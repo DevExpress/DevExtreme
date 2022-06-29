@@ -1,3 +1,4 @@
+import { WidgetName } from '../helpers/createWidget';
 import DropDownList from './internal/dropDownList';
 
 const CLASS = {
@@ -5,8 +6,6 @@ const CLASS = {
 };
 
 export default class TagBox extends DropDownList {
-  name = 'dxTagBox';
-
   tags: Selector;
 
   constructor(id: string) {
@@ -14,4 +13,7 @@ export default class TagBox extends DropDownList {
 
     this.tags = this.element.find(`.${CLASS.tag}`);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxTagBox'; }
 }
