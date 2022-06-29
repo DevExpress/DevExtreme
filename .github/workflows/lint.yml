@@ -178,7 +178,7 @@ jobs:
         git diff --exit-code package-lock.json
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [Renovation, TS, JS, CSS, package_lock, package_lock_npm_6]
     if: always() && contains(needs.*.result, 'failure')

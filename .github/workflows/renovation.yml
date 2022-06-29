@@ -65,7 +65,7 @@ jobs:
         npx gulp native-components-compilation-check
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     name: Send notifications
     needs: [jest-tests, generation]
     if: always() && contains(needs.*.result, 'failure')
