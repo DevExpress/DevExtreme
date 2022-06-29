@@ -268,7 +268,7 @@ fixture`Scrollable_Resize`
   [false, true].forEach((useNative) => {
     [false, true].forEach((useSimulatedScrollbar) => {
       test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, container.width = 75 -> 50 -> 75 -> 100 -> 75`, async (t) => {
-        const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+        const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
 
         await scrollable.setContainerCssWidth(75);
 
@@ -332,7 +332,7 @@ fixture`Scrollable_Resize`
 
       [1, 10, 20].forEach((scrollOffset) => {
         test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, scrollTo(Right - ${scrollOffset}), container.width = 75 -> 50 -> 100 -> 75 -> 50`, async (t) => {
-          const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+          const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
 
           await scrollable.apiScrollTo({ left: 50 - scrollOffset });
           await scrollable.apiUpdate();
@@ -406,7 +406,7 @@ fixture`Scrollable_Resize`
 
       [30, 40, 50].forEach((scrollOffset) => {
         test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, scrollTo(${scrollOffset}), container.width = 75 -> 50 -> 100 -> 75 -> 50`, async (t) => {
-          const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+          const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
 
           await scrollable.apiScrollTo({ left: scrollOffset });
           await scrollable.apiUpdate();
