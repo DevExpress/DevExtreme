@@ -25,7 +25,8 @@ const getCaret = function(input) {
 };
 
 const setCaret = function(input, position) {
-    if(!domAdapter.getBody().contains(input)) {
+    const body = domAdapter.getBody();
+    if(!body.contains(input) && !body.contains(input.getRootNode().host)) {
         return;
     }
 
@@ -43,7 +44,7 @@ const caret = function(input, position, force = false) {
     }
 
     // NOTE: AppleWebKit-based browsers focuses element input after caret position has changed
-    if(!force && isFocusingOnCaretChange && domAdapter.getActiveElement() !== input) {
+    if(!force && isFocusingOnCaretChange && domAdapter.getActiveElement(input) !== input) {
         return;
     }
 

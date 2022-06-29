@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { WidgetName } from '../helpers/createWidget';
 import DropDownList from './internal/dropDownList';
 
 const CLASS = {
@@ -6,7 +7,8 @@ const CLASS = {
 };
 
 export default class Lookup extends DropDownList {
-  name = 'dxLookup';
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxLookup'; }
 
   // eslint-disable-next-line class-methods-use-this
   getInput(): Selector {

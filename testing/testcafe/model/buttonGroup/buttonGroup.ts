@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
+import { WidgetName } from '../../helpers/createWidget';
 
 import Widget from '../internal/widget';
 
@@ -6,22 +7,13 @@ const CLASS = {
   buttonGroup: 'dx-buttongroup',
 };
 export default class ButtonGroup extends Widget {
-  getInstance: ClientFunction;
-
-  name: string;
-
   // eslint-disable-next-line
-  constructor(id: string | Selector, options: any, name = 'dxButtonGroup') {
+  constructor(id: string | Selector) {
     super(id);
 
     this.element = Selector(`.${CLASS.buttonGroup}`);
-
-    const buttonGroup = this.element;
-
-    this.name = name;
-    this.getInstance = ClientFunction(
-      () => $(buttonGroup())[`${name}`]('instance'),
-      { dependencies: { buttonGroup, name } },
-    );
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxButtonGroup'; }
 }
