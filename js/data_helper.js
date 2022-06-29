@@ -58,7 +58,7 @@ const DataHelperMixin = {
     },
 
     _initDataController: function() {
-        const dataController = this.option('_dataController');
+        const dataController = this.option ? this.option('_dataController') : undefined;
         const dataSource = this._dataSource;
 
         if(!this._dataController) {
