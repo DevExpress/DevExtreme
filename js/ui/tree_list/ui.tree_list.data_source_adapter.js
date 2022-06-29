@@ -689,7 +689,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         totalItemsCount: function() {
-            return this._totalItemsCount;
+            return this._totalItemsCount + this._totalCountCorrection;
         },
 
         isRowExpanded: function(key, cache) {
