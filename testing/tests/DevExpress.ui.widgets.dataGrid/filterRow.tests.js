@@ -2430,6 +2430,44 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
     });
 
+    // T1097980
+    QUnit.test('Filtering should not throw an exception when there is hidden column', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            visible: false,
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1, column2: 1 },
+            { column1: 2, column2: 2 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+        this.clock.tick(100);
+
+        // act
+        this.columnOption('column2', 'filterValue', 1);
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no exceptions');
+    });
+
 
     if(device.deviceType === 'desktop') {
     // T306751
