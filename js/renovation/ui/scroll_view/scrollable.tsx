@@ -240,11 +240,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
 
   @Method()
   scrollOffset(): ScrollOffset {
-    if (!this.isServerSide) {
-      return this.scrollableRef.scrollOffset() as ScrollOffset;
-    }
-
-    return { top: 0, left: 0 };
+    return this.scrollableRef.scrollOffset() as ScrollOffset;
   }
 
   @Method()
