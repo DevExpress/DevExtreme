@@ -160,3 +160,31 @@ test('Should initiate load next page if all items on next pages are invisible', 
     displayExpr: 'id',
   });
 });
+
+test('Should not initiate load next page if not reach the bottom when pullRefreshEnabled is true', async (t) => {
+  const list = new List('#container');
+
+  await list.scrollTo(1);
+
+  await t
+    .expect(list.getItems().count)
+    .eql(4);
+}).before(async () => {
+  const sampleData = generateData(12).map((data) => ({
+    ...data,
+  }));
+
+  return createWidget('dxList', {
+    dataSource: {
+      store: sampleData,
+      paginate: true,
+      pageSize: 2,
+    },
+    pullRefreshEnabled: true,
+    height: 130,
+    width: 200,
+    pageLoadMode: 'scrollBottom',
+    valueExpr: 'id',
+    displayExpr: 'id',
+  });
+});
