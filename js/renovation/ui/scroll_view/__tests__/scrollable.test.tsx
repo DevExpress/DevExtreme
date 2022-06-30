@@ -106,7 +106,7 @@ describe('Scrollable', () => {
       { name: 'clientHeight', calledWith: [] },
       { name: 'scrollLeft', calledWith: [] },
       { name: 'scrollTop', calledWith: [] },
-      { name: 'scrollOffset', calledWith: [] },
+      { name: 'scrollOffset', calledWith: [], hasSSRMode: true },
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
       { name: 'content', calledWith: [] },
