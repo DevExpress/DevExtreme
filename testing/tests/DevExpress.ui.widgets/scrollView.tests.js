@@ -475,31 +475,31 @@ QUnit.module('actions', moduleConfig, () => {
         testAction('onReachBottom');
     });
 
-    [true, false].forEach((pullDownEnabled) => {
-        QUnit.test(`onReachBottom action is not fired when scrollable content bottom is not reached, ${pullDownEnabled}`, function(assert) {
-            const onReachBottomHandler = sinon.spy();
+    [true, false].forEach(useNative => {
+        [true, false].forEach((pullDownEnabled) => {
+            QUnit.test(`onReachBottom action is not fired when scrollable content bottom is not reached, pullDownEnabled: ${pullDownEnabled}, useNative: ${useNative}`, function(assert) {
+                const onReachBottomHandler = sinon.spy();
 
-            const scrollView = $('#scrollView').dxScrollView({
-                useNative: false,
-                inertiaEnabled: false,
-                onPullDown() {
+                const scrollView = $('#scrollView').dxScrollView({
+                    useNative,
+                    scrollByContent: true,
+                    onReachBottom: onReachBottomHandler,
+                }).dxScrollView('instance');
 
-                },
-                onReachBottom: onReachBottomHandler,
-            }).dxScrollView('instance');
-            const $container = $(scrollView.container());
-            const $content = $(scrollView.content());
-            const $bottomPocket = $container.find(`.${SCROLLVIEW_BOTTOM_POCKET_CLASS}`);
+                if(pullDownEnabled) {
+                    scrollView.option('onPullDown', noop);
+                }
 
-            pointerMock($content)
-                .start()
-                .down()
-                .move(0, $container.height() - ($content.height() - $bottomPocket.outerHeight() + 1))
-                .up();
+                const $container = $(scrollView.container());
+                const $content = $(scrollView.content());
 
-            assert.strictEqual(onReachBottomHandler.callCount, 0, 'reachBottom event is not fired');
+                scrollView.scrollTo($content.height() - $container.height() - 2);
+
+                assert.strictEqual(onReachBottomHandler.callCount, 0, 'reachBottom event is not fired');
+            });
         });
     });
+
 
     QUnit.test('disabled scrollview should not be updated on pointerdown after finish loading', function(assert) {
         const onUpdatedHandler = sinon.spy();
