@@ -10,6 +10,7 @@
 
 
 $generic-checkbox-disable-opacity: 0.4;
+$icon-position: relative;
 
 .dx-checkbox {
   line-height: 0;
@@ -52,7 +53,7 @@ $generic-checkbox-disable-opacity: 0.4;
 
     color: $checkbox-checked-color;
 
-    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size);
+    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size, $icon-position);
 
 
     font-size: $generic-checkbox-arrow-font-size;
@@ -61,7 +62,7 @@ $generic-checkbox-disable-opacity: 0.4;
   .dx-checkbox-indeterminate & {
     color: $checkbox-indeterminate-bg;
 
-    @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size);
+    @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size, $icon-position);
 
     font-size: $generic-checkbox-indeterminate-font-size;
 

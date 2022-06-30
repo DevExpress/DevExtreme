@@ -139,13 +139,13 @@
   line-height: $container-size - $icon-paddings-dirty;
 }
 
-@mixin dx-icon-font-centered-sizing($icon-size) {
+@mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
   font-size: $icon-size;
   text-align: center;
   line-height: $icon-size;
 
   &::before {
-    position: absolute;
+    position: $position;
     display: block;
     width: $icon-size;
     top: 50%;
