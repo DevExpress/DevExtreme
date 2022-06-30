@@ -23,6 +23,7 @@ export const CLASS = {
   headerPanelCell: 'dx-scheduler-header-panel-cell',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
+  workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
 
   workSpace: 'dx-scheduler-work-space',
 };
@@ -68,6 +69,10 @@ export default class Scheduler extends Widget {
   readonly collectors: Collectors;
 
   readonly reducedIconTooltip: ReducedIconTooltip;
+
+  get workspaceHasBothScrollbar(): Promise<boolean> {
+    return this.workSpace.hasClass(CLASS.workspaceBothScrollbar);
+  }
 
   constructor(id: string) {
     super(id);

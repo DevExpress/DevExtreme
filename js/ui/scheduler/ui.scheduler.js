@@ -1563,15 +1563,6 @@ class Scheduler extends Widget {
         const scrolling = this.option('scrolling');
         const isVirtualScrolling = scrolling.mode === 'virtual' ||
             currentViewOptions.scrolling?.mode === 'virtual';
-        const horizontalVirtualScrollingAllowed = isVirtualScrolling &&
-            (
-                !isDefined(scrolling.orientation) ||
-                ['horizontal', 'both'].filter(
-                    item => scrolling.orientation === item || currentViewOptions.scrolling?.orientation === item
-                ).length > 0
-            );
-        const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
-            horizontalVirtualScrollingAllowed;
 
         const result = extend({
             resources: this.option('resources'),
@@ -1593,7 +1584,6 @@ class Scheduler extends Widget {
             indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
             shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
             allDayExpanded: this._appointments.option('items'),
-            crossScrollingEnabled,
             dataCellTemplate: this.option('dataCellTemplate'),
             timeCellTemplate: this.option('timeCellTemplate'),
             resourceCellTemplate: this.option('resourceCellTemplate'),
