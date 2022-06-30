@@ -83,7 +83,7 @@ themes.forEach((theme) => {
         label: 'label text',
       }, true);
 
-    await t.scroll(Selector('.dx-texteditor-input'), 0, 16);
+    await t.scroll(Selector('.dx-texteditor-input'), 0, 20);
 
     await t.expect(await compareScreenshot(t, `label-scroll-text-area-${theme}.png`)).ok();
   });
