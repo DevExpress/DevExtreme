@@ -153,6 +153,82 @@
 
 }();
 
+(function setupShadowDomMode() {
+    function getRoot() {
+        return document.querySelector('#qunit-fixture').shadowRoot;
+    }
+
+    function get(selector) {
+        return getRoot().querySelector(selector);
+    }
+
+    function isInShadowDomMode() {
+        return QUnit.urlParams['shadowDom'] && QUnit.urlParams['nojquery'];
+    }
+
+    function addShadowRootTree() {
+        const root = document.querySelector('#qunit-fixture');
+
+        if(!root.shadowRoot) {
+            root.attachShadow({ mode: 'open' });
+        }
+
+        const shadowContainer = document.createElement('div');
+        shadowContainer.part = 'shadow';
+
+        root.shadowRoot.appendChild(shadowContainer);
+    }
+
+    function clearShadowRootTree() {
+        const container = get('div');
+
+        jQuery(container).empty();
+        jQuery(container).remove();
+    }
+
+    let jQueryInit;
+
+    QUnit.testStart(function() {
+        if(!isInShadowDomMode()) {
+            return;
+        }
+
+        addShadowRootTree();
+
+        jQueryInit = jQuery.fn.init;
+
+        jQuery.fn.init = function(s, c, r) {
+            const result = new jQueryInit(s, c, r);
+            const resultElement = result.get(0);
+
+            if(!resultElement) {
+                return new jQueryInit(get(s), c, r);
+            }
+
+            if(resultElement === getRoot().host) {
+                return new jQueryInit(get('div'), c, r);
+            }
+
+            return result;
+        };
+    });
+
+    QUnit.beforeTestDone(function() {
+        if(!isInShadowDomMode()) {
+            return;
+        }
+
+        jQuery.fn.init = jQueryInit ?? jQuery.fn.init;
+
+        clearShadowRootTree();
+    });
+
+    QUnit.config.urlConfig.push({
+        id: 'shadowDom',
+        label: 'Shadow DOM',
+        tooltip: 'Enabling this will test the target control inside the ShadowDOM.'
+    });
+})();
 
 (function clearQUnitFixtureByJQuery() {
     const isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
