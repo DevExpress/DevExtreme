@@ -450,17 +450,14 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _updateLoadingState: function(tryLoadMore) {
-        const isDataLoaded = !tryLoadMore || this._isLastPage();
-        const scrollBottomMode = this._scrollBottomMode();
-        const stopLoading = isDataLoaded || !scrollBottomMode;
-        const hideLoadIndicator = stopLoading && !this._isDataSourceLoading();
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !this._isDataSourceLoading() && !this._isLastPage();
 
-        if(stopLoading || this._scrollViewIsFull()) {
-            this._scrollView.release(hideLoadIndicator);
+        if(this._shouldContinueLoading(shouldLoadNextPage)) {
+            this._infiniteDataLoading();
+        } else {
+            this._scrollView.release(!shouldLoadNextPage && !this._isDataSourceLoading());
             this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
-        } else {
-            this._infiniteDataLoading();
         }
     },
 
@@ -543,11 +540,18 @@ export const ListBase = CollectionWidget.inherit({
         }
     },
 
+    _shouldContinueLoading: function(shouldLoadNextPage) {
+        const isBottomReached = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < (this._scrollView.scrollOffset()?.top ?? 0);
+
+        return shouldLoadNextPage && (!this._scrollViewIsFull() || isBottomReached);
+    },
+
     _infiniteDataLoading: function() {
         const isElementVisible = this.$element().is(':visible');
 
-        if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
+        if(isElementVisible) {
             clearTimeout(this._loadNextPageTimer);
+
             this._loadNextPageTimer = setTimeout(() => {
                 this._loadNextPage();
             });

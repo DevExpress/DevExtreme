@@ -40,6 +40,7 @@ const scrollViewServerConfig = {
     finishLoading: noop,
     release: noop,
     refresh: noop,
+    scrollOffset: () => ({ top: 0, left: 0 }),
     _optionChanged: function(args) {
         if(args.name !== 'onUpdated') {
             return this.callBase.apply(this, arguments);
