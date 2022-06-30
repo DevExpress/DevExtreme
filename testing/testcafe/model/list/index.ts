@@ -10,14 +10,13 @@ const CLASS = {
   item: 'dx-list-item',
   search: 'dx-list-search',
   selectAllItem: 'dx-list-select-all',
+  invisible: 'dx-state-invisible',
 
   // Custom classes
   nestedItem: 'nested-item',
 };
 
 export default class List extends Widget {
-  items: Selector;
-
   searchInput: Selector;
 
   selectAll: ListItem;
@@ -25,7 +24,6 @@ export default class List extends Widget {
   constructor(id: string | Selector) {
     super(id);
 
-    this.items = this.element.find(`.${CLASS.item}:not(.${CLASS.nestedItem})`);
     this.searchInput = this.element.find(`.${CLASS.search} input`);
     this.selectAll = new ListItem(this.element.find(`.${CLASS.selectAllItem}`));
   }
@@ -34,7 +32,15 @@ export default class List extends Widget {
   getName(): WidgetName { return 'dxList'; }
 
   getItem(index = 0): ListItem {
-    return new ListItem(this.items.nth(index));
+    return new ListItem(this.getItems().nth(index));
+  }
+
+  getItems(): Selector {
+    return this.element.find(`.${CLASS.item}:not(.${CLASS.nestedItem})`);
+  }
+
+  getVisibleItems(): Selector {
+    return this.element.find(`.${CLASS.item}:not(.${CLASS.invisible})`);
   }
 
   getGroup(index = 0): ListGroup {
