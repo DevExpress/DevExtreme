@@ -761,7 +761,7 @@ test('Scroll should not change focused row if focus method is called inside onCo
   const dataGrid = new DataGrid('#container');
 
   await t
-    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.option('focusedRowKey')).eql(1)
     .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
 
   // act
@@ -770,7 +770,7 @@ test('Scroll should not change focused row if focus method is called inside onCo
 
   // assert
   await t
-    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.option('focusedRowKey')).eql(1)
     .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
 }).before(async () => {
   const data = ((): Record<string, unknown>[] => {
