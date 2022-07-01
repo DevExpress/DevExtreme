@@ -718,6 +718,14 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                     this._invalidate(true, true);
                     args.handled = true;
                     break;
+                case 'syncLookupFilterValues':
+                    if(args.value) {
+                        this.updateLookupDataSource();
+                    } else {
+                        this.render();
+                    }
+                    args.handled = true;
+                    break;
                 default:
                     that.callBase(args);
                     break;
@@ -974,9 +982,6 @@ export const filterRowModule = {
                 optionChanged: function(args) {
                     if(args.name === 'filterRow') {
                         this._invalidate();
-                        args.handled = true;
-                    } else if(args.name === 'syncLookupFilterValues') {
-                        this.component.getView('columnHeadersView')?.updateLookupDataSource();
                         args.handled = true;
                     } else {
                         this.callBase(args);
