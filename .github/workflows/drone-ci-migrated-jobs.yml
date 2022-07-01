@@ -47,6 +47,8 @@ jobs:
           -e HEADLESS=true
           -e TARGET=${{matrix.TARGET}}
           -e CONSTEL=${{matrix.CONSTEL}}
+          -e BROWSER=${{matrix.BROWSER}}
+          -e JQUERY=${{matrix.JQUERY}}
           -v $GITHUB_WORKSPACE:/devextreme
           docker.io/devexpress/devextreme-build:18_2
           ./docker-ci.sh
