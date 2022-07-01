@@ -13,6 +13,7 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
+import ArrayStore from 'data/array_store';
 
 import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
 
@@ -2428,6 +2429,58 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         // assert
         assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
         assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
+    });
+
+    // T1098872
+    QUnit.test('Lookup select box should pass correct group load options', function(assert) {
+        // arrange
+        const loadSpy = sinon.spy((loadOptions) => {
+            const d = $.Deferred();
+            new ArrayStore([
+                { column1: 1, text: 1 },
+                { column1: 2, text: 2 },
+            ]).load(loadOptions).done(items => d.resolve({
+                data: items,
+                totalCount: 2,
+            }));
+
+            return d;
+        });
+
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            calculateDisplayValue: 'text',
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = { load: loadSpy };
+        this.options.remoteOperations = true;
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1.trigger('dxclick');
+
+        // assert
+        assert.deepEqual(loadSpy.getCall(1).args[0].group, [{
+            isExpanded: true,
+            selector: 'column1'
+        },
+        {
+            isExpanded: false,
+            selector: 'text'
+        }]);
     });
 
     // T1097980
