@@ -266,7 +266,7 @@ const SelectBox = DropDownList.inherit({
     _listContentReadyHandler: function() {
         this.callBase();
 
-        const isPaginate = this._dataController?.paginate();
+        const isPaginate = this._dataController.paginate();
 
         if(isPaginate && this._needPopupRepaint()) {
             return;
@@ -309,9 +309,9 @@ const SelectBox = DropDownList.inherit({
     },
 
     _setNextValue: function(e) {
-        const dataSourceIsLoaded = this._dataController?.isLoaded()
+        const dataSourceIsLoaded = this._dataController.isLoaded()
             ? new Deferred().resolve()
-            : this._dataController?.load();
+            : this._dataController.load();
 
         dataSourceIsLoaded.done((function() {
             const selectedIndex = this._getSelectedIndex();
@@ -327,7 +327,7 @@ const SelectBox = DropDownList.inherit({
                     this._createPopup();
                 }
 
-                if(!this._dataController?.isLoading()) {
+                if(!this._dataController.isLoading()) {
                     this._list._loadNextPage().done(this._setNextItem.bind(this, step));
                 }
             } else {
@@ -429,7 +429,7 @@ const SelectBox = DropDownList.inherit({
             const showDataImmediately = this.option('showDataBeforeSearch')
                 || this._isMinSearchLengthExceeded();
 
-            if(showDataImmediately && this._dataController?.getDataSource()) {
+            if(showDataImmediately) {
                 if(this._searchTimer) return;
 
                 const searchValue = this._getActualSearchValue();

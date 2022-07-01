@@ -1,9 +1,46 @@
+import { noop } from './utils/common';
+import { Deferred } from './utils/deferred';
+
+const DataControllerMock = {
+    load: () => Deferred().reject(),
+    loadSingle: () => Deferred().reject(),
+    loadFromStore: () => Deferred().reject(),
+    loadNextPage: () => Deferred().reject(),
+    loadOptions: noop,
+    userData: noop,
+    cancel: noop,
+    cancelAll: noop,
+    filter: noop,
+    addSearchFilter: noop,
+    group: noop,
+    paginate: noop,
+    pageSize: noop,
+    pageIndex: noop,
+    resetDataSourcePageIndex: noop,
+    totalCount: noop,
+    isLastPage: noop,
+    isLoading: noop,
+    isLoaded: noop,
+    searchValue: noop,
+    searchOperation: noop,
+    searchExpr: noop,
+    select: noop,
+    key: noop,
+    keyOf: noop,
+    store: noop,
+    items: noop,
+    applyMapFunction: noop,
+    getDataSource: noop,
+    reload: noop,
+    on: noop,
+    off: noop,
+};
+
 class DataController {
     constructor(dataSource) {
-        this.updateDataSource(dataSource);
-    }
-
-    updateDataSource(dataSource) {
+        if(!dataSource) {
+            return DataControllerMock;
+        }
         this._dataSource = dataSource;
     }
 
@@ -24,18 +61,6 @@ class DataController {
         return this.store().load(loadOptions);
     }
 
-    loadDataSource() {
-        const dataSource = this._dataSource;
-
-        if(dataSource) {
-            if(dataSource.isLoaded()) {
-                this._proxiedDataSourceChangedHandler && this._proxiedDataSourceChangedHandler();
-            } else {
-                dataSource.load();
-            }
-        }
-    }
-
     loadNextPage() {
         this.pageIndex(1 + this.pageIndex());
 
@@ -43,43 +68,43 @@ class DataController {
     }
 
     loadOptions() {
-        return this._dataSource?.loadOptions();
+        return this._dataSource.loadOptions();
     }
 
     userData() {
-        return this._dataSource?._userData;
+        return this._dataSource._userData;
     }
 
     cancel(operationId) {
-        this._dataSource?.cancel(operationId);
+        this._dataSource.cancel(operationId);
     }
 
     cancelAll() {
-        this._dataSource?.cancelAll();
+        this._dataSource.cancelAll();
     }
 
     filter(filter) {
-        return this._dataSource?.filter(filter);
+        return this._dataSource.filter(filter);
     }
 
     addSearchFilter(storeLoadOptions) {
-        this._dataSource?._addSearchFilter(storeLoadOptions);
+        this._dataSource._addSearchFilter(storeLoadOptions);
     }
 
     group(group) {
-        return this._dataSource?.group(group);
+        return this._dataSource.group(group);
     }
 
     paginate() {
-        return this._dataSource?.paginate();
+        return this._dataSource.paginate();
     }
 
     pageSize() {
-        return this._dataSource?._pageSize;
+        return this._dataSource._pageSize;
     }
 
     pageIndex(pageIndex) {
-        return this._dataSource?.pageIndex(pageIndex);
+        return this._dataSource.pageIndex(pageIndex);
     }
 
     resetDataSourcePageIndex() {
@@ -90,7 +115,7 @@ class DataController {
     }
 
     totalCount() {
-        return this._dataSource?.totalCount();
+        return this._dataSource.totalCount();
     }
 
     isLastPage() {
@@ -98,59 +123,55 @@ class DataController {
     }
 
     isLoading() {
-        return this._dataSource?.isLoading();
+        return this._dataSource.isLoading();
     }
 
     isLoaded() {
-        return this._dataSource?.isLoaded();
+        return this._dataSource.isLoaded();
     }
 
     searchValue(value) {
         if(!arguments.length) {
-            return this._dataSource?.searchValue();
+            return this._dataSource.searchValue();
         }
 
-        return this._dataSource?.searchValue(value);
+        return this._dataSource.searchValue(value);
     }
 
     searchOperation(operation) {
-        return this._dataSource?.searchOperation(operation);
+        return this._dataSource.searchOperation(operation);
     }
 
     searchExpr(expr) {
         if(!arguments.length) {
-            return this._dataSource?.searchExpr();
+            return this._dataSource.searchExpr();
         }
 
-        return this._dataSource?.searchExpr(expr);
+        return this._dataSource.searchExpr(expr);
     }
 
     select() {
-        return this._dataSource && this._dataSource.select(...arguments);
-    }
-
-    isKeySpecified() {
-        return !!(this._dataSource?.key());
+        return this._dataSource.select(...arguments);
     }
 
     key() {
-        return this._dataSource?.key();
+        return this._dataSource.key();
     }
 
     keyOf(item) {
-        return this.store()?.keyOf(item);
+        return this.store().keyOf(item);
     }
 
     store() {
-        return this._dataSource?.store();
+        return this._dataSource.store();
     }
 
     items() {
-        return this._dataSource?.items();
+        return this._dataSource.items();
     }
 
     applyMapFunction(data) {
-        return this._dataSource?._applyMapFunction(data);
+        return this._dataSource._applyMapFunction(data);
     }
 
     getDataSource() {
@@ -158,15 +179,15 @@ class DataController {
     }
 
     reload() {
-        return this._dataSource?.reload();
+        return this._dataSource.reload();
     }
 
     on(event, handler) {
-        this._dataSource?.on(event, handler);
+        this._dataSource.on(event, handler);
     }
 
     off(event, handler) {
-        this._dataSource?.off(event, handler);
+        this._dataSource.off(event, handler);
     }
 }
 

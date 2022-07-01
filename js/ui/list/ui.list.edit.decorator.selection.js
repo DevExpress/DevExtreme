@@ -176,7 +176,7 @@ registerDecorator(
             const list = this._list;
             const dataController = list._dataController;
 
-            if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && (!dataController || !dataController.group())) {
+            if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && !dataController.group()) {
                 errors.log('W1010');
                 return false;
             }

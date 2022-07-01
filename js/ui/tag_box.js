@@ -782,17 +782,15 @@ const TagBox = SelectBox.inherit({
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
-        const isListItemsLoaded = !!listSelectedItems && this._list._dataController?.isLoaded();
+        const isListItemsLoaded = !!listSelectedItems && this._list._dataController.isLoaded();
         const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
-        const dataController = this._dataController.getDataSource() && this._dataController;
+        const dataController = this._dataController;
 
-        if(!dataController) {
-            return d.resolve([]).promise();
-        } else if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
+        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const { customQueryParams, expand, select } = dataController.loadOptions();
@@ -884,9 +882,6 @@ const TagBox = SelectBox.inherit({
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
 
-        if(!this._dataController.getDataSource()) {
-            return selectedItems.promise();
-        }
 
         if(this._filteredGroupedItemsLoadPromise) {
             this._dataController.cancel(this._filteredGroupedItemsLoadPromise.operationId);
@@ -1356,17 +1351,11 @@ const TagBox = SelectBox.inherit({
     },
 
     _refreshSelected: function() {
-        this._list?._dataController?.getDataSource()
-            && this._list.option('selectedItems', this._selectedItems);
+        this._list?.option('selectedItems', this._selectedItems);
     },
 
     _resetListDataSourceFilter: function() {
-        const dataController = this._dataController.getDataSource() && this._dataController;
-
-        if(!dataController) {
-            return;
-        }
-
+        const dataController = this._dataController;
         delete this._userFilter;
 
         dataController.filter(null);
@@ -1378,11 +1367,8 @@ const TagBox = SelectBox.inherit({
             return;
         }
 
-        const dataController = this._dataController.getDataSource() && this._dataController;
+        const dataController = this._dataController;
 
-        if(!dataController) {
-            return;
-        }
 
         const valueGetterExpr = this._valueGetterExpr();
 

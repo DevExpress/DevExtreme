@@ -147,7 +147,7 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
     _getGroups: function(items) {
         const dataController = this._collectionWidget._dataController;
-        const group = dataController?.group();
+        const group = dataController.group();
 
         if(group) {
             return storeHelper.queryByOptions(query(items), { group: group }).toArray();

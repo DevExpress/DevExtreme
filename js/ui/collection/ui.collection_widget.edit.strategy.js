@@ -29,7 +29,7 @@ const EditStrategy = Class.inherit({
     },
 
     _equalKeys: function(key1, key2) {
-        if(this._collectionWidget._dataController?.isKeySpecified()) {
+        if(this._collectionWidget._isKeySpecified()) {
             return equalByValue(key1, key2);
         } else {
             return key1 === key2;

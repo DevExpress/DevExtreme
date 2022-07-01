@@ -148,6 +148,7 @@ const CollectionWidget = Widget.inherit({
 
     _init: function() {
         this._compileDisplayGetter();
+        this._initDataController();
         this.callBase();
 
         this._cleanRenderedItems();
@@ -537,7 +538,7 @@ const CollectionWidget = Widget.inherit({
     _loadNextPage: function() {
         this._expectNextPageLoading();
 
-        return this._dataController?.loadNextPage();
+        return this._dataController.loadNextPage();
     },
 
     _expectNextPageLoading: function() {
@@ -977,7 +978,7 @@ const CollectionWidget = Widget.inherit({
     _renderEmptyMessage: function(items) {
         items = items || this.option('items');
         const noDataText = this.option('noDataText');
-        const hideNoData = !noDataText || (items && items.length) || this._dataController?.isLoading();
+        const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
 
         if(hideNoData && this._$noData) {
             this._$noData.remove();

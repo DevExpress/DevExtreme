@@ -22,9 +22,7 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
-            const dataController = this._dataController?.getDataSource() && this._dataController;
-
-            if(dataController && !dataController.isLoaded()) {
+            if(!this._dataController.isLoaded()) {
                 this._correctionIndex = 0;
             }
             if(this._correctionIndex && e.storeLoadOptions) {
@@ -32,7 +30,7 @@ export default CollectionWidget.inherit({
             }
         },
 
-        this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
     },
 
     reload: function() {
@@ -146,7 +144,7 @@ export default CollectionWidget.inherit({
     },
 
     _dispose: function() {
-        this._dataController?.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
         this.callBase();
     },
 
@@ -227,9 +225,9 @@ export default CollectionWidget.inherit({
     _modifyByChanges: function(changes, isPartialRefresh) {
         const items = this._editStrategy.itemsGetter();
         const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
-        const dataController = this._dataController?.getDataSource() && this._dataController;
-        const paginate = dataController?.paginate();
-        const group = dataController?.group();
+        const dataController = this._dataController;
+        const paginate = dataController.paginate();
+        const group = dataController.group();
 
         if(paginate || group) {
             changes = changes.filter(item => item.type !== 'insert' || item.index !== undefined);
