@@ -794,8 +794,9 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _needPopupRepaint: function() {
-        const currentPageIndex = this._dataController.pageIndex();
-        const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const dataController = this._dataController;
+        const currentPageIndex = dataController.pageIndex();
+        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (this.dataController.isLastPage() && !this._list._scrollViewIsFull());
 
         this._pageIndex = currentPageIndex;
 

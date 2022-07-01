@@ -34,7 +34,6 @@ fixture`Scrollable_visibility_integration`
           await scrollable.show();
           await scrollable.apiTriggerShownEvent();
 
-          await t.debug();
           await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
           await t
             .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))

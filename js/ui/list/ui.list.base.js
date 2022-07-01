@@ -196,8 +196,6 @@ export const ListBase = CollectionWidget.inherit({
 
             _swipeEnabled: true,
 
-            _revertPageOnEmptyLoad: false,
-
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
         });
@@ -444,17 +442,14 @@ export const ListBase = CollectionWidget.inherit({
 
     _updateLoadingState: function(tryLoadMore) {
         const dataController = this._dataController;
-        const isDataLoaded = !tryLoadMore || dataController.isLastPage();
-        const scrollBottomMode = this._scrollBottomMode();
-        const stopLoading = isDataLoaded || !scrollBottomMode;
-        const hideLoadIndicator = stopLoading && !this._dataController.isLoading();
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !dataController.isLastPage();
 
-        if(stopLoading || this._scrollViewIsFull()) {
-            this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && !this._dataController.isLastPage());
-            this._loadIndicationSuppressed(false);
-        } else {
+        if(this._shouldContinueLoading(shouldLoadNextPage)) {
             this._infiniteDataLoading();
+        } else {
+            this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
+            this._toggleNextButton(this._shouldRenderNextButton() && !dataController.isLastPage());
+            this._loadIndicationSuppressed(false);
         }
     },
 
@@ -537,30 +532,21 @@ export const ListBase = CollectionWidget.inherit({
         }
     },
 
-    _infiniteDataLoading: function() {
-        const isElementVisible = this.$element().is(':visible');
-        const dataController = this._dataController;
+    _shouldContinueLoading: function(shouldLoadNextPage) {
+        const isBottomReached = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < (this._scrollView.scrollOffset()?.top ?? 0);
 
-        if(
-            isElementVisible && !this._scrollViewIsFull()
-            && !dataController.isLoading() && !dataController.isLastPage()
-        ) {
-            clearTimeout(this._loadNextPageTimer);
-            this._loadNextPageTimer = setTimeout(() => {
-                this._loadNextPage()?.done(this._setPreviousPageIfNewIsEmpty.bind(this));
-            });
-        }
+        return shouldLoadNextPage && (!this._scrollViewIsFull() || isBottomReached);
     },
 
-    _setPreviousPageIfNewIsEmpty: function(result) {
-        if(this.option('_revertPageOnEmptyLoad')) {
-            const dataController = this._dataController;
-            const pageIndex = dataController.pageIndex();
+    _infiniteDataLoading: function() {
+        const isElementVisible = this.$element().is(':visible');
 
-            if(result?.length === 0 && pageIndex > 0) {
-                this._fireContentReadyAction();
-                dataController.pageIndex(pageIndex - 1);
-            }
+        if(isElementVisible) {
+            clearTimeout(this._loadNextPageTimer);
+
+            this._loadNextPageTimer = setTimeout(() => {
+                this._dataController.loadNextPage();
+            });
         }
     },
 
@@ -953,7 +939,6 @@ export const ListBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case '_swipeEnabled':
-            case '_revertPageOnEmptyLoad':
                 break;
             case '_listAttributes':
                 break;
