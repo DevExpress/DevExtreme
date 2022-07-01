@@ -2,7 +2,7 @@ import createWidget, { disposeWidgets } from '../../../../../helpers/createWidge
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: Cross-Scrolling`
+fixture.disablePageReloads`Scheduler Timeline: Cross-Scrolling`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => disposeWidgets());
 

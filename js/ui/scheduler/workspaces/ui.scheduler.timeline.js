@@ -19,6 +19,7 @@ import timezoneUtils from '../utils.timeZone';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { hasWindow } from '../../../core/utils/window';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -59,7 +60,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getWorkSpaceHeight() {
-        if(this.option('crossScrollingEnabled')) {
+        if(this.option('crossScrollingEnabled') && hasWindow()) {
             return getBoundingRect(this._$dateTable.get(0)).height;
         }
 
@@ -323,7 +324,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             groupOrientation: 'vertical',
-            crossScrollingEnabled: true,
         });
     }
 

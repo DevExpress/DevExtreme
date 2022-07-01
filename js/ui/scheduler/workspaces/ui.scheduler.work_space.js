@@ -2198,9 +2198,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'renovateRender':
             case 'scrolling':
-                if(this.isVirtualScrolling()) {
-                    this.option('crossScrollingEnabled', true);
-                }
                 this.repaint();
                 break;
             case 'schedulerHeight':
