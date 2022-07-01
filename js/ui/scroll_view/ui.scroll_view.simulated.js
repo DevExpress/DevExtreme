@@ -70,9 +70,7 @@ const ScrollViewScroller = Scroller.inherit({
 
             const containerEl = this._$container.get(0);
             const contentEl = this._$content.get(0);
-            const scrollTopMax = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
-
-            this._bottomBoundary = scrollTopMax - this._topPocketSize - this._bottomPocketSize;
+            this._bottomBoundary = Math.max(contentEl.clientHeight - this._bottomPocketSize - containerEl.clientHeight, 0);
         }
 
         this.callBase();
