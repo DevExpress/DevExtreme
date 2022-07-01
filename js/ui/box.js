@@ -9,6 +9,8 @@ import { each } from '../core/utils/iterator';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
+// STYLE box
+
 const BOX_CLASS = 'dx-box';
 const BOX_FLEX_CLASS = 'dx-box-flex';
 const BOX_ITEM_CLASS = 'dx-box-item';

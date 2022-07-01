@@ -10,6 +10,8 @@ import registerComponent from '../core/component_registrator';
 import Box from './box';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
+// STYLE responsiveBox
+
 const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
 const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
 const BOX_ITEM_CLASS = 'dx-box-item';
