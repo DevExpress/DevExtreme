@@ -5,11 +5,11 @@ import url from '../../../helpers/getPageUrl';
 fixture`Appointments in TimelineMonth`
   .page(url(__dirname, '../../container.html'));
 
-test('Appointments should have a right order on timeline month (lots of appts)', async (t) => {
+test('Appointments should have correct order', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('timeline-overlapping-appointments.png'))
+    .expect(await takeScreenshot('timelineMonth-appt-order.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
