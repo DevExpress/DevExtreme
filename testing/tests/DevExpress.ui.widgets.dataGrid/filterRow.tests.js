@@ -2434,9 +2434,20 @@ QUnit.module('Filter Row with real dataController and columnsController', {
     // T1098872
     QUnit.test('Lookup select box should pass correct group load options', function(assert) {
         // arrange
-        const $testElement = $('#container');
+        const loadSpy = sinon.spy((loadOptions) => {
+            const d = $.Deferred();
+            new ArrayStore([
+                { column1: 1, text: 1 },
+                { column1: 2, text: 2 },
+            ]).load(loadOptions).done(items => d.resolve({
+                data: items,
+                totalCount: 2,
+            }));
 
-        let lookupIsLoading = false;
+            return d;
+        });
+
+        const $testElement = $('#container');
 
         this.options.columns = [{
             dataField: 'column1',
@@ -2448,32 +2459,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
                 displayExpr: 'value'
             }
         }];
-        this.options.dataSource = {
-            load(loadOptions) {
-                if(lookupIsLoading) {
-                    // assert
-                    assert.deepEqual(loadOptions.group, [{
-                        isExpanded: true,
-                        selector: 'column1'
-                    },
-                    {
-                        isExpanded: false,
-                        selector: 'text'
-                    }]);
-                }
-
-                const d = $.Deferred();
-                new ArrayStore([
-                    { column1: 1, text: 1 },
-                    { column1: 2, text: 2 },
-                ]).load(loadOptions).done(items => d.resolve({
-                    data: items,
-                    totalCount: 2,
-                }));
-
-                return d;
-            }
-        };
+        this.options.dataSource = { load: loadSpy };
         this.options.remoteOperations = true;
         this.options.syncLookupFilterValues = true;
 
@@ -2483,9 +2469,18 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // act
-        lookupIsLoading = true;
         const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
         dropDown1.trigger('dxclick');
+
+        // assert
+        assert.deepEqual(loadSpy.getCall(1).args[0].group, [{
+            isExpanded: true,
+            selector: 'column1'
+        },
+        {
+            isExpanded: false,
+            selector: 'text'
+        }]);
     });
 
     // T1097980
