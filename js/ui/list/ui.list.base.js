@@ -523,7 +523,7 @@ export const ListBase = CollectionWidget.inherit({
     _pullDownHandler: function(e) {
         this._pullRefreshAction(e);
 
-        if(this._dataController && !this._dataController.isLoading()) {
+        if(!this._dataController.isLoading()) {
             this._clearSelectedItems();
             this._dataController.pageIndex(0);
             this._dataController.reload();
@@ -545,7 +545,7 @@ export const ListBase = CollectionWidget.inherit({
             clearTimeout(this._loadNextPageTimer);
 
             this._loadNextPageTimer = setTimeout(() => {
-                this._dataController.loadNextPage();
+                this._loadNextPage();
             });
         }
     },
@@ -712,7 +712,7 @@ export const ListBase = CollectionWidget.inherit({
         this._pageLoadingAction(e);
 
         const dataController = this._dataController;
-        if(dataController.getDataSource() && !dataController.isLoading()) {
+        if(!dataController.isLoading()) {
             this._scrollView.toggleLoading(true);
             this._$nextButton.detach();
             this._loadIndicationSuppressed(true);

@@ -168,7 +168,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _isKeySpecified: function() {
-        return !!(this._dataController && this._dataController.key());
+        return !!(this._dataController.key());
     },
 
     _getCombinedFilter: function() {
@@ -204,7 +204,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             allowNullValue: this._nullValueSelectionSupported(),
             mode: this.option('selectionMode'),
             maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
-            equalByReference: !that._isKeySpecified(),
+            equalByReference: !this._isKeySpecified(),
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
                     that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
