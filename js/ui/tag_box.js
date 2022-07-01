@@ -1351,7 +1351,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _refreshSelected: function() {
-        this._list?.option('selectedItems', this._selectedItems);
+        this._list?.getDataSource() && this._list.option('selectedItems', this._selectedItems);
     },
 
     _resetListDataSourceFilter: function() {

@@ -442,13 +442,13 @@ export const ListBase = CollectionWidget.inherit({
 
     _updateLoadingState: function(tryLoadMore) {
         const dataController = this._dataController;
-        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && dataController.getDataSource() && !dataController.isLoading() && !dataController.isLastPage();
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !this._isLastPage();
 
         if(this._shouldContinueLoading(shouldLoadNextPage)) {
             this._infiniteDataLoading();
         } else {
             this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
-            this._toggleNextButton(this._shouldRenderNextButton() && !dataController.isLastPage());
+            this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         }
     },
@@ -522,11 +522,12 @@ export const ListBase = CollectionWidget.inherit({
 
     _pullDownHandler: function(e) {
         this._pullRefreshAction(e);
+        const dataController = this._dataController;
 
-        if(!this._dataController.isLoading()) {
+        if(dataController.getDataSource() && !dataController.isLoading()) {
             this._clearSelectedItems();
-            this._dataController.pageIndex(0);
-            this._dataController.reload();
+            dataController.pageIndex(0);
+            dataController.reload();
         } else {
             this._updateLoadingState();
         }
@@ -554,7 +555,7 @@ export const ListBase = CollectionWidget.inherit({
         this._pageLoadingAction(e);
         const dataController = this._dataController;
 
-        if(!dataController.isLoading() && !dataController.isLastPage()) {
+        if(!dataController.isLoading() && !this._isLastPage()) {
             this._loadNextPage();
         } else {
             this._updateLoadingState();
@@ -712,7 +713,7 @@ export const ListBase = CollectionWidget.inherit({
         this._pageLoadingAction(e);
 
         const dataController = this._dataController;
-        if(!dataController.isLoading()) {
+        if(dataController.getDataSource() && !dataController.isLoading()) {
             this._scrollView.toggleLoading(true);
             this._$nextButton.detach();
             this._loadIndicationSuppressed(true);

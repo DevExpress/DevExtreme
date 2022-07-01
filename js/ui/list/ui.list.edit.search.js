@@ -22,9 +22,11 @@ const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
 
         this.callBase();
 
-        value && value.length && this._dataController.searchValue(value);
-        mode.length && this._dataController.searchOperation(searchBoxMixin.getOperationBySearchMode(mode));
-        expr && this._dataController.searchExpr(expr);
+        const dataController = this._dataController;
+
+        value && value.length && dataController.searchValue(value);
+        mode.length && dataController.searchOperation(searchBoxMixin.getOperationBySearchMode(mode));
+        expr && dataController.searchExpr(expr);
     }
 });
 

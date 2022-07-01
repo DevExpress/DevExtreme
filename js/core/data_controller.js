@@ -119,7 +119,7 @@ class DataController {
     }
 
     isLastPage() {
-        return !this._dataSource || this._dataSource.isLastPage() || !this._dataSource._pageSize;
+        return this._dataSource.isLastPage() || !this._dataSource._pageSize;
     }
 
     isLoading() {

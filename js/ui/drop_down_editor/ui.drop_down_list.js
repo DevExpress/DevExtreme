@@ -536,7 +536,6 @@ const DropDownList = DropDownEditor.inherit({
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
             _dataController: this._dataController,
-            _revertPageOnEmptyLoad: true,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
         };

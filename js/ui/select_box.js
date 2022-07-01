@@ -429,7 +429,7 @@ const SelectBox = DropDownList.inherit({
             const showDataImmediately = this.option('showDataBeforeSearch')
                 || this._isMinSearchLengthExceeded();
 
-            if(showDataImmediately) {
+            if(showDataImmediately && this._dataController.getDataSource()) {
                 if(this._searchTimer) return;
 
                 const searchValue = this._getActualSearchValue();
