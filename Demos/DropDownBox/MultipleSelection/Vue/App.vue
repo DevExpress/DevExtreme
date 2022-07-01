@@ -45,6 +45,7 @@
         >
           <template #content="{ data }">
             <DxDataGrid
+              :height="345"
               :data-source="gridDataSource"
               :columns="gridColumns"
               :hover-state-enabled="true"
