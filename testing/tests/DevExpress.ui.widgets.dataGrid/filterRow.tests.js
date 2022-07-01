@@ -2430,7 +2430,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
     });
 
-    // todo
+    // T1099516
     QUnit.test('Lookup select box should have actual values after dataSource reload', function(assert) {
         // arrange
         const $testElement = $('#container');
