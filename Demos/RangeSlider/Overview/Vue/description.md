@@ -18,7 +18,7 @@ The RangeSlider can display labels for the [min](/Documentation/ApiReference/UI_
 
 The RangeSlider can also display a tooltip for slider handles. To display tooltips, you need to configure the [tooltip](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/tooltip/) object:
 
-- Set the [enabled](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/tooltip/#enabled) property to **true** to display tooltips. 
+- Set the [enabled](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/tooltip/#enabled) property to **true** to display tooltips.
 
 - Specify the tooltip [position](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/tooltip/#position).
 
@@ -32,4 +32,4 @@ If you want to disable the RangeSlider, set the [disabled](/Documentation/ApiRef
 
 ## Handle the Value Change Event
 
-Specify the [onValueChanged](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/#onValueChanged) function to handle the **value** change. In this demo, the [NumberBox](/Documentation/ApiReference/UI_Components/dxNumberBox/) components and the RangeSlider use this property to exchange values. You can use one of these components to change the range.
+To handle value changes, use two-way binding to bind the [value](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/#value) properties of different components. In this demo, you can use the [NumberBox](/Documentation/ApiReference/UI_Components/dxNumberBox/) or RangeSlider component to change the range because their **value** properties are bound.

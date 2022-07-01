@@ -32,4 +32,4 @@ If you want to disable the RangeSlider, set the [disabled](/Documentation/ApiRef
 
 ## Handle the Value Change Event
 
-Specify the [onValueChanged](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/#onValueChanged) function to handle the **value** change. In this demo, the [NumberBox](/Documentation/ApiReference/UI_Components/dxNumberBox/) components and the RangeSlider use this property to exchange values. You can use one of these components to change the range.
+To handle value changes, use two-way binding to bind the [value](/Documentation/ApiReference/UI_Components/dxNumberBox/Configuration/#value) properties of [NumberBox](/Documentation/ApiReference/UI_Components/dxNumberBox/) components to the [start](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/#start) and [end](/Documentation/ApiReference/UI_Components/dxRangeSlider/Configuration/#end) properties of the RangeSlider.
