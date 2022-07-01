@@ -29,6 +29,7 @@ const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
 const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
 
+const HORIZONTAL = 'horizontal';
 const DATE_TABLE_CELL_BORDER = 1;
 const DATE_TABLE_HEADER_MARGIN = 10;
 const toMs = dateUtils.dateToMilliseconds;
@@ -58,7 +59,20 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getWorkSpaceHeight() {
-        return getBoundingRect(this._$dateTable.get(0)).height;
+        if(this.option('crossScrollingEnabled')) {
+            return getBoundingRect(this._$dateTable.get(0)).height;
+        }
+
+        return getBoundingRect(this.$element().get(0)).height;
+    }
+
+    _dateTableScrollableConfig() {
+        const config = super._dateTableScrollableConfig();
+        const timelineConfig = {
+            direction: HORIZONTAL
+        };
+
+        return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig);
     }
 
     _needCreateCrossScrolling() {
