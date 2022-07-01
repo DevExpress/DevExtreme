@@ -442,7 +442,7 @@ export const ListBase = CollectionWidget.inherit({
 
     _updateLoadingState: function(tryLoadMore) {
         const dataController = this._dataController;
-        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !dataController.isLastPage();
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && dataController.getDataSource() && !dataController.isLoading() && !dataController.isLastPage();
 
         if(this._shouldContinueLoading(shouldLoadNextPage)) {
             this._infiniteDataLoading();
