@@ -1,34 +1,18 @@
-import url from '../../helpers/getPageUrl';
-import TagBox from '../../model/tagBox';
-import createWidget from '../../helpers/createWidget';
-
-async function createTagBox(): Promise<void> {
-  return createWidget('dxTagBox', {
-    items: ['item1', 'item2', 'item3'],
-    showSelectionControls: true,
-    selectionMode: 'all',
-    applyValueMode: 'useButtons',
-  }, true);
-}
-const pureClick = async (t, selector): Promise<void> => {
-  await t
-    .click(selector.element)
-    .wait(500);
-};
-
-const purePressKey = async (t, key): Promise<void> => {
-  await t
-    .pressKey(key)
-    .wait(500);
-};
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import url from '../../../helpers/getPageUrl';
+import TagBox from '../../../model/tagBox';
+import createWidget from '../../../helpers/createWidget';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`TagBox`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {
   const tagBox = new TagBox('#container');
 
-  await pureClick(t, tagBox);
+  await t
+    .click(tagBox.element);
+
   await t
     .expect(tagBox.isFocused).ok()
     .expect(await tagBox.isOpened())
@@ -84,12 +68,19 @@ test('Keyboard navigation should work then tagBox is focused or list is focused'
     .pressKey('enter')
     .expect(firstItemCheckBox.isChecked)
     .notOk();
-}).before(createTagBox);
+}).before(async () => createWidget('dxTagBox', {
+  items: ['item1', 'item2', 'item3'],
+  showSelectionControls: true,
+  selectionMode: 'all',
+  applyValueMode: 'useButtons',
+}, true));
 
 test('Select all checkbox should be focused by tab and closed by escape (T389453)', async (t) => {
   const tagBox = new TagBox('#container');
 
-  await pureClick(t, tagBox);
+  await t
+    .click(tagBox.element);
+
   await t
     .expect(tagBox.isFocused).ok()
     .expect(await tagBox.isOpened())
@@ -117,10 +108,42 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
     .expect(selectAllCheckBox.isFocused)
     .ok();
 
-  await purePressKey(t, 'esc');
+  await t
+    .pressKey('esc');
+
   await t
     .expect(tagBox.isFocused)
     .ok()
     .expect(await tagBox.isOpened())
     .notOk();
-}).before(createTagBox);
+}).before(async () => createWidget('dxTagBox', {
+  items: ['item1', 'item2', 'item3'],
+  showSelectionControls: true,
+  selectionMode: 'all',
+  applyValueMode: 'useButtons',
+}, true));
+
+fixture`TagBox_placeholder`
+  .page(url(__dirname, '../../container.html'))
+  .beforeEach(async (t) => {
+    await t.resizeWindow(200, 200);
+  })
+  .afterEach(async (t) => {
+    await restoreBrowserSize(t);
+  });
+
+test('The placeholder is visible after changing of items option when value is not choosen', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const tagBox = new TagBox('#container');
+
+  await tagBox.option('items', [1, 2, 3]);
+
+  await t
+    .expect(await takeScreenshot('TagBox_placeholder_after_items_change_if_value_is_not_choosen.png'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxTagBox', {
+  placeholder: 'Choose a value',
+}, true));
