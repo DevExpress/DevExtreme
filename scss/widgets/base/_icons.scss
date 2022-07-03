@@ -153,6 +153,18 @@
     left: 50%;
     margin-left: math.div(-$icon-size, 2);
   }
+
+  @if $position == relative {
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      &::before {
+        left: 0;
+        margin-left: 0;
+        right: 50%;
+        margin-right: math.div(-$icon-size, 2);
+      }
+    }
+  }
 }
 
 @mixin dx-icon-margin($size) {
