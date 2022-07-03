@@ -419,7 +419,8 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._updateField();
+        const displayValue = this.option('displayValue');
+        this._updateField(displayValue);
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
@@ -431,13 +432,12 @@ const Lookup = DropDownList.inherit({
         if(this._input().length) {
             this.callBase(text);
         } else {
-            this._updateField();
+            this._updateField(text);
         }
     },
 
     _updateField: function(text) {
-        const displayValue = this.option('displayValue');
-        text = isDefined(displayValue) && String(displayValue) || this.option('placeholder');
+        text = isDefined(text) && String(text) || this.option('placeholder');
 
         this._$field.text(text);
     },
