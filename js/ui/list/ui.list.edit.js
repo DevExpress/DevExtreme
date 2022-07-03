@@ -277,8 +277,8 @@ const ListEdit = ListBase.inherit({
         switch(args.name) {
             case 'selectAllMode':
                 this._initDataSource();
-                this._dataSource.pageIndex(0);
-                this._dataSource.load();
+                this._dataController.pageIndex(0);
+                this._dataController.load();
                 break;
             case 'grouped':
                 this._clearSelectedItems();
