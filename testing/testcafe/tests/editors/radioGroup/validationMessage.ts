@@ -16,7 +16,7 @@ test('message position is right in material (T1020449)', async (t) => {
 });
 
 fixture`ValidationMessage`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('ValidationMessage integrated in editor should not raise any errors when it is placed inside of form and has name "style" (T941581)', async (t) => {
   const checkBox = new CheckBox('#container');
