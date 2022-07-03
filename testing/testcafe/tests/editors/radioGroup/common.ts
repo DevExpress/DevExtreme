@@ -1,12 +1,12 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import RadioGroup from '../../model/radioGroup';
+import url from '../../../helpers/getPageUrl';
+import RadioGroup from '../../../model/radioGroup';
+import createWidget from '../../../helpers/createWidget';
 
 fixture`Radio Group`
-  .page(url(__dirname, './pages/t816449.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async (t) => {
-  const parentGroup = new RadioGroup('#radio-group');
+  const parentGroup = new RadioGroup('#container');
   const firstChildGroup = new RadioGroup(parentGroup.getItem().content.child().nth(0));
   const secondChildGroup = new RadioGroup(parentGroup.getItem(1).content.child());
   const thirdChildGroup = new RadioGroup(parentGroup.getItem(2).content.child());
@@ -64,23 +64,17 @@ test('Radio buttons placed into the template should not be selected after clicki
   await checkGroup(firstChildGroup, true);
   await checkGroup(secondChildGroup, false, true);
   await checkGroup(thirdChildGroup, false, false, true);
-});
+}).before(async () => createWidget('dxRadioGroup', {
+  items: [{}, {}, {}],
+  itemTemplate: () => ($('<div>') as any).dxRadioGroup({
+    dataSource: [{}, {}, {}],
+    layout: 'horizontal',
+  }),
+}, true));
 
 fixture`Radio Group dataSource updating`
-  .page(url(__dirname, './pages/t901779.html'));
+  .page(url(__dirname, '../pages/t901779.html'));
 
 test('There is no error on updating async CustomStore', async (t) => {
   await t.wait(50);
-});
-
-fixture`Radio Group validation message position`
-  .page(url(__dirname, './pages/t1020449.html'));
-
-test('message position is right in material (T1020449)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await t
-    .expect(await takeScreenshot('radiogroup-horizontal-validation.png', '#radio-form'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
 });

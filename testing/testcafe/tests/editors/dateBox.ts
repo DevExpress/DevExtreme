@@ -1,21 +1,24 @@
 import url from '../../helpers/getPageUrl';
 import DateBox from '../../model/dateBox';
 import asyncForEach from '../../helpers/asyncForEach';
+import createWidget from '../../helpers/createWidget';
 
 fixture`DateBox`
-  .page(url(__dirname, './pages/T948310.html'));
+  .page(url(__dirname, '../container.html'));
 
 const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
 
 [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
   test(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async (t) => {
-    const dateBox = new DateBox('#dateBox');
+    const dateBox = new DateBox('#container');
     const { dropDownEditorButton } = dateBox;
 
     await t
       .click(dropDownEditorButton)
-      .wait(TIME_TO_WAIT)
+      .wait(TIME_TO_WAIT);
+
+    await t
       .click(DateBox.getDoneButton())
       .wait(TIME_TO_WAIT);
 
@@ -38,5 +41,10 @@ const ITEM_HEIGHT = 40;
         .expect(scrollTop)
         .eql(views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
     });
-  });
+  }).before(async () => createWidget('dxDateBox', {
+    pickerType: 'rollers',
+    openOnFieldClick: false,
+    useMaskBehavior: true,
+    valueChangeEvent: 'keyup',
+  }));
 });
