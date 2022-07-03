@@ -32,7 +32,7 @@ export default CollectionWidget.inherit({
             }
         },
 
-        this._dataController.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
     },
 
     reload: function() {
