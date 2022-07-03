@@ -137,9 +137,6 @@ themes.forEach((theme) => {
 
 fixture`Lookup_placeholder`
   .page(url(__dirname, '../../container.html'))
-  .beforeEach(async (t) => {
-    await t.resizeWindow(200, 200);
-  })
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
   });
@@ -156,6 +153,10 @@ test('The placeholder is visible after changing of items option when value is no
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxLookup', {
-  placeholder: 'Choose a value',
-}, true));
+}).before(async (t) => {
+  await t.resizeWindow(400, 400);
+
+  return createWidget('dxLookup', {
+    placeholder: 'Choose a value',
+  }, true);
+});

@@ -125,9 +125,6 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
 
 fixture`TagBox_placeholder`
   .page(url(__dirname, '../../container.html'))
-  .beforeEach(async (t) => {
-    await t.resizeWindow(200, 200);
-  })
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
   });
@@ -144,6 +141,10 @@ test('The placeholder is visible after changing of items option when value is no
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxTagBox', {
-  placeholder: 'Choose a value',
-}, true));
+}).before(async (t) => {
+  await t.resizeWindow(400, 400);
+
+  return createWidget('dxTagBox', {
+    placeholder: 'Choose a value',
+  }, true);
+});
