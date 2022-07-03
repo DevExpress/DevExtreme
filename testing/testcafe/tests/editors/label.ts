@@ -27,7 +27,7 @@ themes.forEach((theme) => {
 
       await t.expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
     }).before(async (t) => {
-      await t.resizeWindow(300, 400);
+      await t.resizeWindow(300, 800);
       await changeTheme(theme);
 
       const componentOption = {
