@@ -1,5 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import { changeTheme } from '../../helpers/changeTheme';
 import url from '../../helpers/getPageUrl';
 import createWidget, { WidgetName } from '../../helpers/createWidget';
@@ -10,13 +10,7 @@ const themes = ['generic.light', 'material.blue.light'];
 
 fixture`Label`
   .page(url(__dirname, '../container.html'))
-  .beforeEach(async () => {
-    await ClientFunction(() => {
-      $('#otherContainer').css({
-        'margin-top': '20px',
-      });
-    })();
-  }).afterEach(async () => {
+  .afterEach(async () => {
     await changeTheme('generic.light');
   });
 
@@ -31,7 +25,6 @@ themes.forEach((theme) => {
       await changeTheme(theme);
 
       const componentOption = {
-        width: 300,
         label: 'label text',
         items: [...Array(10)].map((_, i) => `item${i}`),
         value: [...Array(5)].map((_, i) => `item${i}`),
@@ -56,7 +49,6 @@ themes.forEach((theme) => {
       await changeTheme(theme);
 
       const componentOption = {
-        width: 300,
         label: 'label text',
         stylingMode,
       };
@@ -79,7 +71,6 @@ themes.forEach((theme) => {
       await changeTheme(theme);
 
       return createWidget('dxDateBox', {
-        width: 300,
         label: 'label text',
         stylingMode,
         value: new Date(1900, 0, 1),
@@ -107,7 +98,6 @@ themes.forEach((theme) => {
           });
 
           return createWidget(component, {
-            width: 300,
             label: `this label is ${'very '.repeat(10)}long`,
             text: `this content is ${'very '.repeat(10)}long`,
             items: ['item1', 'item2'],
@@ -126,7 +116,6 @@ themes.forEach((theme) => {
         await changeTheme(theme);
 
         const componentOption = {
-          width: 300,
           label: 'label text',
           labelMode,
           dropDownCentered: false,
