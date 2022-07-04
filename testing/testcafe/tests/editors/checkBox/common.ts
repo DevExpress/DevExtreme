@@ -7,7 +7,7 @@ fixture`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
 test('Render', async (t) => {
-  await t.expect(await compareScreenshot(t, 'Checkbox_states.png')).ok();
+  await t.expect(await compareScreenshot(t, 'Checkbox_states.png', '#container')).ok();
 }).before(async () => {
   await setAttribute('#container', 'style', 'width: 300px');
 
