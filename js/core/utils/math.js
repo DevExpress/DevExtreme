@@ -26,6 +26,24 @@ function getExponent(value) {
     return Math.abs(parseInt(value.toExponential().split('e')[1]));
 }
 
+function getExponentialNotation(value) {
+    const parts = value.toExponential().split('e');
+
+    const mantissa = parseFloat(parts[0]);
+    const exponent = parseInt(parts[1]);
+
+    return {
+        exponent,
+        mantissa,
+    };
+}
+
+function multiplyInExponentialForm(value, exponentShift) {
+    const exponentialNotation = getExponentialNotation(value);
+
+    return parseFloat(`${exponentialNotation.mantissa}e${exponentialNotation.exponent + exponentShift}`);
+}
+
 // T570217
 function _isEdgeBug() {
     const value = 0.0003;
@@ -177,5 +195,6 @@ export {
     trunc,
     roundFloatPart,
     getExponentLength,
-    getRemainderByDivision
+    getRemainderByDivision,
+    multiplyInExponentialForm,
 };
