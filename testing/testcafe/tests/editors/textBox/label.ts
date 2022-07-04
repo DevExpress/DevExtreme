@@ -18,7 +18,7 @@ test('Label max-width changed with container size', async (t) => {
   await t
     .expect(textBox.element.find('.dx-label').getStyleProperty('max-width')).eql('82px');
 
-  await setAttribute(`#${await textBox.element.getAttribute('id')}`, 'style', { width: 400 });
+  await setAttribute(`#${await textBox.element.getAttribute('id')}`, 'style', 'width: 400px');
 
   await t
     .expect(textBox.element.find('.dx-label').getStyleProperty('max-width')).eql('382px');

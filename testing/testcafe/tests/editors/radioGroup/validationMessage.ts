@@ -1,4 +1,4 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
@@ -7,41 +7,40 @@ import RadioGroup from '../../../model/radioGroup';
 fixture`Radio Group ValidationMessage`
   .page(url(__dirname, '../../container.html'));
 
-test('message position is right in material (T1020449)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const form = new Form('#container');
+const themes = ['generic.light', 'material.blue.light'];
 
-  await form.validate();
+themes.forEach((theme) => {
+  test('message position is right in theme (T1020449)', async (t) => {
+    const form = new Form('#container');
 
-  const radioGroup = new RadioGroup('.dx-radiogroup');
+    await form.validate();
 
-  await radioGroup.focus();
+    const radioGroup = new RadioGroup('.dx-radiogroup');
 
-  await t
-    .expect(await takeScreenshot('radiogroup-horizontal-validation.png', '#radio-form'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxForm', {
-  items: [{
-    itemType: 'simple',
-    dataField: 'PropertyNameId',
-    editorOptions: {
-      dataSource: ['HR Manager', 'IT Manager'],
-      layout: 'horizontal',
-    },
-    editorType: 'dxRadioGroup',
-    validationRules: [{
-      type: 'required',
-      message: 'The PropertyNameId field is required.',
+    await radioGroup.focus();
+
+    await t.expect(await compareScreenshot(t, `radiogroup-horizontal-validation,theme=${theme.replace(/\./g, '-')}.png`)).ok();
+  }).before(async () => createWidget('dxForm', {
+    items: [{
+      itemType: 'simple',
+      dataField: 'PropertyNameId',
+      editorOptions: {
+        dataSource: ['HR Manager', 'IT Manager'],
+        layout: 'horizontal',
+      },
+      editorType: 'dxRadioGroup',
+      validationRules: [{
+        type: 'required',
+        message: 'The PropertyNameId field is required.',
+      }],
+    }, {
+      itemType: 'button',
+      horizontalAlignment: 'left',
+      buttonOptions: {
+        text: 'Register',
+        type: 'success',
+        useSubmitBehavior: true,
+      },
     }],
-  }, {
-    itemType: 'button',
-    horizontalAlignment: 'left',
-    buttonOptions: {
-      text: 'Register',
-      type: 'success',
-      useSubmitBehavior: true,
-    },
-  }],
-}));
+  }));
+});
