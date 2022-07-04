@@ -12,7 +12,7 @@ fixture`ValidationMessage`
 
 test('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
+  await t.debug();
   await t
     .click(Selector(`.${TEXTEDITOR_INPUT_CLASS}`))
     .pressKey('backspace')
