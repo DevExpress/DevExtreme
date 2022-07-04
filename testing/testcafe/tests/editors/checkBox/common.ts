@@ -1,22 +1,15 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 
 fixture`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
 test('Render', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await t
-    .expect(await takeScreenshot('Checkbox_states.png'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+  await t.expect(await compareScreenshot(t, 'Checkbox_states.png')).ok();
+}).before(async () => {
+  await setAttribute('#container', 'style', { width: 300 });
 
   await appendElementTo('#container', 'div', 'checked', { display: 'block' });
   await createWidget('dxCheckBox', { value: true, text: 'checked' }, false, '#checked');
@@ -36,6 +29,4 @@ test('Render', async (t) => {
 
   await appendElementTo('#container', 'div', 'indeterminateRTL', { display: 'block' });
   await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, false, '#indeterminateRTL');
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
