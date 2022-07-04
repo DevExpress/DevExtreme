@@ -1,13 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 fixture`HtmlEditor`
-  .page(url(__dirname, '../pages/t1025549.html'));
+  .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((toolbar) => {
-  const selector = toolbar ? '#htmleditor-toolbar' : '#htmleditor-simple';
-  const clickTarget = toolbar ? '#htmleditor-toolbar .dx-bold-format' : '#htmleditor-simple';
+  const selector = toolbar ? '#otherContainer' : '#container';
+  const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
   test(`T1025549 - ${baseScreenName}`, async (t) => {
@@ -21,5 +22,20 @@ fixture`HtmlEditor`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxHtmlEditor', {
+      height: 200,
+      width: 200,
+      value: Array(100).fill('string').join('\n'),
+    });
+
+    return createWidget('dxHtmlEditor', {
+      height: 200,
+      width: 200,
+      value: Array(100).fill('string').join('\n'),
+      toolbar: {
+        items: ['bold', 'color'],
+      },
+    }, false, '#otherContainer');
   });
 });

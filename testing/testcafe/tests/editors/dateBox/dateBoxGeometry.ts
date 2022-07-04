@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import { changeTheme } from '../../helpers/changeTheme';
+import url from '../../../helpers/getPageUrl';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 const setConfig = ClientFunction(
   (config) => (window as any).createDateBoxInTheme(config),
 );
 
 fixture`DateBox (datetime) geometry (T896846)`
-  .page(url(__dirname, './pages/dateBoxGeometry.html'));
+  .page(url(__dirname, '../pages/dateBoxGeometry.html'));
 
 const cases: { name: string; config: any }[] = [{
   name: 'calendar',

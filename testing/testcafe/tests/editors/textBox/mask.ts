@@ -1,15 +1,24 @@
 import { Selector } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import TextBox from '../../model/textBox';
+import url from '../../../helpers/getPageUrl';
+import TextBox from '../../../model/textBox';
+import createWidget from '../../../helpers/createWidget';
 
-fixture`Mask T814440`
-  .page(url(__dirname, './pages/t814440.html'));
+fixture`TextBox_mask`
+  .page(url(__dirname, '../../container.html'));
 
 // note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377
 test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabled (T814440)', async (t) => {
-  const textBox = new TextBox('#textbox');
+  const textBox = new TextBox('#container');
   const { input } = textBox;
-  const eventLog = Selector('#eventLog');
+
+  const eventLog = Selector('#otherContainer');
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  await textBox.option('onValueChanged', () => {
+    const log = ($('#otherContainer').get(0) as any).value;
+    ($('#otherContainer').get(0) as any).value = !log ? 'changed' : `${log}changed`;
+  });
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  await textBox.option('onInput', () => { ($('#otherContainer').get(0) as any).value += 'input'; });
 
   await t
     .typeText(input, '1', { caretPos: 0 })
@@ -19,7 +28,7 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .expect(textBox.option('text'))
     .eql('1')
     .expect(eventLog.value)
-    .eql('changed\ninput\n')
+    .eql('changedinput')
 
     .typeText(input, '2')
     .expect(input.value)
@@ -29,7 +38,7 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .expect(textBox.option('text'))
     .eql('1')
     .expect(eventLog.value)
-    .eql('changed\ninput\n')
+    .eql('changedinput')
 
     .pressKey('backspace')
     .expect(input.value)
@@ -39,7 +48,7 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .expect(textBox.option('text'))
     .eql('_')
     .expect(eventLog.value)
-    .eql('changed\ninput\nchanged\ninput\n')
+    .eql('changedinputchangedinput')
 
     .pressKey('backspace')
     .expect(input.value)
@@ -49,5 +58,8 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .expect(textBox.option('text'))
     .eql('_')
     .expect(eventLog.value)
-    .eql('changed\ninput\nchanged\ninput\n');
-});
+    .eql('changedinputchangedinput');
+}).before(async () => createWidget('dxTextBox', {
+  mask: '9',
+  valueChangeEvent: 'input',
+}));

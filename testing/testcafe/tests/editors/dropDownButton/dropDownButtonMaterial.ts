@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
+import url from '../../../helpers/getPageUrl';
 
 const setRtl = ClientFunction(() => (window as any).setRtlMode());
 

@@ -1,10 +1,10 @@
-import url from '../../helpers/getPageUrl';
-import DateBox from '../../model/dateBox';
-import asyncForEach from '../../helpers/asyncForEach';
-import createWidget from '../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import DateBox from '../../../model/dateBox';
+import asyncForEach from '../../../helpers/asyncForEach';
+import createWidget from '../../../helpers/createWidget';
 
 fixture`DateBox`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
