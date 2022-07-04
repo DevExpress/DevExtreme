@@ -4,7 +4,7 @@ import { toFixed } from '../utils';
 const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };
 const ESCAPING_CHAR = '\'';
 const MAXIMUM_NUMBER_LENGTH = 15;
-const PERCENT_SHIFT = 2; // '1e2'
+const PERCENT_EXPONENT_SHIFT = 2; // '1e2'
 
 function getGroupSizes(formatString) {
     return formatString.split(',').slice(1).map(function(str) {
@@ -133,7 +133,7 @@ export function getFormatter(format, config) {
         const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
 
         if(isPercentFormat(numberFormat)) {
-            value = multiplyInExponentialForm(value, PERCENT_SHIFT);
+            value = multiplyInExponentialForm(value, PERCENT_EXPONENT_SHIFT);
         }
 
         if(!isPositive) {

@@ -38,10 +38,10 @@ function getExponentialNotation(value) {
     };
 }
 
-function multiplyInExponentialForm(value, shift) {
+function multiplyInExponentialForm(value, exponentShift) {
     const exponentialNotation = getExponentialNotation(value);
 
-    return parseFloat(`${exponentialNotation.mantissa}e${exponentialNotation.exponent + shift}`);
+    return parseFloat(`${exponentialNotation.mantissa}e${exponentialNotation.exponent + exponentShift}`);
 }
 
 // T570217
