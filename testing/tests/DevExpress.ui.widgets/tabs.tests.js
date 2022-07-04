@@ -1076,7 +1076,6 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
     const itemTemplate = () => $('<div>').width(150).height(150).css('border', '1px solid black');
     const createResponsiveBox = ({ cols, rows, items }) => $('#widget').dxResponsiveBox({
         width: 300,
-        _layoutStrategy: 'flex',
         cols,
         rows,
         itemTemplate,

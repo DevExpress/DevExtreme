@@ -465,27 +465,31 @@ QUnit.module('actions', moduleConfig, () => {
         testAction('onReachBottom');
     });
 
-    QUnit.test('onReachBottom action is not fired when scrollable content bottom is not reached', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({
-            useNative: false,
-            inertiaEnabled: false,
-            onReachBottom: function(e) {
-                assert.ok(false, 'onReachBottom action should not be fired');
-            },
-            onEnd: function() {
-                assert.ok(true, 'end action was fired');
-            }
-        });
-        const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
-        const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+    [true, false].forEach(useNative => {
+        [true, false].forEach((pullDownEnabled) => {
+            QUnit.test(`onReachBottom action is not fired when scrollable content bottom is not reached, pullDownEnabled: ${pullDownEnabled}, useNative: ${useNative}`, function(assert) {
+                const onReachBottomHandler = sinon.spy();
 
-        pointerMock($content)
-            .start()
-            .down()
-            .move(0, $container.height() - ($content.height() - $bottomPocket.outerHeight() + 1))
-            .up();
+                const scrollView = $('#scrollView').dxScrollView({
+                    useNative,
+                    scrollByContent: true,
+                    onReachBottom: onReachBottomHandler,
+                }).dxScrollView('instance');
+
+                if(pullDownEnabled) {
+                    scrollView.option('onPullDown', noop);
+                }
+
+                const $container = $(scrollView.container());
+                const $content = $(scrollView.content());
+
+                scrollView.scrollTo($content.height() - $container.height() - 2);
+
+                assert.strictEqual(onReachBottomHandler.callCount, 0, 'reachBottom event is not fired');
+            });
+        });
     });
+
 
     QUnit.test('disabled scrollview should not be updated on pointerdown after finish loading', function(assert) {
         const onUpdatedHandler = sinon.spy();

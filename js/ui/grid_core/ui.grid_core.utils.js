@@ -152,6 +152,23 @@ const equalFilterParameters = function(filter1, filter2) {
     }
 };
 
+function normalizeGroupingLoadOptions(group) {
+    if(!Array.isArray(group)) {
+        group = [group];
+    }
+
+    return group.map((item, i) => {
+        if(isString(item)) {
+            return {
+                selector: item,
+                isExpanded: i < group.length - 1,
+            };
+        }
+
+        return item;
+    });
+}
+
 export default {
     renderNoDataText: function($element) {
         const that = this;
@@ -568,7 +585,9 @@ export default {
         const lookupDataSourceOptions = this.normalizeLookupDataSource(column.lookup);
 
         const hasLookupOptimization = column.displayField && isString(column.displayField);
-        const group = hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField;
+        const group = normalizeGroupingLoadOptions(
+            hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
+        );
 
         const lookupDataSource = {
             load: (loadOptions) => {
@@ -576,7 +595,6 @@ export default {
                 dataSource.load({
                     filter,
                     group,
-                    isExpanded: false,
                 }).done((items) => {
                     if(items.length === 0) {
                         d.resolve([]);

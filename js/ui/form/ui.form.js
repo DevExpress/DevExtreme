@@ -722,13 +722,6 @@ const Form = Widget.inherit({
                 this._rootLayoutManager.option(args.name, args.value);
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
                 break;
-            case 'visible':
-                this.callBase(args);
-
-                if(args.value) {
-                    triggerShownEvent(this.$element());
-                }
-                break;
             case 'validationGroup':
                 ValidationEngine.removeGroup(args.previousValue || this);
                 this._invalidate();

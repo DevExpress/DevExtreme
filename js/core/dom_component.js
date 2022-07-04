@@ -5,6 +5,7 @@ import windowResizeCallbacks from '../core/utils/resize_callbacks';
 import { Component } from './component';
 import { TemplateManager } from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
+import { addShadowDomStyles } from './utils/shadow_dom';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
 import { extend } from './utils/extend';
@@ -122,6 +123,8 @@ const DOMComponent = Component.inherit({
 
     _render() {
         this._attachVisibilityChangeHandlers();
+
+        addShadowDomStyles(this.$element());
     },
 
     _renderElementAttributes() {
