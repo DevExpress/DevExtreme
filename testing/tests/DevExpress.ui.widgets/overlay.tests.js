@@ -555,6 +555,20 @@ testModule('option', moduleConfig, () => {
             errors.log.restore();
         }
     });
+
+    test('should not show "elementAttr" deprecation warning if "_ignoreElementAttrDeprecation" option enabled (used in ASP.NET wrappers, refer to issues T678658, T1084114, T1097600)', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#overlay').dxOverlay({
+                elementAttr: { id: 'nested-id' },
+                _ignoreElementAttrDeprecation: true
+            });
+            assert.ok(errors.log.notCalled, 'no warnings were logged');
+        } finally {
+            errors.log.restore();
+        }
+    });
 });
 
 
