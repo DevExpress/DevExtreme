@@ -3,7 +3,6 @@ import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import numberLocalization from 'localization/number';
 
 import 'ui/text_box/ui.text_editor';
@@ -2242,13 +2241,9 @@ QUnit.module('symbol with dot in format', {
     });
 });
 
-QUnit.module('ShadowDOM', {
-    beforeEach: function() {
-        appendShadowRoot.call(this, '#numberbox');
-    }
-}, function() {
+QUnit.module('ShadowDOM', {}, function() {
     QUnit.test('should move caret', function(assert) {
-        const $element = $(this.control).dxNumberBox({
+        const $element = $('#numberbox').dxNumberBox({
             format: '#0.##',
             value: '',
             useMaskBehavior: true
