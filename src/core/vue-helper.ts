@@ -111,6 +111,12 @@ export function getVModelValue(options: Record<string, any>) {
     return options[VMODEL_NAME];
 }
 
+export function setCompatOptions(component: Record<string, unknown>) {
+    component.compatConfig = {
+        MODE: 3
+    };
+}
+
 export function setVModel(config: any): void {
     const eventName = `update:${VMODEL_NAME}`;
     config.model.prop = VMODEL_NAME;
