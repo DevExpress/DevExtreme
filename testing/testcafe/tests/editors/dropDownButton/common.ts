@@ -53,7 +53,7 @@ themes.forEach((theme) => {
       await asyncForEach([1, 2, 3, 4], async (index) => {
         await t.hover(Selector(`#drop-down-button${index} .dx-button:first-child`));
 
-        await t.expect(await compareScreenshot(t, `dropdownbutton-rtlEnabled:${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+        await t.expect(await compareScreenshot(t, `dropdownbutton-rtlEnabled=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
       });
     }).before(async (t) => {
       await t.resizeWindow(500, 200);
