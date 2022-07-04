@@ -9,7 +9,7 @@ fixture`CheckBox`
 test('Render', async (t) => {
   await t.expect(await compareScreenshot(t, 'Checkbox_states.png')).ok();
 }).before(async () => {
-  await setAttribute('#container', 'style', { width: 300 });
+  await setAttribute('#container', 'style', 'width: 300px');
 
   await appendElementTo('#container', 'div', 'checked', { display: 'block' });
   await createWidget('dxCheckBox', { value: true, text: 'checked' }, false, '#checked');
