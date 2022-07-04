@@ -1,5 +1,5 @@
 import { compileGetter, compileSetter } from '../../../../../core/utils/data';
-import { DataAccessorType } from '../../types';
+import { AppointmentDataItem, DataAccessorType } from '../../types';
 import { getPreparedDataItems, resolveDataItems } from '../data';
 import { createTimeZoneCalculator } from '../../timeZoneCalculator/createTimeZoneCalculator';
 
@@ -30,6 +30,16 @@ describe('Data API', () => {
         endDate: new Date(2021, 9, 9),
         recurrenceRule: 'FREQ=WEEKLY',
       }];
+      const expectedResult: AppointmentDataItem = {
+        allDay: false,
+        endDate: new Date(2021, 9, 9),
+        hasRecurrenceRule: true,
+        rawAppointment: data[0],
+        recurrenceException: undefined,
+        recurrenceRule: 'FREQ=WEEKLY',
+        startDate: new Date(2021, 9, 8),
+        visible: true,
+      };
       const result = getPreparedDataItems(
         data,
         defaultDataAccessors,
@@ -38,16 +48,7 @@ describe('Data API', () => {
       );
 
       expect(result)
-        .toEqual([{
-          allDay: false,
-          endDate: new Date(2021, 9, 9),
-          hasRecurrenceRule: true,
-          rawAppointment: data[0],
-          recurrenceException: undefined,
-          recurrenceRule: 'FREQ=WEEKLY',
-          startDate: new Date(2021, 9, 8),
-          visible: true,
-        }]);
+        .toEqual([expectedResult]);
     });
 
     [null, undefined, ''].forEach((recurrenceRule) => {
@@ -55,8 +56,18 @@ describe('Data API', () => {
         const data = [{
           startDate: new Date(2021, 9, 8),
           endDate: new Date(2021, 9, 9),
-          recurrenceRule,
+          recurrenceRule: recurrenceRule as any,
         }];
+        const expectedResult: AppointmentDataItem = {
+          allDay: false,
+          endDate: new Date(2021, 9, 9),
+          hasRecurrenceRule: false,
+          rawAppointment: data[0],
+          recurrenceException: undefined,
+          recurrenceRule: recurrenceRule as any,
+          startDate: new Date(2021, 9, 8),
+          visible: true,
+        };
         const result = getPreparedDataItems(
           data as any,
           defaultDataAccessors,
@@ -65,16 +76,7 @@ describe('Data API', () => {
         );
 
         expect(result)
-          .toEqual([{
-            allDay: false,
-            endDate: new Date(2021, 9, 9),
-            hasRecurrenceRule: false,
-            rawAppointment: data[0],
-            recurrenceException: undefined,
-            recurrenceRule,
-            startDate: new Date(2021, 9, 8),
-            visible: true,
-          }]);
+          .toEqual([expectedResult]);
       });
     });
 
@@ -147,6 +149,16 @@ describe('Data API', () => {
         startDate: new Date(2021, 9, 9, 17),
       }];
 
+      const expectedResult: AppointmentDataItem = {
+        allDay: false,
+        endDate: new Date(2021, 9, 9, 17, 30),
+        hasRecurrenceRule: false,
+        rawAppointment: data[0],
+        recurrenceException: undefined,
+        recurrenceRule: undefined,
+        startDate: new Date(2021, 9, 9, 17),
+        visible: true,
+      };
       const result = getPreparedDataItems(
         data as any,
         defaultDataAccessors,
@@ -155,16 +167,28 @@ describe('Data API', () => {
       );
 
       expect(result)
-        .toEqual([{
-          allDay: false,
-          endDate: new Date(2021, 9, 9, 17, 30),
-          hasRecurrenceRule: false,
-          rawAppointment: data[0],
-          recurrenceException: undefined,
-          recurrenceRule: undefined,
-          startDate: new Date(2021, 9, 9, 17),
-          visible: true,
-        }]);
+        .toEqual([expectedResult]);
+    });
+
+    it('should return timezones of start date and end date if them exists', () => {
+      const expectedTimezones = {
+        startDateTimeZone: 'Etc/GMT+10',
+        endDateTimeZone: 'Etc/GMT-10',
+      };
+      const data = [{
+        startDate: new Date(2021, 9, 8),
+        endDate: new Date(2021, 9, 9),
+        ...expectedTimezones,
+      }];
+
+      const result = getPreparedDataItems(
+        data as any,
+        defaultDataAccessors,
+        30,
+        createTimeZoneCalculator(''),
+      );
+
+      expect(result).toMatchObject([expectedTimezones]);
     });
   });
 

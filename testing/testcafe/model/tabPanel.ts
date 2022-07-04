@@ -1,6 +1,7 @@
 import Widget from './internal/widget';
 import Tabs from './tabs';
 import MultiView from './multiView';
+import { WidgetName } from '../helpers/createWidget';
 
 const CLASS = {
   tabs: 'dx-tabs',
@@ -12,12 +13,13 @@ export default class TabPanel extends Widget {
 
   multiView: MultiView;
 
-  name = 'dxTabPanel';
-
   constructor(id: string) {
     super(id);
 
     this.tabs = new Tabs(`.${CLASS.tabs}`);
     this.multiView = new MultiView(`.${CLASS.multiView}`);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxTabPanel'; }
 }

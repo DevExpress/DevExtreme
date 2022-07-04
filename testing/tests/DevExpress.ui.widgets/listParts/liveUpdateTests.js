@@ -695,7 +695,7 @@ QUnit.module('live update', {
             key: 0
         }]);
 
-        $('.dx-list-item:eq(0)').trigger('dxclick');
+        $('.dx-list-item').eq(0).trigger('dxclick');
         assert.deepEqual(list.option('selectedItemKeys'), [1]);
     });
 

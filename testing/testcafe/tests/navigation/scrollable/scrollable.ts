@@ -41,7 +41,7 @@ fixture`Scrollable_ScrollToElement`
       for (const rtlEnabled of [true, false]) {
         // eslint-disable-next-line no-restricted-syntax
         for (const { initialScrollOffset, position } of positions) {
-          await scrollable.apiOption('rtlEnabled', rtlEnabled);
+          await scrollable.option('rtlEnabled', rtlEnabled);
           await scrollable.apiScrollTo(initialScrollOffset);
           await scrollable.apiScrollToElement('#element');
 
@@ -126,9 +126,10 @@ fixture`Scrollable_ScrollToElement`
       for (const rtlEnabled of [true, false]) {
         // eslint-disable-next-line no-restricted-syntax
         for (const { initialScrollOffset, position } of positions) {
+          await scrollable.option('rtlEnabled', rtlEnabled);
+
           await ClientFunction(
             () => {
-              (getInstance() as any).option('rtlEnabled', rtlEnabled);
               (getInstance() as any).scrollTo(initialScrollOffset);
             },
             { dependencies: { getInstance, initialScrollOffset, rtlEnabled } },

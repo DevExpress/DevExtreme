@@ -5,7 +5,6 @@ import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
-import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/number_box';
@@ -2233,17 +2232,9 @@ QUnit.module('valueChanged should receive correct event parameter', {
     });
 });
 
-QUnit.module('ShadowDOM ', {
-    beforeEach: function() {
-        appendShadowRoot.call(this, '#numberbox');
-    },
-    afterEach: function() {
-        // TODO: get rid of it after fix jquery event bubbling to shadow dom
-        $(this.container).empty();
-    },
-}, () => {
+QUnit.module('ShadowDOM ', {}, () => {
     QUnit.test('should change value on mouse wheel', function(assert) {
-        const $numberBox = $(this.control).dxNumberBox({
+        const $numberBox = $('#numberbox').dxNumberBox({
             value: 100.6
         });
 

@@ -11,7 +11,6 @@ import fx from 'animation/fx';
 import holdEvent from 'events/hold';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
-import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import registerComponent from 'core/component_registrator';
 import swipeEvents from 'events/swipe';
 import themes from 'ui/themes';
@@ -2361,7 +2360,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             pageSize: 20
         });
         let list;
-        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
+        const $toggleButton = $('<div/>').appendTo('#qunit-fixture');
         try {
             $toggleButton.dxButton({
                 onClick: () => {
@@ -2671,52 +2670,6 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         this.clock.tick();
 
         assert.deepEqual($element.dxList('option', 'items'), [1, 2, 3, 4], 'all data loaded');
-    });
-
-    QUnit.test('widget has pageIndex == 1 if the pageSize is equal to dataSource length', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
-
-        const dataSource = new DataSource({
-            store: new ArrayStore([1, 2, 3, 4]),
-            pageSize: 4
-        });
-        const $element = this.element.hide().dxList({
-            pageLoadMode: 'scrollBottom',
-            scrollingEnabled: true,
-            dataSource: dataSource
-        });
-
-        $element.show().triggerHandler('dxshown');
-        this.clock.tick();
-
-        assert.strictEqual(dataSource.pageIndex(), 1, 'page index is correct');
-    });
-
-    QUnit.test('widget has a correct pageIndex if the pageSize is equal to dataSource length if it has _revertPageOnEmptyLoad is true (T942881)', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
-
-        const onContentReadySpy = sinon.spy();
-        const dataSource = new DataSource({
-            store: new ArrayStore([1, 2, 3, 4]),
-            pageSize: 4
-        });
-        const $element = this.element.hide().dxList({
-            pageLoadMode: 'scrollBottom',
-            scrollingEnabled: true,
-            dataSource: dataSource,
-            _revertPageOnEmptyLoad: true,
-            onContentReady: onContentReadySpy
-        });
-
-        $element.show().triggerHandler('dxshown');
-        this.clock.tick();
-
-        assert.strictEqual(dataSource.pageIndex(), 0, 'page index is correct');
-        assert.strictEqual(onContentReadySpy.callCount, 3, 'list fires contentReady after empty page load');
     });
 });
 
@@ -4033,25 +3986,22 @@ if(devices.real().deviceType === 'desktop') {
     });
 }
 
-if(QUnit.urlParams['nojquery']) {
+if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
     QUnit.module('ShadowDOM', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            appendShadowRoot.call(this, '#list');
-
-            this.$list = $(this.control).dxList({
+            this.$list = $('#list').dxList({
                 items: ['One', 'Two', 'Three'],
                 itemDragging: { allowReordering: true },
                 focusStateEnabled: true,
             });
+
+            this.root = $('#list')[0].getRootNode();
         },
 
         afterEach: function() {
             this.clock.restore();
-
-            // TODO: get rid of it after fix jquery event bubbling to shadow dom
-            $(this.container).empty();
         },
 
         getItems: function() {

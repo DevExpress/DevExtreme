@@ -342,7 +342,6 @@ QUnit.module('Layout manager', () => {
         const $testContainer = $('#container').dxLayoutManager();
         const layoutManager = $testContainer.dxLayoutManager('instance');
 
-        layoutManager._hasBrowserFlex = () => true;
         layoutManager.option('items', items);
         const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
 

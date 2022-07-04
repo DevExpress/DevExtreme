@@ -2470,9 +2470,9 @@ test.skip('New mode. A cell should be focused when the PageDow/Up key is pressed
   await t
     .expect(dataGrid.getDataCell(0, 0).isFocused)
     .ok()
-    .expect(dataGrid.apiOption('focusedRowIndex'))
+    .expect(dataGrid.option('focusedRowIndex'))
     .eql(0)
-    .expect(dataGrid.apiOption('focusedColumnIndex'))
+    .expect(dataGrid.option('focusedColumnIndex'))
     .eql(0);
 
   // act
@@ -2483,9 +2483,9 @@ test.skip('New mode. A cell should be focused when the PageDow/Up key is pressed
   await t
     .expect(dataGrid.getDataCell(8, 0).isFocused)
     .ok()
-    .expect(dataGrid.apiOption('focusedRowIndex'))
+    .expect(dataGrid.option('focusedRowIndex'))
     .eql(8)
-    .expect(dataGrid.apiOption('focusedColumnIndex'))
+    .expect(dataGrid.option('focusedColumnIndex'))
     .eql(0);
 
   // act
@@ -2496,9 +2496,9 @@ test.skip('New mode. A cell should be focused when the PageDow/Up key is pressed
   await t
     .expect(dataGrid.getDataCell(0, 0).isFocused)
     .ok()
-    .expect(dataGrid.apiOption('focusedRowIndex'))
+    .expect(dataGrid.option('focusedRowIndex'))
     .eql(0)
-    .expect(dataGrid.apiOption('focusedColumnIndex'))
+    .expect(dataGrid.option('focusedColumnIndex'))
     .eql(0);
 }).before(async () => {
   const getData = (): Record<string, unknown>[] => {
