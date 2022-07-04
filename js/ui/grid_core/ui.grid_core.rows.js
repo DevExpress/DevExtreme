@@ -937,9 +937,12 @@ export const rowsModule = {
                 _updateScrollable: function() {
                     const scrollable = Scrollable.getInstance(this.element());
 
-                    if(scrollable && !scrollable?.isRenovated()) {
+                    if(scrollable) {
                         scrollable.update();
-                        this._updateHorizontalScrollPosition();
+
+                        if(!scrollable?.isRenovated()) {
+                            this._updateHorizontalScrollPosition();
+                        }
                     }
                 },
 
