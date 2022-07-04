@@ -935,10 +935,10 @@ export const rowsModule = {
                 },
 
                 _updateScrollable: function() {
-                    const dxScrollable = Scrollable.getInstance(this.element());
+                    const scrollable = Scrollable.getInstance(this.element());
 
-                    if(dxScrollable) {
-                        dxScrollable.update();
+                    if(scrollable && !scrollable?.isRenovated()) {
+                        scrollable.update();
                         this._updateHorizontalScrollPosition();
                     }
                 },
