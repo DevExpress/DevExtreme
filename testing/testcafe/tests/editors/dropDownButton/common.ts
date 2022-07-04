@@ -4,7 +4,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 import asyncForEach from '../../../helpers/asyncForEach';
 
 fixture`Drop Down Button`
@@ -55,9 +55,9 @@ themes.forEach((theme) => {
 
         await t.expect(await compareScreenshot(t, `DropDownButton${index}-rtlEnabled=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`, '#container')).ok();
       });
-    }).before(async (t) => {
-      await t.resizeWindow(500, 200);
-      await changeTheme(theme);
+    }).before(async () => {
+      await changeTheme('generic.light');
+      await setAttribute('#container', 'style', 'width: 500px;');
 
       const baseConfig = {
         items: [{ text: 'text1' }, { text: 'text2' }],
