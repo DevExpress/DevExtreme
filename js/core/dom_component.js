@@ -124,7 +124,7 @@ const DOMComponent = Component.inherit({
     _render() {
         this._attachVisibilityChangeHandlers();
 
-        addShadowDomStyles(this._$element);
+        addShadowDomStyles(this.$element());
     },
 
     _renderElementAttributes() {

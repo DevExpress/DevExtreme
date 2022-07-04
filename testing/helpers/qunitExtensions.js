@@ -197,16 +197,16 @@
 
         jQueryInit = jQuery.fn.init;
 
-        jQuery.fn.init = function(s, c, r) {
-            const result = new jQueryInit(s, c, r);
+        jQuery.fn.init = function(selector, context, root) {
+            const result = new jQueryInit(selector, context, root);
             const resultElement = result.get(0);
 
             if(!resultElement) {
-                return new jQueryInit(get(s), c, r);
+                return new jQueryInit(get(selector), context, root);
             }
 
             if(resultElement === getRoot().host) {
-                return new jQueryInit(get(':scope > div'), c, r);
+                return new jQueryInit(get(':scope > div'), context, root);
             }
 
             return result;
