@@ -1,5 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
@@ -83,15 +83,11 @@ test('Popover should have correct vertical position (T1048128)', async (t) => {
 
 themes.forEach((theme) => {
   test(`Check popup height with no found data option, theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
     await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
     await t
-      .expect(await takeScreenshot(`Lookup_with_no_found_data,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+      .expect(await compareScreenshot(t, `Lookup_with_no_found_data,theme=${theme.replace(/\./g, '-')}.png`))
+      .ok();
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await changeTheme(theme);
@@ -103,15 +99,11 @@ themes.forEach((theme) => {
   });
 
   test(`Check popup height in loading state, theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
     await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
     await t
-      .expect(await takeScreenshot(`Lookup_in_loading,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+      .expect(await compareScreenshot(t, `Lookup_in_loading,theme=${theme.replace(/\./g, '-')}.png`))
+      .ok();
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await changeTheme(theme);
@@ -135,28 +127,15 @@ themes.forEach((theme) => {
   });
 });
 
-fixture`Lookup_placeholder`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
-  });
-
-test('The placeholder is visible after changing of items option when value is not choosen', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
+test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const lookup = new Lookup('#container');
 
   await lookup.option('items', [1, 2, 3]);
 
   await t
-    .expect(await takeScreenshot('Lookup_placeholder_after_items_change_if_value_is_not_choosen.png'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(400, 400);
-
-  return createWidget('dxLookup', {
-    placeholder: 'Choose a value',
-  }, true);
-});
+    .expect(await compareScreenshot(t, 'Lookup_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .ok();
+}).before(async () => createWidget('dxLookup', {
+  width: 300,
+  placeholder: 'Choose a value',
+}));

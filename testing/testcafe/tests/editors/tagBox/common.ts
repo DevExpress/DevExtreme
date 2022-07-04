@@ -1,8 +1,7 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
 import createWidget from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`TagBox`
   .page(url(__dirname, '../../container.html'));
@@ -123,28 +122,15 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
   applyValueMode: 'useButtons',
 }, true));
 
-fixture`TagBox_placeholder`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
-  });
-
-test('The placeholder is visible after changing of items option when value is not choosen', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
+test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const tagBox = new TagBox('#container');
 
   await tagBox.option('items', [1, 2, 3]);
 
   await t
-    .expect(await takeScreenshot('TagBox_placeholder_after_items_change_if_value_is_not_choosen.png'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(400, 400);
-
-  return createWidget('dxTagBox', {
-    placeholder: 'Choose a value',
-  }, true);
-});
+    .expect(await compareScreenshot(t, 'TagBox_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .ok();
+}).before(async () => createWidget('dxTagBox', {
+  width: 300,
+  placeholder: 'Choose a value',
+}));
