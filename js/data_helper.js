@@ -2,7 +2,7 @@
 import { DataSource } from './data/data_source/data_source';
 import { extend } from './core/utils/extend';
 import { normalizeDataSourceOptions } from './data/data_source/utils';
-import DataController from './core/data_controller';
+import DataController from './ui/collection/data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';

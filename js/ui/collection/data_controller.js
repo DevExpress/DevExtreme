@@ -1,5 +1,5 @@
-import { noop } from './utils/common';
-import { Deferred } from './utils/deferred';
+import { noop } from '../../core/utils/common';
+import { Deferred } from '../../core/utils/deferred';
 
 const DataControllerMock = {
     load: () => Deferred().reject(),

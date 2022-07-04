@@ -214,9 +214,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             filter: that._getCombinedFilter.bind(that),
             totalCount: function() {
                 const items = that.option('items');
-                const dataController = that._dataController;
-                return dataController.totalCount() >= 0
-                    ? dataController.totalCount()
+                const totalCount = that._dataController.totalCount();
+                return totalCount >= 0
+                    ? totalCount
                     : that._getItemsCount(items);
             },
             key: that.key.bind(that),
