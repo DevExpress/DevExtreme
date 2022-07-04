@@ -159,7 +159,7 @@
     }
 
     function get(selector) {
-        return getRoot().querySelector(selector);
+        return getRoot().querySelectorAll(selector);
     }
 
     function isInShadowDomMode() {
@@ -180,7 +180,7 @@
     }
 
     function clearShadowRootTree() {
-        const container = get('div');
+        const container = get(':scope > div');
 
         jQuery(container).empty();
         jQuery(container).remove();
@@ -206,7 +206,7 @@
             }
 
             if(resultElement === getRoot().host) {
-                return new jQueryInit(get('div'), c, r);
+                return new jQueryInit(get(':scope > div'), c, r);
             }
 
             return result;

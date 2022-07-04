@@ -1,3 +1,5 @@
+const DX_RULE_PREFIX = 'dx-';
+
 let constructedStyleSheet = null;
 
 function createConstructedStyleSheet(rootNode) {
@@ -28,9 +30,9 @@ function processRules(styleSheets, needApplyAllStyles) {
 
 function insertRule(rule, needApplyAllStyles) {
     const isDxRule = needApplyAllStyles ||
-                     rule.selectorText?.includes('.dx-') ||
-                     rule.cssRules?.[0]?.selectorText?.includes('.dx-') ||
-                     rule.name?.startsWith('dx-') ||
+                     rule.selectorText?.includes(DX_RULE_PREFIX) ||
+                     rule.cssRules?.[0]?.selectorText?.includes(DX_RULE_PREFIX) ||
+                     rule.name?.startsWith(DX_RULE_PREFIX) ||
                      rule.style?.fontFamily === 'DXIcons';
 
     if(isDxRule) {

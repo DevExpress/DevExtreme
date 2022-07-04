@@ -2360,7 +2360,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             pageSize: 20
         });
         let list;
-        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
+        const $toggleButton = $('<div/>').appendTo('#qunit-fixture');
         try {
             $toggleButton.dxButton({
                 onClick: () => {
