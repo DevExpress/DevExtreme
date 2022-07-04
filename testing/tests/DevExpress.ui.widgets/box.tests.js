@@ -432,30 +432,22 @@ module('layouting', () => {
     });
 
     test('rendering after visibility changing', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            const $box = createBox({
-                direction: 'row',
-                items: [{ ratio: 1, baseSize: 0 }, { ratio: 1, baseSize: 0 }],
-                visible: false,
-                _layoutStrategy: 'fallback'
-            });
+        const $box = createBox({
+            direction: 'row',
+            items: [{ ratio: 1, baseSize: 0 }, { ratio: 1, baseSize: 0 }],
+            visible: false,
+        });
 
-            clock.tick();
+        $box.parent().width(100);
 
-            $box.parent().width(100);
+        $box.dxBox('option', 'visible', true);
 
-            $box.dxBox('option', 'visible', true);
+        const $items = $box.find('.' + BOX_ITEM_CLASS);
+        const $firstItem = $items.eq(0);
+        const $secondItem = $items.eq(1);
 
-            const $items = $box.find('.' + BOX_ITEM_CLASS);
-            const $firstItem = $items.eq(0);
-            const $secondItem = $items.eq(1);
-
-            assert.equal($firstItem.width(), $box.width() / 2, 'first item has correct size');
-            assert.equal($secondItem.width(), $box.width() / 2, 'second item has correct size');
-        } finally {
-            clock.restore();
-        }
+        assert.equal($firstItem.width(), $box.width() / 2, 'first item has correct size');
+        assert.equal($secondItem.width(), $box.width() / 2, 'second item has correct size');
     });
 
     test('shrink', function(assert) {
@@ -492,15 +484,12 @@ module('layouting', () => {
         assert.equal($items.eq(0).height(), firstItemSize - (firstItemSize + secondItemSize - boxSize) / (firstItemShrink + secondItemShrink) * firstItemShrink);
         assert.equal($items.eq(1).height(), secondItemSize - (firstItemSize + secondItemSize - boxSize) / (firstItemShrink + secondItemShrink) * secondItemShrink);
     });
-});
 
-module('fallback strategy', () => {
     test('total baseSize should be used when size is zero', function(assert) {
         const baseSize1 = 100;
         const baseSize2 = 200;
 
         const $box = createBox({
-            _layoutStrategy: 'fallback',
             direction: 'col',
             items: [{ baseSize: baseSize1, ratio: 2 }, { baseSize: baseSize2, ratio: 1 }],
             height: 'auto'
@@ -512,7 +501,6 @@ module('fallback strategy', () => {
     test('baseSize in % in invisible area', function(assert) {
         const $box = $('#box').hide().dxBox({
             height: 100,
-            _layoutStrategy: 'fallback',
             direction: 'col',
             items: [{ baseSize: '50%', ratio: 0 }, { baseSize: '50%', ratio: 0 }]
         });
@@ -525,20 +513,17 @@ module('fallback strategy', () => {
         assert.equal(round($items.eq(0).outerHeight()), round($box.outerHeight() * 0.5), 'second item has correct width');
     });
 
-    test('items size should be changed after dxupdate event inside fieldset', function(assert) {
+    test('items size should be changed inside fieldset', function(assert) {
         const $box = $('#box');
         const $wrapper = $box.wrap('<fieldset>').parent();
         $wrapper.width(400);
 
         $box.dxBox({
-            _layoutStrategy: 'fallback',
             direction: 'row',
             items: [{ baseSize: 0, ratio: 1 }, { baseSize: 0, ratio: 1 }]
         });
 
         $wrapper.width(200);
-
-        $box.trigger('dxupdate');
 
         const $items = $box.find('.' + BOX_ITEM_CLASS);
 
@@ -546,7 +531,7 @@ module('fallback strategy', () => {
     });
 });
 
-module('layouting in RTL (fallback strategy)', () => {
+module('layouting in RTL', () => {
     test('align for row direction', function(assert) {
         const baseSize = 40;
         const boxSize = baseSize * 5;
@@ -556,7 +541,6 @@ module('layouting in RTL (fallback strategy)', () => {
             items: [{ baseSize: baseSize }, { baseSize: baseSize }],
             width: boxSize,
             rtlEnabled: true,
-            _layoutStrategy: 'fallback'
         });
 
         const $boxItems = $box.find('.' + BOX_ITEM_CLASS);
@@ -597,7 +581,6 @@ module('layouting in RTL (fallback strategy)', () => {
             items: [{ html: '<div style=\'width: ' + size + 'px\'></div>' }],
             width: boxSize,
             rtlEnabled: true,
-            _layoutStrategy: 'fallback'
         });
         const box = getBoxInstance($box);
 

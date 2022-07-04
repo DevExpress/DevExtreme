@@ -56,18 +56,15 @@ QUnit.module('render', () => {
     QUnit.test('render the box item content with flexBasis equal zero pixel', function(assert) {
         const $box = $('#box').dxBox({
             items: [1],
-            _layoutStrategy: 'flex'
         });
 
         assert.equal($box.find('.' + BOX_ITEM_CLASS + '-content').css('flexBasis'), '0px');
     });
 
     QUnit.test('strategy class', function(assert) {
-        const $box = $('#box').dxBox({
-            _layoutStrategy: 'test'
-        });
+        const $box = $('#box').dxBox({});
 
-        assert.ok($box.hasClass('dx-box-test'), 'class attached');
+        assert.ok($box.hasClass('dx-box-flex'), 'class attached');
     });
 });
 
@@ -83,27 +80,12 @@ QUnit.module('layouting', () => {
         assert.ok(innerBox instanceof Box, 'box was created inside box');
     });
 
-    QUnit.test('box pass _layoutStrategy to children box', function(assert) {
-        const $box = $('#box').dxBox({
-            _layoutStrategy: 'test',
-            items: [{ box: {} }]
-        });
-
-        const innerBox = $box.find('.dx-box').dxBox('instance');
-
-        assert.equal(innerBox.option('_layoutStrategy'), 'test', '_layoutStrategy was passed to children box');
-    });
-
     QUnit.test('box must have a correct flex direction on items rendering (T604581)', function(assert) {
         new Box($('#box'), {
             direction: 'col',
             items: [{ baseSize: 100 }],
             itemTemplate: function() {
-                if(this.option('_layoutStrategy') === 'flex') {
-                    assert.equal(this._$element[0].style.flexDirection, 'column');
-                } else {
-                    assert.ok(true);
-                }
+                assert.equal(this._$element[0].style.flexDirection, 'column');
             }
         });
     });

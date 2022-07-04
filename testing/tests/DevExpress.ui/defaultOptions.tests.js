@@ -11,7 +11,6 @@ const getNestedOptionValue = require('core/options/utils').getNestedOptionValue;
 
 const ActionSheet = require('ui/action_sheet');
 const Accordion = require('ui/accordion');
-const Box = require('ui/box');
 const Button = require('ui/button');
 const ColorBox = require('ui/color_box');
 const DataGrid = require('ui/data_grid');
@@ -178,11 +177,6 @@ testComponentDefaults(DateBox,
     function() {
         devices.real(this._origDevice);
     }
-);
-
-testComponentDefaults(Box,
-    {},
-    { _layoutStrategy: 'flex' },
 );
 
 testComponentDefaults(ValidationMessage,
