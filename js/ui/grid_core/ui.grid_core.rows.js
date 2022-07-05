@@ -259,19 +259,20 @@ export const rowsModule = {
                 },
 
                 _handleScroll: function(e) {
+                    // debugger;
                     const that = this;
                     const rtlEnabled = that.option('rtlEnabled');
-                    const isNativeScrolling = e.component.option('useNative');
+                    // const isNativeScrolling = e.component.option('useNative');
 
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
-                    let scrollLeft = e.scrollOffset.left;
+                    const scrollLeft = e.scrollOffset.left;
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
 
-                        if(isNativeScrolling) {
-                            scrollLeft = -this._scrollRight;
-                        }
+                        // if(isNativeScrolling) {
+                        //     scrollLeft = -this._scrollRight;
+                        // }
 
                         if(!this.isScrollbarVisible(true)) {
                             this._scrollLeft = -1;
