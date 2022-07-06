@@ -6,7 +6,7 @@ fixture`SelectBox as Toolbar item`
   .page(url(__dirname, '../../container.html'));
 
 test('SelectBox should correctly render its buttons if editor is rendered as a Toolbar item with fieldTemplate (T949859)', async (t) => {
-  const selectBox = new SelectBox('#editor');
+  const selectBox = new SelectBox('#container');
   const actionButton = selectBox.getButton(0);
 
   await t
@@ -17,7 +17,6 @@ test('SelectBox should correctly render its buttons if editor is rendered as a T
     {
       widget: 'dxSelectBox',
       options: {
-        elementAttr: { id: 'editor' },
         buttons: [
           {
             name: 'test',
