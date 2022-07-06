@@ -182,7 +182,6 @@
     function clearShadowRootTree() {
         const container = get(':scope > div');
 
-        jQuery(container).empty();
         jQuery(container).remove();
     }
 
