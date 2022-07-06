@@ -325,18 +325,9 @@ export const ListBase = CollectionWidget.inherit({
         return true;
     },
 
-    _resetDataSourcePageIndex: function() {
-        const currentDataSource = this.getDataSource();
-
-        if(currentDataSource && currentDataSource.pageIndex() !== 0) {
-            currentDataSource.pageIndex(0);
-            currentDataSource.load();
-        }
-    },
-
     _init: function() {
         this.callBase();
-        this._resetDataSourcePageIndex();
+        this._dataController.resetDataSourcePageIndex();
         this._$container = this.$element();
 
         this._initScrollView();
@@ -377,7 +368,7 @@ export const ListBase = CollectionWidget.inherit({
     _initScrollView: function() {
         const scrollingEnabled = this.option('scrollingEnabled');
         const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
-        const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
+        const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataController.getDataSource();
 
         this._scrollView = this._createComponent(this.$element(), getScrollView(), {
             height: this.option('height'),
@@ -450,19 +441,20 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _updateLoadingState: function(tryLoadMore) {
-        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !this._isDataSourceLoading() && !this._isLastPage();
+        const dataController = this._dataController;
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !this._isLastPage();
 
         if(this._shouldContinueLoading(shouldLoadNextPage)) {
             this._infiniteDataLoading();
         } else {
-            this._scrollView.release(!shouldLoadNextPage && !this._isDataSourceLoading());
+            this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
             this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         }
     },
 
     _shouldRenderNextButton: function() {
-        return this._nextButtonMode() && this._dataSource && this._dataSource.isLoaded();
+        return this._nextButtonMode() && this._dataController.isLoaded();
     },
 
     _isDataSourceFirstLoadCompleted: function(newValue) {
@@ -530,11 +522,12 @@ export const ListBase = CollectionWidget.inherit({
 
     _pullDownHandler: function(e) {
         this._pullRefreshAction(e);
+        const dataController = this._dataController;
 
-        if(this._dataSource && !this._isDataSourceLoading()) {
+        if(dataController.getDataSource() && !dataController.isLoading()) {
             this._clearSelectedItems();
-            this._dataSource.pageIndex(0);
-            this._dataSource.reload();
+            dataController.pageIndex(0);
+            dataController.reload();
         } else {
             this._updateLoadingState();
         }
@@ -560,8 +553,9 @@ export const ListBase = CollectionWidget.inherit({
 
     _scrollBottomHandler: function(e) {
         this._pageLoadingAction(e);
+        const dataController = this._dataController;
 
-        if(!this._isDataSourceLoading() && !this._isLastPage()) {
+        if(!dataController.isLoading() && !this._isLastPage()) {
             this._loadNextPage();
         } else {
             this._updateLoadingState();
@@ -718,8 +712,8 @@ export const ListBase = CollectionWidget.inherit({
     _nextButtonHandler: function(e) {
         this._pageLoadingAction(e);
 
-        const source = this._dataSource;
-        if(source && !source.isLoading()) {
+        const dataController = this._dataController;
+        if(dataController.getDataSource() && !dataController.isLoading()) {
             this._scrollView.toggleLoading(true);
             this._$nextButton.detach();
             this._loadIndicationSuppressed(true);
@@ -822,12 +816,12 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _toggleNextButton: function(value) {
-        const dataSource = this._dataSource;
+        const dataController = this._dataController;
         const $nextButton = this._getNextButton();
 
         this.$element().toggleClass(LIST_HAS_NEXT_CLASS, value);
 
-        if(value && dataSource && dataSource.isLoaded()) {
+        if(value && dataController.isLoaded()) {
             $nextButton.appendTo(this._itemContainer());
         }
 

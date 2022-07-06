@@ -168,26 +168,25 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _isKeySpecified: function() {
-        return !!(this._dataSource && this._dataSource.key());
+        return !!(this._dataController.key());
     },
 
     _getCombinedFilter: function() {
-        return this._dataSource && this._dataSource.filter();
+        return this._dataController.filter();
     },
 
     key: function() {
         if(this.option('keyExpr')) return this.option('keyExpr');
-        return this._dataSource && this._dataSource.key();
+        return this._dataController.key();
     },
 
     keyOf: function(item) {
         let key = item;
-        const store = this._dataSource && this._dataSource.store();
 
         if(this.option('keyExpr')) {
             key = this._keyGetter(item);
-        } else if(store) {
-            key = store.keyOf(item);
+        } else if(this._dataController.store()) {
+            key = this._dataController.keyOf(item);
         }
 
         return key;
@@ -215,37 +214,34 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             filter: that._getCombinedFilter.bind(that),
             totalCount: function() {
                 const items = that.option('items');
-                const dataSource = that._dataSource;
-                return dataSource && dataSource.totalCount() >= 0
-                    ? dataSource.totalCount()
+                const totalCount = that._dataController.totalCount();
+                return totalCount >= 0
+                    ? totalCount
                     : that._getItemsCount(items);
             },
             key: that.key.bind(that),
             keyOf: that.keyOf.bind(that),
             load: function(options) {
-                if(that._dataSource) {
-                    const loadOptions = that._dataSource.loadOptions();
-                    options.customQueryParams = loadOptions.customQueryParams;
-                    options.userData = that._dataSource._userData;
-                }
-                const store = that._dataSource && that._dataSource.store();
+                const dataController = that._dataController;
+                options.customQueryParams = dataController.loadOptions()?.customQueryParams;
+                options.userData = dataController.userData();
 
-                if(store) {
-                    return store.load(options).done(function(loadResult) {
+                if(dataController.store()) {
+                    return dataController.loadFromStore(options).done(function(loadResult) {
                         if(that._disposed) {
                             return;
                         }
 
                         const items = normalizeLoadResult(loadResult).data;
 
-                        that._dataSource._applyMapFunction(items);
+                        dataController.applyMapFunction(items);
                     });
                 } else {
                     return new Deferred().resolve(this.plainItems());
                 }
             },
             dataFields: function() {
-                return that._dataSource && that._dataSource.select();
+                return that._dataController.select();
             },
             plainItems: itemsGetter.bind(that._editStrategy)
         });
@@ -287,7 +283,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _initMarkup: function() {
         this._rendering = true;
-        if(!this._dataSource || !this._dataSource.isLoading()) {
+
+        if(!this._dataController.isLoading()) {
             this._syncSelectionOptions().done(() => this._normalizeSelectedItems());
         }
 
@@ -649,21 +646,23 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _deleteItemFromDS: function($item) {
-        if(!this._dataSource) {
+        const dataController = this._dataController;
+        const deferred = new Deferred();
+        const disabledState = this.option('disabled');
+        const dataStore = dataController.store();
+
+        if(!dataStore) {
             return new Deferred().resolve().promise();
         }
 
-        const deferred = new Deferred();
-        const disabledState = this.option('disabled');
-        const dataStore = this._dataSource.store();
-
-        this.option('disabled', true);
 
         if(!dataStore.remove) {
             throw errors.Error('E1011');
         }
 
-        dataStore.remove(dataStore.keyOf(this._getItemData($item)))
+        this.option('disabled', true);
+
+        dataStore.remove(dataController.keyOf(this._getItemData($item)))
             .done(function(key) {
                 if(key !== undefined) {
                     deferred.resolve();
@@ -698,7 +697,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _refreshLastPage: function() {
         this._expectLastItemLoading();
-        return this._dataSource.load();
+        return this._dataController.load();
     },
 
     _updateSelectionAfterDelete: function(index) {
@@ -796,7 +795,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
-        const changingOption = this._dataSource ? 'dataSource' : 'items';
+        const changingOption = this._dataController.getDataSource()
+            ? 'dataSource'
+            : 'items';
         this._simulateOptionChange(changingOption);
         this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs, {
             beforeExecute: function() {
@@ -865,7 +866,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         const movingIndex = strategy.getNormalizedIndex(itemElement);
         const destinationIndex = strategy.getNormalizedIndex(toItemElement);
 
-        const changingOption = this._dataSource ? 'dataSource' : 'items';
+        const changingOption = this._dataController.getDataSource()
+            ? 'dataSource'
+            : 'items';
 
         const canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
         if(canMoveItems) {

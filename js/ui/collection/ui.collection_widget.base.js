@@ -126,6 +126,7 @@ const CollectionWidget = Widget.inherit({
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
             dataSource: null,
+            _dataController: null,
 
             _itemAttributes: {},
             itemTemplateProperty: 'template',
@@ -147,6 +148,7 @@ const CollectionWidget = Widget.inherit({
 
     _init: function() {
         this._compileDisplayGetter();
+        this._initDataController();
         this.callBase();
 
         this._cleanRenderedItems();
@@ -534,12 +536,9 @@ const CollectionWidget = Widget.inherit({
     },
 
     _loadNextPage: function() {
-        const dataSource = this._dataSource;
-
         this._expectNextPageLoading();
-        dataSource.pageIndex(1 + dataSource.pageIndex());
 
-        return dataSource.load();
+        return this._dataController.loadNextPage();
     },
 
     _expectNextPageLoading: function() {
@@ -979,7 +978,7 @@ const CollectionWidget = Widget.inherit({
     _renderEmptyMessage: function(items) {
         items = items || this.option('items');
         const noDataText = this.option('noDataText');
-        const hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
+        const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
 
         if(hideNoData && this._$noData) {
             this._$noData.remove();
