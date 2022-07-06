@@ -159,7 +159,7 @@
     }
 
     function get(selector) {
-        return getRoot().querySelectorAll(selector);
+        return typeof selector === 'string' ? getRoot().querySelectorAll(selector) : selector;
     }
 
     function isInShadowDomMode() {
