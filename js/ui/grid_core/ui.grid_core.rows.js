@@ -940,9 +940,9 @@ export const rowsModule = {
                     if(scrollable) {
                         scrollable.update();
 
-                        // if(!scrollable?.isRenovated()) {
-                        this._updateHorizontalScrollPosition();
-                        // }
+                        if(scrollable.option('useNative') && !scrollable?.isRenovated()) {
+                            this._updateHorizontalScrollPosition();
+                        }
                     }
                 },
 
