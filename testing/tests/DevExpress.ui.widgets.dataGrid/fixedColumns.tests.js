@@ -2648,6 +2648,43 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         assert.deepEqual(pointsByFixedColumns[0], { columnIndex: 0, index: 1, x: -9900, y: -10000 }, 'first point');
         assert.deepEqual(pointsByFixedColumns[1], { columnIndex: 1, index: 2, x: -9775, y: -10000 }, 'second point');
     });
+
+    // T1098769
+    QUnit.test('Resizing (columnResizingMode=\'widget\') - get points by columns when all columns have resizing disabled and there is a fixed column with a fixed position on the right', function(assert) {
+        // arrange
+        const that = this;
+        const $testElement = $('#container').width(800);
+
+        that.setupDataGrid({
+            allowColumnResizing: true,
+            columnResizingMode: 'widget',
+            showColumnHeaders: true,
+            columns: [
+                {
+                    caption: 'Column 1', width: 200, allowResizing: false
+                },
+                {
+                    caption: 'Column 2', width: 200, allowResizing: false
+                },
+                {
+                    caption: 'Column 3', width: 200, allowResizing: false
+                },
+                {
+                    caption: 'Column 4', width: 200, allowResizing: false, fixed: true, fixedPosition: 'right'
+                }
+            ]
+        });
+        that.columnHeadersView.render($testElement);
+
+        // act
+        that.columnsResizerController._generatePointsByColumns();
+        const pointsByColumns = that.columnsResizerController._pointsByColumns;
+        const pointsByFixedColumns = that.columnsResizerController._pointsByFixedColumns;
+
+        // assert
+        assert.equal(pointsByColumns.length, 0, 'count points by columns');
+        assert.equal(pointsByFixedColumns.length, 0, 'count points by fixed columns');
+    });
 });
 
 QUnit.module('Fixed columns with band columns', {

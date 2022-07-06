@@ -987,34 +987,22 @@ export const columnFixingModule = {
                         const columnsController = that._columnsController;
                         const columns = columnsController && that._columnsController.getVisibleColumns();
                         const fixedColumns = columnsController && that._columnsController.getFixedColumns();
+                        const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
+                        const correctIndex = columns.length - fixedColumns.length;
                         const cells = that._columnHeadersView.getFixedColumnElements();
-                        let pointsByFixedColumns = [];
 
                         that.callBase();
 
                         if(cells && cells.length > 0) {
-                            pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, function(point) {
-                                return that._pointCreated(point, cells.length, fixedColumns);
+                            that._pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, function(point) {
+                                if(point.index > transparentColumnIndex) {
+                                    point.columnIndex += correctIndex;
+                                    point.index += correctIndex;
+                                }
+
+                                return that._pointCreated(point, columns.length, columns);
                             });
-
-                            that._pointsByFixedColumns = normalizeColumnIndicesByPoints(columns, fixedColumns, pointsByFixedColumns);
                         }
-                    },
-
-                    _pointCreated: function(point, cellsLength, columns) {
-                        const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
-
-                        if(point.index > 0 && point.index < cellsLength) {
-                            const currentColumn = columns[point.columnIndex - 1] || {};
-                            const nextColumn = columns[point.columnIndex] || {};
-
-                            if(currentColumn.fixed || nextColumn.fixed) {
-                                point.columnIndex -= 1;
-                                return !((currentColumn.allowResizing || currentColumn.command === COMMAND_TRANSPARENT) && (isWidgetResizingMode || nextColumn.allowResizing || nextColumn.command === COMMAND_TRANSPARENT));
-                            }
-                        }
-
-                        return this.callBase.apply(this, arguments);
                     },
 
                     _getTargetPoint: function(pointsByColumns, currentX, deltaX) {
