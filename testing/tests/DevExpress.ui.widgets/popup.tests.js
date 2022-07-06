@@ -27,6 +27,8 @@ import visibilityChangeUtils from 'events/visibility_change';
 import 'generic_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
+import 'ui/scroll_view';
+import 'ui/date_box';
 
 const IS_SAFARI = !!browser.safari;
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
@@ -498,6 +500,37 @@ QUnit.module('basic', () => {
         const ZIndex = parseInt(popup.$wrapper().css('zIndex'), 10);
 
         assert.strictEqual(ZIndex, expectedZIndex);
+    });
+
+    ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
+        QUnit.test(`popup content should not be scrollable with datebox in stylingMode: ${stylingMode} (T1100188)`, function(assert) {
+            const popupContent = $(
+                `<div id="scrollView">
+                    <div id="dateBox"></div>
+                </div>'`
+            );
+            popupContent.appendTo($('#popup'));
+
+            $('#popup').dxPopup({
+                height: 'auto',
+                visible: true,
+            });
+
+            const scrollView = $('#scrollView').dxScrollView({
+                scrollByContent: true,
+                showScrollbar: 'always'
+            }).dxScrollView('instance');
+
+            $('#dateBox').dxDateBox({
+                label: 'Hello',
+                stylingMode,
+                displayFormat: 'dd.MM.yyyy'
+            });
+
+            scrollView.scrollTo(100);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scroll position does not changed');
+        });
     });
 });
 
