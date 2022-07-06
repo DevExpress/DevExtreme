@@ -1376,6 +1376,7 @@ QUnit.module('format: percent format', moduleConfig, () => {
         { text: '10.004', value: 0.100035, format: '#0.000%' },
         { text: '43.104', value: 0.431035, format: '#0.000%' },
         { text: '43.105', value: 0.431045, format: '#0.000%' },
+        { text: '0.004', value: 0.000035, format: '#0.000%' },
     ].forEach(({ text, value, format }) => {
         QUnit.test(`percent format should correctly handle float values, value: ${value}, format: ${format} (T1093736)`, function(assert) {
             this.instance.option({
@@ -1387,7 +1388,6 @@ QUnit.module('format: percent format', moduleConfig, () => {
             assert.strictEqual(this.instance.option('value'), value, 'value is correct');
         });
     });
-
 });
 
 QUnit.module('format: removing', moduleConfig, () => {

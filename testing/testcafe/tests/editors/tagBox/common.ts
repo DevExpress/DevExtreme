@@ -1,3 +1,5 @@
+
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
 import createWidget from '../../../helpers/createWidget';
@@ -8,7 +10,10 @@ fixture`TagBox`
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {
   const tagBox = new TagBox('#container');
 
-  await t.click(tagBox.element);
+
+  await t
+    .click(tagBox.element);
+
   await t
     .expect(tagBox.isFocused).ok()
     .expect(await tagBox.isOpened())
@@ -74,7 +79,9 @@ test('Keyboard navigation should work then tagBox is focused or list is focused'
 test('Select all checkbox should be focused by tab and closed by escape (T389453)', async (t) => {
   const tagBox = new TagBox('#container');
 
-  await t.click(tagBox.element);
+  await t
+    .click(tagBox.element);
+
   await t
     .expect(tagBox.isFocused).ok()
     .expect(await tagBox.isOpened())
@@ -102,7 +109,9 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
     .expect(selectAllCheckBox.isFocused)
     .ok();
 
-  await t.pressKey('esc');
+  await t
+    .pressKey('esc');
+
   await t
     .expect(tagBox.isFocused)
     .ok()
@@ -114,3 +123,16 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
   selectionMode: 'all',
   applyValueMode: 'useButtons',
 }, true));
+
+test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
+  const tagBox = new TagBox('#container');
+
+  await tagBox.option('items', [1, 2, 3]);
+
+  await t
+    .expect(await compareScreenshot(t, 'TagBox_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .ok();
+}).before(async () => createWidget('dxTagBox', {
+  width: 300,
+  placeholder: 'Choose a value',
+}));

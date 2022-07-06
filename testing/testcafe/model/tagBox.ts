@@ -1,11 +1,11 @@
 import { WidgetName } from '../helpers/createWidget';
-import DropDownList from './internal/dropDownList';
+import SelectBox from './selectBox';
 
 const CLASS = {
   tag: 'dx-tag',
 };
 
-export default class TagBox extends DropDownList {
+export default class TagBox extends SelectBox {
   tags: Selector;
 
   constructor(id: string) {
