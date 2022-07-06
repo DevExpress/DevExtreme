@@ -14,7 +14,6 @@ export function convertToRenderFieldItemOptions({
     rootElementCssClassList,
     formOrLayoutManager,
     createComponentCallback,
-    useFlexLayout,
     item,
     template,
     name,
@@ -44,14 +43,7 @@ export function convertToRenderFieldItemOptions({
 
     const needRenderLabel = labelOptions.visible && labelOptions.text;
     const { location: labelLocation, labelID } = labelOptions;
-    const labelNeedBaselineAlign =
-        labelLocation !== 'top'
-        &&
-        (
-            (!!item.helpText && !useFlexLayout)
-            ||
-            ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(item.editorType)
-        );
+    const labelNeedBaselineAlign = labelLocation !== 'top' && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(item.editorType);
 
     const editorOptions = _convertToEditorOptions({
         editorType: item.editorType,
@@ -82,7 +74,6 @@ export function convertToRenderFieldItemOptions({
         rootElementCssClassList,
         formOrLayoutManager,
         createComponentCallback,
-        useFlexLayout,
         labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,
         item, isSimpleItem, isRequired, template, helpID, labelID, name, helpText,
         formLabelLocation,

@@ -131,6 +131,8 @@ const Overlay = Widget.inherit({
 
             _ignoreCopyRootClassesToWrapperDeprecation: false,
 
+            _ignoreElementAttrDeprecation: false,
+
             onShowing: null,
 
             onShown: null,
@@ -193,7 +195,6 @@ const Overlay = Widget.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' },
             'closeOnOutsideClick': { since: '22.1', alias: 'hideOnOutsideClick' }
         });
     },
@@ -201,8 +202,20 @@ const Overlay = Widget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
 
-        if(options && options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
-            errors.log('W0001', this.NAME, 'copyRootClassesToWrapper', '21.2', 'Use the "wrapperAttr" option instead');
+        function createWrapperAttrDeprecationInfo() {
+            return {
+                since: '21.2',
+                message: 'Use the "wrapperAttr" option instead'
+            };
+        }
+
+        if(options) {
+            if(options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
+                this._logDeprecatedOptionWarning('copyRootClassesToWrapper', createWrapperAttrDeprecationInfo());
+            }
+            if(options.elementAttr && !options._ignoreElementAttrDeprecation) {
+                this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
+            }
         }
     },
 

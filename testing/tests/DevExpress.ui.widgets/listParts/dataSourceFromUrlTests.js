@@ -37,7 +37,7 @@ QUnit.module(
                 }
             });
 
-            const list = new List('#list', {
+            const list = new List($('#list'), {
                 dataSource: TEST_URL,
                 onItemRendered: handleItemRendered
             });
@@ -69,7 +69,7 @@ QUnit.module(
                 return [ 'a', 'z' ];
             });
 
-            const list = new List('#list', {
+            const list = new List($('#list'), {
                 dataSource: TEST_URL,
                 onItemRendered: handleItemRendered
             });
