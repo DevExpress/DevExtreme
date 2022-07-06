@@ -1,4 +1,3 @@
-
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
@@ -9,7 +8,6 @@ fixture`TagBox`
 
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {
   const tagBox = new TagBox('#container');
-
 
   await t
     .click(tagBox.element);
