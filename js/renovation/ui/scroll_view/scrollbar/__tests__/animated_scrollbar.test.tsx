@@ -1115,7 +1115,7 @@ describe('Animator', () => {
 
     each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
       each([-300, -360, -600]).describe('maxOffset: %o', (maxOffset: number) => {
-        each([-100, -300, -358.49, -358.50, -358.51, -358.99, -359, -359.01, -359.9, -360, -360.1, -500]).describe('scrollLocation: %o', (scrollLocation) => {
+        each([-100, -300, -357.99, -358.1, -358.49, -358.50, -358.51, -358.99, -359, -359.01, -359.9, -360, -360.1, -500]).describe('scrollLocation: %o', (scrollLocation) => {
           it('isReachBottom()', () => {
             const bottomPocketSize = 55;
 
@@ -1127,7 +1127,7 @@ describe('Animator', () => {
               maxOffset,
             });
 
-            if (reachBottomEnabled && scrollLocation < maxOffset + 1.5) {
+            if (reachBottomEnabled && scrollLocation < maxOffset + 2) {
               expect(viewModel.isReachBottom).toBe(true);
             } else {
               expect(viewModel.isReachBottom).toBe(false);

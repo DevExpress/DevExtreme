@@ -480,8 +480,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     // T1032842
     // when sizes is decimal and a rounding error of about 1px
     // scrollLocation = 72.3422123432px | maxOffset = 73px
-    return this.props.reachBottomEnabled
-      && Math.round(this.props.scrollLocation - this.props.maxOffset) <= 1;
+    return this.props.reachBottomEnabled && this.props.maxOffset < 0
+      && Math.round(-Math.ceil(-this.props.scrollLocation) - this.props.maxOffset) <= 1;
   }
 
   get finished(): boolean {
