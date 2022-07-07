@@ -50,5 +50,14 @@ export default abstract class Widget {
     return 'jquery';
   }
 
+  focus(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => { (getInstance() as any).focus(); },
+      { dependencies: { getInstance } },
+    )();
+  }
+
   abstract getName(): WidgetName;
 }
