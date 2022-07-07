@@ -61,16 +61,31 @@ export function addShadowDomStyles($element) {
     root.adoptedStyleSheets = [constructedStyleSheet];
 }
 
+function getShadowDomElementsInViewPort(x, y, el) {
+    let result = [];
+
+    const rect = el.getBoundingClientRect();
+
+    if(rect) {
+        if(x >= rect.left && x <= rect.right - 1 && y <= rect.bottom - 1 && y >= rect.top) {
+            result = [el];
+
+            for(let i = 0; i < el.children.length; i++) {
+                result.push(...getShadowDomElementsInViewPort(x, y, el.children[i]));
+            }
+        }
+    }
+
+    return result;
+}
+
 export function getShadowElementsFromPoint(x, y, root) {
     const result = [];
-    const elements = root.querySelectorAll('*');
+    // eslint-disable-next-line no-undef
+    const childNodes = [...root.childNodes].filter(node => node.nodeType === Node.ELEMENT_NODE);
 
-    for(let i = 0; i < elements.length; i++) {
-        const rect = elements[i].getBoundingClientRect();
-
-        if(x >= rect.left && x <= rect.right - 1 && y <= rect.bottom - 1 && y >= rect.top) {
-            result.unshift(elements[i]);
-        }
+    for(let i = 0; i < childNodes.length; i++) {
+        result.push(...getShadowDomElementsInViewPort(x, y, childNodes[i]));
     }
 
     return result;
