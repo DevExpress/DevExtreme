@@ -445,7 +445,7 @@ export interface dxFilterBuilderField {
        * @default undefined
        * @type Array<any> | Store | DataSourceOptions
        */
-      dataSource?: FilterLookupDataSource<any>;
+      dataSource?: FilterLookupDataSource<any> | null;
       /**
        * @docid
        * @default undefined

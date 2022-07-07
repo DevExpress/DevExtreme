@@ -82,11 +82,11 @@ export interface dxAccordionOptions<
     collapsible?: boolean;
     /**
      * @docid
-     * @type string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default true

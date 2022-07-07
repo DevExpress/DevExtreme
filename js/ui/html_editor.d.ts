@@ -526,9 +526,9 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<string>;
+    dataSource?: DataSourceLike<string> | null;
     /**
      * @docid
      * @default "this"
@@ -659,9 +659,9 @@ export interface dxHtmlEditorVariables {
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<string>
+     * @type Store|DataSource|DataSourceOptions|string|Array<string>|null
      */
-    dataSource?: DataSourceLike<string>;
+    dataSource?: DataSourceLike<string> | null;
     /**
      * @docid
      * @default ""
