@@ -940,7 +940,7 @@ export const rowsModule = {
                     if(scrollable) {
                         scrollable.update();
 
-                        if(scrollable.option('useNative') && !scrollable?.isRenovated()) {
+                        if(scrollable.option('useNative') || !scrollable?.isRenovated()) {
                             this._updateHorizontalScrollPosition();
                         }
                     }
