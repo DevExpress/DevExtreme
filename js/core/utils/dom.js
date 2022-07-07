@@ -152,3 +152,18 @@ export const replaceWith = (element, newElement) => {
 
     return newElement;
 };
+
+export const getShadowElementsFromPoint = (x, y, root) => {
+    const result = [];
+    const elements = root.querySelectorAll('*');
+
+    for(let i = 0; i < elements.length; i++) {
+        const rect = elements[i].getBoundingClientRect();
+
+        if(x >= rect.left && x <= rect.right - 1 && y <= rect.bottom - 1 && y >= rect.top) {
+            result.push(elements[i]);
+        }
+    }
+
+    return result;
+};
