@@ -181,6 +181,7 @@ const FieldChooser = BaseFieldChooser.inherit({
             case 'texts':
             case 'allowSearch':
             case 'searchTimeout':
+            case 'encodeHtml':
                 that._invalidate();
                 break;
             case 'onContextMenuPreparing':
