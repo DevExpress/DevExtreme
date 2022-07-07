@@ -47,15 +47,6 @@ export default class List extends Widget {
     return new ListGroup(this.element.find(`.${CLASS.group}`).nth(index));
   }
 
-  focus(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => { (getInstance() as any).focus(); },
-      { dependencies: { getInstance } },
-    )();
-  }
-
   scrollTo(value: number): Promise<void> {
     const { getInstance } = this;
 
