@@ -96,6 +96,7 @@ const FieldChooser = BaseFieldChooser.inherit({
             height: 400,
             layout: 0,
             dataSource: null,
+            encodeHtml: true,
             onContextMenuPreparing: null,
             allowSearch: false,
             searchTimeout: 500,
