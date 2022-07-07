@@ -866,7 +866,7 @@ const Draggable = DOMComponent.inherit({
         const $targetDraggableElement = this.$element();
 
         const mousePosition = getMousePosition(e);
-        const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
+        const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y, this.element());
         const firstWidgetElement = elements.filter((element) => {
             const $element = $(element);
 
