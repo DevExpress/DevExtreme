@@ -71,7 +71,7 @@ function getShadowDomElementsInViewPort(x, y, el) {
             result = [el];
 
             for(let i = 0; i < el.children.length; i++) {
-                result.push(...getShadowDomElementsInViewPort(x, y, el.children[i]));
+                result.unshift(...getShadowDomElementsInViewPort(x, y, el.children[i]));
             }
         }
     }
