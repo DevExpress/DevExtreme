@@ -39,6 +39,7 @@ export type WidgetName =
 'dxDateBox' |
 'dxLookup' |
 'dxList' |
+'dxHtmlEditor' |
 'dxNumberBox' |
 'dxValidator';
 
