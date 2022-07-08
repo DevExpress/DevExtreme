@@ -9,6 +9,7 @@ import Widget, {
 import {
     EditorStyle,
     ValidationMessageMode,
+    ValidationMessagePosition,
     ValidationStatus,
 } from '../../common';
 
@@ -62,6 +63,12 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @public
      */
     validationMessageMode?: ValidationMessageMode;
+    /**
+     * @docid
+     * @default "bottom"
+     * @public
+     */
+     validationMessagePosition?: ValidationMessagePosition;
     /**
      * @docid
      * @default "valid"

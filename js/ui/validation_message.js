@@ -122,30 +122,48 @@ const ValidationMessage = Overlay.inherit({
         this.option({ maxWidth });
     },
 
+    _getPositionsArray: function(positionRequest, positionSide) {
+        switch(positionRequest) {
+            case 'top':
+                return [`${positionSide} bottom`, `${positionSide} top`];
+            case 'left':
+                return ['right', 'left'];
+            case 'right':
+                return ['left', 'right'];
+            default:
+                return [`${positionSide} top`, `${positionSide} bottom`];
+        }
+
+    },
+
     _updatePosition: function() {
         const {
-            positionRequest,
+            positionRequest = 'top',
             rtlEnabled,
-            offset,
+            offset: componentOffset,
             boundary
         } = this.option();
         const positionSide = getDefaultAlignment(rtlEnabled);
-        const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
+        const positions = this._getPositionsArray(positionRequest, positionSide);
+        const offset = Object.assign({}, componentOffset);
 
-        if(rtlEnabled) offset.h = -offset.h;
-        if(positionRequest !== 'below') offset.v = -offset.v;
+        this.$element().addClass(`dx-invalid-message-${positionRequest}`);
+
+        if(rtlEnabled && positionRequest !== 'left' && positionRequest !== 'right') offset.h = -offset.h;
+        if(positionRequest === 'top') offset.v = -offset.v;
+        if(positionRequest === 'left') offset.h = -offset.h;
 
         this.option('position', {
             offset,
             boundary,
-            my: positionSide + verticalPositions[0],
-            at: positionSide + verticalPositions[1],
+            my: positions[0],
+            at: positions[1],
             collision: 'none flip'
         });
     },
 
     _optionChanged(args) {
-        const { name, value } = args;
+        const { name, value, previousValue } = args;
         switch(name) {
             case 'target':
                 this._updatePositionByTarget();
@@ -161,6 +179,7 @@ const ValidationMessage = Overlay.inherit({
             case 'rtlEnabled':
             case 'offset':
             case 'positionRequest':
+                this.$element().removeClass(`dx-invalid-message-${previousValue}`);
                 this._updatePosition();
                 break;
             case 'container':

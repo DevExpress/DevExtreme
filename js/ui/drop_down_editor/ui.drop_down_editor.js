@@ -648,13 +648,19 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getValidationMessagePositionRequest: function() {
-        let positionRequest = 'below';
+        const validationMessagePosition = this.option('validationMessagePosition');
+
+        if(validationMessagePosition) {
+            return validationMessagePosition;
+        }
+
+        let positionRequest = 'bottom';
 
         if(this._popup && this._popup.option('visible')) {
             const { top: myTop } = animationPosition.setup(this.$element());
             const { top: popupTop } = animationPosition.setup(this._popup.$content());
 
-            positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
+            positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';
         }
 
         return positionRequest;

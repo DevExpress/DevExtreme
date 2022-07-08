@@ -1495,6 +1495,7 @@ declare module DevExpress.common {
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
+  export type ValidationMessagePosition = 'top' | 'right' | 'bottom' | 'left';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
@@ -23922,6 +23923,10 @@ declare module DevExpress.ui {
      * [descr:EditorOptions.validationMessageMode]
      */
     validationMessageMode?: DevExpress.common.ValidationMessageMode;
+    /**
+     * [descr:EditorOptions.validationMessagePosition]
+     */
+    validationMessagePosition?: DevExpress.common.ValidationMessagePosition;
     /**
      * [descr:EditorOptions.validationStatus]
      */
