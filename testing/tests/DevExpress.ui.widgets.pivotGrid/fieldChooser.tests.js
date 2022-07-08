@@ -1,5 +1,8 @@
 QUnit.testStart(function() {
-    const markup = '<div id="container"></div><div id="pgfc"></div>';
+    const markup = '\
+        <div id="container"></div><div id="pgfc"></div>\
+        <div id="standaloneFieldChooser"></div>\
+    ';
     $('#qunit-fixture').html(markup);
 });
 
@@ -12,7 +15,13 @@ import $ from 'jquery';
 import PivotGridDataSource from 'ui/pivot_grid/data_source';
 import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
 import pointerMock from '../../helpers/pointerMock.js';
+import { isDefined } from 'core/utils/type';
 
+import 'ui/pivot_grid/ui.pivot_grid';
+
+const HEADER_FILTER_CLASS = 'dx-header-filter';
+const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
+const LIST_ITEM_CLASS = 'dx-list-item';
 
 const createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
@@ -2547,5 +2556,132 @@ QUnit.module('applyChangesMode: onDemand', {
         const $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
         assert.ok(!$sortIndicator.hasClass('dx-sort-up'));
     });
+});
 
+QUnit.module('FieldChooser encodeHtml', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        const createPivotGrid = function(options) {
+            const pivotGridElement = $('#container').dxPivotGrid(options);
+            return pivotGridElement.dxPivotGrid('instance');
+        };
+
+        this.initPivotGrid = (options) => {
+            this.pivotGrid = createPivotGrid($.extend(true, {
+                dataSource: {
+                    fields: [{ dataField: 'field1', area: 'column' }],
+                    store: [{ field1: 'test <test>' }]
+                },
+                allowFiltering: true,
+                fieldChooser: {
+                    enabled: true
+                }
+            }, options));
+
+            this.clock.tick();
+
+            return this.pivotGrid;
+        };
+
+        this.getListItemText = () => {
+            return $(`.${HEADER_FILTER_MENU_CLASS}`).find(`.${LIST_ITEM_CLASS}`).text();
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.module('integrated', {
+        beforeEach: function() {
+            this.showFieldChooserPopup = () => {
+                this.pivotGrid.getFieldChooserPopup().show();
+                this.clock.tick(500);
+            };
+
+            this.showHeaderFilterPanel = (index) => {
+                $(this.pivotGrid.getFieldChooserPopup().content()).find(`.${HEADER_FILTER_CLASS}`).eq(index).trigger('dxclick');
+                this.clock.tick(500);
+            };
+        },
+    }, () => {
+        QUnit.test('fieldChooser.encodeHtml inherits pivotGrid.encodeHtml default value', function(assert) {
+            this.initPivotGrid({});
+
+            this.showFieldChooserPopup();
+            this.showHeaderFilterPanel(0);
+
+            assert.equal(this.getListItemText(), 'test <test>');
+        });
+
+        [true, false].forEach((pivotGridEncodeHtml) => {
+            QUnit.test(`fieldChooser.encodeHtml inherits pivotgrid.encodeHtml=${pivotGridEncodeHtml}`, function(assert) {
+                this.initPivotGrid({ encodeHtml: pivotGridEncodeHtml });
+
+                this.showFieldChooserPopup();
+                this.showHeaderFilterPanel(0);
+
+                assert.equal(this.getListItemText(), `test ${pivotGridEncodeHtml ? '<test>' : ''}`);
+            });
+
+            [true, false].forEach((fieldChooserEncodeHtml) => {
+                QUnit.test(`fieldChooser.encodeHtml=${fieldChooserEncodeHtml} more priority than pivotgrid.encodeHtml=${pivotGridEncodeHtml}`, function(assert) {
+                    this.initPivotGrid({
+                        encodeHtml: pivotGridEncodeHtml,
+                        fieldChooser: { encodeHtml: fieldChooserEncodeHtml }
+                    });
+
+                    this.showFieldChooserPopup();
+                    this.showHeaderFilterPanel(0);
+
+                    assert.equal(this.getListItemText(), `test ${fieldChooserEncodeHtml ? '<test>' : ''}`);
+                });
+            });
+        });
+    });
+
+    QUnit.module('standalone', {
+        beforeEach: function() {
+            this.initStandaloneFieldChooser = (pivotGridEncodeHtml, fieldChooserEncodeHtml) => {
+                const pivotGrid = this.initPivotGrid({ encodeHtml: pivotGridEncodeHtml });
+
+                const fieldChooserOptions = {
+                    dataSource: pivotGrid.getDataSource(),
+                    width: 400,
+                    height: 400,
+                };
+
+                if(isDefined(fieldChooserEncodeHtml)) {
+                    fieldChooserOptions.encodeHtml = fieldChooserEncodeHtml;
+                }
+
+                this.$standaloneFieldChooser = $('#standaloneFieldChooser').dxPivotGridFieldChooser(fieldChooserOptions);
+            };
+
+            this.showHeaderFilterPanel = (index) => {
+                this.$standaloneFieldChooser.find(`.${HEADER_FILTER_CLASS}`).eq(index).trigger('dxclick');
+                this.clock.tick(500);
+            };
+        },
+    }, () => {
+        QUnit.test('fieldChooser.encodeHtml default value', function(assert) {
+            this.initStandaloneFieldChooser(false, undefined);
+
+            this.showHeaderFilterPanel(0);
+
+            assert.equal(this.getListItemText(), 'test <test>');
+        });
+
+        [true, false].forEach((pivotGridEncodeHtml) => {
+            [true, false].forEach((fieldChooserEncodeHtml) => {
+                QUnit.test(`pivotgrid.encodeHtml=${pivotGridEncodeHtml} doesn't affect on fieldChooser.encodeHtml=${fieldChooserEncodeHtml} `, function(assert) {
+                    this.initStandaloneFieldChooser(pivotGridEncodeHtml, fieldChooserEncodeHtml);
+
+                    this.showHeaderFilterPanel(0);
+
+                    assert.equal(this.getListItemText(), `test ${fieldChooserEncodeHtml ? '<test>' : ''}`);
+                });
+            });
+        });
+    });
 });

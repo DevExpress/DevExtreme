@@ -556,7 +556,7 @@ const PivotGrid = Widget.inherit({
             width: undefined,
             height: undefined,
             headerFilter: that.option('headerFilter'),
-            encodeHtml: that.option('encodeHtml'),
+            encodeHtml: that.option('fieldChooser.encodeHtml') ?? that.option('encodeHtml'),
             applyChangesMode: fieldChooserOptions.applyChangesMode,
             onContextMenuPreparing: function(e) {
                 that._trigger('onContextMenuPreparing', e);
