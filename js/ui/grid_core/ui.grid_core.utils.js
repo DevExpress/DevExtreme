@@ -14,6 +14,7 @@ import { normalizeSortingInfo as normalizeSortingInfoUtility } from '../../data/
 import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
+import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import variableWrapper from '../../core/utils/variable_wrapper';
@@ -599,23 +600,22 @@ export default {
                         d.resolve([]);
                     }
 
+                    let newDataSource;
+
                     if(hasLookupOptimization) {
                         const lookupItems = items.map(item => ({
                             [column.lookup.valueExpr]: item.key,
                             [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
                         }));
 
-                        const store = new ArrayStore({
-                            data: lookupItems,
-                            key: column.lookup.valueExpr,
-                        });
-
-                        store.load({
+                        newDataSource = new DataSource({
                             ...lookupDataSourceOptions,
-                            ...loadOptions
-                        })
-                            .done(d.resolve)
-                            .fail(d.fail);
+                            ...loadOptions,
+                            store: new ArrayStore({
+                                data: lookupItems,
+                                key: column.lookup.valueExpr,
+                            })
+                        });
                     } else {
                         const filter = this.combineFilters(
                             items.map((data => [
@@ -624,15 +624,22 @@ export default {
                             'or'
                         );
 
-                        lookupDataSourceOptions.store.load({
+                        newDataSource = new DataSource({
                             ...lookupDataSourceOptions,
                             ...loadOptions,
                             filter: this.combineFilters([filter, loadOptions.filter], 'and'),
-                        })
-                            .done(d.resolve)
-                            .fail(d.fail);
+                        });
                     }
 
+                    newDataSource.on('customizeStoreLoadOptions', (e) => {
+                        e.storeLoadOptions.take = loadOptions.take;
+                        e.storeLoadOptions.skip = loadOptions.skip;
+                    });
+
+                    newDataSource
+                        .load()
+                        .done(d.resolve)
+                        .fail(d.fail);
                 }).fail(d.fail);
                 return d;
             },
