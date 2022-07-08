@@ -68,7 +68,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @default "bottom"
      * @public
      */
-     validationMessagePosition?: ValidationMessagePosition;
+     validationMessagePosition?: ValidationMessagePosition | null;
     /**
      * @docid
      * @default "valid"

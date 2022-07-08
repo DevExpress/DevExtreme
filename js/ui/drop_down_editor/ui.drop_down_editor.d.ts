@@ -30,6 +30,7 @@ import {
 
 import {
     ApplyValueMode,
+    ValidationMessagePosition,
 } from '../../common';
 
 /** @public */
@@ -125,6 +126,12 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @public
      */
     showDropDownButton?: boolean;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    validationMessagePosition?: ValidationMessagePosition | null;
     /**
      * @docid
      * @default null
