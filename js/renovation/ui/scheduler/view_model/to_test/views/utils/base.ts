@@ -139,18 +139,9 @@ export const isDateAndTimeView = (
   viewType: ViewType,
 ): boolean => viewType !== VIEWS.TIMELINE_MONTH && viewType !== VIEWS.MONTH;
 
-export const isSupportMultiDayAppointments = (
-  viewType: ViewType,
-): boolean => [
-  VIEWS.TIMELINE_DAY,
-  VIEWS.TIMELINE_WEEK,
-  VIEWS.TIMELINE_WORK_WEEK,
-  VIEWS.TIMELINE_MONTH,
-].includes(viewType);
-
 export const isTimelineView = (
   viewType: ViewType,
-): boolean => !!TIMELINE_VIEWS.find((type) => viewType === type);
+): boolean => !!TIMELINE_VIEWS[viewType];
 
 export const getHorizontalGroupCount = (
   groups: Group[], groupOrientation: GroupOrientation,

@@ -12,9 +12,9 @@ export const VIEWS: Record<string, ViewType> = {
   AGENDA: 'agenda',
 };
 
-export const TIMELINE_VIEWS: ViewType[] = [
-  VIEWS.TIMELINE_DAY,
-  VIEWS.TIMELINE_WEEK,
-  VIEWS.TIMELINE_WORK_WEEK,
-  VIEWS.TIMELINE_MONTH,
-];
+export const TIMELINE_VIEWS: Partial<Record<ViewType, boolean>> = {
+  timelineDay: true,
+  timelineWeek: true,
+  timelineWorkWeek: true,
+  timelineMonth: true,
+};
