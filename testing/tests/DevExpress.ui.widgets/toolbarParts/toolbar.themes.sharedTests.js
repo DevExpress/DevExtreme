@@ -59,7 +59,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                     const dropDown = DropDownMenu.getInstance(dropDownMenuElement);
                     dropDown.open();
 
-                    const dropDownMenuListElement = $(`.${DROP_DOWN_MENU_LIST_CLASS}`)[0];
+                    const dropDownMenuListElement = $(`.${DROP_DOWN_MENU_LIST_CLASS}`).get(0);
                     const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
                     const menuButtonElement = dropDownMenuListElement.querySelector(`.${BUTTON_CLASS}`);
 
