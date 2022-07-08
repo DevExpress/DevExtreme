@@ -29,6 +29,7 @@ import dxDropDownEditor, {
 
 import {
     SimplifiedSearchMode,
+    ValidationMessagePosition,
 } from '../../common';
 
 export interface SelectionChangedInfo<T = any> {
@@ -150,6 +151,12 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @ref
      * @public
      */
+     /**
+     * @docid
+     * @default "null"
+     * @public
+     */
+      validationMessagePosition?: ValidationMessagePosition;
     value?: any;
     /**
      * @docid

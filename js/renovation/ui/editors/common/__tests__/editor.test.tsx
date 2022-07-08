@@ -65,6 +65,7 @@ describe('Editor', () => {
                 validationErrors,
                 validationStatus: 'invalid',
                 validationMessageMode: 'always',
+                validationMessagePosition: 'bottom',
                 rtlEnabled: false,
               },
               isValidationMessageVisible: true,

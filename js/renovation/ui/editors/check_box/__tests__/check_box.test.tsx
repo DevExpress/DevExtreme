@@ -104,6 +104,7 @@ describe('CheckBox', () => {
         width: 200,
         isValid: true,
         validationMessageMode: 'auto',
+        validationMessagePosition: 'bottom',
         validationError: { message: 'error' },
         validationErrors: [],
         validationStatus: 'valid',

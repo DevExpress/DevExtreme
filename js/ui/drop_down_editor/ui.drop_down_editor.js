@@ -134,7 +134,8 @@ const DropDownEditor = TextBox.inherit({
             applyButtonText: messageLocalization.format('OK'),
             cancelButtonText: messageLocalization.format('Cancel'),
             buttonsLocation: 'default',
-            useHiddenSubmitElement: false
+            useHiddenSubmitElement: false,
+            validationMessagePosition: null
 
             /**
             * @name dxDropDownEditorOptions.mask

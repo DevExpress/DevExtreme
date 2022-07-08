@@ -260,7 +260,7 @@ export type ValidationMessageMode = 'always' | 'auto';
  * @public
  * @namespace DevExpress.common
  */
- export type ValidationMessagePosition = 'top' | 'right' | 'bottom' | 'left';
+ export type ValidationMessagePosition = 'top' | 'right' | 'bottom' | 'left' | null;
 
 /**
  * @public
