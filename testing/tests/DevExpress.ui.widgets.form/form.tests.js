@@ -217,26 +217,6 @@ QUnit.test('Invalid field name when item is defined not as string and not as obj
     assert.equal(form.getEditor('lastName').option('value'), 'Klark', 'editor by lastName field');
 });
 
-QUnit.test('dxshown event fire when visible option changed to true', function(assert) {
-    const form = $('#form').dxForm({
-        formData: { id: 1 }
-    }).dxForm('instance');
-    let dxShownEventCounter = 0;
-
-    $(form.$element())
-        .find('.dx-visibility-change-handler')
-        .first()
-        .on('dxshown', function() {
-            dxShownEventCounter++;
-        });
-
-    form.option('visible', false);
-    assert.equal(dxShownEventCounter, 0, 'dxshown event does not fire');
-
-    form.option('visible', true);
-    assert.equal(dxShownEventCounter, 1, 'dxshown event fired');
-});
-
 QUnit.test('Reset editor\'s value when the formData option is empty object', function(assert) {
     let values = [];
     const form = $('#form').dxForm({

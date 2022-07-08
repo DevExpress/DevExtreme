@@ -11,7 +11,6 @@ import fx from 'animation/fx';
 import holdEvent from 'events/hold';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
-import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import registerComponent from 'core/component_registrator';
 import swipeEvents from 'events/swipe';
 import themes from 'ui/themes';
@@ -2361,7 +2360,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             pageSize: 20
         });
         let list;
-        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
+        const $toggleButton = $('<div/>').appendTo('#qunit-fixture');
         try {
             $toggleButton.dxButton({
                 onClick: () => {
@@ -3987,25 +3986,22 @@ if(devices.real().deviceType === 'desktop') {
     });
 }
 
-if(QUnit.urlParams['nojquery']) {
+if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
     QUnit.module('ShadowDOM', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            appendShadowRoot.call(this, '#list');
-
-            this.$list = $(this.control).dxList({
+            this.$list = $('#list').dxList({
                 items: ['One', 'Two', 'Three'],
                 itemDragging: { allowReordering: true },
                 focusStateEnabled: true,
             });
+
+            this.root = $('#list')[0].getRootNode();
         },
 
         afterEach: function() {
             this.clock.restore();
-
-            // TODO: get rid of it after fix jquery event bubbling to shadow dom
-            $(this.container).empty();
         },
 
         getItems: function() {

@@ -3,7 +3,6 @@ import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import numberLocalization from 'localization/number';
 
 import 'ui/text_box/ui.text_editor';
@@ -1376,6 +1375,7 @@ QUnit.module('format: percent format', moduleConfig, () => {
         { text: '10.004', value: 0.100035, format: '#0.000%' },
         { text: '43.104', value: 0.431035, format: '#0.000%' },
         { text: '43.105', value: 0.431045, format: '#0.000%' },
+        { text: '0.004', value: 0.000035, format: '#0.000%' },
     ].forEach(({ text, value, format }) => {
         QUnit.test(`percent format should correctly handle float values, value: ${value}, format: ${format} (T1093736)`, function(assert) {
             this.instance.option({
@@ -1387,7 +1387,6 @@ QUnit.module('format: percent format', moduleConfig, () => {
             assert.strictEqual(this.instance.option('value'), value, 'value is correct');
         });
     });
-
 });
 
 QUnit.module('format: removing', moduleConfig, () => {
@@ -2242,13 +2241,9 @@ QUnit.module('symbol with dot in format', {
     });
 });
 
-QUnit.module('ShadowDOM', {
-    beforeEach: function() {
-        appendShadowRoot.call(this, '#numberbox');
-    }
-}, function() {
+QUnit.module('ShadowDOM', {}, function() {
     QUnit.test('should move caret', function(assert) {
-        const $element = $(this.control).dxNumberBox({
+        const $element = $('#numberbox').dxNumberBox({
             format: '#0.##',
             value: '',
             useMaskBehavior: true

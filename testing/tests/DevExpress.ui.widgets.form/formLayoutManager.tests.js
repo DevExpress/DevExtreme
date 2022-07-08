@@ -26,42 +26,6 @@ QUnit.testStart(function() {
 
 QUnit.module('Layout manager');
 
-QUnit.test('Layout strategy when flex is not supported', function(assert) {
-    const items = [
-        {
-            dataField: 'test1',
-            editorType: 'dxTextBox'
-        },
-        {
-            dataField: 'test2',
-            editorType: 'dxTextBox',
-            helpText: 'help'
-        },
-        {
-            dataField: 'test3',
-            editorType: 'dxRadioGroup'
-        },
-        {
-            dataField: 'test4',
-            editorType: 'dxCalendar'
-        },
-        {
-            dataField: 'test5',
-            editorType: 'dxTextArea'
-        }
-    ];
-    const $testContainer = $('#container').dxLayoutManager();
-    const layoutManager = $testContainer.dxLayoutManager('instance');
-
-    layoutManager._hasBrowserFlex = function() {
-        return false;
-    };
-    layoutManager.option('items', items);
-
-    assert.equal(layoutManager._responsiveBox.option('_layoutStrategy'), 'fallback');
-    assert.equal($testContainer.find('.' + FIELD_ITEM_CLASS + '.' + FLEX_LAYOUT_CLASS).length, 0, 'flex layout class');
-});
-
 QUnit.test('Layout strategy when flex is supported', function(assert) {
     const items = [
         {
@@ -89,12 +53,8 @@ QUnit.test('Layout strategy when flex is supported', function(assert) {
     const $testContainer = $('#container').dxLayoutManager();
     const layoutManager = $testContainer.dxLayoutManager('instance');
 
-    layoutManager._hasBrowserFlex = function() {
-        return true;
-    };
     layoutManager.option('items', items);
 
-    assert.equal(layoutManager._responsiveBox.option('_layoutStrategy'), 'flex');
     assert.equal($testContainer.find('.' + FIELD_ITEM_CLASS + '.' + FLEX_LAYOUT_CLASS).length, 5, 'flex layout class');
 });
 
@@ -125,14 +85,11 @@ QUnit.test('Check label alignment classes when browser is not supported flex', f
     const $testContainer = $('#container').dxLayoutManager();
     const layoutManager = $testContainer.dxLayoutManager('instance');
 
-    layoutManager._hasBrowserFlex = function() {
-        return false;
-    };
     layoutManager.option('items', items);
     const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
     assert.ok(!$items.eq(0).hasClass(FIELD_ITEM_LABEL_ALIGN_CLASS), 'item doesn\'t have baseline alignment class');
-    assert.ok($items.eq(1).hasClass(FIELD_ITEM_LABEL_ALIGN_CLASS), 'item have baseline alignment class');
+    assert.ok(!$items.eq(1).hasClass(FIELD_ITEM_LABEL_ALIGN_CLASS), 'item doesn\'t have baseline alignment class');
     assert.ok($items.eq(2).hasClass(FIELD_ITEM_LABEL_ALIGN_CLASS), 'item have baseline alignment class');
     assert.ok($items.eq(3).hasClass(FIELD_ITEM_LABEL_ALIGN_CLASS), 'item have baseline alignment class');
     assert.ok($items.eq(4).hasClass(FIELD_ITEM_LABEL_ALIGN_CLASS), 'item have baseline alignment class');

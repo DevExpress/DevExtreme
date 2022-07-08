@@ -7,15 +7,10 @@ const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     },
 
     _getCombinedFilter: function() {
-        let filter;
-        let storeLoadOptions;
-        const dataSource = this._dataSource;
-
-        if(dataSource) {
-            storeLoadOptions = { filter: dataSource.filter() };
-            dataSource._addSearchFilter(storeLoadOptions);
-            filter = storeLoadOptions.filter;
-        }
+        const dataController = this._dataController;
+        const storeLoadOptions = { filter: dataController.filter() };
+        dataController.addSearchFilter(storeLoadOptions);
+        const filter = storeLoadOptions.filter;
 
         return filter;
     },
@@ -27,11 +22,11 @@ const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
 
         this.callBase();
 
-        if(this._dataSource) {
-            value && value.length && this._dataSource.searchValue(value);
-            mode.length && this._dataSource.searchOperation(searchBoxMixin.getOperationBySearchMode(mode));
-            expr && this._dataSource.searchExpr(expr);
-        }
+        const dataController = this._dataController;
+
+        value && value.length && dataController.searchValue(value);
+        mode.length && dataController.searchOperation(searchBoxMixin.getOperationBySearchMode(mode));
+        expr && dataController.searchExpr(expr);
     }
 });
 

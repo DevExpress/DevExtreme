@@ -41,6 +41,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
                 store: new ArrayStore(this.option('items')),
                 pageSize: 0
             });
+            this._initDataController();
         }
     },
 

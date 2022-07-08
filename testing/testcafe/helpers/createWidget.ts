@@ -2,6 +2,7 @@ import { ClientFunction } from 'testcafe';
 
 export type WidgetName =
 'dxAccordion' |
+'dxAutocomplete' |
 'dxGallery' |
 'dxButtonGroup' |
 'dxCheckBox' |
@@ -38,6 +39,7 @@ export type WidgetName =
 'dxDateBox' |
 'dxLookup' |
 'dxList' |
+'dxHtmlEditor' |
 'dxNumberBox' |
 'dxValidator';
 

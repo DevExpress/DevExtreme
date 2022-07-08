@@ -17265,6 +17265,10 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.PivotGridDataSource;
     /**
+     * [descr:dxPivotGridFieldChooserOptions.encodeHtml]
+     */
+    encodeHtml?: boolean;
+    /**
      * [descr:dxPivotGridFieldChooserOptions.headerFilter]
      */
     headerFilter?: {

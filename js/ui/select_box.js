@@ -266,7 +266,7 @@ const SelectBox = DropDownList.inherit({
     _listContentReadyHandler: function() {
         this.callBase();
 
-        const isPaginate = this._dataSource && this._dataSource.paginate();
+        const isPaginate = this._dataController.paginate();
 
         if(isPaginate && this._needPopupRepaint()) {
             return;
@@ -309,14 +309,14 @@ const SelectBox = DropDownList.inherit({
     },
 
     _setNextValue: function(e) {
-        const dataSourceIsLoaded = this._dataSource.isLoaded()
+        const dataSourceIsLoaded = this._dataController.isLoaded()
             ? new Deferred().resolve()
-            : this._dataSource.load();
+            : this._dataController.load();
 
         dataSourceIsLoaded.done((function() {
             const selectedIndex = this._getSelectedIndex();
-            const hasPages = this._dataSource.pageSize();
-            const isLastPage = this._dataSource.isLastPage();
+            const hasPages = this._dataController.pageSize();
+            const isLastPage = this._dataController.isLastPage();
             const isLastItem = selectedIndex === this._items().length - 1;
 
             this._saveValueChangeEvent(e);
@@ -327,7 +327,7 @@ const SelectBox = DropDownList.inherit({
                     this._createPopup();
                 }
 
-                if(!this._dataSource.isLoading()) {
+                if(!this._dataController.isLoading()) {
                     this._list._loadNextPage().done(this._setNextItem.bind(this, step));
                 }
             } else {
@@ -410,7 +410,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _getActualSearchValue: function() {
-        return this._dataSource.searchValue();
+        return this._dataController.searchValue();
     },
 
     _toggleOpenState: function(isVisible) {
@@ -429,7 +429,7 @@ const SelectBox = DropDownList.inherit({
             const showDataImmediately = this.option('showDataBeforeSearch')
                 || this._isMinSearchLengthExceeded();
 
-            if(showDataImmediately && this._dataSource) {
+            if(showDataImmediately && this._dataController.getDataSource()) {
                 if(this._searchTimer) return;
 
                 const searchValue = this._getActualSearchValue();

@@ -153,7 +153,7 @@ QUnit.module('Mandatory component setup', {
                 + 'and add correspondig tests in your component\'s test suite.';
                 const templatesToCheck = meta.props.template.filter(templateName => {
                     // skip template here if you don't want to test its compatibility
-                    return templateName !== 'iconTemplate' && templateName !== 'noDataTemplate';
+                    return templateName !== 'iconTemplate' && templateName !== 'noDataTemplate' && templateName !== 'loadPanelTemplate';
                 });
                 assert.expect(templatesToCheck.length * 3);
 

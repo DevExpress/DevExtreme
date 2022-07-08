@@ -13,6 +13,12 @@ function createElement(
   return el;
 }
 
+export const setAttribute = ClientFunction((selector, attribute, value) => {
+  const element = document.querySelector(selector);
+
+  element.setAttribute(attribute, value);
+});
+
 export const appendElementTo = ClientFunction((
   containerSelector: string,
   tagName: string,
