@@ -14,7 +14,6 @@ import { normalizeSortingInfo as normalizeSortingInfoUtility } from '../../data/
 import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
-import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import variableWrapper from '../../core/utils/variable_wrapper';
@@ -606,16 +605,15 @@ export default {
                             [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
                         }));
 
-                        const newDataSource = new DataSource({
-                            ...loadOptions,
-                            store: new ArrayStore({
-                                data: lookupItems,
-                                key: column.lookup.valueExpr,
-                            })
+                        const store = new ArrayStore({
+                            data: lookupItems,
+                            key: column.lookup.valueExpr,
                         });
 
-                        newDataSource
-                            .load(loadOptions)
+                        store.load({
+                            ...lookupDataSourceOptions,
+                            ...loadOptions
+                        })
                             .done(d.resolve)
                             .fail(d.fail);
                     } else {
@@ -626,12 +624,11 @@ export default {
                             'or'
                         );
 
-                        (new DataSource({
+                        lookupDataSourceOptions.store.load({
                             ...lookupDataSourceOptions,
                             ...loadOptions,
                             filter: this.combineFilters([filter, loadOptions.filter], 'and'),
-                        }))
-                            .load(loadOptions)
+                        })
                             .done(d.resolve)
                             .fail(d.fail);
                     }
