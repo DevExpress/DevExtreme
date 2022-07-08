@@ -16,6 +16,7 @@ export type WidgetName =
 'dxScrollView' |
 'dxMultiView' |
 'dxPivotGrid' |
+'dxPivotGridFieldChooser' |
 'dxDataGrid' |
 'dxTreeList' |
 'dxPager' |

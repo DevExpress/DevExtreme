@@ -255,7 +255,6 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
             },
             useIndicator: true,
             onChanged: function(e) {
-                const dataSource = that._dataSource;
                 const field = e.sourceElement.data('field');
 
                 e.removeSourceElement = !!e.sourceGroup;
@@ -264,19 +263,22 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
 
                 if(field) {
                     const targetIndex = e.targetIndex;
-
-                    const fields = dataSource.getAreaFields(field.area, true);
-
-                    const visibleFields = fields.filter(f => f.visible !== false);
-                    const fieldBeforeTarget = visibleFields[targetIndex - 1];
-
+                    let mainGroupField;
                     let invisibleFieldsIndexOffset = 0;
 
-                    if(fieldBeforeTarget) {
-                        invisibleFieldsIndexOffset = fields.filter(f => f.visible === false && f.areaIndex <= fieldBeforeTarget.areaIndex).length;
-                    }
+                    that._processDemandState((dataSource) => {
+                        const fields = dataSource.getAreaFields(field.area, true);
+                        mainGroupField = getMainGroupField(dataSource, field);
 
-                    that._applyChanges([getMainGroupField(dataSource, field)], {
+                        const visibleFields = fields.filter(f => f.visible !== false);
+                        const fieldBeforeTarget = visibleFields[targetIndex - 1];
+
+                        if(fieldBeforeTarget) {
+                            invisibleFieldsIndexOffset = fields.filter(f => f.visible === false && f.areaIndex <= fieldBeforeTarget.areaIndex).length;
+                        }
+                    });
+
+                    that._applyChanges([mainGroupField], {
                         area: e.targetGroup,
                         areaIndex: targetIndex + invisibleFieldsIndexOffset
                     });
