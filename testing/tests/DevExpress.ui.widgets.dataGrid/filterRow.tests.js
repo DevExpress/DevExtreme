@@ -2487,7 +2487,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
     });
 
     // T1098872
-    QUnit.test('Lookup select box should pass correct group load options', function(assert) {
+    QUnit.test('Lookup select box should pass correct group load options for dataGrid dataSource', function(assert) {
         // arrange
         const loadSpy = sinon.spy((loadOptions) => {
             const d = $.Deferred();
@@ -2536,6 +2536,63 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             isExpanded: false,
             selector: 'text'
         }]);
+    });
+
+    // T1100782
+    [true, false].forEach((hasLookupOptimization) => {
+        QUnit.test(`Lookup select box should pass correct group load options for lookup dataSource, hasLookupOptimization: ${hasLookupOptimization}`, function(assert) {
+            // arrange
+            const loadSpy = sinon.spy((loadOptions) => {
+                const d = $.Deferred();
+                new ArrayStore(
+                    [...new Array(100).keys()].map(i => ({ id: i, value: `value${i}` }))
+                ).load(loadOptions).done(items => d.resolve({
+                    data: items,
+                    totalCount: 2,
+                }));
+
+                return d;
+            });
+
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                lookup: {
+                    dataSource: {
+                        load: loadSpy,
+                        filter: ['id', '>=', 10]
+                    },
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }];
+            this.options.dataSource = [...new Array(100).keys()].map(i => ({ column1: i, text: `value${i}` }));
+            this.options.syncLookupFilterValues = true;
+
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                initViews: true
+            });
+            this.columnHeadersView.render($testElement);
+
+            // act
+            const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+            dropDown1.trigger('dxclick');
+
+            // assert
+            if(!hasLookupOptimization) {
+                assert.deepEqual(loadSpy.getCall(0).args[0].filter, ['id', '>=', 10]);
+                assert.strictEqual(loadSpy.getCall(0).args[0].take, undefined);
+                assert.strictEqual(loadSpy.getCall(0).args[0].skip, undefined);
+            }
+
+            const dropDownList1 = $('.dx-list:eq(0)');
+            assert.strictEqual(dropDownList1.find('.dx-item').length, 91); // 90 rows + (All)
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value10');
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value11');
+        });
     });
 
     QUnit.test('It should be possible to turn off syncLookupFilterValues option in runtime', function(assert) {
