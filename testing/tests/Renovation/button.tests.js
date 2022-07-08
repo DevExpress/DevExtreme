@@ -52,8 +52,15 @@ QUnit.module('Props: template', {
                 return $template;
             }
         });
-
         assert.strictEqual(element.text(), 'My button123', 'render correct text');
+    });
+
+    QUnit.test('should pass correct text attribute', function(assert) {
+        $('#button').attr('text', '');
+        const element = this.Button();
+        assert.strictEqual(element.text(), '', 'render correct text');
+
+        $('#button').removeAttr('text');
     });
 
     QUnit.test('should render jQuery', function(assert) {
