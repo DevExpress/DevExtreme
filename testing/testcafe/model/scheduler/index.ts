@@ -8,6 +8,7 @@ import Toolbar from './toolbar';
 import Collectors from './collectors';
 import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
 import { WidgetName } from '../../helpers/createWidget';
+import { HeaderPanel } from './headerPanel';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -20,9 +21,9 @@ export const CLASS = {
   droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
-  headerPanelCell: 'dx-scheduler-header-panel-cell',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
+  workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
 
   workSpace: 'dx-scheduler-work-space',
 };
@@ -51,7 +52,7 @@ export default class Scheduler extends Widget {
 
   readonly dateTableScrollable: Selector;
 
-  readonly headerPanelCells: Selector;
+  readonly headerPanel: HeaderPanel;
 
   readonly headerSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
@@ -69,6 +70,10 @@ export default class Scheduler extends Widget {
 
   readonly reducedIconTooltip: ReducedIconTooltip;
 
+  get workspaceHasBothScrollbar(): Promise<boolean> {
+    return this.workSpace.hasClass(CLASS.workspaceBothScrollbar);
+  }
+
   constructor(id: string) {
     super(id);
 
@@ -78,11 +83,11 @@ export default class Scheduler extends Widget {
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);
     this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
     this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);
-    this.headerPanelCells = this.element.find(`.${CLASS.headerPanelCell}`);
     this.workspaceScrollable = this.dateTableScrollable.find(`.${CLASS.scrollableContainer}`);
 
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
 
+    this.headerPanel = new HeaderPanel(this.element);
     this.toolbar = new Toolbar(this.element);
     this.collectors = new Collectors(this.element);
 
