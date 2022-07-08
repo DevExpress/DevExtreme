@@ -851,7 +851,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if(e.scrollOffset.top < 0) {
             elasticScrollTop = -e.scrollOffset.top;
         } else if(e.reachedBottom) {
-            const $scrollableContent = $(this._findContentElement());
+            const $scrollableContent = $(e.component.content());
             const $scrollableContainer = $(e.component.container());
             const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;

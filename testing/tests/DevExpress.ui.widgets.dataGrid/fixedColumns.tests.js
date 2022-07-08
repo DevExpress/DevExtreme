@@ -57,6 +57,13 @@ const generateData = function(countItems) {
     return result;
 };
 
+const setScrollerSpacing = function(rowsView) {
+    const vScrollbarWidth = rowsView.getScrollbarWidth();
+    const hScrollbarWidth = rowsView.getScrollbarWidth(true);
+
+    rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
+};
+
 setTemplateEngine('hogan');
 
 QUnit.module('Fixed columns', {
@@ -1293,6 +1300,61 @@ QUnit.module('Fixed columns', {
         that.rowsView.render(that.gridContainer);
         that.gridContainer.height(50);
         that.rowsView.resize();
+
+        const scrollableInstance = that.rowsView.element().dxScrollable('instance');
+        const $fixTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
+        const $table = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('table').first();
+
+        // assert
+        assert.ok(scrollableInstance, 'has scrollable');
+        assert.equal(getOuterHeight(that.rowsView.element()), 50, 'height rowsView');
+        assert.equal(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content').length, 1, 'has main content');
+        assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
+        assert.equal($fixTable.position().top, 0, 'fixed table - position top');
+
+        const scrollChanged = function(e) {
+            // assert
+            assert.ok($fixTable.position().top < 0, 'position top is defined');
+            assert.ok($table.find('.dx-virtual-row').eq(0).height() > 0, 'virtual row has height');
+            assert.roughEqual($fixTable.position().top, -e.top, 1.01, 'fixed table - position top');
+            that.rowsView.scrollChanged.remove(scrollChanged);
+            done();
+        };
+        that.rowsView.scrollChanged.add(scrollChanged);
+
+        dataOptions.virtualItemsCount.begin = 800;
+        dataOptions.virtualItemsCount.end = 0;
+        that.rowsView.resize();
+
+        // act
+        scrollableInstance.scrollTo({ y: 20000 });
+    });
+
+    // T1100701
+    QUnit.test('Synchronize position fixed table with main table when scrolling mode virtual and showScrollbar is \'always\'', function(assert) {
+        // arrange
+        const that = this;
+        const done = assert.async();
+
+        const dataOptions = {
+            virtualItemsCount: {
+                begin: 0,
+                end: 800
+            }
+        };
+
+        that.setupDataGrid(dataOptions);
+
+        that.options.scrolling = {
+            mode: 'virtual',
+            showScrollbar: 'always',
+            useNative: false
+        };
+
+        that.rowsView.render(that.gridContainer);
+        that.rowsView.height(50);
+        that.rowsView.resize();
+        setScrollerSpacing(that.rowsView);
 
         const scrollableInstance = that.rowsView.element().dxScrollable('instance');
         const $fixTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
