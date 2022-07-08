@@ -2538,6 +2538,52 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         }]);
     });
 
+    QUnit.test('It should be possible to turn off syncLookupFilterValues option in runtime', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        let dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1.trigger('dxclick');
+
+        // assert
+        let dropDownList1 = $('.dx-list:eq(0)');
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+
+        // act
+        this.option('syncLookupFilterValues', false);
+        dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1.trigger('dxclick');
+
+        // assert
+        dropDownList1 = $('.dx-list:eq(0)');
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+
+    });
+
     // T1097980
     QUnit.test('Filtering should not throw an exception when there is hidden column', function(assert) {
         // arrange
