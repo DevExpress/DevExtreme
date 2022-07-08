@@ -323,15 +323,17 @@ describe('Widget\'s container manipulations', () => {
     });
   });
 
-  it('pass custom attribute with empty value (hidden) as props on first render', () => {
+  it('pass custom attributes with empty value (hidden, text) as props on first render', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').attr('hidden', '');
+    $('#my-id').attr('text', '');
 
     $('#my-id').dxTestWidget({});
 
     expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       id: 'my-id',
-      hidden: 'true',
+      hidden: true,
+      text: '',
     });
   });
 
