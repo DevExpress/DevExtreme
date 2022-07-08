@@ -97,6 +97,7 @@ const FieldChooser = BaseFieldChooser.inherit({
             height: 400,
             layout: 0,
             dataSource: null,
+            encodeHtml: true,
             onContextMenuPreparing: null,
             allowSearch: false,
             searchTimeout: 500,
@@ -181,6 +182,7 @@ const FieldChooser = BaseFieldChooser.inherit({
             case 'texts':
             case 'allowSearch':
             case 'searchTimeout':
+            case 'encodeHtml':
                 that._invalidate();
                 break;
             case 'onContextMenuPreparing':
