@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Editors Validation</title>
+
+    <link rel="dx-theme" data-theme="generic.light" href="../../../../../artifacts/css/dx.light.css" data-active="false">
+    <link rel="dx-theme" data-theme="material.blue.light" href="../../../../../artifacts/css/dx.material.blue.light.css" data-active="false">
+    <link rel="dx-theme" data-theme="generic.light.compact" href="../../../../../artifacts/css/dx.light.compact.css" data-active="false">
+    <link rel="dx-theme" data-theme="material.blue.light.compact" href="../../../../../artifacts/css/dx.material.blue.light.compact.css" data-active="false">
+
+    <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+</head>
+<style>
+    #checkBox,
+    #dateBox,
+    #rangeSlider {
+        margin-top: 50px;
+        margin-left: 150px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+
+    <script>
+        function createEditorsInTheme(validationMessagePosition) {
+            return DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400).then(() => {
+                $('body > #container > div').remove();
+
+                $('<div id="checkBox">')
+                    .appendTo($('body > #container'))
+                    .dxCheckBox({
+                        text: 'Click me!',
+                        validationMessageMode: 'always',
+                        width: 400,
+                        validationMessagePosition
+                    }).dxValidator({
+                        validationRules: [{
+                            type: 'compare',
+                            comparisonTarget() { return false; },
+                        }],
+                    });
+
+                $('<div id="dateBox">')
+                    .appendTo($('body > #container'))
+                    .dxDateBox({
+                        validationMessageMode: 'always',
+                        width: 400,
+                        validationMessagePosition
+                    }).dxValidator({
+                        validationRules: [{
+                            type: 'range',
+                            max: new Date() - 1,
+                            message: 'Date is out of range',
+                        }],
+                    });
+
+                $('<div id="rangeSlider">')
+                    .appendTo($('body > #container'))
+                    .dxRangeSlider({
+                        validationMessageMode: 'always',
+                        width: 400,
+                        validationMessagePosition
+                    }).dxValidator({
+                        validationRules: [{
+                            type: 'range',
+                            max: 55,
+                            message: 'Value is out of range',
+                        }],
+                    });
+
+                $("#checkBox").dxCheckBox('instance').option('value', true);
+                $('#dateBox').dxDateBox('instance').option('value', new Date());
+                $('#rangeSlider').dxRangeSlider('instance').option('value', [30, 70]);
+            });
+        }
+    </script>
+</body>
+
+</html>
