@@ -4308,6 +4308,56 @@ QUnit.module('Header Filter with real columnsController', {
             assert.equal($listItemElements.length, 1, 'count list item');
             assert.strictEqual($listItemElements.eq(0).text(), 'value1');
         });
+
+        // T1100536
+        QUnit.test(`Lookup header filter should pass correct group load options for lookup dataSource, lookupOptimization = ${hasLookupOptimization}`, function(assert) {
+            // arrange
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [...new Array(100).keys()].map(i => ({ id: i, value: `value${i}` })),
+                    valueExpr: 'id',
+                    displayExpr: 'value',
+                },
+                calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+            }];
+
+            this.options.dataSource = [...new Array(100).keys()].map(i => ({
+                column1: i, text: `value${i}`
+            }));
+
+
+            this.options.syncLookupFilterValues = true;
+
+            const $testElement = $('#container');
+
+            this.setupDataGrid();
+            this.columnHeadersView.render($testElement);
+            this.headerFilterView.render($testElement);
+
+            // act
+            this.headerFilterController.showHeaderFilterMenu(0);
+
+            // assert
+            const $popupContent = this.headerFilterView.getPopupContainer().$content();
+            let $listItemElements = $popupContent.find('.dx-list-item-content');
+            assert.equal($listItemElements.length, 21, 'count list item');
+            assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+            assert.strictEqual($listItemElements.eq(1).text(), 'value0');
+            assert.strictEqual($listItemElements.eq(-1).text(), 'value19');
+
+            // act
+            const list = $popupContent.find('.dx-list').dxList('instance');
+            list.scrollBy(1000);
+
+            // assert
+            $listItemElements = $popupContent.find('.dx-list-item-content');
+            assert.equal($listItemElements.length, 41, 'count list item');
+            assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+            assert.strictEqual($listItemElements.eq(1).text(), 'value0');
+            assert.strictEqual($listItemElements.eq(-1).text(), 'value39');
+        });
     });
 
     // T938460
