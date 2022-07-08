@@ -742,7 +742,7 @@ const Draggable = DOMComponent.inherit({
 
         if(that.option('autoScroll')) {
             const mousePosition = getMousePosition(e);
-            const allObjects = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
+            const allObjects = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y, this.$element().get(0));
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
             that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
@@ -866,7 +866,7 @@ const Draggable = DOMComponent.inherit({
         const $targetDraggableElement = this.$element();
 
         const mousePosition = getMousePosition(e);
-        const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
+        const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y, this.element());
         const firstWidgetElement = elements.filter((element) => {
             const $element = $(element);
 

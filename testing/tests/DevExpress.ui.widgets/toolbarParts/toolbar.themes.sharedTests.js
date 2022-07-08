@@ -45,7 +45,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                     }]
                 };
 
-                const toolbarElement = document.getElementById('toolbar');
+                const toolbarElement = $('#toolbar')[0];
                 new Toolbar(toolbarElement, {
                     ...toolbarOptions,
                     width: 50,
@@ -59,7 +59,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                     const dropDown = DropDownMenu.getInstance(dropDownMenuElement);
                     dropDown.open();
 
-                    const dropDownMenuListElement = document.querySelector(`.${DROP_DOWN_MENU_LIST_CLASS}`);
+                    const dropDownMenuListElement = $(`.${DROP_DOWN_MENU_LIST_CLASS}`).get(0);
                     const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
                     const menuButtonElement = dropDownMenuListElement.querySelector(`.${BUTTON_CLASS}`);
 

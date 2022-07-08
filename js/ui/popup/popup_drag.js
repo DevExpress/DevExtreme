@@ -131,7 +131,7 @@ class PopupDrag {
     }
 
     _getContainerDimensions() {
-        const document = domAdapter.getDocument();
+        const document = domAdapter.getRootNode(this._draggableElement);
         const container = this._positionController.$dragResizeContainer.get(0);
 
         let containerWidth = getOuterWidth(container);
