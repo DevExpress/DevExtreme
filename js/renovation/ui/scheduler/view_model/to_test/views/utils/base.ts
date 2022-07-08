@@ -15,6 +15,7 @@ import {
 } from '../types';
 import { ViewType, GroupOrientation } from '../../../../types';
 import { Group } from '../../../../workspaces/types';
+import { TIMELINE_VIEWS } from './const';
 
 export const isDateInRange = (
   date: Date,
@@ -138,14 +139,9 @@ export const isDateAndTimeView = (
   viewType: ViewType,
 ): boolean => viewType !== VIEWS.TIMELINE_MONTH && viewType !== VIEWS.MONTH;
 
-export const isSupportMultiDayAppointments = (
+export const isTimelineView = (
   viewType: ViewType,
-): boolean => [
-  VIEWS.TIMELINE_DAY,
-  VIEWS.TIMELINE_WEEK,
-  VIEWS.TIMELINE_WORK_WEEK,
-  VIEWS.TIMELINE_MONTH,
-].includes(viewType);
+): boolean => !!TIMELINE_VIEWS[viewType];
 
 export const getHorizontalGroupCount = (
   groups: Group[], groupOrientation: GroupOrientation,

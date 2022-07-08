@@ -9,7 +9,7 @@ import { hasResourceValue } from '../../../../renovation/ui/scheduler/resources/
 
 import {
     isDateAndTimeView as calculateIsDateAndTimeView,
-    isSupportMultiDayAppointments
+    isTimelineView
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import {
     getResourcesDataByGroups,
@@ -87,7 +87,7 @@ export class AppointmentFilterBaseStrategy {
             max: dateRange[1],
             resources: this.loadedResources,
             allDay,
-            supportMultiDayAppointments: isSupportMultiDayAppointments(this.viewType),
+            supportMultiDayAppointments: isTimelineView(this.viewType),
             firstDayOfWeek: this.firstDayOfWeek,
         }, preparedItems);
     }
@@ -394,7 +394,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
                 viewEndDayHour: this.viewEndDayHour,
                 min: groupStartDate,
                 max: groupEndDate,
-                supportMultiDayAppointments: isSupportMultiDayAppointments(this.viewType),
+                supportMultiDayAppointments: isTimelineView(this.viewType),
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.firstDayOfWeek,

@@ -1129,16 +1129,16 @@ QUnit.test('Four rival appointments should have correct sizes', function(assert)
     const tableCellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0)) * 2;
 
     assert.equal(getOuterWidth($appointment.eq(0)), tableCellWidth, 'appointment has a right size');
-    assert.roughEqual(getOuterHeight($appointment.eq(0)), 123.25, 1, 'appointment has a right size');
+    assert.roughEqual(getOuterHeight($appointment.eq(0)), 122, 1, 'appointment has a right size');
 
     assert.equal(getOuterWidth($appointment.eq(1)), tableCellWidth, 'appointment has a right size');
-    assert.roughEqual(getOuterHeight($appointment.eq(1)), 123.25, 1, 'appointment has a right size');
+    assert.roughEqual(getOuterHeight($appointment.eq(1)), 122, 1, 'appointment has a right size');
 
     assert.equal(getOuterWidth($appointment.eq(2)), tableCellWidth, 'appointment has a right size');
-    assert.roughEqual(getOuterHeight($appointment.eq(2)), 123.25, 1, 'appointment has a right size');
+    assert.roughEqual(getOuterHeight($appointment.eq(2)), 122, 1, 'appointment has a right size');
 
     assert.equal(getOuterWidth($appointment.eq(3)), tableCellWidth, 'appointment has a right size');
-    assert.roughEqual(getOuterHeight($appointment.eq(3)), 123.25, 1, 'appointment has a right size');
+    assert.roughEqual(getOuterHeight($appointment.eq(3)), 122, 1, 'appointment has a right size');
 });
 
 QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek (T701534)', function(assert) {
