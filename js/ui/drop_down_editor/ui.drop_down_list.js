@@ -413,6 +413,8 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _processDataSourceChanging: function() {
+        this._initDataController();
+        this._setListOption('_dataController', this._dataController);
         this._setListDataSource();
 
         this._renderInputValue().fail((function() {
@@ -534,6 +536,7 @@ const DropDownList = DropDownEditor.inherit({
             groupTemplate: this.option('groupTemplate'),
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
+            _dataController: this._dataController,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
         };
@@ -613,7 +616,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _canKeepDataSource: function() {
         const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
-        return this._dataSource?.isLoaded() &&
+        return this._dataController.isLoaded() &&
             this.option('showDataBeforeSearch') &&
             this.option('minSearchLength') &&
             !isMinSearchLengthExceeded &&
@@ -717,18 +720,17 @@ const DropDownList = DropDownEditor.inherit({
     _filterDataSource: function(searchValue) {
         this._clearSearchTimer();
 
-        const dataSource = this._dataSource;
-        if(dataSource) {
-            dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
-            dataSource.searchOperation(this.option('searchMode'));
-            dataSource.searchValue(searchValue);
-            dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
-        }
+        const dataController = this._dataController;
+
+        dataController.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
+        dataController.searchOperation(this.option('searchMode'));
+        dataController.searchValue(searchValue);
+        dataController.load().done(this._dataSourceFiltered.bind(this, searchValue));
     },
 
     _clearFilter: function() {
-        const dataSource = this._dataSource;
-        dataSource && dataSource.searchValue() && dataSource.searchValue(null);
+        const dataController = this._dataController;
+        dataController.searchValue() && dataController.searchValue(null);
     },
 
     _dataSourceFiltered: function() {
@@ -760,7 +762,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(this._dataSource.pageIndex() === 0) {
+        if(this._dataController.pageIndex() === 0) {
             this.option().items = newItems;
         } else {
             this.option().items = this.option().items.concat(newItems);
@@ -768,7 +770,8 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _hasItemsToShow: function() {
-        const resultItems = this._dataSource && this._dataSource.items() || [];
+        const dataController = this._dataController;
+        const resultItems = dataController.items() || [];
         const resultAmount = resultItems.length;
         const isMinSearchLengthExceeded = this._needPassDataSourceToList();
 
@@ -791,12 +794,9 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _needPopupRepaint: function() {
-        if(!this._dataSource) {
-            return false;
-        }
-
-        const currentPageIndex = this._dataSource.pageIndex();
-        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (this._dataSource.isLastPage() && !this._list._scrollViewIsFull());
+        const dataController = this._dataController;
+        const currentPageIndex = dataController.pageIndex();
+        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (dataController.isLastPage() && !this._list._scrollViewIsFull());
 
         this._pageIndex = currentPageIndex;
 

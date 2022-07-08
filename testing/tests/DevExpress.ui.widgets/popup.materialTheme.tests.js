@@ -7,6 +7,8 @@ import 'material_blue_light.css!';
 
 import 'ui/popup';
 import 'ui/switch';
+import 'ui/scroll_view';
+import 'ui/date_box';
 
 QUnit.testStart(function() {
     const markup =
@@ -69,5 +71,37 @@ QUnit.module('popup', {
         const $title = popup.topToolbar();
 
         assert.strictEqual($title.css('marginBottom'), '0px', 'margin-bottom equals 0');
+    });
+
+
+    ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
+        QUnit.test(`popup content should not be scrollable with datebox in stylingMode: ${stylingMode} (T1100188)`, function(assert) {
+            const popupContent = $(
+                `<div id="scrollView">
+                    <div id="dateBox"></div>
+                </div>'`
+            );
+            popupContent.appendTo($('#popup'));
+
+            $('#popup').dxPopup({
+                height: 'auto',
+                visible: true,
+            });
+
+            const scrollView = $('#scrollView').dxScrollView({
+                scrollByContent: true,
+                showScrollbar: 'always'
+            }).dxScrollView('instance');
+
+            $('#dateBox').dxDateBox({
+                label: 'Hello',
+                stylingMode,
+                displayFormat: 'dd.MM.yyyy'
+            });
+
+            scrollView.scrollTo(100);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scroll position does not changed');
+        });
     });
 });

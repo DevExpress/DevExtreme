@@ -2,6 +2,7 @@
 import { DataSource } from './data/data_source/data_source';
 import { extend } from './core/utils/extend';
 import { normalizeDataSourceOptions } from './data/data_source/utils';
+import DataController from './ui/collection/data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';
@@ -52,6 +53,18 @@ const DataHelperMixin = {
             }
 
             this._addDataSourceHandlers();
+            this._initDataController();
+        }
+    },
+
+    _initDataController: function() {
+        const dataController = this.option?.('_dataController');
+        const dataSource = this._dataSource;
+
+        if(dataController) {
+            this._dataController = dataController;
+        } else {
+            this._dataController = new DataController(dataSource);
         }
     },
 
@@ -96,9 +109,8 @@ const DataHelperMixin = {
     },
 
     _loadDataSource: function() {
-        if(this._dataSource) {
-            const dataSource = this._dataSource;
-
+        const dataSource = this._dataSource;
+        if(dataSource) {
             if(dataSource.isLoaded()) {
                 this._proxiedDataSourceChangedHandler && this._proxiedDataSourceChangedHandler();
             } else {
