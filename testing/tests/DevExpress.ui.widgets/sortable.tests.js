@@ -20,6 +20,9 @@ QUnit.testStart(function() {
             .default {
                 cursor: default;
             }
+            div.qunit-fixture-absolute {
+                position: absolute !important;
+            }
         </style>
         <div id="container">
             <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
@@ -2624,6 +2627,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
         try {
             const scrollPosition = 1000;
             $('#qunit-fixture').removeClass('qunit-fixture-visible');
+            $('#qunit-fixture').addClass('qunit-fixture-absolute');
             $('#qunit-fixture').css('top', 0);
             $('body').css('height', 10000);
             $('#scroll').css('top', scrollPosition);
