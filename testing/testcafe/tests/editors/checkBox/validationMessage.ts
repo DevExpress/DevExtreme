@@ -62,12 +62,12 @@ themes.forEach((theme) => {
 
       await t.expect(await compareScreenshot(t, `checkbox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
     }).before(async (t) => {
-      await t.resizeWindow(300, 400);
+      await t.resizeWindow(500, 200);
       await changeTheme(theme);
 
       await createWidget('dxCheckBox', {
         text: 'Click me!',
-        elementAttr: { style: 'margin: 50px 0 0 50px;' },
+        elementAttr: { style: 'margin: 50px 0 0 100px;' },
         validationMessagePosition: position,
       });
 

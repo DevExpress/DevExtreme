@@ -18,13 +18,13 @@ themes.forEach((theme) => {
       const dateBox1 = new DateBox('#container');
       await dateBox1.option('value', new Date());
 
-      await t.expect(await compareScreenshot(t, `datekbox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+      await t.expect(await compareScreenshot(t, `datebox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
     }).before(async (t) => {
-      await t.resizeWindow(300, 400);
+      await t.resizeWindow(500, 200);
       await changeTheme(theme);
 
       await createWidget('dxDateBox', {
-        elementAttr: { style: 'margin: 50px 0 0 50px;' },
+        elementAttr: { style: 'margin: 50px 0 0 100px;' },
         width: 200,
         validationMessageMode: 'always',
         validationMessagePosition: position,
