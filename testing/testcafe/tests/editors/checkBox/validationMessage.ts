@@ -1,6 +1,8 @@
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -38,5 +40,43 @@ test('ValidationMessage integrated in editor should not raise any errors when it
       type: 'required',
       message: 'it is required',
     }],
+  });
+});
+
+fixture`CheckBox ValidationMessagePosition`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {
+    await changeTheme('generic.light');
+  });
+
+const positions = ['top', 'right', 'bottom', 'left'];
+const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
+themes.forEach((theme) => {
+  positions.forEach((position) => {
+    test(`CheckBox ValidationMessage position is correct (${position}, ${theme})`, async (t) => {
+      const checkBox1 = new CheckBox('#container');
+      await t
+        .click(checkBox1.element)
+        .click(checkBox1.element)
+        .expect(true).ok();
+
+      await t.expect(await compareScreenshot(t, `checkbox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+    }).before(async (t) => {
+      await t.resizeWindow(300, 400);
+      await changeTheme(theme);
+
+      await createWidget('dxCheckBox', {
+        text: 'Click me!',
+        elementAttr: { style: 'margin: 50px 0 0 50px;' },
+        validationMessagePosition: position,
+      });
+
+      return createWidget('dxValidator', {
+        validationRules: [{
+          type: 'required',
+          message: 'it is required',
+        }],
+      });
+    });
   });
 });

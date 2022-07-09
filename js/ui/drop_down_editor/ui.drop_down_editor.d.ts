@@ -131,7 +131,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @default null
      * @public
      */
-    validationMessagePosition?: ValidationMessagePosition | null;
+    validationMessagePosition?: ValidationMessagePosition;
     /**
      * @docid
      * @default null

@@ -135,7 +135,7 @@ const DropDownEditor = TextBox.inherit({
             cancelButtonText: messageLocalization.format('Cancel'),
             buttonsLocation: 'default',
             useHiddenSubmitElement: false,
-            validationMessagePosition: null
+            validationMessagePosition: 'auto'
 
             /**
             * @name dxDropDownEditorOptions.mask
@@ -651,7 +651,7 @@ const DropDownEditor = TextBox.inherit({
     _getValidationMessagePositionRequest: function() {
         const validationMessagePosition = this.option('validationMessagePosition');
 
-        if(validationMessagePosition) {
+        if(validationMessagePosition !== 'auto') {
             return validationMessagePosition;
         }
 
