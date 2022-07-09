@@ -3,10 +3,12 @@ import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
+  .afterEach(async (t) => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 

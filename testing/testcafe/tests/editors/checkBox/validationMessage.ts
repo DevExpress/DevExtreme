@@ -3,6 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -45,7 +46,8 @@ test('ValidationMessage integrated in editor should not raise any errors when it
 
 fixture`CheckBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
+  .afterEach(async (t) => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 
