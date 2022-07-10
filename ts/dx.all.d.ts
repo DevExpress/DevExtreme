@@ -23939,7 +23939,7 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.validationMessagePosition]
      */
-    validationMessagePosition?: DevExpress.common.ValidationMessagePosition | null;
+    validationMessagePosition?: DevExpress.common.ValidationMessagePosition;
     /**
      * [descr:EditorOptions.validationStatus]
      */
