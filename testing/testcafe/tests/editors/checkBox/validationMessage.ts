@@ -3,7 +3,6 @@ import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -46,8 +45,7 @@ test('ValidationMessage integrated in editor should not raise any errors when it
 
 fixture`CheckBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
+  .afterEach(async () => {
     await changeTheme('generic.light');
   });
 
@@ -63,8 +61,7 @@ themes.forEach((theme) => {
         .expect(true).ok();
 
       await t.expect(await compareScreenshot(t, `checkbox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(500, 200);
+    }).before(async () => {
       await changeTheme(theme);
 
       await createWidget('dxCheckBox', {

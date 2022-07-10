@@ -3,12 +3,10 @@ import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
+  .afterEach(async () => {
     await changeTheme('generic.light');
   });
 
@@ -21,13 +19,12 @@ themes.forEach((theme) => {
       await dateBox1.option('value', new Date());
 
       await t.expect(await compareScreenshot(t, `datebox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(500, 200);
+    }).before(async () => {
       await changeTheme(theme);
 
       await createWidget('dxDateBox', {
         elementAttr: { style: 'margin: 50px 0 0 100px;' },
-        width: 200,
+        width: 100,
         validationMessageMode: 'always',
         validationMessagePosition: position,
       });
