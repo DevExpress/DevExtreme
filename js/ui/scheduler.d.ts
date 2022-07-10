@@ -1048,7 +1048,7 @@ export type Appointment = dxSchedulerAppointment;
  * @namespace DevExpress.ui
  * @deprecated Use the Scheduler's Appointment type instead
  */
-export interface dxSchedulerAppointment extends CollectionWidgetItem {
+export type dxSchedulerAppointment = CollectionWidgetItem & {
     /**
      * @docid
      * @public
@@ -1116,7 +1116,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
      * @public
      */
     visible?: boolean;
-}
+} & Record<string, any>;
 
 /** @public */
 export type Properties = dxSchedulerOptions;
