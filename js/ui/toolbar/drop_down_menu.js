@@ -9,7 +9,7 @@ import Widget from '../widget/ui.widget';
 import Button from '../button';
 import Popover from '../popover';
 import DataHelperMixin from '../../data_helper';
-import List from '../list_light';
+import ToolbarMenu from './ui.toolbar.menu';
 import { isMaterial } from '../themes';
 import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
 import { toggleItemFocusableElementTabIndex } from './ui.toolbar.utils';
@@ -53,43 +53,27 @@ const DropDownMenu = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             items: [],
-
             onItemClick: null,
-
             dataSource: null,
-
             itemTemplate: 'item',
-
             buttonText: '',
-
             buttonIcon: 'overflow',
-
             buttonWidth: undefined,
             buttonHeight: undefined,
             buttonTemplate: 'content',
-
             onButtonClick: null,
-
             usePopover: false,
-
             popupWidth: 'auto',
-
             popupHeight: 'auto',
-
             activeStateEnabled: true,
-
             hoverStateEnabled: true,
-
             opened: false,
-
             selectionMode: 'none',
             selectedItemKeys: [],
-
             deferRendering: false,
             popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
             popupAnimation: undefined,
             onItemRendered: null,
-            menuWidget: List,
             popupMaxHeight: undefined,
             closeOnClick: true,
             useInkRipple: false,
@@ -314,7 +298,7 @@ const DropDownMenu = Widget.inherit({
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
-        this._list = this._createComponent($content, this.option('menuWidget'), listConfig);
+        this._list = this._createComponent($content, ToolbarMenu, listConfig);
 
         // todo: replace with option
         this._list._getAriaTarget = (function() {
@@ -413,7 +397,6 @@ const DropDownMenu = Widget.inherit({
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
             case 'usePopover':
-            case 'menuWidget':
             case 'useInkRipple':
                 this._invalidate();
                 break;

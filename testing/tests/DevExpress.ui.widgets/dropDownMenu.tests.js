@@ -198,29 +198,6 @@ const testRendering = function(usePopover) {
 
             assert.ok(overlayTop >= buttonBottom);
         });
-
-        QUnit.test('option menuWidget', function(assert) {
-            const testComponentClass = 'test-component';
-            const TestComponent = List.inherit({
-                _render: function() {
-                    this.$element().addClass(testComponentClass);
-                    this.callBase();
-                }
-            });
-
-            const $element = $('#dropDownMenu').dxDropDownMenu({
-                menuWidget: TestComponent,
-                opened: true,
-                items: [1, 2]
-            });
-            const instance = $element.dxDropDownMenu('instance');
-
-            instance.close();
-            assert.ok($element.find('.' + testComponentClass).length, 'collection menu was rendered');
-
-            instance.option('menuWidget', List);
-            assert.ok(!$element.find('.' + testComponentClass).length, 'collection menu was removed');
-        });
     });
 };
 

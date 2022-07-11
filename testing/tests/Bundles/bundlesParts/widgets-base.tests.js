@@ -21,7 +21,6 @@ QUnit.test('widgets-base', function(assert) {
         'dxColorBox',
         'dxDateBox',
         'dxDeferRendering',
-        'dxDropDownMenu',
         'dxFileUploader',
         'dxForm',
         'dxGallery',
