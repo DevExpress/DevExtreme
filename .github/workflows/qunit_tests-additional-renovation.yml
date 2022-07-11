@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Build
     timeout-minutes: 15
 
@@ -54,7 +54,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: ${{ matrix.envs.name }}
     timeout-minutes: 30
     strategy:
@@ -211,7 +211,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')
