@@ -1,7 +1,6 @@
 import { getHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
-const window = getWindow();
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -9,7 +8,7 @@ import Widget from '../widget/ui.widget';
 import Button from '../button';
 import Popover from '../popover';
 import DataHelperMixin from '../../data_helper';
-import ToolbarMenu from './ui.toolbar.menu';
+import ToolbarMenuList from './ui.toolbar.menu.list';
 import { isMaterial } from '../themes';
 import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
 import { toggleItemFocusableElementTabIndex } from './ui.toolbar.utils';
@@ -68,8 +67,6 @@ const DropDownMenu = Widget.inherit({
             activeStateEnabled: true,
             hoverStateEnabled: true,
             opened: false,
-            selectionMode: 'none',
-            selectedItemKeys: [],
             deferRendering: false,
             popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
             popupAnimation: undefined,
@@ -298,7 +295,7 @@ const DropDownMenu = Widget.inherit({
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
-        this._list = this._createComponent($content, ToolbarMenu, listConfig);
+        this._list = this._createComponent($content, ToolbarMenuList, listConfig);
 
         // todo: replace with option
         this._list._getAriaTarget = (function() {
@@ -307,7 +304,7 @@ const DropDownMenu = Widget.inherit({
 
         this._setListDataSource();
 
-        const listMaxHeight = getHeight(window) * 0.5;
+        const listMaxHeight = getHeight(getWindow()) * 0.5;
         if(getHeight($content) > listMaxHeight) {
             setHeight($content, listMaxHeight);
         }
@@ -323,8 +320,6 @@ const DropDownMenu = Widget.inherit({
             pageLoadMode: 'scrollBottom',
             indicateLoading: false,
             noDataText: '',
-            selectionMode: this.option('selectionMode'),
-            selectedItemKeys: this.option('selectedItemKeys'),
             itemTemplate: this.option('itemTemplate'),
             onItemClick: (function(e) {
                 if(this.option('closeOnClick')) {
@@ -407,8 +402,6 @@ const DropDownMenu = Widget.inherit({
                 }
                 this.callBase(args);
                 break;
-            case 'selectionMode':
-            case 'selectedItemKeys':
             case 'onItemRendered':
                 if(this._list) {
                     this._list.option(name, value);

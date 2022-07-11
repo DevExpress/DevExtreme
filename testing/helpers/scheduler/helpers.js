@@ -696,22 +696,6 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getShader: () => $(CLASSES.shader),
         };
 
-        this.viewSwitcher = {
-            getElement: () => $('.dx-dropdownmenu-popup-wrapper.dx-position-bottom'),
-            show: () => {
-                $('.dx-scheduler-view-switcher').trigger('dxclick');
-            },
-            click: (name) => {
-                this.viewSwitcher.getElement().find('.dx-list-item').filter((index, element) => {
-                    return $(element).find('.dx-dropdownmenu-item-text').text() === name;
-                }).trigger('dxclick');
-            },
-            getSelectedViewName: () => {
-                return this.viewSwitcher.getElement().find('.dx-list-item-selected .dx-dropdownmenu-item-text').text();
-            },
-            getLabel: () => $('.dx-scheduler-view-switcher-label')
-        },
-
         this.grouping = {
             getGroupHeaders: () => $('.dx-scheduler-group-header'),
             getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
