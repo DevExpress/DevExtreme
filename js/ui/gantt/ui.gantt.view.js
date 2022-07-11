@@ -96,7 +96,10 @@ export class GanttView extends Widget {
             abbrDayNames: dateLocalization.getDayNames('abbreviated'),
             quarterNames: this._getQuarterNames(),
             amText: dateLocalization.getPeriodNames()[0],
-            pmText: dateLocalization.getPeriodNames()[1]
+            pmText: dateLocalization.getPeriodNames()[1],
+            start: messageLocalization.format('dxGantt-dialogStartTitle'),
+            end: messageLocalization.format('dxGantt-dialogEndTitle'),
+            progress: messageLocalization.format('dxGantt-dialogProgressTitle')
         };
     }
     _getQuarterNames() {
