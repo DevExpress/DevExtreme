@@ -696,6 +696,10 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getShader: () => $(CLASSES.shader),
         };
 
+        this.viewSwitcher = {
+            getLabel: () => $('.dx-scheduler-view-switcher-label')
+        },
+
         this.grouping = {
             getGroupHeaders: () => $('.dx-scheduler-group-header'),
             getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
