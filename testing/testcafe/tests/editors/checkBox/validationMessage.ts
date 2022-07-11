@@ -3,6 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -61,7 +62,8 @@ themes.forEach((theme) => {
         .expect(true).ok();
 
       await t.expect(await compareScreenshot(t, `checkbox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async () => {
+    }).before(async (t) => {
+      await t.resizeWindow(300, 200);
       await changeTheme(theme);
 
       await createWidget('dxCheckBox', {
@@ -76,6 +78,8 @@ themes.forEach((theme) => {
           message: 'it is required',
         }],
       });
+    }).after(async (t) => {
+      await restoreBrowserSize(t);
     });
   });
 });

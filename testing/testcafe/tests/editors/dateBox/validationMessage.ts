@@ -1,8 +1,10 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
@@ -18,8 +20,15 @@ themes.forEach((theme) => {
       const dateBox1 = new DateBox('#container');
       await dateBox1.option('value', new Date());
 
+      if (theme.includes('material')) {
+        await ClientFunction(() => {
+          (document.querySelector('.dx-invalid-message-content') as HTMLElement).style.border = '1px solid';
+        })();
+      }
+
       await t.expect(await compareScreenshot(t, `datebox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async () => {
+    }).before(async (t) => {
+      await t.resizeWindow(300, 200);
       await changeTheme(theme);
 
       await createWidget('dxDateBox', {
@@ -36,6 +45,8 @@ themes.forEach((theme) => {
           message: 'out of range',
         }],
       });
+    }).after(async (t) => {
+      await restoreBrowserSize(t);
     });
   });
 });

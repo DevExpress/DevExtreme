@@ -11439,9 +11439,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
      */
-    validationMessagePosition?:
-      | DevExpress.common.ValidationMessagePosition
-      | 'auto';
+    validationMessagePosition?: DevExpress.common.ValidationMessagePosition;
     /**
      * [descr:dxDropDownEditorOptions.value]
      */
