@@ -2481,7 +2481,6 @@
           {
             "Title": "Scale Breaks",
             "Name": "ScaleBreaks",
-            "DocUrl": "Guide/UI_Components/Chart/Axes/Scale_Breaks/",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
