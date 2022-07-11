@@ -24,7 +24,7 @@ export class ValidationMessageProps extends BaseWidgetProps {
 
   @OneWay() validationErrors?: Record<string, unknown>[] | null;
 
-  @OneWay() position?: string = 'top';
+  @OneWay() positionSide?: string = 'top';
 
   @OneWay() boundary?: string | Element | null;
 
