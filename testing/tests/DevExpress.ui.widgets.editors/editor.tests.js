@@ -421,7 +421,7 @@ QUnit.module('validation', {
                     validationMessagePosition: 'right'
                 });
 
-                const position = this.getValidationMessage().option('positionRequest');
+                const position = this.getValidationMessage().option('position');
                 assert.strictEqual(position, 'right', 'validation message position is updated');
             });
 
@@ -434,7 +434,7 @@ QUnit.module('validation', {
                 });
 
                 this.editor.option('validationMessagePosition', 'left');
-                const position = this.getValidationMessage().option('positionRequest');
+                const position = this.getValidationMessage().option('position');
                 assert.strictEqual(position, 'left', 'validation message position is updated');
             });
 

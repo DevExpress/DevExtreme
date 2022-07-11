@@ -83,7 +83,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
         <ValidationMessage
           validationErrors={validationErrors}
           mode={validationMessageMode}
-          positionRequest={validationMessagePosition}
+          position={validationMessagePosition}
           rtlEnabled={rtlEnabled}
           target={validationMessageTarget}
           boundary={validationMessageTarget}

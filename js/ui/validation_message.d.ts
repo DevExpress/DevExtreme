@@ -12,7 +12,7 @@ export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidatio
 
     validationErrors?: Array<object> | null;
 
-    positionRequest?: string;
+    position?: string;
 
     boundary?: String | UserDefinedElement;
 

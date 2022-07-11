@@ -198,7 +198,7 @@ testComponentDefaults(ValidationMessage,
 
         mode: 'auto',
         validationErrors: undefined,
-        positionRequest: undefined,
+        position: 'top',
         boundary: undefined,
         offset: { h: 0, v: 0 }
     }

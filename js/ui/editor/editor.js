@@ -25,7 +25,7 @@ const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
 const VALIDATION_MESSAGE_KEYS_MAP = {
     validationMessageMode: 'mode',
-    validationMessagePosition: 'positionRequest',
+    validationMessagePosition: 'position',
     validationMessageOffset: 'offset',
     validationBoundary: 'boundary',
 };
@@ -248,7 +248,7 @@ const Editor = Widget.inherit({
                 target: this._getValidationMessageTarget(),
                 visualContainer: $element,
                 mode: validationMessageMode,
-                positionRequest: validationMessagePosition,
+                position: validationMessagePosition,
                 offset: validationMessageOffset,
                 boundary: validationBoundary,
                 contentId: validationMessageContentId

@@ -128,10 +128,10 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
     showDropDownButton?: boolean;
     /**
      * @docid
-     * @default null
+     * @default 'auto'
      * @public
      */
-    validationMessagePosition?: ValidationMessagePosition;
+    validationMessagePosition?: ValidationMessagePosition | 'auto';
     /**
      * @docid
      * @default null

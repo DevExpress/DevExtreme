@@ -33,7 +33,7 @@ const ValidationMessage = Overlay.inherit({
             target: undefined,
             mode: 'auto',
             validationErrors: undefined,
-            positionRequest: undefined,
+            position: 'top',
             boundary: undefined,
             offset: { h: 0, v: 0 },
             contentId: undefined
@@ -122,8 +122,8 @@ const ValidationMessage = Overlay.inherit({
         this.option({ maxWidth });
     },
 
-    _getPositionsArray: function(positionRequest, positionSide) {
-        switch(positionRequest) {
+    _getPositionsArray: function(position, positionSide) {
+        switch(position) {
             case 'top':
                 return [`${positionSide} bottom`, `${positionSide} top`];
             case 'left':
@@ -138,20 +138,20 @@ const ValidationMessage = Overlay.inherit({
 
     _updatePosition: function() {
         const {
-            positionRequest = 'top',
+            position,
             rtlEnabled,
             offset: componentOffset,
             boundary
         } = this.option();
         const positionSide = getDefaultAlignment(rtlEnabled);
-        const positions = this._getPositionsArray(positionRequest, positionSide);
+        const positions = this._getPositionsArray(position, positionSide);
         const offset = Object.assign({}, componentOffset);
 
-        this.$element().addClass(`dx-invalid-message-${positionRequest}`);
+        this.$element().addClass(`dx-invalid-message-${position}`);
 
-        if(rtlEnabled && positionRequest !== 'left' && positionRequest !== 'right') offset.h = -offset.h;
-        if(positionRequest === 'top') offset.v = -offset.v;
-        if(positionRequest === 'left') offset.h = -offset.h;
+        if(rtlEnabled && position !== 'left' && position !== 'right') offset.h = -offset.h;
+        if(position === 'top') offset.v = -offset.v;
+        if(position === 'left') offset.h = -offset.h;
 
         this.option('position', {
             offset,
@@ -178,7 +178,7 @@ const ValidationMessage = Overlay.inherit({
                 break;
             case 'rtlEnabled':
             case 'offset':
-            case 'positionRequest':
+            case 'position':
                 this.$element().removeClass(`dx-invalid-message-${previousValue}`);
                 this._updatePosition();
                 break;

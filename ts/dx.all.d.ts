@@ -1495,12 +1495,7 @@ declare module DevExpress.common {
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
-  export type ValidationMessagePosition =
-    | 'top'
-    | 'right'
-    | 'bottom'
-    | 'left'
-    | 'auto';
+  export type ValidationMessagePosition = 'top' | 'right' | 'bottom' | 'left';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
@@ -11444,7 +11439,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
      */
-    validationMessagePosition?: DevExpress.common.ValidationMessagePosition;
+    validationMessagePosition?:
+      | DevExpress.common.ValidationMessagePosition
+      | 'auto';
     /**
      * [descr:dxDropDownEditorOptions.value]
      */
@@ -23667,7 +23664,7 @@ declare module DevExpress.ui {
 
     validationErrors?: Array<object> | null;
 
-    positionRequest?: string;
+    position?: string;
 
     boundary?: String | DevExpress.core.UserDefinedElement;
 

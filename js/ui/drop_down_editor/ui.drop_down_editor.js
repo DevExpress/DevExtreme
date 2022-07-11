@@ -640,31 +640,31 @@ const DropDownEditor = TextBox.inherit({
             });
         }
 
-        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
+        this._validationMessage?.option('position', this._getValidationMessagePosition());
     },
 
     _popupHiddenHandler: function() {
         this._closeAction();
-        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
+        this._validationMessage?.option('position', this._getValidationMessagePosition());
     },
 
-    _getValidationMessagePositionRequest: function() {
+    _getValidationMessagePosition: function() {
         const validationMessagePosition = this.option('validationMessagePosition');
 
         if(validationMessagePosition !== 'auto') {
             return validationMessagePosition;
         }
 
-        let positionRequest = 'bottom';
+        let position = 'bottom';
 
         if(this._popup && this._popup.option('visible')) {
             const { top: myTop } = animationPosition.setup(this.$element());
             const { top: popupTop } = animationPosition.setup(this._popup.$content());
 
-            positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';
+            position = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';
         }
 
-        return positionRequest;
+        return position;
     },
 
     _closeOutsideDropDownHandler: function({ target }) {
