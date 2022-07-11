@@ -935,11 +935,14 @@ export const rowsModule = {
                 },
 
                 _updateScrollable: function() {
-                    const dxScrollable = Scrollable.getInstance(this.element());
+                    const scrollable = Scrollable.getInstance(this.element());
 
-                    if(dxScrollable) {
-                        dxScrollable.update();
-                        this._updateHorizontalScrollPosition();
+                    if(scrollable) {
+                        scrollable.update();
+
+                        if(scrollable.option('useNative') || !scrollable?.isRenovated()) {
+                            this._updateHorizontalScrollPosition();
+                        }
                     }
                 },
 
