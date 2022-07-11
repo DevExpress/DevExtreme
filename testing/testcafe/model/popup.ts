@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { WidgetName } from '../helpers/createWidget';
 import Widget from './internal/widget';
 
@@ -13,7 +14,7 @@ export default class Popup extends Widget {
 
   toolbar: Selector;
 
-  constructor(id: string) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.content = this.element.find(`.${CLASS.content}`);
@@ -23,4 +24,9 @@ export default class Popup extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxPopup'; }
+
+  // eslint-disable-next-line class-methods-use-this
+  getWrapper(): Selector {
+    return Selector(`.${CLASS.wrapper}`);
+  }
 }
