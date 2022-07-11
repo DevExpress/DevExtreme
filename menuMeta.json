@@ -2473,7 +2473,6 @@
           {
             "Title": "Customize Points and Labels",
             "Name": "CustomizePointsAndLabels",
-            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/#customizePoint",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "customizePoint, customizeLabel, customizeText, constantLines"
