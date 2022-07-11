@@ -23662,7 +23662,7 @@ declare module DevExpress.ui {
 
     validationErrors?: Array<object> | null;
 
-    position?: string;
+    positionSide?: string;
 
     boundary?: String | DevExpress.core.UserDefinedElement;
 
