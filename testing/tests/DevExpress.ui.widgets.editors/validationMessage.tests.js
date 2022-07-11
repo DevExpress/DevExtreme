@@ -129,9 +129,9 @@ QUnit.module('position', moduleSetup, () => {
         { position: 'left', rtlEnabled: true, my: 'right', at: 'left' },
         { position: 'right', rtlEnabled: false, my: 'left', at: 'right' },
         { position: 'right', rtlEnabled: true, my: 'left', at: 'right' },
-    ].forEach(({ position, rtlEnabled, at, my }) => {
-        QUnit.test(`position my and at is correct for position=${position} and rtlEnabled=${rtlEnabled}`, function(assert) {
-            this._validationMessage.option({ rtlEnabled, position });
+    ].forEach(({ position: positionSide, rtlEnabled, at, my }) => {
+        QUnit.test(`position my and at is correct for position=${positionSide} and rtlEnabled=${rtlEnabled}`, function(assert) {
+            this._validationMessage.option({ rtlEnabled, positionSide });
 
             assert.deepEqual(this._validationMessage.option('position.my'), my, 'my is correct');
             assert.deepEqual(this._validationMessage.option('position.at'), at, 'at is correct');
@@ -147,32 +147,32 @@ QUnit.module('position', moduleSetup, () => {
         { position: 'left', rtlEnabled: true, offset: { h: -10, v: 20 } },
         { position: 'right', rtlEnabled: false, offset: { h: 10, v: 20 } },
         { position: 'right', rtlEnabled: true, offset: { h: 10, v: 20 } },
-    ].forEach(({ position, rtlEnabled, offset: expectedOffset }) => {
-        QUnit.test(`offset is correct for position=${position} and rtlEnabled=${rtlEnabled}`, function(assert) {
+    ].forEach(({ position: positionSide, rtlEnabled, offset: expectedOffset }) => {
+        QUnit.test(`offset is correct for position=${positionSide} and rtlEnabled=${rtlEnabled}`, function(assert) {
             const offset = { h: 10, v: 20 };
 
-            this._validationMessage.option({ position, offset, rtlEnabled });
+            this._validationMessage.option({ positionSide, offset, rtlEnabled });
 
             assert.deepEqual(this._validationMessage.option('position.offset'), expectedOffset, 'offset is correct');
         });
     });
 
-    QUnit.test('should add position class on position change', function(assert) {
+    QUnit.test('should add position class on positionSide change', function(assert) {
         const positionClass = 'dx-invalid-message-left';
 
-        this._validationMessage.option('position', 'left');
+        this._validationMessage.option('positionSide', 'left');
 
         assert.ok(this._validationMessage.$element().hasClass(positionClass), 'class was added');
     });
 
-    QUnit.test('should remove previous position class on position change', function(assert) {
+    QUnit.test('should remove previous position class on positionSide change', function(assert) {
         const positionClass = 'dx-invalid-message-left';
 
-        this._validationMessage.option('position', 'left');
+        this._validationMessage.option('positionSide', 'left');
 
         assert.ok(this._validationMessage.$element().hasClass(positionClass), 'class was added');
 
-        this._validationMessage.option('position', 'right');
+        this._validationMessage.option('positionSide', 'right');
 
         assert.notOk(this._validationMessage.$element().hasClass(positionClass), 'class was removed');
     });
