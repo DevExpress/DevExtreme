@@ -4349,7 +4349,7 @@ QUnit.module('Header Filter with real columnsController', {
 
             // act
             const list = $popupContent.find('.dx-list').dxList('instance');
-            list.scrollBy(1000);
+            list.scrollBy(100);
             this.clock.tick();
 
             // assert
