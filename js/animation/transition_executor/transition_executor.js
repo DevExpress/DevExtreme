@@ -29,6 +29,9 @@ export const TransitionExecutor = Class.inherit({
     _createAnimations: function($elements, initialConfig, configModifier, type) {
         const that = this;
         const result = [];
+        if(!$elements.jquery && !$elements.dxRenderer) {
+            $elements = $($elements);
+        }
 
         configModifier = configModifier || {};
         const animationConfig = this._prepareElementAnimationConfig(initialConfig, configModifier, type);
