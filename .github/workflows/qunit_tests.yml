@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Build
     timeout-minutes: 60
 
@@ -53,7 +53,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
     strategy:
@@ -139,7 +139,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')

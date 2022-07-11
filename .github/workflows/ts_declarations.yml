@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-ts-bundle:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -48,7 +48,7 @@ jobs:
         fi
   
   validate-declarations:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -73,7 +73,7 @@ jobs:
       run: npm run validate-declarations
 
   check-ts-compilation:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -101,7 +101,7 @@ jobs:
       run: npm run test-typescript
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations, check-ts-compilation]
     if: always() && contains(needs.*.result, 'failure')
