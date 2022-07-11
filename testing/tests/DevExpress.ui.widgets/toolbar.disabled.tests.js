@@ -1,7 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-import 'ui/action_sheet';
-import 'ui/drop_down_menu';
-
 import $ from 'jquery';
 import 'ui/toolbar';
 import 'ui/toolbar/ui.toolbar.base';
@@ -20,8 +16,6 @@ import 'ui/date_box';
 import 'ui/menu';
 
 import fx from 'animation/fx';
-
-// const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 
 const moduleConfig = {
     before: function() {
@@ -51,7 +45,7 @@ const getItemElement = (toolbar, itemElementSelector) => {
 };
 
 const getDropDownMenu = (toolbar) => {
-    const dropDownMenu = toolbar._menu._dropDownMenu; // $(toolbar.element()).find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
+    const dropDownMenu = toolbar._menu._dropDownMenu;
 
     if(dropDownMenu) {
         return dropDownMenu;

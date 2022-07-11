@@ -7,7 +7,7 @@ import Button from 'ui/button';
 import List from 'ui/list';
 import Popup from 'ui/popup';
 import Popover from 'ui/popover';
-import DropDownMenu from 'ui/drop_down_menu';
+import DropDownMenu from 'ui/toolbar/drop_down_menu';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';

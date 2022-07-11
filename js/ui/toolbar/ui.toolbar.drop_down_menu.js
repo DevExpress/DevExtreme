@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import ToolbarMenu from './ui.toolbar.menu';
-import DropDownMenu from '../drop_down_menu';
+import DropDownMenu from './drop_down_menu';
 import devices from '../../core/devices';
 import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';

@@ -3,7 +3,7 @@ const ko = require('knockout');
 const fx = require('animation/fx');
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
-require('ui/drop_down_menu');
+require('ui/toolbar/drop_down_menu');
 require('integration/knockout');
 
 QUnit.testStart(function() {

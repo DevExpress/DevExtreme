@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import Toolbar from 'ui/toolbar';
-import DropDownMenu from 'ui/drop_down_menu';
+
 import 'ui/button';
 
 const BUTTON_CLASS = 'dx-button';
@@ -56,8 +56,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 if(config.locateInMenu === 'never') {
                     assert.strictEqual(dropDownMenuElement, null, 'dropDownMenuElement not rendered in menu');
                 } else {
-                    const dropDown = DropDownMenu.getInstance(dropDownMenuElement);
-                    dropDown.open();
+                    $(dropDownMenuElement).trigger('click');
 
                     const dropDownMenuListElement = document.querySelector(`.${DROP_DOWN_MENU_LIST_CLASS}`);
                     const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
