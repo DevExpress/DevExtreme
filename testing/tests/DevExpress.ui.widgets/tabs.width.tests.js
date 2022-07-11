@@ -1,5 +1,6 @@
 import 'generic_light.css!';
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import $ from 'jquery';
 import 'ui/tabs';
 
@@ -15,6 +16,8 @@ QUnit.module('Width', () => {
             this.assert = assert;
             this.scrollingEnabled = scrollingEnabled;
             this.setWidthApproach = setWidthApproach;
+
+            addShadowDomStyles($('#qunit-fixture'));
         }
 
         _initializeTabs(width) {
