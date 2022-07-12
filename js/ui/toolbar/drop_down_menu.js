@@ -66,7 +66,12 @@ const DropDownMenu = Widget.inherit({
             hoverStateEnabled: true,
             opened: false,
             deferRendering: false,
-            popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } },
+            popupPosition: {
+                my: 'top right',
+                at: 'bottom right',
+                collision: 'fit flip',
+                offset: { v: 4 }
+            },
             popupAnimation: undefined,
             onItemRendered: null,
             popupMaxHeight: undefined,
