@@ -7,7 +7,6 @@ import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import Button from '../button';
 import Popover from '../popover';
-import DataHelperMixin from '../../data_helper';
 import ToolbarMenuList from './ui.toolbar.menu.list';
 import { isMaterial } from '../themes';
 import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
@@ -116,17 +115,11 @@ const DropDownMenu = Widget.inherit({
         ]);
     },
 
-    _dataSourceOptions: function() {
-        return {
-            paginate: false
-        };
-    },
-
     _init: function() {
         this.callBase();
 
         this.$element().addClass(DROP_DOWN_MENU_CLASS);
-        this._initDataSource();
+
         this._initItemClickAction();
         this._initButtonClickAction();
     },
@@ -261,13 +254,6 @@ const DropDownMenu = Widget.inherit({
 
         this._list = this._createComponent($content, ToolbarMenuList, listConfig);
 
-        // todo: replace with option
-        this._list._getAriaTarget = (function() {
-            return this.$element();
-        }).bind(this);
-
-        this._setListDataSource();
-
         const listMaxHeight = getHeight(getWindow()) * 0.5;
         if(getHeight($content) > listMaxHeight) {
             setHeight($content, listMaxHeight);
@@ -281,6 +267,7 @@ const DropDownMenu = Widget.inherit({
 
     _listOptions: function() {
         return {
+            dataSource: this._getListDataSource(),
             pageLoadMode: 'scrollBottom',
             indicateLoading: false,
             noDataText: '',
@@ -295,14 +282,17 @@ const DropDownMenu = Widget.inherit({
             focusStateEnabled: this.option('focusStateEnabled'),
             activeStateEnabled: this.option('activeStateEnabled'),
             onItemRendered: this.option('onItemRendered'),
+            _areaTarget: this.$element(),
             _itemAttributes: { role: 'menuitem' }
         };
     },
 
+    _getListDataSource() {
+        return this.option('dataSource') ?? this.option('items');
+    },
+
     _setListDataSource: function() {
-        if(this._list) {
-            this._list.option('dataSource', this._dataSource || this.option('items'));
-        }
+        this._list?.option('dataSource', this._getListDataSource());
 
         delete this._deferRendering;
     },
@@ -317,8 +307,7 @@ const DropDownMenu = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        const name = args.name;
-        const value = args.value;
+        const { name, value } = args;
 
         switch(name) {
             case 'items':
@@ -326,14 +315,11 @@ const DropDownMenu = Widget.inherit({
                 if(this.option('deferRendering') && !this.option('opened')) {
                     this._deferRendering = true;
                 } else {
-                    this._refreshDataSource();
                     this._setListDataSource();
                 }
                 break;
             case 'itemTemplate':
-                if(this._list) {
-                    this._list.option(name, this._getTemplate(value));
-                }
+                this._list?.option(name, this._getTemplate(value));
                 break;
             case 'onItemClick':
                 this._initItemClickAction();
@@ -359,19 +345,14 @@ const DropDownMenu = Widget.inherit({
                 break;
             case 'focusStateEnabled':
             case 'activeStateEnabled':
-                if(this._list) {
-                    this._list.option(name, value);
-                }
+                this._list?.option(name, value);
                 this.callBase(args);
                 break;
             case 'onItemRendered':
-                if(this._list) {
-                    this._list.option(name, value);
-                }
+                this._list?.option(name, value);
                 break;
             case 'opened':
                 if(this._deferRendering) {
-                    this._refreshDataSource();
                     this._setListDataSource();
                 }
 
@@ -406,8 +387,7 @@ const DropDownMenu = Widget.inherit({
     close: function() {
         this.option('opened', false);
     }
-
-}).include(DataHelperMixin);
+});
 
 registerComponent('dxDropDownMenu', DropDownMenu);
 
