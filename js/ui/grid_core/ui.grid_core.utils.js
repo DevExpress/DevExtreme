@@ -600,24 +600,22 @@ export default {
                         d.resolve([]);
                     }
 
+                    let newDataSource;
+
                     if(hasLookupOptimization) {
                         const lookupItems = items.map(item => ({
                             [column.lookup.valueExpr]: item.key,
                             [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
                         }));
 
-                        const newDataSource = new DataSource({
+                        newDataSource = new DataSource({
+                            ...lookupDataSourceOptions,
                             ...loadOptions,
                             store: new ArrayStore({
                                 data: lookupItems,
                                 key: column.lookup.valueExpr,
                             })
                         });
-
-                        newDataSource
-                            .load(loadOptions)
-                            .done(d.resolve)
-                            .fail(d.fail);
                     } else {
                         const filter = this.combineFilters(
                             items.map((data => [
@@ -626,16 +624,22 @@ export default {
                             'or'
                         );
 
-                        (new DataSource({
+                        newDataSource = new DataSource({
                             ...lookupDataSourceOptions,
                             ...loadOptions,
                             filter: this.combineFilters([filter, loadOptions.filter], 'and'),
-                        }))
-                            .load(loadOptions)
-                            .done(d.resolve)
-                            .fail(d.fail);
+                        });
                     }
 
+                    newDataSource.on('customizeStoreLoadOptions', (e) => {
+                        e.storeLoadOptions.take = loadOptions.take;
+                        e.storeLoadOptions.skip = loadOptions.skip;
+                    });
+
+                    newDataSource
+                        .load()
+                        .done(d.resolve)
+                        .fail(d.fail);
                 }).fail(d.fail);
                 return d;
             },
