@@ -2486,7 +2486,6 @@
           {
             "Title": "Bi-Directional Bar Chart",
             "Name": "BiDirectionalBarChart",
-            "DocUrl": "Guide/UI_Components/Chart/Bi-Directional_Bar_Chart/",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "stackedbar"
