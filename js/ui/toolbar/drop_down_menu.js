@@ -23,7 +23,6 @@ const POPUP_OPTION_MAP = {
     'popupWidth': 'width',
     'popupHeight': 'height',
     'popupMaxHeight': 'maxHeight',
-    'popupAutoResizeEnabled': 'autoResizeEnabled'
 };
 
 const BUTTON_OPTION_MAP = {
@@ -61,38 +60,29 @@ const DropDownMenu = Widget.inherit({
             buttonHeight: undefined,
             buttonTemplate: 'content',
             onButtonClick: null,
-            usePopover: false,
             popupWidth: 'auto',
             popupHeight: 'auto',
             activeStateEnabled: true,
             hoverStateEnabled: true,
             opened: false,
             deferRendering: false,
-            popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
+            popupPosition: {
+                my: 'top right',
+                at: 'bottom right',
+                collision: 'fit flip',
+                offset: { v: 4 }
+            },
             popupAnimation: undefined,
             onItemRendered: null,
             popupMaxHeight: undefined,
             closeOnClick: true,
             useInkRipple: false,
             container: undefined,
-            popupAutoResizeEnabled: false
         });
     },
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([
-            {
-                device: { platform: 'ios' },
-                options: {
-                    usePopover: true
-                }
-            },
-            {
-                device: { platform: 'generic' },
-                options: {
-                    popupPosition: { offset: { v: 4 } }
-                }
-            },
             {
                 device: function() {
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
@@ -102,14 +92,11 @@ const DropDownMenu = Widget.inherit({
                 }
             },
             {
-                device: { platform: 'android' },
-
+                device: function() {
+                    return isMaterial();
+                },
                 options: {
-                    popupPosition: {
-                        my: 'top ' + (this.option('rtlEnabled') ? 'left' : 'right'),
-                        at: 'top ' + (this.option('rtlEnabled') ? 'left' : 'right'),
-                        collision: 'flipfit'
-                    },
+                    useInkRipple: true,
                     popupAnimation: {
                         show: {
                             type: 'pop',
@@ -126,28 +113,7 @@ const DropDownMenu = Widget.inherit({
                     }
                 }
             },
-            {
-                device: function() {
-                    return isMaterial();
-                },
-                options: {
-                    useInkRipple: true
-                }
-            }
         ]);
-    },
-
-    _initOptions: function(options) {
-        if(devices.current().platform === 'android') {
-            if(!options.popupPosition) {
-                options.popupPosition = {
-                    at: (options.usePopover ? 'bottom ' : 'top ') +
-                        (options.rtlEnabled ? 'left' : 'right')
-                };
-            }
-        }
-
-        this.callBase(options);
     },
 
     _dataSourceOptions: function() {
@@ -260,13 +226,11 @@ const DropDownMenu = Widget.inherit({
     },
 
     _popupOptions: function() {
-        const usePopup = !this.option('usePopover');
-
         return {
             onInitialized: function(args) {
                 args.component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
-                    .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
+                    .addClass(DROP_DOWN_MENU_POPUP_CLASS);
             },
             visible: this.option('opened'),
             deferRendering: false,
@@ -285,7 +249,7 @@ const DropDownMenu = Widget.inherit({
             width: this.option('popupWidth'),
             maxHeight: this.option('popupMaxHeight'),
             container: this.option('container'),
-            autoResizeEnabled: this.option('popupAutoResizeEnabled')
+            autoResizeEnabled: false
         };
     },
 
@@ -388,10 +352,8 @@ const DropDownMenu = Widget.inherit({
             case 'popupWidth':
             case 'popupHeight':
             case 'popupMaxHeight':
-            case 'popupAutoResizeEnabled':
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
-            case 'usePopover':
             case 'useInkRipple':
                 this._invalidate();
                 break;

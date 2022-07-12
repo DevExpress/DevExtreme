@@ -75,10 +75,6 @@ class ToolbarDropDownMenu {
                     this._updateMenuVisibility(value);
                 }
             },
-            popupPosition: {
-                at: 'bottom right',
-                my: 'top right'
-            }
         };
     }
 
