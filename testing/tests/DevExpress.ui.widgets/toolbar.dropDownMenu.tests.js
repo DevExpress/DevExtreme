@@ -363,7 +363,7 @@ QUnit.module('position', {
         }
         const element = $('#dropDownMenu').dxDropDownMenu();
         const instance = element.dxDropDownMenu('instance');
-        const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
+        const defaultPosition = { my: 'top right', at: 'bottom right', collision: 'fit flip', offset: { v: 4 } };
 
         assert.deepEqual(defaultPosition, instance.option('popupPosition'));
     });
