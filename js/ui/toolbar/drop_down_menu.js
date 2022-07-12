@@ -97,9 +97,6 @@ const DropDownMenu = Widget.inherit({
                 },
                 options: {
                     useInkRipple: true,
-                    popupPosition: {
-                        offset: { v: 1 }
-                    },
                     popupAnimation: {
                         show: {
                             type: 'pop',
