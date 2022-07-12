@@ -1,4 +1,4 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from '../../../helpers/screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -394,12 +394,12 @@ test('Change dataFiels order when applyChangesMode is "onDemand" (T1097764)', as
     applyChangesMode: 'onDemand',
   },
   onInitialized(e) {
-    function expand(dataSource) {
+    const expand = (dataSource): void => {
       setTimeout(() => {
         dataSource.expandHeaderItem('row', ['North America']);
         dataSource.expandHeaderItem('column', [2013]);
       }, 0);
-    }
+    };
 
     expand(e.component.getDataSource());
   },
