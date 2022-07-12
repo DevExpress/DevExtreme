@@ -9,8 +9,8 @@ const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
-const ToolbarMenu = ListBase.inherit({
-    _activeStateUnit: '.' + TOOLBAR_MENU_ACTION_CLASS,
+const ToolbarMenuList = ListBase.inherit({
+    _activeStateUnit: `.${TOOLBAR_MENU_ACTION_CLASS}`,
 
     _initMarkup: function() {
         this._renderSections();
@@ -100,6 +100,6 @@ const ToolbarMenu = ListBase.inherit({
     }
 });
 
-registerComponent('dxToolbarMenu', ToolbarMenu);
+registerComponent('dxToolbarMenuList', ToolbarMenuList);
 
-export default ToolbarMenu;
+export default ToolbarMenuList;

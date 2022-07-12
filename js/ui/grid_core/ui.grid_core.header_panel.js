@@ -4,8 +4,6 @@ import { ColumnsView } from './ui.grid_core.columns_view';
 import { noop } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
-
-import '../drop_down_menu';
 import { extend } from '../../core/utils/extend';
 import { getPathParts } from '../../core/utils/data';
 const HEADER_PANEL_CLASS = 'header-panel';

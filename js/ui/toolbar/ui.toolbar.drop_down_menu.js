@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import ToolbarMenu from './ui.toolbar.menu';
-import DropDownMenu from '../drop_down_menu';
+import DropDownMenu from './drop_down_menu';
 import devices from '../../core/devices';
 import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';
@@ -68,7 +67,6 @@ class ToolbarDropDownMenu {
             popupMaxHeight: (devices.current().platform === 'android') // T1010948
                 ? domAdapter.getDocumentElement().clientHeight - topAndBottomOffset
                 : undefined,
-            menuWidget: ToolbarMenu,
             onOptionChanged: ({ name, value }) => {
                 if(name === 'opened') {
                     this._toolbar.option('overflowMenuVisible', value);

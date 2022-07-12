@@ -4,10 +4,10 @@ import ArrayStore from 'data/array_store';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import Button from 'ui/button';
-import List from 'ui/list';
 import Popup from 'ui/popup';
 import Popover from 'ui/popover';
-import DropDownMenu from 'ui/drop_down_menu';
+import DropDownMenu from 'ui/toolbar/drop_down_menu';
+import ToolbarMenuList from 'ui/toolbar/ui.toolbar.menu.list.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -81,7 +81,7 @@ const testRendering = function(usePopover) {
 
             this.toggleMenu();
 
-            assert.ok(this.list instanceof List);
+            assert.ok(this.list instanceof ToolbarMenuList);
             assert.ok(this.popup instanceof (usePopover ? Popover : Popup));
 
             assert.ok(this.$list.hasClass(DROP_DOWN_MENU_LIST_CLASS));
@@ -197,29 +197,6 @@ const testRendering = function(usePopover) {
             const buttonBottom = $button.offset().top + getOuterHeight($button);
 
             assert.ok(overlayTop >= buttonBottom);
-        });
-
-        QUnit.test('option menuWidget', function(assert) {
-            const testComponentClass = 'test-component';
-            const TestComponent = List.inherit({
-                _render: function() {
-                    this.$element().addClass(testComponentClass);
-                    this.callBase();
-                }
-            });
-
-            const $element = $('#dropDownMenu').dxDropDownMenu({
-                menuWidget: TestComponent,
-                opened: true,
-                items: [1, 2]
-            });
-            const instance = $element.dxDropDownMenu('instance');
-
-            instance.close();
-            assert.ok($element.find('.' + testComponentClass).length, 'collection menu was rendered');
-
-            instance.option('menuWidget', List);
-            assert.ok(!$element.find('.' + testComponentClass).length, 'collection menu was removed');
         });
     });
 };
@@ -381,72 +358,6 @@ QUnit.module('render', moduleConfig(), () => {
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
-
-    QUnit.test('selectionMode property should pass to list', function(assert) {
-        const $container = $('#dropDownMenu');
-        $container.dxDropDownMenu({
-            opened: true,
-            items: [1, 2],
-            container: $container
-        });
-
-        this.toggleMenu();
-
-        assert.equal(this.ddMenu.option('selectionMode'), 'none', 'in default case, selectionMode should be "none" value');
-        assert.equal(this.list.option('selectionMode'), 'none', 'in default case, selectionMode should be "none" value in list');
-
-        ['all', 'multiple', 'none', 'single'].forEach(selectionMode => {
-            this.ddMenu.option('selectionMode', selectionMode);
-            assert.equal(this.list.option('selectionMode'), selectionMode, `${selectionMode} value of selectionMode should set in list`);
-        });
-    });
-
-    QUnit.test('selectedItemKeys property should pass to list', function(assert) {
-        const $container = $('#dropDownMenu');
-        $container.dxDropDownMenu({
-            opened: true,
-            items: [1, 2],
-            selectionMode: 'multiple',
-            container: $container
-        });
-
-        this.toggleMenu();
-
-        [[1], [2], [1, 2]].forEach(value => {
-            this.ddMenu.option('selectedItemKeys', value);
-            assert.deepEqual(this.list.option('selectedItemKeys'), value, `${value} value of selectedItemKeys should be set in list`);
-        });
-    });
-
-    QUnit.module('selection', () => {
-        const selectItemClassName = 'dx-list-item-selected';
-
-        [[1], [1, 2]].forEach(selectedItems => {
-            const selectionMode = selectedItems.length > 1 ? 'multiple' : 'single';
-
-            QUnit.test(`item should be render like selected in "${selectionMode}" mode`, function(assert) {
-                const defaultItems = [1, 2];
-                const $container = $('#dropDownMenu');
-
-                $container.dxDropDownMenu({
-                    opened: true,
-                    items: defaultItems,
-                    container: $container,
-                    selectionMode: selectionMode,
-                    selectedItemKeys: selectedItems,
-                });
-
-                this.toggleMenu();
-                const $items = this.list.itemElements();
-
-                defaultItems.forEach((item, index) => {
-                    const isItemSelectionRendered = $items.eq(index).hasClass(selectItemClassName);
-                    selectedItems[index] ? assert.ok(isItemSelectionRendered, 'item should be rendered selection') :
-                        assert.notOk(isItemSelectionRendered, 'item shouldn\'t be render selection');
-                });
-            });
-        });
-    });
 });
 
 QUnit.module('position', {
@@ -552,7 +463,7 @@ QUnit.module('behavior', moduleConfig(), () => {
 
 QUnit.module('integration', () => {
     QUnit.test('list defaults', function(assert) {
-        const list = $('#dropDownMenu').dxList().dxList('instance');
+        const list = $('#dropDownMenu').dxToolbarMenuList().dxToolbarMenuList('instance');
         assert.strictEqual(list.option('pullRefreshEnabled'), false);
     });
 
@@ -1002,7 +913,7 @@ QUnit.module('aria accessibility', {
         instance.close();
 
         const $listItem = $element.find('.dx-list-item:first');
-        const list = $element.find('.dx-list').dxList('instance');
+        const list = $element.find('.dx-list').dxToolbarMenuList('instance');
 
         instance.open();
         list.option('focusedElement', $listItem);
