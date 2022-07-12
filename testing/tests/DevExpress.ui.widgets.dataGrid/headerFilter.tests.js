@@ -4310,7 +4310,7 @@ QUnit.module('Header Filter with real columnsController', {
         });
 
         // T1100536
-        QUnit.test(`Lookup header filter should pass correct group load options for lookup dataSource, lookupOptimization = ${hasLookupOptimization}`, function(assert) {
+        QUnit.test(`Lookup header filter should pass correct load options (skip, take, filter) for lookup dataSource, lookupOptimization = ${hasLookupOptimization}`, function(assert) {
             // arrange
             this.options.columns = [{
                 dataField: 'column1',

@@ -2540,7 +2540,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
     // T1100782
     [true, false].forEach((hasLookupOptimization) => {
-        QUnit.test(`Lookup select box should pass correct group load options for lookup dataSource, hasLookupOptimization: ${hasLookupOptimization}`, function(assert) {
+        QUnit.test(`Lookup select box should pass correct load options (skip, take, filter) for lookup dataSource, hasLookupOptimization: ${hasLookupOptimization}`, function(assert) {
             // arrange
             const loadSpy = sinon.spy((loadOptions) => {
                 const d = $.Deferred();
@@ -2548,7 +2548,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
                     [...new Array(100).keys()].map(i => ({ id: i, value: `value${i}` }))
                 ).load(loadOptions).done(items => d.resolve({
                     data: items,
-                    totalCount: 2,
+                    totalCount: 100,
                 }));
 
                 return d;
@@ -2591,7 +2591,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             const dropDownList1 = $('.dx-list:eq(0)');
             assert.strictEqual(dropDownList1.find('.dx-item').length, 91); // 90 rows + (All)
             assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value10');
-            assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value11');
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(-1)').text(), 'value99');
         });
     });
 
