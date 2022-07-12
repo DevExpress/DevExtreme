@@ -1,7 +1,50 @@
 import { ClientFunction } from 'testcafe';
 
+export type WidgetName =
+'dxAccordion' |
+'dxAutocomplete' |
+'dxGallery' |
+'dxButtonGroup' |
+'dxCheckBox' |
+'dxDropDownButton' |
+'dxTabPanel' |
+'dxForm' |
+'dxFilterBuilder' |
+'dxTabPanel' |
+'dxSelectBox' |
+'dxScrollable' |
+'dxScrollView' |
+'dxMultiView' |
+'dxPivotGrid' |
+'dxPivotGridFieldChooser' |
+'dxDataGrid' |
+'dxTreeList' |
+'dxPager' |
+'dxRadioGroup' |
+'dxScheduler' |
+'dxTabs' |
+'dxTagBox' |
+'dxContextMenu' |
+'dxDropDownMenu' |
+'dxChart' |
+'dxMenu' |
+'dxPopup' |
+'dxSelectBox' |
+'dxButton' |
+'dxTextBox' |
+'dxTextArea' |
+'dxTagBox' |
+'dxToolbar' |
+'dxTreeView' |
+'dxDateBox' |
+'dxLookup' |
+'dxList' |
+'dxHtmlEditor' |
+'dxNumberBox' |
+'dxValidator';
+
 export default async function createWidget(
-  widgetName: string,
+  widgetName: WidgetName,
   options: any,
   disableAnimation = false,
   selector = '#container',
