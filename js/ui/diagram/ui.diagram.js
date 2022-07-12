@@ -753,7 +753,10 @@ class Diagram extends Widget {
         this._killCaptureFocusTimeout();
 
         super._dispose();
-        this._diagramInstance = undefined;
+        if(this._diagramInstance) {
+            this._diagramInstance.dispose();
+            this._diagramInstance = undefined;
+        }
     }
     _executeDiagramCommand(command, parameter) {
         this._diagramInstance.getCommand(command).execute(parameter);
