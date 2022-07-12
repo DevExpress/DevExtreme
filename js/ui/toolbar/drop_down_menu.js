@@ -61,14 +61,13 @@ const DropDownMenu = Widget.inherit({
             buttonHeight: undefined,
             buttonTemplate: 'content',
             onButtonClick: null,
-            usePopover: false,
             popupWidth: 'auto',
             popupHeight: 'auto',
             activeStateEnabled: true,
             hoverStateEnabled: true,
             opened: false,
             deferRendering: false,
-            popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
+            popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } },
             popupAnimation: undefined,
             onItemRendered: null,
             popupMaxHeight: undefined,
@@ -82,18 +81,6 @@ const DropDownMenu = Widget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: 'ios' },
-                options: {
-                    usePopover: true
-                }
-            },
-            {
-                device: { platform: 'generic' },
-                options: {
-                    popupPosition: { offset: { v: 4 } }
-                }
-            },
-            {
                 device: function() {
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
@@ -102,13 +89,13 @@ const DropDownMenu = Widget.inherit({
                 }
             },
             {
-                device: { platform: 'android' },
-
+                device: function() {
+                    return isMaterial();
+                },
                 options: {
+                    useInkRipple: true,
                     popupPosition: {
-                        my: 'top ' + (this.option('rtlEnabled') ? 'left' : 'right'),
-                        at: 'top ' + (this.option('rtlEnabled') ? 'left' : 'right'),
-                        collision: 'flipfit'
+                        offset: { v: 1 }
                     },
                     popupAnimation: {
                         show: {
@@ -126,28 +113,7 @@ const DropDownMenu = Widget.inherit({
                     }
                 }
             },
-            {
-                device: function() {
-                    return isMaterial();
-                },
-                options: {
-                    useInkRipple: true
-                }
-            }
         ]);
-    },
-
-    _initOptions: function(options) {
-        if(devices.current().platform === 'android') {
-            if(!options.popupPosition) {
-                options.popupPosition = {
-                    at: (options.usePopover ? 'bottom ' : 'top ') +
-                        (options.rtlEnabled ? 'left' : 'right')
-                };
-            }
-        }
-
-        this.callBase(options);
     },
 
     _dataSourceOptions: function() {
@@ -260,13 +226,11 @@ const DropDownMenu = Widget.inherit({
     },
 
     _popupOptions: function() {
-        const usePopup = !this.option('usePopover');
-
         return {
             onInitialized: function(args) {
                 args.component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
-                    .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
+                    .addClass(DROP_DOWN_MENU_POPUP_CLASS);
             },
             visible: this.option('opened'),
             deferRendering: false,
@@ -391,7 +355,6 @@ const DropDownMenu = Widget.inherit({
             case 'popupAutoResizeEnabled':
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
-            case 'usePopover':
             case 'useInkRipple':
                 this._invalidate();
                 break;
