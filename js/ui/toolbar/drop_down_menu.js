@@ -23,7 +23,6 @@ const POPUP_OPTION_MAP = {
     'popupWidth': 'width',
     'popupHeight': 'height',
     'popupMaxHeight': 'maxHeight',
-    'popupAutoResizeEnabled': 'autoResizeEnabled'
 };
 
 const BUTTON_OPTION_MAP = {
@@ -74,7 +73,6 @@ const DropDownMenu = Widget.inherit({
             closeOnClick: true,
             useInkRipple: false,
             container: undefined,
-            popupAutoResizeEnabled: false
         });
     },
 
@@ -249,7 +247,7 @@ const DropDownMenu = Widget.inherit({
             width: this.option('popupWidth'),
             maxHeight: this.option('popupMaxHeight'),
             container: this.option('container'),
-            autoResizeEnabled: this.option('popupAutoResizeEnabled')
+            autoResizeEnabled: false
         };
     },
 
@@ -352,7 +350,6 @@ const DropDownMenu = Widget.inherit({
             case 'popupWidth':
             case 'popupHeight':
             case 'popupMaxHeight':
-            case 'popupAutoResizeEnabled':
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
             case 'useInkRipple':

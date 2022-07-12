@@ -4,7 +4,8 @@ import ArrayStore from 'data/array_store';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import Button from 'ui/button';
-import Popover from 'ui/popover';
+import Popup from 'ui/popup';
+import 'ui/popover';
 import DropDownMenu from 'ui/toolbar/drop_down_menu';
 import ToolbarMenuList from 'ui/toolbar/ui.toolbar.menu.list.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -68,7 +69,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('render with popover'), moduleConfig, () => {
+QUnit.module('render with popup'), moduleConfig, () => {
     QUnit.test('default', function(assert) {
         assert.ok(this.button instanceof Button);
         assert.ok(this.element.hasClass(DROP_DOWN_MENU_CLASS));
@@ -77,11 +78,11 @@ QUnit.module('render with popover'), moduleConfig, () => {
         this.toggleMenu();
 
         assert.ok(this.list instanceof ToolbarMenuList);
-        assert.ok(this.popup instanceof Popover);
+        assert.ok(this.popup instanceof Popup);
 
         assert.ok(this.$list.hasClass(DROP_DOWN_MENU_LIST_CLASS));
         assert.equal(this.$list.find('.dx-list-item').length, 0);
-        assert.ok(this.$popup.dxPopover('instance'));
+        assert.ok(this.$popup.dxPopup('instance'));
     });
 
     QUnit.test('list should be rendered before onContentReady of the popup', function(assert) {
@@ -313,9 +314,9 @@ QUnit.module('render', moduleConfig, () => {
         const $dropDownMenu = $('#dropDownMenuSecond').dxDropDownMenu({
             opened: true
         });
-        const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
+        const popup = $dropDownMenu.find('.dx-popup').dxPopover('instance');
 
-        assert.ok(popoverInstance.option('visible'), 'popup is visible');
+        assert.ok(popup.option('visible'), 'popup is visible');
     });
 
     QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
@@ -324,8 +325,8 @@ QUnit.module('render', moduleConfig, () => {
             container: $container,
             opened: true
         });
-        const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = popoverInstance.$content();
+        const popup = $dropDownMenu.find('.dx-popup').dxPopover('instance');
+        const $content = popup.$content();
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
@@ -338,10 +339,10 @@ QUnit.module('render', moduleConfig, () => {
 
         $dropDownMenu.dxDropDownMenu('option', 'container', $container);
 
-        const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = popoverInstance.$content();
+        const popup = $dropDownMenu.find('.dx-popup').dxPopover('instance');
+        const $content = popup.$content();
 
-        assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
+        assert.strictEqual($content.closest($container).length, 1, 'Popup content located into desired container');
     });
 });
 
@@ -365,13 +366,10 @@ QUnit.module('position', {
         const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
 
         assert.deepEqual(defaultPosition, instance.option('popupPosition'));
-        assert.notOk(instance.option('usePopover'));
     });
 
     QUnit.test('check position for LTR and RTL', function(assert) {
-        const element = $('#dropDownMenu').dxDropDownMenu({
-            usePopover: false,
-        });
+        const element = $('#dropDownMenu').dxDropDownMenu({});
 
         const instance = element.dxDropDownMenu('instance');
         let positionConfig;
@@ -466,25 +464,20 @@ QUnit.module('integration', () => {
 
         $dropDownMenu.dxDropDownMenu('option', 'opened', true);
 
-        const popover = $dropDownMenu.find('.dx-popover').dxPopover('instance');
+        const popup = $dropDownMenu.find('.dx-popover').dxPopover('instance');
 
-        assert.equal(popover.option('height'), 100, 'popover height is right');
-        assert.equal(popover.option('width'), 50, 'popover width is right');
+        assert.equal(popup.option('height'), 100, 'popover height is right');
+        assert.equal(popup.option('width'), 50, 'popover width is right');
     });
 
-    QUnit.test('autoResizeEnabled test', function(assert) {
+    QUnit.test('Popup autoResizeEnabled should be false by default', function(assert) {
         const $dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            popupAutoResizeEnabled: true,
             opened: true
         });
 
-        const popover = $dropDownMenu.find('.dx-popover').dxPopover('instance');
+        const popup = $dropDownMenu.find('.dx-popover').dxPopover('instance');
 
-        assert.equal(popover.option('autoResizeEnabled'), true, 'popover autoResizeEnabled is right');
-
-        $dropDownMenu.dxDropDownMenu('option', 'popupAutoResizeEnabled', false);
-
-        assert.equal(popover.option('autoResizeEnabled'), false, 'popover autoResizeEnabled is right');
+        assert.equal(popup.option('autoResizeEnabled'), false, 'popup.autoResizeEnabled is false');
     });
 
     QUnit.test('maxHeight test', function(assert) {
@@ -493,38 +486,27 @@ QUnit.module('integration', () => {
             opened: true
         });
 
-        const popover = $dropDownMenu.find('.dx-popover').dxPopover('instance');
+        const popup = $dropDownMenu.find('.dx-popover').dxPopover('instance');
 
-        assert.equal(popover.option('maxHeight'), 300, 'popover height is right');
+        assert.equal(popup.option('maxHeight'), 300, 'popover height is right');
 
         $dropDownMenu.dxDropDownMenu('option', 'popupMaxHeight', 400);
 
-        assert.equal(popover.option('maxHeight'), 400, 'popover height is right');
+        assert.equal(popup.option('maxHeight'), 400, 'popover height is right');
     });
 
-    QUnit.test('usePopover sets current target', function(assert) {
-        $('#dropDownMenu').dxDropDownMenu({
-            usePopover: true,
-            opened: true
-        });
-
-        const $popover = $('.dx-popover');
-        assert.equal($popover.length, 1, 'popover was created');
-    });
-
-    QUnit.test('usePopover option', function(assert) {
+    QUnit.test('popup target shoud be configured correctly', function(assert) {
         const $dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            usePopover: true,
             opened: true
         });
 
-        const $popover = $('.dx-popover');
-        const $target = $($popover.dxPopover('option', 'target'));
+        const $popup = $('.dx-popover');
+        const $target = $($popup.dxPopover('option', 'target'));
 
         assert.equal($target.get(0), $dropDownMenu.get(0), 'popover target is drop down menu button');
     });
 
-    QUnit.test('Popover vertical offset should be correct in material', function(assert) {
+    QUnit.test('Popup vertical offset should be correct in material', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -538,7 +520,7 @@ QUnit.module('integration', () => {
     });
 
     QUnit.test('Popover arrow should be hide', function(assert) {
-        const dropDownMenu = $('#dropDownMenu').dxDropDownMenu({}).dxDropDownMenu('instance');
+        $('#dropDownMenu').dxDropDownMenu({});
 
         $('.dx-dropdownmenu-button').trigger('dxclick');
 
@@ -548,8 +530,6 @@ QUnit.module('integration', () => {
         assert.equal(getHeight($arrow), 0, 'no arrow height in popup mode');
         assert.equal(getWidth($arrow), 0, 'no arrow width in popup mode');
 
-        $('.dx-dropdownmenu-button').trigger('dxclick');
-        dropDownMenu.option('usePopover', true);
         $('.dx-dropdownmenu-button').trigger('dxclick');
         $arrow = $('.dx-popover-arrow');
 
