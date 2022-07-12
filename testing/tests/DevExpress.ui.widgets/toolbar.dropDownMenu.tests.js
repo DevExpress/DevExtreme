@@ -513,7 +513,7 @@ QUnit.module('integration', () => {
         try {
             const dropDownMenu = $('#dropDownMenu').dxDropDownMenu({}).dxDropDownMenu('instance');
 
-            assert.deepEqual(dropDownMenu.option('popupPosition').offset, { v: 1 }, 'vertical offset is right');
+            assert.deepEqual(dropDownMenu.option('popupPosition').offset, { v: 4 }, 'vertical offset is right');
         } finally {
             themes.isMaterial = origIsMaterial;
         }
