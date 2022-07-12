@@ -260,12 +260,6 @@ export type ValidationMessageMode = 'always' | 'auto';
  * @public
  * @namespace DevExpress.common
  */
- export type ValidationMessagePosition = 'top' | 'right' | 'bottom' | 'left';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 
 /**
