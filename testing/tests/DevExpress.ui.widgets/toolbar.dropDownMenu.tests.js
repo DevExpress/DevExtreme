@@ -540,10 +540,11 @@ QUnit.module('integration', () => {
 
     QUnit.test('paginateEnabled is false by default', function(assert) {
         const dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            dataSource: [1, 2, 3]
+            dataSource: [1, 2, 3],
+            opened: true,
         }).dxDropDownMenu('instance');
 
-        assert.equal(dropDownMenu._dataSource.paginate(), false, 'paginate is false');
+        assert.equal(dropDownMenu._list._dataSource.paginate(), false, 'paginate is false');
     });
 
     QUnit.test('the \'onItemRendered\' option should be proxied to the list', function(assert) {

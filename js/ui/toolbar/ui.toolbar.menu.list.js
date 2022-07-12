@@ -88,10 +88,20 @@ const ToolbarMenuList = ListBase.inherit({
         return menuTemplate || template;
     },
 
+    _dataSourceOptions: function() {
+        return {
+            paginate: false
+        };
+    },
+
     _itemClickHandler: function(e, args, config) {
         if($(e.target).closest('.' + TOOLBAR_MENU_ACTION_CLASS).length) {
             this.callBase(e, args, config);
         }
+    },
+
+    _getAriaTarget: function() {
+        return this.option('_areaTarget') ?? this.callBase();
     },
 
     _clean: function() {
