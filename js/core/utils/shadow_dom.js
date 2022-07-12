@@ -61,32 +61,29 @@ export function addShadowDomStyles($element) {
     root.adoptedStyleSheets = [constructedStyleSheet];
 }
 
-function getShadowDomElementsInViewPort(x, y, el) {
-    let result = [];
+function isPositionInElementRectangle(element, x, y) {
+    const rect = element.getBoundingClientRect();
 
-    const rect = el.getBoundingClientRect();
-
-    if(rect) {
-        if(x >= rect.left && x <= rect.right - 1 && y <= rect.bottom - 1 && y >= rect.top) {
-            result = [el];
-
-            for(let i = 0; i < el.children.length; i++) {
-                result.unshift(...getShadowDomElementsInViewPort(x, y, el.children[i]));
-            }
-        }
-    }
-
-    return result;
+    return rect && x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom;
 }
 
 export function getShadowElementsFromPoint(x, y, root) {
     const result = [];
-    // eslint-disable-next-line no-undef
-    const childNodes = [...root.childNodes].filter(node => node.nodeType === Node.ELEMENT_NODE);
+    const elementQueue = [root];
 
-    for(let i = 0; i < childNodes.length; i++) {
-        result.push(...getShadowDomElementsInViewPort(x, y, childNodes[i]));
+    while(elementQueue.length) {
+        const el = elementQueue.shift();
+
+        for(let i = 0; i < el.childNodes.length; i++) {
+            const childNode = el.childNodes[i];
+
+            // eslint-disable-next-line no-undef
+            if(childNode.nodeType === Node.ELEMENT_NODE && isPositionInElementRectangle(childNode, x, y)) {
+                elementQueue.push(childNode);
+                result.push(childNode);
+            }
+        }
     }
 
-    return result;
+    return result.reverse();
 }

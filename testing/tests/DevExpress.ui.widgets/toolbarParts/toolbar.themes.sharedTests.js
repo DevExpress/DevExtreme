@@ -45,7 +45,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                     }]
                 };
 
-                const toolbarElement = $('#toolbar')[0];
+                const toolbarElement = $('#toolbar').get(0);
                 new Toolbar(toolbarElement, {
                     ...toolbarOptions,
                     width: 50,
