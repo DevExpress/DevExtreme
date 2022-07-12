@@ -361,8 +361,6 @@ test('Change dataFiels order with three invisible fields (T1079461)', async (t) 
 }));
 
 test('Change dataFiels order when applyChangesMode is "onDemand" (T1097764)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const pivotGrid = new PivotGrid('#container');
 
   await t.click(pivotGrid.getFieldChooserButton());
@@ -370,16 +368,45 @@ test('Change dataFiels order when applyChangesMode is "onDemand" (T1097764)', as
   const fieldChooser = pivotGrid.getFieldChooser();
   const fieldChooserTreeView = fieldChooser.getTreeView();
 
-  await t.click(fieldChooserTreeView.getCheckBoxByNodeIndex(0).element);
-  await t.click(fieldChooserTreeView.getCheckBoxByNodeIndex(1).element);
-
-  await t.drag(fieldChooser.getDataFields().nth(0), 0, 155);
+  const dataFields = fieldChooser.getDataFields();
 
   await t
-    .expect(await takeScreenshot('Change_dataField_order_applyChangesMode_onDemand.png', '.dx-overlay-content.dx-popup-draggable'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+    .expect(dataFields.count)
+    .eql(3)
+    .expect(dataFields.nth(0).textContent)
+    .eql('Total')
+    .expect(dataFields.nth(1).textContent)
+    .eql('Total 2')
+    .expect(dataFields.nth(2).textContent)
+    .eql('Total 3');
+
+  await t.click(fieldChooserTreeView.getCheckBoxByNodeIndex(1).element);
+
+  await t
+    .expect(dataFields.count)
+    .eql(4)
+    .expect(dataFields.nth(0).textContent)
+    .eql('Total')
+    .expect(dataFields.nth(1).textContent)
+    .eql('Total 2')
+    .expect(dataFields.nth(2).textContent)
+    .eql('Total 3')
+    .expect(dataFields.nth(3).textContent)
+    .eql('Total 5');
+
+  await t.drag(fieldChooser.getDataFields().nth(0), 0, 150);
+
+  await t
+    .expect(dataFields.count)
+    .eql(4)
+    .expect(dataFields.nth(0).textContent)
+    .eql('Total 2')
+    .expect(dataFields.nth(1).textContent)
+    .eql('Total 3')
+    .expect(dataFields.nth(2).textContent)
+    .eql('Total 5')
+    .expect(dataFields.nth(3).textContent)
+    .eql('Total');
 }).before(async () => createWidget('dxPivotGrid', {
   allowSortingBySummary: true,
   allowFiltering: true,
