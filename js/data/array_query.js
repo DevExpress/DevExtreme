@@ -277,7 +277,7 @@ const compileCriteria = (function() {
 
         const compare = (obj, operatorFn) => {
             obj = toComparable(getter(obj));
-            return [value, obj].includes(null) && value !== obj ? false : operatorFn(obj, value);
+            return (value == null || obj == null) && value !== obj ? false : operatorFn(obj, value);
         };
 
         switch(op.toLowerCase()) {
