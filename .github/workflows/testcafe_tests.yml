@@ -128,7 +128,7 @@ jobs:
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
-        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $PLATFORM"
+        all_args="--concurrency 1 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $PLATFORM"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
