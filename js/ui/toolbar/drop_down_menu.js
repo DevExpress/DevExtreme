@@ -18,7 +18,7 @@ const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
 const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const POPUP_BOUNDARY_OFFSET = 10;
-const POPUP_VERTICAL_OFFSET = 4;
+const POPUP_VERTICAL_OFFSET = 3;
 
 class DropDownMenu extends Widget {
     _supportedKeys() {
