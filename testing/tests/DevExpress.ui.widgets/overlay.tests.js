@@ -22,6 +22,7 @@ import swatch from 'ui/widget/swatch_container';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
+import { getActiveElement } from '../../helpers/shadowDom.js';
 import browser from 'core/utils/browser';
 
 QUnit.testStart(function() {
@@ -127,6 +128,8 @@ const toSelector = (cssClass) => `.${cssClass}`;
 
 const moduleConfig = {
     beforeEach: function() {
+        viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
+
         fx.off = true;
     },
     afterEach: function() {
@@ -2281,7 +2284,7 @@ testModule('container', moduleConfig, () => {
 
     test('content should not be moved to container', function(assert) {
         const overlay = $('#overlay').dxOverlay({
-            container: '#customTargetContainer'
+            container: $('#customTargetContainer')
         }).dxOverlay('instance');
 
         overlay.show();
@@ -2292,7 +2295,7 @@ testModule('container', moduleConfig, () => {
         assert.expect(1);
 
         const overlay = $('#overlay').dxOverlay({
-            container: '#customTargetContainer',
+            container: $('#customTargetContainer'),
             onContentReady: function() {
                 assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
             }
@@ -2305,7 +2308,7 @@ testModule('container', moduleConfig, () => {
         assert.expect(1);
 
         $('#overlay').dxOverlay({
-            container: '#customTargetContainer',
+            container: $('#customTargetContainer'),
             onContentReady: function() {
                 assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
             },
@@ -2510,11 +2513,11 @@ testModule('container', moduleConfig, () => {
 
         TestOverlay.defaultOptions({
             options: {
-                container: '#customTargetContainer'
+                container: $('#customTargetContainer')
             }
         });
 
-        const overlay = new TestOverlay('#overlay');
+        const overlay = new TestOverlay($('#overlay'));
         overlay.show();
         assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
     });
@@ -2796,6 +2799,8 @@ testModule('keyboard navigation', {
     beforeEach: function() {
         fx.off = true;
 
+        viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
+
         this.$overlay = $('#overlay').dxOverlay({
             focusStateEnabled: true,
             visible: true,
@@ -2828,10 +2833,10 @@ testModule('keyboard navigation', {
         this.overlay.option('animation', {
             show: {
                 start: function() {
-                    assert.ok(!$overlayContent.is(document.activeElement), 'focus is on overlay');
+                    assert.ok(!$overlayContent.is(getActiveElement()), 'focus is on overlay');
                 },
                 complete: function() {
-                    assert.ok($overlayContent.is(document.activeElement), 'focus isn\'t on overlay');
+                    assert.ok($overlayContent.is(getActiveElement()), 'focus isn\'t on overlay');
                 }
             }
         });
@@ -2879,14 +2884,14 @@ testModule('focus policy', {
         const $outsideTabbable = $content.find('.outsideTabbable');
 
         $(document).trigger(this.tabEvent);
-        assert.strictEqual(document.activeElement, $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
+        assert.strictEqual(getActiveElement(), $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
 
         $(document).trigger(this.shiftTabEvent);
-        assert.strictEqual(document.activeElement, $lastTabbable.get(0), 'last item focused on press tab+shift on first item (does not go under overlay)');
+        assert.strictEqual(getActiveElement(), $lastTabbable.get(0), 'last item focused on press tab+shift on first item (does not go under overlay)');
 
         $outsideTabbable.focus();
         $(document).trigger(this.tabEvent);
-        assert.strictEqual(document.activeElement, $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
+        assert.strictEqual(getActiveElement(), $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
     });
 
     test('elements under overlay with shader have not to get focus by tab when top overlay has no tabbable elements', function(assert) {
@@ -2907,7 +2912,7 @@ testModule('focus policy', {
 
         $content.find('.lastTabbable').focus();
         $(document).trigger(this.tabEvent);
-        assert.strictEqual(document.activeElement, $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
+        assert.strictEqual(getActiveElement(), $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
     });
 
     test('elements under overlay with shader have not to get focus by tab after another overlay is hide', function(assert) {
@@ -2926,7 +2931,7 @@ testModule('focus policy', {
         const $firstTabbable = $content.find('.firstTabbable');
 
         $(document).trigger(this.tabEvent);
-        assert.strictEqual(document.activeElement, $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
+        assert.strictEqual(getActiveElement(), $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
     });
 
     test('elements on the page have to change focus by tab after overlay dispose', function(assert) {
@@ -3333,18 +3338,18 @@ testModule('overlay utils', moduleConfig, () => {
     });
 
     test('a new overlay should create a new zindex on first showing', function(assert) {
-        new Overlay('#overlay', { visible: true });
+        new Overlay($('#overlay'), { visible: true });
         assert.strictEqual(zIndex.create(), 1502, 'new zindex is larger than overlay\'s');
     });
 
     test('overlay should remove its zindex from the stack on dispose if overlay is visible', function(assert) {
-        const instance = new Overlay('#overlay', { visible: true });
+        const instance = new Overlay($('#overlay'), { visible: true });
         instance.dispose();
         assert.strictEqual(zIndex.create(), 1501, 'zindex has been removed');
     });
 
     test('overlay should not try to remove its zindex from the stack on dispose if overlay is not visible (T1070941)', function(assert) {
-        const instance = new Overlay('#overlay');
+        const instance = new Overlay($('#overlay'));
 
         instance.show();
         instance.hide();
@@ -3358,7 +3363,7 @@ testModule('overlay utils', moduleConfig, () => {
     });
 
     test('overlay should create new zindex only at first showing', function(assert) {
-        const overlay = new Overlay('#overlay', { visible: true });
+        const overlay = new Overlay($('#overlay'), { visible: true });
 
         overlay.option('visible', false);
         overlay.option('visible', true);
@@ -3371,7 +3376,7 @@ testModule('overlay utils', moduleConfig, () => {
     test('overlay should get next z-index if the first one has been created before', function(assert) {
         zIndex.create();
 
-        const overlay = new Overlay('#overlay', { visible: true });
+        const overlay = new Overlay($('#overlay'), { visible: true });
         const content = overlay.$content();
 
         assert.strictEqual(String(getComputedStyle(content[0]).zIndex), '1502');
