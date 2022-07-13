@@ -94,8 +94,8 @@ QUnit.module('Nested scrollable styles', () => {
     configs.forEach(config => {
         QUnit.test(`check container styles, config: ${config.message}`, function(assert) {
             const options = { showScrollbar: config.showScrollbar, rtlEnabled: config.rtlEnabled };
-            const outerScrollableElement = document.querySelector('#outerScrollable');
-            const innerScrollableElement = document.querySelector('#innerScrollable');
+            const outerScrollableElement = $('#outerScrollable').get(0);
+            const innerScrollableElement = $('#innerScrollable').get(0);
 
             new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: config.outerUseNative }));
             new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));
@@ -120,8 +120,8 @@ QUnit.module('Nested scrollable styles', () => {
 
         QUnit.test(`check scrollbar styles, config: ${config.message}`, function(assert) {
             const options = { showScrollbar: config.showScrollbar, rtlEnabled: config.rtlEnabled };
-            const outerScrollableElement = document.querySelector('#outerScrollable');
-            const innerScrollableElement = document.querySelector('#innerScrollable');
+            const outerScrollableElement = $('#outerScrollable').get(0);
+            const innerScrollableElement = $('#innerScrollable').get(0);
 
             new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: config.outerUseNative }));
             new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));

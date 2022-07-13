@@ -28,11 +28,12 @@ const moduleConfig = {
     }
 };
 
-const viewPort = $('#qunit-fixture').addClass('dx-viewport');
-setViewPort(viewPort);
-
+let viewPort = null;
 
 QUnit.testStart(function() {
+    viewPort = $('#qunit-fixture').addClass('dx-viewport');
+    setViewPort(viewPort);
+
     const markup =
         '<div id="toast"></div>\
         <div id="firstToast"></div>\
@@ -138,15 +139,18 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('T179647 - only one toast is visible at the same time', function(assert) {
-        const $first = $('#firstToast'); const $second = $('#secondToast'); const first = $first.dxToast().dxToast('instance'); const second = $second.dxToast().dxToast('instance');
+        const $first = $('#firstToast');
+        const $second = $('#secondToast');
+        const first = $first.dxToast().dxToast('instance');
+        const second = $second.dxToast().dxToast('instance');
 
         first.show();
 
-        assert.equal($('.dx-toast-content:visible').length, 1, 'the first toast is visible');
+        assert.equal($('.dx-toast-content').filter(':visible').length, 1, 'the first toast is visible');
 
         second.show();
 
-        assert.equal($('.dx-toast-content:visible').length, 1, 'only the second toast is visible');
+        assert.equal($('.dx-toast-content').filter(':visible').length, 1, 'only the second toast is visible');
     });
 });
 
