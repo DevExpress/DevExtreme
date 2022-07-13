@@ -1155,7 +1155,6 @@ testComponentDefaults(Scheduler,
         _appointmentTooltipOffset: { x: 0, y: 11 },
         _appointmentTooltipButtonsPosition: 'top',
         _appointmentTooltipOpenButtonText: null,
-        _dropDownButtonIcon: 'chevrondown',
         _appointmentCountPerCell: 1,
         _collectorOffset: 20,
         _appointmentOffset: 30

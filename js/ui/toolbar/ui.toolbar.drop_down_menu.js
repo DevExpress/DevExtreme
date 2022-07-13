@@ -1,13 +1,10 @@
 import $ from '../../core/renderer';
-import domAdapter from '../../core/dom_adapter';
 import DropDownMenu from './drop_down_menu';
-import devices from '../../core/devices';
 import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';
 
 const MENU_INVISIBLE_CLASS = 'dx-state-invisible';
 const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
-const POPOVER_BOUNDARY_OFFSET = 10;
 
 class ToolbarDropDownMenu {
     constructor(toolbar) {
@@ -47,7 +44,6 @@ class ToolbarDropDownMenu {
             .addClass(TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS);
     }
 
-
     _getMenuItemTemplate() {
         return this._toolbar._getTemplateByOption('menuItemTemplate');
     }
@@ -55,18 +51,13 @@ class ToolbarDropDownMenu {
     _dropDownMenuOptions() {
         const itemClickAction = this._toolbar._createActionByOption('onItemClick');
 
-        const topAndBottomOffset = 2 * POPOVER_BOUNDARY_OFFSET;
         return {
             disabled: this._toolbar.option('disabled'),
             itemTemplate: this._getMenuItemTemplate.bind(this),
             onItemClick: (function(e) {
                 itemClickAction(e);
             }).bind(this),
-            deferRendering: true,
             container: this._toolbar.option('menuContainer'),
-            popupMaxHeight: (devices.current().platform === 'android') // T1010948
-                ? domAdapter.getDocumentElement().clientHeight - topAndBottomOffset
-                : undefined,
             onOptionChanged: ({ name, value }) => {
                 if(name === 'opened') {
                     this._toolbar.option('overflowMenuVisible', value);

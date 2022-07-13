@@ -18,70 +18,40 @@ const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
 const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 
-const POPUP_OPTION_MAP = {
-    'popupWidth': 'width',
-    'popupHeight': 'height',
-    'popupMaxHeight': 'maxHeight',
-};
-
-const BUTTON_OPTION_MAP = {
-    'buttonIcon': 'icon',
-    'buttonText': 'text',
-    'buttonWidth': 'width',
-    'buttonHeight': 'height',
-    'buttonTemplate': 'template'
-};
-
-const DropDownMenu = Widget.inherit({
-    _supportedKeys: function() {
+class DropDownMenu extends Widget {
+    _supportedKeys() {
         let extension = {};
 
         if(!this.option('opened') || !this._list.option('focusedElement')) {
             extension = this._button._supportedKeys();
         }
 
-        return extend(this.callBase(), extension, {
+        return extend(super._supportedKeys(), extension, {
             tab: function() {
                 this._popup && this._popup.hide();
             }
         });
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             items: [],
             onItemClick: null,
             dataSource: null,
             itemTemplate: 'item',
-            buttonText: '',
-            buttonIcon: 'overflow',
-            buttonWidth: undefined,
-            buttonHeight: undefined,
-            buttonTemplate: 'content',
             onButtonClick: null,
-            popupWidth: 'auto',
-            popupHeight: 'auto',
             activeStateEnabled: true,
             hoverStateEnabled: true,
             opened: false,
-            deferRendering: false,
-            popupPosition: {
-                my: 'top right',
-                at: 'bottom right',
-                collision: 'fit flip',
-                offset: { v: 4 }
-            },
-            popupAnimation: undefined,
             onItemRendered: null,
-            popupMaxHeight: undefined,
             closeOnClick: true,
             useInkRipple: false,
             container: undefined,
         });
-    },
+    }
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
+    _defaultOptionsRules() {
+        return super._defaultOptionsRules().concat([
             {
                 device: function() {
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
@@ -113,91 +83,84 @@ const DropDownMenu = Widget.inherit({
                 }
             },
         ]);
-    },
+    }
 
-    _init: function() {
-        this.callBase();
+    _init() {
+        super._init();
 
         this.$element().addClass(DROP_DOWN_MENU_CLASS);
 
         this._initItemClickAction();
         this._initButtonClickAction();
-    },
+    }
 
-    _initItemClickAction: function() {
+    _initItemClickAction() {
         this._itemClickAction = this._createActionByOption('onItemClick');
-    },
+    }
 
-    _initButtonClickAction: function() {
+    _initButtonClickAction() {
         this._buttonClickAction = this._createActionByOption('onButtonClick');
-    },
+    }
 
-    _initTemplates: function() {
+    _initTemplates() {
         this._templateManager.addDefaultTemplates({
             content: new ChildDefaultTemplate('content')
         });
-        this.callBase();
-    },
+        super._initTemplates();
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderButton();
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    _render: function() {
-        this.callBase();
+    _render() {
+        super._render();
         this.setAria({
             'role': 'menubar',
             'haspopup': true,
             'expanded': this.option('opened')
         });
-    },
+    }
 
-    _renderContentImpl: function() {
+    _renderContentImpl() {
         if(this.option('opened')) {
             this._renderPopup();
         }
-    },
+    }
 
-    _clean: function() {
+    _clean() {
         this._cleanFocusState();
 
-        if(this._popup) {
-            this._popup.$element().remove();
-            delete this._$popup;
-        }
-    },
+        this._list && this._list.$element().remove();
+        this._popup && this._popup.$element().remove();
 
-    _renderButton: function() {
+        delete this._list;
+        delete this._popup;
+    }
+
+    _renderButton() {
         const $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS);
-        const config = this._buttonOptions();
 
-        this._button = this._createComponent($button, Button, config);
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this._button._toggleActiveState($element, value, e);
-    },
-
-    _buttonOptions: function() {
-        return {
-            text: this.option('buttonText'),
-            icon: this.option('buttonIcon'),
-            width: this.option('buttonWidth'),
-            height: this.option('buttonHeight'),
+        this._button = this._createComponent($button, Button, {
+            icon: 'overflow',
+            template: 'content',
             useInkRipple: this.option('useInkRipple'),
-            template: this.option('buttonTemplate'),
             hoverStateEnabled: false,
             focusStateEnabled: false,
             onClick: (function(e) {
                 this.option('opened', !this.option('opened'));
                 this._buttonClickAction(e);
             }).bind(this)
-        };
-    },
+        });
+    }
 
-    _toggleMenuVisibility: function(opened) {
-        const state = opened === undefined ? !this._popup.option('visible') : opened;
+    _toggleActiveState($element, value, e) {
+        this._button._toggleActiveState($element, value, e);
+    }
+
+    _toggleMenuVisibility(opened) {
+        const state = opened ?? !this._popup.option('visible');
 
         if(opened) {
             this._renderPopup();
@@ -205,22 +168,17 @@ const DropDownMenu = Widget.inherit({
 
         this._popup.toggle(state);
         this.setAria('expanded', state);
-    },
+    }
 
-    _renderPopup: function() {
+    _renderPopup() {
         if(this._$popup) {
             return;
         }
 
         const $popup = this._$popup = $('<div>').appendTo(this.$element());
-        const config = this._popupOptions();
 
-        this._popup = this._createComponent($popup, Popover, config); // TODO: Circular dep
-    },
-
-    _popupOptions: function() {
-        return {
-            onInitialized: function(args) {
+        this._popup = this._createComponent($popup, Popover, {
+            onInitialized(args) {
                 args.component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .addClass(DROP_DOWN_MENU_POPUP_CLASS);
@@ -230,7 +188,12 @@ const DropDownMenu = Widget.inherit({
             contentTemplate: (function(contentElement) {
                 this._renderList(contentElement);
             }).bind(this),
-            position: this.option('popupPosition'),
+            position: {
+                my: `top ${this.option('rtlEnabled') ? 'left' : 'right'}`,
+                at: `bottom ${this.option('rtlEnabled') ? 'left' : 'right'}`,
+                collision: 'fit flip',
+                offset: { v: 4 }
+            },
             animation: this.option('popupAnimation'),
             onOptionChanged: (function(args) {
                 if(args.name === 'visible') {
@@ -238,35 +201,18 @@ const DropDownMenu = Widget.inherit({
                 }
             }).bind(this),
             target: this.$element(),
-            height: this.option('popupHeight'),
-            width: this.option('popupWidth'),
-            maxHeight: this.option('popupMaxHeight'),
+            height: 'auto',
+            width: 'auto',
             container: this.option('container'),
             autoResizeEnabled: false
-        };
-    },
+        });
+    }
 
-    _renderList: function(contentElement) {
+    _renderList(contentElement) {
         const $content = $(contentElement);
-        const listConfig = this._listOptions();
-
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
-        this._list = this._createComponent($content, ToolbarMenuList, listConfig);
-
-        const listMaxHeight = getHeight(getWindow()) * 0.5;
-        if(getHeight($content) > listMaxHeight) {
-            setHeight($content, listMaxHeight);
-        }
-    },
-
-    _itemOptionChanged: function(item, property, value) {
-        this._list?._itemOptionChanged(item, property, value);
-        toggleItemFocusableElementTabIndex(this._list, item);
-    },
-
-    _listOptions: function() {
-        return {
+        this._list = this._createComponent($content, ToolbarMenuList, {
             dataSource: this._getListDataSource(),
             pageLoadMode: 'scrollBottom',
             indicateLoading: false,
@@ -280,39 +226,49 @@ const DropDownMenu = Widget.inherit({
             }).bind(this),
             tabIndex: -1,
             focusStateEnabled: this.option('focusStateEnabled'),
-            activeStateEnabled: this.option('activeStateEnabled'),
+            activeStateEnabled: true,
             onItemRendered: this.option('onItemRendered'),
             _areaTarget: this.$element(),
             _itemAttributes: { role: 'menuitem' }
-        };
-    },
+        });
+
+        const listMaxHeight = getHeight(getWindow()) * 0.5;
+        if(getHeight($content) > listMaxHeight) {
+            setHeight($content, listMaxHeight);
+        }
+    }
+
+    _itemOptionChanged(item, property, value) {
+        this._list?._itemOptionChanged(item, property, value);
+        toggleItemFocusableElementTabIndex(this._list, item);
+    }
 
     _getListDataSource() {
         return this.option('dataSource') ?? this.option('items');
-    },
+    }
 
-    _setListDataSource: function() {
+    _setListDataSource() {
         this._list?.option('dataSource', this._getListDataSource());
 
         delete this._deferRendering;
-    },
+    }
 
     _getKeyboardListeners() {
-        return this.callBase().concat([this._list]);
-    },
+        return super._getKeyboardListeners().concat([this._list]);
+    }
 
-    _toggleVisibility: function(visible) {
-        this.callBase(visible);
+    _toggleVisibility(visible) {
+        super._toggleVisibility(visible);
         this._button.option('visible', visible);
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         const { name, value } = args;
 
         switch(name) {
             case 'items':
             case 'dataSource':
-                if(this.option('deferRendering') && !this.option('opened')) {
+                if(!this.option('opened')) {
                     this._deferRendering = true;
                 } else {
                     this._setListDataSource();
@@ -327,26 +283,12 @@ const DropDownMenu = Widget.inherit({
             case 'onButtonClick':
                 this._buttonClickAction();
                 break;
-            case 'buttonIcon':
-            case 'buttonText':
-            case 'buttonWidth':
-            case 'buttonHeight':
-            case 'buttonTemplate':
-                this._button.option(BUTTON_OPTION_MAP[name], value);
-                this._renderPopup();
-                break;
-            case 'popupWidth':
-            case 'popupHeight':
-            case 'popupMaxHeight':
-                this._popup.option(POPUP_OPTION_MAP[name], value);
-                break;
             case 'useInkRipple':
                 this._invalidate();
                 break;
             case 'focusStateEnabled':
-            case 'activeStateEnabled':
                 this._list?.option(name, value);
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case 'onItemRendered':
                 this._list?.option(name, value);
@@ -359,8 +301,6 @@ const DropDownMenu = Widget.inherit({
                 this._toggleMenuVisibility(value);
                 this._updateFocusableItemsTabIndex();
                 break;
-            case 'deferRendering':
-            case 'popupPosition':
             case 'closeOnClick':
                 break;
             case 'container':
@@ -372,22 +312,22 @@ const DropDownMenu = Widget.inherit({
                 }
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
+    }
 
     _updateFocusableItemsTabIndex() {
         this.option('items').forEach(item => toggleItemFocusableElementTabIndex(this._list, item));
-    },
+    }
 
-    open: function() {
+    open() {
         this.option('opened', true);
-    },
+    }
 
-    close: function() {
+    close() {
         this.option('opened', false);
     }
-});
+}
 
 registerComponent('dxDropDownMenu', DropDownMenu);
 
