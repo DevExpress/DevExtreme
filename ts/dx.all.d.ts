@@ -24631,7 +24631,9 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.wordWrapEnabled]
      */
     wordWrapEnabled?: boolean;
-
+    /**
+     * [descr:GridBaseOptions.syncLookupFilterValues]
+     */
     syncLookupFilterValues?: boolean;
   }
   /**
