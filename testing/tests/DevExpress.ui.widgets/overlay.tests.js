@@ -3645,7 +3645,11 @@ QUnit.module('prevent safari scrolling on ios devices', {
 });
 
 // visualContainer -> container -> position.of -> window
-QUnit.module('wrapper covered element choice', () => {
+QUnit.module('wrapper covered element choice', {
+    beforeEach: function() {
+        viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
+    },
+}, () => {
     QUnit.test('wrapper covers container element if visualPosition is not specified', function(assert) {
         const $container = $('#container');
         const overlay = $('#overlay').dxOverlay({
