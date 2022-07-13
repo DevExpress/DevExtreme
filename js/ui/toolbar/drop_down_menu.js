@@ -40,6 +40,8 @@ class DropDownMenu extends Widget {
             dataSource: null,
             itemTemplate: 'item',
             onButtonClick: null,
+            activeStateEnabled: true,
+            hoverStateEnabled: true,
             opened: false,
             onItemRendered: null,
             closeOnClick: true,
