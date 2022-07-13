@@ -191,6 +191,17 @@
                 width: 1000px;
                 height: 1000px;
             }
+            
+            :scope > div.qunit-fixture-visible {
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                pointer-events: none;
+            }
+
+            :scope > div.qunit-fixture-visible * {
+                pointer-events: auto;
+            }
         `;
 
         root.shadowRoot.appendChild(shadowContainer);
