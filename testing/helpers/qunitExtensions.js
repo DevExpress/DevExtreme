@@ -174,7 +174,21 @@
         }
 
         const shadowContainer = document.createElement('div');
-        shadowContainer.part = 'shadow';
+
+        const style = document.createElement('style');
+
+        style.innerHTML = `
+            #qunit-fixture::part(shadow) {
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                pointer-events: none;
+                width: 1000px;
+                height: 1000px;
+            }
+        `;
+
+        shadowContainer.appendChild(style);
 
         root.shadowRoot.appendChild(shadowContainer);
     }
