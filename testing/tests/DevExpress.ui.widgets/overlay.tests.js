@@ -3690,7 +3690,7 @@ QUnit.module('wrapper covered element choice', () => {
             visible: true
         }).dxOverlay('instance');
 
-        overlay.option('visualContainer', '#container');
+        overlay.option('visualContainer', $('#container'));
 
         const $wrapper = overlay.$wrapper();
 

@@ -178,7 +178,7 @@
         const style = document.createElement('style');
 
         style.innerHTML = `
-            #qunit-fixture::part(shadow) {
+            :scope > div {
                 position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
@@ -188,15 +188,16 @@
             }
         `;
 
-        shadowContainer.appendChild(style);
-
         root.shadowRoot.appendChild(shadowContainer);
+        root.shadowRoot.appendChild(style);
     }
 
     function clearShadowRootTree() {
         const container = get(':scope > div');
+        const style = get(':scope > style');
 
         jQuery(container).remove();
+        jQuery(style).remove();
     }
 
     let jQueryInit;
