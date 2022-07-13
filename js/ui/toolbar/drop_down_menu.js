@@ -102,6 +102,7 @@ class DropDownMenu extends Widget {
     }
 
     _initButtonClickAction() {
+        // TODO: what is it
         this._buttonClickAction = this._createActionByOption('onButtonClick');
     }
 
@@ -178,10 +179,10 @@ class DropDownMenu extends Widget {
             return;
         }
 
-        const $popup = this._$popup = $('<div>').appendTo(this.$element());
+        this._$popup = $('<div>').appendTo(this.$element());
         const { opened, rtlEnabled, container, animation } = this.option();
 
-        this._popup = this._createComponent($popup, Popup, {
+        this._popup = this._createComponent(this._$popup, Popup, {
             onInitialized(args) {
                 args.component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
@@ -192,7 +193,7 @@ class DropDownMenu extends Widget {
             contentTemplate: (contentElement) => {
                 this._renderList(contentElement);
             },
-            maxHeight: () => {
+            maxHeight: () => { // TODO: deprecated warning
                 return this._getMaxHeight();
             },
             position: {
@@ -200,6 +201,7 @@ class DropDownMenu extends Widget {
                 at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
                 collision: 'fit flip',
                 offset: { v: POPUP_VERTICAL_OFFSET },
+                boundaryOffset: `${POPUP_BOUNDARY_OFFSET} ${POPUP_BOUNDARY_OFFSET}`, // TODO: it looks strange
                 of: this.$element()
             },
             animation,
