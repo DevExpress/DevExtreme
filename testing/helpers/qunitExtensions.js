@@ -178,10 +178,15 @@
         const style = document.createElement('style');
 
         style.innerHTML = `
+            :host {
+                position: static!important;
+                top: 0!important;
+                left: 0!important;
+            }
             :scope > div {
-                position: fixed !important;
-                left: 0 !important;
-                top: 0 !important;
+                position: absolute;
+                top: -10000px;
+                left: -10000px;
                 pointer-events: none;
                 width: 1000px;
                 height: 1000px;
