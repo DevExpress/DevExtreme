@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
@@ -46,7 +48,7 @@ function checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTempl
     // Check View element rect
 
     if(!drawer.option('minSize') || (drawer.option('openedStateMode') === 'overlap')) {
-        checkBoundingClientRect(assert, document.getElementById('view'), expectedViewRect, 'view');
+        checkBoundingClientRect(assert, $('#view').get(0), expectedViewRect, 'view');
     }
 }
 
