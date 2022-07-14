@@ -472,4 +472,38 @@ QUnit.module('State storing', baseModuleConfig, () => {
         assert.equal(visibleColumns[2].name, 'buttons', 'column 2 name');
         assert.equal(visibleColumns[2].type, 'buttons', 'column 2 type');
     });
+
+    // T1101718
+    QUnit.test('the customizeColumns callback should only be called once on clear state', function(assert) {
+        // arrange
+        const customizeColumnsSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            columns: ['field1', 'field2', 'field3'],
+            dataSource: [{}, {}, {}],
+            customizeColumns: customizeColumnsSpy
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(customizeColumnsSpy.callCount, 1, 'customizeColumns - call count');
+
+        let columns = customizeColumnsSpy.getCall(0).args[0];
+        assert.strictEqual(columns[0].index, 0, 'first column index');
+        assert.strictEqual(columns[1].index, 1, 'second column index');
+        assert.strictEqual(columns[2].index, 2, 'third column index');
+
+        // act
+        customizeColumnsSpy.reset();
+        dataGrid.state(null);
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(customizeColumnsSpy.callCount, 1, 'customizeColumns - call count');
+
+        columns = customizeColumnsSpy.getCall(0).args[0];
+        assert.strictEqual(columns[0].index, 0, 'first column index');
+        assert.strictEqual(columns[1].index, 1, 'second column index');
+        assert.strictEqual(columns[2].index, 2, 'third column index');
+    });
 });
