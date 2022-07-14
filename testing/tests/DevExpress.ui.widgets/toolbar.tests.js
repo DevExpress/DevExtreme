@@ -6,6 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
 import { getHeight } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import domAdapter from 'core/dom_adapter';
 import devices from 'core/devices';
 
@@ -14,7 +15,10 @@ import 'generic_light.css!';
 import 'ui/drop_down_button';
 import 'ui/tabs';
 
-$('#qunit-fixture').html('<style>\
+QUnit.testStart(() => {
+    addShadowDomStyles($('#qunit-fixture'));
+
+    $('#qunit-fixture').html('<style>\
         #toolbarWithMenu .dx-toolbar-menu-container {\
             width: 100px;\
         }\
@@ -28,6 +32,7 @@ $('#qunit-fixture').html('<style>\
     <div id="toolbarWithMenu"></div>\
     <div id="widget"></div>\
     <div id="widthRootStyle" style="width: 300px;"></div>');
+});
 
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
@@ -1653,7 +1658,7 @@ QUnit.module('adaptivity without hiding in menu', {
         }\
         </style>';
 
-        this.styles = $(fontStyles).appendTo('head');
+        this.styles = $(fontStyles).appendTo($('#qunit-fixture'));
     },
     afterEach: function() {
         this.styles.remove();
