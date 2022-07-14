@@ -104,9 +104,9 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @docid BaseChartOptions.dataSource
      * @notUsedInTheme
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<any>;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @inherits BaseLegend

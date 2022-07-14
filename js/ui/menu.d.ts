@@ -81,11 +81,11 @@ export interface dxMenuOptions<
     adaptivityEnabled?: boolean;
     /**
      * @docid
-     * @type string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey>;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
      * @docid
      * @default false

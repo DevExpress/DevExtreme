@@ -86,11 +86,11 @@ export interface dxTabPanelOptions<
     animationEnabled?: boolean;
     /**
      * @docid
-     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default true
