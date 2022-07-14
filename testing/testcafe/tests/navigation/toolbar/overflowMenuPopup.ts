@@ -49,7 +49,6 @@ test('Popup automatically update its height on window resize', async (t) => {
   });
 }).after(async (t) => {
   await restoreBrowserSize(t);
-  await changeTheme('generic.light');
 });
 
 test('Popup should be position correctly with the window border collision', async (t) => {
@@ -75,7 +74,6 @@ test('Popup should be position correctly with the window border collision', asyn
   });
 }).after(async (t) => {
   await restoreBrowserSize(t);
-  await changeTheme('generic.light');
 });
 
 [true, false].forEach((rtlEnabled) => {
@@ -95,6 +93,7 @@ test('Popup should be position correctly with the window border collision', asyn
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async (t) => {
+      await changeTheme(theme);
       await t.resizeWindow(400, 400);
 
       return createWidget('dxToolbar', {
@@ -121,6 +120,7 @@ test('Popup should be position correctly with the window border collision', asyn
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async (t) => {
+      await changeTheme(theme);
       await t.resizeWindow(400, 400);
 
       await setAttribute('#container', 'style', 'margin-top: 200px');

@@ -477,8 +477,6 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         this.callBase();
         clearTimeout(this._waitParentAnimationTimeout);
     },
-
-
 });
 
 registerComponent('dxToolbarBase', ToolbarBase);
