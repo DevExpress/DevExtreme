@@ -18,11 +18,9 @@ import 'ui/menu';
 import fx from 'animation/fx';
 
 const moduleConfig = {
-    before: function() {
-        this.$fixture = $('#qunit-fixture');
-    },
     beforeEach: function() {
         fx.off = true;
+        this.$fixture = $('#qunit-fixture');
         this.$element = $('<div></div>');
         this.$element.appendTo(this.$fixture);
 
