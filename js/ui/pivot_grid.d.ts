@@ -152,7 +152,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default null
      * @public
      */
-    dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions;
+    dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions | null;
     /**
      * @docid
      * @default true

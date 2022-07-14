@@ -76,11 +76,11 @@ export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
-     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item | any>;
+    dataSource?: DataSourceLike<Item | any> | null;
     /**
      * @docid
      * @default true
