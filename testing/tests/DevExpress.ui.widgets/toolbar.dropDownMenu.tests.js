@@ -376,19 +376,18 @@ QUnit.module('integration', moduleConfig, () => {
                     assert.strictEqual(popup.option('visible'), true, 'popup.visible');
 
                     assert.strictEqual(popup.option('deferRendering'), false, 'popup.deferRendering');
-                    // assert.strictEqual(popup.option('visualContainer'), false, 'popup.visualContainer');
-                    // assert.strictEqual(popup.option('hideOnParentScroll'), true, 'popup.hideOnParentScroll');
+                    assert.strictEqual(popup.option('hideOnParentScroll'), true, 'popup.hideOnParentScroll');
                     assert.strictEqual(popup.option('shading'), false, 'popup.shading');
                     assert.strictEqual(popup.option('dragEnabled'), false, 'popup.dragEnabled');
                     assert.strictEqual(popup.option('showTitle'), false, 'popup.showTitle');
-                    // assert.strictEqual(popup.option('_fixWrapperPosition'), true, 'popup._fixWrapperPosition');
+                    assert.strictEqual(popup.option('_fixWrapperPosition'), true, 'popup._fixWrapperPosition');
 
                     const { my, at, collision, offset, of } = popup.option('position');
 
                     assert.strictEqual(my, `top ${rtlEnabled ? 'left' : 'right'}`, 'popup.position.my');
                     assert.strictEqual(at, `bottom ${rtlEnabled ? 'left' : 'right'}`, 'popup.position.at');
                     assert.strictEqual(collision, 'fit flip', 'popup.position.collision');
-                    assert.deepEqual(offset, { v: 4 }, 'popup.position.offset');
+                    assert.deepEqual(offset, { v: 3 }, 'popup.position.offset');
                     assert.deepEqual(of.get(0), this.$element.get(0), 'popup.position.of');
 
                 } finally {

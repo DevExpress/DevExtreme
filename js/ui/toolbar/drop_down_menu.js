@@ -17,7 +17,7 @@ const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
 const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
-const POPUP_BOUNDARY_OFFSET = 10;
+const POPUP_BOUNDARY_VERTICAL_OFFSET = 10;
 const POPUP_VERTICAL_OFFSET = 3;
 
 class DropDownMenu extends Widget {
@@ -49,7 +49,10 @@ class DropDownMenu extends Widget {
             closeOnClick: true,
             useInkRipple: false,
             container: undefined,
-            animation: { show: { type: 'fade', from: 0, to: 1 }, hide: { type: 'fade', to: 0 } }
+            animation: {
+                show: { type: 'fade', from: 0, to: 1 },
+                hide: { type: 'fade', to: 0 }
+            }
         });
     }
 
@@ -102,7 +105,6 @@ class DropDownMenu extends Widget {
     }
 
     _initButtonClickAction() {
-        // TODO: what is it
         this._buttonClickAction = this._createActionByOption('onButtonClick');
     }
 
@@ -152,10 +154,10 @@ class DropDownMenu extends Widget {
             useInkRipple: this.option('useInkRipple'),
             hoverStateEnabled: false,
             focusStateEnabled: false,
-            onClick: (function(e) {
+            onClick: (e) => {
                 this.option('opened', !this.option('opened'));
                 this._buttonClickAction(e);
-            }).bind(this)
+            }
         });
     }
 
@@ -183,45 +185,40 @@ class DropDownMenu extends Widget {
         const { opened, rtlEnabled, container, animation } = this.option();
 
         this._popup = this._createComponent(this._$popup, Popup, {
-            onInitialized(args) {
-                args.component.$wrapper()
+            onInitialized({ component }) {
+                component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .addClass(DROP_DOWN_MENU_POPUP_CLASS);
             },
             visible: opened,
             deferRendering: false,
-            contentTemplate: (contentElement) => {
-                this._renderList(contentElement);
-            },
-            maxHeight: () => { // TODO: deprecated warning
-                return this._getMaxHeight();
-            },
+            contentTemplate: (contentElement) => this._renderList(contentElement),
+            _ignoreFunctionValueDeprecation: true,
+            maxHeight: () => this._getMaxHeight(),
             position: {
                 my: `top ${rtlEnabled ? 'left' : 'right'}`,
                 at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
                 collision: 'fit flip',
                 offset: { v: POPUP_VERTICAL_OFFSET },
-                boundaryOffset: `${POPUP_BOUNDARY_OFFSET} ${POPUP_BOUNDARY_OFFSET}`, // TODO: it looks strange
                 of: this.$element()
             },
             animation,
-            onOptionChanged: (args) => {
-                if(args.name === 'visible') {
-                    this.option('opened', args.value);
+            onOptionChanged: ({ name, value }) => {
+                if(name === 'visible') {
+                    this.option('opened', value);
                 }
             },
-            visualContainer: this.$element(), // todo
             container,
             autoResizeEnabled: false,
-            height: 'auto', // TODO: add tests
+            height: 'auto',
             width: 'auto',
             hideOnOutsideClick: (e) => this._closeOutsideDropDownHandler(e),
-            hideOnParentScroll: true, // TODO: check
+            hideOnParentScroll: true,
             shading: false,
             dragEnabled: false,
             showTitle: false,
             fullScreen: false,
-            _fixWrapperPosition: true // TODO: check
+            _fixWrapperPosition: true,
         });
     }
 
@@ -232,7 +229,7 @@ class DropDownMenu extends Widget {
         const windowHeight = getOuterHeight(getWindow());
         const maxHeight = Math.max(offsetTop, windowHeight - offsetTop - getOuterHeight($element));
 
-        return Math.min(windowHeight, maxHeight - POPUP_VERTICAL_OFFSET - POPUP_BOUNDARY_OFFSET);
+        return Math.min(windowHeight, maxHeight - POPUP_VERTICAL_OFFSET - POPUP_BOUNDARY_VERTICAL_OFFSET);
     }
 
     _closeOutsideDropDownHandler(e) {
@@ -251,12 +248,12 @@ class DropDownMenu extends Widget {
             indicateLoading: false,
             noDataText: '',
             itemTemplate: this.option('itemTemplate'),
-            onItemClick: (function(e) {
+            onItemClick: (e) => {
                 if(this.option('closeOnClick')) {
                     this.option('opened', false);
                 }
                 this._itemClickAction(e);
-            }).bind(this),
+            },
             tabIndex: -1,
             focusStateEnabled: this.option('focusStateEnabled'),
             activeStateEnabled: true,
@@ -332,7 +329,7 @@ class DropDownMenu extends Widget {
             case 'closeOnClick':
                 break;
             case 'container':
-                this._popup && this._popup.option(args.name, args.value);
+                this._popup && this._popup.option(name, value);
                 break;
             case 'disabled':
                 if(this._list) {

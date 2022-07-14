@@ -29,4 +29,9 @@ export default class Popup extends Widget {
   getWrapper(): Selector {
     return Selector(`.${CLASS.wrapper}`);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getContent(): Selector {
+    return Selector(`.${CLASS.content}`);
+  }
 }
