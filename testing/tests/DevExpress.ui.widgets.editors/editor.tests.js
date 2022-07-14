@@ -412,6 +412,32 @@ QUnit.module('validation', {
                 assert.strictEqual(message, '3', 'validation message is updated');
             });
 
+            QUnit.test('validationMessage should have correct position from validationMessagePosition on init', function(assert) {
+                this.reinitEditor({
+                    validationError: {
+                        message: '2'
+                    },
+                    validationStatus: 'invalid',
+                    validationMessagePosition: 'right'
+                });
+
+                const position = this.getValidationMessage().option('positionSide');
+                assert.strictEqual(position, 'right', 'validation message position is updated');
+            });
+
+            QUnit.test('validationMessage should change position after validationMessagePosition option runtime change', function(assert) {
+                this.reinitEditor({
+                    validationError: {
+                        message: '2'
+                    },
+                    validationStatus: 'invalid'
+                });
+
+                this.editor.option('validationMessagePosition', 'left');
+                const position = this.getValidationMessage().option('positionSide');
+                assert.strictEqual(position, 'left', 'validation message position is updated');
+            });
+
             if(!Editor.IS_RENOVATED_WIDGET) {
                 QUnit.test('editor should clear validation message cache on dispose (T968422)', function(assert) {
                     assert.expect(0);

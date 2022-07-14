@@ -55,7 +55,8 @@ themes.forEach((theme) => {
 
         await t.expect(await compareScreenshot(t, `DropDownButton${index}-rtlEnabled=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`, '#container')).ok();
       });
-    }).before(async () => {
+    }).before(async (t) => {
+      await t.resizeWindow(300, 400);
       await changeTheme('generic.light');
       await setAttribute('#container', 'style', 'width: 500px;');
 
