@@ -367,9 +367,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @public
-     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
+     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions|null
      */
-    dataSource?: DataSourceLike<Appointment>;
+    dataSource?: DataSourceLike<Appointment> | null;
     /**
      * @docid
      * @default null
@@ -751,9 +751,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @type_function_param1 resource:object

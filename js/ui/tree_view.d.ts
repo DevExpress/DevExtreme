@@ -99,11 +99,11 @@ export interface dxTreeViewOptions<TKey = any>
     createChildren?: ((parentNode: Node<TKey>) => PromiseLike<any> | Array<any>);
     /**
      * @docid
-     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey>;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
