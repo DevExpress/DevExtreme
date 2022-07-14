@@ -1334,7 +1334,6 @@ QUnit.module('Fixed columns', {
     QUnit.test('Synchronize position fixed table with main table when scrolling mode virtual and showScrollbar is \'always\'', function(assert) {
         // arrange
         const that = this;
-        const done = assert.async();
 
         const dataOptions = {
             virtualItemsCount: {
@@ -1353,8 +1352,8 @@ QUnit.module('Fixed columns', {
 
         that.rowsView.render(that.gridContainer);
         that.rowsView.height(50);
-        that.rowsView.resize();
         setScrollerSpacing(that.rowsView);
+        that.rowsView.resize();
 
         const scrollableInstance = that.rowsView.element().dxScrollable('instance');
         const $fixTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
@@ -1367,22 +1366,19 @@ QUnit.module('Fixed columns', {
         assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
         assert.equal($fixTable.position().top, 0, 'fixed table - position top');
 
-        const scrollChanged = function(e) {
-            // assert
-            assert.ok($fixTable.position().top < 0, 'position top is defined');
-            assert.ok($table.find('.dx-virtual-row').eq(0).height() > 0, 'virtual row has height');
-            assert.roughEqual($fixTable.position().top, -e.top, 1.01, 'fixed table - position top');
-            that.rowsView.scrollChanged.remove(scrollChanged);
-            done();
-        };
-        that.rowsView.scrollChanged.add(scrollChanged);
-
+        // arrange
         dataOptions.virtualItemsCount.begin = 800;
         dataOptions.virtualItemsCount.end = 0;
         that.rowsView.resize();
 
         // act
         scrollableInstance.scrollTo({ y: 20000 });
+        $(scrollableInstance.content()).trigger('scroll');
+
+        // assert
+        assert.ok($fixTable.position().top < 0, 'position top is defined');
+        assert.ok($table.find('.dx-virtual-row').eq(0).height() > 0, 'virtual row has height');
+        assert.roughEqual($fixTable.position().top, -scrollableInstance.scrollTop(), 1.01, 'fixed table - position top');
     });
 
     QUnit.test('Check that fixed column has virtual rows (T642937)', function(assert) {
