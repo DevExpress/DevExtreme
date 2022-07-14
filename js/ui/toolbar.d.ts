@@ -93,13 +93,6 @@ export interface dxToolbarOptions<
      * @public
      */
     menuItemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-    /**
-     * @docid
-     * @deprecated
-     * @default undefined
-     * @public
-     */
-    height?: number | string | (() => number | string);
 }
 /**
  * @docid

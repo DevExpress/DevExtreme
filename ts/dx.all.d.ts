@@ -21856,11 +21856,6 @@ declare module DevExpress.ui {
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxToolbarOptions.height]
-     * @deprecated [depNote:dxToolbarOptions.height]
-     */
-    height?: number | string | (() => number | string);
   }
   /**
    * [descr:dxTooltip]

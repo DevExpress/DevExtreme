@@ -9,7 +9,6 @@ import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
 import AsyncCollectionWidget from '../collection/ui.collection_widget.async';
 import { BindableTemplate } from '../../core/templates/bindable_template';
-import errors from '../../core/errors';
 import fx from '../../animation/fx';
 
 import { TOOLBAR_CLASS } from './constants';
@@ -35,16 +34,6 @@ const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
 const ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
-
-    ctor: function(element, options) {
-        this._userOptions = options || {};
-
-        this.callBase(element, options);
-
-        if('height' in this._userOptions) {
-            errors.log('W0001', this.NAME, 'height', '20.1', 'Functionality associated with this option is not intended for the Toolbar widget.');
-        }
-    },
 
     _getSynchronizableOptionsForCreateComponent: function() {
         return this.callBase().filter(item => item !== 'disabled');
