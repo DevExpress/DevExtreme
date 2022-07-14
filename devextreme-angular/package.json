@@ -46,7 +46,7 @@
     "gulp-typescript": "^3.2.4",
     "jasmine": "2.99.0",
     "karma": "^6.4.0",
-    "karma-chrome-launcher": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.0.2",
     "karma-junit-reporter": "^1.1.0",
     "karma-webpack": "^2.0.13",
