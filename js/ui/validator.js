@@ -9,6 +9,7 @@ import DefaultAdapter from './validation/default_adapter';
 import registerComponent from '../core/component_registrator';
 import { Deferred } from '../core/utils/deferred';
 import Guid from '../core/guid';
+import ValidationGroup from './validation_group';
 
 const VALIDATOR_CLASS = 'dx-validator';
 const VALIDATION_STATUS_VALID = 'valid';
@@ -184,8 +185,9 @@ const Validator = DOMComponent.inherit({
 
     _findGroup() {
         const $element = this.$element();
+        const validationGroup = ValidationGroup.getInstance && ValidationGroup.getInstance($element);
 
-        return this.option('validationGroup') ||
+        return this.option('validationGroup') || validationGroup ||
             ValidationEngine.findGroup($element, this._modelByElement($element));
     },
 
