@@ -1043,9 +1043,11 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      */
     wordWrapEnabled?: boolean;
-
-    // private
-
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
     syncLookupFilterValues?: boolean;
 }
 
