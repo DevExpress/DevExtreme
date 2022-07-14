@@ -34,6 +34,7 @@ class RecurrenceProcessor {
             return [];
         }
 
+        // NOTE: Get local timezone offset of each Rrule date params.
         const clientOffsets = {
             startDate: timeZoneUtils.getClientTimezoneOffset(options.start),
             minViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
@@ -42,16 +43,29 @@ class RecurrenceProcessor {
 
         const appointmentOffset = options.appointmentTimezoneOffset;
         const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
+
+        // NOTE: Remove local timezone offsets from Rrule date params.
         const startDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentOffset]);
         const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentOffset;
+        // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
         const minViewDate = new Date(minViewTime - duration);
         const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentOffset]);
+
+        // NOTE: Check DST after start date without local timezone offset conversion.
+        const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startDate);
+        const DSTToSummerTime = startDateDSTDifferenceMs < 0;
 
         this._initializeRRule(options, startDate, rule.until);
 
         return this.rRuleSet.between(minViewDate, maxViewDate, true)
             .filter((date) => (date.getTime() + duration) >= minViewTime)
-            .map((date) => timeZoneUtils.setOffsetsToDate(date, [timeZoneUtils.getClientTimezoneOffset(date), -appointmentOffset]));
+            .map((date) => timeZoneUtils.setOffsetsToDate(
+                date, [
+                    timeZoneUtils.getClientTimezoneOffset(date),
+                    -appointmentOffset,
+                    // NOTE: Add only winter time DST to result.
+                    DSTToSummerTime ? 0 : startDateDSTDifferenceMs,
+                ]));
     }
 
     hasRecurrence(options) {
