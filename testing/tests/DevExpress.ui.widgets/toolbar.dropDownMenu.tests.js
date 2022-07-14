@@ -147,7 +147,6 @@ QUnit.module('render with popup', moduleConfig, () => {
 
     QUnit.test('RTL support', function(assert) {
         const RTL_SELECTOR = '.dx-rtl';
-        const DROPDOWNMENU_POPUP_WRAPPER_SELECTOR = '.dx-dropdownmenu-popup-wrapper';
         this.instance.option({
             dataSource: new ArrayStore(['Item 0', 'Item 1', 'Item 2']),
             rtlEnabled: true,
@@ -155,7 +154,7 @@ QUnit.module('render with popup', moduleConfig, () => {
 
         this.instance.option();
         this.overflowMenu.click();
-        assert.ok($(DROPDOWNMENU_POPUP_WRAPPER_SELECTOR + ' ' + RTL_SELECTOR).length > 0, 'menu is in RTL mode');
+        assert.ok($(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS} ${RTL_SELECTOR}`).length > 0, 'menu is in RTL mode');
     });
 
     QUnit.test('correct wrapper classes should be set', function(assert) {

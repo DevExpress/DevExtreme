@@ -1,8 +1,7 @@
 import errors from 'core/errors';
 
 import $ from 'jquery';
-import Toolbar from 'ui/toolbar';
-import ToolbarBase from 'ui/toolbar/ui.toolbar.base';
+import Toolbar from 'ui/toolbar/ui.toolbar';
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
@@ -191,7 +190,7 @@ QUnit.module('render', {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
+        Toolbar.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -214,7 +213,7 @@ QUnit.module('render', {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
+        Toolbar.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -767,10 +766,10 @@ QUnit.module('widget sizing render', () => {
         assert.equal(parseInt($center.css('margin-left')), 65);
     });
 
-    QUnit.test('items should be arranged after rendering in the dxToolbarBase used in the dxPopup', function(assert) {
+    QUnit.test('items should be arranged after rendering in the dxToolbar used in the dxPopup', function(assert) {
         const title = 'LongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongText';
 
-        const $element = $('#widget').dxToolbarBase({
+        const $element = $('#widget').dxToolbar({
             onItemRendered: function(args) {
                 if($(args.itemElement).text() === title) {
                     $(args.itemElement).css('maxWidth', 200);
@@ -1506,7 +1505,7 @@ QUnit.module('adaptivity', {
     QUnit.testInActiveWindow('items should not be rearranged if width is not changed', function(assert) {
         const $input = $('<input>').width(300);
 
-        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
+        Toolbar.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
         const $element = $('#widget').dxToolbar({
             items: [
@@ -1886,9 +1885,9 @@ QUnit.module('Waiting fonts for material theme', {
 
         const done = assert.async();
 
-        ToolbarBase.prototype._checkWebFontForLabelsLoaded = () => Promise.resolve();
+        Toolbar.prototype._checkWebFontForLabelsLoaded = () => Promise.resolve();
 
-        ToolbarBase.prototype._dimensionChanged = () => {
+        Toolbar.prototype._dimensionChanged = () => {
             assert.expect(0);
             done();
         };

@@ -28,7 +28,7 @@ import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from '../themes';
-import '../toolbar/ui.toolbar.base';
+import '../toolbar';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
 import { PopupPositionController } from './popup_position_controller';
@@ -380,7 +380,7 @@ const Popup = Overlay.inherit({
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
                 model: {
-                    widget: 'dxToolbarBase',
+                    widget: 'dxToolbar',
                     options: toolbarOptions
                 }
             });

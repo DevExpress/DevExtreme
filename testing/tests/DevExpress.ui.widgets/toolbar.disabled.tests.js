@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import 'ui/toolbar';
-import 'ui/toolbar/ui.toolbar.base';
+import 'ui/toolbar/ui.toolbar';
 
 import eventsEngine from 'events/core/events_engine';
 

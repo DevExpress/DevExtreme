@@ -153,7 +153,7 @@ QUnit.module('basic', () => {
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
 
-        assert.equal(getOuterHeight($wrapper), getOuterHeight($(document.body)), 'height is 100%');
+        assert.roughEqual(getOuterHeight($wrapper), getOuterHeight($(document.body)), 0.5, 'height is 100%');
         assert.equal(getOuterWidth($wrapper), getOuterWidth($(document.body)), 'width is 100%');
     });
 
@@ -236,7 +236,7 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
         const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
-        $popupBottom.dxToolbarBase('repaint');
+        $popupBottom.dxToolbar('repaint');
         assert.equal($popupBottom.text(), 'TodayOKCancel', 'buttons order is correct');
         devices.current(devices.real());
     });
@@ -367,7 +367,7 @@ QUnit.module('basic', () => {
 
         });
         const instance = $popup.dxPopup('instance');
-        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
         assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is true');
     });
@@ -386,7 +386,7 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
 
         instance.option('rtlEnabled', false);
-        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
         assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is false');
     });
@@ -1029,7 +1029,7 @@ QUnit.module('options changed callbacks', {
         const $overlayContent = this.instance.$content().parent();
 
         assert.equal(getOuterWidth($overlayContent), getOuterWidth($(document.body)), 'wrapper has 100% width');
-        assert.equal(getOuterHeight($overlayContent), getOuterHeight($(document.body)), 'wrapper has 100% height');
+        assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($(document.body)), 0.5, 'wrapper has 100% height');
 
         assert.ok($overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class added');
         assert.ok(!$overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is removed');
@@ -2142,8 +2142,7 @@ QUnit.module('rendering', {
         }).dxPopup('instance');
 
         popup.show();
-
-        assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbarBase('instance').option('compactMode'), 'bottom toolbar has the compact option');
+        assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbar('instance').option('compactMode'), 'bottom toolbar has the compact option');
     });
 });
 

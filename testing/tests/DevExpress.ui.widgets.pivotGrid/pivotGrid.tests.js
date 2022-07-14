@@ -1114,7 +1114,7 @@ QUnit.module('dxPivotGrid', {
             const componentNames = dataUtils.data($widget[0], 'dxComponents');
 
             $.each(componentNames, function(index, componentName) {
-                if(componentName.indexOf('dxPrivateComponent') === -1 && componentName !== 'dxToolbarBase') {
+                if(componentName.indexOf('dxPrivateComponent') === -1 && componentName !== 'dxToolbar') {
                     assert.ok(dataUtils.data($widget[0], componentName).option('rtlEnabled'), 'rtlEnabled for ' + componentName + ' assigned');
                 }
             });
