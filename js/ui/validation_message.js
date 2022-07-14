@@ -33,7 +33,7 @@ const ValidationMessage = Overlay.inherit({
             target: undefined,
             mode: 'auto',
             validationErrors: undefined,
-            positionRequest: undefined,
+            positionSide: 'top',
             boundary: undefined,
             offset: { h: 0, v: 0 },
             contentId: undefined
@@ -122,30 +122,48 @@ const ValidationMessage = Overlay.inherit({
         this.option({ maxWidth });
     },
 
+    _getPositionsArray: function(positionSide, rtlSide) {
+        switch(positionSide) {
+            case 'top':
+                return [`${rtlSide} bottom`, `${rtlSide} top`];
+            case 'left':
+                return ['right', 'left'];
+            case 'right':
+                return ['left', 'right'];
+            default:
+                return [`${rtlSide} top`, `${rtlSide} bottom`];
+        }
+
+    },
+
     _updatePosition: function() {
         const {
-            positionRequest,
+            positionSide,
             rtlEnabled,
-            offset,
+            offset: componentOffset,
             boundary
         } = this.option();
-        const positionSide = getDefaultAlignment(rtlEnabled);
-        const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
+        const rtlSide = getDefaultAlignment(rtlEnabled);
+        const positions = this._getPositionsArray(positionSide, rtlSide);
+        const offset = Object.assign({}, componentOffset);
 
-        if(rtlEnabled) offset.h = -offset.h;
-        if(positionRequest !== 'below') offset.v = -offset.v;
+        this.$element().addClass(`dx-invalid-message-${positionSide}`);
+
+        if(rtlEnabled && positionSide !== 'left' && positionSide !== 'right') offset.h = -offset.h;
+        if(positionSide === 'top') offset.v = -offset.v;
+        if(positionSide === 'left') offset.h = -offset.h;
 
         this.option('position', {
             offset,
             boundary,
-            my: positionSide + verticalPositions[0],
-            at: positionSide + verticalPositions[1],
+            my: positions[0],
+            at: positions[1],
             collision: 'none flip'
         });
     },
 
     _optionChanged(args) {
-        const { name, value } = args;
+        const { name, value, previousValue } = args;
         switch(name) {
             case 'target':
                 this._updatePositionByTarget();
@@ -160,7 +178,8 @@ const ValidationMessage = Overlay.inherit({
                 break;
             case 'rtlEnabled':
             case 'offset':
-            case 'positionRequest':
+            case 'positionSide':
+                this.$element().removeClass(`dx-invalid-message-${previousValue}`);
                 this._updatePosition();
                 break;
             case 'container':

@@ -134,7 +134,8 @@ const DropDownEditor = TextBox.inherit({
             applyButtonText: messageLocalization.format('OK'),
             cancelButtonText: messageLocalization.format('Cancel'),
             buttonsLocation: 'default',
-            useHiddenSubmitElement: false
+            useHiddenSubmitElement: false,
+            validationMessagePosition: 'auto'
 
             /**
             * @name dxDropDownEditorOptions.mask
@@ -639,25 +640,31 @@ const DropDownEditor = TextBox.inherit({
             });
         }
 
-        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
+        this._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     },
 
     _popupHiddenHandler: function() {
         this._closeAction();
-        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
+        this._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     },
 
-    _getValidationMessagePositionRequest: function() {
-        let positionRequest = 'below';
+    _getValidationMessagePositionSide: function() {
+        const validationMessagePosition = this.option('validationMessagePosition');
+
+        if(validationMessagePosition !== 'auto') {
+            return validationMessagePosition;
+        }
+
+        let positionSide = 'bottom';
 
         if(this._popup && this._popup.option('visible')) {
             const { top: myTop } = animationPosition.setup(this.$element());
             const { top: popupTop } = animationPosition.setup(this._popup.$content());
 
-            positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
+            positionSide = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';
         }
 
-        return positionRequest;
+        return positionSide;
     },
 
     _closeOutsideDropDownHandler: function({ target }) {

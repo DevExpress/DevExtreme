@@ -30,6 +30,8 @@ import {
 
 import {
     ApplyValueMode,
+    Mode,
+    Position,
 } from '../../common';
 
 /** @public */
@@ -41,7 +43,7 @@ export interface DropDownButtonTemplateDataModel {
 }
 
 /** @namespace DevExpress.ui */
-export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TComponent> {
+export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptions<TComponent>, 'validationMessagePosition'> {
     /**
      * @docid
      * @default true
@@ -125,6 +127,12 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @public
      */
     showDropDownButton?: boolean;
+    /**
+     * @docid
+     * @default 'auto'
+     * @public
+     */
+    validationMessagePosition?: Position | Mode;
     /**
      * @docid
      * @default null

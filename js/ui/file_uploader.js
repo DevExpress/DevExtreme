@@ -174,6 +174,11 @@ class FileUploader extends Editor {
             */
             validationMessageMode: 'always',
 
+            /**
+            * @name dxFileUploaderOptions.validationMessagePosition
+            * @hidden
+            */
+
 
             uploadFile: null,
 

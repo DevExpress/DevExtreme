@@ -475,9 +475,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "from"
@@ -630,9 +630,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default undefined

@@ -1,5 +1,3 @@
-import errors from 'core/errors';
-
 import $ from 'jquery';
 import Toolbar from 'ui/toolbar/ui.toolbar';
 import fx from 'animation/fx';
@@ -425,45 +423,6 @@ QUnit.module('render', {
         assert.equal($button.eq(0).hasClass('test2'), false);
         assert.equal($button.eq(1).hasClass('test1'), false);
         assert.equal($button.eq(1).hasClass('test2'), true);
-    });
-});
-
-QUnit.module('Deprecated options', {
-    afterEach: function() {
-        this.stub.restore();
-    }
-}, () => {
-    QUnit.test('show warning if deprecated "height" option is used', function(assert) {
-        assert.expect(2);
-        this.stub = sinon.stub(errors, 'log', () => {
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxToolbar',
-                'height',
-                '20.1',
-                'Functionality associated with this option is not intended for the Toolbar widget.'
-            ], 'args of the log method');
-        });
-
-        $('#toolbar').dxToolbar({
-            items: [ { location: 'before', text: 'text1' } ],
-            height: 50
-        });
-
-        assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
-    });
-
-    QUnit.test('Warning messages not displaying if deprecated "height" option not used', function(assert) {
-        assert.expect(1);
-        this.stub = sinon.stub(errors, 'log', () => {
-            assert.strictEqual(true, false, 'error.log should not be called');
-        });
-
-        $('#toolbar').dxToolbar({
-            items: [ { location: 'before', text: 'text1' } ]
-        });
-
-        assert.strictEqual(this.stub.callCount, 0, 'error.log.callCount');
     });
 });
 

@@ -73,11 +73,11 @@ export interface dxToolbarOptions<
 > extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
-     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @type Array<string | dxToolbarItem | any>
@@ -93,13 +93,6 @@ export interface dxToolbarOptions<
      * @public
      */
     menuItemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-    /**
-     * @docid
-     * @deprecated
-     * @default undefined
-     * @public
-     */
-    height?: number | string | (() => number | string);
 }
 /**
  * @docid

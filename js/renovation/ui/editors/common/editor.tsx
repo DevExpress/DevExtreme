@@ -38,7 +38,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
     props: {
       activeStateEnabled, hoverStateEnabled, focusStateEnabled,
       className, accessKey, rtlEnabled, hint, tabIndex,
-      validationMessageMode,
+      validationMessageMode, validationMessagePosition,
       disabled, visible,
       width, height,
       onClick, onKeyDown,
@@ -83,7 +83,7 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
         <ValidationMessage
           validationErrors={validationErrors}
           mode={validationMessageMode}
-          positionRequest="below"
+          positionSide={validationMessagePosition}
           rtlEnabled={rtlEnabled}
           target={validationMessageTarget}
           boundary={validationMessageTarget}
@@ -111,6 +111,8 @@ export class EditorProps extends BaseWidgetProps {
   @OneWay() validationErrors: Record<string, unknown>[] | null = null;
 
   @OneWay() validationMessageMode: 'auto' | 'always' = 'auto';
+
+  @OneWay() validationMessagePosition: 'top' | 'right' | 'bottom' | 'left' = 'bottom';
 
   @OneWay() validationStatus: 'valid' | 'invalid' | 'pending' = 'valid';
 

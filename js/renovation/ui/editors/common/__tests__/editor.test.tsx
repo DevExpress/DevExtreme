@@ -65,6 +65,7 @@ describe('Editor', () => {
                 validationErrors,
                 validationStatus: 'invalid',
                 validationMessageMode: 'always',
+                validationMessagePosition: 'bottom',
                 rtlEnabled: false,
               },
               isValidationMessageVisible: true,
@@ -78,7 +79,7 @@ describe('Editor', () => {
         expect(props.visualContainer).toBe(rootElementRef.current);
         expect(props.target).toBe(rootElementRef.current);
         expect(props.boundary).toBe(rootElementRef.current);
-        expect(props.positionRequest).toBe('below');
+        expect(props.positionSide).toBe('bottom');
         expect(props.mode).toBe('always');
         expect(props.rtlEnabled).toBe(false);
         expect(props.validationErrors).toEqual(validationErrors);
