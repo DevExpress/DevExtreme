@@ -19,6 +19,16 @@ export const setAttribute = ClientFunction((selector, attribute, value) => {
   element.setAttribute(attribute, value);
 });
 
+export const getStyleAttribute = ClientFunction((selector) => {
+  const element = selector();
+  return element.getAttribute('style');
+});
+
+export const setStyleAttribute = ClientFunction((selector, styleValue) => {
+  const element = selector();
+  element.setAttribute('style', styleValue);
+});
+
 export const appendElementTo = ClientFunction((
   containerSelector: string,
   tagName: string,

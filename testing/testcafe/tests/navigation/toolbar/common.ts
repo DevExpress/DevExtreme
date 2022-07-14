@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { appendElementTo } from '../helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../helpers/domUtils';
 import Toolbar from '../../../model/toolbar/toolbar';
 
 fixture`Toolbar_common`
@@ -27,9 +27,7 @@ fixture`Toolbar_common`
         targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
       }
 
-      await ClientFunction(() => {
-        $(targetContainer).css({ backgroundColor: 'gold' });
-      }, { dependencies: { targetContainer } })();
+      await setStyleAttribute(targetContainer, 'background-color: gold;');
 
       await t
         .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, targetContainer))
@@ -65,20 +63,18 @@ fixture`Toolbar_common`
     test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      let targetContainerSelector = '#container';
+      const toolbar = new Toolbar('#container');
+      let targetContainer = Selector('#container');
 
       if (locateInMenu === 'always') {
-        await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
-        })();
+        await t
+          .click(toolbar.getOverflowMenu().element);
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
       }
 
-      await t.wait(500);
-
       await t
-        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, targetContainer))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -134,18 +130,18 @@ fixture`Toolbar_common`
       test(`Toolbar with different types of buttons,theme=${theme},items[{locateInMenu=${locateInMenu},stylingMode:${stylingMode}}]`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        let targetContainerSelector = '#container';
+        const toolbar = new Toolbar('#container');
+        let targetContainer = Selector('#container');
 
         if (locateInMenu === 'always') {
-          await ClientFunction(() => {
-            $('.dx-toolbar .dx-dropdownmenu-button').click();
-          })();
+          await t
+            .click(toolbar.getOverflowMenu().element);
 
-          targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+          targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
         }
 
         await t
-          .expect(await takeScreenshot(`Toolbar-with-${stylingMode}-buttons,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+          .expect(await takeScreenshot(`Toolbar-with-${stylingMode}-buttons,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, targetContainer))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
@@ -304,20 +300,16 @@ fixture`Toolbar_common`
   test(`Default nested widgets render,theme=${theme},items[].locateInMenu=auto`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    let targetContainerSelector = '#container';
+    const toolbar = new Toolbar('#container');
+    await t
+      .click(toolbar.getOverflowMenu().element);
 
-    await ClientFunction(() => {
-      $('.dx-toolbar .dx-dropdownmenu-button').click();
-    })();
+    const targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-    targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
-
-    await ClientFunction(() => {
-      $(targetContainerSelector).css({ backgroundColor: 'gold' });
-    }, { dependencies: { targetContainerSelector } })();
+    await setStyleAttribute(targetContainer, 'background-color: gold;');
 
     await t
-      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, targetContainer))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -351,16 +343,14 @@ fixture`Toolbar_common`
   test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=auto`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await ClientFunction(() => {
-      $('.dx-toolbar .dx-dropdownmenu-button').click();
-    })();
+    const toolbar = new Toolbar('#container');
+    await t
+      .click(toolbar.getOverflowMenu().element);
 
-    const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
-
-    await t.wait(500);
+    const targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
     await t
-      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, targetContainer))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
