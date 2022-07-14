@@ -604,15 +604,6 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
         assert.ok($element.hasClass('dx-scheduler-work-space-week'), 'dxSchedulerWorkSpaceWeek has \'dx-scheduler-workspace-week\' css class');
     });
 
-    QUnit.test('Header cells should have a special css classes', function(assert) {
-        const $element = this.instance.$element();
-        const classes = $element.find('.dx-scheduler-header-panel th').attr('class').split(' ');
-
-        assert.ok($.inArray('dx-scheduler-header-panel-cell', classes) > -1, 'Cell has a css class');
-        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, 'Cell has a css class');
-        assert.notOk($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, 'Cell hasn\'t a css class');
-    });
-
     QUnit.test('Scheduler all day panel should contain one row & 7 cells', function(assert) {
         this.instance.option('showAllDayPanel', true);
 

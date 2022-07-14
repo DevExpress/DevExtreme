@@ -178,7 +178,6 @@ describe('DateHeaderCell', () => {
           expect(combineClasses)
             .toHaveBeenCalledWith({
               'dx-scheduler-header-panel-cell': true,
-              'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-header-panel-current-time-cell': 'today',
               'dx-scheduler-header-panel-week-cell': 'isWeekDayCell',
               class: true,

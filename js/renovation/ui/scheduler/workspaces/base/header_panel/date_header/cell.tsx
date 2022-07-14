@@ -104,7 +104,6 @@ export class DateHeaderCell extends JSXComponent(DateHeaderCellProps) {
 
     const cellClasses = combineClasses({
       'dx-scheduler-header-panel-cell': true,
-      'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-header-panel-current-time-cell': today,
       'dx-scheduler-header-panel-week-cell': isWeekDayCell,
       [className]: !!className,
