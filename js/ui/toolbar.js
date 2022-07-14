@@ -73,6 +73,11 @@ const Toolbar = ToolbarBase.inherit({
             */
 
             /**
+            * @name dxToolbarOptions.height
+            * @hidden
+            */
+
+            /**
             * @name dxToolbarOptions.onSelectionChanged
             * @action
             * @hidden
