@@ -77,11 +77,11 @@ export interface dxBoxOptions<
     crossAlign?: CrosswiseDistribution;
     /**
      * @docid
-     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default 'row'

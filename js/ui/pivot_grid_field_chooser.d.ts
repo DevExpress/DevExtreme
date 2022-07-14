@@ -69,7 +69,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @ref
      * @public
      */
-    dataSource?: PivotGridDataSource;
+    dataSource?: PivotGridDataSource | null;
     /**
      * @docid
      * @default true

@@ -590,9 +590,9 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<TRowData, TKey>;
+    dataSource?: DataSourceLike<TRowData, TKey> | null;
     /**
      * @docid
      * @public
@@ -2584,9 +2584,9 @@ export interface ColumnHeaderFilter {
    * @type_function_param1_field component:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions|Function
+   * @type Array<any>|Store|DataSourceOptions|Function|null
    */
-  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions }) => void);
+  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void);
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @default undefined
@@ -2620,9 +2620,9 @@ export interface ColumnLookup {
    * @type_function_param1_field data:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions|Function
+   * @type Array<any>|Store|DataSourceOptions|Function|null
    */
-  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>);
+  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>) | null;
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
