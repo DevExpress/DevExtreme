@@ -3004,7 +3004,6 @@
           {
             "Title": "Drill Down",
             "Name": "DrillDown",
-            "DocUrl": "ApiReference/UI_Components/dxTreeMap/Node/Methods/#drillDown",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
