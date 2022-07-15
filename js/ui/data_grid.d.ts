@@ -415,6 +415,7 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
     dropFeedbackMode?: DragHighlight;
     /**
      * @docid GridBaseOptions.rowDragging.filter
+     * @deprecated
      * @default "> *"
      */
     filter?: string;
