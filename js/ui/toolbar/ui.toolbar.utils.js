@@ -1,7 +1,11 @@
 import $ from '../../core/renderer';
+import { waitWebFont } from '../themes';
+import fx from '../../animation/fx';
 
+const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const TOOLBAR_ITEMS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+const ANIMATION_TIMEOUT = 15;
 
 const getItemInstance = function($element) {
     const itemData = $element.data && $element.data();
@@ -40,4 +44,38 @@ export function toggleItemFocusableElementTabIndex(context, item) {
             }
         }
     }
+}
+
+export function waitParentAnimationFinished($element, timeout) {
+    return new Promise(resolve => {
+        const check = () => {
+            let readyToResolve = true;
+            $element.parents().each((_, parent) => {
+                if(fx.isAnimating($(parent))) {
+                    readyToResolve = false;
+                    return false;
+                }
+            });
+            if(readyToResolve) {
+                resolve();
+            }
+            return readyToResolve;
+        };
+        const runCheck = () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => check() || runCheck(), ANIMATION_TIMEOUT);
+        };
+        runCheck();
+    });
+}
+
+export function checkWebFontForLabelsLoaded($element) {
+    const $labels = $element.find(`.${TOOLBAR_LABEL_CLASS}`);
+    const promises = [];
+    $labels.each((_, label) => {
+        const text = $(label).text();
+        const fontWeight = $(label).css('fontWeight');
+        promises.push(waitWebFont(text, fontWeight));
+    });
+    return Promise.all(promises);
 }
