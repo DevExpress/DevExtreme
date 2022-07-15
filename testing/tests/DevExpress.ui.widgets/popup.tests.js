@@ -48,6 +48,15 @@ QUnit.testStart(function() {
                 width: 100%;\
                 height: 100%;\
             }\
+            \
+            :scope > div {\
+                width: 100% !important;\
+                height: 100% !important;\
+            }\
+            :host {\
+                width: 100%;\
+                hright: 100%;\
+            }\
         </style>\
         \
         <div id="popup"></div>\
