@@ -18,7 +18,7 @@
     "devextreme": "22.2-next",
     "devextreme-angular": "~22.2.0",
     "core-js": "^2.6.12",
-    "rxjs": "^6.3.3",
+    "rxjs": "^6.6.7",
     "tslib": "^1.9.0",
     "zone.js": "^0.8.26"
   },
