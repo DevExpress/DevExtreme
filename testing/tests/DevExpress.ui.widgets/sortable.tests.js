@@ -2618,8 +2618,6 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
     });
 
     QUnit.test('Placeholder should be visible after page scrolling (T871213)', function(assert) {
-        const fixtureRoot = document.querySelector('#qunit-fixture');
-
         // arrange
         this.createSortable({
             filter: '.draggable',
@@ -2628,9 +2626,8 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
 
         try {
             const scrollPosition = 1000;
-            $(fixtureRoot).removeClass('qunit-fixture-visible');
-            $(fixtureRoot).addClass('qunit-fixture-absolute');
-            fixtureRoot.style.top = '0';
+            $('#qunit-fixture').removeClass('qunit-fixture-visible');
+            $('#qunit-fixture').css('top', 0);
             $('body').css('height', 10000);
             $('#scroll').css('top', scrollPosition);
             window.scrollTo(0, scrollPosition);
@@ -2650,7 +2647,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
             // assert
             assert.notOk($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is not visible');
         } finally {
-            fixtureRoot.style.top = '';
+            $('#qunit-fixture').css('top', '');
             $('body').css('height', '');
             $('#scroll').css('top', 0);
             window.scrollTo(0, 0);
