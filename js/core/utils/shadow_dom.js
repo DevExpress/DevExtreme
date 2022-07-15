@@ -78,7 +78,11 @@ export function getShadowElementsFromPoint(x, y, root) {
             const childNode = el.childNodes[i];
 
             // eslint-disable-next-line no-undef
-            if(childNode.nodeType === Node.ELEMENT_NODE && isPositionInElementRectangle(childNode, x, y)) {
+            if(childNode.nodeType === Node.ELEMENT_NODE &&
+               isPositionInElementRectangle(childNode, x, y) &&
+               // eslint-disable-next-line no-undef
+               getComputedStyle(childNode).pointerEvents !== 'none'
+            ) {
                 elementQueue.push(childNode);
                 result.push(childNode);
             }

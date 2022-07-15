@@ -1946,6 +1946,13 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
             // arrange
             fx.off = true;
 
+            const origViewPort = viewPort.value();
+            const fixtureRoot = $('#qunit-fixture').get(0);
+
+            if(fixtureRoot.getRootNode().host) {
+                viewPort.value(fixtureRoot);
+            }
+
             try {
                 $('#other').show().dxOverlay({
                     width: 150,
@@ -1989,6 +1996,8 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
                 assert.strictEqual($('#scrollable').scrollTop(), shading ? 0 : 1, 'scrollTop');
             } finally {
                 fx.off = false;
+
+                viewPort.value(origViewPort);
             }
         });
     });
