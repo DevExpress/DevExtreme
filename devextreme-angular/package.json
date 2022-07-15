@@ -34,7 +34,7 @@
     "@types/jasmine": "2.8.19",
     "@types/node": "~8.10.66",
     "codelyzer": "6.0.2",
-    "core-js": "^2.5.4",
+    "core-js": "^2.6.12",
     "del": "^2.2.2",
     "devextreme": "22.2-next",
     "devextreme-angular-generator": "^1.0.0",
