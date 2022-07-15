@@ -1,10 +1,10 @@
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import DropDownMenu from '../../model/dropDownMenu';
-import { appendElementTo } from './helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import DropDownMenu from '../../../model/toolbar/dropDownMenu';
+import { appendElementTo } from '../helpers/domUtils';
 
-fixture`DropDownMenu`
-  .page(url(__dirname, '../container.html'));
+fixture`Toolbar_OverflowMenu`
+  .page(url(__dirname, '../../container.html'));
 
 test('Drop down button should lost hover and active state', async (t) => {
   const dropDownMenu = new DropDownMenu('#container');
@@ -56,7 +56,23 @@ test('Drop down button should lost hover and active state', async (t) => {
     width: '50px', height: '50px', backgroundColor: 'steelblue', paddingTop: '400px',
   });
 
-  await createWidget('dxDropDownMenu', {
+  return createWidget('dxDropDownMenu', {
     items: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
   });
 });
+
+test('Click on overflow button should prevent popup\'s hideOnOutsideClick', async (t) => {
+  const dropDownMenu = new DropDownMenu('#container');
+
+  await t
+    .click(dropDownMenu.element)
+    .expect(dropDownMenu.getPopup().getWrapper().count)
+    .eql(1);
+
+  await t
+    .click(dropDownMenu.element)
+    .expect(dropDownMenu.getPopup().getWrapper().count)
+    .eql(0);
+}).before(async () => createWidget('dxDropDownMenu', {
+  items: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
+}));

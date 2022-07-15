@@ -53,10 +53,8 @@ class ToolbarDropDownMenu {
 
         return {
             disabled: this._toolbar.option('disabled'),
-            itemTemplate: this._getMenuItemTemplate.bind(this),
-            onItemClick: (function(e) {
-                itemClickAction(e);
-            }).bind(this),
+            itemTemplate: () => this._getMenuItemTemplate(),
+            onItemClick: (e) => { itemClickAction(e); },
             container: this._toolbar.option('menuContainer'),
             onOptionChanged: ({ name, value }) => {
                 if(name === 'opened') {

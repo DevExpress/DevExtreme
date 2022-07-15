@@ -299,7 +299,7 @@ QUnit.module('Editing', {
         assert.ok($toolbarMenu.length, 'Toolbar menu shown');
 
         $('.dx-edit-button').first().trigger('dxclick');
-        that.clock.tick(300);
+        that.clock.tick(500);
 
         $toolbarMenu = $('.dx-dropdownmenu-popup-wrapper');
         assert.ok(!$toolbarMenu.length, 'Toolbar menu hidden');
