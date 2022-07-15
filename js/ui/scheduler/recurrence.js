@@ -40,15 +40,13 @@ class RecurrenceProcessor {
             rruleIntervalParams.startIntervalDate,
             rule.until);
 
-        const result = this.rRuleSet.between(
+        return this.rRuleSet.between(
             rruleIntervalParams.minViewDate,
             rruleIntervalParams.maxViewDate,
             true
         )
             .filter((date) => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime)
             .map((date) => this._convertRruleResult(rruleIntervalParams, options, date));
-
-        return result;
     }
 
     _createRruleIntervalParams(options) {
@@ -70,28 +68,35 @@ class RecurrenceProcessor {
 
         // NOTE: Check DST after start date without local timezone offset conversion.
         const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
-        const DSTToSummerTime = startDateDSTDifferenceMs < 0;
+        const switchToSummerTime = startDateDSTDifferenceMs < 0;
 
         return {
             startIntervalDate,
             minViewTime,
             minViewDate,
             maxViewDate,
-            startIntervalDateDSTShift: DSTToSummerTime ? 0 : startDateDSTDifferenceMs,
+            startIntervalDateDSTShift: switchToSummerTime ? 0 : startDateDSTDifferenceMs,
             appointmentDuration: duration,
         };
     }
 
     _convertRruleResult(rruleIntervalParams, options, rruleDate) {
-        const resultDate = timeZoneUtils.setOffsetsToDate(
+        const convertedBackDate = timeZoneUtils.setOffsetsToDate(
             rruleDate, [
                 timeZoneUtils.getClientTimezoneOffset(rruleDate),
                 -options.appointmentTimezoneOffset,
                 rruleIntervalParams.startIntervalDateDSTShift,
             ]);
-        const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, rruleDate);
+        const convertedDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
+        const switchToSummerTime = convertedDateDSTShift < 0;
+        const resultDate = timeZoneUtils.setOffsetsToDate(convertedBackDate, [convertedDateDSTShift]);
+        const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
 
-        return timeZoneUtils.setOffsetsToDate(resultDate, [resultDateDSTShift]);
+        if(resultDateDSTShift && switchToSummerTime) {
+            return new Date(resultDate.getTime() + resultDateDSTShift);
+        }
+
+        return resultDate;
     }
 
     hasRecurrence(options) {
