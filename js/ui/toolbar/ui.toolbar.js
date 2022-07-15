@@ -368,10 +368,10 @@ class Toolbar extends AsyncCollectionWidget {
         const that = this;
         each(['before', 'center', 'after'], function() {
             const sectionClass = 'dx-toolbar-' + this;
-            let $section = $container.find(`.${sectionClass}`);
+            const $section = $container.find(`.${sectionClass}`);
 
             if(!$section.length) {
-                that['_$' + this + 'Section'] = $section = $('<div>')
+                that['_$' + this + 'Section'] = $('<div>')
                     .addClass(sectionClass)
                     .appendTo($container);
             }
