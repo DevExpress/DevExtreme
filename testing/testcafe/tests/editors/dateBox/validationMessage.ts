@@ -17,7 +17,7 @@ themes.forEach((theme) => {
   positions.forEach((position) => {
     test(`DateBox ValidationMessage position is correct (${position}, ${theme})`, async (t) => {
       const dateBox1 = new DateBox('#container');
-      await dateBox1.option('value', new Date());
+      await dateBox1.option('value', new Date(2022, 6, 14));
 
       await t.expect(await compareScreenshot(t, `datebox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
     }).before(async (t) => {
@@ -30,7 +30,6 @@ themes.forEach((theme) => {
         height: 40,
         validationMessageMode: 'always',
         validationMessagePosition: position,
-        value: new Date(2022, 6, 14),
       });
 
       return createWidget('dxValidator', {
