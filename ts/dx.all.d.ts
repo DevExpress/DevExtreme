@@ -18847,7 +18847,7 @@ declare module DevExpress.ui {
    * @deprecated Use the Scheduler's Appointment type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxSchedulerAppointment extends CollectionWidgetItem {
+  export type dxSchedulerAppointment = CollectionWidgetItem & {
     /**
      * [descr:dxSchedulerAppointment.allDay]
      */
@@ -18900,7 +18900,7 @@ declare module DevExpress.ui {
      * [descr:dxSchedulerAppointment.visible]
      */
     visible?: boolean;
-  }
+  } & Record<string, any>;
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
