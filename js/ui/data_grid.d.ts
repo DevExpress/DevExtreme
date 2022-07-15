@@ -1066,6 +1066,10 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     wordWrapEnabled?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface ColumnChooser {
     /**
      * @docid GridBaseOptions.columnChooser.allowSearch
@@ -1116,6 +1120,10 @@ export interface ColumnChooser {
     sortOrder?: 'asc' | 'desc';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface ColumnFixing {
     /**
      * @docid GridBaseOptions.columnFixing.enabled
@@ -1129,6 +1137,10 @@ export interface ColumnFixing {
     texts?: ColumnFixingTexts;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface ColumnFixingTexts {
     /**
      * @docid GridBaseOptions.columnFixing.texts.fix
@@ -1152,6 +1164,10 @@ export interface ColumnFixingTexts {
     unfix?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface FilterPanelTexts {
     /**
      * @docid GridBaseOptions.filterPanel.texts.clearFilter
@@ -1170,6 +1186,10 @@ export interface FilterPanelTexts {
     filterEnabledHint?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface FilterRow {
     /**
      * @docid GridBaseOptions.filterRow.applyFilter
@@ -1219,6 +1239,10 @@ export interface FilterRow {
     visible?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface FilterRowOperationDescriptions {
     /**
      * @docid GridBaseOptions.filterRow.operationDescriptions.between
@@ -1277,6 +1301,10 @@ export interface FilterRowOperationDescriptions {
     startsWith?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface HeaderFilter {
     /**
      * @docid GridBaseOptions.headerFilter.allowSearch
@@ -1311,6 +1339,10 @@ export interface HeaderFilter {
     width?: number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface HeaderFilterTexts {
     /**
      * @docid GridBaseOptions.headerFilter.texts.cancel
@@ -1329,6 +1361,10 @@ export interface HeaderFilterTexts {
     ok?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface KeyboardNavigation {
     /**
      * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
@@ -1354,6 +1390,10 @@ export interface KeyboardNavigation {
     enterKeyDirection?: 'none' | 'column' | 'row';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface LoadPanel {
     /**
      * @docid GridBaseOptions.loadPanel.enabled
@@ -1403,6 +1443,10 @@ export interface LoadPanel {
     width?: number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface Pager {
     /**
      * @docid GridBaseOptions.pager.allowedPageSizes
@@ -1444,6 +1488,10 @@ export interface Pager {
     visible?: boolean | 'auto';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface SearchPanel {
     /**
      * @docid GridBaseOptions.searchPanel.highlightCaseSensitive
@@ -1483,6 +1531,10 @@ export interface SearchPanel {
     width?: number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface Sorting {
     /**
      * @docid GridBaseOptions.sorting.ascendingText
@@ -1512,6 +1564,10 @@ export interface Sorting {
     showSortIndexes?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface StateStoring {
     /**
      * @docid GridBaseOptions.stateStoring.customLoad
@@ -1638,7 +1694,8 @@ export interface EditingBase<TRowData = any, TKey = any> {
 
 /**
  * @docid
- * @namespace DevExpress.ui.dxDataGrid
+ * @public
+ * @namespace DevExpress.common.grids
  */
 export interface DataChange<TRowData = any, TKey = any> {
     /**
@@ -2278,6 +2335,10 @@ export interface GridBase<TRowData = any, TKey = any> {
     updateDimensions(): void;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface ColumnCustomizeTextArg {
   value?: string | number | Date;
   valueText?: string;
@@ -2619,6 +2680,10 @@ export interface ColumnBase<TRowData = any> {
     width?: number | string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface ColumnHeaderFilter {
   /**
    * @docid GridBaseColumn.headerFilter.allowSearch
@@ -2657,6 +2722,10 @@ export interface ColumnHeaderFilter {
   width?: number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export interface ColumnLookup {
   /**
    * @docid GridBaseColumn.lookup.allowClearing
