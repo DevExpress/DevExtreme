@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
@@ -23,8 +25,13 @@ createTestCafe('localhost', 1437, 1438)
         if(fs.existsSync('./testing/testcafe/screenshots')) {
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         }
+
+        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
+        // eslint-disable-next-line no-console
+        console.log('Browsers:', browsers);
+
         const runner = testCafe.createRunner()
-            .browsers(args.browsers.split(' '))
+            .browsers(browsers)
             .reporter(reporter)
 
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
@@ -80,6 +87,14 @@ createTestCafe('localhost', 1437, 1438)
 
 function setTestingPlatform(args) {
     process.env.platform = args.platform;
+}
+
+function expandBrowserAlias(browser) {
+    switch(browser) {
+        case 'chrome:devextreme-shr2':
+            return 'chrome:headless --disable-gpu';
+    }
+    return browser;
 }
 
 function getArgs() {
