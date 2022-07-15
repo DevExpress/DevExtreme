@@ -66,7 +66,8 @@ import {
 import { ExpressionUtils } from './expressionUtils';
 import {
     validateDayHours,
-    isDateAndTimeView
+    isDateAndTimeView,
+    isTimelineView
 } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
@@ -1570,8 +1571,9 @@ class Scheduler extends Widget {
                     item => scrolling.orientation === item || currentViewOptions.scrolling?.orientation === item
                 ).length > 0
             );
-        const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
-            horizontalVirtualScrollingAllowed;
+        const crossScrollingEnabled = this.option('crossScrollingEnabled')
+            || horizontalVirtualScrollingAllowed
+            || isTimelineView(this.currentViewType);
 
         const result = extend({
             resources: this.option('resources'),

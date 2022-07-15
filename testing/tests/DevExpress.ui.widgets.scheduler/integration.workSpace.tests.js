@@ -1721,11 +1721,15 @@ module('Resource Cell Template', () => {
                         ],
                     }],
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                        if(!cellIndex) {
-                            const $cell = $(cellElement);
-                            assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
-                            assert.roughEqual(getOuterHeight($cell), 276, 1.001, 'Resource cell height is OK');
-                        }
+                        const done = assert.async();
+                        setTimeout(() => {
+                            if(!cellIndex) {
+                                const $cell = $(cellElement);
+                                assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
+                                assert.roughEqual(getOuterHeight($cell), 274, 1.001, 'Resource cell height is OK');
+                            }
+                            done();
+                        });
                     }
                 });
             });
