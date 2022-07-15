@@ -13,7 +13,7 @@ import { toggleItemFocusableElementTabIndex } from './ui.toolbar.utils';
 
 import { TOOLBAR_CLASS } from './constants';
 import { MultiLineStrategy } from './strategy/toolbar.multiline';
-import { SingleLineStrategy } from './strategy/toolbar.singleLine';
+import { SingleLineStrategy } from './strategy/toolbar.singleline';
 
 // STYLE toolbar
 
