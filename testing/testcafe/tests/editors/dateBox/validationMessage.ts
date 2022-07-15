@@ -30,6 +30,7 @@ themes.forEach((theme) => {
         height: 40,
         validationMessageMode: 'always',
         validationMessagePosition: position,
+        value: new Date(2022, 6, 14),
       });
 
       return createWidget('dxValidator', {
