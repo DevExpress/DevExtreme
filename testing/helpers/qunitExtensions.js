@@ -204,8 +204,8 @@
             }
         `;
 
-        root.shadowRoot.appendChild(style);
         root.shadowRoot.appendChild(shadowContainer);
+        root.shadowRoot.appendChild(style);
     }
 
     function clearShadowRootTree() {
