@@ -31,10 +31,10 @@ const ToolbarMenuList = ListBase.inherit({
 
         each(['before', 'center', 'after', 'menu'], function() {
             const sectionName = '_$' + this + 'Section';
-            let $section = that[sectionName];
+            const $section = that[sectionName];
 
             if(!$section) {
-                that[sectionName] = $section = $('<div>')
+                that[sectionName] = $('<div>')
                     .addClass(TOOLBAR_MENU_SECTION_CLASS);
             }
 
