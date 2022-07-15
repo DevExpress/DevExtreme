@@ -27,7 +27,6 @@ const TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide';
 const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 
-
 const TEXT_BUTTON_MODE = 'text';
 
 const DEFAULT_BUTTON_TYPE = 'default';
@@ -400,6 +399,16 @@ class Toolbar extends AsyncCollectionWidget {
         this._layoutStrategy._applyCompactMode?.();
 
         this._layoutStrategy.renderMenuItems?.();
+    }
+
+    // for filemanager
+    _getItemsWidth() {
+        return this._layoutStrategy._getItemsWidth?.();
+    }
+
+    // for filemanager
+    _getMenuItems() {
+        return this._layoutStrategy._getMenuItems?.();
     }
 
     _dispose() {

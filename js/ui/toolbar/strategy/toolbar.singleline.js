@@ -40,10 +40,10 @@ export class SingleLineStrategy {
 
         each(['before', 'center', 'after'], (_, sectionName) => {
             const sectionClass = `dx-toolbar-${sectionName}`;
-            let $section = $container.find(`.${sectionClass}`);
+            const $section = $container.find(`.${sectionClass}`);
 
             if(!$section.length) {
-                this._toolbar[`_$${sectionName}Section`] = $section = $('<div>')
+                this._toolbar[`_$${sectionName}Section`] = $('<div>')
                     .addClass(sectionClass)
                     .appendTo($container);
             }
