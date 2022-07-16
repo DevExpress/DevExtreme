@@ -1,6 +1,6 @@
 import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
-import { isMaterial } from '../themes';
+import { isMaterial, waitWebFont } from '../themes';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -8,7 +8,7 @@ import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
 import AsyncCollectionWidget from '../collection/ui.collection_widget.async';
 import { BindableTemplate } from '../../core/templates/bindable_template';
-import { updateDimensionsInMaterial } from './ui.toolbar.utils';
+import fx from '../../animation/fx';
 
 import { TOOLBAR_CLASS } from './constants';
 
@@ -29,6 +29,7 @@ const DEFAULT_BUTTON_TYPE = 'default';
 const DEFAULT_DROPDOWNBUTTON_STYLING_MODE = 'contained';
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
+const ANIMATION_TIMEOUT = 15;
 
 class ToolbarBase extends AsyncCollectionWidget {
     _getSynchronizableOptionsForCreateComponent() {
@@ -148,7 +149,7 @@ class ToolbarBase extends AsyncCollectionWidget {
         super._render();
         this._renderItemsAsync();
 
-        updateDimensionsInMaterial.apply(this);
+        this._updateDimensionsInMaterial();
     }
 
     _postProcessRenderItems() {
@@ -418,6 +419,49 @@ class ToolbarBase extends AsyncCollectionWidget {
     _dispose() {
         super._dispose();
         clearTimeout(this._waitParentAnimationTimeout);
+    }
+
+    _updateDimensionsInMaterial() {
+        if(isMaterial()) {
+            const _waitParentAnimationFinished = () => {
+                return new Promise(resolve => {
+                    const check = () => {
+                        let readyToResolve = true;
+                        this.$element().parents().each((_, parent) => {
+                            if(fx.isAnimating($(parent))) {
+                                readyToResolve = false;
+                                return false;
+                            }
+                        });
+                        if(readyToResolve) {
+                            resolve();
+                        }
+                        return readyToResolve;
+                    };
+                    const runCheck = () => {
+                        clearTimeout(this._waitParentAnimationTimeout);
+                        this._waitParentAnimationTimeout = setTimeout(() => check() || runCheck(), ANIMATION_TIMEOUT);
+                    };
+                    runCheck();
+                });
+            };
+
+            const _checkWebFontForLabelsLoaded = () => {
+                const $labels = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
+                const promises = [];
+                $labels.each((_, label) => {
+                    const text = $(label).text();
+                    const fontWeight = $(label).css('fontWeight');
+                    promises.push(waitWebFont(text, fontWeight));
+                });
+                return Promise.all(promises);
+            };
+
+            Promise.all([
+                _waitParentAnimationFinished(),
+                _checkWebFontForLabelsLoaded(),
+            ]).then(() => { this._dimensionChanged(); });
+        }
     }
 }
 
