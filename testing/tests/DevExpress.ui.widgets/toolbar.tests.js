@@ -189,8 +189,6 @@ QUnit.module('render', {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
-
         const element = this.$element.dxToolbar({
             items: [{
                 location: 'before',
@@ -211,8 +209,6 @@ QUnit.module('render', {
     QUnit.test('drop down buttons has text style in Material', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
-
-        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -1465,8 +1461,6 @@ QUnit.module('adaptivity', {
     QUnit.testInActiveWindow('items should not be rearranged if width is not changed', function(assert) {
         const $input = $('<input>').width(300);
 
-        ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
-
         const $element = $('#widget').dxToolbar({
             items: [
                 { location: 'before', template: function() { return $('<div>').width(300); } },
@@ -1840,15 +1834,27 @@ QUnit.module('Waiting fonts for material theme', {
 
 
     QUnit.test('Toolbar calls _dimensionChanged function in Material theme to recalculate labels (T736793)', function(assert) {
+        const estimatedData = [
+            { args: [ 'text1', '400' ], description: 'call for the first label' },
+            { args: [ 'text2', '400' ], description: 'call for the second label' },
+            { args: [ 'text3', '400' ], description: 'call for the third label' }
+        ];
+
+        let executionCount = 0;
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        const done = assert.async();
+        const done = assert.async(4);
 
-        ToolbarBase.prototype._checkWebFontForLabelsLoaded = () => Promise.resolve();
+        themes.waitWebFont = function(text, fontWeight) {
+            const data = estimatedData[executionCount];
+            assert.deepEqual([text, fontWeight], data.args, data.description);
+            executionCount++;
+            done();
+        };
 
         ToolbarBase.prototype._dimensionChanged = () => {
-            assert.expect(0);
+            assert.ok(true, 'dimensionChanged is called');
             done();
         };
 

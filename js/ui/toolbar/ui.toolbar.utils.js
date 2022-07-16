@@ -3,6 +3,7 @@ import $ from '../../core/renderer';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const TOOLBAR_ITEMS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
+
 const getItemInstance = function($element) {
     const itemData = $element.data && $element.data();
     const dxComponents = itemData && itemData.dxComponents;
@@ -30,13 +31,13 @@ export function toggleItemFocusableElementTabIndex(context, item) {
             const itemInstance = getItemInstance($widget);
             const $focusTarget = widget === 'dxDropDownButton'
                 ? itemInstance._focusTarget().find(`.${BUTTON_GROUP_CLASS}`)
-                : itemInstance?._focusTarget?.() || $(itemInstance.element());
+                : itemInstance?._focusTarget?.() ?? $(itemInstance.element());
 
             const tabIndex = itemData.options?.tabIndex;
             if(isItemNotFocusable) {
                 $focusTarget.attr('tabIndex', -1);
             } else {
-                $focusTarget.attr('tabIndex', tabIndex ? tabIndex : 0);
+                $focusTarget.attr('tabIndex', tabIndex ?? 0);
             }
         }
     }
