@@ -25,7 +25,7 @@ export function toggleItemFocusableElementTabIndex(context, item) {
     }
 
     const itemData = context._getItemData($item);
-    const isItemNotFocusable = !!(itemData.options?.disabled ?? itemData.disabled ?? context.option('disabled'));
+    const isItemNotFocusable = !!(itemData.options?.disabled || itemData.disabled || context.option('disabled'));
 
     const { widget } = itemData;
 
@@ -41,7 +41,7 @@ export function toggleItemFocusableElementTabIndex(context, item) {
             if(isItemNotFocusable) {
                 $focusTarget.attr('tabIndex', -1);
             } else {
-                $focusTarget.attr('tabIndex', tabIndex ? tabIndex : 0);
+                $focusTarget.attr('tabIndex', tabIndex ?? 0);
             }
         }
     }

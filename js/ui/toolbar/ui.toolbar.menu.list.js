@@ -87,7 +87,7 @@ class ToolbarMenuList extends ListBase {
         const data = args.itemData;
         const menuTemplate = data && data['menuItemTemplate'];
 
-        return menuTemplate ?? template;
+        return menuTemplate || template;
     }
 
     _dataSourceOptions() {
