@@ -39,15 +39,17 @@ class ToolbarBase extends AsyncCollectionWidget {
         super._initTemplates();
         const template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
-                if(data.text) {
-                    $container.text(data.text).wrapInner('<div>');
+                const { text, html, widget } = data;
+
+                if(text) {
+                    $container.text(text).wrapInner('<div>');
                 }
 
-                if(data.html) {
-                    $container.html(data.html);
+                if(html) {
+                    $container.html(html);
                 }
 
-                if(data.widget === 'dxDropDownButton') {
+                if(widget === 'dxDropDownButton') {
                     data.options = data.options ?? {};
 
                     if(!isDefined(data.options.stylingMode)) {
@@ -57,7 +59,7 @@ class ToolbarBase extends AsyncCollectionWidget {
                     }
                 }
 
-                if(data.widget === 'dxButton') {
+                if(widget === 'dxButton') {
                     if(this.option('useFlatButtons')) {
                         data.options = data.options ?? {};
                         data.options.stylingMode = data.options.stylingMode ?? TEXT_BUTTON_MODE;
