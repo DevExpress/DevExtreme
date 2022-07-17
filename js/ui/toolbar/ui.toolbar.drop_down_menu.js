@@ -68,7 +68,7 @@ class ToolbarDropDownMenu {
     }
 
     _updateMenuVisibility(menuItems) {
-        const items = menuItems || this._getMenuItems();
+        const items = menuItems ?? this._getMenuItems();
         const isMenuVisible = items.length && this._hasVisibleMenuItems(items);
         this._toggleMenuVisibility(isMenuVisible);
     }
@@ -78,7 +78,7 @@ class ToolbarDropDownMenu {
     }
 
     _hasVisibleMenuItems(items) {
-        const menuItems = items || this._toolbar.option('items');
+        const menuItems = items ?? this._toolbar.option('items');
         let result = false;
 
         const optionGetter = compileGetter('visible');
