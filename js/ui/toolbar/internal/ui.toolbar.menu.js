@@ -1,16 +1,17 @@
-import { getOuterHeight } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import devices from '../../core/devices';
-import registerComponent from '../../core/component_registrator';
-import { extend } from '../../core/utils/extend';
-import Widget from '../widget/ui.widget';
-import Button from '../button';
-import Popup from '../popup';
+import { getOuterHeight } from '../../../core/utils/size';
+import $ from '../../../core/renderer';
+import devices from '../../../core/devices';
+import registerComponent from '../../../core/component_registrator';
+import { extend } from '../../../core/utils/extend';
+import Widget from '../../widget/ui.widget';
+import Button from '../../button';
 import ToolbarMenuList from './ui.toolbar.menu.list';
-import { isMaterial } from '../themes';
-import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
-import { toggleItemFocusableElementTabIndex } from './ui.toolbar.utils';
-import { getWindow } from '../../core/utils/window';
+import { isMaterial } from '../../themes';
+import { ChildDefaultTemplate } from '../../../core/templates/child_default_template';
+import { toggleItemFocusableElementTabIndex } from '../ui.toolbar.utils';
+import { getWindow } from '../../../core/utils/window';
+
+import '../../popup';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
@@ -184,7 +185,7 @@ class DropDownMenu extends Widget {
         this._$popup = $('<div>').appendTo(this.$element());
         const { opened, rtlEnabled, container, animation } = this.option();
 
-        this._popup = this._createComponent(this._$popup, Popup, {
+        this._popup = this._createComponent(this._$popup, 'dxPopup', {
             onInitialized({ component }) {
                 component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)

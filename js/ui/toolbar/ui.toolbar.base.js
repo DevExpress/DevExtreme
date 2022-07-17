@@ -22,7 +22,6 @@ const TOOLBAR_BUTTON_CLASS = 'dx-toolbar-button';
 const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
 const TOOLBAR_GROUP_CLASS = 'dx-toolbar-group';
 const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';
-const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
 
 const DEFAULT_BUTTON_TYPE = 'default';
@@ -94,7 +93,6 @@ class ToolbarBase extends AsyncCollectionWidget {
             grouped: false,
             useFlatButtons: false,
             useDefaultButtons: false,
-            multiline: false
         });
     }
 
@@ -127,10 +125,6 @@ class ToolbarBase extends AsyncCollectionWidget {
         return TOOLBAR_ITEM_DATA_KEY;
     }
 
-    _buttonClass() {
-        return TOOLBAR_BUTTON_CLASS;
-    }
-
     _dimensionChanged() {
         this._arrangeItems();
         this._applyCompactMode();
@@ -141,8 +135,6 @@ class ToolbarBase extends AsyncCollectionWidget {
         this._renderSections();
 
         super._initMarkup();
-
-        this.setAria('role', 'toolbar');
     }
 
     _render() {
@@ -158,12 +150,13 @@ class ToolbarBase extends AsyncCollectionWidget {
 
     _renderToolbar() {
         this.$element()
-            .addClass(TOOLBAR_CLASS)
-            .toggleClass(TOOLBAR_MULTILINE_CLASS, this.option('multiline'));
+            .addClass(TOOLBAR_CLASS);
 
         this._$toolbarItemsContainer = $('<div>')
             .addClass(TOOLBAR_ITEMS_CONTAINER_CLASS)
             .appendTo(this.$element());
+
+        this.setAria('role', 'toolbar');
     }
 
     _renderSections() {
@@ -181,8 +174,8 @@ class ToolbarBase extends AsyncCollectionWidget {
         });
     }
 
-    _arrangeItems(elementWidth) {
-        elementWidth = elementWidth ?? getWidth(this.$element());
+    _arrangeItems() {
+        const elementWidth = getWidth(this.$element());
 
         this._$centerSection.css({
             margin: '0 auto',
@@ -318,7 +311,7 @@ class ToolbarBase extends AsyncCollectionWidget {
         const itemElement = super._renderItem(index, item, container, $after);
 
         itemElement
-            .toggleClass(this._buttonClass(), !itemHasText)
+            .toggleClass(TOOLBAR_BUTTON_CLASS, !itemHasText)
             .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText)
             .addClass(item.cssClass);
 
@@ -331,7 +324,7 @@ class ToolbarBase extends AsyncCollectionWidget {
             const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
             const location = group.location ?? 'center';
 
-            if(!groupItems ?? !groupItems.length) {
+            if(!groupItems || !groupItems.length) {
                 return;
             }
 
@@ -339,7 +332,7 @@ class ToolbarBase extends AsyncCollectionWidget {
                 this._renderItem(itemIndex, item, $container, null);
             });
 
-            this._$toolbarItemsContainer.find('.dx-toolbar-' + location).append($container);
+            this._$toolbarItemsContainer.find(`.dx-toolbar-${location}`).append($container);
         });
     }
 
@@ -371,6 +364,10 @@ class ToolbarBase extends AsyncCollectionWidget {
     _clean() {
         this._$toolbarItemsContainer.children().empty();
         this.$element().empty();
+
+        delete this._$beforeSection;
+        delete this._$centerSection;
+        delete this._$afterSection;
     }
 
     _visibilityChanged(visible) {
@@ -397,9 +394,6 @@ class ToolbarBase extends AsyncCollectionWidget {
             case 'width':
                 super._optionChanged.apply(this, arguments);
                 this._dimensionChanged();
-                break;
-            case 'multiline':
-                this.$element().toggleClass(TOOLBAR_MULTILINE_CLASS, value);
                 break;
             case 'renderAs':
             case 'useFlatButtons':

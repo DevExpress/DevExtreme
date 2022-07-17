@@ -1,7 +1,7 @@
-import $ from '../../core/renderer';
-import registerComponent from '../../core/component_registrator';
-import { each } from '../../core/utils/iterator';
-import { ListBase } from '../list/ui.list.base';
+import $ from '../../../core/renderer';
+import registerComponent from '../../../core/component_registrator';
+import { each } from '../../../core/utils/iterator';
+import { ListBase } from '../../list/ui.list.base';
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
