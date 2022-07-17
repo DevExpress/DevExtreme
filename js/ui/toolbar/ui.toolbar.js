@@ -8,7 +8,7 @@ import { SingleLineStrategy } from './strategy/toolbar.singleline';
 // STYLE toolbar
 
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
-
+const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
 
 class Toolbar extends ToolbarBase {
 
@@ -147,6 +147,12 @@ class Toolbar extends ToolbarBase {
         const itemElement = super._renderItem(index, item, itemContainer, $after);
 
         this._layoutStrategy._renderItem(item, itemElement);
+
+        const { widget, showText } = item;
+
+        if(widget === 'dxButton' && showText === 'inMenu') {
+            itemElement.toggleClass(TOOLBAR_AUTO_HIDE_TEXT_CLASS);
+        }
 
         return itemElement;
     }

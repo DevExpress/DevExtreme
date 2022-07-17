@@ -13,7 +13,6 @@ const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 const TOOLBAR_BUTTON_CLASS = 'dx-toolbar-button';
 
 const TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide';
-const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
 const TOOLBAR_HIDDEN_ITEM = 'dx-toolbar-item-invisible';
 
 export class SingleLineStrategy {
@@ -215,14 +214,8 @@ export class SingleLineStrategy {
     }
 
     _renderItem(item, itemElement) {
-        const { widget, locateInMenu, showText } = item;
-
-        if(locateInMenu === 'auto') {
+        if(item.locateInMenu === 'auto') {
             itemElement.addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
-        }
-
-        if(widget === 'dxButton' && showText === 'inMenu') {
-            itemElement.toggleClass(TOOLBAR_AUTO_HIDE_TEXT_CLASS);
         }
     }
 
