@@ -1,7 +1,6 @@
 import { getOuterHeight } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import devices from '../../../core/devices';
-import registerComponent from '../../../core/component_registrator';
 import { extend } from '../../../core/utils/extend';
 import Widget from '../../widget/ui.widget';
 import Button from '../../button';
@@ -21,7 +20,7 @@ const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const POPUP_BOUNDARY_VERTICAL_OFFSET = 10;
 const POPUP_VERTICAL_OFFSET = 3;
 
-class DropDownMenu extends Widget {
+export default class DropDownMenu extends Widget {
     _supportedKeys() {
         let extension = {};
 
@@ -345,16 +344,4 @@ class DropDownMenu extends Widget {
     _updateFocusableItemsTabIndex() {
         this.option('items').forEach(item => toggleItemFocusableElementTabIndex(this._list, item));
     }
-
-    open() {
-        this.option('opened', true);
-    }
-
-    close() {
-        this.option('opened', false);
-    }
 }
-
-registerComponent('dxDropDownMenu', DropDownMenu);
-
-export default DropDownMenu;

@@ -1,5 +1,4 @@
 import $ from '../../../core/renderer';
-import registerComponent from '../../../core/component_registrator';
 import { each } from '../../../core/utils/iterator';
 import { ListBase } from '../../list/ui.list.base';
 
@@ -10,7 +9,7 @@ const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const TOOLBAR_MENU_CUSTOM_CLASS = 'dx-toolbar-menu-custom';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
-class ToolbarMenuList extends ListBase {
+export default class ToolbarMenuList extends ListBase {
     _init() {
         super._init();
         this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}`;
@@ -111,7 +110,3 @@ class ToolbarMenuList extends ListBase {
         super._clean();
     }
 }
-
-registerComponent('dxToolbarMenuList', ToolbarMenuList);
-
-export default ToolbarMenuList;

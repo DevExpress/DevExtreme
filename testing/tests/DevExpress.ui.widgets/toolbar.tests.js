@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Toolbar from 'ui/toolbar';
+
 import ToolbarBase from 'ui/toolbar/ui.toolbar.base';
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -13,6 +13,7 @@ import 'ui/text_box';
 import 'generic_light.css!';
 import 'ui/drop_down_button';
 import 'ui/tabs';
+import 'ui/toolbar';
 
 $('#qunit-fixture').html('<style>\
         #toolbarWithMenu .dx-toolbar-menu-container {\
@@ -29,7 +30,6 @@ $('#qunit-fixture').html('<style>\
     <div id="widget"></div>\
     <div id="widthRootStyle" style="width: 300px;"></div>');
 
-const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 const TOOLBAR_ITEM_INVISIBLE_CLASS = 'dx-toolbar-item-invisible';
 const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
@@ -48,6 +48,33 @@ const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
 
 const BASE_TEXTEDITOR_WIDTH = '150px';
 
+const moduleConfig = {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.$element = $('#toolbar');
+        this.instance = this.$element.dxToolbar().dxToolbar('instance');
+
+        this.overflowMenu = {
+            $element: () => {
+                return this.$element.find(`.${DROP_DOWN_MENU_CLASS}`);
+            },
+            click() {
+                this.$element().trigger('dxclick');
+            },
+            instance: () => {
+                return this.instance._layoutStrategy._menu;
+            }
+        };
+
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+};
+
 QUnit.module('render', {
     beforeEach: function() {
         this.$element = $('#toolbar');
@@ -60,7 +87,7 @@ QUnit.module('render', {
             ]
         });
 
-        const labelElement = this.$element.find('.' + TOOLBAR_ITEM_CLASS)[0];
+        const labelElement = this.$element.find(`.${TOOLBAR_ITEM_CLASS}`)[0];
         const labelMaxWidth = parseInt(labelElement.style.maxWidth);
 
         labelElement.style.maxWidth = '';
@@ -80,14 +107,14 @@ QUnit.module('render', {
             width: '500px'
         });
 
-        const $label = this.$element.find('.' + TOOLBAR_LABEL_CLASS);
+        const $label = this.$element.find(`.${TOOLBAR_LABEL_CLASS}`);
 
         assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
         assert.equal($label.children().eq(0).css('overflow'), 'hidden');
 
-        const $centerSection = this.$element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS);
-        const beforeSectionWidth = this.$element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width;
-        const afterSectionWidth = this.$element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+        const $centerSection = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`);
+        const beforeSectionWidth = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`)[0].getBoundingClientRect().width;
+        const afterSectionWidth = this.$element.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`)[0].getBoundingClientRect().width;
 
         assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
         assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
@@ -108,14 +135,14 @@ QUnit.module('render', {
             width: 500
         });
 
-        const $label = this.$element.find('.' + TOOLBAR_LABEL_CLASS);
+        const $label = this.$element.find(`.${TOOLBAR_LABEL_CLASS}`);
 
         assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
         assert.equal($label.children().eq(0).css('overflow'), 'hidden');
 
-        const $centerSection = this.$element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS);
-        const beforeSectionWidth = this.$element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width;
-        const afterSectionWidth = this.$element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+        const $centerSection = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`);
+        const beforeSectionWidth = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`)[0].getBoundingClientRect().width;
+        const afterSectionWidth = this.$element.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`)[0].getBoundingClientRect().width;
 
         assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
         assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
@@ -133,7 +160,7 @@ QUnit.module('render', {
                 { location: 'center', text: 'center' }
             ]
         });
-        const margin = element.find('.' + TOOLBAR_CLASS + '-center').get(0).style.margin;
+        const margin = element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).get(0).style.margin;
 
         assert.equal(margin, '0px auto', 'aligned by center');
     });
@@ -187,7 +214,7 @@ QUnit.module('render', {
 
     QUnit.test('buttons has text style in Material', function(assert) {
         const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = () => true;
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -208,7 +235,7 @@ QUnit.module('render', {
 
     QUnit.test('drop down buttons has text style in Material', function(assert) {
         const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = () => true;
 
         const element = this.$element.dxToolbar({
             items: [{
@@ -423,29 +450,7 @@ QUnit.module('render', {
     });
 });
 
-QUnit.module('toolbar with menu', {
-    beforeEach: function() {
-        this.$element = $('#toolbar');
-        this.instance = this.$element.dxToolbar().dxToolbar('instance');
-
-        this.overflowMenu = {
-            $element: () => {
-                return this.$element.find(`.${DROP_DOWN_MENU_CLASS}`);
-            },
-            click() {
-                this.$element().trigger('dxclick');
-            },
-            instance() {
-                return this.$element().dxDropDownMenu('instance');
-            }
-        };
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-}, () => {
+QUnit.module('toolbar with menu', moduleConfig, () => {
     QUnit.test('dropDownMenu not exist, set toolbar.overflowMenuVisible = true, does not fire any errors', function(assert) {
         this.instance.option('items', [
             { locateInMenu: 'never', text: 'item2' }
@@ -651,7 +656,7 @@ QUnit.module('widget sizing render', () => {
             width: 359
         });
 
-        const $center = $element.find('.dx-toolbar-center').eq(0);
+        const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
         const $label = $center.children('.dx-toolbar-label').eq(0);
         const $after = $element.find('.dx-toolbar-after').eq(0);
 
@@ -668,14 +673,14 @@ QUnit.module('widget sizing render', () => {
                 }
             },
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
                 { location: 'center', text: title },
-                { location: 'after', template: function() { return $('<div>').width(50); } }
+                { location: 'after', template: () => $('<div>').width(50) }
             ],
             width: 400
         });
 
-        const $center = $element.find('.dx-toolbar-center').eq(0);
+        const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
         assert.equal(parseInt($center.css('margin-left')), 115);
         assert.equal(parseInt($center.css('margin-right')), 65);
         assert.equal($center.css('float'), 'none');
@@ -692,14 +697,14 @@ QUnit.module('widget sizing render', () => {
                 }
             },
             items: [
-                { location: 'before', template: function() { return $('<div>').width(50); } },
+                { location: 'before', template: () => $('<div>').width(50) },
                 { location: 'center', text: title },
-                { location: 'after', template: function() { return $('<div>').width(100); } }
+                { location: 'after', template: () => $('<div>').width(100) }
             ],
             width: 400
         });
 
-        const $center = $element.find('.dx-toolbar-center').eq(0);
+        const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
         assert.equal(parseInt($center.css('margin-left')), 65);
         assert.equal(parseInt($center.css('margin-right')), 115);
         assert.equal($center.css('float'), 'right');
@@ -711,14 +716,14 @@ QUnit.module('widget sizing render', () => {
 
         const $element = $('#widget').dxToolbar({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(50); }, visible: false },
+                { location: 'before', template: () => $('<div>').width(50), visible: false },
                 { location: 'center', text: title }
             ],
             width: 400
         });
         $element.dxToolbar('option', 'items[0].visible', true);
 
-        const $center = $element.find('.dx-toolbar-center').eq(0);
+        const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
         assert.equal(parseInt($center.css('margin-left')), 65);
     });
 
@@ -747,7 +752,7 @@ QUnit.module('widget sizing render', () => {
             width: 400
         });
 
-        const $center = $element.find('.dx-toolbar-center').eq(0);
+        const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
         assert.equal(parseInt($center.css('margin-left')), 115);
         assert.equal(parseInt($center.css('margin-right')), 65);
         assert.equal($center.css('float'), 'none');
@@ -791,45 +796,36 @@ QUnit.module('widget sizing render', () => {
     });
 });
 
-QUnit.module('adaptivity', {
-    beforeEach: function() {
-        fx.off = true;
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        fx.off = false;
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('adaptivity', moduleConfig, () => {
     QUnit.test('center section should be at correct position for huge after section', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(50); } },
-                { location: 'center', template: function() { return $('<div>').width(50); } },
-                { location: 'after', template: function() { return $('<div>').width(200); } },
+                { location: 'before', template: () => $('<div>').width(50) },
+                { location: 'center', template: () => $('<div>').width(50) },
+                { location: 'after', template: () => $('<div>').width(200) },
             ],
             width: 400
         });
-        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
-        const $after = $element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
+        const $center = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
+        const $after = this.$element.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`).eq(0);
 
         assert.equal($center.offset().left + $center.outerWidth(), $after.offset().left, 'center has correct position');
     });
 
     QUnit.test('items in center section should be at correct position after resize', function(assert) {
         const $item = $('<div>').width(50);
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(50); } },
-                { location: 'center', template: function() { return $item; } },
-                { location: 'after', template: function() { return $('<div>').width(200); } },
+                { location: 'before', template: () => $('<div>').width(50) },
+                { location: 'center', template: () => $item },
+                { location: 'after', template: () => $('<div>').width(200) },
             ],
             width: 400
         });
 
-        $element.dxToolbar('option', 'width', 1000);
+        this.$element.dxToolbar('option', 'width', 1000);
 
-        const elementCenter = $element.offset().left + $element.outerWidth() * 0.5;
+        const elementCenter = this.$element.offset().left + this.$element.outerWidth() * 0.5;
         const itemCenter = $item.offset().left + $item.outerWidth() * 0.5;
 
         assert.equal(itemCenter, elementCenter, 'item has correct position');
@@ -847,7 +843,7 @@ QUnit.module('adaptivity', {
                 { location: 'after', widget: 'dxButton', locateInMenu: 'auto', options: { text: 'button 1', width: 100 } },
             ],
         });
-        const getVisibleItemsCount = () => $toolbar.find('.' + TOOLBAR_ITEM_CLASS + ':visible').length;
+        const getVisibleItemsCount = () => $toolbar.find(`.${TOOLBAR_ITEM_CLASS}:visible`).length;
         assert.equal(getVisibleItemsCount(), 3, 'all items are visible');
 
         $container.width(100);
@@ -860,33 +856,32 @@ QUnit.module('adaptivity', {
     });
 
     QUnit.test('center section should be at correct position for huge before section', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(200); } },
-                { location: 'center', template: function() { return $('<div>').width(50); } },
-                { location: 'after', template: function() { return $('<div>').width(50); } },
+                { location: 'before', template: () => $('<div>').width(200) },
+                { location: 'center', template: () => $('<div>').width(50) },
+                { location: 'after', template: () => $('<div>').width(50) },
             ],
             width: 400
         });
-        const $before = $element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0);
-        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
-
+        const $before = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`).eq(0);
+        const $center = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
 
         assert.equal($center.offset().left, $before.offset().left + $before.outerWidth(), 'center has correct position');
     });
 
     QUnit.test('center section should be at correct position for huge after section after change size', function(assert) {
         const $item = $('<div>').width(200);
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(50); } },
-                { location: 'center', template: function() { return $('<div>').width(50); } },
-                { location: 'after', template: function() { return $item; } },
+                { location: 'before', template: () => $('<div>').width(50) },
+                { location: 'center', template: () => $('<div>').width(50) },
+                { location: 'after', template: () => $item },
             ],
             width: 400
         });
-        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
-        const $after = $element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
+        const $center = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
+        const $after = this.$element.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`).eq(0);
 
         $item.width(190);
         resizeCallbacks.fire();
@@ -896,16 +891,17 @@ QUnit.module('adaptivity', {
 
     QUnit.test('center section should be at correct position for huge before section after change size', function(assert) {
         const $item = $('<div>').width(200);
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $item; } },
-                { location: 'center', template: function() { return $('<div>').width(50); } },
-                { location: 'after', template: function() { return $('<div>').width(50); } },
+                { location: 'before', template: () => $item },
+                { location: 'center', template: () => $('<div>').width(50) },
+                { location: 'after', template: () => $('<div>').width(50) },
             ],
             width: 400
         });
-        const $before = $element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0);
-        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
+
+        const $before = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`).eq(0);
+        const $center = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
 
         $item.width(190);
         resizeCallbacks.fire();
@@ -914,279 +910,262 @@ QUnit.module('adaptivity', {
     });
 
     QUnit.test('overflow items should be hidden if there is no free space for them', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
-        const $visibleItems = $element.find('.' + TOOLBAR_ITEM_CLASS + ':visible');
+        const $visibleItems = this.$element.find(`.${TOOLBAR_ITEM_CLASS}:visible`);
         assert.equal($visibleItems.length, 3, 'two items was hidden');
     });
 
     QUnit.test('overflow items should be shown if there is free space for them after resize', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(50); } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(60); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(50) },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(60) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
-        $element.dxToolbar('option', 'width', 1000);
-        const $visibleItems = $element.find('.' + TOOLBAR_ITEM_CLASS + ':visible');
+        this.instance.option('width', 1000);
+        const $visibleItems = this.$element.find(`.${TOOLBAR_ITEM_CLASS}:visible`);
         assert.equal($visibleItems.length, 5, 'all items is visible');
     });
 
     QUnit.test('dropdown menu should be rendered if there is hidden overflow items', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        assert.equal($dropDownMenu.length, 1);
+        assert.equal(this.overflowMenu.$element().length, 1);
     });
 
     QUnit.test('dropdown menu button should be invisible if there is hidden invisible overflow items', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'after', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { locateInMenu: 'always', visible: false, template: function() { return $('<div>').width(100); } }
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'after', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { locateInMenu: 'always', visible: false, template: () => $('<div>').width(100) }
             ]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-
-        assert.equal($dropDownMenu.length, 1, 'button is rendered');
-        assert.notOk($dropDownMenu.is(':visible'), 'button is invisible');
+        assert.equal(this.overflowMenu.$element().length, 1, 'button is rendered');
+        assert.notOk(this.overflowMenu.$element().is(':visible'), 'button is invisible');
     });
 
     QUnit.test('all overflow items should be hidden on render', function(assert) {
-        const $element = $('#toolbarWithMenu').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(50); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(50); } }
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(50) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(50) }
             ],
             width: 190
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        assert.equal($dropDownMenu.dxDropDownMenu('option', 'items').length, 2);
+        assert.equal(this.overflowMenu.instance().option('items').length, 2);
     });
 
     QUnit.test('overflow items should not be rendered twice after resize', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(50); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(50); } }
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(50) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(50) }
             ],
             width: 400
         });
 
-        $element.dxToolbar('option', 'width', 230);
+        this.instance.option('width', 230);
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        $dropDownMenu.dxDropDownMenu('open');
-        $dropDownMenu.dxDropDownMenu('close');
-        $element.dxToolbar('option', 'width', 228);
+        this.overflowMenu.click();
+        this.overflowMenu.click();
 
-        assert.equal($dropDownMenu.dxDropDownMenu('option', 'items').length, 1);
+        this.instance.option('width', 228);
+
+        assert.equal(this.overflowMenu.instance().option('items').length, 1);
     });
 
     QUnit.test('dropdown menu should be rendered if there is hidden overflow items after resize', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 1000
         });
 
-        $element.dxToolbar('option', 'width', 400);
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        assert.equal($dropDownMenu.length, 1);
+        this.instance.option('width', 400);
+
+        assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
     QUnit.test('dropdown menu shouldn\'t be closed during resize with open menu if menu has items', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
-        const dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS).dxDropDownMenu('instance');
+        this.overflowMenu.click();
 
-        dropDown.open();
-
-        $element.dxToolbar('option', 'width', 500);
-        assert.equal(dropDown.option('opened'), true);
+        assert.strictEqual(this.overflowMenu.instance().option('opened'), true);
     });
 
     QUnit.test('dropdown menu should be closed if after resize with open menu all items become visible', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
-        const dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS).dxDropDownMenu('instance');
+        this.overflowMenu.click();
 
-        dropDown.open();
+        this.instance.option('width', 1000);
 
-        $element.dxToolbar('option', 'width', 1000);
-        assert.equal(dropDown.option('opened'), false);
+        assert.strictEqual(this.overflowMenu.instance().option('opened'), false);
     });
 
     QUnit.test('dropdown menu strategy should be used if there is overflow widget', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 { location: 'center', locateInMenu: 'auto', widget: 'dxButton', options: {} }
             ],
             width: 100
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        assert.equal($dropDownMenu.length, 1);
+        assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
     QUnit.test('dropdown menu strategy should be used if there is overflow widget, items: [{ locateInMenu: "auto", widget: "dxButton", showText: "inMenu" }]', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 { locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test' }, showText: 'inMenu' }
             ]
         });
 
-        const $buttonText = $element.find('.dx-button-text');
+        const $buttonText = this.$element.find('.dx-button-text');
 
-        assert.equal($buttonText.length, 1);
+        assert.strictEqual($buttonText.length, 1);
         assert.ok($buttonText.is(':hidden'));
     });
 
     QUnit.test('dropdown menu strategy should be used if there is overflow widget, items: [{ location: "center", locateInMenu: "auto" }]', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 { location: 'center', locateInMenu: 'auto', text: 'test' }
             ],
             width: 100
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        assert.equal($dropDownMenu.length, 1);
+        assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
     QUnit.test('visibility of dropdown menu should be changed if overflow items was hidden/shown after resize', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
 
-        $element.dxToolbar('option', 'width', 1000);
-        assert.ok($dropDownMenu.is(':hidden'), 'menu is hidden');
+        this.instance.option('width', 1000);
+        assert.ok(this.overflowMenu.$element().is(':hidden'), 'menu is hidden');
 
-        $element.dxToolbar('option', 'width', 400);
-        assert.ok($dropDownMenu.is(':visible'), 'menu is visible');
+        this.instance.option('width', 400);
+        assert.ok(this.overflowMenu.$element().is(':visible'), 'menu is visible');
     });
 
     QUnit.test('hidden overflow items should be rendered in menu', function(assert) {
         const $item = $('<div>').width(100);
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $item; } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $item },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
-
-        dropDown.option('onItemRendered', function(args) {
+        this.overflowMenu.instance().option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), 'item was rendered in menu');
         });
 
-        dropDown.open();
+        this.overflowMenu.click();
     });
 
     QUnit.test('items with locateInMenu == \'always\' should be rendered in menu if there is free space for them', function(assert) {
         const $item = $('<div>').width(100);
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'center', locateInMenu: 'always', template: function() { return $item; } }
+                { location: 'center', locateInMenu: 'always', template: () => $item }
             ],
             width: 1000
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
-
-        dropDown.option('onItemRendered', function(args) {
+        this.overflowMenu.instance().option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), 'item was rendered in menu');
         });
 
-        dropDown.open();
+        this.overflowMenu.click();
     });
 
     QUnit.test('visible overflow items should be moved back into widget after resize', function(assert) {
         const $item = $('<div>').width(100);
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(100); } },
-                { location: 'center', template: function() { return $('<div>').width(150); } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $item; } },
-                { location: 'center', template: function() { return $('<div>').width(100); } },
-                { location: 'after', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
+                { location: 'center', template: () => $('<div>').width(150) },
+                { location: 'center', locateInMenu: 'auto', template: () => $item },
+                { location: 'center', template: () => $('<div>').width(100) },
+                { location: 'after', template: () => $('<div>').width(100) },
             ],
             width: 400
         });
 
         const $itemParent = $item.parent();
-        const dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS).dxDropDownMenu('instance');
 
-        dropDown.open();
-        dropDown.close();
-        $element.dxToolbar('option', 'width', 1000);
+        this.overflowMenu.click();
+        this.overflowMenu.click();
+
+        this.instance.option('width', 1000);
         assert.ok($item.parent().is($itemParent), 'item was rendered in toolbar');
     });
 
@@ -1195,22 +1174,19 @@ QUnit.module('adaptivity', {
         const $centerItem = $('<div>').width(150);
         const $afterItem = $('<div>').width(150);
 
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', locateInMenu: 'auto', template: function() { return $beforeItem; } },
-                { location: 'center', locateInMenu: 'auto', template: function() { return $centerItem; } },
-                { location: 'after', locateInMenu: 'auto', template: function() { return $afterItem; } },
+                { location: 'before', locateInMenu: 'auto', template: () => $beforeItem },
+                { location: 'center', locateInMenu: 'auto', template: () => $centerItem },
+                { location: 'after', locateInMenu: 'auto', template: () => $afterItem },
             ],
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDown.dxDropDownMenu('instance');
+        this.overflowMenu.click();
+        this.overflowMenu.click();
 
-        dropDown.open();
-        dropDown.close();
-
-        const $sections = $dropDown.find('.dx-toolbar-menu-section');
+        const $sections = this.overflowMenu.$element().find('.dx-toolbar-menu-section');
 
         assert.equal($sections.length, 4, 'four sections was rendered');
         assert.ok($.contains($sections.eq(0).get(0), $beforeItem.get(0)));
@@ -1223,96 +1199,90 @@ QUnit.module('adaptivity', {
     QUnit.test('dropdown menu shouldn\'t be closed after click on editors', function(assert) {
         const $beforeItem = $('<div>').width(150);
 
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', locateInMenu: 'auto', template: function() { return $beforeItem; } },
+                { location: 'before', locateInMenu: 'auto', template: () => $beforeItem },
             ],
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDown.dxDropDownMenu('instance');
-        dropDown.open();
+        this.overflowMenu.click();
 
         $($beforeItem).trigger('dxclick');
 
-        assert.ok(dropDown.option('opened'), 'dropdown isn\'t closed');
+        assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown isn\'t closed');
     });
 
     QUnit.test('dropdown menu should be closed after click on button or menu items', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 { location: 'before', locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test text' } },
-                { location: 'before', template: function() { return $('<div>').width(100); } },
+                { location: 'before', template: () => $('<div>').width(100) },
                 { locateInMenu: 'auto', text: 'test text' }
             ],
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDown.dxDropDownMenu('instance');
+        this.overflowMenu.click();
+        this.overflowMenu.click();
 
-        dropDown.open();
-        dropDown.close();
+        const $items = this.overflowMenu.$element().find('.dx-list-item');
 
-        const $items = $element.find('.dx-list-item');
-
-        dropDown.open();
+        this.overflowMenu.click();
         $($items.eq(0)).trigger('dxclick');
-        assert.ok(!dropDown.option('opened'), 'dropdown is closed');
+        assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
 
-        dropDown.open();
+        this.overflowMenu.click();
         $($items.eq(1)).trigger('dxclick');
-        assert.ok(!dropDown.option('opened'), 'dropdown is closed');
+        assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
     });
 
     QUnit.test('overflow button should be rendered as list item in dropdown', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 { location: 'before', locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test text' } },
-                { location: 'before', template: function() { return $('<div>').width(100); } }
+                { location: 'before', template: () => $('<div>').width(100) }
             ],
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDown.dxDropDownMenu('instance');
 
-        dropDown.open();
-        dropDown.close();
+        this.overflowMenu.click();
+        this.overflowMenu.click();
 
-        const $section = $dropDown.find('.dx-toolbar-menu-section').eq(0);
+        const $section = this.overflowMenu.$element().find('.dx-toolbar-menu-section').eq(0);
 
-        assert.equal($section.find('.dx-toolbar-menu-action').length, 1, 'click on button should close menu');
-        assert.equal($section.find('.dx-toolbar-hidden-button').length, 1, 'button has specific class for override styles');
-        assert.equal($section.find('.dx-list-item').text(), 'test text', 'button text was rendered');
+        assert.strictEqual($section.find('.dx-toolbar-menu-action').length, 1, 'click on button should close menu');
+        assert.strictEqual($section.find('.dx-toolbar-hidden-button').length, 1, 'button has specific class for override styles');
+        assert.strictEqual($section.find('.dx-list-item').text(), 'test text', 'button text was rendered');
     });
 
     QUnit.test('buttonGroup.locateInMenu: auto -> toolbar.setWidth(100) -> toolbar.openMenu', function(assert) {
-        const toolbar = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { locateInMenu: 'never', template: function() { return $('<div>').width(100); } },
+                { locateInMenu: 'never', template: () => $('<div>').width(100) },
                 { locateInMenu: 'auto', widget: 'dxButtonGroup', options: { width: 100, items: [ { text: 'text1' } ] } }
             ]
-        }).dxToolbar('instance');
+        });
 
-        const getButtonGroupToolbarItem = () => toolbar.$element().find(`.${BUTTON_GROUP_CLASS}`).closest(`.${TOOLBAR_ITEM_CLASS}`);
+        const getButtonGroupToolbarItem = () => this.$element.find(`.${BUTTON_GROUP_CLASS}`).closest(`.${TOOLBAR_ITEM_CLASS}`);
 
         let $buttonGroupToolbarItem = getButtonGroupToolbarItem();
-        assert.equal($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), false, 'buttonGroup is visible in toolbar');
+        assert.strictEqual($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), false, 'buttonGroup is visible in toolbar');
 
-        toolbar.option('width', 100);
+        this.instance.option('width', 100);
+
         $buttonGroupToolbarItem = getButtonGroupToolbarItem();
-        assert.equal($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), true, 'buttonGroup is hidden in toolbar');
+        assert.strictEqual($buttonGroupToolbarItem.hasClass(TOOLBAR_ITEM_INVISIBLE_CLASS), true, 'buttonGroup is hidden in toolbar');
 
         const done = assert.async();
-        const $dropDown = toolbar.$element().find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDown.dxDropDownMenu('instance');
-        dropDown.option('onItemRendered', function(args) {
-            assert.equal($(args.itemElement).find(`.${BUTTON_GROUP_CLASS}`).length, 1, 'button group was rendered in menu');
+
+        this.overflowMenu.instance().option('onItemRendered', function(args) {
+            assert.strictEqual($(args.itemElement).find(`.${BUTTON_GROUP_CLASS}`).length, 1, 'button group was rendered in menu');
             done();
         });
-        dropDown.open();
+
+        this.overflowMenu.click();
     });
 
     QUnit.test('overflow item should rendered with correct template in menu and in toolbar', function(assert) {
@@ -1321,12 +1291,12 @@ QUnit.module('adaptivity', {
         const $toolbarTemplate = $('<div>').width(500);
         const $menuTemplate = $('<div>');
 
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 {
                     locateInMenu: 'auto',
-                    template: function() { return $toolbarTemplate; },
-                    menuItemTemplate: function() { return $menuTemplate; }
+                    template: () => $toolbarTemplate,
+                    menuItemTemplate: () => $menuTemplate
                 }
             ],
             width: 1000
@@ -1335,21 +1305,18 @@ QUnit.module('adaptivity', {
         assert.ok($toolbarTemplate.is(':visible'), 'toolbar template was rendered');
         assert.ok($menuTemplate.is(':hidden'), 'menu template won\'t rendered');
 
-        $element.dxToolbar('option', 'width', 400);
+        this.instance.option('width', 400);
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
-
-        dropDown.option('onItemRendered', function(args) {
+        this.overflowMenu.instance().option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $menuTemplate.get(0)), 'item was rendered in menu');
             assert.ok($toolbarTemplate.is(':hidden'), 'toolbar template was hidden');
         });
 
-        dropDown.open();
+        this.overflowMenu.click();
     });
 
     QUnit.test('toolbar menu should have correct focused element', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 {
                     location: 'before',
@@ -1365,16 +1332,12 @@ QUnit.module('adaptivity', {
         });
 
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
-
-        if(!dropDown.option('focusStateEnabled')) {
+        if(!this.overflowMenu.instance().option('focusStateEnabled')) {
             assert.expect(0);
             return;
         }
 
-
-        dropDown.open();
+        this.overflowMenu.click();
 
         const $item1 = $('.dx-list-item').eq(0);
         const $item2 = $('.dx-list-item').eq(1);
@@ -1387,90 +1350,78 @@ QUnit.module('adaptivity', {
     });
 
     QUnit.test('toolbar menu should have correct item element', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [{ locateInMenu: 'always', text: 'item1' }]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
-
-        dropDown.open();
-        dropDown.close();
+        this.overflowMenu.click();
+        this.overflowMenu.click();
 
         resizeCallbacks.fire();
 
-        dropDown.open();
+        this.overflowMenu.click();
         assert.equal($('.dx-list-item').length, 1, 'only one item in menu is rendered');
     });
 
     QUnit.test('toolbar menu should be rendered after change item visible', function(assert) {
         assert.expect(3);
 
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [{ locateInMenu: 'always', text: 'item1', visible: false }]
         });
 
-        let $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        assert.equal(this.overflowMenu.$element().length, 0, 'menu is not rendered');
 
-        assert.equal($dropDownMenu.length, 0, 'menu is not rendered');
+        this.instance.option('items[0].visible', true);
 
-        const toolbar = $element.dxToolbar('instance');
+        assert.equal(this.overflowMenu.$element().length, 1, 'menu is rendered');
 
-        toolbar.option('items[0].visible', true);
-        $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        if(!this.overflowMenu.$element().length) return;
 
-        assert.equal($dropDownMenu.length, 1, 'menu is rendered');
-
-        if(!$dropDownMenu.length) return;
-
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
-
-        dropDown.open();
+        this.overflowMenu.click();
 
         assert.equal($('.dx-list-item').length, 1, 'item in menu is rendered');
-        dropDown.close();
+        this.overflowMenu.click();
     });
 
     QUnit.test('invisible overflow items should be hidden if there no free space for them', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', locateInMenu: 'auto', template: function() { return $('<div>').width(300); } }
+                { location: 'before', locateInMenu: 'auto', template: () => $('<div>').width(300) }
             ],
             width: 400
         });
 
-        $element.dxToolbar('option', 'items[0].visible', false);
-        assert.equal($element.find('.' + TOOLBAR_ITEM_CLASS + ':visible').length, 0, 'item was hidden');
+        this.instance.option('items[0].visible', false);
+        assert.equal(this.overflowMenu.$element().find(`.${TOOLBAR_ITEM_CLASS}:visible`).length, 0, 'item was hidden');
     });
 
     QUnit.test('menu should be hidden if all overflow items were hidden', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(300); } },
-                { location: 'before', locateInMenu: 'auto', template: function() { return $('<div>').width(300); } }
+                { location: 'before', template: () => $('<div>').width(300) },
+                { location: 'before', locateInMenu: 'auto', template: () => $('<div>').width(300) }
             ],
             width: 300
         });
 
-        $element.dxToolbar('option', 'items[1].visible', false);
+        this.instance.option('items[1].visible', false);
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        assert.ok($dropDownMenu.is(':hidden'), 'menu is hidden');
+        assert.ok(this.overflowMenu.$element().is(':hidden'), 'menu is hidden');
     });
 
     QUnit.testInActiveWindow('items should not be rearranged if width is not changed', function(assert) {
         const $input = $('<input>').width(300);
 
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
-                { location: 'before', template: function() { return $('<div>').width(300); } },
-                { location: 'before', locateInMenu: 'auto', template: function() { return $input; } }
+                { location: 'before', template: () => $('<div>').width(300) },
+                { location: 'before', locateInMenu: 'auto', template: () => $input }
             ],
             width: 300
         });
-        const dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS).dxDropDownMenu('instance');
 
-        dropDown.open();
+        this.overflowMenu.click();
         $input.focus();
         resizeCallbacks.fire('height');
 
@@ -1478,7 +1429,7 @@ QUnit.module('adaptivity', {
     });
 
     QUnit.test('add a custom CSS to item of menu', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 {
                     location: 'before',
@@ -1488,16 +1439,13 @@ QUnit.module('adaptivity', {
             ]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        this.overflowMenu.click();
 
-        dropDown.open();
-
-        assert.equal($('.' + TOOLBAR_MENU_SECTION_CLASS + ' .' + LIST_ITEM_CLASS + '.test').length, 1, 'item with the custom CSS');
+        assert.equal($(`.${TOOLBAR_MENU_SECTION_CLASS} .${LIST_ITEM_CLASS}.test`).length, 1, 'item with the custom CSS');
     });
 
     QUnit.test('dropDown should use default container', function(assert) {
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 {
                     location: 'before',
@@ -1507,16 +1455,14 @@ QUnit.module('adaptivity', {
             ]
         });
 
-        $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger('dxclick');
+        this.overflowMenu.click();
 
-        assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, 'Toolbar\'s container isn\'t contains a dropDown list');
+        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, 'Toolbar\'s container isn\'t contains a dropDown list');
     });
 
     QUnit.test('init Toolbar with new menuContainer', function(assert) {
-        const $element = $('#widget');
-
-        $element.dxToolbar({
-            menuContainer: $element,
+        this.instance.option({
+            menuContainer: this.$element,
             items: [
                 {
                     location: 'before',
@@ -1526,15 +1472,13 @@ QUnit.module('adaptivity', {
             ]
         });
 
-        $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger('dxclick');
+        this.overflowMenu.click();
 
-        assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
+        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
     });
 
     QUnit.test('change Toolbar menuContainer', function(assert) {
-        const $element = $('#widget');
-
-        const instance = $element.dxToolbar({
+        this.instance.option({
             items: [
                 {
                     location: 'before',
@@ -1542,27 +1486,25 @@ QUnit.module('adaptivity', {
                     cssClass: 'test'
                 }
             ]
-        }).dxToolbar('instance');
+        });
 
-        instance.option('menuContainer', $element);
+        this.instance.option('menuContainer', this.$element);
 
-        $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger('dxclick');
+        this.overflowMenu.click();
 
-        assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
+        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
     });
 
     QUnit.test('dropdown menu should have height less then document height on android (T1010948)', function(assert) {
         devices.current({ platform: 'android' });
-        const toolbar = $('#widget').dxToolbar({
+        this.instance.option({
             items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
-        }).dxToolbar('instance');
+        });
 
-        toolbar.option('overflowMenuVisible', true);
+        this.instance.option('overflowMenuVisible', true);
         this.clock.tick();
 
-        const $popupContent = toolbar.$element()
-            .find(`.${DROP_DOWN_MENU_CLASS}`)
-            .dxDropDownMenu('instance')._popup._$content;
+        const $popupContent = this.overflowMenu.instance()._popup.$content();
 
         const document = domAdapter.getDocumentElement();
         assert.equal(getHeight($popupContent) < document.clientHeight, true, `popup height must be less then document height (${getHeight($popupContent)} < ${document.clientHeight})`);
@@ -1570,19 +1512,11 @@ QUnit.module('adaptivity', {
     });
 });
 
-QUnit.module('default template', {
-    prepareItemTest: function(data) {
-        const toolbar = new Toolbar($('<div>'), {
-            items: [data]
-        });
-
-        return toolbar.itemElements().eq(0).find('.dx-item-content').contents();
-    }
-}, () => {
+QUnit.module('default template', moduleConfig, () => {
     QUnit.test('T430159 dropdown menu should be closed after click on item if location is defined', function(assert) {
         const onClickActionStub = sinon.stub();
 
-        const $element = $('#widget').dxToolbar({
+        this.instance.option({
             items: [
                 {
                     location: 'center',
@@ -1595,15 +1529,13 @@ QUnit.module('default template', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
-        const dropDown = $dropDown.dxDropDownMenu('instance');
+        this.overflowMenu.click();
 
-        dropDown.open();
-        const $items = $('.dx-dropdownmenu-list .dx-list-item');
+        const $items = this.overflowMenu.instance()._popup.$content().find('.dx-list-item');
 
         $($items.eq(0)).trigger('dxclick');
 
-        assert.ok(!dropDown.option('opened'), 'dropdown is closed');
+        assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
         assert.equal(onClickActionStub.callCount, 1, 'onClick was fired');
     });
 
@@ -1611,7 +1543,7 @@ QUnit.module('default template', {
         QUnit.test(`Click on buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
             const onClickActionStub = sinon.stub();
 
-            const $element = $('#widget').dxToolbar({
+            this.instance.option({
                 items: [ {
                     location: 'center',
                     locateInMenu: 'always',
@@ -1624,15 +1556,12 @@ QUnit.module('default template', {
                 }]
             });
 
-            const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS);
-            const dropDown = $dropDown.dxDropDownMenu('instance');
-
-            dropDown.open();
-            const $items = $('.dx-dropdownmenu-list .dx-buttongroup-item');
+            this.overflowMenu.click();
+            const $items = this.overflowMenu.instance()._popup.$content().find('.dx-buttongroup-item');
 
             $($items.eq(0)).trigger('dxclick');
 
-            assert.ok(!dropDown.option('opened'), 'dropdown is closed');
+            assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
             assert.equal(onClickActionStub.callCount, 1, 'onClick was fired');
         });
     });
@@ -1642,7 +1571,7 @@ QUnit.module('adaptivity without hiding in menu', {
     beforeEach: function() {
         this.$element = $('#toolbar');
         this.getToolbarItems = function() {
-            return this.$element.find('.' + TOOLBAR_ITEM_CLASS);
+            return this.$element.find(`.${TOOLBAR_ITEM_CLASS}`);
         };
 
         this.MEASURE_SAFE_TEXT = 'xyvxyv';
@@ -1790,14 +1719,7 @@ QUnit.module('adaptivity without hiding in menu', {
     });
 });
 
-QUnit.module('Waiting fonts for material theme', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('Waiting fonts for material theme', moduleConfig, () => {
     QUnit.test('Toolbar calls font-waiting function for labels (T736793)', function(assert) {
         const estimatedData = [
             { args: [ 'text1', '400' ], description: 'call for the first label' },
@@ -1809,7 +1731,7 @@ QUnit.module('Waiting fonts for material theme', {
         const origIsMaterial = themes.isMaterial;
         const done = assert.async(3);
 
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = () => true;
 
         themes.waitWebFont = function(text, fontWeight) {
             const data = estimatedData[executionCount];
@@ -1818,7 +1740,7 @@ QUnit.module('Waiting fonts for material theme', {
             done();
         };
 
-        $('#toolbar').dxToolbar({
+        this.instance.option({
             items: [
                 { location: 'before', text: 'text1' },
                 { location: 'before', text: 'text2' },
@@ -1842,11 +1764,11 @@ QUnit.module('Waiting fonts for material theme', {
 
         let executionCount = 0;
         const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = () => true;
 
-        const done = assert.async(4);
+        const done = assert.async(5);
 
-        themes.waitWebFont = function(text, fontWeight) {
+        themes.waitWebFont = (text, fontWeight) => {
             const data = estimatedData[executionCount];
             assert.deepEqual([text, fontWeight], data.args, data.description);
             executionCount++;
@@ -1858,7 +1780,7 @@ QUnit.module('Waiting fonts for material theme', {
             done();
         };
 
-        $('#toolbar').dxToolbar({
+        this.instance.option({
             items: [
                 { location: 'before', text: 'text1' },
                 { location: 'before', text: 'text2' },

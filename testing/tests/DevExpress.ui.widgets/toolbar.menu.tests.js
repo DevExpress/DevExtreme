@@ -4,8 +4,8 @@ import ArrayStore from 'data/array_store';
 import fx from 'animation/fx';
 import Button from 'ui/button';
 import Popup from 'ui/popup';
-import DropDownMenu from 'ui/toolbar/drop_down_menu';
-import ToolbarMenuList from 'ui/toolbar/ui.toolbar.menu.list.js';
+import DropDownMenu from 'ui/toolbar/internal/ui.toolbar.menu';
+import ToolbarMenuList from 'ui/toolbar/ui.toolbar.menu.list';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -19,8 +19,7 @@ import 'generic_light.css!';
 QUnit.testStart(function() {
     const markup =
         '<div id="dropDownMenu"></div>\
-        <div id="dropDownMenuSecond"></div>\
-        <div id="dropDownMenuKeyboard"></div>';
+        <div id="dropDownMenuSecond"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -31,6 +30,7 @@ const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
+const LIST_ITEM_CLASS = 'dx-list-item';
 
 
 const moduleConfig = {
@@ -40,8 +40,8 @@ const moduleConfig = {
 
         this.clock = sinon.useFakeTimers();
 
-        this.instance = $('#dropDownMenu').dxDropDownMenu().dxDropDownMenu('instance');
-        this.$element = $(this.instance.$element());
+        this.$element = $('#dropDownMenu');
+        this.instance = new DropDownMenu($('#dropDownMenu'));
 
         this.overflowMenu = {
             click: () => {
@@ -67,6 +67,9 @@ const moduleConfig = {
             },
             $popupContent() {
                 return $(this.popup().$content());
+            },
+            $items() {
+                return this.$list().find(`.${LIST_ITEM_CLASS}`);
             }
         };
     },
@@ -85,11 +88,10 @@ QUnit.module('render with popup', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.ok(this.overflowMenu.list() instanceof ToolbarMenuList);
         assert.ok(this.overflowMenu.popup() instanceof Popup);
 
         assert.ok(this.overflowMenu.$list().hasClass(DROP_DOWN_MENU_LIST_CLASS));
-        assert.equal(this.overflowMenu.$list().find('.dx-list-item').length, 0);
+        assert.equal(this.overflowMenu.$items().length, 0);
         assert.ok(this.overflowMenu.$popup().dxPopup('instance'));
     });
 
@@ -116,16 +118,16 @@ QUnit.module('render with popup', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.equal(this.overflowMenu.$list().find('.dx-list-item').length, 3);
+        assert.equal(this.overflowMenu.$items().length, 3);
 
-        this.$element.dxDropDownMenu({
+        this.instance.option({
             items: [
                 'Item 3',
                 'Item 4'
             ],
         });
         this.overflowMenu.click();
-        assert.equal(this.overflowMenu.$list().find('.dx-list-item').length, 2);
+        assert.equal(this.overflowMenu.$items().length, 2);
     });
 
     QUnit.test('w/ options - dataSource', function(assert) {
@@ -133,16 +135,16 @@ QUnit.module('render with popup', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.equal(this.overflowMenu.$popupContent().find('.dx-list-item').length, 3);
+        assert.equal(this.overflowMenu.$items().length, 3);
 
-        this.$element.dxDropDownMenu({
+        this.instance.option({
             dataSource: new DataSource([
                 'Item 3',
                 'Item 4'
             ]),
         });
 
-        assert.equal(this.overflowMenu.$popupContent().find('.dx-list-item').length, 2);
+        assert.equal(this.overflowMenu.$items().length, 2);
     });
 
     QUnit.test('RTL support', function(assert) {
@@ -214,10 +216,10 @@ QUnit.module('render', moduleConfig, () => {
         this.instance.option('opened', false);
         this.instance.option('items', [3, 4, 5]);
 
-        assert.equal(this.overflowMenu.$list().find('.dx-list-item').text(), '012');
+        assert.equal(this.overflowMenu.$items().text(), '012');
 
         this.overflowMenu.click();
-        assert.equal(this.overflowMenu.$list().find('.dx-list-item').text(), '345');
+        assert.equal(this.overflowMenu.$items().text(), '345');
     });
 
     QUnit.test('w/ options - itemTemplate', function(assert) {
@@ -231,7 +233,7 @@ QUnit.module('render', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.equal(this.overflowMenu.$list().find('.dx-list-item').text(), 'Item0Item1Item2');
+        assert.equal(this.overflowMenu.$items().text(), 'Item0Item1Item2');
     });
 
     QUnit.test('custom item template can return default template name', function(assert) {
@@ -251,7 +253,9 @@ QUnit.module('render', moduleConfig, () => {
 
     QUnit.test('popup should be rendered after first click only', function(assert) {
         assert.strictEqual(this.overflowMenu.popup(), undefined, 'popup is not rendered before it is opened');
-        this.instance.open();
+
+        this.instance.option('opened', true);
+
         assert.strictEqual(this.overflowMenu.$popup().length, 1, 'popup is not rendered before it is opened');
     });
 
@@ -263,14 +267,12 @@ QUnit.module('render', moduleConfig, () => {
 
     QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
         const $container = $('#dropDownMenu');
-        const $dropDownMenu = $container.dxDropDownMenu({
+        this.instance.option({
             container: $container,
             opened: true
         });
-        const popup = $dropDownMenu.find('.dx-popup').dxPopup('instance');
-        const $content = popup.$content();
 
-        assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
+        assert.strictEqual(this.overflowMenu.$popupContent().closest($container).length, 1, 'Popover content located into desired container');
     });
 
     QUnit.test('popup should be placed into new container after changing the \'container\' option', function(assert) {
@@ -321,11 +323,11 @@ QUnit.module('behavior', moduleConfig, () => {
         $($list).trigger('dxclick');
         assert.equal(popup.option('visible'), true, 'click on list does not hide popup');
 
-        $($list.find('.dx-list-item').first()).trigger('dxclick');
+        $(this.overflowMenu.$items().first()).trigger('dxclick');
         assert.equal(popup.option('visible'), true, 'popup is visible');
 
         this.instance.option('closeOnClick', true);
-        $($list.find('.dx-list-item').first()).trigger('dxclick');
+        $(this.overflowMenu.$items().first()).trigger('dxclick');
         assert.equal(popup.option('visible'), false, 'popup is hidden');
     });
 
@@ -342,7 +344,7 @@ QUnit.module('behavior', moduleConfig, () => {
 
 QUnit.module('integration', moduleConfig, () => {
     QUnit.test('list defaults', function(assert) {
-        const list = $('#dropDownMenu').dxToolbarMenuList().dxToolbarMenuList('instance');
+        const list = new ToolbarMenuList($('#dropDownMenu'));
         assert.strictEqual(list.option('pullRefreshEnabled'), false);
         assert.strictEqual(list.option('activeStateEnabled'), true);
     });
@@ -423,84 +425,73 @@ QUnit.module('integration', moduleConfig, () => {
 
 QUnit.module('regression', moduleConfig, () => {
     QUnit.test('B233109: dropDownMenu menu interference', function(assert) {
-        const ddMenu1 = $('#dropDownMenu').dxDropDownMenu({ items: [{ text: 'test1' }], opened: true }).dxDropDownMenu('instance');
-        const ddMenu2 = $('#dropDownMenuSecond').dxDropDownMenu({ items: [{ text: 'test2' }], opened: true }).dxDropDownMenu('instance');
-        const $button1 = $(ddMenu1._button.$element());
+        this.instance.option({ items: [{ text: 'test1' }], opened: true });
+        const ddMenu2 = new DropDownMenu($('#dropDownMenuSecond'));
+
+        ddMenu2.option({ items: [{ text: 'test2' }], opened: true });
+
         const $button2 = $(ddMenu2._button.$element());
-        const popup1 = ddMenu1._popup;
         const popup2 = ddMenu2._popup;
 
-        ddMenu1.close();
-        ddMenu2.close();
+        this.overflowMenu.click();
+        ddMenu2.option('opened', false);
 
-        assert.equal(popup1.option('visible'), false);
+        assert.equal(this.overflowMenu.popup().option('visible'), false);
         assert.equal(popup2.option('visible'), false);
 
-        $button1
+        this.overflowMenu.$button()
             .trigger('dxpointerdown')
             .trigger('dxclick');
 
-        assert.equal(popup1.option('visible'), true);
+        assert.equal(this.overflowMenu.popup().option('visible'), true);
         assert.equal(popup2.option('visible'), false);
 
         $button2
             .trigger('dxpointerdown')
             .trigger('dxclick');
 
-        assert.equal(popup1.option('visible'), false);
+        assert.equal(this.overflowMenu.popup().option('visible'), false);
         assert.equal(popup2.option('visible'), true);
 
-        $button1
+        this.overflowMenu.$button()
             .trigger('dxpointerdown')
             .trigger('dxclick');
 
-        assert.equal(popup1.option('visible'), true);
+        assert.equal(this.overflowMenu.popup().option('visible'), true);
         assert.equal(popup2.option('visible'), false);
 
         $('#qunit-fixture')
             .trigger('dxpointerdown')
             .trigger('dxclick');
 
-        assert.equal(popup1.option('visible'), false);
+        assert.equal(this.overflowMenu.popup().option('visible'), false);
         assert.equal(popup2.option('visible'), false);
     });
 
     QUnit.test('B250811 - Cancel item in overflow menu on Android does not work', function(assert) {
         assert.expect(1);
 
-        const that = this;
-
-        that.instance.option({
+        this.instance.option({
             items: [
                 'Item 0'
             ],
-            onItemClick: function() {
-                assert.equal(that.overflowMenu.popup().option('visible'), false, 'popup hides before onItemClick executed');
+            onItemClick: () => {
+                assert.equal(this.overflowMenu.popup().option('visible'), false, 'popup hides before onItemClick executed');
             }
         });
 
-        that.overflowMenu.click();
+        this.overflowMenu.click();
 
-        that.overflowMenu.$list()
-            .find('.dx-list-item')
+        this.overflowMenu.$items()
             .last()
             .trigger('dxclick');
     });
 });
 
-QUnit.module('widget sizing render', {
-    beforeEach: function() {
-        executeAsyncMock.setup();
-        fx.off = true;
-    },
-    afterEach: function() {
-        executeAsyncMock.teardown();
-        fx.off = false;
-    }
-}, () => {
+QUnit.module('widget sizing render', moduleConfig, () => {
     QUnit.test('constructor', function(assert) {
         const dropDownMenuWidth = 400;
-        const $element = $('#dropDownMenu').dxDropDownMenu({
+        this.instance.option({
             items: [
                 'Item 0',
                 'Item 1',
@@ -508,180 +499,148 @@ QUnit.module('widget sizing render', {
             ],
             width: dropDownMenuWidth
         });
-        const instance = $element.dxDropDownMenu('instance');
-        const borderWidth = parseInt($element.css('borderLeftWidth'));
 
-        instance.open();
+        const borderWidth = parseInt(this.$element.css('borderLeftWidth'));
 
-        assert.strictEqual(instance.option('width'), dropDownMenuWidth);
-        assert.strictEqual(getOuterWidth($element), dropDownMenuWidth, 'outer width of the element must be equal to custom width');
-        assert.strictEqual(getOuterWidth(instance._popup.$element()), dropDownMenuWidth - 2 * borderWidth, 'outer width of the popup must be equal to custom width minus border');
+        this.overflowMenu.click();
+
+        assert.strictEqual(this.instance.option('width'), dropDownMenuWidth);
+        assert.strictEqual(getOuterWidth(this.$element), dropDownMenuWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(this.overflowMenu.$popup()), dropDownMenuWidth - 2 * borderWidth, 'outer width of the popup must be equal to custom width minus border');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({
+        this.instance.option({
             items: [
                 'Item 0',
                 'Item 1',
                 'Item 2'
             ]
         });
-        const instance = $element.dxDropDownMenu('instance');
+
         const customWidth = 400;
-        const borderWidth = parseInt($element.css('borderLeftWidth'));
+        const borderWidth = parseInt(this.$element.css('borderLeftWidth'));
 
-        instance.option('width', customWidth);
-        instance.open();
+        this.instance.option('width', customWidth);
+        this.overflowMenu.click();
 
-        assert.strictEqual(getOuterWidth(instance._popup.$element()), customWidth - 2 * borderWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(this.overflowMenu.$popup()), customWidth - 2 * borderWidth, 'outer width of the element must be equal to custom width');
     });
-});
 
-QUnit.module('keyboard navigation', {
-    beforeEach: function() {
-        fx.off = true;
+    QUnit.module('keyboard navigation', {
+        beforeEach: function() {
+            this.instance.option({
+                items: [1, 2, 3],
+                focusStateEnabled: true,
+                opened: true
+            });
 
-        this.$element = $('#dropDownMenu').dxDropDownMenu({
-            items: [1, 2, 3],
-            focusStateEnabled: true,
-            opened: true
+            this.keyboard = keyboardMock(this.overflowMenu.$button());
+        }
+    }, () => {
+        QUnit.test('list focusStateEnabled option', function(assert) {
+            assert.expect(3);
+
+            this.instance.option({ focusStateEnabled: false });
+            assert.ok(!this.overflowMenu.list().option('focusStateEnabled'));
+
+            this.instance.option('focusStateEnabled', true);
+            assert.ok(this.overflowMenu.list().option('focusStateEnabled'));
+
+            assert.equal(this.overflowMenu.$list().attr('tabindex'), -1, 'tabindex for list is -1');
         });
-        this.instance = this.$element.dxDropDownMenu('instance');
 
-        this.button = this.instance._button;
-        this.$button = $(this.button.$element());
-        this.keyboard = keyboardMock(this.$button);
-        this.popup = this.instance._popup;
+        QUnit.test('enter/space keys', function(assert) {
+            assert.expect(3);
 
-        this.popup = this.instance._popup;
-        this.$popup = $(this.popup.$element());
-        this.$popupContent = $(this.popup.$content());
+            this.instance.option('opened', false);
+            this.overflowMenu.$button().focusin();
+            assert.ok(this.overflowMenu.$button().hasClass(STATE_FOCUSED_CLASS), 'element is focused');
 
-        this.list = this.instance._list;
-        this.$list = $(this.list.$element());
-        this.$items = this.$list.find('.dx-list-item');
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-}, () => {
-    QUnit.test('list focusStateEnabled option', function(assert) {
-        assert.expect(3);
+            this.keyboard.keyDown('enter');
+            assert.ok(this.overflowMenu.popup().option('visible'));
 
-        this.instance.option({ focusStateEnabled: false });
-        assert.ok(!this.list.option('focusStateEnabled'));
+            this.keyboard.keyDown('space');
+            assert.ok(!this.overflowMenu.popup().option('visible'));
+        });
 
-        this.instance.option('focusStateEnabled', true);
-        assert.ok(this.list.option('focusStateEnabled'));
+        QUnit.test('navigation by arrows', function(assert) {
+            assert.expect(4);
 
-        assert.equal(this.$list.attr('tabindex'), -1, 'tabindex for list is -1');
-    });
+            this.instance.option('opened', false);
+            this.overflowMenu.$button().focusin();
 
-    QUnit.test('enter/space keys', function(assert) {
-        assert.expect(3);
+            this.keyboard.keyDown('enter');
+            assert.ok(this.overflowMenu.popup().option('visible'));
+            this.keyboard.keyDown('down');
+            assert.ok(this.overflowMenu.$items().eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
 
-        this.instance.close();
-        this.$button.focusin();
-        assert.ok(this.$button.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
+            this.keyboard.keyDown('down');
+            assert.ok(this.overflowMenu.$items().eq(1).hasClass(STATE_FOCUSED_CLASS), 'second item has focus class');
 
-        this.keyboard.keyDown('enter');
-        assert.ok(this.popup.option('visible'));
+            this.keyboard.keyDown('up');
+            assert.ok(this.overflowMenu.$items().eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
+        });
 
-        this.keyboard.keyDown('space');
-        assert.ok(!this.popup.option('visible'));
-    });
+        QUnit.test('hide popup on press tab', function(assert) {
+            assert.expect(2);
 
-    QUnit.test('navigation by arrows', function(assert) {
-        assert.expect(4);
+            this.instance.option('opened', false);
+            this.overflowMenu.$button().focusin();
 
-        this.instance.close();
-        this.$button.focusin();
+            this.keyboard.keyDown('enter');
+            assert.ok(this.overflowMenu.popup().option('visible'));
+            this.keyboard.keyDown('tab');
 
-        this.keyboard.keyDown('enter');
-        assert.ok(this.popup.option('visible'));
-        this.keyboard.keyDown('down');
-        assert.ok(this.$items.eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
+            assert.ok(!this.overflowMenu.popup().option('visible'));
 
-        this.keyboard.keyDown('down');
-        assert.ok(this.$items.eq(1).hasClass(STATE_FOCUSED_CLASS), 'second item has focus class');
+        });
 
-        this.keyboard.keyDown('up');
-        assert.ok(this.$items.eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
-    });
+        QUnit.test('Enter or space press should call onItemClick (T318240)', function(assert) {
+            let itemClicked = 0;
 
-    QUnit.test('hide popup on press tab', function(assert) {
-        assert.expect(2);
+            this.instance.option('onItemClick', function() { itemClicked++; });
 
-        this.instance.close();
-        this.$button.focusin();
+            this.instance.option('opened', false);
+            this.overflowMenu.$button().focusin();
 
-        this.keyboard.keyDown('enter');
-        assert.ok(this.popup.option('visible'));
-        this.keyboard.keyDown('tab');
+            this.keyboard.keyDown('enter');
+            this.keyboard.keyDown('down');
+            this.keyboard.keyDown('enter');
 
-        assert.ok(!this.popup.option('visible'));
+            this.keyboard.keyDown('enter');
+            this.keyboard.keyDown('down');
+            this.keyboard.keyDown('space');
 
-    });
+            assert.equal(itemClicked, 2, 'item was clicked twice');
+        });
 
-    QUnit.test('Enter or space press should call onItemClick (T318240)', function(assert) {
-        let itemClicked = 0;
+        QUnit.test('No exceptions on \'tab\' key pressing when popup is not opened', function(assert) {
+            assert.expect(0);
 
-        this.instance.option('onItemClick', function() { itemClicked++; });
+            this.instance.option({ focusStateEnabled: true });
 
-        this.instance.close();
-        this.$button.focusin();
+            const keyboard = keyboardMock(this.$element);
 
-        this.keyboard.keyDown('enter');
-        this.keyboard.keyDown('down');
-        this.keyboard.keyDown('enter');
-
-        this.keyboard.keyDown('enter');
-        this.keyboard.keyDown('down');
-        this.keyboard.keyDown('space');
-
-        assert.equal(itemClicked, 2, 'item was clicked twice');
-    });
-
-    QUnit.test('No exceptions on \'tab\' key pressing when popup is not opened', function(assert) {
-        assert.expect(0);
-        const instance = $('#dropDownMenuKeyboard').dxDropDownMenu({ focusStateEnabled: true }).dxDropDownMenu('instance');
-        const $element = $(instance.$element());
-        const keyboard = keyboardMock($element);
-
-        keyboard.keyDown('tab');
+            keyboard.keyDown('tab');
+        });
     });
 });
 
 QUnit.module('\'opened\' option', moduleConfig, () => {
     QUnit.test('Default option value', function(assert) {
-        const instance = $('#dropDownMenu').dxDropDownMenu('instance');
-
-        assert.strictEqual(instance.option('opened'), false, 'Option\'s default value is correct');
-    });
-
-    QUnit.test('Change menu visibility by open() and close() methods', function(assert) {
-        const instance = $('#dropDownMenu').dxDropDownMenu('instance');
-
-        instance.open();
-        assert.ok($(document.body).find('.dx-overlay-wrapper').length, 'Correctly opened by open()');
-
-        instance.close();
-        assert.ok(!$(document.body).find('.dx-overlay-wrapper').length, 'Correctly closed by close()');
+        assert.strictEqual(this.instance.option('opened'), false, 'Option\'s default value is correct');
     });
 
     QUnit.test('Change menu visibility by option \'opened\' change', function(assert) {
-        const instance = $('#dropDownMenu').dxDropDownMenu('instance');
-
-        instance.option('opened', true);
+        this.instance.option('opened', true);
         assert.ok($(document.body).find('.dx-overlay-wrapper').length, 'Correctly opened by option change');
 
-        instance.option('opened', false);
+        this.instance.option('opened', false);
         assert.ok(!$(document.body).find('.dx-overlay-wrapper').length, 'Correctly closed by option change');
     });
 
     QUnit.test('option opened should change after button click', function(assert) {
-        this.$element.dxDropDownMenu();
-
         this.overflowMenu.click();
 
         assert.ok(this.instance.option('opened'), 'option opened change to true');
