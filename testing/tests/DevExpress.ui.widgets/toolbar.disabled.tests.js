@@ -45,7 +45,7 @@ const getItemElement = (toolbar, itemElementSelector) => {
 };
 
 const getDropDownMenu = (toolbar) => {
-    const dropDownMenu = toolbar._layoutStrategy._menu._dropDownMenu;
+    const dropDownMenu = toolbar._layoutStrategy._menu;
 
     if(dropDownMenu) {
         return dropDownMenu;

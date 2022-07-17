@@ -100,8 +100,6 @@ QUnit.testStart(() => {
 });
 
 QUnit.module('render', () => {
-    // todo all supported widgets
-    // todo rtl
     QUnit.test('multiline is disabled by default', function() {
         const testWrapper = new ToolbarTestWrapper({ compactMode: true });
         testWrapper.checkMultilineOption(false);
