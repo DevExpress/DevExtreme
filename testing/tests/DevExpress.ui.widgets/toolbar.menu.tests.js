@@ -5,7 +5,7 @@ import fx from 'animation/fx';
 import Button from 'ui/button';
 import Popup from 'ui/popup';
 import DropDownMenu from 'ui/toolbar/internal/ui.toolbar.menu';
-import ToolbarMenuList from 'ui/toolbar/ui.toolbar.menu.list';
+import ToolbarMenuList from 'ui/toolbar/internal/ui.toolbar.menu.list';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
