@@ -24,7 +24,7 @@ jobs:
           { componentFolder: "navigation", name: "navigation", quarantineMode: false },
           { componentFolder: "renovation", name: "renovation", quarantineMode: false }
         ]
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 90
 
     steps:
@@ -64,7 +64,7 @@ jobs:
     - name: Run TestCafe tests
       run: |
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
-        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION"
+        all_args="--concurrency 2 --browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
@@ -84,7 +84,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [testcafe]
     if: always() && contains(needs.*.result, 'failure')
