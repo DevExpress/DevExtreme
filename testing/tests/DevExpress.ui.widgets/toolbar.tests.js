@@ -507,18 +507,18 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
     });
 
 
-    QUnit.test('syncronize toolbar.overflowMenuVisible, dropDownMenu.open() -> dropDownMenu.close() ', function(assert) {
+    QUnit.test('syncronize toolbar.overflowMenuVisible, menu.opened=true -> menu.opened=false ', function(assert) {
         this.instance.option('items', [
             { locateInMenu: 'always', text: 'item2' }
         ]);
 
         assert.equal(this.instance.option('overflowMenuVisible'), false);
 
-        this.overflowMenu.instance().open();
+        this.overflowMenu.instance().option('opened', true);
 
         assert.equal(this.instance.option('overflowMenuVisible'), true);
 
-        this.overflowMenu.instance().close();
+        this.overflowMenu.instance().option('opened', false);
 
         assert.equal(this.instance.option('overflowMenuVisible'), false);
     });

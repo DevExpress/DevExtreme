@@ -174,8 +174,8 @@ class ToolbarBase extends AsyncCollectionWidget {
         });
     }
 
-    _arrangeItems() {
-        const elementWidth = getWidth(this.$element());
+    _arrangeItems(elementWidth) {
+        elementWidth = elementWidth ?? getWidth(this.$element());
 
         this._$centerSection.css({
             margin: '0 auto',

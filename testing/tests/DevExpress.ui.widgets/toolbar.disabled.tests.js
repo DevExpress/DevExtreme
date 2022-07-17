@@ -55,7 +55,7 @@ const getDropDownMenu = (toolbar) => {
 const openDropDownMenuIfExist = (toolbar) => {
     const dropDownMenu = getDropDownMenu(toolbar);
     if(dropDownMenu) {
-        dropDownMenu.open();
+        dropDownMenu.option('opened', true);
     }
 };
 

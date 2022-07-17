@@ -160,10 +160,6 @@ export class SingleLineStrategy {
     }
 
     _arrangeItems() {
-        if(this._toolbar.$element().is(':hidden')) {
-            return;
-        }
-
         this._toolbar._$centerSection.css({
             margin: '0 auto',
             float: 'none'
@@ -174,17 +170,20 @@ export class SingleLineStrategy {
         });
         this._restoreItems = [];
 
-        this._hideOverflowItems();
+        const elementWidth = getWidth(this._toolbar.$element());
+        this._hideOverflowItems(elementWidth);
+
+        return elementWidth;
     }
 
-    _hideOverflowItems() {
+    _hideOverflowItems(elementWidth) {
         const overflowItems = this._toolbar.$element().find(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}`);
 
         if(!overflowItems.length) {
             return;
         }
 
-        const elementWidth = getWidth(this._toolbar.$element());
+        elementWidth = elementWidth ?? getWidth(this._toolbar.$element());
         $(overflowItems).removeClass(TOOLBAR_HIDDEN_ITEM);
 
         let itemsWidth = this._getItemsWidth();

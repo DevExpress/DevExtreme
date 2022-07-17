@@ -166,10 +166,14 @@ class Toolbar extends ToolbarBase {
     }
 
     _arrangeItems() {
-        this._layoutStrategy._arrangeItems();
+        if(this.$element().is(':hidden')) {
+            return;
+        }
+
+        const elementWidth = this._layoutStrategy._arrangeItems();
 
         if(!this._isMultiline()) {
-            super._arrangeItems(); // not call for multiline
+            super._arrangeItems(elementWidth);
         }
     }
 
