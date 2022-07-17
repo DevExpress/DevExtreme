@@ -159,7 +159,7 @@ class Toolbar extends ToolbarBase {
 
     // for filemanager
     _getItemsWidth() {
-        this._layoutStrategy._getItemsWidth();
+        return this._layoutStrategy._getItemsWidth();
     }
 
     // for filemanager
