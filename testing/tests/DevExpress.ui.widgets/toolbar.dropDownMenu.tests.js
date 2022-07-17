@@ -1,18 +1,15 @@
-import { getOuterHeight, getHeight, getWidth, getOuterWidth } from 'core/utils/size';
+import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
-import devices from 'core/devices';
 import fx from 'animation/fx';
 import Button from 'ui/button';
 import Popup from 'ui/popup';
-import 'ui/popover';
 import DropDownMenu from 'ui/toolbar/drop_down_menu';
 import ToolbarMenuList from 'ui/toolbar/ui.toolbar.menu.list.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
-import { noop } from 'core/utils/common';
 import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
@@ -43,23 +40,34 @@ const moduleConfig = {
 
         this.clock = sinon.useFakeTimers();
 
-        this.element = $('#dropDownMenu').dxDropDownMenu({});
-        this.ddMenu = this.element.dxDropDownMenu('instance');
+        this.instance = $('#dropDownMenu').dxDropDownMenu().dxDropDownMenu('instance');
+        this.$element = $(this.instance.$element());
 
-        this.button = this.ddMenu._button;
-        this.$button = $(this.button.$element());
-        this.mouse = pointerMock(this.$button);
-        this.popup = this.ddMenu._popup;
-
-        this.toggleMenu = function() {
-            $(this.$button).trigger('dxclick');
-
-            this.popup = this.ddMenu._popup;
-            this.$popup = $(this.popup.$element());
-            this.$popupContent = $(this.popup.$content());
-
-            this.list = this.ddMenu._list;
-            this.$list = $(this.list.$element());
+        this.overflowMenu = {
+            click: () => {
+                this.$element.trigger('dxclick');
+            },
+            button: () => {
+                return this.instance._button;
+            },
+            $button() {
+                return $(this.button().$element());
+            },
+            list: () => {
+                return this.instance._list;
+            },
+            $list() {
+                return $(this.list().$element());
+            },
+            popup: () => {
+                return this.instance._popup;
+            },
+            $popup() {
+                return $(this.popup().$element());
+            },
+            $popupContent() {
+                return $(this.popup().$content());
+            }
         };
     },
     afterEach: function() {
@@ -69,104 +77,93 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('render with popup'), moduleConfig, () => {
+QUnit.module('render with popup', moduleConfig, () => {
     QUnit.test('default', function(assert) {
-        assert.ok(this.button instanceof Button);
-        assert.ok(this.element.hasClass(DROP_DOWN_MENU_CLASS));
-        assert.ok(this.$button.hasClass(DROP_DOWN_MENU_BUTTON_CLASS));
+        assert.ok(this.overflowMenu.button() instanceof Button);
+        assert.ok(this.$element.hasClass(DROP_DOWN_MENU_CLASS));
+        assert.ok(this.overflowMenu.$button().hasClass(DROP_DOWN_MENU_BUTTON_CLASS));
 
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        assert.ok(this.list instanceof ToolbarMenuList);
-        assert.ok(this.popup instanceof Popup);
+        assert.ok(this.overflowMenu.list() instanceof ToolbarMenuList);
+        assert.ok(this.overflowMenu.popup() instanceof Popup);
 
-        assert.ok(this.$list.hasClass(DROP_DOWN_MENU_LIST_CLASS));
-        assert.equal(this.$list.find('.dx-list-item').length, 0);
-        assert.ok(this.$popup.dxPopup('instance'));
+        assert.ok(this.overflowMenu.$list().hasClass(DROP_DOWN_MENU_LIST_CLASS));
+        assert.equal(this.overflowMenu.$list().find('.dx-list-item').length, 0);
+        assert.ok(this.overflowMenu.$popup().dxPopup('instance'));
     });
 
     QUnit.test('list should be rendered before onContentReady of the popup', function(assert) {
-        const ddMenu = this.element.dxDropDownMenu('instance');
-        const initialPopupOptions = ddMenu._popupOptions;
+        assert.expect(1);
+
         try {
-            ddMenu._popupOptions = function() {
-                return $.extend(initialPopupOptions.call(ddMenu), { onContentReady: function() {
-                    assert.ok(this.$overlayContent().find('.' + DROP_DOWN_MENU_LIST_CLASS).length, 'List is already rendered');
+            Popup.defaultOptions({
+                options: {
+                    onContentReady: () => {
+                        assert.strictEqual(this.overflowMenu.$list().length, 1, 'List is already rendered');
+                    }
                 }
-                });
-            };
-            this.toggleMenu();
+            });
+
+            this.overflowMenu.click();
         } finally {
-            ddMenu._popupOptions = initialPopupOptions;
+            Popup.defaultOptions({ options: { onContentReady: () => {} } });
         }
     });
 
     QUnit.test('w/ options - items', function(assert) {
-        this.element.dxDropDownMenu({
-            items: [
-                'Item 0',
-                'Item 1',
-                'Item 2'
-            ],
-        });
-        this.toggleMenu();
-        assert.equal(this.$popupContent.find('.dx-list-item').length, 3);
+        this.instance.option('items', [ 'Item 0', 'Item 1', 'Item 2' ]);
 
-        this.element.dxDropDownMenu({
+        this.overflowMenu.click();
+
+        assert.equal(this.overflowMenu.$list().find('.dx-list-item').length, 3);
+
+        this.$element.dxDropDownMenu({
             items: [
                 'Item 3',
                 'Item 4'
             ],
         });
-        this.toggleMenu();
-        assert.equal(this.$popupContent.find('.dx-list-item').length, 2);
+        this.overflowMenu.click();
+        assert.equal(this.overflowMenu.$list().find('.dx-list-item').length, 2);
     });
 
     QUnit.test('w/ options - dataSource', function(assert) {
-        this.element.dxDropDownMenu({
-            dataSource: new ArrayStore([
-                'Item 0',
-                'Item 1',
-                'Item 2'
-            ]),
-        });
-        this.toggleMenu();
-        assert.equal(this.$popupContent.find('.dx-list-item').length, 3);
+        this.instance.option('items', [ 'Item 0', 'Item 1', 'Item 2' ]);
 
-        this.element.dxDropDownMenu({
+        this.overflowMenu.click();
+
+        assert.equal(this.overflowMenu.$popupContent().find('.dx-list-item').length, 3);
+
+        this.$element.dxDropDownMenu({
             dataSource: new DataSource([
                 'Item 3',
                 'Item 4'
             ]),
         });
 
-        assert.equal(this.$popupContent.find('.dx-list-item').length, 2);
+        assert.equal(this.overflowMenu.$popupContent().find('.dx-list-item').length, 2);
     });
 
     QUnit.test('RTL support', function(assert) {
         const RTL_SELECTOR = '.dx-rtl';
-        const DROPDOWNMENU_POPUP_WRAPPER_SELECTOR = '.dx-dropdownmenu-popup-wrapper';
-        this.element.dxDropDownMenu({
-            dataSource: new ArrayStore([
-                'Item 0',
-                'Item 1',
-                'Item 2'
-            ]),
+        this.instance.option({
+            dataSource: new ArrayStore(['Item 0', 'Item 1', 'Item 2']),
             rtlEnabled: true,
         });
 
-        this.ddMenu.option();
-        this.toggleMenu();
-        assert.ok($(DROPDOWNMENU_POPUP_WRAPPER_SELECTOR + ' ' + RTL_SELECTOR).length > 0, 'menu is in RTL mode');
+        this.instance.option();
+        this.overflowMenu.click();
+        assert.ok($(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS} ${RTL_SELECTOR}`).length > 0, 'menu is in RTL mode');
     });
 
     QUnit.test('correct wrapper classes should be set', function(assert) {
         new DropDownMenu($('<div>').appendTo('#qunit-fixture'), {
             opened: true,
-            popupAnimation: {
+            animation: {
                 show: {
                     start: function() {
-                        const $wrapper = $('.' + DROP_DOWN_MENU_POPUP_WRAPPER_CLASS);
+                        const $wrapper = $(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`);
                         assert.strictEqual($wrapper.hasClass(DROP_DOWN_MENU_POPUP_CLASS), true, 'popup class added');
                     }
                 }
@@ -187,77 +184,44 @@ QUnit.module('render with popup'), moduleConfig, () => {
 
         assert.ok(overlayTop >= buttonBottom);
     });
-};
+});
 
 
 QUnit.module('render', moduleConfig, () => {
-    QUnit.test('w/ options - button text', function(assert) {
-        this.ddMenu.option('buttonText', 'some text');
-        assert.equal(this.$button.find('.dx-button-content').text(), 'some text');
-
-        this.ddMenu.option('buttonText', 'new text');
-        assert.equal(this.$button.find('.dx-button-content').text(), 'new text');
-    });
-
-    QUnit.test('w/ options - button icon', function(assert) {
-        this.ddMenu.option('buttonIcon', 'add');
-        assert.ok(this.$button.find('.dx-icon-add').length);
-
-        this.ddMenu.option('buttonIcon', 'remove');
-        assert.ok(this.$button.find('.dx-icon-remove').length);
-    });
-
-    QUnit.test('popup should not be removed if the buttonText option is changed', function(assert) {
-        this.ddMenu.option('buttonText', 'some text');
-        assert.equal(this.element.find('.dx-popup').length, 1);
-    });
-
-    QUnit.test('popup should not be removed if the buttonIcon option is changed', function(assert) {
-        this.ddMenu.option('buttonIcon', 'remove');
-        assert.equal(this.element.find('.dx-popup').length, 1);
-    });
-
-    QUnit.test('w/ options - button icon src', function(assert) {
-        this.ddMenu.option('buttonIcon', '');
-        this.ddMenu.option('buttonIcon', '1.png');
-        assert.ok(this.$button.find('img[src=\'1.png\']').length);
-
-        this.ddMenu.option('buttonIcon', '2.png');
-        assert.ok(this.$button.find('img[src=\'2.png\']').length);
-    });
-
     QUnit.test('w/ options - visible', function(assert) {
-        this.ddMenu.option('visible', false);
-        assert.equal(this.button.option('visible'), false);
+        const overflowMenuButton = this.overflowMenu.button();
 
-        this.ddMenu.option('visible', false);
-        assert.equal(this.button.option('visible'), false);
+        this.instance.option('visible', false);
+        assert.equal(overflowMenuButton.option('visible'), false);
 
-        this.ddMenu.option('visible', true);
-        assert.equal(this.button.option('visible'), true);
+        this.instance.option('visible', false);
+        assert.equal(overflowMenuButton.option('visible'), false);
 
-        this.ddMenu.option('visible', true);
-        assert.equal(this.button.option('visible'), true);
+        this.instance.option('visible', true);
+        assert.equal(overflowMenuButton.option('visible'), true);
+
+        this.instance.option('visible', true);
+        assert.equal(overflowMenuButton.option('visible'), true);
     });
 
     QUnit.test('w/ options - deferRendering', function(assert) {
-        this.ddMenu.option({
+        this.instance.option({
             items: [0, 1, 2],
             deferRendering: true
         });
 
-        this.toggleMenu();
-        this.ddMenu.option('opened', false);
-        this.ddMenu.option('items', [3, 4, 5]);
+        this.overflowMenu.click();
+        this.instance.option('opened', false);
+        this.instance.option('items', [3, 4, 5]);
 
-        assert.equal(this.$list.find('.dx-list-item').text(), '012');
+        assert.equal(this.overflowMenu.$list().find('.dx-list-item').text(), '012');
 
-        this.toggleMenu();
-        assert.equal(this.$list.find('.dx-list-item').text(), '345');
+        this.overflowMenu.click();
+        assert.equal(this.overflowMenu.$list().find('.dx-list-item').text(), '345');
     });
 
     QUnit.test('w/ options - itemTemplate', function(assert) {
-        this.ddMenu.option({
+        this.instance.option({
             items: [0, 1, 2],
             itemTemplate: function(item, itemIndex, itemElement) {
                 assert.equal(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
@@ -265,143 +229,75 @@ QUnit.module('render', moduleConfig, () => {
             }
         });
 
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        assert.equal(this.$list.find('.dx-list-item').text(), 'Item0Item1Item2');
+        assert.equal(this.overflowMenu.$list().find('.dx-list-item').text(), 'Item0Item1Item2');
     });
 
     QUnit.test('custom item template can return default template name', function(assert) {
-        this.ddMenu.option({
+        this.instance.option({
             items: [1, 2],
             itemTemplate: function() {
                 return 'item';
             }
         });
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        const $items = this.list.itemElements();
+        const $items = this.overflowMenu.list().itemElements();
 
         assert.strictEqual($items.eq(0).text(), '1', 'default item template was applied');
         assert.strictEqual($items.eq(1).text(), '2', 'default item template was applied');
     });
 
-    QUnit.test('the \'buttonWidth\' option should be passed to the menu button', function(assert) {
-        this.ddMenu.option('buttonWidth', 200);
-        assert.ok(this.button.option('width'), 200);
-    });
-
-    QUnit.test('the \'buttonHeight\' option should be passed to the menu button', function(assert) {
-        this.ddMenu.option('buttonHeight', 200);
-        assert.ok(this.button.option('height'), 200);
-    });
-
-    QUnit.test('the \'buttonTemplate\' option should be passed to the menu button', function(assert) {
-        this.ddMenu.option('buttonTemplate', function(data, container) {
-            assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
-            return $('<span class=\'it-is-button-template\'/>');
-        });
-
-        assert.equal(this.$button.find('.it-is-button-template').length, 1);
-    });
-
     QUnit.test('popup should be rendered after first click only', function(assert) {
-        assert.equal(this.element.find('.dx-popup').length, 0, 'popup is not rendered before it is opened');
-        this.ddMenu.open();
-        assert.equal(this.element.find('.dx-popup').length, 1, 'popup is rendered after it is opened');
+        assert.strictEqual(this.overflowMenu.popup(), undefined, 'popup is not rendered before it is opened');
+        this.instance.open();
+        assert.strictEqual(this.overflowMenu.$popup().length, 1, 'popup is not rendered before it is opened');
     });
 
     QUnit.test('popup should be rendered if opened option is set to true on init', function(assert) {
-        const $dropDownMenu = $('#dropDownMenuSecond').dxDropDownMenu({
-            opened: true
-        });
-        const popup = $dropDownMenu.find('.dx-popup').dxPopover('instance');
+        this.instance.option('opened', true);
 
-        assert.ok(popup.option('visible'), 'popup is visible');
+        assert.ok(this.overflowMenu.popup().option('visible'), 'popup is visible');
     });
 
     QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
-        const $container = $('#dropDownMenuSecond');
+        const $container = $('#dropDownMenu');
         const $dropDownMenu = $container.dxDropDownMenu({
             container: $container,
             opened: true
         });
-        const popup = $dropDownMenu.find('.dx-popup').dxPopover('instance');
+        const popup = $dropDownMenu.find('.dx-popup').dxPopup('instance');
         const $content = popup.$content();
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
 
     QUnit.test('popup should be placed into new container after changing the \'container\' option', function(assert) {
-        const $container = $('#dropDownMenuSecond');
-        const $dropDownMenu = $container.dxDropDownMenu({
-            opened: true
-        });
+        const $container = $('#dropDownMenu');
 
-        $dropDownMenu.dxDropDownMenu('option', 'container', $container);
+        this.instance.option('opened', true);
+        this.instance.option('container', $container);
 
-        const popup = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = popup.$content();
-
-        assert.strictEqual($content.closest($container).length, 1, 'Popup content located into desired container');
-    });
-});
-
-QUnit.module('position', {
-    beforeEach: function() {
-        executeAsyncMock.setup();
-        fx.off = true;
-    },
-    afterEach: function() {
-        executeAsyncMock.teardown();
-        fx.off = false;
-    }
-}, () => {
-    QUnit.test('check default position', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'unnecessary test on mobile devices');
-            return;
-        }
-        const element = $('#dropDownMenu').dxDropDownMenu();
-        const instance = element.dxDropDownMenu('instance');
-        const defaultPosition = { my: 'top right', at: 'bottom right', collision: 'fit flip', offset: { v: 4 } };
-
-        assert.deepEqual(defaultPosition, instance.option('popupPosition'));
-    });
-
-    QUnit.test('check position for LTR and RTL', function(assert) {
-        const element = $('#dropDownMenu').dxDropDownMenu({});
-
-        const instance = element.dxDropDownMenu('instance');
-        let positionConfig;
-
-        $(element.dxDropDownMenu('instance')._button.$element()).trigger('dxclick');
-
-        positionConfig = instance._popup.option('position');
-
-        assert.deepEqual(positionConfig, instance.option('popupPosition'));
-
-        instance.option('rtlEnabled', true);
-        positionConfig = instance._popup.option('position');
-
-        assert.deepEqual(positionConfig, instance.option('popupPosition'));
+        assert.strictEqual(this.overflowMenu.$popupContent().closest($container).length, 1, 'Popup content located into desired container');
     });
 });
 
 QUnit.module('behavior', moduleConfig, () => {
     QUnit.test('first click on button shows drop-down list, second click hides', function(assert) {
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        const popup = this.popup;
+        const popup = this.overflowMenu.popup();
         assert.ok(popup.option('visible'), 'popup is opened after first click');
 
-        this.toggleMenu();
+        this.overflowMenu.click();
         assert.ok(!popup.option('visible'), 'popup is closed after second click');
     });
 
     QUnit.test('click outside of popup hides drop-down list', function(assert) {
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        const popup = this.popup;
+        const popup = this.overflowMenu.popup();
         assert.equal(popup.option('visible'), true);
 
         pointerMock(document).start().down();
@@ -411,14 +307,14 @@ QUnit.module('behavior', moduleConfig, () => {
     QUnit.test('click on list item hides drop-down list if closeOnClick=true', function(assert) {
         assert.expect(4);
 
-        this.ddMenu.option({
+        this.instance.option({
             items: [1, 2, 3],
             closeOnClick: false
         });
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        const popup = this.popup;
-        const $list = this.$list;
+        const popup = this.overflowMenu.popup();
+        const $list = this.overflowMenu.$list();
 
         assert.equal(popup.option('visible'), true, 'popup is visible');
 
@@ -428,7 +324,7 @@ QUnit.module('behavior', moduleConfig, () => {
         $($list.find('.dx-list-item').first()).trigger('dxclick');
         assert.equal(popup.option('visible'), true, 'popup is visible');
 
-        this.ddMenu.option('closeOnClick', true);
+        this.instance.option('closeOnClick', true);
         $($list.find('.dx-list-item').first()).trigger('dxclick');
         assert.equal(popup.option('visible'), false, 'popup is hidden');
     });
@@ -436,144 +332,92 @@ QUnit.module('behavior', moduleConfig, () => {
     QUnit.test('click on list item is not outside click for popup', function(assert) {
         assert.expect(1);
 
+        this.overflowMenu.click();
 
-        this.toggleMenu();
-
-        this.popup.option('visible', false);
-        assert.equal(this.ddMenu.option('opened'), false);
+        this.overflowMenu.popup().option('visible', false);
+        assert.equal(this.instance.option('opened'), false);
     });
 });
 
-QUnit.module('integration', () => {
+
+QUnit.module('integration', moduleConfig, () => {
     QUnit.test('list defaults', function(assert) {
         const list = $('#dropDownMenu').dxToolbarMenuList().dxToolbarMenuList('instance');
         assert.strictEqual(list.option('pullRefreshEnabled'), false);
+        assert.strictEqual(list.option('activeStateEnabled'), true);
     });
 
     QUnit.test('button defaults', function(assert) {
         const button = $('#dropDownMenu').dxButton().dxButton('instance');
         assert.strictEqual(button.option('type'), 'normal');
         assert.strictEqual(button.option('text'), '');
+        assert.strictEqual(button.option('template'), 'content');
+        assert.strictEqual(button.option('width'), undefined);
+        assert.strictEqual(button.option('height'), undefined);
     });
 
-    QUnit.test('popupHeight/popupWidth test', function(assert) {
-        const $dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            popupHeight: 100,
-            popupWidth: 50
+    [true, false].forEach(isMaterial => {
+        [true, false].forEach(rtlEnabled => {
+            QUnit.test(`popup defaults, rtlEnabled: ${rtlEnabled}, isMaterialTheme: ${isMaterial}`, function(assert) {
+                const origIsMaterial = themes.isMaterial;
+                themes.isMaterial = function() { return true; };
+
+                try {
+                    this.instance.option('rtlEnabled', rtlEnabled);
+
+                    this.overflowMenu.click();
+
+                    const popup = this.overflowMenu.popup();
+
+                    assert.strictEqual(popup.option('height'), 'auto', 'popup.height');
+                    assert.strictEqual(popup.option('width'), 'auto', 'popup.width');
+                    assert.strictEqual(popup.option('autoResizeEnabled'), false, 'popup.autoResizeEnabled');
+                    assert.strictEqual(popup.option('visible'), true, 'popup.visible');
+
+                    assert.strictEqual(popup.option('deferRendering'), false, 'popup.deferRendering');
+                    assert.strictEqual(popup.option('hideOnParentScroll'), true, 'popup.hideOnParentScroll');
+                    assert.strictEqual(popup.option('shading'), false, 'popup.shading');
+                    assert.strictEqual(popup.option('dragEnabled'), false, 'popup.dragEnabled');
+                    assert.strictEqual(popup.option('showTitle'), false, 'popup.showTitle');
+                    assert.strictEqual(popup.option('_fixWrapperPosition'), true, 'popup._fixWrapperPosition');
+
+                    const { my, at, collision, offset, of } = popup.option('position');
+
+                    assert.strictEqual(my, `top ${rtlEnabled ? 'left' : 'right'}`, 'popup.position.my');
+                    assert.strictEqual(at, `bottom ${rtlEnabled ? 'left' : 'right'}`, 'popup.position.at');
+                    assert.strictEqual(collision, 'fit flip', 'popup.position.collision');
+                    assert.deepEqual(offset, { v: 3 }, 'popup.position.offset');
+                    assert.deepEqual(of.get(0), this.$element.get(0), 'popup.position.of');
+
+                } finally {
+                    themes.isMaterial = origIsMaterial;
+                }
+            });
         });
-
-        $dropDownMenu.dxDropDownMenu('option', 'opened', true);
-
-        const popup = $dropDownMenu.find('.dx-popover').dxPopover('instance');
-
-        assert.equal(popup.option('height'), 100, 'popover height is right');
-        assert.equal(popup.option('width'), 50, 'popover width is right');
-    });
-
-    QUnit.test('Popup autoResizeEnabled should be false by default', function(assert) {
-        const $dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            opened: true
-        });
-
-        const popup = $dropDownMenu.find('.dx-popover').dxPopover('instance');
-
-        assert.equal(popup.option('autoResizeEnabled'), false, 'popup.autoResizeEnabled is false');
-    });
-
-    QUnit.test('maxHeight test', function(assert) {
-        const $dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            popupMaxHeight: 300,
-            opened: true
-        });
-
-        const popup = $dropDownMenu.find('.dx-popover').dxPopover('instance');
-
-        assert.equal(popup.option('maxHeight'), 300, 'popover height is right');
-
-        $dropDownMenu.dxDropDownMenu('option', 'popupMaxHeight', 400);
-
-        assert.equal(popup.option('maxHeight'), 400, 'popover height is right');
-    });
-
-    QUnit.test('popup target shoud be configured correctly', function(assert) {
-        const $dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            opened: true
-        });
-
-        const $popup = $('.dx-popover');
-        const $target = $($popup.dxPopover('option', 'target'));
-
-        assert.equal($target.get(0), $dropDownMenu.get(0), 'popover target is drop down menu button');
-    });
-
-    QUnit.test('Popup vertical offset should be correct in material', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
-
-        try {
-            const dropDownMenu = $('#dropDownMenu').dxDropDownMenu({}).dxDropDownMenu('instance');
-
-            assert.deepEqual(dropDownMenu.option('popupPosition').offset, { v: 4 }, 'vertical offset is right');
-        } finally {
-            themes.isMaterial = origIsMaterial;
-        }
-    });
-
-    QUnit.test('Popover arrow should be hide', function(assert) {
-        $('#dropDownMenu').dxDropDownMenu({});
-
-        $('.dx-dropdownmenu-button').trigger('dxclick');
-
-        let $arrow = $('.dx-popover-arrow');
-
-        assert.equal($('.dx-popover').length, 1, 'popup is selected');
-        assert.equal(getHeight($arrow), 0, 'no arrow height in popup mode');
-        assert.equal(getWidth($arrow), 0, 'no arrow width in popup mode');
-
-        $('.dx-dropdownmenu-button').trigger('dxclick');
-        $arrow = $('.dx-popover-arrow');
-
-        assert.equal($('.dx-popover').length, 1, 'popover is selected');
-        assert.strictEqual(getHeight($arrow), 0, 'arrow height in popover mode');
-        assert.strictEqual(getWidth($arrow), 0, 'arrow width in popover mode');
     });
 
     QUnit.test('paginateEnabled is false by default', function(assert) {
-        const dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
+        this.instance.option({
             dataSource: [1, 2, 3],
             opened: true,
-        }).dxDropDownMenu('instance');
+        });
 
-        assert.equal(dropDownMenu._list._dataSource.paginate(), false, 'paginate is false');
+        assert.strictEqual(this.overflowMenu.list()._dataSource.paginate(), false, 'paginate is false');
     });
 
     QUnit.test('the \'onItemRendered\' option should be proxied to the list', function(assert) {
-        const options = {
+        const onItemRenderedHandler = sinon.stub();
+
+        this.instance.option({
             dataSource: [1, 2],
-            onItemRendered: noop,
+            onItemRendered: onItemRenderedHandler,
             opened: true
-        };
-        const itemRenderedCallback = sinon.stub(options, 'onItemRendered');
-        const dropDownMenu = $('#dropDownMenu').dxDropDownMenu(options).dxDropDownMenu('instance');
-        const itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
+        });
+        const itemRenderedCallbackArgs = onItemRenderedHandler.getCall(0).args[0];
 
-        assert.equal(itemRenderedCallback.callCount, 2, 'onItemRendered was fired');
-        assert.equal(dropDownMenu._list.element(), itemRenderedCallbackArgs.element, 'onItemRendered was fired in the right context');
-        assert.equal(dropDownMenu._list, itemRenderedCallbackArgs.component, 'onItemRendered was fired in the right context');
-    });
-
-    QUnit.test('the \'activeStateEnabled\' option should be proxied to the list', function(assert) {
-        const dropDownMenu = $('#dropDownMenu').dxDropDownMenu({
-            dataSource: [1, 2],
-            activeStateEnabled: false,
-            opened: true
-        }).dxDropDownMenu('instance');
-
-        assert.notOk(dropDownMenu._list.option('activeStateEnabled'), 'activeStateEnabled is OK');
-
-        dropDownMenu.option('activeStateEnabled', true);
-
-        assert.ok(dropDownMenu._list.option('activeStateEnabled'), 'activeStateEnabled is OK after option change');
+        assert.strictEqual(onItemRenderedHandler.callCount, 2, 'onItemRendered was fired');
+        assert.strictEqual(this.overflowMenu.list().element(), itemRenderedCallbackArgs.element, 'onItemRendered was fired in the right context');
+        assert.strictEqual(this.overflowMenu.list(), itemRenderedCallbackArgs.component, 'onItemRendered was fired in the right context');
     });
 });
 
@@ -626,18 +470,18 @@ QUnit.module('regression', moduleConfig, () => {
 
         const that = this;
 
-        that.ddMenu.option({
+        that.instance.option({
             items: [
                 'Item 0'
             ],
             onItemClick: function() {
-                assert.equal(that.popup.option('visible'), false, 'popup hides before onItemClick executed');
+                assert.equal(that.overflowMenu.popup().option('visible'), false, 'popup hides before onItemClick executed');
             }
         });
 
-        that.toggleMenu();
+        that.overflowMenu.click();
 
-        that.$list
+        that.overflowMenu.$list()
             .find('.dx-list-item')
             .last()
             .trigger('dxclick');
@@ -697,12 +541,12 @@ QUnit.module('keyboard navigation', {
     beforeEach: function() {
         fx.off = true;
 
-        this.element = $('#dropDownMenu').dxDropDownMenu({
+        this.$element = $('#dropDownMenu').dxDropDownMenu({
             items: [1, 2, 3],
             focusStateEnabled: true,
             opened: true
         });
-        this.instance = this.element.dxDropDownMenu('instance');
+        this.instance = this.$element.dxDropDownMenu('instance');
 
         this.button = this.instance._button;
         this.$button = $(this.button.$element());
@@ -836,74 +680,62 @@ QUnit.module('\'opened\' option', moduleConfig, () => {
     });
 
     QUnit.test('option opened should change after button click', function(assert) {
-        this.element.dxDropDownMenu();
+        this.$element.dxDropDownMenu();
 
-        this.toggleMenu();
+        this.overflowMenu.click();
 
-        assert.ok(this.ddMenu.option('opened'), 'option opened change to true');
+        assert.ok(this.instance.option('opened'), 'option opened change to true');
     });
 });
 
-QUnit.module('aria accessibility', {
-    beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-}, () => {
+QUnit.module('aria accessibility', moduleConfig, () => {
     QUnit.test('aria role for widget', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu();
-
-        assert.equal($element.attr('role'), 'menubar');
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
     });
 
     QUnit.test('aria-haspopup for widget', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu();
-
-        assert.equal($element.attr('aria-haspopup'), 'true');
+        assert.strictEqual(this.$element.attr('aria-haspopup'), 'true');
     });
 
     QUnit.test('aria role for list items', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3], opened: true });
-        $('#dropDownMenu').dxDropDownMenu('close');
+        this.instance.option({ items: [1, 2, 3], opened: true });
 
-        assert.equal($element.find('.dx-list-item:first').attr('role'), 'menuitem');
+        this.overflowMenu.click();
+
+        assert.strictEqual(this.$element.find('.dx-list-item:first').attr('role'), 'menuitem');
     });
 
     QUnit.test('aria-activedescendant on widget should point to focused list item', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3], opened: true });
-        const instance = $element.dxDropDownMenu('instance');
-        instance.close();
+        this.instance.option({ items: [1, 2, 3], opened: true });
 
-        const $listItem = $element.find('.dx-list-item:first');
-        const list = $element.find('.dx-list').dxToolbarMenuList('instance');
+        this.overflowMenu.click();
 
-        instance.open();
-        list.option('focusedElement', $listItem);
+        const $listItem = this.$element.find('.dx-list-item:first');
 
-        assert.notEqual($element.attr('aria-activedescendant'), undefined);
-        assert.equal($element.attr('aria-activedescendant'), $listItem.attr('id'));
+        this.overflowMenu.click();
+        this.overflowMenu.list().option('focusedElement', $listItem);
+
+        assert.notEqual(this.$element.attr('aria-activedescendant'), undefined);
+        assert.strictEqual(this.$element.attr('aria-activedescendant'), $listItem.attr('id'));
     });
 
     QUnit.test('aria-expanded property', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3] });
-        const instance = $element.dxDropDownMenu('instance');
+        this.instance.option({ items: [1, 2, 3] });
 
-        instance.close();
-        assert.equal($element.attr('aria-expanded'), 'false', 'collapsed by default');
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'false', 'collapsed by default');
 
-        $($element).trigger('dxclick');
-        assert.equal($element.attr('aria-expanded'), 'true', 'expanded after click');
+        this.overflowMenu.click();
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'true', 'expanded after click');
 
-        $($element).trigger('dxclick');
-        assert.equal($element.attr('aria-expanded'), 'false', 'collapsed after click');
+        this.overflowMenu.click();
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'false', 'collapsed after click');
 
-        instance.open();
-        assert.equal($element.attr('aria-expanded'), 'true', 'expanded after option change');
+        this.overflowMenu.click();
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'true', 'expanded after option change');
 
-        const $listItem = $(instance._popup.$content().find('.dx-list-item').first());
+        const $listItem = $(this.overflowMenu.$popupContent().find('.dx-list-item').first());
+
         $($listItem).trigger('dxclick');
-        assert.equal($element.attr('aria-expanded'), 'false', 'collapsed after item click');
+        assert.strictEqual(this.$element.attr('aria-expanded'), 'false', 'collapsed after item click');
     });
 });

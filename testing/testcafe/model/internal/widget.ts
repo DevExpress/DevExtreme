@@ -6,6 +6,7 @@ import { getComponentInstance } from '../../helpers/multi-platform-test';
 const CLASS = {
   focused: 'dx-state-focused',
   hovered: 'dx-state-hover',
+  active: 'dx-state-active',
 };
 
 export default abstract class Widget {
@@ -17,10 +18,13 @@ export default abstract class Widget {
 
   public isHovered: Promise<boolean>;
 
+  public isActive: Promise<boolean>;
+
   constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isHovered = this.element.hasClass(CLASS.hovered);
+    this.isActive = this.element.hasClass(CLASS.active);
 
     this.getInstance = getComponentInstance(
       this.getTestingPlatform(), this.element, this.getName(),

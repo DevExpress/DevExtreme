@@ -44,7 +44,7 @@ const ColumnsControllerExtender = (function() {
     const members = {
         init: function() {
             const that = this;
-            that.callBase();
+            that.callBase.apply(this, arguments);
 
             that._beginPageIndex = null;
             that._endPageIndex = null;

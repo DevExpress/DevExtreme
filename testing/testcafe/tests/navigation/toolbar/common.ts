@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { Item } from '../../../../../js/ui/toolbar.d';
-import { appendElementTo } from '../helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../helpers/domUtils';
+import Toolbar from '../../../model/toolbar/toolbar';
 
 fixture`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
@@ -13,33 +13,31 @@ fixture`Toolbar_common`
 ['generic.light', 'generic.dark', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', /* 'dxTabs', */ 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
-  (['always', 'never'] as any[]).forEach((locateInMenu) => {
+  ['always', 'never'].forEach((locateInMenu) => {
     test(`Default nested widgets render,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      let targetContainerSelector = '#container';
+      const toolbar = new Toolbar('#container');
+      let targetContainer = Selector('#container');
 
       if (locateInMenu === 'always') {
-        await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
-        })();
+        await t
+          .click(toolbar.getOverflowMenu().element);
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
       }
 
-      await ClientFunction(() => {
-        $(targetContainerSelector).css({ backgroundColor: 'gold' });
-      }, { dependencies: { targetContainerSelector } })();
+      await setStyleAttribute(targetContainer, 'background-color: gold;');
 
       await t
-        .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, targetContainer))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
       await changeTheme(theme);
 
-      const toolbarItems = [] as Item[];
+      const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
         toolbarItems.push({
           location: 'before',
@@ -65,20 +63,18 @@ fixture`Toolbar_common`
     test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=${locateInMenu}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      let targetContainerSelector = '#container';
+      const toolbar = new Toolbar('#container');
+      let targetContainer = Selector('#container');
 
       if (locateInMenu === 'always') {
-        await ClientFunction(() => {
-          $('.dx-toolbar .dx-dropdownmenu-button').click();
-        })();
+        await t
+          .click(toolbar.getOverflowMenu().element);
 
-        targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
       }
 
-      await t.wait(500);
-
       await t
-        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+        .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, targetContainer))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -121,7 +117,7 @@ fixture`Toolbar_common`
             text: 'opts.stylingMode: contained',
           },
         },
-      ] as Item[];
+      ];
 
       return createWidget('dxToolbar', {
         items: toolbarItems,
@@ -134,18 +130,18 @@ fixture`Toolbar_common`
       test(`Toolbar with different types of buttons,theme=${theme},items[{locateInMenu=${locateInMenu},stylingMode:${stylingMode}}]`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        let targetContainerSelector = '#container';
+        const toolbar = new Toolbar('#container');
+        let targetContainer = Selector('#container');
 
         if (locateInMenu === 'always') {
-          await ClientFunction(() => {
-            $('.dx-toolbar .dx-dropdownmenu-button').click();
-          })();
+          await t
+            .click(toolbar.getOverflowMenu().element);
 
-          targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
+          targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
         }
 
         await t
-          .expect(await takeScreenshot(`Toolbar-with-${stylingMode}-buttons,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, Selector(targetContainerSelector)))
+          .expect(await takeScreenshot(`Toolbar-with-${stylingMode}-buttons,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=${locateInMenu}.png`, targetContainer))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
@@ -208,7 +204,7 @@ fixture`Toolbar_common`
               stylingMode,
             },
           },
-        ] as Item[];
+        ];
 
         return createWidget('dxToolbar', {
           items: toolbarItems,
@@ -280,7 +276,7 @@ fixture`Toolbar_common`
         locateInMenu: 'always',
         location: 'after',
       },
-    ] as Item[];
+    ];
 
     await appendElementTo('#container', 'div', 'toolbar1', {});
     await createWidget('dxToolbar', { items: toolbarItems }, false, '#toolbar1');
@@ -304,28 +300,24 @@ fixture`Toolbar_common`
   test(`Default nested widgets render,theme=${theme},items[].locateInMenu=auto`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    let targetContainerSelector = '#container';
+    const toolbar = new Toolbar('#container');
+    await t
+      .click(toolbar.getOverflowMenu().element);
 
-    await ClientFunction(() => {
-      $('.dx-toolbar .dx-dropdownmenu-button').click();
-    })();
+    const targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-    targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
-
-    await ClientFunction(() => {
-      $(targetContainerSelector).css({ backgroundColor: 'gold' });
-    }, { dependencies: { targetContainerSelector } })();
+    await setStyleAttribute(targetContainer, 'background-color: gold;');
 
     await t
-      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Default-nested-widgets-render,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=auto.png`, targetContainer))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await changeTheme(theme);
 
-    const toolbarItems = [] as Item[];
-    (supportedWidgets as any[]).forEach((widgetName) => {
+    const toolbarItems = [] as any[];
+    supportedWidgets.forEach((widgetName) => {
       toolbarItems.push({
         location: 'before',
         locateInMenu: 'auto',
@@ -351,16 +343,14 @@ fixture`Toolbar_common`
   test(`Toolbar with dropDownButton,theme=${theme},items[].locateInMenu=auto`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await ClientFunction(() => {
-      $('.dx-toolbar .dx-dropdownmenu-button').click();
-    })();
+    const toolbar = new Toolbar('#container');
+    await t
+      .click(toolbar.getOverflowMenu().element);
 
-    const targetContainerSelector = '.dx-dropdownmenu-popup .dx-overlay-content';
-
-    await t.wait(500);
+    const targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
     await t
-      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, Selector(targetContainerSelector)))
+      .expect(await takeScreenshot(`Toolbar-with-dropDownButton,theme=${theme.replace(/\./g, '-')},items[]locateInMenu=always.png`, targetContainer))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -403,7 +393,7 @@ fixture`Toolbar_common`
           text: 'opts.stylingMode: contained',
         },
       },
-    ] as Item[];
+    ] as any[];
 
     return createWidget('dxToolbar', {
       width: 50,

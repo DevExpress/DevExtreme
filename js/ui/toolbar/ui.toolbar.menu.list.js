@@ -7,59 +7,61 @@ const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
 const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
+const TOOLBAR_MENU_CUSTOM_CLASS = 'dx-toolbar-menu-custom';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
-const ToolbarMenuList = ListBase.inherit({
-    _activeStateUnit: `.${TOOLBAR_MENU_ACTION_CLASS}`,
+class ToolbarMenuList extends ListBase {
+    _init() {
+        super._init();
+        this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}`;
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderSections();
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    _getSections: function() {
+    _getSections() {
         return this._itemContainer().children();
-    },
+    }
 
-    _itemElements: function() {
+    _itemElements() {
         return this._getSections().children(this._itemSelector());
-    },
+    }
 
-    _renderSections: function() {
-        const that = this;
+    _renderSections() {
         const $container = this._itemContainer();
 
-        each(['before', 'center', 'after', 'menu'], function() {
-            const sectionName = '_$' + this + 'Section';
-            let $section = that[sectionName];
+        each(['before', 'center', 'after', 'menu'], (_, section) => {
+            const sectionName = `_$${section}Section`;
 
-            if(!$section) {
-                that[sectionName] = $section = $('<div>')
+            if(!this[sectionName]) {
+                this[sectionName] = $('<div>')
                     .addClass(TOOLBAR_MENU_SECTION_CLASS);
             }
 
-            $section.appendTo($container);
+            this[sectionName].appendTo($container);
         });
-    },
+    }
 
-    _renderItems: function() {
-        this.callBase.apply(this, arguments);
+    _renderItems() {
+        super._renderItems.apply(this, arguments);
         this._updateSections();
-    },
+    }
 
-    _updateSections: function() {
-        const $sections = this.$element().find('.' + TOOLBAR_MENU_SECTION_CLASS);
+    _updateSections() {
+        const $sections = this.$element().find(`.${TOOLBAR_MENU_SECTION_CLASS}`);
         $sections.removeClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
         $sections.not(':empty').eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
-    },
+    }
 
-    _renderItem: function(index, item, itemContainer, $after) {
-        const location = item.location || 'menu';
-        const $container = this['_$' + location + 'Section'];
-        const itemElement = this.callBase(index, item, $container, $after);
+    _renderItem(index, item, itemContainer, $after) {
+        const location = item.location ?? 'menu';
+        const $container = this[`_$${location}Section`];
+        const itemElement = super._renderItem(index, item, $container, $after);
 
         if(this._getItemTemplateName({ itemData: item })) {
-            itemElement.addClass('dx-toolbar-menu-custom');
+            itemElement.addClass(TOOLBAR_MENU_CUSTOM_CLASS);
         }
 
         if(location === 'menu' || item.widget === 'dxButton' || item.widget === 'dxButtonGroup' || item.isAction) {
@@ -77,38 +79,38 @@ const ToolbarMenuList = ListBase.inherit({
         itemElement.addClass(item.cssClass);
 
         return itemElement;
-    },
+    }
 
-    _getItemTemplateName: function(args) {
-        const template = this.callBase(args);
+    _getItemTemplateName(args) {
+        const template = super._getItemTemplateName(args);
 
         const data = args.itemData;
         const menuTemplate = data && data['menuItemTemplate'];
 
         return menuTemplate || template;
-    },
+    }
 
-    _dataSourceOptions: function() {
+    _dataSourceOptions() {
         return {
             paginate: false
         };
-    },
-
-    _itemClickHandler: function(e, args, config) {
-        if($(e.target).closest('.' + TOOLBAR_MENU_ACTION_CLASS).length) {
-            this.callBase(e, args, config);
-        }
-    },
-
-    _getAriaTarget: function() {
-        return this.option('_areaTarget') ?? this.callBase();
-    },
-
-    _clean: function() {
-        this._getSections().empty();
-        this.callBase();
     }
-});
+
+    _itemClickHandler(e, args, config) {
+        if($(e.target).closest(`.${TOOLBAR_MENU_ACTION_CLASS}`).length) {
+            super._itemClickHandler(e, args, config);
+        }
+    }
+
+    _getAriaTarget() {
+        return this.option('_areaTarget') ?? super._getAriaTarget();
+    }
+
+    _clean() {
+        this._getSections().empty();
+        super._clean();
+    }
+}
 
 registerComponent('dxToolbarMenuList', ToolbarMenuList);
 

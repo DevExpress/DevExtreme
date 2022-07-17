@@ -284,9 +284,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "id"
@@ -659,9 +659,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "id"
@@ -692,9 +692,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "id"
@@ -784,9 +784,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "end"

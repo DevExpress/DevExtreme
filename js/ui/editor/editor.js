@@ -25,6 +25,7 @@ const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
 
 const VALIDATION_MESSAGE_KEYS_MAP = {
     validationMessageMode: 'mode',
+    validationMessagePosition: 'positionSide',
     validationMessageOffset: 'offset',
     validationBoundary: 'boundary',
 };
@@ -82,6 +83,8 @@ const Editor = Widget.inherit({
             validationStatus: VALIDATION_STATUS_VALID,
 
             validationMessageMode: 'auto',
+
+            validationMessagePosition: 'bottom',
 
             validationBoundary: undefined,
 
@@ -233,7 +236,7 @@ const Editor = Widget.inherit({
 
         this._disposeValidationMessage();
         if(!isValid && validationErrors) {
-            const { validationMessageMode, validationMessageOffset, validationBoundary, rtlEnabled } = this.option();
+            const { validationMessageMode, validationMessagePosition, validationMessageOffset, validationBoundary, rtlEnabled } = this.option();
 
             this._$validationMessage = $('<div>').appendTo($element);
             const validationMessageContentId = `dx-${new Guid()}`;
@@ -245,7 +248,7 @@ const Editor = Widget.inherit({
                 target: this._getValidationMessageTarget(),
                 visualContainer: $element,
                 mode: validationMessageMode,
-                positionRequest: 'below',
+                positionSide: validationMessagePosition,
                 offset: validationMessageOffset,
                 boundary: validationBoundary,
                 contentId: validationMessageContentId
@@ -352,6 +355,7 @@ const Editor = Widget.inherit({
                 break;
             case 'validationBoundary':
             case 'validationMessageMode':
+            case 'validationMessagePosition':
             case 'validationMessageOffset':
                 this._setValidationMessageOption(args);
                 break;

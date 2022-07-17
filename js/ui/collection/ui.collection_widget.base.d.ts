@@ -35,10 +35,10 @@ export interface CollectionWidgetOptions<
     /**
      * @docid
      * @default null
-     * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>
+     * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>|null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default 750

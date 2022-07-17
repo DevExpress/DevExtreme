@@ -38,7 +38,8 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
   const {
     props: {
       text, name, value,
-      validationError, validationErrors, validationMessageMode, isValid, validationStatus,
+      validationError, validationErrors, validationMessageMode,
+      validationMessagePosition, isValid, validationStatus,
       accessKey, className, hint, tabIndex, rtlEnabled,
       activeStateEnabled, hoverStateEnabled, focusStateEnabled,
       disabled, readOnly, visible,
@@ -75,6 +76,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       validationError={validationError}
       validationErrors={validationErrors}
       validationMessageMode={validationMessageMode}
+      validationMessagePosition={validationMessagePosition}
       validationStatus={validationStatus}
       isValid={isValid}
       onFocusIn={onFocusIn}
