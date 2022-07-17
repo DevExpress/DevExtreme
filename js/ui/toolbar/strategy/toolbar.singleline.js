@@ -64,7 +64,7 @@ export class SingleLineStrategy {
         this._menu && this._menu.option('items', this._getMenuItems());
 
         if(this._menu && !this._menu.option('items').length) {
-            this._menu.close();
+            this._menu.option('opened', false);
         }
     }
 
