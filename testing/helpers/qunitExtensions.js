@@ -189,19 +189,15 @@
                 left: -10000px;
                 width: 1000px;
                 height: 1000px;
-                pointer-events: none;
             }
             
             :scope > div.qunit-fixture-visible {
                 position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
-                pointer-events: none;
-
             }
 
             :scope > div.qunit-fixture-visible * {
-                pointer-events: none;
             }
         `;
 
