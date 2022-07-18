@@ -1484,20 +1484,26 @@ const TagBox = SelectBox.inherit({
         delete this._tagTemplate;
     },
 
-    _removeDuplicates: function(from, what) {
-        const result = [];
+    _getSelectedItemsDifference(newItems, previousItems) {
+        const previousItemsValuesMap = previousItems.reduce((map, item) => {
+            const value = this._valueGetter(item);
+            map[value] = true;
+            return map;
+        }, {});
 
-        each(from, (_, value) => {
-            const filteredItems = what.filter((item) => {
-                return this._valueGetter(value) === this._valueGetter(item);
-            });
-
-            if(!filteredItems.length) {
-                result.push(value);
+        const addedItems = [];
+        newItems.forEach(item => {
+            const value = this._valueGetter(item);
+            if(!previousItemsValuesMap[value]) {
+                addedItems.push(value);
             }
+            delete previousItemsValuesMap[value];
         });
 
-        return result;
+        return {
+            addedItems,
+            removedItems: Object.keys(previousItemsValuesMap)
+        };
     },
 
     _optionChanged: function(args) {
@@ -1553,10 +1559,7 @@ const TagBox = SelectBox.inherit({
             case 'selectedItem':
                 break;
             case 'selectedItems':
-                this._selectionChangedAction({
-                    addedItems: this._removeDuplicates(value, previousValue),
-                    removedItems: this._removeDuplicates(previousValue, value)
-                });
+                this._selectionChangedAction(this._getSelectedItemsDifference(value, previousValue));
                 break;
             case 'multiline':
                 this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !value);
