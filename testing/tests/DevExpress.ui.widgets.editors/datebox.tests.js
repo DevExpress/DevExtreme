@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Box from 'ui/box';
 import Calendar from 'ui/calendar';
 import DateBox from 'ui/date_box';
+import themes from 'ui/themes';
 import config from 'core/config';
 import dateLocalization from 'localization/date';
 import dateSerialization from 'core/utils/date_serialization';
@@ -70,6 +71,7 @@ const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
+const VALIDATION_MESSAGE_CONTENT = 'dx-invalid-message-content';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
@@ -5499,6 +5501,43 @@ QUnit.module('datebox validation', {}, () => {
         const { value } = validationCallback.lastCall.args[0];
         assert.ok(validationCallback.calledOnce, 'validationCallback called once');
         assert.strictEqual(value, '2020-10-10', 'String value passed');
+    });
+
+    [false, true].forEach((isMaterial) => {
+        [{
+            validationMessagePosition: 'top',
+            checkFunction: (messagePosition, inputPosition) => messagePosition.bottom < inputPosition.top,
+        }, {
+            validationMessagePosition: 'right',
+            checkFunction: (messagePosition, inputPosition) => messagePosition.left > inputPosition.right
+        }, {
+            validationMessagePosition: 'bottom',
+            checkFunction: (messagePosition, inputPosition) => messagePosition.top > inputPosition.bottom
+        }, {
+            validationMessagePosition: 'left',
+            checkFunction: (messagePosition, inputPosition) => messagePosition.right < inputPosition.left
+        }].forEach(({ validationMessagePosition, checkFunction }) => {
+            QUnit.test(`ValidationMessage has correct position when validationMessagePosition is ${validationMessagePosition} in ${isMaterial ? 'material' : 'generic'} theme`, function(assert) {
+                const origIsMaterial = themes.isMaterial;
+                themes.isMaterial = function() { return isMaterial; };
+
+                const $dateBox = $('#dateBox').dxDateBox({
+                    type: 'date',
+                    max: new Date(1),
+                    validationMessagePosition
+                });
+                const dateBox = $dateBox.dxDateBox('instance');
+
+                dateBox.option('value', new Date());
+
+                const inputPosition = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0).getBoundingClientRect();
+                const messagePosition = $dateBox.find(`.${VALIDATION_MESSAGE_CONTENT}`).get(0).getBoundingClientRect();
+
+                assert.ok(checkFunction(messagePosition, inputPosition), 'position is correct');
+
+                themes.isMaterial = origIsMaterial;
+            });
+        });
     });
 });
 

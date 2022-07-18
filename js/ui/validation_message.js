@@ -158,7 +158,7 @@ const ValidationMessage = Overlay.inherit({
             boundary,
             my: positions[0],
             at: positions[1],
-            collision: 'none flip'
+            collision: 'none'
         });
     },
 
