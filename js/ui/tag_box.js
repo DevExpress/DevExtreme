@@ -1441,14 +1441,9 @@ const TagBox = SelectBox.inherit({
             return [];
         }
 
-        const selectedItems = this._getPlainItems(this._list.option('selectedItems'));
-        const result = [];
-
-        each(selectedItems, (index, item) => {
-            result[index] = this._valueGetter(item);
-        });
-
-        return result;
+        return this
+            ._getPlainItems(this._list.option('selectedItems'))
+            .map(item => this._valueGetter(item));
     },
 
     _setListDataSource: function() {
