@@ -1501,7 +1501,8 @@ const TagBox = SelectBox.inherit({
     },
 
     _optionChanged: function(args) {
-        switch(args.name) {
+        const { name, value, previousValue } = args;
+        switch(name) {
             case 'onSelectAllValueChanged':
                 this._initSelectAllValueChangedAction();
                 break;
@@ -1510,14 +1511,14 @@ const TagBox = SelectBox.inherit({
                 this._renderTags();
                 break;
             case 'hideSelectedItems':
-                if(args.value) {
+                if(value) {
                     this._setListDataSourceFilter();
                 } else {
                     this._resetListDataSourceFilter();
                 }
                 break;
             case 'useSubmitBehavior':
-                this._toggleSubmitElement(args.value);
+                this._toggleSubmitElement(value);
                 break;
             case 'displayExpr':
                 this.callBase(args);
@@ -1534,10 +1535,10 @@ const TagBox = SelectBox.inherit({
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
-                !args.value && this._refreshEvents();
+                !value && this._refreshEvents();
                 break;
             case 'value':
-                this._valuesToUpdate = args?.value;
+                this._valuesToUpdate = value;
                 this.callBase(args);
                 this._valuesToUpdate = undefined;
                 this._setListDataSourceFilter();
@@ -1547,18 +1548,18 @@ const TagBox = SelectBox.inherit({
                 this._renderTags();
                 break;
             case 'selectAllMode':
-                this._setListOption(args.name, args.value);
+                this._setListOption(name, value);
                 break;
             case 'selectedItem':
                 break;
             case 'selectedItems':
                 this._selectionChangedAction({
-                    addedItems: this._removeDuplicates(args.value, args.previousValue),
-                    removedItems: this._removeDuplicates(args.previousValue, args.value)
+                    addedItems: this._removeDuplicates(value, previousValue),
+                    removedItems: this._removeDuplicates(previousValue, value)
                 });
                 break;
             case 'multiline':
-                this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
+                this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !value);
                 this._renderSingleLineScroll();
                 break;
             case 'maxFilterQueryLength':
