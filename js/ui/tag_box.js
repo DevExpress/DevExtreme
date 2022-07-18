@@ -13,6 +13,7 @@ import { isDefined, isObject, isString } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
+import { removeDuplicates, getIntersection } from '../core/utils/array';
 import messageLocalization from '../localization/message';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
@@ -1429,8 +1430,8 @@ const TagBox = SelectBox.inherit({
     _getSortedListValues: function() {
         const listValues = this._getListValues();
         const currentValue = this.option('value') || [];
-        const existedItems = listValues.length ? currentValue.filter(item => listValues.indexOf(item) !== -1) : [];
-        const newItems = existedItems.length ? listValues.filter(item => currentValue.indexOf(item) === -1) : listValues;
+        const existedItems = listValues.length ? getIntersection(currentValue, listValues) : [];
+        const newItems = existedItems.length ? removeDuplicates(listValues, currentValue) : listValues;
 
         return existedItems.concat(newItems);
     },
