@@ -1875,9 +1875,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       });
     },
   }));
-});
 
-['Batch', 'Cell'].forEach((editMode) => {
   test(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const firstCell = dataGrid.getDataCell(0, 0);
@@ -1912,6 +1910,49 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       mode: editMode.toLowerCase(),
       allowUpdating: true,
     },
+  }));
+
+  // T1102475
+  test(`The ${editMode} mode - The edited cell value should be saved on click of another cell that has an editor as a tagbox and the showEditorAlways property is enabled`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const firstCell = dataGrid.getDataCell(0, 0);
+
+    // act
+    await t
+      .click(firstCell.element);
+
+    // assert
+    await t
+      .expect(firstCell.isEditCell).ok()
+      .expect(firstCell.isFocused).ok()
+      .expect(firstCell.getEditor().element.focused)
+      .ok();
+
+    // act
+    const secondCell = dataGrid.getDataCell(0, 1);
+
+    await t
+      .typeText(firstCell.getEditor().element, '123', { replace: true })
+      .click(secondCell.element);
+
+    // assert
+    await t
+      .expect(dataGrid.apiGetCellValue(0, 0)).eql('123');
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [{ ID: 1, Name: 'Ann', AssignedEmployee: ['A', 'B', 'C'] }],
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+    columns: ['Name', {
+      dataField: 'AssignedEmployee',
+      showEditorAlways: true,
+      editCellTemplate: (_, cellInfo) => ($('<div/>') as any).dxTagBox({
+        dataSource: ['A', 'B', 'C', 'D'],
+        value: cellInfo.value,
+      }),
+    },
+    ],
   }));
 });
 
