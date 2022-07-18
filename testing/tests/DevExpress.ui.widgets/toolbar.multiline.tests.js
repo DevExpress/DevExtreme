@@ -10,7 +10,11 @@ import { SingleLineStrategy } from 'ui/toolbar/strategy/toolbar.singleline';
 
 import 'generic_light.css!';
 
+const TOOLBAR_ITEMS_CLASS = 'dx-toolbar-item';
+const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
 const TOOLBAR_ITEM_HEIGHT = 36;
+
+const BUTTON_TEXT_CLASS = 'dx-button-text';
 
 class ToolbarTestWrapper {
     constructor(options) {
@@ -56,6 +60,14 @@ class ToolbarTestWrapper {
 
     set multiline(value) {
         this._toolbar.option('multiline', value);
+    }
+
+    getItems() {
+        return this._$toolbar.find(`.${TOOLBAR_ITEMS_CLASS}`);
+    }
+
+    getItemContainer() {
+        return this._$toolbar.find(`.${TOOLBAR_ITEMS_CONTAINER_CLASS}`);
     }
 
     checkToolBarHeight(expected) {
@@ -172,6 +184,44 @@ QUnit.module('render', () => {
         testWrapper.checkItemsInLine([3, 4], 2);
         testWrapper.checkItemsInLine([5], 3);
         testWrapper.checkItemsInLine([6], 4);
+    });
+
+    ['always', 'inMenu'].forEach(showText => {
+        QUnit.test(`button text visibility when showText is ${showText}`, function() {
+            const testWrapper = new ToolbarTestWrapper({
+                items: [{
+                    location: 'before',
+                    widget: 'dxButton',
+                    showText,
+                    options: { text: 'back button', icon: 'back' }
+                }],
+                multiline: true
+            });
+
+            QUnit.assert.strictEqual(testWrapper.getItems().eq(0).find(`.${BUTTON_TEXT_CLASS}`).is(':visible'), showText === 'always' ? true : false);
+        });
+    });
+
+    QUnit.test('Items should be placed in general items container without sections', function() {
+        const testWrapper = new ToolbarTestWrapper({
+            multiline: true,
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: { text: 'back button', icon: 'back' }
+            }, {
+                location: 'center',
+                text: ''
+            }]
+        });
+
+        const $itemContainer = testWrapper.getItemContainer();
+
+        QUnit.assert.strictEqual($itemContainer.children().length, 2, 'itemContainer nested elements count');
+
+        testWrapper.getItems().each((_, item) => {
+            QUnit.assert.strictEqual(item.parentElement, testWrapper.getItemContainer().get(0));
+        });
     });
 });
 

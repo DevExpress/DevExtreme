@@ -186,11 +186,7 @@ class Toolbar extends ToolbarBase {
     _itemOptionChanged(item, property, value) {
         this._layoutStrategy._itemOptionChanged(item, property, value);
 
-        if(this._isMenuItem(item)) {
-            // TODO
-        } else if(this._isToolbarItem(item)) {
-            super._itemOptionChanged(item, property, value);
-        } else {
+        if(!this._isMenuItem(item)) {
             super._itemOptionChanged(item, property, value);
         }
 

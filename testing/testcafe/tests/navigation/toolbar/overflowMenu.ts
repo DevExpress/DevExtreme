@@ -79,5 +79,9 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
     .expect(menu.getPopup().getWrapper().count)
     .eql(0);
 }).before(async () => createWidget('dxToolbar', {
-  items: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
+  items: [
+    { text: 'item1', locateInMenu: 'always' },
+    { text: 'item2', locateInMenu: 'always' },
+    { text: 'item3', locateInMenu: 'always' },
+  ],
 }));

@@ -199,18 +199,15 @@ export class SingleLineStrategy {
         return this._toolbar._getSummaryItemsWidth([this._toolbar._$beforeSection, this._toolbar._$centerSection, this._toolbar._$afterSection]);
     }
 
-    _itemOptionChanged(item, property, value) { // TODO: think
+    _itemOptionChanged(item, property, value) {
         if(this._toolbar._isMenuItem(item)) {
             if(property === 'disabled' || property === 'options.disabled') {
                 this._menu?._itemOptionChanged(item, property, value);
-            } else {
-                this.renderMenuItems();
+                return;
             }
-        } else if(this._toolbar._isToolbarItem(item)) {
-            // TODO
-        } else {
-            this.renderMenuItems();
         }
+
+        this.renderMenuItems();
     }
 
     _renderItem(item, itemElement) {
