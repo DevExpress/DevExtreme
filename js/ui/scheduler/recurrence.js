@@ -255,12 +255,6 @@ class RecurrenceProcessor {
 
                 const utcDate = timeZoneUtils.setOffsetsToDate(date,
                     [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
-                const originClientOffset = date.getTimezoneOffset();
-                const utcDateClientOffset = utcDate.getTimezoneOffset();
-
-                if(utcDateClientOffset !== originClientOffset) {
-                    utcDate.setMilliseconds(utcDate.getMilliseconds() - (utcDateClientOffset - originClientOffset) * 60000);
-                }
 
                 this.rRuleSet.exdate(utcDate);
             });
