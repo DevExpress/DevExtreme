@@ -40,16 +40,15 @@ QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
     let style = '<style>\
-            html, body {\
-                height: 100%;\
-                margin: 0;\
-            }\
-            \
-            #qunit-fixture {\
-                width: 100%;\
-                height: 100%;\
-            }\
-        </style>';
+        html, body {\
+            height: 100%;\
+            margin: 0;\
+        }\
+        \
+        #qunit-fixture {\
+            width: 100%;\
+            height: 100%;\
+        }';
 
     const fixtureRoot = $('#qunit-fixture').get(0);
 
@@ -62,8 +61,10 @@ QUnit.testStart(function() {
             :host {\
                 width: 100%;\
                 height: 100%;\
-            };';
+            }';
     }
+
+    style += '</style>';
 
     const markup = style +
         '<div id="popup"></div>\
