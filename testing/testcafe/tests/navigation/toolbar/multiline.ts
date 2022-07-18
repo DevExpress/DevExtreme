@@ -16,7 +16,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
     const toolbar = new Toolbar('#container');
 
     await t
-      .expect(await takeScreenshot(`Default-nested-widgets-render-in-multiline,rtlEnabled:${rtlEnabled}.png`, toolbar.element))
+      .expect(await takeScreenshot(`Default-nested-widgets-render-in-multiline,rtlEnabled=${rtlEnabled}.png`, toolbar.element))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
