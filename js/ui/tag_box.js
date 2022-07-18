@@ -1488,7 +1488,7 @@ const TagBox = SelectBox.inherit({
     _getSelectedItemsDifference(newItems, previousItems) {
         const previousItemsValuesMap = previousItems.reduce((map, item) => {
             const value = this._valueGetter(item);
-            map[value] = true;
+            map[value] = item;
             return map;
         }, {});
 
@@ -1496,14 +1496,14 @@ const TagBox = SelectBox.inherit({
         newItems.forEach(item => {
             const value = this._valueGetter(item);
             if(!previousItemsValuesMap[value]) {
-                addedItems.push(value);
+                addedItems.push(item);
             }
             delete previousItemsValuesMap[value];
         });
 
         return {
             addedItems,
-            removedItems: Object.keys(previousItemsValuesMap)
+            removedItems: Object.values(previousItemsValuesMap)
         };
     },
 
