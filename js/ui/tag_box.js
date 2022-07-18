@@ -1481,6 +1481,19 @@ const TagBox = SelectBox.inherit({
     },
 
     _getSelectedItemsDifference(newItems, previousItems) {
+        if(!newItems.length) {
+            return {
+                addedItems: [],
+                removedItems: previousItems.slice()
+            };
+        }
+        if(!previousItems.length) {
+            return {
+                addedItems: newItems.slice(),
+                removedItems: []
+            };
+        }
+
         const previousItemsValuesMap = previousItems.reduce((map, item) => {
             const value = this._valueGetter(item);
             map[value] = item;
