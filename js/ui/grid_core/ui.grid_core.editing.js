@@ -2457,7 +2457,7 @@ export const editingModule = {
                 _rowPointerDown: function(e) {
                     this._pointerDownTimeout = setTimeout(() => {
                         this._editCellByClick(e, 'down');
-                    });
+                    }, 100);
                 },
                 _rowClick: function(e) {
                     const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
