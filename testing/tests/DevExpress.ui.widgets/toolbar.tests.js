@@ -7,7 +7,6 @@ import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
 import { getHeight } from 'core/utils/size';
 import domAdapter from 'core/dom_adapter';
-import devices from 'core/devices';
 
 import 'ui/text_box';
 import 'generic_light.css!';
@@ -109,8 +108,8 @@ QUnit.module('render', {
 
         const $label = this.$element.find(`.${TOOLBAR_LABEL_CLASS}`);
 
-        assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
-        assert.equal($label.children().eq(0).css('overflow'), 'hidden');
+        assert.strictEqual($label.children().eq(0).css('text-overflow'), 'ellipsis');
+        assert.strictEqual($label.children().eq(0).css('overflow'), 'hidden');
 
         const $centerSection = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`);
         const beforeSectionWidth = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`)[0].getBoundingClientRect().width;
@@ -137,8 +136,8 @@ QUnit.module('render', {
 
         const $label = this.$element.find(`.${TOOLBAR_LABEL_CLASS}`);
 
-        assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
-        assert.equal($label.children().eq(0).css('overflow'), 'hidden');
+        assert.strictEqual($label.children().eq(0).css('text-overflow'), 'ellipsis');
+        assert.strictEqual($label.children().eq(0).css('overflow'), 'hidden');
 
         const $centerSection = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`);
         const beforeSectionWidth = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`)[0].getBoundingClientRect().width;
@@ -162,7 +161,7 @@ QUnit.module('render', {
         });
         const margin = element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).get(0).style.margin;
 
-        assert.equal(margin, '0px auto', 'aligned by center');
+        assert.strictEqual(margin, '0px auto', 'aligned by center');
     });
 
     ['before', 'center', 'after', undefined].forEach((location) => {
@@ -183,15 +182,15 @@ QUnit.module('render', {
                         const $menuItems = $toolbar.find(`.${TOOLBAR_MENU_CONTAINER_CLASS}`).not(`.${INVISIBLE_STATE_CLASS}`);
 
                         if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
-                            QUnit.assert.equal($menuItems.length, 1, 'menu items count for ');
-                            QUnit.assert.equal($beforeItems.length, 0, 'items count with before location value');
-                            QUnit.assert.equal($centerItems.length, 0, 'items count with center location value');
-                            QUnit.assert.equal($afterItems.length, 0, 'items count with after location value');
+                            QUnit.assert.strictEqual($menuItems.length, 1, 'menu items count for ');
+                            QUnit.assert.strictEqual($beforeItems.length, 0, 'items count with before location value');
+                            QUnit.assert.strictEqual($centerItems.length, 0, 'items count with center location value');
+                            QUnit.assert.strictEqual($afterItems.length, 0, 'items count with after location value');
                         } else {
-                            QUnit.assert.equal($menuItems.length, 0, 'menu items count');
-                            QUnit.assert.equal($beforeItems.length, expected.before || 0, 'items count with before location value');
-                            QUnit.assert.equal($centerItems.length, expected.center || 0, 'items count with center location value');
-                            QUnit.assert.equal($afterItems.length, expected.after || 0, 'items count with after location value');
+                            QUnit.assert.strictEqual($menuItems.length, 0, 'menu items count');
+                            QUnit.assert.strictEqual($beforeItems.length, expected.before || 0, 'items count with before location value');
+                            QUnit.assert.strictEqual($centerItems.length, expected.center || 0, 'items count with center location value');
+                            QUnit.assert.strictEqual($afterItems.length, expected.after || 0, 'items count with after location value');
                         }
                     };
 
@@ -339,7 +338,7 @@ QUnit.module('render', {
         });
 
         assert.ok(templateUsed);
-        assert.equal(this.$element.find('.custom-template').length, 1);
+        assert.strictEqual(this.$element.find('.custom-template').length, 1);
     });
 
 
@@ -368,10 +367,10 @@ QUnit.module('render', {
             }]);
 
             const toolbarItems = this.$element.find('.dx-toolbar-after').children();
-            assert.equal(toolbarItems.length, 2, 'All items are rendered');
+            assert.strictEqual(toolbarItems.length, 2, 'All items are rendered');
 
-            assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
-            assert.equal(toolbarItems[1].innerText.trim(), '', 'second item is menu button');
+            assert.strictEqual(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+            assert.strictEqual(toolbarItems[1].innerText.trim(), '', 'second item is menu button');
         });
 
         QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: before, deferRendering=${deferRendering}.`, function(assert) {
@@ -386,8 +385,8 @@ QUnit.module('render', {
             } ]);
 
             const toolbarItems = this.$element.find('.dx-toolbar-before').children();
-            assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
-            assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
+            assert.strictEqual(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+            assert.strictEqual(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
         });
 
         QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: after, deferRendering=${deferRendering}.`, function(assert) {
@@ -402,8 +401,8 @@ QUnit.module('render', {
             } ]);
 
             const toolbarItems = this.$element.find('.dx-toolbar-after').children();
-            assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
-            assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
+            assert.strictEqual(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+            assert.strictEqual(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
         });
     });
 
@@ -422,9 +421,9 @@ QUnit.module('render', {
         });
 
         const $button = $toolbar.find('.dx-button');
-        assert.equal($button.attr('attr1'), 'test1');
-        assert.equal($button.attr('attr2'), 'test2');
-        assert.equal($button.attr('attr3'), 'test3');
+        assert.strictEqual($button.attr('attr1'), 'test1');
+        assert.strictEqual($button.attr('attr2'), 'test2');
+        assert.strictEqual($button.attr('attr3'), 'test3');
     });
 
     QUnit.test('toolbar.items = [ buttonGroup.items=[ item1.elementAttr.class="test1",item2.elementAttr.class="test2"] ]', function(assert) {
@@ -443,10 +442,10 @@ QUnit.module('render', {
         });
 
         const $button = $toolbar.find('.dx-button');
-        assert.equal($button.eq(0).hasClass('test1'), true);
-        assert.equal($button.eq(0).hasClass('test2'), false);
-        assert.equal($button.eq(1).hasClass('test1'), false);
-        assert.equal($button.eq(1).hasClass('test2'), true);
+        assert.strictEqual($button.eq(0).hasClass('test1'), true);
+        assert.strictEqual($button.eq(0).hasClass('test2'), false);
+        assert.strictEqual($button.eq(1).hasClass('test1'), false);
+        assert.strictEqual($button.eq(1).hasClass('test2'), true);
     });
 });
 
@@ -470,15 +469,15 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
             { locateInMenu: 'always', text: 'item2' }
         ]);
 
-        assert.equal(this.instance.option('overflowMenuVisible'), false);
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), false);
 
         this.overflowMenu.click();
 
-        assert.equal(this.instance.option('overflowMenuVisible'), true);
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), true);
 
         this.overflowMenu.click();
 
-        assert.equal(this.instance.option('overflowMenuVisible'), false);
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), false);
     });
 
     QUnit.test('open menu by set toolbar.overflowMenuVisible = true', function(assert) {
@@ -488,7 +487,7 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
 
         this.instance.option('overflowMenuVisible', true);
 
-        assert.equal(this.overflowMenu.instance().option('opened'), true);
+        assert.strictEqual(this.overflowMenu.instance().option('opened'), true);
     });
 
 
@@ -499,11 +498,11 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.equal(this.overflowMenu.instance().option('opened'), true);
+        assert.strictEqual(this.overflowMenu.instance().option('opened'), true);
 
         this.instance.option('overflowMenuVisible', false);
 
-        assert.equal(this.overflowMenu.instance().option('opened'), false);
+        assert.strictEqual(this.overflowMenu.instance().option('opened'), false);
     });
 
 
@@ -512,15 +511,15 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
             { locateInMenu: 'always', text: 'item2' }
         ]);
 
-        assert.equal(this.instance.option('overflowMenuVisible'), false);
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), false);
 
         this.overflowMenu.instance().option('opened', true);
 
-        assert.equal(this.instance.option('overflowMenuVisible'), true);
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), true);
 
         this.overflowMenu.instance().option('opened', false);
 
-        assert.equal(this.instance.option('overflowMenuVisible'), false);
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), false);
     });
 
     QUnit.test('menu button click doesn\'t dispatch action', function(assert) {
@@ -535,7 +534,7 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.equal(onItemClickHandler.callCount, 0, 'onItemClick was not executed');
+        assert.strictEqual(onItemClickHandler.callCount, 0, 'onItemClick was not executed');
     });
 
     QUnit.test('windowResize should not show/hide menu that doesn\'t created', function(assert) {
@@ -567,7 +566,7 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
 
         this.instance.option('items[0].disabled', false);
 
-        assert.equal($('.dx-state-disabled').length, 0, 'disabled state changed');
+        assert.strictEqual($('.dx-state-disabled').length, 0, 'disabled state changed');
     });
 });
 
@@ -681,10 +680,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 115);
-        assert.equal(parseInt($center.css('margin-right')), 65);
-        assert.equal($center.css('float'), 'none');
-        assert.equal($center.width(), 220);
+        assert.strictEqual(parseInt($center.css('margin-left')), 115);
+        assert.strictEqual(parseInt($center.css('margin-right')), 65);
+        assert.strictEqual($center.css('float'), 'none');
+        assert.strictEqual($center.width(), 220);
     });
 
     QUnit.test('title should be centered considering different before/after block widths (big after case)', function(assert) {
@@ -705,10 +704,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 65);
-        assert.equal(parseInt($center.css('margin-right')), 115);
-        assert.equal($center.css('float'), 'right');
-        assert.equal($center.width(), 220);
+        assert.strictEqual(parseInt($center.css('margin-left')), 65);
+        assert.strictEqual(parseInt($center.css('margin-right')), 115);
+        assert.strictEqual($center.css('float'), 'right');
+        assert.strictEqual($center.width(), 220);
     });
 
     QUnit.test('title should be centered considering different before/after block widths after visible option change', function(assert) {
@@ -724,7 +723,7 @@ QUnit.module('widget sizing render', () => {
         $element.dxToolbar('option', 'items[0].visible', true);
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 65);
+        assert.strictEqual(parseInt($center.css('margin-left')), 65);
     });
 
     QUnit.test('items should be arranged after rendering in the dxToolbarBase used in the dxPopup', function(assert) {
@@ -753,10 +752,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 115);
-        assert.equal(parseInt($center.css('margin-right')), 65);
-        assert.equal($center.css('float'), 'none');
-        assert.equal($center.width(), 220);
+        assert.strictEqual(parseInt($center.css('margin-left')), 115);
+        assert.strictEqual(parseInt($center.css('margin-right')), 65);
+        assert.strictEqual($center.css('float'), 'none');
+        assert.strictEqual($center.width(), 220);
     });
 
     [
@@ -809,7 +808,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         const $center = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
         const $after = this.$element.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`).eq(0);
 
-        assert.equal($center.offset().left + $center.outerWidth(), $after.offset().left, 'center has correct position');
+        assert.strictEqual($center.offset().left + $center.outerWidth(), $after.offset().left, 'center has correct position');
     });
 
     QUnit.test('items in center section should be at correct position after resize', function(assert) {
@@ -828,7 +827,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         const elementCenter = this.$element.offset().left + this.$element.outerWidth() * 0.5;
         const itemCenter = $item.offset().left + $item.outerWidth() * 0.5;
 
-        assert.equal(itemCenter, elementCenter, 'item has correct position');
+        assert.strictEqual(itemCenter, elementCenter, 'item has correct position');
     });
 
     QUnit.test('Resize container: 1000px -> 100px, 100px -> 1000px', function(assert) {
@@ -844,15 +843,15 @@ QUnit.module('adaptivity', moduleConfig, () => {
             ],
         });
         const getVisibleItemsCount = () => $toolbar.find(`.${TOOLBAR_ITEM_CLASS}:visible`).length;
-        assert.equal(getVisibleItemsCount(), 3, 'all items are visible');
+        assert.strictEqual(getVisibleItemsCount(), 3, 'all items are visible');
 
         $container.width(100);
         $toolbar.dxToolbar('instance').updateDimensions();
-        assert.equal(getVisibleItemsCount(), 0, 'all items are invisible, because there is no free space');
+        assert.strictEqual(getVisibleItemsCount(), 0, 'all items are invisible, because there is no free space');
 
         $container.width(1000);
         $toolbar.dxToolbar('instance').updateDimensions();
-        assert.equal(getVisibleItemsCount(), 3, 'all items became visible');
+        assert.strictEqual(getVisibleItemsCount(), 3, 'all items became visible');
     });
 
     QUnit.test('center section should be at correct position for huge before section', function(assert) {
@@ -867,7 +866,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         const $before = this.$element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`).eq(0);
         const $center = this.$element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`).eq(0);
 
-        assert.equal($center.offset().left, $before.offset().left + $before.outerWidth(), 'center has correct position');
+        assert.strictEqual($center.offset().left, $before.offset().left + $before.outerWidth(), 'center has correct position');
     });
 
     QUnit.test('center section should be at correct position for huge after section after change size', function(assert) {
@@ -886,7 +885,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         $item.width(190);
         resizeCallbacks.fire();
 
-        assert.equal($center.get(0).getBoundingClientRect().right, $after.get(0).getBoundingClientRect().left, 'center has correct position');
+        assert.strictEqual($center.get(0).getBoundingClientRect().right, $after.get(0).getBoundingClientRect().left, 'center has correct position');
     });
 
     QUnit.test('center section should be at correct position for huge before section after change size', function(assert) {
@@ -906,7 +905,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         $item.width(190);
         resizeCallbacks.fire();
 
-        assert.equal($center.get(0).getBoundingClientRect().left, $before.get(0).getBoundingClientRect().right, 'center has correct position');
+        assert.strictEqual($center.get(0).getBoundingClientRect().left, $before.get(0).getBoundingClientRect().right, 'center has correct position');
     });
 
     QUnit.test('overflow items should be hidden if there is no free space for them', function(assert) {
@@ -922,7 +921,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         });
 
         const $visibleItems = this.$element.find(`.${TOOLBAR_ITEM_CLASS}:visible`);
-        assert.equal($visibleItems.length, 3, 'two items was hidden');
+        assert.strictEqual($visibleItems.length, 3, 'two items was hidden');
     });
 
     QUnit.test('overflow items should be shown if there is free space for them after resize', function(assert) {
@@ -939,10 +938,10 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         this.instance.option('width', 1000);
         const $visibleItems = this.$element.find(`.${TOOLBAR_ITEM_CLASS}:visible`);
-        assert.equal($visibleItems.length, 5, 'all items is visible');
+        assert.strictEqual($visibleItems.length, 5, 'all items is visible');
     });
 
-    QUnit.test('dropdown menu should be rendered if there is hidden overflow items', function(assert) {
+    QUnit.test('menu should be rendered if there is hidden overflow items', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -954,10 +953,10 @@ QUnit.module('adaptivity', moduleConfig, () => {
             width: 400
         });
 
-        assert.equal(this.overflowMenu.$element().length, 1);
+        assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
-    QUnit.test('dropdown menu button should be invisible if there is hidden invisible overflow items', function(assert) {
+    QUnit.test('menu button should be invisible if there is hidden invisible overflow items', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -967,7 +966,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
             ]
         });
 
-        assert.equal(this.overflowMenu.$element().length, 1, 'button is rendered');
+        assert.strictEqual(this.overflowMenu.$element().length, 1, 'button is rendered');
         assert.notOk(this.overflowMenu.$element().is(':visible'), 'button is invisible');
     });
 
@@ -981,7 +980,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
             width: 190
         });
 
-        assert.equal(this.overflowMenu.instance().option('items').length, 2);
+        assert.strictEqual(this.overflowMenu.instance().option('items').length, 2);
     });
 
     QUnit.test('overflow items should not be rendered twice after resize', function(assert) {
@@ -1001,10 +1000,10 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         this.instance.option('width', 228);
 
-        assert.equal(this.overflowMenu.instance().option('items').length, 1);
+        assert.strictEqual(this.overflowMenu.instance().option('items').length, 1);
     });
 
-    QUnit.test('dropdown menu should be rendered if there is hidden overflow items after resize', function(assert) {
+    QUnit.test('menu should be rendered if there is hidden overflow items after resize', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -1021,7 +1020,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
-    QUnit.test('dropdown menu shouldn\'t be closed during resize with open menu if menu has items', function(assert) {
+    QUnit.test('menu shouldn\'t be closed during resize with open menu if menu has items', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -1038,7 +1037,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.instance().option('opened'), true);
     });
 
-    QUnit.test('dropdown menu should be closed if after resize with open menu all items become visible', function(assert) {
+    QUnit.test('menu should be closed if after resize with open menu all items become visible', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -1057,7 +1056,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.instance().option('opened'), false);
     });
 
-    QUnit.test('dropdown menu strategy should be used if there is overflow widget', function(assert) {
+    QUnit.test('menu strategy should be used if there is overflow widget', function(assert) {
         this.instance.option({
             items: [
                 { location: 'center', locateInMenu: 'auto', widget: 'dxButton', options: {} }
@@ -1068,7 +1067,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
-    QUnit.test('dropdown menu strategy should be used if there is overflow widget, items: [{ locateInMenu: "auto", widget: "dxButton", showText: "inMenu" }]', function(assert) {
+    QUnit.test('menu strategy should be used if there is overflow widget, items: [{ locateInMenu: "auto", widget: "dxButton", showText: "inMenu" }]', function(assert) {
         this.instance.option({
             items: [
                 { locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test' }, showText: 'inMenu' }
@@ -1081,7 +1080,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.ok($buttonText.is(':hidden'));
     });
 
-    QUnit.test('dropdown menu strategy should be used if there is overflow widget, items: [{ location: "center", locateInMenu: "auto" }]', function(assert) {
+    QUnit.test('menu strategy should be used if there is overflow widget, items: [{ location: "center", locateInMenu: "auto" }]', function(assert) {
         this.instance.option({
             items: [
                 { location: 'center', locateInMenu: 'auto', text: 'test' }
@@ -1092,7 +1091,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
-    QUnit.test('visibility of dropdown menu should be changed if overflow items was hidden/shown after resize', function(assert) {
+    QUnit.test('visibility of menu should be changed if overflow items was hidden/shown after resize', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -1169,7 +1168,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.ok($item.parent().is($itemParent), 'item was rendered in toolbar');
     });
 
-    QUnit.test('dropdown menu should have four sections for items', function(assert) {
+    QUnit.test('menu should have four sections for items', function(assert) {
         const $beforeItem = $('<div>').width(150);
         const $centerItem = $('<div>').width(150);
         const $afterItem = $('<div>').width(150);
@@ -1188,7 +1187,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         const $sections = this.overflowMenu.$element().find('.dx-toolbar-menu-section');
 
-        assert.equal($sections.length, 4, 'four sections was rendered');
+        assert.strictEqual($sections.length, 4, 'four sections was rendered');
         assert.ok($.contains($sections.eq(0).get(0), $beforeItem.get(0)));
         assert.ok($.contains($sections.eq(1).get(0), $centerItem.get(0)));
 
@@ -1196,7 +1195,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.ok($sections.eq(2).hasClass('dx-toolbar-menu-last-section'), 'border for last section is removed');
     });
 
-    QUnit.test('dropdown menu shouldn\'t be closed after click on editors', function(assert) {
+    QUnit.test('menu shouldn\'t be closed after click on editors', function(assert) {
         const $beforeItem = $('<div>').width(150);
 
         this.instance.option({
@@ -1213,7 +1212,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown isn\'t closed');
     });
 
-    QUnit.test('dropdown menu should be closed after click on button or menu items', function(assert) {
+    QUnit.test('menu should be closed after click on button or menu items', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test text' } },
@@ -1360,7 +1359,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         resizeCallbacks.fire();
 
         this.overflowMenu.click();
-        assert.equal($('.dx-list-item').length, 1, 'only one item in menu is rendered');
+        assert.strictEqual($('.dx-list-item').length, 1, 'only one item in menu is rendered');
     });
 
     QUnit.test('toolbar menu should be rendered after change item visible', function(assert) {
@@ -1370,17 +1369,17 @@ QUnit.module('adaptivity', moduleConfig, () => {
             items: [{ locateInMenu: 'always', text: 'item1', visible: false }]
         });
 
-        assert.equal(this.overflowMenu.$element().length, 0, 'menu is not rendered');
+        assert.strictEqual(this.overflowMenu.$element().length, 0, 'menu is not rendered');
 
         this.instance.option('items[0].visible', true);
 
-        assert.equal(this.overflowMenu.$element().length, 1, 'menu is rendered');
+        assert.strictEqual(this.overflowMenu.$element().length, 1, 'menu is rendered');
 
         if(!this.overflowMenu.$element().length) return;
 
         this.overflowMenu.click();
 
-        assert.equal($('.dx-list-item').length, 1, 'item in menu is rendered');
+        assert.strictEqual($('.dx-list-item').length, 1, 'item in menu is rendered');
         this.overflowMenu.click();
     });
 
@@ -1393,7 +1392,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         });
 
         this.instance.option('items[0].visible', false);
-        assert.equal(this.overflowMenu.$element().find(`.${TOOLBAR_ITEM_CLASS}:visible`).length, 0, 'item was hidden');
+        assert.strictEqual(this.overflowMenu.$element().find(`.${TOOLBAR_ITEM_CLASS}:visible`).length, 0, 'item was hidden');
     });
 
     QUnit.test('menu should be hidden if all overflow items were hidden', function(assert) {
@@ -1441,7 +1440,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.equal($(`.${TOOLBAR_MENU_SECTION_CLASS} .${LIST_ITEM_CLASS}.test`).length, 1, 'item with the custom CSS');
+        assert.strictEqual($(`.${TOOLBAR_MENU_SECTION_CLASS} .${LIST_ITEM_CLASS}.test`).length, 1, 'item with the custom CSS');
     });
 
     QUnit.test('dropDown should use default container', function(assert) {
@@ -1495,8 +1494,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
     });
 
-    QUnit.test('dropdown menu should have height less then document height on android (T1010948)', function(assert) {
-        devices.current({ platform: 'android' });
+    QUnit.test('menu popup content should have height less then document height (T1010948)', function(assert) {
         this.instance.option({
             items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
         });
@@ -1504,16 +1502,15 @@ QUnit.module('adaptivity', moduleConfig, () => {
         this.instance.option('overflowMenuVisible', true);
         this.clock.tick();
 
-        const $popupContent = this.overflowMenu.instance()._popup.$content();
+        const $content = this.overflowMenu.instance()._popup.$content();
 
         const document = domAdapter.getDocumentElement();
-        assert.equal(getHeight($popupContent) < document.clientHeight, true, `popup height must be less then document height (${getHeight($popupContent)} < ${document.clientHeight})`);
-        devices.current(null);
+        assert.strictEqual(getHeight($content) < document.clientHeight, true, `popup height must be less then document height (${getHeight($content)} < ${document.clientHeight})`);
     });
 });
 
 QUnit.module('default template', moduleConfig, () => {
-    QUnit.test('T430159 dropdown menu should be closed after click on item if location is defined', function(assert) {
+    QUnit.test('T430159 menu should be closed after click on item if location is defined', function(assert) {
         const onClickActionStub = sinon.stub();
 
         this.instance.option({
@@ -1536,7 +1533,7 @@ QUnit.module('default template', moduleConfig, () => {
         $($items.eq(0)).trigger('dxclick');
 
         assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
-        assert.equal(onClickActionStub.callCount, 1, 'onClick was fired');
+        assert.strictEqual(onClickActionStub.callCount, 1, 'onClick was fired');
     });
 
     ['single', 'multiple'].forEach(selectionMode => {
@@ -1562,7 +1559,7 @@ QUnit.module('default template', moduleConfig, () => {
             $($items.eq(0)).trigger('dxclick');
 
             assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
-            assert.equal(onClickActionStub.callCount, 1, 'onClick was fired');
+            assert.strictEqual(onClickActionStub.callCount, 1, 'onClick was fired');
         });
     });
 });
