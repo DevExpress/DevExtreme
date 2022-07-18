@@ -5,8 +5,6 @@ import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
-import { getHeight } from 'core/utils/size';
-import { getWindow } from 'core/utils/window';
 
 import 'ui/text_box';
 import 'generic_light.css!';
@@ -1492,20 +1490,6 @@ QUnit.module('adaptivity', moduleConfig, () => {
         this.overflowMenu.click();
 
         assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
-    });
-
-    QUnit.test('menu popup content should have height less then window height (T1010948)', function(assert) {
-        this.instance.option({
-            items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
-        });
-
-        this.instance.option('overflowMenuVisible', true);
-        this.clock.tick();
-
-        const $content = this.overflowMenu.instance()._popup.$content();
-
-        const window = getWindow();
-        assert.strictEqual(getHeight($content) < getHeight(window), true, `popup height must be less then document height (${getHeight($content)} < ${getHeight(window)})`);
     });
 });
 
