@@ -39,8 +39,7 @@ themes.setDefaultTimeout(0);
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
-    const markup =
-        '<style>\
+    let style = '<style>\
             html, body {\
                 height: 100%;\
                 margin: 0;\
@@ -50,18 +49,24 @@ QUnit.testStart(function() {
                 width: 100%;\
                 height: 100%;\
             }\
-            \
+        </style>';
+
+    const fixtureRoot = $('#qunit-fixture').get(0);
+
+    if(fixtureRoot.getRootNode().host) {
+        style += '\
             :scope > div {\
                 width: 100% !important;\
                 height: 100% !important;\
             }\
             :host {\
                 width: 100%;\
-                hright: 100%;\
-            }\
-        </style>\
-        \
-        <div id="popup"></div>\
+                height: 100%;\
+            };';
+    }
+
+    const markup = style +
+        '<div id="popup"></div>\
         <div id="secondPopup"></div>\
         <div id="container"></div>\
         \
