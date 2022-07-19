@@ -2,7 +2,7 @@ import Quill from 'devextreme-quill';
 
 import $ from '../../../core/renderer';
 import { getBoundingRect } from '../../../core/utils/position';
-import PopupModule from './popup/ui.popup';
+import PopupModule from './popup';
 import BaseModule from './base';
 import Variable from '../formats/variable';
 

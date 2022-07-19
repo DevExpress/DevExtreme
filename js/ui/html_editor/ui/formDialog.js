@@ -1,7 +1,7 @@
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 
-import Popup from '../../popup/ui.popup';
+import Popup from '../../popup';
 import Form from '../../form';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';

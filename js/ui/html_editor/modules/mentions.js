@@ -7,7 +7,7 @@ import { getPublicElement } from '../../../core/element';
 import eventsEngine from '../../../events/core/events_engine';
 
 import BaseModule from './base';
-import PopupModule from './popup/ui.popup';
+import PopupModule from './popup';
 import Mention from '../formats/mention';
 
 let MentionModule = BaseModule;
