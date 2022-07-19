@@ -331,7 +331,19 @@ describe('Widget\'s container manipulations', () => {
 
     expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       id: 'my-id',
-      hidden: true,
+      hidden: 'true',
+    });
+  });
+
+  it('pass custom attribute with empty value (text) as props on first render', () => {
+    $('#component').attr('id', 'my-id');
+    $('#my-id').attr('text', '');
+
+    $('#my-id').dxTestWidget({});
+
+    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
+      id: 'my-id',
+      text: '',
     });
   });
 
