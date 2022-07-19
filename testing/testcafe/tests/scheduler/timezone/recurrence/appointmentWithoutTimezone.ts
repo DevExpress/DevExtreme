@@ -1,11 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import { getScreenshotName } from './timezoneTestingUtils';
-import createWidget from '../../../helpers/createWidget';
-import SelectBox from '../../../model/selectBox';
-import Scheduler from '../../../model/scheduler';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import url from '../../../../helpers/getPageUrl';
+import { getScreenshotName } from '../timezoneTestingUtils';
+import createWidget from '../../../../helpers/createWidget';
+import SelectBox from '../../../../model/selectBox';
+import Scheduler from '../../../../model/scheduler';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';
@@ -41,7 +41,7 @@ const selectTimezoneInUI = async (t: TestController, selectBox: SelectBox, timez
 };
 
 fixture`Recurrent appointments without timezone in scheduler with timezone`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);

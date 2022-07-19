@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import Scheduler from '../../../model/scheduler';
-import AppointmentDialog from '../../../model/scheduler/appointment/dialog';
-import Appointment from '../../../model/scheduler/appointment';
+import url from '../../../../helpers/getPageUrl';
+import createWidget from '../../../../helpers/createWidget';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
+import Scheduler from '../../../../model/scheduler';
+import AppointmentDialog from '../../../../model/scheduler/appointment/dialog';
+import Appointment from '../../../../model/scheduler/appointment';
 
 interface ITestResizeOptions {
   direction: keyof Appointment['resizableHandle'];
@@ -15,7 +15,7 @@ interface ITestDragNDropOptions {
   cellIdx: number;
 }
 
-const SCREENSHOT_BASE_NAME = 'recurrent-appointment-timezone-dst__editing__';
+const SCREENSHOT_BASE_NAME = 'recurrent-appointment-timezone-dst__editing';
 const SCHEDULER_SELECTOR = '#container';
 const TEST_APPOINTMENT_TEXT = 'Watercolor Landscape';
 const TEST_CURSOR_OPTIONS = { speed: 0.5 };
@@ -113,7 +113,7 @@ async function configureScheduler(t: TestController, { start, end }: { start: Da
 }
 
 fixture`Editing recurrent appointment in DST time`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 // === EDITING POPUP ===
 test('Editing popup: should have correctly been edited from editing popup. DST - winter time', async (t) => {
