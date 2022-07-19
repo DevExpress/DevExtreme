@@ -62,17 +62,10 @@ export class TimeZoneCalculator {
       ? -1
       : 1;
 
-    // V3
-    const convertedDateMs = date.getTime() + (targetOffset - clientOffset) * direction * MS_IN_HOUR;
-    return new Date(convertedDateMs);
-
-    // V2
-    // NOTE: This code block commented and placed for history.
-    // This method was changed after fix T1100758.
-    // const resultDate = new Date(date);
-    // resultDate.setMinutes(resultDate.getMinutes() - direction * (60 * clientOffset));
-    // resultDate.setMinutes(resultDate.getMinutes() + direction * (60 * targetOffset));
-    // return new Date(resultDate);
+    const resultDate = new Date(date);
+    resultDate.setMinutes(resultDate.getMinutes() - direction * (60 * clientOffset));
+    resultDate.setMinutes(resultDate.getMinutes() + direction * (60 * targetOffset));
+    return new Date(resultDate);
 
     // V1
     // NOTE: Previous date calculation engine.
