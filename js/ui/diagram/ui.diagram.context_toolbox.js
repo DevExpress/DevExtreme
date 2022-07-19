@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 
 import Widget from '../widget/ui.widget';
-import Popover from '../popover';
+import Popover from '../popover/ui.popover';
 
 import { getDiagram } from './diagram.importer';
 import { getWindow } from '../../core/utils/window';

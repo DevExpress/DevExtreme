@@ -13,7 +13,7 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 import devices from '../../../core/devices';
-import LegacyPopover from '../../../ui/popover';
+import LegacyPopover from '../../../ui/popover/ui.popover';
 /* eslint-disable import/named */
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
