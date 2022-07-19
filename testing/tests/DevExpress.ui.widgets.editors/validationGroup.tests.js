@@ -57,7 +57,7 @@ QUnit.module('General', {
         assert.ok(validator.validate.calledOnce, 'Validator should be validated as part of group');
     });
 
-    QUnit.test('validator should work a part of a validation group if they are created on the same element (T1102012)', function(assert) {
+    QUnit.test('validator should be validated as a part of a validation group if they are created on the same element (T1102012)', function(assert) {
         const $groupContainer = $('#dxValidationGroup');
         const group = this.fixture.createGroup($groupContainer);
         const $validator = $groupContainer.dxValidator({
