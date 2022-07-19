@@ -72,7 +72,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: process.env.CI === 'true' ? 'list' : 'minimal',
+            reporter: 'minimal',
             componentFolder: '',
             file: '*',
             cache: true,
