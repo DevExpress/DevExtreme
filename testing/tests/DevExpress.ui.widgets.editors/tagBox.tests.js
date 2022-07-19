@@ -35,7 +35,7 @@ QUnit.testStart(() => {
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
-const LIST_CKECKBOX_CLASS = 'dx-list-select-checkbox';
+const LIST_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
@@ -959,7 +959,7 @@ QUnit.module('multi tag support', {
             showSelectionControls: true
         });
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal($tagBox.dxTagBox('option', 'value').length, 5, 'first page is selected');
@@ -1554,7 +1554,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
-        const checkbox = $listItems.eq(0).find(`.${LIST_CKECKBOX_CLASS}`).dxCheckBox('instance');
+        const checkbox = $listItems.eq(0).find(`.${LIST_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
@@ -1881,7 +1881,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         $tagBox.dxTagBox('option', 'opened', true);
         this.clock.tick(TIME_TO_WAIT);
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), items, 'items is selected');
@@ -1918,7 +1918,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         assert.equal(fired, 0, 'event was not fired');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         assert.equal(fired, 1, 'event fired once');
     });
 
@@ -1932,7 +1932,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         assert.deepEqual(tagBox.option('value'), [], 'value is an empty array');
     });
 
@@ -2014,7 +2014,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             opened: true
         });
 
-        const selectAllCheck = $('.dx-list-select-all-checkbox').dxCheckBox('instance');
+        const selectAllCheck = $(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
         assert.equal(selectAllCheck.option('value'), true, 'the \'select all\' checkbox is checked');
     });
 
@@ -3884,14 +3884,14 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $popupWrapper = $(instance.content()).parents(`.${TAGBOX_POPUP_WRAPPER_CLASS}`);
 
         keyboard.type('aa');
-        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(0).trigger('dxclick');
+        $popupWrapper.find(`.${LIST_CHECKBOX_CLASS}`).eq(0).trigger('dxclick');
         $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         instance.close();
         instance.open();
 
         keyboard.type('aa');
-        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(1).trigger('dxclick');
+        $popupWrapper.find(`.${LIST_CHECKBOX_CLASS}`).eq(1).trigger('dxclick');
         $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(instance.option('selectedItems').length, 2);
@@ -4349,7 +4349,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
-        const $selectAllCheckbox = $(tagBox._list.$element().find('.dx-list-select-all-checkbox').eq(0));
+        const $selectAllCheckbox = $(tagBox._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).eq(0));
         $selectAllCheckbox.trigger('dxclick');
         $selectAllCheckbox.trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4781,12 +4781,12 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         tagBox.option('opened', true);
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-        $(`.${LIST_CKECKBOX_CLASS}`).first().trigger('dxclick');
+        $(`.${LIST_CHECKBOX_CLASS}`).first().trigger('dxclick');
         $('.dx-tag-remove-button').last().trigger('dxclick');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         assert.equal(selectedItems.length, 6, 'All items should be selected');
     });
@@ -5305,7 +5305,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             .focus()
             .type('c');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         $($input).trigger($.Event('focusout', { relatedTarget: $doneButton.get(0) }));
         $doneButton.trigger('dxclick');
@@ -5498,7 +5498,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         let $popupWrapper = $(tagBox.content()).parent().parent();
 
-        $popupWrapper.find('.dx-list-select-all-checkbox').trigger('dxclick');
+        $popupWrapper.find(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         $popupWrapper.find('.dx-popup-done.dx-button').trigger('dxclick');
 
         keyboard.type('bbb');
@@ -5506,7 +5506,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $popupWrapper = $(tagBox.content()).parent().parent();
 
-        $popupWrapper.find('.dx-list-select-all-checkbox').trigger('dxclick');
+        $popupWrapper.find(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         $popupWrapper.find('.dx-popup-done.dx-button').trigger('dxclick');
 
         assert.deepEqual($tagBox.dxTagBox('instance').option('value'), [0, 1], 'value of TagBox');
@@ -5547,7 +5547,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
     }
 }, () => {
     QUnit.test('the \'onSelectAllValueChanged\' option behavior', function(assert) {
-        const $selectAllCheckbox = this.instance._list.$element().find('.dx-list-select-all-checkbox');
+        const $selectAllCheckbox = this.instance._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
 
         $($selectAllCheckbox).trigger('dxclick');
         assert.ok(this.spy.args[this.spy.args.length - 1][0].value, 'all items are selected');
@@ -5558,7 +5558,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
 
     QUnit.test('the \'onSelectAllValueChanged\' action is fired only one time if all items are selected', function(assert) {
         const $list = this.instance._list.$element();
-        $($list.find('.dx-list-select-all-checkbox')).trigger('dxclick');
+        $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
@@ -5569,7 +5569,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
 
         const $list = this.instance._list.$element();
-        $($list.find('.dx-list-select-all-checkbox')).trigger('dxclick');
+        $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
@@ -5600,7 +5600,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
 
         const $list = this.instance._list.$element();
-        const $selectAllElement = $($list.find('.dx-list-select-all-checkbox'));
+        const $selectAllElement = $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`));
         $selectAllElement.trigger('dxclick');
         assert.equal(this.spy.callCount, 0, 'count is correct');
 
@@ -6568,48 +6568,69 @@ QUnit.module('performance', () => {
         assert.deepEqual(filter, null, 'filter is correct');
     });
 
-    QUnit.test('Select All should use cache', function(assert) {
-        const items = [];
-        let keyGetterCounter = 0;
+    QUnit.module('item getter call count on selection change', {
+        // NOTE: If some of this tests is failed it can mean that selection performance worsens.
+        //       Don't consider these tests as a strict requirement.
+        beforeEach: function() {
+            this.items = [];
+            let keyGetterCallCount = 0;
 
-        const getter = () => {
-            keyGetterCounter++;
-            return this._id;
-        };
-        for(let i = 1; i <= 100; i++) {
-            const item = { _id: i, text: 'item ' + i };
-            Object.defineProperty(item, 'id', {
-                get: getter,
-                enumerable: true,
-                configurable: true
+            const getter = function() {
+                keyGetterCallCount++;
+                return this._id;
+            };
+            for(let i = 1; i <= 100; i++) {
+                const item = { _id: i, text: 'item ' + i };
+                Object.defineProperty(item, 'id', {
+                    get: getter,
+                    enumerable: true,
+                    configurable: true
+                });
+                this.items.push(item);
+            }
+
+            const arrayStore = new ArrayStore({
+                data: this.items,
+                key: 'id'
             });
-            items.push(item);
-        }
 
-        const arrayStore = new ArrayStore({
-            data: items,
-            key: 'id'
+            this.tagBox = $('#tagBox').dxTagBox({
+                dataSource: arrayStore,
+                valueExpr: 'id',
+                opened: true,
+                showSelectionControls: true,
+                selectionMode: 'all',
+                selectAllMode: 'allPages',
+                displayExpr: 'text'
+            }).dxTagBox('instance');
+
+            this.getValueGetterCallCount = () => {
+                return keyGetterCallCount;
+            };
+            this.resetGetterCallCount = () => {
+                keyGetterCallCount = 0;
+            };
+        }
+    }, () => {
+        QUnit.test('on select all', function(assert) {
+            const isValueEqualsSpy = sinon.spy(this.tagBox, '_isValueEquals');
+
+            this.resetGetterCallCount();
+            $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
+
+            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
+            assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
-        const tagBox = $('#tagBox').dxTagBox({
-            dataSource: arrayStore,
-            valueExpr: 'id',
-            opened: true,
-            showSelectionControls: true,
-            selectionMode: 'all',
-            selectAllMode: 'allPages',
-            displayExpr: 'text'
-        }).dxTagBox('instance');
+        QUnit.test('on one item deselect after select all', function(assert) {
+            this.tagBox.option('value', this.items.map(item => item._id));
 
-        const isValueEqualsSpy = sinon.spy(tagBox, '_isValueEquals');
+            this.resetGetterCallCount();
+            const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
+            checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-        // act
-        keyGetterCounter = 0;
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
-
-        // assert
-        assert.equal(keyGetterCounter, 512, 'key getter call count');
-        assert.equal(isValueEqualsSpy.callCount, 1, '_isValueEquals call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6052, 'key getter call count');
+        });
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {
@@ -7186,7 +7207,7 @@ QUnit.module('regression', {
             }
         });
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         const selectedItems = $('.dx-list').dxList('instance').option('selectedItems');
         assert.equal(selectedItems.length, 4, 'selected items');
@@ -7378,7 +7399,7 @@ QUnit.module('valueChanged should receive correct event parameter', {
     QUnit.module('when showSelectionControls=true', {
         beforeEach: function() {
             this.reinit({ showSelectionControls: true });
-            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
+            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CHECKBOX_CLASS}`);
             this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
             this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
         }

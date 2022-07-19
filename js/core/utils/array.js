@@ -2,6 +2,13 @@ import { isDefined } from './type';
 import { orderEach } from './object';
 import config from '../config';
 
+function createOccurrenceMap(array) {
+    return array.reduce((map, value) => {
+        map[value] = (map[value] ?? 0) + 1;
+        return map;
+    }, {});
+}
+
 export const wrapToArray = function(item) {
     return Array.isArray(item) ? item : [item];
 };
@@ -10,11 +17,14 @@ export const getUniqueValues = function(values) {
     return [...new Set(values)];
 };
 
+export const getIntersection = function(firstArray, secondArray) {
+    const secondArrayMap = createOccurrenceMap(secondArray);
+
+    return firstArray.filter(value => secondArrayMap[value]--);
+};
+
 export const removeDuplicates = function(from = [], toRemove = []) {
-    const toRemoveMap = toRemove.reduce((map, value) => {
-        map[value] = (map[value] ?? 0) + 1;
-        return map;
-    }, {});
+    const toRemoveMap = createOccurrenceMap(toRemove);
 
     return from.filter(value => !toRemoveMap[value]--);
 };
