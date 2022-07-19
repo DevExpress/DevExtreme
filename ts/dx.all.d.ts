@@ -21853,6 +21853,10 @@ declare module DevExpress.ui {
      */
     items?: Array<TItem>;
     /**
+     * [descr:dxToolbarOptions.multiline]
+     */
+    multiline?: boolean;
+    /**
      * [descr:dxToolbarOptions.menuItemTemplate]
      */
     menuItemTemplate?:

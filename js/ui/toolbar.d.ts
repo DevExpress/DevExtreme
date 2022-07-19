@@ -87,6 +87,12 @@ export interface dxToolbarOptions<
     items?: Array<TItem>;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    multiline?: boolean;
+    /**
+     * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_return string|Element|jQuery

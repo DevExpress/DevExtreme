@@ -1,13 +1,14 @@
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import DropDownMenu from '../../../model/toolbar/dropDownMenu';
+import Toolbar from '../../../model/toolbar/toolbar';
 import { appendElementTo } from '../helpers/domUtils';
 
 fixture`Toolbar_OverflowMenu`
   .page(url(__dirname, '../../container.html'));
 
 test('Drop down button should lost hover and active state', async (t) => {
-  const dropDownMenu = new DropDownMenu('#container');
+  const toolbar = new Toolbar('#container');
+  const dropDownMenu = toolbar.getOverflowMenu();
 
   await t
     .dispatchEvent(dropDownMenu.element, 'mousedown')
@@ -39,7 +40,7 @@ test('Drop down button should lost hover and active state', async (t) => {
     .expect(dropDownMenu.isHovered)
     .notOk()
     .expect(dropDownMenu.isFocused)
-    .ok()
+    .notOk()
     .expect(dropDownMenu.isActive)
     .notOk();
 
@@ -56,23 +57,31 @@ test('Drop down button should lost hover and active state', async (t) => {
     width: '50px', height: '50px', backgroundColor: 'steelblue', paddingTop: '400px',
   });
 
-  return createWidget('dxDropDownMenu', {
-    items: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
+  return createWidget('dxToolbar', {
+    items: [
+      { text: 'item1', locateInMenu: 'always' },
+      { text: 'item2', locateInMenu: 'always' },
+      { text: 'item3', locateInMenu: 'always' }],
   });
 });
 
 test('Click on overflow button should prevent popup\'s hideOnOutsideClick', async (t) => {
-  const dropDownMenu = new DropDownMenu('#container');
+  const toolbar = new Toolbar('#container');
+  const menu = toolbar.getOverflowMenu();
 
   await t
-    .click(dropDownMenu.element)
-    .expect(dropDownMenu.getPopup().getWrapper().count)
+    .click(menu.element)
+    .expect(menu.getPopup().getWrapper().count)
     .eql(1);
 
   await t
-    .click(dropDownMenu.element)
-    .expect(dropDownMenu.getPopup().getWrapper().count)
+    .click(menu.element)
+    .expect(menu.getPopup().getWrapper().count)
     .eql(0);
-}).before(async () => createWidget('dxDropDownMenu', {
-  items: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
+}).before(async () => createWidget('dxToolbar', {
+  items: [
+    { text: 'item1', locateInMenu: 'always' },
+    { text: 'item2', locateInMenu: 'always' },
+    { text: 'item3', locateInMenu: 'always' },
+  ],
 }));
