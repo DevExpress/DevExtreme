@@ -28,6 +28,8 @@ $agenda-appointment-active-bg: null !default;
 $agenda-appointment-text-color: null !default;
 $agenda-appointment-title-font-size: null !default;
 
+$custom-sell-size: 0 !default;
+
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
 
@@ -117,6 +119,8 @@ $scheduler-appointment-form-label-padding: 20px;
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
 );
 @use "./views" with (
+  $custom-sell-size: $custom-sell-size,
+
   $scheduler-workspace-background-color: $scheduler-workspace-background-color,
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
   $scheduler-small-size-factor: $scheduler-small-size-factor,
