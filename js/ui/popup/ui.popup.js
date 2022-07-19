@@ -1,3 +1,4 @@
+import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
@@ -969,5 +970,7 @@ const Popup = Overlay.inherit({
         return this._$content;
     }
 });
+
+registerComponent('dxPopup', Popup);
 
 export default Popup;
