@@ -331,7 +331,7 @@ describe('Widget\'s container manipulations', () => {
 
     expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       id: 'my-id',
-      hidden: 'true',
+      hidden: true,
     });
   });
 
