@@ -342,18 +342,13 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-date-table-cell,
-.dx-scheduler-all-day-table-cell,
-.dx-scheduler-header-panel-cell {
+.dx-scheduler-all-day-table-cell {
+  border-top: $scheduler-base-border;
   border-left: $scheduler-base-border;
 
   &:first-child {
     border-left: none;
   }
-}
-
-.dx-scheduler-date-table-cell,
-.dx-scheduler-all-day-table-cell {
-  border-top: $scheduler-base-border;
 }
 
 .dx-scheduler-date-table-cell,
@@ -471,7 +466,6 @@ $scheduler-month-date-text-padding: 6px;
   }
 
   .dx-scheduler-date-table-row .dx-scheduler-date-table-cell,
-  .dx-scheduler-header-row .dx-scheduler-header-panel-cell,
   .dx-scheduler-all-day-table-row .dx-scheduler-all-day-table-cell {
     &:first-child {
       border-left: none;
@@ -487,6 +481,11 @@ $scheduler-month-date-text-padding: 6px;
   height: $scheduler-header-panel-table-cell-height;
   text-align: center;
   font-weight: normal;
+  border-left: $scheduler-base-border;
+
+  &:first-child {
+    border-left: 1px solid transparent;
+  }
 
   @include dx-overflow();
 }
