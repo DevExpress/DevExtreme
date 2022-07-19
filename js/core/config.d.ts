@@ -2,6 +2,14 @@ import {
     PositionConfig,
 } from '../animation/position';
 
+import {
+    PositionAlignment,
+    EditorStyle,
+} from '../common';
+
+/** @public */
+export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
+
 /**
  * @docid
  * @publicName config()
@@ -41,11 +49,17 @@ export interface globalConfig {
     defaultCurrency?: string;
     /**
      * @docid
-     * @type Enums.EditorStylingMode
+     * @type boolean
+     * @default true
+     * @public
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * @docid
      * @default undefined
      * @public
      */
-    editorStylingMode?: 'outlined' | 'underlined' | 'filled';
+    editorStylingMode?: EditorStyle;
     /**
      * @docid
      * @public
@@ -58,10 +72,9 @@ export interface globalConfig {
       closeIcon?: string;
       /**
        * @docid
-       * @type Enums.floatingActionButtonDirection
        * @default "auto"
        */
-      direction?: 'auto' | 'up' | 'down';
+      direction?: FloatingActionButtonDirection;
       /**
        * @docid
        * @default "add"
@@ -79,10 +92,9 @@ export interface globalConfig {
       maxSpeedDialActionCount?: number;
       /**
        * @docid
-       * @type Enums.PositionAlignment|PositionConfig|function
        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
        */
-      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
+      position?: PositionAlignment | PositionConfig | Function;
       /**
        * @docid
        * @default false

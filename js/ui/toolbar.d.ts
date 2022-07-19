@@ -16,12 +16,27 @@ import {
     ItemInfo,
 } from '../events/index';
 
+import {
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 type ItemLike = string | Item | any;
+
+/** @public */
+export type LocateInMenuMode = 'always' | 'auto' | 'never';
+/** @public */
+export type ShowTextMode = 'always' | 'inMenu';
+
+export {
+    ToolbarItemLocation,
+    ToolbarItemComponent as ToolbarItemWidget,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
@@ -58,11 +73,11 @@ export interface dxToolbarOptions<
 > extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
-     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @type Array<string | dxToolbarItem | any>
@@ -116,18 +131,16 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocateInMenuMode
      * @default 'never'
      * @public
      */
-    locateInMenu?: 'always' | 'auto' | 'never';
+    locateInMenu?: LocateInMenuMode;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocation
      * @default 'center'
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
@@ -141,17 +154,15 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     options?: any;
     /**
      * @docid
-     * @type Enums.ToolbarItemShowTextMode
      * @default 'always'
      * @public
      */
-    showText?: 'always' | 'inMenu';
+    showText?: ShowTextMode;
     /**
      * @docid
-     * @type Enums.ToolbarItemWidget
      * @public
      */
-    widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+    widget?: ToolbarItemComponent;
 }
 
 /** @public */

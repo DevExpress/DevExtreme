@@ -13,7 +13,22 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+    Mode,
+} from '../common';
+
 type ItemLike<TKey> = string | Item<TKey> | any;
+
+export {
+    Mode,
+};
+
+/** @public */
+export type Distribution = 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+/** @public */
+export type CrosswiseDistribution = 'center' | 'end' | 'start' | 'stretch';
+/** @public */
+export type BoxDirection = 'col' | 'row';
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
@@ -50,32 +65,29 @@ export interface dxBoxOptions<
 > extends CollectionWidgetOptions<dxBox<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
-     * @type Enums.BoxAlign
      * @default 'start'
      * @public
      */
-    align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+    align?: Distribution;
     /**
      * @docid
-     * @type Enums.BoxCrossAlign
      * @default 'start'
      * @public
      */
-    crossAlign?: 'center' | 'end' | 'start' | 'stretch';
+    crossAlign?: CrosswiseDistribution;
     /**
      * @docid
-     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
-     * @type Enums.BoxDirection
      * @default 'row'
      * @public
      */
-    direction?: 'col' | 'row';
+    direction?: BoxDirection;
     /**
      * @docid
      * @type Array<string | dxBoxItem | any>
@@ -108,11 +120,10 @@ export type Item<TKey = any> = dxBoxItem<TKey>;
 export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
     /**
      * @docid
-     * @type number | Enums.Mode
      * @default 0
      * @public
      */
-    baseSize?: number | 'auto';
+    baseSize?: number | Mode;
     /**
      * @docid
      * @default undefined

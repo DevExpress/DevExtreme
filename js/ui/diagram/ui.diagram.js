@@ -753,7 +753,10 @@ class Diagram extends Widget {
         this._killCaptureFocusTimeout();
 
         super._dispose();
-        this._diagramInstance = undefined;
+        if(this._diagramInstance) {
+            this._diagramInstance.dispose();
+            this._diagramInstance = undefined;
+        }
     }
     _executeDiagramCommand(command, parameter) {
         this._diagramInstance.getCommand(command).execute(parameter);
@@ -1763,23 +1766,15 @@ class Diagram extends Widget {
         }
     }
     _raiseToolboxDragStart() {
-        if(this._toolbox) {
-            this._toolbox._raiseToolboxDragStart();
-
-            if(this.isMobileScreenSize()) {
-                this._toolbox.hide();
-                this._toolboxDragHidden = true;
-            }
+        if(this._toolbox && this.isMobileScreenSize()) {
+            this._toolbox.hide();
+            this._toolboxDragHidden = true;
         }
     }
     _raiseToolboxDragEnd() {
-        if(this._toolbox) {
-            this._toolbox._raiseToolboxDragEnd();
-
-            if(this._toolboxDragHidden) {
-                this._toolbox.show();
-                delete this._toolboxDragHidden;
-            }
+        if(this._toolbox && this._toolboxDragHidden) {
+            this._toolbox.show();
+            delete this._toolboxDragHidden;
         }
     }
     _raiseTextInputStart() {

@@ -1,7 +1,7 @@
 import { isDefined } from '../../../../../core/utils/type';
 import dateUtils from '../../../../../core/utils/date';
 
-export type ShowAllDayAppointmentsType = 'auto' | 'allDay' | 'none';
+export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
 
 const getAppointmentDurationInHours = (
   startDate: Date,
@@ -32,18 +32,18 @@ export const getAppointmentTakesAllDay = (
   },
   viewStartDayHour: number,
   viewEndDayHour: number,
-  showAllDayAppointments: ShowAllDayAppointmentsType,
+  allDayPanelMode: AllDayPanelModeType,
 ): boolean => {
   const hasAllDay = (): boolean => appointmentAdapter.allDay;
 
-  switch (showAllDayAppointments) {
-    case 'none':
+  switch (allDayPanelMode) {
+    case 'hidden':
       return false;
 
     case 'allDay':
       return hasAllDay();
 
-    case 'auto':
+    case 'all':
     default:
     {
       if (hasAllDay()) {

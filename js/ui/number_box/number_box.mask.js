@@ -164,7 +164,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _shouldMoveCaret: function(text, caret) {
         const decimalSeparator = number.getDecimalSeparator();
         const isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
-        const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.') && isDecimalSeparatorNext;
+        const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.' || this._lastKey === ',') && isDecimalSeparatorNext;
 
         return moveToFloat;
     },
@@ -302,7 +302,6 @@ const NumberBoxMask = NumberBoxBase.inherit({
             }
         }
 
-        text = this._removeStubs(text, true);
         text = text.substr(integerPartStartIndex);
 
         return parser(text, format);
@@ -429,7 +428,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getParsedValue: function(text, format) {
         const sign = number.getSign(text, format?.formatter || format);
-        const parsedValue = this._parse(text, format);
+        const textWithoutStubs = this._removeStubs(text, true);
+        const parsedValue = this._parse(textWithoutStubs, format);
         const parsedValueSign = parsedValue < 0 ? -1 : 1;
         const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 

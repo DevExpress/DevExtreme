@@ -420,7 +420,7 @@ const Lookup = DropDownList.inherit({
         }
 
         const displayValue = this.option('displayValue');
-        this._updateField(isDefined(displayValue) && String(displayValue) || this.option('placeholder'));
+        this._updateField(displayValue);
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
@@ -437,6 +437,8 @@ const Lookup = DropDownList.inherit({
     },
 
     _updateField: function(text) {
+        text = isDefined(text) && String(text) || this.option('placeholder');
+
         this._$field.text(text);
     },
 
@@ -623,7 +625,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function() {
-        if(this._list && this._list.itemElements()) {
+        if(this._list?.itemElements().length) {
             return this._calculateListHeight(this.option('grouped')) +
                 (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0) +
                 (this._popup._$bottom ? getOuterHeight(this._popup._$bottom) : 0) +

@@ -38,6 +38,22 @@ import {
 } from '../core/utils/deferred';
 import { Skip } from '../core/index';
 
+import {
+    FirstDayOfWeek,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
+
+export type GanttPdfExportDateRange = 'all' | 'visible';
+export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+/** @public */
+export type GanttPredefinedContextMenuItem = 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager';
+/** @public */
+export type GanttPredefinedToolbarItem = 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies';
+export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
+export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
 
@@ -212,7 +228,7 @@ export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
 /** @public */
 export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
     readonly scaleIndex: number;
-    readonly scaleType: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years' | 'fiveYears';
+    readonly scaleType: GanttRenderScaleType;
     readonly scaleElement: DxElement;
     readonly separatorElement: DxElement;
     readonly startDate: Date;
@@ -268,9 +284,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "id"
@@ -643,9 +659,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "id"
@@ -676,9 +692,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "id"
@@ -692,11 +708,10 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @type Enums.GanttScaleType
      * @default "auto"
      * @public
      */
-    scaleType?: 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+    scaleType?: GanttScaleType;
     /**
      * @docid
      * @public
@@ -704,16 +719,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     scaleTypeRange?: {
         /**
          * @docid
-         * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        min?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: GanttScaleType;
         /**
          * @docid
-         * @type Enums.GanttScaleType
          * @default "years"
          */
-        max?: 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: GanttScaleType;
     };
     /**
      * @docid
@@ -747,18 +760,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskListWidth?: number;
     /**
      * @docid
-     * @type Enums.GanttTaskTitlePosition
      * @default "inside"
      * @public
      */
-    taskTitlePosition?: 'inside' | 'outside' | 'none';
+    taskTitlePosition?: GanttTaskTitlePosition;
     /**
      * @docid
-     * @type Enums.FirstDayOfWeek
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
      * @docid
      * @default null
@@ -773,9 +784,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @default "end"
@@ -1130,10 +1141,10 @@ export default class dxGantt extends Widget<dxGanttOptions> {
 export interface dxGanttToolbar {
     /**
      * @docid
-     * @type Array<dxGanttToolbarItem,Enums.GanttToolbarItem>
+     * @type Array<dxGanttToolbarItem,Enums.GanttPredefinedToolbarItem>
      * @public
      */
-    items?: Array<ToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'showResources' | 'showDependencies'>;
+    items?: Array<ToolbarItem | GanttPredefinedToolbarItem>;
 }
 
 /**
@@ -1150,10 +1161,10 @@ export interface dxGanttContextMenu {
     enabled?: boolean;
     /**
      * @docid
-     * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
+     * @type Array<dxGanttContextMenuItem,Enums.GanttPredefinedContextMenuItem>
      * @public
      */
-    items?: Array<ContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager'>;
+    items?: Array<ContextMenuItem | GanttPredefinedContextMenuItem>;
 }
 
 /**
@@ -1169,17 +1180,15 @@ export type ToolbarItem = dxGanttToolbarItem;
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type Enums.GanttToolbarItem|string
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | 'toggleResources' | 'toggleDependencies' | string;
+    name?: GanttPredefinedToolbarItem | string;
     /**
      * @docid
      * @default "before"
-     * @type Enums.ToolbarItemLocation
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**
@@ -1195,10 +1204,10 @@ export type ContextMenuItem = dxGanttContextMenuItem;
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
-     * @type Enums.GanttContextMenuItem|string
+     * @type Enums.GanttPredefinedContextMenuItem|string
      * @public
      */
-    name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | 'resourceManager' | string;
+    name?: GanttPredefinedContextMenuItem | string;
 }
 
 /**
@@ -1256,10 +1265,9 @@ export interface dxGanttSorting {
     descendingText?: string;
     /**
      * @docid
-     * @type Enums.GanttSortingMode|string
      * @default "single"
      */
-    mode?: 'multiple' | 'none' | 'single';
+    mode?: SingleMultipleOrNone | string;
     /**
      * @docid
      * @default false
@@ -1446,7 +1454,7 @@ export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
  * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
  */
-export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellComponent' | 'editCellRender' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
+export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<TRowData, TKey>, 'allowEditing' | 'allowFixing' | 'allowHiding' | 'allowReordering' | 'allowResizing' | 'allowSearch' | 'buttons' | 'columns' | 'editCellTemplate' | 'editorOptions' | 'fixed' | 'fixedPosition' | 'formItem' | 'hidingPriority' | 'isBand' | 'lookup' | 'name' | 'ownerBand' | 'renderAsync' | 'setCellValue' | 'showEditorAlways' | 'showInColumnChooser' | 'type' | 'validationRules' | 'visible' >;
 
 /**
  * @docid dxGanttColumn
@@ -1502,16 +1510,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Skip<dxGanttColumnBlank<
     editorOptions: any;
     /**
      * @hidden
-     * @docid dxGanttColumn.editCellComponent
-     */
-    editCellComponent: any;
-    /**
-     * @hidden
-     * @docid dxGanttColumn.editCellRender
-     */
-    editCellRender: any;
-    /**
-     * @hidden
+     * @type template
      * @docid dxGanttColumn.editCellTemplate
      */
     editCellTemplate: any;

@@ -1,3 +1,6 @@
+import '../../../helpers/noIntl.js';
+import 'intl';
+
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
 import { moduleConfig, createMockPdfDoc, createDataGrid } from './jspdf.dataGrid_utils.js';
 
@@ -36,7 +39,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             dataSource[0][column.dataField] = dateValue;
 
             const isLongLine = ['longDateLongTime', 'shortDateShortTime', 'longDate'].indexOf(column.format) !== -1;
-            columnWidths.push(isLongLine ? 200 : 80);
+            columnWidths.push(isLongLine ? 210 : 80);
         });
 
         const dataGrid = createDataGrid({
@@ -77,20 +80,20 @@ QUnit.module('Column data formats', moduleConfig, () => {
             'rect,440,55,80,21.5',
             'addPage,',
             'text,9:09 AM,45,65.75,{baseline:middle}',
-            'text,Wednesday, October 9, 2019, 9:09:09 AM,125,65.75,{baseline:middle}',
-            'text,10/9/2019, 9:09 AM,325,65.75,{baseline:middle}',
+            'text,Wednesday, October 9, 2019 at 9:09:09 AM,125,65.75,{baseline:middle}',
+            'text,10/9/2019, 9:09 AM,335,65.75,{baseline:middle}',
             'rect,40,55,80,21.5',
-            'rect,120,55,200,21.5',
-            'rect,320,55,200,21.5',
+            'rect,120,55,210,21.5',
+            'rect,330,55,210,21.5',
             'addPage,',
             'text,Wednesday, October 9, 2019,45,65.75,{baseline:middle}',
-            'text,9:09:09 AM,245,65.75,{baseline:middle}',
-            'text,Wednesday,325,65.75,{baseline:middle}',
-            'text,2019-10-09,405,65.75,{baseline:middle}',
-            'rect,40,55,200,21.5',
-            'rect,240,55,80,21.5',
-            'rect,320,55,80,21.5',
-            'rect,400,55,80,21.5',
+            'text,9:09:09 AM,255,65.75,{baseline:middle}',
+            'text,Wednesday,335,65.75,{baseline:middle}',
+            'text,2019-10-09,415,65.75,{baseline:middle}',
+            'rect,40,55,210,21.5',
+            'rect,250,55,80,21.5',
+            'rect,330,55,80,21.5',
+            'rect,410,55,80,21.5',
             'setFontSize,16',
             'setLineWidth,0.200025',
             'setDrawColor,#000000'

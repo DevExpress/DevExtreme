@@ -3,6 +3,7 @@
 const gulp = require('gulp');
 const path = require('path');
 const rename = require('gulp-rename');
+const del = require('del');
 const template = require('gulp-template');
 const lint = require('gulp-eslint');
 const fs = require('fs');
@@ -15,7 +16,10 @@ const Cldr = require('cldrjs');
 const locales = require('cldr-core/availableLocales.json').availableLocales.full;
 const weekData = require('cldr-core/supplemental/weekData.json');
 const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
-const parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
+const parentLocales = require('cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
+
+const globalizeEnCldr = require('devextreme-cldr-data/en.json');
+const globalizeSupplementalCldr = require('devextreme-cldr-data/supplemental.json');
 
 const PARENT_LOCALE_SEPARATOR = '-';
 
@@ -103,6 +107,10 @@ const getMessages = function(directory, locale) {
     return serializeObject(json, true);
 };
 
+gulp.task('clean-cldr-data', function() {
+    return del('js/localization/cldr-data/**', { force: true });
+});
+
 gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => Object.assign(
     function() {
         return gulp
@@ -141,6 +149,18 @@ gulp.task('localization-generated-sources', gulp.parallel([
         filename: 'accounting_formats.js',
         destination: 'js/localization/cldr-data'
 
+    },
+    {
+        data: globalizeEnCldr,
+        exportName: 'enCldr',
+        filename: 'en.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: globalizeSupplementalCldr,
+        exportName: 'supplementalCldr',
+        filename: 'supplemental.js',
+        destination: 'js/localization/cldr-data'
     }
 ].map((source) => Object.assign(
     function() {
@@ -161,4 +181,4 @@ gulp.task('localization-generated-sources', gulp.parallel([
     { displayName: source.filename }
 ))));
 
-gulp.task('localization', gulp.series('localization-messages', 'localization-generated-sources'));
+gulp.task('localization', gulp.series('clean-cldr-data', 'localization-messages', 'localization-generated-sources'));

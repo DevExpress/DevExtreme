@@ -10,7 +10,7 @@ import Widget from '../widget/ui.widget';
 
 import FileManagerDialogManager from './ui.file_manager.dialog_manager';
 import FileManagerFileUploader from './ui.file_manager.file_uploader';
-import { FileManagerMessages } from './ui.file_manager.messages';
+import { ErrorCode, FileManagerMessages } from './ui.file_manager.messages';
 
 class FileManagerEditingControl extends Widget {
 
@@ -155,7 +155,11 @@ class FileManagerEditingControl extends Widget {
             },
 
             download: {
-                action: arg => this._download(arg)
+                action: arg => this._download(arg),
+                singleItemProcessingMessage: '',
+                multipleItemsProcessingMessage: '',
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingDownloadSingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingDownloadMultipleItemsErrorMessage'),
             },
 
             getItemContent: {
@@ -346,7 +350,7 @@ class FileManagerEditingControl extends Widget {
 
     _handleSingleRequestActionError(operationInfo, context, errorInfo) {
         const itemInfo = context.getItemForSingleRequestError();
-        const itemName = context.itemNewName;
+        const itemName = context.getItemName(errorInfo.errorCode);
         const errorText = this._getErrorText(errorInfo, itemInfo, itemName);
 
         context.processSingleRequestError(errorText);
@@ -360,7 +364,8 @@ class FileManagerEditingControl extends Widget {
 
     _handleMultipleRequestActionError(operationInfo, context, errorInfo) {
         const itemInfo = context.getItemForMultipleRequestError(errorInfo.index);
-        const errorText = this._getErrorText(errorInfo, itemInfo);
+        const itemName = context.getItemName(errorInfo.errorCode, errorInfo.index);
+        const errorText = this._getErrorText(errorInfo, itemInfo, itemName);
 
         context.processMultipleRequestError(errorInfo.index, errorText);
         const operationErrorInfo = this._getOperationErrorInfo(context);
@@ -378,7 +383,6 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getErrorText(errorInfo, itemInfo, itemName) {
-        itemName = itemName || itemInfo?.fileItem.name;
         const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorCode, itemName);
 
         const errorArgs = {
@@ -549,6 +553,21 @@ class FileManagerActionContext {
 
     getItemForMultipleRequestError(itemIndex) {
         return this._itemInfos[itemIndex];
+    }
+
+    getItemName(errorCode, itemIndex) {
+        const itemInfo = this.singleRequest
+            ? this.getItemForSingleRequestError()
+            : this.getItemForMultipleRequestError(itemIndex);
+        let result = itemInfo?.fileItem.name;
+        if(this.itemNewName && this._isItemExistsErrorCode(errorCode)) {
+            result = this.itemNewName;
+        }
+        return result;
+    }
+
+    _isItemExistsErrorCode(errorCode) {
+        return errorCode === ErrorCode.DirectoryExists || errorCode === ErrorCode.FileExists;
     }
 
     _setCurrentDetailError(itemIndex, itemInfo, errorText) {

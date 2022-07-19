@@ -1,5 +1,15 @@
-export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
-export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
+import {
+    Palette,
+    PaletteColorSet,
+    PaletteExtensionMode,
+} from '../common/charts';
+
+export {
+    Palette,
+    PaletteColorSet,
+    PaletteExtensionMode,
+};
+
 /**
  * @docid viz.currentPalette
  * @publicName currentPalette()
@@ -19,13 +29,12 @@ export function currentPalette(paletteName: string): void;
 /**
  * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
- * @param1 palette:Enums.VizPalette|Array<string>
- * @param3_field paletteExtensionMode:Enums.VizPaletteExtensionMode
- * @param3_field baseColorSet:Enums.VizPaletteColorSet
+ * @param1 palette:Enums.Palette|Array<string>
+ * @param3_field paletteExtensionMode:Enums.PaletteExtensionMode
  * @static
  * @public
  */
-export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType; baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+export function generateColors(palette: Palette | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionMode; baseColorSet?: PaletteColorSet }): Array<string>;
 
 /**
  * @docid viz.getPalette

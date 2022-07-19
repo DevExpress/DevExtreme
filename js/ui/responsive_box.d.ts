@@ -13,7 +13,15 @@ import CollectionWidget, {
   CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+  Mode,
+} from '../common';
+
 type ItemLike = string | Item | any;
+
+export {
+  Mode,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
@@ -55,10 +63,9 @@ export interface dxResponsiveBoxOptions<
     cols?: Array<{
       /**
        * @docid
-       * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | Mode;
       /**
        * @docid
        * @default 1
@@ -77,11 +84,11 @@ export interface dxResponsiveBoxOptions<
     }>;
     /**
      * @docid
-     * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default '100%'
@@ -102,10 +109,9 @@ export interface dxResponsiveBoxOptions<
     rows?: Array<{
       /**
        * @docid
-       * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | Mode;
       /**
        * @docid
        * @default 1

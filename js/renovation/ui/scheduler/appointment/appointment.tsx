@@ -50,12 +50,18 @@ export const viewFunction = ({
   },
 }: Appointment): JSX.Element => (
   <Widget
+    focusStateEnabled
     onClick={onItemClick}
     rootElementRef={ref}
     style={styles}
     classes={classes}
     hint={text}
-    {...{ role: 'button' }}
+    {
+      ...{
+        role: 'button',
+        'data-index': index,
+      }
+    }
   >
     <AppointmentContent
       text={text}
@@ -96,7 +102,8 @@ export class AppointmentProps {
 })
 export class Appointment extends JSXComponent<
 AppointmentProps,
-'viewModel' | 'onItemClick' | 'onItemDoubleClick' | 'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
+'viewModel' | 'onItemClick' | 'onItemDoubleClick' |
+'showReducedIconTooltip' | 'hideReducedIconTooltip' | 'groups'
 >() {
   @Consumer(AppointmentsContext)
   appointmentsContextValue!: IAppointmentContext;
@@ -127,14 +134,18 @@ AppointmentProps,
 
   get classes(): string {
     const {
-      direction,
-      isRecurrent,
-      allDay,
-      appointmentReduced,
-    } = this.props.viewModel.info;
+      focused,
+      info: {
+        direction,
+        isRecurrent,
+        allDay,
+        appointmentReduced,
+      },
+    } = this.props.viewModel;
     const isVerticalDirection = direction === 'vertical';
 
     return combineClasses({
+      'dx-state-focused': !!focused,
       'dx-scheduler-appointment': true,
       'dx-scheduler-appointment-horizontal': !isVerticalDirection,
       'dx-scheduler-appointment-vertical': isVerticalDirection,

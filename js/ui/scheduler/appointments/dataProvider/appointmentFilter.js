@@ -5,12 +5,15 @@ import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { hasResourceValue } from '../../../../renovation/ui/scheduler/resources/hasResourceValue';
 
 import {
     isDateAndTimeView as calculateIsDateAndTimeView,
-    isSupportMultiDayAppointments
+    isTimelineView
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getResourcesDataByGroups } from '../../resources/utils';
+import {
+    getResourcesDataByGroups,
+} from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
@@ -53,7 +56,7 @@ export class AppointmentFilterBaseStrategy {
     get dateRange() { return this._resolveOption('dateRange'); }
     get groupCount() { return this._resolveOption('groupCount'); }
     get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
-    get showAllDayAppointments() { return this._resolveOption('showAllDayAppointments'); }
+    get allDayPanelMode() { return this._resolveOption('allDayPanelMode'); }
 
     _resolveOption(name) {
         const result = this.options[name];
@@ -84,7 +87,7 @@ export class AppointmentFilterBaseStrategy {
             max: dateRange[1],
             resources: this.loadedResources,
             allDay,
-            supportMultiDayAppointments: isSupportMultiDayAppointments(this.viewType),
+            supportMultiDayAppointments: isTimelineView(this.viewType),
             firstDayOfWeek: this.firstDayOfWeek,
         }, preparedItems);
     }
@@ -103,7 +106,7 @@ export class AppointmentFilterBaseStrategy {
                 item,
                 this.viewStartDayHour,
                 this.viewEndDayHour,
-                this.showAllDayAppointments,
+                this.allDayPanelMode,
             )) {
                 result = true;
                 return false;
@@ -128,7 +131,7 @@ export class AppointmentFilterBaseStrategy {
                 appointment,
                 viewStartDayHour,
                 viewEndDayHour,
-                this.showAllDayAppointments,
+                this.allDayPanelMode,
             )
         ]];
     }
@@ -173,16 +176,11 @@ export class AppointmentFilterBaseStrategy {
                 }
             }
 
-            let recurrenceRule;
-            if(useRecurrence) {
-                recurrenceRule = appointment.recurrenceRule;
-            }
-
             const appointmentTakesAllDay = getAppointmentTakesAllDay(
                 appointment,
                 viewStartDayHour,
                 viewEndDayHour,
-                this.showAllDayAppointments,
+                this.allDayPanelMode,
             );
             const appointmentTakesSeveralDays = getAppointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
@@ -200,9 +198,7 @@ export class AppointmentFilterBaseStrategy {
                 const recurrenceException = getRecurrenceException(appointment, this.timeZoneCalculator, this.timezone);
 
                 if(!this._filterAppointmentByRRule({
-                    startDate,
-                    endDate,
-                    recurrenceRule,
+                    ...appointment,
                     recurrenceException,
                     allDay: appointmentTakesAllDay
                 }, min, max, startDayHour, endDayHour, firstDayOfWeek)) {
@@ -267,11 +263,11 @@ export class AppointmentFilterBaseStrategy {
             const appointmentResourceValues = wrapToArray(resource);
             const resourceData = map(
                 resources[resourceIndex].items,
-                (item) => { return item.id; }
+                ({ id }) => id,
             );
 
-            for(let j = 0; j < appointmentResourceValues.length; j++) {
-                if(resourceData.includes(appointmentResourceValues[j])) {
+            for(let i = 0; i < appointmentResourceValues.length; i++) {
+                if(hasResourceValue(resourceData, appointmentResourceValues[i])) {
                     return true;
                 }
             }
@@ -322,7 +318,12 @@ export class AppointmentFilterBaseStrategy {
                 end: appointmentEndDate,
                 min: min,
                 max: max,
-                firstDayOfWeek: firstDayOfWeek
+                firstDayOfWeek: firstDayOfWeek,
+                appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
+                    appointmentStartDate,
+                    appointment.startDateTimeZone,
+                    false,
+                )
             });
         }
 
@@ -393,7 +394,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
                 viewEndDayHour: this.viewEndDayHour,
                 min: groupStartDate,
                 max: groupEndDate,
-                supportMultiDayAppointments: isSupportMultiDayAppointments(this.viewType),
+                supportMultiDayAppointments: isTimelineView(this.viewType),
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.firstDayOfWeek,

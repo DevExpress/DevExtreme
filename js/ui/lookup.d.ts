@@ -36,6 +36,16 @@ import {
     TitleRenderedInfo,
 } from './popup';
 
+import {
+    ApplyValueMode,
+    PageLoadMode,
+} from '../common';
+
+export {
+    ApplyValueMode,
+    PageLoadMode,
+};
+
 /** @public */
 export type ClosedEvent = EventInfo<dxLookup>;
 
@@ -88,11 +98,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     applyButtonText?: string;
     /**
      * @docid
-     * @type Enums.EditorApplyValueMode
      * @hidden false
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default "Cancel"
@@ -197,11 +206,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
-     * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
      * @public
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: PageLoadMode;
     /**
      * @docid
      * @default "Loading..."

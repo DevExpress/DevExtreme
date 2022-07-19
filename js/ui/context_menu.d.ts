@@ -34,6 +34,9 @@ import {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
+export type ContextSubmenuDirection = 'auto' | 'left' | 'right';
+
+/** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
 /** @public */
@@ -92,11 +95,11 @@ export interface dxContextMenuOptions<
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
-     * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey>;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
      * @docid
      * @default true
@@ -183,11 +186,10 @@ export interface dxContextMenuOptions<
     } | string;
     /**
      * @docid
-     * @type Enums.ContextMenuSubmenuDirection
      * @default "auto"
      * @public
      */
-    submenuDirection?: 'auto' | 'left' | 'right';
+    submenuDirection?: ContextSubmenuDirection;
     /**
      * @docid
      * @default undefined

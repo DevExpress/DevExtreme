@@ -13,6 +13,7 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
+import ArrayStore from 'data/array_store';
 
 import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
 
@@ -2428,6 +2429,254 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         // assert
         assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
         assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
+    });
+
+    // T1099516
+    QUnit.test('Lookup select box should have actual values after dataSource reload', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        let loadCount = 0;
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = {
+            load() {
+                loadCount++;
+                if(loadCount === 1) {
+                    return [{ column1: 1, column2: 1 }];
+                } else {
+                    return [
+                        { column1: 1, column2: 1 },
+                        { column1: 2, column2: 2 }
+                    ];
+                }
+            }
+        },
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+
+        dropDown1.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list:eq(0)');
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+
+        // act
+        this.getDataSource().reload();
+
+        // assert
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+    });
+
+    // T1098872
+    QUnit.test('Lookup select box should pass correct group load options for dataGrid dataSource', function(assert) {
+        // arrange
+        const loadSpy = sinon.spy((loadOptions) => {
+            const d = $.Deferred();
+            new ArrayStore([
+                { column1: 1, text: 1 },
+                { column1: 2, text: 2 },
+            ]).load(loadOptions).done(items => d.resolve({
+                data: items,
+                totalCount: 2,
+            }));
+
+            return d;
+        });
+
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            calculateDisplayValue: 'text',
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = { load: loadSpy };
+        this.options.remoteOperations = true;
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1.trigger('dxclick');
+
+        // assert
+        assert.deepEqual(loadSpy.getCall(1).args[0].group, [{
+            isExpanded: true,
+            selector: 'column1'
+        },
+        {
+            isExpanded: false,
+            selector: 'text'
+        }]);
+    });
+
+    // T1100782
+    [true, false].forEach((hasLookupOptimization) => {
+        QUnit.test(`Lookup select box should pass correct load options (skip, take, filter) for lookup dataSource, hasLookupOptimization: ${hasLookupOptimization}`, function(assert) {
+            // arrange
+            const loadSpy = sinon.spy((loadOptions) => {
+                const d = $.Deferred();
+                new ArrayStore(
+                    [...new Array(100).keys()].map(i => ({ id: i, value: `value${i}` }))
+                ).load(loadOptions).done(items => d.resolve({
+                    data: items,
+                    totalCount: 100,
+                }));
+
+                return d;
+            });
+
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                lookup: {
+                    dataSource: {
+                        load: loadSpy,
+                        filter: ['id', '>=', 10]
+                    },
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }];
+            this.options.dataSource = [...new Array(100).keys()].map(i => ({ column1: i, text: `value${i}` }));
+            this.options.syncLookupFilterValues = true;
+
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                initViews: true
+            });
+            this.columnHeadersView.render($testElement);
+
+            // act
+            const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+            dropDown1.trigger('dxclick');
+
+            // assert
+            if(!hasLookupOptimization) {
+                assert.deepEqual(loadSpy.getCall(0).args[0].filter, ['id', '>=', 10]);
+                assert.strictEqual(loadSpy.getCall(0).args[0].take, undefined);
+                assert.strictEqual(loadSpy.getCall(0).args[0].skip, undefined);
+            }
+
+            const dropDownList1 = $('.dx-list:eq(0)');
+            assert.strictEqual(dropDownList1.find('.dx-item').length, 91); // 90 rows + (All)
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value10');
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(-1)').text(), 'value99');
+        });
+    });
+
+    QUnit.test('It should be possible to turn off syncLookupFilterValues option in runtime', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        let dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1.trigger('dxclick');
+
+        // assert
+        let dropDownList1 = $('.dx-list:eq(0)');
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+
+        // act
+        this.option('syncLookupFilterValues', false);
+        dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1.trigger('dxclick');
+
+        // assert
+        dropDownList1 = $('.dx-list:eq(0)');
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+
+    });
+
+    // T1097980
+    QUnit.test('Filtering should not throw an exception when there is hidden column', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            visible: false,
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1, column2: 1 },
+            { column1: 2, column2: 2 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+        this.clock.tick(100);
+
+        // act
+        this.columnOption('column2', 'filterValue', 1);
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no exceptions');
     });
 
 

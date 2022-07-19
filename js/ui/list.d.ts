@@ -34,6 +34,19 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
+import {
+    SelectAllMode,
+    ScrollbarMode,
+    PageLoadMode,
+    SingleMultipleAllOrNone,
+} from '../common';
+
+export {
+    SelectAllMode,
+    ScrollbarMode,
+    PageLoadMode,
+};
+
 type ItemLike = string | Item | any;
 
 interface ListItemInfo<TItem extends ItemLike> {
@@ -41,6 +54,11 @@ interface ListItemInfo<TItem extends ItemLike> {
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number };
 }
+
+/** @public */
+export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+/** @public */
+export type ListMenuMode = 'context' | 'slide';
 
 export interface ScrollInfo {
     readonly scrollOffset?: any;
@@ -153,11 +171,11 @@ export interface dxListOptions<
     collapsibleGroups?: boolean;
     /**
      * @docid
-     * @type string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default undefined
@@ -199,13 +217,12 @@ export interface dxListOptions<
     indicateLoading?: boolean;
     /**
      * @docid
-     * @type Enums.ListItemDeleteMode
      * @default 'static'
      * @default 'slideItem' &for(iOS)
      * @default 'swipe' &for(Android)
      * @public
      */
-    itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+    itemDeleteMode?: ItemDeleteMode;
     /**
      * @docid
      * @public
@@ -237,12 +254,11 @@ export interface dxListOptions<
     }>;
     /**
      * @docid
-     * @type Enums.ListMenuMode
      * @default 'context'
      * @default 'slide' &for(iOS)
      * @public
      */
-    menuMode?: 'context' | 'slide';
+    menuMode?: ListMenuMode;
     /**
      * @docid
      * @default "More"
@@ -378,12 +394,11 @@ export interface dxListOptions<
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
     /**
      * @docid
-     * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
      * @default "nextButton" &for(desktop except Mac)
      * @public
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: PageLoadMode;
     /**
      * @docid
      * @default "Loading..."
@@ -446,26 +461,23 @@ export interface dxListOptions<
     scrollingEnabled?: boolean;
     /**
      * @docid
-     * @type Enums.SelectAllMode
      * @default 'page'
      * @public
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: SelectAllMode;
     /**
      * @docid
-     * @type Enums.ListSelectionMode
      * @default 'none'
      * @public
      */
-    selectionMode?: 'all' | 'multiple' | 'none' | 'single';
+    selectionMode?: SingleMultipleAllOrNone;
     /**
      * @docid
-     * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @default 'onHover' &for(desktop)
      * @public
      */
-    showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+    showScrollbar?: ScrollbarMode;
     /**
      * @docid
      * @default false

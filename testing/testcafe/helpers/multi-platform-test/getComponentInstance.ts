@@ -4,6 +4,7 @@ import type { PlatformType } from './platform-type';
 export function getComponentInstance(
   platform: PlatformType,
   selector: Selector,
+  name?: string,
 ): () => Promise<unknown> {
   if (platform !== 'jquery') {
     return ClientFunction(
@@ -17,6 +18,10 @@ export function getComponentInstance(
       const $widgetElement = $(selector());
       const elementData = $widgetElement.data();
       const widgetNames = elementData.dxComponents;
+
+      if (name) {
+        return elementData[name];
+      }
       if (widgetNames.length > 1) {
         throw new Error(`Cannot update options for multiple widgets: ${widgetNames}`);
       }
@@ -25,6 +30,6 @@ export function getComponentInstance(
       }
       return elementData[widgetNames[0]];
     },
-    { dependencies: { selector } },
+    { dependencies: { selector, name } },
   );
 }

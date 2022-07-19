@@ -27,6 +27,12 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
+import {
+    DataStructure,
+    SingleOrMultiple,
+    ScrollDirection,
+} from '../common';
+
 import dxScrollable from './scroll_view/ui.scrollable';
 
 interface ItemInfo<TKey = any> {
@@ -35,6 +41,17 @@ interface ItemInfo<TKey = any> {
     readonly itemIndex?: number;
     readonly node?: Node<TKey>;
 }
+
+export {
+    DataStructure,
+    SingleOrMultiple,
+    ScrollDirection,
+};
+
+/** @public */
+export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
+/** @public */
+export type TreeViewExpandEvent = 'dblclick' | 'click';
 
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
@@ -99,18 +116,17 @@ export interface dxTreeViewOptions<TKey = any>
     createChildren?: ((parentNode: Node<TKey>) => PromiseLike<any> | Array<any>);
     /**
      * @docid
-     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey>;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
      * @docid
-     * @type Enums.TreeViewDataStructure
      * @default 'tree'
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: DataStructure;
     /**
      * @docid
      * @default false
@@ -119,11 +135,10 @@ export interface dxTreeViewOptions<TKey = any>
     expandAllEnabled?: boolean;
     /**
      * @docid
-     * @type Enums.TreeViewExpandEvent
      * @default "dblclick"
      * @public
      */
-    expandEvent?: 'dblclick' | 'click';
+    expandEvent?: TreeViewExpandEvent;
     /**
      * @docid
      * @default true
@@ -266,11 +281,10 @@ export interface dxTreeViewOptions<TKey = any>
     rootValue?: any;
     /**
      * @docid
-     * @type Enums.ScrollDirection
      * @default "vertical"
      * @public
      */
-    scrollDirection?: 'both' | 'horizontal' | 'vertical';
+    scrollDirection?: ScrollDirection;
     /**
      * @docid
      * @default "Select All"
@@ -291,18 +305,16 @@ export interface dxTreeViewOptions<TKey = any>
     selectNodesRecursive?: boolean;
     /**
      * @docid
-     * @type Enums.NavSelectionMode
      * @default "multiple"
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid
-     * @type Enums.TreeViewCheckBoxMode
      * @default 'none'
      * @public
      */
-    showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
+    showCheckBoxesMode?: TreeViewCheckBoxMode;
     /**
      * @docid
      * @default false

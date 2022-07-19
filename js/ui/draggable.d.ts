@@ -21,6 +21,10 @@ import {
 
 import dxSortable from './sortable';
 
+import {
+    DragDirection,
+} from '../common';
+
 /**
  * @namespace DevExpress.ui
  */
@@ -67,11 +71,10 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
     data?: any;
     /**
      * @docid
-     * @type Enums.DragDirection
      * @default "both"
      * @public
      */
-    dragDirection?: 'both' | 'horizontal' | 'vertical';
+    dragDirection?: DragDirection;
     /**
      * @docid
      * @default undefined

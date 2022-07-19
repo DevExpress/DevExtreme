@@ -2,6 +2,12 @@ import { DxElement } from '../core/element';
 import { DxPromise } from '../core/utils/deferred';
 import { PositionConfig } from './position';
 
+import {
+    Direction,
+} from '../common';
+
+export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
+
 /**
  * @docid
  * @public
@@ -59,11 +65,10 @@ export type AnimationConfig = {
     delay?: number;
     /**
      * @docid
-     * @type Enums.Direction
      * @default undefined
      * @public
      */
-    direction?: 'bottom' | 'left' | 'right' | 'top';
+    direction?: Direction;
     /**
      * @docid
      * @default 400
@@ -101,11 +106,10 @@ export type AnimationConfig = {
     to?: AnimationState;
     /**
      * @docid
-     * @type Enums.AnimationType
      * @default 'custom'
      * @public
      */
-    type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
+    type?: AnimationType;
 };
 
 /**

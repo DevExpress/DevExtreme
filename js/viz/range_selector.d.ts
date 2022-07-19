@@ -1,11 +1,6 @@
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from './palette';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -35,6 +30,35 @@ import BaseWidget, {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
+
+import {
+    ChartsDataType,
+    DiscreteAxisDivisionMode,
+    LabelOverlap,
+    Palette,
+    PaletteExtensionMode,
+    ScaleBreakLineStyle,
+    VisualRangeUpdateMode,
+} from '../common/charts';
+
+export {
+    ChartsDataType,
+    DiscreteAxisDivisionMode,
+    LabelOverlap,
+    Palette,
+    PaletteExtensionMode,
+    ScaleBreakLineStyle,
+    VisualRangeUpdateMode,
+};
+
+/** @public */
+export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
+/** @public */
+export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
+/** @public */
+export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
+/** @public */
+export type ChartAxisScale = 'continuous' | 'logarithmic';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxRangeSelector>;
@@ -87,10 +111,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       image?: {
         /**
          * @docid
-         * @type Enums.BackgroundImageLocation
          * @default 'full'
          */
-        location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
+        location?: BackgroundImageLocation;
         /**
          * @docid
          * @default undefined
@@ -120,10 +143,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       animationEnabled?: boolean;
       /**
        * @docid
-       * @type Enums.ValueChangedCallMode
        * @default 'onMovingComplete'
        */
-      callValueChanged?: 'onMoving' | 'onMovingComplete';
+      callValueChanged?: ValueChangedCallMode;
       /**
        * @docid
        * @default true
@@ -207,15 +229,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @default "Material"
-       * @type Array<string>|Enums.VizPalette
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | Palette;
       /**
        * @docid
-       * @type Enums.VizPaletteExtensionMode
        * @default 'blend'
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: PaletteExtensionMode;
       /**
        * @docid
        * @default undefined
@@ -268,16 +288,14 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         min?: number;
         /**
          * @docid
-         * @type Enums.RangeSelectorChartAxisScaleType
          * @default undefined
          */
-        type?: 'continuous' | 'logarithmic';
+        type?: ChartAxisScale;
         /**
          * @docid
-         * @type Enums.ChartDataType
          * @default undefined
          */
-        valueType?: 'datetime' | 'numeric' | 'string';
+        valueType?: ChartsDataType;
       };
     };
     /**
@@ -290,9 +308,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @notUsedInTheme
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<any>;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @default 'arg'
@@ -346,16 +364,15 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       aggregationInterval?: VizTimeInterval;
       /**
        * @docid
-       * @type Enums.DiscreteAxisDivisionMode
        * @default 'betweenLabels'
        * @public
        */
-      discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
+      discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
       /**
        * @docid
        * @default undefined
@@ -372,10 +389,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         color?: string;
         /**
          * @docid
-         * @type Enums.ScaleBreakLineStyle
          * @default "waved"
          */
-        line?: 'straight' | 'waved';
+        line?: ScaleBreakLineStyle;
         /**
          * @docid
          * @default 5
@@ -431,10 +447,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         format?: Format;
         /**
          * @docid
-         * @type Enums.ScaleLabelOverlappingBehavior
          * @default "hide"
          */
-        overlappingBehavior?: 'hide' | 'none';
+        overlappingBehavior?: LabelOverlap;
         /**
          * @docid
          * @default 7
@@ -504,13 +519,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       maxRange?: VizTimeInterval;
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       minRange?: VizTimeInterval;
       /**
@@ -546,7 +561,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       minorTickInterval?: VizTimeInterval;
       /**
@@ -593,21 +608,19 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @inherits VizTimeInterval
-       * @type number|object|Enums.VizTimeInterval
+       * @type number|object|Enums.TimeInterval
        */
       tickInterval?: VizTimeInterval;
       /**
        * @docid
-       * @type Enums.RangeSelectorAxisScaleType
        * @default undefined
        */
-      type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
+      type?: AxisScale;
       /**
        * @docid
-       * @type Enums.ChartDataType
        * @default undefined
        */
-      valueType?: 'datetime' | 'numeric' | 'string';
+      valueType?: ChartsDataType;
       /**
        * @docid
        * @default [1, 2, 3, 4, 5]
@@ -627,11 +640,10 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     selectedRangeColor?: string;
     /**
      * @docid
-     * @type Enums.VisualRangeUpdateMode
      * @default "reset"
      * @public
      */
-    selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+    selectedRangeUpdateMode?: VisualRangeUpdateMode;
     /**
      * @docid
      * @public

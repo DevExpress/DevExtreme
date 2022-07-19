@@ -6,13 +6,23 @@ import {
     Font,
 } from './core/base_widget';
 
-export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
-export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
-export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
-export type HatchingDirectionType = 'left' | 'none' | 'right';
+import {
+    HorizontalAlignment,
+    Orientation,
+    Position,
+    VerticalEdge,
+} from '../common';
+
+import {
+    DashStyle,
+    LegendMarkerState,
+    TimeInterval,
+} from '../common/charts';
+
+export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+
 /**
  * @docid
- * @type number|object|Enums.VizTimeInterval
  * @hidden
  * @default undefined
  */
@@ -35,7 +45,7 @@ export type VizTimeInterval = number | {
   weeks?: number;
   /** @docid */
   years?: number;
-} | TimeIntervalType;
+} | TimeInterval;
 
 /**
  * @docid
@@ -66,10 +76,9 @@ export interface BaseLegend {
       cornerRadius?: number;
       /**
        * @docid
-       * @type Enums.DashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid
        * @default undefined
@@ -106,25 +115,22 @@ export interface BaseLegend {
     font?: Font;
     /**
      * @docid
-     * @type Enums.HorizontalAlignment
      * @default 'right'
      * @public
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: HorizontalAlignment;
     /**
      * @docid
-     * @type Enums.Position
      * @default undefined
      * @public
      */
-    itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
+    itemTextPosition?: Position;
     /**
      * @docid
-     * @type Enums.HorizontalAlignment
      * @default undefined
      * @public
      */
-    itemsAlignment?: 'center' | 'left' | 'right';
+    itemsAlignment?: HorizontalAlignment;
     /**
      * @docid
      * @default 10
@@ -160,11 +166,10 @@ export interface BaseLegend {
     markerSize?: number;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default undefined
      * @public
      */
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: Orientation;
     /**
      * @docid
      * @default 10
@@ -204,10 +209,9 @@ export interface BaseLegend {
       font?: Font;
       /**
        * @docid
-       * @type Enums.HorizontalAlignment
        * @default undefined
        */
-      horizontalAlignment?: 'center' | 'left' | 'right';
+      horizontalAlignment?: HorizontalAlignment;
       /**
        * @docid
        */
@@ -268,18 +272,16 @@ export interface BaseLegend {
       text?: string;
       /**
        * @docid
-       * @type Enums.VerticalEdge
        * @default 'top'
        */
-      verticalAlignment?: 'bottom' | 'top';
+      verticalAlignment?: VerticalEdge;
     } | string;
     /**
      * @docid
-     * @type Enums.VerticalEdge
      * @default 'top'
      * @public
      */
-    verticalAlignment?: 'bottom' | 'top';
+    verticalAlignment?: VerticalEdge;
     /**
      * @docid
      * @default true
@@ -313,9 +315,8 @@ export interface BaseLegendItem {
       size?: number;
       /**
        * @docid
-       * @type Enums.LegendMarkerState
        */
-      state?: 'normal' | 'hovered' | 'selected';
+      state?: LegendMarkerState;
     };
     /**
      * @docid
@@ -350,11 +351,10 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     tag?: any;
     /**
      * @docid
-     * @type Enums.SeriesType
      * @default 'line'
      * @public
      */
-    type?: ChartSeriesType;
+    type?: SeriesType;
 }
 
 /**
@@ -395,7 +395,7 @@ export interface VizRange {
     /**
      * @docid
      * @inherits VizTimeInterval
-     * @type number|object|Enums.VizTimeInterval
+     * @type number|object|Enums.TimeInterval
      * @default undefined
      * @public
      */

@@ -16,6 +16,17 @@ import BaseSparkline, {
     BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
+import {
+    PointSymbol,
+} from '../common/charts';
+
+export {
+    PointSymbol,
+};
+
+/** @public */
+export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxSparkline>;
 
@@ -73,9 +84,9 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @docid
      * @notUsedInTheme
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<any>;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @default '#666666'
@@ -144,11 +155,10 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     pointSize?: number;
     /**
      * @docid
-     * @type Enums.VizPointSymbol
      * @default 'circle'
      * @public
      */
-    pointSymbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
+    pointSymbol?: PointSymbol;
     /**
      * @docid
      * @default true
@@ -163,11 +173,10 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     showMinMax?: boolean;
     /**
      * @docid
-     * @type Enums.SparklineType
      * @default 'line'
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
+    type?: SparklineType;
     /**
      * @docid
      * @default 'val'

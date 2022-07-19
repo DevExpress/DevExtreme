@@ -1,5 +1,11 @@
 import DOMComponent from '../core/dom_component';
 
+import {
+    ExportFormat,
+    HorizontalAlignment,
+    VerticalAlignment,
+} from '../common';
+
 /**
  * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)
@@ -29,7 +35,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @static
  * @public
  */
-export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string; format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: 'bottom' | 'center' | 'top'; horizontalAlignment?: 'center' | 'left' | 'right'; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
+export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string; format?: ExportFormat; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: VerticalAlignment; horizontalAlignment?: HorizontalAlignment; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.getMarkup

@@ -1,10 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
 import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
+import { WidgetName } from '../../../helpers/createWidget';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
@@ -19,13 +19,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   hScrollbar?: Scrollbar;
 
-  getInstance: () => Promise<unknown>;
-
-  name: string;
-
-  platform: string;
-
-  constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
+  constructor(id: string | Selector, options?: any) {
     super(id);
 
     const direction = options.direction ?? 'vertical';
@@ -40,12 +34,15 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
         this.hScrollbar = new Scrollbar(DIRECTION_HORIZONTAL);
       }
     }
-
-    this.name = name;
-    this.platform = platform || 'jquery';
-
-    this.getInstance = getComponentInstance(this.platform as PlatformType, this.getElement());
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getTestingPlatform() {
+    return platform;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxScrollable'; }
 
   // eslint-disable-next-line class-methods-use-this
   getElement(): Selector {
@@ -95,9 +92,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).scrollTo(value);
-      },
+      () => { (getInstance() as any).scrollTo(value); },
       { dependencies: { getInstance, value } },
     )();
   }
@@ -106,22 +101,8 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).scrollToElement(selector);
-      },
+      () => { (getInstance() as any).scrollToElement(selector); },
       { dependencies: { getInstance, selector } },
-    )();
-  }
-
-  apiOption(name: string, value: string | number | boolean = 'undefined'): Promise<any> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const scrollable = getInstance() as any;
-        return value !== 'undefined' ? scrollable.option(name, value) : scrollable.option(name);
-      },
-      { dependencies: { getInstance, name, value } },
     )();
   }
 
@@ -129,9 +110,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).update();
-      },
+      () => { (getInstance() as any).update(); },
       { dependencies: { getInstance } },
     )();
   }

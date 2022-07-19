@@ -450,17 +450,18 @@ module('Integration: Work space', { ...moduleConfig }, () => {
     });
 
     test('Work space should have right showAllDayPanel option value', function(assert) {
-        const scheduler = createWrapper({
+        const { instance } = createWrapper({
             showAllDayPanel: false
         });
-        const $element = scheduler.instance.$element();
-        const $workSpace = $element.find('.dx-scheduler-work-space');
+        const workspace = instance.getWorkSpace();
 
-        assert.deepEqual($workSpace.dxSchedulerWorkSpaceDay('instance').option('showAllDayPanel'), false, 'Work space has a right allDay visibility');
+        assert.equal(workspace.type, 'day', 'WorkSpace type is Day');
+        assert.equal(workspace.option('showAllDayPanel'), false, 'Work space has a correct allDay visibility');
 
-        scheduler.instance.option('showAllDayPanel', true);
+        workspace.option('showAllDayPanel', true);
 
-        assert.deepEqual($workSpace.dxSchedulerWorkSpaceDay('instance').option('showAllDayPanel'), true, 'Work space has a right allDay visibility');
+        assert.equal(workspace.option('showAllDayPanel'), true, 'Work space has a correct allDay visibility');
+        assert.equal(workspace.type, 'day', 'WorkSpace type is Day');
     });
 
     test('Work space \'allDayExpanded\' option value when \'showAllDayPanel\' = true', function(assert) {
@@ -1720,11 +1721,15 @@ module('Resource Cell Template', () => {
                         ],
                     }],
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                        if(!cellIndex) {
-                            const $cell = $(cellElement);
-                            assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
-                            assert.roughEqual(getOuterHeight($cell), 276, 1.001, 'Resource cell height is OK');
-                        }
+                        const done = assert.async();
+                        setTimeout(() => {
+                            if(!cellIndex) {
+                                const $cell = $(cellElement);
+                                assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
+                                assert.roughEqual(getOuterHeight($cell), 274, 1.001, 'Resource cell height is OK');
+                            }
+                            done();
+                        });
                     }
                 });
             });

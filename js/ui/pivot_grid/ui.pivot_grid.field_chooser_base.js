@@ -257,7 +257,6 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
             },
             useIndicator: true,
             onChanged: function(e) {
-                const dataSource = that._dataSource;
                 const field = e.sourceElement.data('field');
 
                 e.removeSourceElement = !!e.sourceGroup;
@@ -265,18 +264,25 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 that._adjustSortableOnChangedArgs(e);
 
                 if(field) {
-                    let targetIndex = e.targetIndex;
+                    const targetIndex = e.targetIndex;
+                    let mainGroupField;
+                    let invisibleFieldsIndexOffset = 0;
 
-                    const areaInvisibleFields = dataSource.getAreaFields(field.area, true).filter(f => f.visible === false);
-                    areaInvisibleFields.forEach(field => {
-                        if(field.areaIndex <= e.targetIndex) {
-                            targetIndex++;
+                    that._processDemandState((dataSource) => {
+                        const fields = dataSource.getAreaFields(field.area, true);
+                        mainGroupField = getMainGroupField(dataSource, field);
+
+                        const visibleFields = fields.filter(f => f.visible !== false);
+                        const fieldBeforeTarget = visibleFields[targetIndex - 1];
+
+                        if(fieldBeforeTarget) {
+                            invisibleFieldsIndexOffset = fields.filter(f => f.visible === false && f.areaIndex <= fieldBeforeTarget.areaIndex).length;
                         }
                     });
 
-                    that._applyChanges([getMainGroupField(dataSource, field)], {
+                    that._applyChanges([mainGroupField], {
                         area: e.targetGroup,
-                        areaIndex: targetIndex
+                        areaIndex: targetIndex + invisibleFieldsIndexOffset
                     });
                 }
             }

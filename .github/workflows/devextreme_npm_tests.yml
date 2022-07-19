@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
 
     steps:
     - name: Get sources
@@ -55,12 +55,12 @@ jobs:
   test_npm_renovation:
     name: Renovated NPM - ${{ matrix.framework }}
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        framework: [angular, react]
+        framework: [react]
 
     steps:
     - name: Get sources
@@ -131,10 +131,10 @@ jobs:
         path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
-  test_angular:
+  test_angular_wrappers:
     name: Angular wrapper tests
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 30
 
     steps:
@@ -241,7 +241,7 @@ jobs:
   test_bundlers:
     name: Bundlers tests
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
 
     steps:
@@ -329,7 +329,7 @@ jobs:
       matrix:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 20
 
@@ -432,9 +432,9 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
-    needs: [build, test_angular, test_bundlers, test_demos, test_npm_renovation]
+    needs: [build, test_angular_wrappers, test_bundlers, test_demos, test_npm_renovation]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:

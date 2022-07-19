@@ -21,9 +21,8 @@ describe('compile', () => {
   test('Compile with empty modifications (check that items can be undefined)', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
-    return compiler.compile(null, {
-      file,
-      includePaths,
+    return compiler.compile(file, null, {
+      loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
@@ -43,12 +42,11 @@ describe('compile', () => {
   test('Compile with one base and one accordion items modified', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
-    return compiler.compile([
+    return compiler.compile(file, [
       { key: '$base-accent', value: 'red' },
       { key: '$accordion-item-title-opened-bg', value: 'green' },
     ], {
-      file,
-      includePaths,
+      loadPaths: [...includePaths],
     }).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(`.dx-accordion {
@@ -63,9 +61,9 @@ describe('compile', () => {
       // collected variables
       expect(data.changedVariables).toEqual({
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
-        '$accordion-item-title-opened-bg': 'green',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
+        '$accordion-item-title-opened-bg': '#008000',
       });
     });
   });
@@ -73,11 +71,11 @@ describe('compile', () => {
   test('Compile with error', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
-    return compiler.compile([], { file: 'dx.error.scss' }).then(
+    return compiler.compile('dx.error.scss', [], { }).then(
       () => expect(false).toBe(true),
       (error) => {
-        expect(error.status).toBe(3);
-        expect(error.formatted).toBe('Error: dx.error.scss: no such file or directory');
+        expect(error.code).toBe('ERR_INVALID_URL');
+        expect(`${error.message}: ${error.input}`).toBe('Invalid URL: dx.error.scss');
       },
     );
   });
@@ -86,12 +84,14 @@ describe('compile', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     const bundleContent = fs.readFileSync(file, 'utf8');
-    const extraOptions = {
-      data: `${bundleContent}.extra-class { color: red; }`,
-      includePaths,
-      outputStyle: 'compressed' as const,
-    };
-    return compiler.compile([], extraOptions).then((data) => {
+    return compiler.compileString(
+      `${bundleContent}.extra-class { color: red; }`,
+      [],
+      {
+        loadPaths: [...includePaths],
+        style: 'compressed' as const,
+      },
+    ).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(
         '.dx-accordion{background-color:'
@@ -113,9 +113,12 @@ describe('compile with widgets', () => {
   test('setter return indexFileContent for index file', () => {
     const compiler = new Compiler();
     const contentOfIndexFile = 'some content';
-    const indexFileUrl = '../widgets/generic/tb_index';
+    const indexFileUrl = new URL('db:../widgets/generic/tb_index');
     compiler.indexFileContent = contentOfIndexFile;
 
-    expect(compiler.setter(indexFileUrl)).toEqual({ contents: contentOfIndexFile });
+    expect(compiler.load(indexFileUrl)).toEqual({
+      contents: contentOfIndexFile,
+      syntax: 'scss',
+    });
   });
 });

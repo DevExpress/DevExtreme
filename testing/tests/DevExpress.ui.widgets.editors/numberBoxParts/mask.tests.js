@@ -3,6 +3,7 @@ import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import numberLocalization from 'localization/number';
 
 import 'ui/text_box/ui.text_editor';
@@ -438,6 +439,32 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
 
         assert.equal(this.input.val(), '<<123.4>>', 'value is correct');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, 'caret preserved');
+    });
+
+    [
+        { format: 'b,##0.###b', text: '-b5b', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '0000', text: '-0005', expectedCaretPosition: { start: 5, end: 5 } },
+        { format: '0.00', text: '-5.00', expectedCaretPosition: { start: 2, end: 2 } },
+        { format: '-0.00', text: '--5.00', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '00.00', text: '-05.00', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '$0.##', text: '-$5', expectedCaretPosition: { start: 3, end: 3 } },
+        { format: '\'123\'000.#\'123\'', text: '-123005.123', expectedCaretPosition: { start: 7, end: 7 } },
+        { format: '$ 000.000 \'0\'', text: '-$ 005.000 0', expectedCaretPosition: { start: 6, end: 6 } },
+    ].forEach(({ format, text, expectedCaretPosition }) => {
+        QUnit.test(`NumberBox should not reset the negativ value after valueChange event, format: ${format} (T1092593)`, function(assert) {
+            this.instance.option({
+                format,
+            });
+
+            this.input.focus();
+            this.keyboard
+                .type('5')
+                .type('-')
+                .change();
+
+            assert.strictEqual(this.input.val(), text, 'value is correct');
+            assert.deepEqual(this.keyboard.caret(), expectedCaretPosition, 'caret');
+        });
     });
 
     QUnit.test('typing zero-based value should not revert negative sign', function(assert) {
@@ -1325,11 +1352,42 @@ QUnit.module('format: percent format', moduleConfig, () => {
             this.instance.option('format', format ? format : '#0.##%');
             this.keyboard.type(text).change();
 
-            assert.equal(this.input.val(), `${text}%`, 'text is correct');
-            assert.equal(this.instance.option('value'), value, 'value is correct');
+            assert.strictEqual(this.input.val(), `${text}%`, 'text is correct');
+            assert.strictEqual(this.instance.option('value'), value, 'value is correct');
         });
     });
 
+    [
+        { text: '0.04', value: 0.00035, format: '#0.00%' },
+        { text: '0.0350', value: 0.00035, format: '#0.0000%' },
+        { text: '0.14', value: 0.00135, format: '#0.00%' },
+        { text: '0.4', value: 0.0035, format: '#0.0%' },
+        { text: '0.35', value: 0.0035, format: '#0.00%' },
+        { text: '1.4', value: 0.0135, format: '#0.0%' },
+        { text: '0.005', value: 0.000049999, format: '#0.000%' },
+        { text: '0.004', value: 0.0000444999, format: '#0.000%' },
+        { text: '1.2962', value: 0.01296249, format: '#0.0000%' },
+        { text: '1.2963', value: 0.0129625, format: '#0.0000%' },
+        { text: '1.2962', value: 0.01296249999, format: '#0.0000%' },
+        { text: '4.654', value: 0.046544999, format: '#0.000%' },
+        { text: '-4.65', value: -0.04645, format: '#0.00%' },
+        { text: '-35.86', value: -0.35855, format: '#0.00%' },
+        { text: '-1.2962', value: -0.01296249, format: '#0.0000%' },
+        { text: '10.004', value: 0.100035, format: '#0.000%' },
+        { text: '43.104', value: 0.431035, format: '#0.000%' },
+        { text: '43.105', value: 0.431045, format: '#0.000%' },
+        { text: '0.004', value: 0.000035, format: '#0.000%' },
+    ].forEach(({ text, value, format }) => {
+        QUnit.test(`percent format should correctly handle float values, value: ${value}, format: ${format} (T1093736)`, function(assert) {
+            this.instance.option({
+                format,
+                value
+            });
+
+            assert.strictEqual(this.input.val(), `${text}%`, 'text is correct');
+            assert.strictEqual(this.instance.option('value'), value, 'value is correct');
+        });
+    });
 });
 
 QUnit.module('format: removing', moduleConfig, () => {
@@ -2093,15 +2151,30 @@ QUnit.module('stubs', moduleConfig, function() {
         { format: '#,##0\'.\'\'0\'\'0\'', expectedText: '1,234.00', expectedValue: 1234 },
         { format: '\'-\'#,###.00', expectedText: '-1.00', expectedValue: 1 },
         { format: '\'-\'#,###.00', expectedText: '--1.00', expectedValue: -1 },
-    ].forEach(({ format, expectedText, expectedValue }) => {
-        QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
+        { format: '\'--\'#,###.00', expectedText: '--1.00', expectedValue: 1 },
+        { format: '\'--\'#,###.00', expectedText: '---1.00', expectedValue: -1 },
+        { format: '#', expectedText: '1', expectedValue: 1 },
+        { format: '#', expectedText: '-1', expectedValue: -1 },
+        { format: '#', expectedText: '', typedText: '-', expectedValue: null },
+        { format: '#', expectedText: '-1', typedText: '1-', expectedValue: -1 },
+        { format: '\'-\'#', expectedText: '--1', typedText: '-1', expectedValue: -1 },
+        { format: '\'--\'#', expectedText: '---1', typedText: '-1', expectedValue: -1 },
+        { format: '#;-#', expectedText: '-1', typedText: '1-', expectedValue: -1 },
+        { format: '#;-#', expectedText: '1', typedText: '1--', expectedValue: 1 },
+        { format: '0;<0', expectedText: '<1', typedText: '-1', expectedValue: -1 },
+        { format: '0;<0', expectedText: '<1', typedText: '1-', expectedValue: -1 },
+        { format: '0;<0', expectedText: '1', typedText: '1--', expectedValue: 1 },
+        { format: '\'plus\' 0;\'minus\' 0', expectedText: 'minus 1', typedText: '1-', expectedValue: -1 },
+        { format: '\'plus\' 0;\'minus\' 0', expectedText: 'plus 1', typedText: '1--', expectedValue: 1 },
+    ].forEach(({ format, expectedText, typedText, expectedValue }) => {
+        QUnit.test(`widget should correctly apply format="${format}", value="${typedText || expectedValue}"`, function(assert) {
             this.instance.option({
                 value: null,
                 format
             });
 
             this.keyboard
-                .type(expectedValue.toString())
+                .type(typedText || expectedValue.toString())
                 .press('enter');
 
             assert.equal(this.input.val(), expectedText, 'text is correct');
@@ -2168,3 +2241,40 @@ QUnit.module('symbol with dot in format', {
         assert.strictEqual(this.$input.val(), '. 67.50', 'value is correct');
     });
 });
+
+QUnit.module('ShadowDOM', {
+    beforeEach: function() {
+        appendShadowRoot.call(this, '#numberbox');
+    }
+}, function() {
+    QUnit.test('should move caret', function(assert) {
+        const $element = $(this.control).dxNumberBox({
+            format: '#0.##',
+            value: '',
+            useMaskBehavior: true
+        });
+
+        const clock = sinon.useFakeTimers();
+        const input = $element.find('.dx-texteditor-input');
+        const instance = $element.dxNumberBox('instance');
+        const keyboard = keyboardMock(input, true);
+
+        instance.option({
+            format: '#0 \'9\'',
+            value: 0
+        });
+
+        input.focus();
+        clock.tick(CARET_TIMEOUT_DURATION);
+        for(let i = 0; i < 2; ++i) {
+            keyboard.caret(3);
+            input.trigger('dxclick');
+            clock.tick(CARET_TIMEOUT_DURATION);
+        }
+
+        assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+
+        clock.restore();
+    });
+});
+

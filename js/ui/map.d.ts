@@ -14,6 +14,13 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
+export type MapProvider = 'bing' | 'google' | 'googleStatic';
+/** @public */
+export type RouteMode = 'driving' | 'walking';
+/** @public */
+export type MapType = 'hybrid' | 'roadmap' | 'satellite';
+
+/** @public */
 export type ClickEvent = NativeEventInfo<dxMap, MouseEvent | PointerEvent>;
 
 /** @public */
@@ -236,11 +243,10 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     onRouteRemoved?: ((e: RouteRemovedEvent) => void);
     /**
      * @docid
-     * @type Enums.GeoMapProvider
      * @default "google"
      * @public
      */
-    provider?: 'bing' | 'google' | 'googleStatic';
+    provider?: MapProvider;
     /**
      * @docid
      * @fires dxMapOptions.onRouteAdded
@@ -261,10 +267,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       locations?: Array<any>;
       /**
        * @docid
-       * @type Enums.GeoMapRouteMode
        * @default 'driving'
        */
-      mode?: 'driving' | 'walking';
+      mode?: RouteMode;
       /**
        * @docid
        * @default 0.5
@@ -278,11 +283,10 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     }>;
     /**
      * @docid
-     * @type Enums.GeoMapType
      * @default "roadmap"
      * @public
      */
-    type?: 'hybrid' | 'roadmap' | 'satellite';
+    type?: MapType;
     /**
      * @docid
      * @default 300

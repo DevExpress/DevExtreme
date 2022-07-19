@@ -376,7 +376,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             if(filterLength > maxFilterLengthInRequest) {
                 filter = function(itemData) {
-                    return keyMap[that._keyGetter(itemData)];
+                    return keyMap[needChildren ? that._parentIdGetter(itemData) : that._keyGetter(itemData)];
                 };
 
                 needLocalFiltering = isRemoteFiltering;
@@ -689,7 +689,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         totalItemsCount: function() {
-            return this._totalItemsCount;
+            return this._totalItemsCount + this._totalCountCorrection;
         },
 
         isRowExpanded: function(key, cache) {

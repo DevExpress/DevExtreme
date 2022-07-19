@@ -359,7 +359,9 @@ export default gridCore.Controller.inherit((function() {
             const dataSource = this._dataSource;
             const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
             const totalCount = this.totalCount();
+            const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
             const isVirtualMode = this.option('scrolling.mode') === 'virtual';
+            const isLegacyMode = this.option('scrolling.legacyMode');
 
             changes = changes.filter(function(change) {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
@@ -384,7 +386,14 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
+            const needUpdateTotalCountCorrection =
+                this._currentTotalCount > 0 || (
+                    !isReshapeMode &&
+                    isVirtualMode &&
+                    (!isLegacyMode || totalCount === oldItemCount)
+                );
+
+            if(needUpdateTotalCountCorrection) {
                 this._totalCountCorrection += getItemCount() - oldItemCount;
             }
 

@@ -1,3 +1,5 @@
+export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+
 /**
  * @public
  */
@@ -71,11 +73,10 @@ export interface CompareRule {
     comparisonTarget?: (() => any);
     /**
      * @docid
-     * @type Enums.ComparisonOperator
      * @default '=='
      * @public
      */
-    comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+    comparisonType?: ComparisonOperator;
     /**
      * @docid
      * @default false
@@ -340,4 +341,7 @@ export interface StringLengthRule {
     type: 'stringLength';
 }
 
+/** @public */
 export type ValidationRule = AsyncRule | CompareRule | CustomRule | EmailRule | NumericRule | PatternRule | RangeRule | RequiredRule | StringLengthRule;
+/** @public */
+export type ValidationRuleType = 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';

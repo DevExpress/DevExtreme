@@ -21,6 +21,19 @@ import dxMenuBase, {
     dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
+import {
+    Orientation,
+    SubmenuShowMode,
+} from '../common';
+
+export {
+    Orientation,
+    SubmenuShowMode,
+};
+
+/** @public */
+export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
+
 /** @public */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxMenu<TKey>>;
 
@@ -81,11 +94,11 @@ export interface dxMenuOptions<
     adaptivityEnabled?: boolean;
     /**
      * @docid
-     * @type string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey>;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
      * @docid
      * @default false
@@ -136,14 +149,12 @@ export interface dxMenuOptions<
     onSubmenuShown?: ((e: SubmenuShownEvent<TKey>) => void);
     /**
      * @docid
-     * @type Enums.Orientation
      * @default "horizontal"
      * @public
      */
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: Orientation;
     /**
      * @docid
-     * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onClick", delay: { show: 50, hide: 300 } }
      * @public
      */
@@ -166,18 +177,16 @@ export interface dxMenuOptions<
       } | number;
       /**
        * @docid
-       * @type Enums.ShowSubmenuMode
        * @default "onClick"
        */
-      name?: 'onClick' | 'onHover';
-    } | 'onClick' | 'onHover';
+      name?: SubmenuShowMode;
+    } | SubmenuShowMode;
     /**
      * @docid
-     * @type Enums.SubmenuDirection
      * @default "auto"
      * @public
      */
-    submenuDirection?: 'auto' | 'leftOrTop' | 'rightOrBottom';
+    submenuDirection?: SubmenuDirection;
 }
 /**
  * @docid

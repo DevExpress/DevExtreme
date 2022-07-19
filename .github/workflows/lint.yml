@@ -11,7 +11,7 @@ on:
 
 jobs:
   Renovation:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -33,13 +33,16 @@ jobs:
       run: npm install --no-audit --no-fund 
 
     - name: Compile renovation
-      run: npm run compile:r
+      run: | 
+        npm i cheerio@1.0.0-rc.10 
+        npm run compile:r
+# Remove package install after upgrade to TypeScript >= 4.6
 
     - name: Lint renovation
       run: npm run lint-renovation
 
   TS:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -80,7 +83,7 @@ jobs:
       run: npm run lint-dts
 
   JS:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -110,7 +113,7 @@ jobs:
       run: npm run lint-js
 
   CSS:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -135,7 +138,7 @@ jobs:
       run: npm run lint-css
 
   package_lock_npm_6:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 10
     steps:
     - name: Get sources
@@ -156,7 +159,7 @@ jobs:
       run: npm run build:dev
 
   package_lock:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 10
     steps:
     - name: Get sources
@@ -175,7 +178,7 @@ jobs:
         git diff --exit-code package-lock.json
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [Renovation, TS, JS, CSS, package_lock, package_lock_npm_6]
     if: always() && contains(needs.*.result, 'failure')

@@ -138,13 +138,8 @@ export const needSkipEvent = e => {
     // TODO: this checking used in swipeable first move handler. is it correct?
     const { target } = e;
     const $target = $(target);
-    const isDropDown = $target.is('.dx-dropdownlist-popup-wrapper *, .dx-dropdownlist-popup-wrapper');
     const isContentEditable = target?.isContentEditable || target?.hasAttribute('contenteditable');
     const touchInEditable = $target.is('input, textarea, select') || isContentEditable;
-
-    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event') && !isDropDown) {
-        return true;
-    }
 
     if(isDxMouseWheelEvent(e)) {
         const isTextArea = $target.is('textarea') && $target.hasClass('dx-texteditor-input');
@@ -187,19 +182,15 @@ export const fireEvent = props => {
 };
 
 export const normalizeKeyName = ({ key, which }) => {
-    const originalKey = key;
-    const isKeySupported = !!key;
-
-    if(key || which) {
-        if(isKeySupported) {
-            key = KEY_MAP[key.toLowerCase()];
-        }
-        if(!isKeySupported || !key && which) {
-            key = LEGACY_KEY_CODES[which] || String.fromCharCode(which);
-        }
-
-        return key || originalKey;
+    const normalizedKey = KEY_MAP[key?.toLowerCase()] || key;
+    const normalizedKeyFromWhich = LEGACY_KEY_CODES[which];
+    if(normalizedKeyFromWhich && normalizedKey === key) {
+        return normalizedKeyFromWhich;
+    } else if(!normalizedKey && which) {
+        return String.fromCharCode(which);
     }
+
+    return normalizedKey;
 };
 
 export const getChar = ({ key, which }) => key || String.fromCharCode(which);

@@ -48,13 +48,11 @@ export default class MetadataCollector {
 
   async saveMetadata(
     filePath: string,
-    jsonFilePath: string,
     version: string,
     browsersList: string[],
     dependencies: FlatStylesDependencies,
   ): Promise<void> {
     const absolutePath = resolve(filePath);
-    const absoluteJsonPath = resolve(jsonFilePath);
     const metadata = this.generator.getMetadata();
     const metaString = MetadataCollector.getStringFromObject(metadata);
     const browsersListString = MetadataCollector.getStringFromObject(browsersList);
@@ -66,8 +64,6 @@ export const browsersList: Array<string> = ${browsersListString};
 export const dependencies: FlatStylesDependencies = ${dependenciesString};
 `;
     await fs.mkdir(dirname(absolutePath), { recursive: true });
-    await fs.mkdir(dirname(absoluteJsonPath), { recursive: true });
     await fs.writeFile(absolutePath, metaContent);
-    await fs.writeFile(absoluteJsonPath, JSON.stringify(metadata));
   }
 }

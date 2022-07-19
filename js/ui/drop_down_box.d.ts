@@ -61,7 +61,7 @@ export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
@@ -116,9 +116,9 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<any>;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @public

@@ -79,12 +79,6 @@ QUnit.module('Timeline markup', moduleConfig, () => {
         assert.notOk(this.instance.$element().hasClass('dx-scheduler-work-space-both-scrollbar'), 'CSS class is OK');
     });
 
-    QUnit.test('Date table scrollable should have right config', function(assert) {
-        const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-        assert.equal(dateTableScrollable.option('direction'), 'horizontal', 'Direction is OK');
-    });
-
     QUnit.test('Date table scrollable should have right config for crossScrolling', function(assert) {
         this.instance.option('crossScrollingEnabled', true);
         const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
@@ -469,14 +463,6 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
         assert.equal($rows.eq(0).find('.dx-scheduler-date-table-cell').length, 48 * 2, 'The first group row has 96 cells');
     });
 
-    QUnit.test('Header panel should contain group rows in grouped mode, groupOrientation = horizontal', function(assert) {
-        const $element = this.instance.$element();
-
-        const $groupRows = $element.find('.dx-scheduler-header-panel .dx-scheduler-group-row');
-
-        assert.strictEqual($groupRows.length, 1, 'Header panel does not contain any group row');
-    });
-
     QUnit.test('Group table should contain right rows and cells count, groupOrientation = horizontal', function(assert) {
         const $element = this.instance.$element();
 
@@ -722,14 +708,6 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
             },
             groupIndex: 1,
         }, 'data of 25th cell is correct');
-    });
-
-    QUnit.test('Header panel should contain group rows in grouped mode, groupOrientation = horizontal', function(assert) {
-        const $element = this.instance.$element();
-
-        const $groupRows = $element.find('.dx-scheduler-header-panel .dx-scheduler-group-row');
-
-        assert.strictEqual($groupRows.length, 1, 'Header panel does not contain any group row');
     });
 
     QUnit.test('Group table should contain right rows and cells count, groupOrientation = horizontal', function(assert) {

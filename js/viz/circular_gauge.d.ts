@@ -21,6 +21,11 @@ import {
 } from './gauges/base_gauge';
 
 /** @public */
+export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
+/** @public */
+export type CircularGaugeLabelOverlap = 'first' | 'last';
+
+/** @public */
 export type DisposingEvent = EventInfo<dxCircularGauge>;
 
 /** @public */
@@ -100,11 +105,10 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
 export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.orientation
-     * @type Enums.CircularGaugeElementOrientation
      * @default 'outside'
      * @public
      */
-    orientation?: 'center' | 'inside' | 'outside';
+    orientation?: CircularGaugeElementOrientation;
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.width
      * @default 5
@@ -122,21 +126,19 @@ export interface dxCircularGaugeScale extends BaseGaugeScale {
     label?: dxCircularGaugeScaleLabel;
     /**
      * @docid dxCircularGaugeOptions.scale.orientation
-     * @type Enums.CircularGaugeElementOrientation
      * @default 'outside'
      * @public
      */
-    orientation?: 'center' | 'inside' | 'outside';
+    orientation?: CircularGaugeElementOrientation;
 }
 /** @namespace DevExpress.viz */
 export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast
-     * @type Enums.GaugeOverlappingBehavior
      * @default 'last'
      * @public
      */
-    hideFirstOrLast?: 'first' | 'last';
+    hideFirstOrLast?: CircularGaugeLabelOverlap;
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
      * @default 10

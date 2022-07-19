@@ -6,6 +6,12 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
+import {
+    EditorStyle,
+    ValidationMessageMode,
+    ValidationStatus,
+} from '../../common';
+
 export interface ValueChangedInfo {
     readonly previousValue?: any;
     readonly value?: any;
@@ -52,18 +58,16 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     validationErrors?: Array<any>;
     /**
      * @docid
-     * @type Enums.ValidationMessageMode
      * @default "auto"
      * @public
      */
-    validationMessageMode?: 'always' | 'auto';
+    validationMessageMode?: ValidationMessageMode;
     /**
      * @docid
-     * @type Enums.ValidationStatus
      * @default "valid"
      * @public
      */
-    validationStatus?: 'valid' | 'invalid' | 'pending';
+    validationStatus?: ValidationStatus;
     /**
      * @docid
      * @default null
@@ -73,11 +77,10 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     value?: any;
     /**
      * @docid
-     * @type Enums.EditorStylingMode
      * @default 'outlined'
      * @hidden
      */
-    stylingMode?: 'outlined' | 'underlined' | 'filled';
+    stylingMode?: EditorStyle;
 }
 /**
  * @docid

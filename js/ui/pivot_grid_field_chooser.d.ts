@@ -13,6 +13,19 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    FieldChooserLayout,
+} from '../common';
+
+import {
+    ApplyChangesMode,
+} from '../common/grids';
+
+export {
+    ApplyChangesMode,
+    FieldChooserLayout,
+};
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 
@@ -46,18 +59,23 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     allowSearch?: boolean;
     /**
      * @docid
-     * @type Enums.ApplyChangesMode
      * @default "instantly"
      * @public
      */
-    applyChangesMode?: 'instantly' | 'onDemand';
+    applyChangesMode?: ApplyChangesMode;
     /**
      * @docid
      * @default null
      * @ref
      * @public
      */
-    dataSource?: PivotGridDataSource;
+    dataSource?: PivotGridDataSource | null;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    encodeHtml?: boolean;
     /**
      * @docid
      * @public
@@ -117,11 +135,10 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @type Enums.PivotGridFieldChooserLayout
      * @default 0
      * @public
      */
-    layout?: 0 | 1 | 2;
+    layout?: FieldChooserLayout;
     /**
      * @docid
      * @type_function_param1 e:object

@@ -33,6 +33,12 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+} from '../common';
+
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
   readonly event?: DxEvent<MouseEvent | TouchEvent>;
@@ -45,6 +51,21 @@ interface TargetedAppointmentInfo {
   readonly appointmentData: dxSchedulerAppointment;
   readonly targetedAppointmentData?: dxSchedulerAppointment;
 }
+
+export {
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+};
+
+/** @public */
+export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
+/** @public */
+export type CellAppointmentsLimit = 'auto' | 'unlimited';
+/** @public */
+export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+/** @public */
+export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
 /** @public */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
@@ -90,6 +111,19 @@ export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & 
   readonly appointmentData?: dxSchedulerAppointment;
   readonly form: dxForm;
   readonly popup: dxPopup;
+};
+
+/** @public */
+export type AppointmentTooltipShowingAppointmentInfo = {
+  readonly appointmentData: Appointment;
+  readonly currentAppointmentData: Appointment;
+  readonly color: PromiseLike<string>;
+};
+
+/** @public */
+export type AppointmentTooltipShowingEvent = Cancelable & EventInfo<dxScheduler> & {
+  readonly targetElement: DxElement;
+  readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
 };
 
 /** @public */
@@ -168,7 +202,9 @@ export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
 export type AppointmentTemplateData = TargetedAppointmentInfo;
 
 /** @public */
-export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
+export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+  readonly isButtonClicked: boolean;
+};
 
 /** @public */
 export type AppointmentCollectorTemplateData = {
@@ -304,12 +340,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     currentDate?: Date | number | string;
     /**
      * @docid
-     * @type Enums.SchedulerViewType
      * @default "day"
      * @fires dxSchedulerOptions.onOptionChanged
      * @public
      */
-    currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+    currentView?: ViewType;
     /**
      * @docid
      * @type_function_param1 info:object
@@ -328,9 +363,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @public
-     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
+     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions|null
      */
-    dataSource?: DataSourceLike<Appointment>;
+    dataSource?: DataSourceLike<Appointment> | null;
     /**
      * @docid
      * @default null
@@ -418,11 +453,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     endDayHour?: number;
     /**
      * @docid
-     * @type Enums.FirstDayOfWeek
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
      * @docid
      * @default true &for(desktop)
@@ -455,11 +489,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     max?: Date | number | string;
     /**
      * @docid
-     * @type number|Enums.MaxAppointmentsPerCell
      * @default "auto"
      * @public
      */
-    maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+    maxAppointmentsPerCell?: number | CellAppointmentsLimit;
     /**
      * @docid
      * @default undefined
@@ -533,6 +566,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
+
     /**
      * @docid
      * @default null
@@ -543,6 +577,16 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointments:Array<object>
+     * @action
+     * @public
+     */
+    onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
     /**
      * @docid
      * @default null
@@ -609,11 +653,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
      * @docid
-     * @type Enums.SchedulerRecurrenceEditMode
      * @default "dialog"
      * @public
      */
-    recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
+    recurrenceEditMode?: RecurrenceEditMode;
     /**
      * @docid
      * @default 'recurrenceException'
@@ -658,9 +701,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default null
-       * @type Store|DataSource|DataSourceOptions|string|Array<any>
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
        */
-      dataSource?: DataSourceLike<any>;
+      dataSource?: DataSourceLike<any> | null;
       /**
        * @docid
        * @type_function_param1 resource:object
@@ -765,6 +808,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     useDropDownViewSwitcher?: boolean;
     /**
      * @docid
+     * @default "allDay"
+     */
+    allDayPanelMode?: AllDayPanelMode;
+    /**
+     * @docid
      * @default ['day', 'week']
      * @public
      */
@@ -825,10 +873,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       endDayHour?: number;
       /**
        * @docid
-       * @type Enums.FirstDayOfWeek
        * @default undefined
        */
-      firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+      firstDayOfWeek?: FirstDayOfWeek;
       /**
        * @docid
        * @default false
@@ -836,9 +883,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       groupByDate?: boolean;
       /**
        * @docid
-       * @type Enums.Orientation
        */
-      groupOrientation?: 'horizontal' | 'vertical';
+      groupOrientation?: Orientation;
       /**
        * @docid
        * @default []
@@ -851,10 +897,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       intervalCount?: number;
       /**
        * @docid
-       * @type number|Enums.MaxAppointmentsPerCell
        * @default "auto"
        */
-      maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+      maxAppointmentsPerCell?: number | CellAppointmentsLimit;
       /**
        * @docid
        * @default undefined
@@ -884,14 +929,18 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @type Enums.SchedulerViewType
        * @default undefined
        */
-      type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+      type?: ViewType;
       /**
        * @docid
        */
       scrolling?: dxSchedulerScrolling;
+      /**
+       * @docid
+       * @default "allDay"
+       */
+       allDayPanelMode?: AllDayPanelMode;
     }>;
 }
 /**
@@ -913,6 +962,16 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @public
      */
     deleteAppointment(appointment: dxSchedulerAppointment): void;
+    /**
+     * @docid
+     * @publicName deleteRecurrence(appointment, date, recurrenceEditMode)
+     * @public
+     */
+    deleteRecurrence(
+      appointmentData: dxSchedulerAppointment,
+      date: Date | string,
+      recurrenceEditMode: RecurrenceEditMode,
+    ): void;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -989,7 +1048,7 @@ export type Appointment = dxSchedulerAppointment;
  * @namespace DevExpress.ui
  * @deprecated Use the Scheduler's Appointment type instead
  */
-export interface dxSchedulerAppointment extends CollectionWidgetItem {
+export type dxSchedulerAppointment = CollectionWidgetItem & {
     /**
      * @docid
      * @public
@@ -1057,7 +1116,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
      * @public
      */
     visible?: boolean;
-}
+} & Record<string, any>;
 
 /** @public */
 export type Properties = dxSchedulerOptions;
@@ -1073,9 +1132,8 @@ export type Options = dxSchedulerOptions;
 export interface dxSchedulerScrolling {
   /**
    * @docid
-   * @type Enums.SchedulerScrollingMode
    * @default "standard"
    * @public
    */
-  mode?: 'standard' | 'virtual';
+  mode?: ScrollMode;
 }

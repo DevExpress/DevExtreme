@@ -1,3 +1,5 @@
+import { Format as PredefinedFormat } from './common';
+
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
@@ -73,7 +75,6 @@ export function parseDate(text: string, format: Format): Date;
  */
 export function parseNumber(text: string, format: Format): number;
 
-type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 export interface FormatObject {
     /**
      * @docid Format.currency
@@ -81,7 +82,7 @@ export interface FormatObject {
      */
    currency?: string;
    /**
-     * @docid
+     * @docid Format.useCurrencyAccountingStyle
      * @type boolean
      * @default true
      * @public
@@ -105,7 +106,6 @@ export interface FormatObject {
    /**
     * @docid Format.type
     * @public
-    * @type Enums.Format|string
     */
    type?: PredefinedFormat | string;
 }

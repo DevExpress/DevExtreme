@@ -1,3 +1,6 @@
+/** @public */
+export type ExcelUnderlineType = 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+
 /**
  * @docid
  * @deprecated
@@ -31,8 +34,7 @@ export interface ExcelFont {
     size?: number;
     /**
      * @docid
-     * @type Enums.ExcelFontUnderlineType
      * @public
      */
-    underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+    underline?: ExcelUnderlineType;
 }

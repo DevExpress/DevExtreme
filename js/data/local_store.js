@@ -6,6 +6,7 @@ import Class from '../core/class';
 const abstract = Class.abstract;
 import { errors } from './errors';
 import ArrayStore from './array_store';
+import Query from './query';
 
 const LocalStoreBackend = Class.inherit({
 
@@ -105,6 +106,12 @@ const LocalStore = ArrayStore.inherit({
     clear: function() {
         this.callBase();
         this._backend.notifyChanged();
+    },
+
+    createQuery: function() {
+        return Query(this._backend._loadImpl(), {
+            errorHandler: this._errorHandler
+        });
     },
 
     _insertImpl: function(values) {

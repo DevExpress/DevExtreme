@@ -1,4 +1,8 @@
 import {
+    ButtonStyle,
+} from '../common';
+
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
@@ -31,6 +35,10 @@ import {
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
+
+export {
+    ButtonStyle,
+};
 
 /** @public */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
@@ -68,11 +76,11 @@ export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
-     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item | any>;
+    dataSource?: DataSourceLike<Item | any> | null;
     /**
      * @docid
      * @default true
@@ -215,11 +223,10 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     splitButton?: boolean;
     /**
      * @docid
-     * @type Enums.ButtonStylingMode
      * @default 'outlined'
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: ButtonStyle;
     /**
      * @docid
      * @default ""

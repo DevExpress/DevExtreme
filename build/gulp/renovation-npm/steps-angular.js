@@ -21,12 +21,6 @@ function createNgEntryPoint(context) {
 function createTSConfig(context) {
     return () => {
         const config = {
-            "angularCompilerOptions": {
-                "annotateForClosureCompiler": true,
-                "fullTemplateTypeCheck": true,
-                // TODO: Ivy should be enabled.
-                // "enableIvy": false
-            },
             "buildOnSave": false,
             "compileOnSave": false,
             "compilerOptions": {
@@ -47,10 +41,6 @@ function createTSConfig(context) {
                     "./node_modules/@types",
                     "../../node_modules/@types"
                 ],
-                "paths": {
-                    "@angular/*": ["./node_modules/@angular/*"],
-                    "devextreme/*": ["./node_modules/devextreme/*"]
-                }
             },
             "exclude": ["node_modules", "dist"]
         };
@@ -68,27 +58,9 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
             "devextreme"
         ]
     }
-
-    // TODO: We've hardcoded angular-specific refs because we're unable to refer them inside devextreme's package.json
-    packageObject.peerDependencies = {
-        ...packageObject.peerDependencies,
-        "@angular/core": "^11.0.0 || ^12.0.0 || ^13.0.0",
-        "@angular/common": "^11.0.0 || ^12.0.0 || ^13.0.0",
-        "@angular/forms": "^11.0.0 || ^12.0.0 || ^13.0.0",
-    }
-
-    // TODO: we should do this in a better way
-    packageObject.devDependencies = {
-        ...packageObject.devDependencies,
-        "@angular/core": "^12.2.14",
-        "@angular/common": "^12.2.14",
-        "@angular/forms": "^12.2.14",
-    }
 }
 function runPackagr(context) {
     const rootDir = path.resolve(__dirname, '../../../');
-    const distDir = path.resolve(rootDir, context.destination, 'dist');
-    const tempDir = path.resolve(rootDir, context.destination, '../npm-angular-temp/');
     const destinationDir = path.resolve(rootDir, context.destination);
 
     const runPackagr = function runPackagr(cb) {
@@ -101,14 +73,6 @@ function runPackagr(context) {
             .then(() => cb());
     }
 
-    const copyBuildResultToTempFolder = () => gulp.src(path.join(distDir, '/**/*'))
-        .pipe(gulp.dest(tempDir));
-
-    const deleteNpmAngularFolder = function delNpmAngular(cb) {
-        del.sync(destinationDir);
-        cb();
-    }
-
     const renameTempToDestination = function renameTempToDestination(cb) {
         fs.renameSync(tempDir, destinationDir);
         cb();
@@ -116,8 +80,6 @@ function runPackagr(context) {
 
     return gulp.series(
         runPackagr,
-        copyBuildResultToTempFolder,
-        deleteNpmAngularFolder,
         renameTempToDestination
     );
 }

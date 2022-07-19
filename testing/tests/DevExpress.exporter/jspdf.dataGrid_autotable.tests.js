@@ -1,3 +1,4 @@
+import '../../helpers/noIntl.js';
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -9,7 +10,6 @@ import { JSPdfOptionTests } from './jspdfParts/autotable/jspdf.options.tests.js'
 import { exportDataGridWithAutoTable } from 'pdf_exporter';
 
 import 'ui/data_grid';
-
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

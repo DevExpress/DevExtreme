@@ -66,7 +66,8 @@ import {
 import { ExpressionUtils } from './expressionUtils';
 import {
     validateDayHours,
-    isDateAndTimeView
+    isDateAndTimeView,
+    isTimelineView
 } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
@@ -304,7 +305,7 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            showAllDayAppointments: 'auto',
+            allDayPanelMode: 'all',
 
             renovateRender: true,
 
@@ -669,12 +670,7 @@ class Scheduler extends Widget {
             }
             case 'showAllDayPanel':
                 this.updateInstances();
-
-                this._postponeResourceLoading().done((resources) => {
-                    this._filterAppointmentsByDate();
-                    this._updateOption('workSpace', 'allDayExpanded', value);
-                    this._updateOption('workSpace', name, value);
-                });
+                this.repaint();
                 break;
             case 'showCurrentTimeIndicator':
             case 'indicatorTime':
@@ -733,7 +729,7 @@ class Scheduler extends Widget {
 
                 this._updateOption('workSpace', args.fullName, value);
                 break;
-            case 'showAllDayAppointments':
+            case 'allDayPanelMode':
                 this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'renovateRender':
@@ -972,7 +968,7 @@ class Scheduler extends Widget {
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
-            showAllDayAppointments: this._getCurrentViewOption('showAllDayAppointments'),
+            allDayPanelMode: this._getCurrentViewOption('allDayPanelMode'),
             showAllDayPanel: this.option('showAllDayPanel'),
             getLoadedResources: () => this.option('loadedResources'),
             getIsVirtualScrolling: () => this.isVirtualScrolling(),
@@ -1575,8 +1571,9 @@ class Scheduler extends Widget {
                     item => scrolling.orientation === item || currentViewOptions.scrolling?.orientation === item
                 ).length > 0
             );
-        const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
-            horizontalVirtualScrollingAllowed;
+        const crossScrollingEnabled = this.option('crossScrollingEnabled')
+            || horizontalVirtualScrollingAllowed
+            || isTimelineView(this.currentViewType);
 
         const result = extend({
             resources: this.option('resources'),
@@ -1614,8 +1611,10 @@ class Scheduler extends Widget {
             timeZoneCalculator: this.timeZoneCalculator,
             schedulerHeight: this.option('height'),
             schedulerWidth: this.option('width'),
+            allDayPanelMode: this.option('allDayPanelMode'),
             onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
             onRenderAppointments: this._renderAppointments.bind(this),
+            onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
             getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
             onScrollEnd: () => this._appointments.updateResizableArea(),
 
@@ -2110,7 +2109,7 @@ class Scheduler extends Widget {
             appointment,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour'),
-            this._getCurrentViewOption('showAllDayAppointments'),
+            this._getCurrentViewOption('allDayPanelMode'),
         );
     }
 
@@ -2463,6 +2462,10 @@ class Scheduler extends Widget {
         const endDayHour = this._getCurrentViewOption('endDayHour');
 
         validateDayHours(startDayHour, endDayHour);
+    }
+
+    _getDragBehavior() {
+        return this._workSpace.dragBehavior;
     }
 
     /**

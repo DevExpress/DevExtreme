@@ -278,7 +278,10 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             }
 
             if(options.collapsedItemsCount && options.extra && options.extra.totalCount >= 0) {
-                options.extra.totalCount += options.collapsedItemsCount;
+                if(!options.extra._totalCountWasIncreasedByCollapsedItems) {
+                    options.extra.totalCount += options.collapsedItemsCount;
+                    options.extra._totalCountWasIncreasedByCollapsedItems = true;
+                }
             }
 
             callBase(options);

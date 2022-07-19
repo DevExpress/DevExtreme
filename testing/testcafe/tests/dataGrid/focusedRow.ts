@@ -715,7 +715,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
 });
 
 ['virtual', 'infinite'].forEach((scrollingMode) => {
-  test(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async (t) => {
+  test.skip(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const reloadDataSource = ClientFunction(() => (window as any).widget.getDataSource().reload());
     const getVisibleRowCount = ClientFunction(() => (window as any).widget.getVisibleRows().length);
@@ -761,7 +761,7 @@ test('Scroll should not change focused row if focus method is called inside onCo
   const dataGrid = new DataGrid('#container');
 
   await t
-    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.option('focusedRowKey')).eql(1)
     .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
 
   // act
@@ -770,7 +770,7 @@ test('Scroll should not change focused row if focus method is called inside onCo
 
   // assert
   await t
-    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.option('focusedRowKey')).eql(1)
     .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
 }).before(async () => {
   const data = ((): Record<string, unknown>[] => {

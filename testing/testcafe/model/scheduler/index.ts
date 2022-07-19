@@ -7,6 +7,8 @@ import Appointment from './appointment';
 import Toolbar from './toolbar';
 import Collectors from './collectors';
 import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
+import { WidgetName } from '../../helpers/createWidget';
+import { HeaderPanel } from './headerPanel';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -16,11 +18,12 @@ export const CLASS = {
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
+  droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
-  headerPanelCell: 'dx-scheduler-header-panel-cell',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
+  workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
 
   workSpace: 'dx-scheduler-work-space',
 };
@@ -37,8 +40,6 @@ const ViewTypeClassesMap = {
 };
 
 export default class Scheduler extends Widget {
-  readonly name = 'dxScheduler';
-
   readonly workSpace: Selector;
 
   readonly dateTableCells: Selector;
@@ -51,7 +52,7 @@ export default class Scheduler extends Widget {
 
   readonly dateTableScrollable: Selector;
 
-  readonly headerPanelCells: Selector;
+  readonly headerPanel: HeaderPanel;
 
   readonly headerSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
@@ -69,6 +70,10 @@ export default class Scheduler extends Widget {
 
   readonly reducedIconTooltip: ReducedIconTooltip;
 
+  get workspaceHasBothScrollbar(): Promise<boolean> {
+    return this.workSpace.hasClass(CLASS.workspaceBothScrollbar);
+  }
+
   constructor(id: string) {
     super(id);
 
@@ -78,11 +83,11 @@ export default class Scheduler extends Widget {
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);
     this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
     this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);
-    this.headerPanelCells = this.element.find(`.${CLASS.headerPanelCell}`);
     this.workspaceScrollable = this.dateTableScrollable.find(`.${CLASS.scrollableContainer}`);
 
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
 
+    this.headerPanel = new HeaderPanel(this.element);
     this.toolbar = new Toolbar(this.element);
     this.collectors = new Collectors(this.element);
 
@@ -105,6 +110,9 @@ export default class Scheduler extends Widget {
     return new AppointmentDialog();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getName(): WidgetName { return 'dxScheduler'; }
+
   getDateTableCell(rowIndex = 0, cellIndex = 0): Selector {
     return this.dateTableRows.nth(rowIndex).find(`.${CLASS.dateTableCell}`).nth(cellIndex);
   }
@@ -125,6 +133,12 @@ export default class Scheduler extends Widget {
     return cells.filter(`.${CLASS.selectedCell}`);
   }
 
+  getDroppableCell(isAllDay = false): Selector {
+    const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
+
+    return cells.filter(`.${CLASS.droppableCell}`);
+  }
+
   getAppointment(title: string, index = 0): Appointment {
     return new Appointment(this.element, index, title);
   }
@@ -138,22 +152,23 @@ export default class Scheduler extends Widget {
   }
 
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
-    const { name, element } = this;
-    const scrollTo = (): any => $(element())[name]('instance').scrollTo(date, group, allDay);
+    const { getInstance } = this;
+    const scrollTo = (): any => (getInstance() as any).scrollTo(date, group, allDay);
 
     return ClientFunction(scrollTo, {
       dependencies: {
-        date, group, allDay, element, name,
+        date, group, allDay, getInstance,
       },
     })();
   }
 
   hideAppointmentTooltip(): Promise<any> {
-    const { name, element } = this;
-    const hideAppointmentTooltip = (): any => $(element())[name]('instance').hideAppointmentTooltip();
+    const { getInstance } = this;
+
+    const hideAppointmentTooltip = (): any => (getInstance() as any).hideAppointmentTooltip();
 
     return ClientFunction(hideAppointmentTooltip, {
-      dependencies: { element, name },
+      dependencies: { getInstance },
     })();
   }
 

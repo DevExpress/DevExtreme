@@ -13,7 +13,17 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+    Orientation,
+    ScrollbarMode,
+} from '../common';
+
 type ItemLike = string | Item | any;
+
+export {
+    Orientation,
+    ScrollbarMode,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
@@ -68,18 +78,17 @@ export interface dxTileViewOptions<
     baseItemWidth?: number;
     /**
      * @docid
-     * @type string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default 'horizontal'
      * @public
      */
-    direction?: 'horizontal' | 'vertical';
+    direction?: Orientation;
     /**
      * @docid
      * @default true &for(desktop)
@@ -117,7 +126,7 @@ export interface dxTileViewOptions<
      * @default 'onScroll' &for(Mac|Android|iOS)
      * @public
      */
-    showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
+    showScrollbar?: ScrollbarMode;
 }
 /**
  * @docid

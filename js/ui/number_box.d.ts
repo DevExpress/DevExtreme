@@ -19,6 +19,11 @@ import {
   } from '../localization';
 
 /** @public */
+export type NumberBoxPredefinedButton = 'clear' | 'spins';
+/** @public */
+export type NumberBoxType = 'number' | 'text' | 'tel';
+
+/** @public */
 export type ChangeEvent = NativeEventInfo<dxNumberBox, Event>;
 
 /** @public */
@@ -46,7 +51,7 @@ export type FocusOutEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxNumberBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
@@ -73,11 +78,10 @@ export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | Mou
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
-     * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
      * @default undefined
      * @public
      */
-    buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
+    buttons?: Array<NumberBoxPredefinedButton | dxTextEditorButton>;
     /**
      * @docid
      * @default ""
@@ -104,12 +108,11 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     min?: number;
     /**
      * @docid
-     * @type Enums.NumberBoxMode
      * @default "text"
      * @default 'number' &for(mobile_devices)
      * @public
      */
-    mode?: 'number' | 'text' | 'tel';
+    mode?: NumberBoxType;
     /**
      * @docid
      * @default false

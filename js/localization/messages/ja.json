@@ -424,6 +424,9 @@
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} 項目がアップロードされませんでした",
         "dxFileManager-editingUploadCanceledMessage": "キャンセルしました",
 
+        "dxFileManager-editingDownloadSingleItemErrorMessage": "アイテムはダウンロードされませんでした",
+        "dxFileManager-editingDownloadMultipleItemsErrorMessage": "{0} 個のアイテムはダウンロードされませんでした",
+
         "dxFileManager-listDetailsColumnCaptionName": "ファイル名",
         "dxFileManager-listDetailsColumnCaptionDateModified": "更新日",
         "dxFileManager-listDetailsColumnCaptionFileSize": "ファイル サイズ",

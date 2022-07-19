@@ -14,6 +14,9 @@ import dxTextEditor, {
 } from './text_box/ui.text_editor.base';
 
 /** @public */
+export type TextBoxType = 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
+
+/** @public */
 export type ChangeEvent = NativeEventInfo<dxTextBox, Event>;
 
 /** @public */
@@ -41,7 +44,7 @@ export type FocusOutEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxTextBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTextBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxTextBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
@@ -74,11 +77,10 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
     maxLength?: string | number;
     /**
      * @docid
-     * @type Enums.TextBoxMode
      * @default "text"
      * @public
      */
-    mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
+    mode?: TextBoxType;
     /**
      * @docid
      * @default ""

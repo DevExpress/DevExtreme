@@ -4,11 +4,6 @@ import {
 } from '../../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from '../palette';
-
-import {
     template,
 } from '../../core/templates/template';
 
@@ -43,6 +38,16 @@ import BaseWidget, {
     BaseWidgetAnnotationConfig,
 } from '../core/base_widget';
 
+import {
+    AnimationEaseMode,
+    Palette,
+    PaletteExtensionMode,
+} from '../../common/charts';
+
+import {
+    SingleOrMultiple,
+} from '../../common';
+
 export interface PointInteractionInfo {
     readonly target: basePointObject;
 }
@@ -71,10 +76,9 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
       duration?: number;
       /**
        * @docid
-       * @type Enums.VizAnimationEasing
        * @default 'easeOutCubic'
        */
-      easing?: 'easeOutCubic' | 'linear';
+      easing?: AnimationEaseMode;
       /**
        * @docid
        * @default true
@@ -104,9 +108,9 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @docid BaseChartOptions.dataSource
      * @notUsedInTheme
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<any>;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @inherits BaseLegend
@@ -179,24 +183,21 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     /**
      * @docid
      * @default "Material"
-     * @type Array<string>|Enums.VizPalette
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | Palette;
     /**
      * @docid
-     * @type Enums.VizPaletteExtensionMode
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
      * @docid
-     * @type Enums.ChartElementSelectionMode
      * @default 'single'
      * @public
      */
-    pointSelectionMode?: 'multiple' | 'single';
+    pointSelectionMode?: SingleOrMultiple;
     /**
      * @docid
      * @default undefined

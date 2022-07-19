@@ -21,6 +21,7 @@ import { when, Deferred } from '../../core/utils/deferred';
 import Store from '../../data/abstract_store';
 import { DataSource } from '../../data/data_source/data_source';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
+import { equalByValue } from '../../core/utils/common';
 import filterUtils from '../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
@@ -712,7 +713,7 @@ export const columnsControllerModule = {
                     return optionGetter(column, { functionsAsIs: true });
                 }
                 const prevValue = optionGetter(column, { functionsAsIs: true });
-                if(prevValue !== value) {
+                if(!equalByValue(prevValue, value)) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';
                         updateSortOrderWhenGrouping(that, column, value, prevValue);
@@ -1031,7 +1032,7 @@ export const columnsControllerModule = {
                 _endUpdateCore: function() {
                     !this._skipProcessingColumnsChange && fireColumnsChanged(this);
                 },
-                init: function() {
+                init: function(isApplyingUserState) {
                     const that = this;
                     const columns = that.option('columns');
 
@@ -1051,7 +1052,7 @@ export const columnsControllerModule = {
                     addExpandColumn(that);
 
                     if(that._dataSourceApplied) {
-                        that.applyDataSource(that._dataSource, true);
+                        that.applyDataSource(that._dataSource, true, isApplyingUserState);
                     } else {
                         updateIndexes(that);
                     }
@@ -1172,7 +1173,7 @@ export const columnsControllerModule = {
                 publicMethods: function() {
                     return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex'];
                 },
-                applyDataSource: function(dataSource, forceApplying) {
+                applyDataSource: function(dataSource, forceApplying, isApplyingUserState) {
                     const that = this;
                     const isDataSourceLoaded = dataSource && dataSource.isLoaded();
 
@@ -1188,7 +1189,7 @@ export const columnsControllerModule = {
                                     applyUserState(that);
                                 }
                             }
-                            return that.updateColumns(dataSource, forceApplying);
+                            return that.updateColumns(dataSource, forceApplying, isApplyingUserState);
                         } else {
                             that._dataSourceApplied = false;
                             updateIndexes(that);
@@ -1944,7 +1945,7 @@ export const columnsControllerModule = {
                         assignColumns(that, createColumnsFromOptions(that, columns));
                     }
                 },
-                updateColumns: function(dataSource, forceApplying) {
+                updateColumns: function(dataSource, forceApplying, isApplyingUserState) {
                     if(!forceApplying) {
                         this.updateSortingGrouping(dataSource);
                     }
@@ -1954,7 +1955,9 @@ export const columnsControllerModule = {
                         const groupParameters = dataSource ? dataSource.group() || [] : this.getGroupDataSourceParameters();
                         const filterParameters = dataSource?.lastLoadOptions().filter;
 
-                        this._customizeColumns(this._columns);
+                        if(!isApplyingUserState) {
+                            this._customizeColumns(this._columns);
+                        }
 
                         updateIndexes(this);
 
@@ -2034,7 +2037,9 @@ export const columnsControllerModule = {
                                 that._columns.push(group.selector);
                             });
                             each(sortParameters, function(index, sort) {
-                                that._columns.push(sort.selector);
+                                if(!isFunction(sort.selector)) {
+                                    that._columns.push(sort.selector);
+                                }
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
                         }
@@ -2263,8 +2268,7 @@ export const columnsControllerModule = {
                     that._hasUserState = !!state;
 
                     updateColumnChanges(that, 'filtering');
-
-                    that.init();
+                    that.init(true);
 
                     if(dataSource) {
                         dataSource.sort(that.getSortDataSourceParameters());

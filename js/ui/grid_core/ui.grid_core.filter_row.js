@@ -666,7 +666,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         _handleDataChanged: function(e) {
             this.callBase.apply(this, arguments);
 
-            if(e.operationTypes?.filtering) {
+            if(e.operationTypes?.filtering || e.operationTypes?.fullReload) {
                 this.updateLookupDataSource();
             }
         },
@@ -680,30 +680,32 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 return;
             }
 
-            const columns = this.getController('columns').getVisibleColumns();
-            const dataSource = this.getController('data').dataSource();
-            const filterRowController = this.getController('applyFilter');
+            const columns = this._columnsController.getVisibleColumns();
+            const dataSource = this._dataController.dataSource();
+            const applyFilterViewController = this._applyFilterViewController;
             const rowIndex = this.element().find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS)).index();
 
             if(rowIndex === -1) {
                 return;
             }
 
-            columns.forEach((column) => {
+            columns.forEach((column, index) => {
                 if(!column.lookup) {
                     return;
                 }
 
-                const $cell = this._getCellElement(rowIndex, column.visibleIndex);
-                const editor = getEditorInstance($cell.find('.dx-editor-container'));
+                const $cell = this._getCellElement(rowIndex, index);
+                const editor = getEditorInstance($cell?.find('.dx-editor-container'));
 
-                filterRowController.setCurrentColumnForFiltering(column);
-                const filter = this.getController('data').getCombinedFilter();
-                filterRowController.setCurrentColumnForFiltering(null);
+                if(editor) {
+                    applyFilterViewController.setCurrentColumnForFiltering(column);
+                    const filter = this._dataController.getCombinedFilter();
+                    applyFilterViewController.setCurrentColumnForFiltering(null);
 
-                const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                    const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
 
-                editor?.option('dataSource', lookupDataSource);
+                    editor.option('dataSource', lookupDataSource);
+                }
             });
         },
 
@@ -714,6 +716,14 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 case 'filterRow':
                 case 'showColumnLines':
                     this._invalidate(true, true);
+                    args.handled = true;
+                    break;
+                case 'syncLookupFilterValues':
+                    if(args.value) {
+                        this.updateLookupDataSource();
+                    } else {
+                        this.render();
+                    }
                     args.handled = true;
                     break;
                 default:
@@ -972,9 +982,6 @@ export const filterRowModule = {
                 optionChanged: function(args) {
                     if(args.name === 'filterRow') {
                         this._invalidate();
-                        args.handled = true;
-                    } else if(args.name === 'syncLookupFilterValues') {
-                        this.component.getView('columnHeadersView')?.updateLookupDataSource();
                         args.handled = true;
                     } else {
                         this.callBase(args);

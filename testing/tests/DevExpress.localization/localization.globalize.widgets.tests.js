@@ -7,7 +7,6 @@ const cldrData = [
     require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
     require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
     require('../../../node_modules/devextreme-cldr-data/de.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/en.json!json')
 ];
 
 Globalize.load(likelySubtags);
@@ -230,14 +229,15 @@ QUnit.module('DateBox', commonEnvironment, () => {
             Globalize.locale('ar');
 
             const $calendar = $('#calendar').dxCalendar({
-                value: new Date(2015, 10, 10)
+                value: new Date(2015, 10, 11)
             });
 
             const navigatorText = $calendar.find(CALENDAR_NAVIGATOR_TEXT_SELECTOR).text();
             const cellText = $calendar.find(CALENDAR_CELL_SELECTOR).first().text();
 
             assert.equal(navigatorText, 'نوفمبر ٢٠١٥', 'Navigator localized');
-            assert.equal(cellText, '٢٦', 'Cell localized');
+
+            assert.equal(cellText, '٣١', 'Cell localized');
         } finally {
             Globalize.locale(originalCulture);
         }

@@ -13,14 +13,20 @@ function createElement(
   return el;
 }
 
+export const setAttribute = ClientFunction((selector, attribute, value) => {
+  const element = document.querySelector(selector);
+
+  element.setAttribute(attribute, value);
+});
+
 export const appendElementTo = ClientFunction((
   containerSelector: string,
   tagName: string,
   id,
-  style: Partial<CSSStyleDeclaration>,
+  style?: Partial<CSSStyleDeclaration>,
 ) => {
   const containerElement = document.querySelector(containerSelector);
-  const element = createElement(tagName, id, style);
+  const element = createElement(tagName, id, style ?? {});
 
   containerElement?.appendChild(element);
 }, { dependencies: { createElement } });

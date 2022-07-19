@@ -22,6 +22,10 @@ import dxOverlay, {
     dxOverlayOptions,
 } from './overlay';
 
+import {
+    PositionAlignment,
+} from '../common';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxLoadPanel>;
 
@@ -110,10 +114,9 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     message?: string;
     /**
      * @docid
-     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
+    position?: PositionAlignment | PositionConfig | Function;
     /**
      * @docid
      * @default 'transparent'

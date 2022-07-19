@@ -28,6 +28,11 @@ import {
 } from './popup';
 
 /** @public */
+export type DateType = 'date' | 'datetime' | 'time';
+/** @public */
+export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
+
+/** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
 /** @public */
@@ -58,7 +63,7 @@ export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDateBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxDateBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
@@ -168,13 +173,12 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     min?: Date | number | string;
     /**
      * @docid
-     * @type Enums.DateBoxPickerType
      * @default 'calendar'
      * @default 'native' &for(iOS)
      * @default 'native' &for(Android)
      * @public
      */
-    pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
+    pickerType?: DatePickerType;
     /**
      * @docid
      * @default ""
@@ -189,11 +193,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     showAnalogClock?: boolean;
     /**
      * @docid
-     * @type Enums.DateBoxType
      * @default "date"
      * @public
      */
-    type?: 'date' | 'datetime' | 'time';
+    type?: DateType;
     /**
      * @docid
      * @default false

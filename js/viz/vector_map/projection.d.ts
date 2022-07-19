@@ -1,3 +1,6 @@
+/** @public */
+export type VectorMapProjection = 'equirectangular' | 'lambert' | 'mercator' | 'miller';
+
 /**
  * @docid
  * @namespace DevExpress.viz
@@ -45,13 +48,12 @@ export const projection: {
     /**
      * @docid viz.map.projection.get
      * @publicName get(name)
-     * @param1 name:Enums.VectorMapProjection|string
      * @return object
      * @namespace DevExpress.viz.map.projection
      * @static
      * @hidden
      */
-    get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
+    get(name: VectorMapProjection | string): any;
 
     (data: VectorMapProjectionConfig): any;
 };

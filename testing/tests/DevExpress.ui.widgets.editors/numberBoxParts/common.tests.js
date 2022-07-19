@@ -5,6 +5,7 @@ import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
+import { appendShadowRoot } from '../../../helpers/shadowDOM.js';
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/number_box';
@@ -1650,7 +1651,7 @@ QUnit.module('regressions', {
         assert.ok(!this.element.children().length);
     });
 
-    QUnit.test('T282446 - widget disabled state change should lead to spin buttons disabled state change', function(assert) {
+    QUnit.test('widget disabled state change should lead to spin buttons disabled state change (T282446)', function(assert) {
         const $element = $('#widget').dxNumberBox({
             disabled: true,
             showSpinButtons: true
@@ -1662,6 +1663,32 @@ QUnit.module('regressions', {
         instance.option('disabled', false);
 
         assert.ok(!SpinButton.getInstance($spinButton).option('disabled'), 'spin button disabled state is correct');
+    });
+
+    QUnit.test('tabindex attribute should be rendered after initialization', function(assert) {
+        const instance = $('#widget').dxNumberBox({
+            tabIndex: 3,
+            value: 1,
+            min: 1
+        }).dxNumberBox('instance');
+
+        const $input = instance.$element().find(`.${INPUT_CLASS}`);
+        assert.strictEqual($input.attr('tabIndex'), '3', 'tabIndex is correct after initializing');
+    });
+
+    ['min', 'max', 'step'].forEach(optionName => {
+        QUnit.test(`tabindex attribute shouldn't be removed after change of ${optionName} option (T1090255)`, function(assert) {
+            const instance = $('#widget').dxNumberBox({
+                tabIndex: 3,
+                value: 1,
+                min: 1
+            }).dxNumberBox('instance');
+
+            instance.option(optionName, 4);
+
+            const $input = instance.$element().find(`.${INPUT_CLASS}`);
+            assert.strictEqual($input.attr('tabIndex'), '3', 'tabIndex is correct after option changed');
+        });
     });
 });
 
@@ -2203,5 +2230,34 @@ QUnit.module('valueChanged should receive correct event parameter', {
         assert.ok(this.valueChangedHandler.calledOnce, 'valueChanged is raised');
 
         this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('ShadowDOM ', {
+    beforeEach: function() {
+        appendShadowRoot.call(this, '#numberbox');
+    },
+    afterEach: function() {
+        // TODO: get rid of it after fix jquery event bubbling to shadow dom
+        $(this.container).empty();
+    },
+}, () => {
+    QUnit.test('should change value on mouse wheel', function(assert) {
+        const $numberBox = $(this.control).dxNumberBox({
+            value: 100.6
+        });
+
+        const instance = $numberBox.dxNumberBox('instance');
+        const $input = $numberBox.find(`.${INPUT_CLASS}`);
+        const mouse = pointerMock($input);
+
+        $input.focus();
+
+        mouse.wheel(10);
+
+        assert.strictEqual(instance.option('value'), 101.6, 'value is increased after mousewheel up');
+
+        mouse.wheel(-20);
+        assert.strictEqual(instance.option('value'), 100.6, 'value is decreased after mousewheel down');
     });
 });

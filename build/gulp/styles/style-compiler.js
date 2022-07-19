@@ -5,7 +5,7 @@ const { join } = require('path');
 const { existsSync, readFileSync, writeFileSync, mkdirSync } = require('fs');
 const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
-const sass = require('gulp-dart-sass');
+const sass = require('gulp-sass')(require('sass-embedded'));
 
 const CleanCss = require('clean-css');
 const through = require('through2');

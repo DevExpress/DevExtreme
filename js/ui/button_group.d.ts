@@ -24,6 +24,18 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    ButtonType,
+    ButtonStyle,
+    SingleMultipleOrNone,
+} from '../common';
+
+export {
+    ButtonType,
+    ButtonStyle,
+    SingleMultipleOrNone,
+};
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxButtonGroup>;
 
@@ -115,18 +127,16 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     selectedItems?: Array<any>;
     /**
      * @docid
-     * @type Enums.ButtonGroupSelectionMode
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single' | 'none';
+    selectionMode?: SingleMultipleOrNone;
     /**
      * @docid
-     * @type Enums.ButtonStylingMode
      * @default 'contained'
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: ButtonStyle;
 }
 /**
  * @docid
@@ -159,11 +169,10 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     icon?: string;
     /**
      * @docid
-     * @type Enums.ButtonType
      * @default 'normal'
      * @public
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: ButtonType;
 
     /**
      * @docid

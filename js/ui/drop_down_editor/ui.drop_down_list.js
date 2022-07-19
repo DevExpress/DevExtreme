@@ -25,7 +25,6 @@ const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper';
 
-const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
 const SEARCH_EVENT = 'input';
 
 const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
@@ -260,16 +259,6 @@ const DropDownList = DropDownEditor.inherit({
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
-
-        const that = this;
-        this._popup.on({
-            'shown': function() {
-                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
-            },
-            'hidden': function() {
-                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
-            }
-        });
     },
 
     _updateCustomBoundaryContainer: function() {
@@ -545,7 +534,6 @@ const DropDownList = DropDownEditor.inherit({
             groupTemplate: this.option('groupTemplate'),
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
-            _revertPageOnEmptyLoad: true,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
         };
@@ -808,7 +796,7 @@ const DropDownList = DropDownEditor.inherit({
         }
 
         const currentPageIndex = this._dataSource.pageIndex();
-        const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (this._dataSource.isLastPage() && !this._list._scrollViewIsFull());
 
         this._pageIndex = currentPageIndex;
 

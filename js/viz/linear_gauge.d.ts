@@ -20,6 +20,18 @@ import {
     TooltipInfo,
 } from './gauges/base_gauge';
 
+import {
+    HorizontalAlignment,
+    Orientation,
+    VerticalAlignment,
+} from '../common';
+
+export {
+    HorizontalAlignment,
+    Orientation,
+    VerticalAlignment,
+};
+
 /** @public */
 export type DisposingEvent = EventInfo<dxLinearGauge>;
 
@@ -62,10 +74,9 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     geometry?: {
       /**
        * @docid
-       * @type Enums.Orientation
        * @default 'horizontal'
        */
-      orientation?: 'horizontal' | 'vertical';
+      orientation?: Orientation;
     };
     /**
      * @docid
@@ -96,18 +107,16 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
 export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
-     * @type Enums.HorizontalAlignment
      * @default 'right'
      * @public
      */
-    horizontalOrientation?: 'center' | 'left' | 'right';
+    horizontalOrientation?: HorizontalAlignment;
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.verticalOrientation
-     * @type Enums.VerticalAlignment
      * @default 'bottom'
      * @public
      */
-    verticalOrientation?: 'bottom' | 'center' | 'top';
+    verticalOrientation?: VerticalAlignment;
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.width
      * @public
@@ -129,11 +138,10 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
 export interface dxLinearGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxLinearGaugeOptions.scale.horizontalOrientation
-     * @type Enums.HorizontalAlignment
      * @default 'right'
      * @public
      */
-    horizontalOrientation?: 'center' | 'left' | 'right';
+    horizontalOrientation?: HorizontalAlignment;
     /**
      * @docid dxLinearGaugeOptions.scale.label
      * @type object
@@ -148,11 +156,10 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
     scaleDivisionFactor?: number;
     /**
      * @docid dxLinearGaugeOptions.scale.verticalOrientation
-     * @type Enums.VerticalAlignment
      * @default 'bottom'
      * @public
      */
-    verticalOrientation?: 'bottom' | 'center' | 'top';
+    verticalOrientation?: VerticalAlignment;
 }
 /** @namespace DevExpress.viz */
 export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {

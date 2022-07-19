@@ -288,16 +288,6 @@ module('Subscribes', {
         assert.equal(_positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
     });
 
-    test('"updateAppointmentStartDate" should work correct with custom data fields', function(assert) {
-        this.createInstance({
-            startDateExpr: 'Start'
-        });
-
-        assert.ok(this.instance.fire('updateAppointmentStartDate', {
-            startDate: new Date(2015, 2, 2, 0),
-        }));
-    });
-
     test('"mapAppointmentFields" should call getTargetedAppointment', function(assert) {
         this.createInstance();
 
@@ -503,44 +493,6 @@ module('Subscribes', {
         assert.equal(obj.recurrenceRule, 'FREQ=WEEKLY', 'the \'setField\' method works fine');
     });
 
-    test('UpdateAppointmentStartDate should return corrected startDate', function(assert) {
-        this.createInstance();
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-            startDayHour: 5
-        });
-
-        const appointment = {
-            startDate: new Date(2016, 1, 2, 2),
-            endDate: new Date(2016, 1, 2, 7)
-        };
-
-        const result = this.instance.fire('updateAppointmentStartDate', {
-            startDate: appointment.startDate,
-        });
-        assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Updated date is correct');
-    });
-
-    test('UpdateAppointmentStartDate should return corrected startDate when appointment is short', function(assert) {
-        this.createInstance();
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-            startDayHour: 9
-        });
-
-        const appointment = {
-            startDate: new Date(2016, 1, 2, 8, 30),
-            endDate: new Date(2016, 1, 2, 9, 1)
-        };
-
-        const result = this.instance.fire('updateAppointmentStartDate', {
-            startDate: appointment.startDate,
-        });
-        assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), 'Updated date is correct');
-    });
-
     test('appointmentTakesSeveralDays should return true, if startDate and endDate is different days', function(assert) {
         this.createInstance();
         this.instance.option({
@@ -569,27 +521,6 @@ module('Subscribes', {
             this.instance._dataAccessors,
             this.instance.timeZoneCalculator,
         ), 'appointmentTakesSeveralDays works correctly');
-    });
-
-    test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {
-        this.createInstance();
-
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-            startDayHour: 5
-        });
-
-        const appointment = {
-            startDate: new Date(2016, 1, 2, 2),
-            endDate: new Date(2016, 1, 4, 7)
-        };
-
-        const result = this.instance.fire('updateAppointmentStartDate', {
-            startDate: appointment.startDate,
-            appointment: appointment,
-        });
-        assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Date is correct');
     });
 
     test('UpdateAppointmentEndDate should return corrected endDate', function(assert) {

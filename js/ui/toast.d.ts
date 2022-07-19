@@ -20,6 +20,9 @@ import dxOverlay, {
 } from './overlay';
 
 /** @public */
+export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
+
+/** @public */
 export type ContentReadyEvent = EventInfo<dxToast>;
 
 /** @public */
@@ -131,11 +134,10 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     shading?: boolean;
     /**
      * @docid
-     * @type Enums.ToastType
      * @default 'info'
      * @public
      */
-    type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
+    type?: ToastType;
     /**
      * @docid
      * @default '80vw'

@@ -23,6 +23,16 @@ import dxDraggable, {
     DraggableBaseOptions,
 } from './draggable';
 
+import {
+    DragHighlight,
+    Orientation,
+} from '../common';
+
+export {
+    DragHighlight,
+    Orientation,
+};
+
 /** @public */
 export interface AddEvent {
     readonly component: dxSortable;
@@ -156,11 +166,10 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Enums.DropFeedbackMode
      * @default "push"
      * @public
      */
-    dropFeedbackMode?: 'push' | 'indicate';
+    dropFeedbackMode?: DragHighlight;
     /**
      * @docid
      * @default "> *"
@@ -169,11 +178,10 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     filter?: string;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default "vertical"
      * @public
      */
-    itemOrientation?: 'horizontal' | 'vertical';
+    itemOrientation?: Orientation;
     /**
      * @docid
      * @default false

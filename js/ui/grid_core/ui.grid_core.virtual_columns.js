@@ -44,10 +44,10 @@ const ColumnsControllerExtender = (function() {
     const members = {
         init: function() {
             const that = this;
-            that.callBase();
+            that.callBase.apply(this, arguments);
 
-            that._beginPageIndex = 0;
-            that._endPageIndex = 0;
+            that._beginPageIndex = null;
+            that._endPageIndex = null;
             that._position = 0;
             that._virtualVisibleColumns = {};
         },
@@ -164,7 +164,7 @@ const ColumnsControllerExtender = (function() {
                 return this.callBase(rowIndex);
             }
 
-            if(!this._beginPageIndex && !this._endPageIndex) {
+            if(this._columns?.length && !isDefined(this._beginPageIndex) && !isDefined(this._endPageIndex)) {
                 this._beginPageIndex = this.getBeginPageIndex(this._position);
                 this._endPageIndex = this.getEndPageIndex(this._position);
             }

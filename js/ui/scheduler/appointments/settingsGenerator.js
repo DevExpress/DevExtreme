@@ -333,6 +333,11 @@ export class DateGeneratorBaseStrategy {
 
             start: appointment.startDate,
             end: appointment.endDate,
+            appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
+                appointment.startDate,
+                appointment.rawAppointment.startDateTimeZone,
+                true,
+            ),
 
             getPostProcessedException: date => {
                 if(isEmptyObject(this.timeZone) || timeZoneUtils.isEqualLocalTimeZone(this.timeZone, date)) {

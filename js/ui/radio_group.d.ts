@@ -16,6 +16,14 @@ import {
     DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
+import {
+    Orientation,
+} from '../common';
+
+export {
+    Orientation,
+};
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxRadioGroup>;
 
@@ -57,11 +65,10 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     /**
      * @docid
      * @default 'horizontal' &for(tablets)
-     * @type Enums.Orientation
      * @default "vertical"
      * @public
      */
-    layout?: 'horizontal' | 'vertical';
+    layout?: Orientation;
     /**
      * @docid
      * @hidden false

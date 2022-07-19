@@ -1,9 +1,11 @@
-const $ = require('jquery');
-const excelCreator = require('exporter').excel;
-const coreLocalization = require('localization/core');
+import '../../helpers/noIntl.js';
+import $ from 'jquery';
+import { excel as excelCreator } from 'exporter';
+import coreLocalization from 'localization/core';
+import exportMocks from '../../helpers/exportMocks.js';
+
 const ExcelCreator = excelCreator.creator;
 const internals = excelCreator.__internals;
-const exportMocks = require('../../helpers/exportMocks.js');
 
 QUnit.module('Excel creator', {
     beforeEach: function() {

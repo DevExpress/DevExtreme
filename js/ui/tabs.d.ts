@@ -14,7 +14,15 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
+import {
+    SingleOrMultiple,
+} from '../common';
+
 export type ItemLike = string | Item | any;
+
+export {
+    SingleOrMultiple,
+};
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
@@ -64,11 +72,11 @@ export interface dxTabsBaseOptions<
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
      * @docid dxTabsOptions.dataSource
-     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid dxTabsOptions.focusStateEnabled
      * @default true &for(desktop)
@@ -109,11 +117,10 @@ export interface dxTabsBaseOptions<
     scrollingEnabled?: boolean;
     /**
      * @docid dxTabsOptions.selectionMode
-     * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: SingleOrMultiple;
     /**
      * @docid dxTabsOptions.showNavButtons
      * @default true

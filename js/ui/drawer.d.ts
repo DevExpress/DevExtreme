@@ -23,6 +23,13 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
+export type OpenedStateMode = 'overlap' | 'shrink' | 'push';
+/** @public */
+export type PanelLocation = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+/** @public */
+export type RevealMode = 'slide' | 'expand';
+
+/** @public */
 export type DisposingEvent = EventInfo<dxDrawer>;
 
 /** @public */
@@ -76,25 +83,22 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     opened?: boolean;
     /**
      * @docid
-     * @type Enums.DrawerOpenedStateMode
      * @default "shrink"
      * @public
      */
-    openedStateMode?: 'overlap' | 'shrink' | 'push';
+    openedStateMode?: OpenedStateMode;
     /**
      * @docid
-     * @type Enums.DrawerPosition
      * @default "left"
      * @public
      */
-    position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+    position?: PanelLocation;
     /**
      * @docid
-     * @type Enums.DrawerRevealMode
      * @default "slide"
      * @public
      */
-    revealMode?: 'slide' | 'expand';
+    revealMode?: RevealMode;
     /**
      * @docid
      * @default false

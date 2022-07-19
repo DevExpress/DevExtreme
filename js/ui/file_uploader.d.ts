@@ -17,6 +17,11 @@ import Editor, {
 import UploadInfo from '../file_management/upload_info';
 
 /** @public */
+export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
+/** @public */
+export type UploadHttpMethod = 'POST' | 'PUT';
+
+/** @public */
 export type BeforeSendEvent = EventInfo<dxFileUploader> & {
     readonly request: XMLHttpRequest;
     readonly file: File;
@@ -374,18 +379,16 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     uploadCustomData?: any;
     /**
      * @docid
-     * @type Enums.UploadHttpMethod
      * @default "POST"
      * @public
      */
-    uploadMethod?: 'POST' | 'PUT';
+    uploadMethod?: UploadHttpMethod;
     /**
      * @docid
-     * @type Enums.FileUploadMode
      * @default "instantly"
      * @public
      */
-    uploadMode?: 'instantly' | 'useButtons' | 'useForm';
+    uploadMode?: FileUploadMode;
     /**
      * @docid
      * @default "/"

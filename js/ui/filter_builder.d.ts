@@ -23,6 +23,22 @@ import {
     Format,
 } from '../localization';
 
+import {
+    DataType,
+} from '../common';
+
+export {
+    DataType,
+};
+
+export {
+    FilterOperation,
+} from '../common/grids';
+
+export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
+/** @public */
+export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
@@ -211,11 +227,10 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     };
     /**
      * @docid
-     * @type Array<Enums.FilterBuilderGroupOperations>
      * @default ['and', 'or', 'notAnd', 'notOr']
      * @public
      */
-    groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
+    groupOperations?: Array<GroupOperation>;
     /**
      * @docid
      * @default undefined
@@ -310,11 +325,10 @@ export interface dxFilterBuilderCustomOperation {
     customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
     /**
      * @docid
-     * @type Array<Enums.FilterBuilderFieldDataType>
      * @default undefined
      * @public
      */
-    dataTypes?: Array<'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime'>;
+    dataTypes?: Array<DataType>;
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
@@ -380,11 +394,10 @@ export interface dxFilterBuilderField {
     dataField?: string;
     /**
      * @docid
-     * @type Enums.FilterBuilderFieldDataType
      * @default "string"
      * @public
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: DataType;
     /**
      * @docid
      * @public
@@ -406,11 +419,10 @@ export interface dxFilterBuilderField {
     falseText?: string;
     /**
      * @docid
-     * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
      * @default undefined
      * @public
      */
-    filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | string>;
+    filterOperations?: Array<FilterBuilderOperation | string>;
     /**
      * @docid
      * @default ""
@@ -433,7 +445,7 @@ export interface dxFilterBuilderField {
        * @default undefined
        * @type Array<any> | Store | DataSourceOptions
        */
-      dataSource?: FilterLookupDataSource<any>;
+      dataSource?: FilterLookupDataSource<any> | null;
       /**
        * @docid
        * @default undefined

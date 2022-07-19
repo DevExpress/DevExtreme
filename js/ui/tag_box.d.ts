@@ -33,6 +33,11 @@ import dxSelectBox, {
     CustomItemCreatingInfo,
 } from './select_box';
 
+import {
+    ApplyValueMode,
+    SelectAllMode,
+} from '../common';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
 
@@ -61,7 +66,7 @@ export type FocusOutEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTagBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxTagBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
@@ -106,14 +111,13 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
- export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
+export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
      * @docid
-     * @type Enums.EditorApplyValueMode
      * @default "instantly"
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default false
@@ -164,11 +168,10 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @type Enums.SelectAllMode
      * @default 'page'
      * @public
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: SelectAllMode;
     /**
      * @docid
      * @readonly

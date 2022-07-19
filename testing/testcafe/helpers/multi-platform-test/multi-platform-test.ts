@@ -43,7 +43,7 @@ function getTestingPlatforms(platforms: PlatformType[]): PlatformType[] {
 }
 
 export const multiPlatformTest = ({
-  page, platforms = ['jquery', 'react', 'angular'],
+  page, platforms = ['jquery', 'react'],
 }:
 {
   page: string; platforms?: PlatformType[];

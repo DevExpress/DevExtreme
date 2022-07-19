@@ -249,6 +249,25 @@ describe('Pager pages logic', () => {
     expect(pages.pageIndexes).toEqual([0, 'low', 11, 12, 13, 14, 'high', 18]);
   });
 
+  it(`storeState+(pageIndexes, pageCount),
+      (pageIndex: 12, pageCount: 20) ->
+      (pageIndex: 11, pageCount: 20) ->
+      (pageIndex: 11, pageCount: 13)`, () => {
+    const pages = new PagesLarge({
+      pageCount: 20,
+      pageIndex: 12,
+      maxPagesCount: 10,
+      pageIndexChange: jest.fn(),
+    });
+    expect(pages.pageIndexes).toEqual([0, 'low', 11, 12, 13, 14, 'high', 19]);
+    pages.props.pageIndex = 11;
+    expect(pages.pageIndexes).toEqual([0, 'low', 10, 11, 12, 13, 'high', 19]);
+    pages.props.pageIndex = 12;
+    expect(pages.pageIndexes).toEqual([0, 'low', 10, 11, 12, 13, 'high', 19]);
+    pages.props.pageCount = 13;
+    expect(pages.pageIndexes).toEqual([0, 'low', 8, 9, 10, 11, 12]);
+  });
+
   it('pages: pageIndex: 4', () => {
     const pageIndexChange = jest.fn();
     const pages = new PagesLarge({

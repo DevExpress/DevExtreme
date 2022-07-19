@@ -27,6 +27,14 @@ import {
 } from '../events/index';
 
 import {
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
+
+import {
     GridBase,
     ColumnBase,
     ColumnButtonBase,
@@ -78,6 +86,46 @@ interface CellInfo<TRowData = any, TKey = any> {
     readonly cellElement: DxElement;
     readonly row: Row<TRowData, TKey>;
 }
+
+export {
+    SearchMode,
+} from '../common';
+
+export {
+    ApplyFilterMode,
+    ColumnChooserMode,
+    DataChangeType,
+    DataRenderMode,
+    EnterKeyAction,
+    EnterKeyDirection,
+    FilterOperation,
+    GridsEditMode,
+    GridsEditRefreshMode,
+    GroupExpandMode,
+    NewRowPosition,
+    PagerDisplayMode,
+    PagerPageSize,
+    SelectedFilterOperation,
+    SelectionColumnDisplayMode,
+    StartEditAction,
+} from '../common/grids';
+
+export {
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+};
+
+/** @public */
+export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+/** @public */
+export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+/** @public */
+export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+/** @public */
+export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @public */
 export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
@@ -422,11 +470,10 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     customizeColumns?: ((columns: Array<Column<TRowData, TKey>>) => void);
     /**
      * @docid
-     * @type Enums.TreeListDataStructure
      * @default "plain"
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: DataStructure;
     /**
      * @docid
      * @public
@@ -448,11 +495,10 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     expandedRowKeys?: Array<TKey>;
     /**
      * @docid
-     * @type Enums.TreeListFilterMode
      * @default "withAncestors"
      * @public
      */
-    filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
+    filterMode?: TreeListFilterMode;
     /**
      * @docid
      * @public
@@ -688,7 +734,6 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     parentIdExpr?: string | Function;
     /**
      * @docid
-     * @type object|Enums.Mode
      * @default "auto"
      * @public
      */
@@ -708,7 +753,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
          * @default false
          */
         sorting?: boolean;
-    } | 'auto';
+    } | Mode;
     /**
      * @docid
      * @default 0
@@ -823,11 +868,10 @@ export type dxTreeListScrolling = Scrolling;
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
-     * @type Enums.TreeListScrollingMode
      * @default "virtual"
      * @public
      */
-    mode?: 'standard' | 'virtual';
+    mode?: ScrollMode;
 }
 
 /**
@@ -1069,17 +1113,15 @@ export type dxTreeListToolbarItem = ToolbarItem;
 export interface ToolbarItem extends dxToolbarItem {
     /**
      * @docid dxTreeListToolbarItem.name
-     * @type Enums.TreeListToolbarItem|string
      * @public
      */
-    name?: DefaultToolbarItemName | string;
+    name?: TreeListPredefinedToolbarItem | string;
     /**
      * @docid dxTreeListToolbarItem.location
-     * @type Enums.ToolbarItemLocation
      * @default 'after'
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
 /**
@@ -1090,10 +1132,10 @@ export interface ToolbarItem extends dxToolbarItem {
 export type Toolbar = {
     /**
      * @docid dxTreeListToolbar.items
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListPredefinedToolbarItem>
      * @public
      */
-    items?: (DefaultToolbarItemName | ToolbarItem)[];
+    items?: Array<TreeListPredefinedToolbarItem | ToolbarItem>;
     /**
      * @docid dxTreeListToolbar.visible
      * @default undefined
@@ -1120,10 +1162,10 @@ export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey
 export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
+     * @type Array<Enums.TreeListPredefinedColumnButton,dxTreeListColumnButton>
      * @public
      */
-    buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton<TRowData, TKey>>;
+    buttons?: Array<TreeListPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxTreeListColumn.cellTemplate
      * @type_function_param2 cellInfo:object
@@ -1160,10 +1202,9 @@ export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase
     /**
      * @docid dxTreeListColumn.type
      * @publicName type
-     * @type Enums.TreeListCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons' | 'drag';
+    type?: TreeListCommandColumnType;
 }
 
 /**
@@ -1178,10 +1219,9 @@ export type ColumnButton<TRowData = any, TKey = any> = dxTreeListColumnButton<TR
 export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
-     * @type Enums.TreeListColumnButtonName|string
      * @public
      */
-    name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    name?: TreeListPredefinedColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object

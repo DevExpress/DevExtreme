@@ -39,8 +39,6 @@ const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
 const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('Button', function() {
-    const isRenovation = !!dxButton.IS_RENOVATED_WIDGET;
-
     QUnit.module('options changed callbacks', {
         beforeEach: function() {
             this.element = $('#button').dxButton();
@@ -143,17 +141,15 @@ QUnit.module('Button', function() {
             assert.ok(this.element.hasClass('dx-state-disabled'));
         });
 
-        if(!isRenovation) {
-            QUnit.test('_templateData', function(assert) {
-                const template = sinon.stub().returns('TPL');
-                this.instance.option('template', template);
-                this.instance.option('_templateData', { custom: 1 });
-                template.reset();
-                this.instance.repaint();
+        QUnit.test('_templateData', function(assert) {
+            const template = sinon.stub().returns('TPL');
+            this.instance.option('template', template);
+            this.instance.option('_templateData', { custom: 1 });
+            template.reset();
+            this.instance.repaint();
 
-                assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
-            });
-        }
+            assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
+        });
 
         QUnit.test('stylingMode', function(assert) {
             assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
@@ -171,7 +167,7 @@ QUnit.module('Button', function() {
             assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
         });
 
-        if(!isRenovation) {
+        if(!dxButton.IS_RENOVATED_WIDGET) {
             [
                 { option: 'stylingMode', value: 'text' },
                 { option: 'type', value: 'danger' }
@@ -741,23 +737,19 @@ QUnit.module('Button', function() {
             assert.ok(params.validationGroup, 'validationGroup should be passed');
         });
 
-        if(isRenovation) {
-            QUnit.skip('contentReady');
-        } else {
-            QUnit.test('contentReady', function(assert) {
-                assert.expect(3);
+        QUnit.test('contentReady', function(assert) {
+            assert.expect(3);
 
-                const button = $('#button').dxButton({
-                    text: 'test',
-                }).dxButton('instance');
+            const button = $('#button').dxButton({
+                text: 'test',
+            }).dxButton('instance');
 
-                button.on('contentReady', (e) => {
-                    assert.ok(e.component, 'Component info should be passed');
-                    assert.ok(e.element, 'Element info should be passed');
-                    assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
-                });
-                button.repaint();
+            button.on('contentReady', (e) => {
+                assert.ok(e.component, 'Component info should be passed');
+                assert.ok(e.element, 'Element info should be passed');
+                assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
             });
-        }
+            button.repaint();
+        });
     });
 });

@@ -27,6 +27,10 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+import {
+    ApplyValueMode,
+} from '../common';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxColorBox, Event>;
 
@@ -55,7 +59,7 @@ export type FocusOutEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxColorBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxColorBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
@@ -94,11 +98,10 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     applyButtonText?: string;
     /**
      * @docid
-     * @type Enums.EditorApplyValueMode
      * @default "useButtons"
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: ApplyValueMode;
     /**
      * @docid
      * @default "Cancel"
