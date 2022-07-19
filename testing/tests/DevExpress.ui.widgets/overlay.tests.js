@@ -26,6 +26,8 @@ import { getActiveElement } from '../../helpers/shadowDom.js';
 import browser from 'core/utils/browser';
 
 QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
+
     const markup =
         '<style>\
             html, body {\
@@ -128,8 +130,6 @@ const toSelector = (cssClass) => `.${cssClass}`;
 
 const moduleConfig = {
     beforeEach: function() {
-        viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
-
         fx.off = true;
     },
     afterEach: function() {
@@ -140,8 +140,6 @@ const moduleConfig = {
 };
 
 const { test, module: testModule } = QUnit;
-
-viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
 testModule('render', moduleConfig, () => {
     test('overlay class should be added to overlay', function(assert) {
@@ -3015,7 +3013,7 @@ testModule('focus policy', {
 testModule('scrollable interaction', {
     beforeEach: function() {
         this._originalViewport = viewPort();
-        viewPort('#customTargetContainer');
+        viewPort($('#customTargetContainer'));
         moduleConfig.beforeEach.apply(this, arguments);
     },
 
@@ -3646,9 +3644,6 @@ QUnit.module('prevent safari scrolling on ios devices', {
 
 // visualContainer -> container -> position.of -> window
 QUnit.module('wrapper covered element choice', {
-    beforeEach: function() {
-        viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
-    },
 }, () => {
     QUnit.test('wrapper covers container element if visualPosition is not specified', function(assert) {
         const $container = $('#container');

@@ -2,7 +2,6 @@ import { getOuterWidth } from 'core/utils/size';
 import 'generic_light.css!';
 
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import $ from 'jquery';
 import 'ui/tab_panel';
 
@@ -16,8 +15,6 @@ QUnit.module('Tabs width', () => {
             this.$tabPanel = $('<div>');
             this.assert = assert;
             this.setWidthApproach = setWidthApproach;
-
-            addShadowDomStyles($('#qunit-fixture'));
         }
 
         _initializeTabPanel(width) {

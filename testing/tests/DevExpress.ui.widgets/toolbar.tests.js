@@ -6,7 +6,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
 import { getHeight } from 'core/utils/size';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import domAdapter from 'core/dom_adapter';
 import devices from 'core/devices';
 
@@ -16,8 +15,6 @@ import 'ui/drop_down_button';
 import 'ui/tabs';
 
 QUnit.testStart(() => {
-    addShadowDomStyles($('#qunit-fixture'));
-
     $('#qunit-fixture').html('<style>\
         #toolbarWithMenu .dx-toolbar-menu-container {\
             width: 100px;\

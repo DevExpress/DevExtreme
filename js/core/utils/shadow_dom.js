@@ -67,9 +67,30 @@ function isPositionInElementRectangle(element, x, y) {
     return rect && x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom;
 }
 
+function createQueue() {
+    let shiftIndex = 0;
+    const items = [];
+
+    return {
+        push(item) {
+            items.push(item);
+            return this;
+        },
+
+        shift() {
+            shiftIndex++;
+            return items[shiftIndex - 1];
+        },
+
+        get length() {
+            return items.length - shiftIndex;
+        }
+    };
+}
+
 export function getShadowElementsFromPoint(x, y, root) {
     const result = [];
-    const elementQueue = [root];
+    const elementQueue = createQueue().push(root);
 
     while(elementQueue.length) {
         const el = elementQueue.shift();
