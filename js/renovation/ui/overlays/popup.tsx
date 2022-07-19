@@ -14,7 +14,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { getWindow } from '../../../core/utils/window';
 import devices from '../../../core/devices';
-import LegacyPopup from '../../../ui/popup';
+import LegacyPopup from '../../../ui/popup/ui.popup';
 /* eslint-disable import/named */
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
