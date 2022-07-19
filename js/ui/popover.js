@@ -1,3 +1,3 @@
-import Popover from './popover/ui.popover';
+import Popover from './popover/ui.popover.full';
 
 export default Popover;
