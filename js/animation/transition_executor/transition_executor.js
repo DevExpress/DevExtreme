@@ -27,9 +27,9 @@ export const TransitionExecutor = Class.inherit({
     },
 
     _createAnimations: function($elements, initialConfig, configModifier, type) {
+        $elements = $($elements);
         const that = this;
         const result = [];
-        $elements = $($elements);
 
         configModifier = configModifier || {};
         const animationConfig = this._prepareElementAnimationConfig(initialConfig, configModifier, type);
