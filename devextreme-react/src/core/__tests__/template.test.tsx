@@ -335,6 +335,32 @@ function testTemplateOption(testedOption: string) {
     expect(templatesKeys[0]).not.toBe(templatesKeys[1]);
   });
 
+  it('removes previous template if its container was removed', () => {
+    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
+
+    const elementOptions: Record<string, any> = {};
+    elementOptions[testedOption] = prepareTemplate((data: any) => (
+        <div className="template">
+          Template
+          {data.text}
+        </div>
+    ));
+    render(
+        <ComponentWithTemplates {...elementOptions} ref={ref} />,
+    );
+
+    const componentInstance = ref.current as unknown as {
+      _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
+
+    const container = document.createElement('div');
+    renderItemTemplate({ text: 1 }, container);
+    events.triggerHandler(container, 'dxremove');
+    renderItemTemplate({ text: 1 }, document.createElement('div'));
+
+    const templatesKeys = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
+    expect(templatesKeys.length).toBe(1);
+  });
+
   it('has templates with ids genetated with keyExpr', () => {
     const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
 
