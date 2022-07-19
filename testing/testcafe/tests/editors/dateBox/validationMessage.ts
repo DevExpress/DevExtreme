@@ -12,7 +12,7 @@ fixture`DateBox ValidationMessagePosition`
   });
 
 const positions = ['top', 'right', 'bottom', 'left'];
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
+const themes = ['generic.light', 'generic.light.compact'];
 themes.forEach((theme) => {
   positions.forEach((position) => {
     test(`DateBox ValidationMessage position is correct (${position}, ${theme})`, async (t) => {
