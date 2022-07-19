@@ -7,7 +7,7 @@ import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import Button from './button';
 import CollectionWidget from './collection/ui.collection_widget.edit';
-import Popup from './popup';
+import Popup from './popup/ui.popup';
 import Popover from './popover';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';

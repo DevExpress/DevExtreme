@@ -8,7 +8,7 @@ import { addNamespace } from '../../../events/utils/index';
 
 import BaseModule from './base';
 
-import Popup from '../../popup';
+import Popup from '../../popup/ui.popup';
 import List from '../../list_light';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';

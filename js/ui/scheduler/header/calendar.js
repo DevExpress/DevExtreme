@@ -4,7 +4,7 @@ import registerComponent from '../../../core/component_registrator';
 
 import Widget from '../../widget/ui.widget';
 import Popover from '../../popover';
-import Popup from '../../popup';
+import Popup from '../../popup/ui.popup';
 import Calendar from '../../calendar';
 import Scrollable from '../../scroll_view/ui.scrollable';
 

@@ -1,4 +1,3 @@
-import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
@@ -28,7 +27,7 @@ import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from '../themes';
-import '../toolbar/ui.toolbar.base';
+import '../toolbar/ui.toolbar';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../overlay/z_index';
 import { PopupPositionController } from './popup_position_controller';
@@ -380,7 +379,7 @@ const Popup = Overlay.inherit({
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
                 model: {
-                    widget: 'dxToolbarBase',
+                    widget: this._getToolbarName(),
                     options: toolbarOptions
                 }
             });
@@ -395,6 +394,10 @@ const Popup = Overlay.inherit({
             }
             return $container;
         }
+    },
+
+    _getToolbarName: function() {
+        return 'dxToolbarBase';
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -966,7 +969,5 @@ const Popup = Overlay.inherit({
         return this._$content;
     }
 });
-
-registerComponent('dxPopup', Popup);
 
 export default Popup;

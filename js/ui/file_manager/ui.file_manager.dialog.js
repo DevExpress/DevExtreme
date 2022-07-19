@@ -4,7 +4,7 @@ import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 
 const FILE_MANAGER_DIALOG_CONTENT = 'dx-filemanager-dialog';
 const FILE_MANAGER_DIALOG_POPUP = 'dx-filemanager-dialog-popup';
