@@ -182,8 +182,8 @@ QUnit.module('position', moduleSetup, () => {
         assert.strictEqual(this._validationMessage.option('position.boundary'), this._$container, 'boundary is correct');
     });
 
-    QUnit.test('position collision should be none', function(assert) {
-        assert.strictEqual(this._validationMessage.option('position.collision'), 'none', 'collision is correct');
+    QUnit.test('position collision should be none flip', function(assert) {
+        assert.strictEqual(this._validationMessage.option('position.collision'), 'none flip', 'collision is correct');
     });
 });
 
