@@ -13,6 +13,7 @@ import { isDefined, isObject, isString } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
+import { removeDuplicates, getIntersection } from '../core/utils/array';
 import messageLocalization from '../localization/message';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
@@ -1445,8 +1446,8 @@ const TagBox = SelectBox.inherit({
     _getSortedListValues: function() {
         const listValues = this._getListValues();
         const currentValue = this.option('value') || [];
-        const existedItems = listValues.length ? currentValue.filter(item => listValues.indexOf(item) !== -1) : [];
-        const newItems = existedItems.length ? listValues.filter(item => currentValue.indexOf(item) === -1) : listValues;
+        const existedItems = listValues.length ? getIntersection(currentValue, listValues) : [];
+        const newItems = existedItems.length ? removeDuplicates(listValues, currentValue) : listValues;
 
         return existedItems.concat(newItems);
     },
@@ -1456,14 +1457,9 @@ const TagBox = SelectBox.inherit({
             return [];
         }
 
-        const selectedItems = this._getPlainItems(this._list.option('selectedItems'));
-        const result = [];
-
-        each(selectedItems, (index, item) => {
-            result[index] = this._valueGetter(item);
-        });
-
-        return result;
+        return this
+            ._getPlainItems(this._list.option('selectedItems'))
+            .map(item => this._valueGetter(item));
     },
 
     _setListDataSource: function() {
@@ -1500,24 +1496,44 @@ const TagBox = SelectBox.inherit({
         delete this._tagTemplate;
     },
 
-    _removeDuplicates: function(from, what) {
-        const result = [];
+    _getSelectedItemsDifference(newItems, previousItems) {
+        if(!newItems.length) {
+            return {
+                addedItems: [],
+                removedItems: previousItems.slice()
+            };
+        }
+        if(!previousItems.length) {
+            return {
+                addedItems: newItems.slice(),
+                removedItems: []
+            };
+        }
 
-        each(from, (_, value) => {
-            const filteredItems = what.filter((item) => {
-                return this._valueGetter(value) === this._valueGetter(item);
-            });
+        const previousItemsValuesMap = previousItems.reduce((map, item) => {
+            const value = this._valueGetter(item);
+            map[value] = item;
+            return map;
+        }, {});
 
-            if(!filteredItems.length) {
-                result.push(value);
+        const addedItems = [];
+        newItems.forEach(item => {
+            const value = this._valueGetter(item);
+            if(!previousItemsValuesMap[value]) {
+                addedItems.push(item);
             }
+            delete previousItemsValuesMap[value];
         });
 
-        return result;
+        return {
+            addedItems,
+            removedItems: Object.values(previousItemsValuesMap)
+        };
     },
 
     _optionChanged: function(args) {
-        switch(args.name) {
+        const { name, value, previousValue } = args;
+        switch(name) {
             case 'onSelectAllValueChanged':
                 this._initSelectAllValueChangedAction();
                 break;
@@ -1526,14 +1542,14 @@ const TagBox = SelectBox.inherit({
                 this._renderTags();
                 break;
             case 'hideSelectedItems':
-                if(args.value) {
+                if(value) {
                     this._setListDataSourceFilter();
                 } else {
                     this._resetListDataSourceFilter();
                 }
                 break;
             case 'useSubmitBehavior':
-                this._toggleSubmitElement(args.value);
+                this._toggleSubmitElement(value);
                 break;
             case 'displayExpr':
                 this.callBase(args);
@@ -1550,10 +1566,10 @@ const TagBox = SelectBox.inherit({
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
-                !args.value && this._refreshEvents();
+                !value && this._refreshEvents();
                 break;
             case 'value':
-                this._valuesToUpdate = args?.value;
+                this._valuesToUpdate = value;
                 this.callBase(args);
                 this._valuesToUpdate = undefined;
                 this._setListDataSourceFilter();
@@ -1563,18 +1579,15 @@ const TagBox = SelectBox.inherit({
                 this._renderTags();
                 break;
             case 'selectAllMode':
-                this._setListOption(args.name, args.value);
+                this._setListOption(name, value);
                 break;
             case 'selectedItem':
                 break;
             case 'selectedItems':
-                this._selectionChangedAction({
-                    addedItems: this._removeDuplicates(args.value, args.previousValue),
-                    removedItems: this._removeDuplicates(args.previousValue, args.value)
-                });
+                this._selectionChangedAction(this._getSelectedItemsDifference(value, previousValue));
                 break;
             case 'multiline':
-                this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
+                this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !value);
                 this._renderSingleLineScroll();
                 break;
             case 'maxFilterQueryLength':
