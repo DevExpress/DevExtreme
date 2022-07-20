@@ -52,7 +52,6 @@ QUnit.module('Props: template', {
                 return $template;
             }
         });
-
         assert.strictEqual(element.text(), 'My button123', 'render correct text');
     });
 
