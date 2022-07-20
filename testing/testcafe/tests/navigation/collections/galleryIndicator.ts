@@ -1,6 +1,6 @@
-import createWidget from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
-import Gallery from '../../model/gallery';
+import createWidget from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import Gallery from '../../../model/gallery';
 
 const YELLOW_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXYzi8wA8AA9sBsq0bEHsAAAAASUVORK5CYII=';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1hSWg4AA1EBkakDs38AAAAASUVORK5CYII=';
