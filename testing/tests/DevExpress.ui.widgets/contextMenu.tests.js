@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 import support from 'core/utils/support';
+import { getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
@@ -35,6 +36,7 @@ const DX_MENU_ITEM_EXPANDED_CLASS = 'dx-menu-item-expanded';
 const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
+const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -554,6 +556,17 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         d = instance.hide();
 
         assert.ok($.isFunction(d.promise), 'type object is the Deferred');
+    });
+
+    QUnit.test('overlay wrapper should have the same size as window (T1102095)', function(assert) {
+        const instance = new ContextMenu(this.$element, { target: $('#menuTarget'), visible: false });
+
+        instance.show();
+
+        const $overlayWrapper = $(`.${DX_OVERLAY_WRAPPER_CLASS}`);
+
+        assert.strictEqual(getWidth($overlayWrapper), getWidth($(window)), 'width is equal');
+        assert.strictEqual(getHeight($overlayWrapper), getHeight($(window)), 'height is equal');
     });
 });
 
