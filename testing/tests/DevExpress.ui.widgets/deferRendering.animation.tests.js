@@ -25,6 +25,7 @@ QUnit.testStart(function() {
         }';
 
     $('#qunit-fixture').html(markup);
+    // NOTE: staggering item is placed in body outside of shadow root
     document.body.appendChild(style);
 });
 

@@ -84,12 +84,21 @@ function createQueue() {
 
         get length() {
             return items.length - shiftIndex;
+        },
+
+        getSortedItems() {
+            const result = [];
+
+            for(let i = items.length - 1; i > 0; i--) {
+                result.push(items[i]);
+            }
+
+            return result;
         }
     };
 }
 
 export function getShadowElementsFromPoint(x, y, root) {
-    const result = [];
     const elementQueue = createQueue().push(root);
 
     while(elementQueue.length) {
@@ -105,10 +114,9 @@ export function getShadowElementsFromPoint(x, y, root) {
                getComputedStyle(childNode).pointerEvents !== 'none'
             ) {
                 elementQueue.push(childNode);
-                result.push(childNode);
             }
         }
     }
 
-    return result.reverse();
+    return elementQueue.getSortedItems();
 }
