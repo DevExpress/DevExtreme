@@ -1,8 +1,8 @@
 import { Selector, t } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import asyncForEach from '../../helpers/asyncForEach';
-import createWidget from '../../helpers/createWidget';
-import { appendElementTo, setStyleAttribute } from '../navigation/helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import asyncForEach from '../../../helpers/asyncForEach';
+import createWidget from '../../../helpers/createWidget';
+import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture`Popup`
   .page(url(__dirname, '../container.html'));

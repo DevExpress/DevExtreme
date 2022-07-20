@@ -1,9 +1,9 @@
 import { Selector } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import Popup from '../../model/popup';
-import asyncForEach from '../../helpers/asyncForEach';
-import createWidget from '../../helpers/createWidget';
-import { setStyleAttribute } from '../navigation/helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import Popup from '../../../model/popup';
+import asyncForEach from '../../../helpers/asyncForEach';
+import createWidget from '../../../helpers/createWidget';
+import { setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture`Popup`
   .page(url(__dirname, '../container.html'));

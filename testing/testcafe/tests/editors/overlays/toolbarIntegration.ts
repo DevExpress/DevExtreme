@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import Popup from '../../model/popup';
-import Popover from '../../model/popover';
-import Toolbar from '../../model/toolbar/toolbar';
-import { restoreBrowserSize } from '../../helpers/restoreBrowserSize';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import Popup from '../../../model/popup';
+import Popover from '../../../model/popover';
+import Toolbar from '../../../model/toolbar/toolbar';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`Popup_toolbar`
   .page(url(__dirname, '../container.html'));
