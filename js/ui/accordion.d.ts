@@ -221,6 +221,12 @@ export interface dxAccordionItem extends CollectionWidgetItem {
      * @public
      */
     title?: string;
+    /**
+     * @docid
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    titleTemplate?: template | (() => string | UserDefinedElement);
 }
 
 /** @public */

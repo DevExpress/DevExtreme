@@ -5048,6 +5048,12 @@ declare module DevExpress.ui {
      * [descr:dxAccordionItem.title]
      */
     title?: string;
+    /**
+     * [descr:dxAccordionItem.titleTemplate]
+     */
+    titleTemplate?:
+      | DevExpress.core.template
+      | (() => string | DevExpress.core.UserDefinedElement);
   }
   /**
    * @deprecated use Properties instead

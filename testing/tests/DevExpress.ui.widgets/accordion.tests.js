@@ -673,6 +673,55 @@ QUnit.module('widget options changed', moduleSetup, () => {
         assert.equal($item.text(), 'Changed: ' + this.items[0].title, 'text in rendered element is correct');
     });
 
+    QUnit.test('item title templates should be applied', function(assert) {
+        this.$element.dxAccordion({
+            items: [{ titleTemplate: '<div>Test1</div>' }, { titleTemplate: '<div>Test2</div>' }],
+            selectedIndex: 1,
+            deferRendering: false
+        });
+
+        const $items = this.$element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`);
+
+        assert.strictEqual($items.eq(0).text(), 'Test1', 'element has correct content');
+        assert.strictEqual($items.eq(1).text(), 'Test2', 'element has correct content');
+    });
+
+    QUnit.test('container argument of items.template option is correct', function(assert) {
+        this.$element.dxAccordion({
+            items: [
+                {
+                    template: function(e, index, container) {
+                        assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
+                    },
+                    titleTemplate: function(e, index, container) {
+                        assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
+                    }
+                }
+            ]
+        });
+    });
+
+    QUnit.test('should render custom template with render function passed from integrationOptions', function(assert) {
+        this.$element.dxAccordion({
+            items: [{
+                titleTemplate: 'custom'
+            }],
+            integrationOptions: {
+                templates: {
+                    'custom': {
+                        render: function(args) {
+                            $('<div>Test1</div>').appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        });
+
+        const $items = this.$element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`);
+        assert.strictEqual($items.length, 1, 'items.length');
+        assert.strictEqual($items.eq(0).text(), 'Test1', 'Custom title template rendered');
+    });
+
     QUnit.test('itemTemplate option changed (function)', function(assert) {
         const instance = this.$element.dxAccordion({
             items: this.items,
