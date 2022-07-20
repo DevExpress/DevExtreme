@@ -3990,7 +3990,7 @@
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/TreeView/Employee.cs",
-                  "/Models/SampleData/TreeViewHierarchicalData.cs"
+                  "/Models/SampleData/TreeViewHierarchicalDataForSelection.cs"
                 ],
                 "DemoType": "Web"
               }
@@ -4031,7 +4031,7 @@
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/Product.cs",
-                  "/Models/SampleData/TreeViewHierarchicalData.cs"
+                  "/Models/SampleData/TreeViewHierarchicalDataForSearch.cs"
                 ],
                 "DemoType": "Web"
               }
