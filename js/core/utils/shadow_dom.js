@@ -86,14 +86,8 @@ function createQueue() {
             return items.length - shiftIndex;
         },
 
-        getSortedItems() {
-            const result = [];
-
-            for(let i = items.length - 1; i > 0; i--) {
-                result.push(items[i]);
-            }
-
-            return result;
+        get items() {
+            return items;
         }
     };
 }
@@ -118,5 +112,9 @@ export function getShadowElementsFromPoint(x, y, root) {
         }
     }
 
-    return elementQueue.getSortedItems();
+    const result = elementQueue.items.reverse();
+
+    result.pop();
+
+    return result;
 }
