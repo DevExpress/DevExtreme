@@ -113,6 +113,7 @@ export interface dxTileViewOptions<
     items?: Array<TItem>;
     /**
      * @docid
+     * @type Enums.ShowScrollbarMode
      * @default 'never'
      * @default 'onScroll' &for(Mac|Android|iOS)
      * @public
