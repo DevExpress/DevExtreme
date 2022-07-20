@@ -8,7 +8,7 @@ import { isMaterial as isMaterialTheme, isGeneric, current } from '../themes';
 import Button from '../button';
 import TreeView from '../tree_view';
 import devices from '../../core/devices';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';

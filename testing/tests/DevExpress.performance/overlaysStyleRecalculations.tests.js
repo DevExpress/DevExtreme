@@ -75,6 +75,6 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, shading ? 17 : 16);
+        assert.measureStyleRecalculation(measureFunction, shading ? 18 : 17);
     });
 });

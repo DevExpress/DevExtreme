@@ -12,7 +12,7 @@ import { isObject, isString } from '../../core/utils/type';
 import { fitIntoRange } from '../../core/utils/math';
 import { addNamespace } from '../../events/utils/index';
 import errors from '../widget/ui.errors';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import { getBoundingRect } from '../../core/utils/position';
 import { PopoverPositionController, POPOVER_POSITION_ALIASES } from './popover_position_controller';
 

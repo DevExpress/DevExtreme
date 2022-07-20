@@ -16,7 +16,7 @@ import { value as getViewport } from '../core/utils/view_port';
 
 import messageLocalization from '../localization/message';
 import errors from './widget/ui.errors';
-import Popup from './popup';
+import Popup from './popup/ui.popup';
 
 import { ensureDefined } from '../core/utils/common';
 

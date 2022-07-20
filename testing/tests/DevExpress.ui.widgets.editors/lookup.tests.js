@@ -15,9 +15,9 @@ import { DataSource } from 'data/data_source/data_source';
 
 import themes from 'ui/themes';
 import Lookup from 'ui/lookup';
-import Popup from 'ui/popup';
+import Popup from 'ui/popup/ui.popup';
 import List from 'ui/list';
-import Popover from 'ui/popover';
+import Popover from 'ui/popover/ui.popover';
 import { getWidth } from 'core/utils/size';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';

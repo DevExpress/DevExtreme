@@ -26,7 +26,7 @@ import PivotGridFieldChooser from './ui.pivot_grid.field_chooser';
 import PivotGridFieldChooserBase from './ui.pivot_grid.field_chooser_base';
 import { ExportController } from './ui.pivot_grid.export';
 import chartIntegrationMixin from './ui.pivot_grid.chart_integration';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 

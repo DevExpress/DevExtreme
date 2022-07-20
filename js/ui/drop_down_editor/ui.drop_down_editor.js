@@ -19,7 +19,7 @@ import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import { hasWindow } from '../../core/utils/window';
 import { getElementWidth, getSizeValue } from './utils';
 import { locate, move } from '../../animation/translator';

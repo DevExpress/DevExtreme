@@ -11,7 +11,7 @@ import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 import Scrollable from '../scroll_view/ui.scrollable';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import {
     EDIT_MODE_FORM,
     EDIT_MODE_POPUP,

@@ -4,7 +4,7 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import TreeView from '../tree_view';
 import List from '../list_light';
 import '../list/modules/search';

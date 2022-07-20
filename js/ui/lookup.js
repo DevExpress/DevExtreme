@@ -16,7 +16,7 @@ import { addNamespace } from '../events/utils/index';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import { current, isMaterial } from './themes';
 import { name as clickEventName } from '../events/click';
-import Popover from './popover';
+import Popover from './popover/ui.popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { locate, move, resetPosition } from '../animation/translator';

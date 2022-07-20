@@ -2,7 +2,7 @@ import { getOuterHeight, getHeight, getOuterWidth, getWidth } from '../../core/u
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 
 import DiagramPanel from './ui.diagram.panel';
 

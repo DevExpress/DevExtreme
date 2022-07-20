@@ -3,7 +3,7 @@ import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
 import { Deferred, when } from '../../../core/utils/deferred';
 import { triggerResizeEvent } from '../../../events/visibility_change';
-import Popup from '../../popup';
+import Popup from '../../popup/ui.popup';
 import { hide as hideLoading, show as showLoading } from '../loading';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { getNormalizedResources } from '../resources/utils';

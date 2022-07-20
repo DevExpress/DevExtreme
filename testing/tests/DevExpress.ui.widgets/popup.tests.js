@@ -236,7 +236,7 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
         const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
-        $popupBottom.dxToolbarBase('repaint');
+        $popupBottom.dxToolbar('repaint');
         assert.equal($popupBottom.text(), 'TodayOKCancel', 'buttons order is correct');
         devices.current(devices.real());
     });
@@ -367,7 +367,7 @@ QUnit.module('basic', () => {
 
         });
         const instance = $popup.dxPopup('instance');
-        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
         assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is true');
     });
@@ -386,7 +386,7 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
 
         instance.option('rtlEnabled', false);
-        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
         assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is false');
     });
@@ -2143,7 +2143,7 @@ QUnit.module('rendering', {
 
         popup.show();
 
-        assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbarBase('instance').option('compactMode'), 'bottom toolbar has the compact option');
+        assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbar('instance').option('compactMode'), 'bottom toolbar has the compact option');
     });
 });
 
