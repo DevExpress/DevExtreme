@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { WidgetName } from '../helpers/createWidget';
 import Widget from './internal/widget';
 
@@ -33,5 +33,14 @@ export default class Popup extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getContent(): Selector {
     return Selector(`.${CLASS.content}`);
+  }
+
+  show(): Promise<{ top: number; left: number }> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).show(),
+      { dependencies: { getInstance } },
+    )();
   }
 }
