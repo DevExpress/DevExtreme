@@ -1,3 +1,4 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import Popup from '../../model/popup';
@@ -15,6 +16,7 @@ fixture`Popup_toolbar`
   ['bottom', 'top'].forEach((toolbar) => {
     [true, false].forEach((rtlEnabled) => {
       test(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const instance = new Class('#container');
 
         if (toolbar === 'top') {
@@ -24,7 +26,12 @@ fixture`Popup_toolbar`
           const bottomToolbar = new Toolbar(instance.getBottomToolbar());
           await bottomToolbar.option('overflowMenuVisible', true);
         }
-        await t.debug();
+
+        await t
+          .expect(await takeScreenshot(`${name}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
       }).before(async (t) => {
         await t.resizeWindow(600, 400);
 
