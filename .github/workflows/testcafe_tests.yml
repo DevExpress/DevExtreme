@@ -130,6 +130,10 @@ jobs:
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
+        export TESTCAFE_DASHBOARD_DEVEXTREME_LAYOUT_TESTING_ENABLED=true
+        export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI3MDEyMTgyZC1iMzliLTQyYWMtYjRlZC02YWY2MWMyZmQyNzgiLCJ0b2tlblNlY3JldCI6ImtUODN0QjU1dFdyeWJva2VsdlpDb051R3pzOFZOYzVuaDI4dXNFb3pFd2hPOUZDZlRVaXh5OXBvVC8wS3hDZFAwd05SKzlmVkk0WWh3dXl2ZkhtZDFudTE0MHJqdEUxVnByTlI4Z1RTRHJwZlRPN1dZZXNEUnovUDRTOFF1L3NPTWNjSXpzWno1Y0ZIY2xVSFZKTVVTRVIxVGtaRlgwZTlhUU5tRTBaY1FPTmVkenovREFseGQ4YVoxZnNkN2dSd2VFNjBhSjNueG1vOHNGbGJwazVsYmlvN2JoVy9VTnBvWSs1Q0tFcVFvQ0JSTHJFSlUybUNxNkdGbmhtbmxUTW9SRXpjWDBjUlMwMk41NWlTakNMMXRxdlpMajc4MnB6ZnFrRWo1d29UT0dLY3V1bThRaXE2L1FnaWR2MFV0VWFTaGZvVW9sazhTWFlXNGtxWVNSalR1QT09In0=
+        export TESTCAFE_DASHBOARD_DEVEXTREME_URL=https://devextreme.resolve.sh
+        export TESTCAFE_DASHBOARD_DEVEXTREME_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         all_args="--concurrency 2 --browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $PLATFORM"
         echo "$all_args"
         npm run test-testcafe -- $all_args
