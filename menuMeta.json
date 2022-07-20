@@ -2971,7 +2971,6 @@
           {
             "Title": "Hierarchical Data Structure",
             "Name": "HierarchicalDataStructure",
-            "DocUrl": "ApiReference/UI_Components/dxTreeMap/Configuration/#dataSource",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
