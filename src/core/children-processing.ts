@@ -14,11 +14,11 @@ export function isFragment(node: any): boolean {
     const patchFlag = node.patchFlag;
     return patchFlag === PatchFlags.KEYED_FRAGMENT
     || patchFlag === PatchFlags.UNKEYED_FRAGMENT
-    || patchFlag === PatchFlags.STABLE_FRAGMENT;
+    || patchFlag === PatchFlags.STABLE_FRAGMENT
+    || patchFlag === PatchFlags.BAIL;
 }
 
-function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
-
+export function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
     children.forEach((node) => {
         if (isFragment(node) && Array.isArray(node.children)) {
             pullConfigComponents(node.children as any as VNode[], nodes, ownerConfig);
