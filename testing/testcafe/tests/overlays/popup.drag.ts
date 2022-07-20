@@ -3,13 +3,16 @@ import url from '../../helpers/getPageUrl';
 import Popup from '../../model/popup';
 import asyncForEach from '../../helpers/asyncForEach';
 import createWidget from '../../helpers/createWidget';
+import { setStyleAttribute } from '../navigation/helpers/domUtils';
 
 fixture`Popup`
   .page(url(__dirname, '../container.html'));
 
 test('Popup can not be dragged outside of the container (window)', async (t) => {
   const popup = new Popup('#container');
-  const { content, toolbar } = popup;
+
+  const content = popup.getContent();
+  const toolbar = popup.getToolbar();
 
   const popupRect: { bottom: number; top: number; left: number; right: number } = {
     bottom: 0, top: 0, left: 0, right: 0,
@@ -54,8 +57,10 @@ test('Popup can not be dragged outside of the container (window)', async (t) => 
 }));
 
 test('Popup can not be dragged if content bigger than container', async (t) => {
-  const content = Selector('.dx-overlay-content');
-  const toolbar = Selector('.dx-popup-title');
+  const popup = new Popup('#container');
+
+  const content = popup.getContent();
+  const toolbar = popup.getToolbar();
 
   const popupPosition: { top: number; left: number } = {
     top: 0, left: 0,
@@ -83,18 +88,24 @@ test('Popup can not be dragged if content bigger than container', async (t) => {
   await t
     .expect(popupPosition.left)
     .eql(newPopupPosition.left);
-}).before(async () => createWidget('dxPopup', {
-  position: { of: Selector('#container') },
-  container: Selector('#container'),
-  visible: true,
-  width: 100,
-  height: 100,
-  animation: undefined,
-}));
+}).before(async () => {
+  await setStyleAttribute(Selector('#otherContainer'), 'width: 99px; height: 99px;');
+
+  return createWidget('dxPopup', {
+    position: { of: '#otherContainer' },
+    container: '#otherContainer',
+    visible: true,
+    width: 100,
+    height: 100,
+    animation: undefined,
+  }, false);
+});
 
 test('Popup can be dragged outside of the container if dragOutsideBoundary is enabled', async (t) => {
-  const popup = new Popup('#popup');
-  const { content, toolbar } = popup;
+  const popup = new Popup('#container');
+
+  const content = popup.getContent();
+  const toolbar = popup.getToolbar();
 
   const popupPosition: { top: number; left: number } = {
     top: 0, left: 0,
@@ -121,4 +132,4 @@ test('Popup can be dragged outside of the container if dragOutsideBoundary is en
   dragEnabled: true,
   dragOutsideBoundary: true,
   animation: undefined,
-}));
+}, false));

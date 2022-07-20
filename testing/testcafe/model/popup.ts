@@ -35,6 +35,11 @@ export default class Popup extends Widget {
     return Selector(`.${CLASS.content}`);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getToolbar(): Selector {
+    return Selector(`.${CLASS.toolbar}`);
+  }
+
   show(): Promise<{ top: number; left: number }> {
     const { getInstance } = this;
 
