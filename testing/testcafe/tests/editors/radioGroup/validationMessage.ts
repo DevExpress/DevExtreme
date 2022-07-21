@@ -20,7 +20,7 @@ themes.forEach((theme) => {
 
     await radioGroup.focus();
 
-    await t.expect(await compareScreenshot(t, `radiogroup-horizontal-validation,theme=${theme.replace(/\./g, '-')}.png`)).ok();
+    await t.expect(await compareScreenshot(t, `radiogroup-horizontal-validation,theme=${theme.replace(/\./g, '-')}.png`, form.element)).ok();
   }).before(async () => {
     await changeTheme(theme);
 
