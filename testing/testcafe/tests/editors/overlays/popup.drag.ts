@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture`Popup`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup can not be dragged outside of the container (window)', async (t) => {
   const popup = new Popup('#container');

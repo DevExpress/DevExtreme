@@ -7,7 +7,7 @@ import Toolbar from '../../../model/toolbar/toolbar';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`Popup_toolbar`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 [
   { name: 'dxPopup', Class: Popup },
