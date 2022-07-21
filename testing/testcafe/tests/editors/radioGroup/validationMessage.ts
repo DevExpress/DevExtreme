@@ -4,6 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`Radio Group ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -21,7 +22,8 @@ themes.forEach((theme) => {
     await radioGroup.focus();
 
     await t.expect(await compareScreenshot(t, `radiogroup-horizontal-validation,theme=${theme.replace(/\./g, '-')}.png`, form.element)).ok();
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.resizeWindow(300, 400);
     await changeTheme(theme);
 
     return createWidget('dxForm', {
@@ -47,7 +49,8 @@ themes.forEach((theme) => {
         },
       }],
     });
-  }).after(async () => {
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
     await changeTheme('generic.light');
   });
 });
