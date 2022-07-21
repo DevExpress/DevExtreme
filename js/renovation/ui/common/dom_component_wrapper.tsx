@@ -38,14 +38,19 @@ const normalizeProps = (props: ComponentProps): ComponentProps => Object
 export const viewFunction = ({
   widgetRef,
   props: { componentProps: { className } },
-  restAttributes,
+  restAttributes: {
+    children,
+    ...rest
+  } = { },
 }: DomComponentWrapper): JSX.Element => (
   <div
     ref={widgetRef}
     className={className}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
-  />
+    {...rest}
+  >
+    {children}
+  </div>
 );
 
 @ComponentBindings()
