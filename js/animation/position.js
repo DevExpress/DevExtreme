@@ -308,12 +308,12 @@ const calculatePosition = function(what, options) {
 
         return {
             h: {
-                min: left + h.boundaryOffset,
-                max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset
+                min: Math.max(left + h.boundaryOffset, win.scrollLeft()),
+                max: Math.min(left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset, win.scrollLeft() + windowWidth / hZoomLevel - h.mySize)
             },
             v: {
-                min: top + v.boundaryOffset,
-                max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset
+                min: Math.max(top + v.boundaryOffset, win.scrollTop()),
+                max: Math.min(top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset, win.scrollTop() + windowHeight / vZoomLevel - v.mySize)
             }
         };
     })();
