@@ -25,8 +25,6 @@ themes.forEach((theme) => {
     await changeTheme(theme);
 
     return createWidget('dxForm', {
-      width: 300,
-      height: 400,
       items: [{
         itemType: 'simple',
         dataField: 'PropertyNameId',
