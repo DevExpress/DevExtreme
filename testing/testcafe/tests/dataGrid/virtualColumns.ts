@@ -85,6 +85,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   width: 450,
   dataSource: generateData(10, 50),
   columnWidth: 100,
+  loadingTimeout: null,
   scrolling: {
     columnRenderingMode: 'virtual',
   },
