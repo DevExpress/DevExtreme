@@ -5,7 +5,8 @@ import Widget from './internal/widget';
 const CLASS = {
   content: 'dx-overlay-content',
   wrapper: 'dx-overlay-wrapper',
-  toolbar: 'dx-popup-title',
+  topToolbar: 'dx-popup-title',
+  bottomToolbar: 'dx-popup-bottom',
 };
 export default class Popup extends Widget {
   content: Selector;
@@ -19,7 +20,7 @@ export default class Popup extends Widget {
 
     this.content = this.element.find(`.${CLASS.content}`);
     this.wrapper = this.element.find(`.${CLASS.wrapper}`);
-    this.toolbar = this.element.find(`.${CLASS.toolbar}`);
+    this.toolbar = this.element.find(`.${CLASS.topToolbar}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -37,7 +38,12 @@ export default class Popup extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getToolbar(): Selector {
-    return Selector(`.${CLASS.toolbar}`);
+    return Selector(`.${CLASS.topToolbar}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getBottomToolbar(): Selector {
+    return Selector(`.${CLASS.bottomToolbar}`);
   }
 
   show(): Promise<{ top: number; left: number }> {

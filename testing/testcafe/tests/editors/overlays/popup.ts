@@ -1,11 +1,11 @@
 import { Selector, t } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import asyncForEach from '../../helpers/asyncForEach';
-import createWidget from '../../helpers/createWidget';
-import { appendElementTo, setStyleAttribute } from '../navigation/helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import asyncForEach from '../../../helpers/asyncForEach';
+import createWidget from '../../../helpers/createWidget';
+import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture`Popup`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if container is animated (T920408)', async () => {
   await t.wait(500);

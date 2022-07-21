@@ -1,16 +1,18 @@
 import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-fixture`Filter Builder with scroll`
-  .page(url(__dirname, './pages/T852701.html'));
+fixture.disablePageReloads`Filter Builder`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Field menu should be opened on field click if window scroll exists (T852701)', async (t) => {
-  const filterBuilder = new FilterBuilder('#filter-builder');
+  const filterBuilder = new FilterBuilder('#container');
   const lastField = filterBuilder.getField(49);
 
   await scrollTo(0, 10000);
@@ -18,10 +20,24 @@ test('Field menu should be opened on field click if window scroll exists (T85270
 
   await t.expect(lastField.text).eql('Test 50');
   await t.expect(FilterBuilder.getPopupTreeView().visible).ok();
-});
+}).before(async () => {
+  const filter = [] as any[];
+  const fields = [] as any[];
 
-fixture`Filter Builder with DateBox and pickerType "rollers"`
-  .page(url(__dirname, './pages/T1051831.html'));
+  for (let i = 1; i <= 50; i += 1) {
+    if (i > 1) {
+      filter.push('or');
+    }
+    const name = `Test${i}`;
+    filter.push([name, '=', 'Test']);
+    fields.push({ dataField: name });
+  }
+
+  return createWidget('dxFilterBuilder', {
+    fields,
+    value: filter,
+  });
+});
 
 test('DateBox should not close on click (T1051831)', async (t) => {
   await t
@@ -32,4 +48,13 @@ test('DateBox should not close on click (T1051831)', async (t) => {
   const overlay = Selector('.dx-overlay-content');
 
   await t.expect(overlay.exists).ok();
-});
+}).before(async () => createWidget('dxFilterBuilder', {
+  fields: [{
+    dataField: 'datetime',
+    dataType: 'datetime',
+    editorOptions: {
+      pickerType: 'rollers',
+    },
+  }],
+  value: ['datetime', '=', new Date()],
+}));
