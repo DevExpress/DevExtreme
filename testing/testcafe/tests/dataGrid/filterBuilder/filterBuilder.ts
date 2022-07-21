@@ -1,6 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import FilterBuilder from '../../model/filterBuilder';
+import url from '../../../helpers/getPageUrl';
+import FilterBuilder from '../../../model/filterBuilder';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
