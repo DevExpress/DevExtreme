@@ -4046,7 +4046,7 @@
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/Product.cs",
-                  "/Models/SampleData/TreeViewHierarchicalData.cs"
+                  "/Models/SampleData/TreeViewHierarchicalDataForContextMenu.cs"
                 ],
                 "DemoType": "Web"
               }
