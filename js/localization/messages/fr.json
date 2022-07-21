@@ -335,8 +335,8 @@
         "dxFileManager-dialogCreateDirectoryButtonText": "Créer",
         "dxFileManager-dialogDeleteItemTitle": "Supprimer",
         "dxFileManager-dialogDeleteItemButtonText": "Supprimer",
-        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "Êtes-vous sûr de vouloir supprimer {0}?",
-        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "TODO",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "Voulez-vous vraiment supprimer {0}?",
+        "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "Voulez-vous vraiment supprimer {0}?",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Créer un répertoire dans {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Répertoire créé dans {0}",
