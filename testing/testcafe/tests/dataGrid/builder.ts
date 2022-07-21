@@ -1,14 +1,15 @@
 import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-fixture`Filter Builder`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Filter Builder`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Field menu should be opened on field click if window scroll exists (T852701)', async (t) => {
   const filterBuilder = new FilterBuilder('#container');
