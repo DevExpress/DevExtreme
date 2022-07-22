@@ -482,7 +482,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const dataSource = this.getController('data').dataSource();
             const filterRowController = this.getController('applyFilter');
 
-            if(options.lookup && this.option('syncLookupFilterValues')) {
+            if(options.lookup && !options.calculateCellValue && this.option('syncLookupFilterValues')) {
                 filterRowController.setCurrentColumnForFiltering(options);
                 const filter = this.getController('data').getCombinedFilter();
                 filterRowController.setCurrentColumnForFiltering(null);
@@ -691,6 +691,10 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
             columns.forEach((column, index) => {
                 if(!column.lookup) {
+                    return;
+                }
+
+                if(column.calculateCellValue) {
                     return;
                 }
 
