@@ -19,14 +19,14 @@ export default class TransitionExecutor {
     /**
      * @docid
      * @publicName enter(elements, animation)
-     * @param1 elements:jQuery
+     * @param1 elements:jQuery | Element[]
      * @public
      */
     enter(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
-     * @param1 elements:jQuery
+     * @param1 elements:jQuery | Element[]
      * @public
      */
     leave(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
