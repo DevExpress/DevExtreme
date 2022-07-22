@@ -481,8 +481,9 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const editorController = this.getController('editorFactory');
             const dataSource = this.getController('data').dataSource();
             const filterRowController = this.getController('applyFilter');
+            const isDefaultCalculateCellValue = options.calculateCellValue === options.defaultCalculateCellValue;
 
-            if(options.lookup && !options.calculateCellValue && this.option('syncLookupFilterValues')) {
+            if(options.lookup && isDefaultCalculateCellValue && this.option('syncLookupFilterValues')) {
                 filterRowController.setCurrentColumnForFiltering(options);
                 const filter = this.getController('data').getCombinedFilter();
                 filterRowController.setCurrentColumnForFiltering(null);
@@ -694,7 +695,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                     return;
                 }
 
-                if(column.calculateCellValue) {
+                if(column.calculateCellValue !== column.defaultCalculateCellValue) {
                     return;
                 }
 
