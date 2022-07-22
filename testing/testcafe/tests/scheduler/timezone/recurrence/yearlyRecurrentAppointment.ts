@@ -1,12 +1,12 @@
-import url from '../../../helpers/getPageUrl';
-import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
-import createWidget from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import url from '../../../../helpers/getPageUrl';
+import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils';
+import createWidget from '../../../../helpers/createWidget';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 
 const SCREENSHOT_BASE_NAME = 'timezone-yearly-recurrent';
 
 fixture`Yearly recurrent appointments with timezones`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should correctly display the recurrent yearly appointment with the same timezone', async (t) => {
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
