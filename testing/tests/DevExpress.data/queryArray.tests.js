@@ -304,10 +304,10 @@ QUnit.test('group criterion with function', function(assert) {
 });
 
 QUnit.test('comparison operators', function(assert) {
-    assert.expect(6);
+    assert.expect(16);
 
     const done = assert.async();
-    const input = [{ f: 1 }, { f: 2 }];
+    const input = [{ f: 1 }, { f: 2 }, { f: null }];
 
     const check = function(crit, expectation) {
         return QUERY(input).filter(crit).enumerate().done(function(r) {
@@ -317,11 +317,21 @@ QUnit.test('comparison operators', function(assert) {
 
     $.when(
         check(['f', '=', 2], [{ f: 2 }]),
-        check(['f', '<>', 2], [{ f: 1 }]),
+        check(['f', '<>', 2], [{ f: 1 }, { f: null }]),
         check(['f', '>', 1], [{ f: 2 }]),
         check(['f', '>=', 2], [{ f: 2 }]),
         check(['f', '<', 2], [{ f: 1 }]),
-        check(['f', '<=', 1], [{ f: 1 }])
+        check(['f', '<=', 1], [{ f: 1 }]),
+        check(['f', '>', -1], [{ f: 1 }, { f: 2 }]),
+        check(['f', '>=', -2], [{ f: 1 }, { f: 2 }]),
+        check(['f', '<', -2], []),
+        check(['f', '<=', -1], []),
+        check(['f', '=', null], [{ f: null }]),
+        check(['f', '<>', null], [{ f: 1 }, { f: 2 }]),
+        check(['f', '>', null], []),
+        check(['f', '>=', null], [{ f: null }]),
+        check(['f', '<', null], []),
+        check(['f', '<=', null], [{ f: null }]),
     ).done(function() {
         done();
     });
