@@ -76,11 +76,8 @@ class VerticalGroupedStrategy {
         return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
     }
 
-    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        const groupIndex = coordinates.groupIndex;
+    getGroupBoundsOffset(groupIndex, [$firstCell, $lastCell]) {
         return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
-            const startOffset = $cells.eq(0).offset().left;
-            const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const startDayHour = this._workSpace.option('startDayHour');
             const endDayHour = this._workSpace.option('endDayHour');
             const hoursInterval = this._workSpace.option('hoursInterval');
@@ -95,9 +92,11 @@ class VerticalGroupedStrategy {
 
             const bottomOffset = topOffset + dayHeight;
 
+            const { left } = $firstCell.getBoundingClientRect();
+            const { right } = $lastCell.getBoundingClientRect();
             return this._groupBoundsOffset = {
-                left: startOffset,
-                right: endOffset,
+                left,
+                right,
                 top: topOffset,
                 bottom: bottomOffset
             };
