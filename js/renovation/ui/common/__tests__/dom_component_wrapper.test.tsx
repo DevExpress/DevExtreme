@@ -48,6 +48,20 @@ describe('DomComponentWrapper', () => {
 
       expect((tree.props() as any).className).toEqual('custom-class');
     });
+
+    it('renders text child node', () => {
+      const props = {
+        props: {
+          componentProps: {},
+        },
+        restAttributes: { 'rest-attributes': 'true', children: 'Some Text' },
+      } as any as Partial<DomComponentWrapper>;
+      const tree = mount(
+        <DomComponentWrapperView {...props as any} /> as any,
+      );
+
+      expect(tree.children().contains('Some Text')).toEqual(true);
+    });
   });
 
   describe('Logic', () => {
