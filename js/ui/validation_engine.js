@@ -524,6 +524,12 @@ const ValidationEngine = {
     },
 
     findGroup($element, model) {
+        const hasValidationGroup = $element.data()?.dxComponents?.includes('dxValidationGroup');
+        const validationGroup = hasValidationGroup && $element.dxValidationGroup('instance');
+
+        if(validationGroup) {
+            return validationGroup;
+        }
         // try to find out if this control is child of validation group
         const $dxGroup = $element.parents('.dx-validationgroup').first();
 
