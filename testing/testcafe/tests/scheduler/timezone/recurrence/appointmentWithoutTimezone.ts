@@ -1,11 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import { getAppointmentTime, getScreenshotName } from './timezoneTestingUtils';
-import createWidget from '../../../helpers/createWidget';
-import SelectBox from '../../../model/selectBox';
-import Scheduler from '../../../model/scheduler';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import url from '../../../../helpers/getPageUrl';
+import { getScreenshotName } from '../timezoneTestingUtils';
+import createWidget from '../../../../helpers/createWidget';
+import SelectBox from '../../../../model/selectBox';
+import Scheduler from '../../../../model/scheduler';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';
@@ -41,7 +41,7 @@ const selectTimezoneInUI = async (t: TestController, selectBox: SelectBox, timez
 };
 
 fixture`Recurrent appointments without timezone in scheduler with timezone`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
@@ -70,8 +70,8 @@ test('Should correctly display the recurrent weekly appointment without timezone
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
-      startDate: getAppointmentTime(new Date(2021, 3, 28, 10, 0, 0), schedulerTimezone),
-      endDate: getAppointmentTime(new Date(2021, 3, 28, 12, 0, 0), schedulerTimezone),
+      startDate: new Date('2021-04-28T11:00:00.000Z'),
+      endDate: new Date('2021-04-28T13:00:00.000Z'),
       recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
       text: 'Test',
     }],
@@ -112,8 +112,8 @@ test('Should correctly display the recurrent monthly appointment without timezon
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
-      startDate: getAppointmentTime(new Date(2021, 3, 28, 10, 0, 0), schedulerTimezone),
-      endDate: getAppointmentTime(new Date(2021, 3, 28, 12, 0, 0), schedulerTimezone),
+      startDate: new Date('2021-04-28T11:00:00.000Z'),
+      endDate: new Date('2021-04-28T13:00:00.000Z'),
       recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
       text: 'Test',
     }],
@@ -121,7 +121,7 @@ test('Should correctly display the recurrent monthly appointment without timezon
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
+    cellDuration: 180,
     width: 1000,
     height: 585,
   }, false, SCHEDULER_SELECTOR);
@@ -154,8 +154,8 @@ test('Should correctly display the recurrent yearly appointment without timezone
   await createWidget('dxScheduler', {
     dataSource: [{
       allDay: false,
-      startDate: getAppointmentTime(new Date(2021, 3, 28, 10, 0, 0), schedulerTimezone),
-      endDate: getAppointmentTime(new Date(2021, 3, 28, 12, 0, 0), schedulerTimezone),
+      startDate: new Date('2021-04-28T11:00:00.000Z'),
+      endDate: new Date('2021-04-28T13:00:00.000Z'),
       recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE',
       text: 'Test',
     }],
@@ -163,7 +163,7 @@ test('Should correctly display the recurrent yearly appointment without timezone
     currentView: 'week',
     currentDate: new Date(2021, 3, 28),
     startDayHour: 0,
-    cellDuration: 120,
+    cellDuration: 180,
     width: 1000,
     height: 585,
   }, false, SCHEDULER_SELECTOR);

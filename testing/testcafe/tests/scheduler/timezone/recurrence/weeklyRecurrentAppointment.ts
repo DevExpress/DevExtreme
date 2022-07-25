@@ -1,12 +1,12 @@
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { getAppointmentTime, screenshotTestFunc } from './timezoneTestingUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import url from '../../../../helpers/getPageUrl';
+import createWidget from '../../../../helpers/createWidget';
+import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 
 const SCREENSHOT_BASE_NAME = 'timezone-weekly-recurrent';
 
 fixture`Weekly recurrent appointments with timezones`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 // === One day in week tests section ===
 
