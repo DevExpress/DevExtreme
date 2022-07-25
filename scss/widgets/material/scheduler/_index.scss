@@ -8,7 +8,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/scheduler" as baseScheduler with (
-  $custom-sell-size: 50px,
+  $default-cell-size: 50px,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
