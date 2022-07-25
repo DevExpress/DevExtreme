@@ -1351,6 +1351,7 @@ QUnit.module('Fixed columns', {
         };
 
         that.rowsView.render(that.gridContainer);
+        that.gridContainer.height(50);
         that.rowsView.height(50);
         setScrollerSpacing(that.rowsView);
         that.rowsView.resize();
