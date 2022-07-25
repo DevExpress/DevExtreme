@@ -31,7 +31,7 @@ export default class Editor extends Component {
       // it can change the editor's value
       if (isValidationMessageShownOnFocus) {
         // NOTE: Prevent the validation message from showing
-        const $validationMessageWrapper = $('.dx-invalid-message.dx-overlay-wrapper');
+        const $validationMessageWrapper = $(this._queryChildSelector('.dx-invalid-message.dx-overlay-wrapper') as Element);
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
         const timeToWaitBeforeShow = 150;
@@ -50,6 +50,12 @@ export default class Editor extends Component {
     };
 
     return props;
+  }
+
+  _queryChildSelector(selector: string): HTMLElement | null {
+    const root = this.element().getRootNode() as HTMLElement;
+
+    return root.querySelector(selector);
   }
 
   _createElement(element: HTMLElement): void {
