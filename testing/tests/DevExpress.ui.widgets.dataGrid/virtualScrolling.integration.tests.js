@@ -11,6 +11,7 @@ import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'animation/translator';
+import dataUtils from 'core/element_data';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
@@ -2537,11 +2538,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 useNative: false
             }
         });
+        this.clock.tick(300);
+
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
 
         scrollable.scrollTo({ y: 1440 });
+        this.clock.tick(300);
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2554,12 +2558,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const resizeController = instance.getController('columnsResizer');
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 1 };
-        resizeController._setupResizingInfo(-9900);
+        resizeController._setupResizingInfo(-9800);
         resizeController._moveSeparator({
             event: {
                 data: resizeController,
                 type: 'mousemove',
-                pageX: -9600,
+                pageX: -9500,
                 preventDefault: commonUtils.noop
             }
         });
@@ -2568,13 +2572,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
+        this.clock.tick(300);
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
-        assert.strictEqual(instance.getTopVisibleRowData().name, 'name40', 'top visible row is changed');
+        assert.strictEqual(instance.pageIndex(), 19, 'current page index is changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name39', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
-        assert.strictEqual(instance.getVisibleRows().length, 6, 'row count');
+        assert.strictEqual(instance.getVisibleRows().length, 5, 'row count');
         // T835869
         assert.strictEqual(loadingSpy.callCount, 1, 'data is loaded once');
     });
@@ -4469,6 +4474,114 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows().length, 2, 'only first page items are visible');
     });
 
+    // T1100018
+    [true, false].forEach((useNative) => {
+        QUnit.test(`New mode with scrolling.useNative = ${useNative}. The detail row should not be re-rendered when switching the tab bar that is inside the detail row`, function(assert) {
+            // arrange
+            const items = generateDataSource(100);
+
+            const dataGrid = createDataGrid({
+                height: 600,
+                dataSource: items,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'virtual',
+                    useNative
+                },
+                masterDetail: {
+                    enabled: true,
+                    template: () => $('<div class=\'my-tabpanel\' />').dxTabPanel({
+                        items: [{
+                            title: 'Tab 1',
+                            template: () => $('<div/>').height(400),
+                        }, {
+                            title: 'Tab 2',
+                            template: () => $('<div/>').height(200),
+                        }],
+                    }),
+                }
+            });
+
+            this.clock.tick(300);
+
+            // act
+            dataGrid.getScrollable().scrollTo({ top: 5000 });
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            let visibleRows = dataGrid.getVisibleRows();
+            assert.strictEqual(visibleRows[visibleRows.length - 1].key, 100, 'last row with key = 100');
+
+            // act
+            dataGrid.expandRow(100);
+            this.clock.tick(300);
+
+            dataGrid.getScrollable().scrollTo({ top: 5000 });
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            visibleRows = dataGrid.getVisibleRows();
+            assert.strictEqual(visibleRows[visibleRows.length - 1].rowType, 'detail', 'last row - detail row');
+
+            const $detailRow = $(dataGrid.getRowElement(visibleRows.length - 1));
+            let tabPanel = dataUtils.data($detailRow.find('.my-tabpanel').get(0), 'dxTabPanel');
+            assert.ok(tabPanel, 'there is a tab panel inside a detail row');
+            assert.strictEqual(tabPanel.option('selectedIndex'), 0, 'tab panel - selected index');
+
+            // act
+            tabPanel.option('selectedIndex', 1);
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            tabPanel = dataUtils.data($(dataGrid.getRowElement(visibleRows.length - 1)).find('.my-tabpanel').get(0), 'dxTabPanel');
+            assert.strictEqual($detailRow.get(0), $(dataGrid.getRowElement(visibleRows.length - 1)).get(0), 'detail row is not re-rendered');
+            assert.strictEqual(tabPanel.option('selectedIndex'), 1, 'tab panel - selected index');
+        });
+    });
+
+    QUnit.test('New mode. The updateDimensions method should be called when expanding the nested grid', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            height: 600,
+            dataSource: items,
+            paging: {
+                pageSize: 15,
+            },
+            scrolling: {
+                mode: 'virtual'
+            },
+            masterDetail: {
+                enabled: true,
+                template: (container) => $('<div>').appendTo(container).dxDataGrid({
+                    columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+                    columnFixing: { enabled: true },
+                    columnAutoWidth: true,
+                    keyExpr: 'id',
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }).dxDataGrid('instance')
+            }
+        });
+
+        this.clock.tick(300);
+
+        sinon.spy(dataGrid, 'updateDimensions');
+
+        // assert
+        assert.strictEqual(dataGrid.updateDimensions.callCount, 0, 'number of the updateDimensions method calls');
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual(dataGrid.updateDimensions.callCount, 1, 'number of the updateDimensions method calls');
+    });
+
     // T996914
     QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
         // arrange
@@ -5664,7 +5777,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 7; i++) {
             dataGrid.getScrollable().scrollTo({ top: 16000000 });
             this.clock.tick(1000);
         }

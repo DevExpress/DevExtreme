@@ -4,7 +4,7 @@ import { getWindow } from '../../core/utils/window';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
-import { Deferred } from '../../core/utils/deferred';
+import { when, Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -516,6 +516,19 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             this._appendEmptyRow($table, $virtualRow, location);
         },
+        _updateContentItemSizes: function() {
+            const rowHeights = this._getRowHeights();
+            const correctedRowHeights = this._correctRowHeights(rowHeights);
+
+            this._dataController.setContentItemSizes(correctedRowHeights);
+        },
+        _updateViewportSize: function(viewportHeight, scrollTop) {
+            if(!isDefined(viewportHeight)) {
+                viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
+            }
+
+            this._dataController.viewportHeight(viewportHeight, scrollTop);
+        },
         _getRowHeights: function() {
             const isPopupEditMode = this.getController('editing')?.isPopupEditMode?.();
 
@@ -572,9 +585,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             if(isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
                 if(!isRender) {
-                    const rowHeights = this._getRowHeights();
-                    const correctedRowHeights = this._correctRowHeights(rowHeights);
-                    dataController.setContentItemSizes(correctedRowHeights);
+                    this._updateContentItemSizes();
                 }
 
                 const top = dataController.getContentOffset('begin');
@@ -660,6 +671,12 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
                 this._scrollTop = e.scrollOffset.top;
+
+                if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false) {
+                    this._updateContentItemSizes();
+                    this._updateViewportSize(null, this._scrollTop);
+                }
+
                 this._dataController.setViewportPosition(e.scrollOffset.top);
             }
             this.callBase.apply(this, arguments);
@@ -682,7 +699,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const dataController = this._dataController;
 
                 if(this.option(LEGACY_SCROLLING_MODE) === false) {
-                    dataController.viewportHeight(viewportHeight);
+                    this._updateViewportSize(viewportHeight);
                     dataController.updateViewport();
                 } else {
                     dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
@@ -1221,8 +1238,8 @@ export const virtualScrollingModule = {
 
                         return dataSource?.viewportSize.apply(dataSource, arguments);
                     },
-                    viewportHeight: function(height) {
-                        this._rowsScrollController?.viewportHeight(height);
+                    viewportHeight: function(height, scrollTop) {
+                        this._rowsScrollController?.viewportHeight(height, scrollTop);
                     },
                     viewportItemSize: function() {
                         const rowsScrollController = this._rowsScrollController;
@@ -1545,6 +1562,19 @@ export const virtualScrollingModule = {
                 return members;
             })(),
             resizing: {
+                _updateMasterDataGridCore: function(masterDataGrid) {
+                    return when(this.callBase.apply(this, arguments)).done((masterDataGridUpdated) => {
+                        const isNewVirtualMode = isVirtualMode(masterDataGrid) && masterDataGrid.option(LEGACY_SCROLLING_MODE) === false;
+
+                        if(!masterDataGridUpdated && isNewVirtualMode) {
+                            const scrollable = masterDataGrid.getScrollable();
+
+                            if(scrollable) {
+                                masterDataGrid.updateDimensions();
+                            }
+                        }
+                    });
+                },
                 resize: function() {
                     const that = this;
                     const callBase = that.callBase;

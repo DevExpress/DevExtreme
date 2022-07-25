@@ -221,21 +221,34 @@ export const masterDetailModule = {
                     const masterDataGrid = $($masterDetailRow).closest('.' + this.getWidgetContainerClass()).parent().data('dxDataGrid');
 
                     if(masterRowOptions && masterDataGrid) {
-                        if(masterDataGrid.getView('rowsView').isFixedColumns()) {
-                            return this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
-                        } else {
-                            if(masterDataGrid.option('scrolling.useNative') === true) {
-                                return masterDataGrid.updateDimensions();
-                            }
-
-                            const scrollable = masterDataGrid.getScrollable();
-
-                            // T607490
-                            return scrollable?.update();
-                        }
+                        return this._updateMasterDataGridCore(masterDataGrid, masterRowOptions);
                     }
                 },
+                _updateMasterDataGridCore: function(masterDataGrid, masterRowOptions) {
+                    const d = Deferred();
+
+                    if(masterDataGrid.getView('rowsView').isFixedColumns()) {
+                        this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $(masterRowOptions.rowElement))
+                            .done(d.resolve);
+                    } else {
+                        if(masterDataGrid.option('scrolling.useNative') === true) {
+                            masterDataGrid.updateDimensions().done(() => d.resolve(true));
+                        }
+
+                        const scrollable = masterDataGrid.getScrollable();
+
+                        if(scrollable) {
+                            // T607490
+                            scrollable?.update().done(() => d.resolve());
+                        } else {
+                            d.resolve();
+                        }
+                    }
+
+                    return d.promise();
+                },
                 _updateFixedMasterDetailGrids: function(masterDataGrid, masterRowIndex, $detailElement) {
+                    const d = Deferred();
                     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
                     const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
                     const rowsNotEqual = $rows?.length === 2 && getHeight($rows.eq(0)) !== getHeight($rows.eq(1));
@@ -243,15 +256,21 @@ export const masterDetailModule = {
 
                     if(rowsNotEqual || tablesNotEqual) {
                         const detailElementWidth = getWidth($detailElement);
-                        return masterDataGrid.updateDimensions().done(() => {
+                        masterDataGrid.updateDimensions().done(() => {
                             const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth') && masterDataGrid.option('scrolling.useNative') === true;
                             const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== getWidth($detailElement);
 
                             if(isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
-                                this.updateDimensions();
+                                this.updateDimensions().done(() => d.resolve(true));
+                            } else {
+                                d.resolve(true);
                             }
                         });
+
+                        return d.promise();
                     }
+
+                    return (Deferred()).resolve();
                 },
                 _toggleBestFitMode: function(isBestFit) {
                     this.callBase.apply(this, arguments);
