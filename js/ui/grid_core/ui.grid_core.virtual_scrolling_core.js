@@ -192,7 +192,7 @@ export const VirtualScrollController = Class.inherit((function() {
             return this._position;
         },
 
-        getItemIndexByPosition: function(position) {
+        getItemIndexByPosition: function(position, viewportItemIndex, height) {
             position = position ?? this._position;
             const defaultItemSize = this.getItemSize();
             let offset = 0;
@@ -204,6 +204,10 @@ export const VirtualScrollController = Class.inherit((function() {
                 let itemOffsetDiff = (position - offset) / defaultItemSize;
                 if(itemOffsetWithSize < 0 || itemOffset + itemOffsetDiff < itemOffsetWithSize) {
                     itemOffset += itemOffsetDiff;
+
+                    if(this._sizeRatio < 1 && isDefined(viewportItemIndex)) {
+                        itemOffset = viewportItemIndex + (height / this._viewportItemSize);
+                    }
                     break;
                 } else {
                     itemOffsetDiff = itemOffsetWithSize - itemOffset;
@@ -312,14 +316,15 @@ export const VirtualScrollController = Class.inherit((function() {
             }
             return this._viewportSize;
         },
-        viewportHeight: function(height) {
-            const begin = this.getItemIndexByPosition();
-            const end = this.getItemIndexByPosition(this._position + height);
+        viewportHeight: function(height, scrollTop) {
+            const position = scrollTop ?? this._position;
+            const begin = this.getItemIndexByPosition(position);
+            const end = this.getItemIndexByPosition(position + height, begin, height);
 
             this.viewportSize(Math.ceil(end - begin));
 
-            if(this._viewportItemIndex !== begin) {
-                this._setViewportPositionCore(this._position);
+            if(!isDefined(scrollTop) && this._viewportItemIndex !== begin) {
+                this._setViewportPositionCore(position);
             }
         },
         reset: function(isRefresh) {

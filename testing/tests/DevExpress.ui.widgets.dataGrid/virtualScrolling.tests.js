@@ -950,4 +950,27 @@ QUnit.module('VirtualScrollingController. New mode', {
         assert.deepEqual(virtualItemsCount, { begin: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize, end: 0 }, 'virtual items');
         assert.deepEqual(viewportParams, { skip: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize, take: viewportSize }, 'viewport params');
     });
+
+    QUnit.test('getItemIndexPosition with three arguments', function(assert) {
+        // arrange
+        mockDataSource.totalItemsCount.returns(100000000);
+        this.scrollController.viewportItemSize(50);
+        this.scrollController.setContentItemSizes([new Array(15)].map(() => 50));
+
+        // act, assert
+        assert.strictEqual(this.scrollController.getItemIndexByPosition(10500, 1000, 500), 1010, 'item index');
+    });
+
+    QUnit.test('viewportSize should be correct when there is a lot of data', function(assert) {
+        // arrange
+        mockDataSource.totalItemsCount.returns(100000000);
+        this.scrollController.viewportItemSize(50);
+        this.scrollController.setContentItemSizes([new Array(15)].map(() => 50));
+
+        // act
+        this.scrollController.viewportHeight(500, 10000);
+
+        // assert
+        assert.strictEqual(this.scrollController.viewportSize(), 10, 'viewportSize');
+    });
 });
