@@ -8,13 +8,6 @@ QUnit.testStart(function() {
         '<div id="animation">\
             <div class="defer-rendering"></div>\
         </div>\
-        <style>\
-            .test-staggering-item,\
-            test-no-staggering-item {\
-                    height: 10px;\
-                    width: 10px;\
-            }\
-        </style>\
         <div id="staggering-animation" style="position: absolute; width: 100px; height: 100px; top: 0; left: 0">\
             <div class="defer-rendering" style="position: absolute; width: 100%; height: 100%">\
                 <div class="item1 test-staggering-item"></div>\
@@ -23,7 +16,17 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
+    const style = document.createElement('style');
+    style.innerHTML =
+        '.test-staggering-item,\
+        test-no-staggering-item {\
+            height: 10px;\
+            width: 10px;\
+        }';
+
     $('#qunit-fixture').html(markup);
+    // NOTE: staggering item is placed in body outside of shadow root
+    document.body.appendChild(style);
 });
 
 let savedTransitionExecutor;

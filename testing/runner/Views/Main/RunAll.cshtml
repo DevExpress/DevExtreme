@@ -75,6 +75,7 @@
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
             noJQuery = @Html.Raw(Json.Serialize(Model.NoJQuery)),
+            shadowDom = @Html.Raw(Json.Serialize(Model.ShadowDom)),
             noRenovation = @Html.Raw(Json.Serialize(Model.NoRenovation)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = $.now(),
@@ -175,6 +176,8 @@
                 additionalParams.notimers = "true";
             if(noJQuery)
                 additionalParams.nojquery = "true";
+            if(shadowDom)
+                additionalParams.shadowDom = "true";
             if(noRenovation)
                 additionalParams.norenovation = "true";
 

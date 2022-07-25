@@ -42,6 +42,7 @@ function run_test_impl {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$SHADOW_DOM" ] && url="$url&shadowDom=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 

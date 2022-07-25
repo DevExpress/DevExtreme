@@ -12,7 +12,8 @@ import 'ui/drop_down_button';
 import 'ui/tabs';
 import 'ui/toolbar';
 
-$('#qunit-fixture').html('<style>\
+QUnit.testStart(() => {
+    $('#qunit-fixture').html('<style>\
         #toolbarWithMenu .dx-toolbar-menu-container {\
             width: 100px;\
         }\
@@ -26,6 +27,7 @@ $('#qunit-fixture').html('<style>\
     <div id="toolbarWithMenu"></div>\
     <div id="widget"></div>\
     <div id="widthRootStyle" style="width: 300px;"></div>');
+});
 
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 const TOOLBAR_ITEM_INVISIBLE_CLASS = 'dx-toolbar-item-invisible';
@@ -1563,7 +1565,7 @@ QUnit.module('adaptivity without hiding in menu', {
         }\
         </style>';
 
-        this.styles = $(fontStyles).appendTo('head');
+        this.styles = $(fontStyles).appendTo($('#qunit-fixture'));
     },
     afterEach: function() {
         this.styles.remove();

@@ -60,3 +60,61 @@ export function addShadowDomStyles($element) {
 
     root.adoptedStyleSheets = [constructedStyleSheet];
 }
+
+function isPositionInElementRectangle(element, x, y) {
+    const rect = element.getBoundingClientRect();
+
+    return rect && x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom;
+}
+
+function createQueue() {
+    let shiftIndex = 0;
+    const items = [];
+
+    return {
+        push(item) {
+            items.push(item);
+            return this;
+        },
+
+        shift() {
+            shiftIndex++;
+            return items[shiftIndex - 1];
+        },
+
+        get length() {
+            return items.length - shiftIndex;
+        },
+
+        get items() {
+            return items;
+        }
+    };
+}
+
+export function getShadowElementsFromPoint(x, y, root) {
+    const elementQueue = createQueue().push(root);
+
+    while(elementQueue.length) {
+        const el = elementQueue.shift();
+
+        for(let i = 0; i < el.childNodes.length; i++) {
+            const childNode = el.childNodes[i];
+
+            // eslint-disable-next-line no-undef
+            if(childNode.nodeType === Node.ELEMENT_NODE &&
+               isPositionInElementRectangle(childNode, x, y) &&
+               // eslint-disable-next-line no-undef
+               getComputedStyle(childNode).pointerEvents !== 'none'
+            ) {
+                elementQueue.push(childNode);
+            }
+        }
+    }
+
+    const result = elementQueue.items.reverse();
+
+    result.pop();
+
+    return result;
+}

@@ -37,20 +37,37 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
-    const markup =
-        '<style>\
-            html, body {\
-                height: 100%;\
-                margin: 0;\
+    viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
+
+    let style = '<style>\
+        html, body {\
+            height: 100%;\
+            margin: 0;\
+        }\
+        \
+        #qunit-fixture {\
+            width: 100%;\
+            height: 100%;\
+        }';
+
+    const fixtureRoot = $('#qunit-fixture').get(0);
+
+    if(fixtureRoot.getRootNode().host) {
+        style += '\
+            :scope > div {\
+                width: 100% !important;\
+                height: 100% !important;\
             }\
-            \
-            #qunit-fixture {\
+            :host {\
                 width: 100%;\
                 height: 100%;\
-            }\
-        </style>\
-        \
-        <div id="popup"></div>\
+            }';
+    }
+
+    style += '</style>';
+
+    const markup = style +
+        '<div id="popup"></div>\
         <div id="secondPopup"></div>\
         <div id="container"></div>\
         \
@@ -117,7 +134,6 @@ const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
 
 const toSelector = (cssClass) => `.${cssClass}`;
 
-viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
 QUnit.module('basic', () => {
     QUnit.test('markup init', function(assert) {
@@ -153,8 +169,8 @@ QUnit.module('basic', () => {
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
 
-        assert.equal(getOuterHeight($wrapper), getOuterHeight($(document.body)), 'height is 100%');
-        assert.equal(getOuterWidth($wrapper), getOuterWidth($(document.body)), 'width is 100%');
+        assert.equal(getOuterHeight($wrapper), getOuterHeight($('#qunit-fixture')), 'height is 100%');
+        assert.equal(getOuterWidth($wrapper), getOuterWidth($('#qunit-fixture')), 'width is 100%');
     });
 
     QUnit.test('default options', function(assert) {
@@ -1028,8 +1044,8 @@ QUnit.module('options changed callbacks', {
 
         const $overlayContent = this.instance.$content().parent();
 
-        assert.equal(getOuterWidth($overlayContent), getOuterWidth($(document.body)), 'wrapper has 100% width');
-        assert.equal(getOuterHeight($overlayContent), getOuterHeight($(document.body)), 'wrapper has 100% height');
+        assert.equal(getOuterWidth($overlayContent), getOuterWidth($('#qunit-fixture')), 'wrapper has 100% width');
+        assert.equal(getOuterHeight($overlayContent), getOuterHeight($('#qunit-fixture')), 'wrapper has 100% height');
 
         assert.ok($overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class added');
         assert.ok(!$overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is removed');
@@ -1050,7 +1066,7 @@ QUnit.module('options changed callbacks', {
         $('#popup').dxPopup({
             fullScreen: true,
             visible: true,
-            container: '#container'
+            container: $('#container')
         });
 
         const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
@@ -1093,7 +1109,7 @@ QUnit.module('options changed callbacks', {
 
         $('<iframe>').attr('src', 'about:blank').appendTo(popupContent);
 
-        const iFrame = document.getElementsByTagName('iframe')[0];
+        const iFrame = $('iframe').get(0);
         const iFrameDoc = iFrame.contentWindow.document;
         const element = document.createElement('div');
 

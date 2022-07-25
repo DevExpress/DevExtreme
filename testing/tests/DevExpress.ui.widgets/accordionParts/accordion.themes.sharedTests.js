@@ -16,8 +16,8 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 }
             });
 
-            const iconRect = document.querySelector('.dx-icon-myIcon').getBoundingClientRect();
-            const iconParentRect = document.querySelector('.dx-icon-myIcon').parentElement.getBoundingClientRect();
+            const iconRect = $('.dx-icon-myIcon').get(0).getBoundingClientRect();
+            const iconParentRect = $('.dx-icon-myIcon').get(0).parentElement.getBoundingClientRect();
 
             assert.roughEqual(iconRect.left - iconParentRect.left, iconParentRect.right - iconRect.right, 0.1, `correct horizontal centering ${JSON.stringify(iconRect)} in ${JSON.stringify(iconParentRect)}`);
             assert.roughEqual(iconRect.top - iconParentRect.top, iconParentRect.bottom - iconRect.bottom, 0.1, `correct vertical centering ${JSON.stringify(iconRect)} in ${JSON.stringify(iconParentRect)}`);

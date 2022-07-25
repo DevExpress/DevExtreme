@@ -219,7 +219,8 @@ export class FileManagerWrapper {
     }
 
     getToolbarElements() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS} .${Consts.DROP_DOWN_BUTTON_CLASS}`)
+            .filter(':visible');
     }
 
     getToolbarElementsInSection(sectionName) {
@@ -440,15 +441,13 @@ export class FileManagerWrapper {
     }
 
     getContextMenuItemsWithSeparators() {
-        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}:visible, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}:visible`);
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}`).filter(':visible');
     }
 
     getContextMenuItems(visible) {
-        let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
-        if(visible) {
-            selector += ':visible';
-        }
-        return $(selector);
+        const selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
+
+        return visible ? $(selector).filter(':visible') : $(selector);
     }
 
     getContextMenuItem(text) {

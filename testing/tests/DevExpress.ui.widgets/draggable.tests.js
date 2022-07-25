@@ -850,7 +850,7 @@ QUnit.module('bounds', moduleConfig, () => {
         const areaHeight = $area.height();
 
         this.createDraggable({
-            boundary: '#area'
+            boundary: $('#area')
         });
 
         this.pointer.down().move(areaWidth + 150, areaHeight + 150).up();
@@ -1310,14 +1310,14 @@ QUnit.module('container', moduleConfig, () => {
     // arrange
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         // act
         this.pointer.down().move(10, 10);
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 1, 'there is a cloned element');
     });
 
@@ -1336,7 +1336,7 @@ QUnit.module('container', moduleConfig, () => {
 
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         // act
@@ -1350,20 +1350,20 @@ QUnit.module('container', moduleConfig, () => {
     // arrange
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         this.pointer.down().move(10, 10);
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 1, 'there is a cloned element');
 
         // act
         this.pointer.up();
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
     });
 
@@ -1371,20 +1371,20 @@ QUnit.module('container', moduleConfig, () => {
     // arrange
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         this.pointer.down().move(10, 10);
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 1, 'there is a cloned element');
 
         // act
         this.draggableInstance.dispose();
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
     });
 });
@@ -1946,6 +1946,13 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
             // arrange
             fx.off = true;
 
+            const origViewPort = viewPort.value();
+            const fixtureRoot = $('#qunit-fixture').get(0);
+
+            if(fixtureRoot.getRootNode().host) {
+                viewPort.value(fixtureRoot);
+            }
+
             try {
                 $('#other').show().dxOverlay({
                     width: 150,
@@ -1989,6 +1996,8 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
                 assert.strictEqual($('#scrollable').scrollTop(), shading ? 0 : 1, 'scrollTop');
             } finally {
                 fx.off = false;
+
+                viewPort.value(origViewPort);
             }
         });
     });
