@@ -6995,7 +6995,11 @@ QUnit.module('Scrollbar', {
         rowsView.resize();
 
         // assert
-        assert.strictEqual(getOuterHeight(rowsView.getScrollable().$content()), getOuterHeight($(rowsView.getScrollable().container())), 'No vertical scroll');
+        if(devices.real().android) {
+            assert.roughEqual(getOuterHeight(rowsView.getScrollable().$content()), getOuterHeight($(rowsView.getScrollable().container())), 0.9, 'Acceptable vertical scroll');
+        } else {
+            assert.strictEqual(getOuterHeight(rowsView.getScrollable().$content()), getOuterHeight($(rowsView.getScrollable().container())), 'No vertical scroll');
+        }
     });
 
     QUnit.test('getCell outside viewport should not return last visible row if rowRenderingMode is virtual (T1046754)', function(assert) {
