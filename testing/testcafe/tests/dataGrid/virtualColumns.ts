@@ -45,7 +45,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   await t
     .expect(dataGrid.getScrollLeft())
     .eql(100);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   width: 450,
   dataSource: generateData(10, 30),
   columnWidth: 100,
@@ -81,10 +81,11 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   await t
     .expect(dataGrid.getScrollLeft())
     .eql(800);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   width: 450,
   dataSource: generateData(10, 50),
   columnWidth: 100,
+  loadingTimeout: null,
   scrolling: {
     columnRenderingMode: 'virtual',
   },

@@ -1,13 +1,13 @@
 import { Selector, ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import Popup from '../../model/popup';
-import asyncForEach from '../../helpers/asyncForEach';
-import createWidget from '../../helpers/createWidget';
-import { setStyleAttribute, appendElementTo } from '../navigation/helpers/domUtils';
-import { restoreBrowserSize } from '../../helpers/restoreBrowserSize';
+import url from '../../../helpers/getPageUrl';
+import Popup from '../../../model/popup';
+import asyncForEach from '../../../helpers/asyncForEach';
+import createWidget from '../../../helpers/createWidget';
+import { setStyleAttribute, appendElementTo } from '../../navigation/helpers/domUtils';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`Popup`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if content dimension is changed during animation', async (t) => {
   const popup = new Popup('#container');
