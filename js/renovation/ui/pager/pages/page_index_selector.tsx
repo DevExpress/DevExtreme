@@ -29,9 +29,11 @@ export const viewFunction = ({
   renderPrevButton,
   renderNextButton,
   prevClassName,
+  canNavigateToPrev,
   navigateToPrevPage,
   nextClassName,
   navigateToNextPage,
+  canNavigateToNext,
   pageIndexChange,
   props: {
     isLargeDisplayMode,
@@ -46,6 +48,7 @@ export const viewFunction = ({
       <LightButton
         className={prevClassName}
         label="Previous page"
+        disabled={!canNavigateToPrev}
         onClick={navigateToPrevPage}
       />
     )}
@@ -68,6 +71,7 @@ export const viewFunction = ({
     {renderNextButton && (
       <LightButton
         className={nextClassName}
+        disabled={!canNavigateToNext}
         label="Next page"
         onClick={navigateToNextPage}
       />
@@ -151,19 +155,23 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
     return !isLargeDisplayMode || showNavigationButtons;
   }
 
+  get canNavigateToNext(): boolean {
+    return this.canNavigateTo(this.getNextDirection());
+  }
+
+  get canNavigateToPrev(): boolean {
+    return this.canNavigateTo(this.getPrevDirection());
+  }
+
   get renderNextButton(): boolean {
     return this.renderPrevButton || !this.props.hasKnownLastPage;
   }
 
   get nextClassName(): string {
-    const direction = this.getNextDirection();
-    const canNavigate = this.canNavigateTo(direction);
-    return canNavigate ? nextButtonClassName : nextButtonDisabledClassName;
+    return this.canNavigateToNext ? nextButtonClassName : nextButtonDisabledClassName;
   }
 
   get prevClassName(): string {
-    const direction = this.getPrevDirection();
-    const canNavigate = this.canNavigateTo(direction);
-    return canNavigate ? prevButtonClassName : prevButtonDisabledClassName;
+    return this.canNavigateToPrev ? prevButtonClassName : prevButtonDisabledClassName;
   }
 }

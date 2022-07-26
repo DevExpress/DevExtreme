@@ -9,13 +9,13 @@ import { KeyboardActionContext, KeyboardActionContextType } from './keyboard_act
 export const viewFunction = ({
   widgetRef,
   props: {
-    className, children, label,
+    className, children, label, disabled,
   },
 }: LightButton): JSX.Element => (
   <div
     ref={widgetRef}
     className={className}
-    tabIndex={0}
+    tabIndex={disabled ? -1 : 0}
     role="button"
     aria-label={label}
   >
@@ -31,6 +31,8 @@ export class LightButtonProps {
   @OneWay() className = '';
 
   @OneWay() label = '';
+
+  @OneWay() disabled = false;
   /* istanbul ignore next: EventCallback cannot be tested */
 
   @Event() onClick!: EventCallback;

@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
@@ -21,6 +21,18 @@ describe('LightButton', () => {
 
       expect(tree.html())
         .toBe('<div class="class" tabindex="0" role="button" aria-label="label">text</div>');
+    });
+
+    it('should render properly when disabled', () => {
+      const props = {
+        props: {
+          children: 'text', className: 'disabled class', label: 'label', disabled: true,
+        },
+      } as Partial<LightButton>;
+      const tree = shallow(<LightButtonComponent {...props as any} /> as any);
+
+      expect(tree.html())
+        .toBe('<div class="disabled class" tabindex="-1" role="button" aria-label="label">text</div>');
     });
 
     it('should render children', () => {

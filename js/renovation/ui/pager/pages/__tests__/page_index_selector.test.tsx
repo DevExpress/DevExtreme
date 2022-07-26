@@ -22,6 +22,8 @@ describe('Page index selector', () => {
       nextClassName: 'nextClassName',
       navigateToNextPage: jest.fn(),
       pageIndexChange: jest.fn(),
+      canNavigateToNext: true,
+      canNavigateToPrev: false,
       props: defaultComponentProps(),
     } as Partial<PageIndexSelector> as PageIndexSelector);
 
@@ -41,10 +43,10 @@ describe('Page index selector', () => {
         pageIndexChange: props.pageIndexChange,
       });
       expect(prevButton.props()).toEqual({
-        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
+        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage, disabled: true,
       });
       expect(nextButton.props()).toEqual({
-        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
+        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage, disabled: false,
       });
     });
 
@@ -53,6 +55,7 @@ describe('Page index selector', () => {
         ...defaultProps(),
         renderPrevButton: false,
         renderNextButton: true,
+        canNavigateToNext: true,
       } as Partial<PageIndexSelector>;
 
       const tree = shallow(<PageIndexSelectorComponent {...props as any} />);
@@ -67,7 +70,7 @@ describe('Page index selector', () => {
         pageIndexChange: props.pageIndexChange,
       });
       expect(nextButton.props()).toEqual({
-        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
+        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage, disabled: false,
       });
     });
 
@@ -76,6 +79,7 @@ describe('Page index selector', () => {
         ...defaultProps(),
         renderPrevButton: true,
         renderNextButton: false,
+        canNavigateToPrev: false,
       } as Partial<PageIndexSelector>;
 
       const tree = shallow(<PageIndexSelectorComponent {...props as any} />);
@@ -84,7 +88,7 @@ describe('Page index selector', () => {
 
       expect(tree.children()).toHaveLength(2);
       expect(prevButton.props()).toEqual({
-        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
+        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage, disabled: true,
       });
       expect(pages.props()).toEqual({
         maxPagesCount: 10,
