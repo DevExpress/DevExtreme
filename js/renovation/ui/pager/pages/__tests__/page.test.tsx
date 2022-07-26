@@ -2,6 +2,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Page, PageProps, viewFunction as PageComponent } from '../page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../common/consts';
+import messageLocalization from '../../../../../localization/message';
+
+jest.mock('../../../../../localization/message', () => ({
+  getFormatter: jest.fn(),
+}));
 
 describe('Small pager pages', () => {
   it('view', () => {
@@ -44,6 +49,7 @@ describe('Small pager pages', () => {
     });
 
     it('label', () => {
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValue((n) => `Page ${n}`);
       const component = new Page({ index: 0 });
       expect(component.label).toBe('Page 1');
     });
