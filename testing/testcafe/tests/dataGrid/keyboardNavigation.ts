@@ -3358,3 +3358,21 @@ test('The last cell should be focused after changing the page size when scrollin
     },
   });
 });
+
+test('Window should not be scrolled after clicking on freespace row (T1104035)', async (t) => {
+  const getWindowScrollTop = ClientFunction(() => window.pageYOffset);
+
+  await t
+    .expect(getWindowScrollTop())
+    .eql(0);
+
+  await ClientFunction(() => { $('.dx-freespace-row td').click(); })();
+
+  await t
+    .expect(getWindowScrollTop())
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ id: 1 }, { id: 2 }],
+  keyExpr: 'id',
+  height: 1500,
+}));
