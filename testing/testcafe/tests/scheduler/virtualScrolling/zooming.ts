@@ -46,15 +46,18 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
       await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping-scaling.png`),
     ).ok();
 
-    await scrollTo(scrollConfig[i].firstDate, { resourceId: 7 });
-
-    // NOTE: waiting for async scrollable
-    await t
-      .wait(100);
+    await scrollTo(scrollConfig[i].firstDate, { resourceId: 6 });
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-horizontal-grouping-scaling.png`),
     ).ok();
+
+    await scrollTo(scrollConfig[i].firstDate, { resourceId: 7 });
+
+    const lastGroupCellIndex = await scheduler.headerPanel.groupCells.count - 1;
+    await t
+      .expect(scheduler.headerPanel.groupCells.nth(lastGroupCellIndex).textContent)
+      .eql('Resource 7');
   }
 
   await t.expect(compareResults.isValid())

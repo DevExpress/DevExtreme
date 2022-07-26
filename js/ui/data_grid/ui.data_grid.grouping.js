@@ -16,6 +16,7 @@ const DATAGRID_GROUP_PANEL_CLASS = 'dx-datagrid-group-panel';
 const DATAGRID_GROUP_PANEL_MESSAGE_CLASS = 'dx-group-panel-message';
 const DATAGRID_GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
 const DATAGRID_GROUP_PANEL_LABEL_CLASS = 'dx-toolbar-label';
+const DATAGRID_GROUP_PANEL_CONTAINER_CLASS = 'dx-toolbar-item';
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
@@ -460,6 +461,7 @@ export const GroupingHeaderPanelExtender = (function() {
                     .text(groupPanelOptions.emptyPanelText)
                     .appendTo($groupPanel);
 
+                $groupPanel.closest('.' + DATAGRID_GROUP_PANEL_CONTAINER_CLASS).addClass(DATAGRID_GROUP_PANEL_LABEL_CLASS);
                 $groupPanel.closest('.' + DATAGRID_GROUP_PANEL_LABEL_CLASS).css('maxWidth', 'none');
                 that.updateToolbarDimensions();
             }

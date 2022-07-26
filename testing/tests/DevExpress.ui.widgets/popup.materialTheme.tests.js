@@ -27,11 +27,12 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
 executeAsyncMock.setup();
 
 QUnit.module('popover content size', {
     beforeEach: function() {
+        viewPort($('#qunit-fixture').addClass('dx-viewport'));
+
         fx.off = true;
     },
     afterEach: function() {
@@ -60,6 +61,8 @@ QUnit.module('popover content size', {
 
 QUnit.module('popup', {
     beforeEach: function() {
+        viewPort($('#qunit-fixture').addClass('dx-viewport'));
+
         fx.off = true;
     },
     afterEach: function() {

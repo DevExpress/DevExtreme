@@ -8132,6 +8132,7 @@ declare module DevExpress.ui {
       dropFeedbackMode?: DevExpress.common.DragHighlight;
       /**
        * [descr:GridBaseOptions.rowDragging.filter]
+       * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
        */
       filter?: string;
       /**

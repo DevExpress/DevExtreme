@@ -2431,6 +2431,43 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
     });
 
+    // T1103389
+    QUnit.test('Lookup select box should not show only relevant values for unbound columns', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            calculateCellValue() {
+                return 1;
+            },
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [ { }, { } ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+
+        dropDown1.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list:eq(0)');
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+    });
+
     // T1099516
     QUnit.test('Lookup select box should have actual values after dataSource reload', function(assert) {
         // arrange

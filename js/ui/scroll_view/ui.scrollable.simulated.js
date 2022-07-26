@@ -746,7 +746,7 @@ export const SimulatedStrategy = Class.inherit({
             }
         });
 
-        if(!this._$container.is(domAdapter.getActiveElement())) {
+        if(!this._$container.is(domAdapter.getActiveElement(this._$container.get(0)))) {
             return;
         }
 

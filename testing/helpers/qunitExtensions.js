@@ -159,7 +159,7 @@
     }
 
     function get(selector) {
-        return getRoot().querySelectorAll(selector);
+        return typeof selector === 'string' && selector ? getRoot().querySelectorAll(selector) : selector;
     }
 
     function isInShadowDomMode() {
@@ -174,16 +174,43 @@
         }
 
         const shadowContainer = document.createElement('div');
-        shadowContainer.part = 'shadow';
 
+        const style = document.createElement('style');
+
+        style.innerHTML = `
+            :host {
+                position: static!important;
+                top: 0!important;
+                left: 0!important;
+            }
+            :scope > div {
+                position: absolute;
+                top: -10000px;
+                left: -10000px;
+                width: 1000px;
+                height: 1000px;
+            }
+            
+            :scope > div.qunit-fixture-visible {
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+
+            :scope > div.qunit-fixture-visible * {
+            }
+        `;
+
+        root.shadowRoot.appendChild(style);
         root.shadowRoot.appendChild(shadowContainer);
     }
 
     function clearShadowRootTree() {
         const container = get(':scope > div');
+        const style = get(':scope > style');
 
-        jQuery(container).empty();
         jQuery(container).remove();
+        jQuery(style).remove();
     }
 
     let jQueryInit;
