@@ -233,6 +233,7 @@ export const masterDetailModule = {
                     } else {
                         if(masterDataGrid.option('scrolling.useNative') === true) {
                             masterDataGrid.updateDimensions().done(() => d.resolve(true));
+                            return;
                         }
 
                         const scrollable = masterDataGrid.getScrollable();
