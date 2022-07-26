@@ -384,7 +384,7 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
     let backgroundColorEditorInstance;
     const $table = $element;
     const editorInstance = module.editorInstance;
-    const startTableWidth = isDefined(formats.tableWidth) ? parseInt(formats.tableWidth) : getOuterWidth($table);
+    const startTableWidth = parseInt(formats.tableWidth) || getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
