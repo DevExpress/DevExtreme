@@ -10,6 +10,7 @@ import {
   Consumer,
   RefObject,
   Mutable,
+  Slot,
 } from '@devextreme-generator/declarations';
 import { renderTemplate, hasTemplate } from '@devextreme/runtime/declarations';
 import type DomComponent from '../../../core/dom_component';
@@ -37,17 +38,14 @@ const normalizeProps = (props: ComponentProps): ComponentProps => Object
 
 export const viewFunction = ({
   widgetRef,
-  props: { componentProps: { className } },
-  restAttributes: {
-    children,
-    ...rest
-  } = { },
+  props: { componentProps: { className }, children },
+  restAttributes,
 }: DomComponentWrapper): JSX.Element => (
   <div
     ref={widgetRef}
     className={className}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...rest}
+    {...restAttributes}
   >
     {children}
   </div>
@@ -63,6 +61,8 @@ export class DomComponentWrapperProps {
   @OneWay() templateNames!: string[];
 
   @OneWay() componentProps!: ComponentProps;
+
+  @Slot() children?: JSX.Element;
 }
 
 @Component({
