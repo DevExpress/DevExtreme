@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
 import { grep } from '../../core/utils/common';
@@ -278,8 +277,8 @@ const View = ModuleItem.inherit({
         this.isResizing = false;
     },
 
-    focus: function() {
-        eventsEngine.trigger(this.element(), 'focus');
+    focus: function(preventScroll) {
+        this.element().focus({ preventScroll });
     }
 });
 
