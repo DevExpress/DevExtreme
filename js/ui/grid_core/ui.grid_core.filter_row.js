@@ -690,11 +690,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             }
 
             columns.forEach((column, index) => {
-                if(!column.lookup) {
-                    return;
-                }
-
-                if(column.calculateCellValue !== column.defaultCalculateCellValue) {
+                if(!column.lookup || column.calculateCellValue !== column.defaultCalculateCellValue) {
                     return;
                 }
 
