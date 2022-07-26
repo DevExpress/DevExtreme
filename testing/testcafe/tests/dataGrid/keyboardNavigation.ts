@@ -3366,7 +3366,7 @@ test('Window should not be scrolled after clicking on freespace row (T1104035)',
     .expect(getWindowScrollTop())
     .eql(0);
 
-  await ClientFunction(() => { $('.dx-freespace-row td').click(); })();
+  await ClientFunction(() => { $('.dx-freespace-row td').trigger('dxpointerdown'); })();
 
   await t
     .expect(getWindowScrollTop())
