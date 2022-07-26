@@ -584,6 +584,10 @@ export default {
     getWrappedLookupDataSource(column, dataSource, filter) {
         const lookupDataSourceOptions = this.normalizeLookupDataSource(column.lookup);
 
+        if(column.calculateCellValue !== column.defaultCalculateCellValue) {
+            return lookupDataSourceOptions;
+        }
+
         const hasLookupOptimization = column.displayField && isString(column.displayField);
         const group = normalizeGroupingLoadOptions(
             hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
