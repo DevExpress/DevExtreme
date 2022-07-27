@@ -47,7 +47,6 @@ function run_test_impl {
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        echo foo >> /etc/hosts
         ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
         echo "$TZ" > /etc/timezone
         date
