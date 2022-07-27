@@ -91,7 +91,7 @@ function run_test_impl {
     case "$BROWSER" in
 
         "firefox")
-            kill -9 $(ps -x | grep firefox | awk '{print $1}')
+            kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
 
             local profile_path="/firefox-profile" 
             [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
