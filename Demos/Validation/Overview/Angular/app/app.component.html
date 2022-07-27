@@ -106,7 +106,10 @@
     <div class="dx-field">
       <div class="dx-field-label">Country</div>
       <div class="dx-field-value">
-        <dx-select-box [dataSource]="countries">
+        <dx-select-box
+          [dataSource]="countries"
+          validationMessagePosition="left"
+        >
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -119,7 +122,7 @@
     <div class="dx-field">
       <div class="dx-field-label">City</div>
       <div class="dx-field-value">
-        <dx-text-box>
+        <dx-text-box validationMessagePosition="left">
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -142,7 +145,7 @@
     <div class="dx-field">
       <div class="dx-field-label">Address</div>
       <div class="dx-field-value">
-        <dx-text-box>
+        <dx-text-box validationMessagePosition="left">
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -159,6 +162,7 @@
           mask="+1 (X00) 000-0000"
           [maskRules]="phoneRules"
           maskInvalidMessage="The phone must have a correct USA phone format"
+          validationMessagePosition="left"
         >
           <dx-validator>
             <dxi-validation-rule

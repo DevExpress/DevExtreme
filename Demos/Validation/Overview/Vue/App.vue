@@ -90,7 +90,10 @@
       <div class="dx-field">
         <div class="dx-field-label">Country</div>
         <div class="dx-field-value">
-          <DxSelectBox :data-source="countries">
+          <DxSelectBox
+            :data-source="countries"
+            validation-message-position="left"
+          >
             <DxValidator>
               <DxRequiredRule message="Country is required"/>
             </DxValidator>
@@ -100,7 +103,7 @@
       <div class="dx-field">
         <div class="dx-field-label">City</div>
         <div class="dx-field-value">
-          <DxTextBox>
+          <DxTextBox validation-message-position="left">
             <DxValidator>
               <DxRequiredRule message="City is required"/>
               <DxPatternRule
@@ -118,7 +121,7 @@
       <div class="dx-field">
         <div class="dx-field-label">Address</div>
         <div class="dx-field-value">
-          <DxTextBox>
+          <DxTextBox validation-message-position="left">
             <DxValidator>
               <DxRequiredRule message="Address is required"/>
             </DxValidator>
@@ -132,6 +135,7 @@
             :mask-rules="phoneRules"
             mask="+1 (X00) 000-0000"
             mask-invalid-message="The phone must have a correct USA phone format"
+            validation-message-position="left"
           >
             <DxValidator>
               <DxPatternRule

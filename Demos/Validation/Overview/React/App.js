@@ -114,7 +114,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Country</div>
             <div className="dx-field-value">
-              <SelectBox dataSource={this.countries}>
+              <SelectBox dataSource={this.countries} validationMessagePosition="left">
                 <Validator>
                   <RequiredRule message="Country is required" />
                 </Validator>
@@ -124,7 +124,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">City</div>
             <div className="dx-field-value">
-              <TextBox>
+              <TextBox validationMessagePosition="left">
                 <Validator>
                   <RequiredRule message="City is required" />
                   <PatternRule message="Do not use digits in the City name" pattern={this.cityPattern} />
@@ -136,7 +136,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Address</div>
             <div className="dx-field-value">
-              <TextBox>
+              <TextBox validationMessagePosition="left">
                 <Validator>
                   <RequiredRule message="Address is required" />
                 </Validator>
@@ -149,7 +149,8 @@ class App extends React.Component {
               <TextBox
                 mask="+1 (X00) 000-0000"
                 maskRules={this.phoneRules}
-                maskInvalidMessage="The phone must have a correct USA phone format">
+                maskInvalidMessage="The phone must have a correct USA phone format"
+                validationMessagePosition="left">
                 <Validator>
                   <PatternRule message="The phone must have a correct USA phone format" pattern={this.phonePattern} />
                 </Validator>

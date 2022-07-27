@@ -92,6 +92,7 @@ $(() => {
 
   $('#country-validation').dxSelectBox({
     dataSource: countries,
+    validationMessagePosition: 'left',
   }).dxValidator({
     validationRules: [{
       type: 'required',
@@ -99,7 +100,9 @@ $(() => {
     }],
   });
 
-  $('#city-validation').dxTextBox({ })
+  $('#city-validation').dxTextBox({
+    validationMessagePosition: 'left',
+  })
     .dxValidator({
       validationRules: [{
         type: 'required',
@@ -115,7 +118,9 @@ $(() => {
       }],
     });
 
-  $('#address-validation').dxTextBox({ })
+  $('#address-validation').dxTextBox({
+    validationMessagePosition: 'left',
+  })
     .dxValidator({
       validationRules: [{
         type: 'required',
@@ -129,6 +134,7 @@ $(() => {
       X: /[02-9]/,
     },
     maskInvalidMessage: 'The phone must have a correct USA phone format',
+    validationMessagePosition: 'left',
   }).dxValidator({
     validationRules: [{
       type: 'pattern',
