@@ -137,15 +137,15 @@ jobs:
         '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
         '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
 
-    - name: Update apt
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        sudo apt-get update
+#    - name: Update apt
+#      if: steps.last_run_status.outputs.last_run_status != 'success'
+#      run: |
+#        sudo apt-get update
 
-    - name: Setup utils
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+#    - name: Setup utils
+#      if: steps.last_run_status.outputs.last_run_status != 'success'
+#      run: |
+#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Get sources
       if: steps.last_run_status.outputs.last_run_status != 'success'
