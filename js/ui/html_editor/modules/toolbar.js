@@ -334,9 +334,7 @@ if(Quill) {
                 }
             };
 
-            const multilineItem = this.isMultilineMode() ? { location: 'before', locateInMenu: 'never' } : {};
-
-            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.name), item, baseItem, multilineItem);
+            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.name), item, baseItem);
         }
 
         _getDefaultItemsConfig() {

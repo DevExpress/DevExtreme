@@ -1,4 +1,4 @@
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import Form from '../form';
 import '../tag_box';
 import '../radio_group';

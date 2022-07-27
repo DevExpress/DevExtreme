@@ -905,12 +905,12 @@ QUnit.module('Drawer behavior', () => {
 QUnit.module('Drawer view template', () => {
 
     function getNestedElements() {
-        const wrapperElement = document.querySelectorAll(`.${DRAWER_WRAPPER_CLASS}`);
-        const panelElement = document.querySelectorAll(`.${DRAWER_PANEL_CONTENT_CLASS}`);
-        const viewContentElement = document.querySelectorAll(`.${DRAWER_VIEW_CONTENT_CLASS}`);
-        const shaderElement = document.querySelectorAll(`.${DRAWER_SHADER_CLASS}`);
-        const firstViewContentNestedElement = document.querySelectorAll('#button');
-        const secondViewContentNestedElement = document.querySelectorAll('#additionalContent');
+        const wrapperElement = $(`.${DRAWER_WRAPPER_CLASS}`);
+        const panelElement = $(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const viewContentElement = $(`.${DRAWER_VIEW_CONTENT_CLASS}`);
+        const shaderElement = $(`.${DRAWER_SHADER_CLASS}`);
+        const firstViewContentNestedElement = $('#button');
+        const secondViewContentNestedElement = $('#additionalContent');
 
         return {
             wrapperElement,
@@ -940,8 +940,8 @@ QUnit.module('Drawer view template', () => {
 
     QUnit.test('Drawer + template in markup with button -> repaint() method does not duplicate the content(T864419)', function(assert) {
         const nestedButtonClickHandler = sinon.stub();
-        const drawerElement = document.querySelector('#drawerWithContent');
-        let buttonElement = drawerElement.querySelector('#button');
+        const drawerElement = $('#drawerWithContent').get(0);
+        let buttonElement = $('#button').get(0);
 
         new Button(buttonElement, {
             text: 'innerButton',

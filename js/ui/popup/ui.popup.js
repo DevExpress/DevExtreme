@@ -380,7 +380,7 @@ const Popup = Overlay.inherit({
             this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
                 model: {
-                    widget: 'dxToolbarBase',
+                    widget: this._getToolbarName(),
                     options: toolbarOptions
                 }
             });
@@ -395,6 +395,10 @@ const Popup = Overlay.inherit({
             }
             return $container;
         }
+    },
+
+    _getToolbarName: function() {
+        return 'dxToolbarBase';
     },
 
     _renderVisibilityAnimate: function(visible) {

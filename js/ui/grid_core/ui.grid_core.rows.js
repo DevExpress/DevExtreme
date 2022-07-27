@@ -431,6 +431,8 @@ export const rowsModule = {
                 },
 
                 _getRowsHeight: function($tableElement) {
+                    $tableElement = $tableElement || this._tableElement;
+
                     const $rowElements = $tableElement.children('tbody').children().not('.dx-virtual-row').not('.' + FREE_SPACE_CLASS);
 
                     return $rowElements.toArray().reduce(function(sum, row) {

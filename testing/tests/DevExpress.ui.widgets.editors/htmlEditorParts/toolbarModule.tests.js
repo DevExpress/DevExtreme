@@ -1337,22 +1337,6 @@ testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
         assert.ok(isHeightIncreased, 'Toolbar height increased');
     });
 
-    test('The toolbar with multiline mode overwrites item options affecting adaptive menu', function(assert) {
-        this.options.items = [
-            { widget: 'dxButton', locateInMenu: 'always', location: 'center' },
-            { widget: 'dxButton', locateInMenu: 'auto', location: 'before' },
-            { widget: 'dxButton' }
-        ];
-        const toolbar = new Toolbar(this.quillMock, this.options);
-
-        const toolbarItems = toolbar.toolbarInstance.option('items');
-
-        toolbarItems.forEach(({ locateInMenu, location }) => {
-            assert.strictEqual(locateInMenu, 'never', 'Multiline toolbar should not move items to the adaptive menu');
-            assert.strictEqual(location, 'before', 'Multiline toolbar operates with "before" location only');
-        });
-    });
-
     test('check separator item height', function(assert) {
         this.options.multiline = false;
         this.options.items = ['separator'];

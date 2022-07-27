@@ -2,9 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as PopoverView, PopoverProps, Popover } from '../popover';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
-import LegacyPopover from '../../../../ui/popover';
+import LegacyPopover from '../../../../ui/popover/ui.popover';
 
-jest.mock('../../../../ui/popover', () => jest.fn());
+jest.mock('../../../../ui/popover/ui.popover', () => jest.fn());
 
 describe('Popover', () => {
   describe('View', () => {

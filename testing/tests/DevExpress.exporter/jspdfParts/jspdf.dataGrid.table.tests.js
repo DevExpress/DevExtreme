@@ -1063,7 +1063,6 @@ QUnit.module('Table', moduleConfig, () => {
     });
 
     QUnit.test('3 cols - 2 rows - hide left border of [1,1] cell', function(assert) {
-        // TODO:
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -1126,7 +1125,6 @@ QUnit.module('Table', moduleConfig, () => {
     });
 
     QUnit.test('3 cols - 2 rows - hide right border of [1,1] cell', function(assert) {
-        // TODO:
         const done = assert.async();
         const doc = createMockPdfDoc();
 

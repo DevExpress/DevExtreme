@@ -5048,6 +5048,12 @@ declare module DevExpress.ui {
      * [descr:dxAccordionItem.title]
      */
     title?: string;
+    /**
+     * [descr:dxAccordionItem.titleTemplate]
+     */
+    titleTemplate?:
+      | DevExpress.core.template
+      | (() => string | DevExpress.core.UserDefinedElement);
   }
   /**
    * @deprecated use Properties instead
@@ -8126,6 +8132,7 @@ declare module DevExpress.ui {
       dropFeedbackMode?: DevExpress.common.DragHighlight;
       /**
        * [descr:GridBaseOptions.rowDragging.filter]
+       * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
        */
       filter?: string;
       /**
@@ -21852,6 +21859,10 @@ declare module DevExpress.ui {
      * [descr:dxToolbarOptions.items]
      */
     items?: Array<TItem>;
+    /**
+     * [descr:dxToolbarOptions.multiline]
+     */
+    multiline?: boolean;
     /**
      * [descr:dxToolbarOptions.menuItemTemplate]
      */

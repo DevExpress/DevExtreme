@@ -9,7 +9,7 @@ import { contains } from '../../core/utils/dom';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
 import animationPosition from '../../animation/position';
 import devices from '../../core/devices';
@@ -51,6 +51,8 @@ const ACTIONS = [
 ];
 const LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST];
 const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
+
+const window = getWindow();
 
 class ContextMenu extends MenuBase {
     getShowEvent(showEventOption) {
@@ -503,7 +505,8 @@ class ContextMenu extends MenuBase {
             width: 'auto',
             onShown: this._overlayShownActionHandler.bind(this),
             onHiding: this._overlayHidingActionHandler.bind(this),
-            onHidden: this._overlayHiddenActionHandler.bind(this)
+            onHidden: this._overlayHiddenActionHandler.bind(this),
+            visualContainer: window
         };
 
         return overlayOptions;

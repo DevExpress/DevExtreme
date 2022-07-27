@@ -9,7 +9,7 @@ import messageLocalization from '../../localization/message';
 import { when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import TreeView from '../tree_view';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { normalizeKeyName } from '../../events/utils/index';

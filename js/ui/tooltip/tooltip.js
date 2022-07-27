@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import Popover from '../popover';
+import Popover from '../popover/ui.popover';
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 import { isWindow } from '../../core/utils/type';

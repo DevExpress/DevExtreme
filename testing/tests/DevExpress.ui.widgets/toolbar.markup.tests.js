@@ -431,11 +431,4 @@ QUnit.module('default template', () => {
         assert.equal(tabs.find('.dx-tab').length, 1);
         assert.equal($.trim(tabs.text()), 'test');
     });
-
-    test('template should be rendered correctly with dropDownMenu', function(assert) {
-        const $content = prepareItemTest({ widget: 'dxDropDownMenu', options: { items: [{ text: 'test' }] } });
-
-        const dropDown = $content.filter('.dx-dropdownmenu');
-        assert.equal(dropDown.length, 1);
-    });
 });

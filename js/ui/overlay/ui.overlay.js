@@ -305,7 +305,7 @@ const Overlay = Widget.inherit({
             this._stopAnimation();
         }
 
-        const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
+        const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target) || contains(window.document, e.target.getRootNode().host);
         const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
         const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
             || contains(this._$content.get(0), e.target));

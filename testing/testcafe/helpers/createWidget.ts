@@ -30,6 +30,7 @@ export type WidgetName =
 'dxChart' |
 'dxMenu' |
 'dxPopup' |
+'dxPopover' |
 'dxSelectBox' |
 'dxButton' |
 'dxTextBox' |
