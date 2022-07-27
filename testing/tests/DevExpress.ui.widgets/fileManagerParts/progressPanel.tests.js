@@ -714,4 +714,27 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         implementationsMap.getWidth = originalFunc;
     });
 
+    test('progress panel image has fixed size (T1103197)', function(assert) {
+        this.fileManager.option('notifications.showPanel', true);
+        this.fileManager.option('customizeThumbnail', () => '../../testing/content/customFileIcon.png');
+        this.clock.tick(400);
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'rendered one operation');
+
+        const details = infos[0].details;
+        assert.equal(details.length, 1, 'one detail item rendered');
+
+        assert.strictEqual(details[0].$image.css('width'), '36px', 'detail item icon has correct width');
+        assert.strictEqual(details[0].$image.css('height'), '36px', 'detail item icon has correct height');
+    });
+
 });
