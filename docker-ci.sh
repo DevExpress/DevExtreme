@@ -19,14 +19,14 @@ function run_ts {
 }
 
 function run_test {
-    iteration=0
+    local i
+    local status
 
-    while [ $iteration -ne 3 ]
-    do
-        iteration=$(($iteration+1))
-        if run_test_impl; then
-            exit 0
-        fi
+    for i in {1..3}; do
+        set +e
+        (set -e; run_test_impl); status=$?
+        set -e
+        [ $status == 0 ] && exit 0
     done
 
     exit 1
