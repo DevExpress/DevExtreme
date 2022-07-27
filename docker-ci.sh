@@ -46,9 +46,8 @@ function run_test_impl {
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
-    echo foo >> /etc/hosts
-
     if [ -n "$TZ" ]; then
+        echo foo >> /etc/hosts
         ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
         echo "$TZ" > /etc/timezone
         date
