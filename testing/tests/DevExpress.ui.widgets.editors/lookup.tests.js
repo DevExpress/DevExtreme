@@ -1021,7 +1021,18 @@ QUnit.module('Lookup', {
         mouse.start().down().move(0, 10).up();
 
         openPopupWithList(firstLookup);
-        assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 2);
+
+        const isInShadowDomMode = $('#qunit-fixture').get(0).getRootNode().host;
+
+        // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
+        // and other is in document
+        if(isInShadowDomMode) {
+            assert.equal(document.querySelectorAll('.' + LIST_ITEM_SELECTED_CLASS).length, 1);
+            assert.equal($('#qunit-fixture').get(0).querySelectorAll('.' + LIST_ITEM_SELECTED_CLASS).length, 1);
+        } else {
+            assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 2);
+        }
+
     });
 
     QUnit.test('regression: dxLookup - incorrect search behavior when \'minSearchLength\' greater than zero', function(assert) {
