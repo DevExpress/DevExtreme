@@ -46,8 +46,9 @@ function run_test_impl {
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
-        sudo dpkg-reconfigure --frontend noninteractive tzdata
+        ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        echo "$TZ" > /etc/timezone
+        date
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
