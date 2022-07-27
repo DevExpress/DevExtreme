@@ -172,10 +172,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Focused row should be visible in virtual scrolling mode', function(assert) {
-        if(devices.real().android) {
-            assert.ok(true, 'It\'s a bug under Android only');
-            return;
-        }
+
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const data = [
