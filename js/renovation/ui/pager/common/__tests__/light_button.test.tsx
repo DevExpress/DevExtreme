@@ -13,7 +13,9 @@ describe('LightButton', () => {
       const widgetRef = createRef();
       const props = {
         widgetRef: widgetRef as any,
-        props: { children: 'text', className: 'class', label: 'label' },
+        props: {
+          children: 'text', className: 'class', label: 'label', tabIndex: 0,
+        },
       } as Partial<LightButton>;
       const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
@@ -26,7 +28,7 @@ describe('LightButton', () => {
     it('should render properly when disabled', () => {
       const props = {
         props: {
-          children: 'text', className: 'disabled class', label: 'label', disabled: true,
+          children: 'text', className: 'disabled class', label: 'label', tabIndex: -1,
         },
       } as Partial<LightButton>;
       const tree = shallow(<LightButtonComponent {...props as any} /> as any);

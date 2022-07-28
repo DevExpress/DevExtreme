@@ -764,39 +764,5 @@ QUnit.module('Pager', {
         // assert
         assert.ok($('.dx-datagrid-pager').hasClass('dx-hidden'), 'pager is not visible');
     });
-
-    // T1104237
-    QUnit.test('Pager\'s Prev/Next buttons should not be tabbable when disabled', function(assert) {
-        // arrange
-        this.options = {
-            pager: {
-                enabled: true,
-                showPageSizeSelector: false,
-                visible: true,
-                showNavigationButtons: true,
-                allowedPageSizes: [1]
-            }
-        };
-
-        this.pagerView.render($('#container'));
-        const $prevButton = $('.dx-prev-button');
-        const $nextButton = $('.dx-next-button');
-
-        this.dataController.pageIndex(0);
-
-        // assert
-        assert.ok($prevButton.hasClass('dx-button-disable'), 'prev Button is Disabled on the first page');
-        assert.notEqual($prevButton.attr('tabIndex'), 0, 'TabIndex of prev Button is not 0');
-        assert.equal($nextButton.attr('tabIndex'), 0, 'TabIndex of next Button is 0');
-
-        // act
-        this.dataController.pageIndex(20);
-        this.clock.tick();
-
-        // assert
-        assert.ok($nextButton.hasClass('dx-button-disable'), 'next Button is Disabled on the last page');
-        assert.equal($prevButton.attr('tabIndex'), 0, 'TabIndex of prev Button is 0');
-        assert.notEqual($nextButton.attr('tabIndex'), 0, 'TabIndex of next Button is not 0');
-    });
 });
 

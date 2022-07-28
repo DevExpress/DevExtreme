@@ -21,19 +21,20 @@ const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
 const PAGER_NEXT_BUTTON_CLASS = 'dx-next-button';
 export const PAGER_BUTTON_DISABLE_CLASS = 'dx-button-disable';
 
-const nextButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`;
-const prevButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
-const nextButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`;
-const prevButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
+const classNames = {
+  nextEnabledClass: `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`,
+  prevEnabledClass: `${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`,
+  nextDisabledClass: `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`,
+  prevDisabledClass: `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`,
+};
+
+const reverseDirections = { next: 'prev', prev: 'next' };
+
 export const viewFunction = ({
   renderPrevButton,
   renderNextButton,
-  prevClassName,
-  canNavigateToPrev,
-  navigateToPrevPage,
-  nextClassName,
-  navigateToNextPage,
-  canNavigateToNext,
+  prevButtonProps,
+  nextButtonProps,
   pageIndexChange,
   props: {
     isLargeDisplayMode,
@@ -46,10 +47,10 @@ export const viewFunction = ({
   <Fragment>
     {renderPrevButton && (
       <LightButton
-        className={prevClassName}
         label="Previous page"
-        disabled={!canNavigateToPrev}
-        onClick={navigateToPrevPage}
+        className={prevButtonProps.className}
+        tabIndex={prevButtonProps.tabIndex}
+        onClick={prevButtonProps.navigateToPage}
       />
     )}
     {isLargeDisplayMode && (
@@ -70,10 +71,10 @@ export const viewFunction = ({
     )}
     {renderNextButton && (
       <LightButton
-        className={nextClassName}
-        disabled={!canNavigateToNext}
         label="Next page"
-        onClick={navigateToNextPage}
+        className={nextButtonProps.className}
+        tabIndex={nextButtonProps.tabIndex}
+        onClick={nextButtonProps.navigateToPage}
       />
     )}
   </Fragment>
@@ -101,6 +102,12 @@ type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
 >
 & PageIndexSelectorProps;
 
+interface DirectionButtonProps {
+  className: string;
+  tabIndex: 0 | -1;
+  navigateToPage: () => void;
+}
+
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
@@ -113,19 +120,26 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
   }
 
   navigateToNextPage(): void {
-    this.navigateToPage(this.getNextDirection());
+    this.navigateToPage(this.getRtlAwareDirection('next'));
   }
 
   navigateToPrevPage(): void {
-    this.navigateToPage(this.getPrevDirection());
+    this.navigateToPage(this.getRtlAwareDirection('prev'));
   }
 
-  private getNextDirection(): Direction {
-    return !this.config?.rtlEnabled ? 'next' : 'prev';
+  private getButtonProps(direction: Direction): DirectionButtonProps {
+    const rtlAwareDirection = this.getRtlAwareDirection(direction);
+    const canNavigate = this.canNavigateTo(rtlAwareDirection);
+    const className = classNames[`${direction}${canNavigate ? 'Enabled' : 'Disabled'}Class`];
+    return {
+      className,
+      tabIndex: canNavigate ? -1 : 0,
+      navigateToPage: direction === 'prev' ? this.navigateToPrevPage : this.navigateToNextPage,
+    };
   }
 
-  private getPrevDirection(): Direction {
-    return !this.config?.rtlEnabled ? 'prev' : 'next';
+  private getRtlAwareDirection(direction: Direction): Direction {
+    return this.config?.rtlEnabled ? reverseDirections[direction] as Direction : direction;
   }
 
   private canNavigateToPage(pageIndex: number): boolean {
@@ -155,23 +169,15 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
     return !isLargeDisplayMode || showNavigationButtons;
   }
 
-  get canNavigateToNext(): boolean {
-    return this.canNavigateTo(this.getNextDirection());
-  }
-
-  get canNavigateToPrev(): boolean {
-    return this.canNavigateTo(this.getPrevDirection());
-  }
-
   get renderNextButton(): boolean {
     return this.renderPrevButton || !this.props.hasKnownLastPage;
   }
 
-  get nextClassName(): string {
-    return this.canNavigateToNext ? nextButtonClassName : nextButtonDisabledClassName;
+  get prevButtonProps(): DirectionButtonProps {
+    return this.getButtonProps('prev');
   }
 
-  get prevClassName(): string {
-    return this.canNavigateToPrev ? prevButtonClassName : prevButtonDisabledClassName;
+  get nextButtonProps(): DirectionButtonProps {
+    return this.getButtonProps('next');
   }
 }
