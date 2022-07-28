@@ -289,6 +289,7 @@ class Gantt extends Widget {
                 const keyGetter = compileGetter(this.option(`${optionName}.keyExpr`));
                 const insertedId = keyGetter(response);
                 callback(insertedId);
+                this._ganttTreeList.saveExpandedKeys();
                 dataOption._reloadDataSource().done(data => {
                     if(isTaskInsert) {
                         this._ganttTreeList.onTaskInserted(insertedId, record.parentId);
@@ -308,6 +309,7 @@ class Gantt extends Widget {
                 this._customFieldsManager.addCustomFieldsDataFromCache(key, data);
             }
             dataOption.update(key, data, () => {
+                this._ganttTreeList.saveExpandedKeys();
                 dataOption._reloadDataSource();
                 this._actionsManager.raiseUpdatedAction(optionName, data, key);
             });
@@ -317,6 +319,7 @@ class Gantt extends Widget {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             dataOption.remove(key, () => {
+                this._ganttTreeList.saveExpandedKeys();
                 dataOption._reloadDataSource();
                 this._actionsManager.raiseDeletedAction(optionName, key, this._mappingHelper.convertCoreToMappedData(optionName, data));
             });
