@@ -277,7 +277,7 @@ const View = ModuleItem.inherit({
     },
 
     focus: function(preventScroll) {
-        this.element().focus({ preventScroll });
+        this.element().get(0).focus({ preventScroll: preventScroll });
     }
 });
 
