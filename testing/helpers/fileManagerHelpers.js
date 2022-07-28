@@ -99,7 +99,8 @@ export const Consts = {
     SCROLLABLE_CONTAINER_ClASS: 'dx-scrollable-container',
     EDITING_CONTAINER: 'dx-filemanager-editing-container',
     FILE_UPLOADER_INPUT: 'dx-fileuploader-input',
-    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder'
+    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder',
+    OVERLAY_SHADER_CLASS: 'dx-overlay-shader'
 };
 const showMoreButtonText = '\u22EE';
 
@@ -409,6 +410,10 @@ export class FileManagerWrapper {
             .find(`td:nth-child(${columnIndex})`)
             .text()
             .replace(showMoreButtonText, '');
+    }
+
+    getDetailsOverlayShader() {
+        return this.getDetailsItemList().find(`.${Consts.OVERLAY_SHADER_CLASS}`);
     }
 
     getSelectAllCheckBox() {

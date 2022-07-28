@@ -1451,6 +1451,42 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'NavPane current folder text is correct');
     });
+
+    test('There must be no errors on fast navigation details view (T1103086)', function(assert) {
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'r'
+            }),
+            itemView: {
+                mode: 'details'
+            },
+            currentPath: 'Folder 3'
+        });
+        this.clock.tick(3 * operationDelay);
+
+        this.wrapper.getFolderNode(1).trigger('dxclick');
+        this.clock.tick(2 * operationDelay);
+        this.wrapper.getFolderToggle(1).trigger('dxclick');
+        this.clock.tick(1);
+        this.wrapper.getFolderNode(2).trigger('dxclick');
+        this.clock.tick(1);
+
+        assert.ok(this.wrapper.getDetailsOverlayShader().is(':visible'), 'load panel shader is visible');
+
+        this.clock.tick(2 * operationDelay);
+
+        const currentPath = this.fileManager.option('currentPath');
+        const currentPathKeys = this.fileManager.option('currentPathKeys');
+
+        assert.strictEqual(currentPath, 'Folder 1/Folder 1.1', 'Current path is correct');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1/Folder 1.1', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'Folder 1/Folder 1.1', 'Current directory is the target one');
+        assert.strictEqual(this.wrapper.getFolderNodes().length, 6, 'NavPane folder nodes count is correct');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'NavPane current folder text is correct');
+    });
 });
 
 QUnit.module('initial navigation with error (T1085224)', moduleConfig_T1085224, () => {
