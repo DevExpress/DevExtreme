@@ -1946,19 +1946,20 @@ export const keyboardNavigationModule = {
                 _rowClick: function(e) {
                     const editRowIndex = this.getController('editing').getEditRowIndex();
                     const keyboardController = this.getController('keyboardNavigation');
+                    const isKeyboardEnabled = keyboardController.isKeyboardEnabled();
 
                     if(editRowIndex === e.rowIndex) {
                         keyboardController.setCellFocusType();
                     }
 
-                    const needTriggerPointerEventHandler = isMobile() && this.option('focusedRowEnabled');
+                    const needTriggerPointerEventHandler = (isMobile() || !isKeyboardEnabled) && this.option('focusedRowEnabled');
                     if(needTriggerPointerEventHandler) {
-                        this._triggerPointerDownEventHandler(e);
+                        this._triggerPointerDownEventHandler(e, !isKeyboardEnabled);
                     }
 
                     this.callBase.apply(this, arguments);
                 },
-                _triggerPointerDownEventHandler: function(e) {
+                _triggerPointerDownEventHandler: function(e, force) {
                     const originalEvent = e.event.originalEvent;
                     if(originalEvent) {
                         const keyboardController = this.getController('keyboardNavigation');
@@ -1967,7 +1968,7 @@ export const keyboardNavigationModule = {
                         const column = this.getController('columns').getVisibleColumns()[columnIndex];
                         const row = this.getController('data').items()[e.rowIndex];
 
-                        if(keyboardController._isAllowEditing(row, column)) {
+                        if(keyboardController._isAllowEditing(row, column) || force) {
                             const eventArgs = createEvent(originalEvent, { currentTarget: originalEvent.target });
                             keyboardController._pointerEventHandler(eventArgs);
                         }
