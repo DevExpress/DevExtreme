@@ -1566,11 +1566,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 allowEditing: false,
             }, 'field']
         }).dxDataGrid('instance');
+        const $cellElement = $(dataGrid.getCellElement(0, 0));
 
         // act
-        $(dataGrid.getCellElement(0, 0)).trigger({
-            type: 'click',
-            originalEvent: $.Event('click')
+        $cellElement.trigger({
+            type: 'dxclick',
+            originalEvent: $.Event('dxclick', { target: $cellElement })
         });
 
         // assert
