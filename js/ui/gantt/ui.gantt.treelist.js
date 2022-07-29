@@ -44,7 +44,8 @@ export class GanttTreeList {
             onRowPrepared: (e) => { this._onRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onContextMenuPreparing(e); },
             onRowClick: (e) => { this.onRowClick(e); },
-            onRowDblClick: (e) => { this.onRowDblClick(e); }
+            onRowDblClick: (e) => { this.onRowDblClick(e); },
+            onNodesInitialized: (e) => { this._onNodesInitialized(e); },
         });
 
         return this._treeList;
@@ -162,14 +163,12 @@ export class GanttTreeList {
     }
 
     updateDataSource(data, forceUpdate = false, forceCustomData = false) {
-        const expandedRowKeys = this.getOption('expandedRowKeys');
         if(!this._skipUpdateTreeListDataSource() || forceUpdate) {
             this.setDataSource(data);
         } else if(forceCustomData) {
             const data = this._treeList.option('dataSource');
             this._gantt._onParentTasksRecalculated(data);
         }
-        this.setOption('expandedRowKeys', expandedRowKeys);
     }
     setDataSource(data) {
         this.setOption('dataSource', this.createDataSource(data));
@@ -185,6 +184,15 @@ export class GanttTreeList {
     onRowDblClick(e) {
         if(this._gantt._actionsManager.raiseTaskDblClickAction(e.key, e.event)) {
             this._gantt._ganttView._ganttViewCore.showTaskEditDialog();
+        }
+    }
+    saveExpandedKeys() {
+        this._savedExpandedKeys = this.getOption('expandedRowKeys');
+    }
+    _onNodesInitialized(e) {
+        if(this._savedExpandedKeys) {
+            this.setOption('expandedRowKeys', this._savedExpandedKeys);
+            delete this._savedExpandedKeys;
         }
     }
 
