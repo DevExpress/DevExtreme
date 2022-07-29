@@ -50,7 +50,7 @@ export const viewFunction = ({
         label="Previous page"
         className={prevButtonProps.className}
         tabIndex={prevButtonProps.tabIndex}
-        onClick={prevButtonProps.onClick}
+        onClick={prevButtonProps.navigate}
       />
     )}
     {isLargeDisplayMode && (
@@ -74,7 +74,7 @@ export const viewFunction = ({
         label="Next page"
         className={nextButtonProps.className}
         tabIndex={nextButtonProps.tabIndex}
-        onClick={nextButtonProps.onClick}
+        onClick={nextButtonProps.navigate}
       />
     )}
   </Fragment>
@@ -102,8 +102,7 @@ type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
 >
 & PageIndexSelectorProps;
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type NavigationButtonProps = Pick<LightButtonProps, 'className' | 'tabIndex' | 'onClick'>;
+interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > {navigate: LightButtonProps['onClick']}
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 'pageIndexChange'>() {
@@ -123,7 +122,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
     return {
       className,
       tabIndex: canNavigate ? 0 : -1,
-      onClick: (): void => this.navigateToPage(rtlAwareDirection),
+      navigate: (): void => this.navigateToPage(rtlAwareDirection),
     };
   }
 
