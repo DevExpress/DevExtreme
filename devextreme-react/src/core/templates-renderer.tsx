@@ -6,7 +6,6 @@ import { TemplatesStore } from './templates-store';
 
 class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesStore }> {
   private updateScheduled = false;
-
   private mounted = false;
 
   componentDidMount(): void {
@@ -15,6 +14,10 @@ class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesS
 
   componentWillUnmount(): void {
     this.mounted = false;
+  }
+
+  forceUpdateCallback = () => {
+    this.updateScheduled = false;
   }
 
   public scheduleUpdate(useDeferUpdate: boolean): void {
@@ -27,9 +30,8 @@ class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesS
     const updateFunc = useDeferUpdate ? deferUpdate : requestAnimationFrame;
     updateFunc(() => {
       if (this.mounted) {
-        this.forceUpdate();
+        this.forceUpdate(this.forceUpdateCallback);
       }
-
       this.updateScheduled = false;
     });
   }
