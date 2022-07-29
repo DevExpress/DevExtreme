@@ -233,7 +233,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, assert
         const $buttons = pagerWrapper.getPagerButtonsElements();
         assert.equal($buttons.length, 2, 'buttons count');
-        $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), -1, `button ${index} tabindex`));
+        $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), 0, `button ${index} tabindex`));
     });
 
     // T892543
