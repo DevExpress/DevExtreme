@@ -7,7 +7,7 @@ import {
   Consumer,
 } from '@devextreme-generator/declarations';
 
-import { LightButton } from '../common/light_button';
+import { LightButton, LightButtonProps } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 import { InternalPagerProps } from '../common/pager_props';
@@ -28,7 +28,7 @@ const classNames = {
   prevDisabledClass: `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`,
 };
 
-const reverseDirections = { next: 'prev', prev: 'next' };
+const reverseDirections: { next: Direction; prev: Direction } = { next: 'prev', prev: 'next' };
 
 export const viewFunction = ({
   renderPrevButton,
@@ -50,7 +50,7 @@ export const viewFunction = ({
         label="Previous page"
         className={prevButtonProps.className}
         tabIndex={prevButtonProps.tabIndex}
-        onClick={prevButtonProps.navigateToPage}
+        onClick={prevButtonProps.onClick}
       />
     )}
     {isLargeDisplayMode && (
@@ -74,7 +74,7 @@ export const viewFunction = ({
         label="Next page"
         className={nextButtonProps.className}
         tabIndex={nextButtonProps.tabIndex}
-        onClick={nextButtonProps.navigateToPage}
+        onClick={nextButtonProps.onClick}
       />
     )}
   </Fragment>
@@ -102,11 +102,8 @@ type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
 >
 & PageIndexSelectorProps;
 
-interface DirectionButtonProps {
-  className: string;
-  tabIndex: 0 | -1;
-  navigateToPage: () => void;
-}
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type NavigationButtonProps = Pick<LightButtonProps, 'className' | 'tabIndex' | 'onClick'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 'pageIndexChange'>() {
@@ -119,27 +116,15 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
     }
   }
 
-  navigateToNextPage(): void {
-    this.navigateToPage(this.getRtlAwareDirection('next'));
-  }
-
-  navigateToPrevPage(): void {
-    this.navigateToPage(this.getRtlAwareDirection('prev'));
-  }
-
-  private getButtonProps(direction: Direction): DirectionButtonProps {
-    const rtlAwareDirection = this.getRtlAwareDirection(direction);
+  private getButtonProps(direction: Direction): NavigationButtonProps {
+    const rtlAwareDirection = this.config?.rtlEnabled ? reverseDirections[direction] : direction;
     const canNavigate = this.canNavigateTo(rtlAwareDirection);
     const className = classNames[`${direction}${canNavigate ? 'Enabled' : 'Disabled'}Class`];
     return {
       className,
       tabIndex: canNavigate ? 0 : -1,
-      navigateToPage: direction === 'prev' ? this.navigateToPrevPage : this.navigateToNextPage,
+      onClick: (): void => this.navigateToPage(rtlAwareDirection),
     };
-  }
-
-  private getRtlAwareDirection(direction: Direction): Direction {
-    return this.config?.rtlEnabled ? reverseDirections[direction] as Direction : direction;
   }
 
   private canNavigateToPage(pageIndex: number): boolean {
@@ -173,11 +158,11 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
     return this.renderPrevButton || !this.props.hasKnownLastPage;
   }
 
-  get prevButtonProps(): DirectionButtonProps {
+  get prevButtonProps(): NavigationButtonProps {
     return this.getButtonProps('prev');
   }
 
-  get nextButtonProps(): DirectionButtonProps {
+  get nextButtonProps(): NavigationButtonProps {
     return this.getButtonProps('next');
   }
 }
