@@ -133,7 +133,7 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 
     const className = classNames[`${direction}${canNavigate ? 'Enabled' : 'Disabled'}Class`];
     return {
       className,
-      tabIndex: canNavigate ? -1 : 0,
+      tabIndex: canNavigate ? 0 : -1,
       navigateToPage: direction === 'prev' ? this.navigateToPrevPage : this.navigateToNextPage,
     };
   }
