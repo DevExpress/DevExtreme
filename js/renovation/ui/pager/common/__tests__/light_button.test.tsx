@@ -13,7 +13,9 @@ describe('LightButton', () => {
       const widgetRef = createRef();
       const props = {
         widgetRef: widgetRef as any,
-        props: { children: 'text', className: 'class', label: 'label' },
+        props: {
+          children: 'text', className: 'class', label: 'label', tabIndex: 0,
+        },
       } as Partial<LightButton>;
       const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
