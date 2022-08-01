@@ -2324,6 +2324,12 @@ export interface ColumnBase<TRowData = any> {
      */
     allowSorting?: boolean;
     /**
+     * @docid GridBaseColumn.defaultCalculateCellValue
+     * @type_function_param1 rowData:object
+     * @public
+     */
+    defaultCalculateCellValue?: ((rowData: any) => any);
+    /**
      * @docid GridBaseColumn.calculateCellValue
      * @type_function_param1 rowData:object
      * @public
@@ -2335,6 +2341,12 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     calculateDisplayValue?: string | ((rowData: TRowData) => any);
+    /**
+     * @docid GridBaseColumn.defaultCalculateFilterExpression
+     * @type_function_return Filter expression
+     * @public
+     */
+    defaultCalculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
      * @type_function_return Filter expression
@@ -2635,6 +2647,12 @@ export interface ColumnLookup {
    * @default undefined
    */
   valueExpr?: string;
+  /**
+   * @docid GridBaseColumn.defaultCalculateCellValue
+   * @type_function_param1 rowData:object
+   * @public
+   */
+  defaultCalculateCellValue?: ((rowData: any) => any);
   /**
    * @docid GridBaseColumn.lookup.calculateCellValue
    * @type_function_param1 rowData:object
