@@ -17,10 +17,16 @@ describe('Page index selector', () => {
     const defaultProps = () => ({
       renderPrevButton: true,
       renderNextButton: true,
-      prevClassName: 'prevClassName',
-      navigateToPrevPage: jest.fn(),
-      nextClassName: 'nextClassName',
-      navigateToNextPage: jest.fn(),
+      prevButtonProps: {
+        className: 'prevClassName',
+        tabIndex: -1,
+        navigate: jest.fn(),
+      },
+      nextButtonProps: {
+        className: 'nextClassName',
+        tabIndex: 0,
+        navigate: jest.fn(),
+      },
       pageIndexChange: jest.fn(),
       props: defaultComponentProps(),
     } as Partial<PageIndexSelector> as PageIndexSelector);
@@ -41,10 +47,10 @@ describe('Page index selector', () => {
         pageIndexChange: props.pageIndexChange,
       });
       expect(prevButton.props()).toEqual({
-        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
+        className: 'prevClassName', label: 'Previous page', onClick: props.prevButtonProps.navigate, tabIndex: -1,
       });
       expect(nextButton.props()).toEqual({
-        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
+        className: 'nextClassName', label: 'Next page', onClick: props.nextButtonProps.navigate, tabIndex: 0,
       });
     });
 
@@ -67,7 +73,7 @@ describe('Page index selector', () => {
         pageIndexChange: props.pageIndexChange,
       });
       expect(nextButton.props()).toEqual({
-        className: 'nextClassName', label: 'Next page', onClick: props.navigateToNextPage,
+        className: 'nextClassName', label: 'Next page', onClick: props.nextButtonProps?.navigate, tabIndex: 0,
       });
     });
 
@@ -84,7 +90,7 @@ describe('Page index selector', () => {
 
       expect(tree.children()).toHaveLength(2);
       expect(prevButton.props()).toEqual({
-        className: 'prevClassName', label: 'Previous page', onClick: props.navigateToPrevPage,
+        className: 'prevClassName', label: 'Previous page', onClick: props.prevButtonProps?.navigate, tabIndex: -1,
       });
       expect(pages.props()).toEqual({
         maxPagesCount: 10,
@@ -167,9 +173,9 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: false };
-      expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
+      expect(component.nextButtonProps.className).toBe('dx-navigate-button dx-next-button');
       component.props.pageIndex = 4;
-      expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
+      expect(component.nextButtonProps.className).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
 
     it('prevClassName, rtlEnabled: false', () => {
@@ -180,9 +186,9 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: false };
-      expect(component.prevClassName).toBe('dx-navigate-button dx-prev-button');
+      expect(component.prevButtonProps.className).toBe('dx-navigate-button dx-prev-button');
       component.props.pageIndex = 0;
-      expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
+      expect(component.prevButtonProps.className).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
 
     it('nextClassName, rtlEnabled: false, hasKnownLastPage = false', () => {
@@ -193,9 +199,9 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: false };
-      expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
+      expect(component.nextButtonProps.className).toBe('dx-navigate-button dx-next-button');
       component.props.pageIndexChange(4);
-      expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
+      expect(component.nextButtonProps.className).toBe('dx-navigate-button dx-next-button');
     });
 
     it('nextClassName, rtlEnabled: true', () => {
@@ -206,9 +212,9 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: true };
-      expect(component.nextClassName).toBe('dx-navigate-button dx-next-button');
+      expect(component.nextButtonProps.className).toBe('dx-navigate-button dx-next-button');
       component.props.pageIndex = 0;
-      expect(component.nextClassName).toBe('dx-button-disable dx-navigate-button dx-next-button');
+      expect(component.nextButtonProps.className).toBe('dx-button-disable dx-navigate-button dx-next-button');
     });
 
     it('prevClassName, rtlEnabled: true', () => {
@@ -219,9 +225,9 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: true };
-      expect(component.prevClassName).toBe('dx-navigate-button dx-prev-button');
+      expect(component.prevButtonProps.className).toBe('dx-navigate-button dx-prev-button');
       component.props.pageIndex = 4;
-      expect(component.prevClassName).toBe('dx-button-disable dx-navigate-button dx-prev-button');
+      expect(component.prevButtonProps.className).toBe('dx-button-disable dx-navigate-button dx-prev-button');
     });
 
     describe('navigateToNextPage', () => {
@@ -232,7 +238,7 @@ describe('Page index selector', () => {
           pageIndexChange: jest.fn(),
         });
         component.config = { rtlEnabled: false };
-        component.navigateToNextPage();
+        component.nextButtonProps.navigate();
         expect(component.props.pageIndexChange).toBeCalledWith(4);
       });
 
@@ -244,7 +250,7 @@ describe('Page index selector', () => {
           pageIndexChange: jest.fn(),
         });
         component.config = { rtlEnabled: false };
-        component.navigateToNextPage();
+        component.nextButtonProps.navigate();
         expect(component.props.pageIndex).toBe(4);
       });
 
@@ -255,7 +261,7 @@ describe('Page index selector', () => {
           pageIndexChange: jest.fn(),
         });
         component.config = { rtlEnabled: true };
-        component.navigateToNextPage();
+        component.nextButtonProps.navigate();
         expect(component.props.pageIndexChange).toBeCalledWith(0);
       });
 
@@ -267,7 +273,7 @@ describe('Page index selector', () => {
           pageIndexChange: jest.fn(),
         });
         component.config = { rtlEnabled: true };
-        component.navigateToNextPage();
+        component.prevButtonProps.navigate();
         expect(component.props.pageIndex).toBe(0);
       });
     });
@@ -280,7 +286,7 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: false };
-      component.navigateToPrevPage();
+      component.prevButtonProps.navigate();
       expect(component.props.pageIndexChange).toBeCalledWith(0);
     });
 
@@ -292,7 +298,7 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: false };
-      component.navigateToPrevPage();
+      component.prevButtonProps.navigate();
       expect(component.props.pageIndex).toBe(0);
     });
 
@@ -306,7 +312,7 @@ describe('Page index selector', () => {
       });
       component.config = { rtlEnabled: false };
       expect(pageIndexChange).not.toBeCalled();
-      component.navigateToPrevPage();
+      component.prevButtonProps.navigate();
       expect(pageIndexChange).not.toBeCalled();
     });
 
@@ -318,7 +324,7 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: true };
-      component.navigateToPrevPage();
+      component.prevButtonProps.navigate();
       expect(component.props.pageIndexChange).toBeCalledWith(4);
     });
 
@@ -330,7 +336,7 @@ describe('Page index selector', () => {
         pageIndexChange: jest.fn(),
       });
       component.config = { rtlEnabled: true };
-      component.navigateToPrevPage();
+      component.prevButtonProps.navigate();
       expect(component.props.pageIndex).toBe(4);
     });
   });

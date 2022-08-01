@@ -335,11 +335,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .expect(pager.hasFocusedState)
     .ok()
     .expect(pager.getPrevNavButton().element.focused)
-    .ok()
-
-    .pressKey('tab')
-    .expect(pager.hasFocusedState)
-    .ok()
+    .notOk()
     .expect(pager.getNavPage('1').element.focused)
     .ok()
 
@@ -384,11 +380,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .expect(pager.hasFocusedState)
     .ok()
     .expect(pager.getPrevNavButton().element.focused)
-    .ok()
-
-    .pressKey('shift+tab')
-    .expect(pager.hasFocusedState)
-    .ok()
+    .notOk()
     .expect(pager.getPageSize(1).element.focused)
     .ok()
 
