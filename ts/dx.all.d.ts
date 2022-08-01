@@ -6487,6 +6487,10 @@ declare module DevExpress.ui {
        */
       allowSorting?: boolean;
       /**
+       * [descr:GridBaseColumn.defaultCalculateCellValue]
+       */
+      defaultCalculateCellValue?: (rowData: any) => any;
+      /**
        * [descr:GridBaseColumn.calculateCellValue]
        */
       calculateCellValue?: (rowData: TRowData) => any;
@@ -6494,6 +6498,14 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
       calculateDisplayValue?: string | ((rowData: TRowData) => any);
+      /**
+       * [descr:GridBaseColumn.defaultCalculateFilterExpression]
+       */
+      defaultCalculateFilterExpression?: (
+        filterValue: any,
+        selectedFilterOperation: string,
+        target: string
+      ) => string | Array<any> | Function;
       /**
        * [descr:GridBaseColumn.calculateFilterExpression]
        */
@@ -6904,6 +6916,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.lookup.valueExpr]
        */
       valueExpr?: string;
+      /**
+       * [descr:GridBaseColumn.defaultCalculateCellValue]
+       */
+      defaultCalculateCellValue?: (rowData: any) => any;
       /**
        * [descr:GridBaseColumn.lookup.calculateCellValue]
        */
