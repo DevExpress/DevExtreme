@@ -555,12 +555,6 @@ $scheduler-month-date-text-padding: 6px;
     width: $scheduler-left-column-width * $scheduler-small-size-factor;
     font-size: $scheduler-small-font-size;
   }
-
-  .dx-scheduler-time-panel-row:first-of-type {
-    td > div {
-      margin-top: 0;
-    }
-  }
 }
 
 .dx-scheduler-time-panel-cell {
