@@ -556,8 +556,7 @@ $scheduler-month-date-text-padding: 6px;
     font-size: $scheduler-small-font-size;
   }
 
-  .dx-scheduler-time-panel-row:first-of-type,
-  .dx-scheduler-virtual-row ~ .dx-scheduler-time-panel-row:nth-child(2) {
+  .dx-scheduler-time-panel-row:first-of-type {
     td > div {
       margin-top: 0;
     }
