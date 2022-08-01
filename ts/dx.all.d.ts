@@ -1552,6 +1552,10 @@ declare module DevExpress.common.grids {
      */
     valueExpr?: string;
     /**
+     * [descr:GridBaseColumn.defaultCalculateCellValue]
+     */
+    defaultCalculateCellValue?: (rowData: any) => any;
+    /**
      * [descr:GridBaseColumn.lookup.calculateCellValue]
      */
     calculateCellValue?: (rowData: any) => any;
@@ -6554,13 +6558,25 @@ declare module DevExpress.ui {
        */
       allowSorting?: boolean;
       /**
+       * [descr:GridBaseColumn.defaultCalculateCellValue]
+       */
+      defaultCalculateCellValue?: (rowData: any) => any;
+      /**
        * [descr:GridBaseColumn.calculateCellValue]
        */
-      calculateCellValue?: (rowData: TRowData) => any;
+      calculateCellValue?: (rowData: any) => any;
       /**
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
       calculateDisplayValue?: string | ((rowData: TRowData) => any);
+      /**
+       * [descr:GridBaseColumn.defaultCalculateFilterExpression]
+       */
+      defaultCalculateFilterExpression?: (
+        filterValue: any,
+        selectedFilterOperation: string,
+        target: string
+      ) => string | Array<any> | Function;
       /**
        * [descr:GridBaseColumn.calculateFilterExpression]
        */
