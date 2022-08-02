@@ -27,21 +27,19 @@ const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
 export const viewFunction = ({
   domComponentWrapperRef,
-  componentProps,
+  props,
   restAttributes,
 }: Tooltip): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyTooltip}
-    componentProps={componentProps.restProps}
+    componentProps={props}
     templateNames={[
       'contentTemplate',
     ]}
     ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
-  >
-    {componentProps.children}
-  </DomComponentWrapper>
+  />
 );
 
 @ComponentBindings()
@@ -144,14 +142,5 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });
-  }
-
-  /* istanbul ignore next: WA for Angular */
-  get componentProps(): { children?: TooltipProps['children']; restProps: Partial<TooltipProps> } {
-    const { children, ...restProps } = this.props;
-    return {
-      children,
-      restProps,
-    };
   }
 }
