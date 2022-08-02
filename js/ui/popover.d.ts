@@ -66,7 +66,7 @@ export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
     /**
      * @docid
-     * @default { show: { type: "fade", from: 0, to: 1 }, hide: { type: "fade", to: 0 } }
+     * @default { show: { type: "fade", from: 0, to: 1 }, hide: { type: "fade", from: 1, to: 0 } }
      * @public
      * @type object
      */

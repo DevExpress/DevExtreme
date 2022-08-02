@@ -73,6 +73,7 @@ const Toast = Overlay.inherit({
                 hide: {
                     type: 'fade',
                     duration: 400,
+                    from: 1,
                     to: 0
                 }
             },
