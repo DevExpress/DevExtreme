@@ -71,10 +71,10 @@ export class TimePanelDataGenerator {
             bottomVirtualRowHeight,
             isGroupedAllDayPanel,
             isVerticalGrouping,
-            isAllDayPanelVisible,
+            allDayPanelVisible,
         } = options;
 
-        const indexDifference = isVerticalGrouping || !isAllDayPanelVisible ? 0 : 1;
+        const indexDifference = isVerticalGrouping || !allDayPanelVisible ? 0 : 1;
         const correctedStartRowIndex = startRowIndex + indexDifference;
 
         const displayedRowCount = getDisplayedRowCount(rowCount, completeTimePanelMap);

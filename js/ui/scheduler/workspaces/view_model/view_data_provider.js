@@ -100,7 +100,7 @@ export default class ViewDataProvider {
             groups,
             groupOrientation,
             groupByDate,
-            isAllDayPanelVisible,
+            allDayPanelVisible,
             ...restOptions
         } = renderOptions;
 
@@ -111,11 +111,11 @@ export default class ViewDataProvider {
             isHorizontalGrouping: isHorizontalGroupingApplied(groups, groupOrientation),
             isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
             isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
-                groups, groupOrientation, isAllDayPanelVisible,
+                groups, groupOrientation, allDayPanelVisible,
             ),
             groups,
             groupOrientation,
-            isAllDayPanelVisible,
+            allDayPanelVisible,
         };
     }
 
@@ -197,7 +197,7 @@ export default class ViewDataProvider {
 
     getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
         const rowsPerGroup = this._getRowCountWithAllDayRows();
-        const isShowAllDayPanel = this._options.isAllDayPanelVisible;
+        const allDayPanelVisible = this._options.allDayPanelVisible;
 
         const firstRowInGroup = this._options.isVerticalGrouping
             ? groupIndex * rowsPerGroup
@@ -205,7 +205,7 @@ export default class ViewDataProvider {
         const lastRowInGroup = this._options.isVerticalGrouping
             ? (groupIndex + 1) * rowsPerGroup - 1
             : rowsPerGroup;
-        const correctedFirstRow = isShowAllDayPanel && !allDay
+        const correctedFirstRow = allDayPanelVisible && !allDay
             ? firstRowInGroup + 1
             : firstRowInGroup;
         const correctedLastRow = allDay ? correctedFirstRow : lastRowInGroup;
@@ -244,7 +244,7 @@ export default class ViewDataProvider {
     findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
         const { completeViewDataMap } = this;
 
-        const showAllDayPanel = this._options.isAllDayPanelVisible;
+        const allDayPanelVisible = this._options.allDayPanelVisible;
 
         for(let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
             const currentRow = completeViewDataMap[rowIndex];
@@ -264,7 +264,7 @@ export default class ViewDataProvider {
                     return {
                         position: {
                             columnIndex,
-                            rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
+                            rowIndex: allDayPanelVisible && !this._options.isVerticalGrouping
                                 ? rowIndex - 1
                                 : rowIndex,
                         },
@@ -443,7 +443,7 @@ export default class ViewDataProvider {
     }
 
     _getRowCountWithAllDayRows() {
-        const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
+        const allDayRowCount = this._options.allDayPanelVisible ? 1 : 0;
 
         return this.getRowCount(this._options) + allDayRowCount;
     }
