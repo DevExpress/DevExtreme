@@ -49,6 +49,7 @@
   overflow: hidden;
   gap: 3px;
   align-items: center;
+  z-index: 9500;
 
   /* stylelint-disable declaration-no-important */
   .dx-toast-wrapper {
