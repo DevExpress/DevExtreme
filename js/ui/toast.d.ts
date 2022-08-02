@@ -50,7 +50,7 @@ export type ShownEvent = EventInfo<dxToast>;
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
-     * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
+     * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, from: 1, to: 0 } }
      * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} &for(Android)
      * @public
      * @type object
