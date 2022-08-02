@@ -81,14 +81,12 @@ QUnit.module('notify', {
         QUnit.test('do not create toast-stack if stack do not have position field', function(assert) {
             notify(this.options, {});
             assert.strictEqual($(`.${TOAST_STACK}`).length, 0);
-            this.clock.tick(100);
         });
 
         QUnit.test('create toast-stack if stack have position field', function(assert) {
             notify(this.options, this.stack);
 
             assert.strictEqual($(`.${TOAST_STACK}`).length, 1);
-            this.clock.tick(100);
         });
 
         QUnit.test('use the same toast-stack if two notifies have the same position', function(assert) {
@@ -96,7 +94,6 @@ QUnit.module('notify', {
             notify(this.options, this.stack);
 
             assert.strictEqual($(`.${TOAST_STACK}`).length, 1);
-            this.clock.tick(100);
         });
 
         QUnit.test('use different toast-stacks if two notifies have diefferent position', function(assert) {
@@ -104,21 +101,18 @@ QUnit.module('notify', {
             notify(this.options, { position: 'bottom left' });
 
             assert.strictEqual($(`.${TOAST_STACK}`).length, 2);
-            this.clock.tick(100);
         });
 
         QUnit.test('add down-push direction class if stack do not have direction field and position is a top position alias', function(assert) {
             notify(this.options, this.stack);
 
             assert.strictEqual($(`.${TOAST_STACK}-down-push-direction`).length, 1);
-            this.clock.tick(100);
         });
 
         QUnit.test('add up-push direction class if stack do not have direction field and position is not a top position alias', function(assert) {
             notify(this.options, { position: { top: 100, left: 100 } });
 
             assert.strictEqual($(`.${TOAST_STACK}-up-push-direction`).length, 1);
-            this.clock.tick(100);
         });
 
         QUnit.test('add correct direction class if stack have direction field', function(assert) {
@@ -126,7 +120,6 @@ QUnit.module('notify', {
             notify(this.options, { ...this.stack, direction });
 
             assert.strictEqual($(`.${TOAST_STACK}-${direction}-direction`).length, 1);
-            this.clock.tick(100);
         });
 
         QUnit.test('delete previous direction class on container', function(assert) {
@@ -138,7 +131,6 @@ QUnit.module('notify', {
             notify(this.options, { ...this.stack, direction: newDirection });
             assert.strictEqual($(`.${TOAST_STACK}-${direction}-direction`).length, 0);
 
-            this.clock.tick(100);
         });
 
         QUnit.test('set container option as a toast stack element', function(assert) {
@@ -148,7 +140,6 @@ QUnit.module('notify', {
             const instance = $(`.${TOAST_CLASS}`).dxToast('instance');
 
             assert.strictEqual(instance.option('container')[0], $container[0]);
-            this.clock.tick(100);
         });
 
         [
@@ -163,7 +154,6 @@ QUnit.module('notify', {
                 const stackStyles = $(`.${TOAST_STACK}`)[0].style;
 
                 assert.ok(stackStyles[style]);
-                this.clock.tick(100);
             });
         });
 
@@ -175,17 +165,15 @@ QUnit.module('notify', {
 
             assert.strictEqual(stackStyles.bottom, `${position.bottom}px`);
             assert.strictEqual(stackStyles.right, `${position.right}px`);
-            this.clock.tick(100);
         });
 
-        QUnit.test('stack container should have toasts base zIndex', function(assert) {
+        QUnit.test('stack container should have toasts base zIndex (T1105343)', function(assert) {
             notify(this.options, this.stack);
 
             const stackZIndex = parseInt($(`.${TOAST_STACK}`).css('zIndex'), 10);
             const toastsBaseZIndex = 9500;
 
             assert.strictEqual(stackZIndex, toastsBaseZIndex);
-            this.clock.tick(100);
         });
     });
 });
