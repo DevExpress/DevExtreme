@@ -610,6 +610,7 @@ testComponentDefaults(Popover,
             },
             hide: {
                 type: 'fade',
+                from: 1,
                 to: 0
             }
         }
@@ -789,7 +790,31 @@ testComponentDefaults(Toast,
             of: null,
             offset: '20 -20'
         },
-        width: 'auto'
+        width: 'auto',
+        animation: {
+            show: {
+                type: 'slide',
+                duration: 200,
+                from: {
+                    position: {
+                        my: 'top',
+                        at: 'bottom',
+                        of: window
+                    }
+                },
+            },
+            hide: {
+                type: 'slide',
+                duration: 200,
+                to: {
+                    position: {
+                        my: 'top',
+                        at: 'bottom',
+                        of: window
+                    }
+                },
+            }
+        }
     }
 );
 
@@ -805,11 +830,34 @@ testComponentDefaults(Toast,
 );
 
 testComponentDefaults(Toast,
+    [
+        { platform: 'generic', deviceType: 'desktop' },
+        { platform: 'ios' }
+    ],
+    {
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 400,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 400,
+                from: 1,
+                to: 0
+            },
+        }
+    }
+);
+
+testComponentDefaults(Toast,
     {},
     {
         minWidth: 344,
         maxWidth: 568,
-        displayTime: 4000
+        displayTime: 4000,
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
