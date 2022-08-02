@@ -2,7 +2,11 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import Scheduler from '../../../../../model/scheduler';
 import url from '../../../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
+import {
+  createDataSetWithAllDay,
+  createDataSetWithoutAllDay,
+  resourceDataSource,
+} from '../../utils';
 
 fixture`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../containerMaterial.html'));
@@ -24,9 +28,15 @@ test('Scheduler should have correct height in month view (T927862)', async (t) =
   }, true);
 });
 
-const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
+const createScheduler = async (
+  view: string,
+  supportAllDay: boolean,
+  resourcesValue?: unknown[],
+): Promise<void> => {
   await createWidget('dxScheduler', {
-    dataSource: createDataSetForScreenShotTests(),
+    dataSource: supportAllDay
+      ? createDataSetWithAllDay()
+      : createDataSetWithoutAllDay(),
     currentDate: new Date(2020, 6, 15),
     views: [view],
     currentView: view,
@@ -44,7 +54,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async () => createScheduler(view, true, resourcesValue));
   });
 });
 
@@ -57,6 +67,6 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async () => createScheduler(view, false, resourcesValue));
   });
 });
