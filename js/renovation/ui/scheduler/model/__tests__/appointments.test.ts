@@ -10,6 +10,12 @@ import { AppointmentsConfigType } from '../types';
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 import { getCurrentViewConfig } from '../views';
 import { createTimeZoneCalculator } from '../../timeZoneCalculator/createTimeZoneCalculator';
+import { EAllDayAppointmentStrategy } from '../../appointment/allDayStrategy/index';
+
+const allDayPanelBehaviorTest = {
+  allDayPanelVisible: true,
+  allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+};
 
 const prepareInstances = (
   viewType: ViewType,
@@ -38,7 +44,7 @@ const prepareInstances = (
       schedulerProps,
       currentDate,
     ),
-    showAllDayPanel: supportAllDayRow,
+    allDayPanelBehavior: allDayPanelBehaviorTest,
   };
 
   // TODO: convert ViewdataProvider to TS
@@ -121,7 +127,6 @@ describe('Appointments model', () => {
               isVirtualScrolling: false,
               intervalCount: 7,
               hoursInterval: 0.5,
-              showAllDayPanel: supportAllDayRow,
               groups: [],
               appointmentCountPerCell: 2, // TODO default
               appointmentOffset: 26, // TODO default
@@ -139,6 +144,7 @@ describe('Appointments model', () => {
               loadedResources,
               intervalDuration: 1800000,
               allDayIntervalDuration: 86400000,
+              allDayPanelBehavior: allDayPanelBehaviorTest,
             });
         });
 

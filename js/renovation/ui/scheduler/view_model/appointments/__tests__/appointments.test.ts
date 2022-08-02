@@ -12,6 +12,7 @@ import { createTimeZoneCalculator } from '../../../timeZoneCalculator/createTime
 import { AppointmentsConfigType } from '../../../model/types';
 import { TimeZoneCalculator } from '../../../timeZoneCalculator/utils';
 import { getCurrentViewConfig } from '../../../model/views';
+import { EAllDayAppointmentStrategy } from '../../../appointment/allDayStrategy/index';
 
 jest.mock('../../../../../../ui/scheduler/workspaces/helpers/positionHelper', () => ({
   ...jest.requireActual('../../../../../../ui/scheduler/workspaces/helpers/positionHelper'),
@@ -391,7 +392,10 @@ describe('Appointments view model', () => {
         const viewModel = getAppointmentsViewModel(
           {
             ...appointmentsModel,
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
             supportAllDayRow: true,
             allDayHeight: 75,
           },

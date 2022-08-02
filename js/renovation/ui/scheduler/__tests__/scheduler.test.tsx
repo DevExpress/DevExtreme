@@ -17,6 +17,7 @@ import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointmen
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
 import { AppointmentsContextProvider } from '../appointments_context_provider';
 import { AppointmentEditForm } from '../appointment_edit_form/layout';
+import { EAllDayAppointmentStrategy } from '../appointment/allDayStrategy';
 
 jest.mock('../model/appointments', () => ({
   ...jest.requireActual('../model/appointments'),
@@ -68,13 +69,11 @@ describe('Scheduler', () => {
       intervalCount: 1,
       groupOrientation: 'horizontal',
       startDate: null,
-      showAllDayPanel: true,
       showCurrentTimeIndicator: false,
       indicatorUpdateInterval: 30000,
       shadeUntilCurrentTime: false,
       crossScrollingEnabled: false,
       hoursInterval: 0.5,
-
       indicatorTime: undefined,
       allowMultipleCellSelection: true,
       allDayPanelExpanded: false,
@@ -156,6 +155,10 @@ describe('Scheduler', () => {
         props: {
           height: 500,
           width: 600,
+          allDayBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         },
       });
 
@@ -163,6 +166,7 @@ describe('Scheduler', () => {
 
       expect(workSpace.exists())
         .toBe(true);
+
       expect(workSpace.props())
         .toEqual({
           ...defaultCurrentViewConfig,
@@ -1037,7 +1041,6 @@ describe('Scheduler', () => {
               crossScrollingEnabled: false,
               firstDayOfWeek: 0,
               startDate: undefined,
-              showAllDayPanel: true,
               allDayPanelExpanded: true,
               scrolling,
               cellDuration: 30,
@@ -1082,7 +1085,6 @@ describe('Scheduler', () => {
               crossScrollingEnabled: false,
               firstDayOfWeek: 0,
               startDate: undefined,
-              showAllDayPanel: true,
               allDayPanelExpanded: true,
               scrolling,
               cellDuration: 30,
@@ -1284,7 +1286,10 @@ describe('Scheduler', () => {
             startDayHour: 1,
             endDayHour: 2,
             cellDurationInMinutes: 3,
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayPanelStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
             supportAllDayRow: true,
             firstDayOfWeek: 5,
             viewType: 'typeView',

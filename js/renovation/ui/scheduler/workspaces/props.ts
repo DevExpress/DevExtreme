@@ -22,7 +22,7 @@ import { DateTableLayoutProps } from './base/date_table/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
-import { AllDayPanelModeType } from '../appointment/utils/getAppointmentTakesAllDay';
+import { EAllDayAppointmentStrategy, IAllDayPanelBehavior } from '../appointment/allDayStrategy/index';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];
@@ -73,8 +73,6 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() hoursInterval = 0.5;
 
-  @OneWay() showAllDayPanel = false;
-
   @OneWay() allDayPanelExpanded = false;
 
   @OneWay() allowMultipleCellSelection = true;
@@ -103,7 +101,10 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
 
-  @OneWay() allDayPanelMode: AllDayPanelModeType = 'all';
+  @OneWay() allDayPanelBehavior: IAllDayPanelBehavior = {
+    allDayPanelVisible: false, // TODO: Why we hide allDay panel by default in workspace?
+    allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+  };
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
@@ -125,7 +126,6 @@ WorkSpaceProps,
 | 'intervalCount'
 | 'groupOrientation'
 | 'startDate'
-| 'showAllDayPanel'
 | 'showCurrentTimeIndicator'
 | 'indicatorUpdateInterval'
 | 'shadeUntilCurrentTime'
@@ -146,7 +146,7 @@ WorkSpaceProps,
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
 | 'maxAppointmentsPerCell'
-| 'allDayPanelMode'
+| 'allDayPanelBehavior'
 >;
 
 export interface ViewRenderConfig {
