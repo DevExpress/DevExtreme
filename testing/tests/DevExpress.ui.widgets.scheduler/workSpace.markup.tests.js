@@ -116,17 +116,26 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
             });
 
             QUnit.test('Workspace should have specific css class, if showAllDayPanel = true ', function(assert) {
-                this.instance.option('showAllDayPanel', true);
+                this.instance.option('allDayPanelBehavior', {
+                    allDayPanelVisible: true,
+                    allDayStrategy: 'allLongAppointment',
+                });
 
                 const $element = this.instance.$element();
                 assert.ok($element.hasClass('dx-scheduler-work-space-all-day'), 'dxSchedulerWorkSpace has \'dx-scheduler-work-space-all-day\' css class');
 
-                this.instance.option('showAllDayPanel', false);
+                this.instance.option('allDayPanelBehavior', {
+                    allDayPanelVisible: false,
+                    allDayStrategy: 'allLongAppointment',
+                });
                 assert.notOk($element.hasClass('dx-scheduler-work-space-all-day'), 'dxSchedulerWorkSpace hasn\'t \'dx-scheduler-work-space-all-day\' css class');
             });
 
             QUnit.test('All day panel has specific class when allDayExpanded = true', function(assert) {
-                this.instance.option('showAllDayPanel', true);
+                this.instance.option('allDayPanelBehavior', {
+                    allDayPanelVisible: true,
+                    allDayStrategy: 'allLongAppointment',
+                });
                 this.instance.option('allDayExpanded', true);
 
                 const $element = this.instance.$element();
@@ -139,14 +148,20 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
             });
 
             QUnit.test('Workspace should not has specific class when showAllDayPanel = false', function(assert) {
-                this.instance.option('showAllDayPanel', false);
+                this.instance.option('allDayPanelBehavior', {
+                    allDayPanelVisible: false,
+                    allDayStrategy: 'allLongAppointment',
+                });
                 this.instance.option('allDayExpanded', false);
 
                 const $element = this.instance.$element();
 
                 assert.notOk($element.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'dxSchedulerWorkSpace has not \'dx-scheduler-work-space-all-day-collapsed\' css class');
 
-                this.instance.option('showAllDayPanel', true);
+                this.instance.option('allDayPanelBehavior', {
+                    allDayPanelVisible: true,
+                    allDayStrategy: 'allLongAppointment',
+                });
 
                 assert.ok($element.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'dxSchedulerWorkSpace has \'dx-scheduler-work-space-all-day-collapsed\' css class');
             });
@@ -171,7 +186,10 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
             });
 
             QUnit.test('All day panel row should have special css class', function(assert) {
-                this.instance.option('showAllDayPanel', true);
+                this.instance.option('allDayPanelBehavior', {
+                    allDayPanelVisible: true,
+                    allDayStrategy: 'allLongAppointment',
+                });
 
                 const $element = this.instance.$element();
                 const $row = $element.find('.dx-scheduler-all-day-table tr').first();
@@ -339,7 +357,10 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
     });
 
     QUnit.test('Scheduler all day panel should contain one row', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
 
@@ -509,7 +530,10 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Scheduler all day rows should be built into dateTable', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $allDayRows = this.instance.$element().find(toSelector(ALL_DAY_ROW_CLASS));
 
@@ -517,7 +541,10 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Scheduler all day titles should be built into timePanel', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $timePanel = this.instance.$element().find(toSelector(TIME_PANEL_CLASS));
         const $allDayTitles = $timePanel.find(toSelector(ALL_DAY_TITLE_CLASS));
@@ -538,6 +565,10 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Scheduler workspace Day should have a right rows count', function(assert) {
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: false,
+            allDayStrategy: 'allLongAppointment',
+        });
         const $element = this.instance.$element();
 
         assert.equal($element.find('.dx-scheduler-date-table tbody tr').length, 48, 'Workspace has 48 rows');
@@ -558,6 +589,10 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Time panel should have 48 rows and 48 cells', function(assert) {
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: false,
+            allDayStrategy: 'allLongAppointment',
+        });
         const $element = this.instance.$element();
 
         const cellCount = $element.find('.dx-scheduler-date-table tbody tr').length;
@@ -579,8 +614,10 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
 
     QUnit.test('Grouped allDay cells should have a right group field in dxCellData', function(assert) {
         this.instance.option('renovateRender', false);
-
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $allDayCells = this.instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS));
 
@@ -614,7 +651,10 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
     });
 
     QUnit.test('Scheduler all day panel should contain one row & 7 cells', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
 
@@ -794,13 +834,20 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
     });
 
     QUnit.test('Scheduler workspace Week should have a right rows count', function(assert) {
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: false,
+            allDayStrategy: 'allLongAppointment',
+        });
         const $element = this.instance.$element();
 
         assert.equal($element.find('.dx-scheduler-date-table tbody tr').length, 48, 'Workspace has 48 rows');
     });
 
     QUnit.test('Scheduler all day rows should be built into dateTable', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $allDayRows = this.instance.$element().find(toSelector(ALL_DAY_ROW_CLASS));
 
@@ -838,7 +885,10 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
     });
 
     QUnit.test('Scheduler all day panel should contain one row & 5 cells', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointment',
+        });
 
         const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
 

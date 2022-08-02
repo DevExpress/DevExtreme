@@ -205,14 +205,21 @@ QUnit.module('DateTime indicator on Day View', {
     QUnit.test('Shader on allDayPanel should be rendered if needed, Day view', function(assert) {
         const instance = createInstance({
             indicatorTime: new Date(2017, 8, 5, 12, 45),
-            showAllDayPanel: false
+            allDayPanelBehavior: {
+                allDayPanelVisible: false,
+                allDayStrategy: 'all',
+            }
         });
 
         const $element = instance.$element();
 
+
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).length, 0, 'Shader wasn\'t rendered');
 
-        instance.option('showAllDayPanel', true);
+        instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'all',
+        });
 
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).length, 1, 'Shader is rendered');
     });
@@ -489,7 +496,10 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
 
     QUnit.test('DateTimeIndicator should have correct positions, Day view with groups without allDay panels, verticalGrouping', function(assert) {
         const instance = createInstance({
-            showAllDayPanel: false,
+            allDayPanelBehavior: {
+                allDayPanelVisible: false,
+                allDayStrategy: 'all',
+            },
             shadeUntilCurrentTime: false,
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });

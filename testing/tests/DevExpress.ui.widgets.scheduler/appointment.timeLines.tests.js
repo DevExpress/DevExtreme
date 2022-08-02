@@ -290,7 +290,7 @@ module('Integration: Appointments in Timeline views', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            test('AllDay appointment should have correct width in timelineWeek view', function(assert) {
+            test('AllDay appointment should not be displayed in timelineWeek view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 11, 14),
                     endDate: new Date(2015, 11, 17),
@@ -308,10 +308,8 @@ module('Integration: Appointments in Timeline views', {
                 }, this.clock);
 
                 const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
-                const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
-                const cellsInAppointment = 48;
 
-                assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
+                assert.equal($appointment.length, 0, 'All-day appointment not displayed');
             });
 
             test('AllDay appointment without allDay field should have right width on timelineDay view', function(assert) {

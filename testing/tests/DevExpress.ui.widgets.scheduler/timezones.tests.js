@@ -1988,7 +1988,7 @@ module('Fixed client time zone offset', {
 
     test('AllDay appointment with custom timezone should be resized correctly', function(assert) {
         const scheduler = createWrapper({
-            currentDate: new Date(2015, 5, 12),
+            currentDate: new Date('2015-06-12T10:00:00.000Z'),
             views: ['week'],
             currentView: 'week',
             editing: true,
@@ -1996,8 +1996,8 @@ module('Fixed client time zone offset', {
             timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
-                startDate: new Date(2015, 5, 8, 10),
-                endDate: new Date(2015, 5, 10, 1),
+                startDate: new Date('2015-06-08T10:00:00.000Z'),
+                endDate: new Date('2015-06-10T10:00:00.000Z'),
                 allDay: true
             }]
         });
@@ -2014,7 +2014,7 @@ module('Fixed client time zone offset', {
 
         $appointment = rootElement.find(CLASSES.appointment).eq(0);
 
-        assert.roughEqual(getOuterWidth($appointment), cellWidth * 3, 2.001, 'Appointment width is OK');
+        assert.roughEqual(getOuterWidth($appointment), cellWidth * 4, 2.001, 'Appointment width is OK');
     });
 
     test('Arguments in event args should be correct when timezone is set(T579457)', function(assert) {
