@@ -1,7 +1,7 @@
 import { ResourceProps } from '../props';
 import { DataAccessorType, GroupOrientation, ViewType } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
-import { IAllDayPanelBehavior } from '../appointment/allDayStrategy/index';
+import { IAllDayPanelBehavior } from '../appointment/allDayStrategy/types';
 
 export interface AppointmentsConfigType {
   adaptivityEnabled: boolean;

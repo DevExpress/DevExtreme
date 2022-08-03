@@ -22,7 +22,8 @@ import { DateTableLayoutProps } from './base/date_table/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
-import { EAllDayAppointmentStrategy, IAllDayPanelBehavior } from '../appointment/allDayStrategy/index';
+import { EAllDayAppointmentStrategy } from '../appointment/allDayStrategy/index';
+import { IAllDayPanelBehavior } from '../appointment/allDayStrategy/types';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];

@@ -6,7 +6,7 @@ import {
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 import { Group, ViewDataProviderType } from '../../workspaces/types';
 import { ResourceProps } from '../../props';
-import { IAllDayPanelBehavior } from '../../appointment/allDayStrategy/index';
+import { IAllDayPanelBehavior } from '../../appointment/allDayStrategy/types';
 
 export const getFilterStrategy = (
   resources: ResourceProps[],

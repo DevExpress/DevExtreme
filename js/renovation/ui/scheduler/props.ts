@@ -44,7 +44,7 @@ import { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
 import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
-import { AllDayPanelModeType, EAllDayPanelModeOptionTypes } from './appointment/allDayStrategy/index';
+import { AllDayPanelModeType, EAllDayPanelModeOptionTypes } from './appointment/allDayStrategy/types';
 
 @ComponentBindings()
 export class ScrollingProps {

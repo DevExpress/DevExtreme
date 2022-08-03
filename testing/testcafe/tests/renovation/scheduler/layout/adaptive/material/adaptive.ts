@@ -62,6 +62,11 @@ const takeScreenshotsFunc = async (
 
   // eslint-disable-next-line no-restricted-syntax
   for (const view of views) {
+    // NOTE: Disable timelineDay horizontal grouping with RTL test for react.
+    if (view === 'timelineDay' && platform === 'react' && grouping === 'horizontal' && rtlEnabled) {
+      return;
+    }
+
     await updateComponentOptions(platform, { currentView: view });
 
     await t
