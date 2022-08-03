@@ -84,7 +84,7 @@
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
     "devextreme-internal-tools": "^8.0.2",
-    "devextreme-screenshot-comparer": "file:devextreme-screenshot-comparer-2.0.12.tgz",
+    "devextreme-screenshot-comparer": "file:devextreme-screenshot-comparer.tgz",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.3.1",

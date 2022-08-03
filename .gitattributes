@@ -16,3 +16,6 @@
 *.dbf   binary
 *.shp   binary
 *.shx   binary
+
+# packets
+*.tgz   binary
