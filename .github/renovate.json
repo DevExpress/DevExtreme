@@ -18,6 +18,10 @@
     },
     "packageRules": [
         {
+            "matchPackagePatterns": [ "^@devextreme-generator/" ],
+            "enabled": false
+        },
+        {
             "matchPackageNames": [ "typescript", "typescript-min" ],
             "matchUpdateTypes": [ "major", "minor" ],
             "enabled": false
