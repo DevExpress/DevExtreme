@@ -3,7 +3,7 @@ export default {
   'base-accent': '@brand-primary',
   'base-bg': '@body-bg',
   'base-text-color': '@text-color',
-  'base-border-color': '@table-border-color',
+  'base-border-color': '@border-color',
 
   'base-border-radius': '@border-radius-base',
   'base-border-radius-large': '@border-radius-large',
