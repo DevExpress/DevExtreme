@@ -1,6 +1,7 @@
 import Guid from 'core/guid';
 import { processRequestResultLock, keysEqual, isGroupCriterion, throttleChanges, base64_encode as b64 } from 'data/utils';
 import { EdmLiteral } from 'data/odata/utils';
+import { createObjectWithChanges } from 'data/array_utils';
 
 QUnit.module('keysEqual');
 
@@ -154,3 +155,119 @@ QUnit.module('isGroupCriterion', () => {
     });
 
 });
+
+QUnit.module('createObjectWithChanges', () => {
+    QUnit.test('check shallow', function(t) {
+        const target = { top: 1 };
+        const changes = { top: 2 };
+        const result = createObjectWithChanges(target, changes);
+        t.deepEqual(result, changes);
+        t.notEqual(result, changes);
+        t.notEqual(target, changes);
+    });
+    QUnit.test('check deep', function(t) {
+        const target = { top: {
+            inner: {
+                deep: 1
+            }
+        },
+        static: {
+            inner: {}
+        }
+        };
+        const changes = { top: {
+            inner: {
+                deep: 3
+            }
+        } };
+        const result = createObjectWithChanges(target, changes);
+        t.deepEqual(result.top, changes.top);
+        t.notEqual(result, changes);
+        t.equal(result.static, target.static);
+    });
+    QUnit.test('check new prop', function(t) {
+        const target = { top: 1 };
+        const changes = { topExtra: 2 };
+        const result = createObjectWithChanges(target, changes);
+        const desiredObj = { top: 1, topExtra: 2 };
+        t.deepEqual(result, desiredObj);
+    });
+    QUnit.test('check handles readonly props', function(t) {
+        function Target(id, text) {
+            this.id = id;
+            this.text = text;
+        }
+        Object.defineProperty(Target.prototype, 'ID', {
+            configurable: true,
+            enumerable: true,
+            get: function() { return this.id; }
+        });
+        const target = new Target(0, 'test');
+        const changes = { ID: '2' };
+
+        const result = createObjectWithChanges(target, changes);
+
+        t.deepEqual(result, target);
+    });
+    QUnit.test('handles objects with recursive properties', function(t) {
+        function Target() {
+            this.text = 'Hello';
+            this.circular = this;
+        }
+        const target = {
+            test: 'test',
+            circular: new Target()
+        };
+        const changes = { text: 'text' };
+
+        const result = createObjectWithChanges(target, changes);
+        t.equal(result.text, changes.text);
+        t.equal(result.circular, target.circular);
+    });
+    QUnit.test('handles complex nested recursive links', function(t) {
+        function Foo() {
+            this.text = 'Hello';
+            this.bar = new Bar(this);
+        }
+        function Bar(foo) {
+            this.foo = foo;
+        }
+        const target = { foo: new Foo() };
+        const changes = { foo: { text: 'test' } };
+
+        const result = createObjectWithChanges(target, changes);
+        t.strictEqual(result.foo.bar.foo, result.foo);
+
+    });
+    QUnit.test('handles nested class instances', function(t) {
+        class Data {
+            prop1
+        }
+        class Prop1 {
+            prop2
+        }
+
+        class Prop2 {
+            name
+        }
+
+        const target = {
+            prop1: {
+                prop2: {
+                    field: 'test'
+                }
+            }
+        };
+        Object.setPrototypeOf(target, Data);
+        Object.setPrototypeOf(target.prop1, Prop1);
+        Object.setPrototypeOf(target.prop1.prop2, Prop2);
+        const changes = {
+            prop1: { prop2: { field: 'abc' } }
+        };
+        const result = createObjectWithChanges(target, changes);
+        t.notEqual(target, result);
+        t.notEqual(target.prop1.prop2.field, changes.prop1.prop2.field);
+        t.notEqual(target.prop1.prop2.field, result.prop1.prop2.field);
+    });
+});
+

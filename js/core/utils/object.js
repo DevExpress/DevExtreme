@@ -39,6 +39,28 @@ const orderEach = function(map, func) {
     }
 };
 
+const canWrite = (obj, prop) => {
+    try {
+        const oldValue = obj[prop];
+        obj[prop] = 'foo';
+        if(obj[prop] !== 'foo') return false;
+        obj[prop] = oldValue;
+        return true;
+    } catch{
+        return false;
+    }
+};
+
+const isCircular = target => {
+    try {
+        JSON.stringify(target);
+    } catch{
+        return true;
+    }
+    return false;
+};
+
+
 const assignValueToProperty = function(target, property, value, assignByReference) {
     if(!assignByReference && variableWrapper.isWrapped(target[property])) {
         variableWrapper.assign(target[property], value);
@@ -65,7 +87,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
         }
 
-        if(newValue !== undefined && prevValue !== newValue) {
+        if(newValue !== undefined && prevValue !== newValue && canWrite(target, name)) {
             assignValueToProperty(target, name, newValue, assignByReference);
         }
     }
@@ -76,5 +98,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
 export {
     clone,
     orderEach,
+    canWrite,
+    isCircular,
     deepExtendArraySafe
 };
