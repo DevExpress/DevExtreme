@@ -1450,6 +1450,7 @@ export interface SearchPanel {
     /**
      * @docid GridBaseOptions.searchPanel.visible
      * @default false
+     * @fires GridBaseOptions.onOptionChanged
      */
     visible?: boolean;
     /**
