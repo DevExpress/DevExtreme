@@ -225,6 +225,39 @@ QUnit.module('popup integration', {
             const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
             assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($overlayWrapper) / 2, 0.1, 'overlay content height is correct');
         });
+
+        QUnit.test('should be calculated relative to dropDownOptions.position.of if it is specified', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                dropDownOptions: {
+                    height: '50%',
+                    position: { of: window }
+                },
+                height: 600,
+            }).dxDropDownButton('instance');
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight(window) / 2, 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to dropDownOptions.container if it is specified', function(assert) {
+            const $container = $('<div>')
+                .css({ height: 500 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                dropDownOptions: {
+                    height: '50%',
+                    position: { of: window },
+                    container: $container
+                },
+                height: 600,
+            }).dxDropDownButton('instance');
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'overlay content height is correct');
+        });
     });
 
     QUnit.test('dropDownOptions.height should be passed to popup', function(assert) {
@@ -499,6 +532,41 @@ QUnit.module('popup integration', {
 
             assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
             assert.roughEqual(overlayContentWidth, 750, 0.1, 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to dropDownOptions.position.of if it is specified', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownOptions: {
+                    width: '50%',
+                    position: { of: window }
+                }
+            }).dxDropDownButton('instance');
+
+            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
+
+            assert.roughEqual(overlayContentWidth, getOuterWidth(window) / 2, 0.1, 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to dropDownOptions.container if it is specified', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 500 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownOptions: {
+                    width: '50%',
+                    position: { of: window },
+                    container: $container
+                }
+            }).dxDropDownButton('instance');
+
+            const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
+
+            assert.roughEqual(overlayContentWidth, getOuterWidth($container) / 2, 0.1, 'width is correct');
         });
     });
 

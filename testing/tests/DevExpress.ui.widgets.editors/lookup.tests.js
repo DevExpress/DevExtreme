@@ -18,7 +18,7 @@ import Lookup from 'ui/lookup';
 import Popup from 'ui/popup/ui.popup';
 import List from 'ui/list';
 import Popover from 'ui/popover/ui.popover';
-import { getWidth } from 'core/utils/size';
+import { getWidth, getOuterWidth, getOuterHeight } from 'core/utils/size';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -2336,6 +2336,47 @@ QUnit.module('popup options', {
         } finally {
             isMaterialStub.restore();
         }
+    });
+
+    QUnit.test('popup dimensions should be calculated relative to dropDownOptions.position.of if _scrollToSelectedItemEnabled=true', function(assert) {
+        $('#lookup').dxLookup({
+            dropDownOptions: {
+                position: { of: window },
+                width: '50%',
+                height: '50%',
+            },
+            usePopover: false,
+            _scrollToSelectedItemEnabled: true,
+            opened: true
+        });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.roughEqual(getOuterWidth($overlayContent), getOuterWidth(window) / 2, 0.1, 'popup width is correct');
+        assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight(window) / 2, 0.1, 'popup height is correct');
+    });
+
+    QUnit.test('popup dimensions should be calculated relative to dropDownOptions.container if _scrollToSelectedItemEnabled=true', function(assert) {
+        const $container = $('<div>')
+            .css({ height: 150 })
+            .appendTo('#qunit-fixture');
+
+        $('#lookup').dxLookup({
+            dropDownOptions: {
+                position: { of: window },
+                container: $container,
+                width: '50%',
+                height: '50%',
+            },
+            usePopover: false,
+            _scrollToSelectedItemEnabled: true,
+            opened: true
+        });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.roughEqual(getOuterWidth($overlayContent), getOuterWidth($container) / 2, 0.1, 'popup width is correct');
+        assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
     });
 });
 

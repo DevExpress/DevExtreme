@@ -140,8 +140,6 @@ const Lookup = DropDownList.inherit({
 
                 position: undefined,
 
-                visualContainer: undefined,
-
                 animation: {},
 
                 title: '',
@@ -656,7 +654,6 @@ const Lookup = DropDownList.inherit({
                 showEvent: null,
                 hideEvent: null,
                 target: this.$element(),
-                visualContainer: this.$element(),
                 fullScreen: false,
                 shading: false,
                 hideOnParentScroll: true,
@@ -717,7 +714,6 @@ const Lookup = DropDownList.inherit({
 
         delete result.animation;
         delete result.position;
-        delete result.visualContainer;
 
         if(this.option('_scrollToSelectedItemEnabled')) {
             result.position = this.option('dropDownCentered') ? {
@@ -729,12 +725,11 @@ const Lookup = DropDownList.inherit({
                 at: 'left bottom',
                 of: this.element()
             };
-            result.visualContainer = this.$element();
 
             result.hideOnParentScroll = true;
         }
 
-        each(['position', 'animation', 'width', 'height', 'visualContainer'], (_, optionName) => {
+        each(['position', 'animation', 'width', 'height'], (_, optionName) => {
             const popupOptionValue = this.option(`dropDownOptions.${ optionName }`);
             if(popupOptionValue !== undefined) {
                 result[optionName] = popupOptionValue;
