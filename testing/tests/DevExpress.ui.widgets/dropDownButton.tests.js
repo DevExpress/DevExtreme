@@ -546,7 +546,7 @@ QUnit.module('popup integration', {
 
             const overlayContentWidth = getOuterWidth($(`.${OVERLAY_CONTENT_CLASS}`));
 
-            assert.roughEqual(overlayContentWidth, getOuterWidth(window) / 50, 0.1, 'width is correct');
+            assert.roughEqual(overlayContentWidth, getOuterWidth(window) / 2, 0.1, 'width is correct');
         });
 
         QUnit.test('should be calculated relative to dropDownOptions.container if it is specified', function(assert) {
