@@ -329,10 +329,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const format = this.option('format');
         const isCustomParser = isFunction(format?.parser);
         const isLDMLPattern = isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
+        const isExponentialFormat = format === 'exponential' || format?.type === 'exponential';
+        const shouldUseFormatAsIs = isCustomParser || isLDMLPattern || isExponentialFormat;
 
-        this._currentFormat = isCustomParser || isLDMLPattern ?
-            format :
-            getLDMLFormat((value) => {
+        this._currentFormat = shouldUseFormatAsIs
+            ? format
+            : getLDMLFormat((value) => {
                 const text = this._format(value, format);
                 return number.convertDigits(text, true);
             });
