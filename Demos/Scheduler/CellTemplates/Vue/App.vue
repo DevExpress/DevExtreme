@@ -29,7 +29,10 @@
     </template>
 
     <template #dateCellTemplate="{ data: cellData }">
-      <DateCell :cell-data="cellData"/>
+      <DateCell
+        :cell-data="cellData"
+        :current-view="currentView"
+      />
     </template>
 
     <template #timeCellTemplate="{ data: cellData }">

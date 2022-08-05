@@ -1,5 +1,5 @@
 <template>
-  <div :class="markDateCell(cellData)">
+  <div :class="markDateCell(cellData, currentView)">
     {{ cellData.text }}
   </div>
 </template>
@@ -12,10 +12,17 @@ export default {
       type: Object,
       default: () => {},
     },
+    currentView: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
-    markDateCell(cellData) {
-      return { 'disable-date': Utils.isWeekend(cellData.date) };
+    markDateCell(cellData, currentView) {
+      const isDisabled = currentView === 'month'
+        ? Utils.isWeekend(cellData.date)
+        : Utils.isDisableDate(cellData.date);
+      return { 'disable-date': isDisabled };
     },
   },
 };

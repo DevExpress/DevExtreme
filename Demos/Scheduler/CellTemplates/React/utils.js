@@ -11,6 +11,10 @@ export default class Utils {
     return day === 0 || day === 6;
   }
 
+  static isDisableDate(date) {
+    return Utils.isHoliday(date) || Utils.isWeekend(date);
+  }
+
   static isDinner(date) {
     const hours = date.getHours();
     return hours >= dinnerTime.from && hours < dinnerTime.to;

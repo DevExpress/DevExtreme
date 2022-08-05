@@ -64,7 +64,7 @@ function App() {
     return <CellTemplate itemData={itemData} />;
   };
 
-  const renderDateCell = (itemData) => <DateCell itemData={itemData} />;
+  const renderDateCell = (itemData) => <DateCell itemData={itemData} currentView={currentView} />;
 
   const renderTimeCell = (itemData) => <TimeCell itemData={itemData} />;
 

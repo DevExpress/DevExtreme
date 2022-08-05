@@ -26,7 +26,7 @@
 
   <div
     *dxTemplate="let dateCell of 'dateCellTemplate'"
-    [ngClass]="{ 'disable-date': isWeekend(dateCell.date) }"
+    [ngClass]="{ 'disable-date': isDisabledDateCell(dateCell.date) }"
   >
     {{ dateCell.text }}
   </div>

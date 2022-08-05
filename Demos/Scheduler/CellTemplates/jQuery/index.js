@@ -12,10 +12,9 @@ $(() => {
 
     dataCellTemplate(itemData, itemIndex, itemElement) {
       const date = itemData.startDate;
-      const isDisabled = isHoliday(date) || isWeekend(date);
       const element = $('<div />');
 
-      if (isDisabled) {
+      if (isDisableDate(date)) {
         element.addClass('disable-date');
       } else if (isDinner(date)) {
         element.addClass('dinner');
@@ -32,8 +31,12 @@ $(() => {
 
     dateCellTemplate(itemData, itemIndex, itemElement) {
       const element = $(`<div>${itemData.text}</div>`);
+      const isMonth = this.option('currentView') === 'month';
+      const isDisabled = isMonth
+        ? isWeekend(itemData.date)
+        : isDisableDate(itemData.date);
 
-      if (isWeekend(itemData.date)) {
+      if (isDisabled) {
         element.addClass('disable-date');
       }
 
@@ -128,6 +131,10 @@ function isHoliday(date) {
 function isWeekend(date) {
   const day = date.getDay();
   return day === 0 || day === 6;
+}
+
+function isDisableDate(date) {
+  return isHoliday(date) || isWeekend(date);
 }
 
 function isDinner(date) {

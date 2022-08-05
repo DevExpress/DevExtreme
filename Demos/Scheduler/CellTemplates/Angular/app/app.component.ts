@@ -76,6 +76,12 @@ export class AppComponent {
     return this.isHoliday(date) || this.isWeekend(date);
   }
 
+  isDisabledDateCell(date: Date) {
+    return this.currentView === 'month'
+      ? this.isHoliday(date)
+      : this.isDisableDate(date);
+  }
+
   isDinner(date: Date) {
     const hours = date.getHours();
     const dinnerTime = this.dataService.getDinnerTime();
