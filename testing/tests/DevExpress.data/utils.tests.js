@@ -170,9 +170,6 @@ QUnit.module('createObjectWithChanges', () => {
             inner: {
                 deep: 1
             }
-        },
-        static: {
-            inner: {}
         }
         };
         const changes = { top: {
@@ -183,7 +180,7 @@ QUnit.module('createObjectWithChanges', () => {
         const result = createObjectWithChanges(target, changes);
         t.deepEqual(result.top, changes.top);
         t.notEqual(result, changes);
-        t.equal(result.static, target.static);
+        t.equal(result.top.inner.deep, changes.top.inner.deep);
     });
     QUnit.test('check new prop', function(t) {
         const target = { top: 1 };
@@ -202,12 +199,14 @@ QUnit.module('createObjectWithChanges', () => {
             enumerable: true,
             get: function() { return this.id; }
         });
+
         const target = new Target(0, 'test');
-        const changes = { ID: '2' };
+        const changes = { text: '2' };
 
         const result = createObjectWithChanges(target, changes);
 
-        t.deepEqual(result, target);
+        t.equal(result.id, 0);
+        t.equal(result.text, changes.text);
     });
     QUnit.test('handles objects with recursive properties', function(t) {
         function Target() {
@@ -224,6 +223,22 @@ QUnit.module('createObjectWithChanges', () => {
         t.equal(result.text, changes.text);
         t.equal(result.circular, target.circular);
     });
+    QUnit.test('handles objects with constructors', function(t) {
+        function ObjectWithConstructor() {
+            this.text = 'Hello';
+            this.circular = this;
+        }
+        const target = {
+            text: 'test',
+            complexObject: new ObjectWithConstructor(),
+            plainObject: {}
+        };
+        const changes = { text: 'text' };
+
+        const result = createObjectWithChanges(target, changes);
+        t.equal(result.complexObject, target.complexObject);
+        t.notEqual(result.plainObject, target.plainObject);
+    });
     QUnit.test('handles complex nested recursive links', function(t) {
         function Foo() {
             this.text = 'Hello';
@@ -236,7 +251,27 @@ QUnit.module('createObjectWithChanges', () => {
         const changes = { foo: { text: 'test' } };
 
         const result = createObjectWithChanges(target, changes);
-        t.strictEqual(result.foo.bar.foo, result.foo);
+        t.strictEqual(result.foo.bar.foo, target.foo);
+        t.strictEqual(result.foo.bar, target.foo.bar);
+        t.equal(result.foo.text, changes.foo.text);
+
+    });
+    QUnit.test('handles extra complex nested recursive links', function(t) {
+        function Foo() {
+            this.text = 'Hello';
+            this.bar = new Bar(this);
+        }
+        function Bar(foo) {
+            this.foo = foo;
+        }
+        const target = { foo: new Foo() };
+        const changes = { foo: { bar: { foo: { text: 'test' } } } };
+
+        const result = createObjectWithChanges(target, changes);
+        // t.strictEqual(result.foo, target.foo);
+        t.notStrictEqual(result.foo.bar.foo, target.foo);
+        t.notStrictEqual(result.foo.bar, target.foo.bar);
+        t.equal(result.foo.bar.foo.text, changes.foo.bar.foo.text);
 
     });
     QUnit.test('handles nested class instances', function(t) {
@@ -269,5 +304,30 @@ QUnit.module('createObjectWithChanges', () => {
         t.notEqual(target.prop1.prop2.field, changes.prop1.prop2.field);
         t.notEqual(target.prop1.prop2.field, result.prop1.prop2.field);
     });
+    QUnit.test('handles prototypes', function(t) {
+        function DataItem(id, text) {
+            this.id = id;
+            this.text = text;
+        }
+        Object.defineProperty(DataItem.prototype, 'ID', {
+            configurable: true,
+            enumerable: false,
+            get: function() { return this.id; },
+            set: function(value) { this.id = value; }
+        });
+        Object.defineProperty(DataItem.prototype, 'Text', {
+            configurable: true,
+            enumerable: false,
+            get: function() { return this.text; },
+            set: function(value) { this.text = value; }
+        });
+        const target = new DataItem(0, 'text0');
+        const changes = { text: 'test' };
+        const result = createObjectWithChanges(target, changes);
+        t.equal(result.ID, 0);
+        t.equal(result.text, 'test');
+
+    });
+
 });
 

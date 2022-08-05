@@ -3,7 +3,7 @@ import config from '../core/config';
 import Guid from '../core/guid';
 import { extend } from '../core/utils/extend';
 import { errors } from './errors';
-import { canWrite, deepExtendArraySafe, isCircular } from '../core/utils/object';
+import { deepExtendArraySafe } from '../core/utils/object';
 import { compileGetter } from '../core/utils/data';
 import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
@@ -80,42 +80,42 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function createObjectWithChanges(target, changes, history = new WeakMap()) {
-    const copy = target ? Object.create(Object.getPrototypeOf(target)) : {};
-    if(target) {
-        history.set(target, copy);
+function cloneInstanceWithChangedPaths(instance, changes, clonedInstances) {
+    clonedInstances = clonedInstances || new WeakMap();
+
+    const result = instance ? Object.create(Object.getPrototypeOf(instance)) : {};
+    if(instance) {
+        clonedInstances.set(instance, result);
     }
-    for(const name in target) {
-        const prop = target[name];
+
+    const instanceWithoutPrototype = { ...instance };
+    deepExtendArraySafe(result, instanceWithoutPrototype, true, true);
+    for(const name in instanceWithoutPrototype) {
+
+        const value = instanceWithoutPrototype[name];
         const change = changes?.[name];
-        let newProp = prop;
 
-        if(name === '__proto__' || name === 'constructor' || !canWrite(copy, name)) {
-            continue;
+        if(isObject(value) && !isPlainObject(value) && isObject(change) && !clonedInstances.has(value)) {
+            result[name] = cloneInstanceWithChangedPaths(value, change, clonedInstances);
         }
 
-        if(isObject(prop) && isObject(change) && !history.has(newProp)) {
-            if(!isCircular(target)) {
-                history.set(newProp, prop);
-                newProp = createObjectWithChanges(prop, change, history);
-            } else {
-                newProp = createObjectWithChanges(prop, change, history);
-                history.set(newProp, prop);
-            }
-
-        }
-        copy[name] = newProp;
     }
 
-    for(const name in copy) {
-        const prop = copy[name];
+    for(const name in result) {
+        const prop = result[name];
 
-        if(history.has(prop) && canWrite(copy, name)) {
-            copy[name] = history.get(prop);
+        if(isObject(prop) && clonedInstances.has(prop)) {
+            result[name] = clonedInstances.get(prop);
         }
     }
 
-    return deepExtendArraySafe(copy, changes, true, true);
+    return result;
+}
+
+function createObjectWithChanges(target, changes) {
+    const result = cloneInstanceWithChangedPaths(target, changes);
+
+    return deepExtendArraySafe(result, changes, true, true);
 }
 
 function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache, logError }) {
