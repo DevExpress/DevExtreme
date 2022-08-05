@@ -19,22 +19,25 @@ function isAllDayPanelAppointment(
     endDate,
   } = appointmentAdapter;
 
-  switch (true) {
-    case isAllDayAppointment:
-      return true;
-    case allDayAppointmentStrategy !== EAllDayAppointmentStrategy.allLongAppointment:
-      return false;
-    case !isDefined(endDate):
-      return false;
-    default:
-      return isAppointmentDurationAllDay(
-        startDate,
-        endDate as Date,
-        viewStartDayHour,
-        viewEndDayHour,
-        isSchedulerTimezoneSet,
-      );
+  if (isAllDayAppointment) {
+    return true;
   }
+
+  if (allDayAppointmentStrategy !== EAllDayAppointmentStrategy.allLongAppointment) {
+    return false;
+  }
+
+  if (!isDefined(endDate)) {
+    return false;
+  }
+
+  return isAppointmentDurationAllDay(
+    startDate,
+    endDate,
+    viewStartDayHour,
+    viewEndDayHour,
+    isSchedulerTimezoneSet,
+  );
 }
 
 export default isAllDayPanelAppointment;

@@ -3061,7 +3061,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             result = tableCreator.makeTable(options);
         }
-        [];
         return result;
     }
 
