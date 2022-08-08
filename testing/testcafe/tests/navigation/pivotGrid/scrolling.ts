@@ -19,8 +19,6 @@ fixture`PivotGrid_scrolling`
   { useNative: false, mode: 'virtual' },
 ].forEach(({ useNative, mode }) => {
   test(`Rows sincronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
-    await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
-
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
@@ -37,50 +35,52 @@ fixture`PivotGrid_scrolling`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxPivotGrid', {
-    dataSource: {
-      store: virtualData,
-      retrieveFields: false,
-      fields: [{
-        area: 'data',
-        dataType: 'string',
-        summaryType: 'custom',
-        calculateCustomSummary(options) {
-          if (options.summaryProcess === 'calculate') {
-            const item = options.value;
-            options.totalValue = `<div>${item.value}</div>`;
-          }
-        },
-      }, {
-        dataField: 'y1path',
-        area: 'row',
-        width: 200,
-        expanded: true,
-      }, {
-        dataField: 'y2code',
-        area: 'row',
-        width: dataOptions.data.y2.visible ? undefined : 1,
-      }, {
-        dataField: 'x1code',
-        area: 'column',
-        expanded: true,
-      }],
-    },
-    encodeHtml: false,
-    showColumnTotals: false,
-    height: 400,
-    width: 1200,
-    scrolling: {
-      mode,
-      useNative,
-    },
-  })).after(async () => {
+  }).before(async () => {
+    await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
+
+    return createWidget('dxPivotGrid', {
+      dataSource: {
+        store: virtualData,
+        retrieveFields: false,
+        fields: [{
+          area: 'data',
+          dataType: 'string',
+          summaryType: 'custom',
+          calculateCustomSummary(options) {
+            if (options.summaryProcess === 'calculate') {
+              const item = options.value;
+              options.totalValue = `<div>${item.value}</div>`;
+            }
+          },
+        }, {
+          dataField: 'y1path',
+          area: 'row',
+          width: 200,
+          expanded: true,
+        }, {
+          dataField: 'y2code',
+          area: 'row',
+          width: dataOptions.data.y2.visible ? undefined : 1,
+        }, {
+          dataField: 'x1code',
+          area: 'column',
+          expanded: true,
+        }],
+      },
+      encodeHtml: false,
+      showColumnTotals: false,
+      height: 400,
+      width: 1200,
+      scrolling: {
+        mode,
+        useNative,
+      },
+    });
+  }).after(async () => {
     await deleteStylesheetRule(0);
   });
 
   test(`Rows sincronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
-    await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
-
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
@@ -97,44 +97,48 @@ fixture`PivotGrid_scrolling`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxPivotGrid', {
-    dataSource: {
-      store: virtualData,
-      retrieveFields: false,
-      fields: [{
-        area: 'data',
-        dataType: 'string',
-        summaryType: 'custom',
-        calculateCustomSummary(options) {
-          if (options.summaryProcess === 'calculate') {
-            const item = options.value;
-            options.totalValue = `<div>${item.value}</div>`;
-          }
-        },
-      }, {
-        dataField: 'y1path',
-        area: 'row',
-        width: 200,
-        expanded: true,
-      }, {
-        dataField: 'y2code',
-        area: 'row',
-        width: dataOptions.data.y2.visible ? undefined : 1,
-      }, {
-        dataField: 'x1code',
-        area: 'column',
-        expanded: true,
-      }],
-    },
-    encodeHtml: false,
-    showColumnTotals: false,
-    height: 400,
-    width: 800,
-    scrolling: {
-      mode,
-      useNative,
-    },
-  })).after(async () => {
+  }).before(async () => {
+    await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
+
+    return createWidget('dxPivotGrid', {
+      dataSource: {
+        store: virtualData,
+        retrieveFields: false,
+        fields: [{
+          area: 'data',
+          dataType: 'string',
+          summaryType: 'custom',
+          calculateCustomSummary(options) {
+            if (options.summaryProcess === 'calculate') {
+              const item = options.value;
+              options.totalValue = `<div>${item.value}</div>`;
+            }
+          },
+        }, {
+          dataField: 'y1path',
+          area: 'row',
+          width: 200,
+          expanded: true,
+        }, {
+          dataField: 'y2code',
+          area: 'row',
+          width: dataOptions.data.y2.visible ? undefined : 1,
+        }, {
+          dataField: 'x1code',
+          area: 'column',
+          expanded: true,
+        }],
+      },
+      encodeHtml: false,
+      showColumnTotals: false,
+      height: 400,
+      width: 800,
+      scrolling: {
+        mode,
+        useNative,
+      },
+    });
+  }).after(async () => {
     await deleteStylesheetRule(0);
   });
 });
