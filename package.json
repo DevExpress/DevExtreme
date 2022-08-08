@@ -224,6 +224,7 @@
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
     "discover-declarations": "dx-tools discover --js-scripts ./js --exclude js/renovation/",
+    "smd-generator": "dx-tools generate-ng-smd --version 22_2",
     "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "validate-ts": "gulp validate-ts",
     "internal-tool": "dx-tools",

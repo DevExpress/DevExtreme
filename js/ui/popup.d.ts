@@ -231,7 +231,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Array<Object>
+     * @type Array<dxPopupToolbarItem>
      * @public
      */
     toolbarItems?: Array<ToolbarItem>;
@@ -259,20 +259,20 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
 }
 
 /**
- * @public
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui.dxPopup
  */
-export type ToolbarItem = dxPopupToolbarItem;
+export type dxPopupToolbarItem = ToolbarItem;
 
 /**
- * @deprecated Use ToolbarItem instead
- * @docid dxPopupOptions.toolbarItems
+ * @public
+ * @docid dxPopupToolbarItem
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxPopup
  */
-export interface dxPopupToolbarItem extends dxToolbarItem {
+export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxPopupOptions.toolbarItems.toolbar
+     * @docid dxPopupToolbarItem.toolbar
      * @default 'top'
      * @public
      */
