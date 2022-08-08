@@ -1,6 +1,7 @@
 /* global document */
 import injector from './utils/dependency_injector';
 import { noop } from './utils/common';
+import { getShadowElementsFromPoint } from './utils/shadow_dom';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
@@ -122,9 +123,13 @@ const nativeDOMAdapterStrategy = {
     },
 
     getActiveElement(element) {
-        const activeElementHolder = element?.getRootNode?.() ?? this._document;
+        const activeElementHolder = this.getRootNode(element);
 
         return activeElementHolder.activeElement;
+    },
+
+    getRootNode(element) {
+        return element?.getRootNode?.() ?? this._document;
     },
 
     getBody() {
@@ -171,8 +176,14 @@ const nativeDOMAdapterStrategy = {
         };
     },
 
-    elementsFromPoint(x, y) {
-        return this._document.elementsFromPoint(x, y);
+    elementsFromPoint(x, y, element) {
+        const activeElementHolder = this.getRootNode(element);
+
+        if(activeElementHolder.host) {
+            return getShadowElementsFromPoint(x, y, activeElementHolder);
+        }
+
+        return activeElementHolder.elementsFromPoint(x, y);
     }
 };
 

@@ -19,14 +19,14 @@ function run_ts {
 }
 
 function run_test {
-    iteration=0
+    local i
+    local status
 
-    while [ $iteration -ne 3 ]
-    do
-        iteration=$(($iteration+1))
-        if run_test_impl; then
-            exit 0
-        fi
+    for i in {1..3}; do
+        set +e
+        (set -e; run_test_impl); status=$?
+        set -e
+        [ $status == 0 ] && exit 0
     done
 
     exit 1
@@ -42,12 +42,14 @@ function run_test_impl {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$SHADOW_DOM" ] && url="$url&shadowDom=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
-        sudo dpkg-reconfigure --frontend noninteractive tzdata
+        ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        echo "$TZ" > /etc/timezone
+        date
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
@@ -88,7 +90,7 @@ function run_test_impl {
     case "$BROWSER" in
 
         "firefox")
-            kill -9 $(ps -x | grep firefox | awk '{print $1}')
+            kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
 
             local profile_path="/firefox-profile" 
             [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"

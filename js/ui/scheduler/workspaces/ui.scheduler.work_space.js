@@ -1178,6 +1178,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
+    _getFirstAndLastDataTableCell() {
+        const selector = this.isVirtualScrolling()
+            ? `.${DATE_TABLE_CELL_CLASS}, .${VIRTUAL_CELL_CLASS}`
+            : `.${DATE_TABLE_CELL_CLASS}`;
+
+        const $cells = this.$element().find(selector);
+        return [$cells[0], $cells[$cells.length - 1]];
+    }
+
     _getAllCells(allDay) {
         if(this._isVerticalGroupedWorkSpace()) {
             return this._$dateTable.find(`td:not(.${VIRTUAL_CELL_CLASS})`);
@@ -1495,22 +1504,38 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getGroupBounds(coordinates) {
+        const groupBounds = this._groupedStrategy instanceof VerticalGroupedStrategy
+            ? this.getGroupBoundsVertical(coordinates.groupIndex)
+            : this.getGroupBoundsHorizontal(coordinates);
+
+        return this._isRTL()
+            ? this.getGroupBoundsRtlCorrection(groupBounds)
+            : groupBounds;
+    }
+
+    getGroupBoundsVertical(groupIndex) {
+        const $firstAndLastCells = this._getFirstAndLastDataTableCell();
+        return this._groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
+    }
+
+    getGroupBoundsHorizontal(coordinates) {
         const cellCount = this._getCellCount();
         const $cells = this._getCells();
         const cellWidth = this.getCellWidth();
 
         const groupedDataMap = this.viewDataProvider.groupedDataMap;
-        const result = this._groupedStrategy
+        return this._groupedStrategy
             .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
+    }
 
-        if(this._isRTL()) {
-            const startOffset = result.left;
+    getGroupBoundsRtlCorrection(groupBounds) {
+        const cellWidth = this.getCellWidth();
 
-            result.left = result.right - cellWidth * 2;
-            result.right = startOffset + cellWidth * 2;
-        }
-
-        return result;
+        return {
+            ...groupBounds,
+            left: groupBounds.right - cellWidth * 2,
+            right: groupBounds.left + cellWidth * 2,
+        };
     }
 
     needRecalculateResizableArea() {

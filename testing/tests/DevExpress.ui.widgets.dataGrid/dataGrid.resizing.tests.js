@@ -60,6 +60,37 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(cols[1].style.width, '100px');
     });
 
+
+    // T1103925
+    QUnit.test('GroupPanel should have a maxWidth when empty', function(assert) {
+        // arrange
+        const clock = sinon.useFakeTimers();
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: {
+                store: [
+                    { field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' },
+                    { field1: '11', field2: '22', field3: '33', field4: '44', field5: '55' }]
+            },
+            width: 200,
+            groupPanel: {
+                emptyPanelText: 'Long long long long long long long long long long long text',
+                visible: true
+            },
+            editing: { allowAdding: true, mode: 'batch' },
+            columnChooser: {
+                enabled: true
+            }
+        }).dxDataGrid('instance');
+
+        const $dataGrid = $(dataGrid.element());
+
+        clock.tick();
+        const container = $dataGrid.find('.dx-toolbar-label');
+
+        assert.equal(container.length, 1);
+        assert.ok(container.css('maxWidth'), 'Group panel container has a max width');
+    });
+
     // T688721, T694661
     QUnit.test('column width as string should works correctly', function(assert) {
         // act

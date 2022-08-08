@@ -543,6 +543,11 @@ class Scheduler extends Widget {
                     this._filterAppointmentsByDate();
                     this._appointments.option('allowAllDayResize', value !== 'day');
                 });
+                // NOTE:
+                // Calling postponed operations (promises) here, because when we update options with
+                // usage of the beginUpdate / endUpdate methods, other option changes
+                // may try to access not initialized values inside the scheduler component.
+                this.postponedOperations.callPostponedOperations();
                 break;
             case 'appointmentTemplate':
                 this._appointments.option('itemTemplate', value);

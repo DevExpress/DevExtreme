@@ -73,7 +73,7 @@ export function findPropertiesToolbarItem($diagramElement, label) {
         });
 }
 export function findPropertiesPanelToolbarItem($diagramElement, label) {
-    return $('body').find(Consts.PROPERTIES_PANEL_TOOLBAR_SELECTOR)
+    return $('#qunit-fixture').find(Consts.PROPERTIES_PANEL_TOOLBAR_SELECTOR)
         .find('.dx-widget')
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;

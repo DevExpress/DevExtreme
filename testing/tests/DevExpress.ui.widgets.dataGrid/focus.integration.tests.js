@@ -172,10 +172,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Focused row should be visible in virtual scrolling mode', function(assert) {
-        if(devices.real().android) {
-            assert.ok(true, 'It\'s a bug under Android only');
-            return;
-        }
+
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const data = [
@@ -1555,6 +1552,32 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(true, 'no errors');
     });
 
+    // T1105542
+    QUnit.test('Row should be focused after clicking on it when keyboardNavigation.enabled is false', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ id: 1, field: 'some1' }, { id: 2, field: 'some2' }],
+            keyExpr: 'id',
+            keyboardNavigation: { enabled: false },
+            focusedRowEnabled: true,
+            columns: [{
+                dataField: 'id',
+                allowEditing: false,
+            }, 'field']
+        }).dxDataGrid('instance');
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger({
+            type: 'click',
+            originalEvent: $.Event('click')
+        });
+
+        // assert
+        assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(dataGrid.option('focusedRowKey'), 1, 'focusedRowKey');
+        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-focused'), 'Focused row');
+    });
 });
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
     // T809900

@@ -11,12 +11,16 @@ QUnit.testStart(function() {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
             </div>
         </div>
-
         <div id="scrollviewJquery">
             <div id="textJquery">
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
             </div>
-        </div>`;
+        </div>
+
+        <div id="scrollviewWithBinding" data-bind="dxScrollView: { }">
+            <div id="content" data-bind="html: content"></div>
+        </div>
+`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -43,3 +47,8 @@ QUnit[isRenovatedScrollView ? 'test' : 'skip']('Scrollview content is not recrea
 
 });
 
+QUnit.test('Scrollview content apply binding', function(assert) {
+    ko.applyBindings({ content: 'ScrollViewContent' }, $('#scrollviewWithBinding')[0]);
+
+    assert.strictEqual($('#content').get(0).innerText, 'ScrollViewContent');
+});

@@ -238,6 +238,7 @@ namespace Runner.Controllers
             m.NoTimers = q.ContainsKey("notimers");
             m.NoTryCatch = q.ContainsKey("notrycatch");
             m.NoJQuery = q.ContainsKey("nojquery");
+            m.ShadowDom = q.ContainsKey("shadowDom");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
             m.NoRenovation = q.ContainsKey("norenovation") || false;
         }

@@ -41,7 +41,7 @@ const getToggleButton = (instance) => {
 
 QUnit.module('common markup', {
     beforeEach: function() {
-        this.instance = new DropDownButton('#dropDownButton', {});
+        this.instance = new DropDownButton($('#dropDownButton'), {});
     }
 }, () => {
     QUnit.test('element should have dropDownButton and widget class', function(assert) {
@@ -50,7 +50,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('it should be possible to render the widget button without a text', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             deferRendering: false,
             items: [{ icon: 'box' }, { icon: 'user' }],
             keyExpr: 'icon',
@@ -64,7 +64,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('Widget should have no text after selectedItemKey is changed to null', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [{ id: 1, text: 'Test' }],
             keyExpr: 'id',
             displayExpr: 'text',
@@ -81,7 +81,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('Widget should have no text after Items is changed to empty array', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [{ id: 1, text: 'Test' }],
             keyExpr: 'id',
             displayExpr: 'text',
@@ -98,7 +98,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('width option should change dropDownButton width', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             text: 'Item 1',
             icon: 'box',
             width: 235
@@ -130,7 +130,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('stylingMode option should be transfered to buttonGroup', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             text: 'Item 1',
             icon: 'box',
             stylingMode: 'text'
@@ -143,7 +143,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('widget should have specific class if it has an arrow part (T888866)', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             text: 'Item 1',
             icon: 'box',
             stylingMode: 'text'
@@ -155,7 +155,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('widget should have specific class if it has no arrow part', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             text: 'Item 1',
             icon: 'box',
             stylingMode: 'text',
@@ -168,7 +168,7 @@ QUnit.module('common markup', {
     });
 
     QUnit.test('widget should have specific class if splitButton is true', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             text: 'Item 1',
             icon: 'box',
             stylingMode: 'text',
@@ -184,7 +184,7 @@ QUnit.module('common markup', {
 
 QUnit.module('button group integration', {}, () => {
     QUnit.test('element should have buttonGroup inside', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { selectionMode: true, splitButton: true });
+        const instance = new DropDownButton($('#dropDownButton'), { selectionMode: true, splitButton: true });
         const buttonGroup = getButtonGroup(instance);
         assert.strictEqual(buttonGroup.NAME, 'dxButtonGroup', 'buttonGroup rendered');
         assert.strictEqual(buttonGroup.option('selectionMode'), 'none', 'selection should be disabled');
@@ -197,7 +197,7 @@ QUnit.module('button group integration', {}, () => {
     });
 
     QUnit.test('hoverStateEnabled should be transfered to the buttonGroup', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { hoverStateEnabled: false, deferRendering: false });
+        const instance = new DropDownButton($('#dropDownButton'), { hoverStateEnabled: false, deferRendering: false });
         const buttonGroup = getButtonGroup(instance);
 
         assert.strictEqual(buttonGroup.option('hoverStateEnabled'), false, 'buttonGroup has correct option');
@@ -206,14 +206,14 @@ QUnit.module('button group integration', {}, () => {
     });
 
     QUnit.test('action and toggle button should have special class', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { splitButton: true });
+        const instance = new DropDownButton($('#dropDownButton'), { splitButton: true });
 
         assert.ok(instance.$element().find('.dx-button').eq(0).hasClass(DROP_DOWN_BUTTON_ACTION_CLASS));
         assert.ok(instance.$element().find('.dx-button').eq(1).hasClass(DROP_DOWN_BUTTON_TOGGLE_CLASS));
     });
 
     QUnit.test('a user can redefine buttonGroupOptions', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {
+        const instance = new DropDownButton($('#dropDownButton'), {
             useSelectMode: false,
             buttonGroupOptions: {
                 items: [{ text: 'Test' }],
@@ -231,13 +231,13 @@ QUnit.module('button group integration', {}, () => {
     });
 
     QUnit.test('a user can read buttonGroupOptions', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {});
+        const instance = new DropDownButton($('#dropDownButton'), {});
 
         assert.strictEqual(instance.option('buttonGroupOptions.stylingMode'), 'outlined', 'option is correct');
     });
 
     QUnit.test('text and icon options should depend on selection', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {
+        const instance = new DropDownButton($('#dropDownButton'), {
             text: 'Item 1',
             icon: 'box',
             keyExpr: 'id',
@@ -258,7 +258,7 @@ QUnit.module('button group integration', {}, () => {
 
 QUnit.module('common use cases', {
     beforeEach: function() {
-        this.dropDownButton = new DropDownButton('#dropDownButton', {
+        this.dropDownButton = new DropDownButton($('#dropDownButton'), {
             deferRendering: false,
             keyExpr: 'id',
             displayExpr: 'name',
@@ -326,7 +326,7 @@ QUnit.module('data expressions', {
             useSelectMode: true,
             deferRendering: false
         }) {
-            return new DropDownButton('#dropDownButton', config);
+            return new DropDownButton($('#dropDownButton'), config);
         };
     }
 }, () => {
@@ -420,7 +420,7 @@ QUnit.module('data expressions', {
 
 QUnit.module('items changing', {
     beforeEach: function() {
-        this.dropDownButton = new DropDownButton('#dropDownButton', {
+        this.dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [
                 { id: 1, file: 'vs.exe', name: 'Trial for Visual Studio', icon: 'box' },
                 { id: 2, file: 'all.exe', name: 'Trial for all platforms', icon: 'user' }
@@ -489,7 +489,7 @@ QUnit.module('deferred datasource', {
     }
 }, () => {
     QUnit.test('select an item via api', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             deferRendering: false,
             useSelectMode: true,
             keyExpr: 'id',
@@ -510,7 +510,7 @@ QUnit.module('option change', {}, () => {
             name: 'B', id: 2
         }];
 
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items,
             opened: true,
             keyExpr: 'name',
@@ -539,7 +539,7 @@ QUnit.module('option change', {}, () => {
             name: 'B', id: 2
         }];
 
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items,
             opened: true,
             keyExpr: 'name',
@@ -561,7 +561,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('focusStateEnabled option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
 
         dropDownButton.option('focusStateEnabled', false);
 
@@ -569,7 +569,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('tabIndex option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
 
         dropDownButton.option('tabIndex', 3);
 
@@ -577,14 +577,14 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownButton has no tabIndex attribute', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
         const tabIndexAttribute = dropDownButton.$element().attr('tabIndex');
 
         assert.strictEqual(tabIndexAttribute, undefined);
     });
 
     QUnit.test('buttonGroup tabIndex attribute equals 0', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
         const $buttonGroup = getButtonGroup(dropDownButton).$element();
         const tabIndexAttribute = $buttonGroup.attr('tabIndex');
 
@@ -592,7 +592,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('tabIndex option change sets buttonGroup tabIndex attribute', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
         const $buttonGroup = getButtonGroup(dropDownButton).$element();
 
         dropDownButton.option('tabIndex', 1);
@@ -602,7 +602,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('opened option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
 
         dropDownButton.option('opened', true);
 
@@ -620,7 +620,7 @@ QUnit.module('option change', {}, () => {
 
 
     QUnit.test('visible option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
 
         dropDownButton.option('visible', false);
 
@@ -629,7 +629,7 @@ QUnit.module('option change', {}, () => {
 
     QUnit.test('selectedItemKey option change should raise selectionChanged event', function(assert) {
         const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             splitButton: true,
             selectedItemKey: 2,
@@ -643,7 +643,7 @@ QUnit.module('option change', {}, () => {
 
     QUnit.test('selectedItemKey option change should raise selectionChanged event - subscription using "on" method', function(assert) {
         const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             splitButton: true,
             selectedItemKey: 2
@@ -656,7 +656,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('selectedItemKey option change should change selectedItem option', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             splitButton: true,
             selectedItemKey: 2
@@ -668,7 +668,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownOptions runtime change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             width: 100,
             deferRendering: false
         });
@@ -685,7 +685,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownOptions.visible option change should be ignored', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+        const dropDownButton = new DropDownButton($('#dropDownButton'), { deferRendering: false });
 
         dropDownButton.option('dropDownOptions.visible', true);
 
@@ -699,7 +699,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownOptions.visible option change should not open/close popup', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+        const dropDownButton = new DropDownButton($('#dropDownButton'), { deferRendering: false });
 
         dropDownButton.option('dropDownOptions', { visible: true });
 
@@ -719,7 +719,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('elementAttr runtime change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             elementAttr: {
                 class: 'first'
             }
@@ -733,7 +733,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('icon option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             icon: 'save'
         });
 
@@ -745,7 +745,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('deferRendering option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: ['Item 1']
         });
 
@@ -761,7 +761,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownContentTemplate option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             deferRendering: false
         });
@@ -782,7 +782,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('items option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             deferRendering: false
         });
@@ -800,7 +800,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('splitButton option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
 
         dropDownButton.option('splitButton', true);
 
@@ -816,7 +816,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dataSource option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             dataSource: [1, 2, 3],
             deferRendering: false
         });
@@ -860,7 +860,7 @@ QUnit.module('option change', {}, () => {
             { id: 2, name: 'B' }
         ];
 
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items,
             deferRendering: false,
             itemTemplate: function(itemData) {
@@ -885,7 +885,7 @@ QUnit.module('option change', {}, () => {
 
 
     QUnit.test('some options should be transfered to the list', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [{ key: 1, name: 'Item 1', icon: 'box' }],
             deferRendering: false,
             grouped: true,
@@ -936,7 +936,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('showArrowIcon option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             icon: 'group',
             deferRendering: false,
             splitButton: false,
@@ -958,7 +958,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('text option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             text: 'A'
         });
 
@@ -968,7 +968,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('width option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             width: 235
         });
 
@@ -987,7 +987,7 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('wrapItemText option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             deferRendering: false,
             wrapItemText: true
         });
@@ -1007,7 +1007,7 @@ QUnit.module('option change', {}, () => {
 
     QUnit.test('onContentReady option change', function(assert) {
         const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             selectedItemKey: 2
         });
@@ -1025,7 +1025,7 @@ QUnit.module('option change', {}, () => {
 
     QUnit.test('onItemClick option change', function(assert) {
         const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3]
         });
 
@@ -1051,7 +1051,7 @@ QUnit.module('option change', {}, () => {
 
     QUnit.test('onSelectionChanged option runtime change', function(assert) {
         const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton', {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
             items: [1, 2, 3],
             selectedItemKey: 2
         });
@@ -1079,7 +1079,7 @@ QUnit.module('option change', {}, () => {
 
     QUnit.test('onOptionChanged option runtime change', function(assert) {
         const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton($('#dropDownButton'));
 
         dropDownButton.option('onOptionChanged', handler);
 

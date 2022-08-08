@@ -1413,6 +1413,60 @@ QUnit.module('popup integration', () => {
 
             assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'width is correct');
         });
+
+        QUnit.test('should be equal to editor input width even when dropDownOptions.position.of is specified', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    position: { of: $container }
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+            assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to position.of when dropDownOptions.position.of is specified', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: '100%',
+                    position: { of: $container }
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+            assert.strictEqual($overlayContent.outerWidth(), $container.outerWidth(), 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to container when dropDownOptions.container is specified', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: '100%',
+                    position: { of: 'window' },
+                    container: $container
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+            assert.strictEqual($overlayContent.outerWidth(), $container.outerWidth(), 'width is correct');
+        });
     });
 
     QUnit.module('overlay content height', () => {
@@ -1541,6 +1595,37 @@ QUnit.module('popup integration', () => {
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
             assert.roughEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight() / 2, 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to dropDownOptions.position.of if it is specified (T1106785)', function(assert) {
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: '50%',
+                    position: { of: window },
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), $(window).height() / 2, 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to dropDownOptions.container if it is specified', function(assert) {
+            const $container = $('<div>')
+                .css({ height: 150 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: '50%',
+                    container: $container,
+                    position: { of: window },
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), $container.outerHeight() / 2, 0.1, 'overlay content height is correct');
         });
     });
 
