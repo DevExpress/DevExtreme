@@ -1022,11 +1022,9 @@ QUnit.module('Lookup', {
 
         openPopupWithList(firstLookup);
 
-        const isInShadowDomMode = $('#qunit-fixture').get(0).getRootNode().host;
-
         // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
         // and other is in document
-        if(isInShadowDomMode) {
+        if(QUnit.isInShadowDomMode()) {
             assert.equal(document.querySelectorAll('.' + LIST_ITEM_SELECTED_CLASS).length, 1);
             assert.equal($('#qunit-fixture').get(0).querySelectorAll('.' + LIST_ITEM_SELECTED_CLASS).length, 1);
         } else {
