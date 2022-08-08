@@ -454,24 +454,24 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
         const $dataGridElement = $(dataGrid.element());
         const $selectAllElement = $dataGridElement.find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
-        const $checkboxElement = dataGrid.getCellElement(0, 0);
+        const $checkboxElement = $(dataGrid.getCellElement(0, 0));
 
         // act
-        $checkboxElement.click();
+        $checkboxElement.trigger('dxclick');
         this.clock.tick();
 
         // assert
         assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
 
         // act
-        $dataGridElement.find('.dx-page').eq(1).click();
+        $dataGridElement.find('.dx-page').eq(1).trigger('dxclick');
         this.clock.tick();
 
         // assert
         assert.notOk($selectAllElement.hasClass('dx-checkbox-indeterminate'));
 
         // act
-        $dataGridElement.find('.dx-page').eq(0).click();
+        $dataGridElement.find('.dx-page').eq(0).trigger('dxclick');
         this.clock.tick();
 
         // assert
