@@ -2985,7 +2985,6 @@
           {
             "Title": "Tiling Algorithms",
             "Name": "TilingAlgorithms",
-            "DocUrl": "ApiReference/UI_Components/dxTreeMap/Configuration/#layoutAlgorithm",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
