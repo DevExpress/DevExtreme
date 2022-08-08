@@ -310,7 +310,7 @@ export default function() {
             this.clock.tick();
         });
 
-        test('new mention should be selected after press \'enter\' key', function(assert) {
+        test.skip('new mention should be selected after press \'enter\' key', function(assert) {
             const done = assert.async();
             const expectedMention = '<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>';
             const valueChangeSpy = sinon.spy(({ value }) => {
