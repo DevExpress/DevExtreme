@@ -1,6 +1,6 @@
 {
     "extends": [
-        "config:base"
+        "config:js-lib"
     ],
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
