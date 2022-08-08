@@ -25194,7 +25194,8 @@ declare module DevExpress.ui.dxPivotGrid {
 }
 declare module DevExpress.ui.dxPopup {
   /**
-   * @deprecated Use ToolbarItem instead
+   * [descr:dxPopupOptions.toolbarItems]
+   * @deprecated [depNote:dxPopupOptions.toolbarItems]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPopupToolbarItem extends DevExpress.ui.dxToolbar.Item {

@@ -266,10 +266,11 @@ export type ToolbarItem = dxPopupToolbarItem;
 
 /**
  * @deprecated Use ToolbarItem instead
+ * @docid dxPopupOptions.toolbarItems
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxPopup
  */
- export interface dxPopupToolbarItem extends dxToolbarItem {
+export interface dxPopupToolbarItem extends dxToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.toolbar
      * @default 'top'
