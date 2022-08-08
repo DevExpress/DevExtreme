@@ -223,21 +223,28 @@ QUnit.module('createObjectWithChanges', () => {
         t.equal(result.text, changes.text);
         t.equal(result.circular, target.circular);
     });
-    QUnit.test('handles objects with constructors', function(t) {
+    // T1086600
+    QUnit.test('handles BreezeJS like objects', function(t) {
         function ObjectWithConstructor() {
             this.text = 'Hello';
             this.circular = this;
         }
         const target = {
-            text: 'test',
             complexObject: new ObjectWithConstructor(),
-            plainObject: {}
+            plainObject: { text: 'test' },
+            get text() {
+                return this.plainObject.text;
+            },
+            set text(text) {
+                this.plainObject.text = text;
+            }
         };
         const changes = { text: 'text' };
 
         const result = createObjectWithChanges(target, changes);
         t.equal(result.complexObject, target.complexObject);
         t.notEqual(result.plainObject, target.plainObject);
+        t.equal(result.text, changes.text);
     });
     QUnit.test('handles complex nested recursive links', function(t) {
         function Foo() {
