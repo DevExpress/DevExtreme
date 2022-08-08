@@ -24,6 +24,10 @@ import {
 } from '../events/index';
 
 import {
+    Item as dxToolbarItem,
+} from './toolbar';
+
+import {
     PositionAlignment,
     ToolbarItemLocation,
     ToolbarItemComponent,
@@ -263,59 +267,17 @@ export type ToolbarItem = dxPopupToolbarItem;
 /**
  * @deprecated Use ToolbarItem instead
  * @inherits dxToolbarItem
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxPopup
  */
-export interface dxPopupToolbarItem {
-    /**
-     * @docid dxPopupOptions.toolbarItems.disabled
-     * @default false
-     * @public
-     */
-    disabled?: boolean;
-    /**
-     * @docid dxPopupOptions.toolbarItems.html
-     * @public
-     */
-    html?: string;
-    /**
-     * @docid dxPopupOptions.toolbarItems.location
-     * @default 'center'
-     * @public
-     */
-    location?: ToolbarItemLocation;
-    /**
-     * @docid dxPopupOptions.toolbarItems.options
-     * @public
-     */
-    options?: any;
-    /**
-     * @docid dxPopupOptions.toolbarItems.template
-     * @public
-     */
-    template?: template;
-    /**
-     * @docid dxPopupOptions.toolbarItems.text
-     * @public
-     */
-    text?: string;
+ export interface dxPopupToolbarItem extends dxToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.toolbar
      * @default 'top'
      * @public
      */
     toolbar?: ToolbarLocation;
-    /**
-     * @docid dxPopupOptions.toolbarItems.visible
-     * @default true
-     * @public
-     */
-    visible?: boolean;
-    /**
-     * @docid dxPopupOptions.toolbarItems.widget
-     * @public
-     */
-    widget?: ToolbarItemComponent;
 }
+
 /**
  * @docid
  * @inherits dxOverlay
