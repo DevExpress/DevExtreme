@@ -53,7 +53,7 @@ export default class Editor extends Component {
   }
 
   _queryChildSelector(selector: string): HTMLElement | null {
-    const root = this.element().getRootNode() as HTMLElement;
+    const root = this.element().getRootNode?.() as HTMLElement ?? document;
 
     return root.querySelector(selector);
   }

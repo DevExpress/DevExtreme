@@ -50,6 +50,18 @@
 
     };
 
+    QUnit.isInShadowDomMode = function() {
+        return QUnit.urlParams['shadowDom'] && QUnit.urlParams['nojquery'];
+    };
+
+    QUnit.skipInShadowDomMode = function(name, callback) {
+        if(QUnit.isInShadowDomMode()) {
+            QUnit.skip(name + ' [Skipped in the ShadowDOM mode]');
+        } else {
+            QUnit.test.apply(this, arguments);
+        }
+    };
+
     window.waitFor = function(predicate, timeout, interval) {
         timeout = timeout || 30000;
         interval = interval || 15;
@@ -162,10 +174,6 @@
         return typeof selector === 'string' && selector ? getRoot().querySelectorAll(selector) : selector;
     }
 
-    function isInShadowDomMode() {
-        return QUnit.urlParams['shadowDom'] && QUnit.urlParams['nojquery'];
-    }
-
     function addShadowRootTree() {
         const root = document.querySelector('#qunit-fixture');
 
@@ -216,7 +224,7 @@
     let jQueryInit;
 
     QUnit.testStart(function() {
-        if(!isInShadowDomMode()) {
+        if(!QUnit.isInShadowDomMode()) {
             return;
         }
 
@@ -241,7 +249,7 @@
     });
 
     QUnit.beforeTestDone(function() {
-        if(!isInShadowDomMode()) {
+        if(!QUnit.isInShadowDomMode()) {
             return;
         }
 
