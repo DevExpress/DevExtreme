@@ -431,6 +431,54 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible');
     });
 
+    QUnit.test('SelectAll checkbox should have correct value on page change when allowSelectAll is page and repaintChangesOnly is true (T1106649)', function(assert) {
+        const array = [];
+        let i = 100;
+        while(i--) {
+            array.push({ id: i });
+        }
+        const dataGrid = createDataGrid({
+            dataSource: array,
+            keyExpr: 'id',
+            repaintChangesOnly: true,
+            selection: {
+                mode: 'multiple',
+                selectAllMode: 'page',
+                showCheckboxesMode: 'always',
+            },
+            paging: {
+                pageSize: 10,
+            },
+        });
+
+        this.clock.tick();
+        const $dataGridElement = $(dataGrid.element());
+        const $selectAllElement = $dataGridElement.find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
+        const $checkboxElement = dataGrid.getCellElement(0, 0);
+
+        // act
+        $checkboxElement.click();
+        this.clock.tick();
+
+        // assert
+        assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
+
+        // act
+        $dataGridElement.find('.dx-page').eq(1).click();
+        this.clock.tick();
+
+        // assert
+        assert.notOk($selectAllElement.hasClass('dx-checkbox-indeterminate'));
+
+        // act
+        $dataGridElement.find('.dx-page').eq(0).click();
+        this.clock.tick();
+
+        // assert
+        assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
+    });
+
+
     QUnit.test('Disabled item should be selected when single mode is enabled (T1015840)', function(assert) {
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
