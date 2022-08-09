@@ -134,7 +134,8 @@ describe('TimeZoneCalculator', () => {
 
   describe('getOriginStartDateOffsetInMs method', () => {
     const minutesInMs = 60000;
-    const localOffset = -60 * minutesInMs;
+    const hoursInMs = 60 * minutesInMs;
+    const clientOffset = -7;
     const commonOffset = -5;
     const appointmentOffset = 6;
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -142,14 +143,14 @@ describe('TimeZoneCalculator', () => {
 
     beforeEach(() => {
       calculator = new TimeZoneCalculator({
-        getClientOffset: () => localOffset,
+        getClientOffset: () => -1 * clientOffset * hoursInMs,
         getCommonOffset: () => commonOffset,
         getAppointmentOffset: () => appointmentOffset,
       });
     });
 
-    test('should return correct offset for not utc date', () => {
-      const expectedOffset = 11 * 60 * minutesInMs;
+    test('should return correct offset for not utc date if appointment timezone set', () => {
+      const expectedOffset = (appointmentOffset - commonOffset) * hoursInMs;
       const testDate = new Date(2021, 1, 1, 10, 0, 0);
 
       const result = calculator.getOriginStartDateOffsetInMs(testDate, 'test', false);
@@ -157,11 +158,29 @@ describe('TimeZoneCalculator', () => {
       expect(result).toEqual(expectedOffset);
     });
 
-    test('should return correct offset for utc date', () => {
-      const expectedOffset = 5 * 60 * minutesInMs;
+    test('should return correct offset for utc date if appointment timezone set', () => {
+      const expectedOffset = (appointmentOffset - clientOffset) * hoursInMs;
       const testDate = new Date(2021, 1, 1, 10, 0, 0);
 
       const result = calculator.getOriginStartDateOffsetInMs(testDate, 'test', true);
+
+      expect(result).toEqual(expectedOffset);
+    });
+
+    test('should return correct offset for utc date if appointment timezone not set', () => {
+      const expectedOffset = (commonOffset - clientOffset) * hoursInMs;
+      const testDate = new Date(2021, 1, 1, 10, 0, 0);
+
+      const result = calculator.getOriginStartDateOffsetInMs(testDate, undefined, true);
+
+      expect(result).toEqual(expectedOffset);
+    });
+
+    test('should return zero offset for not utc date if appointment timezone not set', () => {
+      const expectedOffset = 0;
+      const testDate = new Date(2021, 1, 1, 10, 0, 0);
+
+      const result = calculator.getOriginStartDateOffsetInMs(testDate, undefined, false);
 
       expect(result).toEqual(expectedOffset);
     });
