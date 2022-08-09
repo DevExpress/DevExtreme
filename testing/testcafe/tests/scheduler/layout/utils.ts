@@ -1,3 +1,30 @@
+export const viewsWithAllDay = [
+  'day',
+  'week',
+  'month',
+] as const;
+
+export const viewsWithoutAllDay = [
+  'timelineDay',
+  'timelineWeek',
+  'timelineMonth',
+] as const;
+
+export type TViewTypes = typeof viewsWithAllDay | typeof viewsWithoutAllDay;
+
+export interface ITestAppointment {
+  text: string;
+  startDate: Date;
+  endDate: Date;
+  priorityId: number;
+  allDay?: boolean;
+}
+
+export interface ITestViewWithGrouping {
+  type: string;
+  groupOrientation: string;
+}
+
 export const resourceDataSource = [{
   fieldExpr: 'priorityId',
   dataSource: [
@@ -14,57 +41,70 @@ export const resourceDataSource = [{
   label: 'Priority',
 }];
 
-export const views = [
-  'day',
-  'week',
-  'month',
-  'timelineDay',
-  'timelineWeek',
-  'timelineMonth',
-];
-export const verticalViews = views
+export const getVerticalViews = (views: TViewTypes): ITestViewWithGrouping[] => views
   .map((viewType) => ({
     type: viewType,
     groupOrientation: 'vertical',
   }));
-export const horizontalViews = views
+
+export const getHorizontalViews = (views: TViewTypes): ITestViewWithGrouping[] => views
   .map((viewType) => ({
     type: viewType,
     groupOrientation: 'horizontal',
   }));
 
-export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => {
-  const result: {
-    text: string;
-    startDate: Date;
-    endDate: Date;
-    priorityId: number;
-    allDay?: boolean;
-  }[] = [];
-    // eslint-disable-next-line no-plusplus
-  for (let day = 1; day < 25; day++) {
-    result.push({
-      text: '1 appointment',
-      startDate: new Date(2020, 6, day, 0),
-      endDate: new Date(2020, 6, day, 1),
-      priorityId: 0,
-    });
+// NOTE: Array from 1 to 24 range.
+const DATA_SET_DAYS = new Array(24).fill(0).map((_, idx) => idx + 1);
 
-    result.push({
-      text: '2 appointment',
-      startDate: new Date(2020, 6, day, 1),
-      endDate: new Date(2020, 6, day, 2),
-      priorityId: 1,
-    });
+export const createDataSetWithAllDay = (): ITestAppointment[] => DATA_SET_DAYS
+  .reduce<ITestAppointment[]>((result, dayIdx) => {
+  result.push({
+    text: '1 appointment',
+    startDate: new Date(2020, 6, dayIdx, 0),
+    endDate: new Date(2020, 6, dayIdx, 1),
+    priorityId: 0,
+  });
 
-    result.push({
-      text: '3 appointment',
-      startDate: new Date(2020, 6, day, 3),
-      endDate: new Date(2020, 6, day, 5),
-      allDay: true,
-      priorityId: 0,
-    });
-  }
+  result.push({
+    text: '2 appointment',
+    startDate: new Date(2020, 6, dayIdx, 1),
+    endDate: new Date(2020, 6, dayIdx, 2),
+    priorityId: 1,
+  });
+
+  result.push({
+    text: '3 appointment',
+    startDate: new Date(2020, 6, dayIdx, 3),
+    endDate: new Date(2020, 6, dayIdx, 5),
+    allDay: true,
+    priorityId: 0,
+  });
 
   return result;
-};
+}, []);
+
+export const createDataSetWithoutAllDay = (): ITestAppointment[] => DATA_SET_DAYS
+  .reduce<ITestAppointment[]>((result, dayIdx) => {
+  result.push({
+    text: '1 appointment',
+    startDate: new Date(2020, 6, dayIdx, 0),
+    endDate: new Date(2020, 6, dayIdx, 1),
+    priorityId: 0,
+  });
+
+  result.push({
+    text: '2 appointment',
+    startDate: new Date(2020, 6, dayIdx, 1),
+    endDate: new Date(2020, 6, dayIdx, 2),
+    priorityId: 1,
+  });
+
+  result.push({
+    text: '3 long appointment',
+    startDate: new Date(2020, 6, dayIdx, 0),
+    endDate: new Date(2020, 6, dayIdx + 1, 0),
+    priorityId: 0,
+  });
+
+  return result;
+}, []);

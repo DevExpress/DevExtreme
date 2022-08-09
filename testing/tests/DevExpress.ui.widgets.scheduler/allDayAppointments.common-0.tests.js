@@ -583,7 +583,7 @@ module('All day appointments common', config, () => {
 
                 const workspace = $(scheduler.instance.$element()).find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance');
 
-                assert.equal(workspace.option('showAllDayPanel'), true, 'allDay panel is visible after adding allDay task');
+                assert.equal(workspace.option('allDayPanelBehavior').allDayPanelVisible, true, 'allDay panel is visible after adding allDay task');
             });
 
             test('all-day-collapsed class of workSpace should be removed after adding allDay appointment', function(assert) {

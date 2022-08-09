@@ -3,6 +3,7 @@ import { isObject, isString } from '../../../../core/utils/type';
 import { CurrentViewConfigProps, ViewProps } from '../props';
 import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
+import { mergeAllDayPanelPublicOptions } from '../appointment/allDayStrategy/index';
 
 const VIEW_TYPES = [
   'day', 'week', 'workWeek',
@@ -20,11 +21,7 @@ export const getCurrentView = (
       ? [view.name, view.type]
       : [view];
 
-    if (names.includes(currentView)) {
-      return true;
-    }
-
-    return false;
+    return names.includes(currentView);
   });
 
   if (currentViewProps === undefined) {
@@ -101,12 +98,18 @@ export const getCurrentViewConfig = (
       || restSchedulerProps.allDayPanelMode,
   };
 
+  const allDayPanelBehavior = mergeAllDayPanelPublicOptions(
+    schedulerProps.showAllDayPanel,
+    schedulerProps.allDayPanelMode,
+  );
+
   return {
     ...result,
     hoursInterval: result.cellDuration / 60,
     allDayPanelExpanded: true,
     allowMultipleCellSelection: true,
     currentDate,
+    allDayPanelBehavior,
   } as CurrentViewConfigType;
 };
 

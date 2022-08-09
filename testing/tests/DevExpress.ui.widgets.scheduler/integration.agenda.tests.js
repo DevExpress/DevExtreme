@@ -753,6 +753,8 @@ module('Integration: Agenda', moduleConfig, () => {
 
     test('Row count should be correct if appt ends at 0h 0m 0sec (T378182)', function(assert) {
         const instance = createInstance({
+            // NOTE: Fixed timezone, because without it test run in a local random timezone.
+            timeZone: 'Etc/GMT-3',
             dataSource: [{
                 clubId: 1,
                 text: 'One',

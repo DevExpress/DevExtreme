@@ -69,7 +69,7 @@ import { EffectReturn } from '../../../../utils/effect_return';
 import { ConfigContext, ConfigContextValue } from '../../../../common/config_context';
 import pointerEvents from '../../../../../events/pointer';
 import eventsEngine from '../../../../../events/core/events_engine';
-import { isMouseEvent } from '../../../../../events/utils/index';
+import { isMouseEvent } from '../../../../../events/utils';
 import { ALL_DAY_PANEL_CELL_CLASS, DATE_TABLE_CELL_CLASS } from '../const';
 ///#DEBUG
 import { DiagnosticUtils } from '../../../../utils/diagnostic';
@@ -142,7 +142,7 @@ const calculateDefaultVirtualScrollingState = (
 export const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceGenerationOptions,
   renderConfig: ViewRenderConfig,
-  isAllDayPanelVisible: boolean,
+  allDayPanelVisible: boolean,
   virtualStartIndices: CorrectedVirtualScrollingState,
 ): ViewDataProviderOptions => {
   const {
@@ -174,7 +174,7 @@ export const prepareGenerationOptions = (
     groupByDate,
     groups,
     isProvideVirtualCellsWidth,
-    isAllDayPanelVisible,
+    allDayPanelVisible,
     selectedCells: undefined,
     focusedCell: undefined,
     headerCellTextFormat,
@@ -199,7 +199,7 @@ export const viewFunction = ({
   viewData,
   timePanelData,
   groupPanelData,
-  isAllDayPanelVisible,
+  allDayPanelVisible,
   isRenderHeaderEmptyCell,
 
   dateTableRef,
@@ -271,7 +271,7 @@ export const viewFunction = ({
       isRenderTimePanel={isRenderTimePanel}
 
       isAllDayPanelCollapsed={!allDayPanelExpanded}
-      isAllDayPanelVisible={isAllDayPanelVisible}
+      isAllDayPanelVisible={allDayPanelVisible}
       isRenderDateHeader={isRenderDateHeader}
       isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
       isRenderGroupPanel={isVerticalGrouping}
@@ -380,11 +380,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
   }
 
-  get isAllDayPanelVisible(): boolean {
-    const { showAllDayPanel } = this.props;
+  get allDayPanelVisible(): boolean {
+    const { allDayPanelBehavior: { allDayPanelVisible } } = this.props;
     const { isAllDayPanelSupported } = this.renderConfig;
 
-    return isAllDayPanelSupported && showAllDayPanel;
+    return isAllDayPanelSupported && allDayPanelVisible;
   }
 
   get viewDataGenerator(): ViewDataGeneratorType {
@@ -435,7 +435,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       isVerticalGrouping: this.isVerticalGrouping,
       isHorizontalGrouping: this.isHorizontalGrouping,
       isGroupedByDate: this.isGroupedByDate,
-      isAllDayPanelVisible: this.isAllDayPanelVisible,
+      allDayPanelVisible: this.allDayPanelVisible,
       viewType: type,
       interval: this.viewDataGenerator.getInterval(hoursInterval),
     });
@@ -477,7 +477,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       {
         ...this.correctedVirtualScrollingState,
         isVerticalGrouping: this.isVerticalGrouping,
-        isAllDayPanelVisible: this.isAllDayPanelVisible,
+        allDayPanelVisible: this.allDayPanelVisible,
       },
     );
   }
@@ -495,21 +495,19 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   get viewData(): GroupedViewData {
     const { groups } = this.props;
-    const result = this.viewDataGenerator.getViewDataFromMap(
+    return this.viewDataGenerator.getViewDataFromMap(
       this.completeViewDataMap,
       this.viewDataMapWithSelection,
       {
         ...this.correctedVirtualScrollingState,
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
         isVerticalGrouping: this.isVerticalGrouping,
-        isAllDayPanelVisible: this.isAllDayPanelVisible,
+        allDayPanelVisible: this.allDayPanelVisible,
         isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
-          groups, this.groupOrientation, this.isAllDayPanelVisible,
+          groups, this.groupOrientation, this.allDayPanelVisible,
         ),
       },
     );
-
-    return result;
   }
 
   get completeDateHeaderData(): DateHeaderCellData[][] {
@@ -612,10 +610,10 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       this.completeTimePanelData,
       {
         isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
-          this.props.groups, this.groupOrientation, this.isAllDayPanelVisible,
+          this.props.groups, this.groupOrientation, this.allDayPanelVisible,
         ),
         isVerticalGrouping: this.isVerticalGrouping,
-        isAllDayPanelVisible: this.isAllDayPanelVisible,
+        allDayPanelVisible: this.allDayPanelVisible,
         ...this.correctedVirtualScrollingState,
       },
     );
@@ -655,7 +653,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         cellDuration,
       },
       this.renderConfig,
-      this.isAllDayPanelVisible,
+      this.allDayPanelVisible,
       this.correctedVirtualScrollingState,
     );
 
@@ -685,14 +683,12 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       viewType: type,
     });
 
-    const groupPanelData = getGroupPanelData(
+    return getGroupPanelData(
       groups,
       columnCountPerGroup,
       this.isGroupedByDate,
       this.isGroupedByDate ? 1 : columnCountPerGroup,
     );
-
-    return groupPanelData;
   }
 
   get isRenderHeaderEmptyCell(): boolean {
@@ -716,8 +712,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       [this.renderConfig.className]: true,
       'dx-scheduler-work-space-count': intervalCount > 1,
       'dx-scheduler-work-space-odd-cells': !!this.isWorkSpaceWithOddCells,
-      'dx-scheduler-work-space-all-day-collapsed': !allDayPanelExpanded && this.isAllDayPanelVisible,
-      'dx-scheduler-work-space-all-day': this.isAllDayPanelVisible,
+      'dx-scheduler-work-space-all-day-collapsed': !allDayPanelExpanded && this.allDayPanelVisible,
+      'dx-scheduler-work-space-all-day': this.allDayPanelVisible,
       'dx-scheduler-work-space-group-by-date': this.isGroupedByDate,
       'dx-scheduler-work-space-grouped': groups.length > 0,
       'dx-scheduler-work-space-vertical-grouped': this.isVerticalGrouping
@@ -738,7 +734,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       groups,
     } = this.props;
 
-    return !isVerticalGroupingApplied(groups, this.groupOrientation) && this.isAllDayPanelVisible;
+    return !isVerticalGroupingApplied(groups, this.groupOrientation) && this.allDayPanelVisible;
   }
 
   get isCalculateTablesWidth(): boolean {
@@ -908,7 +904,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       crossScrollingEnabled,
       firstDayOfWeek,
       startDate,
-      showAllDayPanel,
       allDayPanelExpanded,
       scrolling,
       cellDuration,
@@ -957,7 +952,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
           crossScrollingEnabled,
           firstDayOfWeek,
           startDate,
-          showAllDayPanel,
           allDayPanelExpanded,
           scrolling,
           cellDuration,

@@ -155,8 +155,8 @@ export const getHorizontalGroupCount = (
 export const calculateIsGroupedAllDayPanel = (
   groups: Group[],
   groupOrientation: GroupOrientation,
-  isAllDayPanelVisible: boolean,
-): boolean => isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
+  allDayPanelVisible: boolean,
+): boolean => isVerticalGroupingApplied(groups, groupOrientation) && allDayPanelVisible;
 
 export const calculateDayDuration = (
   startDayHour: number, endDayHour: number,

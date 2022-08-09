@@ -4,6 +4,7 @@ import timeZoneUtils from '../../../../ui/scheduler/utils.timeZone';
 export const createTimeZoneCalculator = (
   currentTimeZone: string,
 ): TimeZoneCalculator => new TimeZoneCalculator({
+  timeZone: currentTimeZone,
   getClientOffset: (date: Date): number => timeZoneUtils.getClientTimezoneOffset(date),
   getCommonOffset: (
     date: Date,

@@ -1,7 +1,7 @@
-import { AllDayPanelModeType } from '../appointment/utils/getAppointmentTakesAllDay';
 import { ResourceProps } from '../props';
 import { DataAccessorType, GroupOrientation, ViewType } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
+import { IAllDayPanelBehavior } from '../appointment/allDayStrategy/types';
 
 export interface AppointmentsConfigType {
   adaptivityEnabled: boolean;
@@ -16,7 +16,6 @@ export interface AppointmentsConfigType {
   isVirtualScrolling: boolean;
   intervalCount: number;
   hoursInterval: number;
-  showAllDayPanel: boolean;
   loadedResources: Group[];
   groups: string[];
   groupByDate: boolean;
@@ -34,8 +33,8 @@ export interface AppointmentsConfigType {
   supportAllDayRow: boolean;
   isVerticalGroupOrientation: boolean;
   groupCount: number;
-  allDayPanelMode: AllDayPanelModeType;
   dateRange: Date[]; // TODO replace with min / max
+  allDayPanelBehavior: IAllDayPanelBehavior;
 }
 
 export interface AppointmentsModelType extends AppointmentsConfigType {

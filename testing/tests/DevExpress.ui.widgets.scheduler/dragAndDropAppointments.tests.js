@@ -159,7 +159,7 @@ const commonModuleConfig = {
 };
 
 const draggingFromTooltipConfig = $.extend({}, {
-    data: [
+    commonData: [
         {
             text: 'app1',
             startDate: new Date(2017, 4, 22, 9, 30),
@@ -201,12 +201,56 @@ const draggingFromTooltipConfig = $.extend({}, {
             priorityId: 2
         }
     ],
-    createScheduler: function(views, currentView, rtlEnabled) {
+    withoutAllDayData: [
+        {
+            text: 'app1',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30),
+            priorityId: 1
+        }, {
+            text: 'app2',
+            startDate: new Date(2017, 4, 22, 10, 30),
+            endDate: new Date(2017, 4, 22, 11, 30),
+            priorityId: 1
+        }, {
+            text: 'app3',
+            startDate: new Date(2017, 4, 22, 10, 30),
+            endDate: new Date(2017, 4, 22, 11, 30),
+            priorityId: 1
+        }, {
+            text: 'app4',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+            priorityId: 2
+        }, {
+            text: 'app5',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+            priorityId: 2
+        }, {
+            text: 'app6',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+            priorityId: 2
+        }, {
+            text: 'app7',
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+            priorityId: 2
+        }
+    ],
+    createScheduler: function(views, view, rtlEnabled) {
+        const isTimelineView = !!timeLineViews.find(({ name }) => view.name === name);
+        const hasVerticalGrouping = !!view.groupOrientation;
+        const dataSource = isTimelineView || hasVerticalGrouping
+            ? [...this.withoutAllDayData.map((app) => ({ ...app }))]
+            : [...this.commonData.map((app) => ({ ...app }))];
+
         return createWrapper({
             _draggingMode: 'default',
-            dataSource: $.extend(true, [], this.data),
+            dataSource,
             views: views,
-            currentView: currentView,
+            currentView: view.type,
             currentDate: new Date(2017, 4, 25),
             startDayHour: 9,
             width: 800,
@@ -281,7 +325,7 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     [commonViews, timeLineViews, groupViews].forEach(views => {
         views.forEach(view => {
             test(`Views: ${view.name}`, function(assert) {
-                const scheduler = this.createScheduler(views, view.name, false);
+                const scheduler = this.createScheduler(views, view, false);
                 const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
 
                 const dragOffset = { left: 100, top: 100 };
@@ -321,7 +365,7 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     [commonViews, timeLineViews, groupViews].forEach(views => {
         views.forEach(view => {
             test(`Views: ${view.name}`, function(assert) {
-                const scheduler = this.createScheduler(views, view.name, true);
+                const scheduler = this.createScheduler(views, view, true);
                 const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
 
                 const dragOffset = { left: 100, top: 100 };
@@ -353,7 +397,18 @@ module('Appointment should move a same distance in dragging from tooltip case, r
 });
 
 const moveAsMouseConfig = $.extend({}, {
-    data: [{
+    withoutAllDayData: [{
+        text: 'Website Re-Design Plan',
+        priorityId: 2,
+        startDate: new Date(2018, 4, 21, 9, 30),
+        endDate: new Date(2018, 4, 21, 11, 30)
+    }, {
+        text: 'Book Flights to San Fran for Sales Trip',
+        priorityId: 1,
+        startDate: new Date(2018, 4, 21, 10, 0),
+        endDate: new Date(2018, 4, 21, 12, 0),
+    }],
+    commonData: [{
         text: 'Website Re-Design Plan',
         priorityId: 2,
         startDate: new Date(2018, 4, 21, 9, 30),
@@ -395,21 +450,28 @@ const moveAsMouseConfig = $.extend({}, {
         assert.equal(positionAfterDrag.top - positionBeforeDrag.top, dragCase.top,
             `appointment '${text}' should have correct top position in ${viewName}`);
     },
-    testViews: function(views, assert, rtlEnabled) {
-        const scheduler = this.createScheduler(views, rtlEnabled);
+    testViews: function(views, assert, rtlEnabled, withoutAllDayAppointments) {
+        const dataSource = withoutAllDayAppointments
+            ? [...this.withoutAllDayData.map((app) => ({ ...app }))]
+            : [...this.commonData.map((app) => ({ ...app }))];
+        const scheduler = this.createScheduler(
+            views,
+            rtlEnabled,
+            dataSource,
+        );
 
         views.forEach(view => {
             scheduler.option('currentView', view.name);
 
             this.dragCases.forEach(dragCase =>
-                this.data.forEach(({ text }) => this.testAppointmentPosition(scheduler, text, dragCase, view.name, assert))
+                dataSource.forEach(({ text }) => this.testAppointmentPosition(scheduler, text, dragCase, view.name, assert))
             );
         });
     },
-    createScheduler: function(views, rtlEnabled) {
+    createScheduler: function(views, rtlEnabled, dataSource) {
         return createWrapper({
             _draggingMode: 'default',
-            dataSource: $.extend(true, [], this.data),
+            dataSource,
             width: 850,
             height: 600,
             views: views,
@@ -434,18 +496,18 @@ module('Appointment should move a same distance as mouse, rtlEnabled = false', m
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, false); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, false); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, false); });
+    test('Common Views', function(assert) { this.testViews(commonViews, assert, false, false); });
+    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, false, true); });
+    test('Group Views', function(assert) { this.testViews(groupViews, assert, false, true); });
 });
 
 module('Appointment should move a same distance as mouse, rtlEnabled = true', moveAsMouseConfig, () => {
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, true); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, true); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, true); });
+    test('Common Views', function(assert) { this.testViews(commonViews, assert, true, false); });
+    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, true, true); });
+    test('Group Views', function(assert) { this.testViews(groupViews, assert, true, true); });
 });
 
 module('Common', commonModuleConfig, () => {

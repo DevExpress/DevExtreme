@@ -26,6 +26,7 @@ import { getDateTableWidth } from '../utils';
 import { getWindow, setWindow } from '../../../../../../core/utils/window';
 import * as subscribeUtils from '../../../../../utils/subscribe_to_event';
 import { DATE_TABLE_CELL_CLASS, DATE_TABLE_ROW_CLASS } from '../../const';
+import { EAllDayAppointmentStrategy } from '../../../appointment/allDayStrategy';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
@@ -205,7 +206,6 @@ describe('WorkSpace', () => {
         .toEqual({
           ...props,
           isAllDayPanelCollapsed: true,
-          isAllDayPanelVisible: true,
           isRenderHeaderEmptyCell: true,
           dateHeaderData,
           viewData,
@@ -1078,13 +1078,17 @@ describe('WorkSpace', () => {
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
           const currentDate = new Date(2021, 11, 26);
+          const allDayPanelBehaviorTest = {
+            allDayPanelVisible: false,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          };
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: false,
+            allDayPanelBehavior: allDayPanelBehaviorTest,
             currentDate,
             startViewDate: currentDate,
           });
@@ -1149,7 +1153,6 @@ describe('WorkSpace', () => {
                 crossScrollingEnabled: false,
                 firstDayOfWeek: 0,
                 startDate: undefined,
-                showAllDayPanel: false,
                 allDayPanelExpanded: false,
                 scrolling: { mode: 'standard' },
                 cellDuration: 30,
@@ -1160,6 +1163,10 @@ describe('WorkSpace', () => {
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
           const currentDate = new Date(2021, 11, 26);
+          const allDayPanelBehaviorTest = {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          };
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
@@ -1168,7 +1175,7 @@ describe('WorkSpace', () => {
             startViewDate: currentDate,
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: true,
+            allDayPanelBehavior: allDayPanelBehaviorTest,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -1245,7 +1252,6 @@ describe('WorkSpace', () => {
                 crossScrollingEnabled: false,
                 firstDayOfWeek: 0,
                 startDate: undefined,
-                showAllDayPanel: true,
                 allDayPanelExpanded: false,
                 scrolling: { mode: 'standard' },
                 cellDuration: 30,
@@ -1256,6 +1262,11 @@ describe('WorkSpace', () => {
         it('should not call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
           const onViewRendered = jest.fn();
 
+          const allDayPanelBehaviorTest = {
+            allDayPanelVisible: false,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          };
+
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
@@ -1263,7 +1274,7 @@ describe('WorkSpace', () => {
             startViewDate: new Date(2021, 11, 26),
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: false,
+            allDayPanelBehavior: allDayPanelBehaviorTest,
             crossScrollingEnabled: true,
             type: 'week',
           });
@@ -1286,6 +1297,11 @@ describe('WorkSpace', () => {
         it('should call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
           const onViewRendered = jest.fn();
 
+          const allDayPanelBehaviorTest = {
+            allDayPanelVisible: false,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          };
+
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
@@ -1293,7 +1309,7 @@ describe('WorkSpace', () => {
             startViewDate: new Date(2021, 11, 26),
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: false,
+            allDayPanelBehavior: allDayPanelBehaviorTest,
             crossScrollingEnabled: true,
             type: 'week',
           });
@@ -2034,16 +2050,22 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: false,
-            showAllDayPanel: false,
+            allDayPanelBehavior: {
+              allDayPanelVisible: false,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
             type: 'timelineWeek',
           } as any);
 
-          expect(workSpace.isAllDayPanelVisible)
+          expect(workSpace.allDayPanelVisible)
             .toBe(false);
 
-          workSpace.props.showAllDayPanel = true;
+          workSpace.props.allDayPanelBehavior = {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          };
 
-          expect(workSpace.isAllDayPanelVisible)
+          expect(workSpace.allDayPanelVisible)
             .toBe(false);
         });
 
@@ -2051,11 +2073,14 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: true,
-            showAllDayPanel: false,
+            allDayPanelBehavior: {
+              allDayPanelVisible: false,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
             type: 'week',
           } as any);
 
-          expect(workSpace.isAllDayPanelVisible)
+          expect(workSpace.allDayPanelVisible)
             .toBe(false);
         });
 
@@ -2063,11 +2088,14 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             currentDate: new Date(),
             isAllDayPanelSupported: true,
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
             type: 'week',
           } as any);
 
-          expect(workSpace.isAllDayPanelVisible)
+          expect(workSpace.allDayPanelVisible)
             .toBe(true);
         });
       });
@@ -2130,7 +2158,10 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           });
 
           expect(workSpace.completeViewDataMap)
@@ -2175,7 +2206,10 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           });
 
           expect(workSpace.viewDataMap)
@@ -2241,7 +2275,10 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           });
 
           expect(workSpace.viewDataMapWithSelection)
@@ -2305,7 +2342,10 @@ describe('WorkSpace', () => {
             endDayHour: 2,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           });
 
           workSpace.cellsSelectionState = {
@@ -2453,7 +2493,10 @@ describe('WorkSpace', () => {
             endDayHour: 1,
             onViewRendered: () => {},
             type: 'day',
-            showAllDayPanel: true,
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           });
 
           expect(workSpace.viewData)
@@ -2896,7 +2939,7 @@ describe('WorkSpace', () => {
               ...props,
               startRowIndex: 0,
               startCellIndex: 0,
-              isAllDayPanelVisible: false,
+              allDayPanelVisible: false,
               viewType: 'week',
               getDateForHeaderText: expect.any(Function),
               headerCellTextFormat: expect.any(Function),
@@ -3168,8 +3211,11 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'horizontal',
-            showAllDayPanel: true,
             type: 'week',
+            allDayPanelBehavior: {
+              allDayPanelVisible: true,
+              allDayPanelStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           } as any);
 
           const result = workSpace.isStandaloneAllDayPanel;
@@ -3184,8 +3230,11 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'horizontal',
-            showAllDayPanel: false,
             type: 'week',
+            allDayPanelBehavior: {
+              allDayPanelVisible: false,
+              allDayPanelStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+            },
           } as any);
 
           const result = workSpace.isStandaloneAllDayPanel;
@@ -3358,7 +3407,10 @@ describe('WorkSpace', () => {
           intervalCount: 35,
           type: 'day',
           hoursInterval: 0.5,
-          showAllDayPanel: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
           groupByDate: true,
           groups,
           groupOrientation: 'vertical',
@@ -3396,7 +3448,10 @@ describe('WorkSpace', () => {
           groups,
           groupOrientation: 'vertical',
           allDayPanelExpanded: true,
-          showAllDayPanel: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         } as any);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -3461,7 +3516,10 @@ describe('WorkSpace', () => {
           ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
-          showAllDayPanel: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
           groupByDate: false,
           groups: [],
           groupOrientation: 'horizontal',
@@ -3495,7 +3553,10 @@ describe('WorkSpace', () => {
           ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
-          showAllDayPanel: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
           groupByDate: false,
           groups: [],
           groupOrientation: 'vertical',

@@ -84,6 +84,12 @@ import {
 
 import { utils } from '../utils';
 import { compileGetter } from '../../../core/utils/data';
+import {
+    ALL_DAY_BEHAVIOR_JS_NAMES,
+    DEFAULT_ALL_DAY_PANEL_BEHAVIOR
+} from '../../../renovation/ui/scheduler/appointment/allDayStrategy/index';
+import compareAllDayPanelBehaviors
+from '../../../renovation/ui/scheduler/appointment/allDayStrategy/funcs/compareAllDayPanelBehaviors';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -211,8 +217,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._cellsSelectionController;
     }
 
-    get isAllDayPanelVisible() {
-        return this._isShowAllDayPanel() && this.supportAllDayRow();
+    get allDayPanelVisible() {
+        const allDayPanelVisible = this.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName)?.allDayPanelVisible || false;
+        return allDayPanelVisible && this.supportAllDayRow();
     }
 
     get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
@@ -400,7 +407,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const cellCoordinates = {
                     columnIndex: 0,
                     rowIndex: 0,
-                    allDay: this._isVerticalGroupedWorkSpace() && this.isAllDayPanelVisible,
+                    allDay: this._isVerticalGroupedWorkSpace() && this.allDayPanelVisible,
                 };
                 this.cellsSelectionState.setFocusedCell(
                     cellCoordinates.rowIndex,
@@ -662,7 +669,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return calculateIsGroupedAllDayPanel(
             this.option('groups'),
             this.option('groupOrientation'),
-            this.isAllDayPanelVisible,
+            this.allDayPanelVisible,
         );
     }
 
@@ -681,7 +688,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             today: this._getToday?.(),
             groups: this.option('groups'),
             isProvideVirtualCellsWidth,
-            isAllDayPanelVisible: this.isAllDayPanelVisible,
+            allDayPanelVisible: this.allDayPanelVisible,
             selectedCells: this.cellsSelectionState.getSelectedCells(),
             focusedCell: this.cellsSelectionState.focusedCell,
             headerCellTextFormat: this._getFormat(),
@@ -924,7 +931,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getTotalRowCount(groupCount, includeAllDayPanelRows) {
         let result = this._groupedStrategy.getTotalRowCount(groupCount);
 
-        if(includeAllDayPanelRows && this.isAllDayPanelVisible) {
+        if(includeAllDayPanelRows && this.allDayPanelVisible) {
             result += groupCount;
         }
 
@@ -1433,8 +1440,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getAllDayHeight() {
+        const allDayPanelVisible = this.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName).allDayPanelVisible;
+
         return getAllDayHeight(
-            this.option('showAllDayPanel'),
+            allDayPanelVisible,
             this._isVerticalGroupedWorkSpace(),
             this.getDOMElementsMetaData()
         );
@@ -1575,7 +1584,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     updateScrollPosition(date, groups, allDay = false) {
         const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
-        const inAllDayRow = allDay && this.isAllDayPanelVisible;
+        const inAllDayRow = allDay && this.allDayPanelVisible;
 
         if(this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {
             this.scrollTo(newDate, groups, inAllDayRow, false);
@@ -1677,7 +1686,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const groupIndex = this._getGroupCount() && groups
             ? this._getGroupIndexByResourceId(groups)
             : 0;
-        const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
+        const isScrollToAllDay = allDay && this.allDayPanelVisible;
 
         const coordinates = this._getScrollCoordinates(
             date.getHours(), date.getMinutes(), date, groupIndex, isScrollToAllDay,
@@ -1743,10 +1752,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         return { rowIndex, columnIndex };
-    }
-
-    _isShowAllDayPanel() {
-        return this.option('showAllDayPanel');
     }
 
     _getTimePanelCells() {
@@ -1841,7 +1846,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getAllDayPanelDOMElementsInfo() {
         const result = [];
 
-        if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace() && hasWindow()) {
+        if(this.allDayPanelVisible && !this._isVerticalGroupedWorkSpace() && hasWindow()) {
             const allDayCells = this._getAllCells(true);
 
             if(!allDayCells.length) {
@@ -1959,7 +1964,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRAllDayPanel() {
-        const visible = this.isAllDayPanelVisible && !this.isGroupedAllDayPanel();
+        const visible = this.allDayPanelVisible && !this.isGroupedAllDayPanel();
 
         if(visible) {
             this._toggleAllDayVisibility(false);
@@ -2102,7 +2107,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             activeStateEnabled: true,
             hoverStateEnabled: true,
             groups: [],
-            showAllDayPanel: true,
+            [ALL_DAY_BEHAVIOR_JS_NAMES.optionName]: DEFAULT_ALL_DAY_PANEL_BEHAVIOR,
             allDayExpanded: false,
             onCellClick: null,
             crossScrollingEnabled: false,
@@ -2120,19 +2125,24 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            allDayPanelMode: 'all',
             renovateRender: true,
             height: undefined,
             draggingMode: 'outlook',
             onScrollEnd: () => {},
             getHeaderHeight: undefined,
             onRenderAppointments: () => {},
-            onShowAllDayPanel: () => {},
             onSelectedCellsClick: () => {},
             timeZoneCalculator: undefined,
             schedulerHeight: undefined,
             schedulerWidth: undefined,
         });
+    }
+
+    _setOptionsByReference() {
+        this._optionsByReference = {
+            ...this._optionsByReference,
+            [ALL_DAY_BEHAVIOR_JS_NAMES.optionName]: true
+        };
     }
 
     _optionChanged(args) {
@@ -2168,18 +2178,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._cleanWorkSpace();
                 this._toggleGroupByDateClass();
                 break;
-            case 'showAllDayPanel':
-                if(this._isVerticalGroupedWorkSpace()) {
-                    this._cleanView();
-                    this._removeAllDayElements();
-                    this._initGrouping();
-                    this.repaint();
-                } else {
-                    if(!this.isRenovatedRender()) {
-                        this._toggleAllDayVisibility(true);
-                    } else {
-                        this.renderWorkSpace();
-                    }
+            case ALL_DAY_BEHAVIOR_JS_NAMES.optionName:
+                if(!compareAllDayPanelBehaviors(args.value, args.previousValue)) {
+                    this._actionOnAllDayBehaviorUpdate();
                 }
                 break;
             case 'allDayExpanded':
@@ -2208,10 +2209,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
                 break;
-            case 'allDayPanelMode':
-                this.updateShowAllDayPanel();
-                this.updateAppointments();
-                break;
             case 'width':
                 super._optionChanged(args);
                 this._dimensionChanged();
@@ -2232,11 +2229,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             default:
                 super._optionChanged(args);
         }
-    }
-
-    updateShowAllDayPanel() {
-        const isHiddenAllDayPanel = this.option('allDayPanelMode') === 'hidden';
-        this.option('onShowAllDayPanel')(!isHiddenAllDayPanel);
     }
 
     _getVirtualScrollingDispatcherOptions() {
@@ -2635,16 +2627,19 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _toggleAllDayVisibility(isUpdateScrollable) {
-        const showAllDayPanel = this._isShowAllDayPanel();
-        this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
+        const allDayPanelVisible = this.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName)?.allDayPanelVisible || false;
+        this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, allDayPanelVisible);
 
         this._changeAllDayVisibility();
         isUpdateScrollable && this._updateScrollable();
     }
 
     _changeAllDayVisibility() {
+        const allDayPanelVisible = this.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName).allDayPanelVisible;
+        const allDayExpanded = this.option('allDayExpanded');
+
         this.cache.clear();
-        this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option('allDayExpanded') && this._isShowAllDayPanel());
+        this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !allDayExpanded && allDayPanelVisible);
     }
 
     _getDateTables() {
@@ -2984,7 +2979,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const getData = (rowIndex, field) => {
             let allDayPanelsCount = 0;
-            if(this.isAllDayPanelVisible) {
+            if(this.allDayPanelVisible) {
                 allDayPanelsCount = 1;
             }
             if(this.isGroupedAllDayPanel()) {
@@ -3066,8 +3061,26 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             result = tableCreator.makeTable(options);
         }
-
         return result;
+    }
+
+    _actionOnAllDayBehaviorUpdate() {
+        this._toggleAllDayVisibility(false);
+        this.updateAppointments();
+
+        if(this._isVerticalGroupedWorkSpace()) {
+            this._cleanView();
+            this._removeAllDayElements();
+            this._initGrouping();
+            this.repaint();
+            return;
+        }
+
+        if(!this.isRenovatedRender()) {
+            this._toggleAllDayVisibility(true);
+        } else {
+            this.renderWorkSpace();
+        }
     }
 }
 

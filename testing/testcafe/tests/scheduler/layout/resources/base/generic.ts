@@ -2,14 +2,20 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
-import { createDataSetForScreenShotTests } from '../../utils';
+import { createDataSetWithAllDay, createDataSetWithoutAllDay } from '../../utils';
 
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
-const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
+const createScheduler = async (
+  view: string,
+  supportAllDay: boolean,
+  resourcesValue?: unknown[],
+): Promise<void> => {
   await createWidget('dxScheduler', {
-    dataSource: createDataSetForScreenShotTests(),
+    dataSource: supportAllDay
+      ? createDataSetWithAllDay()
+      : createDataSetWithoutAllDay(),
     currentDate: new Date(2020, 6, 15),
     views: [view],
     currentView: view,
@@ -43,7 +49,7 @@ const resources = [{
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async () => createScheduler(view, true, resourcesValue));
   });
 });
 
@@ -56,6 +62,6 @@ const resources = [{
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async () => createScheduler(view, false, resourcesValue));
   });
 });

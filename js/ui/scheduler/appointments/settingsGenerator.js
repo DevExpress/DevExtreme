@@ -110,6 +110,7 @@ export class DateGeneratorBaseStrategy {
 
         if(!appointment.isRecurrent && appointments.length === 0) {
             appointments.push({
+                allDay: appointment.allDay,
                 startDate: appointment.startDate,
                 endDate: appointment.endDate
             });
@@ -125,6 +126,7 @@ export class DateGeneratorBaseStrategy {
 
             return {
                 ...item,
+                allDay: appointment.allDay,
                 exceptionDate: new Date(item.startDate)
             };
         });
@@ -285,13 +287,14 @@ export class DateGeneratorBaseStrategy {
                 source.exceptionDate = new Date(source.startDate);
             }
 
-            const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
-            const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
-
             return {
-                startDate,
-                endDate,
-                source // TODO
+                startDate: source.allDay
+                    ? source.startDate
+                    : this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' }),
+                endDate: source.allDay
+                    ? source.endDate
+                    : this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' }),
+                source // TODO: What this todo mean?
             };
         });
     }

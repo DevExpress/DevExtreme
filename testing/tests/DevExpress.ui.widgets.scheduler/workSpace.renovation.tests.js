@@ -956,7 +956,10 @@ module('Renovated Render', {
 
         test('Renovated Comonents should be disposed on showAllDayPanel change when vertical grouping is used', function(assert) {
             this.createInstance({
-                showAllDayPanel: false,
+                allDayPanelBehavior: {
+                    allDayPanelVisible: false,
+                    allDayStrategy: 'allLongAppointments',
+                },
                 groupOrientation: 'vertical',
             });
             this.instance.option('groups', [
@@ -972,7 +975,10 @@ module('Renovated Render', {
 
             this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
 
-            this.instance.option('showAllDayPanel', true);
+            this.instance.option('allDayPanelBehavior', {
+                allDayPanelVisible: true,
+                allDayStrategy: 'allLongAppointments',
+            });
 
             assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });

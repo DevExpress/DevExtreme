@@ -27,11 +27,16 @@ const defaultDataAccessors = {
 const createAppointmentDataProvider = (options) => {
     return {
         appointmentDataProvider: new AppointmentDataProvider({
-            allDayPanelMode: 'all',
+            allDayPanelBehavior: {
+                allDayPanelVisible: true,
+                allDayStrategy: 'all',
+            },
             timeZoneCalculator: ({
-                createDate: date => date
+                createDate: date => date,
+                getCalculatorTimeZone: () => undefined,
             }),
             getIsVirtualScrolling: () => false,
+            getSupportAllDayRow: () => true,
             ...options
         }),
         prepareDataItems: () => {
@@ -934,6 +939,7 @@ module('Client side after filtering', () => {
             },
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
+                getCalculatorTimeZone: () => undefined,
             },
         });
 
@@ -986,6 +992,7 @@ module('Client side after filtering', () => {
             },
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
+                getCalculatorTimeZone: () => undefined,
             },
         });
 
@@ -1035,6 +1042,7 @@ module('Client side after filtering', () => {
             },
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
+                getCalculatorTimeZone: () => undefined,
             },
         });
 
@@ -1208,48 +1216,6 @@ module('Client side after filtering', () => {
         ], 'Appointments are OK');
     });
 
-    test('Loaded appointments should be filtered by allDay field', function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
-
-        const appts = appointmentDataProvider.filterLoadedAppointments({
-            startDayHour: 3,
-            endDayHour: 7,
-            allDay: false,
-            min: new Date(2015, 0, 1, 3),
-            max: new Date(2015, 0, 1, 8)
-        }, prepareDataItems());
-
-        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
-    });
-
     test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
         const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
@@ -1280,6 +1246,7 @@ module('Client side after filtering', () => {
             },
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
+                getCalculatorTimeZone: () => undefined,
             },
         });
 
@@ -1330,6 +1297,7 @@ module('Client side after filtering', () => {
                 },
                 timeZoneCalculator: {
                     getOriginStartDateOffsetInMs: () => 0,
+                    getCalculatorTimeZone: () => undefined,
                 },
             });
 
