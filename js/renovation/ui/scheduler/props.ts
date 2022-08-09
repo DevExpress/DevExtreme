@@ -44,7 +44,7 @@ import { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
 import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
-import { AllDayPanelModeType } from './appointment/utils/getAppointmentTakesAllDay';
+import { AllDayPanelModeType, EAllDayPanelModeOptionTypes } from './appointment/allDayStrategy/types';
 
 @ComponentBindings()
 export class ScrollingProps {
@@ -385,7 +385,7 @@ export class SchedulerProps extends BaseWidgetProps {
   textExpr = 'text';
 
   @OneWay()
-  allDayPanelMode: AllDayPanelModeType = 'all';
+  allDayPanelMode: AllDayPanelModeType = 'all' as EAllDayPanelModeOptionTypes;
 
   // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
   /* Templates */

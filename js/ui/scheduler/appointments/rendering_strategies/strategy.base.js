@@ -8,7 +8,10 @@ import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { getAppointmentTakesAllDay } from '../../../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
+import {
+    ALL_DAY_BEHAVIOR_JS_NAMES,
+    isAllDayPanelAppointment
+} from '../../../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -46,7 +49,6 @@ class BaseRenderingStrategy {
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
     get topVirtualCellCount() { return this.options.topVirtualCellCount; }
     get positionHelper() { return this.options.positionHelper; }
-    get showAllDayPanel() { return this.options.showAllDayPanel; }
     get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get groupOrientation() { return this.options.groupOrientation; }
     get rowCount() { return this.options.rowCount; }
@@ -60,7 +62,6 @@ class BaseRenderingStrategy {
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get intervalCount() { return this.options.intervalCount; }
-    get allDayPanelMode() { return this.options.allDayPanelMode; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -245,11 +246,12 @@ class BaseRenderingStrategy {
 
     isAppointmentTakesAllDay(rawAppointment) {
         const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-        return getAppointmentTakesAllDay(
+        return isAllDayPanelAppointment(
             adapter,
             this.viewStartDayHour,
             this.viewEndDayHour,
-            this.allDayPanelMode,
+            this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName].allDayStrategy,
+            !!this.timeZoneCalculator.getCalculatorTimeZone(),
         );
     }
 

@@ -1,6 +1,7 @@
 import { setHeight, setWidth } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import CurrentTimeShader from '../shaders/ui.scheduler.current_time_shader';
+import { ALL_DAY_BEHAVIOR_JS_NAMES } from '../../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
@@ -83,7 +84,9 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     }
 
     _renderAllDayShader(shaderWidth, i) {
-        if(this._workSpace.option('showAllDayPanel')) {
+        const allDayPanelVisible = this._workSpace.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName).allDayPanelVisible;
+
+        if(allDayPanelVisible) {
             this._$allDayIndicator = $('<div>').addClass(DATE_TIME_SHADER_ALL_DAY_CLASS);
             setHeight(this._$allDayIndicator, this._workSpace.getAllDayHeight());
             setWidth(this._$allDayIndicator, shaderWidth);

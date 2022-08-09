@@ -6,7 +6,10 @@ import timeZoneUtils from '../../utils.timeZone';
 import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
 import getSkippedHoursInRange from '../../../../renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
-import { getAppointmentTakesAllDay } from '../../../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
+import {
+    ALL_DAY_BEHAVIOR_JS_NAMES,
+    isAllDayPanelAppointment
+} from '../../../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 import { roundFloatPart } from '../../../../core/utils/math';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
@@ -152,13 +155,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const { groupIndex } = appointmentSettings;
         const groupTop = Math.max(0, this.positionHelper.getGroupTop({
             groupIndex,
-            showAllDayPanel: this.showAllDayPanel,
+            allDayPanelVisible: this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName].allDayPanelVisible,
             isGroupedAllDayPanel: this.isGroupedAllDayPanel,
         }));
         const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
             groupIndex,
             supportAllDayRow: this.allDaySupported(),
-            showAllDayPanel: this.showAllDayPanel
+            allDayPanelVisible: this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName].allDayPanelVisible
         });
         const appointmentGroupTopOffset = appointmentSettings.top - groupTop - allDayPanelOffset;
 
@@ -184,8 +187,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const result = [];
         let currentPartTop = Math.max(0, this.positionHelper.getGroupTop({
             groupIndex: appointmentSettings.groupIndex,
-            showAllDayPanel: this.showAllDayPanel,
-            isGroupedAllDayPanel: this.isGroupedAllDayPanel
+            allDayPanelVisible: this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName].allDayPanelVisible,
+            isGroupedAllDayPanel: this.isGroupedAllDayPanel,
         }));
         const cellsDiff = this.isGroupedByDate
             ? this.groupCount
@@ -195,7 +198,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const allDayPanelOffset = this.positionHelper.getOffsetByAllDayPanel({
             groupIndex: appointmentSettings.groupIndex,
             supportAllDayRow: this.allDaySupported(),
-            showAllDayPanel: this.showAllDayPanel
+            allDayPanelVisible: this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName].allDayPanelVisible,
         });
 
         currentPartTop += allDayPanelOffset;
@@ -306,11 +309,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     isAllDay(appointmentData) {
-        return getAppointmentTakesAllDay(
+        return isAllDayPanelAppointment(
             createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
             this.startDayHour,
             this.endDayHour,
-            this.allDayPanelMode
+            this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName].allDayStrategy,
+            !!this.timeZoneCalculator.getCalculatorTimeZone(),
         );
     }
 

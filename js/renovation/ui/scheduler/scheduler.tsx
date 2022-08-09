@@ -123,12 +123,12 @@ export const viewFunction = ({
     intervalCount,
     groupOrientation,
     startDate,
-    showAllDayPanel,
     showCurrentTimeIndicator,
     indicatorUpdateInterval,
     shadeUntilCurrentTime,
     crossScrollingEnabled,
     hoursInterval,
+    allDayPanelBehavior,
 
     allowMultipleCellSelection,
     allDayPanelExpanded,
@@ -193,7 +193,6 @@ export const viewFunction = ({
             groupOrientation={groupOrientation}
             startDate={startDate}
             startViewDate={startViewDate}
-            showAllDayPanel={showAllDayPanel}
             showCurrentTimeIndicator={showCurrentTimeIndicator}
             indicatorUpdateInterval={indicatorUpdateInterval}
             shadeUntilCurrentTime={shadeUntilCurrentTime}
@@ -203,6 +202,7 @@ export const viewFunction = ({
             type={type}
             schedulerHeight={height}
             schedulerWidth={width}
+            allDayPanelBehavior={allDayPanelBehavior}
 
             allowMultipleCellSelection={allowMultipleCellSelection}
             allDayPanelExpanded={allDayPanelExpanded}
@@ -323,13 +323,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         appointmentCollectorTemplate,
         appointmentTooltipTemplate,
         maxAppointmentsPerCell,
-        showAllDayPanel,
         showCurrentTimeIndicator,
         indicatorUpdateInterval,
         shadeUntilCurrentTime,
         crossScrollingEnabled,
         height,
         width,
+        showAllDayPanel,
         allDayPanelMode,
       },
       currentDate,
@@ -349,7 +349,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       crossScrollingEnabled,
       firstDayOfWeek,
       startDate,
-      showAllDayPanel,
       allDayPanelExpanded,
       scrolling,
       cellDuration,
@@ -369,7 +368,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         crossScrollingEnabled,
         firstDayOfWeek,
         startDate,
-        showAllDayPanel,
         allDayPanelExpanded,
         scrolling,
         cellDuration,
@@ -412,9 +410,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     };
 
     const viewDataGenerator = getViewDataGeneratorByViewType(type);
-    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
-
-    return startViewDate;
+    return viewDataGenerator.getStartViewDate(options) as Date;
   }
 
   get isVirtualScrolling(): boolean {
@@ -472,12 +468,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         scrolling: this.currentViewConfig.scrolling,
         intervalCount: this.currentViewConfig.intervalCount,
         hoursInterval: this.currentViewConfig.hoursInterval,
-        showAllDayPanel: this.currentViewConfig.showAllDayPanel,
         firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
         type: this.currentViewConfig.type,
         cellDuration: this.currentViewConfig.cellDuration,
         maxAppointmentsPerCell: this.currentViewConfig.maxAppointmentsPerCell,
-        allDayPanelMode: this.currentViewConfig.allDayPanelMode,
+        allDayPanelBehavior: this.currentViewConfig.allDayPanelBehavior,
       },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,
@@ -504,7 +499,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.appointmentsConfig.startDayHour,
       this.appointmentsConfig.endDayHour,
       this.appointmentsConfig.cellDurationInMinutes,
-      this.appointmentsConfig.showAllDayPanel,
+      this.appointmentsConfig.allDayPanelBehavior,
       this.appointmentsConfig.supportAllDayRow,
       this.appointmentsConfig.firstDayOfWeek,
       this.appointmentsConfig.viewType,

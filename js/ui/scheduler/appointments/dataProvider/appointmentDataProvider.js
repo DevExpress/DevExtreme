@@ -2,6 +2,7 @@ import config from '../../../../core/config';
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
 import combineRemoteFilter from '../../../../renovation/ui/scheduler/utils/filtering/remote';
+import { ALL_DAY_BEHAVIOR_JS_NAMES } from '../../../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -41,9 +42,7 @@ export class AppointmentDataProvider {
             dataAccessors: this.dataAccessors,
             startDayHour: this.options.startDayHour,
             endDayHour: this.options.endDayHour,
-            showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
-            //
             loadedResources: this.options.getLoadedResources,
             supportAllDayRow: this.options.getSupportAllDayRow,
             viewType: this.options.getViewType,
@@ -51,7 +50,7 @@ export class AppointmentDataProvider {
             dateRange: this.options.getDateRange,
             groupCount: this.options.getGroupCount,
             viewDataProvider: this.options.getViewDataProvider,
-            allDayPanelMode: this.options.allDayPanelMode,
+            [ALL_DAY_BEHAVIOR_JS_NAMES.optionName]: this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName],
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
@@ -96,7 +95,7 @@ export class AppointmentDataProvider {
 
 
     hasAllDayAppointments(filteredItems, preparedItems) {
-        return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems);
+        return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems, this.options[ALL_DAY_BEHAVIOR_JS_NAMES.optionName]);
     }
 
     filterLoadedAppointments(filterOption, preparedItems) {

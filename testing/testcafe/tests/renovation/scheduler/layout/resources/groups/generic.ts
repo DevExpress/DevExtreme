@@ -1,8 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../../model/scheduler';
-import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
+import { resourceDataSource } from '../../utils';
 import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
+import { createDataSetWithAllDay, createDataSetWithoutAllDay } from '../../../../../scheduler/layout/utils';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
@@ -14,10 +15,13 @@ fixture('Scheduler: Generic theme layout');
 const createScheduler = async (
   platform: PlatformType,
   view: string,
+  supportAllDay: boolean,
   groupOrientation: string,
 ): Promise<void> => {
   await createWidget(platform, 'dxScheduler', {
-    dataSource: createDataSetForScreenShotTests(),
+    dataSource: supportAllDay
+      ? createDataSetWithAllDay()
+      : createDataSetWithoutAllDay(),
     currentDate: new Date(2020, 6, 15),
     startDayHour: 0,
     endDayHour: 4,
@@ -47,7 +51,9 @@ const createScheduler = async (
 
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async (_, { platform }) => createScheduler(platform, view, groupOrientation));
+      }).before(async (_, { platform }) => createScheduler(
+      platform, view, true, groupOrientation,
+    ));
   });
 });
 
@@ -64,6 +70,8 @@ const createScheduler = async (
 
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async (_, { platform }) => createScheduler(platform, view, groupOrientation));
+      }).before(async (_, { platform }) => createScheduler(
+      platform, view, false, groupOrientation,
+    ));
   });
 });
