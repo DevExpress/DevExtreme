@@ -565,7 +565,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
-            columns: ['id', 'foo.text'],
+            columns: ['id', 'foo.bar.foo.text'],
             dataSource: [{ id: 1, foo: new Foo() }],
             editing: { allowUpdating: true, mode: 'batch' }
         }).dxDataGrid('instance');
