@@ -13928,7 +13928,6 @@ declare module DevExpress.ui {
     | 'showInColumnChooser'
     | 'type'
     | 'validationRules'
-    | 'visible'
   >;
   /**
    * [descr:dxGanttColumn]
@@ -14028,10 +14027,6 @@ declare module DevExpress.ui {
      * [descr:dxGanttColumn.validationRules]
      */
     validationRules: any;
-    /**
-     * [descr:dxGanttColumn.visible]
-     */
-    visible: any;
     /**
      * [descr:dxGanttColumn.type]
      */
