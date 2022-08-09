@@ -31,6 +31,7 @@ export const createDataAccessors = (
   return dataAccessors;
 };
 
+// TODO: Why we've this check?
 export const isViewDataProviderConfigValid = (
   viewDataProviderConfig: ViewDataProviderValidationOptions | undefined,
   currentViewOptions: ViewDataProviderValidationOptions,

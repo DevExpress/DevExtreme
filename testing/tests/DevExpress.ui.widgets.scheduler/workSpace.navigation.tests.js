@@ -576,7 +576,10 @@ module('Workspace navigation', () => {
                 test('Workspace should select/unselect cells in allDay panel with shift & arrows', function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
-                        showAllDayPanel: true,
+                        allDayPanelBehavior: {
+                            allDayPanelVisible: true,
+                            allDayStrategy: 'allLongAppointments',
+                        },
                         firstDayOfWeek: 1,
                         startDayHour: 3,
                         endDayHour: 10,
@@ -1062,6 +1065,10 @@ module('Workspace navigation', () => {
                         },
                         onSelectedCellsClick: () => {},
                         groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        allDayPanelBehavior: {
+                            allDayPanelVisible: false,
+                            allDayStrategy: 'allLongAppointments',
+                        },
                     }, 'dxSchedulerWorkSpaceWeek');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -1444,7 +1451,10 @@ module('Workspace navigation', () => {
                         groupOrientation: 'vertical',
                         startDayHour: 0,
                         endDayHour: 2,
-                        showAllDayPanel: true,
+                        allDayPanelBehavior: {
+                            allDayPanelVisible: true,
+                            allDayStrategy: 'withoutAllDayAppointments',
+                        },
                         groups: [
                             { name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] },
                             { name: 'b', items: [{ id: 10, text: 'b.1' }, { id: 20, text: 'b.2' }] },

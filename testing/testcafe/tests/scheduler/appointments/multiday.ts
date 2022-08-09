@@ -221,12 +221,11 @@ test('it should correctly change allDayPanelOption at runtime', async (t) => {
   await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
 
   await scheduler.option('allDayPanelMode', 'hidden');
+
   await t
     .expect(scheduler.getAppointmentCount())
-    .eql(5)
-    .expect(scheduler.allDayTableCells.exists)
-    .notOk();
-  await checkRegularAppointment(t, scheduler, 'allDay', 0, undefined, 400);
+    .eql(4);
+
   await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
   await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
   await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
@@ -284,8 +283,9 @@ test('it should correctly handle allDayPanelMode for the wokrspace', async (t) =
   await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 451);
 
   await t
-    .click(scheduler.toolbar.viewSwitcher.getButton('weekAllDay').element)
-    .expect(scheduler.getAppointmentCount())
+    .click(scheduler.toolbar.viewSwitcher.getButton('weekAllDay').element);
+
+  await t.expect(scheduler.getAppointmentCount())
     .eql(5);
 
   await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 109);
@@ -315,6 +315,39 @@ test('it should correctly handle allDayPanelMode for the wokrspace', async (t) =
         allDayPanelMode: 'allDay',
       },
     ],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 21),
+    startDayHour: 8,
+    endDayHour: 10,
+  },
+));
+
+test('It should correctly handle showAllDayPanel in runtime', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t.expect(scheduler.allDayTableCells.exists).ok();
+  await t.expect(scheduler.getAppointmentCount()).eql(1);
+
+  await scheduler.option('showAllDayPanel', false);
+
+  await t.expect(scheduler.allDayTableCells.exists).notOk();
+  await t.expect(scheduler.getAppointmentCount()).eql(0);
+
+  await scheduler.option('showAllDayPanel', true);
+
+  await t.expect(scheduler.allDayTableCells.exists).ok();
+  await t.expect(scheduler.getAppointmentCount()).eql(1);
+}).before(async () => createWidget(
+  'dxScheduler',
+  {
+    width: 900,
+    height: 400,
+    dataSource: [{
+      text: 'allDay',
+      startDate: new Date(2021, 2, 22),
+      allDay: true,
+    }],
+    views: ['week'],
     currentView: 'week',
     currentDate: new Date(2021, 2, 21),
     startDayHour: 8,

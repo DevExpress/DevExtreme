@@ -112,14 +112,12 @@ export class GroupedDataMapProvider {
                 : startTime >= cellStartTime && startTime < cellEndTime;
         };
 
-        const {
-            allDayPanelGroupedMap,
-            dateTableGroupedMap
-        } = this.groupedDataMap;
-
-        const rows = isAllDay && !this._viewOptions.isVerticalGrouping
-            ? [allDayPanelGroupedMap[groupIndex]] || []
-            : dateTableGroupedMap[groupIndex] || [];
+        const rows = this._getRowForFindCellPositionInMap(
+            this.groupedDataMap,
+            groupIndex,
+            isAllDay,
+            this._viewOptions.isVerticalGrouping
+        );
 
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
             const row = rows[rowIndex];
@@ -137,6 +135,25 @@ export class GroupedDataMapProvider {
         }
 
         return undefined;
+    }
+
+    _getRowForFindCellPositionInMap(groupedDataMap,
+        groupIdx,
+        isAllDay,
+        isVerticalGrouping) {
+        const {
+            allDayPanelGroupedMap,
+            dateTableGroupedMap
+        } = groupedDataMap;
+
+        if(isAllDay && !isVerticalGrouping) {
+            const allDayMap = allDayPanelGroupedMap || [];
+            const allDayDesiredRow = allDayMap[groupIdx] || [];
+            return allDayDesiredRow ? [allDayDesiredRow] : [];
+        }
+
+        const dayMap = dateTableGroupedMap || [];
+        return dayMap[groupIdx] || [];
     }
 
     _isSameGroupIndexAndIndex(cellData, groupIndex, index) {

@@ -1,14 +1,24 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
+import {
+  createDataSetWithAllDay,
+  createDataSetWithoutAllDay,
+  resourceDataSource,
+} from '../../utils';
 
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
-const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
+const createScheduler = async (
+  view: string,
+  supportAllDay: boolean,
+  groupOrientation: string,
+): Promise<void> => {
   await createWidget('dxScheduler', {
-    dataSource: createDataSetForScreenShotTests(),
+    dataSource: supportAllDay
+      ? createDataSetWithAllDay()
+      : createDataSetWithoutAllDay(),
     currentDate: new Date(2020, 6, 15),
     startDayHour: 0,
     endDayHour: 4,
@@ -30,7 +40,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Base views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async () => createScheduler(view, true, groupOrientation));
   });
 });
 
@@ -39,6 +49,6 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async () => createScheduler(view, false, groupOrientation));
   });
 });

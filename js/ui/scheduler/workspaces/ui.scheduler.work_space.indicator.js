@@ -9,6 +9,7 @@ import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
 import { getToday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import timezoneUtils from '../utils.timeZone';
+import { ALL_DAY_BEHAVIOR_JS_NAMES } from '../../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -246,7 +247,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             case 'indicatorUpdateInterval':
                 this._setIndicationUpdateInterval();
                 break;
-            case 'showAllDayPanel':
+            case ALL_DAY_BEHAVIOR_JS_NAMES.optionName:
                 super._optionChanged(args);
                 this._refreshDateTimeIndication();
                 break;

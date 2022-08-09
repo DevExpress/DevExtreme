@@ -449,19 +449,27 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.notOk($workSpace.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'Work-space has not \'all-day-expanded\' class');
     });
 
-    test('Work space should have right showAllDayPanel option value', function(assert) {
+    test('Work space should have right allDayPanelBehavior option value', function(assert) {
         const { instance } = createWrapper({
-            showAllDayPanel: false
+            showAllDayPanel: false,
+            allDayPanelMode: 'all',
         });
         const workspace = instance.getWorkSpace();
 
+        const firstOptionValue = workspace.option('allDayPanelBehavior');
         assert.equal(workspace.type, 'day', 'WorkSpace type is Day');
-        assert.equal(workspace.option('showAllDayPanel'), false, 'Work space has a correct allDay visibility');
+        assert.equal(firstOptionValue.allDayPanelVisible, false, 'Work space has a correct allDay visibility');
+        assert.equal(firstOptionValue.allDayStrategy, 'allLongAppointment', 'WOrk space has a correct allDay strategy');
 
-        workspace.option('showAllDayPanel', true);
+        workspace.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'separate'
+        });
 
-        assert.equal(workspace.option('showAllDayPanel'), true, 'Work space has a correct allDay visibility');
+        const secondOptionValue = workspace.option('allDayPanelBehavior');
         assert.equal(workspace.type, 'day', 'WorkSpace type is Day');
+        assert.equal(secondOptionValue.allDayPanelVisible, true, 'Work space has a correct allDay visibility');
+        assert.equal(secondOptionValue.allDayStrategy, 'separate', 'Work space has a correct allDay visibility');
     });
 
     test('Work space \'allDayExpanded\' option value when \'showAllDayPanel\' = true', function(assert) {

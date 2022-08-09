@@ -579,9 +579,15 @@ QUnit.module('Appointments', moduleOptions, () => {
             appointmentDataProvider: {
                 appointmentTakesAllDay: commonUtils.noop,
             },
-            allDayPanelMode: 'all',
+            allDayPanelBehavior: {
+                allDayPanelVisible: true,
+                allDayStrategy: 'all',
+            },
             cellDurationInMinutes: 30,
-            cellHeight: 50
+            cellHeight: 50,
+            timeZoneCalculator: {
+                getCalculatorTimeZone: () => undefined,
+            }
         });
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 

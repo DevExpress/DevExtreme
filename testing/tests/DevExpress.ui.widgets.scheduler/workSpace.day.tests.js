@@ -28,10 +28,16 @@ module('Work Space Day', {
     }
 }, () => {
     test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', function(assert) {
-        this.instance.option('showAllDayPanel', true);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: true,
+            allDayStrategy: 'allLongAppointments',
+        });
         assert.ok(this.instance.getAllDayHeight() > 0, 'Return value is correct');
 
-        this.instance.option('showAllDayPanel', false);
+        this.instance.option('allDayPanelBehavior', {
+            allDayPanelVisible: false,
+            allDayStrategy: 'allLongAppointments',
+        });
         assert.equal(this.instance.getAllDayHeight(), 0, 'Return value is correct');
     });
 
@@ -221,8 +227,12 @@ module('Work Space Day', {
             }],
             groupOrientation: 'vertical',
             startDayHour: 9,
-            showAllDayPanel: false
+            allDayPanelBehavior: {
+                allDayPanelVisible: false,
+                allDayStrategy: 'all',
+            }
         });
+
         const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
         const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(36).data('dxCellData');
 

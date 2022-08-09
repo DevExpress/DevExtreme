@@ -42,8 +42,8 @@ export const getCellWidth = (DOMMetaData) => {
     return getCellSize(DOMMetaData).width;
 };
 
-export const getAllDayHeight = (showAllDayPanel, isVerticalGrouping, DOMMetaData) => {
-    if(!showAllDayPanel) {
+export const getAllDayHeight = (allDayPanelVisible, isVerticalGrouping, DOMMetaData) => {
+    if(!allDayPanelVisible) {
         return 0;
     }
 
@@ -183,13 +183,13 @@ class GroupStrategyBase {
     getOffsetByAllDayPanel({
         groupIndex,
         supportAllDayRow,
-        showAllDayPanel
+        allDayPanelVisible,
     }) {
         let result = 0;
 
-        if(supportAllDayRow && showAllDayPanel) {
+        if(supportAllDayRow && allDayPanelVisible) {
             const allDayPanelHeight = getAllDayHeight(
-                showAllDayPanel,
+                allDayPanelVisible,
                 true,
                 this.DOMMetaData
             );
@@ -214,14 +214,14 @@ class GroupStrategyBase {
 
     getGroupTop({
         groupIndex,
-        showAllDayPanel,
+        allDayPanelVisible,
         isGroupedAllDayPanel,
     }) {
         const rowCount = this.viewDataProvider.getRowCountInGroup(groupIndex);
         const maxVerticalPosition = this._getMaxAllowedVerticalPosition({
             groupIndex,
             viewDataProvider: this.viewDataProvider,
-            showAllDayPanel,
+            allDayPanelVisible,
             isGroupedAllDayPanel,
             isVerticalGrouping: true,
             DOMMetaData: this.DOMMetaData
@@ -230,13 +230,13 @@ class GroupStrategyBase {
         return maxVerticalPosition - getCellHeight(this.DOMMetaData) * rowCount;
     }
 
-    _getAllDayHeight(showAllDayPanel) {
-        return getAllDayHeight(showAllDayPanel, true, this.DOMMetaData);
+    _getAllDayHeight(allDayPanelVisible) {
+        return getAllDayHeight(allDayPanelVisible, true, this.DOMMetaData);
     }
 
     _getMaxAllowedVerticalPosition({
         groupIndex,
-        showAllDayPanel,
+        allDayPanelVisible,
         isGroupedAllDayPanel,
     }) {
         const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
@@ -250,7 +250,7 @@ class GroupStrategyBase {
         // TODO remove while refactoring dual calculcations.
         // Should decrease allDayPanel amount due to the dual calculation corrections.
         if(isGroupedAllDayPanel) {
-            result -= (groupIndex + 1) * this._getAllDayHeight(showAllDayPanel);
+            result -= (groupIndex + 1) * this._getAllDayHeight(allDayPanelVisible);
         }
 
         return result;
@@ -282,7 +282,7 @@ class GroupStrategyHorizontal extends GroupStrategyBase {
         return 0;
     }
 
-    _getAllDayHeight(showAllDayPanel) {
-        return getAllDayHeight(showAllDayPanel, false, this.DOMMetaData);
+    _getAllDayHeight(allDayPanelVisible) {
+        return getAllDayHeight(allDayPanelVisible, false, this.DOMMetaData);
     }
 }

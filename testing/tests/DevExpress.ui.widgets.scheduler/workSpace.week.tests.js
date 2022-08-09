@@ -425,7 +425,7 @@ module('Work Space Week', () => {
                 return this.instance.positionHelper.getVerticalMax({
                     groupIndex,
                     isVirtualScrolling: false,
-                    isShowAllDayPanel: true,
+                    allDayPanelVisible: true,
                     supportAllDayRow: true,
                     isGroupedAllDayPanel: true,
                     isVerticalGrouping: true

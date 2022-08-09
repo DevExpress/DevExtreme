@@ -102,6 +102,10 @@ export class TimeZoneCalculator {
     return 0;
   }
 
+  getCalculatorTimeZone(): string | undefined {
+    return this.options.timeZone;
+  }
+
   protected getClientOffset(date: Date): number {
     return this.options.getClientOffset(date);
   }

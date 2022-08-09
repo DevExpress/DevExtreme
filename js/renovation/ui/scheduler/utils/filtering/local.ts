@@ -6,13 +6,14 @@ import {
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 import { Group, ViewDataProviderType } from '../../workspaces/types';
 import { ResourceProps } from '../../props';
+import { IAllDayPanelBehavior } from '../../appointment/allDayStrategy/types';
 
 export const getFilterStrategy = (
   resources: ResourceProps[],
   startDayHour: number,
   endDayHour: number,
   cellDurationInMinutes: number,
-  showAllDayPanel: boolean,
+  allDayPanelBehavior: IAllDayPanelBehavior,
   supportAllDayRow: boolean,
   firstDayOfWeek: number,
   viewType: ViewType,
@@ -29,7 +30,7 @@ export const getFilterStrategy = (
     startDayHour,
     endDayHour,
     appointmentDuration: cellDurationInMinutes,
-    showAllDayPanel,
+    allDayPanelBehavior,
     supportAllDayRow,
     firstDayOfWeek,
     viewType,

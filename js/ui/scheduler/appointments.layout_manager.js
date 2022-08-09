@@ -4,6 +4,7 @@ import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
 import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getAppointmentRenderingStrategyName } from '../../renovation/ui/scheduler/model/appointments';
+import { ALL_DAY_BEHAVIOR_JS_NAMES } from '../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -34,8 +35,10 @@ class AppointmentLayoutManager {
         } = virtualScrollingDispatcher;
         const groupCount = getGroupCount(this.instance.option('loadedResources'));
         const DOMMetaData = workspace.getDOMElementsMetaData();
+
+        const allDayPanelVisible = workspace.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName).allDayPanelVisible;
         const allDayHeight = getAllDayHeight(
-            workspace.option('showAllDayPanel'),
+            allDayPanelVisible,
             workspace._isVerticalGroupedWorkSpace(),
             DOMMetaData
         );
@@ -71,7 +74,7 @@ class AppointmentLayoutManager {
             topVirtualCellCount: cellCountInsideTopVirtualRow,
             intervalCount: workspace.option('intervalCount'),
             hoursInterval: workspace.option('hoursInterval'),
-            showAllDayPanel: workspace.option('showAllDayPanel'),
+            allDayPanelBehavior: workspace.option(ALL_DAY_BEHAVIOR_JS_NAMES.optionName),
             isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             groups: this.instance._getCurrentViewOption('groups'),
             groupCount,
@@ -87,7 +90,6 @@ class AppointmentLayoutManager {
             allDayHeight: allDayHeight,
             resizableStep: positionHelper.getResizableStep(),
             visibleDayDuration,
-            allDayPanelMode: this.instance._getCurrentViewOption('allDayPanelMode'),
             // appointment settings
             timeZoneCalculator: this.instance.timeZoneCalculator,
             timeZone: this.instance.option('timeZone'),
