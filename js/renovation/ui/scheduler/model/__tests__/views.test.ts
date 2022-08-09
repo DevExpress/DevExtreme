@@ -1,6 +1,7 @@
 import { ViewProps } from '../../props';
 import { ViewType } from '../../types';
 import { getCurrentViewConfig, getCurrentViewProps } from '../views';
+import { EAllDayAppointmentStrategy } from '../../appointment/allDayStrategy/index';
 
 describe('Model views', () => {
   describe('getCurrentViewProps', () => {
@@ -82,7 +83,6 @@ describe('Model views', () => {
         cellDuration: 15,
         groupByDate: true,
         currentDate: new Date(2021, 8, 10),
-        showAllDayPanel: true,
         showCurrentTimeIndicator: true,
         indicatorUpdateInterval: 3000,
         shadeUntilCurrentTime: true,
@@ -115,6 +115,10 @@ describe('Model views', () => {
           schedulerWidth: 500,
           allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         });
     });
 
@@ -126,7 +130,6 @@ describe('Model views', () => {
         cellDuration: 15,
         groupByDate: true,
         currentDate: new Date(2021, 8, 10),
-        showAllDayPanel: true,
         showCurrentTimeIndicator: true,
         indicatorUpdateInterval: 3000,
         shadeUntilCurrentTime: true,
@@ -173,6 +176,10 @@ describe('Model views', () => {
           schedulerWidth: 500,
           allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         });
     });
 
@@ -184,7 +191,6 @@ describe('Model views', () => {
         cellDuration: 15,
         groupByDate: true,
         currentDate: new Date(2021, 8, 10),
-        showAllDayPanel: true,
         showCurrentTimeIndicator: true,
         indicatorUpdateInterval: 3000,
         shadeUntilCurrentTime: true,
@@ -213,6 +219,10 @@ describe('Model views', () => {
           allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
           crossScrollingEnabled: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         });
     });
 
@@ -224,7 +234,6 @@ describe('Model views', () => {
         cellDuration: 15,
         groupByDate: true,
         currentDate: new Date(2021, 8, 10),
-        showAllDayPanel: true,
         showCurrentTimeIndicator: true,
         indicatorUpdateInterval: 3000,
         shadeUntilCurrentTime: true,
@@ -250,6 +259,10 @@ describe('Model views', () => {
           allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
           crossScrollingEnabled: true,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         });
     });
 
@@ -269,7 +282,6 @@ describe('Model views', () => {
         cellDuration: 15,
         groupByDate: true,
         currentDate: new Date(2021, 8, 10),
-        showAllDayPanel: true,
         showCurrentTimeIndicator: true,
         indicatorUpdateInterval: 3000,
         shadeUntilCurrentTime: true,
@@ -314,6 +326,10 @@ describe('Model views', () => {
           appointmentTemplate,
           appointmentCollectorTemplate,
           appointmentTooltipTemplate,
+          allDayPanelBehavior: {
+            allDayPanelVisible: true,
+            allDayStrategy: EAllDayAppointmentStrategy.allLongAppointment,
+          },
         });
     });
   });

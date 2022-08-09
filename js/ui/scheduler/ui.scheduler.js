@@ -72,7 +72,13 @@ import {
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
 import { AppointmentDataProvider } from './appointments/dataProvider/appointmentDataProvider';
-import { getAppointmentTakesAllDay } from '../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
+import {
+    ALL_DAY_BEHAVIOR_JS_NAMES,
+    DEFAULT_ALL_DAY_PANEL_BEHAVIOR,
+    isAllDayPanelAppointment,
+    mergeAllDayPanelPublicOptions,
+    compareAllDayPanelBehaviors,
+} from '../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
@@ -201,6 +207,8 @@ class Scheduler extends Widget {
             },
 
             showAllDayPanel: true,
+            allDayPanelMode: 'all',
+            internalOptionAllDayPanelBehavior: DEFAULT_ALL_DAY_PANEL_BEHAVIOR,
 
             showCurrentTimeIndicator: true,
 
@@ -304,8 +312,6 @@ class Scheduler extends Widget {
             scrolling: {
                 mode: 'standard'
             },
-
-            allDayPanelMode: 'all',
 
             renovateRender: true,
 
@@ -452,6 +458,13 @@ class Scheduler extends Widget {
         ]);
     }
 
+    _setOptionsByReference() {
+        this._optionsByReference = {
+            ...this._optionsByReference,
+            [ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName]: true
+        };
+    }
+
     _postponeDataSourceLoading(promise) {
         this.postponedOperations.add('_reloadDataSource', this._reloadDataSource.bind(this), promise);
     }
@@ -504,9 +517,13 @@ class Scheduler extends Widget {
 
                 this.appointmentDataProvider.setDataSource(this._dataSource);
 
-                this._postponeResourceLoading().done((resources) => {
+                this._postponeResourceLoading().done(() => {
                     this._filterAppointmentsByDate();
-                    this._updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
+                    // TODO: Why we need this code?
+                    this._updateOption(
+                        'workSpace',
+                        ALL_DAY_BEHAVIOR_JS_NAMES.optionName,
+                        this.option(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName));
                 });
                 break;
             case 'min':
@@ -542,6 +559,11 @@ class Scheduler extends Widget {
                     this._header?.option(this._headerConfig());
                     this._filterAppointmentsByDate();
                     this._appointments.option('allowAllDayResize', value !== 'day');
+
+                    this._updateInternalOptionAllDayBehavior(
+                        this.option('showAllDayPanel'),
+                        this._getCurrentViewOption('allDayPanelMode'),
+                    );
                 });
                 // NOTE:
                 // Calling postponed operations (promises) here, because when we update options with
@@ -672,8 +694,22 @@ class Scheduler extends Widget {
                 break;
             }
             case 'showAllDayPanel':
-                this.updateInstances();
-                this.repaint();
+                this._updateInternalOptionAllDayBehavior(
+                    value,
+                    this._getCurrentViewOption('allDayPanelMode'),
+                );
+                break;
+            case 'allDayPanelMode':
+                this._updateInternalOptionAllDayBehavior(
+                    this.option('showAllDayPanel'),
+                    value,
+                );
+                break;
+            case ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName:
+                if(!compareAllDayPanelBehaviors(args.value, args.previousValue)) {
+                    this._updateOption('workSpace', ALL_DAY_BEHAVIOR_JS_NAMES.optionName, value);
+                    this.repaint();
+                }
                 break;
             case 'showCurrentTimeIndicator':
             case 'indicatorTime':
@@ -729,9 +765,6 @@ class Scheduler extends Widget {
             case 'scrolling':
                 this.option('crossScrollingEnabled', this._isHorizontalVirtualScrolling() || this.option('crossScrollingEnabled'));
 
-                this._updateOption('workSpace', args.fullName, value);
-                break;
-            case 'allDayPanelMode':
                 this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'renovateRender':
@@ -809,7 +842,8 @@ class Scheduler extends Widget {
     }
 
     _isAllDayExpanded() {
-        return this.option('showAllDayPanel') && this.appointmentDataProvider.hasAllDayAppointments(
+        const { allDayPanelVisible } = this.option(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName);
+        return allDayPanelVisible && this.appointmentDataProvider.hasAllDayAppointments(
             this.filteredItems,
             this.preparedItems
         );
@@ -966,6 +1000,11 @@ class Scheduler extends Widget {
         this._subscribes = subscribes;
 
         this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
+
+        this._updateInternalOptionAllDayBehavior(
+            this.option('showAllDayPanel'),
+            this._getCurrentViewOption('allDayPanelMode'),
+        );
     }
 
     createAppointmentDataProvider() {
@@ -978,8 +1017,7 @@ class Scheduler extends Widget {
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
-            allDayPanelMode: this._getCurrentViewOption('allDayPanelMode'),
-            showAllDayPanel: this.option('showAllDayPanel'),
+            allDayPanelBehavior: this.option(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName),
             getLoadedResources: () => this.option('loadedResources'),
             getIsVirtualScrolling: () => this.isVirtualScrolling(),
             getSupportAllDayRow: () => this._workSpace.supportAllDayRow(),
@@ -1374,8 +1412,9 @@ class Scheduler extends Widget {
     isAppointmentInAllDayPanel(appointmentData) {
         const workSpace = this._workSpace;
         const itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
+        const { allDayPanelVisible } = this.option(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName);
 
-        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
+        return itTakesAllDay && workSpace.supportAllDayRow() && allDayPanelVisible;
     }
 
     _initMarkupCore(resources) {
@@ -1440,7 +1479,7 @@ class Scheduler extends Widget {
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.onCurrentViewChange = (name) => {
             this.option('currentView', name);
-        },
+        };
         result.onCurrentDateChange = (date) => {
             this.option('currentDate', date);
         };
@@ -1599,7 +1638,7 @@ class Scheduler extends Widget {
             accessKey: this.option('accessKey'),
             focusStateEnabled: this.option('focusStateEnabled'),
             cellDuration: this.option('cellDuration'),
-            showAllDayPanel: this.option('showAllDayPanel'),
+            allDayPanelBehavior: this.option(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName),
             showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
             indicatorTime: this.option('indicatorTime'),
             indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
@@ -1621,10 +1660,8 @@ class Scheduler extends Widget {
             timeZoneCalculator: this.timeZoneCalculator,
             schedulerHeight: this.option('height'),
             schedulerWidth: this.option('width'),
-            allDayPanelMode: this.option('allDayPanelMode'),
             onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
             onRenderAppointments: this._renderAppointments.bind(this),
-            onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
             getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
             onScrollEnd: () => this._appointments.updateResizableArea(),
 
@@ -2115,11 +2152,12 @@ class Scheduler extends Widget {
             this.timeZoneCalculator
         );
 
-        return getAppointmentTakesAllDay(
+        return isAllDayPanelAppointment(
             appointment,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour'),
-            this._getCurrentViewOption('allDayPanelMode'),
+            this._getCurrentViewOption(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName).allDayStrategy,
+            !!this.option('timeZone'),
         );
     }
 
@@ -2476,6 +2514,13 @@ class Scheduler extends Widget {
 
     _getDragBehavior() {
         return this._workSpace.dragBehavior;
+    }
+
+    _updateInternalOptionAllDayBehavior(showAllDayPanelOption, allDayPanelModeOption) {
+        this.option(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName, mergeAllDayPanelPublicOptions(
+            showAllDayPanelOption,
+            allDayPanelModeOption,
+        ));
     }
 
     /**

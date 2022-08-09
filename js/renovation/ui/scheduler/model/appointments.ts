@@ -73,12 +73,11 @@ export const getAppointmentsConfig = (
   | 'scrolling'
   | 'intervalCount'
   | 'hoursInterval'
-  | 'showAllDayPanel'
   | 'firstDayOfWeek'
   | 'type'
   | 'cellDuration'
   | 'maxAppointmentsPerCell'
-  | 'allDayPanelMode'
+  | 'allDayPanelBehavior'
   >,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
@@ -106,8 +105,7 @@ export const getAppointmentsConfig = (
     isVirtualScrolling: viewConfig.scrolling.mode === 'virtual',
     intervalCount: viewConfig.intervalCount,
     hoursInterval: viewConfig.hoursInterval,
-    showAllDayPanel: viewConfig.showAllDayPanel,
-    allDayPanelMode: viewConfig.allDayPanelMode,
+    allDayPanelBehavior: viewConfig.allDayPanelBehavior,
     supportAllDayRow: isAllDayPanelSupported, // ?
     groupOrientation: viewDataProvider.getViewOptions().groupOrientation,
     firstDayOfWeek: viewConfig.firstDayOfWeek,
@@ -154,7 +152,7 @@ export const getAppointmentsModel = (
   const isGroupedAllDayPanel = calculateIsGroupedAllDayPanel(
     appointmentsConfig.loadedResources,
     appointmentsConfig.groupOrientation,
-    appointmentsConfig.showAllDayPanel,
+    appointmentsConfig.allDayPanelBehavior.allDayPanelVisible,
   );
 
   const rowCount = viewDataProvider.getRowCount({
@@ -167,7 +165,7 @@ export const getAppointmentsModel = (
   });
 
   const allDayHeight = getAllDayHeight(
-    appointmentsConfig.showAllDayPanel,
+    appointmentsConfig.allDayPanelBehavior.allDayPanelVisible,
     appointmentsConfig.isVerticalGroupOrientation,
     cellsMetaData,
   );

@@ -18,7 +18,6 @@ class BaseStrategy {
     get groupCount() { return this.options.groupCount; }
     get rtlEnabled() { return this.options.rtlEnabled; }
     get isVerticalGrouping() { return this.options.isVerticalGroupOrientation; }
-    get showAllDayPanel() { return this.options.showAllDayPanel; }
     get supportAllDayRow() { return this.options.supportAllDayRow; }
     get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get isVirtualScrolling() { return false; }
@@ -97,7 +96,7 @@ class BaseStrategy {
         const verticalMax = this.positionHelper.getVerticalMax({
             groupIndex: validGroupIndex,
             isVirtualScrolling: this.isVirtualScrolling,
-            showAllDayPanel: this.showAllDayPanel,
+            allDayPanelVisible: this.options.allDayPanelVisible,
             supportAllDayRow: this.supportAllDayRow,
             isGroupedAllDayPanel: this.isGroupedAllDayPanel,
             isVerticalGrouping: this.isVerticalGrouping

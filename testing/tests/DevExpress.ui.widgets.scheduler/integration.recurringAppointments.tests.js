@@ -957,8 +957,8 @@ supportedScrollingModes.forEach(scrollingMode => {
 
         test('AllDay recurrence appointments should be rendered correctly after changing currentDate, day view', function(assert) {
             const tasks = [{
-                startDate: new Date(2015, 4, 25, 9, 30),
-                endDate: new Date(2015, 4, 26, 11, 30),
+                startDate: new Date(Date.UTC(2015, 4, 25, 9, 30)),
+                endDate: new Date(Date.UTC(2015, 4, 26, 11, 30)),
                 recurrenceRule: 'FREQ=MONTHLY;BYMONTHDAY=26'
             }];
             const dataSource = new DataSource({
@@ -969,6 +969,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2015, 4, 26),
                 dataSource: dataSource
             });
+
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
             scheduler.instance.option('currentDate', new Date(2015, 4, 27));
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
@@ -1074,8 +1075,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             const task = {
                 text: 'No Recruiting students',
                 roomId: [5],
-                startDate: new Date(2017, 4, 15, 11, 0),
-                endDate: new Date(2017, 4, 15, 12, 0),
+                startDate: new Date(Date.UTC(2017, 4, 15, 11, 0)),
+                endDate: new Date(Date.UTC(2017, 4, 15, 12, 0)),
                 recurrenceRule: 'FREQ=DAILY;COUNT=3',
                 recurrenceException: '20170516T070000Z',
                 startDateTimeZone: 'Etc/UTC'

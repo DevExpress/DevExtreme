@@ -173,7 +173,7 @@ const verticalGroupingRenderOptions = {
     bottomVirtualRowHeight: undefined,
     groupOrientation: 'vertical',
     isProvideVirtualCellsWidth: true,
-    isAllDayPanelVisible: true,
+    allDayPanelVisible: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
     groups: [{
@@ -189,7 +189,7 @@ const horizontalGroupingRenderOptions = {
     bottomVirtualRowHeight: undefined,
     groupOrientation: 'horizontal',
     isProvideVirtualCellsWidth: true,
-    isAllDayPanelVisible: true,
+    allDayPanelVisible: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
     groups: [],
@@ -453,7 +453,7 @@ module('View Data Provider', {
 
             test('it should work with vertical grouping when all-day panel is not visible', function(assert) {
                 const viewDataProvider = createViewDataProvider({
-                    renderOptions: { ...verticalGroupingRenderOptions, isAllDayPanelVisible: false },
+                    renderOptions: { ...verticalGroupingRenderOptions, allDayPanelVisible: false },
                     completeViewDataMap: [testViewDataMap.verticalGrouping[1], testViewDataMap.verticalGrouping[3]],
                 });
                 viewDataProvider.createGroupedDataMapProvider();
@@ -464,7 +464,7 @@ module('View Data Provider', {
 
             test('it should work with horizontal grouping all-day panel is not visible', function(assert) {
                 const viewDataProvider = createViewDataProvider({
-                    renderOptions: { ...horizontalGroupingRenderOptions, isAllDayPanelVisible: false },
+                    renderOptions: { ...horizontalGroupingRenderOptions, allDayPanelVisible: false },
                     completeViewDataMap: testViewDataMap.verticalGrouping.slice(1),
                 });
                 viewDataProvider.createGroupedDataMapProvider();
@@ -1050,7 +1050,7 @@ module('View Data Provider', {
                         text: 'Second group',
                     }]
                 }],
-                isAllDayPanelVisible: false,
+                allDayPanelVisible: false,
                 isGroupedByDate: false,
                 headerCellTextFormat: 'shorttime',
                 getDateForHeaderText: (_, date) => date,
@@ -1647,7 +1647,7 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when all-day panel is enabled', function(assert) {
                 const completeTimePanelMapRenderOptions = {
                     ...dataGenerationRenderOptions,
-                    isAllDayPanelVisible: true,
+                    allDayPanelVisible: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1698,7 +1698,7 @@ module('View Data Provider', {
                         name: 'groupId',
                         items: [{ id: 1 }, { id: 2 }],
                     }],
-                    isAllDayPanelVisible: true,
+                    allDayPanelVisible: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1779,7 +1779,7 @@ module('View Data Provider', {
                         name: 'groupId',
                         items: [{ id: 1 }, { id: 2 }],
                     }],
-                    isAllDayPanelVisible: false,
+                    allDayPanelVisible: false,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1955,7 +1955,7 @@ module('View Data Provider', {
                 bottomVirtualRowHeight: 50,
                 groupOrientation: 'vertical',
                 isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
+                allDayPanelVisible: true,
                 isGenerateTimePanelData: true,
                 viewType: 'day',
                 groups: [{
@@ -1972,7 +1972,7 @@ module('View Data Provider', {
                 bottomVirtualRowHeight: 50,
                 groupOrientation: 'horizontal',
                 isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
+                allDayPanelVisible: true,
                 viewType: 'day',
                 groups: [{
                     name: 'groupId',
@@ -2390,7 +2390,7 @@ module('View Data Provider', {
                 bottomVirtualRowHeight: 50,
                 groupOrientation: 'vertical',
                 isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
+                allDayPanelVisible: true,
                 viewType: 'day',
                 groups: [{
                     name: 'groupId',
@@ -2409,7 +2409,7 @@ module('View Data Provider', {
                 bottomVirtualRowHeight: 50,
                 groupOrientation: 'horizontal',
                 isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
+                allDayPanelVisible: true,
                 viewType: 'day',
                 groups: [{
                     name: 'groupId',

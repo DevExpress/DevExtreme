@@ -18,8 +18,7 @@ test('all-day and ordinary appointments should overlap each other correctly in t
   dataSource: [{
     text: 'Google AdWords Strategy',
     startDate: new Date(2021, 1, 1, 10),
-    endDate: new Date(2021, 1, 1, 11),
-    allDay: true,
+    endDate: new Date(2021, 1, 2, 10),
   }, {
     text: 'Brochure Design Review',
     startDate: new Date(2021, 1, 1, 11, 30),

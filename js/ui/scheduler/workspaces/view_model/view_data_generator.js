@@ -200,7 +200,7 @@ export class ViewDataGenerator {
             startRowIndex,
             cellCount,
             isVerticalGrouping,
-            isAllDayPanelVisible,
+            allDayPanelVisible,
         } = options;
 
         const sliceCells = (row, rowIndex, startIndex, count) => {
@@ -224,7 +224,7 @@ export class ViewDataGenerator {
 
         let correctedStartRowIndex = startRowIndex;
         let allDayPanelMap = [];
-        if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
+        if(this._isStandaloneAllDayPanel(isVerticalGrouping, allDayPanelVisible)) {
             correctedStartRowIndex++;
             allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
         }
@@ -241,8 +241,8 @@ export class ViewDataGenerator {
         };
     }
 
-    _isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible) {
-        return !isVerticalGrouping && isAllDayPanelVisible;
+    _isStandaloneAllDayPanel(isVerticalGrouping, allDayPanelVisible) {
+        return !isVerticalGrouping && allDayPanelVisible;
     }
 
     getViewDataFromMap(completeViewDataMap, viewDataMap, options) {
@@ -258,7 +258,7 @@ export class ViewDataGenerator {
             isProvideVirtualCellsWidth,
             isGroupedAllDayPanel,
             isVerticalGrouping,
-            isAllDayPanelVisible,
+            allDayPanelVisible,
         } = options;
         const {
             allDayPanelMap,
@@ -298,7 +298,7 @@ export class ViewDataGenerator {
             };
         }, { previousGroupIndex: -1, groupedData: [] });
 
-        if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
+        if(this._isStandaloneAllDayPanel(isVerticalGrouping, allDayPanelVisible)) {
             groupedData[0].allDayPanel = allDayPanelMap.map(({ cellData }) => cellData);
         }
 
@@ -334,7 +334,7 @@ export class ViewDataGenerator {
     }
 
     _generateAllDayPanelData(options, rowCount, columnCount) {
-        if(!options.isAllDayPanelVisible) {
+        if(!options.allDayPanelVisible) {
             return null;
         }
 

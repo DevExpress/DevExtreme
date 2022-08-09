@@ -197,7 +197,7 @@ export interface ViewDataProviderOptions {
   groupByDate: boolean;
   groups: Group[];
   isProvideVirtualCellsWidth: boolean;
-  isAllDayPanelVisible: boolean;
+  allDayPanelVisible: boolean;
   selectedCells?: unknown;
   focusedCell?: unknown;
   headerCellTextFormat: string | ((date: Date) => string);
@@ -259,7 +259,7 @@ interface CompleteViewDataGenerationOptions {
   isVerticalGrouping: boolean;
   isHorizontalGrouping: boolean;
   isGroupedByDate: boolean;
-  isAllDayPanelVisible: boolean;
+  allDayPanelVisible: boolean;
   viewType: ViewType;
   interval: number;
 }
@@ -268,7 +268,7 @@ interface ViewDataMapGenerationOptions {
   startRowIndex: number;
   startCellIndex: number;
   isVerticalGrouping: boolean;
-  isAllDayPanelVisible: boolean;
+  allDayPanelVisible: boolean;
   cellCount?: number;
   rowCount?: number;
 }
@@ -282,7 +282,7 @@ interface ViewDataGenerationOptions {
   startCellIndex: number;
   isProvideVirtualCellsWidth: boolean;
   isVerticalGrouping: boolean;
-  isAllDayPanelVisible: boolean;
+  allDayPanelVisible: boolean;
   isGroupedAllDayPanel: boolean;
 }
 
@@ -394,7 +394,7 @@ interface TimePanelDataGenerationOptions {
   bottomVirtualRowHeight?: number;
   isGroupedAllDayPanel: boolean;
   isVerticalGrouping: boolean;
-  isAllDayPanelVisible: boolean;
+  allDayPanelVisible: boolean;
 }
 
 type GetCompleteTimePanelMap = (
@@ -446,7 +446,6 @@ export interface ViewDataProviderValidationOptions {
   crossScrollingEnabled: boolean;
   firstDayOfWeek: number;
   startDate?: Date;
-  showAllDayPanel: boolean;
   allDayPanelExpanded: boolean;
   scrolling: dxSchedulerScrolling;
   cellDuration: number;
