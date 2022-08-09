@@ -75,17 +75,31 @@ export class TimeZoneCalculator {
     // return new Date(utcDate + direction * targetOffset * dateUtils.dateToMilliseconds('hour'));
   }
 
-  getOriginStartDateOffsetInMs(date: Date, timezone: string, isUTCDate: boolean): number {
-    if (!timezone) {
-      return 0;
+  getOriginStartDateOffsetInMs(
+    date: Date,
+    timezone: string | undefined,
+    isUTCDate: boolean,
+  ): number {
+    const offsetInHours = this.getOffsetInHours(date, timezone, isUTCDate);
+    return offsetInHours * MS_IN_HOUR;
+  }
+
+  protected getOffsetInHours(date: Date, timezone: string | undefined, isUTCDate: boolean): number {
+    const { client, appointment, common } = this.getOffsets(date, timezone);
+
+    if (!!timezone && isUTCDate) {
+      return appointment - client;
     }
 
-    const { client, appointment, common } = this.getOffsets(date, timezone);
-    const offsetInHours = isUTCDate
-      ? appointment - client
-      : appointment - common;
+    if (!!timezone && !isUTCDate) {
+      return appointment - common;
+    }
 
-    return offsetInHours * MS_IN_HOUR;
+    if (!timezone && isUTCDate) {
+      return common - client;
+    }
+
+    return 0;
   }
 
   protected getClientOffset(date: Date): number {
