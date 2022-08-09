@@ -24,6 +24,10 @@ import {
 } from '../events/index';
 
 import {
+    Item as dxToolbarItem,
+} from './toolbar';
+
+import {
     PositionAlignment,
     ToolbarItemLocation,
     ToolbarItemComponent,
@@ -227,7 +231,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Array<Object>
+     * @type Array<dxPopupToolbarItem>
      * @public
      */
     toolbarItems?: Array<ToolbarItem>;
@@ -255,66 +259,26 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
 }
 
 /**
- * @public
+ * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui.dxPopup
  */
-export type ToolbarItem = dxPopupToolbarItem;
+export type dxPopupToolbarItem = ToolbarItem;
 
 /**
- * @deprecated Use ToolbarItem instead
- * @namespace DevExpress.ui
+ * @public
+ * @docid dxPopupToolbarItem
+ * @inherits dxToolbarItem
+ * @namespace DevExpress.ui.dxPopup
  */
-export interface dxPopupToolbarItem {
+export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxPopupOptions.toolbarItems.disabled
-     * @default false
-     * @public
-     */
-    disabled?: boolean;
-    /**
-     * @docid dxPopupOptions.toolbarItems.html
-     * @public
-     */
-    html?: string;
-    /**
-     * @docid dxPopupOptions.toolbarItems.location
-     * @default 'center'
-     * @public
-     */
-    location?: ToolbarItemLocation;
-    /**
-     * @docid dxPopupOptions.toolbarItems.options
-     * @public
-     */
-    options?: any;
-    /**
-     * @docid dxPopupOptions.toolbarItems.template
-     * @public
-     */
-    template?: template;
-    /**
-     * @docid dxPopupOptions.toolbarItems.text
-     * @public
-     */
-    text?: string;
-    /**
-     * @docid dxPopupOptions.toolbarItems.toolbar
+     * @docid dxPopupToolbarItem.toolbar
      * @default 'top'
      * @public
      */
     toolbar?: ToolbarLocation;
-    /**
-     * @docid dxPopupOptions.toolbarItems.visible
-     * @default true
-     * @public
-     */
-    visible?: boolean;
-    /**
-     * @docid dxPopupOptions.toolbarItems.widget
-     * @public
-     */
-    widget?: ToolbarItemComponent;
 }
+
 /**
  * @docid
  * @inherits dxOverlay
