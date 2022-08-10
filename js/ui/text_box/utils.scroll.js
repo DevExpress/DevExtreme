@@ -6,7 +6,10 @@ const allowScroll = function(container, delta, shiftKey) {
     const scrollTopPos = shiftKey ? $container.scrollLeft() : $container.scrollTop();
 
     const prop = shiftKey ? 'Width' : 'Height';
-    const scrollBottomPos = $container.prop(`scroll${prop}`) - $container.prop(`client${prop}`) - scrollTopPos;
+    const scrollSize = $container.prop(`scroll${prop}`);
+    const clientSize = $container.prop(`client${prop}`);
+    // NOTE: round to the nearest integer towards zero
+    const scrollBottomPos = (scrollSize - clientSize - scrollTopPos) | 0;
 
     if(scrollTopPos === 0 && scrollBottomPos === 0) {
         return false;
