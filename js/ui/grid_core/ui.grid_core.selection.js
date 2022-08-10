@@ -660,7 +660,8 @@ export const selectionModule = {
                 },
                 _handleDataChanged: function(e) {
                     this.callBase(e);
-                    if(!e || e.changeType === 'refresh') {
+
+                    if(!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
                         this._updateSelectAllValue();
                     }
                 },
