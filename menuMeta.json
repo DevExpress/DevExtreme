@@ -2993,7 +2993,6 @@
           {
             "Title": "Colorization",
             "Name": "Colorization",
-            "DocUrl": "ApiReference/UI_Components/dxTreeMap/Configuration/colorizer/",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "colorizeGroups, colorCode"
