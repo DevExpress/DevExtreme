@@ -465,6 +465,7 @@ const Overlay = Widget.inherit({
                 this._toggleVisibility(true);
                 this._$content.css('visibility', 'hidden');
                 this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
+                this._updateZIndexStackPosition(true);
                 this._positionController.openingHandled();
                 this._renderContent();
 
@@ -628,21 +629,16 @@ const Overlay = Widget.inherit({
             triggerHidingEvent(this._$content);
         }
 
-        this._toggleVisibility(visible);
-
-        this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
-        this._updateZIndexStackPosition(visible);
-
         if(visible) {
-            // this._positionController.openingHandled();
-            // this._renderContent();
-
             this._moveToContainer();
             this._renderGeometry();
 
             triggerShownEvent(this._$content);
             triggerResizeEvent(this._$content);
         } else {
+            this._toggleVisibility(visible);
+            this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+            this._updateZIndexStackPosition(visible);
             this._moveFromContainer();
         }
         this._toggleShading(visible);
