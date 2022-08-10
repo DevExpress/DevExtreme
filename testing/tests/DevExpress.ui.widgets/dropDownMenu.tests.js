@@ -170,8 +170,7 @@ const testRendering = function(usePopover) {
         });
 
         QUnit.test('correct wrapper classes should be set', function(assert) {
-            new DropDownMenu($('<div>').appendTo('#qunit-fixture'), {
-                opened: true,
+            const dropDownMenu = new DropDownMenu($('<div>').appendTo('#qunit-fixture'), {
                 usePopover: usePopover,
                 popupAnimation: {
                     show: {
@@ -182,6 +181,8 @@ const testRendering = function(usePopover) {
                     }
                 }
             });
+
+            dropDownMenu.option('opened', true);
         });
 
         QUnit.test('overlay should not overlap bottom button border', function(assert) {
