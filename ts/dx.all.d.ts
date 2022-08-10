@@ -6490,6 +6490,7 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.calculateCellValue]
        */
       calculateCellValue?: (rowData: TRowData) => any;
+      defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
       /**
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
@@ -6502,6 +6503,7 @@ declare module DevExpress.ui {
         selectedFilterOperation: string,
         target: string
       ) => string | Array<any> | Function;
+      defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
       /**
        * [descr:GridBaseColumn.calculateSortValue]
        */

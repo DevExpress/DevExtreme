@@ -2328,6 +2328,7 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     calculateCellValue?: ((rowData: TRowData) => any);
+    defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
     /**
      * @docid GridBaseColumn.calculateDisplayValue
      * @type_function_param1 rowData:object
@@ -2340,6 +2341,7 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+    defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
     /**
      * @docid GridBaseColumn.calculateSortValue
      * @type_function_param1 rowData:object
