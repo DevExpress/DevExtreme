@@ -52,12 +52,6 @@ export default class Editor extends Component {
     return props;
   }
 
-  _queryChildSelector(selector: string): HTMLElement | null {
-    const root = this.element().getRootNode?.() as HTMLElement ?? document;
-
-    return root.querySelector(selector);
-  }
-
   _createElement(element: HTMLElement): void {
     super._createElement(element);
     this.showValidationMessageTimeout = undefined;

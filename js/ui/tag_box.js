@@ -1016,7 +1016,7 @@ const TagBox = SelectBox.inherit({
         this._isInputReady.resolve();
         this.callBase();
 
-        const tagsContainer = $(domAdapter.getRootNode(this.element())).find('.'.concat(TEXTEDITOR_INPUT_CONTAINER_CLASS));
+        const tagsContainer = $(domAdapter.getRootNode(this.element())).find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
 
         this._updateTagsContainer(tagsContainer);
         this._renderTagRemoveAction();
