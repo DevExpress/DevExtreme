@@ -223,7 +223,7 @@
     "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
-    "discover-declarations": "dx-tools discover --js-scripts ./js --exclude js/renovation/ --compiler-options '{ \"typeRoots\": [] }'",
+    "discover-declarations": "dx-tools discover --js-scripts ./js --exclude js/renovation/ --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "validate-ts": "gulp validate-ts",
     "internal-tool": "dx-tools",
