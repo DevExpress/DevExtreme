@@ -526,12 +526,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     }
   }
 
-  _queryChildSelector(selector: string): HTMLElement | null {
-    const root = this.element().getRootNode?.() as HTMLElement ?? document;
-
-    return root.querySelector(selector);
-  }
-
   // Public API
   repaint(): void {
     this._isNodeReplaced = false;
