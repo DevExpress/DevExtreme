@@ -16,7 +16,7 @@ fixture`PivotGrid_contextMenu`
     await t.hover(Selector('.dx-context-menu'));
 
     await t
-      .expect(await takeScreenshot(`PivotGrid_contextmenu_width,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`PivotGrid_contextmenu_width,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -82,6 +82,13 @@ fixture`PivotGrid_contextMenu`
           summaryDisplayMode: 'percentOfColumnGrandTotal',
         }],
         store: [{
+          id: 10887,
+          region: 'Africa',
+          country: 'Egypt',
+          city: 'Cairo',
+          amount: 500,
+          date: new Date('2015-05-26'),
+        }, {
           id: 10888,
           region: 'South America',
           country: 'Argentina',
