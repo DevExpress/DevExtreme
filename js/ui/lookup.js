@@ -560,7 +560,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        if(!this.option('dropDownCentered') || !this._isInitialOptionValue('dropDownOptions.position')) {
+        if(!this.option('dropDownCentered') || this.option('dropDownOptions.position') !== undefined) {
             return;
         }
 
