@@ -335,11 +335,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .expect(pager.hasFocusedState)
     .ok()
     .expect(pager.getPrevNavButton().element.focused)
-    .ok()
-
-    .pressKey('tab')
-    .expect(pager.hasFocusedState)
-    .ok()
+    .notOk()
     .expect(pager.getNavPage('1').element.focused)
     .ok()
 
@@ -384,11 +380,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .expect(pager.hasFocusedState)
     .ok()
     .expect(pager.getPrevNavButton().element.focused)
-    .ok()
-
-    .pressKey('shift+tab')
-    .expect(pager.hasFocusedState)
-    .ok()
+    .notOk()
     .expect(pager.getPageSize(1).element.focused)
     .ok()
 
@@ -978,7 +970,7 @@ test('Select views by Ctrl+Up, Ctrl+Down keys', async (t) => {
   });
 });
 
-test.skip('DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)', async (t) => {
+test('DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -2459,7 +2451,7 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
   })();
 });
 
-test.skip('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
+test('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act

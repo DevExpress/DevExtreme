@@ -123,6 +123,7 @@ const Popover = Popup.inherit({
                 },
                 hide: {
                     type: 'fade',
+                    from: 1,
                     to: 0
                 }
             },

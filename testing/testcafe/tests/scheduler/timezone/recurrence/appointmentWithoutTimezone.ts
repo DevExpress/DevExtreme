@@ -168,3 +168,70 @@ test('Should correctly display the recurrent yearly appointment without timezone
     height: 585,
   }, false, SCHEDULER_SELECTOR);
 });
+
+test('Should correctly display morning weekly recurrent appointment in a greater timezone.', async (t) => {
+  const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-morning-appointment__greater-timezone'), schedulerWorkspace);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  const schedulerTimezone = TEST_TIMEZONES[0];
+
+  await restoreBrowserSize(t);
+
+  await createTimezoneSelect(SELECT_SELECTOR, TEST_TIMEZONES, SCHEDULER_SELECTOR);
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'test',
+      startDate: new Date('2021-04-29T15:00:00.000Z'),
+      endDate: new Date('2021-04-29T17:00:00.000Z'),
+      recurrenceRule: 'FREQ=WEEKLY;BYDAY=FR',
+    }],
+    timeZone: schedulerTimezone,
+    currentView: 'week',
+    currentDate: new Date(2021, 3, 28),
+    startDayHour: 0,
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
+  }, false, SCHEDULER_SELECTOR);
+});
+
+test('Should correctly display \'corner\' weekly recurrent appointments in a greater timezone.', async (t) => {
+  const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await takeScreenshot(getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-corner-appointments__greater-timezone'), schedulerWorkspace);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  const schedulerTimezone = TEST_TIMEZONES[0];
+
+  await restoreBrowserSize(t);
+
+  await createTimezoneSelect(SELECT_SELECTOR, TEST_TIMEZONES, SCHEDULER_SELECTOR);
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'test 1',
+      startDate: new Date('2021-04-24T14:00:00.000Z'),
+      endDate: new Date('2021-04-24T16:00:00.000Z'),
+      recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU',
+    }, {
+      text: 'test 2',
+      startDate: new Date('2021-05-01T12:00:00.000Z'),
+      endDate: new Date('2021-05-01T14:00:00.000Z'),
+      recurrenceRule: 'FREQ=WEEKLY;BYDAY=SA',
+    }],
+    timeZone: schedulerTimezone,
+    currentView: 'week',
+    currentDate: new Date(2021, 3, 28),
+    startDayHour: 0,
+    cellDuration: 180,
+    width: 1000,
+    height: 585,
+  }, false, SCHEDULER_SELECTOR);
+});

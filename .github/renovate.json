@@ -1,11 +1,12 @@
 {
     "extends": [
-        "config:base"
+        "config:js-lib"
     ],
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
     "baseBranches": [
         "22_2",
+        "22_1",
         "21_2"
     ],
     "labels": [
@@ -16,6 +17,10 @@
         "automerge": true
     },
     "packageRules": [
+        {
+            "matchPackagePatterns": [ "^@devextreme-generator/" ],
+            "enabled": false
+        },
         {
             "matchPackageNames": [ "typescript", "typescript-min" ],
             "matchUpdateTypes": [ "major", "minor" ],
