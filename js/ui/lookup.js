@@ -20,7 +20,7 @@ import Popover from './popover/ui.popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { locate, move, resetPosition } from '../animation/translator';
-import { isDefined } from '../core/utils/type';
+import { isObject, isFunction, isDefined } from '../core/utils/type';
 import { getElementWidth } from './drop_down_editor/utils';
 
 // STYLE lookup
@@ -560,7 +560,9 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        if(!this.option('dropDownCentered')) return;
+        if(!this.option('dropDownCentered') || !this._isInitialOptionValue('dropDownOptions.position')) {
+            return;
+        }
 
         const flipped = this._popup.$wrapper().hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
@@ -732,7 +734,11 @@ const Lookup = DropDownList.inherit({
         each(['position', 'animation', 'width', 'height'], (_, optionName) => {
             const popupOptionValue = this.option(`dropDownOptions.${ optionName }`);
             if(popupOptionValue !== undefined) {
-                result[optionName] = popupOptionValue;
+                if(isObject(popupOptionValue) && !isFunction(popupOptionValue)) {
+                    extend(result[optionName], popupOptionValue);
+                } else {
+                    result[optionName] = popupOptionValue;
+                }
             }
         });
 

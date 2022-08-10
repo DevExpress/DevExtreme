@@ -2378,6 +2378,48 @@ QUnit.module('popup options', {
         assert.roughEqual(getOuterWidth($overlayContent), getOuterWidth($container) / 2, 0.1, 'popup width is correct');
         assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
     });
+
+    QUnit.test('popup position option value should be extended by dropDownOptions.position if _scrollToSelectedItemEnabled=true (T1107191)', function(assert) {
+        const dropDownPosition = { my: 'left bottom', at: 'left top' };
+        const $lookup = $('#lookup').dxLookup({
+            dropDownOptions: {
+                position: dropDownPosition,
+            },
+            usePopover: false,
+            opened: true,
+            _scrollToSelectedItemEnabled: true,
+        });
+
+        const popup = $lookup.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        const popupPosition = popup.option('position');
+
+        assert.strictEqual(popupPosition.my, dropDownPosition.my, '"my" property is updated by dropDownOptions.position');
+        assert.strictEqual(popupPosition.at, dropDownPosition.at, '"at" property is updated by dropDownOptions.position');
+        assert.strictEqual(popupPosition.of, $lookup.get(0), '"of" property was not restored');
+    });
+
+    QUnit.test('popup should be positioned by dropDownOptions.position if it is passed and dropDownCentered is enabled (T1107191)', function(assert) {
+        const $lookup = $('#lookup').dxLookup({
+            dropDownOptions: {
+                position: {
+                    my: 'bottom left',
+                    at: 'top left',
+                    of: '#lookup'
+                },
+            },
+            usePopover: false,
+            opened: true,
+            _scrollToSelectedItemEnabled: true,
+            dropDownCentered: true
+        });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const popupPosition = $overlayContent.get(0).getBoundingClientRect();
+        const lookupPosition = $lookup.get(0).getBoundingClientRect();
+
+        assert.strictEqual(popupPosition.left, lookupPosition.left, 'horizontal position is correct');
+        assert.strictEqual(popupPosition.bottom, lookupPosition.top, 'vertical position is correct');
+    });
 });
 
 QUnit.module('list options', {
