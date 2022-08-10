@@ -352,9 +352,8 @@ QUnit.module('render', moduleConfig(), () => {
         const $dropDownMenu = $('#dropDownMenuSecond').dxDropDownMenu({
             opened: true
         });
-        const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
 
-        assert.ok(popoverInstance.option('visible'), 'popup is visible');
+        assert.strictEqual($dropDownMenu.find('.dx-popup').length, 1, 'popup is rendered');
     });
 
     QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
