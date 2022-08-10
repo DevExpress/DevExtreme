@@ -193,31 +193,38 @@ const RangeSlider = Slider.inherit({
         this._updateSelectedRangePosition(newRatio, newRatio);
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
-        this._changeValueOnSwipe(newRatio);
+        const newSwipeValue = this._roundSwipeValue(newRatio);
+        const valueChangeMode = this.option('valueChangeMode');
+        SliderHandle.getInstance(this._activeHandle()).option('value', newSwipeValue);
 
-        const startValue = this.option('start');
-        const endValue = this.option('end');
-        let $nextHandle;
 
-        if(startValue === endValue) {
-            if(newValue < startValue) {
-                $nextHandle = this._$handleStart;
-            } else {
-                $nextHandle = this._$handleEnd;
+        if(valueChangeMode === 'instant') {
+            this._changeValueOnSwipe(newSwipeValue);
+            const startValue = this.option('start');
+            const endValue = this.option('end');
+            let $nextHandle;
+
+            if(startValue === endValue) {
+                if(newValue < startValue) {
+                    $nextHandle = this._$handleStart;
+                } else {
+                    $nextHandle = this._$handleEnd;
+                }
+
+                eventsEngine.trigger($nextHandle, 'focus');
+
+                if($nextHandle && $nextHandle !== this._capturedHandle) {
+                    this._updateSelectedRangePosition((startValue - min) / (max - min), (endValue - min) / (max - min));
+                    this._toggleActiveState(this._activeHandle(), false);
+                    this._toggleActiveState($nextHandle, true);
+                    this._capturedHandle = $nextHandle;
+                }
+
+                this._updateSelectedRangePosition(newRatio, newRatio);
+                this._changeValueOnSwipe(newSwipeValue);
             }
-
-            eventsEngine.trigger($nextHandle, 'focus');
-
-            if($nextHandle && $nextHandle !== this._capturedHandle) {
-                this._updateSelectedRangePosition((startValue - min) / (max - min), (endValue - min) / (max - min));
-                this._toggleActiveState(this._activeHandle(), false);
-                this._toggleActiveState($nextHandle, true);
-                this._capturedHandle = $nextHandle;
-            }
-
-            this._updateSelectedRangePosition(newRatio, newRatio);
-            this._changeValueOnSwipe(newRatio);
         }
+
     },
 
     _updateSelectedRangePosition: function(leftRatio, rightRatio) {

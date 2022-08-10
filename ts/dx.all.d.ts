@@ -1496,6 +1496,7 @@ declare module DevExpress.common {
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
+  export type ValueChangeMode = 'instant' | 'eventual';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
 }
@@ -20280,6 +20281,10 @@ declare module DevExpress.ui {
        */
       showMode?: DevExpress.common.TooltipShowMode;
     };
+    /**
+     * [descr:dxSliderBaseOptions.valueChangeMode]
+     */
+    valueChangeMode: DevExpress.common.ValueChangeMode;
   }
   /**
    * @deprecated use Properties instead

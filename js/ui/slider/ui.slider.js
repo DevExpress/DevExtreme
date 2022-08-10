@@ -147,8 +147,9 @@ const Slider = TrackBar.inherit({
 
             validationMessageOffset: isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
 
-            focusStateEnabled: true
+            focusStateEnabled: true,
 
+            valueChangeMode: 'instant',
         });
     },
 
@@ -438,8 +439,11 @@ const Slider = TrackBar.inherit({
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
+
+        const newValue = this._roundSwipeValue(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
+
         this._saveValueChangeEvent(e.event);
-        this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
+        this._changeValueOnSwipe(newValue);
         delete this._startOffset;
         this._renderValue();
     },
@@ -452,7 +456,6 @@ const Slider = TrackBar.inherit({
         if(this._isSingleValuePossible()) {
             return;
         }
-
         this._saveValueChangeEvent(e.event);
         this._updateHandlePosition(e);
     },
@@ -465,7 +468,16 @@ const Slider = TrackBar.inherit({
 
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
-        this._changeValueOnSwipe(newRatio);
+        const newValue = this._roundSwipeValue(newRatio);
+        const valueChangeMode = this.option('valueChangeMode');
+
+        SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
+
+        if(valueChangeMode === 'eventual') {
+            return;
+        }
+
+        this._changeValueOnSwipe(newValue);
     },
 
     _swipePixelRatio: function() {
@@ -499,7 +511,12 @@ const Slider = TrackBar.inherit({
         return roundFloatPart(value, valueExponentLength);
     },
 
-    _changeValueOnSwipe: function(ratio) {
+    _changeValueOnSwipe: function(newValue) {
+        this._setValueOnSwipe(newValue);
+    },
+
+
+    _roundSwipeValue: function(ratio) {
         const min = this.option('min');
         const max = this.option('max');
         const step = this._valueStep(this.option('step'));
@@ -510,13 +527,13 @@ const Slider = TrackBar.inherit({
             return;
         }
 
-        if(newValue === max || newValue === min) {
-            this._setValueOnSwipe(newValue);
-        } else {
+        if(newValue !== max && newValue !== min) {
             const stepCount = Math.round((newValue - min) / step);
             newValue = this._roundToExponentLength(stepCount * step + min);
-            this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
+            newValue = Math.max(Math.min(newValue, max), min);
         }
+        return newValue;
+
     },
 
     _setValueOnSwipe: function(value) {
@@ -542,9 +559,17 @@ const Slider = TrackBar.inherit({
         if(this.option('rtlEnabled')) {
             this._currentRatio = 1 - this._currentRatio;
         }
+        const newValue = this._roundSwipeValue(this._currentRatio);
+        const valueChangeMode = this.option('valueChangeMode');
+
+        SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
+
+        if(valueChangeMode === 'eventual') {
+            return;
+        }
 
         this._saveValueChangeEvent(e);
-        this._changeValueOnSwipe(this._currentRatio);
+        this._changeValueOnSwipe(newValue);
     },
 
     _renderValue: function() {
@@ -605,6 +630,7 @@ const Slider = TrackBar.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
+            case 'valueChangeMode':
             default:
                 this.callBase(args);
         }

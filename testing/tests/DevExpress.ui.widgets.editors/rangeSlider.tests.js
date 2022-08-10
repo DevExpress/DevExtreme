@@ -1343,3 +1343,78 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
         });
     });
 });
+
+QUnit.module('valueChangeMode option', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxRangeSlider({
+            max: 100,
+            min: 0,
+            start: 20,
+            end: 60,
+            valueChangeMode: 'eventual',
+            onValueChanged: this.valueChangedHandler,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+        this.instance = this.$element.dxRangeSlider('instance');
+        this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.leftHandle = this.$handle.eq(0);
+        this.rightHandle = this.$handle.eq(1);
+        this.leftHandleTooltip = this.leftHandle.find(`.${TOOLTIP_CLASS}`);
+        this.rightHandleTooltip = this.rightHandle.find(`.${TOOLTIP_CLASS}`);
+
+        this.range = this.$element.find('.' + SLIDER_RANGE_CLASS);
+
+        this.getLeftTooltipText = () => $.trim(this.leftHandleTooltip.text());
+        this.getRightTooltipText = () => $.trim(this.rightHandleTooltip.text());
+    }
+}, () => {
+    QUnit.test('left slider handle value should not change on swipe with "eventual" valueChangeMode', function(assert) {
+
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start().move(this.range.offset().left).down().move(200);
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        pointer.up();
+
+        assert.equal(this.instance.option('start'), 40);
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+    });
+    QUnit.test('right slider handle value should not change on swipe with "eventual" valueChangeMode', function(assert) {
+
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().move(this.range.offset().left + 8000).down().move(-10000);
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        pointer.up();
+
+        assert.equal(this.instance.option('end'), 20);
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+    });
+    QUnit.test('left slider handle tooltip value should change with "eventual" valueChangeMode', function(assert) {
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start()
+            .down(this.range.offset().left)
+            .move(200);
+
+        assert.strictEqual(this.getLeftTooltipText(), '40');
+
+        pointer.move(400).up();
+
+        assert.strictEqual(this.getLeftTooltipText(), '60');
+    });
+    QUnit.test('right slider handle tooltip value should change with "eventual" valueChangeMode', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
+
+        assert.strictEqual(this.getRightTooltipText(), '80');
+
+        pointer.move(100).up();
+
+        assert.strictEqual(this.getRightTooltipText(), '90');
+    });
+});
+

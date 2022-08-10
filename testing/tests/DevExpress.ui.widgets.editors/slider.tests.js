@@ -1761,3 +1761,63 @@ module('if only the single value is possible', moduleOptions, () => {
         assert.strictEqual(slider.option('value'), value, 'value was not changed');
     });
 });
+
+module('valueChangeMode option', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxSlider({
+            valueChangeMode: 'eventual',
+            onValueChanged: this.valueChangedHandler,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+        this.instance = this.$element.dxSlider('instance');
+        this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
+        this.pointer = pointerMock(this.$wrapper);
+        this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
+
+        this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
+        this.getTooltipText = () => $.trim(this.getTooltip().text());
+    }
+}, () => {
+    test('slider value should not change on swipe with "eventual" valueChangeMode', function(assert) {
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart();
+        this.pointer.swipe(20);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        this.pointer.swipeEnd(40);
+
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+        assert.strictEqual(this.instance.option('value'), 90);
+
+    });
+    test('slider tooltip value should change with "eventual" valueChangeMode', function(assert) {
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart();
+        this.pointer.swipe(20);
+
+        assert.strictEqual(this.getTooltipText(), '70');
+
+        this.pointer.swipeEnd(40);
+
+        assert.strictEqual(this.getTooltipText(), '90');
+    });
+    test('slider should change on every step after runtime change valueChangeMode to instant', function(assert) {
+        this.instance.option('valueChangeMode', 'instant');
+
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart();
+        this.pointer.swipe(20);
+
+        assert.strictEqual(this.valueChangedHandler.called, true, 'the onValueChanged is called');
+
+        this.pointer.swipeEnd(20);
+
+        assert.strictEqual(this.instance.option('value'), 70);
+    });
+});
