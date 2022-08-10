@@ -5774,7 +5774,7 @@ QUnit.module('single line mode', {
         }));
 
         this.$element
-            .find('.dx-tag-container')
+            .find(`.${TAGBOX_TAG_CONTAINER_CLASS}`)
             .scrollLeft(1000);
 
         $(this.$element).trigger($.Event('dxmousewheel', {
