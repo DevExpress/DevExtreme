@@ -5691,10 +5691,10 @@ QUnit.module('single line mode', {
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
 
         this.instance.option('value', this.items);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should not be scrolled to the end on value change without focus (T865611)', function(assert) {
@@ -5774,7 +5774,7 @@ QUnit.module('single line mode', {
         }));
 
         this.$element
-            .find('.dx-tag-container')
+            .find(`.${TAGBOX_TAG_CONTAINER_CLASS}`)
             .scrollLeft(1000);
 
         $(this.$element).trigger($.Event('dxmousewheel', {
@@ -5852,7 +5852,7 @@ QUnit.module('single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('list should save it\'s scroll position after value changed', function(assert) {
