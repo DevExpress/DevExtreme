@@ -459,18 +459,39 @@ const Overlay = Widget.inherit({
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
-            this._showingDeferred.resolve();
+            this._showingDeferred.reject();
         } else {
             const show = () => {
-                this._renderVisibility(true);
+                this._toggleVisibility(true);
+                this._$content.css('visibility', 'hidden');
+                this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
+                this._positionController.openingHandled();
+                this._renderContent();
 
-                if(this._isShowingActionCanceled) {
-                    delete this._isShowingActionCanceled;
+                const showingArgs = { cancel: false };
+                this._actions.onShowing(showingArgs);
+
+                const cancelShow = () => {
+                    this._toggleVisibility(false);
+                    this._$content.css('visibility', '');
+                    this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
+                    this._isShowingActionCanceled = true;
+                    this._moveFromContainer();
+                    this.option('visible', false);
                     this._showingDeferred.resolve();
-                    return;
-                }
+                };
 
-                this._animateShowing();
+                const applyShow = () => {
+                    this._$content.css('visibility', '');
+                    this._renderVisibility(true);
+                    this._animateShowing();
+                };
+
+                if(showingArgs.cancel.then) {
+                    showingArgs.cancel.then(value => value ? cancelShow() : applyShow(), () => applyShow());
+                } else {
+                    showingArgs.cancel ? cancelShow() : applyShow();
+                }
             };
 
             if(this.option('templatesRenderAsynchronously')) {
@@ -537,23 +558,32 @@ const Overlay = Widget.inherit({
         const hidingArgs = { cancel: false };
 
         if(this._isShowingActionCanceled) {
-            this._hidingDeferred.resolve();
+            delete this._isShowingActionCanceled;
+            this._hidingDeferred.reject();
         } else {
             this._actions.onHiding(hidingArgs);
 
             this._toggleSafariScrolling();
 
-            if(hidingArgs.cancel) {
+            const cancelHide = () => {
                 this._isHidingActionCanceled = true;
                 this.option('visible', true);
                 this._hidingDeferred.resolve();
-            } else {
+            };
+
+            const applyHide = () => {
                 this._forceFocusLost();
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
 
                 this._animateHiding();
+            };
+
+            if(hidingArgs.cancel.then) {
+                hidingArgs.cancel.then(value => value ? cancelHide() : applyHide(), () => applyHide());
+            } else {
+                hidingArgs.cancel ? cancelHide() : applyHide();
             }
         }
         return this._hidingDeferred.promise();
@@ -604,20 +634,8 @@ const Overlay = Widget.inherit({
         this._updateZIndexStackPosition(visible);
 
         if(visible) {
-            this._positionController.openingHandled();
-            this._renderContent();
-
-            const showingArgs = { cancel: false };
-            this._actions.onShowing(showingArgs);
-            if(showingArgs.cancel) {
-                this._toggleVisibility(false);
-                this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
-                this._updateZIndexStackPosition(false);
-                this._moveFromContainer();
-                this._isShowingActionCanceled = true;
-                this.option('visible', false);
-                return;
-            }
+            // this._positionController.openingHandled();
+            // this._renderContent();
 
             this._moveToContainer();
             this._renderGeometry();
@@ -1131,13 +1149,9 @@ const Overlay = Widget.inherit({
                 this._toggleSafariScrolling();
                 break;
             case 'visible':
-                this._renderVisibilityAnimate(value).done(() => {
-                    if(!this._animateDeferred) {
-                        return;
-                    }
-
-                    this._animateDeferred.resolveWith(this);
-                });
+                this._renderVisibilityAnimate(value)
+                    .done(() => this._animateDeferred?.resolveWith(this))
+                    .fail(() => this._animateDeferred?.reject());
                 break;
             case 'container':
                 this._positionController.updateContainer(value);
@@ -1200,10 +1214,18 @@ const Overlay = Widget.inherit({
         this._animateDeferred = animateDeferred;
         this.option('visible', showing);
 
-        animateDeferred.promise().done(() => {
-            delete this._animateDeferred;
-            result.resolveWith(this, [this.option('visible')]);
-        });
+        animateDeferred.promise()
+            .done(
+                () => {
+                    delete this._animateDeferred;
+                    result.resolveWith(this, [this.option('visible')]);
+                })
+            .fail(
+                () => {
+                    delete this._animateDeferred;
+                    result.reject();
+                }
+            );
 
         return result.promise();
     },

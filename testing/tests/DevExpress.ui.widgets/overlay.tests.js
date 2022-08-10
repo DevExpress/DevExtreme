@@ -780,31 +780,156 @@ testModule('visibility', moduleConfig, () => {
         }
     });
 
-    test('overlay should not be shown if e.cancel == true in the onShowing event handler (T825865)', function(assert) {
-        const onShown = sinon.stub();
-        const $overlay = $('#overlay').dxOverlay({
-            onShowing: e => e.cancel = true,
-            onShown
+    testModule('e.cancel', {
+        beforeEach: function(assert) {
+            this.onShown = sinon.stub();
+            this.onHidden = sinon.stub();
+            this.$overlay = $('#overlay').dxOverlay({
+                onShown: this.onShown,
+                onHidden: this.onHidden,
+            });
+            this.overlay = this.$overlay.dxOverlay('instance');
+            this.checkIsNotShown = () => {
+                assert.notOk(this.onShown.called, 'onShown should not be called');
+            };
+            this.checkIsShown = () => {
+                assert.notOk(this.$overlay.is(':hidden')), 'overlay is not hidden';
+                assert.ok(this.onShown.called, 'onShown should be called');
+            };
+            this.checkIsNotHidden = () => {
+                assert.notOk(this.$overlay.is(':hidden')), 'overlay is not hidden';
+                assert.notOk(this.onHidden.called, 'onHidden should not be called');
+            };
+            this.checkIsHidden = () => {
+                assert.ok(this.$overlay.is(':hidden')), 'overlay is hidden';
+                assert.ok(this.onHidden.called, 'onHidden should be called');
+            };
+        }
+    }, () => {
+        test('overlay should not be shown if e.cancel == true in the onShowing event handler (T825865)', function(assert) {
+            this.overlay.option({ onShowing: e => e.cancel = true });
+            this.overlay.show();
+
+            assert.ok(this.$overlay.is(':hidden')), 'overlay is hidden';
+            this.checkIsNotShown();
         });
-        const overlay = $overlay.dxOverlay('instance');
-        overlay.show();
 
-        assert.ok($overlay.is(':hidden')), 'overlay is hidden';
-        assert.notOk(onShown.called, 'onShown should not be called');
-    });
+        test('overlay should not be hidden if e.cancel == true in the onHidinging event handler', function(assert) {
+            this.overlay.option({
+                visible: true,
+                onHiding: e => e.cancel = true
+            });
+            this.overlay.hide();
 
-    test('overlay should not be hidden if e.cancel == true in the onHidinging event handler', function(assert) {
-        const onHidden = sinon.stub();
-        const $overlay = $('#overlay').dxOverlay({
-            visible: true,
-            onHiding: e => e.cancel = true,
-            onHidden
+            this.checkIsNotHidden();
         });
-        const overlay = $overlay.dxOverlay('instance');
-        overlay.hide();
 
-        assert.notOk($overlay.is(':hidden')), 'overlay is not hidden';
-        assert.notOk(onHidden.called, 'onHidden should not be called');
+        test('overlay should be shown after timeout if e.cancel == promise resolving false after timeout', function(assert) {
+            const done = assert.async();
+            this.overlay.option({
+                onShowing: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(false), 0); }),
+            });
+            this.overlay.show();
+
+            this.checkIsNotShown();
+
+            setTimeout(() => {
+                done();
+
+                this.checkIsShown();
+            }, 0);
+        });
+
+        test('overlay should be hidden after timeout if e.cancel == promise resolving false after timeout', function(assert) {
+            const done = assert.async();
+            this.overlay.option({
+                visible: true,
+                onHiding: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(false), 0); }),
+            });
+            this.overlay.hide();
+
+            this.checkIsNotHidden();
+
+            setTimeout(() => {
+                done();
+
+                this.checkIsHidden();
+            }, 0);
+        });
+
+        test('overlay should not be shown after timeout if e.cancel == promise resolving true after timeout', function(assert) {
+            const done = assert.async();
+            this.overlay.option({
+                onShowing: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(true), 0); })
+            });
+            this.overlay.show();
+
+            setTimeout(() => {
+                done();
+
+                this.checkIsNotShown();
+            }, 0);
+        });
+
+        test('overlay should not be hidden after timeout if e.cancel == promise resolving true after timeout', function(assert) {
+            const done = assert.async();
+            this.overlay.option({
+                visible: true,
+                onHiding: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(true), 0); })
+            });
+            this.overlay.hide();
+
+            setTimeout(() => {
+                done();
+
+                this.checkIsNotHidden();
+            }, 0);
+        });
+
+        test('overlay should be shown after timeout if e.cancel == promise rejecting after timeout', function(assert) {
+            const done = assert.async();
+            this.overlay.option({
+                onShowing: e => e.cancel = new Promise((_, reject) => { setTimeout(() => reject(), 0); })
+            });
+            this.overlay.show();
+
+            this.checkIsNotShown();
+
+            setTimeout(() => {
+                done();
+
+                this.checkIsShown();
+            }, 0);
+        });
+
+        test('overlay should be hidden after timeout if e.cancel == promise rejecting after timeout', function(assert) {
+            const done = assert.async();
+            this.overlay.option({
+                visible: true,
+                onHiding: e => e.cancel = new Promise((_, reject) => { setTimeout(() => reject(), 0); })
+            });
+            this.overlay.hide();
+
+            this.checkIsNotHidden();
+
+            setTimeout(() => {
+                done();
+
+                this.checkIsHidden();
+            }, 0);
+        });
+
+        test('overlays content should be hidden on onShowig event (T1107193)', function(assert) {
+            assert.expect(1);
+
+            this.overlay.option({
+                onShowing: () => {
+                    const isContentHidden = $(this.overlay.content()).css('visibility') === 'hidden';
+                    assert.ok(isContentHidden, 'content is hidden');
+                }
+            });
+            this.overlay.show();
+        });
     });
 });
 
@@ -2628,6 +2753,25 @@ testModule('API', moduleConfig, () => {
 
             overlay.toggle().done((isVisible) => {
                 assert.strictEqual(isVisible, false, 'visibility is false');
+                done();
+            });
+        });
+    });
+
+    [false, true].forEach(visible => {
+        test(`toggle(${visible}) should be rejected if showing/hiding is canceled`, function(assert) {
+            const done = assert.async();
+            assert.expect(1);
+
+            const overlay = $('#overlay').dxOverlay({ visible: !visible }).dxOverlay('instance');
+            overlay.option({
+                onShowing: e => e.cancel = true,
+                onHiding: e => e.cancel = true
+            });
+
+            overlay.toggle(visible).fail(() => {
+                assert.ok(true);
+
                 done();
             });
         });
