@@ -18,7 +18,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(scheduler.appointmentPopup.allDay.element)
     .expect(await takeScreenshot('appointment-form-after-click-all-day.png'))
     .ok();
 
@@ -35,7 +35,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(scheduler.appointmentPopup.allDay.element)
     .expect(await takeScreenshot('appointment-form-after-switch-off-all-day.png'))
     .ok();
 
@@ -66,7 +66,7 @@ test('Start and end dates should be reflect the current day(create new appointme
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(scheduler.appointmentPopup.allDay.element)
     .expect(await takeScreenshot('new-appointment-form-after-click-all-day.png'))
     .ok();
 
@@ -83,7 +83,7 @@ test('Start and end dates should be reflect the current day(create new appointme
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(scheduler.appointmentPopup.allDay.element)
     .expect(await takeScreenshot('new-appointment-form-after-switch-off-all-day.png'))
     .ok();
 
@@ -111,7 +111,7 @@ test('StartDate and endDate should have correct type after "allDay" and "repeat"
     .expect(await takeScreenshot('form-before-change-allday-and-reccurence-options.png'))
     .ok()
 
-    .click(appointmentPopup.allDayElement)
+    .click(appointmentPopup.allDay.element)
     .click(appointmentPopup.recurrenceElement)
 
     .expect(await takeScreenshot('form-after-change-allday-and-reccurence-options.png'))

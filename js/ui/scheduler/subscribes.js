@@ -85,7 +85,8 @@ const subscribes = {
         const newCellIndex = this._workSpace.getDroppableCellIndex();
         const oldCellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
 
-        const becomeAllDay = targetedAppointment.allDay;
+        const droppableCellData = this._workSpace.getDataByDroppableCell();
+        const becomeAllDay = droppableCellData.allDay; // !
         const wasAllDay = appointment.allDay;
 
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&

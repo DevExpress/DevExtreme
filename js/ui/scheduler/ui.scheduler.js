@@ -1931,23 +1931,21 @@ class Scheduler extends Widget {
         }
 
         const result = createAppointmentAdapter(
-            {},
+            {
+                startDate: resultedStartDate,
+                allDay: appointment.allDay,
+            },
             this._dataAccessors,
-            this.timeZoneCalculator
+            this.timeZoneCalculator,
         );
-
-        if(targetCell.allDay !== undefined) {
-            result.allDay = targetCell.allDay;
-        }
-        result.startDate = resultedStartDate;
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
 
-        if(this.appointmentTakesAllDay(rawAppointment) && !result.allDay && this._workSpace.supportAllDayRow()) {
+        if(this.appointmentTakesAllDay(rawAppointment) && !targetCell.allDay && this._workSpace.supportAllDayRow()) {
             resultedEndDate = this._workSpace.calculateEndDate(resultedStartDate);
         }
 
-        if(appointment.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
+        if(targetCell.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
             const dateCopy = new Date(resultedStartDate);
             dateCopy.setHours(0);
 
