@@ -5918,10 +5918,23 @@ QUnit.module('single line mode', {
             assert.ok(e.isDefaultPrevented(), 'mousedown was prevented and lead to focusout prevent');
         });
 
+        this.instance.focus();
         $inputWrapper.trigger('mousedown');
     });
 
     QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+
+        $inputWrapper.on('mousedown', e => {
+            assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
+        });
+
+        this.instance.focus();
+        $input.trigger('mousedown');
+    });
+
+    QUnit.test('mousedown should not be prevented on first focusin (T1102475)', function(assert) {
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
         const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
