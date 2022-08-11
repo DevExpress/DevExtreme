@@ -58,7 +58,7 @@ const repeatMethod = function(methodName, args) {
 };
 
 const setAttributeValue = function(element, attrName, value) {
-    if(value !== undefined && value !== null) {
+    if(value !== undefined && value !== null && value !== false) {
         domAdapter.setAttribute(element, attrName, value);
     } else {
         domAdapter.removeAttribute(element, attrName);
