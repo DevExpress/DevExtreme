@@ -462,7 +462,7 @@ const Overlay = Widget.inherit({
             this._showingDeferred.reject();
         } else {
             const show = () => {
-                this._stopAnimation(); '';
+                this._stopAnimation();
                 this._toggleVisibility(true);
                 this._$content.css('visibility', 'hidden');
                 this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
