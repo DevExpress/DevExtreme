@@ -373,3 +373,14 @@ QUnit.module('delay', {
     });
 });
 
+QUnit.module('default options', {
+    beforeEach: function() {
+        this.element = $('#loadPanel').dxLoadPanel({});
+        this.instance = this.element.dxLoadPanel('instance');
+    }
+}, () => {
+    QUnit.test('"propagateOutsideClick" option by default should be set to true (T1085638)', function(assert) {
+        assert.ok(this.instance.option('propagateOutsideClick'), true);
+    });
+});
+
