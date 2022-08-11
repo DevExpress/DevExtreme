@@ -707,9 +707,21 @@ export const focusModule = {
                                 }
                             } else {
                                 const filterOperation = sortInfo.desc ? '>' : '<';
-                                let sortFilter = [selector, filterOperation, value];
-                                if(!sortInfo.desc) {
-                                    sortFilter = [sortFilter, 'or', [selector, '=', null]];
+
+                                let sortFilter;
+                                if(sortInfo.compare) {
+                                    sortFilter = (data) => {
+                                        if(filterOperation === '<') {
+                                            return sortInfo.compare(value, getter(data)) >= 1;
+                                        } else {
+                                            return sortInfo.compare(value, getter(data)) <= -1;
+                                        }
+                                    };
+                                } else {
+                                    sortFilter = [selector, filterOperation, value];
+                                    if(!sortInfo.desc) {
+                                        sortFilter = [sortFilter, 'or', [selector, '=', null]];
+                                    }
                                 }
 
                                 filter = [sortFilter, 'or', filter];
