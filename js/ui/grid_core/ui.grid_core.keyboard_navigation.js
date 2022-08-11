@@ -921,7 +921,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             if($parent.hasClass(FREESPACE_ROW_CLASS)) {
                 this._updateFocusedCellPosition($target);
                 this._applyTabIndexToElement(this._focusedView.element());
-                this._focusedView.focus();
+                this._focusedView.focus(true);
             } else if(!this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
             } else {
