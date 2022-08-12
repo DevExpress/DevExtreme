@@ -12,6 +12,7 @@ import { HeaderPanel } from './headerPanel';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
+  allDayAppointment: 'dx-scheduler-all-day-appointment',
   appointmentCollector: 'dx-scheduler-appointment-collector',
   dateTable: 'dx-scheduler-date-table',
   dateTableCell: 'dx-scheduler-date-table-cell',
@@ -147,8 +148,14 @@ export default class Scheduler extends Widget {
     return new Appointment(this.element, index);
   }
 
-  getAppointmentCount(): Promise<number> {
-    return this.element.find(`.${CLASS.appointment}`).count;
+  getAppointmentCount(allDay = false): Promise<number> {
+    const selector = allDay
+      ? `.${CLASS.appointment}.${CLASS.allDayAppointment}`
+      : `.${CLASS.appointment}:not(.${CLASS.allDayAppointment})`;
+
+    return this.element
+      .find(selector)
+      .count;
   }
 
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
