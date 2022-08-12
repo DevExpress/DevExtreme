@@ -1937,13 +1937,12 @@ class Scheduler extends Widget {
             targetCell.allDay,
         );
         const result = createAppointmentAdapter(
-            {
-                startDate: resultedStartDate,
-                allDay: appointmentAllDay,
-            },
+            {},
             this._dataAccessors,
             this.timeZoneCalculator,
         );
+        result.startDate = resultedStartDate;
+        result.allDay = appointmentAllDay;
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
 
