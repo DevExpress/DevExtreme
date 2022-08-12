@@ -23,12 +23,9 @@ fixture`PivotGrid_scrolling`
     const pivotGrid = new PivotGrid('#container');
 
     await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(100);
-    await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(100);
-    await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(100);
+    await t.wait(500);
     await pivotGrid.scrollBy({ top: -150 });
+    await t.wait(500);
 
     await t
       .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}.png`, '#container'))
@@ -85,12 +82,9 @@ fixture`PivotGrid_scrolling`
     const pivotGrid = new PivotGrid('#container');
 
     await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(100);
-    await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(100);
-    await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(100);
+    await t.wait(500);
     await pivotGrid.scrollBy({ top: -150 });
+    await t.wait(500);
 
     await t
       .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}.png`, '#container'))
