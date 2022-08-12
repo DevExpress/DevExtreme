@@ -561,15 +561,14 @@ const Slider = TrackBar.inherit({
         }
         const newValue = this._roundSwipeValue(this._currentRatio);
         const valueChangeMode = this.option('valueChangeMode');
+        const $handle = this._activeHandle();
 
         SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
 
-        if(valueChangeMode === 'eventual') {
-            return;
+        if(valueChangeMode === 'instant' || $handle) {
+            this._saveValueChangeEvent(e);
+            this._changeValueOnSwipe(newValue);
         }
-
-        this._saveValueChangeEvent(e);
-        this._changeValueOnSwipe(newValue);
     },
 
     _renderValue: function() {

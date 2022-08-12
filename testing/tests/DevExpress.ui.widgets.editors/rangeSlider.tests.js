@@ -1386,12 +1386,12 @@ QUnit.module('valueChangeMode option', {
     QUnit.test('right slider handle value should not change on swipe with "eventual" valueChangeMode', function(assert) {
 
         const pointer = pointerMock(this.rightHandle);
-        pointer.start().move(this.range.offset().left + 8000).down().move(-10000);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
         assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
 
         pointer.up();
 
-        assert.equal(this.instance.option('end'), 20);
+        assert.equal(this.instance.option('end'), 80);
         assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
     });
     QUnit.test('left slider handle tooltip value should change with "eventual" valueChangeMode', function(assert) {

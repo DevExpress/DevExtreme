@@ -306,20 +306,23 @@ module('render', moduleOptions, () => {
         assert.equal(instance.option('value'), 300, 'value set after dxswipestart');
     });
 
-    test('value should be updated on click on mobile devices', function(assert) {
-        const $element = $('#slider').dxSlider({
-            max: 500,
-            min: 0,
-            value: 0,
-            width: 500 + 2 * SLIDER_PADDING
+    ['instant', 'eventual'].forEach(mode => {
+        test('value should be updated on click on mobile devices', function(assert) {
+            const $element = $('#slider').dxSlider({
+                max: 500,
+                min: 0,
+                value: 0,
+                width: 500 + 2 * SLIDER_PADDING,
+                valueChangeMode: mode
+            });
+            const instance = $element.dxSlider('instance');
+
+            const $handle = $element.find('.' + SLIDER_WRAPPER_CLASS);
+            const pointer = pointerMock($handle);
+
+            pointer.start({ pointerType: 'touch', x: SLIDER_PADDING }).move($element.offset().left + 300).click();
+            assert.equal(instance.option('value'), 300, 'value set after dxclick');
         });
-        const instance = $element.dxSlider('instance');
-
-        const $handle = $element.find('.' + SLIDER_WRAPPER_CLASS);
-        const pointer = pointerMock($handle);
-
-        pointer.start({ pointerType: 'touch', x: SLIDER_PADDING }).move($element.offset().left + 300).click();
-        assert.equal(instance.option('value'), 300, 'value set after dxclick');
     });
 
     test('value should be correctly updated on swipestart with the step that exceeds the maximum (T831727)', function(assert) {
