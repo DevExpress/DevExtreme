@@ -13,8 +13,8 @@ fixture`PivotGrid_scrolling`
   .afterEach(async () => disposeWidgets());
 
 [
-  // { useNative: true, mode: 'standart' },
-  // { useNative: false, mode: 'standart' },
+  { useNative: true, mode: 'standart' },
+  { useNative: false, mode: 'standart' },
   { useNative: true, mode: 'virtual' },
   { useNative: false, mode: 'virtual' },
 ].forEach(({ useNative, mode }) => {
