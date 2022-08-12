@@ -77,7 +77,8 @@ createTestCafe('localhost', 1437, 1438)
             runner.cache = args.cache;
         }
         return runner.run({
-            quarantineMode: args.quarantineMode
+            quarantineMode: args.quarantineMode,
+            assertionTimeout: args.assertionTimeout,
         });
     })
     .then(failedCount => {
@@ -109,6 +110,7 @@ function getArgs() {
             file: '*',
             cache: true,
             quarantineMode: false,
+            assertionTimeout: 1000,
             indices: '',
             platform: ''
         }
