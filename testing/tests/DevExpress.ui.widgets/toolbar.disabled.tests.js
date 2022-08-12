@@ -15,6 +15,8 @@ import 'ui/autocomplete';
 import 'ui/date_box';
 import 'ui/menu';
 
+import devices from 'core/devices';
+
 import fx from 'animation/fx';
 
 const moduleConfig = {
@@ -58,6 +60,11 @@ const openDropDownMenuIfExist = (toolbar) => {
 };
 
 ['never', 'always'].forEach((locateInMenu) => {
+    if(devices.real().deviceType !== 'desktop') {
+        // there is no specific for devices in these tests
+        return;
+    }
+
     [
         { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
         { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
