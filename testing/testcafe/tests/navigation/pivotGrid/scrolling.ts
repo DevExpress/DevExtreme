@@ -13,8 +13,8 @@ fixture`PivotGrid_scrolling`
   .afterEach(async () => disposeWidgets());
 
 [
-  { useNative: true, mode: 'standart' },
-  { useNative: false, mode: 'standart' },
+  // { useNative: true, mode: 'standart' },
+  // { useNative: false, mode: 'standart' },
   { useNative: true, mode: 'virtual' },
   { useNative: false, mode: 'virtual' },
 ].forEach(({ useNative, mode }) => {
@@ -23,9 +23,11 @@ fixture`PivotGrid_scrolling`
     const pivotGrid = new PivotGrid('#container');
 
     await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(500);
+    await t.wait(1000);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(1000);
     await pivotGrid.scrollBy({ top: -150 });
-    await t.wait(500);
+    await t.wait(1000);
 
     await t
       .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}.png`, '#container'))
@@ -83,9 +85,11 @@ fixture`PivotGrid_scrolling`
     const pivotGrid = new PivotGrid('#container');
 
     await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(500);
+    await t.wait(1000);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(1000);
     await pivotGrid.scrollBy({ top: -150 });
-    await t.wait(500);
+    await t.wait(1000);
 
     await t
       .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}.png`, '#container'))
