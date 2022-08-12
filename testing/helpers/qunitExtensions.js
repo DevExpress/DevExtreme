@@ -174,8 +174,9 @@
         }
 
         const shadowContainer = document.createElement('div');
-
         const style = document.createElement('style');
+
+        shadowContainer.className = 'shadow-container';
 
         style.innerHTML = `
             :host {
@@ -183,7 +184,7 @@
                 top: 0!important;
                 left: 0!important;
             }
-            :scope > div {
+            :scope .shadow-container {
                 position: absolute;
                 top: -10000px;
                 left: -10000px;
@@ -191,13 +192,10 @@
                 height: 1000px;
             }
             
-            :scope > div.qunit-fixture-visible {
+            :scope .shadow-container.qunit-fixture-visible {
                 position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
-            }
-
-            :scope > div.qunit-fixture-visible * {
             }
         `;
 
