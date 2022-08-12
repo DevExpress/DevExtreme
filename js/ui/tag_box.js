@@ -581,7 +581,7 @@ const TagBox = SelectBox.inherit({
 
         eventsEngine.off(this._inputWrapper(), eventName);
         eventsEngine.on(this._inputWrapper(), eventName, (e) => {
-            if(e.target !== this._input()[0]) {
+            if(e.target !== this._input()[0] && this._isFocused()) {
                 e.preventDefault();
             }
         });
