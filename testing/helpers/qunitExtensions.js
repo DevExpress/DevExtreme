@@ -206,8 +206,8 @@
     }
 
     function clearShadowRootTree() {
-        const container = get(':scope > div');
-        const style = get(':scope > style');
+        const container = get(':scope div')[0];
+        const style = get(':scope style')[0];
 
         jQuery(container).remove();
         jQuery(style).remove();
@@ -233,7 +233,7 @@
             }
 
             if(resultElement === getRoot().host) {
-                return new jQueryInit(get(':scope > div'), context, root);
+                return new jQueryInit(get(':scope div')[0], context, root);
             }
 
             return result;
