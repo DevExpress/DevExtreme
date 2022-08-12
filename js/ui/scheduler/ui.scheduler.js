@@ -83,6 +83,7 @@ import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
+import { getAppointmentAllDay } from '../../renovation/ui/scheduler/appointment/dragging/utils/getAppointmentAllDay';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1885,7 +1886,7 @@ class Scheduler extends Widget {
         return this._recurrenceDialog.show();
     }
 
-    _getUpdatedData(rawAppointment) {
+    _getUpdatedData(rawAppointment, wasAllDay) {
         const getConvertedFromGrid = date => date
             ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' })
             : undefined;
@@ -1930,10 +1931,15 @@ class Scheduler extends Widget {
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
+        const appointmentAllDay = getAppointmentAllDay(
+            appointment.allDay,
+            wasAllDay,
+            targetCell.allDay,
+        );
         const result = createAppointmentAdapter(
             {
                 startDate: resultedStartDate,
-                allDay: appointment.allDay,
+                allDay: appointmentAllDay,
             },
             this._dataAccessors,
             this.timeZoneCalculator,
