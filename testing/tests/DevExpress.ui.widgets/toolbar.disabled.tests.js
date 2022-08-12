@@ -67,11 +67,12 @@ const openDropDownMenuIfExist = (toolbar) => {
     }
 };
 
-if(devices.real().deviceType !== 'desktop') {
-    return;
-}
-
 ['never', 'always'].forEach((locateInMenu) => {
+    if(devices.real().deviceType !== 'desktop') {
+        // there is no specific for devices in these tests
+        return;
+    }
+
     [
         { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
         { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
