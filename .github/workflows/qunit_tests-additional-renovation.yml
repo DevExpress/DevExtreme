@@ -103,6 +103,12 @@ jobs:
         ]
 
     steps:
+    - name: Setup MATRIX_ENVS_NAME_SAFE
+      run: |
+        MATRIX_ENVS_NAME_SAFE=$(echo -n "${{ matrix.envs.name }}" | sed 's|/|-|g')
+        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
+        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
+
     # Prepare fast re-run start
     - name: Set default run status
       run: echo "default" > last_run_status
@@ -206,7 +212,7 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
-        name: RawLog-${{ matrix.envs.name }}
+        name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
         path: ${{ github.workspace }}/testing/RawLog.txt
         if-no-files-found: ignore
 
