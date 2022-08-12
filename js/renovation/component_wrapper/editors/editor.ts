@@ -8,6 +8,7 @@ import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
 import { Option } from '../common/types';
+import { querySelectorInSameDocument } from '../../utils/dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -31,7 +32,7 @@ export default class Editor extends Component {
       // it can change the editor's value
       if (isValidationMessageShownOnFocus) {
         // NOTE: Prevent the validation message from showing
-        const $validationMessageWrapper = $('.dx-invalid-message.dx-overlay-wrapper');
+        const $validationMessageWrapper = $(querySelectorInSameDocument(this.element(), '.dx-invalid-message.dx-overlay-wrapper') as Element);
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
         const timeToWaitBeforeShow = 150;

@@ -6,6 +6,7 @@ import { getShadowElementsFromPoint } from './utils/shadow_dom';
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
+const DOCUMENT_FRAGMENT_NODE = 11;
 
 const nativeDOMAdapterStrategy = {
     querySelectorAll(element, selector) {
@@ -63,6 +64,10 @@ const nativeDOMAdapterStrategy = {
 
     isDocument(element) {
         return element && element.nodeType === DOCUMENT_NODE;
+    },
+
+    isDocumentFragment(element) {
+        return element && element.nodeType === DOCUMENT_FRAGMENT_NODE;
     },
 
     removeElement(element) {

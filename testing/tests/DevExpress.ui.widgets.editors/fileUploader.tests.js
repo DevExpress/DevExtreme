@@ -853,7 +853,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
             multiple: true,
-            dropZone: '.drop'
+            dropZone: $('.drop')
         });
         const files = [fakeFile, fakeFile1];
         const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
@@ -3624,7 +3624,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const onDropZoneLeaveSpy = sinon.spy();
         $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
-            dropZone: '.drop',
+            dropZone: $('.drop'),
             onDropZoneEnter: onDropZoneEnterSpy,
             onDropZoneLeave: onDropZoneLeaveSpy
         });
@@ -3671,7 +3671,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const onDropZoneLeaveSpy = sinon.spy();
         $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
-            dropZone: '.drop',
+            dropZone: $('.drop'),
             onDropZoneEnter: onDropZoneEnterSpy,
             onDropZoneLeave: onDropZoneLeaveSpy
         });

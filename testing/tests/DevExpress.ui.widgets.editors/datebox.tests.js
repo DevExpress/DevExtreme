@@ -10,6 +10,7 @@ import dateUtils from 'core/utils/date';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { getActiveElement } from '../../helpers/shadowDom.js';
 import messageLocalization from 'localization/message';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
@@ -2089,7 +2090,7 @@ QUnit.module('datebox w/ calendar', {
         $(this.fixture.dateBox._input()).focus();
         this.fixture.dateBox.open();
         pointerMock(this.fixture.dateBox._strategy._calendarContainer).start().swipeStart().swipeEnd(1);
-        assert.strictEqual(this.fixture.dateBox._input()[0], document.activeElement);
+        assert.strictEqual(this.fixture.dateBox._input()[0], getActiveElement());
     });
 
     QUnit.test('Pressing escape must hide the calendar and clean focus', function(assert) {
@@ -4088,7 +4089,7 @@ QUnit.module('width of datebox with list', {
                 type: 'time',
                 pickerType: 'list',
                 dropDownOptions: {
-                    container: '#containerWithWidth'
+                    container: $('#containerWithWidth')
                 },
                 opened: true
             });
@@ -4459,7 +4460,7 @@ QUnit.module('width of datebox with calendar', {
             this.$dateBox.dxDateBox({
                 pickerType: 'calendar',
                 dropDownOptions: {
-                    container: '#containerWithWidth'
+                    container: $('#containerWithWidth')
                 },
                 opened: true
             });

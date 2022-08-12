@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 import DeltaConverter from 'ui/html_editor/converters/delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
 import { getQuill } from 'ui/html_editor/quill_importer';
@@ -8,7 +10,7 @@ testModule('Delta converter', {
     beforeEach: function() {
         const Quill = getQuill();
         this.deltaConverter = new DeltaConverter();
-        this.quillInstance = new Quill(document.getElementById('htmlEditor'), {});
+        this.quillInstance = new Quill($('#htmlEditor').get(0), {});
         this.deltaConverter.setQuillInstance(this.quillInstance);
     } }, () => {
     test('it convert an editor content to semantic HTML markup', function(assert) {
@@ -127,7 +129,7 @@ testModule('Custom list', {
     beforeEach: function() {
         const Quill = getQuill();
         this.deltaConverter = new DeltaConverter();
-        this.quillInstance = new Quill(document.getElementById('htmlEditor'), {});
+        this.quillInstance = new Quill($('#htmlEditor').get(0), {});
         this.deltaConverter.setQuillInstance(this.quillInstance);
     },
     after: function() {
