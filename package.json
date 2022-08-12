@@ -178,7 +178,7 @@
     "systemjs-plugin-json": "0.2.2",
     "systemjs-plugin-text": "0.0.11",
     "terser-webpack-plugin": "5.3.5",
-    "testcafe": "1.19.0",
+    "testcafe": "^1.20.1",
     "through2": "2.0.5",
     "ts-jest": "26.5.6",
     "typescript": "4.2.4",
