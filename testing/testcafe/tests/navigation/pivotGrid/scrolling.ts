@@ -15,8 +15,6 @@ fixture`PivotGrid_scrolling`
 [
   { useNative: true, mode: 'standart' },
   { useNative: false, mode: 'standart' },
-  // { useNative: true, mode: 'virtual' },
-  { useNative: false, mode: 'virtual' },
 ].forEach(({ useNative, mode }) => {
   test(`Rows sincronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
