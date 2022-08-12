@@ -24,8 +24,6 @@ fixture`PivotGrid_scrolling`
 
     await pivotGrid.scrollTo({ top: 300000 });
     await t.wait(500);
-    await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(500);
     await pivotGrid.scrollBy({ top: -150 });
     await t.wait(500);
 
@@ -38,6 +36,7 @@ fixture`PivotGrid_scrolling`
     await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
 
     return createWidget('dxPivotGrid', {
+      loadingTimeout: null,
       dataSource: {
         store: virtualData,
         retrieveFields: false,
@@ -85,8 +84,6 @@ fixture`PivotGrid_scrolling`
 
     await pivotGrid.scrollTo({ top: 300000 });
     await t.wait(500);
-    await pivotGrid.scrollTo({ top: 300000 });
-    await t.wait(500);
     await pivotGrid.scrollBy({ top: -150 });
     await t.wait(500);
 
@@ -99,6 +96,7 @@ fixture`PivotGrid_scrolling`
     await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
 
     return createWidget('dxPivotGrid', {
+      loadingTimeout: null,
       dataSource: {
         store: virtualData,
         retrieveFields: false,
