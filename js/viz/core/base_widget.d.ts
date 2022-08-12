@@ -1,5 +1,6 @@
 import DOMComponent, {
-    DOMComponentOptions,
+  DOMComponentOptions,
+  Properties,
 } from '../../core/dom_component';
 
 import {
@@ -557,7 +558,7 @@ export interface BaseWidgetTooltip {
  * @inherits DOMComponent
  * @namespace DevExpress.viz
  */
-export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
+export default class BaseWidget<TProperties = Properties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @static
@@ -612,6 +613,11 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      */
     svg(): string;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ * @public */
+export type VizWidget = BaseWidget;
 
 /**
  * @docid

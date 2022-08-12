@@ -26389,7 +26389,9 @@ declare module DevExpress.viz {
    * [descr:BaseWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class BaseWidget<TProperties> extends DOMComponent<TProperties> {
+  export class BaseWidget<
+    TProperties = DevExpress.DOMComponent.Properties
+  > extends DOMComponent<TProperties> {
     /**
      * [descr:BaseWidget.defaultOptions(rule)]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -36313,13 +36315,13 @@ declare module DevExpress.viz {
    * [descr:viz.exportWidgets(widgetInstances)]
    */
   export function exportWidgets(
-    widgetInstances: Array<Array<DOMComponent>>
+    widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>
   ): void;
   /**
    * [descr:viz.exportWidgets(widgetInstances, options)]
    */
   export function exportWidgets(
-    widgetInstances: Array<Array<DOMComponent>>,
+    widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>,
     options: {
       fileName?: string;
       format?: DevExpress.common.ExportFormat;
@@ -36395,7 +36397,9 @@ declare module DevExpress.viz {
   /**
    * [descr:viz.getMarkup(widgetInstances)]
    */
-  export function getMarkup(widgetInstances: Array<DOMComponent>): string;
+  export function getMarkup(
+    widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>
+  ): string;
   /**
    * [descr:viz.getPalette(paletteName)]
    */
@@ -36743,6 +36747,10 @@ declare module DevExpress.viz {
         years?: number;
       }
     | DevExpress.common.charts.TimeInterval;
+  /**
+   * [descr:VizWidget]
+   */
+  export type VizWidget = BaseWidget;
 }
 declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
