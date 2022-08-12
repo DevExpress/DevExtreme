@@ -256,6 +256,50 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
     });
 
+    QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is not visible and custom sortingMethod is used (T1105332)', function(assert) {
+        // arrange
+        const data = [
+            { name: 'Alex', phone: 1, room: 6 },
+            { name: 'Dan', phone: 2, room: 5 },
+            { name: 'Ben', phone: 3, room: 4 },
+            { name: 'Sean', phone: 4, room: 3 },
+            { name: 'Smith', phone: 5, room: 2 },
+            { name: 'Zeb', phone: 6, room: 1 }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 80,
+            dataSource: data,
+            columns: [
+                'name', {
+                    dataField: 'phone',
+                    calculateSortValue(data) {
+                        return { sort: data.phone };
+                    },
+                    sortOrder: 'desc',
+                    sortIndex: 0,
+                    sortingMethod: function(a, b) {
+                        return b.sort - a.sort;
+                    }
+                }, 'room'
+            ],
+            keyExpr: 'name',
+            autoNavigateToFocusedRow: true,
+            focusedRowEnabled: true,
+            focusedRowKey: 'Zeb',
+            paging: {
+                pageSize: 2
+            },
+        }).dxDataGrid('instance');
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index changed');
+        assert.equal(dataGrid.option('focusedRowKey'), 'Zeb', 'focusedRowKey');
+        assert.equal(dataGrid.option('focusedRowIndex'), 1, 'focusedRowIndex');
+    });
+
     QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is visible', function(assert) {
         // arrange
         const data = [

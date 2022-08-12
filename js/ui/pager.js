@@ -322,7 +322,7 @@ const Pager = Widget.inherit({
 
             that.setAria({
                 'role': 'button',
-                'label': 'Page ' + page.value()
+                'label': messageLocalization.format('dxPager-page') + page.value()
             }, page.element());
 
             setTabIndex(that, page.element());
@@ -555,10 +555,9 @@ const Pager = Widget.inherit({
             eventsEngine.on($button, addNamespace([pointerEvents.up, clickEventName], that.Name + 'Pages'), that._wrapClickAction(clickAction));
 
             registerKeyboardAction('pager', that, $button, undefined, clickAction);
-
             that.setAria({
                 'role': 'button',
-                'label': direction === 'prev' ? 'Previous page' : ' Next page'
+                'label': messageLocalization.format(`dxPager-${messageLocalization.format(direction === 'prev' ? 'prev' : 'next')}Page`)
             }, $button);
 
             setTabIndex(that, $button);
