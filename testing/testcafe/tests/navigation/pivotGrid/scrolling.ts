@@ -24,6 +24,8 @@ fixture`PivotGrid_scrolling`
 
     await pivotGrid.scrollTo({ top: 300000 });
     await t.wait(500);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(500);
     await pivotGrid.scrollBy({ top: -150 });
     await t.wait(500);
 
@@ -81,6 +83,8 @@ fixture`PivotGrid_scrolling`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(500);
     await pivotGrid.scrollTo({ top: 300000 });
     await t.wait(500);
     await pivotGrid.scrollBy({ top: -150 });
