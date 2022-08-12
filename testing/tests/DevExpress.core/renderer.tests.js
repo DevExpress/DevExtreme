@@ -359,8 +359,8 @@ QUnit.test('Should not remove content when replacing the same content', function
 });
 
 QUnit.module('attr method');
-
-QUnit.test('Should not remove content when replacing the same content', function(assert) {
+// T1108190
+QUnit.test('Add/remove atribute', function(assert) {
     const $element = renderer('<div>');
 
     $element.attr('data-test', 'test');
@@ -369,9 +369,9 @@ QUnit.test('Should not remove content when replacing the same content', function
 
     fixture.appendChild($element.get(0));
     assert.equal($element.get(0).getAttribute('data-test'), 'test', 'element data-test attribute');
-    assert.equal($element.get(0).getAttribute('readOnly'), 'true', 'element readOnly attribute');
+    assert.equal(!!$element.get(0).getAttribute('readonly'), true, 'element readOnly attribute');
     $element.attr('readonly', false);
-    assert.equal($element.get(0).getAttribute('readOnly'), undefined, 'element readOnly attribute');
+    assert.equal($element.get(0).getAttribute('readonly'), undefined, 'element readOnly attribute');
 
 });
 
