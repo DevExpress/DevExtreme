@@ -5691,10 +5691,10 @@ QUnit.module('single line mode', {
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
 
         this.instance.option('value', this.items);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should not be scrolled to the end on value change without focus (T865611)', function(assert) {
@@ -5774,7 +5774,7 @@ QUnit.module('single line mode', {
         }));
 
         this.$element
-            .find('.dx-tag-container')
+            .find(`.${TAGBOX_TAG_CONTAINER_CLASS}`)
             .scrollLeft(1000);
 
         $(this.$element).trigger($.Event('dxmousewheel', {
@@ -5852,7 +5852,7 @@ QUnit.module('single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('list should save it\'s scroll position after value changed', function(assert) {
@@ -5918,10 +5918,23 @@ QUnit.module('single line mode', {
             assert.ok(e.isDefaultPrevented(), 'mousedown was prevented and lead to focusout prevent');
         });
 
+        this.instance.focus();
         $inputWrapper.trigger('mousedown');
     });
 
     QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+
+        $inputWrapper.on('mousedown', e => {
+            assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
+        });
+
+        this.instance.focus();
+        $input.trigger('mousedown');
+    });
+
+    QUnit.test('mousedown should not be prevented on first focusin (T1102475)', function(assert) {
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
         const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 

@@ -1,5 +1,5 @@
 export interface DomAdapter {
-  getActiveElement(): HTMLElement;
+  getActiveElement(element?: HTMLElement | null): HTMLElement;
   getDocument(): Document;
   getDocumentElement(): HTMLDocument & {
     scrollLeft: number;

@@ -6496,6 +6496,7 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.calculateCellValue]
        */
       calculateCellValue?: (rowData: TRowData) => any;
+      defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
       /**
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
@@ -6508,6 +6509,7 @@ declare module DevExpress.ui {
         selectedFilterOperation: string,
         target: string
       ) => string | Array<any> | Function;
+      defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
       /**
        * [descr:GridBaseColumn.calculateSortValue]
        */
@@ -13928,7 +13930,6 @@ declare module DevExpress.ui {
     | 'showInColumnChooser'
     | 'type'
     | 'validationRules'
-    | 'visible'
   >;
   /**
    * [descr:dxGanttColumn]
@@ -14028,10 +14029,6 @@ declare module DevExpress.ui {
      * [descr:dxGanttColumn.validationRules]
      */
     validationRules: any;
-    /**
-     * [descr:dxGanttColumn.visible]
-     */
-    visible: any;
     /**
      * [descr:dxGanttColumn.type]
      */
@@ -18196,48 +18193,6 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.width]
      */
     width?: number | string | (() => number | string);
-  }
-  /**
-   * @deprecated Use ToolbarItem instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPopupToolbarItem {
-    /**
-     * [descr:dxPopupOptions.toolbarItems.disabled]
-     */
-    disabled?: boolean;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.html]
-     */
-    html?: string;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.location]
-     */
-    location?: DevExpress.common.ToolbarItemLocation;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.options]
-     */
-    options?: any;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.template]
-     */
-    template?: DevExpress.core.template;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.text]
-     */
-    text?: string;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.toolbar]
-     */
-    toolbar?: DevExpress.ui.dxPopup.ToolbarLocation;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxPopupOptions.toolbarItems.widget]
-     */
-    widget?: DevExpress.common.ToolbarItemComponent;
   }
   /**
    * [descr:dxProgressBar]
@@ -25235,7 +25190,20 @@ declare module DevExpress.ui.dxPivotGrid {
   export type Cell = dxPivotGridPivotGridCell;
 }
 declare module DevExpress.ui.dxPopup {
-  export type ToolbarItem = dxPopupToolbarItem;
+  /**
+   * @deprecated Use ToolbarItem instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type dxPopupToolbarItem = ToolbarItem;
+  /**
+   * [descr:dxPopupToolbarItem]
+   */
+  export interface ToolbarItem extends DevExpress.ui.dxToolbar.Item {
+    /**
+     * [descr:dxPopupToolbarItem.toolbar]
+     */
+    toolbar?: ToolbarLocation;
+  }
 }
 declare module DevExpress.ui.dxResponsiveBox {
   export type Item = dxResponsiveBoxItem;
