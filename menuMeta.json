@@ -2355,7 +2355,6 @@
           {
             "Title": "Area",
             "Name": "Area",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Area_Series/",
             "Credits": "wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
