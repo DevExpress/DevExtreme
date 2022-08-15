@@ -4,8 +4,11 @@ import * as React from 'react';
 
 import { TemplatesStore } from './templates-store';
 
-class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesStore }> {
+class TemplatesRenderer extends React.PureComponent<{
+  templatesStore: TemplatesStore;
+}> {
   private updateScheduled = false;
+
   private mounted = false;
 
   componentDidMount(): void {
@@ -16,11 +19,7 @@ class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesS
     this.mounted = false;
   }
 
-  forceUpdateCallback = () => {
-    this.updateScheduled = false;
-  }
-
-  public scheduleUpdate(useDeferUpdate: boolean): void {
+  public scheduleUpdate(useDeferUpdate: boolean, onRendered?: () => void): void {
     if (this.updateScheduled) {
       return;
     }
@@ -30,7 +29,10 @@ class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesS
     const updateFunc = useDeferUpdate ? deferUpdate : requestAnimationFrame;
     updateFunc(() => {
       if (this.mounted) {
-        this.forceUpdate(this.forceUpdateCallback);
+        this.forceUpdate(() => {
+          this.updateScheduled = false;
+          onRendered?.();
+        });
       }
       this.updateScheduled = false;
     });

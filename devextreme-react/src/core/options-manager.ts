@@ -1,13 +1,27 @@
-import TemplatesManager from './templates-manager';
-
+/* eslint-disable no-restricted-globals */
 import { getChanges } from './configuration/comparer';
-import { IConfigNode } from './configuration/config-node';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';
 import { capitalizeFirstLetter } from './helpers';
 
+import type TemplatesManager from './templates-manager';
+import type { IConfigNode } from './configuration/config-node';
+
+const optionsManagers = new Set<OptionsManager>();
+let guardTimeoutHandler = -1;
+
+export function unscheduleGuards(): void {
+  clearTimeout(guardTimeoutHandler);
+}
+export function scheduleGuards(): void {
+  unscheduleGuards();
+  guardTimeoutHandler = window.setTimeout(() => {
+    optionsManagers.forEach((optionManager) => optionManager.execGuards());
+  });
+}
+
 class OptionsManager {
-  private readonly guards: Record<string, number> = {};
+  private readonly guards: Record<string, ()=> void> = {};
 
   private templatesManager: TemplatesManager;
 
@@ -23,6 +37,7 @@ class OptionsManager {
 
   constructor(templatesManager: TemplatesManager) {
     this.templatesManager = templatesManager;
+    optionsManagers.add(this);
 
     this.onOptionChanged = this.onOptionChanged.bind(this);
     this.wrapOptionValue = this.wrapOptionValue.bind(this);
@@ -62,7 +77,7 @@ class OptionsManager {
   }
 
   public update(config: IConfigNode): void {
-    const changedOptions:Array<[string, any]> = [];
+    const changedOptions:Array<[string, unknown]> = [];
     const optionChangedHandler = ({ value, fullName }) => {
       changedOptions.push([fullName, value]);
     };
@@ -103,7 +118,8 @@ class OptionsManager {
 
     changedOptions.forEach(([name, value]) => {
       const currentPropValue = config.options[name];
-      if (config.options.hasOwnProperty(name) && currentPropValue !== value) {
+      if (Object.prototype.hasOwnProperty.call(config.options, name)
+      && currentPropValue !== value) {
         this.setValue(name, currentPropValue);
       }
     });
@@ -129,7 +145,7 @@ class OptionsManager {
     if (value instanceof Array && type === ValueType.Array) {
       for (let i = 0; i < value.length; i += 1) {
         if (value[i] !== (e.value as Array<unknown>)?.[i]) {
-          this.setGuard(e.fullName, value);
+          this.addGuard(e.fullName, value);
           return;
         }
       }
@@ -138,7 +154,7 @@ class OptionsManager {
         if (value[key] === (e.value as Record<string, unknown>)?.[key]) {
           return;
         }
-        this.setGuard(mergeNameParts(e.fullName, key), value[key]);
+        this.addGuard(mergeNameParts(e.fullName, key), value[key]);
       });
     } else {
       const valuesAreEqual = value === e.value;
@@ -151,13 +167,13 @@ class OptionsManager {
         return;
       }
 
-      this.setGuard(e.fullName, value);
+      this.addGuard(e.fullName, value);
     }
   }
 
   public dispose(): void {
+    optionsManagers.delete(this);
     Object.keys(this.guards).forEach((optionName) => {
-      window.clearTimeout(this.guards[optionName]);
       delete this.guards[optionName];
     });
   }
@@ -211,18 +227,21 @@ class OptionsManager {
     return value;
   }
 
-  private setGuard(optionName: string, optionValue: unknown): void {
+  private addGuard(optionName: string, optionValue: unknown): void {
     if (this.guards[optionName] !== undefined) {
       return;
     }
-
-    const guardId = window.setTimeout(() => {
+    const handler = () => {
       this.setValue(optionName, optionValue);
-      window.clearTimeout(guardId);
       delete this.guards[optionName];
-    });
+    };
+    this.guards[optionName] = handler;
+    scheduleGuards();
+  }
 
-    this.guards[optionName] = guardId;
+  public execGuards(): void {
+    Object.values(this.guards)
+      .forEach((handler) => handler());
   }
 
   private resetOption(name: string) {
@@ -231,7 +250,6 @@ class OptionsManager {
 
   private setValue(name: string, value: unknown) {
     if (this.guards[name]) {
-      window.clearTimeout(this.guards[name]);
       delete this.guards[name];
     }
 

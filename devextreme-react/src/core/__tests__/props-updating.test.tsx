@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
+import * as CommonModule from 'devextreme/core/utils/common';
 import ConfigurationComponent from '../nested-option';
-import { OptionsManager } from '../options-manager';
+import * as OptionsManagerModule from '../options-manager';
 import {
   eventHandlers,
   fireOptionChange,
@@ -10,6 +11,8 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+import TemplatesManager from '../templates-manager';
+import { TemplatesStore } from '../templates-store';
 
 jest.useFakeTimers();
 
@@ -592,6 +595,69 @@ describe('cfg-component option control', () => {
     expect(Widget.option.mock.calls[1]).toEqual(['nestedOption.b', 'const']);
   });
 
+  // T1106899
+  it('apply cfg-component option value if value has changes', () => {
+    const optionsManager = new OptionsManagerModule.OptionsManager(
+      new TemplatesManager(new TemplatesStore(() => {})),
+    );
+    const config = {
+      fullName: '',
+      predefinedOptions: {},
+      initialOptions: {},
+      options: { value: 1 },
+      templates: [],
+      configs: {},
+      configCollections: {},
+    };
+    optionsManager.setInstance({
+      skipOptionsRollBack: false,
+      option: jest.fn(),
+      on: jest.fn(),
+      off: jest.fn(),
+      beginUpdate: jest.fn(),
+      endUpdate: jest.fn(),
+    }, config, [], []);
+    jest.spyOn(optionsManager as any, 'addGuard');
+    jest.spyOn(optionsManager as any, 'setValue');
+    jest.spyOn(OptionsManagerModule, 'scheduleGuards');
+    jest.spyOn(OptionsManagerModule, 'unscheduleGuards');
+    let renderTemplate;
+    jest.spyOn(CommonModule, 'deferUpdate').mockImplementation((cb) => { renderTemplate = cb; });
+    const TestContainer = (props: any) => {
+      const { value } = props;
+      return (
+        <ControlledComponent>
+          <NestedComponent a={value} b="const" />
+        </ControlledComponent>
+      );
+    };
+
+    const { rerender } = render(<TestContainer value={2} />);
+    jest.runAllTimers();
+    // simulate option changing in jQuery control
+    optionsManager.onOptionChanged({ name: 'value', value: 2, fullName: 'value' });
+    // add guards for restore value
+    expect((optionsManager as any).addGuard).toBeCalled();
+    // but no call it
+    expect((optionsManager as any).setValue).not.toBeCalled();
+    // re-render container. Unschedule guards and wait template render for schedule it back
+    rerender(<TestContainer value={2} />);
+    expect(OptionsManagerModule.scheduleGuards).not.toBeCalled();
+    expect(OptionsManagerModule.unscheduleGuards).toBeCalled();
+    expect((optionsManager as any).setValue).not.toBeCalled();
+    jest.runAllTimers();
+    // simulate Request Animation Frame for template re-render
+    renderTemplate();
+    // guards are scheduled
+    expect(OptionsManagerModule.scheduleGuards).toBeCalled();
+    const updatedConfig = { ...config, options: { value: 2 } };
+    // value changed and options manager set value and remove scheduled guard
+    optionsManager.update(updatedConfig);
+    expect((optionsManager as any).setValue).toBeCalled();
+    jest.runAllTimers();
+    expect((optionsManager as any).setValue).toHaveBeenCalledTimes(1);
+  });
+
   it('apply cfg-component option change if value really change', () => {
     const TestContainer = (props: any) => {
       const { value } = props;
@@ -805,7 +871,8 @@ describe('onXXXChange', () => {
 
     beforeAll(() => {
       jest.spyOn(
-        OptionsManager.prototype as OptionsManager & { isOptionSubscribable: () => boolean; },
+        OptionsManagerModule.OptionsManager.prototype as
+        OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean; },
         'isOptionSubscribable',
       )
         .mockImplementation(() => true);
@@ -1040,7 +1107,8 @@ describe('onXXXChange', () => {
   describe('non-subscribable options', () => {
     beforeAll(() => {
       jest.spyOn(
-        OptionsManager.prototype as OptionsManager & { isOptionSubscribable: () => boolean; },
+        OptionsManagerModule.OptionsManager.prototype as
+        OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean; },
         'isOptionSubscribable',
       )
         .mockImplementation(() => false);
@@ -1080,7 +1148,8 @@ describe('onXXXChange', () => {
   describe('independent events', () => {
     beforeAll(() => {
       jest.spyOn(
-        OptionsManager.prototype as OptionsManager & { isIndependentEvent: () => boolean; },
+        OptionsManagerModule.OptionsManager.prototype as
+        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean; },
         'isIndependentEvent',
       )
         .mockImplementation(() => true);
@@ -1136,7 +1205,8 @@ describe('onXXXChange', () => {
   describe('dependent events', () => {
     beforeAll(() => {
       jest.spyOn(
-        OptionsManager.prototype as OptionsManager & { isIndependentEvent: () => boolean; },
+        OptionsManagerModule.OptionsManager.prototype as
+        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean; },
         'isIndependentEvent',
       )
         .mockImplementation(() => false);
