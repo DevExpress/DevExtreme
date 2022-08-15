@@ -247,7 +247,7 @@ module('render', moduleOptions, () => {
 
     test('drag handler', function(assert) {
         // the width of the right and left margin must be 0 (T927984)
-        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('head'));
+        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('#qunit-fixture'));
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
@@ -271,7 +271,7 @@ module('render', moduleOptions, () => {
 
     test('smooth drag of handler', function(assert) {
         // the width of the right and left margin must be 0 (T927984)
-        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('head'));
+        const styles = $('<style>.dx-slider-bar{margin: 14px 0px;}</style>').appendTo($('#qunit-fixture'));
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,

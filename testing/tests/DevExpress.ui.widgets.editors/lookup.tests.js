@@ -1009,19 +1009,28 @@ QUnit.module('Lookup', {
         const secondLookup = $secondLookup.dxLookup('instance');
 
         openPopupWithList(firstLookup);
-        assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 1);
+        assert.equal($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
 
         const $firstListItem = $(getList().$element().find('.dx-list-item').eq(0));
         const mouse = pointerMock($firstListItem);
         mouse.start().down().move(0, 10).up();
 
         openPopupWithList(secondLookup);
-        assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 2);
+        assert.equal($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
 
         mouse.start().down().move(0, 10).up();
 
         openPopupWithList(firstLookup);
-        assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 2);
+
+        // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
+        // and other is in document
+        if(QUnit.isInShadowDomMode()) {
+            assert.strictEqual(document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
+            assert.strictEqual($('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
+        } else {
+            assert.strictEqual($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
+        }
+
     });
 
     QUnit.test('regression: dxLookup - incorrect search behavior when \'minSearchLength\' greater than zero', function(assert) {
