@@ -1,10 +1,23 @@
-import DOMComponent from '../core/dom_component';
-
 import {
-    ExportFormat,
-    HorizontalAlignment,
-    VerticalAlignment,
+  ExportFormat,
+  HorizontalAlignment,
+  VerticalAlignment,
 } from '../common';
+
+import dxChart from './chart';
+import dxPieChart from './pie_chart';
+import dxFunnel from './funnel';
+import dxSankey from './sankey';
+import dxTreeMap from './tree_map';
+import dxVectorMap from './vector_map';
+import dxSparkline from './sparkline';
+import dxBullet from './bullet';
+import dxBarGauge from './bar_gauge';
+
+/**
+ * @docid
+ * @public */
+export type VizWidget = dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap | dxVectorMap | dxSparkline | dxBullet | dxBarGauge;
 
 /**
  * @docid viz.exportFromMarkup
@@ -22,7 +35,7 @@ export function exportFromMarkup(markup: string, options: { fileName?: string; f
  * @static
  * @public
  */
-export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
+export function exportWidgets(widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>): void;
 
 /**
  * @docid viz.exportWidgets
@@ -35,7 +48,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @static
  * @public
  */
-export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string; format?: ExportFormat; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: VerticalAlignment; horizontalAlignment?: HorizontalAlignment; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
+export function exportWidgets(widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>, options: { fileName?: string; format?: ExportFormat; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: VerticalAlignment; horizontalAlignment?: HorizontalAlignment; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.getMarkup
@@ -43,4 +56,4 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, optio
  * @static
  * @public
  */
-export function getMarkup(widgetInstances: Array<DOMComponent>): string;
+export function getMarkup(widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>): string;
