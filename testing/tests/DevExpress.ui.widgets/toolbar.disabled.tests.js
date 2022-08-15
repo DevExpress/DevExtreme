@@ -19,6 +19,8 @@ import 'ui/autocomplete';
 import 'ui/date_box';
 import 'ui/menu';
 
+import devices from 'core/devices';
+
 import fx from 'animation/fx';
 
 // const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
@@ -66,11 +68,16 @@ const openDropDownMenuIfExist = (toolbar) => {
 };
 
 ['never', 'always'].forEach((locateInMenu) => {
+    if(devices.real().deviceType !== 'desktop') {
+        // there is no specific for devices in these tests
+        return;
+    }
+
     [
         { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
         { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
-        // { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
-        // { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' },
+        { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
+        { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' },
         // { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
         // { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
         // { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },

@@ -465,6 +465,12 @@ $pivotgrid-expand-icon-text-offset: 0;
       }
     }
   }
+
+  &.dx-context-menu {
+    .dx-pivotgrid.dx-submenu {
+      width: auto;
+    }
+  }
 }
 
 .dx-pivotgridfieldchooser {
