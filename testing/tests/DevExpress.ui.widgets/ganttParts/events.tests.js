@@ -116,14 +116,14 @@ QUnit.module('Events', moduleConfig, () => {
         this.createInstance(my_options);
         this.clock.tick();
 
-        const $top_item = $('#qunit-fixture').find('.gst_item');
+        const $top_item = $('body').find('.gst_item');
         assert.ok($top_item.length > 0, 'top items customized');
-        const $top_separator = $('#qunit-fixture').find('.gst_separator');
+        const $top_separator = $('body').find('.gst_separator');
         assert.ok($top_separator.length > 0, 'top separators customized');
 
-        const $bottom_item = $('#qunit-fixture').find('.gsb_item');
+        const $bottom_item = $('body').find('.gsb_item');
         assert.ok($bottom_item.length > 0, 'bottom items customized');
-        const $bottom_separator = $('#qunit-fixture').find('.gsb_separator');
+        const $bottom_separator = $('body').find('.gsb_separator');
         assert.ok($bottom_separator.length > 0, 'bottom separators customized');
     });
 });

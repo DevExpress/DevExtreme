@@ -229,7 +229,7 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Method()
   blur(): void {
-    const activeElement = domAdapter.getActiveElement(this.widgetElementRef.current);
+    const activeElement = domAdapter.getActiveElement();
 
     if (this.widgetElementRef.current === activeElement) {
       activeElement.blur();

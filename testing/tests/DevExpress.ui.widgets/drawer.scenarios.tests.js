@@ -18,8 +18,10 @@ import dxDrawer from 'ui/drawer';
 import fx from 'animation/fx';
 
 const moduleConfig = {
-    beforeEach: function() {
+    before: function() {
         this.$fixture = $('#qunit-fixture');
+    },
+    beforeEach: function() {
         this.$element = $(drawerTesters.markup);
         this.$fixture.html(this.$element);
         this.clock = sinon.useFakeTimers();
@@ -219,14 +221,14 @@ configs.forEach(config => {
         }
 
         QUnit.test('opened: false', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template,
                 __debugWhenPanelContentRendered: (e) => {
                     if(!(configIs('overlap', ['right', 'top', 'bottom', ], ['expand', 'slide']) && config.minSize)) {
-                        drawerTesters[config.position].checkWhenPanelContentRendered(assert, e.drawer, drawerElement, $('#template').get(0), config.minSize);
+                        drawerTesters[config.position].checkWhenPanelContentRendered(assert, e.drawer, drawerElement, document.getElementById('template'), config.minSize);
                     }
                 }
             }));
@@ -237,7 +239,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: false -> minSize: 0', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -252,7 +254,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: false -> minSize: null', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -267,7 +269,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: false -> minSize: 30', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -282,7 +284,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: false -> opened: true', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template()
@@ -296,7 +298,7 @@ configs.forEach(config => {
         });
 
         testOrSkip('opened: false, visible: false -> visible: true', () => configIs('overlap') && config.minSize, function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 visible: false,
@@ -311,7 +313,7 @@ configs.forEach(config => {
         });
 
         testOrSkip('opened: false, visible: false -> visible: true -> opened: true', () => configIs('overlap'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 visible: false,
@@ -328,7 +330,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: true', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 template: drawerTesters[config.position].template,
@@ -340,7 +342,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: true -> visible: false', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 template: drawerTesters[config.position].template
@@ -356,7 +358,7 @@ configs.forEach(config => {
 
         [true, false].forEach((closeOnOutsideClick) => {
             QUnit.test(`opened: true -> click by viewContent, closeOnOutsideClick: ${closeOnOutsideClick}`, function(assert) {
-                const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+                const drawerElement = document.getElementById(drawerTesters.drawerElementId);
                 const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                     opened: true,
                     closeOnOutsideClick: closeOnOutsideClick,
@@ -376,7 +378,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: true -> visible: false -> visible: true', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 template: drawerTesters[config.position].template
@@ -392,7 +394,7 @@ configs.forEach(config => {
         });
 
         QUnit.test(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 shading: config.shading,
@@ -407,7 +409,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('opened: true -> repaint', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 template: drawerTesters[config.position].template,
@@ -421,7 +423,7 @@ configs.forEach(config => {
         });
 
         testOrSkip('opened: false -> resize -> opened: true, update position config after resize', () => configIs('overlap', 'bottom'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template
@@ -445,7 +447,7 @@ configs.forEach(config => {
         });
 
         testOrSkip('opened: true (template + onRendered)', () => configIs('overlap', 'bottom'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 width: 200,
                 height: 100,
@@ -471,7 +473,7 @@ configs.forEach(config => {
         });
 
         testOverlap('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(undefined, 'right') || configIs('overlap', 'bottom'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 visible: true,
@@ -497,7 +499,7 @@ configs.forEach(config => {
         });
 
         testOrSkip('opened: true, visible: false -> visible: true', () => configIs('overlap'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 visible: false,
@@ -512,7 +514,7 @@ configs.forEach(config => {
         });
 
         testOrSkip('opened: true, visible: false -> repaint -> visible: true', () => configIs('overlap'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 visible: false,
@@ -550,7 +552,7 @@ changeOpenedStateModeConfigs.forEach(config => {
 
     QUnit.module(`Change openedStateMode (position: ${config.position}, revealMode: ${config.revealMode}, minSize: ${config.minSize})`, moduleConfig, () => {
         QUnit.test('opened: false, push -> shrink', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'push',
                 opened: false,
@@ -563,7 +565,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: false, push -> overlap', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'push',
                 opened: false,
@@ -576,7 +578,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: false, shrink -> push', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'shrink',
                 opened: false,
@@ -589,7 +591,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: false, shrink -> overlap', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'shrink',
                 opened: false,
@@ -602,7 +604,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: false, overlap -> shrink', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'overlap',
                 opened: false
@@ -615,7 +617,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: false, overlap -> push', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'overlap',
                 opened: false
@@ -630,7 +632,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         // ================
 
         QUnit.test('opened: true, push -> shrink', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'push',
                 opened: true,
@@ -643,7 +645,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: true, push -> overlap', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'push',
                 opened: true
@@ -656,7 +658,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: true, shrink -> push', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'shrink',
                 opened: true
@@ -669,7 +671,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: true, shrink -> overlap', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'shrink',
                 opened: true
@@ -682,7 +684,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: true, overlap -> shrink', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'overlap',
                 opened: true
@@ -695,7 +697,7 @@ changeOpenedStateModeConfigs.forEach(config => {
         });
 
         QUnit.test('opened: true, overlap -> push', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 openedStateMode: 'overlap',
                 opened: true
@@ -711,7 +713,7 @@ changeOpenedStateModeConfigs.forEach(config => {
 
 QUnit.module('Scenarios', moduleConfig, () => {
     QUnit.test('push, left, opened: false, hidden child, AngularJS, T956751', function(assert) {
-        const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+        const drawerElement = document.getElementById(drawerTesters.drawerElementId);
 
         const drawer = new dxDrawer(drawerElement, {
             openedStateMode: 'shrink',
@@ -729,7 +731,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     QUnit.test('overlay, left, opened: false, Angular, T948509', function(assert) {
-        const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+        const drawerElement = document.getElementById(drawerTesters.drawerElementId);
 
         const drawer = new dxDrawer(drawerElement, {
             openedStateMode: 'overlap',

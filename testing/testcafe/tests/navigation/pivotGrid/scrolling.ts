@@ -15,13 +15,19 @@ fixture`PivotGrid_scrolling`
 [
   { useNative: true, mode: 'standart' },
   { useNative: false, mode: 'standart' },
+  { useNative: true, mode: 'virtual' },
+  { useNative: false, mode: 'virtual' },
 ].forEach(({ useNative, mode }) => {
   test(`Rows sincronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
-    await pivotGrid.scrollBy({ top: 300000 });
-    await pivotGrid.scrollBy({ top: 100000 });
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
     await pivotGrid.scrollBy({ top: -150 });
 
     await t
@@ -78,8 +84,12 @@ fixture`PivotGrid_scrolling`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
-    await pivotGrid.scrollBy({ top: 300000 });
-    await pivotGrid.scrollBy({ top: 100000 });
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
+    await pivotGrid.scrollTo({ top: 300000 });
+    await t.wait(100);
     await pivotGrid.scrollBy({ top: -150 });
 
     await t

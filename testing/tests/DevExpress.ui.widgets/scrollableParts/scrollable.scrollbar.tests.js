@@ -662,9 +662,10 @@ QUnit.test('scrollbar should be hidden when container size is almost similar to 
 
 // T1043437
 QUnit.module('scrollbar visibility', {
-    beforeEach: function() {
+    before: function() {
         this.$fixture = $('#qunit-fixture');
-
+    },
+    beforeEach: function() {
         this.$outerScrollable = $('<div>').height(250).width(250);
         this.$innerScrollable = $('<div>').height(500).width(500).appendTo(this.$outerScrollable);
         this.$innerScrollable.append('<div>').children().height(750).width(750);

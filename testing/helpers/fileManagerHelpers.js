@@ -99,8 +99,7 @@ export const Consts = {
     SCROLLABLE_CONTAINER_ClASS: 'dx-scrollable-container',
     EDITING_CONTAINER: 'dx-filemanager-editing-container',
     FILE_UPLOADER_INPUT: 'dx-fileuploader-input',
-    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder',
-    OVERLAY_SHADER_CLASS: 'dx-overlay-shader'
+    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder'
 };
 const showMoreButtonText = '\u22EE';
 
@@ -220,8 +219,7 @@ export class FileManagerWrapper {
     }
 
     getToolbarElements() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS} .${Consts.DROP_DOWN_BUTTON_CLASS}`)
-            .filter(':visible');
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarElementsInSection(sectionName) {
@@ -413,10 +411,6 @@ export class FileManagerWrapper {
             .replace(showMoreButtonText, '');
     }
 
-    getDetailsOverlayShader() {
-        return this.getDetailsItemList().find(`.${Consts.OVERLAY_SHADER_CLASS}`);
-    }
-
     getSelectAllCheckBox() {
         const $itemList = this.getDetailsItemList();
         return $itemList.find('.dx-header-row > td.dx-command-select .dx-select-checkbox');
@@ -446,13 +440,15 @@ export class FileManagerWrapper {
     }
 
     getContextMenuItemsWithSeparators() {
-        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}`).filter(':visible');
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}:visible, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}:visible`);
     }
 
     getContextMenuItems(visible) {
-        const selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
-
-        return visible ? $(selector).filter(':visible') : $(selector);
+        let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
+        if(visible) {
+            selector += ':visible';
+        }
+        return $(selector);
     }
 
     getContextMenuItem(text) {

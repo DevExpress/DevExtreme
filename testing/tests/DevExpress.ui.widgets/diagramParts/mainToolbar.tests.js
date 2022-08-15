@@ -4,7 +4,6 @@ import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';
 import { Consts, getMainToolbarInstance, findMainToolbarItem, getToolbarIcon, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
-import { getActiveElement } from '../../../helpers/shadowDom.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -149,20 +148,20 @@ QUnit.module('Main Toolbar', {
         const fontSelectBox = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-selectbox').eq(0).dxSelectBox('instance');
         fontSelectBox.focus();
         fontSelectBox.open();
-        const item = $('.dx-list-item-content').filter(function() {
+        const item = $(document).find('.dx-list-item-content').filter(function() {
             return $(this).text().toLowerCase().indexOf('arial black') >= 0;
         });
-        assert.notEqual(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         item.trigger('dxclick');
         this.clock.tick(200);
-        assert.equal(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('diagram should be focused after set font bold', function(assert) {
         const boldButton = findMainToolbarItem(this.$element, 'bold');
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         boldButton.trigger('dxclick');
         this.clock.tick(200);
-        assert.equal(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('Auto Layout button should be disabled in Read Only mode', function(assert) {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);

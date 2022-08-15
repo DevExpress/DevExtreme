@@ -445,7 +445,7 @@ initRender.prototype.find = function(selector) {
                 const querySelector = queryId + selector.replace(/([^\\])(,)/g, '$1, ' + queryId);
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, querySelector));
                 setAttributeValue(element, 'id', elementId);
-            } else if(domAdapter.isDocument(element) || domAdapter.isDocumentFragment(element)) {
+            } else if(domAdapter.isDocument(element)) {
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, selector));
             }
         }
@@ -462,8 +462,6 @@ initRender.prototype.find = function(selector) {
 };
 
 const isVisible = function(_, element) {
-    element = element.host ?? element;
-
     if(!element.nodeType) return true;
     return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 };

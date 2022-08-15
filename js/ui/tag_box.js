@@ -24,7 +24,6 @@ import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { allowScroll } from './text_box/utils.scroll';
 import errors from './widget/ui.errors';
-import domAdapter from '../core/dom_adapter';
 
 // STYLE tagBox
 
@@ -579,7 +578,7 @@ const TagBox = SelectBox.inherit({
 
         eventsEngine.off(this._inputWrapper(), eventName);
         eventsEngine.on(this._inputWrapper(), eventName, (e) => {
-            if(e.target !== this._input()[0] && this._isFocused()) {
+            if(e.target !== this._input()[0]) {
                 e.preventDefault();
             }
         });
@@ -1015,10 +1014,7 @@ const TagBox = SelectBox.inherit({
     _integrateInput: function() {
         this._isInputReady.resolve();
         this.callBase();
-
-        const tagsContainer = $(domAdapter.getRootNode(this.element())).find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
-
-        this._updateTagsContainer(tagsContainer);
+        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         this._renderTagRemoveAction();
     },
 

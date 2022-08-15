@@ -43,7 +43,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                     }]
                 };
 
-                const toolbarElement = $('#toolbar').get(0);
+                const toolbarElement = document.getElementById('toolbar');
                 new Toolbar(toolbarElement, {
                     ...toolbarOptions,
                     width: 50,
@@ -56,7 +56,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 } else {
                     $(dropDownMenuElement).trigger('dxclick');
 
-                    const dropDownMenuListElement = $(`.${DROP_DOWN_MENU_LIST_CLASS}`).get(0);
+                    const dropDownMenuListElement = document.querySelector(`.${DROP_DOWN_MENU_LIST_CLASS}`);
                     const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
                     const menuButtonElement = dropDownMenuListElement.querySelector(`.${BUTTON_CLASS}`);
 

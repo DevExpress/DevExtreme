@@ -1,12 +1,10 @@
 /* global document */
 import injector from './utils/dependency_injector';
 import { noop } from './utils/common';
-import { getShadowElementsFromPoint } from './utils/shadow_dom';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
-const DOCUMENT_FRAGMENT_NODE = 11;
 
 const nativeDOMAdapterStrategy = {
     querySelectorAll(element, selector) {
@@ -66,10 +64,6 @@ const nativeDOMAdapterStrategy = {
         return element && element.nodeType === DOCUMENT_NODE;
     },
 
-    isDocumentFragment(element) {
-        return element && element.nodeType === DOCUMENT_FRAGMENT_NODE;
-    },
-
     removeElement(element) {
         const parentNode = element && element.parentNode;
         if(parentNode) {
@@ -127,14 +121,8 @@ const nativeDOMAdapterStrategy = {
         return this._document;
     },
 
-    getActiveElement(element) {
-        const activeElementHolder = this.getRootNode(element);
-
-        return activeElementHolder.activeElement;
-    },
-
-    getRootNode(element) {
-        return element?.getRootNode?.() ?? this._document;
+    getActiveElement() {
+        return this._document.activeElement;
     },
 
     getBody() {
@@ -181,14 +169,8 @@ const nativeDOMAdapterStrategy = {
         };
     },
 
-    elementsFromPoint(x, y, element) {
-        const activeElementHolder = this.getRootNode(element);
-
-        if(activeElementHolder.host) {
-            return getShadowElementsFromPoint(x, y, activeElementHolder);
-        }
-
-        return activeElementHolder.elementsFromPoint(x, y);
+    elementsFromPoint(x, y) {
+        return this._document.elementsFromPoint(x, y);
     }
 };
 

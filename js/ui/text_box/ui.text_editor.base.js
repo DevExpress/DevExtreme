@@ -732,7 +732,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _hasActiveElement: function() {
-        return this._input().is(domAdapter.getActiveElement(this._input()[0]));
+        return this._input().is(domAdapter.getActiveElement());
     },
 
     _optionChanged: function(args) {

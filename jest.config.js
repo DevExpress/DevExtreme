@@ -28,7 +28,6 @@ module.exports = {
         './js/renovation/ui/scheduler/appointment_edit_form/layout.tsx', // NOTE: covering with TestCafe
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/utils/get_computed_style.ts',
-        './js/renovation/utils/dom.ts',
         './js/renovation/utils/render_template.ts', // TODO: this is temporary file
         './js/renovation/viz/common/renderers/utils.ts',
         './js/renovation/viz/common/tooltip_utils.ts',

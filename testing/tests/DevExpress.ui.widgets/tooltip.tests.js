@@ -41,8 +41,8 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('tooltip should render when target is core renderer object', function(assert) {
-        const target = renderer($('#target'));
-        const target2 = renderer($('#target2'));
+        const target = renderer('#target');
+        const target2 = renderer('#target2');
 
         const $tooltip = $('#tooltip');
         const $tooltip2 = $('#tooltip2');
@@ -143,9 +143,8 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('aria-describedby property should be set on target when tooltip is visible', function(assert) {
-        const $target = $('#target');
-        const $element = $('#tooltip');
-        new Tooltip($element, { target: $target, visible: false });
+        const $target = $('#target'); const $element = $('#tooltip');
+        new Tooltip($element, { target: '#target', visible: false });
         const $overlay = $element.find('.dx-overlay-content');
 
         assert.notEqual($target.attr('aria-describedby'), undefined, 'aria-describedby exists on target');

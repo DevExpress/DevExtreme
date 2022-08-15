@@ -1,5 +1,5 @@
 export interface DomAdapter {
-  getActiveElement(element?: HTMLElement | null): HTMLElement;
+  getActiveElement(): HTMLElement;
   getDocument(): Document;
   getDocumentElement(): HTMLDocument & {
     scrollLeft: number;
@@ -11,7 +11,6 @@ export interface DomAdapter {
   };
   isNode(node: unknown): boolean;
   getBody(): HTMLBodyElement;
-  getRootNode(element: HTMLElement): Document | DocumentFragment;
   isElementNode(element: unknown): boolean;
   createElement(tagName: string, context?: Document): HTMLElement;
   createDocumentFragment(): DocumentFragment;

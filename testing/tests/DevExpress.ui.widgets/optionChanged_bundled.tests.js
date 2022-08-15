@@ -21,7 +21,7 @@ define(function(require) {
         beforeEach: function() {
             // NOTE: workaround for inferno
             // component can not be rendered as body first-level child
-            const $container = $('<div />').appendTo('#qunit-fixture');
+            const $container = $('<div />').appendTo('body');
             this.$element = $('<div />').appendTo($container);
 
             this._originalOptionChanged = Component.prototype._optionChanged;

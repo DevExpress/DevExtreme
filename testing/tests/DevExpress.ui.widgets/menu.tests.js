@@ -2922,14 +2922,7 @@ QUnit.module('itemRendered event', () => { // T906117
 
             menu.option('dataSource', testDataSource);
             ['item1', 'item1_1']
-                .forEach(item => {
-                    const element = $(`.${DX_MENU_ITEM_TEXT_CLASS}`);
-
-                    if(element.text().includes(item)) {
-                        element.trigger('dxclick');
-                    }
-                });
-
+                .forEach(item => $(`.${DX_MENU_ITEM_TEXT_CLASS}:contains("${item}")`).trigger('dxclick'));
 
             assert.equal(expectedItemsArray.length, 3);
             assert.equal(expectedItemsArray[0], 'item1');
@@ -2952,13 +2945,7 @@ QUnit.module('itemRendered event', () => { // T906117
 
             menu.option('dataSource', testDataSource);
             ['item1', 'item1_1']
-                .forEach(item => {
-                    const element = $(`.${DX_MENU_ITEM_TEXT_CLASS}`);
-
-                    if(element.text().includes(item)) {
-                        element.trigger('dxclick');
-                    }
-                });
+                .forEach(item => $(`.${DX_MENU_ITEM_TEXT_CLASS}:contains("${item}")`).trigger('dxclick'));
 
             assert.equal(expectedItemsArray.length, 0);
         });

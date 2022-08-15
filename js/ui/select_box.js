@@ -587,7 +587,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _isFocused: function() {
-        const activeElement = domAdapter.getActiveElement(this.element());
+        const activeElement = domAdapter.getActiveElement();
         return this.callBase() && $(activeElement).closest(this._input()).length > 0;
     },
 

@@ -85,7 +85,7 @@ export default function() {
                     expected: '<table><tbody><tr><td><p>ce<br>ll 1</p></td><td><p>cell 2</p></td></tr></tbody></table>'
                 }
             ].forEach(({ name, value, expected }) => {
-                QUnit.skipInShadowDomMode(name, function(assert) {
+                test(name, function(assert) {
                     const done = assert.async();
                     const $element = $('#htmlEditor');
                     const instance = $element.dxHtmlEditor({

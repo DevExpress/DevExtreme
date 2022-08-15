@@ -294,7 +294,7 @@ QUnit.module('dateView', {
         });
 
         setTimeout(() => {
-            triggerShownEvent($('#qunit-fixture'));
+            triggerShownEvent('#qunit-fixture');
 
             setTimeout(() => {
                 const instance = $dateView.dxDateView('instance');

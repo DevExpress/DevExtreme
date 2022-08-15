@@ -3,7 +3,6 @@ const { test } = QUnit;
 import 'ui/diagram';
 
 import { Consts, getViewToolbarElement, getViewToolbarInstance, findViewToolbarItem, findContextMenuItem, getContextMenuItemCheck } from '../../../helpers/diagramHelpers.js';
-import { getActiveElement } from '../../../helpers/shadowDom.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -49,10 +48,10 @@ QUnit.module('View Toolbar', {
     test('diagram should be focused after button click', function(assert) {
         assert.notOk(this.$element.hasClass(Consts.FULLSCREEN_CLASS));
         const $fullScreenButton = findViewToolbarItem(this.$element, 'full screen');
-        assert.notEqual(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         $fullScreenButton.trigger('dxclick');
         this.clock.tick(200);
-        assert.equal(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('should toggle check state on show grid button click', function(assert) {
         assert.equal(this.instance.option('showGrid'), true);

@@ -20,9 +20,6 @@ QUnit.testStart(function() {
             .default {
                 cursor: default;
             }
-            div.qunit-fixture-absolute {
-                position: absolute !important;
-            }
         </style>
         <div id="container">
             <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">

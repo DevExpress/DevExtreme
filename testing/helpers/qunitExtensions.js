@@ -50,18 +50,6 @@
 
     };
 
-    QUnit.isInShadowDomMode = function() {
-        return QUnit.urlParams['shadowDom'] && QUnit.urlParams['nojquery'];
-    };
-
-    QUnit.skipInShadowDomMode = function(name, callback) {
-        if(QUnit.isInShadowDomMode()) {
-            QUnit.skip(name + ' [Skipped in the ShadowDOM mode]');
-        } else {
-            QUnit.test.apply(this, arguments);
-        }
-    };
-
     window.waitFor = function(predicate, timeout, interval) {
         timeout = timeout || 30000;
         interval = interval || 15;
@@ -174,6 +162,10 @@
         return typeof selector === 'string' && selector ? getRoot().querySelectorAll(selector) : selector;
     }
 
+    function isInShadowDomMode() {
+        return QUnit.urlParams['shadowDom'] && QUnit.urlParams['nojquery'];
+    }
+
     function addShadowRootTree() {
         const root = document.querySelector('#qunit-fixture');
 
@@ -182,9 +174,8 @@
         }
 
         const shadowContainer = document.createElement('div');
-        const style = document.createElement('style');
 
-        shadowContainer.className = 'shadow-container';
+        const style = document.createElement('style');
 
         style.innerHTML = `
             :host {
@@ -192,7 +183,7 @@
                 top: 0!important;
                 left: 0!important;
             }
-            :scope .shadow-container {
+            :scope > div {
                 position: absolute;
                 top: -10000px;
                 left: -10000px;
@@ -200,10 +191,13 @@
                 height: 1000px;
             }
             
-            :scope .shadow-container.qunit-fixture-visible {
+            :scope > div.qunit-fixture-visible {
                 position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
+            }
+
+            :scope > div.qunit-fixture-visible * {
             }
         `;
 
@@ -212,8 +206,8 @@
     }
 
     function clearShadowRootTree() {
-        const container = get(':scope div')[0];
-        const style = get(':scope style')[0];
+        const container = get(':scope > div');
+        const style = get(':scope > style');
 
         jQuery(container).remove();
         jQuery(style).remove();
@@ -222,7 +216,7 @@
     let jQueryInit;
 
     QUnit.testStart(function() {
-        if(!QUnit.isInShadowDomMode()) {
+        if(!isInShadowDomMode()) {
             return;
         }
 
@@ -239,7 +233,7 @@
             }
 
             if(resultElement === getRoot().host) {
-                return new jQueryInit(get(':scope div')[0], context, root);
+                return new jQueryInit(get(':scope > div'), context, root);
             }
 
             return result;
@@ -247,7 +241,7 @@
     });
 
     QUnit.beforeTestDone(function() {
-        if(!QUnit.isInShadowDomMode()) {
+        if(!isInShadowDomMode()) {
             return;
         }
 
