@@ -36298,13 +36298,13 @@ declare module DevExpress.viz {
    * [descr:viz.exportWidgets(widgetInstances)]
    */
   export function exportWidgets(
-    widgetInstances: Array<Array<DOMComponent>>
+    widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>
   ): void;
   /**
    * [descr:viz.exportWidgets(widgetInstances, options)]
    */
   export function exportWidgets(
-    widgetInstances: Array<Array<DOMComponent>>,
+    widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>,
     options: {
       fileName?: string;
       format?: DevExpress.common.ExportFormat;
@@ -36380,7 +36380,9 @@ declare module DevExpress.viz {
   /**
    * [descr:viz.getMarkup(widgetInstances)]
    */
-  export function getMarkup(widgetInstances: Array<DOMComponent>): string;
+  export function getMarkup(
+    widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>
+  ): string;
   /**
    * [descr:viz.getPalette(paletteName)]
    */
@@ -36728,6 +36730,16 @@ declare module DevExpress.viz {
         years?: number;
       }
     | DevExpress.common.charts.TimeInterval;
+  export type VizWidget =
+    | dxChart
+    | dxPieChart
+    | dxFunnel
+    | dxSankey
+    | dxTreeMap
+    | dxVectorMap
+    | dxSparkline
+    | dxBullet
+    | dxBarGauge;
 }
 declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
