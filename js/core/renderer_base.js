@@ -445,7 +445,7 @@ initRender.prototype.find = function(selector) {
                 const querySelector = queryId + selector.replace(/([^\\])(,)/g, '$1, ' + queryId);
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, querySelector));
                 setAttributeValue(element, 'id', elementId);
-            } else if(domAdapter.isDocument(element)) {
+            } else if(domAdapter.isDocument(element) || domAdapter.isDocumentFragment(element)) {
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, selector));
             }
         }

@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 import QuillRegistrator from 'ui/html_editor/quill_registrator';
 import Image from 'ui/html_editor/formats/image';
 import Font from 'ui/html_editor/formats/font';
@@ -48,7 +50,7 @@ QUnit.module('Quill registrator', () => {
     });
 
     test('create a quill editor instance', function(assert) {
-        const element = document.getElementById('htmlEditor');
+        const element = $('#htmlEditor').get(0);
         const quillRegistrator = new QuillRegistrator();
 
         quillRegistrator.createEditor(element);
