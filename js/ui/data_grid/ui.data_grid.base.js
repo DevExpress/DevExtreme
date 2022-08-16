@@ -145,6 +145,7 @@ const DataGrid = Widget.inherit({
         gridCore.processModules(that, gridCore);
 
         gridCore.callModuleItemsMethod(that, 'init');
+        // TODO: test
     },
 
     _clean: noop,
