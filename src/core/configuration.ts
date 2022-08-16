@@ -1,4 +1,4 @@
-import { ComponentPublicInstance as IVue, VNode, VNodeProps } from "vue";
+import { ComponentPublicInstance as IVue, toRaw, VNode, VNodeProps } from "vue";
 import { getOption } from "./config";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
@@ -264,8 +264,9 @@ function bindOptionWatchers(
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
+                const rawValue = toRaw(value);
                 if (!innerChanges.hasOwnProperty(optionName) ||
-                innerChanges[optionName] !== value) {
+                innerChanges[optionName] !== rawValue) {
                     config.updateValue(optionName, value);
                 }
                 delete innerChanges[optionName];
@@ -293,7 +294,7 @@ function setEmitOptionChangedFunc(
         const props = vueInstance.$props;
         const vnode = vueInstance?.$?.vnode;
         if (hasProp(vueInstance, name) && !isEqual(value, props[name]) && vueInstance.$emit) {
-            innerChanges[name] = value;
+            innerChanges[name] = toRaw(value);
             const eventName = name === "value" && hasVModelValue(vueInstance.$options, props, vnode) ?
                 `update:${VMODEL_NAME}` :
                 `update:${name}`;

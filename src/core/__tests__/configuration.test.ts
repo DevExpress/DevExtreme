@@ -5,7 +5,7 @@ import Configuration, {
     UpdateFunc
 } from "../configuration";
 
-import { ComponentPublicInstance } from "vue";
+import { ComponentPublicInstance, reactive } from "vue";
 
 function createRootConfig(updateFunc: UpdateFunc): Configuration {
     return new Configuration(updateFunc, null, {});
@@ -175,6 +175,33 @@ it("binds option watchers", () => {
     expect(updateValueFunc).toHaveBeenCalledTimes(1);
     expect(updateValueFunc.mock.calls[0][0]).toBe("prop1");
     expect(updateValueFunc.mock.calls[0][1]).toBe(value);
+});
+
+it("should update only when raw value not equal", () => {
+    const updateValueFunc = jest.fn();
+    const $watchFunc = jest.fn();
+    const innerChanges = { prop1: "test" };
+
+    bindOptionWatchers(
+        {
+            updateValue: updateValueFunc,
+            getOptionsToWatch: () => ["prop1"],
+            innerChanges: {}
+        } as any,
+        {
+            $watch: $watchFunc
+        },
+        innerChanges
+    );
+
+    $watchFunc.mock.calls[0][1](reactive(innerChanges).prop1);
+
+    expect(updateValueFunc).toHaveBeenCalledTimes(0);
+
+    $watchFunc.mock.calls[0][1](reactive({ prop1: "test1"}).prop1);
+    expect(updateValueFunc).toHaveBeenCalledTimes(1);
+    expect(updateValueFunc.mock.calls[0][0]).toBe("prop1");
+    expect(updateValueFunc.mock.calls[0][1]).toBe("test1");
 });
 
 describe("initial configuration", () => {
