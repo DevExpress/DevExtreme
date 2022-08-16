@@ -34,11 +34,11 @@
     "zone.js": "^0.11.5"
   },
   "devDependencies": {
-    "babel-preset-react-app": "^10.0.0",
-    "html-loader": "^2.1.2",
-    "raw-loader": "^4.0.2",
-    "ts-loader": "^9.2.4",
-    "vue-loader": "^17.0.0",
-    "vue-template-compiler": "^2.6.11"
+    "babel-preset-react-app": "10.0.1",
+    "html-loader": "2.1.2",
+    "raw-loader": "4.0.2",
+    "ts-loader": "9.3.0",
+    "vue-loader": "17.0.0",
+    "vue-template-compiler": "2.6.14"
   }
 }
