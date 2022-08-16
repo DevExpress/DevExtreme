@@ -113,28 +113,12 @@ jobs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
-    # Prepare fast re-run start
-    - name: Set default run status
-      run: echo "default" > last_run_status
-
-    - name: Restore last run status
-      uses: actions/cache@v2
-      with:
-        path: last_run_status
-        key: last-run-status-${{ github.job }}-${{ matrix.envs.name }}-${{ github.sha }}
-
-    - name: Set last run status
-      id: last_run_status
-      run: cat last_run_status
-
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
         name: devextreme-artifacts
-    # Prepare fast re-run end
 
     - name: Setup firefox profile
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         mkdir -p /tmp/firefox-profile
         for p in \
@@ -145,27 +129,22 @@ jobs:
         '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
 
 #    - name: Update apt
-#      if: steps.last_run_status.outputs.last_run_status != 'success'
 #      run: |
 #        sudo apt-get update
 
 #    - name: Setup utils
-#      if: steps.last_run_status.outputs.last_run_status != 'success'
 #      run: |
 #        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Get sources
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
 
     - name: Use Node.js
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/setup-node@v2
       with:
         node-version: '15'
 
     - name: Restore npm cache
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./node_modules
@@ -173,25 +152,20 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Download artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
       with:
         name: devextreme-artifacts
 
     - name: Unpack artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: 7z x artifacts.zip
 
     - name: Build dotnet
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: dotnet build build/build-dotnet.sln
 
     - name: Run QUnit tests
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       env:
         CONSTEL: ${{ matrix.envs.CONSTEL }}
         BROWSER: ${{ matrix.envs.BROWSER }}
@@ -208,10 +182,6 @@ jobs:
       run: |
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
-
-    - name: Save run status
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: echo "::set-output name=last_run_status::success" > last_run_status
 
     - name: Copy RawLog.txt
       if: ${{ failure() }}
