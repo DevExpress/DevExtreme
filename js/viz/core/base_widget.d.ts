@@ -563,7 +563,7 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @static
      * @publicName defaultOptions(rule)
      * @param1 rule:Object
-     * @param1_field device:Device|Array<Device>|function
+     * @param1_field device:Device|function
      * @param1_field options:Object
      * @hidden
      */
