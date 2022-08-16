@@ -31,6 +31,7 @@ test('Drag-n-drop all-day appointment', async (t) => {
   currentDate: new Date(2021, 4, 11),
   width: 700,
   height: 500,
+  startDayHour: 0,
   endDayHour: 3,
   dataSource: [{
     startDate: new Date(2021, 4, 10),
@@ -66,6 +67,7 @@ test('Drag-n-drop multi-day appointment', async (t) => {
   currentDate: new Date(2021, 4, 11),
   width: 700,
   height: 500,
+  startDayHour: 0,
   endDayHour: 3,
   dataSource: [{
     startDate: new Date(2021, 4, 10, 6),
@@ -79,7 +81,7 @@ test('Drag-n-drop multi-day appointment', async (t) => {
 // TODO correct
 test('Drag-n-drop all-day appointment if allDayPanelMode="allDay"', async (t) => {
   const scheduler = new Scheduler('#container');
-  const draggableAppointment = scheduler.getAppointment('multi-day');
+  const draggableAppointment = scheduler.getAppointment('all-day');
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 1))
@@ -102,12 +104,13 @@ test('Drag-n-drop all-day appointment if allDayPanelMode="allDay"', async (t) =>
   currentDate: new Date(2021, 4, 11),
   width: 700,
   height: 500,
+  startDayHour: 0,
   endDayHour: 3,
   dataSource: [{
     startDate: new Date(2021, 4, 10, 6),
     endDate: new Date(2021, 4, 12, 18),
     allDay: true,
-    text: 'multi-day',
+    text: 'all-day',
   }],
   allDayPanelMode: 'allDay',
   views: ['week'],
