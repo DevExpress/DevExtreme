@@ -2,9 +2,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { PageIndexSelector, viewFunction as PageIndexSelectorComponent } from '../page_index_selector';
+import messageLocalization from '../../../../../localization/message';
+
+jest.mock('../../../../../localization/message', () => ({
+  getFormatter: jest.fn(),
+}));
 
 describe('Page index selector', () => {
   describe('View', () => {
+    (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'Previous page');
     const defaultComponentProps = (): PageIndexSelector['props'] => (
       {
         isLargeDisplayMode: true,
@@ -32,13 +38,13 @@ describe('Page index selector', () => {
     } as Partial<PageIndexSelector> as PageIndexSelector);
 
     it('renderPrevButton: true, renderNextButton: true, isLargeDisplayMode:true', () => {
-      const props = defaultProps();
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValueOnce(() => 'Previous page').mockReturnValueOnce(() => 'Next page');
 
+      const props = defaultProps();
       const tree = shallow(<PageIndexSelectorComponent {...props as any} />);
       const pages = tree.childAt(1);
       const prevButton = tree.childAt(0);
       const nextButton = tree.childAt(2);
-
       expect(tree.children()).toHaveLength(3);
       expect(pages.props()).toEqual({
         maxPagesCount: 10,
@@ -55,6 +61,7 @@ describe('Page index selector', () => {
     });
 
     it('renderPrevButton: false, renderNextButton: true, isLargeDisplayMode: true', () => {
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValueOnce(() => 'Next page');
       const props = {
         ...defaultProps(),
         renderPrevButton: false,

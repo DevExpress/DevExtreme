@@ -6,6 +6,8 @@ import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
 import { EventCallback } from '../../common/event_callback';
+import messageLocalization from '../../../../localization/message';
+import { format } from '../../../../core/utils/string';
 
 export const viewFunction = ({
   className, value, label, props: { onClick },
@@ -45,7 +47,7 @@ export class PageProps implements PagePropsInterface {
 
 export class Page extends JSXComponent<PageProps>() {
   get label(): string {
-    return `Page ${this.value}`;
+    return format(messageLocalization.getFormatter('dxPager-page'), this.value) as string;
   }
 
   get value(): number {
