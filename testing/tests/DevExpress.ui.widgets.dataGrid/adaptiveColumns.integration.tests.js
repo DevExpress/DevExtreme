@@ -317,4 +317,51 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.equal(column.dataField, 'lastName', 'dataField of column');
         assert.equal(columnIndex, 1, 'index of column');
     });
+
+    // T1107108
+    QUnit.test('Adaptive detail row should preserve item order in a banded layout', function(assert) {
+        // arrange
+        const items = [
+            { id: '1', value1: '1', value2: '2', value3: '3', value4: '4', value5: '5' },
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: items,
+            columns: [
+                {
+                    caption: 'Band 1', columns: [
+                        { dataField: 'id' }
+                    ]
+                }, {
+                    caption: 'Band 2', columns: [
+                        { dataField: 'value1', hidingPriority: 5 },
+                        { dataField: 'value2', hidingPriority: 4 }
+                    ]
+                },
+                {
+                    caption: 'Band 3', columns: [
+                        { dataField: 'value3', hidingPriority: 3 },
+                        { dataField: 'value4', hidingPriority: 2 },
+                        { dataField: 'value5', hidingPriority: 1 }
+                    ]
+                }
+            ],
+            width: 200,
+            columnAutoWidth: true,
+            columnHidingEnabled: true,
+            masterDetail: null
+        });
+        // act
+        const instance = dataGrid.dxDataGrid('instance');
+
+        instance.expandAdaptiveDetailRow(items[0]);
+        this.clock.tick();
+
+        // assert
+        const detailRowItems = $(instance.element()).find('.dx-adaptive-item-text')
+            .map(function() { return this.innerHTML; })
+            .toArray()
+            .join('');
+        // assert
+        assert.equal(detailRowItems, '2345');
+    });
 });
