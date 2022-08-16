@@ -432,11 +432,10 @@ export const columnsControllerModule = {
             };
 
             const updateColumnVisibleIndexes = function(that, currentColumn) {
-                let key;
                 let column;
-                const bandColumns = {};
                 const result = [];
                 const bandColumnsCache = that.getBandColumnsCache();
+                const bandedColumns = [];
                 const columns = that._columns.filter((column) => !column.command);
 
                 for(let i = 0; i < columns.length; i++) {
@@ -444,17 +443,13 @@ export const columnsControllerModule = {
                     const parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns.length) {
-                        const bandColumnIndex = parentBandColumns[parentBandColumns.length - 1].index;
-                        bandColumns[bandColumnIndex] = bandColumns[bandColumnIndex] || [];
-                        bandColumns[bandColumnIndex].push(column);
+                        bandedColumns.push(column);
                     } else {
                         result.push(column);
                     }
                 }
 
-                for(key in bandColumns) {
-                    normalizeIndexes(bandColumns[key], 'visibleIndex', currentColumn);
-                }
+                normalizeIndexes(bandedColumns, 'visibleIndex', currentColumn);
 
                 normalizeIndexes(result, 'visibleIndex', currentColumn);
             };
