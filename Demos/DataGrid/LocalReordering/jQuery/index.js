@@ -13,8 +13,8 @@ $(() => {
       allowReordering: true,
       onReorder(e) {
         const visibleRows = e.component.getVisibleRows();
-        const toIndex = tasks.indexOf(visibleRows[e.toIndex].data);
-        const fromIndex = tasks.indexOf(e.itemData);
+        const toIndex = tasks.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
+        const fromIndex = tasks.findIndex((item) => item.ID === e.itemData.ID);
 
         tasks.splice(fromIndex, 1);
         tasks.splice(toIndex, 0, e.itemData);

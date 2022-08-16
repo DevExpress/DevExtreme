@@ -21,8 +21,9 @@ class App extends React.Component {
   onReorder(e) {
     const visibleRows = e.component.getVisibleRows();
     const newTasks = [...this.state.tasks];
-    const toIndex = newTasks.indexOf(visibleRows[e.toIndex].data);
-    const fromIndex = newTasks.indexOf(e.itemData);
+
+    const toIndex = newTasks.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
+    const fromIndex = newTasks.findIndex((item) => item.ID === e.itemData.ID);
 
     newTasks.splice(fromIndex, 1);
     newTasks.splice(toIndex, 0, e.itemData);
