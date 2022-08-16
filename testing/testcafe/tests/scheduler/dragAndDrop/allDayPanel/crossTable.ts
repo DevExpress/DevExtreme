@@ -12,18 +12,18 @@ test('Drag-n-drop all-day appointment', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 2))
-    .expect(scheduler.getAppointmentCount(true))
+    .expect(scheduler.getAppointmentCount('allDay'))
     .eql(0)
-    .expect(scheduler.getAppointmentCount(false))
+    .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(1)
     .expect(draggableAppointment.date.time)
     .eql('12:00 AM - 12:30 AM');
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(2))
-    .expect(scheduler.getAppointmentCount(true))
+    .expect(scheduler.getAppointmentCount('allDay'))
     .eql(1)
-    .expect(scheduler.getAppointmentCount(false))
+    .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(0)
     .expect(draggableAppointment.date.time)
     .eql('12:00 AM - 12:30 AM');
@@ -47,18 +47,18 @@ test('Drag-n-drop multi-day appointment', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 1))
-    .expect(scheduler.getAppointmentCount(true))
+    .expect(scheduler.getAppointmentCount('allDay'))
     .eql(0)
-    .expect(scheduler.getAppointmentCount(false))
+    .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(1)
     .expect(draggableAppointment.date.time)
     .eql('12:00 AM - 12:30 AM');
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(2))
-    .expect(scheduler.getAppointmentCount(true))
+    .expect(scheduler.getAppointmentCount('allDay'))
     .eql(1)
-    .expect(scheduler.getAppointmentCount(false))
+    .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(0)
     .expect(draggableAppointment.date.time)
     .eql('12:00 AM - 12:30 AM');
@@ -83,18 +83,18 @@ test('Drag-n-drop all-day appointment if allDayPanelMode="allDay"', async (t) =>
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 1))
-    .expect(scheduler.getAppointmentCount(true))
+    .expect(scheduler.getAppointmentCount('allDay'))
     .eql(0)
-    .expect(scheduler.getAppointmentCount(false))
+    .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(1)
     .expect(draggableAppointment.date.time)
     .eql('12:00 AM - 12:30 AM');
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(2))
-    .expect(scheduler.getAppointmentCount(true))
+    .expect(scheduler.getAppointmentCount('allDay'))
     .eql(1)
-    .expect(scheduler.getAppointmentCount(false))
+    .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(0)
     .expect(draggableAppointment.date.time)
     .eql('12:00 AM - 12:30 AM');

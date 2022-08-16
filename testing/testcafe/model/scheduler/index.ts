@@ -148,10 +148,14 @@ export default class Scheduler extends Widget {
     return new Appointment(this.element, index);
   }
 
-  getAppointmentCount(allDay = false): Promise<number> {
-    const selector = allDay
-      ? `.${CLASS.appointment}.${CLASS.allDayAppointment}`
-      : `.${CLASS.appointment}:not(.${CLASS.allDayAppointment})`;
+  getAppointmentCount(appointmentType: 'all' | 'allDay' | 'timeTable' = 'all'): Promise<number> {
+    let selector = `.${CLASS.appointment}`;
+
+    if (appointmentType === 'allDay') {
+      selector += `.${CLASS.allDayAppointment}`;
+    } else if (appointmentType === 'timeTable') {
+      selector += `:not(.${CLASS.allDayAppointment})`;
+    }
 
     return this.element
       .find(selector)
