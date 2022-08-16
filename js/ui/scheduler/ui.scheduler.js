@@ -926,6 +926,12 @@ class Scheduler extends Widget {
         return { paginate: false };
     }
 
+    _initAllDayPanel() {
+        if(this.option('allDayPanelMode') === 'hidden') {
+            this.option('showAllDayPanel', false);
+        }
+    }
+
     _init() {
         this._initExpressions({
             startDate: this.option('startDateExpr'),
@@ -941,6 +947,8 @@ class Scheduler extends Widget {
         });
 
         super._init();
+
+        this._initAllDayPanel();
 
         this._initDataSource();
 

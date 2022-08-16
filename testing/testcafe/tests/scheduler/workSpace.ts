@@ -141,3 +141,29 @@ test('Hidden scheduler should not resize', async (t) => {
   currentDate: new Date(2021, 1, 1),
   height: 400,
 }));
+
+test('All day panel should be hidden when allDayPanelMode=hidden by initializing scheduler', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.allDayTitle.exists)
+    .eql(false);
+
+  await t
+    .expect(scheduler.allDayRow.exists)
+    .eql(false);
+}).before(async () => createWidget('dxScheduler', {
+  currentDate: new Date(2021, 2, 28),
+  currentView: 'day',
+  allDayPanelMode: 'hidden',
+  dataSource: [{
+    text: 'Book Flights to San Fran for Sales Trip',
+    startDate: new Date('2021-03-28T17:00:00.000Z'),
+    endDate: new Date('2021-03-28T18:00:00.000Z'),
+    allDay: true,
+  }, {
+    text: 'Customer Workshop',
+    startDate: new Date('2021-03-29T17:30:00.000Z'),
+    endDate: new Date('2021-04-03T19:00:00.000Z'),
+  }],
+}));
