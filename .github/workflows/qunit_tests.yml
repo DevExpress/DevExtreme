@@ -58,38 +58,20 @@ jobs:
         CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
 
     steps:
-    # Prepare fast re-run start
-    - name: Set default run status
-      run: echo "default" > last_run_status
-
-    - name: Restore last run status
-      uses: actions/cache@v2
-      with:
-        path: last_run_status
-        key: last-run-status-${{ github.job }}-${{ matrix.CONSTEL }}-${{ github.sha }}
-
-    - name: Set last run status
-      id: last_run_status
-      run: cat last_run_status
-
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
         name: devextreme-artifacts
-    # Prepare fast re-run end
 
     - name: Get sources
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
 
     - name: Use Node.js
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/setup-node@v2
       with:
         node-version: '15'
 
     - name: Restore npm cache
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./node_modules
@@ -102,15 +84,12 @@ jobs:
         name: devextreme-artifacts
 
     - name: Unpack artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: 7z x artifacts.zip
       
     - name: Build dotnet
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: dotnet build build/build-dotnet.sln
       
     - name: Run QUnit tests
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
         NORENOVATION: "true"
@@ -119,10 +98,6 @@ jobs:
       run: |
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
-
-    - name: Save run status
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
     runs-on: devextreme-shr2
