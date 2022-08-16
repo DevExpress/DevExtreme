@@ -74,10 +74,9 @@ const subscribes = {
     updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const wasAllDay = this._workSpace.dragBehavior.isAllDay(element);
         const droppableCellData = this._workSpace.getDataByDroppableCell();
         const becomeAllDay = droppableCellData.allDay; // !
-        const updatedData = this._getUpdatedData(rawAppointment, wasAllDay);
+        const updatedData = this._getUpdatedData(rawAppointment);
         const targetedAppointment = createAppointmentAdapter(
             extend({}, rawAppointment, updatedData),
             this._dataAccessors,
@@ -88,6 +87,7 @@ const subscribes = {
         const newCellIndex = this._workSpace.getDroppableCellIndex();
         const oldCellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
 
+        const wasAllDay = this._workSpace.dragBehavior.isAllDay(element);
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;

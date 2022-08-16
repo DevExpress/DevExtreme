@@ -83,7 +83,6 @@ import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
-import { getAppointmentAllDay } from '../../renovation/ui/scheduler/appointment/dragging/utils/getAppointmentAllDay';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1886,7 +1885,7 @@ class Scheduler extends Widget {
         return this._recurrenceDialog.show();
     }
 
-    _getUpdatedData(rawAppointment, wasAllDay) {
+    _getUpdatedData(rawAppointment) {
         const getConvertedFromGrid = date => date
             ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' })
             : undefined;
@@ -1931,11 +1930,11 @@ class Scheduler extends Widget {
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
-        const appointmentAllDay = getAppointmentAllDay(
-            appointment.allDay,
-            wasAllDay,
-            targetCell.allDay,
-        );
+        const wasAllDay = this.appointmentTakesAllDay(rawAppointment);
+        const appointmentAllDay = wasAllDay
+            ? targetCell.allDay && appointment.allDay
+            : targetCell.allDay;
+
         const result = createAppointmentAdapter(
             {},
             this._dataAccessors,
@@ -1946,7 +1945,7 @@ class Scheduler extends Widget {
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
 
-        if(this.appointmentTakesAllDay(rawAppointment) && !targetCell.allDay && this._workSpace.supportAllDayRow()) {
+        if(wasAllDay && !targetCell.allDay && this._workSpace.supportAllDayRow()) {
             resultedEndDate = this._workSpace.calculateEndDate(resultedStartDate);
         }
 
