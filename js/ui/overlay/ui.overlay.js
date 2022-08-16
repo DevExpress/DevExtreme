@@ -12,7 +12,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isFunction, isObject, isWindow } from '../../core/utils/type';
+import { isFunction, isObject, isPromise, isWindow } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
@@ -439,6 +439,22 @@ const Overlay = Widget.inherit({
             });
     },
 
+    _processShowingHidingCancel: function(cancelArg, applyFunction, cancelFunction) {
+        if(isPromise(cancelArg)) {
+            cancelArg
+                .then(shouldCancel => {
+                    if(shouldCancel) {
+                        cancelFunction();
+                    } else {
+                        applyFunction();
+                    }
+                })
+                .catch(() => applyFunction());
+        } else {
+            cancelArg ? cancelFunction() : applyFunction();
+        }
+    },
+
     _show: function() {
         this._showingDeferred = new Deferred();
 
@@ -489,11 +505,7 @@ const Overlay = Widget.inherit({
                     this._animateShowing();
                 };
 
-                if(showingArgs.cancel.then) {
-                    showingArgs.cancel.then(value => value ? cancelShow() : applyShow(), () => applyShow());
-                } else {
-                    showingArgs.cancel ? cancelShow() : applyShow();
-                }
+                this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
             };
 
             if(this.option('templatesRenderAsynchronously')) {
@@ -582,11 +594,7 @@ const Overlay = Widget.inherit({
                 this._animateHiding();
             };
 
-            if(hidingArgs.cancel.then) {
-                hidingArgs.cancel.then(value => value ? cancelHide() : applyHide(), () => applyHide());
-            } else {
-                hidingArgs.cancel ? cancelHide() : applyHide();
-            }
+            this._processShowingHidingCancel(hidingArgs.cancel, applyHide, cancelHide);
         }
         return this._hidingDeferred.promise();
     },
@@ -1212,16 +1220,14 @@ const Overlay = Widget.inherit({
         this.option('visible', showing);
 
         animateDeferred.promise()
-            .done(
-                () => {
-                    delete this._animateDeferred;
-                    result.resolveWith(this, [this.option('visible')]);
-                })
-            .fail(
-                () => {
-                    delete this._animateDeferred;
-                    result.reject();
-                }
+            .done(() => {
+                delete this._animateDeferred;
+                result.resolveWith(this, [this.option('visible')]);
+            })
+            .fail(() => {
+                delete this._animateDeferred;
+                result.reject();
+            }
             );
 
         return result.promise();

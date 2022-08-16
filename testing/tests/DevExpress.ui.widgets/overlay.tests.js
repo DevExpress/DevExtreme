@@ -810,11 +810,11 @@ testModule('visibility', moduleConfig, () => {
             this.overlay.option({ onShowing: e => e.cancel = true });
             this.overlay.show();
 
-            assert.ok(this.$overlay.is(':hidden')), 'overlay is hidden';
+            assert.ok(this.$overlay.is(':hidden'), 'overlay is hidden');
             this.checkIsNotShown();
         });
 
-        test('overlay should not be hidden if e.cancel == true in the onHidinging event handler', function(assert) {
+        test('overlay should not be hidden if e.cancel == true in the onHiding event handler', function(assert) {
             this.overlay.option({
                 visible: true,
                 onHiding: e => e.cancel = true
@@ -827,7 +827,11 @@ testModule('visibility', moduleConfig, () => {
         test('overlay should be shown after timeout if e.cancel == promise resolving false after timeout', function(assert) {
             const done = assert.async();
             this.overlay.option({
-                onShowing: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(false), 0); }),
+                onShowing: e => {
+                    e.cancel = new Promise((resolve) => {
+                        setTimeout(() => resolve(false), 0);
+                    });
+                }
             });
             this.overlay.show();
 
@@ -844,7 +848,11 @@ testModule('visibility', moduleConfig, () => {
             const done = assert.async();
             this.overlay.option({
                 visible: true,
-                onHiding: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(false), 0); }),
+                onHiding: e => {
+                    e.cancel = new Promise((resolve) => {
+                        setTimeout(() => resolve(false), 0);
+                    });
+                }
             });
             this.overlay.hide();
 
@@ -860,7 +868,11 @@ testModule('visibility', moduleConfig, () => {
         test('overlay should not be shown after timeout if e.cancel == promise resolving true after timeout', function(assert) {
             const done = assert.async();
             this.overlay.option({
-                onShowing: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(true), 0); })
+                onShowing: e => {
+                    e.cancel = new Promise((resolve) => {
+                        setTimeout(() => resolve(true), 0);
+                    });
+                }
             });
             this.overlay.show();
 
@@ -875,7 +887,11 @@ testModule('visibility', moduleConfig, () => {
             const done = assert.async();
             this.overlay.option({
                 visible: true,
-                onHiding: e => e.cancel = new Promise((resolve) => { setTimeout(() => resolve(true), 0); })
+                onHiding: e => {
+                    e.cancel = new Promise((resolve) => {
+                        setTimeout(() => resolve(true), 0);
+                    });
+                }
             });
             this.overlay.hide();
 
@@ -889,7 +905,11 @@ testModule('visibility', moduleConfig, () => {
         test('overlay should be shown after timeout if e.cancel == promise rejecting after timeout', function(assert) {
             const done = assert.async();
             this.overlay.option({
-                onShowing: e => e.cancel = new Promise((_, reject) => { setTimeout(() => reject(), 0); })
+                onShowing: e => {
+                    e.cancel = new Promise((_, reject) => {
+                        setTimeout(() => reject(), 0);
+                    });
+                }
             });
             this.overlay.show();
 
@@ -906,7 +926,11 @@ testModule('visibility', moduleConfig, () => {
             const done = assert.async();
             this.overlay.option({
                 visible: true,
-                onHiding: e => e.cancel = new Promise((_, reject) => { setTimeout(() => reject(), 0); })
+                onHiding: e => {
+                    e.cancel = new Promise((_, reject) => {
+                        setTimeout(() => reject(), 0);
+                    });
+                }
             });
             this.overlay.hide();
 
