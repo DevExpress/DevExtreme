@@ -313,7 +313,7 @@ module('render', moduleOptions, () => {
                 min: 0,
                 value: 0,
                 width: 500 + 2 * SLIDER_PADDING,
-                SliderValueChangeMode: mode
+                valueChangeMode: mode
             });
             const instance = $element.dxSlider('instance');
 
@@ -1765,11 +1765,11 @@ module('if only the single value is possible', moduleOptions, () => {
     });
 });
 
-module('SliderValueChangeMode option', {
+module('valueChangeMode option', {
     beforeEach: function() {
         this.valueChangedHandler = sinon.stub();
         this.$element = $('#slider').dxSlider({
-            SliderValueChangeMode: 'eventual',
+            valueChangeMode: 'eventual',
             onValueChanged: this.valueChangedHandler,
             tooltip: {
                 enabled: true,
@@ -1786,7 +1786,7 @@ module('SliderValueChangeMode option', {
         this.getTooltipText = () => $.trim(this.getTooltip().text());
     }
 }, () => {
-    test('slider value should not change on swipe with "eventual" SliderValueChangeMode', function(assert) {
+    test('slider value should not change on swipe with "eventual" valueChangeMode', function(assert) {
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
         this.pointer.swipe(20);
@@ -1800,7 +1800,7 @@ module('SliderValueChangeMode option', {
 
     });
 
-    test('slider tooltip value should change with "eventual" SliderValueChangeMode', function(assert) {
+    test('slider tooltip value should change with "eventual" valueChangeMode', function(assert) {
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
         this.pointer.swipe(20);
@@ -1812,8 +1812,8 @@ module('SliderValueChangeMode option', {
         assert.strictEqual(this.getTooltipText(), '90');
     });
 
-    test('slider should change on every step after runtime change SliderValueChangeMode to instant', function(assert) {
-        this.instance.option('SliderValueChangeMode', 'instant');
+    test('slider should change on every step after runtime change valueChangeMode to instant', function(assert) {
+        this.instance.option('valueChangeMode', 'instant');
 
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();

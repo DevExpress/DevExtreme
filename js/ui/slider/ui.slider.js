@@ -149,7 +149,7 @@ const Slider = TrackBar.inherit({
 
             focusStateEnabled: true,
 
-            SliderValueChangeMode: 'instant',
+            valueChangeMode: 'instant',
         });
     },
 
@@ -469,7 +469,7 @@ const Slider = TrackBar.inherit({
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
         const newValue = this._roundSwipeValue(newRatio);
-        const valueChangeMode = this.option('SliderValueChangeMode');
+        const valueChangeMode = this.option('valueChangeMode');
 
         SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
 
@@ -560,7 +560,7 @@ const Slider = TrackBar.inherit({
             this._currentRatio = 1 - this._currentRatio;
         }
         const newValue = this._roundSwipeValue(this._currentRatio);
-        const valueChangeMode = this.option('SliderValueChangeMode');
+        const valueChangeMode = this.option('valueChangeMode');
         const $handle = this._activeHandle();
 
         SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
@@ -629,7 +629,8 @@ const Slider = TrackBar.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
-            case 'SliderValueChangeMode':
+            case 'valueChangeMode':
+                break;
             default:
                 this.callBase(args);
         }
