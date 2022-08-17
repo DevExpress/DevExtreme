@@ -36714,6 +36714,9 @@ declare module DevExpress.viz {
         years?: number;
       }
     | DevExpress.common.charts.TimeInterval;
+  /**
+   * [descr:VizWidget]
+   */
   export type VizWidget =
     | dxChart
     | dxPieChart

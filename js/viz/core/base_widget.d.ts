@@ -1,5 +1,5 @@
 import DOMComponent, {
-  DOMComponentOptions,
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
