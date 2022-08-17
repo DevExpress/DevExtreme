@@ -838,7 +838,11 @@ export const selectionModule = {
                         if(isSelected) {
                             $row.addClass(ROW_SELECTION_CLASS);
                         }
-                        this.setAria('selected', isSelected, $row);
+
+                        const selectionMode = this.option(SELECTION_MODE);
+                        if(selectionMode !== 'none') {
+                            this.setAria('selected', isSelected, $row);
+                        }
                     }
 
                     return $row;
