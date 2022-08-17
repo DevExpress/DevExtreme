@@ -1,7 +1,7 @@
 import {
-  ExportFormat,
-  HorizontalAlignment,
-  VerticalAlignment,
+    ExportFormat,
+    HorizontalAlignment,
+    VerticalAlignment,
 } from '../common';
 
 import dxChart from './chart';
