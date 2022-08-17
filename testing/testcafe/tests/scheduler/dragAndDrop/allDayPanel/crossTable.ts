@@ -1,6 +1,8 @@
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
+import { checkRegularAppointment } from '../../../../helpers/widgets/scheduler/checkRegularAppointment';
+import { checkAllDayAppointment } from '../../../../helpers/widgets/scheduler/checkAllDayAppointment';
 
 fixture.disablePageReloads`Drag-and-drop between all-day panel and date table`
   .page(url(__dirname, '../../../container.html'))
@@ -84,22 +86,35 @@ test('Drag-n-drop all-day appointment if allDayPanelMode="allDay"', async (t) =>
   const draggableAppointment = scheduler.getAppointment('all-day');
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 1))
+    .dragToElement(
+      draggableAppointment.element,
+      scheduler.getDateTableCell(3, 3),
+    )
     .expect(scheduler.getAppointmentCount('allDay'))
     .eql(0)
     .expect(scheduler.getAppointmentCount('timeTable'))
-    .eql(1)
+    .eql(3)
     .expect(draggableAppointment.date.time)
-    .eql('12:00 AM - 12:30 AM');
+    .eql('1:30 AM - 1:30 PM');
+
+  await checkRegularAppointment(t, scheduler, 'all-day', 0, 'head', 150);
+  await checkRegularAppointment(t, scheduler, 'all-day', 1, 'body', 300);
+  await checkRegularAppointment(t, scheduler, 'all-day', 2, 'tail', 300);
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(2))
+    .dragToElement(
+      draggableAppointment.element,
+      scheduler.getAllDayTableCell(1),
+      { speed: 0.8 },
+    )
     .expect(scheduler.getAppointmentCount('allDay'))
     .eql(1)
     .expect(scheduler.getAppointmentCount('timeTable'))
     .eql(0)
     .expect(draggableAppointment.date.time)
-    .eql('12:00 AM - 12:30 AM');
+    .eql('12:00 AM - 12:00 PM');
+
+  await checkAllDayAppointment(t, scheduler, 'all-day', 0, undefined, 250);
 }).before(async () => createWidget('dxScheduler', {
   currentDate: new Date(2021, 4, 11),
   width: 700,

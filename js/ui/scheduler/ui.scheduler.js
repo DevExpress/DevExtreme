@@ -1938,22 +1938,23 @@ class Scheduler extends Widget {
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
-        const wasAllDay = this.appointmentTakesAllDay(rawAppointment);
-        const appointmentAllDay = wasAllDay
-            ? targetCell.allDay && appointment.allDay
-            : targetCell.allDay;
-
         const result = createAppointmentAdapter(
             {},
             this._dataAccessors,
             this.timeZoneCalculator,
         );
         result.startDate = resultedStartDate;
+
+        const appointmentWasAllDay = this.appointmentTakesAllDay(rawAppointment);
+        const appointmentAllDay = appointmentWasAllDay
+            ? targetCell.allDay && appointment.allDay
+            : targetCell.allDay;
+
         result.allDay = appointmentAllDay;
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
-
-        if(wasAllDay && !targetCell.allDay && this._workSpace.supportAllDayRow()) {
+        const isSeparateAllDayPanel = this.getAllDayPanelStrategy() === 'separate';
+        if(appointmentWasAllDay && !isSeparateAllDayPanel && !targetCell.allDay && this._workSpace.supportAllDayRow()) {
             resultedEndDate = this._workSpace.calculateEndDate(resultedStartDate);
         }
 
@@ -2147,6 +2148,11 @@ class Scheduler extends Widget {
         return this._actions;
     }
 
+    getAllDayPanelStrategy() {
+        return this._getCurrentViewOption(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName)
+            .allDayStrategy;
+    }
+
     appointmentTakesAllDay(rawAppointment) {
         const appointment = createAppointmentAdapter(
             rawAppointment,
@@ -2158,7 +2164,7 @@ class Scheduler extends Widget {
             appointment,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour'),
-            this._getCurrentViewOption(ALL_DAY_BEHAVIOR_JS_NAMES.publicOptionName).allDayStrategy,
+            this.getAllDayPanelStrategy(),
             !!this.option('timeZone'),
         );
     }
