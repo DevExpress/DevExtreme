@@ -1227,8 +1227,7 @@ const Overlay = Widget.inherit({
             .fail(() => {
                 delete this._animateDeferred;
                 result.reject();
-            }
-            );
+            });
 
         return result.promise();
     },
