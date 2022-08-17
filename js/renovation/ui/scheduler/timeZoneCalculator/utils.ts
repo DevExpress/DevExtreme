@@ -84,6 +84,10 @@ export class TimeZoneCalculator {
     return offsetInHours * MS_IN_HOUR;
   }
 
+  getCalculatorTimeZone(): string | undefined {
+    return this.options.timeZone;
+  }
+
   protected getOffsetInHours(date: Date, timezone: string | undefined, isUTCDate: boolean): number {
     const { client, appointment, common } = this.getOffsets(date, timezone);
 
@@ -100,10 +104,6 @@ export class TimeZoneCalculator {
     }
 
     return 0;
-  }
-
-  getCalculatorTimeZone(): string | undefined {
-    return this.options.timeZone;
   }
 
   protected getClientOffset(date: Date): number {
