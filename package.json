@@ -63,6 +63,7 @@
     "@types/jquery": "2.0.60",
     "@types/react": "16.9.16",
     "@typescript-eslint/eslint-plugin": "5.32.0",
+    "@typescript-eslint/experimental-utils": "5.32.0",
     "angular": "1.8.3",
     "ast-types": "0.14.2",
     "autoprefixer": "10.4.8",
