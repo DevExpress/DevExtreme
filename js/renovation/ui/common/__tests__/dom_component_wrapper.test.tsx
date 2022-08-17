@@ -4,6 +4,7 @@ import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 import { renderTemplate } from '../../../../../node_modules/@devextreme/runtime/cjs/declarations/index';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getUpdatedOptions } from '../utils/get_updated_options';
 
 jest.mock('../../../../../node_modules/@devextreme/runtime/esm/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));

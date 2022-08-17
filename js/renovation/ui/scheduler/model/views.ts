@@ -50,7 +50,7 @@ export const getCurrentViewProps = (
     : currentViewProps;
 };
 
-export function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
+export function getViewConfigProp<T>(schedulerProp: T, viewProp: T | undefined): T {
   return viewProp !== undefined ? viewProp : schedulerProp;
 }
 
