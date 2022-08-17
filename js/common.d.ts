@@ -267,7 +267,7 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
  * @namespace DevExpress.common
  */
 
-export type ValueChangeMode = 'instant' | 'eventual';
+export type SliderValueChangeMode = 'instant' | 'eventual';
 
 /**
  * @public
