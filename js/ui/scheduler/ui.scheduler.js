@@ -1938,24 +1938,26 @@ class Scheduler extends Widget {
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
+        const wasAllDay = this.appointmentTakesAllDay(rawAppointment);
+        const appointmentAllDay = wasAllDay
+            ? targetCell.allDay && appointment.allDay
+            : targetCell.allDay;
+
         const result = createAppointmentAdapter(
             {},
             this._dataAccessors,
-            this.timeZoneCalculator
+            this.timeZoneCalculator,
         );
-
-        if(targetCell.allDay !== undefined) {
-            result.allDay = targetCell.allDay;
-        }
         result.startDate = resultedStartDate;
+        result.allDay = appointmentAllDay;
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
 
-        if(this.appointmentTakesAllDay(rawAppointment) && !result.allDay && this._workSpace.supportAllDayRow()) {
+        if(wasAllDay && !targetCell.allDay && this._workSpace.supportAllDayRow()) {
             resultedEndDate = this._workSpace.calculateEndDate(resultedStartDate);
         }
 
-        if(appointment.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
+        if(targetCell.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
             const dateCopy = new Date(resultedStartDate);
             dateCopy.setHours(0);
 

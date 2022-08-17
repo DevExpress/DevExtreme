@@ -74,9 +74,11 @@ const subscribes = {
     updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const appointment = createAppointmentAdapter(rawAppointment, this._dataAccessors, this.timeZoneCalculator);
+        const droppableCellData = this._workSpace.getDataByDroppableCell();
+        const becomeAllDay = droppableCellData.allDay; // !
+        const updatedData = this._getUpdatedData(rawAppointment);
         const targetedAppointment = createAppointmentAdapter(
-            extend({}, rawAppointment, this._getUpdatedData(rawAppointment)),
+            extend({}, rawAppointment, updatedData),
             this._dataAccessors,
             this.timeZoneCalculator,
         );
@@ -85,20 +87,20 @@ const subscribes = {
         const newCellIndex = this._workSpace.getDroppableCellIndex();
         const oldCellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
 
-        const becomeAllDay = targetedAppointment.allDay;
-        const wasAllDay = appointment.allDay;
-
+        const wasAllDay = this._workSpace.dragBehavior.isAllDay(element);
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
         if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, (function() {
-
-                this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
-                    this._appointments.moveAppointmentBack(event);
-                }, event);
-            }).bind(this), undefined, undefined, event);
+            this._checkRecurringAppointment(
+                rawAppointment,
+                targetedRawAppointment,
+                info.sourceAppointment.exceptionDate, (function() {
+                    this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
+                        this._appointments.moveAppointmentBack(event);
+                    }, event);
+                }).bind(this), undefined, undefined, event);
         } else {
             this._appointments.moveAppointmentBack(event);
         }

@@ -113,7 +113,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
     .expect(appointmentPopup.subjectElement.value)
     .eql(APPOINTMENT_TEXT)
 
-    .click(appointmentPopup.allDayElement, { speed: 0.1 })
+    .click(appointmentPopup.allDay.element, { speed: 0.1 })
     .click(appointmentPopup.cancelButton, { speed: 0.1 })
     .expect(appointmentPopup.isVisible())
     .notOk()
@@ -157,7 +157,7 @@ test('From elements for disabled appointments should be read only (T835731)', as
     .expect(appointmentPopup.descriptionElement.value)
     .eql('')
 
-    .click(appointmentPopup.allDayElement)
+    .click(appointmentPopup.allDay.element)
     .expect(appointmentPopup.startDateElement.value)
     .eql('5/22/2017, 2:30 PM');
 }).before(async () => createWidget('dxScheduler', {
