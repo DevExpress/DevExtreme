@@ -54,9 +54,30 @@ const LoadPanel = Overlay.inherit({
 
             hideTopOverlayHandler: null,
 
+            /**
+            * @name dxLoadPanelOptions.resizeEnabled
+            * @hidden
+            */
+            resizeEnabled: false,
+
             focusStateEnabled: false,
 
-            propagateOutsideClick: true,
+            propagateOutsideClick: true
+
+            /**
+            * @name dxLoadPanelOptions.dragEnabled
+            * @hidden
+            */
+
+            /**
+            * @name dxLoadPanelOptions.dragOutsideBoundary
+            * @hidden
+            */
+
+            /**
+            * @name dxLoadPanelOptions.dragAndResizeArea
+            * @hidden
+            */
 
             /**
             * @name dxLoadPanelOptions.contentTemplate
