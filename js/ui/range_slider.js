@@ -194,7 +194,7 @@ const RangeSlider = Slider.inherit({
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
         const newSwipeValue = this._roundSwipeValue(newRatio);
-        const valueChangeMode = this.option('valueChangeMode');
+        const valueChangeMode = this.option('SliderValueChangeMode');
         SliderHandle.getInstance(this._activeHandle()).option('value', newSwipeValue);
 
 
