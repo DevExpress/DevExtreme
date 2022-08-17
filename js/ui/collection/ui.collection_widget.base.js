@@ -724,7 +724,7 @@ const CollectionWidget = Widget.inherit({
         } else {
             $target = $target.parent();
 
-            while($target.length && !domAdapter.isDocument($target.get(0))) {
+            while($target.length && !domAdapter.isDocument($target.get(0)) && !domAdapter.isDocumentFragment($target.get(0))) {
                 if($target.is(focusable)) {
                     return $target;
                 }

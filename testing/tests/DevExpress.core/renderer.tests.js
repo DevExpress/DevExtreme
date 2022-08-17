@@ -357,3 +357,21 @@ QUnit.test('Should not remove content when replacing the same content', function
     assert.equal(fixture.childElementCount, 1, 'element still exist');
     assert.equal($element.is($result), true, 'returned value the same element');
 });
+
+QUnit.module('attr method');
+// T1108190
+QUnit.test('Add/remove atribute', function(assert) {
+    const $element = renderer('<div>');
+
+    $element.attr('data-test', 'test');
+    $element.attr('readonly', true);
+    const fixture = document.getElementById('qunit-fixture');
+
+    fixture.appendChild($element.get(0));
+    assert.equal($element.get(0).getAttribute('data-test'), 'test', 'element data-test attribute');
+    assert.equal(!!$element.get(0).getAttribute('readonly'), true, 'element readOnly attribute');
+    $element.attr('readonly', false);
+    assert.equal($element.get(0).getAttribute('readonly'), undefined, 'element readOnly attribute');
+
+});
+
