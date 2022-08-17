@@ -197,6 +197,23 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($('#dataGrid').find('.dx-row.dx-selection').length, 2, 'isSelected rows');
     });
 
+    // T1109408
+    QUnit.test('Aria-selected should not present if selection.mode is none', function(assert) {
+        // arrange
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{
+                ID: 0
+            }],
+            keyExpr: 'ID',
+            columns: ['ID'],
+            showBorders: true,
+            selection: { mode: 'none' },
+        });
+        // assert
+        $('.dx-data-row').each((ind, item) => assert.notOk(item.hasAttribute('aria-selected')));
+    });
+
     // T489478
     QUnit.test('Console errors should not be occurs when stateStoring enabled with selectedRowKeys value', function(assert) {
         sinon.spy(errors, 'log');
