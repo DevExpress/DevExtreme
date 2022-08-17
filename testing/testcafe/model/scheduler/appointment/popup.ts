@@ -1,4 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
+import Switch from '../../switch/switch';
 
 export const CLASS = {
   appointmentPopup: 'dx-scheduler-appointment-popup',
@@ -29,7 +30,7 @@ export default class AppointmentPopup {
 
   cancelButton: Selector;
 
-  allDayElement: Selector;
+  allDay: Switch;
 
   recurrenceElement: Selector;
 
@@ -49,7 +50,7 @@ export default class AppointmentPopup {
     this.startDateElement = this.wrapper.find('.dx-texteditor-input').nth(1);
     this.endDateElement = this.wrapper.find('.dx-texteditor-input').nth(2);
     this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
-    this.allDayElement = this.wrapper.find('.dx-switch').nth(0);
+    this.allDay = new Switch(this.wrapper.find('.dx-switch').nth(0));
     this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
 
     this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
