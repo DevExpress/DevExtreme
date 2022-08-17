@@ -15,11 +15,15 @@ import {
   ConfigContextValue,
   ConfigContext,
 } from '../../../common/config_context';
+import messageLocalization from '../../../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
 const PAGER_NEXT_BUTTON_CLASS = 'dx-next-button';
 export const PAGER_BUTTON_DISABLE_CLASS = 'dx-button-disable';
+
+const getNextButtonLabel = (): string => messageLocalization.getFormatter('dxPager-nextPage')();
+const getPrevButtonLabel = (): string => messageLocalization.getFormatter('dxPager-prevPage')();
 
 const classNames = {
   nextEnabledClass: `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`,
@@ -29,7 +33,6 @@ const classNames = {
 };
 
 const reverseDirections: { next: Direction; prev: Direction } = { next: 'prev', prev: 'next' };
-
 export const viewFunction = ({
   renderPrevButton,
   renderNextButton,
@@ -47,7 +50,7 @@ export const viewFunction = ({
   <Fragment>
     {renderPrevButton && (
       <LightButton
-        label="Previous page"
+        label={getPrevButtonLabel()}
         className={prevButtonProps.className}
         tabIndex={prevButtonProps.tabIndex}
         onClick={prevButtonProps.navigate}
@@ -71,7 +74,7 @@ export const viewFunction = ({
     )}
     {renderNextButton && (
       <LightButton
-        label="Next page"
+        label={getNextButtonLabel()}
         className={nextButtonProps.className}
         tabIndex={nextButtonProps.tabIndex}
         onClick={nextButtonProps.navigate}

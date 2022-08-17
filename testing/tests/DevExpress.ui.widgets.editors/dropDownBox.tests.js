@@ -18,14 +18,13 @@ const realDevice = devices.real();
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="container">\
-                <div id="dropDownBox"></div>\
-                <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
-            </div>\
+        '<div id="container">\
+            <div id="dropDownBox"></div>\
+            <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#qunit-fixture').addClass('qunit-fixture-visible');
 });
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';

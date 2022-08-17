@@ -171,6 +171,10 @@
         "dxPager-infoText": "Page {0} of {1} ({2} items)",
         "dxPager-pagesCountText": "of",
         "dxPager-pageSizesAllText": "All",
+        "dxPager-page": "Page {0}",
+        "dxPager-prevPage": "Previous Page",
+        "dxPager-nextPage": "Next Page",
+
 
         "dxPivotGrid-grandTotal": "Grand Total",
         "dxPivotGrid-total": "{0} Total",

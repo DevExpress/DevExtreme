@@ -54,7 +54,7 @@ QUnit.testStart(function() {
 
     if(fixtureRoot.getRootNode().host) {
         style += '\
-            :scope > div {\
+            :scope div.shadow-container {\
                 width: 100% !important;\
                 height: 100% !important;\
             }\
