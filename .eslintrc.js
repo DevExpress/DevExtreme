@@ -293,7 +293,12 @@ module.exports = {
                 '@typescript-eslint/no-dynamic-delete': 'error',
                 '@typescript-eslint/no-base-to-string': 'error',
                 '@typescript-eslint/init-declarations': 'error',
-                '@typescript-eslint/member-ordering': 'error',
+                '@typescript-eslint/member-ordering': [
+                    'error',
+                    {
+                        default: [ 'signature', 'field', 'constructor', 'method' ]
+                    }
+                ],
                 '@typescript-eslint/return-await': 'error',
                 '@typescript-eslint/no-invalid-void-type': 'error',
                 '@typescript-eslint/typedef': 'error',
