@@ -98,7 +98,7 @@ export default class ODataStore<
     TItem = any,
     TKey = any,
 > extends Store<TItem, TKey> {
-    constructor(options?: Options<TItem, TKey>)
+    constructor(options?: Options<TItem, TKey>);
     byKey(key: TKey): DxPromise<TItem>;
     /**
      * @docid

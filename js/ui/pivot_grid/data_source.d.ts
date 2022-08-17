@@ -492,7 +492,7 @@ export interface PivotGridDataSourceField {
  * @public
  */
 export default class PivotGridDataSource {
-    constructor(options?: Options)
+    constructor(options?: Options);
     /**
      * @docid
      * @publicName collapseAll(id)
