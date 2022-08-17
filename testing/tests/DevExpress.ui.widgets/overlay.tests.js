@@ -805,6 +805,19 @@ testModule('visibility', moduleConfig, () => {
         assert.notOk($overlay.is(':hidden')), 'overlay is not hidden';
         assert.notOk(onHidden.called, 'onHidden should not be called');
     });
+
+    test('overlays content should be hidden on onShowig event (T1107193)', function(assert) {
+        assert.expect(1);
+
+        const overlay = $('#overlay').dxOverlay({
+            onShowing: () => {
+                const isContentHidden = $(this.overlay.content()).css('visibility') === 'hidden';
+                assert.ok(isContentHidden, 'content is hidden');
+            }
+        }).dxOverlay('instance');
+
+        overlay.show();
+    });
 });
 
 
