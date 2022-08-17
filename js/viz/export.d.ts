@@ -16,7 +16,8 @@ import dxBarGauge from './bar_gauge';
 
 /**
  * @docid
- * @public */
+ * @public
+ */
 export type VizWidget = dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap | dxVectorMap | dxSparkline | dxBullet | dxBarGauge;
 
 /**

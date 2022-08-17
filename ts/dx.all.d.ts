@@ -26358,9 +26358,7 @@ declare module DevExpress.viz {
    * [descr:BaseWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class BaseWidget<
-    TProperties = DevExpress.DOMComponent.Properties
-  > extends DOMComponent<TProperties> {
+  export class BaseWidget<TProperties> extends DOMComponent<TProperties> {
     /**
      * [descr:BaseWidget.defaultOptions(rule)]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -36716,9 +36714,6 @@ declare module DevExpress.viz {
         years?: number;
       }
     | DevExpress.common.charts.TimeInterval;
-  /**
-   * [descr:VizWidget]
-   */
   export type VizWidget =
     | dxChart
     | dxPieChart
