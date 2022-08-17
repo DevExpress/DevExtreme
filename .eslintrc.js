@@ -292,7 +292,6 @@ module.exports = {
                 '@typescript-eslint/no-extraneous-class': 'error',
                 '@typescript-eslint/no-dynamic-delete': 'error',
                 '@typescript-eslint/no-base-to-string': 'error',
-                '@typescript-eslint/no-unused-vars-experimental': 'error',
                 '@typescript-eslint/init-declarations': 'error',
                 '@typescript-eslint/member-ordering': 'error',
                 '@typescript-eslint/return-await': 'error',

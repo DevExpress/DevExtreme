@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
 import { DataAccessorType } from '../../../types';
