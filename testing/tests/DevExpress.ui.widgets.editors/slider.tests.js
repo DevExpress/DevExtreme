@@ -1799,6 +1799,7 @@ module('valueChangeMode option', {
         assert.strictEqual(this.instance.option('value'), 90);
 
     });
+
     test('slider tooltip value should change with "eventual" valueChangeMode', function(assert) {
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
@@ -1810,6 +1811,7 @@ module('valueChangeMode option', {
 
         assert.strictEqual(this.getTooltipText(), '90');
     });
+
     test('slider should change on every step after runtime change valueChangeMode to instant', function(assert) {
         this.instance.option('valueChangeMode', 'instant');
 
