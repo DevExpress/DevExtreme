@@ -8246,16 +8246,16 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         assert.equal(visibleColumns[1].visibleIndex, 1, 'visibleIndex of the second column');
 
         assert.strictEqual(visibleColumns[2].caption, 'TestField3', 'caption of the third column');
-        assert.equal(visibleColumns[2].visibleIndex, 0, 'visibleIndex of the third column');
+        assert.equal(visibleColumns[2].visibleIndex, 2, 'visibleIndex of the third column');
 
         assert.strictEqual(visibleColumns[3].caption, 'TestField4', 'caption of the fourth column');
-        assert.equal(visibleColumns[3].visibleIndex, 1, 'visibleIndex of the fourth column');
+        assert.equal(visibleColumns[3].visibleIndex, 3, 'visibleIndex of the fourth column');
 
         assert.strictEqual(visibleColumns[4].caption, 'TestField5', 'caption of the fifth column');
-        assert.equal(visibleColumns[4].visibleIndex, 0, 'visibleIndex of the fifth column');
+        assert.equal(visibleColumns[4].visibleIndex, 4, 'visibleIndex of the fifth column');
 
         assert.strictEqual(visibleColumns[5].caption, 'TestField6', 'caption of the sixth column');
-        assert.equal(visibleColumns[5].visibleIndex, 1, 'visibleIndex of the sixth column');
+        assert.equal(visibleColumns[5].visibleIndex, 5, 'visibleIndex of the sixth column');
     });
 
     QUnit.test('getVisibleIndex when there is band columns', function(assert) {

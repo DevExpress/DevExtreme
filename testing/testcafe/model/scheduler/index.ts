@@ -16,6 +16,8 @@ export const CLASS = {
   dateTable: 'dx-scheduler-date-table',
   dateTableCell: 'dx-scheduler-date-table-cell',
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
+  allDayTitle: 'dx-scheduler-all-day-title',
+  allDayRow: 'dx-scheduler-all-day-table-row',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
   droppableCell: 'dx-scheduler-date-table-droppable-cell',
@@ -45,6 +47,10 @@ export default class Scheduler extends Widget {
   readonly dateTableCells: Selector;
 
   readonly allDayTableCells: Selector;
+
+  readonly allDayRow: Selector;
+
+  readonly allDayTitle: Selector;
 
   readonly dateTableRows: Selector;
 
@@ -80,6 +86,8 @@ export default class Scheduler extends Widget {
     this.workSpace = this.element.find(`.${CLASS.workSpace}`);
     this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
     this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
+    this.allDayRow = this.element.find(`.${CLASS.allDayRow}`);
+    this.allDayTitle = this.element.find(`.${CLASS.allDayTitle}`);
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);
     this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
     this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);

@@ -54,7 +54,9 @@ const LoadPanel = Overlay.inherit({
 
             hideTopOverlayHandler: null,
 
-            focusStateEnabled: false
+            focusStateEnabled: false,
+
+            propagateOutsideClick: true,
 
             /**
             * @name dxLoadPanelOptions.contentTemplate
