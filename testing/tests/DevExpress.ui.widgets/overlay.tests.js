@@ -811,7 +811,7 @@ testModule('visibility', moduleConfig, () => {
 
         const overlay = $('#overlay').dxOverlay({
             onShowing: () => {
-                const isContentHidden = $(this.overlay.content()).css('visibility') === 'hidden';
+                const isContentHidden = $(overlay.content()).css('visibility') === 'hidden';
                 assert.ok(isContentHidden, 'content is hidden');
             }
         }).dxOverlay('instance');
