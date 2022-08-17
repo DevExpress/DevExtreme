@@ -154,7 +154,7 @@ dropDownEditorsNames.forEach(widgetName => {
                     return;
                 }
                 QUnit.test(`${option} is correct`, function(assert) {
-                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
+                    const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false, applyValueMode: 'instantly' });
 
                     if(optionComparer[option]) {
                         optionComparer[option](assert, editor);
@@ -175,7 +175,7 @@ dropDownEditorsNames.forEach(widgetName => {
                         return;
                     }
 
-                    const editor = new dropDownEditorsList[widgetName]('#editor', {
+                    const editor = new dropDownEditorsList[widgetName]($('#editor'), {
                         deferRendering: false,
                         applyValueMode: 'instantly',
                         dropDownOptions: {
@@ -197,7 +197,7 @@ dropDownEditorsNames.forEach(widgetName => {
                 }
 
                 QUnit.test(`${option} is correct`, function(assert) {
-                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
+                    const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false, applyValueMode: 'instantly' });
                     editor.option(`dropDownOptions.${option}`, optionTestValues[option]);
 
                     assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option], `dropDownOptions.${option} is equal to ${optionTestValues[option]}`);
@@ -209,7 +209,7 @@ dropDownEditorsNames.forEach(widgetName => {
         QUnit.module('dropDownOptions 2-way binding', () => {
             dropDownOptionsKeys.forEach(option => {
                 QUnit.test(`dropDownOptions.${option} was updated correctly`, function(assert) {
-                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
+                    const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false, applyValueMode: 'instantly' });
                     const popup = getPopupInstance(editor);
                     popup.option(option, optionTestValues[option]);
 
@@ -220,13 +220,13 @@ dropDownEditorsNames.forEach(widgetName => {
 
         QUnit.module('deferRendering', () => {
             QUnit.skip('default dropDownOptions.deferRendering value is true', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor');
+                const editor = new dropDownEditorsList[widgetName]($('#editor'));
 
                 assert.strictEqual(editor.option('dropDownOptions.deferRendering'), true);
             });
 
             QUnit.test('dropDownOptions.deferRendering=false should not override deferRendering', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', {
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), {
                     deferRendering: true,
                     'dropDownOptions.deferRendering': false
                 });
@@ -236,7 +236,7 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('dropDownOptions.deferRendering=true should not override deferRendering', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', {
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), {
                     deferRendering: false,
                     'dropDownOptions.deferRendering': true
                 });
@@ -246,21 +246,21 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('popup is not rendered if deferRendering is true', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor');
+                const editor = new dropDownEditorsList[widgetName]($('#editor'));
                 const popup = getPopupInstance(editor);
 
                 assert.strictEqual(popup, undefined, 'popup is not rendered');
             });
 
             QUnit.test('popup is rendered if deferRendering is false', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false });
                 const popup = getPopupInstance(editor);
 
                 assert.strictEqual(popup.NAME, 'dxPopup', 'popup is rendered');
             });
 
             QUnit.test('popup is rendered immediately when deferRendering is changed to false at runtime', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor');
+                const editor = new dropDownEditorsList[widgetName]($('#editor'));
                 editor.option('deferRendering', false);
                 const popup = getPopupInstance(editor);
 
@@ -268,7 +268,7 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('popup should not render when dropDownOptions.deferRendering is changed to false at runtime', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor');
+                const editor = new dropDownEditorsList[widgetName]($('#editor'));
                 editor.option('dropDownOptions.deferRendering', false);
                 const popup = getPopupInstance(editor);
 
@@ -276,14 +276,14 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('popup should not render if dropDownOptions.deferRendering is false', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { 'dropDownOptions.deferRendering': false });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { 'dropDownOptions.deferRendering': false });
                 const popup = getPopupInstance(editor);
 
                 assert.strictEqual(popup, undefined, 'popup is not rendered');
             });
 
             QUnit.test('deferRendering should not do anything if popup has already been rendered', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false });
                 const popup = getPopupInstance(editor);
 
                 editor.option('deferRendering', true);
@@ -296,21 +296,21 @@ dropDownEditorsNames.forEach(widgetName => {
 
         QUnit.module('dropDownOptions.visible', () => {
             QUnit.test('popup should not render if dropDownOptions.visible=true and deferRendering=true', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { 'dropDownOptions.visible': true });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { 'dropDownOptions.visible': true });
                 const popup = getPopupInstance(editor);
 
                 assert.strictEqual(popup, undefined, 'popup is not rendered');
             });
 
             QUnit.skip('popup should not open if dropDownOptions.visible=true and deferRendering=false', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { 'dropDownOptions.visible': true, deferRendering: false });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { 'dropDownOptions.visible': true, deferRendering: false });
                 const popup = getPopupInstance(editor);
 
                 assert.strictEqual(popup.option('visible'), false, 'popup is closed');
             });
 
             QUnit.test('popup should not render after dropDownOptions.visible value changes to true if deferRendering=true', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor');
+                const editor = new dropDownEditorsList[widgetName]($('#editor'));
                 editor.option('dropDownOptions.visible', true);
                 const popup = getPopupInstance(editor);
 
@@ -323,7 +323,7 @@ dropDownEditorsNames.forEach(widgetName => {
                     return;
                 }
 
-                const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false });
                 editor.option('dropDownOptions.visible', true);
                 const popup = getPopupInstance(editor);
 
@@ -336,7 +336,7 @@ dropDownEditorsNames.forEach(widgetName => {
                     return;
                 }
 
-                const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, opened: true });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { deferRendering: false, opened: true });
                 editor.option('dropDownOptions.visible', false);
                 const popup = getPopupInstance(editor);
 
@@ -347,7 +347,7 @@ dropDownEditorsNames.forEach(widgetName => {
         QUnit.module('dropDownOptions using after repaint', () => {
             // TODO: skip because of ddOptions.visible incorrect behavior
             QUnit.skip('dropDownOptions should not be cleared', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', {
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), {
                     dropDownOptions: optionTestValues,
                     deferRendering: false,
                     pickerType: 'calendar'
@@ -363,7 +363,7 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('dropDownOptions should not be cleared even if it was changed at runtime', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', {
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), {
                     deferRendering: false,
                     pickerType: 'calendar'
                 });
@@ -379,7 +379,7 @@ dropDownEditorsNames.forEach(widgetName => {
 
         QUnit.module('dropDownOptions.hideOnOutsideClick', () => {
             QUnit.test('popup should be hidden after click outside', function(assert) {
-                new dropDownEditorsList[widgetName]('#editor', { opened: true, pickerType: 'calendar' });
+                new dropDownEditorsList[widgetName]($('#editor'), { opened: true, pickerType: 'calendar' });
                 const $overlay = $('.dx-overlay-content').eq(0);
 
                 $(document).trigger('dxpointerdown');
@@ -387,7 +387,7 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('popup should not be hidden after click on overlay', function(assert) {
-                new dropDownEditorsList[widgetName]('#editor', { opened: true, pickerType: 'calendar' });
+                new dropDownEditorsList[widgetName]($('#editor'), { opened: true, pickerType: 'calendar' });
                 const $overlay = $('.dx-overlay-content').eq(0);
 
                 $overlay.trigger('dxpointerdown');
@@ -397,7 +397,7 @@ dropDownEditorsNames.forEach(widgetName => {
 
         QUnit.module('specific tests', () => {
             QUnit.test('dropDownOptions should have dragEnabled=false after popup opened (T946143)', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { opened: true, pickerType: 'calendar' });
+                const editor = new dropDownEditorsList[widgetName]($('#editor'), { opened: true, pickerType: 'calendar' });
 
                 assert.strictEqual(editor.option('dropDownOptions.dragEnabled'), false);
             });

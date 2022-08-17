@@ -182,7 +182,7 @@ export default class DropDownMenu extends Widget {
         }
 
         this._$popup = $('<div>').appendTo(this.$element());
-        const { opened, rtlEnabled, container, animation } = this.option();
+        const { rtlEnabled, container, animation } = this.option();
 
         this._popup = this._createComponent(this._$popup, 'dxPopup', {
             onInitialized({ component }) {
@@ -190,7 +190,6 @@ export default class DropDownMenu extends Widget {
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .addClass(DROP_DOWN_MENU_POPUP_CLASS);
             },
-            visible: opened,
             deferRendering: false,
             contentTemplate: (contentElement) => this._renderList(contentElement),
             _ignoreFunctionValueDeprecation: true,

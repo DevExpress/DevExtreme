@@ -157,6 +157,10 @@
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
         "dxPager-pagesCountText": "из",
         "dxPager-pageSizesAllText": "Все",
+        "dxPager-page": "Страница {0}",
+        "dxPager-prevPage": "Предыдущая страница",
+        "dxPager-nextPage": "Следующая страница",
+
         "dxPivotGrid-grandTotal": "Итого",
         "dxPivotGrid-total": "{0} Всего",
         "dxPivotGrid-fieldChooserTitle": "Выбор полей",

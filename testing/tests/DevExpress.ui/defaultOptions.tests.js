@@ -929,7 +929,8 @@ testComponentDefaults(LoadPanel,
 testComponentDefaults(LoadPanel,
     {},
     {
-        focusStateEnabled: false
+        focusStateEnabled: false,
+        propagateOutsideClick: true,
     }
 );
 
