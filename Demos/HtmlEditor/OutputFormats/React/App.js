@@ -2,6 +2,8 @@ import React from 'react';
 
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import ButtonGroup, { Item as ButtonItem } from 'devextreme-react/button-group';
+import prettier from 'prettier/standalone';
+import parserHtml from 'prettier/parser-html';
 import { markup } from './data.js';
 
 import 'devextreme/ui/html_editor/converters/markdown';
@@ -21,6 +23,7 @@ class App extends React.Component {
 
     this.valueChanged = this.valueChanged.bind(this);
     this.valueTypeChanged = this.valueTypeChanged.bind(this);
+    this.prettierFormat = this.prettierFormat.bind(this);
   }
 
   render() {
@@ -71,7 +74,7 @@ class App extends React.Component {
             <ButtonItem text="Markdown" />
           </ButtonGroup>
           <div className="value-content">
-            {valueContent}
+            {this.prettierFormat(valueContent)}
           </div>
         </div>
       </div>
@@ -88,6 +91,16 @@ class App extends React.Component {
     this.setState({
       editorValueType: e.addedItems[0].text.toLowerCase(),
     });
+  }
+
+  prettierFormat(text) {
+    if (this.state.editorValueType === 'html') {
+      return prettier.format(text, {
+        parser: 'html',
+        plugins: [parserHtml],
+      });
+    }
+    return text;
   }
 }
 

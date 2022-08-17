@@ -10,6 +10,8 @@ import {
 
 import 'devextreme/ui/html_editor/converters/markdown';
 
+import prettier from 'prettier/standalone';
+import parserHtml from 'prettier/parser-html';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -26,7 +28,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   valueContent: string;
 
-  editorValueType: string;
+  editorValueType = 'html';
 
   constructor(service: Service) {
     this.valueContent = service.getMarkup();
@@ -34,6 +36,16 @@ export class AppComponent {
 
   onValueTypeChanged({ addedItems }) {
     this.editorValueType = addedItems[0].text.toLowerCase();
+  }
+
+  prettierFormat(markup: string) {
+    if (this.editorValueType === 'html') {
+      return prettier.format(markup, {
+        parser: 'html',
+        plugins: [parserHtml],
+      });
+    }
+    return markup;
   }
 }
 

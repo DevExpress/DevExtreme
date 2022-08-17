@@ -117,6 +117,10 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+
+    // Prettier
+    'prettier/standalone': 'npm:prettier/standalone.js',
+    'prettier/parser-html': 'npm:prettier/parser-html.js',
   },
   packages: {
     'app': {

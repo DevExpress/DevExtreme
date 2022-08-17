@@ -118,6 +118,10 @@ window.config = {
 
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
     'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js',
+
+    // Prettier
+    'prettier/standalone': 'npm:prettier/standalone.js',
+    'prettier/parser-html': 'npm:prettier/parser-html.js',
   },
   packages: {
     'devextreme-vue': {

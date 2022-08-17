@@ -38,7 +38,7 @@
         <DxButtonGroupItem text="Html"/>
         <DxButtonGroupItem text="Markdown"/>
       </DxButtonGroup>
-      <div class="value-content">{{ valueContent }}</div>
+      <div class="value-content">{{ prettierFormat(valueContent) }}</div>
     </div>
   </div>
 </template>
@@ -53,6 +53,9 @@ import {
   DxButtonGroup,
   DxItem as DxButtonGroupItem,
 } from 'devextreme-vue/button-group';
+
+import prettier from 'prettier/standalone';
+import parserHtml from 'prettier/parser-html';
 
 import { markup } from './data.js';
 
@@ -77,6 +80,17 @@ export default {
   computed: {
     editorValueType() {
       return this.selectedItems[0].text.toLowerCase();
+    },
+  },
+  methods: {
+    prettierFormat(text) {
+      if (this.editorValueType === 'html') {
+        return prettier.format(text, {
+          parser: 'html',
+          plugins: [parserHtml],
+        });
+      }
+      return text;
     },
   },
 };

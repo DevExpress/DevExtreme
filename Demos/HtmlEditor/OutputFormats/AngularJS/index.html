@@ -13,6 +13,8 @@
     <script src="../../../../../node_modules/turndown/dist/turndown.js"></script>
     <script src="../../../../../node_modules/devextreme-showdown/dist/showdown.js"></script>
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="../../../../../node_modules/prettier/standalone.js"></script>
+    <script src="../../../../../node_modules/prettier/parser-html.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
@@ -22,7 +24,7 @@
       <div dx-html-editor="htmlEditorOptions"></div>
       <div class="options">
         <div dx-button-group="buttonGroupOptions"></div>
-        <div class="value-content" ng-bind="editorValue"></div>
+        <div class="value-content" ng-bind="prettierFormat(editorValue)"></div>
       </div>
     </div>
   </body>
