@@ -64,6 +64,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
  * @namespace DevExpress.ui
  */
 export default class DataExpressionMixin {
-    constructor(options?: DataExpressionMixinOptions)
+    constructor(options?: DataExpressionMixinOptions);
     getDataSource(): DataSource;
 }

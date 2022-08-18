@@ -6,7 +6,7 @@ import FileSystemItem from './file_system_item';
  * @public
  */
 export default class FileSystemError {
-   constructor(errorCode?: number, fileSystemItem?: FileSystemItem, errorText?: string)
+   constructor(errorCode?: number, fileSystemItem?: FileSystemItem, errorText?: string);
     /**
      * @docid FileSystemError.fileSystemItem
      * @public

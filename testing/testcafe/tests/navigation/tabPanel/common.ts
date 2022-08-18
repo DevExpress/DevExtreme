@@ -42,7 +42,6 @@ fixture`TabPanel_common`
 
     const tabPanelOptions = {
       dataSource,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
       itemTemplate: (itemData, itemIndex, itemElement) => {
         ($('<div>').css('marginTop', 10) as any)
           .dxTabs({
@@ -113,7 +112,6 @@ fixture`TabPanel_common`
 
     const tabPanelOptions = {
       dataSource,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
       itemTemplate: (itemData, itemIndex, itemElement) => {
         ($('<div>').css('marginTop', 10) as any)
           .dxTabs({
