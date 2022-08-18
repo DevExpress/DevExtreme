@@ -65,18 +65,18 @@ test('It should be possible to change the data source of agenda resources', asyn
       {
         text: 'New Brochures',
         ownerId: [1],
-        startDate: new Date('2021-02-01T18:30:00.000Z'),
-        endDate: new Date('2021-02-01T21:15:00.000Z'),
+        startDate: new Date(2021, 1, 1, 18, 30),
+        endDate: new Date(2021, 1, 1, 21, 15),
       }, {
         text: 'Website Re-Design Plan',
         ownerId: [2],
-        startDate: new Date('2021-02-01T23:45:00.000Z'),
-        endDate: new Date('2021-02-02T18:15:00.000Z'),
+        startDate: new Date(2021, 1, 1, 23, 45),
+        endDate: new Date(2021, 1, 2, 18, 15),
       },
     ],
     views: ['agenda'],
     currentView: 'agenda',
-    currentDate: new Date(2021, 1, 2),
+    currentDate: new Date(2021, 1, 1),
     resources: [{
       fieldExpr: 'ownerId',
       dataSource: [{
