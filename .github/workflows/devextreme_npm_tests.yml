@@ -66,6 +66,8 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - uses: ./.github/actions/pin-browsers
+
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
@@ -145,6 +147,8 @@ jobs:
 
     - name: Get sources
       uses: actions/checkout@v2
+
+    - uses: ./.github/actions/pin-browsers
 
     - name: Create directory link
       run: cd ../ && ln -s DevExtreme devextreme
@@ -281,6 +285,8 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v2
+
+    - uses: ./.github/actions/pin-browsers
 
     - name: Use Node.js
       uses: actions/setup-node@v2
