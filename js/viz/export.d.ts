@@ -15,12 +15,6 @@ import dxBullet from './bullet';
 import dxBarGauge from './bar_gauge';
 
 /**
- * @docid
- * @public
- */
-export type VizWidget = dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap | dxVectorMap | dxSparkline | dxBullet | dxBarGauge;
-
-/**
  * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)
  * @param2_field proxyUrl:string:deprecated
@@ -36,7 +30,7 @@ export function exportFromMarkup(markup: string, options: { fileName?: string; f
  * @static
  * @public
  */
-export function exportWidgets(widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>): void;
+export function exportWidgets(widgetInstances: Array<Array<dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap | dxVectorMap | dxSparkline | dxBullet | dxBarGauge>>): void;
 
 /**
  * @docid viz.exportWidgets
@@ -49,7 +43,7 @@ export function exportWidgets(widgetInstances: VizWidget | Array<VizWidget> | Ar
  * @static
  * @public
  */
-export function exportWidgets(widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>, options: { fileName?: string; format?: ExportFormat; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: VerticalAlignment; horizontalAlignment?: HorizontalAlignment; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
+export function exportWidgets(widgetInstances: Array<Array<dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap | dxVectorMap | dxSparkline | dxBullet | dxBarGauge>>, options: { fileName?: string; format?: ExportFormat; backgroundColor?: string; margin?: number; gridLayout?: boolean; verticalAlignment?: VerticalAlignment; horizontalAlignment?: HorizontalAlignment; proxyUrl?: string; onExporting?: Function; onExported?: Function; onFileSaving?: Function; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.getMarkup
@@ -57,4 +51,4 @@ export function exportWidgets(widgetInstances: VizWidget | Array<VizWidget> | Ar
  * @static
  * @public
  */
-export function getMarkup(widgetInstances: VizWidget | Array<VizWidget> | Array<Array<VizWidget>>): string;
+export function getMarkup(widgetInstances: Array<Array<dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap | dxVectorMap | dxSparkline | dxBullet | dxBarGauge>>): string;
