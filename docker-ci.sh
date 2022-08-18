@@ -1,22 +1,8 @@
 #!/bin/bash -e
 
-# Run inside https://hub.docker.com/r/devexpress/devextreme-build/
-
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_TEST_CI=true
-export NUGET_PACKAGES=$PWD/dotnet_packages
-
-function run_lint {
-    npm i
-    npm run lint
-}
-
-function run_ts {
-    echo 'Skipped'
-    # This function is a stub for a Drone; it is a subject to remove in future
-    # Current implementation located in .github/workflows/ts_declarations.yml
-}
 
 function run_test {
     local i
@@ -178,12 +164,6 @@ function run_test_impl {
     start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
     return $runner_result
-}
-
-function run_test_jest {
-    npm i
-    npx gulp localization
-    npm run test-jest
 }
 
 function start_runner_watchdog {
