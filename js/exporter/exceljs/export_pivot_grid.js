@@ -122,17 +122,19 @@ class PivotGridHelpers {
             return [];
         }
 
-        return this._getAllFieldHeaders()[area === 'data' ? 'values' : `${area}s`]
-            .filter(r => r.area === area)
-            .sort((a, b) => {
-                if(a.areaIndex > b.areaIndex) {
-                    if(getDefaultAlignment(this.dataProvider._options.rtlEnabled) === 'left') {
-                        return 1;
-                    }
+        let allFields = this._getAllFieldHeaders()[area === 'data' ? 'values' : `${area}s`].filter(r => r.area === area);
 
-                    return -1;
+        if(getDefaultAlignment(this.dataProvider._options.rtlEnabled) === 'right') {
+            allFields = allFields.sort((a, b) => {
+                if(a.areaIndex < b.areaIndex) {
+                    return 1;
                 }
-            }).map(r => r.caption);
+
+                return -1;
+            });
+        }
+
+        return allFields.map(r => r.caption);
     }
 
     _customizeCell(customizeCell, excelCell, pivotCell, shouldPreventCall) {
