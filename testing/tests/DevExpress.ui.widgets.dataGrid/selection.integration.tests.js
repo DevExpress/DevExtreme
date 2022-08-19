@@ -199,12 +199,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T1109408
     QUnit.test('Aria-selected should not present if selection.mode is none', function(assert) {
+        assert.expect(2);
         // arrange
         $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
-            dataSource: [{
-                ID: 0
-            }],
+            dataSource: [{ ID: 0 }, { ID: 1 }],
             keyExpr: 'ID',
             columns: ['ID'],
             showBorders: true,
@@ -216,6 +215,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T1109728
     QUnit.test('Row selection checkboxes should have aria-label', function(assert) {
+        assert.expect(3);
         // arrange
         $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
