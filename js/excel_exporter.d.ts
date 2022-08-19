@@ -215,6 +215,30 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
     mergeColumnFieldValues?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    exportFilterFieldHeaders?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportDataFieldHeaders?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportColumnFieldHeaders?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportRowFieldHeaders?: boolean;
+    /**
+     * @docid
      * @type_function_param1_field pivotCell:ExcelPivotGridCell
      * @type_function_param1_field excelCell:Object
      * @public

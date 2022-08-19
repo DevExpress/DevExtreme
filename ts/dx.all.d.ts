@@ -3787,6 +3787,22 @@ declare module DevExpress.excelExporter {
      */
     mergeColumnFieldValues?: boolean;
     /**
+     * [descr:ExcelExportPivotGridProps.exportFilterFieldHeaders]
+     */
+    exportFilterFieldHeaders?: boolean;
+    /**
+     * [descr:ExcelExportPivotGridProps.exportDataFieldHeaders]
+     */
+    exportDataFieldHeaders?: boolean;
+    /**
+     * [descr:ExcelExportPivotGridProps.exportColumnFieldHeaders]
+     */
+    exportColumnFieldHeaders?: boolean;
+    /**
+     * [descr:ExcelExportPivotGridProps.exportRowFieldHeaders]
+     */
+    exportRowFieldHeaders?: boolean;
+    /**
      * [descr:ExcelExportPivotGridProps.customizeCell]
      */
     customizeCell?: (options: {
