@@ -214,6 +214,23 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('.dx-data-row').each((ind, item) => assert.notOk(item.hasAttribute('aria-selected')));
     });
 
+    // T1109728
+    QUnit.test('Row selection checkboxes should have aria-label', function(assert) {
+        // arrange
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ ID: 0 }, { ID: 1 }],
+            keyExpr: 'ID',
+            columns: ['ID'],
+            selection: { mode: 'multiple' },
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.ok($('.dx-header-row .dx-select-checkbox').get(0).hasAttribute('aria-label'));
+
+        $('.dx-data-row .dx-select-checkbox').each((ind, item) => assert.ok(item.hasAttribute('aria-label')));
+    });
+
     // T489478
     QUnit.test('Console errors should not be occurs when stateStoring enabled with selectedRowKeys value', function(assert) {
         sinon.spy(errors, 'log');
