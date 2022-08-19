@@ -1,34 +1,51 @@
-import { isDefined, isObject } from '../../core/utils/type';
+import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
 
-const helpers = {
-    _trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled) {
-        if(autoFilterEnabled) {
-            if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
-                const dataRange = { from: { row: cellRange.from.row + dataProvider.getHeaderRowCount() - 1, column: cellRange.from.column }, to: cellRange.to };
+class DataGridHelpers {
+    constructor(worksheet, dataProvider, options) {
+        this.worksheet = worksheet;
+        this.dataProvider = dataProvider;
 
-                worksheet.autoFilter = dataRange;
+        this.topLeftCell = options.topLeftCell;
+
+        this.autoFilterEnabled = options.autoFilterEnabled;
+    }
+
+    _getFirstColumnIndex() {
+        return this.topLeftCell.column;
+    }
+
+    _getFieldHeaderRowsCount() {
+        return 0;
+    }
+
+    _trySetAutoFilter(cellRange) {
+        if(this.autoFilterEnabled) {
+            if(!isDefined(this.worksheet.autoFilter) && this.dataProvider.getRowsCount() > 0) {
+                const dataRange = { from: { row: cellRange.from.row + this.dataProvider.getHeaderRowCount() - 1, column: cellRange.from.column }, to: cellRange.to };
+
+                this.worksheet.autoFilter = dataRange;
             }
         }
-    },
+    }
 
     _trySetFont(excelCell, bold) {
         if(isDefined(bold)) {
             excelCell.font = excelCell.font || {};
             excelCell.font.bold = bold;
         }
-    },
+    }
 
-    _getWorksheetFrozenState(dataProvider, cellRange) {
-        return { state: 'frozen', ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 };
-    },
+    _getWorksheetFrozenState(cellRange) {
+        return { state: 'frozen', ySplit: cellRange.from.row + this.dataProvider.getFrozenArea().y - 1 };
+    }
 
-    _trySetOutlineLevel(dataProvider, row, rowIndex) {
-        if(rowIndex >= dataProvider.getHeaderRowCount()) {
-            row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
+    _trySetOutlineLevel(row, rowIndex) {
+        if(rowIndex >= this.dataProvider.getHeaderRowCount()) {
+            row.outlineLevel = this.dataProvider.getGroupLevel(rowIndex);
         }
-    },
+    }
 
     _getCustomizeCellOptions(excelCell, gridCell) {
         const options = { excelCell, gridCell };
@@ -41,31 +58,43 @@ const helpers = {
         });
 
         return options;
-    },
+    }
 
     _isFrozenZone(dataProvider) {
         return dataProvider.getHeaderRowCount() > 0;
-    },
+    }
 
-    _isHeaderCell(dataProvider, rowIndex) {
-        return rowIndex < dataProvider.getHeaderRowCount();
-    },
+    _isHeaderCell(rowIndex) {
+        return rowIndex < this.dataProvider.getHeaderRowCount();
+    }
+
+    _isInfoCell() {
+        return false;
+    }
 
     _allowToMergeRange() {
         return true;
-    },
-
-    _getLoadPanelTargetElement(component) {
-        return component.getView('rowsView').element();
-    },
-
-    _getLoadPanelContainer(component) {
-        return component.getView('rowsView').element().parent();
     }
-};
+
+    _getAllFieldHeaders() {
+        return [];
+    }
+
+    _customizeCell(customizeCell, excelCell, gridCell) {
+        if(isFunction(customizeCell)) {
+            customizeCell(this._getCustomizeCellOptions(excelCell, gridCell));
+        }
+    }
+
+    _exportFieldHeaders() {}
+
+    _exportAllFieldHeaders() {}
+
+    _isRowFieldHeadersRow() {}
+}
 
 function exportDataGrid(options) {
-    return Export.export(_getFullOptions(options), helpers);
+    return Export.export(_getFullOptions(options), DataGridHelpers, _getLoadPanelTargetElement, _getLoadPanelContainer);
 }
 
 function _getFullOptions(options) {
@@ -82,6 +111,14 @@ function _getFullOptions(options) {
         options.autoFilterEnabled = false;
     }
     return Export.getFullOptions(options);
+}
+
+function _getLoadPanelTargetElement(component) {
+    return component.getView('rowsView').element();
+}
+
+function _getLoadPanelContainer(component) {
+    return component.getView('rowsView').element().parent();
 }
 
 //#DEBUG

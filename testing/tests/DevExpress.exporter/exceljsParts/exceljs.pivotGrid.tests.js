@@ -25,6 +25,15 @@ const alignRightTopNoWrap = { horizontal: 'right', vertical: 'top', wrapText: fa
 const alignCenterTopWrap = { horizontal: 'center', vertical: 'top', wrapText: true };
 const alignCenterTopNoWrap = { horizontal: 'center', vertical: 'top', wrapText: false };
 
+// eslint-disable-next-line spellcheck/spell-checker
+const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
+const defaultBorderStyle = {
+    bottom: borderStyle,
+    left: borderStyle,
+    right: borderStyle,
+    top: borderStyle
+};
+
 const PADDING_WIDTH = 10;
 const BORDER_WIDTH = 1;
 const CHAR_WIDTH = 7;
@@ -62,11 +71,22 @@ const moduleConfig = {
 // 3. Select a file in the shown 'SaveAs' dialog and open the saved file in Excel
 
 QUnit.module('Scenarios', moduleConfig, () => {
-    const topLeft = { row: 2, column: 3 };
+    const topLeft = { row: 1, column: 1 };
 
     const getOptions = (context, pivotGrid, expectedCustomizeCellArgs, options) => {
-        const { keepColumnWidths = true, selectedRowsOnly = false,
-            mergeRowFieldValues = true, mergeColumnFieldValues = true, topLeftCell = topLeft, loadPanel = { enabled: false }, customizeCell } = options || {};
+        const {
+            keepColumnWidths = true,
+            selectedRowsOnly = false,
+            mergeRowFieldValues = true,
+            mergeColumnFieldValues = true,
+            exportFilterFieldHeaders = false,
+            exportDataFieldHeaders = false,
+            exportColumnFieldHeaders = false,
+            exportRowFieldHeaders = false,
+            topLeftCell = topLeft,
+            loadPanel = { enabled: false },
+            customizeCell
+        } = options || {};
 
         const result = {
             component: pivotGrid,
@@ -86,6 +106,10 @@ QUnit.module('Scenarios', moduleConfig, () => {
         result.selectedRowsOnly = selectedRowsOnly;
         result.mergeRowFieldValues = mergeRowFieldValues;
         result.mergeColumnFieldValues = mergeColumnFieldValues;
+        result.exportFilterFieldHeaders = exportFilterFieldHeaders;
+        result.exportDataFieldHeaders = exportDataFieldHeaders;
+        result.exportColumnFieldHeaders = exportColumnFieldHeaders;
+        result.exportRowFieldHeaders = exportRowFieldHeaders;
         return result;
     };
 
@@ -5937,6 +5961,1565 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
                 helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                done();
+            });
+        });
+    });
+
+    QUnit.module('Export headers', () => {
+        [true, false].forEach((exportFilterFieldHeaders) => {
+            QUnit.test(`Filter: empty, showFilterFields: true, exportFilterFieldHeaders: ${exportFilterFieldHeaders}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string' },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' },
+                        { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
+                    ],
+                    store: [
+                        { row1: 'A', col1: 'a', data1: 42 },
+                    ]
+                };
+
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    fieldPanel: {
+                        showFilterFields: true,
+                        visible: true,
+                    },
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataFieldArea: 'column',
+                    dataSource: ds,
+                }).dxPivotGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+                    { excelCell: { value: 'a', master: [1, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+                    { excelCell: { value: 'a', master: [1, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+                ], [
+                    { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+                    { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+                ], [
+                    { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                    { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                    { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+                ]];
+
+                helper.extendExpectedCells(expectedCells, topLeft);
+
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportFilterFieldHeaders })).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                    helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                    helper.checkCellStyle(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('Filter: [filter.areaIndex = 0], fieldPanel.showFilterFields: true, exportFilterFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Filter 1', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1', value: 'Filter 1', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1', value: 'Filter 1', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1', value: 'Filter 1', type: 'header', area: 'filter' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+                { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportFilterFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportFilterFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Filter: [filter.areaIndex = 1, filter.areaIndex = 0], fieldPanel.showFilterFields: true, exportFilterFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 1, caption: 'Filter 1' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 2' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Filter 2, Filter 1', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 2, Filter 1', value: 'Filter 2, Filter 1', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 2, Filter 1', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 2, Filter 1', value: 'Filter 2, Filter 1', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 2, Filter 1', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 2, Filter 1', value: 'Filter 2, Filter 1', type: 'header', area: 'filter' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+                { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportFilterFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportFilterFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Filter: [filter.areaIndex = 1, filter.areaIndex = 0], fieldPanel.showFilterFields: true, exportFilterFieldHeaders: true, rtlEnabled: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 1, caption: 'Filter 1' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 2' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                rtlEnabled: true,
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+                { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportFilterFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportFilterFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column, rightToLeft: true });
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        [true, false].forEach((exportDataFieldHeaders) => {
+            QUnit.test(`Data: empty, fieldPanel.showDataFields: true, exportDataFieldHeaders: ${exportDataFieldHeaders}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string' },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                    ],
+                    store: [
+                        { row1: 'A', col1: 'a', data1: 42 },
+                    ]
+                };
+
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    fieldPanel: {
+                        showDataFields: true,
+                        showFilterFields: true,
+                        visible: true,
+                    },
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: false,
+                    dataFieldArea: 'column',
+                    dataSource: ds,
+                }).dxPivotGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+                ], [
+                    { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                    { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                ]];
+
+                helper.extendExpectedCells(expectedCells, topLeft);
+
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders })).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                    helper.checkCellStyle(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('Data: [Count], fieldPanel.showDataFields: true, exportDataFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showDataFields: true,
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count', value: 'Count', type: 'header', area: 'data' } },
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', value: '', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1 } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Data: [Data1 (Sum), Count], fieldPanel.showDataFields: true, exportDataFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showDataFields: true,
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Count, Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Data1 (Sum)', value: 'Count, Data1 (Sum)', type: 'header', area: 'data' } },
+                { excelCell: { value: '', master: [1, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'column' } },
+                { excelCell: { value: '', master: [1, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+                { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Data: [Data1 (Sum), Count], fieldPanel.showDataFields: true, exportDataFieldHeaders: true, rtlEnabled: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                rtlEnabled: true,
+                fieldPanel: {
+                    showDataFields: true,
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Data1 (Sum), Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Data1 (Sum), Count', value: 'Data1 (Sum), Count', type: 'header', area: 'data' } },
+                { excelCell: { value: '', master: [1, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'column' } },
+                { excelCell: { value: '', master: [1, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
+                { excelCell: { value: 'a', master: [2, 2], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+                { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column, 'rightToLeft': true, });
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        [true, false].forEach((exportColumnFieldHeaders) => {
+            QUnit.test(`Column: empty, fieldPanel.showColumnFields: true, exportColumnFieldHeaders: ${exportColumnFieldHeaders}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string' },
+                        { area: 'data', dataField: 'col1', dataType: 'string', customizeText: () => 'custom data' },
+                        { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                    ],
+                    store: [
+                        { row1: 'A', col1: 'a', data1: 42 },
+                    ]
+                };
+
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    fieldPanel: {
+                        showColumnFields: true,
+                        showDataFields: true,
+                        showFilterFields: true,
+                        visible: true,
+                    },
+                    showColumnGrandTotals: true,
+                    showRowGrandTotals: false,
+                    dataFieldArea: 'column',
+                    dataSource: ds,
+                }).dxPivotGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
+                ], [
+                    { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                    { excelCell: { value: 'custom data', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'data', value: 1, colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: 'custom data', dataType: 'string' } }
+                ]];
+
+                helper.extendExpectedCells(expectedCells, topLeft);
+
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportColumnFieldHeaders })).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                    helper.checkCellStyle(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('Column: [Col1], fieldPanel.showColumnFields: true, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showColumnFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', value: '', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1', value: 'Col1', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1 } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Column: [Col1, Col2], fieldPanel.showColumnFields: true, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', col2: 'b', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showColumnFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', value: '', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1, Col2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100, expanded: true } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'b', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['a', 'b'], rowspan: 1, text: 'b', type: 'D', isLast: true, width: 100, expanded: true } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1 } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'b'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Column: [Col1, Col2], fieldPanel.showColumnFields: true, exportColumnFieldHeaders: true, rtlEnabled: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', col2: 'b', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                rtlEnabled: true,
+                fieldPanel: {
+                    showColumnFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', value: '', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col2, Col1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col2, Col1', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100, expanded: true } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'b', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['a', 'b'], rowspan: 1, text: 'b', type: 'D', isLast: true, width: 100, expanded: true } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1 } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a', 'b'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 2, xSplit: topLeft.column, 'rightToLeft': true });
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        [true, false].forEach((exportRowFieldHeaders) => {
+            QUnit.test(`Row: empty, fieldPanel.showColumnFields: true, exportRowFieldHeaders: ${exportRowFieldHeaders}`, function(assert) {
+                const done = assert.async();
+                const ds = {
+                    fields: [
+                        { area: 'data', dataField: 'row1', dataType: 'string', customizeText: () => 'custom data' },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                        { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                    ],
+                    store: [
+                        { row1: 'A', col1: 'a', data1: 42 },
+                    ]
+                };
+
+                const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                    fieldPanel: {
+                        showColumnFields: true,
+                        showDataFields: true,
+                        showFilterFields: true,
+                        visible: true,
+                    },
+                    showColumnGrandTotals: false,
+                    showRowGrandTotals: true,
+                    dataFieldArea: 'column',
+                    dataSource: ds,
+                }).dxPivotGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                    { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } },
+                ], [
+                    { excelCell: { value: 'Grand Total', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } },
+                    { excelCell: { value: 'custom data', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'data', value: 1, colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, format: undefined, rowPath: [], rowType: 'GT', rowspan: 1, text: 'custom data', dataType: 'string' } }
+                ]];
+
+                helper.extendExpectedCells(expectedCells, topLeft);
+
+                exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders })).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                    helper.checkCellStyle(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('Row: [Row1], fieldPanel.showRowFields: true, exportRowFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showRowFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1', type: 'header', area: 'row' } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1 } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Row: [Row1, Row2, Row3], row1.expanded: false, fieldPanel.showRowFields: true, exportRowFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'row', dataField: 'row2', dataType: 'string' },
+                    { area: 'row', dataField: 'row3', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', row2: 'B', row3: 'C', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showRowFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Row1, Row2, Row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1, Row2, Row3', type: 'header', area: 'row' } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1, expanded: false } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Row: [Row1, Row2, Row3], row1.expanded: true, fieldPanel.showRowFields: true, exportRowFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
+                    { area: 'row', dataField: 'row2', dataType: 'string' },
+                    { area: 'row', dataField: 'row3', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', row2: 'B', row3: 'C', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showRowFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Row1, Row2, Row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1, Row2, Row3', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row1, Row2, Row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1, Row2, Row3', type: 'header', area: 'row' } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1, expanded: true } },
+                { excelCell: { value: 'B', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'B', width: 100, type: 'D', path: ['A', 'B'], isLast: true, dataSourceIndex: 2, expanded: false } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'B'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Row: [Row1, Row2, Row3], rows.expanded: true, fieldPanel.showRowFields: true, exportRowFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
+                    { area: 'row', dataField: 'row2', dataType: 'string', expanded: true },
+                    { area: 'row', dataField: 'row3', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', row2: 'B', row3: 'C', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showRowFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row2', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row3', type: 'header', area: 'row' } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1, expanded: true } },
+                { excelCell: { value: 'B', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'B', width: 100, type: 'D', path: ['A', 'B'], isLast: true, dataSourceIndex: 2, expanded: true } },
+                { excelCell: { value: 'C', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'C', width: 100, type: 'D', path: ['A', 'B', 'C'], isLast: true, dataSourceIndex: 3, expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'B', 'C'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 2, column: 4 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Row: [Row1, Row2, Row3], rows.expanded: true, fieldPanel.showRowFields: true, exportRowFieldHeaders: true, rtlEnabled: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
+                    { area: 'row', dataField: 'row2', dataType: 'string', expanded: true },
+                    { area: 'row', dataField: 'row3', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'filter', dataField: 'data1', summaryType: 'sum', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'A', row2: 'B', row3: 'C', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                rtlEnabled: true,
+                fieldPanel: {
+                    showRowFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row3', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row2', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1', type: 'header', area: 'row' } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } },
+            ], [
+                { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'A', width: 100, type: 'D', path: ['A'], isLast: true, dataSourceIndex: 1, expanded: true } },
+                { excelCell: { value: 'B', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'B', width: 100, type: 'D', path: ['A', 'B'], isLast: true, dataSourceIndex: 2, expanded: true } },
+                { excelCell: { value: 'C', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignRightTopWrap }, pivotCell: { area: 'row', alignment: 'left', colspan: 1, rowspan: 1, text: 'C', width: 100, type: 'D', path: ['A', 'B', 'C'], isLast: true, dataSourceIndex: 3, expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A', 'B', 'C'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 2, rightToLeft: true, });
+                helper.checkCellRange(cellRange, { row: 2, column: 4 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Row: [Row1, Row2], rows.expanded: true, fieldPanel.showRowFields: true, exportRowFieldHeaders: true, rowHeaderLayout = tree', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true },
+                    { area: 'row', dataField: 'row2' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
+                ],
+                store: [
+                    { row1: 'r1', row2: 'r2', col1: 'c1', col2: 'c2' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                rowHeaderLayout: 'tree',
+                fieldPanel: {
+                    showRowFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                showColumnTotals: false,
+                showRowTotals: false,
+                dataSource: ds
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Row1, Row2', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1, Row2', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row1, Row2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1, Row2', type: 'header', area: 'row' } },
+                { excelCell: { value: 'c1', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, rowspan: 1, isLast: true, path: ['c1'], text: 'c1', type: 'D', dataSourceIndex: 1, width: 100 } },
+            ], [
+                { excelCell: { value: 'r1 Total', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 2, rowspan: 1, isLast: true, path: ['r1'], text: 'r1 Total', type: 'T', dataSourceIndex: 1, expanded: true } },
+                { excelCell: { value: 'r1 Total', master: [2, 1], alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: ['r1'], text: '', type: 'T', dataSourceIndex: 1, expanded: true } },
+                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['c1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['r1'], rowType: 'T', text: '1' } },
+            ], [
+                { excelCell: { value: '', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, path: ['r1'], text: 'r1', type: 'D', dataSourceIndex: 1, isWhiteSpace: true, width: null } },
+                { excelCell: { value: 'r2', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, rowspan: 1, isLast: true, path: ['r1', 'r2'], text: 'r2', type: 'D', dataSourceIndex: 2 } },
+                { excelCell: { value: 1, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, rowspan: 1, columnPath: ['c1'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['r1', 'r2'], rowType: 'D', text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column + 1 });
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Data: [Count, count2 ] & Column: [Col1, Col2], fieldPanel.showDataFields: true, fieldPanel.showColumnFields: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', groupName: 'group1' },
+                    { groupName: 'group1', dataField: 'row1', dataType: 'string', expanded: true, groupIndex: 1 },
+                    { groupName: 'group1', dataField: 'row2', dataType: 'string', expanded: true, groupIndex: 0 },
+                    { groupName: 'group1', dataField: 'row3', dataType: 'string', expanded: true, groupIndex: 2 },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', summaryType: 'count2', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                    { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                ],
+                store: [
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'col1', col2: 'value' },
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'col2', col2: 'value' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showDataFields: true,
+                    showColumnFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Count, Count2', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count, Count2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count, Count2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1, Col2', master: [1, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [1, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [1, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [1, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 3, text: '' } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'col1', master: [2, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['col1'], rowspan: 1, text: 'col1', type: 'D', expanded: true } },
+                { excelCell: { value: 'col1', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['col1'], rowspan: 1, text: '', type: 'D', expanded: true } },
+                { excelCell: { value: 'col2', master: [2, 6], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 3, path: ['col2'], rowspan: 1, text: 'col2', type: 'D', expanded: true } },
+                { excelCell: { value: 'col2', master: [2, 6], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, path: ['col2'], rowspan: 1, text: '', type: 'D', expanded: true } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'value', master: [3, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'value', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [3, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: '', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [3, 6], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'value', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [3, 6], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: '', type: 'D', expanded: true } },
+            ],
+            [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'Count', type: 'D', expanded: true, isLast: true, dataIndex: 0, width: 100 } },
+                { excelCell: { value: 'Count2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'Count2', type: 'D', expanded: true, isLast: true, dataIndex: 1, width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'Count', type: 'D', expanded: true, isLast: true, dataIndex: 0, width: 100 } },
+                { excelCell: { value: 'Count2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'Count2', type: 'D', expanded: true, isLast: true, dataIndex: 1, width: 100 } },
+            ],
+            [
+                { excelCell: { value: 'row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row2'], rowspan: 1, text: 'row2', type: 'D', expanded: true } },
+                { excelCell: { value: 'row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['row2', 'row1'], rowspan: 1, text: 'row1', type: 'D', expanded: true } },
+                { excelCell: { value: 'row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['row2', 'row1', 'row3'], rowspan: 1, text: 'row3', type: 'D', expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1', 'value'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1', 'value'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col2', 'value'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col2', 'value'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: true, exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: true, exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 5, column: 7 }, { row: 5, column: 7 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 3, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 5, column: 7 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Filter: [Filter1, Filter2] & Data: [Count, count2 ] & Column: [Col1, Col2], exportFilterFieldHeaders: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', groupName: 'group1' },
+                    { groupName: 'group1', dataField: 'row1', dataType: 'string', expanded: true, groupIndex: 1 },
+                    { groupName: 'group1', dataField: 'row2', dataType: 'string', expanded: true, groupIndex: 0 },
+                    { groupName: 'group1', dataField: 'row3', dataType: 'string', expanded: true, groupIndex: 2 },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', summaryType: 'count2', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                    { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                ],
+                store: [
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'col1', col2: 'value' },
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'col2', col2: 'value' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showFilterFields: true,
+                    showDataFields: true,
+                    showColumnFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+            ], [
+                { excelCell: { value: 'Count, Count2', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count, Count2', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count, Count2', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 3, text: '' } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'col1', master: [3, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['col1'], rowspan: 1, text: 'col1', type: 'D', expanded: true } },
+                { excelCell: { value: 'col1', master: [3, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['col1'], rowspan: 1, text: '', type: 'D', expanded: true } },
+                { excelCell: { value: 'col2', master: [3, 6], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 3, path: ['col2'], rowspan: 1, text: 'col2', type: 'D', expanded: true } },
+                { excelCell: { value: 'col2', master: [3, 6], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, path: ['col2'], rowspan: 1, text: '', type: 'D', expanded: true } },
+            ], [
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'value', master: [4, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'value', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [4, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: '', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [4, 6], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'value', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [4, 6], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: '', type: 'D', expanded: true } },
+            ], [
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'Count', type: 'D', expanded: true, isLast: true, dataIndex: 0, width: 100 } },
+                { excelCell: { value: 'Count2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'Count2', type: 'D', expanded: true, isLast: true, dataIndex: 1, width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'Count', type: 'D', expanded: true, isLast: true, dataIndex: 0, width: 100 } },
+                { excelCell: { value: 'Count2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'Count2', type: 'D', expanded: true, isLast: true, dataIndex: 1, width: 100 } },
+            ], [
+                { excelCell: { value: 'row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row2'], rowspan: 1, text: 'row2', type: 'D', expanded: true } },
+                { excelCell: { value: 'row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['row2', 'row1'], rowspan: 1, text: 'row1', type: 'D', expanded: true } },
+                { excelCell: { value: 'row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['row2', 'row1', 'row3'], rowspan: 1, text: 'row3', type: 'D', expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1', 'value'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1', 'value'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col2', 'value'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col2', 'value'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportFilterFieldHeaders: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportFilterFieldHeaders: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 6, column: 7 }, { row: 6, column: 7 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 4, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 6, column: 7 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Rows: [row2, row1, row3] & Filter: [Filter1, Filter2] & Data: [Count, count2 ] & Column: [Col1, Col2], exportRowFieldHeaders: true, exportFilterFieldHeaders: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', groupName: 'group1' },
+                    { groupName: 'group1', dataField: 'row1', dataType: 'string', expanded: true, groupIndex: 1 },
+                    { groupName: 'group1', dataField: 'row2', dataType: 'string', expanded: true, groupIndex: 0 },
+                    { groupName: 'group1', dataField: 'row3', dataType: 'string', expanded: true, groupIndex: 2 },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', summaryType: 'count2', dataType: 'number' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                    { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                ],
+                store: [
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'col1', col2: 'value' },
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'col2', col2: 'value' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showRowFields: true,
+                    showFilterFields: true,
+                    showDataFields: true,
+                    showColumnFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+                { excelCell: { value: 'Filter 1, Filter 2', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Filter 1, Filter 2', type: 'header', area: 'filter' } },
+            ], [
+                { excelCell: { value: 'Count, Count2', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count, Count2', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count, Count2', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count, Count2', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+                { excelCell: { value: 'Col1, Col2', master: [2, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1, Col2', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 3, text: '' } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'col1', master: [3, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['col1'], rowspan: 1, text: 'col1', type: 'D', expanded: true } },
+                { excelCell: { value: 'col1', master: [3, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['col1'], rowspan: 1, text: '', type: 'D', expanded: true } },
+                { excelCell: { value: 'col2', master: [3, 6], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 3, path: ['col2'], rowspan: 1, text: 'col2', type: 'D', expanded: true } },
+                { excelCell: { value: 'col2', master: [3, 6], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, path: ['col2'], rowspan: 1, text: '', type: 'D', expanded: true } },
+            ], [
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [3, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'value', master: [4, 4], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'value', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [4, 4], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: '', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [4, 6], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'value', type: 'D', expanded: true } },
+                { excelCell: { value: 'value', master: [4, 6], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: '', type: 'D', expanded: true } },
+            ], [
+                { excelCell: { value: 'Row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row2', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row1', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Row3', type: 'header', area: 'row' } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'Count', type: 'D', expanded: true, isLast: true, dataIndex: 0, width: 100 } },
+                { excelCell: { value: 'Count2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 2, path: ['col1', 'value'], rowspan: 1, text: 'Count2', type: 'D', expanded: true, isLast: true, dataIndex: 1, width: 100 } },
+                { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'Count', type: 'D', expanded: true, isLast: true, dataIndex: 0, width: 100 } },
+                { excelCell: { value: 'Count2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 4, path: ['col2', 'value'], rowspan: 1, text: 'Count2', type: 'D', expanded: true, isLast: true, dataIndex: 1, width: 100 } },
+            ], [
+                { excelCell: { value: 'row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row2'], rowspan: 1, text: 'row2', type: 'D', expanded: true } },
+                { excelCell: { value: 'row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['row2', 'row1'], rowspan: 1, text: 'row1', type: 'D', expanded: true } },
+                { excelCell: { value: 'row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['row2', 'row1', 'row3'], rowspan: 1, text: 'row3', type: 'D', expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1', 'value'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col1', 'value'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col2', 'value'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['col2', 'value'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['row2', 'row1', 'row3'], rowType: 'D', rowspan: 1, text: '1' } },
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportRowFieldHeaders: true, exportFilterFieldHeaders: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportRowFieldHeaders: true, exportFilterFieldHeaders: true, exportDataFieldHeaders: true, exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 6, column: 7 }, { row: 6, column: 7 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0, 0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 4, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 6, column: 7 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Rows: [row2, row1, row3] & Data: [empty], Column: [Col1], exportDataFieldHeaders: true, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', groupName: 'group1' },
+                    { groupName: 'group1', dataField: 'row1', dataType: 'string', expanded: true, groupIndex: 0 },
+                    { groupName: 'group1', dataField: 'row2', dataType: 'string', expanded: true, groupIndex: 1 },
+                    { groupName: 'group1', dataField: 'row3', dataType: 'string', expanded: true, groupIndex: 2 },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showDataFields: true,
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'data' } },
+                { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'data' } },
+                { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } }
+            ], [
+                { excelCell: { value: 'row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row1'], rowspan: 1, text: 'row1', type: 'D', expanded: true } },
+                { excelCell: { value: 'row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['row1', 'row2'], rowspan: 1, text: 'row2', type: 'D', expanded: true } },
+                { excelCell: { value: 'row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['row1', 'row2', 'row3'], rowspan: 1, text: 'row3', type: 'D', expanded: true } },
+                { excelCell: { value: null, type: ExcelJS.ValueType.Null, dataType: 'object', alignment: alignLeftTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: true, exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: true, exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 3, column: 4 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Rows: [row2, row1, row3] & Data: [Count], Column: [Col1], exportDataFieldHeaders: false, exportColumnFieldHeaders: true', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', groupName: 'group1' },
+                    { groupName: 'group1', dataField: 'row1', dataType: 'string', expanded: true, groupIndex: 0 },
+                    { groupName: 'group1', dataField: 'row2', dataType: 'string', expanded: true, groupIndex: 1 },
+                    { groupName: 'group1', dataField: 'row3', dataType: 'string', expanded: true, groupIndex: 2 },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showDataFields: true,
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'data' } },
+                { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'data' } },
+                { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Col1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Col1', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } }
+            ], [
+                { excelCell: { value: 'row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row1'], rowspan: 1, text: 'row1', type: 'D', expanded: true } },
+                { excelCell: { value: 'row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['row1', 'row2'], rowspan: 1, text: 'row2', type: 'D', expanded: true } },
+                { excelCell: { value: 'row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['row1', 'row2', 'row3'], rowspan: 1, text: 'row3', type: 'D', expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row1', 'row2', 'row3'], rowType: 'D', rowspan: 1, text: '1' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: false, exportColumnFieldHeaders: true });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: false, exportColumnFieldHeaders: true })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 3, column: 4 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test('Rows: [row2, row1, row3] & Data: [Count], Column: [Col1], exportDataFieldHeaders: true, exportColumnFieldHeaders: false', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', groupName: 'group1' },
+                    { groupName: 'group1', dataField: 'row1', dataType: 'string', expanded: true, groupIndex: 0 },
+                    { groupName: 'group1', dataField: 'row2', dataType: 'string', expanded: true, groupIndex: 1 },
+                    { groupName: 'group1', dataField: 'row3', dataType: 'string', expanded: true, groupIndex: 2 },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                ],
+                store: [
+                    { row1: 'row1', row2: 'row2', row3: 'row3', col1: 'a', data1: 42 },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                fieldPanel: {
+                    showDataFields: true,
+                    showFilterFields: true,
+                    visible: true,
+                },
+                showColumnGrandTotals: false,
+                showColumnTotals: false,
+                showRowGrandTotals: false,
+                showRowTotals: false,
+                dataFieldArea: 'column',
+                dataSource: ds,
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: 'Count', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count', type: 'header', area: 'data' } },
+                { excelCell: { value: 'Count', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: 'Count', type: 'header', area: 'data' } },
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap, border: defaultBorderStyle, font: { bold: true } }, pivotCell: { text: '', type: 'header', area: 'column' } },
+            ], [
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 3, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '', master: [2, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D', isLast: true, width: 100 } }
+            ], [
+                { excelCell: { value: 'row1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['row1'], rowspan: 1, text: 'row1', type: 'D', expanded: true } },
+                { excelCell: { value: 'row2', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['row1', 'row2'], rowspan: 1, text: 'row2', type: 'D', expanded: true } },
+                { excelCell: { value: 'row3', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['row1', 'row2', 'row3'], rowspan: 1, text: 'row3', type: 'D', expanded: true } },
+                { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['row1', 'row2', 'row3'], rowType: 'D', rowspan: 1, text: '1' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft, { exportDataFieldHeaders: true, exportColumnFieldHeaders: false });
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { exportDataFieldHeaders: true, exportColumnFieldHeaders: false })).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 4 }, { row: 3, column: 4 }, topLeft);
+                helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkCellFormat(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 2 });
+                helper.checkCellRange(cellRange, { row: 3, column: 4 }, topLeft);
                 done();
             });
         });
