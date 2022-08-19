@@ -32,7 +32,7 @@ export default class ArrayStore<
     TItem = any,
     TKey = any,
 > extends Store<TItem, TKey> {
-    constructor(options?: Options<TItem, TKey>)
+    constructor(options?: Options<TItem, TKey>);
     /**
      * @docid
      * @publicName clear()

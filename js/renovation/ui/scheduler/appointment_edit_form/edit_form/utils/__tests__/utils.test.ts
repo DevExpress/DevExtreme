@@ -4,7 +4,7 @@ import {
 } from '../normalizeDate';
 
 describe('Utils', () => {
-  const invalidDate = new Date(11111111111111111);
+  const invalidDate = new Date(11111111111111112);
 
   describe('normalizeNewStartDate', () => {
     [

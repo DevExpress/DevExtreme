@@ -79,7 +79,7 @@ export interface ODataContextOptions {
  * @public
  */
 export default class ODataContext {
-    constructor(options?: ODataContextOptions)
+    constructor(options?: ODataContextOptions);
     /**
      * @docid
      * @publicName get(operationName, params)

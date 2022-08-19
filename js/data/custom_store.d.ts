@@ -111,7 +111,7 @@ export default class CustomStore<
     TItem = any,
     TKey = any,
 > extends Store<TItem, TKey> {
-    constructor(options?: Options<TItem, TKey>)
+    constructor(options?: Options<TItem, TKey>);
     /**
      * @docid
      * @publicName clearRawDataCache()

@@ -292,9 +292,13 @@ module.exports = {
                 '@typescript-eslint/no-extraneous-class': 'error',
                 '@typescript-eslint/no-dynamic-delete': 'error',
                 '@typescript-eslint/no-base-to-string': 'error',
-                '@typescript-eslint/no-unused-vars-experimental': 'error',
                 '@typescript-eslint/init-declarations': 'error',
-                '@typescript-eslint/member-ordering': 'error',
+                '@typescript-eslint/member-ordering': [
+                    'error',
+                    {
+                        default: [ 'signature', 'field', 'constructor', 'method' ]
+                    }
+                ],
                 '@typescript-eslint/return-await': 'error',
                 '@typescript-eslint/no-invalid-void-type': 'error',
                 '@typescript-eslint/typedef': 'error',
@@ -322,7 +326,8 @@ module.exports = {
                 '@typescript-eslint/no-floating-promises': 'error',
                 '@typescript-eslint/no-unsafe-return': 'error',
                 '@typescript-eslint/no-unsafe-member-access': 'warn',
-                '@typescript-eslint/no-non-null-assertion': 'error'
+                '@typescript-eslint/no-non-null-assertion': 'error',
+                'react/sort-comp': 'off',
                 /*
             "@typescript-eslint/no-magic-numbers": "error",
             "no-return-await": "off",
@@ -389,6 +394,7 @@ module.exports = {
                 '@typescript-eslint/ban-types': 'off',
                 '@typescript-eslint/prefer-interface': 'off',
                 '@typescript-eslint/consistent-type-definitions': 'off',
+                'react/sort-comp': 'off',
             }
         },
         {
