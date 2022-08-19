@@ -193,38 +193,32 @@ const RangeSlider = Slider.inherit({
         this._updateSelectedRangePosition(newRatio, newRatio);
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
-        const newSwipeValue = this._roundSwipeValue(newRatio);
-        const valueChangeMode = this.option('valueChangeMode');
-        SliderHandle.getInstance(this._activeHandle()).option('value', newSwipeValue);
+        this._changeValueOnSwipe(newRatio);
 
+        const startValue = this._currentValue && this._currentValue[0] || this.option('start');
+        const endValue = this._currentValue && this._currentValue[1] || this.option('end');
 
-        if(valueChangeMode === 'instant') {
-            this._changeValueOnSwipe(newSwipeValue);
-            const startValue = this.option('start');
-            const endValue = this.option('end');
-            let $nextHandle;
+        let $nextHandle;
 
-            if(startValue === endValue) {
-                if(newValue < startValue) {
-                    $nextHandle = this._$handleStart;
-                } else {
-                    $nextHandle = this._$handleEnd;
-                }
-
-                eventsEngine.trigger($nextHandle, 'focus');
-
-                if($nextHandle && $nextHandle !== this._capturedHandle) {
-                    this._updateSelectedRangePosition((startValue - min) / (max - min), (endValue - min) / (max - min));
-                    this._toggleActiveState(this._activeHandle(), false);
-                    this._toggleActiveState($nextHandle, true);
-                    this._capturedHandle = $nextHandle;
-                }
-
-                this._updateSelectedRangePosition(newRatio, newRatio);
-                this._changeValueOnSwipe(newSwipeValue);
+        if(startValue === endValue) {
+            if(newValue < startValue) {
+                $nextHandle = this._$handleStart;
+            } else {
+                $nextHandle = this._$handleEnd;
             }
-        }
 
+            eventsEngine.trigger($nextHandle, 'focus');
+
+            if($nextHandle && $nextHandle !== this._capturedHandle) {
+                this._updateSelectedRangePosition((startValue - min) / (max - min), (endValue - min) / (max - min));
+                this._toggleActiveState(this._activeHandle(), false);
+                this._toggleActiveState($nextHandle, true);
+                this._capturedHandle = $nextHandle;
+            }
+
+            this._updateSelectedRangePosition(newRatio, newRatio);
+            this._changeValueOnSwipe(newRatio);
+        }
     },
 
     _updateSelectedRangePosition: function(leftRatio, rightRatio) {
@@ -243,8 +237,8 @@ const RangeSlider = Slider.inherit({
 
     _setValueOnSwipe: function(value) {
         const option = this._capturedHandle === this._$handleStart ? 'start' : 'end';
-        let start = this.option('start');
-        let end = this.option('end');
+        let start = this._currentValue && this._currentValue[0] || this.option('start');
+        let end = this._currentValue && this._currentValue[1] || this.option('end');
         const max = this.option('max');
         const min = this.option('min');
 
@@ -257,12 +251,18 @@ const RangeSlider = Slider.inherit({
             end = value < start ? start : value;
         }
 
-        this.option('value', [start, end]);
+
+        if(this.option('valueChangeMode') === 'instant') {
+            this.option('value', [start, end]);
+        } else {
+            this._currentValue = [start, end];
+            this._renderValue();
+        }
     },
 
     _renderValue: function() {
-        let valStart = this.option('start');
-        let valEnd = this.option('end');
+        let valStart = this._currentValue && this._currentValue[0] || this.option('start');
+        let valEnd = this._currentValue && this._currentValue[1] || this.option('end');
         const min = this.option('min');
         const max = this.option('max');
         const rtlEnabled = this.option('rtlEnabled');
@@ -270,9 +270,12 @@ const RangeSlider = Slider.inherit({
         valStart = Math.max(min, Math.min(valStart, max));
         valEnd = Math.max(valStart, Math.min(valEnd, max));
 
-        this._setOptionWithoutOptionChange('start', valStart);
-        this._setOptionWithoutOptionChange('end', valEnd);
-        this._setOptionWithoutOptionChange('value', [valStart, valEnd]);
+        if(this.option('valueChangeMode') === 'instant') {
+            this._setOptionWithoutOptionChange('start', valStart);
+            this._setOptionWithoutOptionChange('end', valEnd);
+            this._setOptionWithoutOptionChange('value', [valStart, valEnd]);
+        }
+
 
         this._$submitStartElement.val(applyServerDecimalSeparator(valStart));
         this._$submitEndElement.val(applyServerDecimalSeparator(valEnd));

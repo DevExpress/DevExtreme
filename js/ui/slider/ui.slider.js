@@ -149,7 +149,7 @@ const Slider = TrackBar.inherit({
 
             focusStateEnabled: true,
 
-            valueChangeMode: 'instant',
+            valueChangeMode: 'instant'
         });
     },
 
@@ -381,9 +381,19 @@ const Slider = TrackBar.inherit({
 
     _renderStartHandler: function() {
         const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
+        const pointerUpEventName = addNamespace(pointerEvents.up, this.NAME);
         const clickEventName = addNamespace(clickName, this.NAME);
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
+
+        const processEventualMode = () => {
+            if(this.option('valueChangeMode') === 'eventual') {
+                if(this._currentValue) {
+                    this.option('value', this._currentValue);
+                    this._currentValue = undefined;
+                }
+            }
+        };
 
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, e => {
@@ -391,6 +401,14 @@ const Slider = TrackBar.inherit({
                 startAction({ event: e });
             }
         });
+
+        eventsEngine.off($element, pointerUpEventName);
+        eventsEngine.on($element, pointerUpEventName, e => {
+            if(isMouseEvent(e)) {
+                processEventualMode();
+            }
+        });
+
         eventsEngine.off($element, clickEventName);
         eventsEngine.on($element, clickEventName, e => {
             const $handle = this._activeHandle();
@@ -400,6 +418,7 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
+            processEventualMode();
         });
     },
 
@@ -438,12 +457,17 @@ const Slider = TrackBar.inherit({
         this._toggleActiveState(this._activeHandle(), false);
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
+        const ratio = this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio();
+
         delete this._needPreventAnimation;
-
-        const newValue = this._roundSwipeValue(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
-
         this._saveValueChangeEvent(e.event);
-        this._changeValueOnSwipe(newValue);
+        this._changeValueOnSwipe(ratio);
+
+        if(this.option('valueChangeMode') === 'eventual') {
+            this.option('value', this._currentValue);
+        }
+
+        this._currentValue = undefined;
         delete this._startOffset;
         this._renderValue();
     },
@@ -456,6 +480,7 @@ const Slider = TrackBar.inherit({
         if(this._isSingleValuePossible()) {
             return;
         }
+
         this._saveValueChangeEvent(e.event);
         this._updateHandlePosition(e);
     },
@@ -468,16 +493,7 @@ const Slider = TrackBar.inherit({
 
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
-        const newValue = this._roundSwipeValue(newRatio);
-        const valueChangeMode = this.option('valueChangeMode');
-
-        SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
-
-        if(valueChangeMode === 'eventual') {
-            return;
-        }
-
-        this._changeValueOnSwipe(newValue);
+        this._changeValueOnSwipe(newRatio);
     },
 
     _swipePixelRatio: function() {
@@ -511,12 +527,7 @@ const Slider = TrackBar.inherit({
         return roundFloatPart(value, valueExponentLength);
     },
 
-    _changeValueOnSwipe: function(newValue) {
-        this._setValueOnSwipe(newValue);
-    },
-
-
-    _roundSwipeValue: function(ratio) {
+    _changeValueOnSwipe: function(ratio) {
         const min = this.option('min');
         const max = this.option('max');
         const step = this._valueStep(this.option('step'));
@@ -527,16 +538,23 @@ const Slider = TrackBar.inherit({
             return;
         }
 
-        if(newValue !== max && newValue !== min) {
+        if(newValue === max || newValue === min) {
+            this._setValueOnSwipe(newValue);
+        } else {
             const stepCount = Math.round((newValue - min) / step);
             newValue = this._roundToExponentLength(stepCount * step + min);
-            newValue = Math.max(Math.min(newValue, max), min);
+            this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
         }
-        return newValue;
-
     },
 
     _setValueOnSwipe: function(value) {
+        this._currentValue = value;
+
+        if(this.option('valueChangeMode') === 'eventual') {
+            SliderHandle.getInstance(this._activeHandle()).option('value', value);
+            return;
+        }
+
         this.option('value', value);
         this._saveValueChangeEvent(undefined);
     },
@@ -559,22 +577,15 @@ const Slider = TrackBar.inherit({
         if(this.option('rtlEnabled')) {
             this._currentRatio = 1 - this._currentRatio;
         }
-        const newValue = this._roundSwipeValue(this._currentRatio);
-        const valueChangeMode = this.option('valueChangeMode');
-        const $handle = this._activeHandle();
 
-        SliderHandle.getInstance(this._activeHandle()).option('value', newValue);
-
-        if(valueChangeMode === 'instant' || $handle) {
-            this._saveValueChangeEvent(e);
-            this._changeValueOnSwipe(newValue);
-        }
+        this._saveValueChangeEvent(e);
+        this._changeValueOnSwipe(this._currentRatio);
     },
 
     _renderValue: function() {
         this.callBase();
 
-        const value = this.option('value');
+        const value = this._currentValue || this.option('value');
 
         this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option('value', value);
