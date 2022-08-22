@@ -1372,10 +1372,10 @@ QUnit.module('valueChangeMode option', {
         this.getRightTooltipText = () => $.trim(this.rightHandleTooltip.text());
     }
 }, () => {
-    QUnit.test('left slider handle value should not change on swipe with "eventual" valueChangeMode', function(assert) {
-
+    QUnit.test('value option should not change on left handle swipe with "eventual valueChangeMode', function(assert) {
         const pointer = pointerMock(this.leftHandle);
         pointer.start().move(this.range.offset().left).down().move(200);
+
         assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
 
         pointer.up();
@@ -1384,10 +1384,10 @@ QUnit.module('valueChangeMode option', {
         assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
     });
 
-    QUnit.test('right slider handle value should not change on swipe with "eventual" valueChangeMode', function(assert) {
-
+    QUnit.test('value option should not change on right handle swipe with "eventual valueChangeMode', function(assert) {
         const pointer = pointerMock(this.rightHandle);
         pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
+
         assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
 
         pointer.up();
@@ -1396,7 +1396,7 @@ QUnit.module('valueChangeMode option', {
         assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
     });
 
-    QUnit.test('left slider handle tooltip value should change with "eventual" valueChangeMode', function(assert) {
+    QUnit.test('tooltip value should change on left handle swipe with "eventual" valueChangeMode', function(assert) {
         const pointer = pointerMock(this.leftHandle);
         pointer.start()
             .down(this.range.offset().left)
@@ -1409,7 +1409,7 @@ QUnit.module('valueChangeMode option', {
         assert.strictEqual(this.getLeftTooltipText(), '60');
     });
 
-    QUnit.test('right slider handle tooltip value should change with "eventual" valueChangeMode', function(assert) {
+    QUnit.test('tooltip value should change on right handle swipe with "eventual" valueChangeMode', function(assert) {
         const pointer = pointerMock(this.rightHandle);
         pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
 
@@ -1418,6 +1418,21 @@ QUnit.module('valueChangeMode option', {
         pointer.move(100).up();
 
         assert.strictEqual(this.getRightTooltipText(), '90');
+    });
+
+    QUnit.test('value should be correctly updated when right handle is moved through left handle', function(assert) {
+        this.instance.option('start', 40);
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(-400).up();
+
+        assert.strictEqual(this.instance.option('start'), 20);
+    });
+    QUnit.test('value should be correctly updated when left handle is moved through right handle', function(assert) {
+        this.instance.option('start', 40);
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start().down(this.leftHandle.offset().left + CONTAINER_MARGIN).move(400).up();
+
+        assert.strictEqual(this.instance.option('end'), 80);
     });
 });
 

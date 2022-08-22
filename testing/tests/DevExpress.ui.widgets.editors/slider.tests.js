@@ -307,7 +307,7 @@ module('render', moduleOptions, () => {
     });
 
     ['instant', 'eventual'].forEach(mode => {
-        test('value should be updated on click on mobile devices', function(assert) {
+        test('value option should be updated on click', function(assert) {
             const $element = $('#slider').dxSlider({
                 max: 500,
                 min: 0,

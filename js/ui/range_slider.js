@@ -195,8 +195,8 @@ const RangeSlider = Slider.inherit({
 
         this._changeValueOnSwipe(newRatio);
 
-        const startValue = this._currentValue && this._currentValue[0] || this.option('start');
-        const endValue = this._currentValue && this._currentValue[1] || this.option('end');
+        const startValue = this._getActualStartValue() || this.option('start');
+        const endValue = this._getActualEndValue() || this.option('end');
 
         let $nextHandle;
 
@@ -237,8 +237,8 @@ const RangeSlider = Slider.inherit({
 
     _setValueOnSwipe: function(value) {
         const option = this._capturedHandle === this._$handleStart ? 'start' : 'end';
-        let start = this._currentValue && this._currentValue[0] || this.option('start');
-        let end = this._currentValue && this._currentValue[1] || this.option('end');
+        let start = this._getActualStartValue() || this.option('start');
+        let end = this._getActualEndValue() || this.option('end');
         const max = this.option('max');
         const min = this.option('min');
 
@@ -255,14 +255,14 @@ const RangeSlider = Slider.inherit({
         if(this.option('valueChangeMode') === 'instant') {
             this.option('value', [start, end]);
         } else {
-            this._currentValue = [start, end];
+            this._actualValue = [start, end];
             this._renderValue();
         }
     },
 
     _renderValue: function() {
-        let valStart = this._currentValue && this._currentValue[0] || this.option('start');
-        let valEnd = this._currentValue && this._currentValue[1] || this.option('end');
+        let valStart = this._getActualStartValue() || this.option('start');
+        let valEnd = this._getActualEndValue() || this.option('end');
         const min = this.option('min');
         const max = this.option('max');
         const rtlEnabled = this.option('rtlEnabled');
@@ -305,6 +305,20 @@ const RangeSlider = Slider.inherit({
         const end = this.option('end');
 
         this.option('value', [start, end]);
+    },
+
+    _getActualStartValue: function() {
+        if(!this._actualValue) {
+            return undefined;
+        }
+        return this._actualValue[0];
+    },
+
+    _getActualEndValue: function() {
+        if(!this._actualValue) {
+            return undefined;
+        }
+        return this._actualValue[1];
     },
 
     _optionChanged: function(args) {

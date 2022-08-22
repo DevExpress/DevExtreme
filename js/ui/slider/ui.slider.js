@@ -388,9 +388,9 @@ const Slider = TrackBar.inherit({
 
         const processEventualMode = () => {
             if(this.option('valueChangeMode') === 'eventual') {
-                if(this._currentValue) {
-                    this.option('value', this._currentValue);
-                    this._currentValue = undefined;
+                if(this._getActualValue()) {
+                    this.option('value', this._getActualValue());
+                    this._actualValue = undefined;
                 }
             }
         };
@@ -464,10 +464,10 @@ const Slider = TrackBar.inherit({
         this._changeValueOnSwipe(ratio);
 
         if(this.option('valueChangeMode') === 'eventual') {
-            this.option('value', this._currentValue);
+            this.option('value', this._getActualValue());
         }
 
-        this._currentValue = undefined;
+        this._actualValue = undefined;
         delete this._startOffset;
         this._renderValue();
     },
@@ -548,7 +548,7 @@ const Slider = TrackBar.inherit({
     },
 
     _setValueOnSwipe: function(value) {
-        this._currentValue = value;
+        this._actualValue = value;
 
         if(this.option('valueChangeMode') === 'eventual') {
             SliderHandle.getInstance(this._activeHandle()).option('value', value);
@@ -557,6 +557,13 @@ const Slider = TrackBar.inherit({
 
         this.option('value', value);
         this._saveValueChangeEvent(undefined);
+    },
+
+    _getActualValue: function() {
+        if(!this._actualValue) {
+            return undefined;
+        }
+        return this._actualValue;
     },
 
     _isSingleValuePossible: function() {
@@ -585,7 +592,7 @@ const Slider = TrackBar.inherit({
     _renderValue: function() {
         this.callBase();
 
-        const value = this._currentValue || this.option('value');
+        const value = this._getActualValue() || this.option('value');
 
         this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option('value', value);
