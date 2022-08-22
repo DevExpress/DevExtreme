@@ -176,6 +176,14 @@ export class AppointmentPopup {
         );
     }
 
+    _setTimeZonesVisibility() {
+        if(this.scheduler.getEditingConfig().allowTimeZoneEditing) {
+            const isVisible = !this.state.appointment.data.allDay;
+            this.form.form.itemOption('undefined.startDateTimeZone', 'visible', isVisible);
+            this.form.form.itemOption('undefined.endDateTimeZone', 'visible', isVisible);
+        }
+    }
+
     _updateForm() {
         const { data } = this.state.appointment;
         const appointment = this._createAppointmentAdapter(this._createFormData(data));
@@ -192,6 +200,8 @@ export class AppointmentPopup {
 
         this.form.readOnly = this._isReadOnly(formData);
         this.form.updateFormData(formData);
+
+        this._setTimeZonesVisibility();
     }
 
     triggerResize() {
