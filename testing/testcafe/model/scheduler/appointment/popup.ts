@@ -34,6 +34,8 @@ export default class AppointmentPopup {
 
   recurrenceElement: Selector;
 
+  inputElements: Selector;
+
   freqElement: Selector;
 
   endRepeatDateElement: Selector;
@@ -52,6 +54,8 @@ export default class AppointmentPopup {
     this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
     this.allDay = new Switch(this.wrapper.find('.dx-switch').nth(0));
     this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
+
+    this.inputElements = this.wrapper.find('.dx-texteditor-input');
 
     this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
 
