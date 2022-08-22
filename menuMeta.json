@@ -2363,7 +2363,6 @@
           {
             "Title": "Spline Area",
             "Name": "SplineArea",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Area_Series/",
             "Credits": "www.geohive.com",
             "Widget": "Charts",
             "DemoType": "Viz",
