@@ -22,6 +22,10 @@
             "enabled": false
         },
         {
+            "matchPackageNames": [ "eslint-config-devextreme" ],
+            "enabled": false
+        },
+        {
             "matchPackageNames": [ "typescript", "typescript-min" ],
             "matchUpdateTypes": [ "major", "minor" ],
             "enabled": false
