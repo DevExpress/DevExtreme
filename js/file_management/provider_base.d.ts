@@ -45,7 +45,7 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
  * @hidden
  */
 export default class FileSystemProviderBase {
-    constructor(options?: FileSystemProviderBaseOptions)
+    constructor(options?: FileSystemProviderBaseOptions);
     /**
      * @docid
      * @publicName getItems()

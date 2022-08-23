@@ -33,5 +33,5 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
  * @public
  */
 export default class ObjectFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: Options)
+    constructor(options?: Options);
 }

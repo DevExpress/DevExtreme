@@ -48,5 +48,5 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
  * @public
  */
 export default class RemoteFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: Options)
+    constructor(options?: Options);
 }
