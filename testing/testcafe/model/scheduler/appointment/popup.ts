@@ -60,18 +60,17 @@ export default class AppointmentPopup {
   constructor(scheduler: Selector, expr = defaultExpr) {
     this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
     this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
-
-    this.subjectElement = this.wrapper.find('.dx-texteditor-input').nth(0);
-    this.startDateElement = this.wrapper.find('.dx-texteditor-input').nth(1);
-    this.endDateElement = this.wrapper.find('.dx-texteditor-input').nth(2);
-    this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
-    this.allDay = new Switch(this.wrapper.find('.dx-switch').nth(0));
-    this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
-
     this.inputElements = this.wrapper.find('.dx-texteditor-input');
 
+    this.subjectElement = this.inputElements.withAttribute('id', new RegExp(expr.subject));
+    this.startDateElement = this.inputElements.withAttribute('id', new RegExp(expr.startDate));
     this.startDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(expr.startDateTimeZone));
+    this.endDateElement = this.inputElements.withAttribute('id', new RegExp(expr.endDate));
     this.endDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(expr.endDateTimeZone));
+    this.descriptionElement = this.inputElements.withAttribute('id', new RegExp(expr.description));
+
+    this.allDay = new Switch(this.wrapper.find('.dx-switch').nth(0));
+    this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
 
     this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
 
