@@ -24,8 +24,10 @@ test('Time zone fields should be hidden on all day appointments', async (t) => {
 
   await t
     .doubleClick(scheduler.getAppointment(dataSource[0].text).element)
-    .expect(appointmentPopup.inputElements.count)
-    .eql(4);
+    .expect(appointmentPopup.startDateTimeZoneElement.exists)
+    .notOk()
+    .expect(appointmentPopup.endDateTimeZoneElement.exists)
+    .notOk();
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource,
@@ -49,8 +51,10 @@ test('Time zone fields should be visible on non all day appointments', async (t)
 
   await t
     .doubleClick(scheduler.getAppointment(dataSource[1].text).element)
-    .expect(appointmentPopup.inputElements.count)
-    .eql(6);
+    .expect(appointmentPopup.startDateTimeZoneElement.exists)
+    .ok()
+    .expect(appointmentPopup.endDateTimeZoneElement.exists)
+    .ok();
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource,
@@ -74,8 +78,10 @@ test('Time zone fields should be hidden when allowTimeZoneEditing is false', asy
 
   await t
     .doubleClick(scheduler.getAppointment(dataSource[1].text).element)
-    .expect(appointmentPopup.inputElements.count)
-    .eql(4);
+    .expect(appointmentPopup.startDateTimeZoneElement.exists)
+    .notOk()
+    .expect(appointmentPopup.endDateTimeZoneElement.exists)
+    .notOk();
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource,

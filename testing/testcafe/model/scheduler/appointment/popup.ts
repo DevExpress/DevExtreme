@@ -13,6 +13,15 @@ export const CLASS = {
   fullScreen: 'dx-popup-fullscreen',
 };
 
+const defaultExpr = {
+  subject: 'text',
+  startDate: 'startDate',
+  startDateTimeZone: 'startDateTimeZone',
+  endDate: 'endDate',
+  endDateTimeZone: 'endDateTimeZone',
+  description: 'description',
+};
+
 export default class AppointmentPopup {
   element: Selector;
 
@@ -24,7 +33,11 @@ export default class AppointmentPopup {
 
   startDateElement: Selector;
 
+  startDateTimeZoneElement: Selector;
+
   endDateElement: Selector;
+
+  endDateTimeZoneElement: Selector;
 
   doneButton: Selector;
 
@@ -44,7 +57,7 @@ export default class AppointmentPopup {
 
   fullScreen: Promise<boolean>;
 
-  constructor(scheduler: Selector) {
+  constructor(scheduler: Selector, expr = defaultExpr) {
     this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
     this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 
@@ -56,6 +69,9 @@ export default class AppointmentPopup {
     this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
 
     this.inputElements = this.wrapper.find('.dx-texteditor-input');
+
+    this.startDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(expr.startDateTimeZone));
+    this.endDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(expr.endDateTimeZone));
 
     this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
 
