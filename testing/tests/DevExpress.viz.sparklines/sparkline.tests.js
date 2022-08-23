@@ -1553,6 +1553,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'line',
             valueField: 'val',
             visible: true,
@@ -1598,6 +1599,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'line',
             valueField: 'val',
             visible: true,
@@ -1706,6 +1708,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'area',
             valueField: 'val',
             visible: true,
@@ -1751,6 +1754,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'area',
             valueField: 'val',
             visible: true,
@@ -1816,6 +1820,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'bar',
             valueField: 'val',
             visible: true,
@@ -1859,6 +1864,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'bar',
             valueField: 'val',
             visible: true,
@@ -2162,6 +2168,16 @@ QUnit.begin(function() {
         this.forceTimeout();
 
         assert.ok(incSpy.called);
+    });
+
+    QUnit.test('check incidentOccurred passed to the series', function(assert) {
+        const incSpy = function(info) {
+            assert.equal(info.target.text, 'The  series cannot be drawn because the val data field is missing');
+        };
+        this.createSparkline({ onIncidentOccurred: incSpy });
+        assert.ok(seriesModule.Series.lastCall.args[0].incidentOccurred);
+
+        seriesModule.Series.lastCall.args[0].incidentOccurred('W2002', ['', 'val']);
     });
 
     QUnit.module('dataSource integration', environment);
