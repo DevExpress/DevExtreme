@@ -76,7 +76,7 @@ export interface ExcelPivotGridCell extends Cell {
      * @docid
      * @public
      */
-    area?: string;
+    area?: 'column' | 'row' | 'data';
     /**
      * @docid
      * @public
@@ -87,6 +87,11 @@ export interface ExcelPivotGridCell extends Cell {
      * @public
      */
     columnIndex?: number;
+    /**
+     * @docid
+     * @public
+     */
+    headerType?: 'column' | 'row' | 'data' | 'filter';
 }
 
 /**

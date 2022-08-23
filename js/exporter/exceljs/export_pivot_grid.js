@@ -71,7 +71,6 @@ class PivotGridHelpers {
 
     _getDefaultFieldHeaderCellsData(value) {
         return {
-            type: 'header',
             text: value,
             value: value,
         };
@@ -197,7 +196,7 @@ class PivotGridHelpers {
                 ? values.join(FIELD_HEADERS_SEPARATOR)
                 : values[cellIndex];
 
-            cellData = { ...this._getDefaultFieldHeaderCellsData(value), area };
+            cellData = { ...this._getDefaultFieldHeaderCellsData(value), headerType: area };
 
             excelCell.value = value;
 

@@ -3818,7 +3818,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelPivotGridCell.area]
      */
-    area?: string;
+    area?: 'column' | 'row' | 'data';
     /**
      * [descr:ExcelPivotGridCell.rowIndex]
      */
@@ -3827,6 +3827,10 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelPivotGridCell.columnIndex]
      */
     columnIndex?: number;
+    /**
+     * [descr:ExcelPivotGridCell.headerType]
+     */
+    headerType?: 'column' | 'row' | 'data' | 'filter';
   }
   /**
    * [descr:excelExporter.exportDataGrid(options)]
