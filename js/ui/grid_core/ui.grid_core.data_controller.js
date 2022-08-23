@@ -165,6 +165,7 @@ export const dataControllerModule = {
                 optionChanged: function(args) {
                     const that = this;
                     let dataSource;
+                    let changedPagingOptions;
 
                     function handled() {
                         args.handled = true;
@@ -193,9 +194,19 @@ export const dataControllerModule = {
                             break;
                         case 'paging':
                             dataSource = that.dataSource();
-                            if(dataSource && that._setPagingOptions(dataSource)) {
-                                const pageIndex = dataSource.pageIndex();
-                                dataSource.load().done(() =>that.pageChanged.fire(pageIndex));
+
+                            if(dataSource) {
+                                changedPagingOptions = that._setPagingOptions(dataSource);
+                                if(changedPagingOptions) {
+                                    const pageIndex = dataSource.pageIndex();
+
+                                    this._isPaging = changedPagingOptions.isPageIndexChanged;
+
+                                    dataSource.load().done(() => {
+                                        this._isPaging = false;
+                                        that.pageChanged.fire(pageIndex);
+                                    });
+                                }
                             }
                             handled();
                             break;
@@ -419,23 +430,33 @@ export const dataControllerModule = {
                     const appendMode = scrollingMode === 'infinite';
                     const virtualMode = scrollingMode === 'virtual';
                     const paginate = pagingEnabled || virtualMode || appendMode;
-                    let isChanged = false;
+                    let isPaginateChanged = false;
+                    let isPageSizeChanged = false;
+                    let isPageIndexChanged = false;
 
                     dataSource.requireTotalCount(!appendMode);
                     if(pagingEnabled !== undefined && dataSource.paginate() !== paginate) {
                         dataSource.paginate(paginate);
-                        isChanged = true;
+                        isPaginateChanged = true;
                     }
                     if(pageSize !== undefined && dataSource.pageSize() !== pageSize) {
                         dataSource.pageSize(pageSize);
-                        isChanged = true;
+                        isPageSizeChanged = true;
                     }
                     if(pageIndex !== undefined && dataSource.pageIndex() !== pageIndex) {
                         dataSource.pageIndex(pageIndex);
-                        isChanged = true;
+                        isPageIndexChanged = true;
                     }
 
-                    return isChanged;
+                    if(isPaginateChanged || isPageSizeChanged || isPageIndexChanged) {
+                        return {
+                            isPaginateChanged,
+                            isPageSizeChanged,
+                            isPageIndexChanged
+                        };
+                    }
+
+                    return false;
                 },
                 _getSpecificDataSourceOption: function() {
                     const dataSource = this.option('dataSource');
@@ -462,7 +483,9 @@ export const dataControllerModule = {
                     that._useSortingGroupingFromColumns = true;
                     that._cachedProcessedItems = null;
                     if(dataSource) {
-                        that._setPagingOptions(dataSource);
+                        const changedPagingOptions = that._setPagingOptions(dataSource);
+
+                        this._isPaging = changedPagingOptions?.isPageIndexChanged;
                         that.setDataSource(dataSource);
                     } else if(oldDataSource) {
                         that.updateItems();
@@ -475,7 +498,10 @@ export const dataControllerModule = {
 
                     when(this._columnsController.refresh(true)).always(function() {
                         if(dataSource) {
-                            dataSource.load().done(result.resolve).fail(result.reject);
+                            dataSource.load().done(function() {
+                                that._isPaging = false;
+                                result.resolve.apply(result, arguments);
+                            }).fail(result.reject);
                         } else {
                             result.resolve();
                         }
