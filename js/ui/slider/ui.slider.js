@@ -149,7 +149,7 @@ const Slider = TrackBar.inherit({
 
             focusStateEnabled: true,
 
-            valueChangeMode: 'instant'
+            callValueChange: 'onMoving'
         });
     },
 
@@ -386,8 +386,8 @@ const Slider = TrackBar.inherit({
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
 
-        const processEventualMode = () => {
-            if(this.option('valueChangeMode') === 'eventual') {
+        const processOnMovingComplete = () => {
+            if(this.option('callValueChange') === 'onMovingComplete') {
                 if(this._getActualValue()) {
                     this.option('value', this._getActualValue());
                     this._actualValue = undefined;
@@ -405,7 +405,7 @@ const Slider = TrackBar.inherit({
         eventsEngine.off($element, pointerUpEventName);
         eventsEngine.on($element, pointerUpEventName, e => {
             if(isMouseEvent(e)) {
-                processEventualMode();
+                processOnMovingComplete();
             }
         });
 
@@ -418,7 +418,7 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
-            processEventualMode();
+            processOnMovingComplete();
         });
     },
 
@@ -463,7 +463,7 @@ const Slider = TrackBar.inherit({
         this._saveValueChangeEvent(e.event);
         this._changeValueOnSwipe(ratio);
 
-        if(this.option('valueChangeMode') === 'eventual') {
+        if(this.option('callValueChange') === 'onMovingComplete') {
             this.option('value', this._getActualValue());
         }
 
@@ -550,7 +550,7 @@ const Slider = TrackBar.inherit({
     _setValueOnSwipe: function(value) {
         this._actualValue = value;
 
-        if(this.option('valueChangeMode') === 'eventual') {
+        if(this.option('callValueChange') === 'onMovingComplete') {
             SliderHandle.getInstance(this._activeHandle()).option('value', value);
             return;
         }
@@ -647,7 +647,7 @@ const Slider = TrackBar.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
-            case 'valueChangeMode':
+            case 'callValueChange':
                 break;
             default:
                 this.callBase(args);

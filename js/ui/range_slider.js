@@ -252,7 +252,7 @@ const RangeSlider = Slider.inherit({
         }
 
 
-        if(this.option('valueChangeMode') === 'instant') {
+        if(this.option('callValueChange') === 'onMoving') {
             this.option('value', [start, end]);
         } else {
             this._actualValue = [start, end];
@@ -270,7 +270,7 @@ const RangeSlider = Slider.inherit({
         valStart = Math.max(min, Math.min(valStart, max));
         valEnd = Math.max(valStart, Math.min(valEnd, max));
 
-        if(this.option('valueChangeMode') === 'instant') {
+        if(this.option('callValueChange') === 'onMoving') {
             this._setOptionWithoutOptionChange('start', valStart);
             this._setOptionWithoutOptionChange('end', valEnd);
             this._setOptionWithoutOptionChange('value', [valStart, valEnd]);
