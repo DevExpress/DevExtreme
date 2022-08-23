@@ -1,0 +1,34 @@
+name: "Pin Browsers"
+description: "Fill CHROME_VERSION,  FIREFOX_VERSION variables below to enable this action"
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+
+      env:
+        # List of browser versions
+        # Chrome:  https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
+        # Firefox: https://www.ubuntuupdates.org/package/ubuntu_mozilla_security/focal/main/base/firefox
+        CHROME_VERSION:  ""
+        FIREFOX_VERSION: ""
+
+      run: |
+
+        if [ -n "$CHROME_VERSION" ]; then
+          curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb" > /tmp/chrome.deb
+          sudo dpkg -i /tmp/chrome.deb
+          unlink /tmp/chrome.deb
+          google-chrome-stable --version
+        else
+          echo "Skip Chrome upgrade"
+        fi
+
+        if [ -n "$FIREFOX_VERSION" ]; then
+          curl -L "http://ppa.launchpad.net/ubuntu-mozilla-security/ppa/ubuntu/pool/main/f/firefox/firefox_${FIREFOX_VERSION}_amd64.deb" > /tmp/firefox.deb
+          sudo dpkg -i /tmp/firefox.deb
+          unlink /tmp/firefox.deb
+          firefox --version
+        else
+          echo "Skip Firefox upgrade"
+        fi

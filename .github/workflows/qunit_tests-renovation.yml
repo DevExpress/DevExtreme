@@ -71,6 +71,8 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - uses: ./.github/actions/pin-browsers
+
 #    - name: Update apt
 #      run: |
 #        sudo apt-get update
