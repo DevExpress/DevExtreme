@@ -6,10 +6,10 @@ DemoApp.controller('DemoController', ($scope) => {
   maxDate.setFullYear(maxDate.getFullYear() - 21);
 
   const sendRequest = function (value) {
-    const validEmail = 'test@dx-email.com';
+    const invalidEmail = 'test@dx-email.com';
     const d = $.Deferred();
     setTimeout(() => {
-      d.resolve(value === validEmail);
+      d.resolve(value !== invalidEmail);
     }, 1000);
     return d.promise();
   };

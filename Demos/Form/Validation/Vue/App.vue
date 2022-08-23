@@ -140,10 +140,10 @@ import notify from 'devextreme/ui/notify';
 import service from './data.js';
 
 const sendRequest = function(value) {
-  const validEmail = 'test@dx-email.com';
+  const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(value === validEmail);
+      resolve(value !== invalidEmail);
     }, 1000);
   });
 };

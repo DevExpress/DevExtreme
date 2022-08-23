@@ -209,10 +209,10 @@ class App extends React.Component {
 }
 
 function sendRequest(value) {
-  const validEmail = 'test@dx-email.com';
+  const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(value === validEmail);
+      resolve(value !== invalidEmail);
     }, 1000);
   });
 }
