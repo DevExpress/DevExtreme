@@ -13,6 +13,15 @@ export const CLASS = {
   fullScreen: 'dx-popup-fullscreen',
 };
 
+interface ISchedulerPopupExpr {
+  subject?: string;
+  startDate?: string;
+  startDateTimeZone?: string;
+  endDate?: string;
+  endDateTimeZone?: string;
+  description?: string;
+}
+
 const defaultExpr = {
   subject: 'text',
   startDate: 'startDate',
@@ -47,8 +56,6 @@ export default class AppointmentPopup {
 
   recurrenceElement: Selector;
 
-  inputElements: Selector;
-
   freqElement: Selector;
 
   endRepeatDateElement: Selector;
@@ -57,17 +64,23 @@ export default class AppointmentPopup {
 
   fullScreen: Promise<boolean>;
 
-  constructor(scheduler: Selector, expr = defaultExpr) {
+  private readonly expr = defaultExpr;
+
+  private readonly inputElements: Selector;
+
+  constructor(scheduler: Selector, expr?: ISchedulerPopupExpr) {
+    this.expr = { ...defaultExpr, ...expr };
+
     this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
     this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
     this.inputElements = this.wrapper.find('.dx-texteditor-input');
 
-    this.subjectElement = this.inputElements.withAttribute('id', new RegExp(expr.subject));
-    this.startDateElement = this.inputElements.withAttribute('id', new RegExp(expr.startDate));
-    this.startDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(expr.startDateTimeZone));
-    this.endDateElement = this.inputElements.withAttribute('id', new RegExp(expr.endDate));
-    this.endDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(expr.endDateTimeZone));
-    this.descriptionElement = this.inputElements.withAttribute('id', new RegExp(expr.description));
+    this.subjectElement = this.inputElements.withAttribute('id', new RegExp(this.expr.subject));
+    this.startDateElement = this.inputElements.withAttribute('id', new RegExp(this.expr.startDate));
+    this.startDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(this.expr.startDateTimeZone));
+    this.endDateElement = this.inputElements.withAttribute('id', new RegExp(this.expr.endDate));
+    this.endDateTimeZoneElement = this.inputElements.withAttribute('id', new RegExp(this.expr.endDateTimeZone));
+    this.descriptionElement = this.inputElements.withAttribute('id', new RegExp(this.expr.description));
 
     this.allDay = new Switch(this.wrapper.find('.dx-switch').nth(0));
     this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
