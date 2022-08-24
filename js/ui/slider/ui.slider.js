@@ -647,6 +647,7 @@ const Slider = TrackBar.inherit({
 
     _clean: function() {
         delete this._inkRipple;
+        delete this._actualValue;
         this.callBase();
     }
 });
