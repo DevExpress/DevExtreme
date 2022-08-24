@@ -71,7 +71,7 @@
     "babel-eslint": "10.1.0",
     "babel-loader": "8.2.5",
     "babel-plugin-add-module-exports": "1.0.4",
-    "babel-plugin-inferno": "6.4.0",
+    "babel-plugin-inferno": "6.5.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
     "babel-plugin-transform-object-assign": "6.22.0",
     "babel-preset-env": "1.7.0",
