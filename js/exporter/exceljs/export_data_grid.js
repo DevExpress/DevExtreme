@@ -4,7 +4,8 @@ import errors from '../../core/errors';
 import { MergedRangesManager } from './export_merged_ranges_manager';
 
 class DataGridHelpers {
-    constructor(dataProvider, worksheet, options) {
+    constructor(component, dataProvider, worksheet, options) {
+        this.component = component;
         this.dataProvider = dataProvider;
         this.worksheet = worksheet;
         this.mergedRangesManager = new MergedRangesManager(dataProvider, worksheet);

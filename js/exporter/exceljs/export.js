@@ -142,13 +142,13 @@ export const Export = {
                 const columns = dataProvider.getColumns();
                 const dataRowsCount = dataProvider.getRowsCount();
 
-                const helpers = new Helpers(dataProvider, worksheet, options);
+                const helpers = new Helpers(component, dataProvider, worksheet, options);
 
                 if(keepColumnWidths) {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                helpers._exportAllFieldHeaders(columns, wrapText, this.setAlignment);
+                helpers._exportAllFieldHeaders(columns, this.setAlignment);
 
                 const fieldHeaderRowsCount = helpers._getFieldHeaderRowsCount();
                 cellRange.to.row = cellRange.from.row + fieldHeaderRowsCount;
@@ -158,16 +158,16 @@ export const Export = {
                     const currentRowIndex = cellRange.from.row + fieldHeaderRowsCount + rowIndex;
                     const row = worksheet.getRow(currentRowIndex);
 
-                    let startCellIndex = 0;
+                    let startColumnIndex = 0;
 
                     if(helpers._isRowFieldHeadersRow(rowIndex)) {
-                        startCellIndex = dataProvider.getRowAreaColCount();
-                        helpers._exportFieldHeaders('row', currentRowIndex, 0, startCellIndex, wrapText, this.setAlignment, component.option('rowHeaderLayout'));
+                        startColumnIndex = dataProvider.getRowAreaColCount();
+                        helpers._exportFieldHeaders('row', currentRowIndex, 0, startColumnIndex, this.setAlignment);
                     }
 
                     helpers._trySetOutlineLevel(row, rowIndex);
 
-                    this.exportRow(dataProvider, helpers, row, rowIndex, startCellIndex, columns.length, wrapText, styles);
+                    this.exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columns.length, wrapText, styles);
 
                     cellRange.to.row = currentRowIndex;
                 }
