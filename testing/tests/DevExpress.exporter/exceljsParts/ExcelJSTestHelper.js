@@ -84,6 +84,7 @@ class ExcelJSTestHelper {
 
     checkCellRange(cellRange, actual, topLeft) {
         assert.deepEqual(cellRange.from, topLeft, 'cellRange.from');
+
         if(actual.row > 0 && actual.column > 0) {
             assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, 'cellRange.to');
         } else {
@@ -172,10 +173,23 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
         }
     }
 
-    extendExpectedCells(cellsArray, topLeft) {
+    extendExpectedCells(cellsArray, topLeft, options) {
+        let rowIndexCorrection = 0;
+
+        if(options) {
+            if(options.exportFilterFieldHeaders ^ (options.exportDataFieldHeaders || options.exportColumnFieldHeaders)) {
+                rowIndexCorrection = 1;
+            }
+            if(options.exportFilterFieldHeaders && options.exportDataFieldHeaders) {
+                rowIndexCorrection = 2;
+            }
+        }
+
         super._extendExpectedCells(cellsArray, topLeft, (cellArgs, rowIndex, columnIndex) => {
-            cellArgs.pivotCell.rowIndex = rowIndex;
-            cellArgs.pivotCell.columnIndex = columnIndex;
+            if(!(cellArgs.pivotCell.type === 'header' && cellArgs.pivotCell.area === 'filter')) {
+                cellArgs.pivotCell.rowIndex = rowIndex - rowIndexCorrection;
+                cellArgs.pivotCell.columnIndex = columnIndex;
+            }
 
             if(!('value' in cellArgs.pivotCell)) {
                 cellArgs.pivotCell.value = cellArgs.excelCell.value;

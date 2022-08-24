@@ -3786,6 +3786,22 @@ declare module DevExpress.excelExporter {
      */
     mergeColumnFieldValues?: boolean;
     /**
+     * [descr:ExcelExportPivotGridProps.exportFilterFieldHeaders]
+     */
+    exportFilterFieldHeaders?: boolean;
+    /**
+     * [descr:ExcelExportPivotGridProps.exportDataFieldHeaders]
+     */
+    exportDataFieldHeaders?: boolean;
+    /**
+     * [descr:ExcelExportPivotGridProps.exportColumnFieldHeaders]
+     */
+    exportColumnFieldHeaders?: boolean;
+    /**
+     * [descr:ExcelExportPivotGridProps.exportRowFieldHeaders]
+     */
+    exportRowFieldHeaders?: boolean;
+    /**
      * [descr:ExcelExportPivotGridProps.customizeCell]
      */
     customizeCell?: (options: {
@@ -3801,7 +3817,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelPivotGridCell.area]
      */
-    area?: string;
+    area?: 'column' | 'row' | 'data';
     /**
      * [descr:ExcelPivotGridCell.rowIndex]
      */
@@ -3810,6 +3826,10 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelPivotGridCell.columnIndex]
      */
     columnIndex?: number;
+    /**
+     * [descr:ExcelPivotGridCell.headerType]
+     */
+    headerType?: 'column' | 'row' | 'data' | 'filter';
   }
   /**
    * [descr:excelExporter.exportDataGrid(options)]

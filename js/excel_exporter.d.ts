@@ -76,7 +76,7 @@ export interface ExcelPivotGridCell extends Cell {
      * @docid
      * @public
      */
-    area?: string;
+    area?: 'column' | 'row' | 'data';
     /**
      * @docid
      * @public
@@ -87,6 +87,11 @@ export interface ExcelPivotGridCell extends Cell {
      * @public
      */
     columnIndex?: number;
+    /**
+     * @docid
+     * @public
+     */
+    headerType?: 'column' | 'row' | 'data' | 'filter';
 }
 
 /**
@@ -213,6 +218,30 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @public
      */
     mergeColumnFieldValues?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportFilterFieldHeaders?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportDataFieldHeaders?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportColumnFieldHeaders?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    exportRowFieldHeaders?: boolean;
     /**
      * @docid
      * @type_function_param1_field pivotCell:ExcelPivotGridCell

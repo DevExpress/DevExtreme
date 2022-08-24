@@ -1,7 +1,6 @@
 
-import { isDefined, isString, isDate, isObject, isFunction } from '../../core/utils/type';
+import { isDefined, isString, isDate, isObject } from '../../core/utils/type';
 import { ExportFormat } from './export_format';
-import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
 import { ExportLoadPanel } from '../common/export_load_panel';
 import { hasWindow } from '../../core/utils/window';
@@ -73,7 +72,7 @@ export const Export = {
     },
 
     setAlignment(excelCell, wrapText, horizontalAlignment) {
-        excelCell.alignment = excelCell.alignment || {};
+        excelCell.alignment = excelCell.alignment ?? {};
 
         if(isDefined(wrapText)) {
             excelCell.alignment.wrapText = wrapText;
@@ -98,19 +97,17 @@ export const Export = {
         }
     },
 
-    export(options, helpers) {
+    export(options, Helpers, getLoadPanelTargetElement, getLoadPanelContainer) {
         const {
-            customizeCell,
             component,
             worksheet,
             topLeftCell,
-            autoFilterEnabled,
             keepColumnWidths,
             selectedRowsOnly,
             loadPanel,
-            mergeRowFieldValues,
-            mergeColumnFieldValues,
         } = options;
+
+        const dataProvider = component.getDataProvider(selectedRowsOnly);
 
         const internalComponent = component._getInternalInstance?.() || component;
         const initialLoadPanelEnabledOption = internalComponent.option('loadPanel') && internalComponent.option('loadPanel').enabled;
@@ -121,8 +118,8 @@ export const Export = {
 
         let exportLoadPanel;
         if(loadPanel.enabled && hasWindow()) {
-            const $targetElement = helpers._getLoadPanelTargetElement(component);
-            const $container = helpers._getLoadPanelContainer(component);
+            const $targetElement = getLoadPanelTargetElement(component);
+            const $container = getLoadPanelContainer(component);
 
             exportLoadPanel = new ExportLoadPanel(component, $targetElement, $container, loadPanel);
             exportLoadPanel.show();
@@ -140,32 +137,42 @@ export const Export = {
             to: { row: topLeftCell.row, column: topLeftCell.column }
         };
 
-        const dataProvider = component.getDataProvider(selectedRowsOnly);
-
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
                 const columns = dataProvider.getColumns();
                 const dataRowsCount = dataProvider.getRowsCount();
 
+                const helpers = new Helpers(component, dataProvider, worksheet, options);
+
                 if(keepColumnWidths) {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const mergedRangesManager = new MergedRangesManager(dataProvider, helpers, mergeRowFieldValues, mergeColumnFieldValues);
+                helpers._exportAllFieldHeaders(columns, this.setAlignment);
+
+                const fieldHeaderRowsCount = helpers._getFieldHeaderRowsCount();
+                cellRange.to.row = cellRange.from.row + fieldHeaderRowsCount;
+
                 const styles = this.getCellStyles(dataProvider);
-
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                    const row = worksheet.getRow(cellRange.from.row + rowIndex);
-                    helpers._trySetOutlineLevel(dataProvider, row, rowIndex);
+                    const currentRowIndex = cellRange.from.row + fieldHeaderRowsCount + rowIndex;
+                    const row = worksheet.getRow(currentRowIndex);
 
-                    this.exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, columns.length, row, cellRange.from.column, customizeCell, wrapText, styles);
+                    let startColumnIndex = 0;
 
-                    if(rowIndex >= 1) {
-                        cellRange.to.row++;
+                    if(helpers._isRowFieldHeadersRow(rowIndex)) {
+                        startColumnIndex = dataProvider.getRowAreaColCount();
+                        helpers._exportFieldHeaders('row', currentRowIndex, 0, startColumnIndex, this.setAlignment);
                     }
+
+                    helpers._trySetOutlineLevel(row, rowIndex);
+
+                    this.exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columns.length, wrapText, styles);
+
+                    cellRange.to.row = currentRowIndex;
                 }
 
-                mergedRangesManager.applyMergedRages(worksheet);
+                helpers.mergedRangesManager.applyMergedRages();
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -177,9 +184,9 @@ export const Export = {
 
                 if(helpers._isFrozenZone(dataProvider)) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                        extend(worksheetViewSettings, helpers._getWorksheetFrozenState(dataProvider, cellRange));
+                        extend(worksheetViewSettings, helpers._getWorksheetFrozenState(cellRange));
                     }
-                    helpers._trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
+                    helpers._trySetAutoFilter(cellRange);
                 }
 
                 if(Object.keys(worksheetViewSettings).length > 0) {
@@ -199,14 +206,14 @@ export const Export = {
         });
     },
 
-    exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, cellCount, row, startColumnIndex, customizeCell, wrapText, styles) {
-        for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
+    exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columnsCount, wrapText, styles) {
+        for(let cellIndex = startColumnIndex; cellIndex < columnsCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-            const excelCell = row.getCell(startColumnIndex + cellIndex);
+            const excelCell = row.getCell(helpers._getFirstColumnIndex() + cellIndex);
 
-            mergedRangesManager.updateMergedRanges(excelCell, rowIndex, cellIndex);
+            helpers.mergedRangesManager.updateMergedRanges(excelCell, rowIndex, cellIndex, helpers);
 
-            const cellInfo = mergedRangesManager.findMergedCellInfo(rowIndex, cellIndex);
+            const cellInfo = helpers.mergedRangesManager.findMergedCellInfo(rowIndex, cellIndex, helpers._isHeaderCell(rowIndex, cellIndex));
             if(isDefined(cellInfo) && (excelCell !== cellInfo.masterCell)) {
                 excelCell.style = cellInfo.masterCell.style;
                 excelCell.value = cellInfo.masterCell.value;
@@ -231,9 +238,7 @@ export const Export = {
                 }
             }
 
-            if(isFunction(customizeCell)) {
-                customizeCell(helpers._getCustomizeCellOptions(excelCell, cellData.cellSourceData));
-            }
+            helpers._customizeCell(excelCell, cellData.cellSourceData);
         }
     }
 };

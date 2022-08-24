@@ -103,6 +103,24 @@ const ExcelJSOptionTests = {
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: false }).mergeColumnFieldValues, false, 'false');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: true }).mergeColumnFieldValues, true, 'true');
             });
+
+            ['exportDataFieldHeaders', 'exportRowFieldHeaders', 'exportColumnFieldHeaders', 'exportFilterFieldHeaders'].forEach((optionName) => {
+                QUnit.test(`${optionName}`, function(assert) {
+                    if(!(getComponent() instanceof PivotGrid)) {
+                        assert.ok(true, 'The test relevant for PivotGrid widget only');
+                        return;
+                    }
+
+                    const component = getComponent();
+
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet })[optionName], false, `${optionName}: no member`);
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: undefined })[optionName], false, `${optionName}:undefined`);
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: null })[optionName], false, `${optionName}:null`);
+
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: false })[optionName], false, `${optionName}:false`);
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: true })[optionName], true, `${optionName}:true`);
+                });
+            });
         });
     }
 };
