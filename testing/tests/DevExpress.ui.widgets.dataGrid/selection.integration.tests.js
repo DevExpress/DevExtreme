@@ -214,8 +214,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     // T1109728
-    QUnit.test('Row selection checkboxes should have aria-label', function(assert) {
-        assert.expect(3);
+    QUnit.test('Row selection td-tags should not have aria-label attr, but its checkboxes should', function(assert) {
+        assert.expect(6);
         // arrange
         $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
@@ -226,8 +226,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
 
         // assert
+        assert.notOk($('.dx-header-row .dx-command-select').get(0).hasAttribute('aria-label'));
         assert.ok($('.dx-header-row .dx-select-checkbox').get(0).hasAttribute('aria-label'));
 
+        $('.dx-data-row .dx-command-select').each((ind, item) => assert.notOk(item.hasAttribute('aria-label')));
         $('.dx-data-row .dx-select-checkbox').each((ind, item) => assert.ok(item.hasAttribute('aria-label')));
     });
 
