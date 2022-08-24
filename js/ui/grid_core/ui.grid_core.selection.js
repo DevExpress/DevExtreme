@@ -677,8 +677,6 @@ export const selectionModule = {
 
                     that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
 
-                    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), $container);
-
                     that.getController('editorFactory').createEditor(groupElement, extend({}, column, {
                         parentType: 'headerRow',
                         dataType: 'boolean',
@@ -726,7 +724,6 @@ export const selectionModule = {
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 
-                        this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), $container);
                         this._renderSelectCheckBox($container, options);
                     } else {
                         gridCoreUtils.setEmptyText($container);
