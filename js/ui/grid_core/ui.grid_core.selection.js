@@ -675,7 +675,7 @@ export const selectionModule = {
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 
-                    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), $container);
+                    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
 
                     that.getController('editorFactory').createEditor(groupElement, extend({}, column, {
                         parentType: 'headerRow',
@@ -724,7 +724,6 @@ export const selectionModule = {
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 
-                        this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), $container);
                         this._renderSelectCheckBox($container, options);
                     } else {
                         gridCoreUtils.setEmptyText($container);
@@ -735,6 +734,8 @@ export const selectionModule = {
                     const groupElement = $('<div>')
                         .addClass(SELECT_CHECKBOX_CLASS)
                         .appendTo(container);
+
+                    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), groupElement);
 
                     this.getController('editorFactory').createEditor(groupElement, extend({}, options.column, {
                         parentType: 'dataRow',
