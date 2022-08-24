@@ -1427,12 +1427,20 @@ QUnit.module('callValueChange option', {
 
         assert.strictEqual(this.instance.option('start'), 20);
     });
+
     QUnit.test('value should be correctly updated when left handle is moved through right handle', function(assert) {
         this.instance.option('start', 40);
         const pointer = pointerMock(this.leftHandle);
         pointer.start().down(this.leftHandle.offset().left + CONTAINER_MARGIN).move(400).up();
 
         assert.strictEqual(this.instance.option('end'), 80);
+    });
+
+    QUnit.test('tooltip value should be correctly updated when handle value is 0', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(-600);
+
+        assert.strictEqual(this.getLeftTooltipText(), '0');
     });
 });
 

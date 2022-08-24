@@ -20282,9 +20282,9 @@ declare module DevExpress.ui {
       showMode?: DevExpress.common.TooltipShowMode;
     };
     /**
-     * [descr:dxSliderBaseOptions.SliderCallValueChange]
+     * [descr:dxSliderBaseOptions.callValueChange]
      */
-    SliderCallValueChange: DevExpress.common.SliderCallValueChange;
+    callValueChange: DevExpress.common.SliderCallValueChange;
   }
   /**
    * @deprecated use Properties instead

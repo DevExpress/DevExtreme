@@ -560,10 +560,7 @@ const Slider = TrackBar.inherit({
     },
 
     _getActualValue: function() {
-        if(!this._actualValue) {
-            return undefined;
-        }
-        return this._actualValue;
+        return this._actualValue ?? this.option('value');
     },
 
     _isSingleValuePossible: function() {
@@ -592,7 +589,7 @@ const Slider = TrackBar.inherit({
     _renderValue: function() {
         this.callBase();
 
-        const value = this._getActualValue() || this.option('value');
+        const value = this._getActualValue();
 
         this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option('value', value);

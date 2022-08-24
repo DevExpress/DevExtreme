@@ -1780,6 +1780,7 @@ module('callValueChange option', {
         this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
         this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
         this.pointer = pointerMock(this.$wrapper);
+        this.keyboard = keyboardMock(this.$handle);
         this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
 
         this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
@@ -1797,10 +1798,9 @@ module('callValueChange option', {
 
         assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
         assert.strictEqual(this.instance.option('value'), 90);
-
     });
 
-    test('slider tooltip value should change with "onMovingComplete" callValueChange', function(assert) {
+    test('slider tooltip value should change on swipe if callValueChange = onMovingComplete', function(assert) {
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
         this.pointer.swipe(20);
@@ -1812,7 +1812,7 @@ module('callValueChange option', {
         assert.strictEqual(this.getTooltipText(), '90');
     });
 
-    test('slider should change on every step after runtime change callValueChange to onMoving', function(assert) {
+    test('slider should change its value on every step after runtime change callValueChange to onMoving', function(assert) {
         this.instance.option('callValueChange', 'onMoving');
 
         this.pointer.start({ x: SLIDER_PADDING });
@@ -1824,5 +1824,32 @@ module('callValueChange option', {
         this.pointer.swipeEnd(20);
 
         assert.strictEqual(this.instance.option('value'), 70);
+    });
+
+    test('slider should change its value on moving complete after runtime change callValueChange to onMovingComplete', function(assert) {
+        this.instance.option('callValueChange', 'onMovingComplete');
+
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart().swipe(20);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+        assert.strictEqual(this.instance.option('value'), 50, 'value is not changed');
+
+        this.pointer.swipeEnd(20);
+
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+        assert.strictEqual(this.instance.option('value'), 70, 'value is changed');
+    });
+
+    test('tooltip value should be correctly updated on left arrow pressed', function(assert) {
+        this.instance.option('callValueChange', 'onMoving');
+        this.keyboard.press('leftArrow');
+        assert.strictEqual(this.getTooltipText(), '49');
+    });
+
+    test('tooltip value should be correctly updated on right arrow pressed', function(assert) {
+        this.instance.option('callValueChange', 'onMoving');
+        this.keyboard.press('rightArrow');
+        assert.strictEqual(this.getTooltipText(), '51');
     });
 });

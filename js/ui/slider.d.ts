@@ -162,10 +162,10 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
     };
     /**
      * @docid
-     * @default 'instant'
+     * @default 'onMoving'
      * @public
      */
-     SliderCallValueChange: SliderCallValueChange;
+     callValueChange: SliderCallValueChange;
 }
 
 /** @public */

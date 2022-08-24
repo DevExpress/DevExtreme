@@ -195,8 +195,7 @@ const RangeSlider = Slider.inherit({
 
         this._changeValueOnSwipe(newRatio);
 
-        const startValue = this._getActualStartValue() || this.option('start');
-        const endValue = this._getActualEndValue() || this.option('end');
+        const [startValue, endValue] = this._getActualValue();
 
         let $nextHandle;
 
@@ -237,8 +236,7 @@ const RangeSlider = Slider.inherit({
 
     _setValueOnSwipe: function(value) {
         const option = this._capturedHandle === this._$handleStart ? 'start' : 'end';
-        let start = this._getActualStartValue() || this.option('start');
-        let end = this._getActualEndValue() || this.option('end');
+        let [start, end] = this._getActualValue();
         const max = this.option('max');
         const min = this.option('min');
 
@@ -261,8 +259,7 @@ const RangeSlider = Slider.inherit({
     },
 
     _renderValue: function() {
-        let valStart = this._getActualStartValue() || this.option('start');
-        let valEnd = this._getActualEndValue() || this.option('end');
+        let [valStart, valEnd] = this._getActualValue();
         const min = this.option('min');
         const max = this.option('max');
         const rtlEnabled = this.option('rtlEnabled');
@@ -305,20 +302,6 @@ const RangeSlider = Slider.inherit({
         const end = this.option('end');
 
         this.option('value', [start, end]);
-    },
-
-    _getActualStartValue: function() {
-        if(!this._actualValue) {
-            return undefined;
-        }
-        return this._actualValue[0];
-    },
-
-    _getActualEndValue: function() {
-        if(!this._actualValue) {
-            return undefined;
-        }
-        return this._actualValue[1];
     },
 
     _optionChanged: function(args) {
