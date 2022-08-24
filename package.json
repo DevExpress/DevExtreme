@@ -81,7 +81,7 @@
     "cldrjs": "0.5.5",
     "clean-css": "5.3.1",
     "cross-env": "7.0.3",
-    "cssom": "0.4.4",
+    "cssom": "0.5.0",
     "del": "2.2.2",
     "devextreme-cldr-data": "1.0.3",
     "devextreme-internal-tools": "9.1.0",
