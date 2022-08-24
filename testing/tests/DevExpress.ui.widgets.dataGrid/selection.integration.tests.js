@@ -199,12 +199,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T1109408
     QUnit.test('Aria-selected should not present if selection.mode is none', function(assert) {
+        assert.expect(2);
         // arrange
         $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
-            dataSource: [{
-                ID: 0
-            }],
+            dataSource: [{ ID: 0 }, { ID: 1 }],
             keyExpr: 'ID',
             columns: ['ID'],
             showBorders: true,
@@ -212,6 +211,26 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         // assert
         $('.dx-data-row').each((ind, item) => assert.notOk(item.hasAttribute('aria-selected')));
+    });
+
+    // T1109728
+    QUnit.test('Row selection td-tags should not have aria-label attr, but its checkboxes should', function(assert) {
+        assert.expect(6);
+        // arrange
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ ID: 0 }, { ID: 1 }],
+            keyExpr: 'ID',
+            columns: ['ID'],
+            selection: { mode: 'multiple' },
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.notOk($('.dx-header-row .dx-command-select').get(0).hasAttribute('aria-label'));
+        assert.ok($('.dx-header-row .dx-select-checkbox').get(0).hasAttribute('aria-label'));
+
+        $('.dx-data-row .dx-command-select').each((ind, item) => assert.notOk(item.hasAttribute('aria-label')));
+        $('.dx-data-row .dx-select-checkbox').each((ind, item) => assert.ok(item.hasAttribute('aria-label')));
     });
 
     // T489478
