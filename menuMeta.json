@@ -2574,7 +2574,6 @@
           {
             "Title": "Stock",
             "Name": "Stock",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Financial_Series/",
             "Credits": "bigcharts.marketwatch.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
