@@ -36,7 +36,7 @@ const BaseStrategy = Class.inherit({
         };
 
         const originalEvent = e.originalEvent;
-        if(originalEvent?.target.shadowRoot) {
+        if(originalEvent?.target?.shadowRoot) {
             const path = originalEvent.path ?? originalEvent.composedPath?.();
             event.target = path[0];
         }
