@@ -381,7 +381,6 @@ const Slider = TrackBar.inherit({
 
     _renderStartHandler: function() {
         const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
-        const pointerUpEventName = addNamespace(pointerEvents.up, this.NAME);
         const clickEventName = addNamespace(clickName, this.NAME);
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
@@ -398,11 +397,6 @@ const Slider = TrackBar.inherit({
             if(isMouseEvent(e)) {
                 startAction({ event: e });
             }
-        });
-
-        eventsEngine.off($element, pointerUpEventName);
-        eventsEngine.on($element, pointerUpEventName, e => {
-            changeValueOnMovingComplete();
         });
 
         eventsEngine.off($element, clickEventName);
