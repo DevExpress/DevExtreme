@@ -388,10 +388,8 @@ const Slider = TrackBar.inherit({
 
         const changeValueOnMovingComplete = () => {
             if(this.option('callValueChange') === 'onMovingComplete') {
-                if(this._getActualValue()) {
-                    this.option('value', this._getActualValue());
-                    this._actualValue = undefined;
-                }
+                this.option('value', this._getActualValue());
+                this._actualValue = undefined;
             }
         };
 
