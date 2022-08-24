@@ -385,13 +385,6 @@ const Slider = TrackBar.inherit({
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
 
-        const changeValueOnMovingComplete = () => {
-            if(this.option('callValueChange') === 'onMovingComplete') {
-                this.option('value', this._getActualValue());
-                this._actualValue = undefined;
-            }
-        };
-
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, e => {
             if(isMouseEvent(e)) {
@@ -408,7 +401,11 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
-            changeValueOnMovingComplete();
+
+            if(this.option('callValueChange') === 'onMovingComplete') {
+                this.option('value', this._getActualValue());
+                this._actualValue = undefined;
+            }
         });
     },
 
