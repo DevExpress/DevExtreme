@@ -1,13 +1,16 @@
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
+import { MergedRangesManager } from './export_merged_ranges_manager';
 
 class DataGridHelpers {
-    constructor(worksheet, dataProvider, options) {
-        this.worksheet = worksheet;
+    constructor(dataProvider, worksheet, options) {
         this.dataProvider = dataProvider;
+        this.worksheet = worksheet;
+        this.mergedRangesManager = new MergedRangesManager(dataProvider, worksheet);
 
         this.topLeftCell = options.topLeftCell;
+        this.customizeCell = options.customizeCell;
 
         this.autoFilterEnabled = options.autoFilterEnabled;
     }
@@ -80,9 +83,9 @@ class DataGridHelpers {
         return [];
     }
 
-    _customizeCell(customizeCell, excelCell, gridCell) {
-        if(isFunction(customizeCell)) {
-            customizeCell(this._getCustomizeCellOptions(excelCell, gridCell));
+    _customizeCell(excelCell, gridCell) {
+        if(isFunction(this.customizeCell)) {
+            this.customizeCell(this._getCustomizeCellOptions(excelCell, gridCell));
         }
     }
 

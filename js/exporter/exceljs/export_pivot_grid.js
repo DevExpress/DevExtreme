@@ -2,15 +2,18 @@ import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import { Export } from './export';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { camelize } from '../../core/utils/inflector';
+import { MergedRangesManager } from './export_merged_ranges_manager';
 
 const FIELD_HEADERS_SEPARATOR = ', ';
 
 class PivotGridHelpers {
-    constructor(worksheet, dataProvider, options) {
-        this.worksheet = worksheet;
+    constructor(dataProvider, worksheet, options) {
         this.dataProvider = dataProvider;
+        this.worksheet = worksheet;
+        this.mergedRangesManager = new MergedRangesManager(dataProvider, worksheet);
 
         this.topLeftCell = options.topLeftCell;
+        this.customizeCell = options.customizeCell;
 
         this.mergeColumnFieldValues = options.mergeColumnFieldValues;
         this.mergeRowFieldValues = options.mergeRowFieldValues;
@@ -41,17 +44,9 @@ class PivotGridHelpers {
     }
 
     _getFieldHeaderRowsCount() {
-        let result = 0;
-
-        if(this._allowExportFilterFieldHeaders()) {
-            result++;
-        }
-
-        if(this._allowExportDataFieldHeaders() || this._allowExportColumnFieldHeaders()) {
-            result++;
-        }
-
-        return result;
+        return 0
+            + this._allowExportFilterFieldHeaders()
+            + this._allowExportDataFieldHeaders() || this._allowExportColumnFieldHeaders();
     }
 
     _getCustomizeCellOptions(excelCell, pivotCell) {
@@ -82,7 +77,7 @@ class PivotGridHelpers {
 
     _allowToMergeRange(rowIndex, cellIndex, rowspan, colspan) {
         return !((this.dataProvider.isColumnAreaCell(rowIndex, cellIndex) && !this.mergeColumnFieldValues && !!colspan)
-        || (this.dataProvider.isRowAreaCell(rowIndex, cellIndex) && !this.mergeRowFieldValues && !!rowspan));
+            || (this.dataProvider.isRowAreaCell(rowIndex, cellIndex) && !this.mergeRowFieldValues && !!rowspan));
     }
 
     _trySetAutoFilter() {}
@@ -121,78 +116,74 @@ class PivotGridHelpers {
             return [];
         }
 
-        let fields = this._getAllFieldHeaders()[area === 'data' ? 'values' : `${area}s`].filter(r => r.area === area);
+        let fields = this._getAllFieldHeaders()[area === 'data' ? 'values' : `${area}s`]
+            .filter(fieldHeader => fieldHeader.area === area);
 
         if(getDefaultAlignment(this.dataProvider._options.rtlEnabled) === 'right') {
-            fields = fields.sort((a, b) => {
-                if(a.areaIndex < b.areaIndex) {
-                    return 1;
-                }
-
-                return -1;
-            });
+            fields = fields = fields.sort((a, b) => b.areaIndex - a.areaIndex);
         }
 
         return fields.map(r => r.caption);
     }
 
-    _customizeCell(customizeCell, excelCell, pivotCell, shouldPreventCall) {
-        if(isFunction(customizeCell) && !shouldPreventCall) {
-            customizeCell(this._getCustomizeCellOptions(excelCell, pivotCell));
+    _customizeCell(excelCell, pivotCell, shouldPreventCall) {
+        if(isFunction(this.customizeCell) && !shouldPreventCall) {
+            this.customizeCell(this._getCustomizeCellOptions(excelCell, pivotCell));
         }
     }
 
     _isRowFieldHeadersRow(rowIndex) {
-        const isLastInfoRangeCell = this._isInfoCell(rowIndex, 0) && this.dataProvider.getCellData(rowIndex + 1, 0, true).cellSourceData.area === 'row';
+        const isLastInfoRangeCell = this._isInfoCell(rowIndex, 0)
+            && this.dataProvider.getCellData(rowIndex + 1, 0, true).cellSourceData.area === 'row';
 
         return this._allowExportRowFieldHeaders() && isLastInfoRangeCell;
     }
 
-    _exportAllFieldHeaders(mergedRangesManager, customizeCell, columns, wrapText, setAlignment) {
+    _exportAllFieldHeaders(columns, wrapText, setAlignment) {
         const totalCellsCount = columns.length;
         const rowAreaColCount = this.dataProvider.getRowAreaColCount();
 
         let rowIndex = this.topLeftCell.row;
 
         if(this._allowExportFilterFieldHeaders()) {
-            this._exportFieldHeaders('filter', rowIndex, mergedRangesManager, 0, totalCellsCount, customizeCell, wrapText, setAlignment);
+            this._exportFieldHeaders('filter', rowIndex, 0, totalCellsCount, wrapText, setAlignment);
             rowIndex++;
         }
 
         if(this._allowExportDataFieldHeaders()) {
-            this._exportFieldHeaders('data', rowIndex, mergedRangesManager, 0, rowAreaColCount, customizeCell, wrapText, setAlignment);
+            this._exportFieldHeaders('data', rowIndex, 0, rowAreaColCount, wrapText, setAlignment);
 
             if(!this._allowExportColumnFieldHeaders()) {
-                this._exportFieldHeaders('column', rowIndex, mergedRangesManager, rowAreaColCount, totalCellsCount - rowAreaColCount, customizeCell, wrapText, setAlignment);
+                this._exportFieldHeaders('column', rowIndex, rowAreaColCount, totalCellsCount - rowAreaColCount, wrapText, setAlignment);
             }
         }
 
         if(this._allowExportColumnFieldHeaders()) {
             if(!this._allowExportDataFieldHeaders()) {
-                this._exportFieldHeaders('data', rowIndex, mergedRangesManager, 0, rowAreaColCount, customizeCell, wrapText, setAlignment);
+                this._exportFieldHeaders('data', rowIndex, 0, rowAreaColCount, wrapText, setAlignment);
             }
 
-            this._exportFieldHeaders('column', rowIndex, mergedRangesManager, rowAreaColCount, totalCellsCount - rowAreaColCount, customizeCell, wrapText, setAlignment);
+            this._exportFieldHeaders('column', rowIndex, rowAreaColCount, totalCellsCount - rowAreaColCount, wrapText, setAlignment);
         }
     }
 
-    _exportFieldHeaders(area, rowIndex, mergedRangesManager, startCellIndex, cellsCount, customizeCell, wrapText, setAlignment, rowHeaderLayout) {
+    _exportFieldHeaders(area, rowIndex, startColumnIndex, totalColumnsCount, wrapText, setAlignment, rowHeaderLayout) {
         const fieldHeaders = this[`${area}FieldHeaders`];
         const row = this.worksheet.getRow(rowIndex);
 
         const shouldMergeHeaderField = area !== 'row' || (area === 'row' && rowHeaderLayout === 'tree');
 
         if(shouldMergeHeaderField) {
-            mergedRangesManager.addMergedRange(row.getCell(this.topLeftCell.column + startCellIndex), 0, cellsCount - 1);
+            this.mergedRangesManager.addMergedRange(row.getCell(this.topLeftCell.column + startColumnIndex), 0, totalColumnsCount - 1);
         }
 
-        for(let cellIndex = 0; cellIndex < cellsCount; cellIndex++) {
-            const excelCell = row.getCell(this.topLeftCell.column + startCellIndex + cellIndex);
+        for(let cellIndex = 0; cellIndex < totalColumnsCount; cellIndex++) {
+            const excelCell = row.getCell(this.topLeftCell.column + startColumnIndex + cellIndex);
 
             const values = fieldHeaders;
             let cellData = [];
 
-            const value = (values.length > cellsCount || shouldMergeHeaderField)
+            const value = (values.length > totalColumnsCount || shouldMergeHeaderField)
                 ? values.join(FIELD_HEADERS_SEPARATOR)
                 : values[cellIndex];
 
@@ -202,7 +193,7 @@ class PivotGridHelpers {
 
             this._applyHeaderStyles(excelCell, wrapText, setAlignment);
 
-            this._customizeCell(customizeCell, excelCell, cellData);
+            this._customizeCell(excelCell, cellData);
         }
     }
 

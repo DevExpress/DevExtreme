@@ -1,7 +1,6 @@
 
 import { isDefined, isString, isDate, isObject } from '../../core/utils/type';
 import { ExportFormat } from './export_format';
-import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
 import { ExportLoadPanel } from '../common/export_load_panel';
 import { hasWindow } from '../../core/utils/window';
@@ -100,7 +99,6 @@ export const Export = {
 
     export(options, Helpers, getLoadPanelTargetElement, getLoadPanelContainer) {
         const {
-            customizeCell,
             component,
             worksheet,
             topLeftCell,
@@ -144,39 +142,37 @@ export const Export = {
                 const columns = dataProvider.getColumns();
                 const dataRowsCount = dataProvider.getRowsCount();
 
-                const helpers = new Helpers(worksheet, dataProvider, options);
-                const mergedRangesManager = new MergedRangesManager(worksheet, dataProvider, helpers);
+                const helpers = new Helpers(dataProvider, worksheet, options);
 
                 if(keepColumnWidths) {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const styles = this.getCellStyles(dataProvider);
-
-                helpers._exportAllFieldHeaders(mergedRangesManager, customizeCell, columns, wrapText, this.setAlignment);
+                helpers._exportAllFieldHeaders(columns, wrapText, this.setAlignment);
 
                 const fieldHeaderRowsCount = helpers._getFieldHeaderRowsCount();
                 cellRange.to.row = cellRange.from.row + fieldHeaderRowsCount;
 
+                const styles = this.getCellStyles(dataProvider);
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                    const actualRowIndex = cellRange.from.row + fieldHeaderRowsCount + rowIndex;
-                    const row = worksheet.getRow(actualRowIndex);
+                    const currentRowIndex = cellRange.from.row + fieldHeaderRowsCount + rowIndex;
+                    const row = worksheet.getRow(currentRowIndex);
 
                     let startCellIndex = 0;
 
                     if(helpers._isRowFieldHeadersRow(rowIndex)) {
                         startCellIndex = dataProvider.getRowAreaColCount();
-                        helpers._exportFieldHeaders('row', actualRowIndex, mergedRangesManager, 0, startCellIndex, customizeCell, wrapText, this.setAlignment, component.option('rowHeaderLayout'));
+                        helpers._exportFieldHeaders('row', currentRowIndex, 0, startCellIndex, wrapText, this.setAlignment, component.option('rowHeaderLayout'));
                     }
 
                     helpers._trySetOutlineLevel(row, rowIndex);
 
-                    this.exportRow(dataProvider, helpers, row, rowIndex, mergedRangesManager, columns.length, startCellIndex, customizeCell, wrapText, styles);
+                    this.exportRow(dataProvider, helpers, row, rowIndex, startCellIndex, columns.length, wrapText, styles);
 
-                    cellRange.to.row = actualRowIndex;
+                    cellRange.to.row = currentRowIndex;
                 }
 
-                mergedRangesManager.applyMergedRages();
+                helpers.mergedRangesManager.applyMergedRages();
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -210,14 +206,14 @@ export const Export = {
         });
     },
 
-    exportRow(dataProvider, helpers, row, rowIndex, mergedRangesManager, cellCount, startCellIndex, customizeCell, wrapText, styles) {
-        for(let cellIndex = startCellIndex; cellIndex < cellCount; cellIndex++) {
+    exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columnsCount, wrapText, styles) {
+        for(let cellIndex = startColumnIndex; cellIndex < columnsCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
             const excelCell = row.getCell(helpers._getFirstColumnIndex() + cellIndex);
 
-            mergedRangesManager.updateMergedRanges(excelCell, rowIndex, cellIndex, helpers._isInfoCell(rowIndex, cellIndex) && helpers._allowExportRowFieldHeaders());
+            helpers.mergedRangesManager.updateMergedRanges(excelCell, rowIndex, cellIndex, helpers);
 
-            const cellInfo = mergedRangesManager.findMergedCellInfo(rowIndex, cellIndex);
+            const cellInfo = helpers.mergedRangesManager.findMergedCellInfo(rowIndex, cellIndex, helpers._isHeaderCell(rowIndex, cellIndex));
             if(isDefined(cellInfo) && (excelCell !== cellInfo.masterCell)) {
                 excelCell.style = cellInfo.masterCell.style;
                 excelCell.value = cellInfo.masterCell.value;
@@ -242,7 +238,7 @@ export const Export = {
                 }
             }
 
-            helpers._customizeCell(customizeCell, excelCell, cellData.cellSourceData);
+            helpers._customizeCell(excelCell, cellData.cellSourceData);
         }
     }
 };
