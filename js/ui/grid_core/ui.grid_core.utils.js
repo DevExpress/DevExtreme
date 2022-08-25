@@ -622,8 +622,8 @@ export default {
                         });
                     } else {
                         const filter = this.combineFilters(
-                            items.map((data => [
-                                column.lookup.valueExpr, data.key,
+                            items.flatMap((data) => data.key).map((key => [
+                                column.lookup.valueExpr, key,
                             ])),
                             'or'
                         );
