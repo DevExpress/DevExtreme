@@ -1757,11 +1757,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
-
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
   /**
    * [descr:template]
    */
@@ -8460,7 +8455,7 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
-    export type Scrollable = DevExpress.core.Skip<
+    export type Scrollable = Omit<
       dxScrollable,
       | '_templateManager'
       | '_cancelOptionChange'
@@ -13924,7 +13919,7 @@ declare module DevExpress.ui {
    * @deprecated Use the Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxGanttColumn<TRowData = any, TKey = any> = DevExpress.core.Skip<
+  export type dxGanttColumn<TRowData = any, TKey = any> = Omit<
     dxGanttColumnBlank<TRowData, TKey>,
     | 'allowEditing'
     | 'allowFixing'
@@ -16445,7 +16440,7 @@ declare module DevExpress.ui {
     TComponent extends dxMenuBase<any, TItem, TKey>,
     TItem extends dxMenuBaseItem = dxMenuBaseItem,
     TKey = any
-  > extends DevExpress.core.Skip<
+  > extends Omit<
       HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>,
       'dataSource'
     > {
@@ -22757,7 +22752,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>;
-    export type Scrollable = DevExpress.core.Skip<
+    export type Scrollable = Omit<
       dxScrollable,
       | '_templateManager'
       | '_cancelOptionChange'
@@ -23324,7 +23319,7 @@ declare module DevExpress.ui {
     > &
       DevExpress.events.ChangedOptionInfo;
     export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
-    export type Scrollable = DevExpress.core.Skip<
+    export type Scrollable = Omit<
       dxScrollable,
       | '_templateManager'
       | '_cancelOptionChange'
@@ -23423,7 +23418,7 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    */
   export interface dxTreeViewOptions<TKey = any>
-    extends DevExpress.core.Skip<
+    extends Omit<
         HierarchicalCollectionWidgetOptions<
           dxTreeView<TKey>,
           dxTreeViewItem,
