@@ -381,28 +381,15 @@ const Slider = TrackBar.inherit({
 
     _renderStartHandler: function() {
         const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
-        const pointerUpEventName = addNamespace(pointerEvents.up, this.NAME);
         const clickEventName = addNamespace(clickName, this.NAME);
         const startAction = this._createAction(this._startHandler.bind(this));
         const $element = this.$element();
-
-        const changeValueOnMovingComplete = () => {
-            if(this.option('callValueChange') === 'onMovingComplete') {
-                this.option('value', this._getActualValue());
-                this._actualValue = undefined;
-            }
-        };
 
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, e => {
             if(isMouseEvent(e)) {
                 startAction({ event: e });
             }
-        });
-
-        eventsEngine.off($element, pointerUpEventName);
-        eventsEngine.on($element, pointerUpEventName, e => {
-            changeValueOnMovingComplete();
         });
 
         eventsEngine.off($element, clickEventName);
@@ -414,7 +401,11 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
-            changeValueOnMovingComplete();
+
+            if(this.option('callValueChange') === 'onMovingComplete') {
+                this.option('value', this._getActualValue());
+                this._actualValue = undefined;
+            }
         });
     },
 
@@ -656,6 +647,7 @@ const Slider = TrackBar.inherit({
 
     _clean: function() {
         delete this._inkRipple;
+        delete this._actualValue;
         this.callBase();
     }
 });
