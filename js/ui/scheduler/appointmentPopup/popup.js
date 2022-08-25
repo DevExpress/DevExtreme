@@ -179,8 +179,8 @@ export class AppointmentPopup {
     _setTimeZonesVisibility() {
         if(this.scheduler.getEditingConfig().allowTimeZoneEditing) {
             const isVisible = !this.state.appointment.data.allDay;
-            this.form.form.itemOption('undefined.startDateTimeZone', 'visible', isVisible);
-            this.form.form.itemOption('undefined.endDateTimeZone', 'visible', isVisible);
+            this.form.dxForm.itemOption('undefined.startDateTimeZone', 'visible', isVisible);
+            this.form.dxForm.itemOption('undefined.endDateTimeZone', 'visible', isVisible);
         }
     }
 
