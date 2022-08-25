@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`Scheduler - Multiday appointments (screenshot)`
   .page(url(__dirname, '../../container.html'));
@@ -26,21 +27,24 @@ fixture`Scheduler - Multiday appointments (screenshot)`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createWidget(
-    'dxScheduler',
-    {
-      width: 900,
-      height: 400,
-      dataSource: [{
-        text: 'Website Re-Design Plan',
-        startDate: new Date(2021, 2, 28, 8),
-        endDate: new Date(2021, 3, 4, 8),
-      }],
-      views: ['week', 'month', 'timelineMonth'],
-      currentView,
-      currentDate: new Date(2021, 3, 4),
-      startDayHour: 12,
-    },
-    true,
-  ));
+  }).before(async (t: TestController) => {
+    await restoreBrowserSize(t);
+    await createWidget(
+      'dxScheduler',
+      {
+        width: 900,
+        height: 400,
+        dataSource: [{
+          text: 'Website Re-Design Plan',
+          startDate: new Date(2021, 2, 28, 8),
+          endDate: new Date(2021, 3, 4, 8),
+        }],
+        views: ['week', 'month', 'timelineMonth'],
+        currentView,
+        currentDate: new Date(2021, 3, 4),
+        startDayHour: 12,
+      },
+      true,
+    );
+  });
 });
