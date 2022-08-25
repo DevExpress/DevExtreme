@@ -22,7 +22,7 @@ interface ISchedulerPopupExpr {
   description?: string;
 }
 
-const defaultExpr = {
+const defaultExpr: Required<ISchedulerPopupExpr> = {
   subject: 'text',
   startDate: 'startDate',
   startDateTimeZone: 'startDateTimeZone',
