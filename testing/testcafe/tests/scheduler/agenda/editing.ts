@@ -43,9 +43,9 @@ test('It should be possible to change the data source of agenda resources', asyn
   const scheduler = new Scheduler('#container');
 
   await t
-    .expect(scheduler.getAppointmentByIndex(0).resourceValue)
+    .expect(scheduler.getAppointmentResourceByIndex(0, 'Owner'))
     .eql('Samantha Bright')
-    .expect(scheduler.getAppointmentByIndex(1).resourceValue)
+    .expect(scheduler.getAppointmentResourceByIndex(1, 'Owner'))
     .eql('Todd Hoffman');
 
   await scheduler.option('resources[0].dataSource', [{
@@ -55,9 +55,9 @@ test('It should be possible to change the data source of agenda resources', asyn
   ]);
 
   await t
-    .expect(scheduler.getAppointmentByIndex(0).resourceValue)
+    .expect(scheduler.getAppointmentResourceByIndex(0, 'Owner'))
     .notOk()
-    .expect(scheduler.getAppointmentByIndex(1).resourceValue)
+    .expect(scheduler.getAppointmentResourceByIndex(1, 'Owner'))
     .eql('Todd Hoffman');
 }).before(async () => {
   await createWidget('dxScheduler', {
