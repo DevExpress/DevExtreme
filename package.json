@@ -172,7 +172,7 @@
     "stylelint-config-standard-scss": "3.0.0",
     "stylelint-devextreme": "0.0.6",
     "stylelint-scss": "4.2.0",
-    "systemjs": "0.19.41",
+    "systemjs": "0.21.6",
     "systemjs-plugin-babel": "0.0.25",
     "systemjs-plugin-css": "0.1.37",
     "systemjs-plugin-json": "0.2.2",
