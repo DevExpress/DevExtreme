@@ -403,6 +403,7 @@ export const headerFilterMixin = {
 
         if(options.name === 'headerFilter') {
             const rtlEnabled = this.option('rtlEnabled');
+            $indicator.attr('role', 'button');
             if($container.children().length && (!rtlEnabled && options.columnAlignment === 'right' || rtlEnabled && options.columnAlignment === 'left')) {
                 $container.prepend($indicator);
                 return;
