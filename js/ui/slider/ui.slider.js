@@ -147,8 +147,9 @@ const Slider = TrackBar.inherit({
 
             validationMessageOffset: isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
 
-            focusStateEnabled: true
+            focusStateEnabled: true,
 
+            callValueChange: 'onMoving'
         });
     },
 
@@ -390,6 +391,7 @@ const Slider = TrackBar.inherit({
                 startAction({ event: e });
             }
         });
+
         eventsEngine.off($element, clickEventName);
         eventsEngine.on($element, clickEventName, e => {
             const $handle = this._activeHandle();
@@ -399,6 +401,11 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
+
+            if(this.option('callValueChange') === 'onMovingComplete') {
+                this.option('value', this._getActualValue());
+                this._actualValue = undefined;
+            }
         });
     },
 
@@ -437,9 +444,17 @@ const Slider = TrackBar.inherit({
         this._toggleActiveState(this._activeHandle(), false);
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
+        const ratio = this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio();
+
         delete this._needPreventAnimation;
         this._saveValueChangeEvent(e.event);
-        this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
+        this._changeValueOnSwipe(ratio);
+
+        if(this.option('callValueChange') === 'onMovingComplete') {
+            this.option('value', this._getActualValue());
+        }
+
+        this._actualValue = undefined;
         delete this._startOffset;
         this._renderValue();
     },
@@ -520,8 +535,18 @@ const Slider = TrackBar.inherit({
     },
 
     _setValueOnSwipe: function(value) {
-        this.option('value', value);
-        this._saveValueChangeEvent(undefined);
+        this._actualValue = value;
+
+        if(this.option('callValueChange') === 'onMovingComplete') {
+            SliderHandle.getInstance(this._activeHandle()).option('value', value);
+        } else {
+            this.option('value', value);
+            this._saveValueChangeEvent(undefined);
+        }
+    },
+
+    _getActualValue: function() {
+        return this._actualValue ?? this.option('value');
     },
 
     _isSingleValuePossible: function() {
@@ -550,7 +575,7 @@ const Slider = TrackBar.inherit({
     _renderValue: function() {
         this.callBase();
 
-        const value = this.option('value');
+        const value = this._getActualValue();
 
         this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option('value', value);
@@ -605,6 +630,8 @@ const Slider = TrackBar.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
+            case 'callValueChange':
+                break;
             default:
                 this.callBase(args);
         }
@@ -620,6 +647,7 @@ const Slider = TrackBar.inherit({
 
     _clean: function() {
         delete this._inkRipple;
+        delete this._actualValue;
         this.callBase();
     }
 });

@@ -1474,6 +1474,7 @@ declare module DevExpress.common {
   export type SingleOrMultiple = 'single' | 'multiple';
   export type SingleOrNone = 'single' | 'none';
   export type SlideOutMenuPosition = 'inverted' | 'normal';
+  export type SliderCallValueChange = 'onMoving' | 'onMovingComplete';
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
   export type SubmenuShowMode = 'onClick' | 'onHover';
@@ -20254,6 +20255,10 @@ declare module DevExpress.ui {
        */
       showMode?: DevExpress.common.TooltipShowMode;
     };
+    /**
+     * [descr:dxSliderBaseOptions.callValueChange]
+     */
+    callValueChange?: DevExpress.common.SliderCallValueChange;
   }
   /**
    * @deprecated use Properties instead

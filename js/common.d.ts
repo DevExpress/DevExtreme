@@ -266,6 +266,13 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
  * @public
  * @namespace DevExpress.common
  */
+
+export type SliderCallValueChange = 'onMoving' | 'onMovingComplete';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type VerticalAlignment = 'bottom' | 'center' | 'top';
 
 /**

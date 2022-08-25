@@ -306,20 +306,23 @@ module('render', moduleOptions, () => {
         assert.equal(instance.option('value'), 300, 'value set after dxswipestart');
     });
 
-    test('value should be updated on click on mobile devices', function(assert) {
-        const $element = $('#slider').dxSlider({
-            max: 500,
-            min: 0,
-            value: 0,
-            width: 500 + 2 * SLIDER_PADDING
+    ['onMoving', 'onMovingComplete'].forEach(mode => {
+        test('value option should be updated on click', function(assert) {
+            const $element = $('#slider').dxSlider({
+                max: 500,
+                min: 0,
+                value: 0,
+                width: 500 + 2 * SLIDER_PADDING,
+                callValueChange: mode
+            });
+            const instance = $element.dxSlider('instance');
+
+            const $handle = $element.find('.' + SLIDER_WRAPPER_CLASS);
+            const pointer = pointerMock($handle);
+
+            pointer.start({ pointerType: 'touch', x: SLIDER_PADDING }).move($element.offset().left + 300).click();
+            assert.equal(instance.option('value'), 300, 'value set after dxclick');
         });
-        const instance = $element.dxSlider('instance');
-
-        const $handle = $element.find('.' + SLIDER_WRAPPER_CLASS);
-        const pointer = pointerMock($handle);
-
-        pointer.start({ pointerType: 'touch', x: SLIDER_PADDING }).move($element.offset().left + 300).click();
-        assert.equal(instance.option('value'), 300, 'value set after dxclick');
     });
 
     test('value should be correctly updated on swipestart with the step that exceeds the maximum (T831727)', function(assert) {
@@ -1759,5 +1762,94 @@ module('if only the single value is possible', moduleOptions, () => {
 
         assert.strictEqual($handle.offset().left, handleX, 'handle position was not changed');
         assert.strictEqual(slider.option('value'), value, 'value was not changed');
+    });
+});
+
+module('callValueChange option', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxSlider({
+            callValueChange: 'onMovingComplete',
+            onValueChanged: this.valueChangedHandler,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+        this.instance = this.$element.dxSlider('instance');
+        this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
+        this.pointer = pointerMock(this.$wrapper);
+        this.keyboard = keyboardMock(this.$handle);
+        this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
+
+        this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
+        this.getTooltipText = () => $.trim(this.getTooltip().text());
+    }
+}, () => {
+    test('slider value should not change on swipe with "onMovingComplete" callValueChange', function(assert) {
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart();
+        this.pointer.swipe(20);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        this.pointer.swipeEnd(40);
+
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+        assert.strictEqual(this.instance.option('value'), 90);
+    });
+
+    test('slider tooltip value should change on swipe if callValueChange = onMovingComplete', function(assert) {
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart();
+        this.pointer.swipe(20);
+
+        assert.strictEqual(this.getTooltipText(), '70');
+
+        this.pointer.swipeEnd(40);
+
+        assert.strictEqual(this.getTooltipText(), '90');
+    });
+
+    test('slider should change its value on every step after runtime change callValueChange to onMoving', function(assert) {
+        this.instance.option('callValueChange', 'onMoving');
+
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart();
+        this.pointer.swipe(20);
+
+        assert.strictEqual(this.valueChangedHandler.called, true, 'the onValueChanged is called');
+
+        this.pointer.swipeEnd(20);
+
+        assert.strictEqual(this.instance.option('value'), 70);
+    });
+
+    test('slider should change its value on moving complete after runtime change callValueChange to onMovingComplete', function(assert) {
+        this.instance.option('callValueChange', 'onMovingComplete');
+
+        this.pointer.start({ x: SLIDER_PADDING });
+        this.pointer.swipeStart().swipe(20);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+        assert.strictEqual(this.instance.option('value'), 50, 'value is not changed');
+
+        this.pointer.swipeEnd(20);
+
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+        assert.strictEqual(this.instance.option('value'), 70, 'value is changed');
+    });
+
+    test('tooltip value should be correctly updated on left arrow pressed', function(assert) {
+        this.instance.option('callValueChange', 'onMoving');
+        this.keyboard.press('leftArrow');
+        assert.strictEqual(this.getTooltipText(), '49');
+    });
+
+    test('tooltip value should be correctly updated on right arrow pressed', function(assert) {
+        this.instance.option('callValueChange', 'onMoving');
+        this.keyboard.press('rightArrow');
+        assert.strictEqual(this.getTooltipText(), '51');
     });
 });

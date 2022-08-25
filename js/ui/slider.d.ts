@@ -19,6 +19,7 @@ import {
 
 import {
     TooltipShowMode,
+    SliderCallValueChange,
     VerticalEdge,
 } from '../common';
 
@@ -159,6 +160,12 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        */
       showMode?: TooltipShowMode;
     };
+    /**
+     * @docid
+     * @default 'onMoving'
+     * @public
+     */
+     callValueChange?: SliderCallValueChange;
 }
 
 /** @public */

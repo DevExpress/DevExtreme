@@ -1343,3 +1343,104 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
         });
     });
 });
+
+QUnit.module('callValueChange option', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxRangeSlider({
+            max: 100,
+            min: 0,
+            start: 20,
+            end: 60,
+            callValueChange: 'onMovingComplete',
+            onValueChanged: this.valueChangedHandler,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+        this.instance = this.$element.dxRangeSlider('instance');
+        this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.leftHandle = this.$handle.eq(0);
+        this.rightHandle = this.$handle.eq(1);
+        this.leftHandleTooltip = this.leftHandle.find(`.${TOOLTIP_CLASS}`);
+        this.rightHandleTooltip = this.rightHandle.find(`.${TOOLTIP_CLASS}`);
+
+        this.range = this.$element.find('.' + SLIDER_RANGE_CLASS);
+
+        this.getLeftTooltipText = () => $.trim(this.leftHandleTooltip.text());
+        this.getRightTooltipText = () => $.trim(this.rightHandleTooltip.text());
+    }
+}, () => {
+    QUnit.test('value option should not change on left handle swipe with "onMovingComplete" callValueChange', function(assert) {
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start().move(this.range.offset().left).down().move(200);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        pointer.up();
+
+        assert.equal(this.instance.option('start'), 40);
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+    });
+
+    QUnit.test('value option should not change on right handle swipe with "onMovingComplete" callValueChange', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        pointer.up();
+
+        assert.equal(this.instance.option('end'), 80);
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+    });
+
+    QUnit.test('tooltip value should change on left handle swipe with "onMovingComplete" callValueChange', function(assert) {
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start()
+            .down(this.range.offset().left)
+            .move(200);
+
+        assert.strictEqual(this.getLeftTooltipText(), '40');
+
+        pointer.move(400).up();
+
+        assert.strictEqual(this.getLeftTooltipText(), '60');
+    });
+
+    QUnit.test('tooltip value should change on right handle swipe with "onMovingComplete" callValueChange', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
+
+        assert.strictEqual(this.getRightTooltipText(), '80');
+
+        pointer.move(100).up();
+
+        assert.strictEqual(this.getRightTooltipText(), '90');
+    });
+
+    QUnit.test('value should be correctly updated when right handle is moved through left handle', function(assert) {
+        this.instance.option('start', 40);
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(-400).up();
+
+        assert.strictEqual(this.instance.option('start'), 20);
+    });
+
+    QUnit.test('value should be correctly updated when left handle is moved through right handle', function(assert) {
+        this.instance.option('start', 40);
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start().down(this.leftHandle.offset().left + CONTAINER_MARGIN).move(400).up();
+
+        assert.strictEqual(this.instance.option('end'), 80);
+    });
+
+    QUnit.test('tooltip value should be correctly updated when handle value is 0', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(-600);
+
+        assert.strictEqual(this.getLeftTooltipText(), '0');
+    });
+});
+
