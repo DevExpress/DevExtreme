@@ -643,6 +643,35 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.deepEqual(selectedRowKeys, [1, 2], 'both rows are selected');
     });
+
+    QUnit.test('Selection should persist when triggering selection on an already selected row (T1105369)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{
+                'id': 1,
+            }, {
+                'id': 2,
+            }],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            onFocusedRowChanged: function(e) {
+                if(e.row) { e.component.selectRows([e.row.key], false); }
+            },
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always'
+            },
+        });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'row is selected');
+    });
+
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
