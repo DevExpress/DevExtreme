@@ -2371,7 +2371,6 @@
           {
             "Title": "Step Area",
             "Name": "StepArea",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Area_Series/",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
@@ -2382,7 +2381,6 @@
           {
             "Title": "Step Area with Gaps",
             "Name": "NullPointSupport",
-            "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#ignoreEmptyPoints",
             "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
