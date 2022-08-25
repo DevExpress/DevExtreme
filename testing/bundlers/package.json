@@ -11,7 +11,7 @@
     "globalize": "1.7.0",
     "jquery": "3.6.0",
     "minimist": "1.2.6",
-    "parcel": "2.6.1",
+    "parcel": "2.7.0",
     "rimraf": "3.0.2",
     "rollup": "2.75.6",
     "vite": "2.9.15",
