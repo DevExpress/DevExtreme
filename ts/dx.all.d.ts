@@ -20284,7 +20284,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSliderBaseOptions.callValueChange]
      */
-    callValueChange: DevExpress.common.SliderCallValueChange;
+    callValueChange?: DevExpress.common.SliderCallValueChange;
   }
   /**
    * @deprecated use Properties instead
