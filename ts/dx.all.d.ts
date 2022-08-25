@@ -1502,54 +1502,18 @@ declare module DevExpress.common {
 declare module DevExpress.common.charts {
   export type AnimationEaseMode = 'easeOutCubic' | 'linear';
   export type AnnotationType = 'text' | 'image' | 'custom';
-  export type ApplyChangesMode = 'instantly' | 'onDemand';
-  export type ApplyFilterMode = 'auto' | 'onClick';
   export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
   export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type ColumnChooserMode = 'dragAndDrop' | 'select';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
-  export type DataChangeType = 'insert' | 'update' | 'remove';
-  export type DataRenderMode = 'standard' | 'virtual';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
-  export type EnterKeyAction = 'startEdit' | 'moveFocus';
-  export type EnterKeyDirection = 'none' | 'column' | 'row';
-  export type FilterOperation =
-    | '='
-    | '<>'
-    | '<'
-    | '<='
-    | '>'
-    | '>='
-    | 'contains'
-    | 'endswith'
-    | 'isblank'
-    | 'isnotblank'
-    | 'notcontains'
-    | 'startswith'
-    | 'between'
-    | 'anyof'
-    | 'noneof';
-  export type FilterType = 'exclude' | 'include';
-  export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
-  export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
-  export type GroupExpandMode = 'buttonClick' | 'rowClick';
   export type HatchDirection = 'left' | 'none' | 'right';
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
-  export type NewRowPosition =
-    | 'first'
-    | 'last'
-    | 'pageBottom'
-    | 'pageTop'
-    | 'viewportBottom'
-    | 'viewportTop';
-  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type PagerPageSize = 'all' | 'auto';
   export type Palette =
     | 'Bright'
     | 'Harmony Light'
@@ -1583,23 +1547,6 @@ declare module DevExpress.common.charts {
     | 'triangleUp';
   export type RelativePosition = 'inside' | 'outside';
   export type ScaleBreakLineStyle = 'straight' | 'waved';
-  export type SelectedFilterOperation =
-    | '<'
-    | '<='
-    | '<>'
-    | '='
-    | '>'
-    | '>='
-    | 'between'
-    | 'contains'
-    | 'endswith'
-    | 'notcontains'
-    | 'startswith';
-  export type SelectionColumnDisplayMode =
-    | 'always'
-    | 'none'
-    | 'onClick'
-    | 'onLongTap';
   export type SeriesHoverMode =
     | 'allArgumentPoints'
     | 'allSeriesPoints'
@@ -1615,9 +1562,6 @@ declare module DevExpress.common.charts {
     | 'includePoints'
     | 'none'
     | 'onlyPoint';
-  export type StartEditAction = 'click' | 'dblClick';
-  export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
-  export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
     | 'generic.dark'
@@ -1653,6 +1597,64 @@ declare module DevExpress.common.charts {
   export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
+}
+declare module DevExpress.common.grids {
+  export type ApplyChangesMode = 'instantly' | 'onDemand';
+  export type ApplyFilterMode = 'auto' | 'onClick';
+  export type ColumnChooserMode = 'dragAndDrop' | 'select';
+  export type DataChangeType = 'insert' | 'update' | 'remove';
+  export type DataRenderMode = 'standard' | 'virtual';
+  export type EnterKeyAction = 'startEdit' | 'moveFocus';
+  export type EnterKeyDirection = 'none' | 'column' | 'row';
+  export type FilterOperation =
+    | '='
+    | '<>'
+    | '<'
+    | '<='
+    | '>'
+    | '>='
+    | 'contains'
+    | 'endswith'
+    | 'isblank'
+    | 'isnotblank'
+    | 'notcontains'
+    | 'startswith'
+    | 'between'
+    | 'anyof'
+    | 'noneof';
+  export type FilterType = 'exclude' | 'include';
+  export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
+  export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
+  export type GroupExpandMode = 'buttonClick' | 'rowClick';
+  export type NewRowPosition =
+    | 'first'
+    | 'last'
+    | 'pageBottom'
+    | 'pageTop'
+    | 'viewportBottom'
+    | 'viewportTop';
+  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+  export type PagerPageSize = 'all' | 'auto';
+  export type SelectedFilterOperation =
+    | '<'
+    | '<='
+    | '<>'
+    | '='
+    | '>'
+    | '>='
+    | 'between'
+    | 'contains'
+    | 'endswith'
+    | 'notcontains'
+    | 'startswith';
+  export type SelectionColumnDisplayMode =
+    | 'always'
+    | 'none'
+    | 'onClick'
+    | 'onLongTap';
+  export type StartEditAction = 'click' | 'dblClick';
+  export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
+  export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
 }
 declare module DevExpress.core {
   /**
@@ -2857,7 +2859,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.filterType]
      */
-    filterType?: DevExpress.common.charts.FilterType;
+    filterType?: DevExpress.common.grids.FilterType;
     /**
      * [descr:PivotGridDataSourceOptions.fields.filterValues]
      */
@@ -2942,7 +2944,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.summaryType]
      */
-    summaryType?: DevExpress.common.charts.SummaryType | string;
+    summaryType?: DevExpress.common.grids.SummaryType | string;
     /**
      * [descr:PivotGridDataSourceOptions.fields.visible]
      */
@@ -6565,12 +6567,12 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.filterOperations]
        */
       filterOperations?: Array<
-        DevExpress.common.charts.FilterOperation | string
+        DevExpress.common.grids.FilterOperation | string
       >;
       /**
        * [descr:GridBaseColumn.filterType]
        */
-      filterType?: DevExpress.common.charts.FilterType;
+      filterType?: DevExpress.common.grids.FilterType;
       /**
        * [descr:GridBaseColumn.filterValue]
        */
@@ -6630,7 +6632,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.selectedFilterOperation]
        */
-      selectedFilterOperation?: DevExpress.common.charts.SelectedFilterOperation;
+      selectedFilterOperation?: DevExpress.common.grids.SelectedFilterOperation;
       /**
        * [descr:GridBaseColumn.setCellValue]
        */
@@ -6773,7 +6775,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.columnChooser.mode]
        */
-      mode?: DevExpress.common.charts.ColumnChooserMode;
+      mode?: DevExpress.common.grids.ColumnChooserMode;
       /**
        * [descr:GridBaseOptions.columnChooser.searchTimeout]
        */
@@ -7111,7 +7113,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.editing.newRowPosition]
        */
-      newRowPosition?: DevExpress.common.charts.NewRowPosition;
+      newRowPosition?: DevExpress.common.grids.NewRowPosition;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7140,7 +7142,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.mode]
        */
-      mode?: DevExpress.common.charts.GridsEditMode;
+      mode?: DevExpress.common.grids.GridsEditMode;
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
@@ -7148,7 +7150,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.refreshMode]
        */
-      refreshMode?: DevExpress.common.charts.GridsEditRefreshMode;
+      refreshMode?: DevExpress.common.grids.GridsEditRefreshMode;
       /**
        * [descr:GridBaseOptions.editing.selectTextOnEditStart]
        */
@@ -7156,7 +7158,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.startEditAction]
        */
-      startEditAction?: DevExpress.common.charts.StartEditAction;
+      startEditAction?: DevExpress.common.grids.StartEditAction;
       /**
        * [descr:GridBaseOptions.editing.texts]
        */
@@ -7540,7 +7542,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.filterRow.applyFilter]
        */
-      applyFilter?: DevExpress.common.charts.ApplyFilterMode;
+      applyFilter?: DevExpress.common.grids.ApplyFilterMode;
       /**
        * [descr:GridBaseOptions.filterRow.applyFilterText]
        */
@@ -7711,7 +7713,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.grouping.expandMode]
        */
-      expandMode?: DevExpress.common.charts.GroupExpandMode;
+      expandMode?: DevExpress.common.grids.GroupExpandMode;
       /**
        * [descr:dxDataGridOptions.grouping.texts]
        */
@@ -7835,11 +7837,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
        */
-      enterKeyAction?: DevExpress.common.charts.EnterKeyAction;
+      enterKeyAction?: DevExpress.common.grids.EnterKeyAction;
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
        */
-      enterKeyDirection?: DevExpress.common.charts.EnterKeyDirection;
+      enterKeyDirection?: DevExpress.common.grids.EnterKeyDirection;
     }
     export type KeyDownEvent<
       TRowData = any,
@@ -7940,12 +7942,12 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.pager.allowedPageSizes]
        */
       allowedPageSizes?:
-        | Array<number | DevExpress.common.charts.PagerPageSize>
+        | Array<number | DevExpress.common.grids.PagerPageSize>
         | DevExpress.common.Mode;
       /**
        * [descr:GridBaseOptions.pager.displayMode]
        */
-      displayMode?: DevExpress.common.charts.PagerDisplayMode;
+      displayMode?: DevExpress.common.grids.PagerDisplayMode;
       /**
        * [descr:GridBaseOptions.pager.infoText]
        */
@@ -8478,7 +8480,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.columnRenderingMode]
        */
-      columnRenderingMode?: DevExpress.common.charts.DataRenderMode;
+      columnRenderingMode?: DevExpress.common.grids.DataRenderMode;
       /**
        * [descr:GridBaseOptions.scrolling.preloadEnabled]
        */
@@ -8486,7 +8488,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.rowRenderingMode]
        */
-      rowRenderingMode?: DevExpress.common.charts.DataRenderMode;
+      rowRenderingMode?: DevExpress.common.grids.DataRenderMode;
       /**
        * [descr:GridBaseOptions.scrolling.scrollByContent]
        */
@@ -8553,7 +8555,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
-      showCheckBoxesMode?: DevExpress.common.charts.SelectionColumnDisplayMode;
+      showCheckBoxesMode?: DevExpress.common.grids.SelectionColumnDisplayMode;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -8634,7 +8636,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.stateStoring.type]
        */
-      type?: DevExpress.common.charts.StateStoreType;
+      type?: DevExpress.common.grids.StateStoreType;
     }
     export type Summary<TRowData = any, TKey = any> = {
       /**
@@ -8700,7 +8702,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.summaryType]
        */
-      summaryType?: DevExpress.common.charts.SummaryType | string;
+      summaryType?: DevExpress.common.grids.SummaryType | string;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
@@ -8784,7 +8786,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.summaryType]
        */
-      summaryType?: DevExpress.common.charts.SummaryType | string;
+      summaryType?: DevExpress.common.grids.SummaryType | string;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
@@ -17273,7 +17275,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
      */
-    applyChangesMode?: DevExpress.common.charts.ApplyChangesMode;
+    applyChangesMode?: DevExpress.common.grids.ApplyChangesMode;
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
      */
@@ -17444,7 +17446,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.applyChangesMode]
        */
-      applyChangesMode?: DevExpress.common.charts.ApplyChangesMode;
+      applyChangesMode?: DevExpress.common.grids.ApplyChangesMode;
       /**
        * [descr:dxPivotGridOptions.fieldChooser.enabled]
        */
@@ -17728,7 +17730,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.stateStoring.type]
        */
-      type?: DevExpress.common.charts.StateStoreType;
+      type?: DevExpress.common.grids.StateStoreType;
     };
     /**
      * [descr:dxPivotGridOptions.texts]
@@ -25106,7 +25108,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:DataChange.type]
      */
-    type: DevExpress.common.charts.DataChangeType;
+    type: DevExpress.common.grids.DataChangeType;
     /**
      * [descr:DataChange.data]
      */
