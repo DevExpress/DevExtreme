@@ -10,12 +10,13 @@ import messageLocalization from '../../../../localization/message';
 import { format } from '../../../../core/utils/string';
 
 export const viewFunction = ({
-  className, value, label, props: { onClick },
+  className, value, label, props: { onClick, selected },
 }: Page): JSX.Element => (
   <LightButton
     className={className}
     label={label}
     onClick={onClick}
+    selected={selected}
   >
     {value}
   </LightButton>
@@ -52,6 +53,10 @@ export class Page extends JSXComponent<PageProps>() {
 
   get value(): number {
     return this.props.index + 1;
+  }
+
+  get selected(): boolean {
+    return this.props.selected;
   }
 
   get className(): string {
