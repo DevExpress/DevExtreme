@@ -205,6 +205,23 @@ describe('PagerContent', () => {
       expect(childrenContainer.childAt(1).childAt(1).instance()).toBe(pagesRef.current);
       expect(childrenContainer.childAt(1).childAt(0).props().rootElementRef).toBe(infoTextRef);
     });
+
+    // T1109686
+    it('has role and aria-label attributes', () => {
+      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
+      const props = {
+        pagesContainerVisible: true,
+        pagesContainerVisibility: 'hidden',
+        props: {
+          rootElementRef,
+        },
+      } as Partial<PagerContent>;
+
+      const pagerContent = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
+
+      expect(pagerContent.prop('aria-label')).toBe('pagination');
+      expect(pagerContent.prop('role')).toBe('navigation');
+    });
   });
 
   describe('Logic', () => {

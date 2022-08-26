@@ -50,10 +50,10 @@ export const viewFunction = ({
     rtlEnabled={rtlEnabled}
     classes={classes}
     visible={visible}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     role="navigation"
     aria-label="pagination"
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
   >
     {showPageSizes && (
       <PageSizeSelector
