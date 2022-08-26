@@ -52,6 +52,8 @@ export const viewFunction = ({
     visible={visible}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
+    role="navigation"
+    aria-label="pagination"
   >
     {showPageSizes && (
       <PageSizeSelector
