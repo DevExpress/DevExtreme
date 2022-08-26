@@ -397,7 +397,7 @@ export class AppointmentForm {
     }
 
     setEditorOptions(name, groupName, options) {
-        const editorPath = `${APPOINTMENT_FORM_GROUP_NAMES.groupName}.${name}`;
+        const editorPath = `${groupName}.${name}`;
         const editor = this.form.itemOption(editorPath);
 
         editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
@@ -405,7 +405,7 @@ export class AppointmentForm {
 
     setTimeZoneEditorDataSource(date, path) {
         const dataSource = this.createTimeZoneDataSource(date);
-        this.setEditorOptions(path, 'Main', { dataSource: dataSource });
+        this.setEditorOptions(path, APPOINTMENT_FORM_GROUP_NAMES.Main, { dataSource: dataSource });
     }
 
     updateFormData(formData) {
