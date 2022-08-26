@@ -654,8 +654,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }],
             keyExpr: 'id',
             focusedRowEnabled: true,
-            onFocusedRowChanged: function(e) {
-                if(e.row) { e.component.selectRows([e.row.key], false); }
+            onFocusedRowChanged: (e) => {
+                if(e.row) {
+                    e.component.selectRows([e.row.key], false);
+                }
             },
             selection: {
                 mode: 'multiple',
@@ -664,12 +666,16 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         this.clock.tick();
 
+        const $checkBox = $(dataGrid.getRowElement(0)).find('.dx-checkbox');
         // act
-        $(dataGrid.getRowElement(0)).find('.dx-checkbox').trigger('dxclick');
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+        $checkBox.trigger('dxpointerdown');
         this.clock.tick();
 
         // assert
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'row is selected');
+        assert.ok(dataGrid.isRowFocused(1), 'row is focused');
     });
 
 });
