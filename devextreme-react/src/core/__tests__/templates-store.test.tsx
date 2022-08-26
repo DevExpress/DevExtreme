@@ -32,26 +32,26 @@ describe('templates-store', () => {
     expect(callback.mock.calls.length).toBe(2);
   });
 
-  it('removes', () => {
+  it('setDeferredRemove for remove', () => {
     const templatesStore = new TemplatesStore(jest.fn());
 
     templatesStore.add('1', jest.fn());
     templatesStore.add('2', jest.fn());
 
-    templatesStore.remove('1');
+    templatesStore.setDeferredRemove('1', true);
     expect(templatesStore.renderWrappers().length).toBe(1);
 
-    templatesStore.remove('2');
+    templatesStore.setDeferredRemove('2', true);
     expect(templatesStore.renderWrappers().length).toBe(0);
   });
 
-  it('removes not existing template correctly', () => {
+  it('setDeferredRemove not existing template correctly', () => {
     const templatesStore = new TemplatesStore(jest.fn());
 
     templatesStore.add('1', jest.fn());
 
-    templatesStore.remove('2');
-    templatesStore.remove('3');
+    templatesStore.setDeferredRemove('2', true);
+    templatesStore.setDeferredRemove('3', true);
     expect(templatesStore.renderWrappers().length).toBe(1);
   });
 
@@ -64,10 +64,20 @@ describe('templates-store', () => {
 
     expect(callback.mock.calls.length).toBe(2);
 
-    templatesStore.remove('1');
-    templatesStore.remove('2');
+    templatesStore.setDeferredRemove('1', true);
+    templatesStore.setDeferredRemove('2', true);
 
     expect(callback.mock.calls.length).toBe(2);
+  });
+
+  it('toggle deferred remove shouldnt remove template (Unmount, Mount scenarion)', () => {
+    const templatesStore = new TemplatesStore(jest.fn());
+
+    templatesStore.add('1', jest.fn());
+
+    templatesStore.setDeferredRemove('1', true);
+    templatesStore.setDeferredRemove('1', false);
+    expect(templatesStore.renderWrappers().length).toBe(1);
   });
 
   it('lists renderers execution results', () => {

@@ -250,7 +250,7 @@ const renderNestedComponent: (model: {
     + '// <#= owner #>\n'
 + '<#~#>'
 
-+ 'interface <#= it.propsType #> <#= it.renderedType #>\n'
++ 'type <#= it.propsType #> = React.PropsWithChildren<<#= it.renderedType #>>\n'
 
 + 'class <#= it.className #> extends NestedOption<<#= it.propsType #>> {'}${
     L1}public static OptionName = "<#= it.optionName #>";`
@@ -315,7 +315,7 @@ const renderOptionsInterface: (model: {
     type: string;
   }>;
 }) => string = createTempate(
-  `interface <#= it.optionsName #>${TYPE_PARAMS_WITH_DEFAULTS} extends Properties${TYPE_PARAMS}, IHtmlOptions {\n`
+  `type <#= it.optionsName #>${TYPE_PARAMS_WITH_DEFAULTS} = React.PropsWithChildren<Properties${TYPE_PARAMS} & IHtmlOptions & {\n`
 
 + '<#? it.typeParams #>'
     + `  dataSource?: Properties${TYPE_PARAMS}["dataSource"];\n`
@@ -335,7 +335,7 @@ const renderOptionsInterface: (model: {
     + '  <#= prop.name #>?: <#= prop.type #>;\n'
 + '<#~#>'
 
-+ '}',
++ '}>',
 );
 
 const renderComponent: (model: {
@@ -352,7 +352,7 @@ const renderComponent: (model: {
   useRequestAnimationFrameFlag?: boolean;
   typeParams: string[] | undefined;
 }) => string = createTempate(
-  `class <#= it.className #>${TYPE_PARAMS_WITH_DEFAULTS} extends BaseComponent<<#= it.optionsName #>${TYPE_PARAMS}> {
+  `class <#= it.className #>${TYPE_PARAMS_WITH_DEFAULTS} extends BaseComponent<React.PropsWithChildren<<#= it.optionsName #>${TYPE_PARAMS}>> {
 
   public get instance(): <#= it.widgetName #>${TYPE_PARAMS} {
     return this._instance;

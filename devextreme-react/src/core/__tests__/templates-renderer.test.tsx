@@ -89,3 +89,28 @@ jest.mock('devextreme/core/utils/common', () => ({
     });
   });
 });
+
+describe('option update', () => {
+  it('should call forceUpdateCallback and reset "updateScheduled" after forceUpdateCallback', async () => {
+    const ref = React.createRef<TemplatesRenderer>();
+    const templatesStore = new TemplatesStore(() => { });
+
+    deferUpdate.mockImplementation((func, _) => {
+      func();
+    });
+
+    render(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
+    const current = ref.current!;
+    const onRendered = jest.fn();
+    const spyForceUpdateCallback = jest.spyOn(current, 'forceUpdate').mockImplementation((cb) => {
+      expect((current as any).updateScheduled).toEqual(true);
+      expect(onRendered).not.toHaveBeenCalled();
+      cb();
+      expect(onRendered).toHaveBeenCalled();
+
+      expect((current as any).updateScheduled).toEqual(false);
+    });
+    current.scheduleUpdate(true, onRendered);
+    expect(spyForceUpdateCallback).toHaveBeenCalledTimes(1);
+  });
+});

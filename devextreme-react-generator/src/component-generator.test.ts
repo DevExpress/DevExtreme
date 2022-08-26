@@ -9,10 +9,10 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -47,7 +47,7 @@ import dxCLASS_NAME, {
 
 import { ExtensionComponent as BaseComponent } from "EXTENSION_COMPONENT_PATH";
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -85,11 +85,11 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions<T1 = any, T2 = any> extends Properties<T1, T2>, IHtmlOptions {
+type ICLASS_NAMEOptions<T1 = any, T2 = any> = React.PropsWithChildren<Properties<T1, T2> & IHtmlOptions & {
   dataSource?: Properties<T1, T2>["dataSource"];
-}
+}>
 
-class CLASS_NAME<T1 = any, T2 = any> extends BaseComponent<ICLASS_NAMEOptions<T1, T2>> {
+class CLASS_NAME<T1 = any, T2 = any> extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions<T1, T2>>> {
 
   public get instance(): dxCLASS_NAME<T1, T2> {
     return this._instance;
@@ -144,13 +144,13 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   optionRender?: (...params: any) => React.ReactNode;
   optionComponent?: React.ComponentType<any>;
   optionKeyFn?: (data: any) => string;
-}
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -193,16 +193,16 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   optionRender?: (...params: any) => React.ReactNode;
   optionComponent?: React.ComponentType<any>;
   optionKeyFn?: (data: any) => string;
   anotherOptionRender?: (...params: any) => React.ReactNode;
   anotherOptionComponent?: React.ComponentType<any>;
   anotherOptionKeyFn?: (data: any) => string;
-}
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -250,13 +250,13 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   keyFn?: (data: any) => string;
-}
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -301,12 +301,12 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   defaultOption1?: someType;
   onOption1Change?: (value: someType) => void;
-}
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -350,14 +350,14 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   defaultOption1?: someType;
   defaultOption2?: anotherType;
   onOption1Change?: (value: someType) => void;
   onOption2Change?: (value: anotherType) => void;
-}
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -403,12 +403,12 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   defaultOption1?: someType;
   onOption1Change?: (value: someType) => void;
-}
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -457,10 +457,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -472,7 +472,7 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
   sub_opt_2?: TYPE_1;
   sub_opt_3?: TYPE_SUB_3 | {
     sub_sub_opt_4?: TYPE_2;
@@ -480,16 +480,16 @@ interface IOpt_1_ComponentProps {
       sub_sub_sub_opt_6?: TYPE_3;
     };
   };
-}
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
 }
 
 // owners:
 // Opt_1_Component
-interface IOpt_6_SubComponentProps {
+type IOpt_6_SubComponentProps = React.PropsWithChildren<{
   sub_sub_sub_opt_8?: TYPE_4;
-}
+}>
 class Opt_6_SubComponent extends NestedOption<IOpt_6_SubComponentProps> {
   public static OptionName = "sub_sub_opt_7";
 }
@@ -571,10 +571,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -586,9 +586,9 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
   sub_opt_2?: TYPE_1;
-}
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
   public static IsCollectionItem = true;
@@ -639,10 +639,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -654,14 +654,14 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
   sub_opt_2?: TYPE_1;
   sub_opt_3?: {
     sub_sub_opt_4?: TYPE_2;
   };
   defaultSub_opt_2?: TYPE_1;
   onSub_opt_2Change?: (value: TYPE_1) => void;
-}
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
   public static DefaultsProps = {
@@ -724,10 +724,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -739,12 +739,12 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
   optionTemplate?: TYPE_1;
   optionRender?: (...params: any) => React.ReactNode;
   optionComponent?: React.ComponentType<any>;
   optionKeyFn?: (data: any) => string;
-}
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
   public static TemplateProps = [{
@@ -800,10 +800,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -815,9 +815,9 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
   sub_opt_2?: TYPE_1;
-}
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
   public static IsCollectionItem = true;
@@ -873,10 +873,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -888,13 +888,13 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
   sub_opt_2?: TYPE_1;
   sub_opt_3?: {
     subsub_1?: TYPE_3;
     subsub_2?: TYPE_4;
   }[];
-}
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
   public static IsCollectionItem = true;
@@ -966,10 +966,10 @@ import dxCLASS_NAME, {
 import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -1014,10 +1014,10 @@ import dxCLASS_NAME, {
 import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -1066,10 +1066,10 @@ import dxCLASS_NAME, {
 import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -1117,10 +1117,10 @@ import dxCLASS_NAME, {
 import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -1184,10 +1184,10 @@ import dxCLASS_NAME, {
 
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -1232,10 +1232,10 @@ import dxCLASS_NAME, {
 import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
 import NestedOption from "CONFIG_COMPONENT_PATH";
 
-interface ICLASS_NAMEOptions extends Properties, IHtmlOptions {
-}
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
 
-class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
 
   public get instance(): dxCLASS_NAME {
     return this._instance;
@@ -1247,8 +1247,8 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 
 // owners:
 // CLASS_NAME
-interface IOpt_1_ComponentProps {
-}
+type IOpt_1_ComponentProps = React.PropsWithChildren<{
+}>
 class Opt_1_Component extends NestedOption<IOpt_1_ComponentProps> {
   public static OptionName = "opt_1";
   public static ExpectedChildren = {

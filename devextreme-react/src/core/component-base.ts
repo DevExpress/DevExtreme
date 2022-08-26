@@ -2,11 +2,12 @@ import * as events from 'devextreme/events';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 
-import { OptionsManager } from './options-manager';
-import { ITemplateMeta } from './template';
 import TemplatesManager from './templates-manager';
 import { TemplatesRenderer } from './templates-renderer';
 import { TemplatesStore } from './templates-store';
+
+import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
+import { ITemplateMeta } from './template';
 import { elementPropNames, getClassName } from './widget-config';
 
 import { IConfigNode } from './configuration/config-node';
@@ -54,6 +55,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected readonly independentEvents: string[];
 
+  private _childNodes: Node[] = [];
+
   private _templatesRendererRef: TemplatesRenderer | null;
 
   private _templatesStore: TemplatesStore;
@@ -82,21 +85,27 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   public componentDidMount(): void {
+    if (this._childNodes?.length) {
+      this._element.append(...this._childNodes);
+    } else if (this._element.childNodes.length) {
+      this._childNodes = Array.from(this._element.childNodes);
+    }
     this._updateCssClasses(null, this.props);
   }
 
   public componentDidUpdate(prevProps: P): void {
     this._updateCssClasses(prevProps, this.props);
-
     const config = this._getConfig();
     this._optionsManager.update(config);
     if (this._templatesRendererRef) {
-      this._templatesRendererRef.scheduleUpdate(this.useDeferUpdateForTemplates);
+      this._templatesRendererRef.scheduleUpdate(this.useDeferUpdateForTemplates, scheduleGuards);
     }
+    unscheduleGuards();
   }
 
   public componentWillUnmount(): void {
     if (this._instance) {
+      this._childNodes?.forEach((child) => child.parentNode?.removeChild(child));
       events.triggerHandler(this._element, DX_REMOVE_EVENT);
       this._instance.dispose();
     }

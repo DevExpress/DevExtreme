@@ -27,18 +27,18 @@
   "license": "MIT",
   "dependencies": {
     "dasherize": "^2.0.0",
-    "devextreme-internal-tools": "^7.6.0",
-    "dot": "^1.1.2"
+    "devextreme-internal-tools": "^8.0.2",
+    "dot": "^1.1.3"
   },
   "devDependencies": {
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^13.0.1",
-    "@types/dot": "^1.1.4",
-    "@types/jest": "^22.1.2",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/dot": "^1.1.5",
+    "@types/jest": "^22.2.3",
     "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
-    "jest": "^24.8.0",
-    "ts-jest": "^24.0.2",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.3.0",
     "typescript": "~4.2"
   }
 }
