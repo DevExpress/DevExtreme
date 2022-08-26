@@ -186,7 +186,7 @@
     "underscore": "1.13.4",
     "vinyl": "2.2.1",
     "vinyl-named": "1.1.0",
-    "webpack": "5.73.0",
+    "webpack": "5.74.0",
     "webpack-stream": "6.1.2",
     "yaml": "1.10.2",
     "yargs": "7.1.2"
