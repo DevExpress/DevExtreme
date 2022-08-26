@@ -11,6 +11,10 @@ const CLASS = {
   stateFocused: 'dx-state-focused',
   allDay: 'dx-scheduler-all-day-appointment',
   title: 'dx-scheduler-appointment-title',
+  resources: {
+    item: 'dx-scheduler-appointment-resource-item',
+    value: 'dx-scheduler-appointment-resource-item-value',
+  },
   reduced: {
     icon: 'dx-scheduler-appointment-reduced-icon',
     appointment: 'dx-scheduler-appointment-reduced',
@@ -45,6 +49,8 @@ export default class Appointment {
   isDraggableSource: Promise<boolean>;
 
   title: Promise<string>;
+
+  resourcesItems: Selector;
 
   reducedIcon: Selector;
 
@@ -81,6 +87,7 @@ export default class Appointment {
     this.isReducedTail = this.element.hasClass(CLASS.reduced.tail);
     this.isDraggableSource = this.element.hasClass(CLASS.draggableSource);
     this.title = this.element.find(`.${CLASS.title}`).innerText;
+    this.resourcesItems = this.element.find(`.${CLASS.resources.item}`);
   }
 
   getColor(): Promise<string> {
@@ -94,5 +101,12 @@ export default class Appointment {
         },
       },
     )();
+  }
+
+  getResource(label: string): Promise<string> {
+    return this.resourcesItems
+      .find('div').withText(label)
+      .parent(0).find(`.${CLASS.resources.value}`)
+      .innerText;
   }
 }
