@@ -5,10 +5,6 @@ import {
 } from '../core/element';
 
 import {
-    Skip,
-} from '../core/index';
-
-import {
     template,
 } from '../core/templates/template';
 
@@ -128,7 +124,7 @@ export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
 /** @public */
-export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;

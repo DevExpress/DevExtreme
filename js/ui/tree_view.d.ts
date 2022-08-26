@@ -1,4 +1,3 @@
-import { Skip } from '../core';
 import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
@@ -100,7 +99,7 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
  * @public
  */
 export interface dxTreeViewOptions<TKey = any>
-    extends Skip<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
+    extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -612,7 +611,7 @@ export interface dxTreeViewNode<TKey = any> {
 }
 
 /** @public */
-export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
 /** @public */
 export type ExplicitTypes<TKey = any> = {

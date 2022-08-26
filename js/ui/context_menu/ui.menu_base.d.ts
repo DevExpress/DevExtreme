@@ -1,4 +1,3 @@
-import { Skip } from '../../core';
 import { DataSourceLike } from '../../data/data_source';
 import {
     AnimationConfig,
@@ -22,7 +21,7 @@ export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
   TItem extends dxMenuBaseItem = dxMenuBaseItem,
   TKey = any,
-> extends Skip<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
+> extends Omit<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
      * @docid
      * @default true
