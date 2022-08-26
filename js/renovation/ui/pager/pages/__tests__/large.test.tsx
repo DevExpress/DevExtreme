@@ -24,6 +24,21 @@ describe('View', () => {
   });
 });
 
+it('pageIndexes: check aria-current attribute', () => {
+  const pages = new PagesLarge({
+    pageCount: 30,
+    maxPagesCount: 10,
+    pageIndex: 6,
+    pageIndexChange: jest.fn(),
+  });
+
+  const tree = shallow(<PagesLargeComponent {...{ pages: pages.pages } as any} /> as any);
+  // const val = tree.find('.dx-page.dx-selection[aria-current="page"]').first().props();
+  const val = tree.find('.dx-page.dx-selection');
+  console.log(val);
+  expect(pages.pageIndexes).toEqual([0, 'low', 4, 5, 6, 7, 'high', 29]);
+});
+
 describe('Pager pages logic', () => {
   it('pageIndexes, pageCount = 0', () => {
     const pages = new PagesLarge({
