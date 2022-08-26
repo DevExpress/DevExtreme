@@ -10,6 +10,10 @@ const CLASS = {
   resizableHandleTop: 'dx-resizable-handle-top',
   stateFocused: 'dx-state-focused',
   allDay: 'dx-scheduler-all-day-appointment',
+  resources: {
+    item: 'dx-scheduler-appointment-resource-item',
+    value: 'dx-scheduler-appointment-resource-item-value',
+  },
   reduced: {
     appointment: 'dx-scheduler-appointment-reduced',
     head: 'dx-scheduler-appointment-head',
@@ -42,6 +46,8 @@ export default class Appointment {
 
   isDraggableSource: Promise<boolean>;
 
+  resourcesItems: Selector;
+
   constructor(scheduler: Selector, index = 0, title?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
     this.element = (title ? element.withAttribute('title', title) : element).nth(index);
@@ -72,6 +78,7 @@ export default class Appointment {
     this.isReducedBody = this.element.hasClass(CLASS.reduced.body);
     this.isReducedTail = this.element.hasClass(CLASS.reduced.tail);
     this.isDraggableSource = this.element.hasClass(CLASS.draggableSource);
+    this.resourcesItems = this.element.find(`.${CLASS.resources.item}`);
   }
 
   getColor(): Promise<string> {
@@ -85,5 +92,12 @@ export default class Appointment {
         },
       },
     )();
+  }
+
+  getResource(label: string): Promise<string> {
+    return this.resourcesItems
+      .find('div').withText(label)
+      .parent(0).find(`.${CLASS.resources.value}`)
+      .innerText;
   }
 }
