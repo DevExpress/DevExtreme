@@ -16,6 +16,7 @@ export const viewFunction = ({
     ref={widgetRef}
     className={className}
     tabIndex={tabIndex}
+    role="button"
     aria-label={label}
     aria-current={selected ? 'page' : undefined}
   >
