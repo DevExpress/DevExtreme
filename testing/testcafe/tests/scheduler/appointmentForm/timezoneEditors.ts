@@ -14,7 +14,6 @@ const dataSource = [{
   endDateTimeZone: 'US/Alaska',
 }];
 
-const inputClassName = '.dx-texteditor-input';
 const startDateTimeZoneValue = '(GMT -10:00) Etc - GMT+10';
 const endDateTimeZoneValue = '(GMT -08:00) US - Alaska';
 
@@ -24,11 +23,9 @@ test('TimeZone editors should be have data after hide forms data(T1080932)', asy
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
 
-  const startDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(1);
-  await t.expect(startDateTimeZone.value).eql(startDateTimeZoneValue);
+  await t.expect(appointmentPopup.startDateTimeZoneElement.value).eql(startDateTimeZoneValue);
 
-  const endDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(3);
-  await t.expect(endDateTimeZone.value).eql(endDateTimeZoneValue);
+  await t.expect(appointmentPopup.endDateTimeZoneElement.value).eql(endDateTimeZoneValue);
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource,
@@ -56,11 +53,9 @@ test('TimeZone editors should be have data in default case(T1080932)', async (t)
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
 
-  const startDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(2);
-  await t.expect(startDateTimeZone.value).eql(startDateTimeZoneValue);
+  await t.expect(appointmentPopup.startDateTimeZoneElement.value).eql(startDateTimeZoneValue);
 
-  const endDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(4);
-  await t.expect(endDateTimeZone.value).eql(endDateTimeZoneValue);
+  await t.expect(appointmentPopup.endDateTimeZoneElement.value).eql(endDateTimeZoneValue);
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource,

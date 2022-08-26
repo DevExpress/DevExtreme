@@ -13,6 +13,7 @@ import {
     getMaxWidth,
     getPopupToolbarItems,
 } from '../../../renovation/ui/scheduler/appointment_edit_form/popup_config';
+import { APPOINTMENT_FORM_GROUP_NAMES } from './form';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -176,6 +177,14 @@ export class AppointmentPopup {
         );
     }
 
+    _setTimeZonesVisibility() {
+        if(this.scheduler.getEditingConfig().allowTimeZoneEditing) {
+            const isVisible = !this.state.appointment.data.allDay;
+            this.form.dxForm.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, 'visible', isVisible);
+            this.form.dxForm.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, 'visible', isVisible);
+        }
+    }
+
     _updateForm() {
         const { data } = this.state.appointment;
         const appointment = this._createAppointmentAdapter(this._createFormData(data));
@@ -192,6 +201,8 @@ export class AppointmentPopup {
 
         this.form.readOnly = this._isReadOnly(formData);
         this.form.updateFormData(formData);
+
+        this._setTimeZonesVisibility();
     }
 
     triggerResize() {
