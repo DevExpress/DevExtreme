@@ -29,6 +29,12 @@
       />
       <DxToolbarItem
         widget="dxButton"
+        toolbar="top"
+        locate-in-menu="always"
+        :options="moreInfoButtonOptions"
+      />
+      <DxToolbarItem
+        widget="dxButton"
         toolbar="bottom"
         location="before"
         :options="emailButtonOptions"
@@ -80,6 +86,19 @@ export default {
       currentEmployee: {},
       popupVisible: false,
       positionOf: '',
+      moreInfoButtonOptions: {
+        text: 'More info',
+        onClick: () => {
+          const message = `More info about ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
+          notify({
+            message,
+            position: {
+              my: 'center top',
+              at: 'center top',
+            },
+          }, 'success', 3000);
+        },
+      },
       emailButtonOptions: {
         icon: 'email',
         text: 'Send',

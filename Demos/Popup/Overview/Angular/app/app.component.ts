@@ -24,6 +24,8 @@ export class AppComponent {
 
   popupVisible = false;
 
+  moreInfoButtonOptions: any;
+
   emailButtonOptions: any;
 
   closeButtonOptions: any;
@@ -33,6 +35,19 @@ export class AppComponent {
   constructor(service: Service) {
     const that = this;
     this.employees = service.getEmployees();
+    this.moreInfoButtonOptions = {
+      text: 'More info',
+      onClick(e) {
+        const message = `More info about ${that.currentEmployee.FirstName} ${that.currentEmployee.LastName}`;
+        notify({
+          message,
+          position: {
+            my: 'center top',
+            at: 'center top',
+          },
+        }, 'success', 3000);
+      },
+    };
     this.emailButtonOptions = {
       icon: 'email',
       text: 'Send',

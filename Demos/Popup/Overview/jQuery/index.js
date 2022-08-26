@@ -26,6 +26,24 @@ $(() => {
       my: 'center',
     },
     toolbarItems: [{
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      toolbar: 'top',
+      options: {
+        text: 'More info',
+        onClick() {
+          const message = `More info about ${employee.FirstName} ${employee.LastName}`;
+
+          DevExpress.ui.notify({
+            message,
+            position: {
+              my: 'center top',
+              at: 'center top',
+            },
+          }, 'success', 3000);
+        },
+      },
+    }, {
       widget: 'dxButton',
       toolbar: 'bottom',
       location: 'before',

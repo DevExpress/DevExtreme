@@ -6,6 +6,8 @@ import { EmployeeItem } from './EmployeeItem.js';
 import { employees } from './data.js';
 
 class App extends React.Component {
+  moreInfoButtonOptions = null;
+
   emailButtonOptions = null;
 
   closeButtonOptions = null;
@@ -19,6 +21,10 @@ class App extends React.Component {
     };
     this.showInfo = this.showInfo.bind(this);
     this.hideInfo = this.hideInfo.bind(this);
+    this.moreInfoButtonOptions = {
+      text: 'More info',
+      onClick: this.showMoreInfo.bind(this),
+    };
     this.emailButtonOptions = {
       icon: 'email',
       text: 'Send',
@@ -61,6 +67,12 @@ class App extends React.Component {
             at="bottom"
             my="center"
             of={this.state.positionOf}
+          />
+          <ToolbarItem
+            widget="dxButton"
+            toolbar="top"
+            locateInMenu="always"
+            options={this.moreInfoButtonOptions}
           />
           <ToolbarItem
             widget="dxButton"
@@ -113,6 +125,17 @@ class App extends React.Component {
 
   sendEmail() {
     const message = `Email is sent to ${this.state.currentEmployee.FirstName} ${this.state.currentEmployee.LastName}`;
+    notify({
+      message,
+      position: {
+        my: 'center top',
+        at: 'center top',
+      },
+    }, 'success', 3000);
+  }
+
+  showMoreInfo() {
+    const message = `More info about ${this.state.currentEmployee.FirstName} ${this.state.currentEmployee.LastName}`;
     notify({
       message,
       position: {
