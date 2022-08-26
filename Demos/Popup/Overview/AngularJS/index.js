@@ -26,6 +26,23 @@ DemoApp.controller('DemoController', ($scope) => {
     },
     toolbarItems: [{
       widget: 'dxButton',
+      toolbar: 'top',
+      locateInMenu: 'always',
+      options: {
+        text: 'More info',
+        onClick() {
+          const message = `More info about ${$scope.currentEmployee.FirstName} ${$scope.currentEmployee.LastName}`;
+          DevExpress.ui.notify({
+            message,
+            position: {
+              my: 'center top',
+              at: 'center top',
+            },
+          }, 'success', 3000);
+        },
+      },
+    }, {
+      widget: 'dxButton',
       toolbar: 'bottom',
       location: 'before',
       options: {
