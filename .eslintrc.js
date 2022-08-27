@@ -328,6 +328,8 @@ module.exports = {
                 '@typescript-eslint/no-unsafe-member-access': 'warn',
                 '@typescript-eslint/no-non-null-assertion': 'error',
                 'react/sort-comp': 'off',
+                'react/jsx-props-no-multi-spaces': 'off',
+                'react/no-array-index-key': 'off',
                 /*
             "@typescript-eslint/no-magic-numbers": "error",
             "no-return-await": "off",
