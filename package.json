@@ -39,7 +39,7 @@
     "inferno-create-element": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
-    "rrule": "2.6.6",
+    "rrule": "2.7.1",
     "turndown": "~7.0.0"
   },
   "devDependencies": {
