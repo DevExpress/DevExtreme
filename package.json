@@ -95,7 +95,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "23.20.0",
     "eslint-plugin-jest-formatting": "1.2.0",
-    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-jsx-a11y": "6.6.1",
     "eslint-plugin-no-only-tests": "2.6.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-qunit": "4.3.0",
