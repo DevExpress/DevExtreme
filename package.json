@@ -140,7 +140,7 @@
     "intl": "1.2.5",
     "jest": "26.6.3",
     "jest-each": "26.6.2",
-    "jquery": "3.6.0",
+    "jquery": "3.6.1",
     "jquery.tmpl": "0.0.2",
     "jspdf": "2.5.1",
     "jspdf-autotable": "3.5.25",
