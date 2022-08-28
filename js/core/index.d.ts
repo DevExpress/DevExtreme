@@ -31,3 +31,5 @@ export type PropertyType<T, TProp extends string> =
   TProp extends `${infer TOwnProp}.${infer TNestedProps}`
     ? PropertyType<OwnPropertyType<T, TOwnProp>, TNestedProps>
     : OwnPropertyType<T, TProp>;
+
+export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;

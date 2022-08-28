@@ -1399,6 +1399,7 @@ declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  export type ColumnResizeMode = 'nextColumn' | 'widget';
   export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
@@ -1409,6 +1410,8 @@ declare module DevExpress.common {
     | 'datetime';
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
+  export type Draggable =
+    DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
   export type DragHighlight = 'push' | 'indicate';
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
   export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
@@ -1443,6 +1446,14 @@ declare module DevExpress.common {
     | 'minute'
     | 'second'
     | 'shortDateShortTime';
+  export type HeaderFilterGroupInterval =
+    | 'day'
+    | 'hour'
+    | 'minute'
+    | 'month'
+    | 'quarter'
+    | 'second'
+    | 'year';
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
   export type LabelMode = 'static' | 'floating' | 'hidden';
@@ -1463,6 +1474,22 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ReducedNativeEventInfo<
+    TComponent extends DevExpress.common.grids.GridBase
+  > = Required<
+    Pick<
+      DevExpress.events.NativeEventInfo<
+        TComponent,
+        PointerEvent | MouseEvent | TouchEvent
+      >,
+      'component' | 'event'
+    >
+  >;
+  export type Scrollable =
+    DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
   export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
   export type ScrollMode = 'standard' | 'virtual';
@@ -1475,6 +1502,7 @@ declare module DevExpress.common {
   export type SingleOrNone = 'single' | 'none';
   export type SlideOutMenuPosition = 'inverted' | 'normal';
   export type SliderCallValueChange = 'onMoving' | 'onMovingComplete';
+  export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
   export type SubmenuShowMode = 'onClick' | 'onHover';
@@ -1599,11 +1627,547 @@ declare module DevExpress.common.charts {
   export type ZoomPanAction = 'zoom' | 'pan';
 }
 declare module DevExpress.common.grids {
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type AdaptiveDetailRowPreparingInfo = {
+    readonly formOptions: any;
+  };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:GridBaseColumn]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ColumnBase<TRowData = any> {
+    /**
+     * [descr:GridBaseColumn.alignment]
+     */
+    alignment?: HorizontalAlignment;
+    /**
+     * [descr:GridBaseColumn.allowEditing]
+     */
+    allowEditing?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowFiltering]
+     */
+    allowFiltering?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowFixing]
+     */
+    allowFixing?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowHeaderFiltering]
+     */
+    allowHeaderFiltering?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowHiding]
+     */
+    allowHiding?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowReordering]
+     */
+    allowReordering?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowResizing]
+     */
+    allowResizing?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseColumn.allowSorting]
+     */
+    allowSorting?: boolean;
+    /**
+     * [descr:GridBaseColumn.calculateCellValue]
+     */
+    calculateCellValue?: (rowData: TRowData) => any;
+    defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
+    /**
+     * [descr:GridBaseColumn.calculateDisplayValue]
+     */
+    calculateDisplayValue?: string | ((rowData: TRowData) => any);
+    /**
+     * [descr:GridBaseColumn.calculateFilterExpression]
+     */
+    calculateFilterExpression?: (
+      filterValue: any,
+      selectedFilterOperation: string,
+      target: string
+    ) => string | Array<any> | Function;
+    defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
+    /**
+     * [descr:GridBaseColumn.calculateSortValue]
+     */
+    calculateSortValue?: string | ((rowData: TRowData) => any);
+    /**
+     * [descr:GridBaseColumn.caption]
+     */
+    caption?: string;
+    /**
+     * [descr:GridBaseColumn.cssClass]
+     */
+    cssClass?: string;
+    /**
+     * [descr:GridBaseColumn.customizeText]
+     */
+    customizeText?: (cellInfo: ColumnCustomizeTextArg) => string;
+    /**
+     * [descr:GridBaseColumn.dataField]
+     */
+    dataField?: string;
+    /**
+     * [descr:GridBaseColumn.dataType]
+     */
+    dataType?: DataType;
+    /**
+     * [descr:GridBaseColumn.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:GridBaseColumn.encodeHtml]
+     */
+    encodeHtml?: boolean;
+    /**
+     * [descr:GridBaseColumn.falseText]
+     */
+    falseText?: string;
+    /**
+     * [descr:GridBaseColumn.filterOperations]
+     */
+    filterOperations?: Array<FilterOperation | string>;
+    /**
+     * [descr:GridBaseColumn.filterType]
+     */
+    filterType?: FilterType;
+    /**
+     * [descr:GridBaseColumn.filterValue]
+     */
+    filterValue?: any;
+    /**
+     * [descr:GridBaseColumn.filterValues]
+     */
+    filterValues?: Array<any>;
+    /**
+     * [descr:GridBaseColumn.fixed]
+     */
+    fixed?: boolean;
+    /**
+     * [descr:GridBaseColumn.fixedPosition]
+     */
+    fixedPosition?: HorizontalEdge;
+    /**
+     * [descr:GridBaseColumn.formItem]
+     */
+    formItem?: DevExpress.ui.dxForm.SimpleItem;
+    /**
+     * [descr:GridBaseColumn.format]
+     */
+    format?: DevExpress.ui.Format;
+    /**
+     * [descr:GridBaseColumn.headerFilter]
+     */
+    headerFilter?: ColumnHeaderFilter;
+    /**
+     * [descr:GridBaseColumn.hidingPriority]
+     */
+    hidingPriority?: number;
+    /**
+     * [descr:GridBaseColumn.isBand]
+     */
+    isBand?: boolean;
+    /**
+     * [descr:GridBaseColumn.lookup]
+     */
+    lookup?: ColumnLookup;
+    /**
+     * [descr:GridBaseColumn.minWidth]
+     */
+    minWidth?: number;
+    /**
+     * [descr:GridBaseColumn.name]
+     */
+    name?: string;
+    /**
+     * [descr:GridBaseColumn.ownerBand]
+     */
+    ownerBand?: number;
+    /**
+     * [descr:GridBaseColumn.renderAsync]
+     */
+    renderAsync?: boolean;
+    /**
+     * [descr:GridBaseColumn.selectedFilterOperation]
+     */
+    selectedFilterOperation?: SelectedFilterOperation;
+    /**
+     * [descr:GridBaseColumn.setCellValue]
+     */
+    setCellValue?: (
+      newData: DevExpress.core.DeepPartial<TRowData>,
+      value: any,
+      currentRowData: TRowData
+    ) => void | PromiseLike<void>;
+    /**
+     * [descr:GridBaseColumn.showEditorAlways]
+     */
+    showEditorAlways?: boolean;
+    /**
+     * [descr:GridBaseColumn.showInColumnChooser]
+     */
+    showInColumnChooser?: boolean;
+    /**
+     * [descr:GridBaseColumn.sortIndex]
+     */
+    sortIndex?: number;
+    /**
+     * [descr:GridBaseColumn.sortOrder]
+     */
+    sortOrder?: SortOrder;
+    /**
+     * [descr:GridBaseColumn.sortingMethod]
+     */
+    sortingMethod?: (value1: any, value2: any) => number;
+    /**
+     * [descr:GridBaseColumn.trueText]
+     */
+    trueText?: string;
+    /**
+     * [descr:GridBaseColumn.validationRules]
+     */
+    validationRules?: Array<DevExpress.ui.ValidationRule>;
+    /**
+     * [descr:GridBaseColumn.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:GridBaseColumn.visibleIndex]
+     */
+    visibleIndex?: number;
+    /**
+     * [descr:GridBaseColumn.width]
+     */
+    width?: number | string;
+  }
+  /**
+   * [descr:GridBaseColumnButton]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ColumnButtonBase {
+    /**
+     * [descr:GridBaseColumnButton.cssClass]
+     */
+    cssClass?: string;
+    /**
+     * [descr:GridBaseColumnButton.hint]
+     */
+    hint?: string;
+    /**
+     * [descr:GridBaseColumnButton.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:GridBaseColumnButton.text]
+     */
+    text?: string;
+  }
+  export type ColumnChooser = {
+    /**
+     * [descr:GridBaseOptions.columnChooser.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser.emptyPanelText]
+     */
+    emptyPanelText?: string;
+    /**
+     * [descr:GridBaseOptions.columnChooser.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.mode]
+     */
+    mode?: ColumnChooserMode;
+    /**
+     * [descr:GridBaseOptions.columnChooser.searchTimeout]
+     */
+    searchTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.title]
+     */
+    title?: string;
+    /**
+     * [descr:GridBaseOptions.columnChooser.width]
+     */
+    width?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.sortOrder]
+     */
+    sortOrder?: SortOrder;
+  };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
+  export type ColumnCustomizeTextArg = {
+    value?: string | number | Date;
+    valueText?: string;
+    target?: string;
+    groupInterval?: string | number;
+  };
+  export type ColumnFixing = {
+    /**
+     * [descr:GridBaseOptions.columnFixing.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts]
+     */
+    texts?: ColumnFixingTexts;
+  };
+  export type ColumnFixingTexts = {
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.fix]
+     */
+    fix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.leftPosition]
+     */
+    leftPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.rightPosition]
+     */
+    rightPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.unfix]
+     */
+    unfix?: string;
+  };
+  export type ColumnHeaderFilter = {
+    /**
+     * [descr:GridBaseColumn.headerFilter.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseColumn.headerFilter.dataSource]
+     */
+    dataSource?:
+      | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+      | ((options: {
+          component?: any;
+          dataSource?: DevExpress.data.DataSource.Options | null;
+        }) => void);
+    /**
+     * [descr:GridBaseColumn.headerFilter.groupInterval]
+     */
+    groupInterval?: HeaderFilterGroupInterval | number;
+    /**
+     * [descr:GridBaseColumn.headerFilter.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseColumn.headerFilter.searchMode]
+     */
+    searchMode?: SearchMode;
+    /**
+     * [descr:GridBaseColumn.headerFilter.width]
+     */
+    width?: number;
+  };
+  export type ColumnLookup = {
+    /**
+     * [descr:GridBaseColumn.lookup.allowClearing]
+     */
+    allowClearing?: boolean;
+    /**
+     * [descr:GridBaseColumn.lookup.dataSource]
+     */
+    dataSource?:
+      | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+      | ((options: {
+          data?: any;
+          key?: any;
+        }) => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>)
+      | null;
+    /**
+     * [descr:GridBaseColumn.lookup.displayExpr]
+     */
+    displayExpr?: string | ((data: any) => string);
+    /**
+     * [descr:GridBaseColumn.lookup.valueExpr]
+     */
+    valueExpr?: string;
+    /**
+     * [descr:GridBaseColumn.lookup.calculateCellValue]
+     */
+    calculateCellValue?: (rowData: any) => any;
+  };
+  /**
+   * [descr:DataChange]
+   */
+  export type DataChange<TRowData = any, TKey = any> = {
+    /**
+     * [descr:DataChange.key]
+     */
+    key: TKey;
+    /**
+     * [descr:DataChange.type]
+     */
+    type: DataChangeType;
+    /**
+     * [descr:DataChange.data]
+     */
+    data: DevExpress.core.DeepPartial<TRowData>;
+    /**
+     * [descr:DataChange.insertAfterKey]
+     */
+    insertAfterKey?: TKey;
+    /**
+     * [descr:DataChange.insertBeforeKey]
+     */
+    insertBeforeKey?: TKey;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DataChangeInfo<TRowData = any, TKey = any> = {
+    readonly changes: Array<DataChange<TRowData, TKey>>;
+  };
   export type DataChangeType = 'insert' | 'update' | 'remove';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DataErrorOccurredInfo = {
+    readonly error?: Error;
+  };
   export type DataRenderMode = 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DragDropInfo = {
+    readonly dropInsideItem: boolean;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DragReorderInfo = {
+    readonly dropInsideItem: boolean;
+    promise?: PromiseLike<void>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface DragStartEventInfo<TRowData = any> {
+    itemData?: TRowData;
+    readonly itemElement: DevExpress.core.DxElement;
+    readonly fromIndex: number;
+    readonly fromData?: any;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface EditingBase<TRowData = any, TKey = any> {
+    /**
+     * [descr:GridBaseOptions.editing.confirmDelete]
+     */
+    confirmDelete?: boolean;
+    /**
+     * [descr:GridBaseOptions.editing.changes]
+     */
+    changes?: Array<DataChange<TRowData, TKey>>;
+    /**
+     * [descr:GridBaseOptions.editing.editColumnName]
+     */
+    editColumnName?: string;
+    /**
+     * [descr:GridBaseOptions.editing.editRowKey]
+     */
+    editRowKey?: TKey;
+    /**
+     * [descr:GridBaseOptions.editing.form]
+     */
+    form?: DevExpress.ui.dxForm.Properties;
+    /**
+     * [descr:GridBaseOptions.editing.mode]
+     */
+    mode?: GridsEditMode;
+    /**
+     * [descr:GridBaseOptions.editing.popup]
+     */
+    popup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:GridBaseOptions.editing.refreshMode]
+     */
+    refreshMode?: GridsEditRefreshMode;
+    /**
+     * [descr:GridBaseOptions.editing.selectTextOnEditStart]
+     */
+    selectTextOnEditStart?: boolean;
+    /**
+     * [descr:GridBaseOptions.editing.startEditAction]
+     */
+    startEditAction?: StartEditAction;
+    /**
+     * [descr:GridBaseOptions.editing.texts]
+     */
+    texts?: EditingTextsBase;
+    /**
+     * [descr:GridBaseOptions.editing.useIcons]
+     */
+    useIcons?: boolean;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface EditingTextsBase {
+    /**
+     * [descr:GridBaseOptions.editing.texts.addRow]
+     */
+    addRow?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.cancelAllChanges]
+     */
+    cancelAllChanges?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.cancelRowChanges]
+     */
+    cancelRowChanges?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.confirmDeleteMessage]
+     */
+    confirmDeleteMessage?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.confirmDeleteTitle]
+     */
+    confirmDeleteTitle?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.deleteRow]
+     */
+    deleteRow?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.editRow]
+     */
+    editRow?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.saveAllChanges]
+     */
+    saveAllChanges?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.saveRowChanges]
+     */
+    saveRowChanges?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.undeleteRow]
+     */
+    undeleteRow?: string;
+    /**
+     * [descr:GridBaseOptions.editing.texts.validationCancelChanges]
+     */
+    validationCancelChanges?: string;
+  }
   export type EnterKeyAction = 'startEdit' | 'moveFocus';
   export type EnterKeyDirection = 'none' | 'column' | 'row';
   export type FilterOperation =
@@ -1622,10 +2186,889 @@ declare module DevExpress.common.grids {
     | 'between'
     | 'anyof'
     | 'noneof';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface FilterPanel<
+    TComponent extends GridBase<TRowData, TKey>,
+    TRowData = any,
+    TKey = any
+  > {
+    /**
+     * [descr:GridBaseOptions.filterPanel.customizeText]
+     */
+    customizeText?: (e: FilterPanelCustomizeTextArg<TComponent>) => string;
+    /**
+     * [descr:GridBaseOptions.filterPanel.filterEnabled]
+     */
+    filterEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts]
+     */
+    texts?: FilterPanelTexts;
+    /**
+     * [descr:GridBaseOptions.filterPanel.visible]
+     */
+    visible?: boolean;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface FilterPanelCustomizeTextArg<TComponent> {
+    readonly component: TComponent;
+    readonly filterValue: any;
+    readonly text: string;
+  }
+  export type FilterPanelTexts = {
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
+     */
+    clearFilter?: string;
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts.createFilter]
+     */
+    createFilter?: string;
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
+     */
+    filterEnabledHint?: string;
+  };
+  export type FilterRow = {
+    /**
+     * [descr:GridBaseOptions.filterRow.applyFilter]
+     */
+    applyFilter?: ApplyFilterMode;
+    /**
+     * [descr:GridBaseOptions.filterRow.applyFilterText]
+     */
+    applyFilterText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.betweenEndText]
+     */
+    betweenEndText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.betweenStartText]
+     */
+    betweenStartText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions]
+     */
+    operationDescriptions?: FilterRowOperationDescriptions;
+    /**
+     * [descr:GridBaseOptions.filterRow.resetOperationText]
+     */
+    resetOperationText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.showAllText]
+     */
+    showAllText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.showOperationChooser]
+     */
+    showOperationChooser?: boolean;
+    /**
+     * [descr:GridBaseOptions.filterRow.visible]
+     */
+    visible?: boolean;
+  };
+  export type FilterRowOperationDescriptions = {
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
+     */
+    between?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.contains]
+     */
+    contains?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.endsWith]
+     */
+    endsWith?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.equal]
+     */
+    equal?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThan]
+     */
+    greaterThan?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual]
+     */
+    greaterThanOrEqual?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThan]
+     */
+    lessThan?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual]
+     */
+    lessThanOrEqual?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.notContains]
+     */
+    notContains?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.notEqual]
+     */
+    notEqual?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.startsWith]
+     */
+    startsWith?: string;
+  };
   export type FilterType = 'exclude' | 'include';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface GridBase<TRowData = any, TKey = any> {
+    /**
+     * [descr:GridBase.beginCustomLoading(messageText)]
+     */
+    beginCustomLoading(messageText: string): void;
+    /**
+     * [descr:GridBase.byKey(key)]
+     */
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
+    /**
+     * [descr:GridBase.cancelEditData()]
+     */
+    cancelEditData(): void;
+    /**
+     * [descr:GridBase.cellValue(rowIndex, dataField)]
+     */
+    cellValue(rowIndex: number, dataField: string): any;
+    /**
+     * [descr:GridBase.cellValue(rowIndex, dataField, value)]
+     */
+    cellValue(rowIndex: number, dataField: string, value: any): void;
+    /**
+     * [descr:GridBase.cellValue(rowIndex, visibleColumnIndex)]
+     */
+    cellValue(rowIndex: number, visibleColumnIndex: number): any;
+    /**
+     * [descr:GridBase.cellValue(rowIndex, visibleColumnIndex, value)]
+     */
+    cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
+    /**
+     * [descr:GridBase.clearFilter()]
+     */
+    clearFilter(): void;
+    /**
+     * [descr:GridBase.clearFilter(filterName)]
+     */
+    clearFilter(filterName: string): void;
+    /**
+     * [descr:GridBase.clearSelection()]
+     */
+    clearSelection(): void;
+    /**
+     * [descr:GridBase.clearSorting()]
+     */
+    clearSorting(): void;
+    /**
+     * [descr:GridBase.closeEditCell()]
+     */
+    closeEditCell(): void;
+    /**
+     * [descr:GridBase.collapseAdaptiveDetailRow()]
+     */
+    collapseAdaptiveDetailRow(): void;
+    /**
+     * [descr:GridBase.columnCount()]
+     */
+    columnCount(): number;
+    /**
+     * [descr:GridBase.columnOption(id)]
+     */
+    columnOption(id: number | string): any;
+    /**
+     * [descr:GridBase.columnOption(id, optionName)]
+     */
+    columnOption(id: number | string, optionName: string): any;
+    /**
+     * [descr:GridBase.columnOption(id, optionName, optionValue)]
+     */
+    columnOption(
+      id: number | string,
+      optionName: string,
+      optionValue: any
+    ): void;
+    /**
+     * [descr:GridBase.columnOption(id, options)]
+     */
+    columnOption(id: number | string, options: any): void;
+    /**
+     * [descr:GridBase.deleteColumn(id)]
+     */
+    deleteColumn(id: number | string): void;
+    /**
+     * [descr:GridBase.deleteRow(rowIndex)]
+     */
+    deleteRow(rowIndex: number): void;
+    /**
+     * [descr:GridBase.deselectAll()]
+     */
+    deselectAll(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.deselectRows(keys)]
+     */
+    deselectRows(keys: Array<any>): DevExpress.core.utils.DxPromise<any>;
+    /**
+     * [descr:GridBase.editCell(rowIndex, dataField)]
+     */
+    editCell(rowIndex: number, dataField: string): void;
+    /**
+     * [descr:GridBase.editCell(rowIndex, visibleColumnIndex)]
+     */
+    editCell(rowIndex: number, visibleColumnIndex: number): void;
+    /**
+     * [descr:GridBase.editRow(rowIndex)]
+     */
+    editRow(rowIndex: number): void;
+    /**
+     * [descr:GridBase.endCustomLoading()]
+     */
+    endCustomLoading(): void;
+    /**
+     * [descr:GridBase.expandAdaptiveDetailRow(key)]
+     */
+    expandAdaptiveDetailRow(key: TKey): void;
+    /**
+     * [descr:GridBase.filter()]
+     */
+    filter(): any;
+    /**
+     * [descr:GridBase.filter(filterExpr)]
+     */
+    filter(filterExpr: any): void;
+    focus(): void;
+    /**
+     * [descr:GridBase.focus(element)]
+     */
+    focus(element: DevExpress.core.UserDefinedElement): void;
+    /**
+     * [descr:GridBase.getCellElement(rowIndex, dataField)]
+     */
+    getCellElement(
+      rowIndex: number,
+      dataField: string
+    ): DevExpress.core.DxElement | undefined;
+    /**
+     * [descr:GridBase.getCellElement(rowIndex, visibleColumnIndex)]
+     */
+    getCellElement(
+      rowIndex: number,
+      visibleColumnIndex: number
+    ): DevExpress.core.DxElement | undefined;
+    /**
+     * [descr:GridBase.getCombinedFilter()]
+     */
+    getCombinedFilter(): any;
+    /**
+     * [descr:GridBase.getCombinedFilter(returnDataField)]
+     */
+    getCombinedFilter(returnDataField: boolean): any;
+    getDataSource(): DevExpress.data.DataSource<TRowData, TKey>;
+    /**
+     * [descr:GridBase.getKeyByRowIndex(rowIndex)]
+     */
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
+    /**
+     * [descr:GridBase.getRowElement(rowIndex)]
+     */
+    getRowElement(
+      rowIndex: number
+    ): DevExpress.core.UserDefinedElementsArray | undefined;
+    /**
+     * [descr:GridBase.getRowIndexByKey(key)]
+     */
+    getRowIndexByKey(key: TKey): number;
+    /**
+     * [descr:GridBase.getScrollable()]
+     */
+    getScrollable(): Scrollable;
+    /**
+     * [descr:GridBase.getVisibleColumnIndex(id)]
+     */
+    getVisibleColumnIndex(id: number | string): number;
+    /**
+     * [descr:GridBase.hasEditData()]
+     */
+    hasEditData(): boolean;
+    /**
+     * [descr:GridBase.hideColumnChooser()]
+     */
+    hideColumnChooser(): void;
+    /**
+     * [descr:GridBase.isAdaptiveDetailRowExpanded(key)]
+     */
+    isAdaptiveDetailRowExpanded(key: TKey): boolean;
+    /**
+     * [descr:GridBase.isRowFocused(key)]
+     */
+    isRowFocused(key: TKey): boolean;
+    /**
+     * [descr:GridBase.isRowSelected(key)]
+     */
+    isRowSelected(key: TKey): boolean;
+    /**
+     * [descr:GridBase.keyOf(obj)]
+     */
+    keyOf(obj: TRowData): TKey;
+    /**
+     * [descr:GridBase.navigateToRow(key)]
+     */
+    navigateToRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.pageCount()]
+     */
+    pageCount(): number;
+    /**
+     * [descr:GridBase.pageIndex()]
+     */
+    pageIndex(): number;
+    /**
+     * [descr:GridBase.pageIndex(newIndex)]
+     */
+    pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.pageSize()]
+     */
+    pageSize(): number;
+    /**
+     * [descr:GridBase.pageSize(value)]
+     */
+    pageSize(value: number): void;
+    /**
+     * [descr:GridBase.refresh()]
+     */
+    refresh(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.refresh(changesOnly)]
+     */
+    refresh(changesOnly: boolean): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.repaintRows(rowIndexes)]
+     */
+    repaintRows(rowIndexes: Array<number>): void;
+    /**
+     * [descr:GridBase.saveEditData()]
+     */
+    saveEditData(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.searchByText(text)]
+     */
+    searchByText(text: string): void;
+    /**
+     * [descr:GridBase.selectAll()]
+     */
+    selectAll(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:GridBase.selectRows(keys, preserve)]
+     */
+    selectRows(
+      keys: Array<TKey>,
+      preserve: boolean
+    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
+    /**
+     * [descr:GridBase.selectRowsByIndexes(indexes)]
+     */
+    selectRowsByIndexes(
+      indexes: Array<number>
+    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
+    /**
+     * [descr:GridBase.showColumnChooser()]
+     */
+    showColumnChooser(): void;
+    /**
+     * [descr:GridBase.state()]
+     */
+    state(): any;
+    /**
+     * [descr:GridBase.state(state)]
+     */
+    state(state: any): void;
+    /**
+     * [descr:GridBase.undeleteRow(rowIndex)]
+     */
+    undeleteRow(rowIndex: number): void;
+    /**
+     * [descr:GridBase.updateDimensions()]
+     */
+    updateDimensions(): void;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface GridBaseOptions<
+    TComponent extends GridBase<TRowData, TKey>,
+    TRowData = any,
+    TKey = any
+  > extends DevExpress.ui.WidgetOptions<TComponent> {
+    /**
+     * [descr:GridBaseOptions.allowColumnReordering]
+     */
+    allowColumnReordering?: boolean;
+    /**
+     * [descr:GridBaseOptions.allowColumnResizing]
+     */
+    allowColumnResizing?: boolean;
+    /**
+     * [descr:GridBaseOptions.autoNavigateToFocusedRow]
+     */
+    autoNavigateToFocusedRow?: boolean;
+    /**
+     * [descr:GridBaseOptions.cacheEnabled]
+     */
+    cacheEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.cellHintEnabled]
+     */
+    cellHintEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnAutoWidth]
+     */
+    columnAutoWidth?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser]
+     */
+    columnChooser?: ColumnChooser;
+    /**
+     * [descr:GridBaseOptions.columnFixing]
+     */
+    columnFixing?: ColumnFixing;
+    /**
+     * [descr:GridBaseOptions.columnHidingEnabled]
+     */
+    columnHidingEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnMinWidth]
+     */
+    columnMinWidth?: number;
+    /**
+     * [descr:GridBaseOptions.columnResizingMode]
+     */
+    columnResizingMode?: ColumnResizeMode;
+    /**
+     * [descr:GridBaseOptions.columnWidth]
+     */
+    columnWidth?: number | Mode;
+    /**
+     * [descr:GridBaseOptions.columns]
+     */
+    columns?: Array<ColumnBase<TRowData> | string>;
+    /**
+     * [descr:GridBaseOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<
+      TRowData,
+      TKey
+    > | null;
+    /**
+     * [descr:GridBaseOptions.dateSerializationFormat]
+     */
+    dateSerializationFormat?: string;
+    /**
+     * [descr:GridBaseOptions.editing]
+     */
+    editing?: EditingBase<TRowData, TKey>;
+    /**
+     * [descr:GridBaseOptions.errorRowEnabled]
+     */
+    errorRowEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.filterBuilder]
+     */
+    filterBuilder?: DevExpress.ui.dxFilterBuilder.Properties;
+    /**
+     * [descr:GridBaseOptions.filterBuilderPopup]
+     */
+    filterBuilderPopup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:GridBaseOptions.filterPanel]
+     */
+    filterPanel?: FilterPanel<TComponent, TRowData, TKey>;
+    /**
+     * [descr:GridBaseOptions.filterRow]
+     */
+    filterRow?: FilterRow;
+    /**
+     * [descr:GridBaseOptions.filterSyncEnabled]
+     */
+    filterSyncEnabled?: boolean | Mode;
+    /**
+     * [descr:GridBaseOptions.filterValue]
+     */
+    filterValue?: string | Array<any> | Function;
+    /**
+     * [descr:GridBaseOptions.focusedColumnIndex]
+     */
+    focusedColumnIndex?: number;
+    /**
+     * [descr:GridBaseOptions.focusedRowEnabled]
+     */
+    focusedRowEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.focusedRowIndex]
+     */
+    focusedRowIndex?: number;
+    /**
+     * [descr:GridBaseOptions.focusedRowKey]
+     */
+    focusedRowKey?: TKey;
+    /**
+     * [descr:GridBaseOptions.headerFilter]
+     */
+    headerFilter?: HeaderFilter;
+    /**
+     * [descr:GridBaseOptions.highlightChanges]
+     */
+    highlightChanges?: boolean;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation]
+     */
+    keyboardNavigation?: KeyboardNavigation;
+    /**
+     * [descr:GridBaseOptions.loadPanel]
+     */
+    loadPanel?: LoadPanel;
+    /**
+     * [descr:GridBaseOptions.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:GridBaseOptions.onAdaptiveDetailRowPreparing]
+     */
+    onAdaptiveDetailRowPreparing?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        AdaptiveDetailRowPreparingInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onDataErrorOccurred]
+     */
+    onDataErrorOccurred?: (
+      e: DevExpress.events.EventInfo<TComponent> & DataErrorOccurredInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onEditCanceled]
+     */
+    onEditCanceled?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        DataChangeInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onEditCanceling]
+     */
+    onEditCanceling?: (
+      e: DevExpress.events.Cancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        DataChangeInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onInitNewRow]
+     */
+    onInitNewRow?: (
+      e: DevExpress.events.EventInfo<TComponent> & NewRowInfo<TRowData>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onKeyDown]
+     */
+    onKeyDown?: (
+      e: DevExpress.events.NativeEventInfo<TComponent, KeyboardEvent> &
+        KeyDownInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowCollapsed]
+     */
+    onRowCollapsed?: (
+      e: DevExpress.events.EventInfo<TComponent> & RowKeyInfo<TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowCollapsing]
+     */
+    onRowCollapsing?: (
+      e: DevExpress.events.Cancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        RowKeyInfo<TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowExpanded]
+     */
+    onRowExpanded?: (
+      e: DevExpress.events.EventInfo<TComponent> & RowKeyInfo<TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowExpanding]
+     */
+    onRowExpanding?: (
+      e: DevExpress.events.Cancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        RowKeyInfo<TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowInserted]
+     */
+    onRowInserted?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        RowInsertedInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowInserting]
+     */
+    onRowInserting?: (
+      e: DevExpress.events.EventInfo<TComponent> & RowInsertingInfo<TRowData>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowRemoved]
+     */
+    onRowRemoved?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        RowRemovedInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowRemoving]
+     */
+    onRowRemoving?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        RowRemovingInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowUpdated]
+     */
+    onRowUpdated?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        RowUpdatedInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowUpdating]
+     */
+    onRowUpdating?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        RowUpdatingInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onRowValidating]
+     */
+    onRowValidating?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        RowValidatingInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onSaved]
+     */
+    onSaved?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        DataChangeInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onSaving]
+     */
+    onSaving?: (
+      e: DevExpress.events.EventInfo<TComponent> & SavingInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onSelectionChanged]
+     */
+    onSelectionChanged?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        SelectionChangedInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onToolbarPreparing]
+     */
+    onToolbarPreparing?: (
+      e: DevExpress.events.EventInfo<TComponent> & ToolbarPreparingInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.pager]
+     */
+    pager?: Pager;
+    /**
+     * [descr:GridBaseOptions.paging]
+     */
+    paging?: PagingBase;
+    /**
+     * [descr:GridBaseOptions.renderAsync]
+     */
+    renderAsync?: boolean;
+    /**
+     * [descr:GridBaseOptions.repaintChangesOnly]
+     */
+    repaintChangesOnly?: boolean;
+    /**
+     * [descr:GridBaseOptions.rowAlternationEnabled]
+     */
+    rowAlternationEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.rowDragging]
+     */
+    rowDragging?: RowDragging<TComponent, TRowData, TKey>;
+    /**
+     * [descr:GridBaseOptions.scrolling]
+     */
+    scrolling?: ScrollingBase;
+    /**
+     * [descr:GridBaseOptions.searchPanel]
+     */
+    searchPanel?: SearchPanel;
+    /**
+     * [descr:GridBaseOptions.selectedRowKeys]
+     */
+    selectedRowKeys?: Array<TKey>;
+    /**
+     * [descr:GridBaseOptions.selection]
+     */
+    selection?: SelectionBase;
+    /**
+     * [descr:GridBaseOptions.showBorders]
+     */
+    showBorders?: boolean;
+    /**
+     * [descr:GridBaseOptions.showColumnHeaders]
+     */
+    showColumnHeaders?: boolean;
+    /**
+     * [descr:GridBaseOptions.showColumnLines]
+     */
+    showColumnLines?: boolean;
+    /**
+     * [descr:GridBaseOptions.showRowLines]
+     */
+    showRowLines?: boolean;
+    /**
+     * [descr:GridBaseOptions.sorting]
+     */
+    sorting?: Sorting;
+    /**
+     * [descr:GridBaseOptions.stateStoring]
+     */
+    stateStoring?: StateStoring;
+    /**
+     * [descr:GridBaseOptions.twoWayBindingEnabled]
+     */
+    twoWayBindingEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.wordWrapEnabled]
+     */
+    wordWrapEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.syncLookupFilterValues]
+     */
+    syncLookupFilterValues?: boolean;
+  }
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
+  export type HeaderFilter = {
+    /**
+     * [descr:GridBaseOptions.headerFilter.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseOptions.headerFilter.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseOptions.headerFilter.searchTimeout]
+     */
+    searchTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts]
+     */
+    texts?: HeaderFilterTexts;
+    /**
+     * [descr:GridBaseOptions.headerFilter.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:GridBaseOptions.headerFilter.width]
+     */
+    width?: number;
+  };
+  export type HeaderFilterTexts = {
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts.cancel]
+     */
+    cancel?: string;
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
+     */
+    emptyValue?: string;
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts.ok]
+     */
+    ok?: string;
+  };
+  export type KeyboardNavigation = {
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
+     */
+    editOnKeyPress?: boolean;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
+     */
+    enterKeyAction?: EnterKeyAction;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
+     */
+    enterKeyDirection?: EnterKeyDirection;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type KeyDownInfo = {
+    handled: boolean;
+  };
+  export type LoadPanel = {
+    /**
+     * [descr:GridBaseOptions.loadPanel.enabled]
+     */
+    enabled?: boolean | Mode;
+    /**
+     * [descr:GridBaseOptions.loadPanel.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseOptions.loadPanel.indicatorSrc]
+     */
+    indicatorSrc?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.shading]
+     */
+    shading?: boolean;
+    /**
+     * [descr:GridBaseOptions.loadPanel.shadingColor]
+     */
+    shadingColor?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.showIndicator]
+     */
+    showIndicator?: boolean;
+    /**
+     * [descr:GridBaseOptions.loadPanel.showPane]
+     */
+    showPane?: boolean;
+    /**
+     * [descr:GridBaseOptions.loadPanel.text]
+     */
+    text?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.width]
+     */
+    width?: number;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface NewRowInfo<TRowData = any> {
+    data: TRowData;
+    promise?: PromiseLike<void>;
+  }
   export type NewRowPosition =
     | 'first'
     | 'last'
@@ -1633,8 +3076,360 @@ declare module DevExpress.common.grids {
     | 'pageTop'
     | 'viewportBottom'
     | 'viewportTop';
+  export type Pager = {
+    /**
+     * [descr:GridBaseOptions.pager.allowedPageSizes]
+     */
+    allowedPageSizes?: Array<number | PagerPageSize> | Mode;
+    /**
+     * [descr:GridBaseOptions.pager.displayMode]
+     */
+    displayMode?: PagerDisplayMode;
+    /**
+     * [descr:GridBaseOptions.pager.infoText]
+     */
+    infoText?: string;
+    /**
+     * [descr:GridBaseOptions.pager.showInfo]
+     */
+    showInfo?: boolean;
+    /**
+     * [descr:GridBaseOptions.pager.showNavigationButtons]
+     */
+    showNavigationButtons?: boolean;
+    /**
+     * [descr:GridBaseOptions.pager.showPageSizeSelector]
+     */
+    showPageSizeSelector?: boolean;
+    /**
+     * [descr:GridBaseOptions.pager.visible]
+     */
+    visible?: boolean | Mode;
+  };
   export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
   export type PagerPageSize = 'all' | 'auto';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface PagingBase {
+    /**
+     * [descr:GridBaseOptions.paging.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.paging.pageIndex]
+     */
+    pageIndex?: number;
+    /**
+     * [descr:GridBaseOptions.paging.pageSize]
+     */
+    pageSize?: number;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RowDragging<
+    TComponent extends GridBase<TRowData, TKey>,
+    TRowData = any,
+    TKey = any
+  > = {
+    /**
+     * [descr:GridBaseOptions.rowDragging.allowDropInsideItem]
+     */
+    allowDropInsideItem?: boolean;
+    /**
+     * [descr:GridBaseOptions.rowDragging.allowReordering]
+     */
+    allowReordering?: boolean;
+    /**
+     * [descr:GridBaseOptions.rowDragging.autoScroll]
+     */
+    autoScroll?: boolean;
+    /**
+     * [descr:GridBaseOptions.rowDragging.boundary]
+     */
+    boundary?: string | DevExpress.core.UserDefinedElement;
+    /**
+     * [descr:GridBaseOptions.rowDragging.container]
+     */
+    container?: string | DevExpress.core.UserDefinedElement;
+    /**
+     * [descr:GridBaseOptions.rowDragging.cursorOffset]
+     */
+    cursorOffset?:
+      | string
+      | {
+          /**
+           * [descr:GridBaseOptions.rowDragging.cursorOffset.x]
+           */
+          x?: number;
+          /**
+           * [descr:GridBaseOptions.rowDragging.cursorOffset.y]
+           */
+          y?: number;
+        };
+    /**
+     * [descr:GridBaseOptions.rowDragging.data]
+     */
+    data?: any;
+    /**
+     * [descr:GridBaseOptions.rowDragging.dragDirection]
+     */
+    dragDirection?: DragDirection;
+    /**
+     * [descr:GridBaseOptions.rowDragging.dragTemplate]
+     */
+    dragTemplate?:
+      | DevExpress.core.template
+      | ((
+          dragInfo: RowDraggingTemplateData<TRowData>,
+          containerElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:GridBaseOptions.rowDragging.dropFeedbackMode]
+     */
+    dropFeedbackMode?: DragHighlight;
+    /**
+     * [descr:GridBaseOptions.rowDragging.filter]
+     * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
+     */
+    filter?: string;
+    /**
+     * [descr:GridBaseOptions.rowDragging.group]
+     */
+    group?: string;
+    /**
+     * [descr:GridBaseOptions.rowDragging.handle]
+     */
+    handle?: string;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onAdd]
+     */
+    onAdd?: (
+      e: ReducedNativeEventInfo<TComponent> &
+        RowDraggingEventInfo<TRowData> &
+        DragDropInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onDragChange]
+     */
+    onDragChange?: (
+      e: DevExpress.events.Cancelable &
+        ReducedNativeEventInfo<TComponent> &
+        RowDraggingEventInfo<TRowData> &
+        DragDropInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onDragEnd]
+     */
+    onDragEnd?: (
+      e: DevExpress.events.Cancelable &
+        ReducedNativeEventInfo<TComponent> &
+        RowDraggingEventInfo<TRowData> &
+        DragDropInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onDragMove]
+     */
+    onDragMove?: (
+      e: DevExpress.events.Cancelable &
+        ReducedNativeEventInfo<TComponent> &
+        RowDraggingEventInfo<TRowData> &
+        DragDropInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onDragStart]
+     */
+    onDragStart?: (
+      e: DevExpress.events.Cancelable &
+        ReducedNativeEventInfo<TComponent> &
+        DragStartEventInfo<TRowData>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onRemove]
+     */
+    onRemove?: (
+      e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.onReorder]
+     */
+    onReorder?: (
+      e: ReducedNativeEventInfo<TComponent> &
+        RowDraggingEventInfo<TRowData> &
+        DragReorderInfo
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.rowDragging.scrollSensitivity]
+     */
+    scrollSensitivity?: number;
+    /**
+     * [descr:GridBaseOptions.rowDragging.scrollSpeed]
+     */
+    scrollSpeed?: number;
+    /**
+     * [descr:GridBaseOptions.rowDragging.showDragIcons]
+     */
+    showDragIcons?: boolean;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface RowDraggingEventInfo<TRowData = any> {
+    readonly itemData?: TRowData;
+    readonly itemElement: DevExpress.core.DxElement;
+    readonly fromIndex: number;
+    readonly toIndex: number;
+    readonly fromComponent: Sortable | Draggable;
+    readonly toComponent: Sortable | Draggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+  }
+  export type RowDraggingTemplateData<TRowData = any> = {
+    readonly itemData: TRowData;
+    readonly itemElement: DevExpress.core.DxElement;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RowInsertedInfo<TRowData = any, TKey = any> = {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly error: Error;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RowInsertingInfo<TRowData = any> = {
+    data: TRowData;
+    cancel: boolean | PromiseLike<void>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RowKeyInfo<TKey = any> = {
+    readonly key: TKey;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface RowRemovedInfo<TRowData = any, TKey = any> {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly error: Error;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface RowRemovingInfo<TRowData = any, TKey = any> {
+    readonly data: TRowData;
+    readonly key: TKey;
+    cancel: boolean | PromiseLike<void>;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface RowUpdatedInfo<TRowData = any, TKey = any> {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly error: Error;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface RowUpdatingInfo<TRowData = any, TKey = any> {
+    readonly oldData: TRowData;
+    newData: DevExpress.core.DeepPartial<TRowData>;
+    readonly key: TKey;
+    cancel: boolean | PromiseLike<void>;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface RowValidatingInfo<TRowData = any, TKey = any> {
+    readonly brokenRules: Array<DevExpress.ui.ValidationRule>;
+    isValid: boolean;
+    readonly key: TKey;
+    readonly newData: DevExpress.core.DeepPartial<TRowData>;
+    readonly oldData: TRowData;
+    errorText: string;
+    promise?: PromiseLike<void>;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface SavingInfo<TRowData = any, TKey = any> {
+    changes: Array<DataChange<TRowData, TKey>>;
+    promise?: PromiseLike<void>;
+    cancel: boolean;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ScrollingBase {
+    /**
+     * [descr:GridBaseOptions.scrolling.columnRenderingMode]
+     */
+    columnRenderingMode?: DataRenderMode;
+    /**
+     * [descr:GridBaseOptions.scrolling.preloadEnabled]
+     */
+    preloadEnabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.scrolling.rowRenderingMode]
+     */
+    rowRenderingMode?: DataRenderMode;
+    /**
+     * [descr:GridBaseOptions.scrolling.scrollByContent]
+     */
+    scrollByContent?: boolean;
+    /**
+     * [descr:GridBaseOptions.scrolling.scrollByThumb]
+     */
+    scrollByThumb?: boolean;
+    /**
+     * [descr:GridBaseOptions.scrolling.showScrollbar]
+     */
+    showScrollbar?: ScrollbarMode;
+    /**
+     * [descr:GridBaseOptions.scrolling.useNative]
+     */
+    useNative?: boolean | Mode;
+    /**
+     * [descr:GridBaseOptions.scrolling.renderAsync]
+     */
+    renderAsync?: boolean;
+  }
+  export type SearchPanel = {
+    /**
+     * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
+     */
+    highlightCaseSensitive?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.highlightSearchText]
+     */
+    highlightSearchText?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.placeholder]
+     */
+    placeholder?: string;
+    /**
+     * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
+     */
+    searchVisibleColumnsOnly?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.text]
+     */
+    text?: string;
+    /**
+     * [descr:GridBaseOptions.searchPanel.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.width]
+     */
+    width?: number;
+  };
   export type SelectedFilterOperation =
     | '<'
     | '<='
@@ -1647,14 +3442,90 @@ declare module DevExpress.common.grids {
     | 'endswith'
     | 'notcontains'
     | 'startswith';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface SelectionBase {
+    /**
+     * [descr:GridBaseOptions.selection.allowSelectAll]
+     */
+    allowSelectAll?: boolean;
+    /**
+     * [descr:GridBaseOptions.selection.mode]
+     */
+    mode?: SingleMultipleOrNone;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface SelectionChangedInfo<TRowData = any, TKey = any> {
+    readonly currentSelectedRowKeys: Array<TKey>;
+    readonly currentDeselectedRowKeys: Array<TKey>;
+    readonly selectedRowKeys: Array<TKey>;
+    readonly selectedRowsData: Array<TRowData>;
+  }
   export type SelectionColumnDisplayMode =
     | 'always'
     | 'none'
     | 'onClick'
     | 'onLongTap';
+  export type Sorting = {
+    /**
+     * [descr:GridBaseOptions.sorting.ascendingText]
+     */
+    ascendingText?: string;
+    /**
+     * [descr:GridBaseOptions.sorting.clearText]
+     */
+    clearText?: string;
+    /**
+     * [descr:GridBaseOptions.sorting.descendingText]
+     */
+    descendingText?: string;
+    /**
+     * [descr:GridBaseOptions.sorting.mode]
+     */
+    mode?: SingleMultipleOrNone;
+    /**
+     * [descr:GridBaseOptions.sorting.showSortIndexes]
+     */
+    showSortIndexes?: boolean;
+  };
   export type StartEditAction = 'click' | 'dblClick';
   export type StateStoreType = 'custom' | 'localStorage' | 'sessionStorage';
+  export type StateStoring = {
+    /**
+     * [descr:GridBaseOptions.stateStoring.customLoad]
+     */
+    customLoad?: () => PromiseLike<any>;
+    /**
+     * [descr:GridBaseOptions.stateStoring.customSave]
+     */
+    customSave?: (gridState: any) => any;
+    /**
+     * [descr:GridBaseOptions.stateStoring.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.stateStoring.savingTimeout]
+     */
+    savingTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.stateStoring.storageKey]
+     */
+    storageKey?: string;
+    /**
+     * [descr:GridBaseOptions.stateStoring.type]
+     */
+    type?: StateStoreType;
+  };
   export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ToolbarPreparingInfo {
+    toolbarOptions: DevExpress.ui.dxToolbar.Properties;
+  }
 }
 declare module DevExpress.core {
   /**
@@ -1750,6 +3621,10 @@ declare module DevExpress.core {
       transclude?: boolean;
     }): DxElement;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6208,7 +8083,7 @@ declare module DevExpress.ui {
    */
   export class dxDataGrid<TRowData = any, TKey = any>
     extends Widget<dxDataGridOptions<TRowData, TKey>>
-    implements GridBase<TRowData, TKey>
+    implements DevExpress.common.grids.GridBase<TRowData, TKey>
   {
     /**
      * [descr:dxDataGrid.addColumn(columnOptions)]
@@ -6340,7 +8215,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
+    getScrollable(): DevExpress.common.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -6377,13 +8252,7 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      AdaptiveDetailRowPreparingInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface AdaptiveDetailRowPreparingInfo {
-      readonly formOptions: any;
-    }
+      DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     export type CellClickEvent<
       TRowData = any,
       TKey = any
@@ -6464,260 +8333,10 @@ declare module DevExpress.ui {
       TRowData,
       TKey
     >;
-    /**
-     * [descr:GridBaseColumn]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnBase<TRowData = any> {
-      /**
-       * [descr:GridBaseColumn.alignment]
-       */
-      alignment?: DevExpress.common.HorizontalAlignment;
-      /**
-       * [descr:GridBaseColumn.allowEditing]
-       */
-      allowEditing?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowFiltering]
-       */
-      allowFiltering?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowFixing]
-       */
-      allowFixing?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowHeaderFiltering]
-       */
-      allowHeaderFiltering?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowHiding]
-       */
-      allowHiding?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowReordering]
-       */
-      allowReordering?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowResizing]
-       */
-      allowResizing?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseColumn.allowSorting]
-       */
-      allowSorting?: boolean;
-      /**
-       * [descr:GridBaseColumn.calculateCellValue]
-       */
-      calculateCellValue?: (rowData: TRowData) => any;
-      defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
-      /**
-       * [descr:GridBaseColumn.calculateDisplayValue]
-       */
-      calculateDisplayValue?: string | ((rowData: TRowData) => any);
-      /**
-       * [descr:GridBaseColumn.calculateFilterExpression]
-       */
-      calculateFilterExpression?: (
-        filterValue: any,
-        selectedFilterOperation: string,
-        target: string
-      ) => string | Array<any> | Function;
-      defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
-      /**
-       * [descr:GridBaseColumn.calculateSortValue]
-       */
-      calculateSortValue?: string | ((rowData: TRowData) => any);
-      /**
-       * [descr:GridBaseColumn.caption]
-       */
-      caption?: string;
-      /**
-       * [descr:GridBaseColumn.cssClass]
-       */
-      cssClass?: string;
-      /**
-       * [descr:GridBaseColumn.customizeText]
-       */
-      customizeText?: (cellInfo: ColumnCustomizeTextArg) => string;
-      /**
-       * [descr:GridBaseColumn.dataField]
-       */
-      dataField?: string;
-      /**
-       * [descr:GridBaseColumn.dataType]
-       */
-      dataType?: DevExpress.common.DataType;
-      /**
-       * [descr:GridBaseColumn.editorOptions]
-       */
-      editorOptions?: any;
-      /**
-       * [descr:GridBaseColumn.encodeHtml]
-       */
-      encodeHtml?: boolean;
-      /**
-       * [descr:GridBaseColumn.falseText]
-       */
-      falseText?: string;
-      /**
-       * [descr:GridBaseColumn.filterOperations]
-       */
-      filterOperations?: Array<
-        DevExpress.common.grids.FilterOperation | string
-      >;
-      /**
-       * [descr:GridBaseColumn.filterType]
-       */
-      filterType?: DevExpress.common.grids.FilterType;
-      /**
-       * [descr:GridBaseColumn.filterValue]
-       */
-      filterValue?: any;
-      /**
-       * [descr:GridBaseColumn.filterValues]
-       */
-      filterValues?: Array<any>;
-      /**
-       * [descr:GridBaseColumn.fixed]
-       */
-      fixed?: boolean;
-      /**
-       * [descr:GridBaseColumn.fixedPosition]
-       */
-      fixedPosition?: DevExpress.common.HorizontalEdge;
-      /**
-       * [descr:GridBaseColumn.formItem]
-       */
-      formItem?: dxFormSimpleItem;
-      /**
-       * [descr:GridBaseColumn.format]
-       */
-      format?: Format;
-      /**
-       * [descr:GridBaseColumn.headerFilter]
-       */
-      headerFilter?: ColumnHeaderFilter;
-      /**
-       * [descr:GridBaseColumn.hidingPriority]
-       */
-      hidingPriority?: number;
-      /**
-       * [descr:GridBaseColumn.isBand]
-       */
-      isBand?: boolean;
-      /**
-       * [descr:GridBaseColumn.lookup]
-       */
-      lookup?: ColumnLookup;
-      /**
-       * [descr:GridBaseColumn.minWidth]
-       */
-      minWidth?: number;
-      /**
-       * [descr:GridBaseColumn.name]
-       */
-      name?: string;
-      /**
-       * [descr:GridBaseColumn.ownerBand]
-       */
-      ownerBand?: number;
-      /**
-       * [descr:GridBaseColumn.renderAsync]
-       */
-      renderAsync?: boolean;
-      /**
-       * [descr:GridBaseColumn.selectedFilterOperation]
-       */
-      selectedFilterOperation?: DevExpress.common.grids.SelectedFilterOperation;
-      /**
-       * [descr:GridBaseColumn.setCellValue]
-       */
-      setCellValue?: (
-        newData: DevExpress.core.DeepPartial<TRowData>,
-        value: any,
-        currentRowData: TRowData
-      ) => void | PromiseLike<void>;
-      /**
-       * [descr:GridBaseColumn.showEditorAlways]
-       */
-      showEditorAlways?: boolean;
-      /**
-       * [descr:GridBaseColumn.showInColumnChooser]
-       */
-      showInColumnChooser?: boolean;
-      /**
-       * [descr:GridBaseColumn.sortIndex]
-       */
-      sortIndex?: number;
-      /**
-       * [descr:GridBaseColumn.sortOrder]
-       */
-      sortOrder?: DevExpress.common.SortOrder;
-      /**
-       * [descr:GridBaseColumn.sortingMethod]
-       */
-      sortingMethod?: (value1: any, value2: any) => number;
-      /**
-       * [descr:GridBaseColumn.trueText]
-       */
-      trueText?: string;
-      /**
-       * [descr:GridBaseColumn.validationRules]
-       */
-      validationRules?: Array<
-        | RequiredRule
-        | NumericRule
-        | RangeRule
-        | StringLengthRule
-        | CustomRule
-        | CompareRule
-        | PatternRule
-        | EmailRule
-        | AsyncRule
-      >;
-      /**
-       * [descr:GridBaseColumn.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:GridBaseColumn.visibleIndex]
-       */
-      visibleIndex?: number;
-      /**
-       * [descr:GridBaseColumn.width]
-       */
-      width?: number | string;
-    }
     export type ColumnButton<
       TRowData = any,
       TKey = any
     > = dxDataGridColumnButton<TRowData, TKey>;
-    /**
-     * [descr:GridBaseColumnButton]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnButtonBase {
-      /**
-       * [descr:GridBaseColumnButton.cssClass]
-       */
-      cssClass?: string;
-      /**
-       * [descr:GridBaseColumnButton.hint]
-       */
-      hint?: string;
-      /**
-       * [descr:GridBaseColumnButton.icon]
-       */
-      icon?: string;
-      /**
-       * [descr:GridBaseColumnButton.text]
-       */
-      text?: string;
-    }
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
@@ -6752,56 +8371,6 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnChooser {
-      /**
-       * [descr:GridBaseOptions.columnChooser.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseOptions.columnChooser.emptyPanelText]
-       */
-      emptyPanelText?: string;
-      /**
-       * [descr:GridBaseOptions.columnChooser.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.columnChooser.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseOptions.columnChooser.mode]
-       */
-      mode?: DevExpress.common.grids.ColumnChooserMode;
-      /**
-       * [descr:GridBaseOptions.columnChooser.searchTimeout]
-       */
-      searchTimeout?: number;
-      /**
-       * [descr:GridBaseOptions.columnChooser.title]
-       */
-      title?: string;
-      /**
-       * [descr:GridBaseOptions.columnChooser.width]
-       */
-      width?: number;
-      /**
-       * [descr:GridBaseOptions.columnChooser.sortOrder]
-       */
-      sortOrder?: DevExpress.common.SortOrder;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnCustomizeTextArg {
-      value?: string | number | Date;
-      valueText?: string;
-      target?: string;
-      groupInterval?: string | number;
-    }
     export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
       readonly setValue?: any;
       readonly data?: TRowData;
@@ -6816,40 +8385,6 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnFixing {
-      /**
-       * [descr:GridBaseOptions.columnFixing.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts]
-       */
-      texts?: ColumnFixingTexts;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnFixingTexts {
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.fix]
-       */
-      fix?: string;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.leftPosition]
-       */
-      leftPosition?: string;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.rightPosition]
-       */
-      rightPosition?: string;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.unfix]
-       */
-      unfix?: string;
-    }
     export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
       readonly data?: GroupData<TRowData>;
       readonly component: dxDataGrid<TRowData, TKey>;
@@ -6869,71 +8404,6 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly column: Column<TRowData, TKey>;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnHeaderFilter {
-      /**
-       * [descr:GridBaseColumn.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseColumn.headerFilter.dataSource]
-       */
-      dataSource?:
-        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
-        | ((options: {
-            component?: any;
-            dataSource?: DevExpress.data.DataSource.Options | null;
-          }) => void);
-      /**
-       * [descr:GridBaseColumn.headerFilter.groupInterval]
-       */
-      groupInterval?: HeaderFilterGroupInterval | number;
-      /**
-       * [descr:GridBaseColumn.headerFilter.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseColumn.headerFilter.searchMode]
-       */
-      searchMode?: DevExpress.common.SearchMode;
-      /**
-       * [descr:GridBaseColumn.headerFilter.width]
-       */
-      width?: number;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnLookup {
-      /**
-       * [descr:GridBaseColumn.lookup.allowClearing]
-       */
-      allowClearing?: boolean;
-      /**
-       * [descr:GridBaseColumn.lookup.dataSource]
-       */
-      dataSource?:
-        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
-        | ((options: {
-            data?: any;
-            key?: any;
-          }) => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>)
-        | null;
-      /**
-       * [descr:GridBaseColumn.lookup.displayExpr]
-       */
-      displayExpr?: string | ((data: any) => string);
-      /**
-       * [descr:GridBaseColumn.lookup.valueExpr]
-       */
-      valueExpr?: string;
-      /**
-       * [descr:GridBaseColumn.lookup.calculateCellValue]
-       */
-      calculateCellValue?: (rowData: any) => any;
-    }
     export type ColumnResizeMode = 'nextColumn' | 'widget';
     export type ContentReadyEvent<
       TRowData = any,
@@ -6959,23 +8429,11 @@ declare module DevExpress.ui {
       totalValue?: any;
       readonly groupIndex?: number;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface DataChangeInfo<TRowData = any, TKey = any> {
-      readonly changes: Array<DataChange<TRowData, TKey>>;
-    }
     export type DataErrorOccurredEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      DataErrorOccurredInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface DataErrorOccurredInfo {
-      readonly error?: Error;
-    }
+      DevExpress.common.grids.DataErrorOccurredInfo;
     export type DataGridCommandColumnType =
       | 'adaptive'
       | 'buttons'
@@ -7017,36 +8475,6 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface DragDropInfo {
-      readonly dropInsideItem: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface DragReorderInfo {
-      readonly dropInsideItem: boolean;
-      promise?: PromiseLike<void>;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface DragStartEventInfo<
-      T extends GridBase<TRowData, TKey>,
-      TRowData = any,
-      TKey = any
-    > {
-      readonly component: T;
-      readonly event: DevExpress.events.DxEvent<
-        PointerEvent | MouseEvent | TouchEvent
-      >;
-      itemData?: TRowData;
-      readonly itemElement: DevExpress.core.DxElement;
-      readonly fromIndex: number;
-      readonly fromData?: any;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface dxDataGridSortByGroupSummaryInfoItem {
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.groupColumn]
@@ -7073,17 +8501,17 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      DataChangeInfo<TRowData, TKey>;
+      DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
     export type EditCancelingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      DataChangeInfo<TRowData, TKey>;
-    export type Editing<TRowData = any, TKey = any> = EditingBase<
-      TRowData,
-      TKey
-    > & {
+      DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
+    export type Editing<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.grids.EditingBase<TRowData, TKey> & {
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
        */
@@ -7115,59 +8543,6 @@ declare module DevExpress.ui {
        */
       newRowPosition?: DevExpress.common.grids.NewRowPosition;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface EditingBase<TRowData = any, TKey = any> {
-      /**
-       * [descr:GridBaseOptions.editing.confirmDelete]
-       */
-      confirmDelete?: boolean;
-      /**
-       * [descr:GridBaseOptions.editing.changes]
-       */
-      changes?: Array<DataChange<TRowData, TKey>>;
-      /**
-       * [descr:GridBaseOptions.editing.editColumnName]
-       */
-      editColumnName?: string;
-      /**
-       * [descr:GridBaseOptions.editing.editRowKey]
-       */
-      editRowKey?: TKey;
-      /**
-       * [descr:GridBaseOptions.editing.form]
-       */
-      form?: dxFormOptions;
-      /**
-       * [descr:GridBaseOptions.editing.mode]
-       */
-      mode?: DevExpress.common.grids.GridsEditMode;
-      /**
-       * [descr:GridBaseOptions.editing.popup]
-       */
-      popup?: DevExpress.ui.dxPopup.Properties;
-      /**
-       * [descr:GridBaseOptions.editing.refreshMode]
-       */
-      refreshMode?: DevExpress.common.grids.GridsEditRefreshMode;
-      /**
-       * [descr:GridBaseOptions.editing.selectTextOnEditStart]
-       */
-      selectTextOnEditStart?: boolean;
-      /**
-       * [descr:GridBaseOptions.editing.startEditAction]
-       */
-      startEditAction?: DevExpress.common.grids.StartEditAction;
-      /**
-       * [descr:GridBaseOptions.editing.texts]
-       */
-      texts?: EditingTextsBase;
-      /**
-       * [descr:GridBaseOptions.editing.useIcons]
-       */
-      useIcons?: boolean;
-    }
     export type EditingStartEvent<
       TRowData = any,
       TKey = any
@@ -7177,55 +8552,6 @@ declare module DevExpress.ui {
         readonly key: TKey;
         readonly column?: Column<TRowData, TKey>;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface EditingTextsBase {
-      /**
-       * [descr:GridBaseOptions.editing.texts.addRow]
-       */
-      addRow?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.cancelAllChanges]
-       */
-      cancelAllChanges?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.cancelRowChanges]
-       */
-      cancelRowChanges?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.confirmDeleteMessage]
-       */
-      confirmDeleteMessage?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.confirmDeleteTitle]
-       */
-      confirmDeleteTitle?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.deleteRow]
-       */
-      deleteRow?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.editRow]
-       */
-      editRow?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.saveAllChanges]
-       */
-      saveAllChanges?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.saveRowChanges]
-       */
-      saveRowChanges?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.undeleteRow]
-       */
-      undeleteRow?: string;
-      /**
-       * [descr:GridBaseOptions.editing.texts.validationCancelChanges]
-       */
-      validationCancelChanges?: string;
-    }
     export type EditorPreparedEvent<
       TRowData = any,
       TKey = any
@@ -7374,7 +8700,7 @@ declare module DevExpress.ui {
       RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
       RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
       RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
-      RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+      RowDraggingTemplateData: DevExpress.common.grids.RowDraggingTemplateData<TRowData>;
       RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
       RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
       RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
@@ -7485,146 +8811,12 @@ declare module DevExpress.ui {
       format?: string;
       readonly data: Blob;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface FilterPanel<
-      T extends GridBase<TRowData, TKey>,
+    export type FilterPanel<
       TRowData = any,
       TKey = any
-    > {
-      /**
-       * [descr:GridBaseOptions.filterPanel.customizeText]
-       */
-      customizeText?: (e: FilterPanelCustomizeTextArg<T>) => string;
-      /**
-       * [descr:GridBaseOptions.filterPanel.filterEnabled]
-       */
-      filterEnabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts]
-       */
-      texts?: FilterPanelTexts;
-      /**
-       * [descr:GridBaseOptions.filterPanel.visible]
-       */
-      visible?: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface FilterPanelCustomizeTextArg<T> {
-      readonly component: T;
-      readonly filterValue: any;
-      readonly text: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface FilterPanelTexts {
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
-       */
-      clearFilter?: string;
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts.createFilter]
-       */
-      createFilter?: string;
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
-       */
-      filterEnabledHint?: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface FilterRow {
-      /**
-       * [descr:GridBaseOptions.filterRow.applyFilter]
-       */
-      applyFilter?: DevExpress.common.grids.ApplyFilterMode;
-      /**
-       * [descr:GridBaseOptions.filterRow.applyFilterText]
-       */
-      applyFilterText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.betweenEndText]
-       */
-      betweenEndText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.betweenStartText]
-       */
-      betweenStartText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions]
-       */
-      operationDescriptions?: FilterRowOperationDescriptions;
-      /**
-       * [descr:GridBaseOptions.filterRow.resetOperationText]
-       */
-      resetOperationText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.showAllText]
-       */
-      showAllText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.showOperationChooser]
-       */
-      showOperationChooser?: boolean;
-      /**
-       * [descr:GridBaseOptions.filterRow.visible]
-       */
-      visible?: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface FilterRowOperationDescriptions {
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
-       */
-      between?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.contains]
-       */
-      contains?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.endsWith]
-       */
-      endsWith?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.equal]
-       */
-      equal?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThan]
-       */
-      greaterThan?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual]
-       */
-      greaterThanOrEqual?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThan]
-       */
-      lessThan?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual]
-       */
-      lessThanOrEqual?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.notContains]
-       */
-      notContains?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.notEqual]
-       */
-      notEqual?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.startsWith]
-       */
-      startsWith?: string;
-    }
+    > = DevExpress.common.grids.FilterPanel<dxDataGrid, TRowData, TKey>;
+    export type FilterPanelCustomizeTextArg =
+      DevExpress.common.grids.FilterPanelCustomizeTextArg<dxDataGrid>;
     export type FocusedCellChangedEvent<
       TRowData = any,
       TKey = any
@@ -7759,35 +8951,6 @@ declare module DevExpress.ui {
        */
       visible?: boolean | DevExpress.common.Mode;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface HeaderFilter {
-      /**
-       * [descr:GridBaseOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseOptions.headerFilter.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseOptions.headerFilter.searchTimeout]
-       */
-      searchTimeout?: number;
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts]
-       */
-      texts?: HeaderFilterTexts;
-      /**
-       * [descr:GridBaseOptions.headerFilter.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:GridBaseOptions.headerFilter.width]
-       */
-      width?: number;
-    }
     export type HeaderFilterGroupInterval =
       | 'day'
       | 'hour'
@@ -7796,23 +8959,6 @@ declare module DevExpress.ui {
       | 'quarter'
       | 'second'
       | 'year';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface HeaderFilterTexts {
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts.cancel]
-       */
-      cancel?: string;
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
-       */
-      emptyValue?: string;
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts.ok]
-       */
-      ok?: string;
-    }
     export type InitializedEvent<
       TRowData = any,
       TKey = any
@@ -7821,28 +8967,7 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      NewRowInfo<TRowData>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface KeyboardNavigation {
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
-       */
-      editOnKeyPress?: boolean;
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
-       */
-      enterKeyAction?: DevExpress.common.grids.EnterKeyAction;
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
-       */
-      enterKeyDirection?: DevExpress.common.grids.EnterKeyDirection;
-    }
+      DevExpress.common.grids.NewRowInfo<TRowData>;
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
@@ -7850,54 +8975,7 @@ declare module DevExpress.ui {
       dxDataGrid<TRowData, TKey>,
       KeyboardEvent
     > &
-      KeyDownInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface KeyDownInfo {
-      handled: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface LoadPanel {
-      /**
-       * [descr:GridBaseOptions.loadPanel.enabled]
-       */
-      enabled?: boolean | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.loadPanel.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseOptions.loadPanel.indicatorSrc]
-       */
-      indicatorSrc?: string;
-      /**
-       * [descr:GridBaseOptions.loadPanel.shading]
-       */
-      shading?: boolean;
-      /**
-       * [descr:GridBaseOptions.loadPanel.shadingColor]
-       */
-      shadingColor?: string;
-      /**
-       * [descr:GridBaseOptions.loadPanel.showIndicator]
-       */
-      showIndicator?: boolean;
-      /**
-       * [descr:GridBaseOptions.loadPanel.showPane]
-       */
-      showPane?: boolean;
-      /**
-       * [descr:GridBaseOptions.loadPanel.text]
-       */
-      text?: string;
-      /**
-       * [descr:GridBaseOptions.loadPanel.width]
-       */
-      width?: number;
-    }
+      DevExpress.common.grids.KeyDownInfo;
     export type MasterDetail<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.masterDetail.autoExpandAll]
@@ -7922,70 +9000,11 @@ declare module DevExpress.ui {
       readonly data: TRowData;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface NewRowInfo<TRowData = any> {
-      data: TRowData;
-      promise?: PromiseLike<void>;
-    }
     export type OptionChangedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Pager {
-      /**
-       * [descr:GridBaseOptions.pager.allowedPageSizes]
-       */
-      allowedPageSizes?:
-        | Array<number | DevExpress.common.grids.PagerPageSize>
-        | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.pager.displayMode]
-       */
-      displayMode?: DevExpress.common.grids.PagerDisplayMode;
-      /**
-       * [descr:GridBaseOptions.pager.infoText]
-       */
-      infoText?: string;
-      /**
-       * [descr:GridBaseOptions.pager.showInfo]
-       */
-      showInfo?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.showNavigationButtons]
-       */
-      showNavigationButtons?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.showPageSizeSelector]
-       */
-      showPageSizeSelector?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.visible]
-       */
-      visible?: boolean | DevExpress.common.Mode;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface PagingBase {
-      /**
-       * [descr:GridBaseOptions.paging.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.paging.pageIndex]
-       */
-      pageIndex?: number;
-      /**
-       * [descr:GridBaseOptions.paging.pageSize]
-       */
-      pageSize?: number;
-    }
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -8059,13 +9078,13 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowCollapsingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
@@ -8085,252 +9104,75 @@ declare module DevExpress.ui {
       readonly groupIndex?: number;
       readonly rowElement: DevExpress.core.DxElement;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowDragging<
-      T extends GridBase<TRowData, TKey>,
+    export type RowDragging<
       TRowData = any,
       TKey = any
-    > {
-      /**
-       * [descr:GridBaseOptions.rowDragging.allowDropInsideItem]
-       */
-      allowDropInsideItem?: boolean;
-      /**
-       * [descr:GridBaseOptions.rowDragging.allowReordering]
-       */
-      allowReordering?: boolean;
-      /**
-       * [descr:GridBaseOptions.rowDragging.autoScroll]
-       */
-      autoScroll?: boolean;
-      /**
-       * [descr:GridBaseOptions.rowDragging.boundary]
-       */
-      boundary?: string | DevExpress.core.UserDefinedElement;
-      /**
-       * [descr:GridBaseOptions.rowDragging.container]
-       */
-      container?: string | DevExpress.core.UserDefinedElement;
-      /**
-       * [descr:GridBaseOptions.rowDragging.cursorOffset]
-       */
-      cursorOffset?:
-        | string
-        | {
-            /**
-             * [descr:GridBaseOptions.rowDragging.cursorOffset.x]
-             */
-            x?: number;
-            /**
-             * [descr:GridBaseOptions.rowDragging.cursorOffset.y]
-             */
-            y?: number;
-          };
-      /**
-       * [descr:GridBaseOptions.rowDragging.data]
-       */
-      data?: any;
-      /**
-       * [descr:GridBaseOptions.rowDragging.dragDirection]
-       */
-      dragDirection?: DevExpress.common.DragDirection;
-      /**
-       * [descr:GridBaseOptions.rowDragging.dragTemplate]
-       */
-      dragTemplate?:
-        | DevExpress.core.template
-        | ((
-            dragInfo: RowDraggingTemplateData<TRowData>,
-            containerElement: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
-      /**
-       * [descr:GridBaseOptions.rowDragging.dropFeedbackMode]
-       */
-      dropFeedbackMode?: DevExpress.common.DragHighlight;
-      /**
-       * [descr:GridBaseOptions.rowDragging.filter]
-       * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
-       */
-      filter?: string;
-      /**
-       * [descr:GridBaseOptions.rowDragging.group]
-       */
-      group?: string;
-      /**
-       * [descr:GridBaseOptions.rowDragging.handle]
-       */
-      handle?: string;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onAdd]
-       */
-      onAdd?: (
-        e: RowDraggingEventInfo<T, TRowData, TKey> & DragDropInfo
-      ) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onDragChange]
-       */
-      onDragChange?: (
-        e: DevExpress.events.Cancelable &
-          RowDraggingEventInfo<T, TRowData, TKey> &
-          DragDropInfo
-      ) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onDragEnd]
-       */
-      onDragEnd?: (
-        e: DevExpress.events.Cancelable &
-          RowDraggingEventInfo<T, TRowData, TKey> &
-          DragDropInfo
-      ) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onDragMove]
-       */
-      onDragMove?: (
-        e: DevExpress.events.Cancelable &
-          RowDraggingEventInfo<T, TRowData, TKey> &
-          DragDropInfo
-      ) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onDragStart]
-       */
-      onDragStart?: (
-        e: DevExpress.events.Cancelable & DragStartEventInfo<T, TRowData, TKey>
-      ) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onRemove]
-       */
-      onRemove?: (e: RowDraggingEventInfo<T, TRowData, TKey>) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.onReorder]
-       */
-      onReorder?: (
-        e: RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-          DragReorderInfo
-      ) => void;
-      /**
-       * [descr:GridBaseOptions.rowDragging.scrollSensitivity]
-       */
-      scrollSensitivity?: number;
-      /**
-       * [descr:GridBaseOptions.rowDragging.scrollSpeed]
-       */
-      scrollSpeed?: number;
-      /**
-       * [descr:GridBaseOptions.rowDragging.showDragIcons]
-       */
-      showDragIcons?: boolean;
-    }
+    > = DevExpress.common.grids.RowDragging<dxDataGrid, TRowData, TKey>;
     export type RowDraggingAddEvent<
       TRowData = any,
       TKey = any
-    > = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-      DragDropInfo;
+    > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingChangeEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-      DragDropInfo;
+      DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingEndEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-      DragDropInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowDraggingEventInfo<
-      T extends GridBase<TRowData, TKey>,
-      TRowData = any,
-      TKey = any
-    > {
-      readonly component: T;
-      readonly event: DevExpress.events.DxEvent<
-        PointerEvent | MouseEvent | TouchEvent
-      >;
-      readonly itemData?: TRowData;
-      readonly itemElement: DevExpress.core.DxElement;
-      readonly fromIndex: number;
-      readonly toIndex: number;
-      readonly fromComponent: dxSortable | dxDraggable;
-      readonly toComponent: dxSortable | dxDraggable;
-      readonly fromData?: any;
-      readonly toData?: any;
-    }
+      DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingMoveEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-      DragDropInfo;
+      DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingRemoveEvent<
       TRowData = any,
       TKey = any
-    > = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey>;
+    > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
     export type RowDraggingReorderEvent<
       TRowData = any,
       TKey = any
-    > = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-      DragReorderInfo;
+    > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragReorderInfo;
     export type RowDraggingStartEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DragStartEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey>;
-    export type RowDraggingTemplateData<TRowData = any> =
-      RowDraggingTemplateDataModel<TRowData>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowDraggingTemplateDataModel<TRowData = any> {
-      readonly itemData: TRowData;
-      readonly itemElement: DevExpress.core.DxElement;
-    }
+      DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.DragStartEventInfo<TRowData>;
     export type RowExpandedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowExpandingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowInsertedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowInsertedInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowInsertedInfo<TRowData = any, TKey = any> {
-      readonly data: TRowData;
-      readonly key: TKey;
-      readonly error: Error;
-    }
+      DevExpress.common.grids.RowInsertedInfo<TRowData, TKey>;
     export type RowInsertingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowInsertingInfo<TRowData>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowInsertingInfo<TRowData = any> {
-      data: TRowData;
-      cancel: boolean | PromiseLike<void>;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowKeyInfo<TKey = any> {
-      readonly key: TKey;
-    }
+      DevExpress.common.grids.RowInsertingInfo<TRowData>;
     export type RowPreparedEvent<
       TRowData = any,
       TKey = any
@@ -8351,28 +9193,12 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowRemovedInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowRemovedInfo<TRowData = any, TKey = any> {
-      readonly data: TRowData;
-      readonly key: TKey;
-      readonly error: Error;
-    }
+      DevExpress.common.grids.RowRemovedInfo<TRowData, TKey>;
     export type RowRemovingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowRemovingInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowRemovingInfo<TRowData = any, TKey = any> {
-      readonly data: TRowData;
-      readonly key: TKey;
-      cancel: boolean | PromiseLike<void>;
-    }
+      DevExpress.common.grids.RowRemovingInfo<TRowData, TKey>;
     export type RowTemplateData<TRowData = any, TKey = any> = {
       readonly key: TKey;
       readonly data: TRowData;
@@ -8389,161 +9215,34 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowUpdatedInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowUpdatedInfo<TRowData = any, TKey = any> {
-      readonly data: TRowData;
-      readonly key: TKey;
-      readonly error: Error;
-    }
+      DevExpress.common.grids.RowUpdatedInfo<TRowData, TKey>;
     export type RowUpdatingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowUpdatingInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowUpdatingInfo<TRowData = any, TKey = any> {
-      readonly oldData: TRowData;
-      newData: DevExpress.core.DeepPartial<TRowData>;
-      readonly key: TKey;
-      cancel: boolean | PromiseLike<void>;
-    }
+      DevExpress.common.grids.RowUpdatingInfo<TRowData, TKey>;
     export type RowValidatingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowValidatingInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface RowValidatingInfo<TRowData = any, TKey = any> {
-      readonly brokenRules: Array<
-        | RequiredRule
-        | NumericRule
-        | RangeRule
-        | StringLengthRule
-        | CustomRule
-        | CompareRule
-        | PatternRule
-        | EmailRule
-        | AsyncRule
-      >;
-      isValid: boolean;
-      readonly key: TKey;
-      readonly newData: DevExpress.core.DeepPartial<TRowData>;
-      readonly oldData: TRowData;
-      errorText: string;
-      promise?: PromiseLike<void>;
-    }
+      DevExpress.common.grids.RowValidatingInfo<TRowData, TKey>;
     export type SavedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      DataChangeInfo<TRowData, TKey>;
+      DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
     export type SavingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      SavingInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SavingInfo<TRowData = any, TKey = any> {
-      changes: Array<DataChange<TRowData, TKey>>;
-      promise?: PromiseLike<void>;
-      cancel: boolean;
-    }
-    export type Scrollable = Omit<
-      dxScrollable,
-      | '_templateManager'
-      | '_cancelOptionChange'
-      | '_getTemplate'
-      | '_invalidate'
-      | '_refresh'
-      | '_notifyOptionChanged'
-      | '_createElement'
-    >;
-    export type Scrolling = ScrollingBase & {
+      DevExpress.common.grids.SavingInfo<TRowData, TKey>;
+    export type Scrolling = DevExpress.common.grids.ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
       mode?: DataGridScrollMode;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ScrollingBase {
-      /**
-       * [descr:GridBaseOptions.scrolling.columnRenderingMode]
-       */
-      columnRenderingMode?: DevExpress.common.grids.DataRenderMode;
-      /**
-       * [descr:GridBaseOptions.scrolling.preloadEnabled]
-       */
-      preloadEnabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.scrolling.rowRenderingMode]
-       */
-      rowRenderingMode?: DevExpress.common.grids.DataRenderMode;
-      /**
-       * [descr:GridBaseOptions.scrolling.scrollByContent]
-       */
-      scrollByContent?: boolean;
-      /**
-       * [descr:GridBaseOptions.scrolling.scrollByThumb]
-       */
-      scrollByThumb?: boolean;
-      /**
-       * [descr:GridBaseOptions.scrolling.showScrollbar]
-       */
-      showScrollbar?: DevExpress.common.ScrollbarMode;
-      /**
-       * [descr:GridBaseOptions.scrolling.useNative]
-       */
-      useNative?: boolean | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.scrolling.renderAsync]
-       */
-      renderAsync?: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SearchPanel {
-      /**
-       * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
-       */
-      highlightCaseSensitive?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.highlightSearchText]
-       */
-      highlightSearchText?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.placeholder]
-       */
-      placeholder?: string;
-      /**
-       * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
-       */
-      searchVisibleColumnsOnly?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.text]
-       */
-      text?: string;
-      /**
-       * [descr:GridBaseOptions.searchPanel.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.width]
-       */
-      width?: number;
-    }
-    export type Selection = SelectionBase & {
+    export type Selection = DevExpress.common.grids.SelectionBase & {
       /**
        * [descr:dxDataGridOptions.selection.deferred]
        */
@@ -8557,87 +9256,11 @@ declare module DevExpress.ui {
        */
       showCheckBoxesMode?: DevExpress.common.grids.SelectionColumnDisplayMode;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SelectionBase {
-      /**
-       * [descr:GridBaseOptions.selection.allowSelectAll]
-       */
-      allowSelectAll?: boolean;
-      /**
-       * [descr:GridBaseOptions.selection.mode]
-       */
-      mode?: DevExpress.common.SingleMultipleOrNone;
-    }
     export type SelectionChangedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      SelectionChangedInfo<TRowData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SelectionChangedInfo<TRowData = any, TKey = any> {
-      readonly currentSelectedRowKeys: Array<TKey>;
-      readonly currentDeselectedRowKeys: Array<TKey>;
-      readonly selectedRowKeys: Array<TKey>;
-      readonly selectedRowsData: Array<TRowData>;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Sorting {
-      /**
-       * [descr:GridBaseOptions.sorting.ascendingText]
-       */
-      ascendingText?: string;
-      /**
-       * [descr:GridBaseOptions.sorting.clearText]
-       */
-      clearText?: string;
-      /**
-       * [descr:GridBaseOptions.sorting.descendingText]
-       */
-      descendingText?: string;
-      /**
-       * [descr:GridBaseOptions.sorting.mode]
-       */
-      mode?: DevExpress.common.SingleMultipleOrNone;
-      /**
-       * [descr:GridBaseOptions.sorting.showSortIndexes]
-       */
-      showSortIndexes?: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface StateStoring {
-      /**
-       * [descr:GridBaseOptions.stateStoring.customLoad]
-       */
-      customLoad?: () => PromiseLike<any>;
-      /**
-       * [descr:GridBaseOptions.stateStoring.customSave]
-       */
-      customSave?: (gridState: any) => any;
-      /**
-       * [descr:GridBaseOptions.stateStoring.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.stateStoring.savingTimeout]
-       */
-      savingTimeout?: number;
-      /**
-       * [descr:GridBaseOptions.stateStoring.storageKey]
-       */
-      storageKey?: string;
-      /**
-       * [descr:GridBaseOptions.stateStoring.type]
-       */
-      type?: DevExpress.common.grids.StateStoreType;
-    }
+      DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
     export type Summary<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
@@ -8796,20 +9419,14 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      ToolbarPreparingInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ToolbarPreparingInfo {
-      toolbarOptions: dxToolbarOptions;
-    }
+      DevExpress.common.grids.ToolbarPreparingInfo;
   }
   /**
    * @deprecated Use the DevExpress.ui.dxDataGrid.Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridColumn<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxDataGrid.ColumnBase<TRowData> {
+    extends DevExpress.common.grids.ColumnBase<TRowData> {
     /**
      * [descr:dxDataGridColumn.allowExporting]
      */
@@ -8903,7 +9520,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridColumnButton<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
+    extends DevExpress.common.grids.ColumnButtonBase {
     /**
      * [descr:dxDataGridColumnButton.name]
      */
@@ -8958,7 +9575,11 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    */
   export interface dxDataGridOptions<TRowData = any, TKey = any>
-    extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
+    extends DevExpress.common.grids.GridBaseOptions<
+      dxDataGrid<TRowData, TKey>,
+      TRowData,
+      TKey
+    > {
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -21898,7 +22519,7 @@ declare module DevExpress.ui {
    */
   export class dxTreeList<TRowData = any, TKey = any>
     extends Widget<dxTreeListOptions<TRowData, TKey>>
-    implements GridBase<TRowData, TKey>
+    implements DevExpress.common.grids.GridBase<TRowData, TKey>
   {
     /**
      * [descr:dxTreeList.addColumn(columnOptions)]
@@ -22082,7 +22703,7 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.AdaptiveDetailRowPreparingInfo;
+      DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     export type CellClickEvent<
       TRowData = any,
       TKey = any
@@ -22217,7 +22838,7 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.DataErrorOccurredInfo;
+      DevExpress.common.grids.DataErrorOccurredInfo;
     export type DisposingEvent<
       TRowData = any,
       TKey = any
@@ -22234,15 +22855,15 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>;
+      DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
     export type EditCancelingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>;
+      DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
     export interface Editing<TRowData = any, TKey = any>
-      extends DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey> {
+      extends DevExpress.common.grids.EditingBase<TRowData, TKey> {
       /**
        * [descr:dxTreeListOptions.editing.allowAdding]
        */
@@ -22288,7 +22909,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface EditingTexts
-      extends DevExpress.ui.dxDataGrid.EditingTextsBase {
+      extends DevExpress.common.grids.EditingTextsBase {
       /**
        * [descr:dxTreeListOptions.editing.texts.addRowToNode]
        */
@@ -22373,7 +22994,7 @@ declare module DevExpress.ui {
       RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
       RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
       RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
-      RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+      RowDraggingTemplateData: DevExpress.common.grids.RowDraggingTemplateData<TRowData>;
       RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
       RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
       RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
@@ -22449,7 +23070,7 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.NewRowInfo<TRowData>;
+      DevExpress.common.grids.NewRowInfo<TRowData>;
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
@@ -22457,7 +23078,7 @@ declare module DevExpress.ui {
       dxTreeList<TRowData, TKey>,
       KeyboardEvent
     > &
-      DevExpress.ui.dxDataGrid.KeyDownInfo;
+      DevExpress.common.grids.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
      */
@@ -22505,7 +23126,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface Paging extends DevExpress.ui.dxDataGrid.PagingBase {
+    export interface Paging extends DevExpress.common.grids.PagingBase {
       /**
        * [descr:dxTreeListOptions.paging.enabled]
        */
@@ -22589,13 +23210,13 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowCollapsingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
@@ -22617,91 +23238,68 @@ declare module DevExpress.ui {
     export type RowDraggingAddEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
-      dxTreeList<TRowData, TKey>,
-      TRowData,
-      TKey
-    > &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
+    > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingChangeEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
-        dxTreeList<TRowData, TKey>,
-        TRowData,
-        TKey
-      > &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
+      DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingEndEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
-        dxTreeList<TRowData, TKey>,
-        TRowData,
-        TKey
-      > &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
+      DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingMoveEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
-        dxTreeList<TRowData, TKey>,
-        TRowData,
-        TKey
-      > &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
+      DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragDropInfo;
     export type RowDraggingRemoveEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
-      dxTreeList<TRowData, TKey>,
-      TRowData,
-      TKey
-    >;
+    > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
     export type RowDraggingReorderEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
-      dxTreeList<TRowData, TKey>,
-      TRowData,
-      TKey
-    > &
-      DevExpress.ui.dxDataGrid.DragReorderInfo;
+    > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
+      DevExpress.common.grids.DragReorderInfo;
     export type RowDraggingStartEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.DragStartEventInfo<
-        dxTreeList<TRowData, TKey>,
-        TRowData,
-        TKey
-      >;
-    export type RowDraggingTemplateData<TRowData = any> =
-      DevExpress.ui.dxDataGrid.RowDraggingTemplateDataModel<TRowData>;
+      DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.DragStartEventInfo<TRowData>;
     export type RowExpandedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowExpandingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+      DevExpress.common.grids.RowKeyInfo<TKey>;
     export type RowInsertedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowInsertedInfo<TRowData, TKey>;
+      DevExpress.common.grids.RowInsertedInfo<TRowData, TKey>;
     export type RowInsertingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowInsertingInfo<TRowData>;
+      DevExpress.common.grids.RowInsertingInfo<TRowData>;
     export type RowPreparedEvent<
       TRowData = any,
       TKey = any
@@ -22723,37 +23321,37 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowRemovedInfo<TRowData, TKey>;
+      DevExpress.common.grids.RowRemovedInfo<TRowData, TKey>;
     export type RowRemovingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowRemovingInfo<TRowData, TKey>;
+      DevExpress.common.grids.RowRemovingInfo<TRowData, TKey>;
     export type RowUpdatedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowUpdatedInfo<TRowData, TKey>;
+      DevExpress.common.grids.RowUpdatedInfo<TRowData, TKey>;
     export type RowUpdatingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowUpdatingInfo<TRowData, TKey>;
+      DevExpress.common.grids.RowUpdatingInfo<TRowData, TKey>;
     export type RowValidatingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.RowValidatingInfo<TRowData, TKey>;
+      DevExpress.common.grids.RowValidatingInfo<TRowData, TKey>;
     export type SavedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>;
+      DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
     export type SavingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>;
+      DevExpress.common.grids.SavingInfo<TRowData, TKey>;
     export type Scrollable = Omit<
       dxScrollable,
       | '_templateManager'
@@ -22764,13 +23362,13 @@ declare module DevExpress.ui {
       | '_notifyOptionChanged'
       | '_createElement'
     >;
-    export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
+    export interface Scrolling extends DevExpress.common.grids.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
        */
       mode?: DevExpress.common.ScrollMode;
     }
-    export interface Selection extends DevExpress.ui.dxDataGrid.SelectionBase {
+    export interface Selection extends DevExpress.common.grids.SelectionBase {
       /**
        * [descr:dxTreeListOptions.selection.recursive]
        */
@@ -22780,12 +23378,12 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.SelectionChangedInfo<TRowData, TKey>;
+      DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
     export type ToolbarPreparingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
+      DevExpress.common.grids.ToolbarPreparingInfo;
     export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
     export type TreeListFilterMode =
       | 'fullBranch'
@@ -22811,7 +23409,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListColumn<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxDataGrid.ColumnBase<TRowData> {
+    extends DevExpress.common.grids.ColumnBase<TRowData> {
     /**
      * [descr:dxTreeListColumn.buttons]
      */
@@ -22869,7 +23467,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListColumnButton<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
+    extends DevExpress.common.grids.ColumnButtonBase {
     /**
      * [descr:dxTreeListColumnButton.name]
      */
@@ -22936,7 +23534,11 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    */
   export interface dxTreeListOptions<TRowData = any, TKey = any>
-    extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
+    extends DevExpress.common.grids.GridBaseOptions<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    > {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -23963,692 +24565,37 @@ declare module DevExpress.ui {
     | ((value: number) => string)
     | ExternalFormat;
   /**
-   * [descr:GridBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface GridBase<TRowData = any, TKey = any> {
-    /**
-     * [descr:GridBase.beginCustomLoading(messageText)]
-     */
-    beginCustomLoading(messageText: string): void;
-    /**
-     * [descr:GridBase.byKey(key)]
-     */
-    byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
-    /**
-     * [descr:GridBase.cancelEditData()]
-     */
-    cancelEditData(): void;
-    /**
-     * [descr:GridBase.cellValue(rowIndex, dataField)]
-     */
-    cellValue(rowIndex: number, dataField: string): any;
-    /**
-     * [descr:GridBase.cellValue(rowIndex, dataField, value)]
-     */
-    cellValue(rowIndex: number, dataField: string, value: any): void;
-    /**
-     * [descr:GridBase.cellValue(rowIndex, visibleColumnIndex)]
-     */
-    cellValue(rowIndex: number, visibleColumnIndex: number): any;
-    /**
-     * [descr:GridBase.cellValue(rowIndex, visibleColumnIndex, value)]
-     */
-    cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
-    /**
-     * [descr:GridBase.clearFilter()]
-     */
-    clearFilter(): void;
-    /**
-     * [descr:GridBase.clearFilter(filterName)]
-     */
-    clearFilter(filterName: string): void;
-    /**
-     * [descr:GridBase.clearSelection()]
-     */
-    clearSelection(): void;
-    /**
-     * [descr:GridBase.clearSorting()]
-     */
-    clearSorting(): void;
-    /**
-     * [descr:GridBase.closeEditCell()]
-     */
-    closeEditCell(): void;
-    /**
-     * [descr:GridBase.collapseAdaptiveDetailRow()]
-     */
-    collapseAdaptiveDetailRow(): void;
-    /**
-     * [descr:GridBase.columnCount()]
-     */
-    columnCount(): number;
-    /**
-     * [descr:GridBase.columnOption(id)]
-     */
-    columnOption(id: number | string): any;
-    /**
-     * [descr:GridBase.columnOption(id, optionName)]
-     */
-    columnOption(id: number | string, optionName: string): any;
-    /**
-     * [descr:GridBase.columnOption(id, optionName, optionValue)]
-     */
-    columnOption(
-      id: number | string,
-      optionName: string,
-      optionValue: any
-    ): void;
-    /**
-     * [descr:GridBase.columnOption(id, options)]
-     */
-    columnOption(id: number | string, options: any): void;
-    /**
-     * [descr:GridBase.deleteColumn(id)]
-     */
-    deleteColumn(id: number | string): void;
-    /**
-     * [descr:GridBase.deleteRow(rowIndex)]
-     */
-    deleteRow(rowIndex: number): void;
-    /**
-     * [descr:GridBase.deselectAll()]
-     */
-    deselectAll(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.deselectRows(keys)]
-     */
-    deselectRows(keys: Array<any>): DevExpress.core.utils.DxPromise<any>;
-    /**
-     * [descr:GridBase.editCell(rowIndex, dataField)]
-     */
-    editCell(rowIndex: number, dataField: string): void;
-    /**
-     * [descr:GridBase.editCell(rowIndex, visibleColumnIndex)]
-     */
-    editCell(rowIndex: number, visibleColumnIndex: number): void;
-    /**
-     * [descr:GridBase.editRow(rowIndex)]
-     */
-    editRow(rowIndex: number): void;
-    /**
-     * [descr:GridBase.endCustomLoading()]
-     */
-    endCustomLoading(): void;
-    /**
-     * [descr:GridBase.expandAdaptiveDetailRow(key)]
-     */
-    expandAdaptiveDetailRow(key: TKey): void;
-    /**
-     * [descr:GridBase.filter()]
-     */
-    filter(): any;
-    /**
-     * [descr:GridBase.filter(filterExpr)]
-     */
-    filter(filterExpr: any): void;
-    focus(): void;
-    /**
-     * [descr:GridBase.focus(element)]
-     */
-    focus(element: DevExpress.core.UserDefinedElement): void;
-    /**
-     * [descr:GridBase.getCellElement(rowIndex, dataField)]
-     */
-    getCellElement(
-      rowIndex: number,
-      dataField: string
-    ): DevExpress.core.DxElement | undefined;
-    /**
-     * [descr:GridBase.getCellElement(rowIndex, visibleColumnIndex)]
-     */
-    getCellElement(
-      rowIndex: number,
-      visibleColumnIndex: number
-    ): DevExpress.core.DxElement | undefined;
-    /**
-     * [descr:GridBase.getCombinedFilter()]
-     */
-    getCombinedFilter(): any;
-    /**
-     * [descr:GridBase.getCombinedFilter(returnDataField)]
-     */
-    getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DevExpress.data.DataSource<TRowData, TKey>;
-    /**
-     * [descr:GridBase.getKeyByRowIndex(rowIndex)]
-     */
-    getKeyByRowIndex(rowIndex: number): TKey | undefined;
-    /**
-     * [descr:GridBase.getRowElement(rowIndex)]
-     */
-    getRowElement(
-      rowIndex: number
-    ): DevExpress.core.UserDefinedElementsArray | undefined;
-    /**
-     * [descr:GridBase.getRowIndexByKey(key)]
-     */
-    getRowIndexByKey(key: TKey): number;
-    /**
-     * [descr:GridBase.getScrollable()]
-     */
-    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
-    /**
-     * [descr:GridBase.getVisibleColumnIndex(id)]
-     */
-    getVisibleColumnIndex(id: number | string): number;
-    /**
-     * [descr:GridBase.hasEditData()]
-     */
-    hasEditData(): boolean;
-    /**
-     * [descr:GridBase.hideColumnChooser()]
-     */
-    hideColumnChooser(): void;
-    /**
-     * [descr:GridBase.isAdaptiveDetailRowExpanded(key)]
-     */
-    isAdaptiveDetailRowExpanded(key: TKey): boolean;
-    /**
-     * [descr:GridBase.isRowFocused(key)]
-     */
-    isRowFocused(key: TKey): boolean;
-    /**
-     * [descr:GridBase.isRowSelected(key)]
-     */
-    isRowSelected(key: TKey): boolean;
-    /**
-     * [descr:GridBase.keyOf(obj)]
-     */
-    keyOf(obj: TRowData): TKey;
-    /**
-     * [descr:GridBase.navigateToRow(key)]
-     */
-    navigateToRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.pageCount()]
-     */
-    pageCount(): number;
-    /**
-     * [descr:GridBase.pageIndex()]
-     */
-    pageIndex(): number;
-    /**
-     * [descr:GridBase.pageIndex(newIndex)]
-     */
-    pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.pageSize()]
-     */
-    pageSize(): number;
-    /**
-     * [descr:GridBase.pageSize(value)]
-     */
-    pageSize(value: number): void;
-    /**
-     * [descr:GridBase.refresh()]
-     */
-    refresh(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.refresh(changesOnly)]
-     */
-    refresh(changesOnly: boolean): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.repaintRows(rowIndexes)]
-     */
-    repaintRows(rowIndexes: Array<number>): void;
-    /**
-     * [descr:GridBase.saveEditData()]
-     */
-    saveEditData(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.searchByText(text)]
-     */
-    searchByText(text: string): void;
-    /**
-     * [descr:GridBase.selectAll()]
-     */
-    selectAll(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:GridBase.selectRows(keys, preserve)]
-     */
-    selectRows(
-      keys: Array<TKey>,
-      preserve: boolean
-    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
-    /**
-     * [descr:GridBase.selectRowsByIndexes(indexes)]
-     */
-    selectRowsByIndexes(
-      indexes: Array<number>
-    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
-    /**
-     * [descr:GridBase.showColumnChooser()]
-     */
-    showColumnChooser(): void;
-    /**
-     * [descr:GridBase.state()]
-     */
-    state(): any;
-    /**
-     * [descr:GridBase.state(state)]
-     */
-    state(state: any): void;
-    /**
-     * [descr:GridBase.undeleteRow(rowIndex)]
-     */
-    undeleteRow(rowIndex: number): void;
-    /**
-     * [descr:GridBase.updateDimensions()]
-     */
-    updateDimensions(): void;
-  }
-  /**
    * @deprecated 
    */
   export type GridBaseColumn<TRowData = any> =
-    DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
+    DevExpress.common.grids.ColumnBase<TRowData>;
   /**
    * @deprecated 
    */
-  export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
+  export type GridBaseColumnButton = DevExpress.common.grids.ColumnButtonBase;
   /**
    * @deprecated 
    */
   export type GridBaseEditing<
     TRowData = any,
     TKey = any
-  > = DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
+  > = DevExpress.common.grids.EditingBase<TRowData, TKey>;
   /**
    * @deprecated 
    */
-  export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface GridBaseOptions<
-    TComponent extends GridBase<TRowData, TKey>,
-    TRowData = any,
-    TKey = any
-  > extends WidgetOptions<TComponent> {
-    /**
-     * [descr:GridBaseOptions.allowColumnReordering]
-     */
-    allowColumnReordering?: boolean;
-    /**
-     * [descr:GridBaseOptions.allowColumnResizing]
-     */
-    allowColumnResizing?: boolean;
-    /**
-     * [descr:GridBaseOptions.autoNavigateToFocusedRow]
-     */
-    autoNavigateToFocusedRow?: boolean;
-    /**
-     * [descr:GridBaseOptions.cacheEnabled]
-     */
-    cacheEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.cellHintEnabled]
-     */
-    cellHintEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.columnAutoWidth]
-     */
-    columnAutoWidth?: boolean;
-    /**
-     * [descr:GridBaseOptions.columnChooser]
-     */
-    columnChooser?: DevExpress.ui.dxDataGrid.ColumnChooser;
-    /**
-     * [descr:GridBaseOptions.columnFixing]
-     */
-    columnFixing?: DevExpress.ui.dxDataGrid.ColumnFixing;
-    /**
-     * [descr:GridBaseOptions.columnHidingEnabled]
-     */
-    columnHidingEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.columnMinWidth]
-     */
-    columnMinWidth?: number;
-    /**
-     * [descr:GridBaseOptions.columnResizingMode]
-     */
-    columnResizingMode?: DevExpress.ui.dxDataGrid.ColumnResizeMode;
-    /**
-     * [descr:GridBaseOptions.columnWidth]
-     */
-    columnWidth?: number | DevExpress.common.Mode;
-    /**
-     * [descr:GridBaseOptions.columns]
-     */
-    columns?: Array<DevExpress.ui.dxDataGrid.ColumnBase<TRowData> | string>;
-    /**
-     * [descr:GridBaseOptions.dataSource]
-     */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      TRowData,
-      TKey
-    > | null;
-    /**
-     * [descr:GridBaseOptions.dateSerializationFormat]
-     */
-    dateSerializationFormat?: string;
-    /**
-     * [descr:GridBaseOptions.editing]
-     */
-    editing?: DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
-    /**
-     * [descr:GridBaseOptions.errorRowEnabled]
-     */
-    errorRowEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.filterBuilder]
-     */
-    filterBuilder?: dxFilterBuilderOptions;
-    /**
-     * [descr:GridBaseOptions.filterBuilderPopup]
-     */
-    filterBuilderPopup?: DevExpress.ui.dxPopup.Properties;
-    /**
-     * [descr:GridBaseOptions.filterPanel]
-     */
-    filterPanel?: DevExpress.ui.dxDataGrid.FilterPanel<
-      TComponent,
-      TRowData,
-      TKey
-    >;
-    /**
-     * [descr:GridBaseOptions.filterRow]
-     */
-    filterRow?: DevExpress.ui.dxDataGrid.FilterRow;
-    /**
-     * [descr:GridBaseOptions.filterSyncEnabled]
-     */
-    filterSyncEnabled?: boolean | DevExpress.common.Mode;
-    /**
-     * [descr:GridBaseOptions.filterValue]
-     */
-    filterValue?: string | Array<any> | Function;
-    /**
-     * [descr:GridBaseOptions.focusedColumnIndex]
-     */
-    focusedColumnIndex?: number;
-    /**
-     * [descr:GridBaseOptions.focusedRowEnabled]
-     */
-    focusedRowEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.focusedRowIndex]
-     */
-    focusedRowIndex?: number;
-    /**
-     * [descr:GridBaseOptions.focusedRowKey]
-     */
-    focusedRowKey?: TKey;
-    /**
-     * [descr:GridBaseOptions.headerFilter]
-     */
-    headerFilter?: DevExpress.ui.dxDataGrid.HeaderFilter;
-    /**
-     * [descr:GridBaseOptions.highlightChanges]
-     */
-    highlightChanges?: boolean;
-    /**
-     * [descr:GridBaseOptions.keyboardNavigation]
-     */
-    keyboardNavigation?: DevExpress.ui.dxDataGrid.KeyboardNavigation;
-    /**
-     * [descr:GridBaseOptions.loadPanel]
-     */
-    loadPanel?: DevExpress.ui.dxDataGrid.LoadPanel;
-    /**
-     * [descr:GridBaseOptions.noDataText]
-     */
-    noDataText?: string;
-    /**
-     * [descr:GridBaseOptions.onAdaptiveDetailRowPreparing]
-     */
-    onAdaptiveDetailRowPreparing?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.AdaptiveDetailRowPreparingInfo
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onDataErrorOccurred]
-     */
-    onDataErrorOccurred?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.DataErrorOccurredInfo
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onEditCanceled]
-     */
-    onEditCanceled?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onEditCanceling]
-     */
-    onEditCanceling?: (
-      e: DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onInitNewRow]
-     */
-    onInitNewRow?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.NewRowInfo<TRowData>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onKeyDown]
-     */
-    onKeyDown?: (
-      e: DevExpress.events.NativeEventInfo<TComponent, KeyboardEvent> &
-        DevExpress.ui.dxDataGrid.KeyDownInfo
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowCollapsed]
-     */
-    onRowCollapsed?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowCollapsing]
-     */
-    onRowCollapsing?: (
-      e: DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowExpanded]
-     */
-    onRowExpanded?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowExpanding]
-     */
-    onRowExpanding?: (
-      e: DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowInserted]
-     */
-    onRowInserted?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowInsertedInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowInserting]
-     */
-    onRowInserting?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowInsertingInfo<TRowData>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowRemoved]
-     */
-    onRowRemoved?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowRemovedInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowRemoving]
-     */
-    onRowRemoving?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowRemovingInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowUpdated]
-     */
-    onRowUpdated?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowUpdatedInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowUpdating]
-     */
-    onRowUpdating?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowUpdatingInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onRowValidating]
-     */
-    onRowValidating?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowValidatingInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onSaved]
-     */
-    onSaved?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onSaving]
-     */
-    onSaving?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onSelectionChanged]
-     */
-    onSelectionChanged?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.SelectionChangedInfo<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onToolbarPreparing]
-     */
-    onToolbarPreparing?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.ToolbarPreparingInfo
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.pager]
-     */
-    pager?: DevExpress.ui.dxDataGrid.Pager;
-    /**
-     * [descr:GridBaseOptions.paging]
-     */
-    paging?: DevExpress.ui.dxDataGrid.PagingBase;
-    /**
-     * [descr:GridBaseOptions.renderAsync]
-     */
-    renderAsync?: boolean;
-    /**
-     * [descr:GridBaseOptions.repaintChangesOnly]
-     */
-    repaintChangesOnly?: boolean;
-    /**
-     * [descr:GridBaseOptions.rowAlternationEnabled]
-     */
-    rowAlternationEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.rowDragging]
-     */
-    rowDragging?: DevExpress.ui.dxDataGrid.RowDragging<
-      TComponent,
-      TRowData,
-      TKey
-    >;
-    /**
-     * [descr:GridBaseOptions.scrolling]
-     */
-    scrolling?: DevExpress.ui.dxDataGrid.ScrollingBase;
-    /**
-     * [descr:GridBaseOptions.searchPanel]
-     */
-    searchPanel?: DevExpress.ui.dxDataGrid.SearchPanel;
-    /**
-     * [descr:GridBaseOptions.selectedRowKeys]
-     */
-    selectedRowKeys?: Array<TKey>;
-    /**
-     * [descr:GridBaseOptions.selection]
-     */
-    selection?: DevExpress.ui.dxDataGrid.SelectionBase;
-    /**
-     * [descr:GridBaseOptions.showBorders]
-     */
-    showBorders?: boolean;
-    /**
-     * [descr:GridBaseOptions.showColumnHeaders]
-     */
-    showColumnHeaders?: boolean;
-    /**
-     * [descr:GridBaseOptions.showColumnLines]
-     */
-    showColumnLines?: boolean;
-    /**
-     * [descr:GridBaseOptions.showRowLines]
-     */
-    showRowLines?: boolean;
-    /**
-     * [descr:GridBaseOptions.sorting]
-     */
-    sorting?: DevExpress.ui.dxDataGrid.Sorting;
-    /**
-     * [descr:GridBaseOptions.stateStoring]
-     */
-    stateStoring?: DevExpress.ui.dxDataGrid.StateStoring;
-    /**
-     * [descr:GridBaseOptions.twoWayBindingEnabled]
-     */
-    twoWayBindingEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.wordWrapEnabled]
-     */
-    wordWrapEnabled?: boolean;
-    /**
-     * [descr:GridBaseOptions.syncLookupFilterValues]
-     */
-    syncLookupFilterValues?: boolean;
-  }
+  export type GridBaseEditingTexts = DevExpress.common.grids.EditingTextsBase;
   /**
    * @deprecated 
    */
-  export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
+  export type GridBasePaging = DevExpress.common.grids.PagingBase;
   /**
    * @deprecated 
    */
-  export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
+  export type GridBaseScrolling = DevExpress.common.grids.ScrollingBase;
   /**
    * @deprecated 
    */
-  export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
+  export type GridBaseSelection = DevExpress.common.grids.SelectionBase;
   /**
    * [descr:ui.hideToasts()]
    */
@@ -25096,32 +25043,6 @@ declare module DevExpress.ui.dxContextMenu {
   export type Item = dxContextMenuItem;
 }
 declare module DevExpress.ui.dxDataGrid {
-  /**
-   * [descr:DataChange]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface DataChange<TRowData = any, TKey = any> {
-    /**
-     * [descr:DataChange.key]
-     */
-    key: TKey;
-    /**
-     * [descr:DataChange.type]
-     */
-    type: DevExpress.common.grids.DataChangeType;
-    /**
-     * [descr:DataChange.data]
-     */
-    data: DevExpress.core.DeepPartial<TRowData>;
-    /**
-     * [descr:DataChange.insertAfterKey]
-     */
-    insertAfterKey?: TKey;
-    /**
-     * [descr:DataChange.insertBeforeKey]
-     */
-    insertBeforeKey?: TKey;
-  }
   /**
    * [descr:dxDataGridToolbar]
    */
