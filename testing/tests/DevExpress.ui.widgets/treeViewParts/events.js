@@ -1010,3 +1010,16 @@ QUnit.test('ContentReady event rise once when the data source is remote by first
 
     assert.strictEqual(contentReadyHandler.callCount, 1, 'onContentReady was first time');
 });
+
+QUnit.test('Should not throw error if event does not have the \'originalEvent\' property', function(assert) {
+    const onItemRenderedHandler = sinon.spy();
+
+    const $treeView = initTree({
+        dataSource: window.dataID,
+        onItemRendered: onItemRenderedHandler
+    });
+
+    $treeView.find('.dx-treeview-item').eq(0).trigger('mouseenter');
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 5);
+});
