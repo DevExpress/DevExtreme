@@ -1012,14 +1012,18 @@ QUnit.test('ContentReady event rise once when the data source is remote by first
 });
 
 QUnit.test('Should not throw error if event does not have the \'originalEvent\' property', function(assert) {
-    const onItemRenderedHandler = sinon.spy();
+    if(QUnit.urlParams['nojquery']) {
+        assert.ok(true);
+    } else {
+        const onItemRenderedHandler = sinon.spy();
 
-    const $treeView = initTree({
-        dataSource: window.dataID,
-        onItemRendered: onItemRenderedHandler
-    });
+        const $treeView = initTree({
+            dataSource: window.dataID,
+            onItemRendered: onItemRenderedHandler
+        });
 
-    $treeView.find('.dx-treeview-item').eq(0).trigger('mouseenter');
+        $treeView.find('.dx-treeview-item').eq(0).trigger('mouseenter');
 
-    assert.strictEqual(onItemRenderedHandler.callCount, 5);
+        assert.strictEqual(onItemRenderedHandler.callCount, 5);
+    }
 });
