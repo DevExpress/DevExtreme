@@ -6,6 +6,7 @@ import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import { changeTheme } from '../../helpers/changeTheme';
+import { CLASS } from '../../model/dataGrid/toolbar-popup';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
@@ -72,8 +73,8 @@ test('Compact pager', async (t) => {
   const pager = dataGrid.getPager();
   await t
     .resizeWindow(350, 600);
-  const pageSizeWidget = new SelectBox(pager.element.find('.dx-page-sizes .dx-selectbox') as any);
-  const pageIndexWidget = new TextBox(pager.element.find('.dx-page-index.dx-numberbox') as any);
+  const pageSizeWidget = new SelectBox(pager.getPageSizeWidget() as any);
+  const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
     .click(pageSizeWidget.dropDownButton)
@@ -182,8 +183,8 @@ test("Changing pageSize to 'all' with rowRenderingMode='virtual' should work (T1
 
   await dataGrid.scrollBy({ y: 100 });
 
-  await t.click('.dx-dropdowneditor-button');
-  await t.click(Selector('.dx-item').withText('All'));
+  await t.click(`.${CLASS.dropDownEditorButton}`);
+  await t.click(Selector(`.${CLASS.item}`).withText('All'));
 
   await t
     .expect(dataGrid.option('paging.pageSize'))

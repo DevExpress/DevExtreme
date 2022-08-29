@@ -7,6 +7,12 @@ const CLASS = {
   pagerPageSize: 'dx-page-size',
   pagerPrevNavButton: 'dx-prev-button',
   pagerNextNavButton: 'dx-next-button',
+  info: 'dx-info',
+};
+
+const SELECTOR = {
+  pageSizeWidget: '.dx-page-sizes .dx-selectbox',
+  pageIndexWidget: '.dx-page-index.dx-numberbox',
 };
 
 export default class Pager extends FocusableElement {
@@ -28,7 +34,15 @@ export default class Pager extends FocusableElement {
     return new NavPage(this.element, pageIndexText);
   }
 
+  getPageSizeWidget(): Selector {
+    return this.element.find(SELECTOR.pageSizeWidget);
+  }
+
+  getPageIndexWidget(): Selector {
+    return this.element.find(SELECTOR.pageIndexWidget);
+  }
+
   get infoText(): Selector {
-    return this.element.find('.dx-info');
+    return this.element.find(`.${CLASS.info}`);
   }
 }

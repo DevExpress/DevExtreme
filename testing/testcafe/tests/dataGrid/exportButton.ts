@@ -26,7 +26,7 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.click('.dx-datagrid-export-button');
+  await t.click(dataGrid.getExportButton());
 
   await t
     .expect(await takeScreenshot('grid-export-dropdown-button.png', dataGrid.element))
@@ -44,7 +44,10 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
 test('allowExportSelectedData: false, menu: true', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.click('.dx-toolbar-menu-container > .dx-button');
+  const dataGrid = new DataGrid('#container');
+  const toolbar = dataGrid.getToolbar();
+
+  await t.click(toolbar.getButton());
 
   await t
     .expect(await takeScreenshot('grid-export-one-button-in-menu.png', 'html'))
@@ -62,7 +65,10 @@ test('allowExportSelectedData: false, menu: true', async (t) => {
 test('allowExportSelectedData: true, menu: true', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.click('.dx-toolbar-menu-container > .dx-button');
+  const dataGrid = new DataGrid('#container');
+  const toolbar = dataGrid.getToolbar();
+
+  await t.click(toolbar.getButton());
 
   await t
     .expect(await takeScreenshot('grid-export-dropdown-button-in-menu.png', 'html'))
