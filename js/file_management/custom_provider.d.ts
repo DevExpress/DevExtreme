@@ -96,5 +96,5 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
  * @public
  */
 export default class CustomFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: Options)
+    constructor(options?: Options);
 }

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 import { isMaterial, current } from '../../../../ui/themes';
 import {
   Direction,

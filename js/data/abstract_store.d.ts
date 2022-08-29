@@ -115,7 +115,7 @@ export default class Store<
     TItem = any,
     TKey = any,
 > {
-    constructor(options?: Options<TItem, TKey>)
+    constructor(options?: Options<TItem, TKey>);
     /**
      * @docid
      * @publicName byKey(key)

@@ -9,13 +9,14 @@
     "cross-env": "7.0.3",
     "devextreme-cldr-data": "1.0.3",
     "globalize": "1.7.0",
-    "jquery": "3.6.0",
-    "parcel": "2.6.1",
+    "jquery": "3.6.1",
+    "minimist": "1.2.6",
+    "parcel": "2.7.0",
     "rimraf": "3.0.2",
-    "rollup": "2.75.6",
-    "vite": "2.9.12",
-    "webpack": "5.73.0",
-    "webpack-cli": "4.9.2"
+    "rollup": "2.78.1",
+    "vite": "2.9.15",
+    "webpack": "5.74.0",
+    "webpack-cli": "4.10.0"
   },
   "scripts": {
     "test:bundlers": "npm run install:devextreme && npm run generate-entry-files && npm run build:all && npm run clean",
