@@ -1,5 +1,8 @@
+// eslint-disable-next-line max-classes-per-file
+import { Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
+import { CellEditor } from './cell-editor';
 
 const CLASS = {
   hiddenColumn: 'hidden-column',
@@ -11,11 +14,11 @@ const CLASS = {
   cellModified: 'dx-cell-modified',
   pendingIndicator: 'dx-pending-indicator',
   overlay: 'dx-overlay',
+  checkbox: 'dx-checkbox',
+  linkEdit: 'dx-link-edit',
 };
 
 export default class DataCell extends FocusableElement {
-  element: Selector;
-
   isEditCell: Promise<boolean>;
 
   isFocused: Promise<boolean>;
@@ -41,7 +44,19 @@ export default class DataCell extends FocusableElement {
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 
-  getEditor(): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.editorInput}, .dx-checkbox`));
+  getEditor(): CellEditor {
+    return new CellEditor(this.element.find(`.${CLASS.editorInput}, .${CLASS.checkbox}`));
+  }
+
+  getCheckbox(): Selector {
+    return this.element.find(`.${CLASS.checkbox}`);
+  }
+
+  getLinkEdit(): Selector {
+    return this.element.find(`.${CLASS.linkEdit}`);
+  }
+
+  static getModifiedCells(): Selector {
+    return Selector(CLASS.cellModified);
   }
 }

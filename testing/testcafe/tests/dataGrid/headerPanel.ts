@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -8,12 +7,14 @@ fixture`Header Panel`
   .page(url(__dirname, '../container.html'));
 
 test('Drop-down window should be positioned correctly after resizing the toolbar (T1037975)', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
   const menuButton = dataGrid.getHeaderPanel().getDropDownMenuButton();
-  const popupContent = Selector('.dx-popup-content');
-  const dropDownEditorButton = popupContent.find('.dx-dropdowneditor-button');
-  const menuItem = Selector('.dx-selectbox-popup-wrapper .dx-item.dx-list-item').nth(1);
+
+  const { popup } = dataGrid.getToolbar();
+  const popupContent = popup.element;
+  const dropDownEditorButton = popup.getDropDownEditorButton();
+  const menuItem = popup.getMenuItem();
 
   // act
   await t.click(menuButton);

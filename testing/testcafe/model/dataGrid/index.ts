@@ -8,9 +8,13 @@ import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
-import { WidgetName } from '../../helpers/createWidget';
 
-const CLASS = {
+import { WidgetName } from '../../helpers/createWidget';
+import { Toolbar } from './toolbar';
+import { EditingPopup } from './editing-popup';
+
+export const CLASS = {
+  dataGrid: 'dx-datagrid',
   headers: 'headers',
   headerPanel: 'header-panel',
   dataRow: 'dx-data-row',
@@ -20,15 +24,26 @@ const CLASS = {
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
+  checkbox: 'dx-checkbox',
   formButtonsContainer: 'form-buttons-container',
-  overlayContent: 'edit-popup',
-  popupContent: 'dx-overlay-content',
+  popupEdit: 'edit-popup',
+
+  headerRow: 'dx-header-row',
+  footerRow: 'dx-footer-row',
+
+  overlayWrapper: 'dx-overlay-wrapper',
+  overlayContent: 'dx-overlay-content',
+  invalidMessage: 'dx-invalid-message',
+  revertTooltip: 'dx-datagrid-revert-tooltip',
+
   toolbar: 'dx-toolbar',
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
+  exportButton: 'dx-datagrid-export-button',
+  commandDrag: 'dx-command-drag',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -102,6 +117,10 @@ export default class DataGrid extends Widget {
     return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
   }
 
+  getGroupRowSelector(): Selector {
+    return this.element.find(`.${CLASS.groupRow}`);
+  }
+
   getGroupRow(index: number): GroupRow {
     return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.getName());
   }
@@ -116,6 +135,38 @@ export default class DataGrid extends Widget {
 
   getPager(): Pager {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getHeaderRow(): Selector {
+    return Selector(`tr.${CLASS.headerRow}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getFooterRow(): Selector {
+    return Selector(`tr.${CLASS.footerRow}`);
+  }
+
+  getExportButton(): Selector {
+    return this.element.find(`.${CLASS.exportButton}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getOverlayContent(): Selector {
+    return Selector(`.${CLASS.overlayContent}`);
+  }
+
+  getInvalidMessage(): Selector {
+    return this.element.find(`.${CLASS.overlayWrapper}.${CLASS.invalidMessage}`);
+  }
+
+  getRevertTooltip(): Selector {
+    return this.element.find(`.${CLASS.overlayWrapper}.${CLASS.revertTooltip}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getPopupCheckbox(): Selector {
+    return Selector(`.${CLASS.overlayContent} .${CLASS.checkbox}`);
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
@@ -208,10 +259,20 @@ export default class DataGrid extends Widget {
   }
 
   getPopupEditForm(): EditForm {
-    const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+    const element = Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)} .${CLASS.overlayContent}`);
     const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
     return new EditForm(element, buttons);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getEditingPopup(): EditingPopup {
+    return new EditingPopup();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getToolbar(): Toolbar {
+    return new Toolbar(`.${CLASS.toolbar}`);
   }
 
   getHeaderPanel(): HeaderPanel {
@@ -220,6 +281,11 @@ export default class DataGrid extends Widget {
 
   getRevertButton(): Selector {
     return this.element.find(`.${CLASS.revertButton}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDragCommand(): Selector {
+    return Selector(`.${CLASS.dataRow} .${CLASS.commandDrag}`);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
