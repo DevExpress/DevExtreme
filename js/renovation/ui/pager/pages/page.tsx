@@ -55,10 +55,6 @@ export class Page extends JSXComponent<PageProps>() {
     return this.props.index + 1;
   }
 
-  get selected(): boolean {
-    return this.props.selected;
-  }
-
   get className(): string {
     const
       { selected } = this.props;
