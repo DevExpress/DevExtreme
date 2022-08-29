@@ -198,10 +198,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     }
   }
 
-  _silent(name: string, value: unknown): void {
-    this._options.silent(name, value);
-  }
-
   _render(): void { } // NOTE: Inherited from DOM_Component
 
   _removeWidget(): void {
@@ -514,14 +510,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _patchElementParam(value: Element): Element {
-    try {
-      const result = $(value);
-      const element = result?.get(0);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return element?.nodeType ? element : value;
-    } catch (error) {
-      return value;
-    }
+    const result = $(value);
+    const element = result?.get(0);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return element?.nodeType ? element : value;
   }
 
   // Public API
