@@ -78,7 +78,7 @@
     "cldr-core": "latest",
     "cldr-numbers-full": "latest",
     "cldrjs": "0.5.5",
-    "clean-css": "5.3.0",
+    "clean-css": "5.3.1",
     "cross-env": "7.0.3",
     "cssom": "0.4.4",
     "del": "2.2.2",
