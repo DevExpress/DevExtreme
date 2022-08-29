@@ -1,9 +1,12 @@
+/* eslint-disable max-len */
 import { Selector } from 'testcafe';
+import { CellEditor } from '../../model/dataGrid/data/cell-editor';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import DataCell from '../../model/dataGrid/data/cell';
 import EditForm from '../../model/dataGrid/editForm';
+import { ClassNames as CLASS } from '../../model/dataGrid/class-names';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
@@ -128,13 +131,13 @@ const editCell = async (
   t: TestController, {
     mode, dataField, useKeyboard, columnIndex,
   }, rowIndex: number, modifyFirstColumn = false,
-): Promise<{ cell: DataCell; editor: Selector }> => {
+): Promise<{ cell: DataCell; editor: CellEditor }> => {
   const cell = dataGrid.getDataCell(rowIndex, columnIndex);
-  let editor = cell.getEditor().element;
+  let editor = cell.getEditor();
 
   const form = getEditForm(mode);
   if (form) {
-    editor = form.getItem(dataField);
+    editor = new CellEditor(form.getItem(dataField));
   }
 
   if (useKeyboard) {
@@ -167,7 +170,7 @@ const editCell = async (
     await t.click(editButton);
 
     if (columnIndex > 0) {
-      const item = !form ? cell.element : editor.parent('.dx-datagrid-edit-form-item').find('.dx-field-item-label');
+      const item = !form ? cell.element : editor.getItemLabel();
       await t.click(item, { offsetX: 5 });
     }
   }
@@ -179,13 +182,13 @@ const addRow = async (
   t: TestController, {
     mode, dataField, columnIndex, useKeyboard,
   },
-): Promise<{ cell: DataCell; editor: Selector }> => {
+): Promise<{ cell: DataCell; editor: CellEditor }> => {
   const cell = dataGrid.getDataCell(0, columnIndex);
-  let editor = cell.getEditor().element;
+  let editor = cell.getEditor();
 
   const form = getEditForm(mode);
   if (form) {
-    editor = form.getItem(dataField);
+    editor = new CellEditor(form.getItem(dataField));
   }
 
   if (useKeyboard) {
@@ -202,7 +205,7 @@ const addRow = async (
     await t.click(addRowButton);
 
     if (columnIndex > 0) {
-      const item = !form ? cell.element : editor.parent('.dx-datagrid-edit-form-item').find('.dx-field-item-label');
+      const item = !form ? cell.element : editor.getItemLabel();
       await t.click(item, { offsetX: 5 });
     }
   }
@@ -211,7 +214,7 @@ const addRow = async (
 };
 
 const checkEditCell = async (
-  t: TestController, { mode, dataField }, cell: DataCell | undefined, editor: Selector | undefined,
+  t: TestController, { mode, dataField }, cell: DataCell | undefined, editor: CellEditor | undefined,
 ): Promise<void> => {
   if (mode !== 'form' && mode !== 'popup') {
     await t.expect(cell?.isFocused).ok();
@@ -222,28 +225,29 @@ const checkEditCell = async (
   }
 
   await t
-    .expect(editor?.focused)
+    .expect(editor?.element.focused)
     .eql(true);
 };
 
-const getEditorValue = async (dataField: string, editor: Selector): Promise<string | undefined> => {
+// eslint-disable-next-line max-len
+const getEditorValue = async (dataField: string, editor: CellEditor): Promise<string | undefined> => {
   if (dataField === 'boolean') {
-    return await editor.hasClass('dx-checkbox-checked') ? 'true' : 'false';
+    return await editor.isChecked() ? 'true' : 'false';
   }
 
-  return editor.value;
+  return editor.element.value;
 };
 
 const getCellText = async (dataField: string, cell: DataCell): Promise<string | undefined> => {
   if (dataField === 'boolean') {
-    return getEditorValue(dataField, cell.getEditor().element);
+    return getEditorValue(dataField, cell.getEditor());
   }
 
   return cell.element.textContent;
 };
 
 const checkModifiedCell = async (
-  t: TestController, { mode, dataField }, cell: DataCell, editor: Selector, value: string,
+  t: TestController, { mode, dataField }, cell: DataCell, editor: CellEditor, value: string,
 ): Promise<void> => {
   const editorText = mode === 'batch' || mode === 'cell'
     ? await getCellText(dataField, cell)
@@ -261,7 +265,7 @@ const checkModifiedCell = async (
       .eql(mode === 'batch');
 
     await t
-      .expect(Selector('.dx-cell-modified').count)
+      .expect(DataCell.getModifiedCells().count)
       .eql(mode === 'batch' ? 2 : 0);
   }
 };
@@ -282,7 +286,7 @@ const checkSavedCell = async (
     .notOk();
 
   await t
-    .expect(Selector('.dx-cell-modified').count)
+    .expect(DataCell.getModifiedCells().count)
     .eql(0);
 };
 
@@ -316,22 +320,22 @@ const clickSaveButton = async (t: TestController, {
 const setEditorValue = async (
   t: TestController, {
     mode, dataField, useKeyboard, useMask, newMaskValue, newValue,
-  }, editor: Selector,
+  }, editor: CellEditor,
 ): Promise<void> => {
   const value: string = useMask ? newMaskValue : newValue;
   if (dataField === 'date' && !useKeyboard && !useMask) {
-    await t.click(editor.parent().parent().find('.dx-dropdowneditor-button'));
-    await t.click(Selector('.dx-calendar-cell').withText(value.split('/')[1]));
+    await t.click(editor.getDropDownButton());
+    await t.click(Selector(`.${CLASS.calendarCell}`).withText(value.split('/')[1]));
   } else if (dataField === 'lookup' && !useKeyboard) {
     if (mode === 'cell' || mode === 'batch') {
-      await t.click(editor.parent().parent().find('.dx-dropdowneditor-button'));
+      await t.click(editor.getDropDownButton());
     }
-    await t.click(Selector('.dx-list-item-content').withText(value));
+    await t.click(Selector(`.${CLASS.listItemContent}`).withText(value));
   } else if (dataField === 'boolean') {
     if (useKeyboard) {
       await t.pressKey('space');
     } else {
-      await t.click(editor);
+      await t.click(editor.element);
     }
   } else {
     await t
@@ -339,7 +343,7 @@ const setEditorValue = async (
       .pressKey(value.split('').map((k) => k.replace(' ', 'space')).join(' '));
 
     if (dataField === 'lookup' && useKeyboard) {
-      await Selector('.dx-list-item-content').withText(value)();
+      await Selector(`.${CLASS.listItemContent}`).withText(value)();
       await t.pressKey('enter');
     }
   }
@@ -349,15 +353,15 @@ const editNextCell = async (
   t: TestController, {
     mode, dataField, columnInfoIndex, columnIndex, useKeyboard,
   }, rowIndex: number,
-): Promise<{ nextEditor: Selector | undefined; nextCell: DataCell | undefined }> => {
+): Promise<{ nextEditor: CellEditor | undefined; nextCell: DataCell | undefined }> => {
   const form = getEditForm(mode);
 
-  let nextEditor: Selector | undefined = undefined;
+  let nextEditor: CellEditor | undefined = undefined;
   let nextCell: DataCell | undefined = undefined;
   if (form) {
     const nextColumnInfo = columnInfos[columnInfoIndex === 0 ? 1 : columnInfoIndex - 1];
     if (nextColumnInfo) {
-      nextEditor = form.getItem(nextColumnInfo.dataField);
+      nextEditor = new CellEditor(form.getItem(nextColumnInfo.dataField));
       if (useKeyboard) {
         for (
           let i = 0; i < Math.abs(nextColumnInfo.columnIndex - columnIndex); i += 1
@@ -365,13 +369,13 @@ const editNextCell = async (
           await t.pressKey(columnInfoIndex === 0 ? 'tab' : 'shift+tab');
         }
       } else {
-        await t.click(nextEditor);
+        await t.click(nextEditor.element);
       }
     }
   } else {
     const nextColumnIndex = columnIndex === 0 ? 1 : columnIndex - 1;
     nextCell = dataGrid.getDataCell(rowIndex, nextColumnIndex);
-    nextEditor = nextCell.getEditor().element;
+    nextEditor = nextCell.getEditor();
 
     if (useKeyboard) {
       await t.pressKey(columnIndex === 0 ? 'tab' : 'shift+tab');

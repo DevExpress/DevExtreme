@@ -1,10 +1,9 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
-
-const groupRow = Selector('.dx-group-row');
+import { ClassNames as CLASS } from '../../model/dataGrid/class-names';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -187,8 +186,8 @@ test('DataGrid should not reset its top scroll position after cell modification 
   const scrollTop = await dataGrid.getScrollTop();
   await t
     .click(dataGrid.getDataRow(1).getCommandCell(0).element)
-    .click(dataGrid.getDataCell(2, 1).element)
-    .typeText(dataGrid.getDataCell(2, 1).element, 'new_value')
+    .click(dataGrid.getDataCell(1, 1).element)
+    .typeText(dataGrid.getDataCell(1, 1).element, 'new_value')
     .pressKey('Tab');
   // assert
   const newScrollTop = await dataGrid.getScrollTop();
@@ -235,6 +234,8 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
   await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
 
   // assert
+  const groupRow = dataGrid.getGroupRowSelector();
+
   await t
     .expect(groupRow.exists)
     .notOk();
@@ -296,6 +297,8 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
 
   // assert
+  const groupRow = dataGrid.getGroupRowSelector();
+
   await t
     .expect(groupRow.exists)
     .ok();
@@ -507,7 +510,7 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
   const dataGrid = new DataGrid('#container');
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
-    const $virtualRows = $((window as any).widget.element()).find('.dx-virtual-row');
+    const $virtualRows = $((window as any).widget.element()).find(CLASS.virtualRow);
 
     result.count = $virtualRows.length;
     $virtualRows.each((index, el) => {
@@ -522,7 +525,7 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
   });
   const getVisibleRowsHeight = ClientFunction(() => {
     let result = 0;
-    const $rows = $((window as any).widget.element()).find('.dx-data-row');
+    const $rows = $((window as any).widget.element()).find(CLASS.dataRow);
 
     $rows.each((_, el) => {
       result += $(el).height() ?? 0;

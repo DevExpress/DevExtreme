@@ -1,18 +1,21 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
+import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
+import { ClassNames } from '../../model/dataGrid/class-names';
 
-const isPlaceholderVisible = ClientFunction(() => $('.dx-sortable-placeholder').is(':visible'));
+const CLASS = { ...DataGridClassNames, ...ClassNames };
 
-const getPlaceholderOffset = ClientFunction(() => $('.dx-sortable-placeholder').offset());
+const isPlaceholderVisible = ClientFunction(() => $(`.${CLASS.sortablePlaceholder}`).is(':visible'), { dependencies: { CLASS } });
 
-const getRowsViewLeftOffset = ClientFunction(() => $('#container .dx-datagrid-rowsview').offset()?.left);
+const getPlaceholderOffset = ClientFunction(() => $(`.${CLASS.sortablePlaceholder}`).offset(), { dependencies: { CLASS } });
 
-const getDraggingElementLeftOffset = ClientFunction(() => $('.dx-sortable-dragging').offset()?.left);
+const getRowsViewLeftOffset = ClientFunction(() => $(`#container .${CLASS.dataGridRowsView}`).offset()?.left, { dependencies: { CLASS } });
+
+const getDraggingElementLeftOffset = ClientFunction(() => $(`.${CLASS.sortableDragging}`).offset()?.left, { dependencies: { CLASS } });
 
 const getDraggingElementScrollPosition = ClientFunction(() => {
-  const $dataGrid = $('.dx-sortable-dragging').find('.dx-datagrid').first().parent();
+  const $dataGrid = $(`.${CLASS.sortableDragging}`).find(`.${CLASS.dataGrid}`).first().parent();
   const dataGridInstance = $dataGrid.data('dxDataGrid');
   const scrollableInstance = dataGridInstance.getScrollable();
 
@@ -20,13 +23,13 @@ const getDraggingElementScrollPosition = ClientFunction(() => {
     left: scrollableInstance.scrollLeft(),
     top: scrollableInstance.scrollTop(),
   };
-});
+}, { dependencies: { CLASS } });
 
 const getFreeSpaceRowOffset = ClientFunction(() => {
-  const $freeSpaceRow = $('#container').find('.dx-datagrid-rowsview table .dx-freespace-row').first();
+  const $freeSpaceRow = $('#container').find(`.${CLASS.dataGridRowsView} table .${CLASS.freeSpaceRow}`).first();
 
   return $freeSpaceRow?.offset();
-});
+}, { dependencies: { CLASS } });
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
@@ -248,12 +251,12 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
-  await t.drag(Selector('.dx-command-drag').nth(2), 500, 0);
+  await t.drag(dataGrid.getDragCommand().nth(2), 500, 0);
 
   const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
-    $('.dx-datagrid-rowsview .dx-datagrid-content-fixed:eq(0)').css('pointer-events'),
-    $('.dx-datagrid-rowsview .dx-datagrid-content-fixed:eq(1)').css('pointer-events'),
-  ], { dependencies: { dataGrid, otherDataGrid } })();
+    $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(0)`).css('pointer-events'),
+    $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(1)`).css('pointer-events'),
+  ], { dependencies: { dataGrid, otherDataGrid, CLASS } })();
 
   // T1013088
   await t
@@ -343,12 +346,13 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
 });
 
 test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
-  await t.drag(Selector('.dx-data-row .dx-command-drag').nth(0), 0, 100, { speed: 0.01 });
+  const dataGrid = new DataGrid('#container');
+  await t.drag(dataGrid.getDragCommand().nth(0), 0, 100, { speed: 0.01 });
 
-  const lastRow = Selector('tr').withAttribute('aria-rowindex', '10');
+  const lastRow = dataGrid.getDataRow(9);
 
   await t
-    .expect(lastRow.exists)
+    .expect(lastRow.element.exists)
     .ok();
 }).before(async () => createWidget('dxDataGrid', {
   height: 200,
@@ -384,9 +388,10 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
 
 // T1078513
 test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
-  await t.drag(Selector('.dx-data-row .dx-command-drag').nth(0), 0, 90, { speed: 0.01 });
+  const dataGrid = new DataGrid('#container');
+  await t.drag(dataGrid.getDragCommand().nth(0), 0, 90, { speed: 0.01 });
 
-  const headerRow = Selector('tr.dx-header-row');
+  const headerRow = dataGrid.getHeaderRow();
 
   await t
     .expect(headerRow.exists)
@@ -436,9 +441,10 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 
 // T1078513
 test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
-  await t.drag(Selector('.dx-data-row .dx-command-drag').nth(0), 0, 90, { speed: 0.01 });
+  const dataGrid = new DataGrid('#container');
+  await t.drag(dataGrid.getDragCommand().nth(0), 0, 90, { speed: 0.01 });
 
-  const footerRow = Selector('tr.dx-footer-row');
+  const footerRow = dataGrid.getFooterRow();
 
   await t
     .expect(footerRow.exists)
