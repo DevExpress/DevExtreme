@@ -49,16 +49,16 @@ themes.forEach((theme) => {
       test(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
         const tagBox = new TagBox('#container');
 
-        await tagBox.option('opened', true);
+        await t.click(tagBox.element);
         await t.wait(500);
 
         await t
           .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
           .ok();
 
-        await tagBox.option('opened', false);
+        await t.click(tagBox.element);
         await t.wait(500);
-        await tagBox.option('opened', true);
+        await t.click(tagBox.element);
         await t.wait(500);
 
         await t
