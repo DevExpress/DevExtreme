@@ -234,8 +234,8 @@ describe('Pager pages logic', () => {
 
     const selectedPage = tree.find('[aria-current="page"]');
 
+    expect(selectedPage.exists()).toBeTruthy();
     expect(selectedPage.parent().prop('selected')).toBe(true);
-    expect(selectedPage.prop('aria-current')).toBe('page');
   });
 
   it('storeState+(pageIndexes, pageCount), (pageIndex: 12, pageCount: 15) -> (pageIndex: 12, pageCount: 13)', () => {
