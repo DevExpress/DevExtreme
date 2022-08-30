@@ -30,41 +30,14 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <style>
-        .container {
-            width: 300px;
-            height: 400px;
-        }
-    </style>
 </head>
 <body>
-    <div id="container" class="container">
-        <div id="tag-box"></div>
-    </div>
+    <div id="button"></div>
     <script>
-        const stylingMods = ['outlined', 'underlined', 'filled'];
-        const labelMods = ['static', 'floating', 'hidden'];
-
         $(function() {
-            $("#tag-box").dxTagBox({
-                width: 200,
-                label: 'Label text',
-                labelMode: labelMods[0],
-                stylingMode: stylingMods[0],
-                dataSource: {
-                    load() {
-                        return new Promise((resolve) => {
-                            resolve([
-                                { text: 'item_1' },
-                                { text: 'item_2' },
-                                { text: 'item_3' },
-                                { text: 'item_4' },
-                            ]);
-                        });
-                    },
-                    paginate: true,
-                    pageSize: 20,
-                },
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>

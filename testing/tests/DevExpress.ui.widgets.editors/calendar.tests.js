@@ -2669,27 +2669,6 @@ QUnit.module('disabledDates option', {
         assert.deepEqual(this.calendar.option('value'), startDate, 'selected value has not been changed');
     });
 
-    QUnit.test('enter key should change selected value if focused date is not disabled', function(assert) {
-        const startDate = new Date(2020, 0, 6);
-        const newDate = new Date(2020, 1, 6);
-
-        this.calendar.option({
-            value: startDate,
-        });
-
-        this.$element.trigger('focusin');
-
-        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, { ctrlKey: true });
-
-        assert.deepEqual(this.calendar.option('currentDate'), newDate, 'current date has been changed');
-        assert.deepEqual(this.calendar.option('value'), startDate, 'selected value is correct');
-
-        triggerKeydown(this.$element, ENTER_KEY_CODE);
-
-        assert.deepEqual(this.calendar.option('currentDate'), newDate, 'current date is correct');
-        assert.deepEqual(this.calendar.option('value'), newDate, 'selected value has been changed');
-    });
-
     QUnit.test('home/end keys should focus the first/last available date in the current month', function(assert) {
         this.calendar.option({
             value: new Date(2020, 0, 15),
