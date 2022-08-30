@@ -1,5 +1,7 @@
 /* global internals, initTree */
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import devices from 'core/devices';
+
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 QUnit.module('Lazy rendering');
@@ -26,8 +28,24 @@ QUnit.test('Only root nodes should be rendered by default', function(assert) {
     assert.equal(items.length, 2);
 });
 
-['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+', 1, 2.18, Number(3), true, 0,
-    'Egsdfgfd]\0\r\n\b', '!/#$%' + String.fromCharCode(10) + String.fromCharCode(13) + String.fromCharCode(0), 'سلام دنیا' ].forEach((testId) => {
+[
+    '!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,',
+    '____2______.jpg',
+    'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+',
+    1,
+    2.18,
+    Number(3),
+    true,
+    0,
+    'Egsdfgfd]\0\r\n\b',
+    '!/#$%' + String.fromCharCode(10) + String.fromCharCode(13) + String.fromCharCode(0), 'سلام دنیا'
+].forEach((testId) => {
+    if(devices.real().deviceType !== 'desktop') {
+        // there is no specific for devices in these tests
+        return;
+    }
+
+
     QUnit.test(`Nodes expanding should work with special charactes in id - ${testId}`, function(assert) {
         const treeView = createInstance({
             dataSource: [
