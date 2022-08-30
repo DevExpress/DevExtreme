@@ -338,6 +338,29 @@ QUnit.module('Header Filter', {
         assert.equal(testElement.find('.dx-header-filter').length, 2, 'has header filter indicators');
     });
 
+    // T1109631
+    QUnit.test('Check header filter indicator has role attribute', function(assert) {
+        // arrange
+        const that = this;
+        const testElement = $('#container');
+
+        that.setupDataGrid({
+            dataSource: [],
+            keyExpr: 'ID',
+            headerFilter: {
+                visible: true,
+            },
+            columns: ['ID', 'Column 2'],
+        });
+
+        // act
+        that.columnHeadersView.render(testElement);
+
+        // assert
+        assert.expect(2);
+        testElement.find('.dx-header-filter').each((ind, item) => assert.strictEqual(item.getAttribute('role'), 'button'));
+    });
+
     QUnit.test('Draw header filter indicator with allowFiltering true', function(assert) {
     // arrange
         const that = this;
