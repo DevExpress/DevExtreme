@@ -563,7 +563,7 @@ class Scheduler extends Widget {
                 break;
             case 'resources':
                 this._dataAccessors.resources = createExpressions(this.option('resources'));
-                this.agendaResourceProcessor.initializeState(value);
+                this.agendaResourceProcessor.initializeState(this.option('resources'));
                 this.updateInstances();
 
                 this._postponeResourceLoading().done((resources) => {
