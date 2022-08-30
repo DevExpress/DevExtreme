@@ -61,7 +61,7 @@
     "@types/enzyme": "3.10.12",
     "@types/jest": "24.9.1",
     "@types/jquery": "2.0.60",
-    "@types/react": "16.14.30",
+    "@types/react": "16.14.31",
     "@typescript-eslint/eslint-plugin": "5.36.0",
     "@typescript-eslint/experimental-utils": "5.36.0",
     "angular": "1.8.3",
