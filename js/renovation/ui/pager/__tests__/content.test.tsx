@@ -48,6 +48,7 @@ describe('PagerContent', () => {
         infoVisible: true,
         pageIndexSelectorVisible: true,
         props: componentProps,
+        aria: { role: 'navigation', label: 'pagination' },
         restAttributes: { 'rest-attribute': {}, className: 'className' },
       } as Partial<PagerContent> as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />);
@@ -55,6 +56,7 @@ describe('PagerContent', () => {
       expect(widget.props()).toMatchObject({
         rtlEnabled: true,
         className: 'className',
+        aria: props.aria,
         'rest-attribute': props.restAttributes['rest-attribute'],
       });
       expect(tree.find(Widget).instance()).toBe(widget.instance());
@@ -205,23 +207,6 @@ describe('PagerContent', () => {
       expect(childrenContainer.childAt(1).childAt(1).instance()).toBe(pagesRef.current);
       expect(childrenContainer.childAt(1).childAt(0).props().rootElementRef).toBe(infoTextRef);
     });
-
-    // T1109686
-    it('has role and aria-label attributes', () => {
-      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
-      const props = {
-        pagesContainerVisible: true,
-        pagesContainerVisibility: 'hidden',
-        props: {
-          rootElementRef,
-        },
-      } as Partial<PagerContent>;
-
-      const pagerContent = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
-
-      expect(pagerContent.prop('aria-label')).toBe('pagination');
-      expect(pagerContent.prop('role')).toBe('navigation');
-    });
   });
 
   describe('Logic', () => {
@@ -360,6 +345,12 @@ describe('PagerContent', () => {
       expect(component.pageIndexSelectorVisible).toBe(false);
       component.props.pageSize = 10;
       expect(component.pageIndexSelectorVisible).toBe(true);
+    });
+
+    it('aria', () => {
+      const component = new PagerContent({} as PagerContentProps);
+
+      expect(component.aria).toEqual({ role: 'navigation', label: 'pagination' });
     });
 
     describe('className', () => {
