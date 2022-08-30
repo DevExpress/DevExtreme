@@ -43,6 +43,7 @@ export const viewFunction = ({
     showNavigationButtons, totalCount,
     visible,
   },
+  aria,
   restAttributes,
 }: PagerContent): JSX.Element => (
   <Widget
@@ -50,8 +51,7 @@ export const viewFunction = ({
     rtlEnabled={rtlEnabled}
     classes={classes}
     visible={visible}
-    role="navigation"
-    aria-label="pagination"
+    aria={aria}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
@@ -200,5 +200,13 @@ export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChang
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,
     };
     return combineClasses(classesMap);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get aria(): Record<string, string> {
+    return {
+      role: 'navigation',
+      label: 'pagination',
+    };
   }
 }
