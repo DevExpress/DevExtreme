@@ -623,18 +623,20 @@ const DropDownEditor = TextBox.inherit({
         const stylingMode = this.option('stylingMode');
 
         const isNeedMoved = (labelMode, stylingMode) => (
-            (labelMode === 'static' && stylingMode === 'outlined') ||
+            ((labelMode === 'static' && stylingMode === 'outlined') ||
             (labelMode === 'floating' && stylingMode === 'outlined') ||
             (labelMode === 'static' && stylingMode === 'underlined') ||
-            (labelMode === 'floating' && stylingMode === 'underlined')
+            (labelMode === 'floating' && stylingMode === 'underlined')) &&
+            isOverlayFlipped && this._label.isVisible()
         );
 
         if(e.position) {
             $popupOverlayContent.toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, isOverlayFlipped);
         }
 
-        if(isNeedMoved(labelMode, stylingMode) && isOverlayFlipped && this._label.isVisible()) {
+        if(isNeedMoved(labelMode, stylingMode)) {
             const $label = this._label.$element();
+
             move($popupOverlayContent, {
                 top: locate($popupOverlayContent).top - parseInt($label.css('fontSize'))
             });

@@ -3,6 +3,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
+import TagBox from '../../../model/tagBox';
 
 const stylingMods = ['outlined', 'underlined', 'filled'];
 const labelMods = ['static', 'floating', 'hidden'];
@@ -19,7 +20,9 @@ themes.forEach((theme) => {
     test(`Label for dxTagBox ${theme} stylingMode=${stylingMode}`, async (t) => {
       await t.click('#otherContainer');
 
-      await t.expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+      await t
+        .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`))
+        .ok();
     }).before(async (t) => {
       await t.resizeWindow(300, 800);
       await changeTheme(theme);
@@ -44,14 +47,23 @@ themes.forEach((theme) => {
 
     labelMods.forEach((labelMode) => {
       test(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
-        await t.click('#container');
+        const tagBox = new TagBox('#container');
 
-        await t.expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+        await tagBox.option('opened', true);
+        await t.wait(500);
 
-        await t.click('#container');
-        await t.click('#container');
+        await t
+          .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
+          .ok();
 
-        await t.expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+        await tagBox.option('opened', false);
+        await t.wait(500);
+        await tagBox.option('opened', true);
+        await t.wait(500);
+
+        await t
+          .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
+          .ok();
       }).before(async (t) => {
         await t.resizeWindow(300, 400);
         await changeTheme(theme);
@@ -77,7 +89,7 @@ themes.forEach((theme) => {
             paginate: true,
             pageSize: 20,
           },
-        }, true, '#container');
+        });
       });
     });
   });
