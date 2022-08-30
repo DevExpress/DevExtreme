@@ -47,6 +47,11 @@ themes.forEach((theme) => {
         await t.click('#container');
 
         await t.expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+
+        await t.click('#container');
+        await t.click('#container');
+
+        await t.expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
       }).before(async (t) => {
         await t.resizeWindow(300, 400);
         await changeTheme(theme);

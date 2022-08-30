@@ -625,7 +625,8 @@ const DropDownEditor = TextBox.inherit({
         const isNeedMoved = (labelMode, stylingMode) => (
             (labelMode === 'static' && stylingMode === 'outlined') ||
             (labelMode === 'floating' && stylingMode === 'outlined') ||
-            (labelMode === 'static' && stylingMode === 'underlined')
+            (labelMode === 'static' && stylingMode === 'underlined') ||
+            (labelMode === 'floating' && stylingMode === 'underlined')
         );
 
         if(e.position) {
