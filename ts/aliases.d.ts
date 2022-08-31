@@ -275,9 +275,9 @@ declare module DevExpress.ui {
 
 declare module DevExpress.ui {
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type GridBase<TRowData = any, TKey = any> = DevExpress.common.grids.GridBase<TRowData, TKey>;
+    export type GridBase<TRowData = any, TKey = any> = DevExpress.common.grids.GridBase<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = DevExpress.common.grids.GridBaseOptions<TComponent, TRowData, TKey>;
+    export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = DevExpress.common.grids.GridBaseOptions<TComponent, TRowData, TKey>;
 }
 
 declare module DevExpress.ui.dxDataGrid {
@@ -331,59 +331,59 @@ declare module DevExpress.ui.dxDataGrid {
     export type StateStoring = DevExpress.common.grids.StateStoring;
 
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type AdaptiveDetailRowPreparingInfo = DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    export type AdaptiveDetailRowPreparingInfo = DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type ColumnBase<TRowData = any> = DevExpress.common.grids.ColumnBase<TRowData>;
+    export type ColumnBase<TRowData = any> = DevExpress.common.grids.ColumnBase<TRowData>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type ColumnButtonBase = DevExpress.common.grids.ColumnButtonBase;
+    export type ColumnButtonBase = DevExpress.common.grids.ColumnButtonBase;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type DataChangeInfo<TRowData = any, TKey = any> = DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
+    export type DataChangeInfo<TRowData = any, TKey = any> = DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type DataErrorOccurredInfo = DevExpress.common.grids.DataErrorOccurredInfo;
+    export type DataErrorOccurredInfo = DevExpress.common.grids.DataErrorOccurredInfo;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type DragDropInfo = DevExpress.common.grids.DragDropInfo;
+    export type DragDropInfo = DevExpress.common.grids.DragDropInfo;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type DragReorderInfo = DevExpress.common.grids.DragReorderInfo;
+    export type DragReorderInfo = DevExpress.common.grids.DragReorderInfo;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type DragStartEventInfo<TRowData = any> = DevExpress.common.grids.DragStartEventInfo<TRowData>;
+    export type DragStartEventInfo<TRowData = any> = DevExpress.common.grids.DragStartEventInfo<TRowData>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type EditingBase<TRowData = any, TKey = any> = DevExpress.common.grids.EditingBase<TRowData, TKey>;
+    export type EditingBase<TRowData = any, TKey = any> = DevExpress.common.grids.EditingBase<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type EditingTextsBase = DevExpress.common.grids.EditingTextsBase;
+    export type EditingTextsBase = DevExpress.common.grids.EditingTextsBase;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type KeyDownInfo = DevExpress.common.grids.KeyDownInfo;
+    export type KeyDownInfo = DevExpress.common.grids.KeyDownInfo;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type NewRowInfo<TRowData = any> = DevExpress.common.grids.NewRowInfo<TRowData>;
+    export type NewRowInfo<TRowData = any> = DevExpress.common.grids.NewRowInfo<TRowData>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type PagingBase = DevExpress.common.grids.PagingBase;
+    export type PagingBase = DevExpress.common.grids.PagingBase;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowDraggingEventInfo<TRowData = any> = DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
+    export type RowDraggingEventInfo<TRowData = any> = DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowInsertedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowInsertedInfo<TRowData, TKey>;
+    export type RowInsertedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowInsertedInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowInsertingInfo<TRowData = any> = DevExpress.common.grids.RowInsertingInfo<TRowData>;
+    export type RowInsertingInfo<TRowData = any> = DevExpress.common.grids.RowInsertingInfo<TRowData>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowKeyInfo<TKey = any> = DevExpress.common.grids.RowKeyInfo<TKey>;
+    export type RowKeyInfo<TKey = any> = DevExpress.common.grids.RowKeyInfo<TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowRemovedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowRemovedInfo<TRowData, TKey>;
+    export type RowRemovedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowRemovedInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowRemovingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowRemovingInfo<TRowData, TKey>;
+    export type RowRemovingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowRemovingInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowUpdatedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowUpdatedInfo<TRowData, TKey>;
+    export type RowUpdatedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowUpdatedInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowUpdatingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowUpdatingInfo<TRowData, TKey>;
+    export type RowUpdatingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowUpdatingInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type RowValidatingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowValidatingInfo<TRowData, TKey>;
+    export type RowValidatingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.RowValidatingInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type SavingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.SavingInfo<TRowData, TKey>;
+    export type SavingInfo<TRowData = any, TKey = any> = DevExpress.common.grids.SavingInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type ScrollingBase = DevExpress.common.grids.ScrollingBase;
+    export type ScrollingBase = DevExpress.common.grids.ScrollingBase;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type SelectionBase = DevExpress.common.grids.SelectionBase;
+    export type SelectionBase = DevExpress.common.grids.SelectionBase;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type SelectionChangedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
+    export type SelectionChangedInfo<TRowData = any, TKey = any> = DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
-    export  type ToolbarPreparingInfo = DevExpress.common.grids.ToolbarPreparingInfo;
+    export type ToolbarPreparingInfo = DevExpress.common.grids.ToolbarPreparingInfo;
 }
 
 declare module DevExpress.common.charts {
