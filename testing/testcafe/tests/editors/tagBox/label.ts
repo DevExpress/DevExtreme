@@ -5,8 +5,8 @@ import createWidget from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
 
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const labelMods = ['static', 'floating', 'hidden'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
+const labelModes = ['static', 'floating', 'hidden'];
 const themes = ['generic.light', 'material.blue.light'];
 
 fixture`TagBox_Label`
@@ -16,7 +16,7 @@ fixture`TagBox_Label`
   });
 
 themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
+  stylingModes.forEach((stylingMode) => {
     test(`Label for dxTagBox ${theme} stylingMode=${stylingMode}`, async (t) => {
       await t.click('#otherContainer');
 
@@ -45,21 +45,23 @@ themes.forEach((theme) => {
       }, true, '#otherContainer');
     });
 
-    labelMods.forEach((labelMode) => {
+    labelModes.forEach((labelMode) => {
       test(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
         const tagBox = new TagBox('#container');
 
         await t.click(tagBox.element);
 
+        const screenshotName = `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`;
+
         await t
-          .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
+          .expect(await compareScreenshot(t, screenshotName))
           .ok();
 
         await t.click(tagBox.element);
         await t.click(tagBox.element);
 
         await t
-          .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
+          .expect(await compareScreenshot(t, screenshotName))
           .ok();
       }).before(async (t) => {
         await t.resizeWindow(300, 400);

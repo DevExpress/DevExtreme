@@ -627,7 +627,7 @@ const DropDownEditor = TextBox.inherit({
             $popupOverlayContent.toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, isOverlayFlipped);
         }
 
-        if(isOverlayFlipped && shouldIndentForLabel && this._label.isVisible()) {
+        if(isOverlayFlipped && shouldIndentForLabel) {
             const $label = this._label.$element();
 
             move($popupOverlayContent, {
