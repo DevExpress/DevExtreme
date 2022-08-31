@@ -5940,6 +5940,52 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.ok(true, 'no errors');
     });
+
+    // T1109722
+    [true, false].forEach((useNative) => {
+        QUnit.test(`Virtual scrolling should correctly scroll to the last page on initialization, useNative = ${useNative} (T1109722)`, function(assert) {
+            // arrange
+            const items = generateDataSource(183);
+
+            const dataGrid = createDataGrid({
+                height: 375,
+                dataSource: items,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'virtual',
+                    useNative
+                },
+                paging: {
+                    pageSize: 10,
+                    pageIndex: 18
+                },
+                pager: { visible: true }
+
+            });
+
+            this.clock.tick(300);
+
+            $(dataGrid.getScrollable().content()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            let visibleRows = dataGrid.getVisibleRows();
+
+            assert.strictEqual(visibleRows[visibleRows.length - 1].key, 183, 'last row is correct');
+
+            // act;
+            dataGrid.option('paging.pageIndex', 15);
+            $(dataGrid.getScrollable().content()).trigger('scroll');
+            this.clock.tick(300);
+            //
+            //
+            // assert
+            visibleRows = dataGrid.getVisibleRows();
+            assert.strictEqual(dataGrid.option('paging.pageIndex'), 15, 'pageIndex via options ');
+            assert.strictEqual(visibleRows[0].key, 150, 'first row is correct');
+        });
+    });
+
 });
 
 
