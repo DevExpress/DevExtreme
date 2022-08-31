@@ -1452,6 +1452,30 @@ testModule('animation', moduleConfig, () => {
             fx.animate = origFX;
         }
     });
+
+    test('animation should be stopped on geometry rerendering (T1104748)', function(assert) {
+        fx.off = false;
+        try {
+            const overlay = $('#overlay').dxOverlay({
+                animation: {
+                    show: {
+                        type: 'fade',
+                        duration: 1000,
+                        from: { opacity: 0 },
+                        to: { opacity: 1 }
+                    }
+                }
+            }).dxOverlay('instance');
+            const $content = overlay.$content();
+
+            overlay.show();
+            overlay.option('position', { of: 'body' });
+
+            assert.notOk(fx.isAnimating($content), 'animation is stopped after position option change');
+        } finally {
+            fx.off = true;
+        }
+    });
 });
 
 
