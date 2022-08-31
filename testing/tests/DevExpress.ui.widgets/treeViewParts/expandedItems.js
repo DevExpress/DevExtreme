@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import devices from 'core/devices';
 
 const TREEVIEW_NODE_CLASS = 'dx-treeview-node';
 const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
@@ -720,6 +721,10 @@ module('Expanded items', {
 
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
+        if(devices.real().deviceType !== 'desktop') {
+            // there is no specific for devices in these tests
+            return;
+        }
         [false, true].forEach((virtualModeEnabled) => {
             QUnit.module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
                 [false, true].forEach((expanded) => {
