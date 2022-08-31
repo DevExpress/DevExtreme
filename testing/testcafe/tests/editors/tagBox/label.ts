@@ -50,16 +50,13 @@ themes.forEach((theme) => {
         const tagBox = new TagBox('#container');
 
         await t.click(tagBox.element);
-        await t.wait(500);
 
         await t
           .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
           .ok();
 
         await t.click(tagBox.element);
-        await t.wait(500);
         await t.click(tagBox.element);
-        await t.wait(500);
 
         await t
           .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`))
@@ -78,18 +75,13 @@ themes.forEach((theme) => {
           dataSource: {
             load() {
               return new Promise((resolve) => {
-                resolve([
-                  { text: 'item_1' },
-                  { text: 'item_2' },
-                  { text: 'item_3' },
-                  { text: 'item_4' },
-                ]);
+                resolve([...Array(10)].map((_, i) => `item${i}`));
               });
             },
             paginate: true,
             pageSize: 20,
           },
-        });
+        }, true);
       });
     });
   });
