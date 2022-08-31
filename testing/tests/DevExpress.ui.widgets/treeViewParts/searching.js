@@ -2,6 +2,7 @@
 
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import $ from 'jquery';
+import devices from 'core/devices';
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
@@ -51,6 +52,11 @@ function isLazyDataSourceMode(wrapper) {
 }
 
 configs.forEach(config => {
+    if(devices.real().deviceType !== 'desktop') {
+        // there is no specific for devices in these tests
+        return;
+    }
+
     QUnit.test(`dataSource: ${config.dataSourceOption}, selectionMode:${config.selectionMode}, showCheckBoxesMode: ${config.showCheckBoxesMode}, itemsExpr:"subItems", dataStructure: tree, keyExpr:undefined -> search("2"); (T871605)`, function(assert) {
         const options = {
             itemsExpr: 'subItems',
