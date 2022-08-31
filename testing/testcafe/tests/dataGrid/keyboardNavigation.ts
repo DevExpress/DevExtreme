@@ -2,8 +2,8 @@ import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
-import CommandCell from '../../model/dataGrid/command-cell';
-import { ClassNames } from '../../model/dataGrid/class-names';
+import CommandCell from '../../model/dataGrid/commandCell';
+import { ClassNames } from '../../model/dataGrid/classNames';
 
 const CLASS = ClassNames;
 

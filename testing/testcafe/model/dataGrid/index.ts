@@ -10,8 +10,7 @@ import DataCell from './data/cell';
 import Headers from './headers';
 
 import { WidgetName } from '../../helpers/createWidget';
-import { Toolbar } from './toolbar';
-import { EditingPopup } from './editing-popup';
+import { Overlay } from './overlay';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -24,17 +23,14 @@ export const CLASS = {
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
-  checkbox: 'dx-checkbox',
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
 
-  overlayWrapper: 'dx-overlay-wrapper',
   overlayContent: 'dx-overlay-content',
-  invalidMessage: 'dx-invalid-message',
-  revertTooltip: 'dx-datagrid-revert-tooltip',
+  overlayWrapper: 'dx-overlay-wrapper',
 
   toolbar: 'dx-toolbar',
   fixedGridView: 'content-fixed',
@@ -42,7 +38,6 @@ export const CLASS = {
   revertButton: 'dx-revert-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
-  exportButton: 'dx-datagrid-export-button',
   commandDrag: 'dx-command-drag',
 };
 
@@ -72,7 +67,7 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): 
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
-  constructor(id: string) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
@@ -133,6 +128,10 @@ export default class DataGrid extends Widget {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
   }
 
+  getOverlay(): Overlay {
+    return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
+  }
+
   getPager(): Pager {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
@@ -145,28 +144,6 @@ export default class DataGrid extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getFooterRow(): Selector {
     return Selector(`tr.${CLASS.footerRow}`);
-  }
-
-  getExportButton(): Selector {
-    return this.element.find(`.${CLASS.exportButton}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getOverlayContent(): Selector {
-    return Selector(`.${CLASS.overlayContent}`);
-  }
-
-  getInvalidMessage(): Selector {
-    return this.element.find(`.${CLASS.overlayWrapper}.${CLASS.invalidMessage}`);
-  }
-
-  getRevertTooltip(): Selector {
-    return this.element.find(`.${CLASS.overlayWrapper}.${CLASS.revertTooltip}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getPopupCheckbox(): Selector {
-    return Selector(`.${CLASS.overlayContent} .${CLASS.checkbox}`);
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
@@ -265,14 +242,8 @@ export default class DataGrid extends Widget {
     return new EditForm(element, buttons);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getEditingPopup(): EditingPopup {
-    return new EditingPopup();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getToolbar(): Toolbar {
-    return new Toolbar(`.${CLASS.toolbar}`);
+  getToolbar(): Selector {
+    return this.element.find(`.${CLASS.toolbar}`);
   }
 
   getHeaderPanel(): HeaderPanel {

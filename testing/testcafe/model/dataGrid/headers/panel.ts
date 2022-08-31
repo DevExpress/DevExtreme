@@ -1,10 +1,12 @@
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
+import { DropDownSelectPopup } from './dropDownSelectPopup';
 
 const CLASS = {
   addRowButton: 'addrow-button',
   saveButton: 'save-button',
   cancelButton: 'cancel-button',
+  exportButton: 'export-button',
   dropDownMenuButton: 'dx-dropdownmenu-button',
 };
 
@@ -28,7 +30,16 @@ export default class HeaderPanel extends FocusableElement {
     return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.cancelButton)}`);
   }
 
+  getExportButton(): Selector {
+    return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.exportButton)}`);
+  }
+
   getDropDownMenuButton(): Selector {
     return this.element.find(`.${CLASS.dropDownMenuButton}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDropDownSelectPopup(): DropDownSelectPopup {
+    return new DropDownSelectPopup();
   }
 }
