@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
-import { DateBoxPopup } from '../../model/filterBuilder/datebox-popup';
+import { DateBoxPopup } from '../../model/filterBuilder/dateboxPopup';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
@@ -52,9 +52,9 @@ test('DateBox should not close on click (T1051831)', async (t) => {
     .click(field.getDateBox())
     .click(popup.getDoneButton());
 
-  const overlay = popup.getContent();
+  const overlayContent = popup.getContent();
 
-  await t.expect(overlay.exists).ok();
+  await t.expect(overlayContent.exists).ok();
 }).before(async () => createWidget('dxFilterBuilder', {
   fields: [{
     dataField: 'datetime',
