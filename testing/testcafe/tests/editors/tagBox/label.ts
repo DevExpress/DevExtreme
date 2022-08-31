@@ -75,7 +75,12 @@ themes.forEach((theme) => {
           dataSource: {
             load() {
               return new Promise((resolve) => {
-                resolve([...Array(10)].map((_, i) => ({ text: `item${i}` })));
+                resolve([
+                  { text: 'item_1' },
+                  { text: 'item_2' },
+                  { text: 'item_3' },
+                  { text: 'item_4' },
+                ]);
               });
             },
             paginate: true,
