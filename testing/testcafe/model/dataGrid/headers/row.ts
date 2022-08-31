@@ -1,6 +1,6 @@
 import FocusableElement from '../../internal/focusable';
 import HeaderCell from './cell';
-import CommandCell from '../command-cell';
+import CommandCell from '../commandCell';
 
 export default class HeaderRow extends FocusableElement {
   widgetName: string;

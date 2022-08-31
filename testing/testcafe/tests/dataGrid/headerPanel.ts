@@ -9,15 +9,16 @@ fixture`Header Panel`
 test('Drop-down window should be positioned correctly after resizing the toolbar (T1037975)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const menuButton = dataGrid.getHeaderPanel().getDropDownMenuButton();
+  const headerPanel = dataGrid.getHeaderPanel();
 
-  const { popup } = dataGrid.getToolbar();
-  const popupContent = popup.element;
-  const dropDownEditorButton = popup.getDropDownEditorButton();
-  const menuItem = popup.getMenuItem();
+  const selectPopup = headerPanel.getDropDownSelectPopup();
+
+  const popupContent = selectPopup.menuContent();
+  const editButton = selectPopup.editButton();
+  const menuItem = selectPopup.getSelectItem(1);
 
   // act
-  await t.click(menuButton);
+  await t.click(headerPanel.getDropDownMenuButton());
 
   // assert
   await t
@@ -27,7 +28,7 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
     .ok();
 
   // act
-  await t.click(dropDownEditorButton);
+  await t.click(editButton);
 
   // assert
   await t

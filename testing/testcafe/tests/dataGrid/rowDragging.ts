@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
-import { ClassNames } from '../../model/dataGrid/class-names';
+import { ClassNames } from '../../model/dataGrid/classNames';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 

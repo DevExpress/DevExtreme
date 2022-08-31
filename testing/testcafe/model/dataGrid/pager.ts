@@ -1,18 +1,22 @@
 // eslint-disable-next-line max-classes-per-file
+import { Selector } from 'testcafe';
 import NavPage from './navPage';
 import FocusableElement from '../internal/focusable';
 import { SelectableElement } from './SelectableElement';
 
 const CLASS = {
   pagerPageSize: 'dx-page-size',
+  pagerPageSizes: 'dx-page-sizes',
   pagerPrevNavButton: 'dx-prev-button',
   pagerNextNavButton: 'dx-next-button',
-  info: 'dx-info',
-};
+  pagerPageIndex: 'dx-page-index',
 
-const SELECTOR = {
-  pageSizeWidget: '.dx-page-sizes .dx-selectbox',
-  pageIndexWidget: '.dx-page-index.dx-numberbox',
+  info: 'dx-info',
+  select: 'dx-selectbox',
+  item: 'dx-item',
+  numberBox: 'dx-numberbox',
+
+  overlayContent: 'dx-overlay-content',
 };
 
 export default class Pager extends FocusableElement {
@@ -34,12 +38,17 @@ export default class Pager extends FocusableElement {
     return new NavPage(this.element, pageIndexText);
   }
 
-  getPageSizeWidget(): Selector {
-    return this.element.find(SELECTOR.pageSizeWidget);
+  getPageSizeSelect(): Selector {
+    return this.element.find(`.${CLASS.pagerPageSizes} .${CLASS.select}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getPopupPageSizes(): Selector {
+    return Selector(`.${CLASS.overlayContent} .${CLASS.item}`);
   }
 
   getPageIndexWidget(): Selector {
-    return this.element.find(SELECTOR.pageIndexWidget);
+    return this.element.find(`.${CLASS.pagerPageIndex}.${CLASS.numberBox}`);
   }
 
   get infoText(): Selector {
