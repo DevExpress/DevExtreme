@@ -1196,6 +1196,29 @@ QUnit.module('Keyboard navigation', {
 
         assert.equal(this.calendar.option('zoomLevel'), 'century', 'zoomLevel option has not been increased');
     });
+
+    QUnit.test('downArrow with ctrl-key should decrease zoomLevel option', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'year',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'month', 'zoomLevel option has been decreased');
+    });
+
+    QUnit.test('downArrow with ctrl-key should not decrease zoomLevel option if zoomLevel === minZoomLevel', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'month',
+            minZoomLevel: 'month',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'month', 'zoomLevel option has not been decreased');
+    });
 });
 
 
