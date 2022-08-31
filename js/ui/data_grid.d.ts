@@ -118,6 +118,7 @@ export {
     ColumnFixingTexts,
     ColumnHeaderFilter,
     ColumnLookup,
+    ColumnResizeMode,
     DataChange,
     DataChangeType,
     DataRenderMode,
@@ -132,6 +133,7 @@ export {
     GridsEditRefreshMode,
     GroupExpandMode,
     HeaderFilter,
+    HeaderFilterGroupInterval,
     HeaderFilterTexts,
     KeyboardNavigation,
     LoadPanel,
@@ -155,8 +157,6 @@ export {
 } from '../exporter/excel/excel.doc_comments';
 
 /** @public */
-export type ColumnResizeMode = 'nextColumn' | 'widget';
-/** @public */
 export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 /** @public */
 export type DataGridExportFormat = 'pdf' | 'xlsx';
@@ -168,8 +168,6 @@ export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'dist
 export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
 /** @public */
 export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
-/** @public */
-export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 /** @public */
 export type DataGridPredefinedColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 /** @public */

@@ -1399,7 +1399,6 @@ declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
-  export type ColumnResizeMode = 'nextColumn' | 'widget';
   export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
@@ -1446,14 +1445,6 @@ declare module DevExpress.common {
     | 'minute'
     | 'second'
     | 'shortDateShortTime';
-  export type HeaderFilterGroupInterval =
-    | 'day'
-    | 'hour'
-    | 'minute'
-    | 'month'
-    | 'quarter'
-    | 'second'
-    | 'year';
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
   export type LabelMode = 'static' | 'floating' | 'hidden';
@@ -2005,6 +1996,7 @@ declare module DevExpress.common.grids {
      */
     calculateCellValue?: (rowData: any) => any;
   };
+  export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**
    * [descr:DataChange]
    */
@@ -2986,6 +2978,14 @@ declare module DevExpress.common.grids {
      */
     width?: number;
   };
+  export type HeaderFilterGroupInterval =
+    | 'day'
+    | 'hour'
+    | 'minute'
+    | 'month'
+    | 'quarter'
+    | 'second'
+    | 'year';
   export type HeaderFilterTexts = {
     /**
      * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -8404,7 +8404,6 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly column: Column<TRowData, TKey>;
     };
-    export type ColumnResizeMode = 'nextColumn' | 'widget';
     export type ContentReadyEvent<
       TRowData = any,
       TKey = any
@@ -8951,14 +8950,6 @@ declare module DevExpress.ui {
        */
       visible?: boolean | DevExpress.common.Mode;
     };
-    export type HeaderFilterGroupInterval =
-      | 'day'
-      | 'hour'
-      | 'minute'
-      | 'month'
-      | 'quarter'
-      | 'second'
-      | 'year';
     export type InitializedEvent<
       TRowData = any,
       TKey = any

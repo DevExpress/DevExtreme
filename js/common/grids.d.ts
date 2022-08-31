@@ -632,7 +632,10 @@ export type ColumnLookup = {
   calculateCellValue?: ((rowData: any) => any);
 };
 
-/** @public */
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type ColumnResizeMode = 'nextColumn' | 'widget';
 
 /**
@@ -1107,7 +1110,10 @@ export type HeaderFilter = {
   width?: number;
 };
 
-/** @public */
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
