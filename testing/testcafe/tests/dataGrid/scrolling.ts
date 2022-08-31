@@ -186,8 +186,8 @@ test('DataGrid should not reset its top scroll position after cell modification 
   const scrollTop = await dataGrid.getScrollTop();
   await t
     .click(dataGrid.getDataRow(1).getCommandCell(0).element)
-    .click(dataGrid.getDataCell(1, 1).element)
-    .typeText(dataGrid.getDataCell(1, 1).element, 'new_value')
+    .click(dataGrid.getDataCell(2, 1).element)
+    .typeText(dataGrid.getDataCell(2, 1).element, 'new_value')
     .pressKey('Tab');
   // assert
   const newScrollTop = await dataGrid.getScrollTop();

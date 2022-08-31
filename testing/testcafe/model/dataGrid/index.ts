@@ -137,11 +137,6 @@ export default class DataGrid extends Widget {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getHeaderRow(): Selector {
-    return Selector(`tr.${CLASS.headerRow}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   getFooterRow(): Selector {
     return Selector(`tr.${CLASS.footerRow}`);
   }
