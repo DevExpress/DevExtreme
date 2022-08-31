@@ -5,6 +5,7 @@ import 'ui/tree_view';
 import 'ui/box';
 import 'ui/responsive_box';
 
+import devices from 'core/devices';
 
 const TREEVIEW_ID = 'treeView_id';
 const PLACEMENT_STANDALONE = 'standalone';
@@ -203,6 +204,11 @@ QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
 },
 () => {
     [PLACEMENT_INSIDE_BOX, PLACEMENT_INSIDE_RESPONSIVE_BOX].forEach(placement => {
+        if(devices.real().deviceType !== 'desktop') {
+            // there is no specific for devices in these tests
+            return;
+        }
+
         const TODO_SKIP_BECAUSE_INCORRECT_SIZE = (placement === PLACEMENT_INSIDE_RESPONSIVE_BOX);
         const testContext = `[placement: ${placement}]`;
 
