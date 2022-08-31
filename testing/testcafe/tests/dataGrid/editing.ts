@@ -1674,14 +1674,15 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
 test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const overlay = new Overlay();
-
-  const popupDataGridSelector = overlay.content.find(CLASS.dataGrid);
-  const popupDataGrid = new DataGrid(popupDataGridSelector);
 
   // act
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
+
+  const overlay = new Overlay();
+
+  const popupDataGridSelector = overlay.content.find(`.${CLASS.dataGrid}`);
+  const popupDataGrid = new DataGrid(popupDataGridSelector);
 
   await t
     .expect(popupDataGrid.getDataRow(0).element.exists)

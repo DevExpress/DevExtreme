@@ -49,6 +49,10 @@ export default class DataRow extends FocusableElement {
     return new CommandCell(this.element, index, this.widgetName);
   }
 
+  getDragCommand(): Selector {
+    return this.element.find('.dx-command-drag');
+  }
+
   getSelectCheckBox(): Selector {
     return this.element.find(`.${CLASS.selectCheckBox}`);
   }

@@ -251,7 +251,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
-  await t.drag(dataGrid.getDragCommand().nth(2), 500, 0);
+  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 500, 0);
 
   const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
     $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(0)`).css('pointer-events'),
@@ -347,7 +347,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
 
 test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.drag(dataGrid.getDragCommand().nth(0), 0, 100, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.01 });
 
   const lastRow = dataGrid.getDataRow(9);
 
@@ -389,9 +389,9 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
 // T1078513
 test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.drag(dataGrid.getDragCommand().nth(0), 0, 90, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
 
-  const headerRow = dataGrid.getHeaderRow();
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0).element;
 
   await t
     .expect(headerRow.exists)
@@ -442,7 +442,7 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 // T1078513
 test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.drag(dataGrid.getDragCommand().nth(0), 0, 90, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
 
   const footerRow = dataGrid.getFooterRow();
 

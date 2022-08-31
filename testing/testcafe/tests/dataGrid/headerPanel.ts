@@ -11,16 +11,13 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
   const dataGrid = new DataGrid('#container');
   const headerPanel = dataGrid.getHeaderPanel();
 
-  const selectPopup = headerPanel.getDropDownSelectPopup();
-
-  const popupContent = selectPopup.menuContent();
-  const editButton = selectPopup.editButton();
-  const menuItem = selectPopup.getSelectItem(1);
-
   // act
   await t.click(headerPanel.getDropDownMenuButton());
 
   // assert
+  const selectPopup = headerPanel.getDropDownSelectPopup();
+  const popupContent = selectPopup.menuContent();
+
   await t
     .expect(popupContent.exists)
     .ok()
@@ -28,9 +25,11 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
     .ok();
 
   // act
-  await t.click(editButton);
+  await t.click(selectPopup.editButton());
 
   // assert
+  const menuItem = selectPopup.getSelectItem(1);
+
   await t
     .expect(menuItem.exists)
     .ok()
