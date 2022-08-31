@@ -5,6 +5,7 @@ import {
 } from '../scrollableParts/scrollable.constants.js';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
+import devices from 'core/devices';
 
 import 'generic_light.css!';
 
@@ -79,6 +80,11 @@ QUnit.module('scrollToItem', {
     });
 
     configs.forEach(config => {
+        if(devices.real().deviceType !== 'desktop') {
+            // there is no specific for devices in these tests
+            return;
+        }
+
         config.keysToScroll.forEach(key => {
             QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
                 let completionCallback = null;
