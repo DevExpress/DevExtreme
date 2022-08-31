@@ -1173,6 +1173,29 @@ QUnit.module('Keyboard navigation', {
             clock.restore();
         }
     });
+
+    QUnit.test('upArrow with ctrl-key should increase zoomLevel option', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'month',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'year', 'zoomLevel option has been increased');
+    });
+
+    QUnit.test('upArrow with ctrl-key should not increase zoomLevel option if zoomLevel === maxZoomLevel', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'century',
+            maxZoomLevel: 'century',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'century', 'zoomLevel option has not been increased');
+    });
 });
 
 
@@ -2539,8 +2562,10 @@ QUnit.module('disabledDates option', {
 
         triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
         this.clock.tick(VIEW_ANIMATION_DURATION);
+
         triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
         this.clock.tick(VIEW_ANIMATION_DURATION);
+
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2021, 0, 7), 'closest date has been focused');
     });
 
