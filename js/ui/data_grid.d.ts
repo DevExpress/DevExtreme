@@ -153,6 +153,36 @@ export {
 } from '../common/grids';
 
 export {
+    AdaptiveDetailRowPreparingInfo,
+    ColumnBase,
+    ColumnButtonBase,
+    DataChangeInfo,
+    DataErrorOccurredInfo,
+    DragDropInfo,
+    DragReorderInfo,
+    DragStartEventInfo,
+    EditingBase,
+    EditingTextsBase,
+    KeyDownInfo,
+    NewRowInfo,
+    PagingBase,
+    RowDraggingEventInfo,
+    RowInsertedInfo,
+    RowInsertingInfo,
+    RowKeyInfo,
+    RowRemovedInfo,
+    RowRemovingInfo,
+    RowUpdatedInfo,
+    RowUpdatingInfo,
+    RowValidatingInfo,
+    SavingInfo,
+    ScrollingBase,
+    SelectionBase,
+    SelectionChangedInfo,
+    ToolbarPreparingInfo,
+} from '../common/grids';
+
+export {
     ExcelUnderlineType,
 } from '../exporter/excel/excel.doc_comments';
 
