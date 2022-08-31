@@ -12,7 +12,7 @@ test('Grouping Panel label should not overflow in a narrow grid (T1103925)', asy
   const dataGrid = new DataGrid('#container');
 
   await t
-    .expect(await takeScreenshot('groupingPanel', dataGrid.getToolbar().element))
+    .expect(await takeScreenshot('groupingPanel', dataGrid.getToolbar()))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

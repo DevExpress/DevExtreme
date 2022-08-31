@@ -2,7 +2,7 @@
 import { Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
-import { CellEditor } from './cell-editor';
+import { CellEditor } from './cellEditor';
 
 const CLASS = {
   hiddenColumn: 'hidden-column',

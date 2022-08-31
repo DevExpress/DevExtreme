@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
-import CommandCell from '../command-cell';
+import CommandCell from '../commandCell';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',

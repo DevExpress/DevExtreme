@@ -1,12 +1,10 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import { changeTheme } from '../../helpers/changeTheme';
-import { CLASS } from '../../model/dataGrid/toolbar-popup';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
@@ -73,7 +71,7 @@ test('Compact pager', async (t) => {
   const pager = dataGrid.getPager();
   await t
     .resizeWindow(350, 600);
-  const pageSizeWidget = new SelectBox(pager.getPageSizeWidget() as any);
+  const pageSizeWidget = new SelectBox(pager.getPageSizeSelect() as any);
   const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
@@ -174,6 +172,7 @@ test('Resize without navigation buttons', async (t) => {
 
 test("Changing pageSize to 'all' with rowRenderingMode='virtual' should work (T1090331)", async (t) => {
   const dataGrid = new DataGrid('#container');
+  const pager = dataGrid.getPager();
 
   await t
     .expect(dataGrid.option('paging.pageSize'))
@@ -183,8 +182,8 @@ test("Changing pageSize to 'all' with rowRenderingMode='virtual' should work (T1
 
   await dataGrid.scrollBy({ y: 100 });
 
-  await t.click(`.${CLASS.dropDownEditorButton}`);
-  await t.click(Selector(`.${CLASS.item}`).withText('All'));
+  await t.click(pager.getPageSizeSelect());
+  await t.click(pager.getPopupPageSizes().withText('All'));
 
   await t
     .expect(dataGrid.option('paging.pageSize'))
