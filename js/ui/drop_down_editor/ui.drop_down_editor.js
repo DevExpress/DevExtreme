@@ -643,17 +643,6 @@ const DropDownEditor = TextBox.inherit({
 
     _popupShownHandler: function() {
         this._openAction();
-
-        const $popupOverlayContent = this._popup.$overlayContent();
-        const position = locate($popupOverlayContent);
-
-        if(this._label.isVisible() && $popupOverlayContent.hasClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED)) {
-            const $label = this._label.$element();
-            move($popupOverlayContent, {
-                top: position.top - parseInt($label.css('fontSize'))
-            });
-        }
-
         this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 
