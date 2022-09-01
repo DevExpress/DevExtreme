@@ -77,6 +77,7 @@ import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
+import { customizeDataSourceLoadOptions } from '../../renovation/ui/scheduler/dataSource/customizeDataSourceLoadOptions';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -949,6 +950,8 @@ class Scheduler extends Widget {
 
         this._initDataSource();
 
+        this._initDataSourceLoadOptions();
+
         this.$element().addClass(WIDGET_CLASS);
 
         this._initEditing();
@@ -997,6 +1000,13 @@ class Scheduler extends Widget {
         if(this.getWorkSpace()) {
             this.createAppointmentDataProvider();
         }
+    }
+
+    _initDataSourceLoadOptions() {
+        customizeDataSourceLoadOptions(this._dataSource, {
+            startDate: this.getStartViewDate.bind(this),
+            endDate: this.getEndViewDate.bind(this),
+        });
     }
 
     _initTemplates() {
