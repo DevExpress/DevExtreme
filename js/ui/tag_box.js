@@ -1373,8 +1373,6 @@ const TagBox = SelectBox.inherit({
         }
 
         const dataController = this._dataController;
-
-
         const valueGetterExpr = this._valueGetterExpr();
 
         if(isString(valueGetterExpr) && valueGetterExpr !== 'this') {
@@ -1387,7 +1385,6 @@ const TagBox = SelectBox.inherit({
             this._userFilter && filter.push(this._userFilter);
 
             filter.length ? dataController.filter(filter) : dataController.filter(null);
-
         } else {
             dataController.filter(this._dataSourceFilterFunction.bind(this));
         }
