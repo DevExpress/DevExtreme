@@ -6,6 +6,7 @@ import CommandCell from '../commandCell';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',
+  commandDrag: 'dx-command-drag',
   focusedRow: 'dx-row-focused',
   rowRemoved: 'dx-row-removed',
   selection: 'dx-selection',
@@ -50,7 +51,7 @@ export default class DataRow extends FocusableElement {
   }
 
   getDragCommand(): Selector {
-    return this.element.find('.dx-command-drag');
+    return this.element.find(`.${CLASS.commandDrag}`);
   }
 
   getSelectCheckBox(): Selector {

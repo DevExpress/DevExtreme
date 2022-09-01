@@ -44,6 +44,10 @@ export default class DataCell extends FocusableElement {
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 
+  static getModifiedCells(): Selector {
+    return Selector(CLASS.cellModified);
+  }
+
   getEditor(): CellEditor {
     return new CellEditor(this.element.find(`.${CLASS.editorInput}, .${CLASS.checkbox}`));
   }
@@ -54,9 +58,5 @@ export default class DataCell extends FocusableElement {
 
   getLinkEdit(): Selector {
     return this.element.find(`.${CLASS.linkEdit}`);
-  }
-
-  static getModifiedCells(): Selector {
-    return Selector(CLASS.cellModified);
   }
 }
