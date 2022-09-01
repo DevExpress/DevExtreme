@@ -9,14 +9,12 @@ const CLASS = {
 };
 
 export class Overlay {
-  element: Selector = Selector(`.${CLASS.overlayWrapper}`);
+  element: Selector;
 
   content: Selector;
 
-  constructor(id?: Selector | string) {
-    if (id) {
-      this.element = typeof id === 'string' ? Selector(id) : id;
-    }
+  constructor(id?: Selector) {
+    this.element = id ?? Selector(`.${CLASS.overlayWrapper}`);
 
     this.content = this.element.find(`.${CLASS.overlayContent}`);
   }

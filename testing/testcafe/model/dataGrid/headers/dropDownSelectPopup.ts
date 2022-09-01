@@ -28,7 +28,7 @@ export class DropDownSelectPopup {
     return this.menu.find(`.${CLASS.editorButton}`);
   }
 
-  getSelectItem(ind: number): Selector {
-    return this.select.find(`.${CLASS.item}.${CLASS.listItem}`).nth(ind);
+  getSelectItem(index: number): Selector {
+    return this.select.find(`.${CLASS.item}.${CLASS.listItem}`).nth(index);
   }
 }

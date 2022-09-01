@@ -138,7 +138,7 @@ export default class DataGrid extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getFooterRow(): Selector {
-    return Selector(`tr.${CLASS.footerRow}`);
+    return this.element.find(`.${CLASS.footerRow}`);
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
