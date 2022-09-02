@@ -5,6 +5,7 @@ import PivotGrid, {
   FieldPanel,
   Export,
 } from 'devextreme-react/pivot-grid';
+import CheckBox from 'devextreme-react/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
@@ -39,11 +40,20 @@ const dataSource = new PivotGridDataSource({
     summaryType: 'sum',
     format: 'currency',
     area: 'data',
+  }, {
+    caption: 'Country',
+    dataField: 'country',
+    area: 'filter',
   }],
   store: sales,
 });
 
 export default function App() {
+  const [exportDataFieldHeaders, setExportDataFieldHeaders] = React.useState(false);
+  const [exportRowFieldHeaders, setExportRowFieldHeaders] = React.useState(false);
+  const [exportColumnFieldHeaders, setExportColumnFieldHeaders] = React.useState(false);
+  const [exportFilterFieldHeaders, setExportFilterFieldHeaders] = React.useState(false);
+
   const onExporting = React.useCallback((e) => {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Sales');
@@ -57,6 +67,10 @@ export default function App() {
       worksheet,
       topLeftCell: { row: 4, column: 1 },
       keepColumnWidths: false,
+      exportDataFieldHeaders,
+      exportRowFieldHeaders,
+      exportColumnFieldHeaders,
+      exportFilterFieldHeaders,
     }).then((cellRange) => {
       // Header
       const headerRow = worksheet.getRow(2);
@@ -85,6 +99,22 @@ export default function App() {
     e.cancel = true;
   });
 
+  const onExportDataFieldHeadersChanged = React.useCallback(({ value }) => {
+    setExportDataFieldHeaders(value);
+  }, [exportDataFieldHeaders, setExportDataFieldHeaders]);
+
+  const onExportRowFieldHeadersChanged = React.useCallback(({ value }) => {
+    setExportRowFieldHeaders(value);
+  }, [exportRowFieldHeaders, setExportRowFieldHeaders]);
+
+  const onExportColumnFieldHeadersChanged = React.useCallback(({ value }) => {
+    setExportColumnFieldHeaders(value);
+  }, [exportColumnFieldHeaders, setExportColumnFieldHeaders]);
+
+  const onExportFilterFieldHeadersChanged = React.useCallback(({ value }) => {
+    setExportFilterFieldHeaders(value);
+  }, [exportFilterFieldHeaders, setExportFilterFieldHeaders]);
+
   return (
     <React.Fragment>
       <div className="long-title">
@@ -102,13 +132,34 @@ export default function App() {
           showDataFields={true}
           showRowFields={true}
           showColumnFields={true}
-          showFilterFields={false}
-          allowFieldDragging={false}
+          showFilterFields={true}
+          allowFieldDragging={true}
           visible={true}>
         </FieldPanel>
         <FieldChooser enabled={false} />
         <Export enabled={true} />
       </PivotGrid>
+      <div className="export-options">
+        <div className="caption">Export Options</div>
+        <div className="options">
+          <CheckBox id="export-data-field-headers"
+            value={exportDataFieldHeaders}
+            onValueChanged={onExportDataFieldHeadersChanged}
+            text="Export Data Field Headers" />
+          <CheckBox id="export-row-field-headers"
+            value={exportRowFieldHeaders}
+            onValueChanged={onExportRowFieldHeadersChanged}
+            text="Export Row Field Headers" />
+          <CheckBox id="export-column-field-headers"
+            value={exportColumnFieldHeaders}
+            onValueChanged={onExportColumnFieldHeadersChanged}
+            text="Export Column Field Headers" />
+          <CheckBox id="export-filter-field-headers"
+            value={exportFilterFieldHeaders}
+            onValueChanged={onExportFilterFieldHeadersChanged}
+            text="Export Filter Field Headers" />
+        </div>
+      </div>
     </React.Fragment>
   );
 }

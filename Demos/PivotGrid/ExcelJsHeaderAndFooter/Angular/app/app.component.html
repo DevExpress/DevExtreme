@@ -13,11 +13,33 @@
     [showDataFields]="true"
     [showRowFields]="true"
     [showColumnFields]="true"
-    [showFilterFields]="false"
-    [allowFieldDragging]="false"
+    [showFilterFields]="true"
+    [allowFieldDragging]="true"
     [visible]="true"
   >
   </dxo-field-panel>
   <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
   <dxo-export [enabled]="true"></dxo-export>
 </dx-pivot-grid>
+
+<div class="export-options">
+  <div class="caption">Export Options</div>
+  <div class="options">
+    <dx-check-box
+      text="Export Data Field Headers"
+      [(value)]="exportDataFieldHeaders"
+    ></dx-check-box>
+    <dx-check-box
+      text="Export Row Field Headers"
+      [(value)]="exportRowFieldHeaders"
+    ></dx-check-box>
+    <dx-check-box
+      text="Export Column Field Headers"
+      [(value)]="exportColumnFieldHeaders"
+    ></dx-check-box>
+    <dx-check-box
+      text="Export Filter Field Headers"
+      [(value)]="exportFilterFieldHeaders"
+    ></dx-check-box>
+  </div>
+</div>

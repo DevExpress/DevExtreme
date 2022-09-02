@@ -1,4 +1,11 @@
 $(() => {
+  const exportHeaderOptions = {
+    exportRowFieldHeaders: false,
+    exportColumnFieldHeaders: false,
+    exportDataFieldHeaders: false,
+    exportFilterFieldHeaders: false,
+  };
+
   $('#sales').dxPivotGrid({
     allowSorting: true,
     allowFiltering: true,
@@ -7,9 +14,9 @@ $(() => {
     fieldPanel: {
       showColumnFields: true,
       showDataFields: true,
-      showFilterFields: false,
+      showFilterFields: true,
       showRowFields: true,
-      allowFieldDragging: false,
+      allowFieldDragging: true,
       visible: true,
     },
     fieldChooser: {
@@ -43,6 +50,10 @@ $(() => {
         summaryType: 'sum',
         format: 'currency',
         area: 'data',
+      }, {
+        caption: 'Country',
+        dataField: 'country',
+        area: 'filter',
       }],
       store: sales,
     },
@@ -59,6 +70,7 @@ $(() => {
         worksheet,
         topLeftCell: { row: 4, column: 1 },
         keepColumnWidths: false,
+        ...exportHeaderOptions,
       }).then((cellRange) => {
         // Header
         const headerRow = worksheet.getRow(2);
@@ -85,6 +97,38 @@ $(() => {
         });
       });
       e.cancel = true;
+    },
+  });
+
+  $('#export-data-field-headers').dxCheckBox({
+    text: 'Export Data Field Headers',
+    value: false,
+    onValueChanged({ value }) {
+      exportHeaderOptions.exportDataFieldHeaders = value;
+    },
+  });
+
+  $('#export-row-field-headers').dxCheckBox({
+    text: 'Export Row Field Headers',
+    value: false,
+    onValueChanged({ value }) {
+      exportHeaderOptions.exportRowFieldHeaders = value;
+    },
+  });
+
+  $('#export-column-field-headers').dxCheckBox({
+    text: 'Export Column Field Headers',
+    value: false,
+    onValueChanged({ value }) {
+      exportHeaderOptions.exportColumnFieldHeaders = value;
+    },
+  });
+
+  $('#export-filter-field-headers').dxCheckBox({
+    text: 'Export Filter Field Headers',
+    value: false,
+    onValueChanged({ value }) {
+      exportHeaderOptions.exportFilterFieldHeaders = value;
     },
   });
 });
