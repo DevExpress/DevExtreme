@@ -187,4 +187,61 @@ declare module DevExpress.ui {
 
     /** @deprecated Use DevExpress.ui.dxTreeViewItem */
     export type dxTreeViewItemTemplate = DevExpress.ui.dxTreeViewItem;
+
+    export module dxDataGrid {
+
+        /** @deprecated Use DevExpress.common.grids.ColumnChooser instead */
+        export type ColumnChooser = DevExpress.common.grids.ColumnChooser;
+
+        /** @deprecated Use DevExpress.common.grids.ColumnCustomizeTextArg instead */
+        export type ColumnCustomizeTextArg = DevExpress.common.grids.ColumnCustomizeTextArg;
+
+        /** @deprecated Use DevExpress.common.grids.ColumnFixing instead */
+        export type ColumnFixing = DevExpress.common.grids.ColumnFixing;
+
+        /** @deprecated Use DevExpress.common.grids.ColumnFixingTexts instead */
+        export type ColumnFixingTexts = DevExpress.common.grids.ColumnFixingTexts;
+
+        /** @deprecated Use DevExpress.common.grids.ColumnHeaderFilter instead */
+        export type ColumnHeaderFilter = DevExpress.common.grids.ColumnHeaderFilter;
+
+        /** @deprecated Use DevExpress.common.grids.ColumnLookup instead */
+        export type ColumnLookup = DevExpress.common.grids.ColumnLookup;
+
+        /** @deprecated Use DevExpress.common.grids.DataChange instead */
+        export type DataChange = DevExpress.common.grids.DataChange;
+
+        /** @deprecated Use DevExpress.common.grids.FilterPanelTexts instead */
+        export type FilterPanelTexts = DevExpress.common.grids.FilterPanelTexts;
+
+        /** @deprecated Use DevExpress.common.grids.FilterRow instead */
+        export type FilterRow = DevExpress.common.grids.FilterRow;
+
+        /** @deprecated Use DevExpress.common.grids.FilterRowOperationDescriptions instead */
+        export type FilterRowOperationDescriptions = DevExpress.common.grids.FilterRowOperationDescriptions;
+
+        /** @deprecated Use DevExpress.common.grids.HeaderFilter instead */
+        export type HeaderFilter = DevExpress.common.grids.HeaderFilter;
+
+        /** @deprecated Use DevExpress.common.grids.HeaderFilterTexts instead */
+        export type HeaderFilterTexts = DevExpress.common.grids.HeaderFilterTexts;
+
+        /** @deprecated Use DevExpress.common.grids.KeyboardNavigation instead */
+        export type KeyboardNavigation = DevExpress.common.grids.KeyboardNavigation;
+
+        /** @deprecated Use DevExpress.common.grids.LoadPanel instead */
+        export type LoadPanel = DevExpress.common.grids.LoadPanel;
+
+        /** @deprecated Use DevExpress.common.grids.Pager instead */
+        export type Pager = DevExpress.common.grids.Pager;
+
+        /** @deprecated Use DevExpress.common.grids.SearchPanel instead */
+        export type SearchPanel = DevExpress.common.grids.SearchPanel;
+
+        /** @deprecated Use DevExpress.common.grids.Sorting instead */
+        export type Sorting = DevExpress.common.grids.Sorting;
+
+        /** @deprecated Use DevExpress.common.grids.StateStoring instead */
+        export type StateStoring = DevExpress.common.grids.StateStoring;
+    }
 }

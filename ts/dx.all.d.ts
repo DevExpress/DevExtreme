@@ -1653,6 +1653,468 @@ declare module DevExpress.common.charts {
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
 }
+declare module DevExpress.common.grids {
+  export interface ColumnChooser {
+    /**
+     * [descr:GridBaseOptions.columnChooser.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser.emptyPanelText]
+     */
+    emptyPanelText?: string;
+    /**
+     * [descr:GridBaseOptions.columnChooser.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnChooser.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.mode]
+     */
+    mode?: DevExpress.common.charts.ColumnChooserMode;
+    /**
+     * [descr:GridBaseOptions.columnChooser.searchTimeout]
+     */
+    searchTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.title]
+     */
+    title?: string;
+    /**
+     * [descr:GridBaseOptions.columnChooser.width]
+     */
+    width?: number;
+    /**
+     * [descr:GridBaseOptions.columnChooser.sortOrder]
+     */
+    sortOrder?: SortOrder;
+  }
+  export interface ColumnCustomizeTextArg {
+    value?: string | number | Date;
+    valueText?: string;
+    target?: string;
+    groupInterval?: string | number;
+  }
+  export interface ColumnFixing {
+    /**
+     * [descr:GridBaseOptions.columnFixing.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts]
+     */
+    texts?: ColumnFixingTexts;
+  }
+  export interface ColumnFixingTexts {
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.fix]
+     */
+    fix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.leftPosition]
+     */
+    leftPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.rightPosition]
+     */
+    rightPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.unfix]
+     */
+    unfix?: string;
+  }
+  export interface ColumnHeaderFilter {
+    /**
+     * [descr:GridBaseColumn.headerFilter.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseColumn.headerFilter.dataSource]
+     */
+    dataSource?:
+      | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+      | ((options: {
+          component?: any;
+          dataSource?: DevExpress.data.DataSource.Options | null;
+        }) => void);
+    /**
+     * [descr:GridBaseColumn.headerFilter.groupInterval]
+     */
+    groupInterval?: DevExpress.ui.dxDataGrid.HeaderFilterGroupInterval | number;
+    /**
+     * [descr:GridBaseColumn.headerFilter.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseColumn.headerFilter.searchMode]
+     */
+    searchMode?: SearchMode;
+    /**
+     * [descr:GridBaseColumn.headerFilter.width]
+     */
+    width?: number;
+  }
+  export interface ColumnLookup {
+    /**
+     * [descr:GridBaseColumn.lookup.allowClearing]
+     */
+    allowClearing?: boolean;
+    /**
+     * [descr:GridBaseColumn.lookup.dataSource]
+     */
+    dataSource?:
+      | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
+      | ((options: {
+          data?: any;
+          key?: any;
+        }) => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>)
+      | null;
+    /**
+     * [descr:GridBaseColumn.lookup.displayExpr]
+     */
+    displayExpr?: string | ((data: any) => string);
+    /**
+     * [descr:GridBaseColumn.lookup.valueExpr]
+     */
+    valueExpr?: string;
+    /**
+     * [descr:GridBaseColumn.lookup.calculateCellValue]
+     */
+    calculateCellValue?: (rowData: any) => any;
+  }
+  /**
+   * [descr:DataChange]
+   */
+  export interface DataChange<TRowData = any, TKey = any> {
+    /**
+     * [descr:DataChange.key]
+     */
+    key: TKey;
+    /**
+     * [descr:DataChange.type]
+     */
+    type: DevExpress.common.charts.DataChangeType;
+    /**
+     * [descr:DataChange.data]
+     */
+    data: DevExpress.core.DeepPartial<TRowData>;
+    /**
+     * [descr:DataChange.insertAfterKey]
+     */
+    insertAfterKey?: TKey;
+    /**
+     * [descr:DataChange.insertBeforeKey]
+     */
+    insertBeforeKey?: TKey;
+  }
+  export interface FilterPanelTexts {
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
+     */
+    clearFilter?: string;
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts.createFilter]
+     */
+    createFilter?: string;
+    /**
+     * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
+     */
+    filterEnabledHint?: string;
+  }
+  export interface FilterRow {
+    /**
+     * [descr:GridBaseOptions.filterRow.applyFilter]
+     */
+    applyFilter?: DevExpress.common.charts.ApplyFilterMode;
+    /**
+     * [descr:GridBaseOptions.filterRow.applyFilterText]
+     */
+    applyFilterText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.betweenEndText]
+     */
+    betweenEndText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.betweenStartText]
+     */
+    betweenStartText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions]
+     */
+    operationDescriptions?: FilterRowOperationDescriptions;
+    /**
+     * [descr:GridBaseOptions.filterRow.resetOperationText]
+     */
+    resetOperationText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.showAllText]
+     */
+    showAllText?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.showOperationChooser]
+     */
+    showOperationChooser?: boolean;
+    /**
+     * [descr:GridBaseOptions.filterRow.visible]
+     */
+    visible?: boolean;
+  }
+  export interface FilterRowOperationDescriptions {
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
+     */
+    between?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.contains]
+     */
+    contains?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.endsWith]
+     */
+    endsWith?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.equal]
+     */
+    equal?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThan]
+     */
+    greaterThan?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual]
+     */
+    greaterThanOrEqual?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThan]
+     */
+    lessThan?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual]
+     */
+    lessThanOrEqual?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.notContains]
+     */
+    notContains?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.notEqual]
+     */
+    notEqual?: string;
+    /**
+     * [descr:GridBaseOptions.filterRow.operationDescriptions.startsWith]
+     */
+    startsWith?: string;
+  }
+  export interface HeaderFilter {
+    /**
+     * [descr:GridBaseOptions.headerFilter.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:GridBaseOptions.headerFilter.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseOptions.headerFilter.searchTimeout]
+     */
+    searchTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts]
+     */
+    texts?: HeaderFilterTexts;
+    /**
+     * [descr:GridBaseOptions.headerFilter.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:GridBaseOptions.headerFilter.width]
+     */
+    width?: number;
+  }
+  export interface HeaderFilterTexts {
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts.cancel]
+     */
+    cancel?: string;
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
+     */
+    emptyValue?: string;
+    /**
+     * [descr:GridBaseOptions.headerFilter.texts.ok]
+     */
+    ok?: string;
+  }
+  export interface KeyboardNavigation {
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
+     */
+    editOnKeyPress?: boolean;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
+     */
+    enterKeyAction?: DevExpress.common.charts.EnterKeyAction;
+    /**
+     * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
+     */
+    enterKeyDirection?: DevExpress.common.charts.EnterKeyDirection;
+  }
+  export interface LoadPanel {
+    /**
+     * [descr:GridBaseOptions.loadPanel.enabled]
+     */
+    enabled?: boolean | Mode;
+    /**
+     * [descr:GridBaseOptions.loadPanel.height]
+     */
+    height?: number;
+    /**
+     * [descr:GridBaseOptions.loadPanel.indicatorSrc]
+     */
+    indicatorSrc?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.shading]
+     */
+    shading?: boolean;
+    /**
+     * [descr:GridBaseOptions.loadPanel.shadingColor]
+     */
+    shadingColor?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.showIndicator]
+     */
+    showIndicator?: boolean;
+    /**
+     * [descr:GridBaseOptions.loadPanel.showPane]
+     */
+    showPane?: boolean;
+    /**
+     * [descr:GridBaseOptions.loadPanel.text]
+     */
+    text?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.width]
+     */
+    width?: number;
+  }
+  export interface Pager {
+    /**
+     * [descr:GridBaseOptions.pager.allowedPageSizes]
+     */
+    allowedPageSizes?:
+      | Array<number | DevExpress.common.charts.PagerPageSize>
+      | Mode;
+    /**
+     * [descr:GridBaseOptions.pager.displayMode]
+     */
+    displayMode?: DevExpress.common.charts.PagerDisplayMode;
+    /**
+     * [descr:GridBaseOptions.pager.infoText]
+     */
+    infoText?: string;
+    /**
+     * [descr:GridBaseOptions.pager.showInfo]
+     */
+    showInfo?: boolean;
+    /**
+     * [descr:GridBaseOptions.pager.showNavigationButtons]
+     */
+    showNavigationButtons?: boolean;
+    /**
+     * [descr:GridBaseOptions.pager.showPageSizeSelector]
+     */
+    showPageSizeSelector?: boolean;
+    /**
+     * [descr:GridBaseOptions.pager.visible]
+     */
+    visible?: boolean | Mode;
+  }
+  export interface SearchPanel {
+    /**
+     * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
+     */
+    highlightCaseSensitive?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.highlightSearchText]
+     */
+    highlightSearchText?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.placeholder]
+     */
+    placeholder?: string;
+    /**
+     * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
+     */
+    searchVisibleColumnsOnly?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.text]
+     */
+    text?: string;
+    /**
+     * [descr:GridBaseOptions.searchPanel.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:GridBaseOptions.searchPanel.width]
+     */
+    width?: number;
+  }
+  export interface Sorting {
+    /**
+     * [descr:GridBaseOptions.sorting.ascendingText]
+     */
+    ascendingText?: string;
+    /**
+     * [descr:GridBaseOptions.sorting.clearText]
+     */
+    clearText?: string;
+    /**
+     * [descr:GridBaseOptions.sorting.descendingText]
+     */
+    descendingText?: string;
+    /**
+     * [descr:GridBaseOptions.sorting.mode]
+     */
+    mode?: SingleMultipleOrNone;
+    /**
+     * [descr:GridBaseOptions.sorting.showSortIndexes]
+     */
+    showSortIndexes?: boolean;
+  }
+  export interface StateStoring {
+    /**
+     * [descr:GridBaseOptions.stateStoring.customLoad]
+     */
+    customLoad?: () => PromiseLike<any>;
+    /**
+     * [descr:GridBaseOptions.stateStoring.customSave]
+     */
+    customSave?: (gridState: any) => any;
+    /**
+     * [descr:GridBaseOptions.stateStoring.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:GridBaseOptions.stateStoring.savingTimeout]
+     */
+    savingTimeout?: number;
+    /**
+     * [descr:GridBaseOptions.stateStoring.storageKey]
+     */
+    storageKey?: string;
+    /**
+     * [descr:GridBaseOptions.stateStoring.type]
+     */
+    type?: DevExpress.common.charts.StateStoreType;
+  }
+}
 declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -6518,7 +6980,9 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.customizeText]
        */
-      customizeText?: (cellInfo: ColumnCustomizeTextArg) => string;
+      customizeText?: (
+        cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
+      ) => string;
       /**
        * [descr:GridBaseColumn.dataField]
        */
@@ -6576,7 +7040,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.headerFilter]
        */
-      headerFilter?: ColumnHeaderFilter;
+      headerFilter?: DevExpress.common.grids.ColumnHeaderFilter;
       /**
        * [descr:GridBaseColumn.hidingPriority]
        */
@@ -6588,7 +7052,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.lookup]
        */
-      lookup?: ColumnLookup;
+      lookup?: DevExpress.common.grids.ColumnLookup;
       /**
        * [descr:GridBaseColumn.minWidth]
        */
@@ -6728,56 +7192,6 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ColumnChooser {
-      /**
-       * [descr:GridBaseOptions.columnChooser.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseOptions.columnChooser.emptyPanelText]
-       */
-      emptyPanelText?: string;
-      /**
-       * [descr:GridBaseOptions.columnChooser.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.columnChooser.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseOptions.columnChooser.mode]
-       */
-      mode?: DevExpress.common.charts.ColumnChooserMode;
-      /**
-       * [descr:GridBaseOptions.columnChooser.searchTimeout]
-       */
-      searchTimeout?: number;
-      /**
-       * [descr:GridBaseOptions.columnChooser.title]
-       */
-      title?: string;
-      /**
-       * [descr:GridBaseOptions.columnChooser.width]
-       */
-      width?: number;
-      /**
-       * [descr:GridBaseOptions.columnChooser.sortOrder]
-       */
-      sortOrder?: DevExpress.common.SortOrder;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ColumnCustomizeTextArg {
-      value?: string | number | Date;
-      valueText?: string;
-      target?: string;
-      groupInterval?: string | number;
-    }
     export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
       readonly setValue?: any;
       readonly data?: TRowData;
@@ -6792,40 +7206,6 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ColumnFixing {
-      /**
-       * [descr:GridBaseOptions.columnFixing.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts]
-       */
-      texts?: ColumnFixingTexts;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ColumnFixingTexts {
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.fix]
-       */
-      fix?: string;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.leftPosition]
-       */
-      leftPosition?: string;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.rightPosition]
-       */
-      rightPosition?: string;
-      /**
-       * [descr:GridBaseOptions.columnFixing.texts.unfix]
-       */
-      unfix?: string;
-    }
     export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
       readonly data?: GroupData<TRowData>;
       readonly component: dxDataGrid<TRowData, TKey>;
@@ -6845,71 +7225,6 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly column: Column<TRowData, TKey>;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ColumnHeaderFilter {
-      /**
-       * [descr:GridBaseColumn.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseColumn.headerFilter.dataSource]
-       */
-      dataSource?:
-        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
-        | ((options: {
-            component?: any;
-            dataSource?: DevExpress.data.DataSource.Options | null;
-          }) => void);
-      /**
-       * [descr:GridBaseColumn.headerFilter.groupInterval]
-       */
-      groupInterval?: HeaderFilterGroupInterval | number;
-      /**
-       * [descr:GridBaseColumn.headerFilter.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseColumn.headerFilter.searchMode]
-       */
-      searchMode?: DevExpress.common.SearchMode;
-      /**
-       * [descr:GridBaseColumn.headerFilter.width]
-       */
-      width?: number;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ColumnLookup {
-      /**
-       * [descr:GridBaseColumn.lookup.allowClearing]
-       */
-      allowClearing?: boolean;
-      /**
-       * [descr:GridBaseColumn.lookup.dataSource]
-       */
-      dataSource?:
-        | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
-        | ((options: {
-            data?: any;
-            key?: any;
-          }) => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>)
-        | null;
-      /**
-       * [descr:GridBaseColumn.lookup.displayExpr]
-       */
-      displayExpr?: string | ((data: any) => string);
-      /**
-       * [descr:GridBaseColumn.lookup.valueExpr]
-       */
-      valueExpr?: string;
-      /**
-       * [descr:GridBaseColumn.lookup.calculateCellValue]
-       */
-      calculateCellValue?: (rowData: any) => any;
-    }
     export type ColumnResizeMode = 'nextColumn' | 'widget';
     export type ContentReadyEvent<
       TRowData = any,
@@ -6939,7 +7254,9 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface DataChangeInfo<TRowData = any, TKey = any> {
-      readonly changes: Array<DataChange<TRowData, TKey>>;
+      readonly changes: Array<
+        DevExpress.common.grids.DataChange<TRowData, TKey>
+      >;
     }
     export type DataErrorOccurredEvent<
       TRowData = any,
@@ -7102,7 +7419,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.changes]
        */
-      changes?: Array<DataChange<TRowData, TKey>>;
+      changes?: Array<DevExpress.common.grids.DataChange<TRowData, TKey>>;
       /**
        * [descr:GridBaseOptions.editing.editColumnName]
        */
@@ -7480,7 +7797,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.filterPanel.texts]
        */
-      texts?: FilterPanelTexts;
+      texts?: DevExpress.common.grids.FilterPanelTexts;
       /**
        * [descr:GridBaseOptions.filterPanel.visible]
        */
@@ -7493,113 +7810,6 @@ declare module DevExpress.ui {
       readonly component: T;
       readonly filterValue: any;
       readonly text: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface FilterPanelTexts {
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
-       */
-      clearFilter?: string;
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts.createFilter]
-       */
-      createFilter?: string;
-      /**
-       * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
-       */
-      filterEnabledHint?: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface FilterRow {
-      /**
-       * [descr:GridBaseOptions.filterRow.applyFilter]
-       */
-      applyFilter?: DevExpress.common.charts.ApplyFilterMode;
-      /**
-       * [descr:GridBaseOptions.filterRow.applyFilterText]
-       */
-      applyFilterText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.betweenEndText]
-       */
-      betweenEndText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.betweenStartText]
-       */
-      betweenStartText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions]
-       */
-      operationDescriptions?: FilterRowOperationDescriptions;
-      /**
-       * [descr:GridBaseOptions.filterRow.resetOperationText]
-       */
-      resetOperationText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.showAllText]
-       */
-      showAllText?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.showOperationChooser]
-       */
-      showOperationChooser?: boolean;
-      /**
-       * [descr:GridBaseOptions.filterRow.visible]
-       */
-      visible?: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface FilterRowOperationDescriptions {
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
-       */
-      between?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.contains]
-       */
-      contains?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.endsWith]
-       */
-      endsWith?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.equal]
-       */
-      equal?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThan]
-       */
-      greaterThan?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual]
-       */
-      greaterThanOrEqual?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThan]
-       */
-      lessThan?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual]
-       */
-      lessThanOrEqual?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.notContains]
-       */
-      notContains?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.notEqual]
-       */
-      notEqual?: string;
-      /**
-       * [descr:GridBaseOptions.filterRow.operationDescriptions.startsWith]
-       */
-      startsWith?: string;
     }
     export type FocusedCellChangedEvent<
       TRowData = any,
@@ -7735,35 +7945,6 @@ declare module DevExpress.ui {
        */
       visible?: boolean | DevExpress.common.Mode;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface HeaderFilter {
-      /**
-       * [descr:GridBaseOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
-       * [descr:GridBaseOptions.headerFilter.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseOptions.headerFilter.searchTimeout]
-       */
-      searchTimeout?: number;
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts]
-       */
-      texts?: HeaderFilterTexts;
-      /**
-       * [descr:GridBaseOptions.headerFilter.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:GridBaseOptions.headerFilter.width]
-       */
-      width?: number;
-    }
     export type HeaderFilterGroupInterval =
       | 'day'
       | 'hour'
@@ -7772,23 +7953,6 @@ declare module DevExpress.ui {
       | 'quarter'
       | 'second'
       | 'year';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface HeaderFilterTexts {
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts.cancel]
-       */
-      cancel?: string;
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
-       */
-      emptyValue?: string;
-      /**
-       * [descr:GridBaseOptions.headerFilter.texts.ok]
-       */
-      ok?: string;
-    }
     export type InitializedEvent<
       TRowData = any,
       TKey = any
@@ -7798,27 +7962,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       NewRowInfo<TRowData>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface KeyboardNavigation {
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
-       */
-      editOnKeyPress?: boolean;
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
-       */
-      enterKeyAction?: DevExpress.common.charts.EnterKeyAction;
-      /**
-       * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
-       */
-      enterKeyDirection?: DevExpress.common.charts.EnterKeyDirection;
-    }
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
@@ -7832,47 +7975,6 @@ declare module DevExpress.ui {
      */
     export interface KeyDownInfo {
       handled: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface LoadPanel {
-      /**
-       * [descr:GridBaseOptions.loadPanel.enabled]
-       */
-      enabled?: boolean | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.loadPanel.height]
-       */
-      height?: number;
-      /**
-       * [descr:GridBaseOptions.loadPanel.indicatorSrc]
-       */
-      indicatorSrc?: string;
-      /**
-       * [descr:GridBaseOptions.loadPanel.shading]
-       */
-      shading?: boolean;
-      /**
-       * [descr:GridBaseOptions.loadPanel.shadingColor]
-       */
-      shadingColor?: string;
-      /**
-       * [descr:GridBaseOptions.loadPanel.showIndicator]
-       */
-      showIndicator?: boolean;
-      /**
-       * [descr:GridBaseOptions.loadPanel.showPane]
-       */
-      showPane?: boolean;
-      /**
-       * [descr:GridBaseOptions.loadPanel.text]
-       */
-      text?: string;
-      /**
-       * [descr:GridBaseOptions.loadPanel.width]
-       */
-      width?: number;
     }
     export type MasterDetail<TRowData = any, TKey = any> = {
       /**
@@ -7910,41 +8012,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Pager {
-      /**
-       * [descr:GridBaseOptions.pager.allowedPageSizes]
-       */
-      allowedPageSizes?:
-        | Array<number | DevExpress.common.charts.PagerPageSize>
-        | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.pager.displayMode]
-       */
-      displayMode?: DevExpress.common.charts.PagerDisplayMode;
-      /**
-       * [descr:GridBaseOptions.pager.infoText]
-       */
-      infoText?: string;
-      /**
-       * [descr:GridBaseOptions.pager.showInfo]
-       */
-      showInfo?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.showNavigationButtons]
-       */
-      showNavigationButtons?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.showPageSizeSelector]
-       */
-      showPageSizeSelector?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.visible]
-       */
-      visible?: boolean | DevExpress.common.Mode;
-    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -8428,7 +8495,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface SavingInfo<TRowData = any, TKey = any> {
-      changes: Array<DataChange<TRowData, TKey>>;
+      changes: Array<DevExpress.common.grids.DataChange<TRowData, TKey>>;
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
@@ -8485,39 +8552,6 @@ declare module DevExpress.ui {
        */
       renderAsync?: boolean;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface SearchPanel {
-      /**
-       * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
-       */
-      highlightCaseSensitive?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.highlightSearchText]
-       */
-      highlightSearchText?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.placeholder]
-       */
-      placeholder?: string;
-      /**
-       * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
-       */
-      searchVisibleColumnsOnly?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.text]
-       */
-      text?: string;
-      /**
-       * [descr:GridBaseOptions.searchPanel.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:GridBaseOptions.searchPanel.width]
-       */
-      width?: number;
-    }
     export type Selection = SelectionBase & {
       /**
        * [descr:dxDataGridOptions.selection.deferred]
@@ -8558,60 +8592,6 @@ declare module DevExpress.ui {
       readonly currentDeselectedRowKeys: Array<TKey>;
       readonly selectedRowKeys: Array<TKey>;
       readonly selectedRowsData: Array<TRowData>;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Sorting {
-      /**
-       * [descr:GridBaseOptions.sorting.ascendingText]
-       */
-      ascendingText?: string;
-      /**
-       * [descr:GridBaseOptions.sorting.clearText]
-       */
-      clearText?: string;
-      /**
-       * [descr:GridBaseOptions.sorting.descendingText]
-       */
-      descendingText?: string;
-      /**
-       * [descr:GridBaseOptions.sorting.mode]
-       */
-      mode?: DevExpress.common.SingleMultipleOrNone;
-      /**
-       * [descr:GridBaseOptions.sorting.showSortIndexes]
-       */
-      showSortIndexes?: boolean;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface StateStoring {
-      /**
-       * [descr:GridBaseOptions.stateStoring.customLoad]
-       */
-      customLoad?: () => PromiseLike<any>;
-      /**
-       * [descr:GridBaseOptions.stateStoring.customSave]
-       */
-      customSave?: (gridState: any) => any;
-      /**
-       * [descr:GridBaseOptions.stateStoring.enabled]
-       */
-      enabled?: boolean;
-      /**
-       * [descr:GridBaseOptions.stateStoring.savingTimeout]
-       */
-      savingTimeout?: number;
-      /**
-       * [descr:GridBaseOptions.stateStoring.storageKey]
-       */
-      storageKey?: string;
-      /**
-       * [descr:GridBaseOptions.stateStoring.type]
-       */
-      type?: DevExpress.common.charts.StateStoreType;
     }
     export type Summary<TRowData = any, TKey = any> = {
       /**
@@ -24302,11 +24282,11 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnChooser]
      */
-    columnChooser?: DevExpress.ui.dxDataGrid.ColumnChooser;
+    columnChooser?: DevExpress.common.grids.ColumnChooser;
     /**
      * [descr:GridBaseOptions.columnFixing]
      */
-    columnFixing?: DevExpress.ui.dxDataGrid.ColumnFixing;
+    columnFixing?: DevExpress.common.grids.ColumnFixing;
     /**
      * [descr:GridBaseOptions.columnHidingEnabled]
      */
@@ -24365,7 +24345,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.filterRow]
      */
-    filterRow?: DevExpress.ui.dxDataGrid.FilterRow;
+    filterRow?: DevExpress.common.grids.FilterRow;
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
      */
@@ -24393,7 +24373,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.headerFilter]
      */
-    headerFilter?: DevExpress.ui.dxDataGrid.HeaderFilter;
+    headerFilter?: DevExpress.common.grids.HeaderFilter;
     /**
      * [descr:GridBaseOptions.highlightChanges]
      */
@@ -24401,11 +24381,11 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.keyboardNavigation]
      */
-    keyboardNavigation?: DevExpress.ui.dxDataGrid.KeyboardNavigation;
+    keyboardNavigation?: DevExpress.common.grids.KeyboardNavigation;
     /**
      * [descr:GridBaseOptions.loadPanel]
      */
-    loadPanel?: DevExpress.ui.dxDataGrid.LoadPanel;
+    loadPanel?: DevExpress.common.grids.LoadPanel;
     /**
      * [descr:GridBaseOptions.noDataText]
      */
@@ -24563,7 +24543,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.pager]
      */
-    pager?: DevExpress.ui.dxDataGrid.Pager;
+    pager?: DevExpress.common.grids.Pager;
     /**
      * [descr:GridBaseOptions.paging]
      */
@@ -24595,7 +24575,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.searchPanel]
      */
-    searchPanel?: DevExpress.ui.dxDataGrid.SearchPanel;
+    searchPanel?: DevExpress.common.grids.SearchPanel;
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
      */
@@ -24623,11 +24603,11 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.sorting]
      */
-    sorting?: DevExpress.ui.dxDataGrid.Sorting;
+    sorting?: DevExpress.common.grids.Sorting;
     /**
      * [descr:GridBaseOptions.stateStoring]
      */
-    stateStoring?: DevExpress.ui.dxDataGrid.StateStoring;
+    stateStoring?: DevExpress.common.grids.StateStoring;
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
      */
@@ -25100,32 +25080,6 @@ declare module DevExpress.ui.dxContextMenu {
   export type Item = dxContextMenuItem;
 }
 declare module DevExpress.ui.dxDataGrid {
-  /**
-   * [descr:DataChange]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface DataChange<TRowData = any, TKey = any> {
-    /**
-     * [descr:DataChange.key]
-     */
-    key: TKey;
-    /**
-     * [descr:DataChange.type]
-     */
-    type: DevExpress.common.charts.DataChangeType;
-    /**
-     * [descr:DataChange.data]
-     */
-    data: DevExpress.core.DeepPartial<TRowData>;
-    /**
-     * [descr:DataChange.insertAfterKey]
-     */
-    insertAfterKey?: TKey;
-    /**
-     * [descr:DataChange.insertBeforeKey]
-     */
-    insertBeforeKey?: TKey;
-  }
   /**
    * [descr:dxDataGridToolbar]
    */
