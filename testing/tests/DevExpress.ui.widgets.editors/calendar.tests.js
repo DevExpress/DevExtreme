@@ -1173,6 +1173,52 @@ QUnit.module('Keyboard navigation', {
             clock.restore();
         }
     });
+
+    QUnit.test('upArrow with ctrl-key should increase zoomLevel option', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'month',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'year', 'zoomLevel option has been increased');
+    });
+
+    QUnit.test('upArrow with ctrl-key should not increase zoomLevel option if zoomLevel === maxZoomLevel', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'century',
+            maxZoomLevel: 'century',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'century', 'zoomLevel option has not been increased');
+    });
+
+    QUnit.test('downArrow with ctrl-key should decrease zoomLevel option', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'year',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'month', 'zoomLevel option has been decreased');
+    });
+
+    QUnit.test('downArrow with ctrl-key should not decrease zoomLevel option if zoomLevel === minZoomLevel', function(assert) {
+        this.calendar.option({
+            zoomLevel: 'month',
+            minZoomLevel: 'month',
+        });
+
+        this.$element.trigger('focusin');
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.equal(this.calendar.option('zoomLevel'), 'month', 'zoomLevel option has not been decreased');
+    });
 });
 
 
@@ -2539,8 +2585,10 @@ QUnit.module('disabledDates option', {
 
         triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
         this.clock.tick(VIEW_ANIMATION_DURATION);
+
         triggerKeydown(this.$element, UP_ARROW_KEY_CODE, { ctrlKey: true });
         this.clock.tick(VIEW_ANIMATION_DURATION);
+
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2021, 0, 7), 'closest date has been focused');
     });
 
@@ -2667,6 +2715,27 @@ QUnit.module('disabledDates option', {
 
         triggerKeydown(this.$element, ENTER_KEY_CODE);
         assert.deepEqual(this.calendar.option('value'), startDate, 'selected value has not been changed');
+    });
+
+    QUnit.test('enter key should change selected value if focused date is not disabled', function(assert) {
+        const startDate = new Date(2020, 0, 6);
+        const newDate = new Date(2020, 1, 6);
+
+        this.calendar.option({
+            value: startDate,
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, { ctrlKey: true });
+
+        assert.deepEqual(this.calendar.option('currentDate'), newDate, 'current date has been changed');
+        assert.deepEqual(this.calendar.option('value'), startDate, 'selected value is correct');
+
+        triggerKeydown(this.$element, ENTER_KEY_CODE);
+
+        assert.deepEqual(this.calendar.option('currentDate'), newDate, 'current date is correct');
+        assert.deepEqual(this.calendar.option('value'), newDate, 'selected value has been changed');
     });
 
     QUnit.test('home/end keys should focus the first/last available date in the current month', function(assert) {
