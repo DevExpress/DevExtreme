@@ -2,6 +2,9 @@ import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+import { ClassNames } from '../../model/dataGrid/classNames';
+
+const CLASS = ClassNames;
 
 const getVisibleColumns = (dataGrid: DataGrid): Promise<string[]> => {
   const { getInstance } = dataGrid;
@@ -13,8 +16,7 @@ const getVisibleColumns = (dataGrid: DataGrid): Promise<string[]> => {
     { dependencies: { getInstance } },
   )();
 };
-
-const getColumnsSeparatorOffset = ClientFunction(() => $('.dx-datagrid-columns-separator').offset());
+const getColumnsSeparatorOffset = ClientFunction(() => $(`.${CLASS.columnsSeparator}`).offset(), { dependencies: { CLASS } });
 
 fixture`Column reordering`
   .page(url(__dirname, '../container.html'));
