@@ -1400,7 +1400,6 @@ const TagBox = SelectBox.inherit({
             this._userFilter && filter.push(this._userFilter);
 
             filter.length ? dataSource.filter(filter) : dataSource.filter(null);
-
         } else {
             dataSource.filter(this._dataSourceFilterFunction.bind(this));
         }

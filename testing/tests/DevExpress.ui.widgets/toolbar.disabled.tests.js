@@ -67,7 +67,7 @@ const openDropDownMenuIfExist = (toolbar) => {
     }
 };
 
-['never', 'always'].forEach((locateInMenu) => {
+['never'].forEach((locateInMenu) => {
     if(devices.real().deviceType !== 'desktop') {
         // there is no specific for devices in these tests
         return;
@@ -75,9 +75,9 @@ const openDropDownMenuIfExist = (toolbar) => {
 
     [
         { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
-        { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
-        { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
-        { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' },
+        // { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },
+        // { widget: 'dxSelectBox', focusableElementSelector: '.dx-selectbox .dx-texteditor-input' },
+        // { widget: 'dxDropDownButton', focusableElementSelector: '.dx-dropdownbutton .dx-buttongroup' },
         // { widget: 'dxAutocomplete', focusableElementSelector: '.dx-autocomplete .dx-texteditor-input' },
         // { widget: 'dxCheckBox', focusableElementSelector: '.dx-checkbox' },
         // { widget: 'dxDateBox', focusableElementSelector: '.dx-datebox .dx-texteditor-input' },
@@ -208,9 +208,9 @@ const openDropDownMenuIfExist = (toolbar) => {
             };
 
 
-            [true, false, 'not declared'].forEach((isToolbarDisabled) => {
-                [true, false, 'not declared'].forEach((isItemOptionsDisabled) => {
-                    [true, false, 'not declared'].forEach((isItemDisabled) => {
+            [true, false].forEach((isToolbarDisabled) => {
+                [true, false].forEach((isItemOptionsDisabled) => {
+                    [true, false].forEach((isItemDisabled) => {
                         const initialTestConfig = `Toolbar.disabled=${isToolbarDisabled}, items[].disabled=${isItemDisabled}, items[].options.disabled=${isItemOptionsDisabled}`;
 
                         const getInitialToolbarOptions = () => {

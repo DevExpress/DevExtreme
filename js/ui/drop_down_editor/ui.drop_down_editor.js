@@ -616,7 +616,23 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        const { labelMode, stylingMode } = this.option();
+
+        const $popupOverlayContent = this._popup.$overlayContent();
+        const isOverlayFlipped = e.position.v.flip;
+        const shouldIndentForLabel = labelMode !== 'hidden' && stylingMode === 'outlined';
+
+        if(e.position) {
+            $popupOverlayContent.toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, isOverlayFlipped);
+        }
+
+        if(isOverlayFlipped && shouldIndentForLabel && this._label.isVisible()) {
+            const $label = this._label.$element();
+
+            move($popupOverlayContent, {
+                top: locate($popupOverlayContent).top - parseInt($label.css('fontSize'))
+            });
+        }
     },
 
     _popupShowingHandler: noop,
@@ -627,17 +643,6 @@ const DropDownEditor = TextBox.inherit({
 
     _popupShownHandler: function() {
         this._openAction();
-
-        const $popupOverlayContent = this._popup.$overlayContent();
-        const position = locate($popupOverlayContent);
-
-        if(this._label.isVisible() && $popupOverlayContent.hasClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED)) {
-            const $label = this._label.$element();
-            move($popupOverlayContent, {
-                top: position.top - parseInt($label.css('fontSize'))
-            });
-        }
-
         this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 
