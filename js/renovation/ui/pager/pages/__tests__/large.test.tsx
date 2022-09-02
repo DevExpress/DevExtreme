@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { PagesLarge, viewFunction as PagesLargeComponent } from '../large';
 import { Page } from '../page';
 
@@ -219,23 +219,6 @@ describe('Pager pages logic', () => {
       pageCount: 30, maxPagesCount: 10, pageIndex: 5, pageIndexChange: jest.fn(),
     };
     expect(pages.pageIndexes).toEqual([0, 'low', 3, 4, 5, 6, 'high', 29]);
-  });
-
-  // T1109686
-  it('pageIndexes: check aria-current attribute', () => {
-    const pages = new PagesLarge({
-      pageCount: 30,
-      maxPagesCount: 10,
-      pageIndex: 5,
-      pageIndexChange: jest.fn(),
-    });
-
-    const tree = mount(<PagesLargeComponent {...{ pages: pages.pages } as any} /> as any);
-
-    const selectedPage = tree.find('[aria-current="page"]');
-
-    expect(selectedPage.exists()).toBeTruthy();
-    expect(selectedPage.parent().prop('selected')).toBe(true);
   });
 
   it('storeState+(pageIndexes, pageCount), (pageIndex: 12, pageCount: 15) -> (pageIndex: 12, pageCount: 13)', () => {
