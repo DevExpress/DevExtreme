@@ -557,6 +557,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler() {
+        this._loadMaskValue(this._maskValue);
         if(this.option('text')) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
