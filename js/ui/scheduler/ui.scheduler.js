@@ -949,7 +949,7 @@ class Scheduler extends Widget {
 
         this._initDataSource();
 
-        this._initDataSourceLoadOptions();
+        this._customizeDataSourceLoadOptions();
 
         this.$element().addClass(WIDGET_CLASS);
 
@@ -1001,7 +1001,7 @@ class Scheduler extends Widget {
         }
     }
 
-    _initDataSourceLoadOptions() {
+    _customizeDataSourceLoadOptions() {
         if(!this._dataSource) {
             return;
         }
