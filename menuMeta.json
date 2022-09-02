@@ -4371,7 +4371,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "ApiReference/UI_Components/dxValidator/",
             "Widget": "Validation",
             "MvcAdditionalFiles": [
               "/Views/Validation/SuccessValidation.cshtml",
