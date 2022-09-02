@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Page, PageProps, viewFunction as PageComponent } from '../page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../common/consts';
 import messageLocalization from '../../../../../localization/message';
@@ -18,6 +18,24 @@ describe('Small pager pages', () => {
     expect(tree.props()).toEqual({
       children: 1, className: 'className', label: 'label', onClick: click,
     });
+  });
+
+  // T1109686
+  it('pageIndexes: check aria-current attribute', () => {
+    const getPageButton = (selected: boolean) => {
+      const props = { props: { selected, onClick: () => {} } };
+      const tree = mount<typeof PageComponent>(<PageComponent {...props as any} />);
+
+      const pageButton = tree.childAt(0).childAt(0);
+
+      return pageButton;
+    };
+
+    let pageButton = getPageButton(true);
+    expect(pageButton.prop('aria-current')).toBe('page');
+
+    pageButton = getPageButton(false);
+    expect(pageButton.prop('aria-current')).toBeFalsy();
   });
 
   describe('Logic', () => {
