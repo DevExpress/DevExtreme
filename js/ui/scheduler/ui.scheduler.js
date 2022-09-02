@@ -1002,6 +1002,9 @@ class Scheduler extends Widget {
     }
 
     _initDataSourceLoadOptions() {
+        if(!this._dataSource) {
+            return;
+        }
         this._dataSource.on('customizeStoreLoadOptions', ({ storeLoadOptions }) => {
             storeLoadOptions.startDate = this.getStartViewDate();
             storeLoadOptions.endDate = this.getEndViewDate();
