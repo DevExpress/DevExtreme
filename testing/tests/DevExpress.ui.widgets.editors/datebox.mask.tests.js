@@ -463,7 +463,7 @@ module('Keyboard navigation', setupModule, () => {
 
         this.keyboard.press('up');
         this.keyboard.caret(4);
-        this.$input.click();
+        this.$input.trigger('dxclick');
         this.keyboard.press('up');
 
         const increasedDateText = '11/11/2012';
