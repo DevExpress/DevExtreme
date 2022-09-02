@@ -1,7 +1,7 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
+import DataGrid from '../../model/dataGrid';
 
 fixture`Grouping Panel`
   .page(url(__dirname, '../container.html'));
@@ -9,8 +9,10 @@ fixture`Grouping Panel`
 test('Grouping Panel label should not overflow in a narrow grid (T1103925)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  const dataGrid = new DataGrid('#container');
+
   await t
-    .expect(await takeScreenshot('groupingPanel', Selector('.dx-toolbar')))
+    .expect(await takeScreenshot('groupingPanel', dataGrid.getToolbar()))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

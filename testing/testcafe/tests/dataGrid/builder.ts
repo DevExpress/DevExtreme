@@ -1,7 +1,9 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import { DateBoxPopup } from '../../model/filterBuilder/dateboxPopup';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
@@ -40,14 +42,19 @@ test('Field menu should be opened on field click if window scroll exists (T85270
 });
 
 test('DateBox should not close on click (T1051831)', async (t) => {
+  const filterBuilder = new FilterBuilder('#container');
+  const popup = new DateBoxPopup();
+
+  const field = filterBuilder.getField(0, 'item');
+
   await t
-    .click(Selector('.dx-filterbuilder-item-value-text'))
-    .click(Selector('.dx-datebox'))
-    .click(Selector('.dx-popup-done'));
+    .click(field.getValueText())
+    .click(field.getDateBox())
+    .click(popup.getDoneButton());
 
-  const overlay = Selector('.dx-overlay-content');
+  const overlayContent = popup.getContent();
 
-  await t.expect(overlay.exists).ok();
+  await t.expect(overlayContent.exists).ok();
 }).before(async () => createWidget('dxFilterBuilder', {
   fields: [{
     dataField: 'datetime',
