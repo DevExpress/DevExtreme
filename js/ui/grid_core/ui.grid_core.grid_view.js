@@ -244,15 +244,16 @@ const ResizingController = modules.ViewController.inherit({
 
         this._setVisibleWidths(visibleColumns, []);
 
+        const $element = this.component.$element();
+
         if(needBestFit) {
-            focusedElement = domAdapter.getActiveElement();
+            focusedElement = domAdapter.getActiveElement($element.get(0));
             selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             this._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
 
-        const $element = this.component.$element();
-        if($element && $element[0] && this._maxWidth) {
+        if($element && $element.get(0) && this._maxWidth) {
             delete this._maxWidth;
             $element[0].style.maxWidth = '';
         }

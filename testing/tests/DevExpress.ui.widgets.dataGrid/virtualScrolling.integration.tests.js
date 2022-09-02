@@ -5339,9 +5339,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         const dataRows = $('.dx-data-row');
         assert.strictEqual(dataRows.length, 3);
-        assert.strictEqual($('.dx-data-row:eq(0) .dx-link-save').length, 1, 'first row is new');
-        assert.strictEqual($('.dx-data-row:eq(1)').text(), 'value 1', 'second row is "value 1"');
-        assert.strictEqual($('.dx-data-row:eq(2)').text(), 'value 2', 'third row is "value 2"');
+        assert.strictEqual($('.dx-data-row').eq(0).find('.dx-link-save').length, 1, 'first row is new');
+        assert.strictEqual($('.dx-data-row').eq(1).text(), 'value 1', 'second row is "value 1"');
+        assert.strictEqual($('.dx-data-row').eq(2).text(), 'value 2', 'third row is "value 2"');
     });
 
     QUnit.test('Redundant requests should not be sent on scroll (T1056318)', function(assert) {

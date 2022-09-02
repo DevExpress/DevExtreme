@@ -15,7 +15,7 @@ import renderer from 'core/renderer';
 
 function setupTreeList(that, $treeListContainer) {
     that.$element = function() {
-        return $treeListContainer ? $treeListContainer : renderer('.dx-treelist');
+        return $treeListContainer ? $treeListContainer : renderer($('.dx-treelist'));
     };
 
     if(that.columns !== null) {

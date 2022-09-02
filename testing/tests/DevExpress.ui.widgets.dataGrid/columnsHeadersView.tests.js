@@ -20,6 +20,8 @@ const SORT_INDEX_INDICATOR_SELECTOR = '.dx-sort-index-indicator';
 
 $('body').addClass('dx-viewport');
 QUnit.testStart(function() {
+    $('#qunit-fixture').addClass('dx-viewport');
+
     const markup =
         '<div class="dx-widget">\
             <div id="container" class="dx-datagrid"></div>\

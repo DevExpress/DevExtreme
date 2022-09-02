@@ -191,7 +191,7 @@ const EditorFactory = modules.ViewController.inherit({
         this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-        eventsEngine.on(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.on(domAdapter.getRootNode(this.component.$element()?.get(0)), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
         this._attachContainerEventHandlers();
     },
@@ -213,7 +213,7 @@ const EditorFactory = modules.ViewController.inherit({
     dispose: function() {
         clearTimeout(this._focusTimeoutID);
         clearTimeout(this._updateFocusTimeoutID);
-        eventsEngine.off(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.off(domAdapter.getRootNode(this.component.$element()?.get(0)), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
     }
 }).include(EditorFactoryMixin);
 
