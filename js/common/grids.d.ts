@@ -956,6 +956,58 @@ export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowDa
  * @public
  * @namespace DevExpress.common.grids
  */
+export type FilterRow = {
+  /**
+   * @docid GridBaseOptions.filterRow.applyFilter
+   * @default "auto"
+   */
+  applyFilter?: ApplyFilterMode;
+  /**
+   * @docid GridBaseOptions.filterRow.applyFilterText
+   * @default "Apply filter"
+   */
+  applyFilterText?: string;
+  /**
+   * @docid GridBaseOptions.filterRow.betweenEndText
+   * @default "End"
+   */
+  betweenEndText?: string;
+  /**
+   * @docid GridBaseOptions.filterRow.betweenStartText
+   * @default "Start"
+   */
+  betweenStartText?: string;
+  /**
+   * @docid GridBaseOptions.filterRow.operationDescriptions
+   * @type object
+   */
+  operationDescriptions?: FilterRowOperationDescriptions;
+  /**
+   * @docid GridBaseOptions.filterRow.resetOperationText
+   * @default "Reset"
+   */
+  resetOperationText?: string;
+  /**
+   * @docid GridBaseOptions.filterRow.showAllText
+   * @default "(All)"
+   */
+  showAllText?: string;
+  /**
+   * @docid GridBaseOptions.filterRow.showOperationChooser
+   * @default true
+   */
+  showOperationChooser?: boolean;
+  /**
+   * @docid GridBaseOptions.filterRow.visible
+   * @default false
+   */
+  visible?: boolean;
+};
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type FilterRowOperationDescriptions = {
   /**
    * @docid GridBaseOptions.filterRow.operationDescriptions.between
@@ -1012,58 +1064,6 @@ export type FilterRowOperationDescriptions = {
    * @default "Starts with"
    */
   startsWith?: string;
-};
-
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
-export type FilterRow = {
-  /**
-   * @docid GridBaseOptions.filterRow.applyFilter
-   * @default "auto"
-   */
-  applyFilter?: ApplyFilterMode;
-  /**
-   * @docid GridBaseOptions.filterRow.applyFilterText
-   * @default "Apply filter"
-   */
-  applyFilterText?: string;
-  /**
-   * @docid GridBaseOptions.filterRow.betweenEndText
-   * @default "End"
-   */
-  betweenEndText?: string;
-  /**
-   * @docid GridBaseOptions.filterRow.betweenStartText
-   * @default "Start"
-   */
-  betweenStartText?: string;
-  /**
-   * @docid GridBaseOptions.filterRow.operationDescriptions
-   * @type object
-   */
-  operationDescriptions?: FilterRowOperationDescriptions;
-  /**
-   * @docid GridBaseOptions.filterRow.resetOperationText
-   * @default "Reset"
-   */
-  resetOperationText?: string;
-  /**
-   * @docid GridBaseOptions.filterRow.showAllText
-   * @default "(All)"
-   */
-  showAllText?: string;
-  /**
-   * @docid GridBaseOptions.filterRow.showOperationChooser
-   * @default true
-   */
-  showOperationChooser?: boolean;
-  /**
-   * @docid GridBaseOptions.filterRow.visible
-   * @default false
-   */
-  visible?: boolean;
 };
 
 /**

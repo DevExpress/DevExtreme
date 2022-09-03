@@ -287,8 +287,6 @@ declare module DevExpress.ui.dxDataGrid {
 
     /** @deprecated Use DevExpress.common.grids.ColumnChooser instead */
     export type ColumnChooser = DevExpress.common.grids.ColumnChooser;
-    /** @deprecated Use DevExpress.common.grids.ColumnChooserMode instead */
-    export type ColumnChooserMode = DevExpress.common.grids.ColumnChooserMode;
     /** @deprecated Use DevExpress.common.grids.ColumnCustomizeTextArg instead */
     export type ColumnCustomizeTextArg = DevExpress.common.grids.ColumnCustomizeTextArg;
     /** @deprecated Use DevExpress.common.grids.ColumnFixing instead */
@@ -391,6 +389,8 @@ declare module DevExpress.common.charts {
     export type ApplyChangesMode = DevExpress.common.grids.ApplyChangesMode;
     /** @deprecated Use DevExpress.common.grids.ApplyFilterMode instead */
     export type ApplyFilterMode = DevExpress.common.grids.ApplyFilterMode;
+    /** @deprecated Use DevExpress.common.grids.ColumnChooserMode instead */
+    export type ColumnChooserMode = DevExpress.common.grids.ColumnChooserMode;
     /** @deprecated Use DevExpress.common.grids.ColumnResizeMode instead */
     export type ColumnResizeMode = DevExpress.common.grids.ColumnResizeMode;
     /** @deprecated Use DevExpress.common.grids.DataChangeType instead */

@@ -2145,6 +2145,9 @@ export type ExplicitTypes<TRowData, TKey> = {
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
 };
 
+/** @deprecated RowDraggingTemplateData from 'devextreme/common/grids' instead */
+export type RowDraggingTemplateDataModel = RowDraggingTemplateData;
+
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
