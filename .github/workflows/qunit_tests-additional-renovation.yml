@@ -113,11 +113,6 @@ jobs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: devextreme-artifacts
-
     - name: Setup firefox profile
       run: |
         mkdir -p /tmp/firefox-profile

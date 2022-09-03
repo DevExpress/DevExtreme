@@ -958,6 +958,7 @@ const Overlay = Widget.inherit({
         const { visible } = this.option();
 
         if(visible && hasWindow()) {
+            this._stopAnimation();
             this._renderGeometryImpl();
         }
     },

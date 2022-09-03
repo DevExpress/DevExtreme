@@ -6,8 +6,7 @@
     "semanticCommits": "enabled",
     "baseBranches": [
         "22_2",
-        "22_1",
-        "21_2"
+        "22_1"
     ],
     "labels": [
         "dependencies"
@@ -22,7 +21,12 @@
             "enabled": false
         },
         {
-            "matchPackageNames": [ "eslint-config-devextreme" ],
+            "matchPackageNames": [
+              "eslint-config-devextreme",
+              "rrule",
+              "sinon",
+              "systemjs"
+            ],
             "enabled": false
         },
         {

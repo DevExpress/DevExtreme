@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -8,17 +7,17 @@ fixture`Header Panel`
   .page(url(__dirname, '../container.html'));
 
 test('Drop-down window should be positioned correctly after resizing the toolbar (T1037975)', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const menuButton = dataGrid.getHeaderPanel().getDropDownMenuButton();
-  const popupContent = Selector('.dx-popup-content');
-  const dropDownEditorButton = popupContent.find('.dx-dropdowneditor-button');
-  const menuItem = Selector('.dx-selectbox-popup-wrapper .dx-item.dx-list-item').nth(1);
+  const dataGrid = new DataGrid('#container');
+  const headerPanel = dataGrid.getHeaderPanel();
 
   // act
-  await t.click(menuButton);
+  await t.click(headerPanel.getDropDownMenuButton());
 
   // assert
+  const selectPopup = headerPanel.getDropDownSelectPopup();
+  const popupContent = selectPopup.menuContent();
+
   await t
     .expect(popupContent.exists)
     .ok()
@@ -26,9 +25,11 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
     .ok();
 
   // act
-  await t.click(dropDownEditorButton);
+  await t.click(selectPopup.editButton());
 
   // assert
+  const menuItem = selectPopup.getSelectItem(1);
+
   await t
     .expect(menuItem.exists)
     .ok()

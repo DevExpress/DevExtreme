@@ -2,7 +2,10 @@ import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
-import CommandCell from '../../model/dataGrid/command-cell';
+import CommandCell from '../../model/dataGrid/commandCell';
+import { ClassNames } from '../../model/dataGrid/classNames';
+
+const CLASS = ClassNames;
 
 fixture.disablePageReloads`Keyboard Navigation`
   .page(url(__dirname, '../container.html'))
@@ -143,13 +146,13 @@ test('Cell should be focused after Enter key press if enterKeyDirection is "none
 
 test('TextArea should be focused on editing start', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const commandCell = dataGrid.getDataCell(1, 3).element;
+  const commandCell = dataGrid.getDataCell(1, 3);
   const dataCell = dataGrid.getDataCell(1, 0);
   const getTextArea = (): Selector => dataCell.element.find('.text-area-1');
 
   await t
     // act, assert
-    .click(commandCell.find('.dx-link-edit'))
+    .click(commandCell.getLinkEdit())
     .expect(dataCell.isEditCell).ok()
     .expect(getTextArea().exists)
     .ok()
@@ -3358,7 +3361,7 @@ test('Window should not be scrolled after clicking on freespace row (T1104035)',
     .expect(getWindowScrollTop())
     .eql(0);
 
-  await ClientFunction(() => { $('.dx-freespace-row td').trigger('click'); })();
+  await ClientFunction(() => { $(`.${CLASS.freeSpaceRow} td`).trigger('click'); }, { dependencies: { CLASS } })();
 
   await t
     .expect(getWindowScrollTop())
