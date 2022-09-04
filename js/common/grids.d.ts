@@ -1139,6 +1139,9 @@ export type HeaderFilterTexts = {
 };
 
 /**
+ * @docid
+ * @inherits Widget, DataHelperMixin
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface GridBase<TRowData = any, TKey = any> {
