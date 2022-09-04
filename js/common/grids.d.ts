@@ -62,7 +62,7 @@ import {
 } from '../ui/popup';
 
 import {
-  Properties as dxToolbarOptions,
+  Properties as ToolbarProperties,
 } from '../ui/toolbar';
 
 import {
@@ -1942,6 +1942,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
    * @type_function_param1_field newData:object
    * @type_function_param1_field oldData:object
    * @type_function_param1_field promise:Promise<void>
+   * @type_function_param1_field brokenRules:Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
    * @default null
    * @action
    * @public
@@ -1985,6 +1986,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
+   * @type_function_param1_field toolbarOptions:dxToolbarOptions
    * @default null
    * @action
    * @public
@@ -2398,6 +2400,8 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
    * @type_function_param1_field itemData:any
+   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
+   * @type_function_param1_field toComponent:dxSortable|dxDraggable
    */
   onAdd?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
@@ -2406,6 +2410,8 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
    * @type_function_param1_field itemData:any
+   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
+   * @type_function_param1_field toComponent:dxSortable|dxDraggable
    */
   onDragChange?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
@@ -2414,6 +2420,8 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
    * @type_function_param1_field itemData:any
+   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
+   * @type_function_param1_field toComponent:dxSortable|dxDraggable
    */
   onDragEnd?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
@@ -2422,6 +2430,8 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
    * @type_function_param1_field itemData:any
+   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
+   * @type_function_param1_field toComponent:dxSortable|dxDraggable
    */
   onDragMove?: ((e: Cancelable & ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
   /**
@@ -2438,6 +2448,8 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
    * @type_function_param1_field itemData:any
+   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
+   * @type_function_param1_field toComponent:dxSortable|dxDraggable
    */
   onRemove?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData>) => void);
   /**
@@ -2447,6 +2459,8 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @type_function_param1_field event:event
    * @type_function_param1_field itemData:any
    * @type_function_param1_field promise:Promise<void>
+   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
+   * @type_function_param1_field toComponent:dxSortable|dxDraggable
    */
   onReorder?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragReorderInfo) => void);
   /**
@@ -2804,5 +2818,5 @@ export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
  * @namespace DevExpress.common.grids
  */
 export interface ToolbarPreparingInfo {
-  toolbarOptions: dxToolbarOptions;
+  toolbarOptions: ToolbarProperties;
 }
