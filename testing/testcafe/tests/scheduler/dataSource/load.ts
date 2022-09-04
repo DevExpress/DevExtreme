@@ -45,3 +45,40 @@ test('it should correctly load items with post processing', async (t) => {
   },
   true,
 ));
+
+test('it should have start and end date in load options', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { appointmentPopup } = scheduler;
+
+  await t
+    .doubleClick(scheduler.getAppointmentByIndex(0).element)
+
+    .expect(appointmentPopup.startDateElement.value)
+    .eql('5/9/2021, 12:00 AM')
+
+    .expect(appointmentPopup.endDateElement.value)
+    .eql('5/15/2021, 2:59 AM');
+}).before(async () => createWidget(
+  'dxScheduler',
+  {
+    dataSource: {
+      load: (loadOptions) => {
+        const { startDate, endDate } = loadOptions;
+        return [{
+          text: 'test',
+          startDate,
+          endDate,
+        }];
+      },
+    },
+    currentDate: new Date(2021, 4, 11),
+    width: 700,
+    height: 500,
+    startDayHour: 0,
+    endDayHour: 3,
+    groupByDate: true,
+    views: ['week'],
+    currentView: 'week',
+  },
+  true,
+));
