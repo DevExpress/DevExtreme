@@ -90,3 +90,40 @@ test('it should have start and end date in load options', async (t) => {
   },
   true,
 ));
+
+test('it should have start and end date in load options when view dates changing', async (t) => {
+  const { toolbar } = new Scheduler('#container');
+
+  await t
+    .click(toolbar.navigator.nextButton);
+  const win = await getWindow();
+  await t
+    .expect(win.startDate)
+    .eql(new Date(2021, 4, 16))
+    .expect(win.endDate)
+    .eql(new Date(2021, 4, 22, 2, 59));
+}).before(async () => createWidget(
+  'dxScheduler',
+  {
+    dataSource: {
+      load: (loadOptions) => {
+        const { startDate, endDate } = loadOptions;
+
+        // added dates to global scope because there isn't another acceptable way to test them
+        window.testOptions = {
+          startDate,
+          endDate,
+        };
+      },
+    },
+    currentDate: new Date(2021, 4, 11),
+    width: 700,
+    height: 500,
+    startDayHour: 0,
+    endDayHour: 3,
+    groupByDate: true,
+    views: ['week'],
+    currentView: 'week',
+  },
+  true,
+));
