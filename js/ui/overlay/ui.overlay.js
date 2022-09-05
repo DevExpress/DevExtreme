@@ -1114,7 +1114,7 @@ const Overlay = Widget.inherit({
             if(options?.shouldOnlyReposition) {
                 this._positionController.positionContent();
             } else {
-                this._renderGeometryImpl();
+                this._renderGeometryImpl(options?.isDimensionChange);
             }
 
             if(shouldRepeatAnimation) {
@@ -1252,7 +1252,7 @@ const Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._renderGeometry();
+        this._renderGeometry({ isDimensionChange: true });
     },
 
     _clean: function() {
