@@ -12,6 +12,7 @@ import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import gridCoreUtils from './ui.grid_core.utils';
+import { isElementInDom } from '../../core/utils/dom';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -191,9 +192,16 @@ const EditorFactory = modules.ViewController.inherit({
         this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-        eventsEngine.on(domAdapter.getRootNode(this.component.$element()?.get(0)), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.on(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
         this._attachContainerEventHandlers();
+    },
+
+    _getContainerRoot: function() {
+        const $container = this.component && this.component.$element();
+        const isContainerInDom = isElementInDom($container);
+
+        return domAdapter.getRootNode(isContainerInDom && $container);
     },
 
     _attachContainerEventHandlers: function() {
@@ -213,7 +221,7 @@ const EditorFactory = modules.ViewController.inherit({
     dispose: function() {
         clearTimeout(this._focusTimeoutID);
         clearTimeout(this._updateFocusTimeoutID);
-        eventsEngine.off(domAdapter.getRootNode(this.component.$element()?.get(0)), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.off(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
     }
 }).include(EditorFactoryMixin);
 
