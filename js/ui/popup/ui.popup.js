@@ -510,7 +510,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderGeometryImpl: function(isDimensionChange = false) {
-        if(isDimensionChange) { // NOTE: to save content scroll position T1113123
+        if(!isDimensionChange) { // NOTE: to save content scroll position T1113123
             // NOTE: for correct new position calculation
             this._resetContentHeight();
         }
