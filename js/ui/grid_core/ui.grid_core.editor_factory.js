@@ -201,7 +201,7 @@ const EditorFactory = modules.ViewController.inherit({
         const $container = this.component && this.component.$element();
         const isContainerInDom = isElementInDom($container);
 
-        return domAdapter.getRootNode(isContainerInDom && $container);
+        return domAdapter.getRootNode(isContainerInDom && $container.get(0));
     },
 
     _attachContainerEventHandlers: function() {
