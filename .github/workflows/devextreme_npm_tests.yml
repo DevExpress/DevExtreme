@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+        key: build-npm-devextreme-artifacts-${{ github.sha }}-2
 
     - name: Install packages in devextreme repo
       run: test -d artifacts || npm install --no-audit --no-fund
