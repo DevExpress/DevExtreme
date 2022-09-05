@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -46,29 +47,36 @@ test('it should correctly load items with post processing', async (t) => {
   true,
 ));
 
+declare global {
+  interface Window {
+    testOptions: {
+      startDate: Date;
+      endDate: Date;
+    };
+  }
+}
+
+const getWindow = ClientFunction(() => window.testOptions);
+
 test('it should have start and end date in load options', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
-
+  const win = await getWindow();
   await t
-    .doubleClick(scheduler.getAppointmentByIndex(0).element)
-
-    .expect(appointmentPopup.startDateElement.value)
-    .eql('5/9/2021, 12:00 AM')
-
-    .expect(appointmentPopup.endDateElement.value)
-    .eql('5/15/2021, 2:59 AM');
+    .expect(win.startDate)
+    .eql(new Date(2021, 4, 9))
+    .expect(win.endDate)
+    .eql(new Date(2021, 4, 15, 2, 59));
 }).before(async () => createWidget(
   'dxScheduler',
   {
     dataSource: {
       load: (loadOptions) => {
         const { startDate, endDate } = loadOptions;
-        return [{
-          text: 'test',
+
+        // added dates to global scope because there isn't another acceptable way to test them
+        window.testOptions = {
           startDate,
           endDate,
-        }];
+        };
       },
     },
     currentDate: new Date(2021, 4, 11),
