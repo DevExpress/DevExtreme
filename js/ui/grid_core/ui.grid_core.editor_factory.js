@@ -199,7 +199,7 @@ const EditorFactory = modules.ViewController.inherit({
     _getContainerRoot: function() {
         const $container = this.component && this.component.$element();
 
-        return domAdapter.getRootNode($container.get(0));
+        return domAdapter.getRootNode($container?.get(0));
     },
 
     _attachContainerEventHandlers: function() {
