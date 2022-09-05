@@ -12,7 +12,6 @@ import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import gridCoreUtils from './ui.grid_core.utils';
-import { isElementInDom } from '../../core/utils/dom';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -199,9 +198,8 @@ const EditorFactory = modules.ViewController.inherit({
 
     _getContainerRoot: function() {
         const $container = this.component && this.component.$element();
-        const isContainerInDom = isElementInDom($container);
 
-        return domAdapter.getRootNode(isContainerInDom && $container.get(0));
+        return domAdapter.getRootNode($container.get(0));
     },
 
     _attachContainerEventHandlers: function() {
