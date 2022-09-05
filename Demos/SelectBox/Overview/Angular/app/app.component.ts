@@ -1,6 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import notify from 'devextreme/ui/notify';
 
 import {
   DxSelectBoxModule,
@@ -35,6 +36,10 @@ export class AppComponent {
       data: this.products,
       key: 'ID',
     });
+  }
+
+  onValueChanged(e: any) {
+    notify(`The value is changed to: "${e.value}"`);
   }
 }
 

@@ -79,6 +79,7 @@
           <DxSelectBox
             :items="simpleProducts"
             v-model:value="value"
+            @value-changed="onValueChanged"
           />
         </div>
       </div>
@@ -91,6 +92,7 @@
 <script>
 import DxSelectBox from 'devextreme-vue/select-box';
 import ArrayStore from 'devextreme/data/array_store';
+import notify from 'devextreme/ui/notify';
 import Field from './Field.vue';
 import Item from './Item.vue';
 
@@ -114,6 +116,11 @@ export default {
       }),
       value: simpleProducts[0],
     };
+  },
+  methods: {
+    onValueChanged(e) {
+      notify(`The value is changed to: "${e.value}"`);
+    },
   },
 };
 </script>

@@ -88,6 +88,7 @@
         #selectBox
         [items]="simpleProducts"
         [value]="simpleProducts[0]"
+        (onValueChanged)="onValueChanged($event)"
       >
       </dx-select-box>
     </div>

@@ -40,6 +40,9 @@ window.onload = function () {
     eventHandler: {
       items: simpleProducts,
       value: currentProduct,
+      onValueChanged(data) {
+        DevExpress.ui.notify(`The value is changed to: "${data.value}"`);
+      },
     },
   };
 

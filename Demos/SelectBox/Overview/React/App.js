@@ -1,6 +1,7 @@
 import React from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import ArrayStore from 'devextreme/data/array_store';
+import notify from 'devextreme/ui/notify';
 
 import service from './data.js';
 import Field from './Field.js';
@@ -25,6 +26,7 @@ class App extends React.Component {
     this.setState({
       value: e.value,
     });
+    notify(`The value is changed to: "${e.value}"`);
   }
 
   render() {
