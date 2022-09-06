@@ -246,4 +246,48 @@ QUnit.module('Dialogs', moduleConfig, () => {
         const button = $dialog.find('.dx-texteditor-buttons-container > .dx-button');
         assert.ok(button.attr('aria-disabled'), 'button is disabled');
     });
+    test('task edit dialog not shown on new task adding (T1110285)', function(assert) {
+
+        const myTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 5, 'parentId': 2, 'title': 'Define preliminary resources', 'start': new Date('2019-02-22T10:00:00.000Z'), 'end': new Date('2019-02-25T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 6, 'parentId': 2, 'title': 'Secure core resources', 'start': new Date('2019-02-25T10:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 },
+            { 'id': 7, 'parentId': 2, 'title': 'Scope complete', 'start': new Date('2019-02-26T09:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: myTasks },
+            editing: { enabled: true },
+            selectedRowKey: 1
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        const $dialog = $('body').find(Consts.POPUP_SELECTOR);
+        const dialogInstance = this.instance._dialogInstance._popupInstance;
+        dialogInstance.option('showCloseButton', true);
+
+        assert.ok(dialogInstance.option('visible'), 'dialog is visible');
+        assert.equal($dialog.length, 1, 'dialog exists');
+        const $closeButton = $('.dx-closebutton');
+        $closeButton.triggerHandler('dxclick');
+        this.clock.tick(1000);
+
+        assert.notOk(dialogInstance.option('visible'), 'dialog is not visible');
+        // insert task
+
+        const taskData = {
+            title: 'My text',
+            start: new Date('2019-02-23'),
+            end: new Date('2019-02-23'),
+        };
+
+        this.instance.insertTask(taskData);
+        this.clock.tick(1000);
+        assert.notOk(dialogInstance.option('visible'), 'dialog is not visible');
+    });
 });
