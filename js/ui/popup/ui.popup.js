@@ -509,9 +509,11 @@ const Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function() {
-        // NOTE: for correct new position calculation
-        this._resetContentHeight();
+    _renderGeometryImpl: function(isDimensionChange = false) {
+        if(!isDimensionChange) { // NOTE: to save content scroll position T1113123
+            // NOTE: for correct new position calculation
+            this._resetContentHeight();
+        }
         this.callBase();
         this._setContentHeight();
     },
