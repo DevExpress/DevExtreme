@@ -11,6 +11,7 @@ import { PageSizeSelector } from '../page_size/selector';
 import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
+import messageLocalization from '../../../../localization/message';
 
 let mockInstance: Record<string, AbstractFunction> = {};
 
@@ -22,6 +23,7 @@ jest.mock('../../../../ui/shared/accessibility', () => ({
 jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: () => null }));
 jest.mock('../page_size/selector', () => ({ PageSizeSelector: forwardRef(() => null) }));
 jest.mock('../info', () => ({ InfoText: forwardRef(() => null) }));
+jest.mock('../../../../localization/message', () => ({ format: jest.fn() }));
 
 describe('PagerContent', () => {
   describe('View', () => {
@@ -48,7 +50,7 @@ describe('PagerContent', () => {
         infoVisible: true,
         pageIndexSelectorVisible: true,
         props: componentProps,
-        aria: { role: 'navigation', label: 'pagination' },
+        aria: { role: 'navigation', label: 'Pagination' },
         restAttributes: { 'rest-attribute': {}, className: 'className' },
       } as Partial<PagerContent> as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />);
@@ -348,9 +350,11 @@ describe('PagerContent', () => {
     });
 
     it('aria', () => {
-      const component = new PagerContent({} as PagerContentProps);
+      (messageLocalization.format as jest.Mock).mockReturnValue('Pagination');
+      const component = new PagerContent(new PagerContentProps());
 
-      expect(component.aria).toEqual({ role: 'navigation', label: 'pagination' });
+      expect(component.aria).toEqual({ role: 'navigation', label: 'Pagination' });
+      expect(messageLocalization.format).toBeCalledWith('dxPager-ariaLabel');
     });
 
     describe('className', () => {

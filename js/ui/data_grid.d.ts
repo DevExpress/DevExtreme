@@ -1486,6 +1486,11 @@ export interface Pager {
      * @default "auto"
      */
     visible?: boolean | 'auto';
+    /**
+     * @docid GridBaseOptions.pager.ariaLabel
+     * @default "Navigation"
+     */
+    ariaLabel?: string;
 }
 
 /**
