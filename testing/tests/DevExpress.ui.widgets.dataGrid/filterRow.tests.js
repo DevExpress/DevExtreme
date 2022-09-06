@@ -2628,7 +2628,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
             const dropDownList1 = $('.dx-list').eq(0);
             assert.strictEqual(dropDownList1.find('.dx-item').length, 91); // 90 rows + (All)
-            assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value10');
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value10');
             assert.strictEqual(dropDownList1.find('.dx-item:eq(-1)').text(), 'value99');
         });
     });

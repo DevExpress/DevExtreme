@@ -197,7 +197,7 @@ const EditorFactory = modules.ViewController.inherit({
     },
 
     _getContainerRoot: function() {
-        const $container = this.component && this.component.$element();
+        const $container = this.component?.$element();
         const root = domAdapter.getRootNode($container?.get(0));
 
         // NOTE: this condition is for the 'Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)'
