@@ -1418,6 +1418,11 @@ export interface Pager {
      * @default "auto"
      */
     visible?: boolean | Mode;
+    /**
+     * @docid GridBaseOptions.pager.ariaLabel
+     * @default "Navigation"
+     */
+    ariaLabel?: string;
 }
 
 export interface SearchPanel {

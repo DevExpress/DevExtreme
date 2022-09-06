@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme';
 import { Page, PageProps, viewFunction as PageComponent } from '../page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../common/consts';
 import messageLocalization from '../../../../../localization/message';
+import { LightButton } from '../../common/light_button';
 
 jest.mock('../../../../../localization/message', () => ({
   getFormatter: jest.fn(),
@@ -22,20 +23,12 @@ describe('Small pager pages', () => {
 
   // T1109686
   it('pageIndexes: check aria-current attribute', () => {
-    const getPageButton = (selected: boolean) => {
-      const props = { props: { selected, onClick: () => {} } };
-      const tree = mount<typeof PageComponent>(<PageComponent {...props as any} />);
+    const props = { props: { selected: true, onClick: () => {} } };
+    const tree = mount<typeof PageComponent>(<PageComponent {...props as any} />);
 
-      const pageButton = tree.childAt(0).childAt(0);
+    const pageButton = tree.find(LightButton);
 
-      return pageButton;
-    };
-
-    let pageButton = getPageButton(true);
-    expect(pageButton.prop('aria-current')).toBe('page');
-
-    pageButton = getPageButton(false);
-    expect(pageButton.prop('aria-current')).toBeFalsy();
+    expect(pageButton.prop('selected')).toBeTruthy();
   });
 
   describe('Logic', () => {

@@ -160,6 +160,7 @@
         "dxPager-page": "Seite {0}",
         "dxPager-prevPage": "Vorherige Seite",
         "dxPager-nextPage": "Nächste Seite",
+        "dxPager-ariaLabel": "Paginierung",
         "dxPivotGrid-grandTotal": "Gesamt",
         "dxPivotGrid-total": "{0} Gesamt",
         "dxPivotGrid-fieldChooserTitle": "Feldauswahl",
