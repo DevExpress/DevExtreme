@@ -439,7 +439,7 @@ QUnit.module('API', {
         });
 
         const element = $('#widget');
-        const instance = new NewWidget('#widget');
+        const instance = new NewWidget($('#widget'));
 
         assert.ok($.isFunction(instance.repaint));
 
@@ -790,7 +790,7 @@ QUnit.module('templates support', {}, () => {
     registerComponent('TestContainer', TestContainer);
 
     QUnit.test('internal template collection', function(assert) {
-        const testContainer = new TestContainer('#container', {});
+        const testContainer = new TestContainer($('#container'), {});
         const templateCollection = testContainer.option('integrationOptions.templates');
 
         assert.ok(templateCollection['item'] instanceof Template);
@@ -798,7 +798,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('internal template as name (string)', function(assert) {
-        const testContainer = new TestContainer('#container', { template1: 'item', template2: 'group' });
+        const testContainer = new TestContainer($('#container'), { template1: 'item', template2: 'group' });
         const templateCollection = testContainer.option('integrationOptions.templates');
 
         assert.strictEqual(testContainer._getTemplateByOption('template1'), templateCollection['item']);
@@ -807,7 +807,7 @@ QUnit.module('templates support', {}, () => {
 
     // T312012
     QUnit.test('internal row template as name (string)', function(assert) {
-        const testContainer = new TestContainer('#container', { rowTemplate: 'rowItem' });
+        const testContainer = new TestContainer($('#container'), { rowTemplate: 'rowItem' });
 
         const $row = testContainer._getTemplateByOption('rowTemplate').render();
         assert.strictEqual($row.length, 1, 'one element is rendered');
@@ -816,7 +816,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('internal template as function returning name', function(assert) {
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             template1() {
                 return 'item';
             },
@@ -830,7 +830,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('external template as DOM Element', function(assert) {
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             template: $('[data-options*=dxTemplate]').get(0)
         });
 
@@ -838,7 +838,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('external template as jQuery', function(assert) {
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             template: $('[data-options*=dxTemplate]')
         });
 
@@ -846,7 +846,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('external template as script element', function(assert) {
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             template: $('#scriptTemplate')
         });
 
@@ -863,7 +863,7 @@ QUnit.module('templates support', {}, () => {
 
         const onRenderedHandler = sinon.spy();
 
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             templatesRenderAsynchronously: false,
             integrationOptions: {
                 templates: {
@@ -890,7 +890,7 @@ QUnit.module('templates support', {}, () => {
     QUnit.test('external custom template should call onRendered method without templatesRenderAsynchronously (template.render exists)', function(assert) {
         const onRenderedHandler = sinon.spy();
 
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             templatesRenderAsynchronously: false,
             template: {
                 render() {
@@ -910,7 +910,7 @@ QUnit.module('templates support', {}, () => {
     QUnit.test('external custom template should not call onRendered method with templatesRenderAsynchronously (template.render exists)', function(assert) {
         const onRenderedHandler = sinon.spy();
 
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             templatesRenderAsynchronously: true,
             template: {
                 render() {
@@ -928,7 +928,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('shared external template as script element', function(assert) {
-        const testContainer1 = new TestContainer('#container', {
+        const testContainer1 = new TestContainer($('#container'), {
             template: $('#scriptTemplate')
         });
 
@@ -937,7 +937,7 @@ QUnit.module('templates support', {}, () => {
         assert.ok(template1 instanceof Template);
         assert.ok(template1.render().is('.myTemplate'));
 
-        const testContainer2 = new TestContainer('#container2', {
+        const testContainer2 = new TestContainer($('#container2'), {
             template: $('#scriptTemplate')
         });
 
@@ -948,7 +948,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('external template as function returning element', function(assert) {
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             template() {
                 return $('#scriptTemplate');
             }
@@ -961,7 +961,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('named template should be cut', function(assert) {
-        new TestContainer('#container', {});
+        new TestContainer($('#container'), {});
 
         assert.equal($('#container').contents().filter((_, el) => {
             return el.nodeType === 1;
@@ -969,7 +969,7 @@ QUnit.module('templates support', {}, () => {
     });
 
     QUnit.test('anonymous template should be cut even if it contain script tag', function(assert) {
-        new TestContainer('#widgetWithScriptInTemplate', {});
+        new TestContainer($('#widgetWithScriptInTemplate'), {});
 
         assert.equal($('#widgetWithScriptInTemplate').contents().filter((_, el) => {
             return el.nodeType === 1;
@@ -978,7 +978,7 @@ QUnit.module('templates support', {}, () => {
 
     QUnit.test('shared template as Template instance', function(assert) {
         const template = new Template();
-        const testContainer = new TestContainer('#container', { myTemplate: template });
+        const testContainer = new TestContainer($('#container'), { myTemplate: template });
         assert.strictEqual(testContainer._getTemplateByOption('myTemplate'), template);
     });
 
@@ -994,16 +994,16 @@ QUnit.module('templates support', {}, () => {
             }
         };
 
-        let testContainer = new TestContainer('#container', { myTemplate: template });
+        let testContainer = new TestContainer($('#container'), { myTemplate: template });
         testContainer._getTemplateByOption('myTemplate').render();
         assert.deepEqual(renderHandler.callCount, 1, 'object with render function acquired as template');
 
-        testContainer = new TestContainer('#container', { myTemplate: fakeTemplate });
+        testContainer = new TestContainer($('#container'), { myTemplate: fakeTemplate });
         assert.notDeepEqual(testContainer._getTemplateByOption('myTemplate'), fakeTemplate);
     });
 
     QUnit.test('template should not be rendered if function return null or undefined', function(assert) {
-        const testContainer = new TestContainer('#container', {
+        const testContainer = new TestContainer($('#container'), {
             nullTemplate() {
                 return null;
             },
@@ -1030,7 +1030,7 @@ QUnit.module('templates support', {}, () => {
                 }
             };
 
-            const testContainer = new TestContainer('#container', {
+            const testContainer = new TestContainer($('#container'), {
                 template() {
                     return text;
                 }
@@ -1057,7 +1057,7 @@ QUnit.module('templates support', {}, () => {
                 }
             };
 
-            const testContainer = new TestContainer('#container', {
+            const testContainer = new TestContainer($('#container'), {
                 ownedTemplate: text,
                 template() {
                     return testContainer._getTemplateByOption('ownedTemplate');
@@ -1078,7 +1078,7 @@ QUnit.module('templates support', {}, () => {
         QUnit.test('dynamically created from ' + name + ' template should be removed after rendering', function(assert) {
             let disposed = false;
 
-            const testContainer = new TestContainer('#container', {
+            const testContainer = new TestContainer($('#container'), {
                 template: data
             });
 
@@ -1102,7 +1102,7 @@ QUnit.module('templates support', {}, () => {
         QUnit.test('dynamically created ' + name + ' template should save data associated with it', function(assert) {
             dataUtils.data(element, 'key', 'value');
 
-            const testContainer = new TestContainer('#container', {
+            const testContainer = new TestContainer($('#container'), {
                 template() {
                     return element;
                 }
@@ -1120,7 +1120,7 @@ QUnit.module('templates support', {}, () => {
 
         let testContainer;
         try {
-            testContainer = new TestContainer('#container-custom-config', {});
+            testContainer = new TestContainer($('#container-custom-config'), {});
         } finally {
             config({ optionsParser: originalParser });
         }
@@ -1477,7 +1477,7 @@ QUnit.module('isReady', {}, () => {
     QUnit.test('widget doesn\'t throw if disposed before rendering (T717968)', function(assert) {
 
         deferUpdate(() => {
-            new DxWidget('#widget').dispose();
+            new DxWidget($('#widget')).dispose();
         });
 
         assert.ok(true);
@@ -1517,7 +1517,7 @@ QUnit.module('dataHelperMixin', {}, () => {
         dataSource.on('loadError', loadErrorHandler);
         dataSource.on('loadingChanged', loadingChangedHandler);
 
-        new TestWidget('#widget', {
+        new TestWidget($('#widget'), {
             dataSource
         });
 
@@ -1615,7 +1615,7 @@ QUnit.module('inner options cache', {}, () => {
     });
 
     QUnit.test('a user can redefine inner component options', function(assert) {
-        const widget = new TestWidget('#widget', {
+        const widget = new TestWidget($('#widget'), {
             innerComponentOptions: {
                 someOption: 'Test',
                 defaultOption: 'New'
@@ -1627,7 +1627,7 @@ QUnit.module('inner options cache', {}, () => {
     });
 
     QUnit.test('two way binding should work with inner component options', function(assert) {
-        const widget = new TestWidget('#widget', {});
+        const widget = new TestWidget($('#widget'), {});
 
         assert.strictEqual(widget.option('innerComponentOptions.defaultOption'), 'Test', 'inner component options has been loaded');
 
@@ -1640,7 +1640,7 @@ QUnit.module('inner options cache', {}, () => {
     });
 
     QUnit.test('inner component options should not be losed on dispose', function(assert) {
-        const widget = new TestWidget('#widget', {
+        const widget = new TestWidget($('#widget'), {
             innerComponentOptions: {
                 someOption: 'Test',
                 defaultOption: 'New'
@@ -1654,7 +1654,7 @@ QUnit.module('inner options cache', {}, () => {
     });
 
     QUnit.test('the exception should not be shown when the inner component is not exist yet', function(assert) {
-        const widget = new TestWidget('#widget', {
+        const widget = new TestWidget($('#widget'), {
             innerComponentOptions: {
                 someOption: 'Test',
                 defaultOption: 'New'

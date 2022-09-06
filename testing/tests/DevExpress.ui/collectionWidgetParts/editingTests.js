@@ -1484,7 +1484,7 @@ module('deleting of items', () => {
     test('onDeleteItem should trigger delete callback only once with correct itemData', function(assert) {
         const item = '0';
         const deleteActionSpy = sinon.spy();
-        const instance = new TestComponent('#cmp', {
+        const instance = new TestComponent($('#cmp'), {
             items: [item],
             onItemDeleted: deleteActionSpy
         });
@@ -1498,7 +1498,7 @@ module('deleting of items', () => {
     test('deleteItem event should trigger delete callback only once with correct itemData', function(assert) {
         const item = '0';
         const deleteActionSpy = sinon.spy();
-        const instance = new TestComponent('#cmp', {
+        const instance = new TestComponent($('#cmp'), {
             items: [item]
         });
 
@@ -2153,7 +2153,7 @@ module('reordering of items', () => {
     });
 
     test('onItemReordered should be fired if items reordered', function(assert) {
-        const instance = new TestComponent('#cmp', {
+        const instance = new TestComponent($('#cmp'), {
             items: [{ a: 0 }, { a: 1 }],
             onItemReordered: function(args) {
                 assert.equal($(args.itemElement).get(0), item(1), 'correct item element');
@@ -2170,7 +2170,7 @@ module('reordering of items', () => {
     });
 
     test('itemReordered event should be fired if items reordered', function(assert) {
-        const instance = new TestComponent('#cmp', {
+        const instance = new TestComponent($('#cmp'), {
             items: [{ a: 0 }, { a: 1 }]
         });
 
@@ -2264,7 +2264,7 @@ module('reordering with dataSource', () => {
     });
 
     test('items should update when datasource option changed', function(assert) {
-        const widget = new TestComponent('#cmp', {
+        const widget = new TestComponent($('#cmp'), {
             dataSource: new DataSource({
                 store: new ArrayStore([{ text: 'item 1' }])
             })

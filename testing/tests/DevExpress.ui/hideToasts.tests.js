@@ -18,7 +18,7 @@ QUnit.module('hideToasts', {
         const displayTime = 100;
 
         notify({
-            container: '#container',
+            container: $('#container'),
             position: 'bottom left',
             displayTime,
         });
@@ -47,7 +47,7 @@ QUnit.module('hideToasts', {
     QUnit.test('with string parameter hides Toasts with corresponding container', function(assert) {
         assert.equal(this.getToastCount(), 2);
 
-        hideToasts(this.containerSelector);
+        hideToasts($(this.containerSelector));
 
         assert.equal(this.getToastCount(), 1);
     });
