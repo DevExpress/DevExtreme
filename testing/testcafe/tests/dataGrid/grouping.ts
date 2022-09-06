@@ -36,3 +36,44 @@ test('Grouping Panel label should not overflow in a narrow grid (T1103925)', asy
     enabled: true,
   },
 }));
+
+// T1112573
+test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiExpandAllGroups();
+
+  await t
+    .wait(100)
+    .expect(await takeScreenshot('expanded-groups-content', Selector('.dx-datagrid')))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      field1: '1', field2: 'test1',
+    },
+    {
+      field1: '2', field2: 'test1',
+    },
+    {
+      field1: '3', field2: 'test2',
+    },
+  ],
+  width: 700,
+  columns: [
+    'field1',
+    { dataField: 'field2', groupIndex: 0 },
+  ],
+  dataRowTemplate(container, { data }) {
+    return $(container).append($(`<tr><td>${data.field1}</td></tr>`));
+  },
+  groupPanel: {
+    visible: true,
+  },
+  grouping: {
+    autoExpandAll: false,
+  },
+}));
