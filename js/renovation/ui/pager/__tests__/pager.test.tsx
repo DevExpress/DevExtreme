@@ -6,9 +6,11 @@ import { Pager as PagerComponent } from '../pager';
 import { PageSizeLarge } from '../page_size/large';
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PagerProps } from '../common/pager_props';
+import messageLocalization from '../../../../localization/message';
 
 jest.mock('../../../../localization/message', () => ({
   getFormatter: () => jest.fn(),
+  format: jest.fn(),
 }));
 
 jest.mock('../../editors/drop_down_editors/select_box', () => ({ SelectBox: jest.fn() }));
@@ -16,6 +18,8 @@ jest.mock('../../editors/drop_down_editors/select_box', () => ({ SelectBox: jest
 describe('Pager', () => {
   describe('View', () => {
     it('render pager with defaults', () => {
+      (messageLocalization.format as jest.Mock).mockReturnValueOnce('Pagination');
+
       const props = new PagerProps();
       const tree = mount<PagerComponent>(<PagerComponent {...props} />);
       const pager = tree.childAt(0);
@@ -50,6 +54,7 @@ describe('Pager', () => {
         showPageSizes: true,
         showNavigationButtons: false,
         totalCount: 0,
+        label: 'Pagination',
       });
 
       expect(typeof pageIndexChange).toBe('function');

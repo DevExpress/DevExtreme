@@ -203,7 +203,6 @@ export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChang
   }
 
   get aria(): Record<string, string> {
-    console.log(this.props);
     return {
       role: 'navigation',
       label: this.props.label,
