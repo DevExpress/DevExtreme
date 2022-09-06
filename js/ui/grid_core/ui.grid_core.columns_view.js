@@ -490,11 +490,12 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _wrapRowIfNeed: function($table, $row, isRefreshing) {
-        const hasDataRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
+        const hasRowTemplate = !!this.option().rowTemplate;
+        const hasDataRowTemplate = !!this.option('dataRowTemplate');
         const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
-        const $tBodies = hasDataRowTemplate && this._getBodies($tableElement);
+        const hasTbodyAsDataRow = hasDataRowTemplate || hasRowTemplate && !!this._getBodies($tableElement)?.filter('.' + ROW_CLASS).length;
 
-        if($tBodies && $tBodies.filter('.' + ROW_CLASS).length) {
+        if(hasTbodyAsDataRow) {
             const $tbody = $('<tbody>').addClass($row.attr('class'));
 
             this.setAria('role', 'presentation', $tbody);
