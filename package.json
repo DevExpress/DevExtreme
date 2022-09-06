@@ -31,7 +31,7 @@
     "vue-router": "^4.0.16",
     "webpack": "^4.29.2",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^4.0.0"
   },
   "scripts": {
     "start": "webpack-dev-server"
