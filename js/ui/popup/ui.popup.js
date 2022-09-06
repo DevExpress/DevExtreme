@@ -621,7 +621,7 @@ const Popup = Overlay.inherit({
             if(options?.shouldOnlyReposition) {
                 this._positionController.positionContent();
             } else {
-                this._renderGeometryImpl();
+                this._renderGeometryImpl(options?.isDimensionChange);
             }
 
             if(shouldRepeatAnimation) {
@@ -642,9 +642,11 @@ const Popup = Overlay.inherit({
         };
     },
 
-    _renderGeometryImpl: function() {
-        // NOTE: for correct new position calculation
-        this._resetContentHeight();
+    _renderGeometryImpl: function(isDimensionChange = false) {
+        if(!isDimensionChange) { // NOTE: to save content scroll position T1113123
+            // NOTE: for correct new position calculation
+            this._resetContentHeight();
+        }
         this.callBase();
         this._cacheDimensions();
         this._setContentHeight();
@@ -837,6 +839,10 @@ const Popup = Overlay.inherit({
         if(hasWindow()) {
             this._renderFullscreenWidthClass();
         }
+    },
+
+    _dimensionChanged: function() {
+        this._renderGeometry({ isDimensionChange: true });
     },
 
     _clean: function() {

@@ -2432,6 +2432,24 @@ QUnit.module('renderGeometry', {
             assert.ok(initialCallCount < this.renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
         }
     });
+
+    QUnit.test('dimension change should not reset content height to not restore inner scroll position (T1113123)', function(assert) {
+        const $scrollView = $('<div>');
+        $('#popup').dxPopup({
+            height: 'auto',
+            maxHeight: 200,
+            visible: true,
+            contentTemplate: () => $scrollView.append($('<div>').height(400))
+        });
+        const scrollView = $scrollView.dxScrollView({ height: '100%' }).dxScrollView('instance');
+        const scrollTop = 100;
+
+        scrollView.scrollTo(scrollTop);
+
+        resizeCallbacks.fire();
+
+        assert.strictEqual(scrollView.scrollTop(), scrollTop, 'content scroll position is not reset');
+    });
 });
 
 QUnit.module('positioning', {
