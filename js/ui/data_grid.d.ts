@@ -1463,10 +1463,10 @@ export interface Pager {
      */
     visible?: boolean | Mode;
     /**
-     * @docid GridBaseOptions.pager.ariaLabel
+     * @docid GridBaseOptions.pager.label
      * @default "Navigation"
      */
-    ariaLabel?: string;
+    label?: string;
 }
 
 /**
