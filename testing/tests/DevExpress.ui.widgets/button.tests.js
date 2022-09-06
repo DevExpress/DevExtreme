@@ -6,6 +6,8 @@ import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
 import { Deferred } from 'core/utils/deferred';
 import dxButton from 'ui/button';
 
@@ -759,5 +761,47 @@ QUnit.module('Button', function() {
                 button.repaint();
             });
         }
+    });
+
+    QUnit.module('localization', function() {
+        [
+            { locale: 'en', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'en', text: '', icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'en', text: '', icon: '', expectedAriaLabelText: undefined },
+            { locale: 'en', text: undefined, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'en', text: null, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'en', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'en', text: '', icon: 'close', expectedAriaLabelText: 'Close' },
+            { locale: 'en', text: undefined, icon: 'close', expectedAriaLabelText: 'Close' },
+            { locale: 'en', text: null, icon: 'close', expectedAriaLabelText: 'Close' },
+            { locale: 'ja', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'ja', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'ja', text: '', icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'ja', text: '', icon: '', expectedAriaLabelText: undefined },
+            { locale: 'ja', text: undefined, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'ja', text: null, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'ja', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'ja', text: '', icon: 'close', expectedAriaLabelText: '閉じる' },
+            { locale: 'ja', text: undefined, icon: 'close', expectedAriaLabelText: '閉じる' },
+            { locale: 'ja', text: null, icon: 'close', expectedAriaLabelText: '閉じる' },
+        ].forEach(({ locale, text, icon, expectedAriaLabelText }) => {
+            QUnit.test(`aria-label attribute value should be equal=${expectedAriaLabelText} in '${locale}' locale when text='${text}', icon='${icon}' (T1109711)`, function(assert) {
+                const defaultLocale = localization.locale();
+
+                try {
+                    localization.loadMessages(ja);
+                    localization.locale(locale);
+
+                    const $button = $('#button').dxButton({
+                        text,
+                        icon,
+                    });
+
+                    assert.strictEqual($button.attr('aria-label'), expectedAriaLabelText, 'aria-label attribute localized correctly');
+                } finally {
+                    localization.locale(defaultLocale);
+                }
+            });
+        });
     });
 });
