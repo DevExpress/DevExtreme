@@ -25,7 +25,6 @@ import { DisposeEffectReturn } from '../../utils/effect_return';
 import { registerKeyboardAction } from '../../../ui/shared/accessibility';
 import { EventCallback } from '../common/event_callback';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
-import messageLocalization from '../../../localization/message';
 
 export const viewFunction = ({
   widgetRootElementRef,
@@ -203,11 +202,11 @@ export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChang
     return combineClasses(classesMap);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get aria(): Record<string, string> {
+    console.log(this.props);
     return {
       role: 'navigation',
-      label: messageLocalization.format('dxPager-ariaPagination'),
+      label: this.props.label,
     };
   }
 }
