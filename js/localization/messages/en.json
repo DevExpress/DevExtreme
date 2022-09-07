@@ -174,7 +174,7 @@
         "dxPager-page": "Page {0}",
         "dxPager-prevPage": "Previous Page",
         "dxPager-nextPage": "Next Page",
-        "dxPager-ariaLabel": "Pagination",
+        "dxPager-ariaLabel": "Page Navigation",
 
         "dxPivotGrid-grandTotal": "Grand Total",
         "dxPivotGrid-total": "{0} Total",
