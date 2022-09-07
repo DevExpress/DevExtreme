@@ -2035,6 +2035,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.pager.visible]
      */
     visible?: boolean | Mode;
+    /**
+     * [descr:GridBaseOptions.pager.label]
+     */
+    label?: string;
   }
   export interface SearchPanel {
     /**
@@ -8012,45 +8016,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Pager {
-      /**
-       * [descr:GridBaseOptions.pager.allowedPageSizes]
-       */
-      allowedPageSizes?:
-        | Array<number | DevExpress.common.charts.PagerPageSize>
-        | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.pager.displayMode]
-       */
-      displayMode?: DevExpress.common.charts.PagerDisplayMode;
-      /**
-       * [descr:GridBaseOptions.pager.infoText]
-       */
-      infoText?: string;
-      /**
-       * [descr:GridBaseOptions.pager.showInfo]
-       */
-      showInfo?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.showNavigationButtons]
-       */
-      showNavigationButtons?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.showPageSizeSelector]
-       */
-      showPageSizeSelector?: boolean;
-      /**
-       * [descr:GridBaseOptions.pager.visible]
-       */
-      visible?: boolean | DevExpress.common.Mode;
-      /**
-       * [descr:GridBaseOptions.pager.label]
-       */
-      label?: string;
-    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
