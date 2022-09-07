@@ -15,7 +15,7 @@ const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
 
 module('dialog tests', {
     beforeEach: function() {
-        viewPort('#qunit-fixture');
+        viewPort($('#qunit-fixture'));
 
         fx.off = true;
 
@@ -315,7 +315,7 @@ module('dialog tests', {
 
 QUnit.module('width on android', {
     beforeEach: function() {
-        viewPort('#qunit-fixture');
+        viewPort($('#qunit-fixture'));
         fx.off = true;
         this.realDevice = devices.real();
 
