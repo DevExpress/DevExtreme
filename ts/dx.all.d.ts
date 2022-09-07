@@ -7629,7 +7629,7 @@ declare module DevExpress.ui {
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface PagingBase {
       /**
