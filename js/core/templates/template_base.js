@@ -40,7 +40,9 @@ export class TemplateBase {
             return;
         }
 
-        const resultInBody = domAdapter.getBody().contains($container.get(0));
+        const body = domAdapter.getBody();
+        const el = $container.get(0);
+        const resultInBody = body.contains(el) || body.contains(domAdapter.getRootNode(el).host);
         if(!resultInBody) {
             return;
         }

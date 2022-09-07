@@ -72,7 +72,7 @@ const BaseStrategy = Class.inherit({
 
     add: function(element, handleObj) {
         if(this._handlerCount <= 0 || this.noBubble) {
-            element = this.noBubble ? element : domAdapter.getDocument();
+            element = this.noBubble ? element : domAdapter.getRootNode(element);
             this._setSelector(handleObj);
 
             const that = this;
