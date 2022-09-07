@@ -514,6 +514,10 @@ export const rowsModule = {
                     };
                 },
 
+                _needWrapRow: function() {
+                    return this.callBase() || !!this.option('dataRowTemplate');
+                },
+
                 _renderCells: function($row, options) {
                     if(options.row.rowType === 'group') {
                         this._renderGroupedCells($row, options);

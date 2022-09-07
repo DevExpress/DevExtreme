@@ -489,13 +489,17 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
     },
 
-    _wrapRowIfNeed: function($table, $row, isRefreshing) {
+    _needWrapRow: function($tableElement) {
         const hasRowTemplate = !!this.option().rowTemplate;
-        const hasDataRowTemplate = !!this.option('dataRowTemplate');
-        const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
-        const hasTbodyAsDataRow = hasDataRowTemplate || hasRowTemplate && !!this._getBodies($tableElement)?.filter('.' + ROW_CLASS).length;
 
-        if(hasTbodyAsDataRow) {
+        return hasRowTemplate && !!this._getBodies($tableElement)?.filter('.' + ROW_CLASS).length;
+    },
+
+    _wrapRowIfNeed: function($table, $row, isRefreshing) {
+        const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
+        const needWrapRow = this._needWrapRow($tableElement);
+
+        if(needWrapRow) {
             const $tbody = $('<tbody>').addClass($row.attr('class'));
 
             this.setAria('role', 'presentation', $tbody);
