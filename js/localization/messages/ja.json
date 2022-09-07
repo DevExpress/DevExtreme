@@ -161,6 +161,7 @@
         "dxPager-page": "ページ {0}",
         "dxPager-prevPage": "前のページ",
         "dxPager-nextPage": "次のページ",
+        "dxPager-ariaLabel": "ページ ナビゲーション",
         "dxPivotGrid-grandTotal": "総計",
         "dxPivotGrid-total": "{0} 合計",
         "dxPivotGrid-fieldChooserTitle": "フィールドの選択",
