@@ -113,6 +113,12 @@ export function renderFieldItem({
                 component: formOrLayoutManager,
                 name: item.name
             },
+            onRendered() {
+                const $validationTarget = getValidationTarget($fieldEditorContainer);
+                const validationTargetInstance = tryGetValidationTargetInstance($validationTarget);
+
+                toggleWrapperInvalidClassForMaterial(validationTargetInstance);
+            }
         });
     } else {
         const $div = $('<div>').appendTo($fieldEditorContainer);
@@ -131,9 +137,8 @@ export function renderFieldItem({
     // Setup $validation:
     //
 
-    const editorElem = $fieldEditorContainer.children().first();
-    const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
-    const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
+    const $validationTarget = getValidationTarget($fieldEditorContainer);
+    const validationTargetInstance = tryGetValidationTargetInstance($validationTarget);
 
     if(validationTargetInstance) {
         const isItemHaveCustomLabel = item.label && item.label.text;
@@ -162,27 +167,7 @@ export function renderFieldItem({
             });
         }
 
-        if(isMaterial()) {
-            const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
-            const toggleInvalidClass = function(e) {
-                $(e.element).parents(wrapperClass)
-                    .toggleClass(
-                        INVALID_CLASS,
-                        e.component.option('isValid') === false &&
-                        (e.component._isFocused() || e.component.option('validationMessageMode') === 'always')
-                    );
-            };
-
-            validationTargetInstance.on('optionChanged', (e) => {
-                if(e.name !== 'isValid') return;
-                toggleInvalidClass(e);
-            });
-
-            validationTargetInstance
-                .on('focusIn', toggleInvalidClass)
-                .on('focusOut', toggleInvalidClass)
-                .on('enterKey', toggleInvalidClass);
-        }
+        toggleWrapperInvalidClassForMaterial(validationTargetInstance);
     }
 
     //
@@ -206,4 +191,38 @@ export function renderFieldItem({
     }
 
     return { $fieldEditorContainer, $rootElement, widgetInstance };
+}
+
+function getValidationTarget($fieldEditorContainer) {
+    const $editor = $fieldEditorContainer.children().first();
+    return $editor.hasClass(TEMPLATE_WRAPPER_CLASS) ? $editor.children().first() : $editor;
+}
+
+function tryGetValidationTargetInstance($validationTarget) {
+    return $validationTarget && $validationTarget.data('dx-validation-target');
+}
+
+function toggleWrapperInvalidClassForMaterial(validationTargetInstance) {
+    if(validationTargetInstance && isMaterial()) {
+        const wrapperClass = `.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`;
+        const toggleInvalidClass = (e) => {
+            $(e.element)
+                .parents(wrapperClass)
+                .toggleClass(
+                    INVALID_CLASS,
+                    e.component.option('isValid') === false &&
+                    (e.component._isFocused() || e.component.option('validationMessageMode') === 'always')
+                );
+        };
+
+        validationTargetInstance.on('optionChanged', (e) => {
+            if(e.name !== 'isValid') return;
+            toggleInvalidClass(e);
+        });
+
+        validationTargetInstance
+            .on('focusIn', toggleInvalidClass)
+            .on('focusOut', toggleInvalidClass)
+            .on('enterKey', toggleInvalidClass);
+    }
 }

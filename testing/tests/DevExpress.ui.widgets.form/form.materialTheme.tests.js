@@ -521,6 +521,55 @@ QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949285)', {
         assert.ok(wrapper.hasClass(invalidClass));
     });
 
+    QUnit.testInActiveWindow('dx-invalid class is added for invalid focused editor (async template) (T1107088)', function(assert) {
+        let $editorElement;
+        const form = $('#form').dxForm({
+            formData,
+            items: [
+                {
+                    dataField: 'field1',
+                    helpText: 'help',
+                    template: 'itemTemplate'
+                }
+            ],
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    itemTemplate: {
+                        render({ container, onRendered }) {
+
+                            $editorElement = $('<div>').appendTo(container);
+
+                            setTimeout(() => {
+                                $editorElement.dxTextBox({}).dxValidator({
+                                    validationRules: [{
+                                        type: 'required',
+                                        message: 'LastName is required'
+                                    }]
+                                });
+
+                                $editorElement.dxValidator('instance').validate();
+                                onRendered();
+                            });
+                        }
+                    }
+                }
+            },
+        }).dxForm('instance');
+
+        const $itemContentWrapper = $editorElement.closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
+
+        assert.strictEqual($itemContentWrapper.hasClass(invalidClass), false);
+        this.clock.tick();
+
+        form.validate();
+        $editorElement.dxTextBox('instance').focus();
+        assert.strictEqual($itemContentWrapper.hasClass(invalidClass), true);
+
+        $editorElement.dxTextBox('instance').blur();
+        assert.strictEqual($itemContentWrapper.hasClass(invalidClass), false);
+    });
+
     QUnit.testInActiveWindow('dx-invalid class is added for invalid editor if validationMessageMode: "always" (T1026923)', function(assert) {
         const formInstance = $('#form').dxForm({
             formData,
