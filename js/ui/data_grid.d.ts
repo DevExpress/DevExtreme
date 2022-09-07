@@ -1464,7 +1464,7 @@ export interface Pager {
     visible?: boolean | Mode;
     /**
      * @docid GridBaseOptions.pager.label
-     * @default "Navigation"
+     * @default "Page Navigation"
      */
     label?: string;
 }
