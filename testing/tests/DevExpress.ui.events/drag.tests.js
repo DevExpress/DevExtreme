@@ -6,7 +6,6 @@ const GestureEmitter = require('events/gesture/emitter.gesture');
 const dropTargets = dragEvents.dropTargets;
 const pointerMock = require('../../helpers/pointerMock.js');
 
-$('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {
     const markup =
         '<style>\
@@ -46,6 +45,8 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#qunit-fixture').addClass('qunit-fixture-visible');
 });
 
 GestureEmitter.touchBoundary(GestureEmitter.initialTouchBoundary);
