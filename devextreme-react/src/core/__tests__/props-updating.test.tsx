@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import * as CommonModule from 'devextreme/core/utils/common';
 import ConfigurationComponent from '../nested-option';
 import * as OptionsManagerModule from '../options-manager';
@@ -647,7 +648,7 @@ describe('cfg-component option control', () => {
     expect((optionsManager as any).setValue).not.toBeCalled();
     jest.runAllTimers();
     // simulate Request Animation Frame for template re-render
-    renderTemplate();
+    act(() => renderTemplate());
     // guards are scheduled
     expect(OptionsManagerModule.scheduleGuards).toBeCalled();
     const updatedConfig = { ...config, options: { value: 2 } };

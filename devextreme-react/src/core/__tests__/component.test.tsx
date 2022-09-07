@@ -62,7 +62,7 @@ describe('rendering', () => {
       </TestComponent>
     );
     const { container, unmount, rerender } = render(
-      component,
+      component, { legacyRoot: true }
     );
 
     unmount();
