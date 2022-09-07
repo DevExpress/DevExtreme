@@ -515,7 +515,7 @@ export const rowsModule = {
                 },
 
                 _needWrapRow: function() {
-                    return this.callBase() || !!this.option('dataRowTemplate');
+                    return this.callBase.apply(this, arguments) || !!this.option('dataRowTemplate');
                 },
 
                 _renderCells: function($row, options) {
