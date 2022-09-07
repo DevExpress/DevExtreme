@@ -46,7 +46,7 @@ test('Content should be rendered correctly after setting the grouping.autoExpand
 
   await t
     .wait(100)
-    .expect(await takeScreenshot('expanded-groups-content', Selector('.dx-datagrid')))
+    .expect(await takeScreenshot('expanded-groups-content', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
