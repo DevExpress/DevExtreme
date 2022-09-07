@@ -50,7 +50,7 @@ describe('PagerContent', () => {
         infoVisible: true,
         pageIndexSelectorVisible: true,
         props: componentProps,
-        aria: { role: 'navigation', label: 'Pagination' },
+        aria: { role: 'navigation', label: 'Page Navigation' },
         restAttributes: { 'rest-attribute': {}, className: 'className' },
       } as Partial<PagerContent> as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />);
@@ -350,10 +350,10 @@ describe('PagerContent', () => {
     });
 
     it('aria', () => {
-      (messageLocalization.format as jest.Mock).mockReturnValue('Pagination');
+      (messageLocalization.format as jest.Mock).mockReturnValue('Page Navigation');
       const component = new PagerContent(new PagerContentProps());
 
-      expect(component.aria).toEqual({ role: 'navigation', label: 'Pagination' });
+      expect(component.aria).toEqual({ role: 'navigation', label: 'Page Navigation' });
       expect(messageLocalization.format).toBeCalledWith('dxPager-ariaLabel');
     });
 
