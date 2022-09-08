@@ -118,7 +118,7 @@ export function renderFieldItem({
                 const $validationTarget = getValidationTarget($fieldEditorContainer);
                 const validationTargetInstance = tryGetValidationTargetInstance($validationTarget);
 
-                toggleWrapperInvalidClassForMaterial(validationTargetInstance);
+                toggleWrapperInvalidClassInMaterial(validationTargetInstance);
             }
         });
     } else {
@@ -168,7 +168,7 @@ export function renderFieldItem({
             });
         }
 
-        toggleWrapperInvalidClassForMaterial(validationTargetInstance);
+        toggleWrapperInvalidClassInMaterial(validationTargetInstance);
     }
 
     //
@@ -203,7 +203,7 @@ function tryGetValidationTargetInstance($validationTarget) {
     return $validationTarget && $validationTarget.data(VALIDATION_TARGET_CLASS) || $validationTarget.parent().data(VALIDATION_TARGET_CLASS);
 }
 
-function toggleWrapperInvalidClassForMaterial(validationTargetInstance) {
+function toggleWrapperInvalidClassInMaterial(validationTargetInstance) {
     if(validationTargetInstance && isMaterial()) {
         const wrapperClass = `.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`;
         const toggleInvalidClass = ({ element, component }) => {
