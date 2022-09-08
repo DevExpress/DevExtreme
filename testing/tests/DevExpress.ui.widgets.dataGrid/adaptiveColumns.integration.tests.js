@@ -364,4 +364,99 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // assert
         assert.equal(detailRowItems, '2345');
     });
+
+
+    // T1112866
+    QUnit.test('Adaptive detail column should not be navigable while hidden', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columnHidingEnabled: true,
+            dataSource: [
+                { id: 1, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' },
+                { id: 2, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' }
+            ],
+        }).dxDataGrid('instance');
+
+        const fireKeyDown = (target, key, shift = false) => {
+            const e = $.Event('keydown');
+            e.key = key;
+            e.shiftKey = shift;
+            target.trigger(e);
+        };
+        this.clock.tick();
+        let $lastDataCell = $(dataGrid.getCellElement(0, 5));
+        const $commandCell = $(dataGrid.getCellElement(0, 6));
+        const $firstNextRow = $(dataGrid.getCellElement(1, 0));
+
+        // act
+        dataGrid.focus($lastDataCell);
+        fireKeyDown($lastDataCell, 'Tab');
+        this.clock.tick();
+
+        // assert
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'));
+        assert.notOk($commandCell.hasClass('dx-focused'));
+
+        // act
+        dataGrid.focus($firstNextRow);
+        fireKeyDown($firstNextRow, 'Tab', true);
+        this.clock.tick();
+
+        // assert
+        assert.ok($lastDataCell.hasClass('dx-focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'));
+
+        // act
+        dataGrid.focus($lastDataCell);
+        fireKeyDown($lastDataCell, 'ArrowRight');
+        this.clock.tick();
+
+        // assert
+        assert.notOk($commandCell.hasClass('dx-focused'));
+
+        // act
+        dataGrid.option('width', 400);
+        $lastDataCell = $(dataGrid.getCellElement(0, 4));
+        dataGrid.focus($lastDataCell);
+        fireKeyDown($lastDataCell, 'Tab');
+        this.clock.tick();
+
+        // assert
+        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'));
+        assert.ok($commandCell.hasClass('dx-focused'));
+
+        // act
+        dataGrid.option('width', 600);
+        this.clock.tick();
+
+        // assert
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'));
+    });
+
+    // T1112866
+    QUnit.test('Hidden command cell accessibility attributes', function(assert) {
+
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columnHidingEnabled: true,
+            dataSource: [
+                { id: 1, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' }
+            ],
+        }).dxDataGrid('instance');
+        this.clock.tick();
+        const $commandCell = $(dataGrid.getCellElement(0, 6));
+        // assert
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'));
+        assert.ok($commandCell.attr('aria-hidden'));
+        assert.equal($commandCell.attr('tabindex'), -1);
+
+        // act
+        dataGrid.option('width', 400);
+        this.clock.tick();
+
+        // assert
+        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'));
+        assert.notOk($commandCell.attr('aria-hidden'));
+        assert.notEqual($commandCell.attr('tabindex'), -1);
+    });
 });

@@ -371,7 +371,14 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _showHiddenCellsInView: function({ $cells, isCommandColumn }) {
-        const cssClassNameToRemove = isCommandColumn ? COMMAND_ADAPTIVE_HIDDEN_CLASS : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+        let cssClassNameToRemove = this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+        if(isCommandColumn) {
+            $cells.attr({
+                tabIndex: 0,
+                'aria-hidden': null
+            });
+            cssClassNameToRemove = COMMAND_ADAPTIVE_HIDDEN_CLASS;
+        }
         $cells.removeClass(cssClassNameToRemove);
     },
 
@@ -458,6 +465,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     _hideVisibleCellInView: function({ $cell, isCommandColumn }) {
         const cssClassNameToAdd = isCommandColumn ? COMMAND_ADAPTIVE_HIDDEN_CLASS : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+        $cell.attr({
+            tabIndex: -1,
+            'aria-hidden': true
+        });
         $cell.addClass(cssClassNameToAdd);
     },
 
