@@ -588,18 +588,38 @@ export default {
             return lookupDataSourceOptions;
         }
 
+        const hasGroupPaging = dataSource.remoteOperations().groupPaging;
         const hasLookupOptimization = column.displayField && isString(column.displayField);
-        const group = normalizeGroupingLoadOptions(
-            hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
-        );
 
-        const lookupDataSource = {
-            load: (loadOptions) => {
-                const d = new Deferred();
+        let cachedUniqueRelevantItems;
+        const loadUniqueRelevantItems = (loadOptions) => {
+            const group = normalizeGroupingLoadOptions(
+                hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
+            );
+            const d = new Deferred();
+
+            if(!hasGroupPaging && cachedUniqueRelevantItems) {
+                d.resolve(cachedUniqueRelevantItems);
+            } else {
                 dataSource.load({
                     filter,
                     group,
+                    take: hasGroupPaging ? loadOptions.take : undefined,
+                    skip: hasGroupPaging ? loadOptions.skip : undefined,
                 }).done((items) => {
+                    cachedUniqueRelevantItems = items;
+                    d.resolve(items);
+                }).fail(d.fail);
+            }
+
+            return d;
+        };
+
+        const lookupDataSource = {
+            ...lookupDataSourceOptions,
+            load: (loadOptions) => {
+                const d = new Deferred();
+                loadUniqueRelevantItems(loadOptions).done((items) => {
                     if(items.length === 0) {
                         d.resolve([]);
                     }
@@ -635,10 +655,12 @@ export default {
                         });
                     }
 
-                    newDataSource.on('customizeStoreLoadOptions', (e) => {
-                        e.storeLoadOptions.take = loadOptions.take;
-                        e.storeLoadOptions.skip = loadOptions.skip;
-                    });
+                    if(!hasGroupPaging) {
+                        newDataSource.on('customizeStoreLoadOptions', (e) => {
+                            e.storeLoadOptions.take = loadOptions.take;
+                            e.storeLoadOptions.skip = loadOptions.skip;
+                        });
+                    }
 
                     newDataSource
                         .load()
@@ -657,7 +679,7 @@ export default {
                 });
 
                 return d.promise();
-            }
+            },
         };
 
         return lookupDataSource;
