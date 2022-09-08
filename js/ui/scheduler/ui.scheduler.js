@@ -1523,6 +1523,7 @@ class Scheduler extends Widget {
             groups: this._getCurrentViewOption('groups'),
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             timeZoneCalculator: this.timeZoneCalculator,
+            datesInUTC: this.option('datesInUTC'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
             getViewDataProvider: () => this._workSpace?.viewDataProvider,

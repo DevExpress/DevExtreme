@@ -664,10 +664,7 @@ class SchedulerAppointments extends CollectionWidget {
         const timeZoneCalculator = this.option('timeZoneCalculator');
         const dataAccessors = this.option('dataAccessors');
 
-        const {
-            startDate,
-            endDate
-        } = getAppointmentDateRange({
+        const dateRange = getAppointmentDateRange({
             handles: e.handles,
             appointmentSettings: $element.data('dxAppointmentSettings'),
             isVerticalViewDirection: this.option('isVerticalViewDirection')(),
@@ -684,10 +681,12 @@ class SchedulerAppointments extends CollectionWidget {
             DOMMetaData: this.option('getDOMElementsMetaData')(),
         });
 
-        return {
-            startDate: convertUTCDate(startDate, 'toUtc'),
-            endDate: convertUTCDate(endDate, 'toUtc'),
-        };
+        return this.option('datesInUTC')
+            ? {
+                startDate: convertUTCDate(dateRange.startDate, 'toUtc'),
+                endDate: convertUTCDate(dateRange.endDate, 'toUtc'),
+            }
+            : dateRange;
     }
 
     updateResizedAppointment($element, dateRange, dataAccessors, timeZoneCalculator) {
