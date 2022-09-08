@@ -4,7 +4,7 @@ import BaseRenderingStrategy from './strategy.base';
 import { ExpressionUtils } from '../../expressionUtils';
 import { groupAppointmentsByResources } from '../../resources/utils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { replaceWrongEndDate, getAppointmentTakesSeveralDays } from '../dataProvider/utils';
+import { getValidEndDate, getAppointmentTakesSeveralDays } from '../dataProvider/utils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     get instance() { return this.options.instance; }
@@ -180,9 +180,11 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
     // From subscribe
     replaceWrongAppointmentEndDate(rawAppointment, startDate, endDate) {
-        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
+        const isAllDay = this.dataAccessors.getter.allDay(rawAppointment);
 
-        replaceWrongEndDate(adapter, startDate, endDate, this.cellDuration, this.dataAccessors);
+        const validEndDate = getValidEndDate(isAllDay, startDate, endDate, this.cellDuration, this.dataAccessors);
+
+        this.dataAccessors.setter.endDate(rawAppointment, validEndDate);
     }
 
     // TODO: get rid of an extra 'needClearSettings' argument

@@ -1,25 +1,52 @@
 import type { Appointment } from '../../../../ui/scheduler';
 import { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
-import { replaceWrongEndDate } from '../../../../ui/scheduler/appointments/dataProvider/utils';
+import { getValidEndDate } from '../../../../ui/scheduler/appointments/dataProvider/utils';
 import { createAppointmentAdapter } from '../../../../ui/scheduler/appointmentAdapter';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 import { isDefined } from '../../../../core/utils/type';
+import { convertUTCDate } from './date/convertUTCDate';
 
 const RECURRENCE_FREQ = 'freq';
+
+// TODO get rid of rawAppointment mutation
+const patchDates = (
+  rawAppointment: Appointment,
+  dataAccessors: DataAccessorType,
+  cellDurationInMinutes: number,
+  datesInUTC: boolean,
+): void => {
+  let startDate = dataAccessors.getter.startDate(rawAppointment);
+
+  if (startDate) {
+    let endDate = dataAccessors.getter.endDate(rawAppointment);
+    const allDay = dataAccessors.getter.allDay(rawAppointment);
+
+    if (datesInUTC && allDay) {
+      startDate = convertUTCDate(startDate, 'toLocal');
+      endDate = convertUTCDate(endDate, 'toLocal');
+      dataAccessors.setter.startDate(rawAppointment, startDate);
+    }
+
+    if (!endDate) {
+      const isAllDay = dataAccessors.getter.allDay(rawAppointment);
+      endDate = getValidEndDate(isAllDay, startDate, endDate, cellDurationInMinutes);
+    }
+
+    dataAccessors.setter.endDate(rawAppointment, endDate);
+  }
+};
 
 export const getPreparedDataItems = (
   dataItems: Appointment[] | undefined,
   dataAccessors: DataAccessorType,
   cellDurationInMinutes: number,
   timeZoneCalculator: TimeZoneCalculator,
+  datesInUTC: boolean,
 ): AppointmentDataItem[] => {
   const result: AppointmentDataItem[] = [];
 
   dataItems?.forEach((rawAppointment) => {
-    const startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
-    const endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
-
-    replaceWrongEndDate(rawAppointment, startDate, endDate, cellDurationInMinutes, dataAccessors);
+    patchDates(rawAppointment, dataAccessors, cellDurationInMinutes, datesInUTC);
 
     const adapter = createAppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator);
 
