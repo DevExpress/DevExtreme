@@ -139,7 +139,7 @@ export function renderFieldItem({
     //
 
     const $validationTarget = getValidationTarget($fieldEditorContainer);
-    const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
+    const validationTargetInstance = $validationTarget && $validationTarget.data(VALIDATION_TARGET_CLASS);
 
     if(validationTargetInstance) {
         const isItemHaveCustomLabel = item.label && item.label.text;
