@@ -195,6 +195,8 @@ class Scheduler extends Widget {
 
             startDayHour: 0,
 
+            datesInUTC: false,
+
             endDayHour: 24,
 
             editing: {
@@ -1095,7 +1097,8 @@ class Scheduler extends Widget {
             items,
             this._dataAccessors,
             this._getCurrentViewOption('cellDuration'),
-            this.timeZoneCalculator
+            this.timeZoneCalculator,
+            this.option('datesInUTC'),
         );
     }
 

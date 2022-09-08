@@ -90,6 +90,7 @@ class AppointmentLayoutManager {
             allDayHeight: allDayHeight,
             resizableStep: positionHelper.getResizableStep(),
             visibleDayDuration,
+            datesInUTC: this.instance.option('datesInUTC'),
             // appointment settings
             timeZoneCalculator: this.instance.timeZoneCalculator,
             timeZone: this.instance.option('timeZone'),
