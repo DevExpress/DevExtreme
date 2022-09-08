@@ -728,6 +728,7 @@ class Scheduler extends Widget {
             case 'recurrenceEditMode':
             case 'remoteFiltering':
             case 'timeZone':
+            case 'datesInUTC':
                 this.updateInstances();
                 this.repaint();
                 break;
