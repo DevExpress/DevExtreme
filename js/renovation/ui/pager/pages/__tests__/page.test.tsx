@@ -28,6 +28,7 @@ describe('Small pager pages', () => {
 
     const pageButton = tree.find(LightButton);
 
+    // eslint-disable-next-line spellcheck/spell-checker
     expect(pageButton.prop('selected')).toBeTruthy();
   });
 
