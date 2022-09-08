@@ -634,7 +634,7 @@ QUnit.module('Draw buttons in header panel', {
         headerPanel.render(testElement);
 
         const $columnChooserButton = testElement.find('.dx-toolbar .dx-toolbar-item:visible');
-        const $toolbarMenuButton = $('.dx-toolbar .dx-dropdownmenu:visible');
+        const $toolbarMenuButton = $('.dx-toolbar .dx-dropdownmenu').filter(':visible');
 
         // assert
         assert.equal($toolbarMenuButton.length, 1, 'has shown toolbar menu button');

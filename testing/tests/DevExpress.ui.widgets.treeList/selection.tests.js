@@ -1,3 +1,5 @@
+import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
+
 QUnit.testStart(function() {
     const markup =
 '<!--qunit-fixture-->\
@@ -8,6 +10,8 @@ QUnit.testStart(function() {
 ';
 
     $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';

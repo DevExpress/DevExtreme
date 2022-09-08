@@ -385,7 +385,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             const templateParameters = templates.shift();
 
             const options = templateParameters.options;
-            const doc = domAdapter.getDocument();
+            const doc = domAdapter.getRootNode($(options.container).get(0));
 
             if(!isAsync || $(options.container).closest(doc).length) {
                 if(change) {

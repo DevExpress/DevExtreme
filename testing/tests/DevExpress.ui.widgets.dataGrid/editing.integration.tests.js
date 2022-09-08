@@ -4682,14 +4682,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick();
         dataGrid.editCell(0, 0);
         this.clock.tick();
-        $(':focus').on('focusout', function(e) {
+        $('#qunit-fixture').find(':focus').on('focusout', function(e) {
             // emulate browser behaviour
             $(e.target).trigger('change');
         });
-        $(':focus').val('test');
+        $('#qunit-fixture').find(':focus').val('test');
 
         // act
-        const event = $.Event('keydown', { target: $(':focus').get(0) });
+        const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
         navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
         this.clock.tick();
 
@@ -4715,13 +4715,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick();
         dataGrid.editCell(0, 0);
         this.clock.tick();
-        $(':focus').on('focusout', function(e) {
+        $('#qunit-fixture').find(':focus').on('focusout', function(e) {
             // emulate browser behaviour
             $(e.target).trigger('change');
         });
 
         // act
-        $(':focus').val('test');
+        $('#qunit-fixture').find(':focus').val('test');
         const $secondRowEditor = $(dataGrid.getRowElement(1)).find('.dx-texteditor-input');
         $secondRowEditor.trigger('dxpointerdown');
         $secondRowEditor.trigger('focus');

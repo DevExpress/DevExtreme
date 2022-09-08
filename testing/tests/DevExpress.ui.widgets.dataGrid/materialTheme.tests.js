@@ -25,7 +25,7 @@ QUnit.module('Material theme', baseModuleConfig, () => {
         this.clock.tick();
         dataGridInstance.editCell(0, 0);
 
-        const beforeElement = window.getComputedStyle(document.querySelector('.dx-placeholder'), ':before');
+        const beforeElement = window.getComputedStyle($('.dx-placeholder').get(0), ':before');
         const rightPadding = beforeElement.getPropertyValue('padding-right');
         const leftPadding = beforeElement.getPropertyValue('padding-left');
 

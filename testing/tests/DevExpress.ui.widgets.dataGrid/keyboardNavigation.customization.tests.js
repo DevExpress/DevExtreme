@@ -119,12 +119,12 @@ QUnit.module('Customize keyboard navigation', {
         this.focusCell(2, 1);
         this.triggerKeyDown('2');
         this.clock.tick(525);
-        keyboardMock($(':focus')[0]).keyDown('downArrow');
+        keyboardMock($('#qunit-fixture').find(':focus')[0]).keyDown('downArrow');
         this.clock.tick();
         // assert
         assert.equal($('.dx-selectbox-popup').length, 1, 'drop down created');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        keyboardMock($(':focus')[0]).keyDown('enter');
+        keyboardMock($('#qunit-fixture').find(':focus')[0]).keyDown('enter');
 
         this.triggerKeyDown('enter');
         this.clock.tick();
@@ -139,9 +139,9 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.triggerKeyDown('1');
         this.clock.tick(525);
-        keyboardMock($(':focus')[0]).keyDown('downArrow');
+        keyboardMock($('#qunit-fixture').find(':focus')[0]).keyDown('downArrow');
         this.clock.tick();
-        keyboardMock($(':focus')[0]).keyDown('enter');
+        keyboardMock($('#qunit-fixture').find(':focus')[0]).keyDown('enter');
         this.clock.tick();
         this.triggerKeyDown('upArrow');
         this.clock.tick();
