@@ -486,6 +486,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.dataAccessors,
       this.currentViewConfig.cellDuration,
       this.timeZoneCalculator,
+      this.props.datesInUTC,
     );
   }
 

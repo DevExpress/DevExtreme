@@ -232,6 +232,9 @@ export class SchedulerProps extends BaseWidgetProps {
   @OneWay()
   descriptionExpr = 'description';
 
+  @OneWay()
+  datesInUTC = false;
+
   @Nested()
   editing: AppointmentEditingProps = {
     allowAdding: true,
