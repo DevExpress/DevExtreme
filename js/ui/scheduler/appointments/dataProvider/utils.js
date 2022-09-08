@@ -127,14 +127,15 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
     return exceptionString;
 };
 
-export const getValidEndDate = (isAllDay, startDate, endDate, cellDurationInMinutes) => {
+export const replaceWrongEndDate = (appointment, startDate, endDate, appointmentDuration, dataAccessors) => {
     if(_isEndDateWrong(startDate, endDate)) {
-        return isAllDay
+        const allDay = dataAccessors.getter.allDay(appointment);
+        const calculatedEndDate = allDay
             ? dateUtils.setToDayEnd(new Date(startDate))
-            : new Date(startDate.getTime() + cellDurationInMinutes * toMs('minute'));
-    }
+            : new Date(startDate.getTime() + appointmentDuration * toMs('minute'));
 
-    return endDate;
+        dataAccessors.setter.endDate(appointment, calculatedEndDate);
+    }
 };
 
 export const sortAppointmentsByStartDate = (appointments, dataAccessors) => {

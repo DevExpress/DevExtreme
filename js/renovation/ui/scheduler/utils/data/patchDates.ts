@@ -1,4 +1,4 @@
-import { getValidEndDate } from '../../../../../ui/scheduler/appointments/dataProvider/utils';
+import { replaceWrongEndDate } from '../../../../../ui/scheduler/appointments/dataProvider/utils';
 import { convertUTCDate } from '../date/convertUTCDate';
 import type { Appointment } from '../../../../../ui/scheduler';
 import { DataAccessorType } from '../../types';
@@ -10,24 +10,19 @@ const patchDates = (
   cellDurationInMinutes: number,
   datesInUTC: boolean,
 ): void => {
-  let startDate = dataAccessors.getter.startDate(rawAppointment);
+  let startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
 
   if (startDate) {
-    let endDate = dataAccessors.getter.endDate(rawAppointment);
+    let endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
     const allDay = dataAccessors.getter.allDay(rawAppointment);
 
     if (datesInUTC && allDay) {
-      startDate = convertUTCDate(startDate, 'toLocal');
-      endDate = convertUTCDate(endDate, 'toLocal');
+      startDate = convertUTCDate(startDate, 'toLocal') as Date;
+      endDate = convertUTCDate(endDate, 'toLocal') as Date;
       dataAccessors.setter.startDate(rawAppointment, startDate);
     }
 
-    if (!endDate) {
-      const isAllDay = dataAccessors.getter.allDay(rawAppointment);
-      endDate = getValidEndDate(isAllDay, startDate, endDate, cellDurationInMinutes);
-    }
-
-    dataAccessors.setter.endDate(rawAppointment, endDate);
+    replaceWrongEndDate(rawAppointment, startDate, endDate, cellDurationInMinutes, dataAccessors);
   }
 };
 
