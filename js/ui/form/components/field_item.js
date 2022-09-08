@@ -26,6 +26,7 @@ export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
 import { renderLabel } from './label';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+const VALIDATION_TARGET_CLASS = 'dx-validation-target';
 const INVALID_CLASS = 'dx-invalid';
 
 export function renderFieldItem({
@@ -199,19 +200,20 @@ function getValidationTarget($fieldEditorContainer) {
 }
 
 function tryGetValidationTargetInstance($validationTarget) {
-    return $validationTarget && $validationTarget.data('dx-validation-target');
+    return $validationTarget && $validationTarget.data(VALIDATION_TARGET_CLASS) || $validationTarget.parent().data(VALIDATION_TARGET_CLASS);
 }
 
 function toggleWrapperInvalidClassForMaterial(validationTargetInstance) {
     if(validationTargetInstance && isMaterial()) {
         const wrapperClass = `.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`;
-        const toggleInvalidClass = (e) => {
-            $(e.element)
+        const toggleInvalidClass = ({ element, component }) => {
+            const { isValid, validationMessageMode } = component.option();
+
+            $(element)
                 .parents(wrapperClass)
                 .toggleClass(
                     INVALID_CLASS,
-                    e.component.option('isValid') === false &&
-                    (e.component._isFocused() || e.component.option('validationMessageMode') === 'always')
+                    isValid === false && (component._isFocused() || validationMessageMode === 'always')
                 );
         };
 
