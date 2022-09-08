@@ -27,6 +27,7 @@ import { createAppointmentAdapter } from '../appointmentAdapter';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './dataProvider/utils';
 import { getBoundingRect } from '../../../core/utils/position';
 import { getAppointmentDateRange } from './resizing/core';
+import { convertUTCDate } from '../../../renovation/ui/scheduler/utils/date/convertUTCDate';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -663,7 +664,10 @@ class SchedulerAppointments extends CollectionWidget {
         const timeZoneCalculator = this.option('timeZoneCalculator');
         const dataAccessors = this.option('dataAccessors');
 
-        return getAppointmentDateRange({
+        const {
+            startDate,
+            endDate
+        } = getAppointmentDateRange({
             handles: e.handles,
             appointmentSettings: $element.data('dxAppointmentSettings'),
             isVerticalViewDirection: this.option('isVerticalViewDirection')(),
@@ -679,6 +683,11 @@ class SchedulerAppointments extends CollectionWidget {
             rtlEnabled: this.option('rtlEnabled'),
             DOMMetaData: this.option('getDOMElementsMetaData')(),
         });
+
+        return {
+            startDate: convertUTCDate(startDate, 'toUtc'),
+            endDate: convertUTCDate(endDate, 'toUtc'),
+        };
     }
 
     updateResizedAppointment($element, dateRange, dataAccessors, timeZoneCalculator) {

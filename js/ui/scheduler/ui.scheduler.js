@@ -80,6 +80,7 @@ import {
     compareAllDayPanelBehaviors,
 } from '../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
+import { convertUTCDate } from '../../renovation/ui/scheduler/utils/date/convertUTCDate';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
@@ -1976,6 +1977,11 @@ class Scheduler extends Widget {
         result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
         const rawResult = result.source();
+
+        if(this.option('datesInUTC') && appointmentAllDay) {
+            rawResult.startDate = convertUTCDate(rawResult.startDate, 'toUtc');
+            rawResult.endDate = convertUTCDate(rawResult.endDate, 'toUtc');
+        }
 
         setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);
 
