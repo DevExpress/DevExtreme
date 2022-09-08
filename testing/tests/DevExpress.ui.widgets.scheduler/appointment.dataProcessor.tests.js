@@ -13,6 +13,7 @@ const defaultDataAccessors = {
     getter: {
         startDate: compileGetter('startDate'),
         endDate: compileGetter('endDate'),
+        allDay: compileGetter('endDate'),
     },
     setter: {
         startDate: compileSetter('startDate'),
@@ -1172,6 +1173,15 @@ module('Client side after filtering', () => {
                     startDateTimeZone: compileGetter('StartDateTimeZone'),
                     endDateTimeZone: compileGetter('EndDateTimeZone'),
                 },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate'),
+                    recurrenceRule: compileSetter('RecRule'),
+                    recurrenceException: compileSetter('RecException'),
+                    allDay: compileSetter('AllDay'),
+                    startDateTimeZone: compileSetter('StartDateTimeZone'),
+                    endDateTimeZone: compileSetter('EndDateTimeZone'),
+                },
                 expr: {
                     startDateExpr: 'StartDate',
                     endDateExpr: 'EndDate',
@@ -1362,6 +1372,10 @@ module('Client side after filtering', () => {
                     startDateTimeZone: compileGetter('StartDateTimeZone'),
                     endDateTimeZone: compileGetter('EndDateTimeZone')
                 },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate'),
+                },
                 expr: {
                     startDateExpr: 'StartDate',
                     endDateExpr: 'EndDate',
@@ -1403,6 +1417,10 @@ module('Client side after filtering', () => {
                     allDay: compileGetter('AllDay'),
                     startDateTimeZone: compileGetter('StartDateTimeZone'),
                     endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate'),
                 },
                 expr: {
                     startDateExpr: 'StartDate',
@@ -1446,6 +1464,10 @@ module('Client side after filtering', () => {
                     allDay: compileGetter('AllDay'),
                     startDateTimeZone: compileGetter('StartDateTimeZone'),
                     endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate'),
                 },
                 expr: {
                     startDateExpr: 'StartDate',
