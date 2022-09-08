@@ -105,7 +105,7 @@ test('Drag-n-drop all-day appointment if allDayPanelMode="allDay"', async (t) =>
     .dragToElement(
       draggableAppointment.element,
       scheduler.getAllDayTableCell(1),
-      { speed: 0.8 },
+      { speed: 0.5 },
     )
     .expect(scheduler.getAppointmentCount('allDay'))
     .eql(1)
