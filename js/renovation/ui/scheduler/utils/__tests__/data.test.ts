@@ -7,6 +7,7 @@ const defaultDataAccessors: DataAccessorType = {
   getter: {
     startDate: compileGetter('startDate') as any,
     endDate: compileGetter('endDate') as any,
+    allDay: compileGetter('allDay') as any,
     recurrenceRule: compileGetter('recurrenceRule') as any,
     visible: compileGetter('visible') as any,
   },
@@ -17,6 +18,7 @@ const defaultDataAccessors: DataAccessorType = {
   expr: {
     startDateExpr: 'startDate',
     endDateExpr: 'endDate',
+    allDayExpr: 'allDay',
     recurrenceRuleExpr: 'recurrenceRule',
     visibleExpr: 'visible',
   } as any,
@@ -45,6 +47,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        false,
       );
 
       expect(result)
@@ -73,6 +76,7 @@ describe('Data API', () => {
           defaultDataAccessors,
           30,
           createTimeZoneCalculator(''),
+          false,
         );
 
         expect(result)
@@ -97,6 +101,7 @@ describe('Data API', () => {
           defaultDataAccessors,
           30,
           createTimeZoneCalculator(''),
+          false,
         );
 
         expect(result)
@@ -112,6 +117,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        false,
       );
 
       expect(result)
@@ -122,6 +128,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        false,
       );
 
       expect(result)
@@ -138,6 +145,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        false,
       );
 
       expect(result)
@@ -164,6 +172,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        false,
       );
 
       expect(result)
@@ -186,6 +195,7 @@ describe('Data API', () => {
         defaultDataAccessors,
         30,
         createTimeZoneCalculator(''),
+        false,
       );
 
       expect(result).toMatchObject([expectedTimezones]);
