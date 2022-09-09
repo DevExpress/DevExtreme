@@ -133,7 +133,7 @@
         "dxDataGrid-exportAll": "Экспортировать всё",
         "dxDataGrid-exportSelectedRows": "Экспортировать выбранные строки",
         "dxDataGrid-headerFilterLabel": "Фильтрация",
-        "dxDataGrid-headerFilterIndicatorLabel": "Открыть настройки фильтрации для стобца {0}",
+        "dxDataGrid-headerFilterIndicatorLabel": "Открыть настройки фильтрации для столбца {0}",
         "dxDataGrid-headerFilterEmptyValue": "(Пустое)",
         "dxDataGrid-headerFilterOK": "ОК",
         "dxDataGrid-headerFilterCancel": "Отменить",
