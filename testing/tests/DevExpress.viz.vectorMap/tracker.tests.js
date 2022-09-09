@@ -168,7 +168,7 @@ QUnit.test('Event emitter methods are injected', function(assert) {
     });
 });
 
-// T249548, T322560
+// T249548
 QUnit.module('Default prevention', $.extend({}, environment, {
     check: function(assert, eventMode, eventName, withData, preventDefaultCount, stopPropagationCount) {
         trackerModule._DEBUG_forceEventMode(eventMode);
@@ -180,7 +180,7 @@ QUnit.module('Default prevention', $.extend({}, environment, {
         const stopPropagation = sinon.spy();
         this[withData ? 'trigger' : 'triggerNoData'](eventName, { x: 10, y: 20 }, {
             preventDefault: preventDefault,
-            stopPropagation: stopPropagation
+            stopPropagation: stopPropagation,
         });
 
         assert.strictEqual(preventDefault.callCount, preventDefaultCount, 'prevent default');
@@ -190,7 +190,7 @@ QUnit.module('Default prevention', $.extend({}, environment, {
 
 $.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, mode) {
     QUnit.test(mode + ' - start', function(assert) {
-        this.check(assert, mode, 'start', true, 1, 1);
+        this.check(assert, mode, 'start', true, 1, 0);
     });
 
     QUnit.test(mode + ' - start / no data', function(assert) {
@@ -561,7 +561,7 @@ $.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
     QUnit.test('focus is turned off and not turned on on start on element without data', function(assert) {
         this.triggerNoData('start', {});
 
-        assert.strictEqual(this.focus.turnOff.callCount, 2, 'turn off');
+        assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
         assert.strictEqual(this.focus.stub('turnOn').lastCall, null, 'turn on');
     });
 
