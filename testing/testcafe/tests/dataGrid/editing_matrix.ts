@@ -377,6 +377,7 @@ const editNextCell = async (
       await t.pressKey(columnIndex === 0 ? 'tab' : 'shift+tab');
     } else {
       const isCellRevertBug = mode === 'cell' && columnIndex < nextColumnIndex; // TODO
+      if (mode === 'batch') await t.click(dataGrid.element());// workaround for https://github.com/DevExpress/testcafe/issues/7277 TODO remove once fixed
       await t.click(nextCell.element, { offsetX: isCellRevertBug ? 50 : 5 });
     }
   }
@@ -437,7 +438,7 @@ editingModes.forEach((mode) => {
             }).before(createDataGrid(options));
 
             if (isBasicColumn && !isAdding) {
-              test.skip(`Edit next cell ${JSON.stringify({
+              test(`Edit next cell ${JSON.stringify({
                 mode, dataField, repaintChangesOnly, useKeyboard, useMask,
               })}`, async (t) => {
                 const rowIndex = 0;
