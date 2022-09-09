@@ -36,6 +36,13 @@ QUnit.testStart(function() {
                 width: 100%;\
                 height: 100%;\
             }\
+            #runtime {\
+                width: 100px;\
+                height: 100px;\
+                position: absolute;\
+                top: 200px; \
+                left: 400px; \
+            } \
         </style>\
         <div id="container">\
             <div id="element"></div>\
@@ -228,6 +235,36 @@ QUnit.test('maxBottomOffset', function(assert) {
     });
 
     pointer.start().down().move(0, 200).up();
+});
+
+QUnit.test('Should be possible to drag into created in runtime element', function(assert) {
+    const done = assert.async();
+    const $element = $('#element');
+    const pointer = pointerMock($element);
+
+    let dragEnterCount = 0;
+    const subscribeToDragEnterAndLeaveEvents = function(elements) {
+        elements.on('dxdragenter', function(e) {
+            dragEnterCount = 1;
+        });
+    };
+
+    $element.on('dxdragstart', function(e) {
+        setTimeout(() => {
+            $('#container').append($('<div id="runtime"/>'));
+            subscribeToDragEnterAndLeaveEvents($('#runtime'));
+        }, 5);
+    });
+
+    $element.on('dxdragend', function(e) {
+        $('#runtime').remove();
+    });
+    pointer.start().down();
+    setTimeout(() => {
+        pointer.move(450, 250);
+        assert.equal(dragEnterCount, 1);
+        done();
+    }, 10);
 });
 
 
