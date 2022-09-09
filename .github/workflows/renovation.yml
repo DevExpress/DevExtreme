@@ -62,7 +62,6 @@ jobs:
     - name: Check components generation
       run: |
         npx gulp localization
-        npx gulp native-components-compilation-check
 
   notify:
     runs-on: devextreme-shr2
