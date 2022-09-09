@@ -2035,6 +2035,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.pager.visible]
      */
     visible?: boolean | Mode;
+    /**
+     * [descr:GridBaseOptions.pager.label]
+     */
+    label?: string;
   }
   export interface SearchPanel {
     /**
