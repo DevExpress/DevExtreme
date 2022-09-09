@@ -8,6 +8,7 @@ import { isMaterial as isMaterialTheme, isGeneric, current } from '../themes';
 import TreeView from '../tree_view';
 import devices from '../../core/devices';
 import Popup from '../popup/ui.popup';
+import Button from '../button';
 
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -57,6 +58,35 @@ const processItems = function(that, chooserColumns) {
 };
 
 const ColumnChooserController = modules.ViewController.inherit({
+    renderShowColumnChooserButton: function($element) {
+        const that = this;
+        const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
+        const columnChooserEnabled = that.option('columnChooser.enabled');
+        const $showColumnChooserButton = $element.find('.' + columnChooserButtonClass);
+        let $columnChooserButton;
+
+        if(columnChooserEnabled) {
+            if(!$showColumnChooserButton.length) {
+                $columnChooserButton = $('<div>')
+                    .addClass(columnChooserButtonClass)
+                    .appendTo($element);
+
+                that._createComponent($columnChooserButton, Button, {
+                    icon: COLUMN_CHOOSER_ICON_NAME,
+                    onClick: function() {
+                        that.getView('columnChooserView').showColumnChooser();
+                    },
+                    hint: that.option('columnChooser.title'),
+                    integrationOptions: {}
+                });
+            } else {
+                $showColumnChooserButton.show();
+            }
+        } else {
+            $showColumnChooserButton.hide();
+        }
+    },
+
     getPosition: function() {
         const rowsView = this.getView('rowsView');
 
