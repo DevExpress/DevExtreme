@@ -243,6 +243,19 @@ QUnit.module('Pager', {
         assert.notStrictEqual(testElement.find('.dx-pager').css('display'), 'none', 'pager visible');
     });
 
+    QUnit.test('Label option works', function(assert) {
+        // arrange
+        const testElement = $('#container');
+        const pagerView = this.pagerView;
+
+        this.dataControllerOptions.pageCount = 1;
+        this.options.pager.label = 'my_label';
+        pagerView.render(testElement, {});
+
+        // assert
+        assert.strictEqual(testElement.find('.dx-pager').attr('aria-label'), 'my_label');
+    });
+
     QUnit.test('Pager is not rendered on partial update', function(assert) {
     // arrange
         const testElement = $('#container');
