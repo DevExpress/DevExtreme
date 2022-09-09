@@ -344,6 +344,11 @@ QUnit.module('Header Filter', {
         const that = this;
         const testElement = $('#container');
 
+        const columnsCaptions = ['col 1', 'col 2'];
+        this.columns = [
+            { dataField: 'Test1', allowFiltering: true, caption: columnsCaptions[0] },
+            { dataField: 'Test2', allowFiltering: true, caption: columnsCaptions[1] }
+        ];
         that.setupDataGrid();
 
         // act
@@ -355,9 +360,11 @@ QUnit.module('Header Filter', {
         assert.expect(6);
 
         filterIndicator.each((ind, element) => {
+            const ariaLabelValue = messageLocalization.format('dxDataGrid-headerFilterIndicatorLabel', columnsCaptions[ind]);
+
             assert.strictEqual(element.getAttribute('role'), 'button', `filter indicator ${ind} has role attr`);
             assert.strictEqual(element.getAttribute('aria-haspopup'), 'dialog', `filter indicator ${ind} has aria-haspopup attr`);
-            assert.strictEqual(element.getAttribute('aria-label'), 'Filter column', `filter indicator ${ind} has aria-label attr`);
+            assert.strictEqual(element.getAttribute('aria-label'), ariaLabelValue, `filter indicator ${ind} has aria-label attr`);
         });
 
     });
