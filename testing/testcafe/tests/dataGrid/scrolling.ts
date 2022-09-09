@@ -943,7 +943,6 @@ test('Scroll to the bottom after expand several group', async (t) => {
     groupPanel: {
       visible: true,
     },
-    wordWrapEnabled: true,
     showBorders: true,
     columns: [{
       dataField: 'Id',
