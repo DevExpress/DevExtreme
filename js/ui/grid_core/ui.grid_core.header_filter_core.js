@@ -152,9 +152,10 @@ export const HeaderFilterView = modules.View.inherit({
         const showColumnLines = this.option('showColumnLines');
         const alignment = ((options.alignment === 'right') ^ !showColumnLines) ? 'left' : 'right';
 
-        const $overlayContent = that._popupContainer.$content().parent();
-        $overlayContent.attr('role', 'dialog');
-        $overlayContent.attr('aria-label', messageLocalization.format('dxDataGrid-headerFilterLabel'));
+        that._popupContainer.setAria({
+            role: 'dialog',
+            label: messageLocalization.format('dxDataGrid-headerFilterLabel')
+        });
 
         if(that._popupContainer) {
             that._cleanPopupContent();
