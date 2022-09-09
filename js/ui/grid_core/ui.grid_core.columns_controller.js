@@ -2005,7 +2005,13 @@ export const columnsControllerModule = {
                                         selector === column.calculateGroupValue ||
                                         selector === column.calculateDisplayValue
                                     ) {
-                                        column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
+
+                                        if(fromDataSource) {
+                                            column.sortOrder = 'sortOrder' in column ? column.sortOrder : (sortParameters[i].desc ? 'desc' : 'asc');
+                                        } else {
+                                            column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
+                                        }
+
 
                                         if(isExpanded !== undefined) {
                                             column.autoExpandGroup = isExpanded;
