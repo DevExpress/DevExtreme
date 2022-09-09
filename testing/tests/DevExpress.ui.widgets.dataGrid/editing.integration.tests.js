@@ -1824,11 +1824,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             keyExpr: 'field1',
             columnWidth: 100,
             onContentReady: (e) => {
-                const comp = e.component;
-                if(comp.getController) {
-                    const editCtrl = comp.getController('editing');
-                    if(editCtrl) {
-                        editCtrl.highlightDataCell = () => {
+                const component = e.component;
+                if(component.getController) {
+                    const editingController = component.getController('editing');
+                    if(editingController) {
+                        editingController.highlightDataCell = () => {
                             counter++;
                         };
                     }
@@ -1848,11 +1848,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 });
             },
         });
-
         this.clock.tick();
-
-        // act
-        //
 
         // assert
         assert.equal(counter, 0, 'HighlightDataCell count');
