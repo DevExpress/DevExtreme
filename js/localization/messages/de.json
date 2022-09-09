@@ -132,6 +132,8 @@
         "dxDataGrid-selectedRows": "Ausgewählte Zeilen",
         "dxDataGrid-exportAll": "Alle Daten exportieren",
         "dxDataGrid-exportSelectedRows": "Ausgewählte Zeilen exportieren",
+        "dxDataGrid-headerFilterLabel": "Filteroptionen",
+        "dxDataGrid-headerFilterIndicatorLabel": "Filteroptionen für Spalte {0} öffnen",
         "dxDataGrid-headerFilterEmptyValue": "(Leerwerte)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Abbrechen",

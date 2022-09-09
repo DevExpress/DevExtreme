@@ -339,26 +339,27 @@ QUnit.module('Header Filter', {
     });
 
     // T1109631
-    QUnit.test('Check header filter indicator has role attribute', function(assert) {
+    QUnit.test('header filter indicator should have role, label, haspopup attributes', function(assert) {
         // arrange
         const that = this;
         const testElement = $('#container');
 
-        that.setupDataGrid({
-            dataSource: [],
-            keyExpr: 'ID',
-            headerFilter: {
-                visible: true,
-            },
-            columns: ['ID', 'Column 2'],
-        });
+        that.setupDataGrid();
 
         // act
         that.columnHeadersView.render(testElement);
 
         // assert
-        assert.expect(2);
-        testElement.find('.dx-header-filter').each((ind, item) => assert.strictEqual(item.getAttribute('role'), 'button'));
+        const filterIndicator = testElement.find('.dx-header-filter');
+
+        assert.expect(6);
+
+        filterIndicator.each((ind, element) => {
+            assert.strictEqual(element.getAttribute('role'), 'button', `filter indicator ${ind} has role attr`);
+            assert.strictEqual(element.getAttribute('aria-haspopup'), 'dialog', `filter indicator ${ind} has aria-haspopup attr`);
+            assert.strictEqual(element.getAttribute('aria-label'), 'Filter column', `filter indicator ${ind} has aria-label attr`);
+        });
+
     });
 
     QUnit.test('Draw header filter indicator with allowFiltering true', function(assert) {
@@ -457,6 +458,27 @@ QUnit.module('Header Filter', {
         assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.collision'), 'flip fit');
         // T756320
         assert.strictEqual(that.headerFilterView.getPopupContainer().option('hideOnParentScroll'), false, 'hideOnParentScroll should be false');
+    });
+
+    // T1109671
+    QUnit.test('Header filter popup should have aria-label and role attributes', function(assert) {
+        // arrange
+        const that = this;
+        const testElement = $('#container');
+
+        that.setupDataGrid();
+        that.columnHeadersView.render(testElement);
+        that.headerFilterView.render(testElement);
+
+        // act
+        that.headerFilterController.showHeaderFilterMenu(0);
+
+        // assert
+        const popupContainer = that.headerFilterView.getPopupContainer();
+        const $popupContent = popupContainer.$content().parent();
+
+        assert.strictEqual($popupContent.attr('aria-label'), messageLocalization.format('dxDataGrid-headerFilterLabel'), 'has aria-label attribute');
+        assert.strictEqual($popupContent.attr('role'), 'dialog', 'has role="dialog" attribute');
     });
 
     // T435785
