@@ -5,7 +5,6 @@ import modules from './ui.grid_core.modules';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import messageLocalization from '../../localization/message';
 import { isMaterial as isMaterialTheme, isGeneric, current } from '../themes';
-import Button from '../button';
 import TreeView from '../tree_view';
 import devices from '../../core/devices';
 import Popup from '../popup/ui.popup';
@@ -58,35 +57,6 @@ const processItems = function(that, chooserColumns) {
 };
 
 const ColumnChooserController = modules.ViewController.inherit({
-    renderShowColumnChooserButton: function($element) {
-        const that = this;
-        const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
-        const columnChooserEnabled = that.option('columnChooser.enabled');
-        const $showColumnChooserButton = $element.find('.' + columnChooserButtonClass);
-        let $columnChooserButton;
-
-        if(columnChooserEnabled) {
-            if(!$showColumnChooserButton.length) {
-                $columnChooserButton = $('<div>')
-                    .addClass(columnChooserButtonClass)
-                    .appendTo($element);
-
-                that._createComponent($columnChooserButton, Button, {
-                    icon: COLUMN_CHOOSER_ICON_NAME,
-                    onClick: function() {
-                        that.getView('columnChooserView').showColumnChooser();
-                    },
-                    hint: that.option('columnChooser.title'),
-                    integrationOptions: {}
-                });
-            } else {
-                $showColumnChooserButton.show();
-            }
-        } else {
-            $showColumnChooserButton.hide();
-        }
-    },
-
     getPosition: function() {
         const rowsView = this.getView('rowsView');
 
@@ -114,6 +84,11 @@ const ColumnChooserView = ColumnsView.inherit({
         const isSelectMode = this.option('columnChooser.mode') === 'select';
         const columnChooserList = this._columnChooserList;
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
+
+        this._popupContainer.setAria({
+            role: 'dialog',
+            label: messageLocalization.format('dxDataGrid-columnChooserTitle')
+        });
 
         // T726413
         if(isSelectMode && columnChooserList && change && change.changeType === 'selection') {
@@ -477,7 +452,8 @@ export const columnChooserModule = {
                                 onClick: onClickHandler,
                                 hint: hintText,
                                 text: hintText,
-                                onInitialized: onInitialized
+                                onInitialized: onInitialized,
+                                elementAttr: { 'aria-haspopup': 'dialog' }
                             },
                             showText: 'inMenu',
                             location: 'after',
