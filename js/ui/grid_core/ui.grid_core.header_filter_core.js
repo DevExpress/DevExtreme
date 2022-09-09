@@ -9,6 +9,7 @@ import TreeView from '../tree_view';
 import List from '../list_light';
 import '../list/modules/search';
 import '../list/modules/selection';
+import messageLocalization from '../../localization/message';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
@@ -150,6 +151,10 @@ export const HeaderFilterView = modules.View.inherit({
         const that = this;
         const showColumnLines = this.option('showColumnLines');
         const alignment = ((options.alignment === 'right') ^ !showColumnLines) ? 'left' : 'right';
+
+        const $overlayContent = that._popupContainer.$content().parent();
+        $overlayContent.attr('role', 'dialog');
+        $overlayContent.attr('aria-label', messageLocalization.format('dxDataGrid-headerFilterLabel'));
 
         if(that._popupContainer) {
             that._cleanPopupContent();
@@ -378,6 +383,12 @@ export const headerFilterMixin = {
                 if(!this.option('useLegacyKeyboardNavigation')) {
                     $headerFilterIndicator.attr('tabindex', this.option('tabindex') || 0);
                 }
+
+                const indicatorLabel = messageLocalization.format('dxDataGrid-headerFilterIndicatorLabel', column.caption);
+
+                $headerFilterIndicator.attr('aria-label', indicatorLabel);
+                $headerFilterIndicator.attr('aria-haspopup', 'dialog');
+                $headerFilterIndicator.attr('role', 'button');
             }
 
             return $headerFilterIndicator;
@@ -403,7 +414,6 @@ export const headerFilterMixin = {
 
         if(options.name === 'headerFilter') {
             const rtlEnabled = this.option('rtlEnabled');
-            $indicator.attr('role', 'button');
             if($container.children().length && (!rtlEnabled && options.columnAlignment === 'right' || rtlEnabled && options.columnAlignment === 'left')) {
                 $container.prepend($indicator);
                 return;
