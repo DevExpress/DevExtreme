@@ -421,7 +421,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _upDownKeysHandler: function(eventArgs, isEditing) {
-        let rowIndex = this._focusedCellPosition.rowIndex;
         const visibleRowIndex = this.getVisibleRowIndex();
         const $row = this._focusedView && this._focusedView.getRow(visibleRowIndex);
         const $event = eventArgs.originalEvent;
@@ -436,7 +435,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             if(!this._navigateNextCell($event, eventArgs.keyName)) {
                 if(this._isVirtualRowRender() && isUpArrow && dataSource && !dataSource.isLoading()) {
                     const rowHeight = getOuterHeight($row);
-                    rowIndex = this._focusedCellPosition.rowIndex - 1;
+                    const rowIndex = this._focusedCellPosition.rowIndex - 1;
                     this._scrollBy(0, -rowHeight, rowIndex, $event);
                 }
             }
@@ -972,7 +971,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         } else {
             this.setRowFocusType();
             this.setFocusedRowIndex(args.prevRowIndex);
-            $cell = this._getFocusedCell();
             if(this._editingController.isEditing() && isCellEditMode) {
                 this._closeEditCell();
             }
