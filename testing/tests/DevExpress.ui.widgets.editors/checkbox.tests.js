@@ -482,6 +482,47 @@ QUnit.module('Checkbox', function() {
                     assert.notOk(instance._isFocused(), 'checkBox is not focused');
                 });
             });
+
+            QUnit.module('indeterminate state', function() {
+                QUnit.test('click triggers user handler and changes state from false to null, from null to true', function(assert) {
+                    const $element = $('#checkBox').dxCheckBox({
+                        allowIndeterminate: true,
+                        focusStateEnabled: true,
+                        value: false
+                    });
+                    const instance = $element.dxCheckBox('instance');
+
+                    $element.trigger('dxclick');
+                    assert.strictEqual(instance.option('value'), null, 'value has been changed from false to null');
+
+                    $element.trigger('dxclick');
+                    assert.strictEqual(instance.option('value'), true, 'value has been changed from null to true');
+
+                    $element.trigger('dxclick');
+                    assert.strictEqual(instance.option('value'), false, 'value has been changed from true to false');
+                });
+
+                QUnit.test('space press should toggle value from false to null, from null to true', function(assert) {
+                    const $element = $('#checkBox').dxCheckBox({
+                        allowIndeterminate: true,
+                        focusStateEnabled: true,
+                        value: false
+                    });
+                    const instance = $element.dxCheckBox('instance');
+                    const keyboard = keyboardMock($element);
+
+                    $element.trigger('focusin');
+
+                    keyboard.keyDown('space');
+                    assert.strictEqual(instance.option('value'), null, 'value has been changed from false to null');
+
+                    keyboard.keyDown('space');
+                    assert.strictEqual(instance.option('value'), true, 'value has been changed from null to true');
+
+                    keyboard.keyDown('space');
+                    assert.strictEqual(instance.option('value'), false, 'value has been changed from true to false');
+                });
+            });
         }
     });
 });
