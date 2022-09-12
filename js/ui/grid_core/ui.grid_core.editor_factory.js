@@ -190,9 +190,23 @@ const EditorFactory = modules.ViewController.inherit({
         this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-        eventsEngine.on(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.on(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
         this._attachContainerEventHandlers();
+    },
+
+    _getContainerRoot: function() {
+        const $container = this.component?.$element();
+        const root = domAdapter.getRootNode($container?.get(0));
+
+        // NOTE: this condition is for the 'Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)'
+        // testcafe test. The detail grid is created inside document_fragment_node but it is not shadow dom
+        // eslint-disable-next-line no-undef
+        if(root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !root.host) {
+            return domAdapter.getDocument();
+        }
+
+        return root;
     },
 
     _attachContainerEventHandlers: function() {
@@ -212,7 +226,7 @@ const EditorFactory = modules.ViewController.inherit({
     dispose: function() {
         clearTimeout(this._focusTimeoutID);
         clearTimeout(this._updateFocusTimeoutID);
-        eventsEngine.off(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.off(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
     }
 }).include(EditorFactoryMixin);
 

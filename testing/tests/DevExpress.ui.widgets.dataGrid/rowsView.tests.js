@@ -20,6 +20,8 @@ QUnit.testStart(function() {
 </div>';
 
     $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';
@@ -36,6 +38,7 @@ import devices from 'core/devices';
 import config from 'core/config';
 import support from 'core/utils/support';
 import browser from 'core/utils/browser';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from '../../helpers/dataGridMocks.js';
@@ -1414,7 +1417,7 @@ QUnit.module('Rows view', {
                     .appendTo($container);
 
                 // T234340
-                assert.ok(!!$container.closest(document).length, 'cell is attached to dom');
+                assert.ok(!!$container.closest($('#qunit-fixture')).length, 'cell is attached to dom');
             }
         }]);
         const testElement = $('#container');
@@ -1900,7 +1903,7 @@ QUnit.module('Rows view', {
 
 
     // T355686
-    QUnit.test('ContextMenu on hold when touch and when assign items in onContextMenuPreparing', function(assert) {
+    QUnit.skipInShadowDomMode('ContextMenu on hold when touch and when assign items in onContextMenuPreparing', function(assert) {
     // arrange
         const rowInfos = this.items;
         const dataController = new MockDataController({ items: rowInfos });

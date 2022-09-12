@@ -10,6 +10,7 @@ import { DataSource } from 'data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
+import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 import 'ui/data_grid';
 import '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
@@ -20,6 +21,8 @@ const SORT_INDEX_INDICATOR_SELECTOR = '.dx-sort-index-indicator';
 
 $('body').addClass('dx-viewport');
 QUnit.testStart(function() {
+    $('#qunit-fixture').addClass('dx-viewport');
+
     const markup =
         '<div class="dx-widget">\
             <div id="container" class="dx-datagrid"></div>\
@@ -27,6 +30,8 @@ QUnit.testStart(function() {
         <div id="containerIE" class="dx-datagrid"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 function getText(cell) {

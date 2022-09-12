@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isString } from '../../core/utils/type';
@@ -10,6 +9,7 @@ import devices from '../../core/devices';
 import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
+import { isElementInDom } from '../../core/utils/dom';
 import Scrollable from '../scroll_view/ui.scrollable';
 import Popup from '../popup/ui.popup';
 import {
@@ -301,7 +301,7 @@ export const editingFormBasedModule = {
                     cellOptions.value = column.calculateCellValue(rowData);
 
                     const template = this._getFormEditItemTemplate.bind(this)(cellOptions, column);
-                    this._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
+                    this._rowsView.renderTemplate($container, template, cellOptions, !!isElementInDom($container)).done(() => {
                         this._rowsView._updateCell($container, cellOptions);
                     });
                     return cellOptions;

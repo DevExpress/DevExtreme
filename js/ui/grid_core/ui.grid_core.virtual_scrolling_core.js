@@ -56,11 +56,12 @@ export function subscribeToExternalScrollers($element, scrollChangedHandler, $ta
 
     function subscribeToScrollEvents($scrollElement) {
         const isDocument = $scrollElement.get(0).nodeName === '#document';
+        const isElement = $scrollElement.get(0).nodeType === getWindow().Node.ELEMENT_NODE;
         let scrollable = $scrollElement.data('dxScrollable');
         let eventsStrategy = widgetScrollStrategy;
 
         if(!scrollable) {
-            scrollable = isDocument && $(getWindow()) || $scrollElement.css('overflowY') === 'auto' && $scrollElement;
+            scrollable = isDocument && $(getWindow()) || isElement && $scrollElement.css('overflowY') === 'auto' && $scrollElement;
             eventsStrategy = eventsEngine;
             if(!scrollable) return;
         }
@@ -84,7 +85,9 @@ export function subscribeToExternalScrollers($element, scrollChangedHandler, $ta
         });
     }
 
-    for($scrollElement = $targetElement.parent(); $scrollElement.length; $scrollElement = $scrollElement.parent()) {
+    const getScrollElementParent = $element => $($element.get(0).parentNode ?? $element.get(0).host);
+
+    for($scrollElement = $targetElement.parent(); $scrollElement.length; $scrollElement = getScrollElementParent($scrollElement)) {
         subscribeToScrollEvents($scrollElement);
     }
 

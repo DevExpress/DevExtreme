@@ -7,6 +7,7 @@ import { each } from '../../core/utils/iterator';
 import { addNamespace } from '../../events/utils/index';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
+import domAdapter from '../../core/dom_adapter';
 import {
     start as dragEventStart,
     move as dragEventMove,
@@ -286,10 +287,12 @@ const Sortable = DOMComponent.inherit({
         };
 
         const createGroups = function() {
+            const root = domAdapter.getRootNode(that.$element().get(0));
+
             if(!groupSelector) {
                 return element;
             } else {
-                return groupFilter ? $(groupSelector).filter(groupFilter) : element.find(groupSelector);
+                return groupFilter ? $(root).find(groupSelector).filter(groupFilter) : element.find(groupSelector);
             }
         };
 

@@ -8,6 +8,7 @@ import { when, Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
+import { isElementInDom } from '../../core/utils/dom';
 import { isDefined } from '../../core/utils/type';
 
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -738,7 +739,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase();
 
-            if(that.component.$element() && !that._windowScroll && $element.closest(getWindow().document).length) {
+            if(that.component.$element() && !that._windowScroll && isElementInDom($element)) {
                 that._windowScroll = subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
                         that._dataController.setViewportPosition(scrollPos);

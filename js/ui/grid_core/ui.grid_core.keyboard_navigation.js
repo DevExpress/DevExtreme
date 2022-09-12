@@ -169,7 +169,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isFocusedViewCorrect = this._focusedView && this._focusedView.name === rowsView.name;
             let needUpdateFocus = false;
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-            const $focusedElement = $(':focus');
+            const root = $(domAdapter.getRootNode($rowsView.get && $rowsView.get(0)));
+            const $focusedElement = root.find(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
 
             eventsEngine.off($rowsView, 'focusin', rowsViewFocusHandler);

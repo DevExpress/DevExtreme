@@ -9,11 +9,11 @@ import modules from './ui.grid_core.modules';
 import Form from '../form';
 import gridCoreUtils from './ui.grid_core.utils';
 import { isMaterial } from '../themes';
-import { getWindow } from '../../core/utils/window';
 import { equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { Deferred, when } from '../../core/utils/deferred';
+import { isElementInDom } from '../../core/utils/dom';
 import messageLocalization from '../../localization/message';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
@@ -111,8 +111,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             const templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
-            const isDomElement = !!$container.closest(getWindow().document).length;
-            rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isDomElement).done(() => {
+
+            rowsView.renderTemplate($container, column.cellTemplate, templateOptions, isElementInDom($container)).done(() => {
                 rowsView._cellPrepared($container, cellOptions);
             });
         } else {
