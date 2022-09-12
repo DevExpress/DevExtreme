@@ -629,7 +629,6 @@ gridCore.registerModule('summary', {
                             const column = columnsController.columnOption(summaryItem.column);
                             const calculateCellValue = (column && column.calculateCellValue) ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column);
                             let aggregator = summaryItem.summaryType || 'count';
-                            let selector = summaryItem.column;
                             const skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues;
 
                             if(remoteOperations) {
@@ -638,7 +637,7 @@ gridCore.registerModule('summary', {
                                     summaryType: aggregator
                                 };
                             } else {
-                                selector = that._prepareAggregateSelector(calculateCellValue, aggregator);
+                                const selector = that._prepareAggregateSelector(calculateCellValue, aggregator);
 
                                 if(aggregator === 'custom') {
                                     if(!calculateCustomSummary) {
