@@ -607,7 +607,7 @@ const ResizingController = modules.ViewController.inherit({
         that.updateSize($rootElement);
         const hasHeight = that._hasHeight || maxHeightHappened;
 
-        if(height && (that._hasHeight ^ height !== 'auto')) {
+        if(height && (that._hasHeight ^ (height !== 'auto'))) {
             $testDiv = $('<div>');
             setHeight($testDiv, height);
             $testDiv.appendTo($rootElement);
