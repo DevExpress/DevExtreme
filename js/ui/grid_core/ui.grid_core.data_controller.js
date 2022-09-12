@@ -475,11 +475,10 @@ export const dataControllerModule = {
                 },
                 _initDataSource: function() {
                     const that = this;
-                    let dataSource = this.option('dataSource');
                     const oldDataSource = this._dataSource;
 
                     that.callBase();
-                    dataSource = that._dataSource;
+                    const dataSource = that._dataSource;
                     that._useSortingGroupingFromColumns = true;
                     that._cachedProcessedItems = null;
                     if(dataSource) {
