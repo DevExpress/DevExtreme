@@ -2,10 +2,11 @@ import { ClientFunction } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
-import CommandCell from '../command-cell';
+import CommandCell from '../commandCell';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',
+  commandDrag: 'dx-command-drag',
   focusedRow: 'dx-row-focused',
   rowRemoved: 'dx-row-removed',
   selection: 'dx-selection',
@@ -47,6 +48,10 @@ export default class DataRow extends FocusableElement {
 
   getCommandCell(index: number): CommandCell {
     return new CommandCell(this.element, index, this.widgetName);
+  }
+
+  getDragCommand(): Selector {
+    return this.element.find(`.${CLASS.commandDrag}`);
   }
 
   getSelectCheckBox(): Selector {

@@ -8,9 +8,12 @@ import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
-import { WidgetName } from '../../helpers/createWidget';
 
-const CLASS = {
+import { WidgetName } from '../../helpers/createWidget';
+import { Overlay } from './overlay';
+
+export const CLASS = {
+  dataGrid: 'dx-datagrid',
   headers: 'headers',
   headerPanel: 'header-panel',
   dataRow: 'dx-data-row',
@@ -21,14 +24,21 @@ const CLASS = {
   editFormRow: 'edit-form',
   button: 'dx-button',
   formButtonsContainer: 'form-buttons-container',
-  overlayContent: 'edit-popup',
-  popupContent: 'dx-overlay-content',
+  popupEdit: 'edit-popup',
+
+  headerRow: 'dx-header-row',
+  footerRow: 'dx-footer-row',
+
+  overlayContent: 'dx-overlay-content',
+  overlayWrapper: 'dx-overlay-wrapper',
+
   toolbar: 'dx-toolbar',
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
+  commandDrag: 'dx-command-drag',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -57,7 +67,7 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): 
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
-  constructor(id: string) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
@@ -102,6 +112,10 @@ export default class DataGrid extends Widget {
     return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
   }
 
+  getGroupRowSelector(): Selector {
+    return this.element.find(`.${CLASS.groupRow}`);
+  }
+
   getGroupRow(index: number): GroupRow {
     return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.getName());
   }
@@ -114,8 +128,17 @@ export default class DataGrid extends Widget {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
   }
 
+  getOverlay(): Overlay {
+    return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
+  }
+
   getPager(): Pager {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getFooterRow(): Selector {
+    return this.element.find(`.${CLASS.footerRow}`);
   }
 
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
@@ -208,10 +231,14 @@ export default class DataGrid extends Widget {
   }
 
   getPopupEditForm(): EditForm {
-    const element = Selector(`.${this.addWidgetPrefix(CLASS.overlayContent)} .${CLASS.popupContent}`);
+    const element = Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)} .${CLASS.overlayContent}`);
     const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
     return new EditForm(element, buttons);
+  }
+
+  getToolbar(): Selector {
+    return this.element.find(`.${CLASS.toolbar}`);
   }
 
   getHeaderPanel(): HeaderPanel {
@@ -220,6 +247,11 @@ export default class DataGrid extends Widget {
 
   getRevertButton(): Selector {
     return this.element.find(`.${CLASS.revertButton}`);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getDragCommand(): Selector {
+    return Selector(`.${CLASS.dataRow} .${CLASS.commandDrag}`);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
@@ -342,6 +374,19 @@ export default class DataGrid extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).updateDimensions(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
+  apiExpandAllGroups(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).option('grouping.autoExpandAll', true),
       {
         dependencies: {
           getInstance,

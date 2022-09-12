@@ -3,6 +3,7 @@
         "Yes": "Да",
         "No": "Нет",
         "Cancel": "Отмена",
+        "Close": "Закрыть",
         "Clear": "Очистить",
         "Done": "Готово",
         "Loading": "Загрузка...",
@@ -160,6 +161,7 @@
         "dxPager-page": "Страница {0}",
         "dxPager-prevPage": "Предыдущая страница",
         "dxPager-nextPage": "Следующая страница",
+        "dxPager-ariaLabel": "Навигация по страницам",
 
         "dxPivotGrid-grandTotal": "Итого",
         "dxPivotGrid-total": "{0} Всего",

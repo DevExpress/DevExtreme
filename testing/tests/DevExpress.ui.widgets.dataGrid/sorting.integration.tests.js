@@ -1,6 +1,5 @@
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
-
 QUnit.testStart(function() {
     const markup = `
         <div id="container">
@@ -287,6 +286,35 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.equal($(dataGrid.element()).find('.dx-header-row .dx-sort-up').length, 1, 'one sort indicator is shown');
         assert.equal($(dataGrid.element()).find('.dx-header-row').children().length, 2, 'two header cells');
         assert.equal($(dataGrid.element()).find('.dx-data-row').children().length, 2, 'two data cells');
+    });
+
+    QUnit.test('resetting filterValue and sortOrder with filterSyncEnabled = true should not reset sortOrder when used in beginUpdate/endUpdate block (T1112142)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ a: 'a', b: 'b' }],
+            columns: ['a', 'b'],
+            filterSyncEnabled: true,
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.columnOption('a', 'sortOrder', 'asc');
+        dataGrid.columnOption('b', 'filterValue', 'G');
+
+        // assert
+        assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), 'asc');
+        assert.deepEqual(dataGrid.columnOption('b', 'filterValue'), 'G');
+
+
+        // act
+        dataGrid.beginUpdate();
+        dataGrid.columnOption('a', 'sortOrder', undefined);
+        dataGrid.columnOption('b', 'filterValue', undefined);
+        dataGrid.endUpdate();
+
+        // assert
+        assert.deepEqual(dataGrid.columnOption('a', 'sortOrder'), undefined);
+        assert.deepEqual(dataGrid.columnOption('b', 'filterValue'), undefined);
     });
 });
 

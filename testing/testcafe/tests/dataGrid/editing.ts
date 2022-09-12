@@ -4,9 +4,10 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
+import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
+import { Overlay } from '../../model/dataGrid/overlay';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
@@ -23,15 +24,6 @@ const getGridConfig = (config): Record<string, unknown> => {
   };
 
   return config ? { ...defaultConfig, ...config } : defaultConfig;
-};
-
-const getElementCount = async (dataGrid: DataGrid, elementSelector: string):
-Promise<number> => {
-  const { getInstance } = dataGrid;
-  return ClientFunction(
-    () => (getInstance() as any).element().find(elementSelector).length,
-    { dependencies: { getInstance, elementSelector } },
-  )();
 };
 
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
@@ -1414,7 +1406,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
     .doubleClick(cell0.element)
     .expect(cell0.isEditCell)
     .ok()
-    .click(cell0.element.find('.dx-checkbox'))
+    .click(cell0.getCheckbox())
     .expect($revertButton.exists)
     .ok()
     .click($revertButton)
@@ -1443,6 +1435,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
 test('Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
+  const overlay = dataGrid.getOverlay();
 
   // act
   await t
@@ -1453,7 +1446,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1461,7 +1454,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1469,7 +1462,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
@@ -1507,6 +1500,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 test('Cell - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
+  const overlay = dataGrid.getOverlay();
 
   // act
   await t
@@ -1516,8 +1510,8 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1)
+    .expect(overlay.getRevertTooltip().count).eql(1);
 
   // act
   await t
@@ -1525,8 +1519,8 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1)
+    .expect(overlay.getRevertTooltip().count).eql(1);
 
   // act
   await t
@@ -1534,8 +1528,8 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1)
+    .expect(overlay.getRevertTooltip().count).eql(1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
@@ -1573,6 +1567,7 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
+  const overlay = dataGrid.getOverlay();
 
   // act
   await t
@@ -1583,7 +1578,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1591,7 +1586,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1599,7 +1594,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
@@ -1635,18 +1630,19 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 }));
 
 test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const overlay = new Overlay();
 
   // act
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0))
     .wait(1000)
-    .click('.dx-overlay-content .dx-checkbox');
+    .click(overlay.getPopupCheckbox());
 
   // assert
   await t
-    .expect(await takeScreenshot('grid-popup-editing-checkbox.png', '.dx-overlay-content'))
+    .expect(await takeScreenshot('grid-popup-editing-checkbox.png', overlay.content))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1676,20 +1672,25 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
 });
 
 test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
 
   // act
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
 
+  const overlay = new Overlay();
+
+  const popupDataGridSelector = overlay.content.find(`.${CLASS.dataGrid}`);
+  const popupDataGrid = new DataGrid(popupDataGridSelector);
+
   await t
-    .expect('.dx-popup-content .dx-data-grid .dx-data-row')
+    .expect(popupDataGrid.getDataRow(0).element.exists)
     .ok();
 
   // assert
   await t
-    .expect(await takeScreenshot('grid-popup-editing-grid.png', '.dx-overlay-content'))
+    .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1758,7 +1759,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
 
   // assert
   await t
-    .expect(await takeScreenshot('grid-adaptive-item-text.png', '.dx-datagrid'))
+    .expect(await takeScreenshot('grid-adaptive-item-text.png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

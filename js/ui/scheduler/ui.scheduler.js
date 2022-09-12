@@ -987,6 +987,8 @@ class Scheduler extends Widget {
 
         this._initDataSource();
 
+        this._customizeDataSourceLoadOptions();
+
         this.$element().addClass(WIDGET_CLASS);
 
         this._initEditing();
@@ -1041,6 +1043,13 @@ class Scheduler extends Widget {
         if(this.getWorkSpace()) {
             this.createAppointmentDataProvider();
         }
+    }
+
+    _customizeDataSourceLoadOptions() {
+        this._dataSource?.on('customizeStoreLoadOptions', ({ storeLoadOptions }) => {
+            storeLoadOptions.startDate = this.getStartViewDate();
+            storeLoadOptions.endDate = this.getEndViewDate();
+        });
     }
 
     _initTemplates() {
