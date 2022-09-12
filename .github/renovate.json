@@ -30,6 +30,12 @@
             "enabled": false
         },
         {
+            "matchPackageNames": [
+                "sass-embedded"
+              ],
+              "enabled": false
+        },
+        {
             "matchPackageNames": [ "typescript", "typescript-min" ],
             "matchUpdateTypes": [ "major", "minor" ],
             "enabled": false
