@@ -205,7 +205,10 @@ $grid-masterdetail-padding: 20px;
   .dx-#{$widget-name}-headers,
   .dx-#{$widget-name}-rowsview {
     .dx-texteditor-input {
-      padding: $generic-grid-base-cell-padding;
+      padding-top: $generic-grid-base-cell-padding;
+      padding-bottom: $generic-grid-base-cell-padding;
+      padding-left: $generic-grid-base-cell-padding;
+      
       min-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
     }
 
