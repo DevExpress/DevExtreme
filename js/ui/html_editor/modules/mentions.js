@@ -199,9 +199,7 @@ if(Quill) {
                 marker: this._activeMentionConfig.marker
             };
             const Delta = Quill.import('delta');
-            let startIndex = Math.max(0, caretPosition - markerLength);
-            const retainCorrection = this._getCharByIndex(startIndex) === '\n' ? 1 : 0;
-            startIndex += retainCorrection;
+            const startIndex = Math.max(0, caretPosition - markerLength);
             const newDelta = new Delta()
                 .retain(startIndex)
                 .delete(textLength)
@@ -283,7 +281,10 @@ if(Quill) {
 
             if(this._activeMentionConfig) {
                 this._updateList(this._activeMentionConfig);
-                this.savePosition(caret.index);
+                // NOTE: Fix of off-by-one error in selection index after insert on a new line.
+                // See https://github.com/quilljs/quill/issues/1763.
+                const isOnNewLine = caret.index && this._getCharByIndex(caret.index - 1) === '\n';
+                this.savePosition(caret.index + isOnNewLine);
                 this._popup.option('position', this._popupPosition);
                 this._searchValue = '';
                 this._popup.show();
