@@ -785,6 +785,7 @@ class Scheduler extends Widget {
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
+                break;
             default:
                 super._optionChanged(args);
         }
