@@ -486,7 +486,7 @@ QUnit.module('Checkbox', function() {
             QUnit.module('indeterminate state', function() {
                 QUnit.test('click triggers user handler and changes state from false to null, from null to true', function(assert) {
                     const $element = $('#checkBox').dxCheckBox({
-                        allowIndeterminate: true,
+                        indeterminateStateEnabled: true,
                         focusStateEnabled: true,
                         value: false
                     });
@@ -504,7 +504,7 @@ QUnit.module('Checkbox', function() {
 
                 QUnit.test('space press should toggle value from false to null, from null to true', function(assert) {
                     const $element = $('#checkBox').dxCheckBox({
-                        allowIndeterminate: true,
+                        indeterminateStateEnabled: true,
                         focusStateEnabled: true,
                         value: false
                     });

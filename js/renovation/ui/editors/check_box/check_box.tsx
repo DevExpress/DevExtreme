@@ -100,6 +100,8 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() iconSize?: number | string;
 
+  @OneWay() indeterminateStateEnabled = false;
+
   // overrides default value
   @OneWay() activeStateEnabled = true;
 
@@ -107,7 +109,7 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
 
-  @TwoWay() value: boolean | null = false;
+  @TwoWay() value: boolean | null | undefined = false;
 
   // private
   @OneWay() saveValueChangeEvent?: (event: Event) => void;
@@ -139,12 +141,35 @@ export class CheckBox extends JSXComponent<CheckBoxPropsType>() {
   }
 
   onWidgetClick(event: Event): void {
-    const { readOnly, saveValueChangeEvent } = this.props;
-    const value = this.props.value ?? false;
+    const {
+      value, readOnly, indeterminateStateEnabled, saveValueChangeEvent,
+    } = this.props;
+
+    const finalValue = indeterminateStateEnabled ? value : value ?? false;
 
     if (!readOnly) {
       saveValueChangeEvent?.(event);
-      this.props.value = !value;
+
+      if (indeterminateStateEnabled) {
+        switch (finalValue) {
+          case true:
+            this.props.value = false;
+            break;
+          case false:
+            this.props.value = null;
+            break;
+          case null:
+            this.props.value = true;
+            break;
+          case undefined:
+            this.props.value = true;
+            break;
+          default:
+            break;
+        }
+      } else {
+        this.props.value = !finalValue;
+      }
     }
   }
 
