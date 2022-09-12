@@ -11,8 +11,11 @@
         "Search": "Поиск",
         "Back": "Назад",
         "OK": "OK",
+
         "dxCollectionWidget-noDataText": "Нет данных для отображения",
+
         "dxDropDownEditor-selectLabel": "Выбрать",
+
         "validation-required": "Поле необходимо заполнить",
         "validation-required-formatted": "Необходимо заполнить: {0}",
         "validation-numeric": "Значение должно быть числом",
@@ -32,7 +35,9 @@
         "validation-email": "Недопустимое значение email",
         "validation-email-formatted": "Недопустимое значениe {0}",
         "validation-mask": "Недопустимое значение",
+
         "dxLookup-searchPlaceholder": "Минимальное количество символов: {0}",
+
         "dxList-pullingDownText": "Потяните, чтобы обновить...",
         "dxList-pulledDownText": "Отпустите, чтобы обновить...",
         "dxList-refreshingText": "Обновление...",
@@ -41,14 +46,17 @@
         "dxList-selectAll": "Выбрать все",
         "dxListEditDecorator-delete": "Удалить",
         "dxListEditDecorator-more": "Еще",
+
         "dxScrollView-pullingDownText": "Потяните, чтобы обновить...",
         "dxScrollView-pulledDownText": "Отпустите, чтобы обновить...",
         "dxScrollView-refreshingText": "Обновление...",
         "dxScrollView-reachBottomText": "Загрузка...",
+
         "dxDateBox-simulatedDataPickerTitleTime": "Выберите время",
         "dxDateBox-simulatedDataPickerTitleDate": "Выберите дату",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Выберите дату и время",
         "dxDateBox-validation-datetime": "Значение должно быть датой/временем",
+
         "dxFileUploader-selectFile": "Выберите файл",
         "dxFileUploader-dropFile": "или Перетащите файл сюда",
         "dxFileUploader-bytes": "байт",
@@ -63,14 +71,18 @@
         "dxFileUploader-invalidFileExtension": "Недопустимое расширение файла",
         "dxFileUploader-invalidMaxFileSize": "Файл слишком большой",
         "dxFileUploader-invalidMinFileSize": "Файл слишком маленький",
+
         "dxRangeSlider-ariaFrom": "От",
         "dxRangeSlider-ariaTill": "До",
         "dxSwitch-switchedOnText": "ВКЛ",
         "dxSwitch-switchedOffText": "ВЫКЛ",
+
         "dxForm-optionalMark": "необязательный",
         "dxForm-requiredMessage": " Поле {0} должно быть заполнено",
+
         "dxNumberBox-invalidValueMessage": "Значение должно быть числом",
         "dxNumberBox-noDataText": "Нет данных",
+
         "dxDataGrid-columnChooserTitle": "Выбор столбцов",
         "dxDataGrid-columnChooserEmptyText": "Перетащите столбец сюда, чтобы скрыть его",
         "dxDataGrid-groupContinuesMessage": "Продолжение на следующей странице",
@@ -130,8 +142,8 @@
         "dxDataGrid-exporting": "Экспорт...",
         "dxDataGrid-excelFormat": "Excel файл",
         "dxDataGrid-selectedRows": "Выбранные строки",
-        "dxDataGrid-exportAll": "Экспортировать всё в {0}",
         "dxDataGrid-exportSelectedRows": "Экспортировать выбранные строки в {0}",
+        "dxDataGrid-exportAll": "Экспортировать всё в {0}",
         "dxDataGrid-headerFilterEmptyValue": "(Пустое)",
         "dxDataGrid-headerFilterOK": "ОК",
         "dxDataGrid-headerFilterCancel": "Отменить",
@@ -151,10 +163,12 @@
         "dxDataGrid-filterPanelCreateFilter": "Создать фильтр",
         "dxDataGrid-filterPanelClearFilter": "Очистить",
         "dxDataGrid-filterPanelFilterEnabledHint": "Активировать фильтр",
+
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных",
         "dxTreeList-ariaSearchInGrid": "Искать в иерархической таблице данных",
         "dxTreeList-ariaToolbar": "Панель инструментов иерархической таблицы данных",
         "dxTreeList-editingAddRowToNode": "Добавить",
+
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
         "dxPager-pagesCountText": "из",
         "dxPager-pageSizesAllText": "Все",
@@ -182,12 +196,15 @@
         "dxPivotGrid-dataFieldArea": "Перетащите поля данных cюда",
         "dxPivotGrid-rowFieldArea": "Перетащите поля строк cюда",
         "dxPivotGrid-filterFieldArea": "Перетащите поля фильтров cюда",
+
         "dxScheduler-editorLabelTitle": "Название",
         "dxScheduler-editorLabelStartDate": "Дата начала",
         "dxScheduler-editorLabelEndDate": "Дата завершения",
         "dxScheduler-editorLabelDescription": "Описание",
         "dxScheduler-editorLabelRecurrence": "Повторение",
+
         "dxScheduler-openAppointment": "Открыть задачу",
+
         "dxScheduler-recurrenceNever": "Никогда",
         "dxScheduler-recurrenceMinutely": "Ежеминутно",
         "dxScheduler-recurrenceHourly": "Ежечасно",
@@ -195,50 +212,64 @@
         "dxScheduler-recurrenceWeekly": "Еженедельно",
         "dxScheduler-recurrenceMonthly": "Ежемесячно",
         "dxScheduler-recurrenceYearly": "Ежегодно",
+
         "dxScheduler-recurrenceRepeatEvery": "Интервал",
         "dxScheduler-recurrenceRepeatOn": "Повторять по",
         "dxScheduler-recurrenceEnd": "Завершить повторение",
         "dxScheduler-recurrenceAfter": "После",
         "dxScheduler-recurrenceOn": "Повторять до",
+
         "dxScheduler-recurrenceRepeatMinutely": "минут(минуты)",
         "dxScheduler-recurrenceRepeatHourly": "часов(часа)",
         "dxScheduler-recurrenceRepeatDaily": "дней(дня)",
         "dxScheduler-recurrenceRepeatWeekly": "недели(недель)",
         "dxScheduler-recurrenceRepeatMonthly": "месяца(месяцев)",
         "dxScheduler-recurrenceRepeatYearly": "года(лет)",
-        "dxScheduler-recurrenceRepeatOnDate": "до даты",
-        "dxScheduler-recurrenceRepeatCount": "повторений",
+
         "dxScheduler-switcherDay": "День",
         "dxScheduler-switcherWeek": "Неделя",
         "dxScheduler-switcherWorkWeek": "Рабочая неделя",
         "dxScheduler-switcherMonth": "Месяц",
+
+        "dxScheduler-switcherAgenda": "Расписание",
+
         "dxScheduler-switcherTimelineDay": "Хронология дня",
         "dxScheduler-switcherTimelineWeek": "Хронология недели",
         "dxScheduler-switcherTimelineWorkWeek": "Хронология рабочей недели",
         "dxScheduler-switcherTimelineMonth": "Хронология месяца",
-        "dxScheduler-switcherAgenda": "Расписание",
+
+        "dxScheduler-recurrenceRepeatOnDate": "до даты",
+        "dxScheduler-recurrenceRepeatCount": "повторений",
         "dxScheduler-allDay": "Весь день",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Вы хотите отредактировать только это событие или всю серию?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Вы хотите удалить только это событие или всю серию?",
+
         "dxScheduler-confirmRecurrenceEditSeries": "Всю серию",
         "dxScheduler-confirmRecurrenceDeleteSeries": "Всю серию",
         "dxScheduler-confirmRecurrenceEditOccurrence": "Только это событие",
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Только это событие",
+
         "dxScheduler-noTimezoneTitle": "Часовой пояс не выбран",
         "dxScheduler-moreAppointments": "и еще {0}",
+
         "dxCalendar-todayButtonText": "Сегодня",
         "dxCalendar-ariaWidgetName": "Календарь",
+
         "dxColorView-ariaRed": "Красный",
         "dxColorView-ariaGreen": "Зеленый",
         "dxColorView-ariaBlue": "Синий",
         "dxColorView-ariaAlpha": "Прозрачность",
         "dxColorView-ariaHex": "Код цвета",
+
         "dxTagBox-selected": "{0} выбрано",
         "dxTagBox-allSelected": "Выбрано все ({0})",
         "dxTagBox-moreSelected": "и еще {0}",
+
         "vizExport-printingButtonText": "Печать",
         "vizExport-titleMenuText": "Экспорт/Печать",
         "vizExport-exportButtonText": "{0} файл",
+
         "dxFilterBuilder-and": "И",
         "dxFilterBuilder-or": "Или",
         "dxFilterBuilder-notAnd": "Не И",
@@ -261,6 +292,7 @@
         "dxFilterBuilder-filterOperationBetween": "В диапазоне",
         "dxFilterBuilder-filterOperationAnyOf": "Любой из",
         "dxFilterBuilder-filterOperationNoneOf": "Ни один из",
+
         "dxHtmlEditor-dialogColorCaption": "Изменить цвет текста",
         "dxHtmlEditor-dialogBackgroundCaption": "Изменить цвет фона",
         "dxHtmlEditor-dialogLinkCaption": "Добавить ссылку",
@@ -346,6 +378,7 @@
         "dxHtmlEditor-right": "По правому краю",
         "dxHtmlEditor-indent": "Отступ",
         "dxHtmlEditor-justify": "По ширине",
+
         "dxFileManager-newDirectoryName": "Без названия",
         "dxFileManager-rootDirectoryName": "Файлы",
         "dxFileManager-errorNoAccess": "Доступ запрещён. Операция не может быть завершена.",
@@ -370,7 +403,6 @@
         "dxFileManager-commandThumbnails": "Режим эксизов",
         "dxFileManager-commandDetails": "Режим списка",
         "dxFileManager-commandClearSelection": "Очистить выделение",
-        "dxFileManager-dialogButtonCancel": "Отмена",
         "dxFileManager-commandShowNavPane": "Переключить панель навигации",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Переместить в",
@@ -385,6 +417,7 @@
         "dxFileManager-dialogDeleteItemButtonText": "Удалить",
         "dxFileManager-dialogDeleteItemSingleItemConfirmation": "Вы действительно хотите удалить {0}?",
         "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "Вы действительно хотите удалить {0} элементов?",
+        "dxFileManager-dialogButtonCancel": "Отмена",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Создаётся папка в {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Создана папка в {0}",
