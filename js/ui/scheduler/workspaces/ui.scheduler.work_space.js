@@ -985,6 +985,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
         eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
         eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => {
+            if(!this.dragBehavior) {
+                return;
+            }
+
             if(!this.dragBehavior?.dragBetweenComponentsPromise) {
                 this.dragBehavior.removeDroppableClasses();
                 return;
@@ -1729,7 +1733,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     removeDroppableCellClass($cellElement) {
-        ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        const $cell = ($cellElement || this._getDroppableCell());
+        $cell?.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
     }
 
     _getCoordinatesByCell($cell) {
