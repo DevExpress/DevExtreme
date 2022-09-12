@@ -12,7 +12,7 @@ export const getPreparedDataItems = (
   dataAccessors: DataAccessorType,
   cellDurationInMinutes: number,
   timeZoneCalculator: TimeZoneCalculator,
-  datesInUTC: boolean,
+  convertAllDayDatesToLocal: boolean,
 ): AppointmentDataItem[] => {
   const result: AppointmentDataItem[] = [];
 
@@ -22,7 +22,7 @@ export const getPreparedDataItems = (
       rawAppointment,
       dataAccessors,
       cellDurationInMinutes,
-      datesInUTC,
+      convertAllDayDatesToLocal,
     );
 
     const adapter = createAppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator);

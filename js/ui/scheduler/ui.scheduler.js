@@ -80,7 +80,6 @@ import {
     compareAllDayPanelBehaviors,
 } from '../../renovation/ui/scheduler/appointment/allDayStrategy/index';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
-import { convertUTCDate } from '../../renovation/ui/scheduler/utils/date/convertUTCDate';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
@@ -516,6 +515,8 @@ class Scheduler extends Widget {
                 this._postponeDataSourceLoading();
                 break;
             case 'dataSource':
+                this.convertAllDayDatesToLocal = true;
+
                 this._initDataSource();
 
                 this.appointmentDataProvider.setDataSource(this._dataSource);
@@ -784,7 +785,6 @@ class Scheduler extends Widget {
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
-                break;
             default:
                 super._optionChanged(args);
         }
@@ -1005,6 +1005,8 @@ class Scheduler extends Widget {
 
         this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
 
+        this.convertAllDayDatesToLocal = true;
+
         this._updateInternalOptionAllDayBehavior(
             this.option('showAllDayPanel'),
             this._getCurrentViewOption('allDayPanelMode'),
@@ -1100,8 +1102,10 @@ class Scheduler extends Widget {
             this._dataAccessors,
             this._getCurrentViewOption('cellDuration'),
             this.timeZoneCalculator,
-            this.option('datesInUTC'),
+            this.option('datesInUTC') && this.convertAllDayDatesToLocal,
         );
+
+        this.convertAllDayDatesToLocal = false;
     }
 
     _dataSourceChangedHandler(result) {
@@ -1979,11 +1983,6 @@ class Scheduler extends Widget {
         result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
         const rawResult = result.source();
-
-        if(this.option('datesInUTC') && appointmentAllDay) {
-            rawResult.startDate = convertUTCDate(rawResult.startDate, 'toUtc');
-            rawResult.endDate = convertUTCDate(rawResult.endDate, 'toUtc');
-        }
 
         setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);
 

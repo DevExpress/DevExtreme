@@ -8,7 +8,7 @@ const patchDates = (
   rawAppointment: Appointment,
   dataAccessors: DataAccessorType,
   cellDurationInMinutes: number,
-  datesInUTC: boolean,
+  convertAllDayDatesToLocal: boolean,
 ): void => {
   let startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
 
@@ -16,7 +16,7 @@ const patchDates = (
     let endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
     const allDay = dataAccessors.getter.allDay(rawAppointment);
 
-    if (datesInUTC && allDay) {
+    if (convertAllDayDatesToLocal && allDay) {
       startDate = convertUTCDate(startDate, 'toLocal') as Date;
       endDate = convertUTCDate(endDate, 'toLocal') as Date;
       dataAccessors.setter.startDate(rawAppointment, startDate);
