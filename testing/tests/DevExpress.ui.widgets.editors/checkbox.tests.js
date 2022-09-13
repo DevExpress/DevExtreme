@@ -484,43 +484,42 @@ QUnit.module('Checkbox', function() {
             });
 
             QUnit.module('indeterminate state', function() {
-                QUnit.test('click triggers user handler and changes state from false to null, from null to true', function(assert) {
-                    const $element = $('#checkBox').dxCheckBox({
-                        indeterminateStateEnabled: true,
-                        focusStateEnabled: true,
-                        value: false
+                [
+                    { initial: 'string', expected: false },
+                    { initial: '', expected: null },
+                    { initial: 0, expected: null },
+                    { initial: 1, expected: false },
+                    { initial: true, expected: false },
+                    { initial: false, expected: null },
+                    { initial: undefined, expected: true },
+                    { initial: null, expected: true },
+                ].forEach(({ initial, expected }) => {
+                    QUnit.test('click changes state', function(assert) {
+                        const $element = $('#checkBox').dxCheckBox({
+                            allowIndeterminateStateByClick: true,
+                            focusStateEnabled: true,
+                            value: initial
+                        });
+                        const instance = $element.dxCheckBox('instance');
+
+                        $element.trigger('dxclick');
+                        assert.strictEqual(instance.option('value'), expected, 'value has been changed');
                     });
-                    const instance = $element.dxCheckBox('instance');
 
-                    $element.trigger('dxclick');
-                    assert.strictEqual(instance.option('value'), null, 'value has been changed from false to null');
+                    QUnit.test('space press should change value', function(assert) {
+                        const $element = $('#checkBox').dxCheckBox({
+                            allowIndeterminateStateByClick: true,
+                            focusStateEnabled: true,
+                            value: initial
+                        });
+                        const instance = $element.dxCheckBox('instance');
+                        const keyboard = keyboardMock($element);
 
-                    $element.trigger('dxclick');
-                    assert.strictEqual(instance.option('value'), true, 'value has been changed from null to true');
+                        $element.trigger('focusin');
 
-                    $element.trigger('dxclick');
-                    assert.strictEqual(instance.option('value'), false, 'value has been changed from true to false');
-                });
-
-                QUnit.test('space press should toggle value from false to null, from null to true', function(assert) {
-                    const $element = $('#checkBox').dxCheckBox({
-                        indeterminateStateEnabled: true,
-                        focusStateEnabled: true,
-                        value: false
+                        keyboard.keyDown('space');
+                        assert.strictEqual(instance.option('value'), expected, 'value has been changed');
                     });
-                    const instance = $element.dxCheckBox('instance');
-                    const keyboard = keyboardMock($element);
-
-                    $element.trigger('focusin');
-
-                    keyboard.keyDown('space');
-                    assert.strictEqual(instance.option('value'), null, 'value has been changed from false to null');
-
-                    keyboard.keyDown('space');
-                    assert.strictEqual(instance.option('value'), true, 'value has been changed from null to true');
-
-                    keyboard.keyDown('space');
-                    assert.strictEqual(instance.option('value'), false, 'value has been changed from true to false');
                 });
             });
         }

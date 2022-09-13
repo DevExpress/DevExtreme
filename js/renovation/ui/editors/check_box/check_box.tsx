@@ -15,6 +15,7 @@ import BaseComponent from '../../../component_wrapper/editors/check_box';
 import { combineClasses } from '../../../utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
 import { WidgetProps } from '../../common/widget';
+import { isDefined } from '../../../../core/utils/type';
 
 const getCssClasses = (model: CheckBoxPropsType): string => {
   const {
@@ -100,7 +101,7 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() iconSize?: number | string;
 
-  @OneWay() indeterminateStateEnabled = false;
+  @OneWay() allowIndeterminateStateByClick = false;
 
   // overrides default value
   @OneWay() activeStateEnabled = true;
@@ -109,7 +110,7 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() focusStateEnabled = devices.real().deviceType === 'desktop' && !devices.isSimulator();
 
-  @TwoWay() value: boolean | null | undefined = false;
+  @TwoWay() value: boolean | null = false;
 
   // private
   @OneWay() saveValueChangeEvent?: (event: Event) => void;
@@ -142,33 +143,16 @@ export class CheckBox extends JSXComponent<CheckBoxPropsType>() {
 
   onWidgetClick(event: Event): void {
     const {
-      value, readOnly, indeterminateStateEnabled, saveValueChangeEvent,
+      value, readOnly, allowIndeterminateStateByClick, saveValueChangeEvent,
     } = this.props;
-
-    const finalValue = indeterminateStateEnabled ? value : value ?? false;
 
     if (!readOnly) {
       saveValueChangeEvent?.(event);
 
-      if (indeterminateStateEnabled) {
-        switch (finalValue) {
-          case true:
-            this.props.value = false;
-            break;
-          case false:
-            this.props.value = null;
-            break;
-          case null:
-            this.props.value = true;
-            break;
-          case undefined:
-            this.props.value = true;
-            break;
-          default:
-            break;
-        }
+      if (allowIndeterminateStateByClick) {
+        this.props.value = !isDefined(value) || (!value ? null : false);
       } else {
-        this.props.value = !finalValue;
+        this.props.value = !(value ?? false);
       }
     }
   }
