@@ -39,7 +39,7 @@ const SRC = [
 const IGNORE_PATHS_BY_FRAMEWORKS = {
     vue: [],
     react: [],
-    angular: []
+    angular: ['!js/renovation/ui/pager/pager.tsx']
 };
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
