@@ -120,7 +120,7 @@ export class SingleLineStrategy {
 
         const overflowItems = [].slice.call($hiddenItems).map((item) => {
             const itemData = this._toolbar._getItemData(item);
-            const $itemContainer = $(item);
+            const $itemContainer = $(item).children();
             const $itemMarkup = $itemContainer.children();
 
             return extend({
