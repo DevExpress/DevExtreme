@@ -5900,6 +5900,10 @@ declare module DevExpress.ui {
      * [descr:dxCheckBoxOptions.value]
      */
     value?: boolean | null | undefined;
+    /**
+     * [descr:dxCheckBoxOptions.allowIndeterminateStateByClick]
+     */
+    allowIndeterminateStateByClick?: boolean;
   }
   /**
    * [descr:dxColorBox]
