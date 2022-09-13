@@ -10,16 +10,17 @@ const patchDates = (
   cellDurationInMinutes: number,
   convertAllDayDatesToLocal: boolean,
 ): void => {
-  let startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
+  const startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
 
   if (startDate) {
-    let endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
+    const endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
     const allDay = dataAccessors.getter.allDay(rawAppointment);
 
     if (convertAllDayDatesToLocal && allDay) {
-      startDate = convertUTCDate(startDate, 'toUtc') as Date;
-      endDate = convertUTCDate(endDate, 'toUtc') as Date;
-      dataAccessors.setter.startDate(rawAppointment, startDate);
+      const startDateInUtc = convertUTCDate(startDate, 'toUtc') as Date;
+      const endDateInUtc = convertUTCDate(endDate, 'toUtc') as Date;
+      dataAccessors.setter.startDate(rawAppointment, startDateInUtc);
+      dataAccessors.setter.endDate(rawAppointment, endDateInUtc);
     }
 
     replaceWrongEndDate(rawAppointment, startDate, endDate, cellDurationInMinutes, dataAccessors);
