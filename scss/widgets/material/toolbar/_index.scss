@@ -114,6 +114,21 @@
     }
   }
 
+  .dx-toolbar-hidden-button-group {
+    margin-top: $material-toolbar-padding;
+    margin-bottom: $material-toolbar-padding;
+
+    .dx-buttongroup-wrapper {
+      .dx-buttongroup-item.dx-button {
+        box-shadow: none;
+
+        .dx-button-content {
+          padding: $material-toolbar-padding $material-list-item-horizontal-padding;
+        }
+      }
+    }
+  }
+
   .dx-toolbar-item-auto-hide {
     padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding $material-list-item-vertical-padding - 1px;
   }
@@ -173,17 +188,3 @@
   padding: 4px;
 }
 
-.dx-toolbar-hidden-button-group {
-  margin-top: $material-toolbar-padding;
-  margin-bottom: $material-toolbar-padding;
-
-  .dx-buttongroup-wrapper {
-    .dx-buttongroup-item.dx-button {
-      box-shadow: none;
-
-      .dx-button-content {
-        padding: $material-toolbar-padding $material-list-item-horizontal-padding;
-      }
-    }
-  }
-}

@@ -49,6 +49,24 @@ fixture`Toolbar_integration_with_DataGrid`
               },
             },
             {
+              location: 'before',
+              locateInMenu: 'always',
+              cssClass: 'dx-toolbar-hidden-button-group',
+              template() {
+                return ($('<div>') as any).dxButtonGroup({
+                  items: [
+                    { icon: 'alignleft', alignment: 'left', text: 'Align left' },
+                    { icon: 'aligncenter', alignment: 'center', text: 'Center' },
+                    { icon: 'alignright', alignment: 'right', text: 'Right' },
+                    { icon: 'alignjustify', alignment: 'justify', text: 'Justify' },
+                  ],
+                  keyExpr: 'alignment',
+                  stylingMode: 'outlined',
+                  selectedItemKeys: ['left'],
+                });
+              },
+            },
+            {
               locateInMenu: 'always',
               widget: 'dxButton',
               options: {
