@@ -232,6 +232,7 @@ describe('CheckBox', () => {
             { initial: null, expected: true },
           ]).it('should change value by Widget click of allowIndeterminateStateByClick is true', ({ initial, expected }) => {
             const checkBox = new CheckBox({
+              allowIndeterminateStateByClick: true,
               value: initial,
             });
             checkBox.onWidgetClick({} as Event);
