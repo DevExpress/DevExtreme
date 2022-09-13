@@ -205,9 +205,7 @@ $grid-masterdetail-padding: 20px;
   .dx-#{$widget-name}-headers,
   .dx-#{$widget-name}-rowsview {
     .dx-texteditor-input {
-      padding-top: $generic-grid-base-cell-padding;
-      padding-bottom: $generic-grid-base-cell-padding;
-      padding-left: $generic-grid-base-cell-padding;
+      padding: $generic-grid-base-cell-padding;
       min-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
     }
 
@@ -686,6 +684,10 @@ $grid-masterdetail-padding: 20px;
       .dx-master-detail-cell {
         border-top: $datagrid-border;
         border-bottom: $datagrid-border;
+      }
+
+      .dx-texteditor-input {
+        padding-right: 0;
       }
     }
 
