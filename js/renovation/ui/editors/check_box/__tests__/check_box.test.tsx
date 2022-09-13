@@ -224,6 +224,19 @@ describe('CheckBox', () => {
             checkBox.onWidgetClick({} as Event);
             expect(checkBox.props.value).toBe(false);
           });
+
+          each([
+            { initial: true, expected: false },
+            { initial: false, expected: null },
+            { initial: undefined, expected: true },
+            { initial: null, expected: true },
+          ]).it('should change value by Widget click of allowIndeterminateStateByClick is true', ({ initial, expected }) => {
+            const checkBox = new CheckBox({
+              value: initial,
+            });
+            checkBox.onWidgetClick({} as Event);
+            expect(checkBox.props.value).toBe(expected);
+          });
         });
       });
     });
