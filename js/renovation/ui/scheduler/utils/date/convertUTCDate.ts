@@ -14,7 +14,7 @@ export const convertUTCDate = (
     ? new Date(date)
     : date;
 
-  const offset = direction === 'toLocal'
+  const offset = direction === 'toUtc'
     ? timeZoneUtils.getClientTimezoneOffset()
     : -1 * timeZoneUtils.getClientTimezoneOffset();
 

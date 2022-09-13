@@ -17,8 +17,8 @@ const patchDates = (
     const allDay = dataAccessors.getter.allDay(rawAppointment);
 
     if (convertAllDayDatesToLocal && allDay) {
-      startDate = convertUTCDate(startDate, 'toLocal') as Date;
-      endDate = convertUTCDate(endDate, 'toLocal') as Date;
+      startDate = convertUTCDate(startDate, 'toUtc') as Date;
+      endDate = convertUTCDate(endDate, 'toUtc') as Date;
       dataAccessors.setter.startDate(rawAppointment, startDate);
     }
 

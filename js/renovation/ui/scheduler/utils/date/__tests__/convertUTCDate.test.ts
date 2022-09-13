@@ -11,11 +11,11 @@ jest.mock('../../../../../../ui/scheduler/utils.timeZone', () => ({
 describe('ConvertUTCDate', () => {
   [{
     date: '2021-05-12T12:00:00.000Z',
-    direction: 'toUtc',
+    direction: 'toLocal',
     expected: '2021-05-12T12:00:00.240Z',
   }, {
     date: '2021-05-12T12:00:00.000Z',
-    direction: 'toLocal',
+    direction: 'toUtc',
     expected: '2021-05-12T11:59:59.760Z',
   }].forEach(({ date, direction, expected }) => {
     it(`should return correct date=${date}, direction=${direction} if dates as string`, () => {
@@ -27,11 +27,11 @@ describe('ConvertUTCDate', () => {
 
   [{
     date: new Date('2021-05-12T12:00:00.000Z'),
-    direction: 'toUtc',
+    direction: 'toLocal',
     expected: '2021-05-12T12:00:00.240Z',
   }, {
     date: new Date('2021-05-12T12:00:00.000Z'),
-    direction: 'toLocal',
+    direction: 'toUtc',
     expected: '2021-05-12T11:59:59.760Z',
   }].forEach(({ date, direction, expected }) => {
     it(`should return correct date=${date}, direction=${direction} if dates as Date`, () => {
