@@ -34,6 +34,7 @@ $('#qunit-fixture').html('<style>\
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 const TOOLBAR_ITEM_INVISIBLE_CLASS = 'dx-toolbar-item-invisible';
+const TOOLBAR_ITEM_CONTENT_CLASS = 'dx-toolbar-item-content';
 const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 const TOOLBAR_BEFORE_CONTAINER_CLASS = 'dx-toolbar-before';
 const TOOLBAR_AFTER_CONTAINER_CLASS = 'dx-toolbar-after';
@@ -1416,6 +1417,33 @@ QUnit.module('adaptivity', {
 
         dropDown.open();
     });
+
+    QUnit.test('overflow item should be rendered in correct container in menu and in toolbar when locateInMenu is auto (T1102197)', function(assert) {
+        assert.expect(2);
+
+        const $itemTemplate = $('<div>itemTemplate</div>').width(500);
+
+        this.instance.option({
+            items: [
+                {
+                    locateInMenu: 'auto',
+                    template: () => $itemTemplate,
+                }
+            ],
+            width: 1000
+        });
+
+        assert.strictEqual($itemTemplate.parent().hasClass(TOOLBAR_ITEM_CONTENT_CLASS), true, 'template was rendered in correct container');
+
+        this.instance.option('width', 400);
+
+        this.overflowMenu.instance().option('onItemRendered', () => {
+            assert.strictEqual($itemTemplate.parent().hasClass(TOOLBAR_ITEM_CONTENT_CLASS), true, 'template was rendered in correct container');
+        });
+
+        this.overflowMenu.click();
+    });
+
 
     QUnit.test('toolbar menu should have correct focused element', function(assert) {
         const $element = $('#widget').dxToolbar({

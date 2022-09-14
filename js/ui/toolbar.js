@@ -168,7 +168,7 @@ const Toolbar = ToolbarBase.inherit({
 
         const overflowItems = [].slice.call($hiddenItems).map((item) => {
             const itemData = that._getItemData(item);
-            const $itemContainer = $(item).children();
+            const $itemContainer = $(item);
             const $itemMarkup = $itemContainer.children();
 
             return extend({
