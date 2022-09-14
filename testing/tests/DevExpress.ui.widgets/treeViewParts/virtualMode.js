@@ -1233,13 +1233,11 @@ QUnit.test('expandItem promise should be resolved if return value is empty array
         dataStructure: 'plain',
         displayExpr: 'name',
         createChildren: (parent) => {
-            const result = [];
-
             if(!parent) {
-                result.push({ id: 1, name: 'root item', expanded: false });
+                return [{ id: 1, name: 'root item', expanded: false }];
             }
 
-            return result;
+            return [];
         }
     }).dxTreeView('instance');
 
