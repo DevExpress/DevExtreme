@@ -6515,7 +6515,9 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
-      calculateDisplayValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
+      calculateDisplayValue?: 
+        | string 
+        | ((this: ColumnBase, rowData: TRowData) => any);
       /**
        * [descr:GridBaseColumn.calculateFilterExpression]
        */
@@ -6529,7 +6531,9 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.calculateSortValue]
        */
-      calculateSortValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
+      calculateSortValue?: 
+        | string 
+        | ((this: ColumnBase, rowData: TRowData) => any);
       /**
        * [descr:GridBaseColumn.caption]
        */
@@ -6541,7 +6545,10 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.customizeText]
        */
-      customizeText?: (this: ColumnBase, cellInfo: ColumnCustomizeTextArg) => string;
+      customizeText?: (
+        this: ColumnBase, 
+        cellInfo: ColumnCustomizeTextArg
+      ) => string;
       /**
        * [descr:GridBaseColumn.dataField]
        */
@@ -8837,7 +8844,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
      */
-    calculateGroupValue?: string | ((this: DevExpress.ui.dxDataGrid.ColumnBase, rowData: TRowData) => any);
+    calculateGroupValue?: 
+      | string 
+      | ((this: DevExpress.ui.dxDataGrid.ColumnBase, rowData: TRowData) => any);
     /**
      * [descr:dxDataGridColumn.cellTemplate]
      */
