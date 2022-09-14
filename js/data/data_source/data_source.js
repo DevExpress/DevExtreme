@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
+import { isString, isNumeric, isBoolean, isDefined, isObject } from '../../core/utils/type';
 import { throttleChanges } from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
@@ -641,7 +641,7 @@ export const DataSource = Class.inherit({
 
         data = this._applyPostProcessFunction(this._applyMapFunction(data));
 
-        if(!isPlainObject(extra)) {
+        if(!isObject(extra)) {
             extra = {};
         }
 
