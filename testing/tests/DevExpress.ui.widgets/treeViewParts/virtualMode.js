@@ -1225,6 +1225,29 @@ QUnit.test('widget should support resolving promise if it is returned from the c
     assert.deepEqual(treeView.option('items'), [item], 'nodes were added after deferred is resolved');
 });
 
+QUnit.test('expandItem promise should be resolved if return value is empty array (T1114997)', function(assert) {
+    const done = assert.async();
+    assert.expect(1);
+
+    const treeView = $('#treeView').dxTreeView({
+        dataStructure: 'plain',
+        displayExpr: 'name',
+        createChildren: (parent) => {
+            if(!parent) {
+                return [{ id: 1, name: 'root item', expanded: false }];
+            }
+
+            return [];
+        }
+    }).dxTreeView('instance');
+
+    treeView.expandItem(1).then(() => {
+        assert.ok(true, 'promise was resolved');
+
+        done();
+    });
+});
+
 QUnit.test('load indicator should be rendered on node expansion if the \'createChildren\' callback is specified', function(assert) {
     const $treeView = $('#treeView').dxTreeView({
         dataStructure: 'plain',
