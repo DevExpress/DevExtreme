@@ -2339,20 +2339,20 @@ export interface ColumnBase<TRowData = any> {
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateDisplayValue?: string | ((rowData: TRowData) => any);
+    calculateDisplayValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
      * @type_function_return Filter expression
      * @public
      */
-    calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+    calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
     defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
     /**
      * @docid GridBaseColumn.calculateSortValue
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateSortValue?: string | ((rowData: TRowData) => any);
+    calculateSortValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.caption
      * @default undefined
@@ -2370,7 +2370,7 @@ export interface ColumnBase<TRowData = any> {
      * @type_function_param1 cellInfo:object
      * @public
      */
-    customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
+    customizeText?: ((this: ColumnBase, cellInfo: ColumnCustomizeTextArg) => string);
     /**
      * @docid GridBaseColumn.dataField
      * @default undefined
@@ -2513,7 +2513,8 @@ export interface ColumnBase<TRowData = any> {
      * @type_function_return void|Promise<void>
      * @public
      */
-    setCellValue?: ((newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+    setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+    defaultSetCellValue?: ColumnBase['setCellValue'];
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false
@@ -2546,7 +2547,7 @@ export interface ColumnBase<TRowData = any> {
      * @default undefined
      * @public
      */
-    sortingMethod?: ((value1: any, value2: any) => number);
+    sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number);
     /**
      * @docid GridBaseColumn.trueText
      * @default "true"
@@ -2646,7 +2647,7 @@ export interface ColumnLookup {
    * @type_function_param1 rowData:object
    * @public
    */
-  calculateCellValue?: ((rowData: any) => any);
+  calculateCellValue?: ((this: ColumnBase, rowData: any) => any);
 }
 
 /**
@@ -4281,7 +4282,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateGroupValue?: string | ((rowData: TRowData) => any);
+    calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
      * @type_function_param2 cellInfo:object
