@@ -494,7 +494,7 @@ QUnit.module('Checkbox', function() {
                     { initial: undefined, expected: true },
                     { initial: null, expected: true },
                 ].forEach(({ initial, expected }) => {
-                    QUnit.test('click changes state', function(assert) {
+                    QUnit.test(`click should change value from "${initial}" to "${expected}"`, function(assert) {
                         const $element = $('#checkBox').dxCheckBox({
                             allowIndeterminateStateByClick: true,
                             focusStateEnabled: true,
@@ -506,7 +506,7 @@ QUnit.module('Checkbox', function() {
                         assert.strictEqual(instance.option('value'), expected, 'value has been changed');
                     });
 
-                    QUnit.test('space press should change value', function(assert) {
+                    QUnit.test(`space press should change value from "${initial}" to "${expected}"`, function(assert) {
                         const $element = $('#checkBox').dxCheckBox({
                             allowIndeterminateStateByClick: true,
                             focusStateEnabled: true,
