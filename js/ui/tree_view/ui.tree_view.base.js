@@ -931,6 +931,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
 
             if(!items || !items.length) {
+                completionCallback.resolve();
                 return;
             }
 
