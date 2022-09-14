@@ -5877,6 +5877,10 @@ declare module DevExpress.ui {
      */
     activeStateEnabled?: boolean;
     /**
+     * [descr:dxCheckBoxOptions.allowIndeterminateStateByClick]
+     */
+    allowIndeterminateStateByClick?: boolean;
+    /**
      * [descr:dxCheckBoxOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;

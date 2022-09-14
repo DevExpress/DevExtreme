@@ -482,6 +482,46 @@ QUnit.module('Checkbox', function() {
                     assert.notOk(instance._isFocused(), 'checkBox is not focused');
                 });
             });
+
+            QUnit.module('indeterminate state', function() {
+                [
+                    { initial: 'string', expected: false },
+                    { initial: '', expected: null },
+                    { initial: 0, expected: null },
+                    { initial: 1, expected: false },
+                    { initial: true, expected: false },
+                    { initial: false, expected: null },
+                    { initial: undefined, expected: true },
+                    { initial: null, expected: true },
+                ].forEach(({ initial, expected }) => {
+                    QUnit.test(`click should change value from "${initial}" to "${expected}"`, function(assert) {
+                        const $element = $('#checkBox').dxCheckBox({
+                            allowIndeterminateStateByClick: true,
+                            focusStateEnabled: true,
+                            value: initial
+                        });
+                        const instance = $element.dxCheckBox('instance');
+
+                        $element.trigger('dxclick');
+                        assert.strictEqual(instance.option('value'), expected, 'value has been changed');
+                    });
+
+                    QUnit.test(`space press should change value from "${initial}" to "${expected}"`, function(assert) {
+                        const $element = $('#checkBox').dxCheckBox({
+                            allowIndeterminateStateByClick: true,
+                            focusStateEnabled: true,
+                            value: initial
+                        });
+                        const instance = $element.dxCheckBox('instance');
+                        const keyboard = keyboardMock($element);
+
+                        $element.trigger('focusin');
+
+                        keyboard.keyDown('space');
+                        assert.strictEqual(instance.option('value'), expected, 'value has been changed');
+                    });
+                });
+            });
         }
     });
 });

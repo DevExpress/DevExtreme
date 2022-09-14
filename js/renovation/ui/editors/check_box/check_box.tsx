@@ -100,6 +100,8 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() iconSize?: number | string;
 
+  @OneWay() allowIndeterminateStateByClick = false;
+
   // overrides default value
   @OneWay() activeStateEnabled = true;
 
@@ -139,12 +141,18 @@ export class CheckBox extends JSXComponent<CheckBoxPropsType>() {
   }
 
   onWidgetClick(event: Event): void {
-    const { readOnly, saveValueChangeEvent } = this.props;
-    const value = this.props.value ?? false;
+    const {
+      value, readOnly, allowIndeterminateStateByClick, saveValueChangeEvent,
+    } = this.props;
 
     if (!readOnly) {
       saveValueChangeEvent?.(event);
-      this.props.value = !value;
+
+      if (allowIndeterminateStateByClick) {
+        this.props.value = value === null || (!value ? null : false);
+      } else {
+        this.props.value = !(value ?? false);
+      }
     }
   }
 
