@@ -118,6 +118,14 @@
     margin-top: $material-toolbar-padding;
     margin-bottom: $material-toolbar-padding;
 
+    &:first-of-type {
+      margin-top: $material-list-vertical-padding;
+    }
+
+    &:last-of-type {
+      margin-bottom: $material-list-vertical-padding;
+    }
+
     .dx-buttongroup-wrapper {
       .dx-buttongroup-item.dx-button {
         box-shadow: none;
