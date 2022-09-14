@@ -38,6 +38,12 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     activeStateEnabled?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    allowIndeterminateStateByClick?: boolean;
+    /**
+     * @docid
      * @default true &for(desktop)
      * @public
      */
@@ -72,12 +78,6 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @public
      */
     value?: boolean | null | undefined;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    allowIndeterminateStateByClick?: boolean;
 }
 /**
  * @docid

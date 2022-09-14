@@ -15,7 +15,6 @@ import BaseComponent from '../../../component_wrapper/editors/check_box';
 import { combineClasses } from '../../../utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
 import { WidgetProps } from '../../common/widget';
-import { isDefined } from '../../../../core/utils/type';
 
 const getCssClasses = (model: CheckBoxPropsType): string => {
   const {
@@ -150,7 +149,7 @@ export class CheckBox extends JSXComponent<CheckBoxPropsType>() {
       saveValueChangeEvent?.(event);
 
       if (allowIndeterminateStateByClick) {
-        this.props.value = !isDefined(value) || (!value ? null : false);
+        this.props.value = value === null || (!value ? null : false);
       } else {
         this.props.value = !(value ?? false);
       }
