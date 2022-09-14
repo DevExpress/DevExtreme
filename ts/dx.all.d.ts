@@ -8795,7 +8795,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
      */
-    calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
+    calculateGroupValue?: string | ((this: DevExpress.ui.dxDataGrid.ColumnBase, rowData: TRowData) => any);
     /**
      * [descr:dxDataGridColumn.cellTemplate]
      */
