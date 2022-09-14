@@ -3,7 +3,7 @@ import { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
 import { createAppointmentAdapter } from '../../../../ui/scheduler/appointmentAdapter';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 import { isDefined } from '../../../../core/utils/type';
-import patchDates from './data/patchDates';
+import { replaceWrongEndDate } from '../../../../ui/scheduler/appointments/dataProvider/utils';
 
 const RECURRENCE_FREQ = 'freq';
 
@@ -12,18 +12,14 @@ export const getPreparedDataItems = (
   dataAccessors: DataAccessorType,
   cellDurationInMinutes: number,
   timeZoneCalculator: TimeZoneCalculator,
-  convertAllDayDatesToLocal: boolean,
 ): AppointmentDataItem[] => {
   const result: AppointmentDataItem[] = [];
 
   dataItems?.forEach((rawAppointment) => {
-    // TODO get rid of rawAppointment mutation
-    patchDates(
-      rawAppointment,
-      dataAccessors,
-      cellDurationInMinutes,
-      convertAllDayDatesToLocal,
-    );
+    const startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
+    const endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
+
+    replaceWrongEndDate(rawAppointment, startDate, endDate, cellDurationInMinutes, dataAccessors);
 
     const adapter = createAppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator);
 

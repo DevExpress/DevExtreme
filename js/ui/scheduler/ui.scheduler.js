@@ -83,6 +83,7 @@ import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';
 import { getCurrentView } from '../../renovation/ui/scheduler/model/views';
 import { createTimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import { excludeFromRecurrence } from '../../renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
+import prepareAppointmentForUpdate from '../../renovation/ui/scheduler/utils/data/prepareAppointmentForUpdate';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -515,8 +516,6 @@ class Scheduler extends Widget {
                 this._postponeDataSourceLoading();
                 break;
             case 'dataSource':
-                this.convertAllDayDatesToLocal = true;
-
                 this._initDataSource();
 
                 this.appointmentDataProvider.setDataSource(this._dataSource);
@@ -1008,8 +1007,6 @@ class Scheduler extends Widget {
 
         this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
 
-        this.convertAllDayDatesToLocal = true;
-
         this._updateInternalOptionAllDayBehavior(
             this.option('showAllDayPanel'),
             this._getCurrentViewOption('allDayPanelMode'),
@@ -1112,10 +1109,7 @@ class Scheduler extends Widget {
             this._dataAccessors,
             this._getCurrentViewOption('cellDuration'),
             this.timeZoneCalculator,
-            this.option('datesInUTC') && this.convertAllDayDatesToLocal,
         );
-
-        this.convertAllDayDatesToLocal = false;
     }
 
     _dataSourceChangedHandler(result) {
@@ -1862,7 +1856,12 @@ class Scheduler extends Widget {
             });
             this._editAppointmentData = rawAppointment;
         } else {
-            this._updateAppointment(rawAppointment, appointment.source(), () => {
+            const preparedAppointment = prepareAppointmentForUpdate(
+                appointment.source(),
+                this._dataAccessors,
+                this.option('datesInUTC'),
+            );
+            this._updateAppointment(rawAppointment, preparedAppointment, () => {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
         }

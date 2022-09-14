@@ -7,6 +7,7 @@ import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
 import { createAppointmentAdapter } from './appointmentAdapter';
 import { getFormatType, formatDates } from './appointments/textUtils';
+import prepareAppointmentForUpdate from '../../renovation/ui/scheduler/utils/data/prepareAppointmentForUpdate';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -61,7 +62,12 @@ const subscribes = {
         const exceptionDate = info.sourceAppointment.exceptionDate;
 
         this._checkRecurringAppointment(options.target, options.data, exceptionDate, (function() {
-            this._updateAppointment(options.target, options.data, function() {
+            const preparedAppointment = prepareAppointmentForUpdate(
+                options.data,
+                this._dataAccessors,
+                this.option('datesInUTC'),
+            );
+            this._updateAppointment(options.target, preparedAppointment, function() {
                 this._appointments.moveAppointmentBack();
             });
         }).bind(this));
@@ -97,7 +103,12 @@ const subscribes = {
                 rawAppointment,
                 targetedRawAppointment,
                 info.sourceAppointment.exceptionDate, (function() {
-                    this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
+                    const preparedAppointment = prepareAppointmentForUpdate(
+                        targetedRawAppointment,
+                        this._dataAccessors,
+                        this.option('datesInUTC'),
+                    );
+                    this._updateAppointment(rawAppointment, preparedAppointment, function() {
                         this._appointments.moveAppointmentBack(event);
                     }, event);
                 }).bind(this), undefined, undefined, event);

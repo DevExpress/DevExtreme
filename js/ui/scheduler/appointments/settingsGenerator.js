@@ -9,6 +9,7 @@ import { CellPositionCalculator } from './cellPositionCalculator';
 import { ExpressionUtils } from '../expressionUtils';
 import { isDateAndTimeView } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createFormattedDateText } from './textUtils';
+import getAppointmentDateRange from '../../../renovation/ui/scheduler/utils/date/getAppointmentDateRange';
 
 const toMs = dateUtils.dateToMilliseconds;
 const APPOINTMENT_DATE_TEXT_FORMAT = 'TIME';
@@ -278,6 +279,8 @@ export class DateGeneratorBaseStrategy {
     }
 
     _createGridAppointmentList(appointmentList, appointment) {
+        const { datesInUTC } = this.options;
+
         return appointmentList.map(source => {
             const offsetDifference = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
@@ -287,13 +290,20 @@ export class DateGeneratorBaseStrategy {
                 source.exceptionDate = new Date(source.startDate);
             }
 
+            const {
+                startDate,
+                endDate,
+            } = getAppointmentDateRange(
+                source.startDate,
+                source.endDate,
+                source.allDay,
+                datesInUTC,
+                this.timeZoneCalculator,
+            );
+
             return {
-                startDate: source.allDay
-                    ? source.startDate
-                    : this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' }),
-                endDate: source.allDay
-                    ? source.endDate
-                    : this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' }),
+                startDate,
+                endDate,
                 source // TODO: What this todo mean?
             };
         });
