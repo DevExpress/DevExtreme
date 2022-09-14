@@ -2332,7 +2332,7 @@ export interface ColumnBase<TRowData = any> {
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateCellValue?: ((rowData: TRowData) => any);
+    calculateCellValue?: ((this: ColumnBase, rowData: TRowData) => any);
     defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
     /**
      * @docid GridBaseColumn.calculateDisplayValue
@@ -2647,7 +2647,7 @@ export interface ColumnLookup {
    * @type_function_param1 rowData:object
    * @public
    */
-  calculateCellValue?: ((this: ColumnBase, rowData: any) => any);
+  calculateCellValue?: ((rowData: any) => any);
 }
 
 /**
