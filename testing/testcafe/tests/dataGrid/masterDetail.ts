@@ -84,13 +84,12 @@ fixture.disablePageReloads`Master detail`
 test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // arrange
   const dataGrid = new DataGrid('#container');
-  const masterRow = dataGrid.getMasterRow(0);
 
   // act
   await t.click(dataGrid.getDataRow(0).getCommandCell(0).element);
 
+  const masterRow = dataGrid.getMasterRow(0);
   const masterGrid = masterRow.getDataGrid();
   const pageSizeSelect = masterGrid.getPager().getPageSizeSelect();
 
