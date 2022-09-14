@@ -1227,51 +1227,26 @@ QUnit.test('widget should support resolving promise if it is returned from the c
 
 QUnit.test('expandItem promise should be resolved if return value is empty array (T1114997)', function(assert) {
     const done = assert.async();
-    const data = [{
-        id: 1,
-        parentId: null,
-        name: 'A',
-        expanded: false,
-    }, {
-        id: 2,
-        parentId: null,
-        name: 'B',
-        expanded: false,
-    }, {
-        id: 3,
-        parentId: 2,
-        name: 'C',
-        expanded: false,
-    }];
-
     assert.expect(1);
 
     const treeView = $('#treeView').dxTreeView({
         dataStructure: 'plain',
-        createChildren: (parent) => {
-            const promise = new Promise((resolve, reject) => {
-                const result = [];
-                if(!parent) { result.push(data[0], data[1]); } else {
-                    data.forEach(item => {
-                        if(item.parentId === parent.key) result.push(item);
-                    });
-                }
-                resolve(result);
-            });
-
-            return promise;
-        },
-        parentIdExpr: 'parentID',
         displayExpr: 'name',
-        keyExpr: 'ID',
+        createChildren: (parent) => {
+            const result = [];
+
+            if(!parent) {
+                result.push({ id: 1, name: 'root item', expanded: false });
+            }
+
+            return result;
+        }
     }).dxTreeView('instance');
 
-    setTimeout(() => {
-        treeView.expandItem(1).then(() => {
-            assert.ok(true, 'promise was resolved');
+    treeView.expandItem(1).then(() => {
+        assert.ok(true, 'promise was resolved');
 
-            done();
-        });
+        done();
     });
 });
 
