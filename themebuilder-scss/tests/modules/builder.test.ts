@@ -66,6 +66,20 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
+  test('Build bootstrap 5 theme', async () => {
+    const config: ConfigSettings = {
+      command: commands.BUILD_THEME,
+      inputFile: 'bootstrap5.scss',
+      bootstrapVersion: 5,
+      data: '',
+      outputColorScheme: 'custom-scheme',
+    };
+
+    return buildTheme(config).then((result) => {
+      expect(result.css).not.toBe('');
+    });
+  }, buildTimeout);
+
   test('Build theme with changed color constants (generic)', async () => {
     const allChangedVariables = metadata.generic.map((item) => ({
       key: item.Key,
