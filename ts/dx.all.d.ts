@@ -7085,6 +7085,7 @@ declare module DevExpress.ui {
         value: any,
         currentRowData: TRowData
       ) => void | PromiseLike<void>;
+      defaultSetCellValue?: ColumnBase['setCellValue'];
       /**
        * [descr:GridBaseColumn.showEditorAlways]
        */
