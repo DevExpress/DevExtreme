@@ -1800,59 +1800,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.notOk(cellClickSpy.called, 'onCellClick is not raised');
         });
     });
-
-
-    QUnit.test('HighlightDataCell should not trigger for non editable templates (T1109778)', function(assert) {
-        // arrange
-        const generateData = function(rowCount, columnCount) {
-            let i; let
-                j;
-            const items = [];
-
-            for(i = 0; i < rowCount; i += 1) {
-                const item = {};
-                for(j = 0; j < columnCount; j += 1) {
-                    item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
-                }
-                items.push(item);
-            }
-            return items;
-        };
-        let counter = 0;
-        createDataGrid({
-            dataSource: generateData(5, 5),
-            keyExpr: 'field1',
-            columnWidth: 100,
-            onContentReady: (e) => {
-                const component = e.component;
-                if(component.getController) {
-                    const editingController = component.getController('editing');
-                    if(editingController) {
-                        editingController.highlightDataCell = () => {
-                            counter++;
-                        };
-                    }
-                }
-            },
-            customizeColumns: function(cols) {
-                cols.forEach((column)=>{
-                    column.cellTemplate = (element, options)=>{
-                        const div = $('<div></div>');
-                        div.appendTo(element);
-                        div.dxTextBox({
-                            readOnly: true,
-                            editable: false,
-                            value: options.value
-                        });
-                    };
-                });
-            },
-        });
-        this.clock.tick();
-
-        // assert
-        assert.equal(counter, 0, 'HighlightDataCell count');
-    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {
