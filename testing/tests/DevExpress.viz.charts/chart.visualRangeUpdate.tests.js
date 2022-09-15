@@ -4467,3 +4467,23 @@ QUnit.test('Value Axis with visualRange. Hide and show series - do not update vi
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: -10, endValue: 3000 }, 'Case 2');
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -10, endValue: 3000 }, 'Case 2');
 });
+
+QUnit.test('No Data. Argument axis with constant lines after change visual range (T1102487)', function(assert) {
+    const [chart] = this.createChart({
+        dataSource: [],
+        argumentAxis: {
+            constantLines: [{
+                value: 10,
+                extendAxis: true
+            }, {
+                value: 12,
+                extendAxis: true
+            }],
+        }
+    });
+
+    chart.getArgumentAxis().visualRange([10.5, 11.5]);
+    const businessRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
+    assert.equal(businessRange.min, 10);
+    assert.equal(businessRange.max, 12);
+});
