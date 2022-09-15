@@ -1423,7 +1423,7 @@ QUnit.module('adaptivity', {
 
         const $itemTemplate = $('<div>itemTemplate</div>').width(500);
 
-        this.instance.option({
+        const $element = $('#widget').dxToolbar({
             items: [
                 {
                     locateInMenu: 'auto',
@@ -1435,13 +1435,16 @@ QUnit.module('adaptivity', {
 
         assert.strictEqual($itemTemplate.parent().hasClass(TOOLBAR_ITEM_CONTENT_CLASS), true, 'template was rendered in correct container');
 
-        this.instance.option('width', 400);
+        $element.dxToolbar('option', 'width', 400);
 
-        this.overflowMenu.instance().option('onItemRendered', () => {
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+        const dropDown = $dropDownMenu.dxDropDownMenu('instance');
+
+        dropDown.option('onItemRendered', () => {
             assert.strictEqual($itemTemplate.parent().hasClass(TOOLBAR_ITEM_CONTENT_CLASS), true, 'template was rendered in correct container');
         });
 
-        this.overflowMenu.click();
+        dropDown.open();
     });
 
 
