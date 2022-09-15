@@ -459,12 +459,13 @@ export const DataSource = Class.inherit({
         if(this._reshapeOnPush) {
             this.load();
         } else {
-            this._eventsStrategy.fireEvent('changing', [{ changes }]);
+            const changingArgs = { changes };
+            this._eventsStrategy.fireEvent('changing', [changingArgs]);
 
             const group = this.group();
             const items = this.items();
             let groupLevel = 0;
-            const dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === 'update') : changes;
+            let dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === 'update') : changes;
 
             if(group) {
                 groupLevel = Array.isArray(group) ? group.length : 1;
@@ -476,6 +477,10 @@ export const DataSource = Class.inherit({
                         item.data = this._mapFunc(item.data);
                     }
                 });
+            }
+
+            if(changingArgs.postProcessChanges) {
+                dataSourceChanges = changingArgs.postProcessChanges(dataSourceChanges);
             }
 
             applyBatch({
