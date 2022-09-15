@@ -2514,7 +2514,6 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
-    defaultSetCellValue?: ColumnBase['setCellValue'];
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false
