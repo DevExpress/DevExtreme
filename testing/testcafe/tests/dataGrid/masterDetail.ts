@@ -91,12 +91,10 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
 
   const masterRow = dataGrid.element.find('.dx-master-detail-row');
   const masterGrid = masterRow.find('.dx-datagrid');
-  const masterPager = masterGrid.find('.dx-datagrid-pager');
-  const pageSizeSelect = masterPager.find('.dx-page-sizes .dx-selectbox');
 
   // assert
   await t
-    .expect(await takeScreenshot('T1113525.page-size-select.png', pageSizeSelect))
+    .expect(await takeScreenshot('T1113525.page-size-select.png', masterGrid))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
