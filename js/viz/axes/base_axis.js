@@ -1079,7 +1079,7 @@ Axis.prototype = {
         const visualRange = that.getViewport() || {};
 
         const result = new Range(businessRange);
-        that._addConstantLinesToRange(result, 'minVisible', 'maxVisible');
+        that._addConstantLinesToRange(result);
 
         let minDefined = isDefined(visualRange.startValue);
         let maxDefined = isDefined(visualRange.endValue);
@@ -1288,7 +1288,7 @@ Axis.prototype = {
 
         const rangeWithConstantLines = new Range(that._seriesData);
 
-        that._addConstantLinesToRange(rangeWithConstantLines, 'minVisible', 'maxVisible');
+        that._addConstantLinesToRange(rangeWithConstantLines);
         that._prevDataInfo = {
             isEmpty: dataIsEmpty,
             containsConstantLine: rangeWithConstantLines.containsConstantLine
@@ -1334,14 +1334,16 @@ Axis.prototype = {
         that._translator.updateBusinessRange(that._getViewportRange());
     },
 
-    _addConstantLinesToRange(dataRange, minValueField, maxValueField) {
+    _addConstantLinesToRange(dataRange) {
         this._outsideConstantLines.concat(this._insideConstantLines || []).forEach(cl => {
             if(cl.options.extendAxis) {
                 const value = cl.getParsedValue();
                 dataRange.addRange({
                     containsConstantLine: true,
-                    [minValueField]: value,
-                    [maxValueField]: value
+                    minVisible: value,
+                    maxVisible: value,
+                    min: !isDefined(dataRange.min) ? value : dataRange.min,
+                    max: !isDefined(dataRange.max) ? value : dataRange.max,
                 });
             }
         });
