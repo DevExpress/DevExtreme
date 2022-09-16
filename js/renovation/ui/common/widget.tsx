@@ -424,7 +424,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     return {
       ...extend({}, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
-      ...this.restAttributes,
+      ...extend({}, this.restAttributes) as Record<string, string>,
     };
   }
 
