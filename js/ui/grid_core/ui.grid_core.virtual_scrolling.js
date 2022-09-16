@@ -1356,7 +1356,7 @@ export const virtualScrollingModule = {
 
                         return result;
                     },
-                    _loadItems: function(checkLoading) {
+                    _loadItems: function(checkLoading, viewportIsFilled) {
                         const virtualPaging = isVirtualPaging(this);
                         const dataSourceAdapter = this._dataSource;
                         const changedParams = this._getChangedLoadParams();
@@ -1369,7 +1369,7 @@ export const virtualScrollingModule = {
                         const pageIndexIncreased = changedParams?.pageIndex > currentPageIndex;
                         let result = false;
 
-                        if(!dataSourceAdapter || (virtualPaging && checkLoading && (isRepaintMode || (pageIndexIncreased || pageIndexNotChanged && allLoadedInAppendMode)))) {
+                        if(!dataSourceAdapter || (virtualPaging && checkLoading && ((isRepaintMode && viewportIsFilled) || (pageIndexIncreased || pageIndexNotChanged && allLoadedInAppendMode)))) {
                             return result;
                         }
 
@@ -1400,12 +1400,12 @@ export const virtualScrollingModule = {
                         return result;
                     },
                     loadViewport: function(params) {
-                        const { checkLoadedParamsOnly, checkLoading } = params ?? {};
+                        const { checkLoadedParamsOnly, checkLoading, viewportIsNotFilled } = params ?? {};
                         const virtualPaging = isVirtualPaging(this);
                         if(virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
                             this._updateLoadViewportParams();
 
-                            const loadingItemsStarted = this._loadItems(checkLoading);
+                            const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
 
                             if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
                                 this.updateItems({
@@ -1426,7 +1426,8 @@ export const virtualScrollingModule = {
                         const newTake = rowsScrollController?.getViewportParams().take;
 
                         (viewportIsNotFilled || currentTake < newTake) && !this._isPaging && itemCount && this.loadViewport({
-                            checkLoading: true
+                            checkLoading: true,
+                            viewportIsNotFilled
                         });
                     },
                     loadIfNeed: function() {
