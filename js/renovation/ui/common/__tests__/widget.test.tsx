@@ -922,7 +922,8 @@ describe('Widget', () => {
           widget.restAttributes = { 'aria-label': 'custom', 'aria-hidden': 'false' };
 
           expect(widget.attributes).toEqual({
-            'aria-hidden': 'false', 'aria-label': 'custom',
+            'aria-hidden': 'false', 
+            'aria-label': 'custom',
           });
         });
 
