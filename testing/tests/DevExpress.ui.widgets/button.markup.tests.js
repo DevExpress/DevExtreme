@@ -260,7 +260,7 @@ QUnit.module('Button markup', function() {
             assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
         });
 
-        QUnit.test('aria-label attribute should be override by custom value via elementAttr option', function(assert) {
+        QUnit.test('aria-label attribute should be overriden by custom value via elementAttr option (T1115877)', function(assert) {
             const $element = $('#button').dxButton({
                 icon: 'find',
                 type: 'danger',
