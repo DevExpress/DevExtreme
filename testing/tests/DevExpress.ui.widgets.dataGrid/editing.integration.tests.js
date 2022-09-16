@@ -3616,9 +3616,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        const $popupContent = dataGrid.getController('editing').getPopupContent().first();
+        const $popupContent = dataGrid.getController('editing').getPopupContent() || [];
 
-        assert.ok($popupContent, 'Editing popup rendered');
+        assert.equal($popupContent.length, 1, 'There is editing popup');
     });
 });
 
