@@ -4,12 +4,26 @@
   [dataSource]="dataSource"
   dateCellTemplate="dateCellTemplate"
   [showAllDayPanel]="false"
-  [views]="views"
   currentView="workWeek"
   [currentDate]="currentDate"
   [startDayHour]="7"
   [endDayHour]="23"
 >
+  <dxi-view type="day"></dxi-view>
+  <dxi-view
+    type="week"
+    [groups]="['typeId']"
+    dateCellTemplate="dateCellTemplate"
+  ></dxi-view>
+  <dxi-view
+    type="workWeek"
+    [startDayHour]="9"
+    [endDayHour]="18"
+    [groups]="['priorityId']"
+    dateCellTemplate="dateCellTemplate"
+  ></dxi-view>
+  <dxi-view type="month"></dxi-view>
+
   <dxi-resource
     fieldExpr="priorityId"
     [allowMultiple]="false"

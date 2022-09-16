@@ -24,18 +24,6 @@ export class AppComponent {
 
   typeData: TypeData[];
 
-  views: any = ['day', {
-    type: 'week',
-    groups: ['typeId'],
-    dateCellTemplate: 'dateCellTemplate',
-  }, {
-    type: 'workWeek',
-    startDayHour: 9,
-    endDayHour: 18,
-    groups: ['priorityId'],
-    dateCellTemplate: 'dateCellTemplate',
-  }, 'month'];
-
   constructor(service: Service) {
     this.dataSource = new DataSource({
       store: service.getData(),
