@@ -260,6 +260,29 @@ QUnit.module('Button markup', function() {
             assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
         });
 
+        QUnit.test('aria-label attribute should be override by custom value via elementAttr option', function(assert) {
+            const $element = $('#button').dxButton({
+                icon: 'find',
+                type: 'danger',
+                elementAttr: { 'aria-label': 'custom' },
+            });
+            const instance = $element.dxButton('instance');
+
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'aria label is correct');
+
+            instance.option('text', '');
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'custom aria label is correct after text is changed');
+
+            instance.option('icon', '/path/file.png');
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'custom aria label is correct after icon is changed');
+
+            instance.option('icon', '');
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'custom aria label is correct after icon is changed');
+
+            instance.option('elementAttr', { 'aria-label': 'new custom value' });
+            assert.strictEqual($element.attr('aria-label'), 'new custom value', 'custom aria label was overridden via elementAttr option');
+        });
+
         QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
             const $element = $('#button').dxButton({
                 icon: 'data:image/png;base64,'

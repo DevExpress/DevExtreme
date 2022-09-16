@@ -420,9 +420,11 @@ export class Widget extends JSXComponent(WidgetProps) {
     } = this.props;
 
     const accessKey = focusStateEnabled && !disabled && this.props.accessKey;
+
     return {
-      ...extend({}, this.restAttributes, accessKey && { accessKey }) as Record<string, string>,
+      ...extend({}, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
+      ...this.restAttributes,
     };
   }
 

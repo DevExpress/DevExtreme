@@ -917,6 +917,15 @@ describe('Widget', () => {
           });
         });
 
+        it('custom ARIA attributes should be more priority than aria property', () => {
+          const widget = new Widget({ visible: false, aria: { label: 'default' } });
+          widget.restAttributes = { 'aria-label': 'custom', 'aria-hidden': 'false' };
+
+          expect(widget.attributes).toEqual({
+            'aria-hidden': 'false', 'aria-label': 'custom',
+          });
+        });
+
         it('should not return accessKey if widget is not focusable', () => {
           const widget1 = new Widget({ accessKey: 'c', visible: true });
           expect(widget1.attributes).toEqual({ 'rest-attributes': 'restAttributes' });
