@@ -55,6 +55,14 @@ export const editingFormBasedModule = {
                     this._updateEditFormDeferred = null;
 
                     this.callBase.apply(this, arguments);
+
+                    this._rowsView.renderCompleted.add(() => {
+                        const rowIndex = this.getEditRowIndex();
+
+                        if(rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
+                            this._showEditPopup(rowIndex);
+                        }
+                    });
                 },
 
                 isFormOrPopupEditMode: function() {
