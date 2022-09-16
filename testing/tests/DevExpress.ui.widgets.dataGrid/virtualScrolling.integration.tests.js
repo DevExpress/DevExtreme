@@ -5989,6 +5989,40 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
+    // T1111033
+    QUnit.test('DataGrid should load all rows if pageSize is less than window and repaint mode is turned on', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+            },
+            editing: {
+                refreshMode: 'repaint',
+            },
+            paging: {
+                pageSize: 5
+            },
+        });
+
+        this.clock.tick(300);
+
+        const visibleRows = dataGrid.getVisibleRows();
+
+        assert.strictEqual(visibleRows.length, 27);
+    });
 });
 
 
