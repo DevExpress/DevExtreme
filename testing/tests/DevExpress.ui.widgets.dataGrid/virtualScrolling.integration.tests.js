@@ -6009,6 +6009,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
             },
+            height: 500,
             editing: {
                 refreshMode: 'repaint',
             },
@@ -6021,7 +6022,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const visibleRows = dataGrid.getVisibleRows();
 
-        assert.strictEqual(visibleRows.length, 27);
+        assert.strictEqual(visibleRows.length, 15);
     });
 });
 
