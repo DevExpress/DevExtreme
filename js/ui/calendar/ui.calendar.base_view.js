@@ -85,6 +85,9 @@ const BaseView = Widget.inherit({
             for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
                 this._renderCell(rowData, colIndex);
             }
+            if(this._shouldRenderWeekColumn()) {
+                this._renderWeekNumberCell(rowData);
+            }
         }
     },
 
@@ -109,6 +112,11 @@ const BaseView = Widget.inherit({
         this._appendMethodName = rtlEnabled ?? this.option('rtlEnabled') ?
             'prepend' :
             'append';
+    },
+
+    _shouldRenderWeekColumn: function() {
+        const { showWeekNumbers, zoomLevel } = this.option();
+        return showWeekNumbers && zoomLevel === 'month';
     },
 
     _createCell: function(cellDate) {
@@ -150,6 +158,26 @@ const BaseView = Widget.inherit({
         }
 
         params.cellDate = this._getNextCellData(cellDate);
+    },
+
+    _renderWeekNumberCell: function(rowData) {
+        const { firstDayOfWeek, rtlEnabled } = this.option();
+        const weekNumber = coreDateUtils.getWeekNumber(rowData.prevCellDate, firstDayOfWeek);
+
+        const cell = domAdapter.createElement('td');
+        const $cell = $(cell);
+
+        cell.className = 'dx-calendar-week-number-cell';
+        cell.innerText = weekNumber;
+
+        if(rtlEnabled) {
+            rowData.row.append(cell);
+        } else {
+            rowData.row.prepend(cell);
+        }
+        this.setAria({
+            'role': 'gridcell'
+        }, $cell);
     },
 
     _getClassNameByDate: function(cellDate) {

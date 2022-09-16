@@ -20,6 +20,8 @@ import 'generic_light.css!';
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_WEEK_NUMBER_HEADER_CLASS = 'dx-week-number-header';
 const CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
 const CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
@@ -1677,6 +1679,84 @@ QUnit.module('Options', {
         result.setHours(0, 0, 0, 0);
 
         assert.deepEqual(today, result, 'today date is correct');
+    });
+
+    QUnit.module('showWeekNumbers', {
+        beforeEach: function(assert) {
+            this.cacheTableElements = () => {
+                this.$table = this.$element.find('table').eq(0);
+                this.$headerRow = this.$table.find('thead').eq(0).children().eq(0);
+                this.$firstBodyRow = this.$table.find('tbody').eq(0).children().eq(0);
+            };
+
+            this.checkColumnCount = (expectedColumnCount) => {
+                this.cacheTableElements();
+
+                assert.strictEqual(this.$headerRow.children().length, expectedColumnCount);
+                assert.strictEqual(this.$firstBodyRow.children().length, expectedColumnCount);
+            };
+        },
+    }, () => {
+        QUnit.test('table should have additional column if showWeekNumbers=true', function() {
+            this.reinit({ showWeekNumbers: true });
+
+            this.checkColumnCount(8);
+        });
+
+        QUnit.test('table should not have additional column if showWeekNumbers=false', function() {
+            this.reinit({ showWeekNumbers: false });
+
+            this.checkColumnCount(7);
+        });
+
+        QUnit.test('table should be rerendred with additional column after runtime chage of showWeekNumbers', function(assert) {
+            this.reinit({});
+
+            this.checkColumnCount(7);
+
+            this.calendar.option('showWeekNumbers', true);
+
+            this.checkColumnCount(8);
+        });
+
+        QUnit.test('first header cell should have "dx-week-number-header" class when showWeekNumbers=true', function(assert) {
+            this.reinit({ showWeekNumbers: true });
+            this.cacheTableElements();
+            const $firstHeaderCell = this.$headerRow.children().eq(0);
+
+            assert.ok($firstHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
+        });
+
+        QUnit.test('first cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true', function(assert) {
+            this.reinit({ showWeekNumbers: true });
+            this.cacheTableElements();
+            const $firstBodyCell = this.$firstBodyRow.children().eq(0);
+
+            assert.ok($firstBodyCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
+        });
+
+        QUnit.test('last header cell should have "dx-week-number-header" class when showWeekNumbers=true and rtlEnabled=true', function(assert) {
+            this.reinit({ showWeekNumbers: true, rtlEnabled: true });
+            this.cacheTableElements();
+            const $lastHeaderCell = this.$headerRow.children().eq(7);
+
+            assert.ok($lastHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
+        });
+
+        QUnit.test('last cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true and rtlEnabled=true', function(assert) {
+            this.reinit({ showWeekNumbers: true, rtlEnabled: true });
+            this.cacheTableElements();
+            const $lastBodyRowCell = this.$firstBodyRow.children().eq(7);
+
+            assert.ok($lastBodyRowCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
+        });
+
+        QUnit.test('calendar with zoomLevel!=="month" and showWeekNumbers=true should not have additional column', function(assert) {
+            this.reinit({ showWeekNumbers: true, zoomLevel: 'year' });
+            this.cacheTableElements();
+
+            assert.ok(true);
+        });
     });
 });
 

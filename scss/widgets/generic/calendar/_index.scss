@@ -194,6 +194,19 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
       font-size: $generic-xs-font-size;
       padding: 1px 0 $generic-calendar-header-bottom-padding 0;
     }
+
+    .dx-week-number-header {
+      color: $calendar-cell-selected-bg;
+    }
+
+    .dx-calendar-week-number-cell {
+      text-align: center;
+      padding: 1px $generic-calendar-cell-horizontal-padding 2px;
+      color: $calendar-cell-selected-bg;
+      font-size: $generic-calendar-week-number-cell-font-size;
+      width: 39px;
+      cursor: default;
+    }
   }
 }
 

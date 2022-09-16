@@ -5820,6 +5820,10 @@ declare module DevExpress.ui {
      */
     showTodayButton?: boolean;
     /**
+     * [descr:dxCalendarOptions.showWeekNumbers]
+     */
+    showWeekNumbers?: boolean;
+    /**
      * [descr:dxCalendarOptions.value]
      */
     value?: Date | number | string;

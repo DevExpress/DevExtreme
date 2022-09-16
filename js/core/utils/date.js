@@ -502,6 +502,15 @@ function getFirstWeekDate(date, firstDayOfWeek) {
     return result;
 }
 
+function getWeekNumber(date, firstDayOfWeekIndex = 0) {
+    const firstDay = new Date(date.getFullYear(), 0, 1);
+    const differenceInDays = dateUtils.getDatesInterval(firstDay, date, 'day');
+    const weekOffset = (7 + new Date(Date.UTC(date.getFullYear(), 0, 1)).getUTCDay() - firstDayOfWeekIndex) % 7;
+    const week = Math.floor((differenceInDays + weekOffset - 1) / 7) + 1;
+
+    return week;
+}
+
 const normalizeDateByWeek = function(date, currentDate) {
     const differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day');
     let resultDate = new Date(date);
@@ -672,6 +681,7 @@ const dateUtils = {
     getLastMonthDate: getLastMonthDate,
     getFirstMonthDate: getFirstMonthDate,
     getFirstWeekDate: getFirstWeekDate,
+    getWeekNumber: getWeekNumber,
     normalizeDateByWeek: normalizeDateByWeek,
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,
