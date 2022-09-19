@@ -62,7 +62,7 @@ export const editingFormBasedModule = {
                         this._rowsView?.renderCompleted.add(() => {
                             const rowIndex = this.getEditRowIndex();
 
-                            if(rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
+                            if(this._isInitCalledFirstTime && rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
                                 this._showEditPopup(rowIndex);
                             }
                         });
