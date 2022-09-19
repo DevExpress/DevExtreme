@@ -164,14 +164,19 @@ const BaseView = Widget.inherit({
     },
 
     _renderWeekNumberCell: function(rowData) {
-        const { firstDayOfWeek, rtlEnabled } = this.option();
+        const { firstDayOfWeek, rtlEnabled, cellTemplate } = this.option();
         const weekNumber = coreDateUtils.getWeekNumber(rowData.prevCellDate, firstDayOfWeek);
 
         const cell = domAdapter.createElement('td');
         const $cell = $(cell);
 
         cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
-        cell.innerText = weekNumber;
+
+        if(cellTemplate) {
+            cellTemplate.render(this._prepareCellTemplateData(weekNumber, rtlEnabled ? 7 : 0, $cell));
+        } else {
+            cell.innerHTML = weekNumber;
+        }
 
         if(rtlEnabled) {
             rowData.row.append(cell);
@@ -179,7 +184,9 @@ const BaseView = Widget.inherit({
             rowData.row.prepend(cell);
         }
         this.setAria({
-            'role': 'gridcell'
+            'role': 'gridcell',
+            'label': `Week ${weekNumber}`,
+            'read-only': true
         }, $cell);
     },
 
@@ -202,12 +209,12 @@ const BaseView = Widget.inherit({
     },
 
     _prepareCellTemplateData: function(cellDate, cellIndex, $cell) {
+        const text = cellDate instanceof Date ? this._getCellText(cellDate) : cellDate;
+        const date = cellDate instanceof Date ? cellDate : undefined;
+        const view = this._getViewName();
+
         return {
-            model: {
-                text: this._getCellText(cellDate),
-                date: cellDate,
-                view: this._getViewName()
-            },
+            model: { text, date, view },
             container: getPublicElement($cell),
             index: cellIndex
         };

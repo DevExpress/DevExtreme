@@ -601,32 +601,32 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
 
 [
     {
-        date: '01.01.2022',
+        date: new Date(2022, 0, 1),
         firstDayOfWeek: 0,
         expectedWeekNumber: 1,
     },
     {
-        date: '01.02.2022',
+        date: new Date(2022, 0, 2),
         firstDayOfWeek: 0,
         expectedWeekNumber: 2,
     },
     {
-        date: '01.07.2022',
+        date: new Date(2022, 0, 7),
         firstDayOfWeek: 6,
         expectedWeekNumber: 1,
     },
     {
-        date: '01.05.2022',
+        date: new Date(2022, 0, 5),
         firstDayOfWeek: 0,
         expectedWeekNumber: 2,
     },
     {
-        date: '12.30.2022',
+        date: new Date(2022, 11, 30),
         firstDayOfWeek: 0,
         expectedWeekNumber: 53,
     },
     {
-        date: '12.30.2022',
+        date: new Date(2022, 11, 30),
         firstDayOfWeek: 6,
         expectedWeekNumber: 52,
     },
