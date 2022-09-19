@@ -58,13 +58,17 @@ export const editingFormBasedModule = {
 
                     this.callBase.apply(this, arguments);
 
-                    this._rowsView.renderCompleted.add(() => {
-                        const rowIndex = this.getEditRowIndex();
+                    this._isFirstRender = this._isFirstRender === undefined ? true : false;
 
-                        if(rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
-                            this._showEditPopup(rowIndex);
-                        }
-                    });
+                    if(this._isFirstRender) {
+                        this._rowsView?.renderCompleted.add(() => {
+                            const rowIndex = this.getEditRowIndex();
+
+                            if(this._isFirstRender && rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
+                                this._showEditPopup(rowIndex);
+                            }
+                        });
+                    }
                 },
 
                 isFormOrPopupEditMode: function() {
