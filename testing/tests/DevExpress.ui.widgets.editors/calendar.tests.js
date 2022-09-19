@@ -20,6 +20,7 @@ import 'generic_light.css!';
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
 const CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
@@ -3621,6 +3622,22 @@ QUnit.module('Aria accessibility', {
                 assert.strictEqual(role, 'grid', `zoomLevel: ${zoomLevel}, role is correct`);
                 assert.equal(label, 'Calendar', `zoomLevel: ${zoomLevel}, label is correct`);
             });
+        });
+    });
+
+    [
+        { attr: 'aria-label', value: 'Week 1' },
+        { attr: 'role', value: 'gridcell' },
+    ].forEach(({ attr, value }) => {
+        QUnit.test(`week number cell should have ${attr} attribute equals ${value}`, function(assert) {
+            this.$element.dxCalendar({
+                value: new Date(2022, 0, 1),
+                showWeekNumbers: true
+            });
+
+            const $cell = this.$element.find(toSelector(CALENDAR_WEEK_NUMBER_CELL_CLASS)).first();
+
+            assert.equal($cell.attr(attr), value);
         });
     });
 });

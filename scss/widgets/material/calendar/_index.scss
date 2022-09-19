@@ -182,13 +182,11 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     }
 
     .dx-calendar-week-number-cell {
-      text-align: center;
       padding: $material-calendar-cell-vertical-padding 0;
       color: $calendar-cell-selected-bg;
       font-size: $material-calendar-week-number-cell-font-size;
       width: $material-calendar-cell-width;
       border-radius: $calendar-cell-contoured-border-radius;
-      cursor: default;
     }
   }
 }
