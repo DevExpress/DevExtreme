@@ -58,13 +58,13 @@ export const editingFormBasedModule = {
 
                     this.callBase.apply(this, arguments);
 
-                    this._isFirstRender = this._isFirstRender === undefined ? true : false;
+                    this._isInitCalledFirstTime = this._isInitCalledFirstTime === undefined ? true : false;
 
-                    if(this._isFirstRender) {
+                    if(this._isInitCalledFirstTime) {
                         this._rowsView?.renderCompleted.add(() => {
                             const rowIndex = this.getEditRowIndex();
 
-                            if(this._isFirstRender && rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
+                            if(rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
                                 this._showEditPopup(rowIndex);
                             }
                         });
