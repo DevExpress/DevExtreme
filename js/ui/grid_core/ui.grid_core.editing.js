@@ -2147,18 +2147,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return buttonItems;
         },
 
-        highlightDataCell: function($cell, parameters) {
-            const cellModified = this.isCellModified(parameters);
-            const shouldHighlight =
-                cellModified &&
-                parameters.column.setCellValue &&
-                (
-                    this.getEditMode() !== EDIT_MODE_ROW ||
-                    !parameters.row.isEditing
-                );
-
-            shouldHighlight && $cell.addClass(CELL_MODIFIED);
-        },
+        highlightDataCell: function($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); },
 
         _afterInsertRow: noop,
 
@@ -2204,6 +2193,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const rows = this._dataController.items();
 
             return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
+        },
+
+        shouldHighlightCell: function(parameters) {
+            const cellModified = this.isCellModified(parameters);
+            return cellModified &&
+                parameters.column.setCellValue &&
+                (
+                    this.getEditMode() !== EDIT_MODE_ROW ||
+                    !parameters.row.isEditing
+                );
+
         }
     };
 })());
@@ -2494,10 +2494,11 @@ export const editingModule = {
                         this._editCellPrepared($cell);
                     }
 
-                    if(parameters.column && !isCommandCell) {
+                    const hasTemplate = !!parameters.column?.cellTemplate;
+
+                    if(parameters.column && !isCommandCell && (!hasTemplate || editingController.shouldHighlightCell(parameters))) {
                         editingController.highlightDataCell($cell, parameters);
                     }
-
                     this.callBase.apply(this, arguments);
                 },
                 _editCellPrepared: noop,
