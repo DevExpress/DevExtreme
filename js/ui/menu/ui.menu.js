@@ -625,6 +625,9 @@ class Menu extends MenuBase {
     }
 
     _submenuOnShownHandler($rootItem, submenu) {
+        this.option('focusedElement', super._focusTarget());
+        this.focus();
+
         this._actions.onSubmenuShown({
             rootItem: getPublicElement($rootItem),
             submenu: submenu
