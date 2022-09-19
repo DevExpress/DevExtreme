@@ -173,7 +173,7 @@ const BaseView = Widget.inherit({
         cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
 
         if(cellTemplate) {
-            cellTemplate.render(this._prepareCellTemplateData(weekNumber, rtlEnabled ? 7 : 0, $cell));
+            cellTemplate.render(this._prepareCellTemplateData(weekNumber, -1, $cell));
         } else {
             cell.innerHTML = weekNumber;
         }
@@ -186,7 +186,6 @@ const BaseView = Widget.inherit({
         this.setAria({
             'role': 'gridcell',
             'label': `Week ${weekNumber}`,
-            'read-only': true
         }, $cell);
     },
 

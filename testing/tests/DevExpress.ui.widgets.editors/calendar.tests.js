@@ -1489,6 +1489,21 @@ QUnit.module('Options', {
         assert.strictEqual(cellContent, 'Custom template', 'cell content is correct after cellTemplate runtime change');
     });
 
+    QUnit.test('cellTemplate is rendered fow week cell', function(assert) {
+        this.calendar.option({
+            cellTemplate: function(cellData, cellIndex) {
+                return cellIndex === -1 ? 'Week cell template' : `${cellData.text}`;
+            },
+            value: new Date(2022, 0, 1),
+            showWeekNumbers: true
+        });
+
+        const $cell = this.$element.find(toSelector(CALENDAR_WEEK_NUMBER_CELL_CLASS)).eq(0);
+        const cellContent = $cell.text();
+
+        assert.strictEqual(cellContent, 'Week cell template');
+    });
+
     QUnit.test('showTodayButton option', function(assert) {
         const getTodayButton = () => this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS)).get(0);
 
