@@ -599,6 +599,45 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
     assert.deepEqual(dates[4], new Date(2018, 8, 4, 12, 13, 0), 'Date in interval is correct');
 });
 
+[
+    {
+        date: '01.01.2022',
+        firstDayOfWeek: 0,
+        expectedWeekNumber: 1,
+    },
+    {
+        date: '01.02.2022',
+        firstDayOfWeek: 0,
+        expectedWeekNumber: 2,
+    },
+    {
+        date: '01.07.2022',
+        firstDayOfWeek: 6,
+        expectedWeekNumber: 1,
+    },
+    {
+        date: '01.05.2022',
+        firstDayOfWeek: 0,
+        expectedWeekNumber: 2,
+    },
+    {
+        date: '12.30.2022',
+        firstDayOfWeek: 0,
+        expectedWeekNumber: 53,
+    },
+    {
+        date: '12.30.2022',
+        firstDayOfWeek: 6,
+        expectedWeekNumber: 52,
+    },
+].forEach(({ date, firstDayOfWeek, expectedWeekNumber }) => {
+    QUnit.test(`getWeekNumber should return ${expectedWeekNumber} for date='${date}'  and firstDayOfWeek='${firstDayOfWeek}'`, function(assert) {
+        const weekNumber = dateUtils.getWeekNumber(new Date(date), firstDayOfWeek);
+
+        assert.strictEqual(weekNumber, expectedWeekNumber);
+    });
+});
+
 QUnit.module('Dates creation');
 
 QUnit.test('createDateWithFullYear', function(assert) {

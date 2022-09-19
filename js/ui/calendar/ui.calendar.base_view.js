@@ -16,6 +16,7 @@ const { abstract } = Widget;
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
@@ -80,12 +81,14 @@ const BaseView = Widget.inherit({
             prevCellDate: null
         };
 
+        const shouldRenderWeekColumn = this._shouldRenderWeekColumn();
+
         for(let rowIndex = 0, rowCount = this.option('rowCount'); rowIndex < rowCount; rowIndex++) {
             rowData.row = this._createRow();
             for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
                 this._renderCell(rowData, colIndex);
             }
-            if(this._shouldRenderWeekColumn()) {
+            if(shouldRenderWeekColumn) {
                 this._renderWeekNumberCell(rowData);
             }
         }
@@ -167,7 +170,7 @@ const BaseView = Widget.inherit({
         const cell = domAdapter.createElement('td');
         const $cell = $(cell);
 
-        cell.className = 'dx-calendar-week-number-cell';
+        cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
         cell.innerText = weekNumber;
 
         if(rtlEnabled) {

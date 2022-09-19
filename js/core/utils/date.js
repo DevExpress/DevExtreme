@@ -503,10 +503,9 @@ function getFirstWeekDate(date, firstDayOfWeek) {
 }
 
 function getWeekNumber(date, firstDayOfWeekIndex = 0) {
-    const firstDay = new Date(date.getFullYear(), 0, 1);
-    const differenceInDays = dateUtils.getDatesInterval(firstDay, date, 'day');
-    const weekOffset = (7 + new Date(Date.UTC(date.getFullYear(), 0, 1)).getUTCDay() - firstDayOfWeekIndex) % 7;
-    const week = Math.floor((differenceInDays + weekOffset - 1) / 7) + 1;
+    const yearFirstDay = new Date(date.getFullYear(), 0, 1);
+    const differenceInDays = dateUtils.getDatesInterval(yearFirstDay, date, 'day');
+    const week = Math.floor((differenceInDays + (7 - firstDayOfWeekIndex) - 1) / 7) + 1;
 
     return week;
 }
