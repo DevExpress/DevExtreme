@@ -2808,6 +2808,25 @@ QUnit.module('Editing', {
         assert.strictEqual(value, 1, 'value === 1');
         assert.notOk(this.editingController._deferreds.length, 'deferreds should be empty');
     });
+
+
+    QUnit.test('HighlightDataCell should not trigger for non editable templates (T1109778)', function(assert) {
+        this.columns.length = 0;
+        this.columns.push({
+            cellTemplate: function(container, options) {
+                $('<div>').appendTo(container).dxTextBox({
+                    readOnly: true,
+                    editable: false,
+                    value: options.value
+                });
+            }
+        });
+        const spy = sinon.spy(this.editingController, 'highlightDataCell');
+
+        this.rowsView.render(this.gridContainer);
+
+        assert.notOk(spy.called);
+    });
 });
 
 QUnit.module('Editing with real dataController', {
