@@ -1160,7 +1160,9 @@ export const adaptivityModule = {
             },
             keyboardNavigation: {
                 _isCellValid: function($cell) {
-                    return this.callBase.apply(this, arguments) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    return this.callBase.apply(this, arguments)
+                        && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS))
+                        && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
                 },
 
                 _processNextCellInMasterDetail: function($nextCell) {

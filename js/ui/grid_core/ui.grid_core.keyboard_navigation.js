@@ -33,7 +33,6 @@ const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const COMMAND_SELECT_CLASS = 'dx-command-select';
 const COMMAND_EDIT_CLASS = 'dx-command-edit';
-const COMMAND_ADAPTIVE_HIDDEN_CLASS = 'dx-command-adaptive-hidden';
 const COMMAND_CELL_SELECTOR = '[class^=dx-command]';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const DATEBOX_WIDGET_NAME = 'dxDateBox';
@@ -1467,14 +1466,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 const row = rowItems[visibleRowIndex];
                 const isCellEditing = editingController && this._isCellEditMode() && editingController.isEditing();
                 const isRowEditingInCurrentRow = editingController && editingController.isEditRow(visibleRowIndex);
-                const isHiddenAdaptiveCommand = $cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
                 const isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
                     if(this._isLegacyNavigation()) {
                         return !isEditing && column.command === 'expand';
                     }
-                    if(isCellEditing || isHiddenAdaptiveCommand) {
+                    if(isCellEditing) {
                         return false;
                     }
                     if(isRowEditingInCurrentRow) {
