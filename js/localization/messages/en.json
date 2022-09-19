@@ -177,7 +177,7 @@
         "dxPager-page": "Page {0}",
         "dxPager-prevPage": "Previous Page",
         "dxPager-nextPage": "Next Page",
-
+        "dxPager-ariaLabel": "Page Navigation",
 
         "dxPivotGrid-grandTotal": "Grand Total",
         "dxPivotGrid-total": "{0} Total",
@@ -660,5 +660,5 @@
         "dxGantt-showDependencies": "Show Dependencies",
         "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
         "dxGantt-dialogEndDateValidation": "End date must be after {0}"
-      }
+    }
 }

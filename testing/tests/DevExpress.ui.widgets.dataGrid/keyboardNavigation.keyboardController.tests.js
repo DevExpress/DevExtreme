@@ -361,7 +361,7 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('Interactive element is focused when edit mode is enabled (T403964)', function(assert) {
         // arrange
-        const $rowsElement = $('<div />').appendTo('#container').append($(`
+        const $rowsElement = $('<div />').appendTo($('#container')).append($(`
                 <tr class='dx-row'>"
                     <td class='cell-0'><input></td>
                     <td><input></td>

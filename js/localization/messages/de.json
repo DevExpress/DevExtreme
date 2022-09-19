@@ -11,8 +11,11 @@
         "Search": "Suchen...",
         "Back": "Zurück",
         "OK": "OK",
+
         "dxCollectionWidget-noDataText": "Keine Daten verfügbar",
+
         "dxDropDownEditor-selectLabel": "Auswählen",
+
         "validation-required": "Pflichtfeld",
         "validation-required-formatted": "{0} ist ein Pflichtfeld",
         "validation-numeric": "Der Wert muss eine Zahl sein",
@@ -32,7 +35,9 @@
         "validation-email": "Die Email-Adresse ist ungültig",
         "validation-email-formatted": "{0} ist ungültig",
         "validation-mask": "Der Wert ist ungültig",
+
         "dxLookup-searchPlaceholder": "Minimale Anzahl Zeichen: {0}",
+
         "dxList-pullingDownText": "Zum Aktualisieren nach unten ziehen",
         "dxList-pulledDownText": "Zum Aktualisieren loslassen",
         "dxList-refreshingText": "Aktualisiere...",
@@ -41,14 +46,17 @@
         "dxList-selectAll": "Alles auswählen",
         "dxListEditDecorator-delete": "Entfernen",
         "dxListEditDecorator-more": "Mehr",
+
         "dxScrollView-pullingDownText": "Zum Aktualisieren nach unten ziehen",
         "dxScrollView-pulledDownText": "Zum Aktualisieren loslassen",
         "dxScrollView-refreshingText": "Aktualisiere...",
         "dxScrollView-reachBottomText": "Laden...",
+
         "dxDateBox-simulatedDataPickerTitleTime": "Zeit auswählen",
         "dxDateBox-simulatedDataPickerTitleDate": "Datum auswählen",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Datum und Zeit auswählen",
         "dxDateBox-validation-datetime": "Der Wert muss ein Datum oder eine Uhrzeit sein",
+
         "dxFileUploader-selectFile": "Datei auswählen",
         "dxFileUploader-dropFile": "oder hierher ziehen",
         "dxFileUploader-bytes": "Bytes",
@@ -63,14 +71,18 @@
         "dxFileUploader-invalidFileExtension": "Unzulässiger Dateityp",
         "dxFileUploader-invalidMaxFileSize": "Datei ist zu groß",
         "dxFileUploader-invalidMinFileSize": "Datei ist zu klein",
+
         "dxRangeSlider-ariaFrom": "Von",
         "dxRangeSlider-ariaTill": "Bis",
         "dxSwitch-switchedOnText": "EIN",
         "dxSwitch-switchedOffText": "AUS",
+
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} ist ein Pflichtfeld",
+
         "dxNumberBox-invalidValueMessage": "Der Wert muss eine Zahl sein",
         "dxNumberBox-noDataText": "Keine Daten",
+
         "dxDataGrid-columnChooserTitle": "Spaltenauswahl",
         "dxDataGrid-columnChooserEmptyText": "Ziehen Sie Spalten hierhin, um sie zu verstecken",
         "dxDataGrid-groupContinuesMessage": "Weiter auf der nächsten Seite",
@@ -130,8 +142,8 @@
         "dxDataGrid-exporting": "Exportieren ...",
         "dxDataGrid-excelFormat": "Excel-Datei",
         "dxDataGrid-selectedRows": "Ausgewählte Zeilen",
-        "dxDataGrid-exportAll": "Alle Daten exportieren nach {0}",
         "dxDataGrid-exportSelectedRows": "Ausgewählte Zeilen exportieren nach {0}",
+        "dxDataGrid-exportAll": "Alle Daten exportieren nach {0}",
         "dxDataGrid-headerFilterLabel": "Filteroptionen",
         "dxDataGrid-headerFilterIndicatorLabel": "Filteroptionen für Spalte {0} öffnen",
         "dxDataGrid-headerFilterEmptyValue": "(Leerwerte)",
@@ -153,16 +165,20 @@
         "dxDataGrid-filterPanelCreateFilter": "Filter erzeugen",
         "dxDataGrid-filterPanelClearFilter": "Zurücksetzen",
         "dxDataGrid-filterPanelFilterEnabledHint": "Filter aktivieren",
+
         "dxTreeList-ariaTreeList": "Strukturliste",
         "dxTreeList-ariaSearchInGrid": "Suchen in der Strukturliste",
         "dxTreeList-ariaToolbar": "Symbolleiste der Strukturliste",
         "dxTreeList-editingAddRowToNode": "Hinzufügen",
+
         "dxPager-infoText": "Seite {0} von {1} ({2} Elemente)",
         "dxPager-pagesCountText": "von",
         "dxPager-pageSizesAllText": "Alle",
         "dxPager-page": "Seite {0}",
         "dxPager-prevPage": "Vorherige Seite",
         "dxPager-nextPage": "Nächste Seite",
+        "dxPager-ariaLabel": "Seitennavigation",
+
         "dxPivotGrid-grandTotal": "Gesamt",
         "dxPivotGrid-total": "{0} Gesamt",
         "dxPivotGrid-fieldChooserTitle": "Feldauswahl",
@@ -182,12 +198,15 @@
         "dxPivotGrid-dataFieldArea": "Datenfelder hierher ziehen",
         "dxPivotGrid-rowFieldArea": "Zeilenfelder hierher ziehen",
         "dxPivotGrid-filterFieldArea": "Filterfelder hierher ziehen",
+
         "dxScheduler-editorLabelTitle": "Betreff",
         "dxScheduler-editorLabelStartDate": "Anfangszeit",
         "dxScheduler-editorLabelEndDate": "Endzeit",
         "dxScheduler-editorLabelDescription": "Beschreibung",
         "dxScheduler-editorLabelRecurrence": "Wiederholen",
+
         "dxScheduler-openAppointment": "Termin öffnen",
+
         "dxScheduler-recurrenceNever": "Nie",
         "dxScheduler-recurrenceMinutely": "Minütlich",
         "dxScheduler-recurrenceHourly": "Stündlich",
@@ -195,50 +214,64 @@
         "dxScheduler-recurrenceWeekly": "Wöchentlich",
         "dxScheduler-recurrenceMonthly": "Monatlich",
         "dxScheduler-recurrenceYearly": "Jährlich",
+
         "dxScheduler-recurrenceRepeatEvery": "Wiederholen alle",
         "dxScheduler-recurrenceRepeatOn": "Wiederholen an",
         "dxScheduler-recurrenceEnd": "Wiederholungsende",
         "dxScheduler-recurrenceAfter": "Nach",
         "dxScheduler-recurrenceOn": "Am",
+
         "dxScheduler-recurrenceRepeatMinutely": "Minute(n)",
         "dxScheduler-recurrenceRepeatHourly": "Stunde(n)",
         "dxScheduler-recurrenceRepeatDaily": "Tag(e)",
         "dxScheduler-recurrenceRepeatWeekly": "Woche(n)",
         "dxScheduler-recurrenceRepeatMonthly": "Monat(e)",
         "dxScheduler-recurrenceRepeatYearly": "Jahr(e)",
+
         "dxScheduler-switcherDay": "Tag",
         "dxScheduler-switcherWeek": "Woche",
         "dxScheduler-switcherWorkWeek": "Arbeitswoche",
         "dxScheduler-switcherMonth": "Monat",
+
+        "dxScheduler-switcherAgenda": "Agenda",
+
         "dxScheduler-switcherTimelineDay": "Zeitstrahl Tag",
         "dxScheduler-switcherTimelineWeek": "Zeitstrahl Woche",
         "dxScheduler-switcherTimelineWorkWeek": "Zeitstrahl Arbeitswoche",
         "dxScheduler-switcherTimelineMonth": "Zeitstrahl Monat",
-        "dxScheduler-switcherAgenda": "Agenda",
+
         "dxScheduler-recurrenceRepeatOnDate": "am Datum",
         "dxScheduler-recurrenceRepeatCount": "Ereignisse",
         "dxScheduler-allDay": "Ganztägig",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Möchten Sie nur diesen Termin bearbeiten, oder die gesamte Serie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Möchten Sie nur diesen Termin löschen, oder die gesamte Serie?",
+
         "dxScheduler-confirmRecurrenceEditSeries": "Serie bearbeiten",
         "dxScheduler-confirmRecurrenceDeleteSeries": "Serie löschen",
         "dxScheduler-confirmRecurrenceEditOccurrence": "Termin bearbeiten",
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Termin löschen",
+
         "dxScheduler-noTimezoneTitle": "Keine Zeitzone",
         "dxScheduler-moreAppointments": "{0} weitere",
+
         "dxCalendar-todayButtonText": "Heute",
         "dxCalendar-ariaWidgetName": "Kalendar",
+
         "dxColorView-ariaRed": "Rot",
         "dxColorView-ariaGreen": "Grün",
         "dxColorView-ariaBlue": "Blau",
         "dxColorView-ariaAlpha": "Transparenz",
         "dxColorView-ariaHex": "Farbwert",
+
         "dxTagBox-selected": "{0} ausgewählt",
         "dxTagBox-allSelected": "Alle ausgewählt ({0})",
         "dxTagBox-moreSelected": "{0} weitere",
+
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
         "vizExport-exportButtonText": "{0}-Datei",
+
         "dxFilterBuilder-and": "Und",
         "dxFilterBuilder-or": "Oder",
         "dxFilterBuilder-notAnd": "Nicht Und",

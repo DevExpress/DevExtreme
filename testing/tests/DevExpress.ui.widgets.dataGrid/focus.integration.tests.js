@@ -1642,7 +1642,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         this.clock.tick();
 
-        assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').is(':focus'), 'filter row\'s cell is focused');
+        assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').eq(0).is(':focus'), 'filter row\'s cell is focused');
     });
 
     QUnit.test('DataGrid - DataController should return correct lastIndex for the focusedRow logic (T864478)', function(assert) {
@@ -4722,7 +4722,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.focus(dataGrid.getCellElement(0, 1));
 
         // assert
-        const $focused = $(':focus');
+        const $focused = $('#qunit-fixture').find(':focus');
         assert.ok($focused.length, 'focused element');
         assert.ok($focused.closest('.dx-command-edit').length, 'focused element is command cell child');
 

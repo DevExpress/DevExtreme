@@ -17,6 +17,7 @@ import 'ui/data_grid';
 import commonUtils from 'core/utils/common';
 import pointerEvents from 'events/pointer';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { getActiveElement } from '../../helpers/shadowDom.js';
 import {
     CLICK_EVENT,
     triggerKeyDown,
@@ -292,13 +293,13 @@ QUnit.module('Real DataController and ColumnsController', {
         this.editRow(1);
         this.clock.tick();
 
-        this.triggerKeyDown('tab', false, false, $(':focus'));
+        this.triggerKeyDown('tab', false, false, getActiveElement());
         this.clock.tick();
 
         assert.deepEqual(navigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
         const cell = dataGridWrapper.rowsView.getDataRow(1).getCell(1);
         assert.ok(cell.hasFocusedClass());
-        assert.ok($(':focus').hasClass('input2'));
+        assert.ok($(getActiveElement()).hasClass('input2'));
     });
 
     // T802790
@@ -720,7 +721,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock.tick();
 
         // assert
-        assert.ok($(':focus').closest('#container').length, 'focus in grid');
+        assert.ok($(getActiveElement()).closest('#container').length, 'focus in grid');
 
         // act
         $anotherRowsView.trigger(pointerEvents.down);
@@ -728,7 +729,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock.tick();
 
         // assert
-        assert.notOk($(':focus').closest('#container').length, 'focus is not in grid');
+        assert.notOk($(getActiveElement()).closest('#container').length, 'focus is not in grid');
     });
 
     QUnit.testInActiveWindow('Focus must be after enter key pressed if \'cell\' edit mode (T653709)', function(assert) {
@@ -1114,14 +1115,14 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         that.gridView.render($('#container'));
-        $('#editButton')
+        $('#editButton').eq(0)
             .trigger('dxpointerdown.dxDataGridKeyboardNavigation')
             .click();
 
         this.clock.tick();
 
         // assert
-        assert.equal($('input:focus').val(), 'Alex', 'value of first editor');
+        assert.equal($(getActiveElement()).val(), 'Alex', 'value of first editor');
     });
 
     QUnit.test('Editor\'s input should be focused after mouse click (T650581)', function(assert) {

@@ -1918,7 +1918,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const deferred = new Deferred();
             this.addDeferred(deferred);
             setTimeout(() => {
-                const $focusedElement = $(domAdapter.getActiveElement());
+                // NOTE: if the editForm is enabled then we need to search for focused element in the document root
+                // otherwise we need to search for element in the shadow dom
+                const elementContainer = this._editForm?.element() || this.component.$element().get(0);
+                const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
                 const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
                 let focusedElement = $focusedElement.get(0);
                 const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
@@ -1930,7 +1933,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const $focusedItem = this._rowsView._getCellElement(row.rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItem, () => {
                         setTimeout(() => {
-                            focusedElement = domAdapter.getActiveElement();
+                            focusedElement = domAdapter.getActiveElement(this.component.$element()?.get(0));
                             if(selectionRange.selectionStart >= 0) {
                                 gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
                             }

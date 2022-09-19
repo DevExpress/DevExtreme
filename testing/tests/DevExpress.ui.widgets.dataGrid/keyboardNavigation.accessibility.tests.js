@@ -31,8 +31,8 @@ QUnit.module('Keyboard navigation accessibility', {
         this.triggerKeyDown = triggerKeyDown;
         this.focusCell = focusCell;
         this.focusFirstCell = () => this.focusCell(0, 0);
-        this.ctrlUp = () => fireKeyDown($(':focus'), 'ArrowUp', true);
-        this.ctrlDown = () => fireKeyDown($(':focus'), 'ArrowDown', true);
+        this.ctrlUp = () => fireKeyDown($('#qunit-fixture').find(':focus'), 'ArrowUp', true);
+        this.ctrlDown = () => fireKeyDown($('#qunit-fixture').find(':focus'), 'ArrowDown', true);
 
         this.data = this.data || [
             { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 },
@@ -156,8 +156,8 @@ QUnit.module('Keyboard navigation accessibility', {
         this.clock.tick();
 
         // assert
-        assert.ok($(':focus').hasClass('dx-link'), 'focused element');
-        assert.equal($(':focus').index(), 0, 'focused element index');
+        assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-link'), 'focused element');
+        assert.equal($('#qunit-fixture').find(':focus').index(), 0, 'focused element index');
 
         // act
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').first());
@@ -170,15 +170,15 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // assert
         assert.equal(counter, 2, '_editingCellTabHandler counter');
-        assert.ok($(':focus').is('input'), 'focused element');
-        assert.equal($(':focus').closest('td').index(), 3, 'focused element index');
+        assert.ok($('#qunit-fixture').find(':focus').is('input'), 'focused element');
+        assert.equal($('#qunit-fixture').find(':focus').closest('td').index(), 3, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, true, $(':focus'));
+        this.triggerKeyDown('tab', false, true, $('#qunit-fixture').find(':focus'));
 
         // assert
-        assert.ok($(':focus').hasClass('dx-link'), 'focused element');
-        assert.equal($(':focus').index(), 1, 'focused element index');
+        assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-link'), 'focused element');
+        assert.equal($('#qunit-fixture').find(':focus').index(), 1, 'focused element index');
 
         // act
         this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').last());
@@ -219,7 +219,7 @@ QUnit.module('Keyboard navigation accessibility', {
         this.clock.tick();
 
         // assert
-        assert.ok($(':focus').hasClass('dx-editor-cell'), 'editor cell is focused');
+        assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-editor-cell'), 'editor cell is focused');
     });
 
     testInDesktop('Command column should not focused if batch editing mode', function(assert) {
@@ -561,7 +561,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         pagerWrapper.getPagerPageSizeElement(2).trigger('focus');
-        fireKeyDown($(':focus'), 'Enter');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Enter');
         this.clock.tick();
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
@@ -569,7 +569,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         pagerWrapper.getPagerPageElement(1).trigger('focus');
-        fireKeyDown($(':focus'), 'Enter');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Enter');
         this.clock.tick();
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
@@ -579,7 +579,7 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.notOk(pagerWrapper.getPrevButtonsElement().is(':focus'), 'Page prev button focus state');
         // act
         pagerWrapper.getPrevButtonsElement().trigger('focus');
-        fireKeyDown($(':focus'), 'Space');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Space');
         this.clock.tick();
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
@@ -589,7 +589,7 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.notOk(pagerWrapper.getNextButtonsElement().is(':focus'), 'Page next button focus state');
         // act
         pagerWrapper.getNextButtonsElement().trigger('focus');
-        fireKeyDown($(':focus'), 'Space');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Space');
         this.clock.tick();
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
@@ -618,13 +618,13 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         headerPanelWrapper.getGroupPanelItem(0).focus();
-        fireKeyDown($(':focus'), 'Tab');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Tab');
 
         // assert
         assert.ok(headerPanelWrapper.getElement().hasClass('dx-state-focused'), 'Group panel focus state');
 
         // act
-        $(':focus').trigger('mousedown');
+        $('#qunit-fixture').find(':focus').trigger('mousedown');
 
         // assert
         assert.notOk(headerPanelWrapper.getElement().hasClass('dx-state-focused'), 'Group panel focus state');
@@ -653,13 +653,13 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.ok(headersWrapper.getElement().hasClass('dx-state-focused'), 'Header row focus state');
 
         // act
-        fireKeyDown($(':focus'), 'Tab');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Tab');
 
         // assert
         assert.ok(headersWrapper.getElement().hasClass('dx-state-focused'), 'Header row focus state');
 
         // act
-        $(':focus').trigger('mousedown');
+        $('#qunit-fixture').find(':focus').trigger('mousedown');
 
         // assert
         assert.notOk(headersWrapper.getElement().hasClass('dx-state-focused'), 'Header row focus state');
@@ -708,15 +708,15 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         filterPanelWrapper.getIconFilter().trigger('focus');
-        fireKeyDown($(':focus'), 'Tab');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Tab');
         // assert
         assert.ok(filterPanelWrapper.getElement().hasClass('dx-state-focused'), 'Filter panel focus state');
         // act
-        $(':focus').trigger('mousedown');
+        $('#qunit-fixture').find(':focus').trigger('mousedown');
         // assert
         assert.notOk(filterPanelWrapper.getElement().hasClass('dx-state-focused'), 'Filter panel focus state');
         // act
-        fireKeyDown($(':focus'), 'Tab');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Tab');
         // assert
         assert.ok(filterPanelWrapper.getElement().hasClass('dx-state-focused'), 'Filter panel focus state');
     });
@@ -745,17 +745,17 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         pagerWrapper.getPagerPageSizeElement(0).trigger('focus');
-        fireKeyDown($(':focus'), 'Tab');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Tab');
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
 
         // act
-        $(':focus').trigger('mousedown');
+        $('#qunit-fixture').find(':focus').trigger('mousedown');
         // assert
         assert.notOk(pagerWrapper.isFocusedState(), 'Pager focus state');
 
         // act
-        fireKeyDown($(':focus'), 'Tab');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Tab');
         // assert
         assert.ok(pagerWrapper.isFocusedState(), 'Pager focus state');
     });

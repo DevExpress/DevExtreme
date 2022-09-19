@@ -5877,6 +5877,10 @@ declare module DevExpress.ui {
      */
     activeStateEnabled?: boolean;
     /**
+     * [descr:dxCheckBoxOptions.allowIndeterminateStateByClick]
+     */
+    allowIndeterminateStateByClick?: boolean;
+    /**
      * [descr:dxCheckBoxOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;
@@ -6639,6 +6643,7 @@ declare module DevExpress.ui {
         value: any,
         currentRowData: TRowData
       ) => void | PromiseLike<void>;
+      defaultSetCellValue?: ColumnBase['setCellValue'];
       /**
        * [descr:GridBaseColumn.showEditorAlways]
        */
@@ -7966,6 +7971,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.pager.visible]
        */
       visible?: boolean | DevExpress.common.Mode;
+      /**
+       * [descr:GridBaseOptions.pager.label]
+       */
+      label?: string;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

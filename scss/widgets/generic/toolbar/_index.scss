@@ -68,7 +68,8 @@
   .dx-toolbar-item-auto-hide {
     padding: $generic-list-item-vertical-padding;
 
-    > .dx-button {
+    > .dx-button,
+    > .dx-toolbar-item-content > .dx-button {
       .dx-button-content {
         padding: 0;
       }
@@ -86,6 +87,19 @@
       &,
       & .dx-icon {
         color: $button-normal-color;
+      }
+    }
+  }
+
+  .dx-toolbar-hidden-button-group {
+    margin-top: $generic-toolbar-item-spacing;
+    margin-bottom: $generic-toolbar-item-spacing;
+
+    .dx-buttongroup-wrapper {
+      .dx-buttongroup-item.dx-button {
+        .dx-button-content {
+          padding: $generic-list-item-vertical-padding;
+        }
       }
     }
   }
@@ -113,19 +127,6 @@
         .dx-menu-item-text {
           line-height: normal;
         }
-      }
-    }
-  }
-}
-
-.dx-toolbar-hidden-button-group {
-  margin-top: $generic-toolbar-item-spacing;
-  margin-bottom: $generic-toolbar-item-spacing;
-
-  .dx-buttongroup-wrapper {
-    .dx-buttongroup-item.dx-button {
-      .dx-button-content {
-        padding: $generic-list-item-vertical-padding;
       }
     }
   }

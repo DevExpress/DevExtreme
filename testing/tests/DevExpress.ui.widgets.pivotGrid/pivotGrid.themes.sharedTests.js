@@ -39,7 +39,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 }
             };
 
-            const pivotGridElement = document.getElementById('PivotGrid');
+            const pivotGridElement = $('#PivotGrid').get(0);
             new PivotGrid(pivotGridElement, {
                 ...pivotGridOptions,
                 width: 400,

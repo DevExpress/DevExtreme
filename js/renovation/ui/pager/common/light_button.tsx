@@ -9,7 +9,7 @@ import { KeyboardActionContext, KeyboardActionContextType } from './keyboard_act
 export const viewFunction = ({
   widgetRef,
   props: {
-    className, children, label, tabIndex,
+    className, children, label, tabIndex, selected,
   },
 }: LightButton): JSX.Element => (
   <div
@@ -18,6 +18,7 @@ export const viewFunction = ({
     tabIndex={tabIndex}
     role="button"
     aria-label={label}
+    aria-current={selected ? 'page' : undefined}
   >
     {children}
   </div>
@@ -33,8 +34,10 @@ export class LightButtonProps {
   @OneWay() label = '';
 
   @OneWay() tabIndex = 0;
-  /* istanbul ignore next: EventCallback cannot be tested */
 
+  @OneWay() selected = false;
+
+  /* istanbul ignore next: EventCallback cannot be tested */
   @Event() onClick!: EventCallback;
 }
 

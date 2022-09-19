@@ -94,6 +94,7 @@ jobs:
           { SHADOW_DOM: true, CONSTEL: "ui.widgets(2/3)", NO_HEADLESS: true, name: 'ui.widgets(2/3)-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.widgets(3/3)", NO_HEADLESS: true, name: 'ui.widgets(3/3)-shadowdom' },
           { SHADOW_DOM: true, CONSTEL: "ui.editors", NO_HEADLESS: true, name: 'ui.editors-shadowdom' },
+          { SHADOW_DOM: true, CONSTEL: "ui.grid", NO_HEADLESS: true, name: 'ui.grid-shadowdom' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "export", name: 'export-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc", name: 'misc-firefox' },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui", name: 'ui-firefox' },

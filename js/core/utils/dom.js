@@ -152,3 +152,10 @@ export const replaceWith = (element, newElement) => {
 
     return newElement;
 };
+
+export const isElementInDom = $element => {
+    const element = $element?.get(0);
+    const shadowHost = element?.getRootNode().host;
+
+    return !!$(shadowHost || element).closest(getWindow().document).length;
+};

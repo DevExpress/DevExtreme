@@ -2,6 +2,7 @@ import modules from './ui.grid_core.modules';
 import Pager from '../pager';
 import { isDefined } from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
+import messageLocalization from '../../localization/message';
 
 const PAGER_CLASS = 'pager';
 const MAX_PAGES_COUNT = 10;
@@ -51,6 +52,7 @@ const PagerView = modules.View.inherit({
             displayMode: pagerOptions.displayMode,
             pagesNavigatorVisible: pagerOptions.visible,
             showNavigationButtons: pagerOptions.showNavigationButtons,
+            label: pagerOptions.label,
             pageSizes: that.getPageSizes(),
             totalCount: dataController.totalCount(),
             hasKnownLastPage: dataController.hasKnownLastPage(),
@@ -169,7 +171,8 @@ export const pagerModule = {
             pager: {
                 visible: 'auto',
                 showPageSizeSelector: false,
-                allowedPageSizes: 'auto'
+                allowedPageSizes: 'auto',
+                label: messageLocalization.format('dxPager-ariaLabel')
             }
         };
     },
