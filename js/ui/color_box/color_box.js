@@ -221,8 +221,8 @@ const ColorBox = DropDownEditor.inherit({
 
     _enterKeyHandler: function(e) {
         const newValue = this._input().val();
-        const value = this.option('value');
-        const oldValue = this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value;
+        const { value, editAlphaChannel } = this.option();
+        const oldValue = value && editAlphaChannel ? colorUtils.makeRgba(value) : value;
 
         if(!newValue) return false;
 
@@ -300,9 +300,9 @@ const ColorBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        const value = this.option('value');
-        const convertToColor = value && this.option('editAlphaChannel');
-        const text = convertToColor ? colorUtils.makeRgba(value) : value;
+        const { value, editAlphaChannel } = this.option();
+        const shouldConvertToColor = value && editAlphaChannel;
+        const text = shouldConvertToColor ? colorUtils.makeRgba(value) : value;
 
         this.option('text', text);
 

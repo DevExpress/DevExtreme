@@ -13,9 +13,4 @@ test('Colorbox should display full placeholder', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxColorBox', {
-    width: 300,
-    placeholder: 'I am a very long placeholder',
-  });
-});
+}).before(async () => createWidget('dxColorBox', { width: 300, placeholder: 'I am a very long placeholder' }));
