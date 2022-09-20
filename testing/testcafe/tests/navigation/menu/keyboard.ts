@@ -5,7 +5,7 @@ import Menu from '../../../model/menu';
 fixture`Menu_keyboard`
   .page(url(__dirname, '../../container.html'));
 
-test('keyboard navigation should work after click on a root item if showFirstSubmenuMode is "onHover"', async (t) => {
+test('keyboard navigation should work after click on a root item if showFirstSubmenuMode is "onClick"', async (t) => {
   const menu = new Menu();
 
   await t
