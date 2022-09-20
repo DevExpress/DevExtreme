@@ -513,6 +513,13 @@ const ResizingController = modules.ViewController.inherit({
         return !this.component._requireResize && this.updateDimensions();
     },
 
+    deferUpdateDimensions: function() {
+        clearTimeout(this.deferUpdateDimensionsTimeout);
+        this.deferUpdateDimensionsTimeout = setTimeout(() => {
+            this.updateDimensions();
+        }, this.option('deferUpdateDimensionsTimeout') || 100);
+    },
+
     updateDimensions: function(checkSize) {
         const that = this;
 

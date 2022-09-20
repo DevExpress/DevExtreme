@@ -456,6 +456,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             model: options,
             deferred: templateDeferred,
             onRendered: () => {
+                this.getController('resizing').deferUpdateDimensions();
                 templateDeferred.resolve();
             }
         };
