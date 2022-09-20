@@ -52,6 +52,10 @@ const Views = {
             for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
                 this._renderHeaderCell(colIndex, $headerRow);
             }
+
+            if(this.option('showWeekNumbers')) {
+                this._renderWeekHeaderCell($headerRow);
+            }
         },
 
         _renderHeaderCell: function(cellIndex, $headerRow) {
@@ -67,6 +71,24 @@ const Views = {
                 .text(abbrCaption);
 
             this._appendCell($headerRow, $cell);
+        },
+
+        _renderWeekHeaderCell: function($headerRow) {
+            const $weekNumberHeaderCell = $('<th>')
+                .attr({
+                    scope: 'col',
+                    abbr: 'WeekNumber',
+                    class: 'dx-week-number-header'
+                })
+                .text('#');
+
+            const rtlEnabled = this.option('rtlEnabled');
+
+            if(rtlEnabled) {
+                $headerRow.append($weekNumberHeaderCell);
+            } else {
+                $headerRow.prepend($weekNumberHeaderCell);
+            }
         },
 
         getNavigatorCaption: function() {
