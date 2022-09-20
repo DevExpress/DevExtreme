@@ -5989,6 +5989,32 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
+    // T1115547
+    QUnit.test('Virtual columns in combination with fixed columns and stateStoring (T1115547)', function(assert) {
+        createDataGrid({
+            dataSource: generateDataSource(100),
+            columns: [
+                { dataField: 'firstName', dataType: 'string', width: 100 },
+                { dataField: 'lastName', dataType: 'string', width: 200 },
+                { name: 'fixedColumns', width: 70, fixed: true, fixedPosition: 'right' },
+            ],
+            stateStoring: {
+                enabled: true,
+                storageKey: 'datagridState',
+                type: 'localStorage'
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                mode: 'virtual'
+            }
+        });
+
+
+        this.clock.tick(1000);
+
+
+        assert.ok(true, 'no errors');
+    });
 });
 
 
