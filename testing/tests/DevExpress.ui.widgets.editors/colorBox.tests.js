@@ -583,17 +583,41 @@ QUnit.module('Color Box', {
         { value: undefined, editAlphaChannel: false },
         { value: undefined, editAlphaChannel: true },
         { value: null, editAlphaChannel: false },
-        { value: null, editAlphaChannel: true }
+        { value: null, editAlphaChannel: true },
+        { value: '', editAlphaChannel: false },
+        { value: '', editAlphaChannel: true },
     ].forEach(({ value, editAlphaChannel }) => {
-        QUnit.test(`Text should be empty when value=${value} and editAlphaChannel=${editAlphaChannel}`, function(assert) {
+        QUnit.test(`Text should be empty (value=${value}; editAlphaChannel=${editAlphaChannel})`, function(assert) {
+            const colorBox = $('#color-box').dxColorBox({
+                value,
+                editAlphaChannel
+            }).dxColorBox('instance');
+
+            assert.strictEqual(colorBox.option('text'), '');
+        });
+
+        QUnit.test(`Text should be empty after typed digit and pressed enter (value=${value}; editAlphaChannel=${editAlphaChannel})`, function(assert) {
             const $colorBox = $('#color-box').dxColorBox({
                 value,
                 editAlphaChannel
-            }); const colorBox = $colorBox.dxColorBox('instance');
+            });
+            const colorBox = $colorBox.dxColorBox('instance');
+            const $input = $colorBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+            const keyboard = keyboardMock($input);
 
-            assert.notOk(colorBox.option('text'));
+            keyboard
+                .type('0')
+                .press('enter');
+
+            assert.strictEqual(colorBox.option('text'), '');
         });
     });
+
+
+    [false, true]
+        .forEach((editAlphaChannel) => {
+
+        });
 });
 
 QUnit.module('keyboard navigation', {
