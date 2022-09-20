@@ -208,8 +208,9 @@ const BaseView = Widget.inherit({
     },
 
     _prepareCellTemplateData: function(cellDate, cellIndex, $cell) {
-        const text = cellDate instanceof Date ? this._getCellText(cellDate) : cellDate;
-        const date = cellDate instanceof Date ? cellDate : undefined;
+        const isDateCell = cellDate instanceof Date;
+        const text = isDateCell ? this._getCellText(cellDate) : cellDate;
+        const date = isDateCell ? cellDate : undefined;
         const view = this._getViewName();
 
         return {
