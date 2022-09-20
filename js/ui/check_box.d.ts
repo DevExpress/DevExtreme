@@ -41,7 +41,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @default false
      * @public
      */
-    allowIndeterminateStateByClick?: boolean;
+    enableThreeStateBehavior?: boolean;
     /**
      * @docid
      * @default true &for(desktop)
