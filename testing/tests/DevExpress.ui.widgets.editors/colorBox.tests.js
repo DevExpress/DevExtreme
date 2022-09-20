@@ -578,6 +578,22 @@ QUnit.module('Color Box', {
         colorBox.open();
         assert.equal(colorBox._colorView.option('stylingMode'), 'underlined');
     });
+
+    [
+        { value: undefined, editAlphaChannel: false },
+        { value: undefined, editAlphaChannel: true },
+        { value: null, editAlphaChannel: false },
+        { value: null, editAlphaChannel: true }
+    ].forEach(({ value, editAlphaChannel }) => {
+        QUnit.test(`Text should be empty when value=${value} and editAlphaChannel=${editAlphaChannel}`, function(assert) {
+            const $colorBox = $('#color-box').dxColorBox({
+                value,
+                editAlphaChannel
+            }); const colorBox = $colorBox.dxColorBox('instance');
+
+            assert.notOk(colorBox.option('text'));
+        });
+    });
 });
 
 QUnit.module('keyboard navigation', {

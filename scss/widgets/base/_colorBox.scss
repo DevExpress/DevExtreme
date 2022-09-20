@@ -9,7 +9,7 @@ $colorbox-input-left-padding: 40px;
     }
   }
 
-  .dx-placeholder::before {
+  .dx-placeholder {
     max-width: calc(100% - 25px);
   }
 }
