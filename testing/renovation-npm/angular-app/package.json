@@ -29,7 +29,7 @@
     "@types/jasmine": "3.10.6",
     "@types/node": "12.20.55",
     "jasmine-core": "3.99.1",
-    "karma": "6.4.0",
+    "karma": "6.4.1",
     "karma-chrome-launcher": "3.1.1",
     "karma-coverage": "2.2.0",
     "karma-jasmine": "4.0.2",
