@@ -102,7 +102,9 @@ export const editingFormBasedModule = {
                         const editRowKey = this.option('editing.editRowKey');
                         const hasEditRow = args?.items?.some((item) => equalByValue(item.key, editRowKey));
 
-                        if(args.changeType === 'refresh' || hasEditRow) {
+                        const onlyInsertChanges = args.changeTypes?.length && args.changeTypes.every(item => item === 'insert');
+
+                        if((args.changeType === 'refresh' || hasEditRow) && !onlyInsertChanges) {
                             this._repaintEditPopup();
                         }
                     }
