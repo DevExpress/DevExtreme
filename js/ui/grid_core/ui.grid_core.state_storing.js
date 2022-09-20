@@ -202,11 +202,11 @@ export const stateStoringModule = {
                 }
             },
             columns: {
-                getVisibleColumns: function() {
-                    const visibleColumns = this.callBase.apply(this, arguments);
+                _shouldReturnVisibleColumns: function() {
+                    const result = this.callBase.apply(this, arguments);
                     const stateStoringController = this.getController('stateStoring');
 
-                    return stateStoringController.isEnabled() && !stateStoringController.isLoaded() ? [] : visibleColumns;
+                    return result && (!stateStoringController.isEnabled() || stateStoringController.isLoaded());
                 }
             },
             data: {
