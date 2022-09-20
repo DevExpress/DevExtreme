@@ -20,6 +20,15 @@
         </div>
       </div>
       <div class="dx-field">
+        <div class="dx-field-label">Three state mode</div>
+        <div class="dx-field-value">
+          <DxCheckBox
+            :enable-three-state-behavior="true"
+            :value="null"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
         <div class="dx-field-label">Handle value change</div>
         <div class="dx-field-value">
           <DxCheckBox v-model:value="checkBoxValue"/>
@@ -47,8 +56,8 @@
         <div class="dx-field-label">With label</div>
         <div class="dx-field-value">
           <DxCheckBox
-            :value="true"
             text="Label"
+            :value="true"
           />
         </div>
       </div>
@@ -62,6 +71,7 @@ export default {
   components: {
     DxCheckBox,
   },
+
   data() {
     return {
       checkBoxValue: null,

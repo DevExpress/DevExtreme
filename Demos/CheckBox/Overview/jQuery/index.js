@@ -11,6 +11,11 @@ $(() => {
     value: null,
   });
 
+  $('#threeStateMode').dxCheckBox({
+    enableThreeStateBehavior: true,
+    value: null,
+  });
+
   $('#handler').dxCheckBox({
     value: null,
     onValueChanged(data) {

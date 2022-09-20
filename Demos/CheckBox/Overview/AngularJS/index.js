@@ -12,6 +12,10 @@ DemoApp.controller('DemoController', ($scope) => {
     indeterminate: {
       value: null,
     },
+    threeStateMode: {
+      enableThreeStateBehavior: true,
+      value: null,
+    },
     handler: {
       bindingOptions: {
         value: 'checkBoxValue',

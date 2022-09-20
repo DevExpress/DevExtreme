@@ -39,6 +39,15 @@ class App extends React.Component {
             </div>
           </div>
           <div className="dx-field">
+            <div className="dx-field-label">Three state mode</div>
+            <div className="dx-field-value">
+              <CheckBox
+                enableThreeStateBehavior={true}
+                defaultValue={null}
+              />
+            </div>
+          </div>
+          <div className="dx-field">
             <div className="dx-field-label">Handle value change</div>
             <div className="dx-field-value">
               <CheckBox value={this.state.checkBoxValue} onValueChanged={this.onValueChanged} />
