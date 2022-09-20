@@ -5659,7 +5659,7 @@
             "Title": "Stack",
             "Name": "Stack",
             "Badge": "New",
-            "DocUrl": "Guide/UI_Components/Toast/Stack/",
+            "DocUrl": "Guide/UI_Components/Toast/Getting_Started_with_Toast/#Display_a_Toast_notification/Use_the_notify_Method/",
             "Widget": "Toast"
           }
         ]
