@@ -30,6 +30,12 @@ class TabOptionItemOptionAction extends ItemOptionAction {
     }
 }
 
+class SimpleItemTemplateChangedAction extends ItemOptionAction {
+    tryExecute() {
+        return false;
+    }
+}
+
 class GroupItemTemplateChangedAction extends ItemOptionAction {
     tryExecute() {
         const preparedItem = this.findPreparedItem();
@@ -100,12 +106,16 @@ const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
             return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
         case 'tabs': // TabbedItem/tabs
             return new TabsOptionItemOptionAction(itemActionOptions);
-        case 'template': // TODO: TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
-            if(itemActionOptions.item?.itemType === 'group') {
+        case 'template': {
+            // TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
+            const { itemType } = itemActionOptions.itemsRunTimeInfo.findPreparedItemByItem(itemActionOptions?.item);
+            if(itemType === 'simple') {
+                return new SimpleItemTemplateChangedAction(itemActionOptions);
+            } else if(itemType === 'group') {
                 return new GroupItemTemplateChangedAction(itemActionOptions);
-            } else {
-                return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
             }
+            return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
+        }
         default:
             return null;
     }

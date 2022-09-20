@@ -1624,6 +1624,31 @@ QUnit.test('Change option after group rendered (check for cycling template rende
     assert.equal($fieldItemWidgets.length, 3, 'Correct number of a widgets');
 });
 
+QUnit.test('template should be applied to default field if items[].template option has been changed (T1085831)', function(assert) {
+    const $formContainer = $('#form').dxForm({
+        formData: {
+            firstName: 'John',
+        },
+        items: [
+            {
+                itemType: 'group',
+                caption: 'Personal',
+                items: [
+                    {
+                        dataField: 'firstName'
+                    },
+                ]
+            }]
+    });
+
+    const $customFieldTemplate = $('<div>').text('template').addClass('custom-field-template');
+
+    $formContainer.dxForm('instance').option('items[0].items[0].template', () => $customFieldTemplate);
+
+    assert.equal($formContainer.find('.custom-field-template').length, 1, 'custom template has been applied');
+    assert.equal($formContainer.find('.custom-field-template').text(), 'template', 'template text is correct');
+});
+
 QUnit.test('Align labels when layout is changed in responsive box_T306106', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
