@@ -6,6 +6,7 @@ export type WidgetName =
 'dxGallery' |
 'dxButtonGroup' |
 'dxCheckBox' |
+'dxColorBox' |
 'dxDropDownButton' |
 'dxTabPanel' |
 'dxForm' |
