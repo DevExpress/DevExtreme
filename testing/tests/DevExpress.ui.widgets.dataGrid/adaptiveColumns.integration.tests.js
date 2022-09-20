@@ -394,8 +394,9 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'));
-        assert.notOk($commandCell.hasClass('dx-focused'));
+        // tab
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell has appropriate class');
+        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
 
         // act
         dataGrid.focus($firstNextRow);
@@ -403,8 +404,9 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.ok($lastDataCell.hasClass('dx-focused'));
-        assert.notOk($commandCell.hasClass('dx-focused'));
+        // shift tab
+        assert.ok($lastDataCell.hasClass('dx-focused', 'last cell in row should be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
 
         // act
         dataGrid.focus($lastDataCell);
@@ -412,7 +414,8 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.notOk($commandCell.hasClass('dx-focused'));
+        // right arrow
+        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
 
         // act
         dataGrid.option('width', 400);
@@ -422,15 +425,16 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'));
-        assert.ok($commandCell.hasClass('dx-focused'));
+        // tab to visible
+        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is visible');
+        assert.ok($commandCell.hasClass('dx-focused'), 'command cell is focused');
 
         // act
         dataGrid.option('width', 600);
         this.clock.tick();
 
         // assert
-        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'));
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is hidden after subsequent width increase');
     });
 
     // T1112866
@@ -446,17 +450,17 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         this.clock.tick();
         const $commandCell = $(dataGrid.getCellElement(0, 6));
         // assert
-        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'));
-        assert.ok($commandCell.attr('aria-hidden'));
-        assert.equal($commandCell.attr('tabindex'), -1);
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is hidden');
+        assert.ok($commandCell.attr('aria-hidden'), 'command cell has hidden aria attribute');
+        assert.equal($commandCell.attr('tabindex'), -1, 'command cell has negative tab index');
 
         // act
         dataGrid.option('width', 400);
         this.clock.tick();
 
         // assert
-        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'));
-        assert.notOk($commandCell.attr('aria-hidden'));
-        assert.notEqual($commandCell.attr('tabindex'), -1);
+        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is not hidden');
+        assert.notOk($commandCell.attr('aria-hidden'), 'command cell doesn\'t have hidden aria attribute');
+        assert.notEqual($commandCell.attr('tabindex'), -1, 'command cell doesn\'t have negative tab index');
     });
 });
