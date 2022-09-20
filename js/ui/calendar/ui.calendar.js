@@ -94,6 +94,8 @@ const Calendar = Editor.inherit({
 
             showTodayButton: false,
 
+            showWeekNumbers: false,
+
             cellTemplate: 'cell',
 
             disabledDates: null,
@@ -643,6 +645,8 @@ const Calendar = Editor.inherit({
             min: this._getMinDate(),
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek'),
+            showWeekNumbers: this.option('showWeekNumbers'),
+            zoomLevel: this.option('zoomLevel'),
             value: this._dateOption('value'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
@@ -1230,6 +1234,7 @@ const Calendar = Editor.inherit({
             case 'skipFocusCheck':
                 break;
             case '_todayDate':
+            case 'showWeekNumbers':
                 this._refreshViews();
                 break;
             default:

@@ -5,6 +5,7 @@ export type WidgetName =
 'dxAutocomplete' |
 'dxGallery' |
 'dxButtonGroup' |
+'dxCalendar' |
 'dxCheckBox' |
 'dxDropDownButton' |
 'dxTabPanel' |
