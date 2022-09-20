@@ -57,18 +57,6 @@ export const editingFormBasedModule = {
                     this._updateEditFormDeferred = null;
 
                     this.callBase.apply(this, arguments);
-
-                    this._isInitCalledFirstTime = this._isInitCalledFirstTime === undefined ? true : false;
-
-                    if(this._isInitCalledFirstTime) {
-                        this._rowsView?.renderCompleted.add(() => {
-                            const rowIndex = this.getEditRowIndex();
-
-                            if(this._isInitCalledFirstTime && rowIndex !== -1 && this.isEditing() && this.isPopupEditMode()) {
-                                this._showEditPopup(rowIndex);
-                            }
-                        });
-                    }
                 },
 
                 isFormOrPopupEditMode: function() {
@@ -229,12 +217,15 @@ export const editingFormBasedModule = {
                 _repaintEditPopup: function() {
                     const rowIndex = this._getVisibleEditRowIndex();
 
-                    if(this._editPopup?.option('visible') && rowIndex >= 0) {
-                        const defaultAnimation = this._editPopup.option('animation');
+                    if(rowIndex >= 0) {
+                        const defaultAnimation = this._editPopup?.option('animation');
 
-                        this._editPopup.option('animation', null);
+                        this._editPopup?.option('animation', null);
                         this._showEditPopup(rowIndex, true);
-                        this._editPopup.option('animation', defaultAnimation);
+
+                        if(defaultAnimation !== undefined) {
+                            this._editPopup.option('animation', defaultAnimation);
+                        }
                     }
                 },
 
