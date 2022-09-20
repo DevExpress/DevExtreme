@@ -612,12 +612,6 @@ QUnit.module('Color Box', {
             assert.strictEqual(colorBox.option('text'), '');
         });
     });
-
-
-    [false, true]
-        .forEach((editAlphaChannel) => {
-
-        });
 });
 
 QUnit.module('keyboard navigation', {
