@@ -28,6 +28,10 @@
   color: #ff8080;
 }
 
+.dx-calendar-week-number-cell .week-number {
+  font-style: italic;
+}
+
 .options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);

@@ -6,6 +6,7 @@ $(() => {
     value: new Date(),
     disabled: false,
     firstDayOfWeek: 0,
+    showWeekNumbers: false,
     zoomLevel: zoomLevels[0],
     onValueChanged(data) {
       selectedDate.option('value', data.value);
@@ -61,6 +62,13 @@ $(() => {
     },
   });
 
+  $('#week-numbers').dxCheckBox({
+    text: 'Show week numbers',
+    onValueChanged(data) {
+      calendar.option('showWeekNumbers', data.value);
+    },
+  });
+
   $('#disabled').dxCheckBox({
     text: 'Disabled',
     onValueChanged(data) {
@@ -104,15 +112,19 @@ $(() => {
     let cssClass = '';
 
     if (data.view === 'month') {
-      if (isWeekend(data.date)) { cssClass = 'weekend'; }
+      if (!data.date) {
+        cssClass = 'week-number';
+      } else {
+        if (isWeekend(data.date)) { cssClass = 'weekend'; }
 
-      $.each(holydays, (_, item) => {
-        if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
-          cssClass = 'holyday';
-          return false;
-        }
-        return true;
-      });
+        $.each(holydays, (_, item) => {
+          if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
+            cssClass = 'holyday';
+            return false;
+          }
+          return true;
+        });
+      }
     }
 
     return `<span class='${cssClass}'>${data.text}</span>`;

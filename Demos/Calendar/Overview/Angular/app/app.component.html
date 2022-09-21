@@ -7,6 +7,7 @@
       [max]="maxDateValue"
       [disabledDates]="disabledDates"
       [firstDayOfWeek]="firstDay"
+      [showWeekNumbers]="showWeekNumbers"
       [disabled]="false"
       [(value)]="currentValue"
       [zoomLevel]="zoomLevels[0]"
@@ -51,6 +52,14 @@
         text="Monday as the first day of a week"
         [value]="false"
         (onValueChanged)="setFirstDay($event)"
+      >
+      </dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Show week numbers"
+        [value]="false"
+        (onValueChanged)="setShowWeekNumbers($event)"
       >
       </dx-check-box>
     </div>

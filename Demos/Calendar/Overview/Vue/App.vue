@@ -8,6 +8,7 @@
         :max="maxDateValue"
         :disabled-dates="disabledDates"
         :first-day-of-week="firstDay"
+        :show-week-numbers="showWeekNumbers"
         :disabled="disabled"
         :zoom-level="zoomLevel"
         :cell-template="cellTemplate"
@@ -47,6 +48,13 @@
           :value="false"
           text="Monday as the first day of a week"
           @value-changed="setFirstDay"
+        />
+      </div>
+      <div class="option">
+        <DxCheckBox
+          :value="false"
+          text="Show week numbers"
+          @value-changed="setShowWeekNumbers"
         />
       </div>
       <div class="option">
@@ -100,6 +108,7 @@ export default {
       maxDateValue: null,
       disabledDates: null,
       firstDay: 0,
+      showWeekNumbers: false,
       currentValue: new Date(),
       zoomLevels: ['month', 'year', 'decade', 'century'],
       cellTemplate: 'cell',
@@ -140,6 +149,9 @@ export default {
         this.firstDay = 0;
       }
     },
+    setShowWeekNumbers(e) {
+      this.showWeekNumbers = e.value;
+    },
     useCellTemplate(e) {
       if (e.value) {
         this.cellTemplate = 'custom';
@@ -152,13 +164,17 @@ export default {
       const holydays = [[1, 0], [4, 6], [25, 11]];
 
       if (view === 'month') {
-        if (this.isWeekend(date)) { cssClass = 'weekend'; }
+        if (!date) {
+          cssClass = 'week-number';
+        } else {
+          if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-        holydays.forEach((item) => {
-          if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-            cssClass = 'holyday';
-          }
-        });
+          holydays.forEach((item) => {
+            if (date.getDate() === item[0] && date.getMonth() === item[1]) {
+              cssClass = 'holyday';
+            }
+          });
+        }
       }
 
       return cssClass;
@@ -195,6 +211,10 @@ export default {
 
 .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
   color: #ff8080;
+}
+
+.dx-calendar-week-number-cell .week-number {
+  font-style: italic;
 }
 
 .options {
