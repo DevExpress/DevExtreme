@@ -604,7 +604,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 onContentReady: function(e) {
                     eventsEngine.on($menu, 'blur', () => {
                         const menu = e.component;
-                        menu._hideSubmenu(menu._visibleSubmenu);
+                        menu._hideSubmenuAfterTimeout();
                         restoreFocus();
                     });
                 },

@@ -808,9 +808,11 @@ class Menu extends MenuBase {
 
         if(submenu) {
             this._clearTimeouts();
+
             submenu.show();
-            this.focus();
+
             this.option('focusedElement', submenu.option('focusedElement'));
+            this.focus();
         }
 
         this._visibleSubmenu = submenu;
