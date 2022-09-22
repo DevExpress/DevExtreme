@@ -108,7 +108,7 @@ const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
             return new TabsOptionItemOptionAction(itemActionOptions);
         case 'template': {
             // TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
-            const { itemType } = itemActionOptions.itemsRunTimeInfo.findPreparedItemByItem(itemActionOptions?.item);
+            const itemType = itemActionOptions?.item?.itemType ?? itemActionOptions.itemsRunTimeInfo.findPreparedItemByItem(itemActionOptions?.item)?.itemType;
             if(itemType === 'simple') {
                 return new SimpleItemTemplateChangedAction(itemActionOptions);
             } else if(itemType === 'group') {
