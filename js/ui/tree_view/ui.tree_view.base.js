@@ -1028,7 +1028,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _normalizeIconState: function($node, hasNewItems) {
         const $loadIndicator = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`);
-        $loadIndicator.length && LoadIndicator.getInstance($loadIndicator).option('visible', false);
+        $loadIndicator.length && LoadIndicator.getInstance($loadIndicator)?.option('visible', false);
 
         if(hasNewItems) {
             const $icon = $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
