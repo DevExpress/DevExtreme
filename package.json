@@ -34,7 +34,6 @@
     "devexpress-gantt": "4.1.33",
     "devextreme-quill": "~1.5.17",
     "devextreme-showdown": "^1.0.1",
-    "dx-tools": "^0.0.12",
     "inferno": "^7.4.9",
     "inferno-compat": "^7.4.9",
     "inferno-create-element": "^7.4.9",
