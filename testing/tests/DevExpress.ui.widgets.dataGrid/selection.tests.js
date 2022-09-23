@@ -4090,8 +4090,7 @@ QUnit.module('Deferred selection', {
     // T1116383
     QUnit.test('The selectionFilter should be saved to correctly to state storage', function(assert) {
         // arrange
-        const storageKey = 'selectionFilter-storage';
-        sessionStorage.removeItem(storageKey);
+        let savedState;
 
         this.setupDataGrid({
             dataSource: [
@@ -4111,8 +4110,10 @@ QUnit.module('Deferred selection', {
             stateStoring: {
                 enabled: true,
                 savingTimeout: 0,
-                type: 'sessionStorage',
-                storageKey
+                type: 'custom',
+                customSave: state => {
+                    savedState = state;
+                }
             }
         });
 
@@ -4130,9 +4131,7 @@ QUnit.module('Deferred selection', {
             ['id', '=', 1], 'or', ['id', '=', 2], 'or', ['id', '=', 4], 'or', ['id', '=', 5]
         ];
 
-        const storageValue = JSON.parse(sessionStorage.getItem(storageKey)).selectionFilter;
-
-        assert.deepEqual(storageValue, expectedSelectionFilter, 'selectionFilter is correct');
+        assert.deepEqual(savedState.selectionFilter, expectedSelectionFilter, 'selectionFilter is correct');
     });
 
     QUnit.test('selectRows', function(assert) {
