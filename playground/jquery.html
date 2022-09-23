@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -31,128 +30,16 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-
-    <style>
-        .current-product {
-            padding-top: 11px;
-        }
-
-        .current-value {
-            font-weight: bold;
-        }
-
-        .options {
-            padding: 20px;
-            background-color: rgba(191, 191, 191, 0.15);
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 260px;
-        }
-
-        .caption {
-            font-weight: 500;
-            font-size: 18px;
-        }
-
-        .option {
-            margin-top: 10px;
-        }
-    </style>
 </head>
-
 <body>
-
-    <div class="dx-viewport demo-container">
-        <div id="selectbox-demo">
-            <div class="widget-container">
-                <div class="dx-fieldset">
-                    <div class="dx-fieldset-header">EditBox</div>
-                    <div class="dx-field">
-                        <div class="dx-field-label">Product</div>
-                        <div class="dx-field-value">
-                            <div id="editBox"></div>
-                        </div>
-                    </div>
-                    <div class="dx-field current-product">
-                        Current product:
-                        <span class="current-value"> HD Video Player (ID: 0) </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <div id="button"></div>
     <script>
-        $(() => {
-            const productsDataSource = new DevExpress.data.DataSource({
-                store: {
-                    data: simpleProducts,
-                    type: 'array',
-                    key: 'ID',
-                },
-            });
-
-            $('#editBox').dxSelectBox({
-                dataSource: productsDataSource,
-                displayExpr: 'Name',
-                valueExpr: 'ID',
-                valueChangeEvent: 'change keydown',
-                acceptCustomValue: true,
-                onValueChanged(data) {
-                    const $result = $('.current-value');
-
-                    if (data.value !== null) {
-                        const selectedItem = data.component.option('selectedItem');
-                        $result.text(`${selectedItem.Name} (ID: ${selectedItem.ID})`);
-                    } else {
-                        $result.text('Not selected');
-                    }
-                },
-                onCustomItemCreating(data) {
-                    console.log('custom')
-                    if (!data.text) {
-                        data.customItem = null;
-                        return;
-                    }
-
-                    const productIds = simpleProducts.map((item) => item.ID);
-                    const incrementedId = Math.max.apply(null, productIds) + 1;
-                    const newItem = {
-                        Name: data.text,
-                        ID: incrementedId,
-                    };
-                    data.customItem = productsDataSource.store().insert(newItem)
-                        .then(() => productsDataSource.load())
-                        .then(() => console.log(productsDataSource._items))
-                        .then(() => newItem)
-                        .catch((error) => {
-                            throw error;
-                        });
-                },
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
-
-
-        const simpleProducts = [
-            { Name: 'HD Video Player', ID: 0 },
-            { Name: 'SuperHD Video Player', ID: 1 },
-            { Name: 'SuperPlasma 50', ID: 2 },
-            { Name: 'SuperLED 50', ID: 3 },
-            { Name: 'SuperLED 42', ID: 4 },
-            { Name: 'SuperLCD 55', ID: 5 },
-            { Name: 'SuperLCD 42', ID: 6 },
-            { Name: 'SuperPlasma 65', ID: 7 },
-            { Name: 'SuperLCD 70', ID: 8 },
-            { Name: 'Projector Plus', ID: 9 },
-            { Name: 'Projector PlusHT', ID: 10 },
-            { Name: 'ExcelRemote IR', ID: 11 },
-            { Name: 'ExcelRemote Bluetooth', ID: 12 },
-            { Name: 'ExcelRemote IP', ID: 13 },
-        ];
     </script>
 </body>
-
 </html>
