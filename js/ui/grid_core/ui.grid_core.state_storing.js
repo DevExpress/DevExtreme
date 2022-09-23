@@ -142,7 +142,8 @@ export const stateStoringModule = {
                         const newStateHash = getKeyHash(newState);
 
                         if(!equalByValue(oldStateHash, newStateHash)) {
-                            extend(this._state, state);
+                            extend(true, this._state, { selectionFilter: null }, state);
+
                             this.save();
                         }
                     } else {
