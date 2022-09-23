@@ -5517,7 +5517,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
         $input.blur();
 
-        assert.strictEqual(initialItems.length, 1, 'one should be added in data array');
+        assert.strictEqual(initialItems.length, 1, 'one item should be added in data array');
     });
 
     QUnit.test('custom value should be added on enter key when acceptCustomValue=true and dd is initially closed', function(assert) {
