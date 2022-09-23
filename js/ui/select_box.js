@@ -534,7 +534,7 @@ const SelectBox = DropDownList.inherit({
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
             if(!isOverlayTarget) {
-                if(!this._valueWasBeChanged) {
+                if(!this._valueHasBeenChanged) {
                     this._restoreInputText();
                 } else {
                     this._setValueChangingStatus(false);
@@ -858,7 +858,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _setValueChangingStatus: function(status) {
-        this._valueWasBeChanged = status;
+        this._valueHasBeenChanged = status;
     },
 });
 
