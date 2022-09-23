@@ -2331,6 +2331,10 @@ declare module DevExpress.data {
      */
     customQueryParams?: any;
     /**
+     * [descr:LoadOptions.endDate]
+     */
+    endDate?: Date;
+    /**
      * [descr:LoadOptions.expand]
      */
     expand?: Array<string>;
@@ -2358,6 +2362,10 @@ declare module DevExpress.data {
      * [descr:LoadOptions.requireTotalCount]
      */
     requireTotalCount?: boolean;
+    /**
+     * [descr:LoadOptions.startDate]
+     */
+    startDate?: Date;
     /**
      * [descr:LoadOptions.searchExpr]
      */
