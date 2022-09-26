@@ -155,6 +155,8 @@ const HOUR_MS = toMs('hour');
 const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
+const CELL_INDEX_CALCULATION_EPSILON = 0.05;
+
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
@@ -1460,10 +1462,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     // NOTE: refactor leftIndex calculation
     getCellIndexByCoordinates(coordinates, allDay) {
         const cellCount = this._getTotalCellCount(this._getGroupCount());
-        const cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount);
+        const cellWidth = this.getCellWidth();
         const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
+
         const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
-        let leftIndex = Math.floor((coordinates.left + 5) / cellWidth);
+        let leftIndex = coordinates.left / cellWidth;
+        leftIndex = Math.floor(leftIndex + CELL_INDEX_CALCULATION_EPSILON);
 
         if(this._isRTL()) {
             leftIndex = cellCount - leftIndex - 1;
