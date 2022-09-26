@@ -620,6 +620,8 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
 test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiEditCell(0, 0);
 
   await t

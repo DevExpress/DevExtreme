@@ -744,6 +744,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
       return result;
     })();
     return createWidget('dxDataGrid', {
+      height: 2000,
       dataSource: data,
       keyExpr: 'ID',
       focusedRowEnabled: true,
