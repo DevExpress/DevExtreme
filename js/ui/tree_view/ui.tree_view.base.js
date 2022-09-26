@@ -1028,16 +1028,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _normalizeIconState: function($node, hasNewItems) {
         const $loadIndicator = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`);
-        $loadIndicator.length && LoadIndicator.getInstance($loadIndicator)?.option('visible', false);
+
+        if($loadIndicator.length) {
+            LoadIndicator.getInstance($loadIndicator)?.option('visible', false);
+        }
 
         if(hasNewItems) {
-            const $icon = $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
+            const $icon = $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
             $icon.show();
             return;
         }
 
-        $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
-        $node.addClass(IS_LEAF);
+        $node
+            .find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`)
+            .removeClass(TOGGLE_ITEM_VISIBILITY_CLASS)
+            .addClass(IS_LEAF);
     },
 
     _emptyMessageContainer: function() {
