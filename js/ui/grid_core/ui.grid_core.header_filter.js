@@ -371,7 +371,7 @@ const ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
             $headerFilterIndicator && that._subscribeToIndicatorEvent($headerFilterIndicator, column, 'headerFilter');
         }
 
-        that.callBase($cell, options);
+        this.callBase.apply(this, arguments);
     },
 
     _subscribeToIndicatorEvent: function($indicator, column, indicatorName) {
