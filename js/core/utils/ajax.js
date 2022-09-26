@@ -171,8 +171,8 @@ const isCrossDomain = function(url) {
         // eslint-disable-next-line no-self-assign
         urlAnchor.href = urlAnchor.href;
 
-        crossDomain = originAnchor.protocol + '//' + originAnchor.host !==
-            urlAnchor.protocol + '//' + urlAnchor.host;
+        crossDomain = originAnchor.protocol + '/' + '/' + originAnchor.host !==
+            urlAnchor.protocol + '/' + '/' + urlAnchor.host;
     } catch(e) {
         crossDomain = true;
     }
