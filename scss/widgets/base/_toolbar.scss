@@ -136,37 +136,65 @@
   padding: 0;
 }
 
-.dx-toolbar-menu-section.dx-toolbar-menu-last-section {
-  border-bottom: none;
-}
-
-.dx-toolbar-menu-section .dx-toolbar-hidden-button .dx-button {
-  border: none;
-  background: none;
-  margin: 0;
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  box-shadow: none;
-
-  .dx-button-text {
-    line-height: normal;
-  }
-
-  .dx-button-content {
-    text-align: left;
-
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      text-align: right;
-    }
-  }
-}
-
 .dx-toolbar-menu-section {
+  &.dx-toolbar-menu-last-section {
+    border-bottom: none;
+  }
+
   .dx-toolbar-hidden-button {
     .dx-toolbar-item-auto-hide {
       padding: 0;
+    }
+
+    .dx-button {
+      border: none;
+      background: none;
+      margin: 0;
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      box-shadow: none;
+
+      .dx-button-text {
+        line-height: normal;
+      }
+
+      .dx-button-content {
+        text-align: left;
+
+        @at-root #{selector-append(".dx-rtl", &)},
+        .dx-rtl & {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .dx-toolbar-hidden-button-group {
+    .dx-toolbar-item-auto-hide {
+      padding: 0;
+    }
+
+    &.dx-state-hover {
+      background-color: transparent;
+    }
+
+    .dx-buttongroup {
+      width: 100%;
+
+      .dx-buttongroup-wrapper {
+        flex-direction: column;
+
+        .dx-buttongroup-item {
+          border: none;
+          text-align: left;
+
+          @at-root #{selector-append(".dx-rtl", &)},
+          .dx-rtl & {
+            text-align: right;
+          }
+        }
+      }
     }
   }
 }
@@ -181,36 +209,4 @@
 
 .dx-toolbar-item-invisible {
   display: none;
-}
-
-.dx-toolbar-hidden-button-group {
-  &.dx-state-hover {
-    background-color: transparent;
-  }
-
-  .dx-list-item-content {
-    padding: 0;
-
-    .dx-toolbar-item-auto-hide {
-      padding: 0;
-    }
-  }
-
-  .dx-buttongroup {
-    width: 100%;
-
-    .dx-buttongroup-wrapper {
-      flex-direction: column;
-
-      .dx-buttongroup-item {
-        border: none;
-        text-align: left;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          text-align: right;
-        }
-      }
-    }
-  }
 }

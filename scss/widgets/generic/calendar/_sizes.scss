@@ -3,6 +3,7 @@
 // adduse
 
 $generic-calendar-cell-font-size: null !default;
+$generic-calendar-week-number-cell-font-size: null !default;
 $generic-calendar-body-width: null !default;
 $generic-calendar-body-height: null !default;
 $generic-calendar-body-top: null !default;
@@ -16,6 +17,7 @@ $generic-calendar-caption-button-padding: null !default;
 
 @if $size == "default" {
   $generic-calendar-cell-font-size: 15px !default;
+  $generic-calendar-week-number-cell-font-size: 12px !default;
   $generic-calendar-body-width: 282px !default;
   $generic-calendar-body-height: 205px !default;
   $generic-calendar-body-top: 52px !default;
@@ -31,6 +33,7 @@ $generic-calendar-caption-button-padding: null !default;
 
 @else if $size == "compact" {
   $generic-calendar-cell-font-size: 13px !default;
+  $generic-calendar-week-number-cell-font-size: 11px !default;
   $generic-calendar-body-width: 232px !default;
   $generic-calendar-body-height: 175px !default;
   $generic-calendar-body-top: 42px !default;

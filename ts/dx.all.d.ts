@@ -2331,6 +2331,10 @@ declare module DevExpress.data {
      */
     customQueryParams?: any;
     /**
+     * [descr:LoadOptions.endDate]
+     */
+    endDate?: Date;
+    /**
      * [descr:LoadOptions.expand]
      */
     expand?: Array<string>;
@@ -2358,6 +2362,10 @@ declare module DevExpress.data {
      * [descr:LoadOptions.requireTotalCount]
      */
     requireTotalCount?: boolean;
+    /**
+     * [descr:LoadOptions.startDate]
+     */
+    startDate?: Date;
     /**
      * [descr:LoadOptions.searchExpr]
      */
@@ -5836,6 +5844,10 @@ declare module DevExpress.ui {
      */
     showTodayButton?: boolean;
     /**
+     * [descr:dxCalendarOptions.showWeekNumbers]
+     */
+    showWeekNumbers?: boolean;
+    /**
      * [descr:dxCalendarOptions.value]
      */
     value?: Date | number | string;
@@ -5876,6 +5888,10 @@ declare module DevExpress.ui {
      * [descr:dxCheckBoxOptions.activeStateEnabled]
      */
     activeStateEnabled?: boolean;
+    /**
+     * [descr:dxCheckBoxOptions.enableThreeStateBehavior]
+     */
+    enableThreeStateBehavior?: boolean;
     /**
      * [descr:dxCheckBoxOptions.focusStateEnabled]
      */
@@ -6648,6 +6664,7 @@ declare module DevExpress.ui {
         value: any,
         currentRowData: TRowData
       ) => void | PromiseLike<void>;
+      defaultSetCellValue?: ColumnBase['setCellValue'];
       /**
        * [descr:GridBaseColumn.showEditorAlways]
        */

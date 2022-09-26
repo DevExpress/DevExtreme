@@ -224,6 +224,21 @@ describe('CheckBox', () => {
             checkBox.onWidgetClick({} as Event);
             expect(checkBox.props.value).toBe(false);
           });
+
+          each`
+            initial  | expected
+            ${true}  | ${false}
+            ${false} | ${null}
+            ${null}  | ${true}
+          `
+            .it('value="$initial" should be changed to "$expected" by click if enableThreeStateBehavior is true', ({ initial, expected }) => {
+              const checkBox = new CheckBox({
+                enableThreeStateBehavior: true,
+                value: initial,
+              });
+              checkBox.onWidgetClick({} as Event);
+              expect(checkBox.props.value).toBe(expected);
+            });
         });
       });
     });

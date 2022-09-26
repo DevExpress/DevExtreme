@@ -1,8 +1,9 @@
 import * as sass from 'sass-embedded';
 import less from 'less';
 import { promises as fs } from 'fs';
-import bootstrap3meta from '../data/bootstrap-metadata/bootstrap-metadata';
+import bootstrap3meta from '../data/bootstrap-metadata/bootstrap3-metadata';
 import bootstrap4meta from '../data/bootstrap-metadata/bootstrap4-metadata';
+import bootstrap5meta from '../data/bootstrap-metadata/bootstrap5-metadata';
 
 export default class BootstrapExtractor {
   compiler: (input: string) => Promise<string>;
@@ -25,7 +26,10 @@ export default class BootstrapExtractor {
     } else {
       this.compiler = BootstrapExtractor.sassRender;
       this.sourceProcessor = this.sassProcessor;
-      this.meta = bootstrap4meta; // suitable for 4 and 5
+
+      this.meta = version === 4
+        ? bootstrap4meta
+        : bootstrap5meta;
     }
   }
 
