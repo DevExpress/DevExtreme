@@ -431,20 +431,32 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             };
         },
 
-        _applyBatch: function(changes) {
-            let baseChanges = [];
+        _processChanges: function(changes) {
+            let processedChanges = [];
 
             changes.forEach(change => {
                 if(change.type === 'insert') {
-                    baseChanges = baseChanges.concat(this._applyInsert(change));
+                    processedChanges = processedChanges.concat(this._applyInsert(change));
                 } else if(change.type === 'remove') {
-                    baseChanges = baseChanges.concat(this._applyRemove(change));
+                    processedChanges = processedChanges.concat(this._applyRemove(change));
                 } else if(change.type === 'update') {
-                    baseChanges.push({ type: change.type, key: change.key, data: { data: change.data } });
+                    processedChanges.push({ type: change.type, key: change.key, data: { data: change.data } });
                 }
             });
 
-            this.callBase(baseChanges);
+            return processedChanges;
+        },
+
+        _handleChanging: function(e) {
+            this.callBase.apply(this, arguments);
+
+            e.postProcessChanges = this._processChanges.bind(this);
+        },
+
+        _applyBatch: function(changes) {
+            const processedChanges = this._processChanges(changes);
+
+            this.callBase(processedChanges);
         },
 
         _setHasItems: function(node, value) {

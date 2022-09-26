@@ -150,8 +150,12 @@ const DragEmitter = GestureEmitter.inherit({
         this._maxTopOffset = e.maxTopOffset;
         this._maxBottomOffset = e.maxBottomOffset;
 
-        const dropTargets = wrapToArray(e.targetElements || (e.targetElements === null ? [] : knownDropTargets));
-        this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
+        if(e.targetElements || e.targetElements === null) {
+            const dropTargets = wrapToArray(e.targetElements || []);
+            this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
+        } else {
+            this._dropTargets = knownDropTargets;
+        }
     },
 
     _move: function(e) {

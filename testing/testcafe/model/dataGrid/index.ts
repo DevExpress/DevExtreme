@@ -11,6 +11,8 @@ import Headers from './headers';
 
 import { WidgetName } from '../../helpers/createWidget';
 import { Overlay } from './overlay';
+// eslint-disable-next-line import/no-cycle
+import MasterRow from './masterRow';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -25,6 +27,7 @@ export const CLASS = {
   button: 'dx-button',
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
+  masterDetailRow: 'dx-master-detail-row',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
@@ -92,6 +95,10 @@ export default class DataGrid extends Widget {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
   }
 
+  getMasterRow(index: number): MasterRow {
+    return new MasterRow(this.element.find(`.${CLASS.masterDetailRow}`).nth(index));
+  }
+
   getFormItemElement(index: number): Selector {
     return this.element.find(`.${CLASS.fieldItemContent}`).nth(index);
   }
@@ -136,7 +143,6 @@ export default class DataGrid extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getFooterRow(): Selector {
     return this.element.find(`.${CLASS.footerRow}`);
   }
@@ -247,11 +253,6 @@ export default class DataGrid extends Widget {
 
   getRevertButton(): Selector {
     return this.element.find(`.${CLASS.revertButton}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getDragCommand(): Selector {
-    return Selector(`.${CLASS.dataRow} .${CLASS.commandDrag}`);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
