@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+::ng-deep .dx-resizable-handle::after {
+  content: "";
+  background-color: #337ab7;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #337ab7;
+  top: 50%;
+  transform: translateY(-7px);
+}
+
+::ng-deep .dx-resizable-handle-right::after {
+  right: -7px;
+}
+
+::ng-deep .dx-toolbar.dx-toolbar-multiline .dx-toolbar-item {
+  margin-bottom: 5px;
+}
+
+::ng-deep .dx-toolbar-menu-section .dx-selectbox {
+  width: auto;
+}
+
+::ng-deep .dx-toolbar-menu-section .toolbar-separator-container {
+  height: 1px;
+}
+
+::ng-deep .widget-container {
+  margin-right: 6px;
+}
+
+::ng-deep .resizable-container {
+  padding: 10px;
+  height: 300px;
+  border: 1px dashed #dbdbdb;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+::ng-deep .options-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: relative;
+}
+
+::ng-deep .caption {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+::ng-deep .toolbar-separator {
+  height: 36px;
+  margin: 0 5px;
+  border-left: 1px solid #ddd;
+}
+
+::ng-deep .toolbar-menu-separator {
+  height: 1px;
+  border-bottom: 1px solid #ddd;
+}

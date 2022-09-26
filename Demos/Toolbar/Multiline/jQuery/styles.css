@@ -1,0 +1,62 @@
+.dx-resizable-handle::after {
+  content: "";
+  background-color: #337ab7;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #337ab7;
+  top: 50%;
+  transform: translateY(-7px);
+}
+
+.dx-resizable-handle-right::after {
+  right: -7px;
+}
+
+.dx-toolbar.dx-toolbar-multiline .dx-toolbar-item {
+  margin-bottom: 5px;
+}
+
+.dx-toolbar-menu-section .dx-selectbox {
+  width: auto;
+}
+
+.dx-toolbar-menu-section .toolbar-separator-container {
+  height: 1px;
+}
+
+.widget-container {
+  margin-right: 6px;
+}
+
+.resizable-container {
+  padding: 10px;
+  height: 300px;
+  border: 1px dashed #dbdbdb;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.options-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: relative;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.toolbar-separator {
+  height: 36px;
+  margin: 0 5px;
+  border-left: 1px solid #ddd;
+}
+
+.toolbar-menu-separator {
+  height: 1px;
+  border-bottom: 1px solid #ddd;
+}
