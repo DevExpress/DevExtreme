@@ -427,7 +427,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 }
             }
 
-            that.callBase($cell, options);
+            this.callBase.apply(this, arguments);
         },
 
         _getEditorOptions: function($editorContainer, column) {
