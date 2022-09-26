@@ -87,7 +87,7 @@ const parseISO8601 = (isoString) => {
     return result;
 };
 
-const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/{2,}/i.test(url);
+const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/{2,2}/i.test(url);
 
 const stripParams = (url) => {
     const index = url.indexOf('?');
