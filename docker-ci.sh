@@ -3,6 +3,7 @@
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_TEST_CI=true
+export DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION=true
 
 function run_test {
     local i
