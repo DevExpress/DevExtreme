@@ -335,7 +335,8 @@ export const masterDetailModule = {
                                     row: row,
                                     rowIndex: row.rowIndex,
                                     column: { command: 'detail' },
-                                    columnIndex: 0
+                                    columnIndex: 0,
+                                    change: options.change,
                                 });
 
                                 $detailCell
