@@ -1,9 +1,13 @@
-When you add a CheckBox to an application, set its [value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) property. The CheckBox can have the following states: 
+When you add the CheckBox component to an application, specify its [value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) property to set its state. The CheckBox can have one of the following states: 
 
-- Checked (**value** is **true**).
-- Unchecked (**value** is **false**).
-- Undetermined (**value** is **undefined**).
+- Checked ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `true`).
+- Unchecked ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `false`).
+- Indeterminate ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `null` or `undefined`).
 
-Set the [onValueChanged](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#onValueChanged) property to handle the value change. In this demo, the **value** of the "Handle value change" CheckBox is passed to the "Disabled" CheckBox. Click the first CheckBox to see how it affects the second one.
+The component supports the three state mode. In this demo, the [enableThreeStateBehavior](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#enableThreeStateBehavior) property of the "Three state mode" CheckBox is enabled. You can cycle through the states of this CheckBox in the following order:
 
-You can use the [iconSize](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#iconSize) property to specify a custom width and height for the CheckBox. To add a label to the CheckBox, set the [text](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#text) property.
+*Indeterminate → Checked → Unchecked → Indeterminate →  ...*
+
+Specify the [onValueChanged](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#onValueChanged) property to handle value changes. In this demo, the [value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) of the "Handle value change" CheckBox is passed to the "Disabled" CheckBox. Click the first CheckBox to see how it affects the second one.
+
+You can use the [iconSize](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#iconSize) property to specify custom dimensions for the CheckBox. To add a label to the CheckBox, specify the [text](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#text) property.
