@@ -10,6 +10,7 @@ import dblclickEvent from 'events/dblclick';
 import TreeView from 'ui/tree_view';
 import eventsEngine from 'events/core/events_engine';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import LoadIndicator from 'ui/load_indicator';
 
 const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
@@ -1265,6 +1266,34 @@ QUnit.test('load indicator should be rendered on node expansion if the \'createC
 
     deferred.resolve([{ id: 2, text: 'Two', parentId: 1 }]);
     assert.ok($treeView.find('.dx-treeview-node-loadindicator').is(':hidden'), 'load indicator is removed after data is fetched');
+});
+
+QUnit.test('should not fire any errors after promise was resolved on demand (T1114072)', function(assert) {
+    const treeView = $('#treeView').dxTreeView({
+        dataStructure: 'plain',
+        items: [{ id: 1, text: 'One' }],
+        expandNodesRecursive: false,
+    }).dxTreeView('instance');
+
+    const deferred = $.Deferred();
+
+    treeView.option('createChildren', function() {
+        return deferred.promise();
+    });
+
+    treeView.expandItem(1);
+
+    try {
+        const stub = sinon.stub(LoadIndicator, 'getInstance', () => {
+            stub.restore();
+            return undefined;
+        });
+        deferred.resolve([{ id: 2, text: 'Two', parentId: 1 }]);
+    } catch(e) {
+        assert.notOk(true, `Error has been raised: ${e}`);
+    } finally {
+        assert.ok(true);
+    }
 });
 
 QUnit.test('fetched nodes should be rendered after asynchronous load via \'createChildren\' is finished', function(assert) {
