@@ -502,7 +502,7 @@ const SelectBox = DropDownList.inherit({
             } = this.option();
 
             if(acceptCustomValue) {
-                if(!saveEditingValue) {
+                if(!saveEditingValue && !this._isValueChanging) {
                     this._updateField(initialSelectedItem ?? this._createCustomItem(text));
                     this._clearFilter();
                 }
@@ -534,12 +534,7 @@ const SelectBox = DropDownList.inherit({
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
             if(!isOverlayTarget) {
-                if(!this._valueHasBeenChanged) {
-                    this._restoreInputText();
-                } else {
-                    this._setValueChangingStatus(false);
-                }
-
+                this._restoreInputText();
                 this._clearSearchTimer();
             }
 
@@ -696,8 +691,6 @@ const SelectBox = DropDownList.inherit({
         if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this._isValueChanging) {
             this._isValueChanging = true;
             this._customItemAddedHandler(e);
-            this._isValueChanging = false;
-            this._setValueChangingStatus(true);
         }
     },
 
@@ -749,6 +742,7 @@ const SelectBox = DropDownList.inherit({
         this._cancelSearchIfNeed();
         this._setValue(this._valueGetter(item));
         this._renderDisplayText(this._displayGetter(item));
+        this._isValueChanging = false;
     },
 
     _clearValueHandler: function(e) {
@@ -855,10 +849,6 @@ const SelectBox = DropDownList.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _setValueChangingStatus: function(status) {
-        this._valueHasBeenChanged = status;
     },
 });
 
