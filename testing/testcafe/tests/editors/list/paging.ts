@@ -198,16 +198,18 @@ test('Should not initiate load next page if not reach the bottom when pullRefres
 
     await t
       .expect(list.getItems().count)
-      .eql(4);
+      .eql(6);
 
     await t
+      .pressKey('down')
+      .pressKey('down')
       .pressKey('down')
       .pressKey('down')
       .pressKey('down');
 
     await t
       .expect(list.getItems().count)
-      .eql(6);
+      .eql(9);
   }).before(async () => {
     const sampleData = generateData(12).map((data) => ({
       ...data,
@@ -219,10 +221,10 @@ test('Should not initiate load next page if not reach the bottom when pullRefres
       dataSource: {
         store: sampleData,
         paginate: true,
-        pageSize: 2,
+        pageSize: 3,
       },
       pullRefreshEnabled: true,
-      height: 120,
+      height: 160,
       width: 200,
       pageLoadMode: 'scrollBottom',
       valueExpr: 'id',
