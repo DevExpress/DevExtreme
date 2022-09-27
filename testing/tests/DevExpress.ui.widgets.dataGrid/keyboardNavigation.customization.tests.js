@@ -2902,5 +2902,43 @@ QUnit.module('Customize keyboard navigation', {
             const $input = $('.dx-row .dx-texteditor-input').eq(0);
             assert.equal($input.val(), '5', 'input value');
         });
+
+        // T1116105
+        testInDesktop(`${mode} - input value should not throw an exception for a column with a given mask when editOnKeyPress is enabled and startEditAction='dblClick'`, function(assert) {
+            // arrange
+            this.options = {
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true,
+                    startEditAction: 'dblClick'
+                },
+                keyboardNavigation: {
+                    editOnKeyPress: true
+                }
+            };
+
+            this.data = [{ name: 'Alex', room: 5 }];
+
+            this.columns = [{
+                dataField: 'name',
+                editorOptions: {
+                    mask: '#'
+                }
+            }, 'room'],
+
+            this.setupModule();
+            this.renderGridView();
+
+            // act
+            this.focusCell(0, 0);
+            this.clock.tick();
+            $(this.getCellElement(0, 0)).trigger($.Event('keydown', { key: 'b' }));
+            $(this.getCellElement(0, 0)).find('.dx-texteditor-input').first().trigger($.Event('beforeinput'));
+            this.clock.tick(300);
+
+            // assert
+            const $input = $('.dx-row .dx-texteditor-input').eq(0);
+            assert.equal($input.val(), '_', 'input value');
+        });
     });
 });
