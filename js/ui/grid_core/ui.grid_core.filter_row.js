@@ -593,7 +593,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                         that._showFilterRange($editorContainer.closest('.' + EDITOR_CELL_CLASS), column);
                     }
                 },
-                onSubmenuShown: function() {
+                onSubmenuShowing: function() {
                     isCellWasFocused = that._isEditorFocused($editorContainer);
                     that.getController('editorFactory').loseFocus();
                 },
@@ -604,7 +604,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 onContentReady: function(e) {
                     eventsEngine.on($menu, 'blur', () => {
                         const menu = e.component;
-                        menu._hideSubmenu(menu._visibleSubmenu);
+                        menu._hideSubmenuAfterTimeout();
                         restoreFocus();
                     });
                 },
