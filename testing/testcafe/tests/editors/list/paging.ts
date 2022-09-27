@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
+import { changeTheme } from '../../../helpers/changeTheme';
 import createWidget from '../../../helpers/createWidget';
 
 fixture`List`
@@ -186,5 +187,48 @@ test('Should not initiate load next page if not reach the bottom when pullRefres
     pageLoadMode: 'scrollBottom',
     valueExpr: 'id',
     displayExpr: 'id',
+  });
+});
+
+['generic.light', 'material.blue.light'].forEach((theme) => {
+  test(`Should initiate load next page on select last item by keyboard,theme=${theme}`, async (t) => {
+    const list = new List('#container');
+
+    await list.focus();
+
+    await t
+      .expect(list.getItems().count)
+      .eql(4);
+
+    await t
+      .pressKey('down')
+      .pressKey('down')
+      .pressKey('down');
+
+    await t
+      .expect(list.getItems().count)
+      .eql(6);
+  }).before(async () => {
+    const sampleData = generateData(12).map((data) => ({
+      ...data,
+    }));
+
+    await changeTheme(theme);
+
+    return createWidget('dxList', {
+      dataSource: {
+        store: sampleData,
+        paginate: true,
+        pageSize: 2,
+      },
+      pullRefreshEnabled: true,
+      height: 130,
+      width: 200,
+      pageLoadMode: 'scrollBottom',
+      valueExpr: 'id',
+      displayExpr: 'id',
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });
