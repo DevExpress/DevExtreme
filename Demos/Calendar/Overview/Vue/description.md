@@ -18,13 +18,13 @@ Use the [min](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration
 
 If you need to disable specific dates, use the [disabledDates](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#disabledDates) property. Toggle the "Disable weekend" checkbox to see how this setting affects the component's behavior. You can specify either an array of predefined dates or a function that determines whether a date is available.
 
-## Set the Beginning of the Week
+## Specify First Day of Week and Display Week Numbers
 
-To specify the first day of the week, pass its index (0 - for Sunday, 1 - for Monday, and so on) to the [firstDayOfWeek](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#firstDayOfWeek) property.
+To specify the first day of the week, assign its index (0 - for Sunday, 1 - for Monday, and so on) to the [firstDayOfWeek](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#firstDayOfWeek) property. You can also display a column with week numbers. For this, enable the [showWeekNumbers](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#showWeekNumbers) property.
 
 ## Handle Value Change
 
-To handle value changes, use two-way binding to bind the **value** properties of different components . In this demo, you can use the [DateBox](/Documentation/Guide/UI_Components/DateBox/Getting_Started_with_DateBox/) or Calendar component to change the date because their **value** properties are bound.
+To handle value changes, use two-way binding to bind the **value** properties of different components. In this demo, you can use the [DateBox](/Documentation/Guide/UI_Components/DateBox/Getting_Started_with_DateBox/) or Calendar component to change the date because their **value** properties are bound.
 
 ## Customize Cell Appearance
 
