@@ -12,7 +12,7 @@ export const getImageSourceType = (source) => {
         return 'svg';
     }
 
-    if(/data:.*base64|\.|[^<\s]\//.test(source)) {
+    if(/data:.*base64|\.|[^<\s]\/{1,1}/.test(source)) {
         return 'image';
     }
 
