@@ -711,7 +711,7 @@ QUnit.module('dxPivotGrid', {
         $('.dx-checkbox').eq(0).trigger('dxclick');
         assert.equal($('.dx-checkbox-checked').length, 2, 'two checked checkboxes');
 
-        $('.dx-button').eq(2).trigger('dxclick');
+        $('.dx-button').filter(':contains("OK")').trigger('dxclick');
         this.clock.tick(500);
 
         assert.deepEqual(pivotGrid.getDataSource().state().fields.map(normalizeField), [{
@@ -1346,7 +1346,7 @@ QUnit.module('dxPivotGrid', {
             dataSource: this.dataSource,
             onCellPrepared: function(e) {
                 if(e.cell.text === '2010') {
-                    assert.equal($(e.cellElement).closest(document).length, 1, 'cellElement is attached to dom');
+                    assert.equal($(e.cellElement).closest($('#qunit-fixture').get(0)).length, 1, 'cellElement is attached to dom');
                     assert.equal($(e.cellElement).css('textAlign'), 'left', 'cellElement text-align');
                     isCellPreparedCalled = true;
                 }

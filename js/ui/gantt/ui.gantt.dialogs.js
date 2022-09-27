@@ -43,6 +43,9 @@ export class GanttDialog {
             height: this._dialogInfo.getHeight(),
             contentTemplate: this._dialogInfo.getContentTemplate()
         });
+        if(this._afterClosing) {
+            this._popupInstance.option('onHidden', this._afterClosing);
+        }
         if(!isRefresh) {
             this._popupInstance.show();
         }

@@ -660,7 +660,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         // act
         $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
-        this.triggerKeyDown('rightArrow', false, false, $(':focus').get(0));
+        this.triggerKeyDown('rightArrow', false, false, $('#qunit-fixture').find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
         assert.equal(this.option('focusedColumnIndex'), 1, 'FocusedColumnIndex = 1');
@@ -1094,7 +1094,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleColumnIndex(), 0, 'Focused column index');
         assert.equal(focusedColumnChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.notOk($('#container .dx-datagrid-focus-overlay:visible').length, 'has focus overlay');
+        assert.notOk($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has focus overlay');
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by LeftArrow key', function(assert) {
@@ -2239,7 +2239,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.notOk($('#container .dx-datagrid-focus-overlay:visible').length, 'has no focus overlay');
+        assert.notOk($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has no focus overlay');
         assert.ok(this.getView('rowsView').getRow(0).is(':focus'), 'row 0 is focused');
     });
 
@@ -2279,7 +2279,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'has focus overlay');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has focus overlay');
         assert.ok(this.getView('rowsView').getRow(0).is(':focus'), 'row 0 is focused');
     });
 
@@ -2307,7 +2307,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'has focus overlay');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has focus overlay');
     });
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowIndex, focusedColumnIndex are not set', function(assert) {
@@ -2330,7 +2330,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.notOk($('#container .dx-datagrid-focus-overlay:visible').length, 'has no focus overlay');
+        assert.notOk($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has no focus overlay');
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by click', function(assert) {
@@ -2885,7 +2885,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(focusedCellChangedCount, 0, 'onFocusedCellChanged fires count');
 
         // act
-        this.triggerKeyDown('tab', false, false, $(':focus'));
+        this.triggerKeyDown('tab', false, false, $('#qunit-fixture').find(':focus'));
         // assert
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
     });
@@ -3180,7 +3180,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleColumnIndex(), 1, 'Focused column index');
         assert.equal(focusedColumnChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'has focus overlay');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has focus overlay');
     });
 
     QUnit.testInActiveWindow('isHighlighted in the onFocusedCellChanged event', function(assert) {
@@ -3707,7 +3707,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.strictEqual(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'has focus overlay');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has focus overlay');
     });
 
     QUnit.testInActiveWindow('DataGrid - onFocusedCellChanging event should execute on cell click in batch edit mode (T743530)', function(assert) {
@@ -5145,7 +5145,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             // assert
             assert.equal(focusedCellChangingCount, 0, 'No focusedCellChanging event');
-            assert.notOk($('#container .dx-datagrid-focus-overlay:visible').length, 'has no focus overlay');
+            assert.notOk($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has no focus overlay');
         });
 
         QUnit.testInActiveWindow('Not highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex is not set', function(assert) {
@@ -5169,7 +5169,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             // assert
             assert.equal(focusedCellChangingCount, 0, 'onFocusedCellChanging fires count');
-            assert.notOk($('#container .dx-datagrid-focus-overlay:visible').length, 'has no focus overlay');
+            assert.notOk($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'has no focus overlay');
         });
 
         QUnit.testInActiveWindow('onFocusedRowChanged event', function(assert) {

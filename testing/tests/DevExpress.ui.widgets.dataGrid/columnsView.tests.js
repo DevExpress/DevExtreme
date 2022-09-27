@@ -1,9 +1,12 @@
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
+import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 QUnit.testStart(function() {
     const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
     $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 import 'generic_light.css!';
@@ -70,7 +73,7 @@ QUnit.module('API methods', {
         const that = this;
 
         // act
-        fx.animate('#container', {
+        fx.animate($('#container'), {
             type: 'pop',
             duration: 50,
             complete: function() {

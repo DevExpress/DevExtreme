@@ -1918,7 +1918,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const deferred = new Deferred();
             this.addDeferred(deferred);
             setTimeout(() => {
-                const $focusedElement = $(domAdapter.getActiveElement());
+                // NOTE: if the editForm is enabled then we need to search for focused element in the document root
+                // otherwise we need to search for element in the shadow dom
+                const elementContainer = this._editForm?.element() || this.component.$element().get(0);
+                const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
                 const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
                 let focusedElement = $focusedElement.get(0);
                 const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
@@ -1930,7 +1933,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const $focusedItem = this._rowsView._getCellElement(row.rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItem, () => {
                         setTimeout(() => {
-                            focusedElement = domAdapter.getActiveElement();
+                            focusedElement = domAdapter.getActiveElement(this.component.$element()?.get(0));
                             if(selectionRange.selectionStart >= 0) {
                                 gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
                             }
@@ -2147,18 +2150,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return buttonItems;
         },
 
-        highlightDataCell: function($cell, parameters) {
-            const cellModified = this.isCellModified(parameters);
-            const shouldHighlight =
-                cellModified &&
-                parameters.column.setCellValue &&
-                (
-                    this.getEditMode() !== EDIT_MODE_ROW ||
-                    !parameters.row.isEditing
-                );
-
-            shouldHighlight && $cell.addClass(CELL_MODIFIED);
-        },
+        highlightDataCell: function($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); },
 
         _afterInsertRow: noop,
 
@@ -2204,6 +2196,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const rows = this._dataController.items();
 
             return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
+        },
+
+        shouldHighlightCell: function(parameters) {
+            const cellModified = this.isCellModified(parameters);
+            return cellModified &&
+                parameters.column.setCellValue &&
+                (
+                    this.getEditMode() !== EDIT_MODE_ROW ||
+                    !parameters.row.isEditing
+                );
+
         }
     };
 })());
@@ -2494,10 +2497,11 @@ export const editingModule = {
                         this._editCellPrepared($cell);
                     }
 
-                    if(parameters.column && !isCommandCell) {
+                    const hasTemplate = !!parameters.column?.cellTemplate;
+
+                    if(parameters.column && !isCommandCell && (!hasTemplate || editingController.shouldHighlightCell(parameters))) {
                         editingController.highlightDataCell($cell, parameters);
                     }
-
                     this.callBase.apply(this, arguments);
                 },
                 _editCellPrepared: noop,

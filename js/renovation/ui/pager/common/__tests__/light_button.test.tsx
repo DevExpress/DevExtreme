@@ -33,6 +33,19 @@ describe('LightButton', () => {
 
       expect(tree.find('.child').exists()).toBe(true);
     });
+
+    // T1109686
+    it('should have aria-current if is selected', () => {
+      const getButtonDiv = (selected: boolean) => {
+        const props = { props: { selected } } as Partial<LightButton>;
+        const tree = mount(<LightButtonComponent {...props as any} />);
+
+        return tree.find('div');
+      };
+
+      expect(getButtonDiv(true).prop('aria-current')).toStrictEqual('page');
+      expect(getButtonDiv(false).prop('aria-current')).toBeUndefined();
+    });
   });
 
   describe('Effect', () => {

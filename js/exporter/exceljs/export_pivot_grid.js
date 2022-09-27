@@ -51,7 +51,7 @@ class PivotGridHelpers {
     _getFieldHeaderRowsCount() {
         return 0
             + this._allowExportFilterFieldHeaders()
-            + this._allowExportDataFieldHeaders() || this._allowExportColumnFieldHeaders();
+            + (this._allowExportDataFieldHeaders() || this._allowExportColumnFieldHeaders());
     }
 
     _getCustomizeCellOptions(excelCell, pivotCell) {

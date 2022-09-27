@@ -850,7 +850,7 @@ QUnit.module('Keyboard keys', {
 
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
-        this.triggerKeyDown('space', false, false, $(':focus').get(0));
+        this.triggerKeyDown('space', false, false, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
         assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, 'selection rows count');
@@ -905,7 +905,7 @@ QUnit.module('Keyboard keys', {
 
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
-        this.triggerKeyDown('space', false, false, $(':focus').get(0));
+        this.triggerKeyDown('space', false, false, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
         assert.ok(!this.selectionOptions.changeItemSelectionCallsCount);
@@ -945,8 +945,8 @@ QUnit.module('Keyboard keys', {
 
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
-        this.triggerKeyDown('space', false, false, $(':focus').get(0));
-        this.triggerKeyDown('space', false, true, $(':focus').get(0));
+        this.triggerKeyDown('space', false, false, $('#qunit-fixture').find(':focus').get(0));
+        this.triggerKeyDown('space', false, true, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
         assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 2, 'selection rows count');
@@ -965,7 +965,7 @@ QUnit.module('Keyboard keys', {
 
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
-        this.triggerKeyDown('space', true, false, $(':focus').get(0));
+        this.triggerKeyDown('space', true, false, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
         assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, 'selection rows count');
@@ -1636,17 +1636,17 @@ QUnit.module('Keyboard keys', {
         assert.equal($rowsView.attr('tabindex'), 111, 'rowsView element has tabindex');
 
         // act, assert
-        fireKeyDown($(':focus'), 'enter');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'enter');
         assert.equal(keyDownFiresCount, 0, 'onKeyDown not fired');
 
         // act
         $rowsView.focus();
-        fireKeyDown($(':focus'), 'enter');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'enter');
         // assert
         assert.equal(keyDownFiresCount, 1, 'onKeyDown fired once');
 
         // act, assert
-        fireKeyDown($(':focus'), 'Enter');
+        fireKeyDown($('#qunit-fixture').find(':focus'), 'Enter');
         assert.equal(keyDownFiresCount, 2, 'onKeyDown fired twice');
     });
 
@@ -2271,11 +2271,11 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         assert.ok($groupRow.hasClass('dx-focused'), 'group row is focused');
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'focus overlay is visible');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'focus overlay is visible');
 
         this.triggerKeyDown('tab', false, false, $groupRow);
 
-        assert.ok($(':focus').parent().hasClass('dx-data-row'), 'data cell is focused');
+        assert.ok($('#qunit-fixture').find(':focus').parent().hasClass('dx-data-row'), 'data cell is focused');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
             rowIndex: 1,
             columnIndex: 0
@@ -2314,7 +2314,7 @@ QUnit.module('Keyboard keys', {
         this.triggerKeyDown('tab', false, false, $groupRows.eq(0));
 
         // assert
-        assert.equal($(':focus').get(0), $groupRows.get(1), 'second group row is focused');
+        assert.equal($('#qunit-fixture').find(':focus').get(0), $groupRows.get(1), 'second group row is focused');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
             rowIndex: 1,
             columnIndex: 1
@@ -2531,7 +2531,7 @@ QUnit.module('Keyboard keys', {
         this.editCell(1, 1);
         this.clock.tick();
 
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'focus overlay is visible');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'focus overlay is visible');
 
 
         const $lastCell = this.rowsView.element().find('.dx-row').filter(':visible').last().find('td').eq(1);
@@ -2580,7 +2580,7 @@ QUnit.module('Keyboard keys', {
         this.editCell(1, 1);
         this.clock.tick();
 
-        assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'focus overlay is visible');
+        assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'focus overlay is visible');
 
         this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
 
@@ -2631,7 +2631,7 @@ QUnit.module('Keyboard keys', {
                 this.addRow();
                 this.clock.tick();
 
-                assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'focus overlay is visible');
+                assert.ok($('#container .dx-datagrid-focus-overlay').filter(':visible').length, 'focus overlay is visible');
 
                 const $firstCell = this.rowsView.element().find('.dx-row-inserted').find('td').eq(0);
 
@@ -2777,10 +2777,10 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
-        assert.ok($(':focus').hasClass('link1'), 'first link is focused');
+        assert.ok($('#qunit-fixture').find(':focus').hasClass('link1'), 'first link is focused');
 
         // act
-        isPreventDefaultCalled = this.triggerKeyDown('tab', false, false, $(':focus')).preventDefault;
+        isPreventDefaultCalled = this.triggerKeyDown('tab', false, false, $('#qunit-fixture').find(':focus')).preventDefault;
 
         // assert
         assert.ok(!isPreventDefaultCalled, 'preventDefault is not called');
@@ -2840,11 +2840,11 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
-        assert.ok($(':focus').hasClass('link2'), 'last link is focused');
+        assert.ok($('#qunit-fixture').find(':focus').hasClass('link2'), 'last link is focused');
         assert.ok($('#container .dx-datagrid-focus-overlay').hasClass('dx-hidden'), 'focus overlay is not visible');
 
         // act
-        isPreventDefaultCalled = this.triggerKeyDown('tab', false, true, $(':focus')).preventDefault;
+        isPreventDefaultCalled = this.triggerKeyDown('tab', false, true, $('#qunit-fixture').find(':focus')).preventDefault;
         this.clock.tick();
 
         // assert
@@ -2899,7 +2899,7 @@ QUnit.module('Keyboard keys', {
 
             // assert
             assert.ok(isPreventDefaultCalled, 'preventDefault is called');
-            assert.ok($(':focus').hasClass('dx-button'), 'button is focused');
+            assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-button'), 'button is focused');
             assert.ok($('#container .dx-datagrid-focus-overlay').hasClass('dx-hidden'), 'focus overlay is not visible');
         });
     }
@@ -4097,7 +4097,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok($firstGroupRow.hasClass('dx-focused'), 'the first group row is marked as focused');
-        assert.equal($(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
+        assert.equal($('#qunit-fixture').find(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {});
 
         // act
@@ -4139,7 +4139,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok($firstGroupRow.hasClass('dx-focused'), 'the first group row is marked as focused');
-        assert.equal($(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
+        assert.equal($('#qunit-fixture').find(':focus').get(0), $firstGroupRow.get(0), 'the first group row is focused');
 
         // act
         this.triggerKeyDown('downArrow', false, false, $firstGroupRow.get(0));
@@ -4148,7 +4148,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok($secondGroupRow.hasClass('dx-focused'), 'the second group row is marked as focused');
-        assert.equal($(':focus').get(0), $secondGroupRow.get(0), 'the second group row is focused');
+        assert.equal($('#qunit-fixture').find(':focus').get(0), $secondGroupRow.get(0), 'the second group row is focused');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
             rowIndex: 1,
             columnIndex: 1
@@ -4213,14 +4213,14 @@ QUnit.module('Keyboard keys', {
             this.clock.tick();
 
             // assert
-            assert.equal($('.dx-data-row:eq(0) td:eq(0) textarea:focus').length, 1, 'first cell is focused');
+            assert.equal($('.dx-data-row').eq(0).find('td:eq(0) textarea:focus').length, 1, 'first cell is focused');
 
             // act
             this.triggerKeyDown('downArrow', true);
             this.clock.tick();
 
             // assert
-            assert.equal($('.dx-data-row:eq(0) td:eq(0) textarea:focus').length, 1, 'first cell is still focused');
+            assert.equal($('.dx-data-row').eq(0).find('td:eq(0) textarea:focus').length, 1, 'first cell is still focused');
         });
     });
 });

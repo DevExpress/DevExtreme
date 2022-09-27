@@ -45,9 +45,9 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
 
 export function addShadowDomStyles($element) {
     const el = $element.get(0);
-    const root = el.getRootNode();
+    const root = el.getRootNode?.();
 
-    if(!root.host) {
+    if(!root?.host) {
         return;
     }
 

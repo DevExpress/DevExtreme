@@ -5339,9 +5339,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         const dataRows = $('.dx-data-row');
         assert.strictEqual(dataRows.length, 3);
-        assert.strictEqual($('.dx-data-row:eq(0) .dx-link-save').length, 1, 'first row is new');
-        assert.strictEqual($('.dx-data-row:eq(1)').text(), 'value 1', 'second row is "value 1"');
-        assert.strictEqual($('.dx-data-row:eq(2)').text(), 'value 2', 'third row is "value 2"');
+        assert.strictEqual($('.dx-data-row').eq(0).find('.dx-link-save').length, 1, 'first row is new');
+        assert.strictEqual($('.dx-data-row').eq(1).text(), 'value 1', 'second row is "value 1"');
+        assert.strictEqual($('.dx-data-row').eq(2).text(), 'value 2', 'third row is "value 2"');
     });
 
     QUnit.test('Redundant requests should not be sent on scroll (T1056318)', function(assert) {
@@ -5989,6 +5989,32 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
+    // T1115547
+    QUnit.test('Virtual columns in combination with fixed columns and stateStoring (T1115547)', function(assert) {
+        createDataGrid({
+            dataSource: generateDataSource(100),
+            columns: [
+                { dataField: 'firstName', dataType: 'string', width: 100 },
+                { dataField: 'lastName', dataType: 'string', width: 200 },
+                { name: 'fixedColumns', width: 70, fixed: true, fixedPosition: 'right' },
+            ],
+            stateStoring: {
+                enabled: true,
+                storageKey: 'datagridState',
+                type: 'localStorage'
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                mode: 'virtual'
+            }
+        });
+
+
+        this.clock.tick(1000);
+
+
+        assert.ok(true, 'no errors');
+    });
 });
 
 

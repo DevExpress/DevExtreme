@@ -674,6 +674,10 @@ $grid-masterdetail-padding: 20px;
         border-top: $datagrid-border;
         border-bottom: $datagrid-border;
       }
+
+      .dx-texteditor-input {
+        padding-right: 0;
+      }
     }
 
     .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) {

@@ -2990,3 +2990,63 @@ QUnit.module('Filtering', { beforeEach: function() {
     });
 });
 
+QUnit.module('Push API', {
+    beforeEach: function() {
+        this.items = [
+            { id: 1, parentId: 0, name: 'Name 1' },
+            { id: 2, parentId: 0, name: 'Name 2' },
+            { id: 3, parentId: 0, name: 'Name 3' },
+            { id: 4, parentId: 1, name: 'Name 4' },
+            { id: 5, parentId: 1, name: 'Name 5' },
+            { id: 6, parentId: 1, name: 'Name 6' }
+        ];
+
+        this.setupTreeList = function(options) {
+            if(!('loadingTimeout' in options)) {
+                options.loadingTimeout = null;
+            }
+            setupTreeListModules(this, ['data', 'columns'], {
+                initDefaultOptions: true,
+                options: options
+            });
+        };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: teardownModule
+}, () => {
+    // T1113826
+    QUnit.test('Update the node using the push method of the store when changes have the \'data\' property', function(assert) {
+        // arrange
+        this.setupTreeList({
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            dataSource: this.items,
+            columns: ['name', 'age']
+        });
+        const store = this.getDataSource().store();
+
+        // act
+        store.push([{
+            type: 'update',
+            key: 1,
+            data: {
+                name: 'Root name 1',
+                data: {
+                    name: 'Inner name 1'
+                }
+            }
+        }]);
+        this.clock.tick(100);
+
+        // assert
+        const firstNode = this.getVisibleRows()[0];
+        assert.deepEqual(firstNode.data, {
+            id: 1,
+            parentId: 0,
+            name: 'Root name 1',
+            data: {
+                name: 'Inner name 1'
+            }
+        }, 'node data is correct');
+    });
+});

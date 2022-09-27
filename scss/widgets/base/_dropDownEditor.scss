@@ -13,6 +13,15 @@
     .dx-texteditor-input {
       cursor: pointer;
     }
+
+    .dx-texteditor-buttons-container {
+      .dx-state-disabled {
+        &.dx-button,
+        .dx-button {
+          pointer-events: auto;
+        }
+      }
+    }
   }
 }
 

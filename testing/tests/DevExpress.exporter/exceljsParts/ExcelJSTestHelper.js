@@ -177,11 +177,11 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
         let rowIndexCorrection = 0;
 
         if(options) {
-            if(options.exportFilterFieldHeaders ^ (options.exportDataFieldHeaders || options.exportColumnFieldHeaders)) {
-                rowIndexCorrection = 1;
+            if(options.exportFilterFieldHeaders) {
+                rowIndexCorrection++;
             }
-            if(options.exportFilterFieldHeaders && options.exportDataFieldHeaders) {
-                rowIndexCorrection = 2;
+            if(options.exportDataFieldHeaders || options.exportColumnFieldHeaders) {
+                rowIndexCorrection++;
             }
         }
 

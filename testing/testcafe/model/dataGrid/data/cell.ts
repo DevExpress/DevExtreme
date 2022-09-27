@@ -45,7 +45,7 @@ export default class DataCell extends FocusableElement {
   }
 
   static getModifiedCells(): Selector {
-    return Selector(CLASS.cellModified);
+    return Selector(`.${CLASS.cellModified}`);
   }
 
   getEditor(): CellEditor {

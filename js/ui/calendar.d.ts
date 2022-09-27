@@ -150,6 +150,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     showTodayButton?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    showWeekNumbers?: boolean;
+    /**
+     * @docid
      * @default null
      * @public
      */

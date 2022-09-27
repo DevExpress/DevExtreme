@@ -1,4 +1,6 @@
 QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass('dx-viewport'));
+
     const markup =
 '<div>\
     <div id="container">\
@@ -32,7 +34,6 @@ const device = devices.real();
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
 setTemplateEngine('hogan');
 
@@ -769,7 +770,7 @@ QUnit.module('Filter Row', {
         ]);
 
         // act
-        this.columnHeadersView.render('.dx-datagrid');
+        this.columnHeadersView.render($('.dx-datagrid'));
 
         const filterRow = testElement.find('.dx-datagrid-filter-row');
 
@@ -2203,7 +2204,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         const $menuItem = $filterMenu.find('.dx-menu-item');
         $($menuItem).trigger('dxclick');
-        $('.dx-menu-item:contains(\'Between\')').trigger('dxclick');
+        $('.dx-menu-item').filter(':contains(\'Between\')').trigger('dxclick');
 
         const $filterRangeContent = $('.dx-filter-range-content');
 
@@ -2250,30 +2251,30 @@ QUnit.module('Filter Row with real dataController and columnsController', {
                 this.columnHeadersView.render($testElement);
 
                 // act
-                const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
-                const dropDown2 = $('.dx-dropdowneditor-button:eq(1)');
+                const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+                const dropDown2 = $('.dx-dropdowneditor-button').eq(1);
 
                 dropDown1.trigger('dxclick');
                 dropDown2.trigger('dxclick');
 
                 // assert
-                const dropDownList1 = $('.dx-list:eq(0)');
-                const dropDownList2 = $('.dx-list:eq(1)');
+                const dropDownList1 = $('.dx-list').eq(0);
+                const dropDownList2 = $('.dx-list').eq(1);
 
                 assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
-                assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
-                assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+                assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+                assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
 
                 assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
-                assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
-                assert.strictEqual(dropDownList2.find('.dx-item:eq(2)').text(), 'value2');
+                assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
+                assert.strictEqual(dropDownList2.find('.dx-item').eq(2).text(), 'value2');
 
                 // act
-                dropDownList1.find('.dx-item:eq(1)').trigger('dxclick');
+                dropDownList1.find('.dx-item').eq(1).trigger('dxclick');
 
                 // assert
                 assert.strictEqual(dropDownList2.find('.dx-item').length, 2);
-                assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
+                assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
             });
 
             QUnit.test(`Lookup select box should show only relevant values after initialization, lookup optimization = ${hasLookupOptimization}, refreshMode = ${refreshMode}`, function(assert) {
@@ -2314,13 +2315,13 @@ QUnit.module('Filter Row with real dataController and columnsController', {
                 this.columnHeadersView.render($testElement);
 
                 // act
-                const dropDown = $('.dx-dropdowneditor-button:eq(1)');
+                const dropDown = $('.dx-dropdowneditor-button').eq(1);
                 dropDown.trigger('dxclick');
                 const dropDownList = $('.dx-list');
 
                 // assert
                 assert.strictEqual(dropDownList.find('.dx-item').length, 2);
-                assert.strictEqual(dropDownList.find('.dx-item:eq(1)').text(), 'value1');
+                assert.strictEqual(dropDownList.find('.dx-item').eq(1).text(), 'value1');
             });
 
             QUnit.test(`Lookup select box should be empty if no rows are displayed, lookup optimization = ${hasLookupOptimization}, refreshMode = ${refreshMode}`, function(assert) {
@@ -2360,7 +2361,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
                 this.columnHeadersView.render($testElement);
 
                 // act
-                const dropDown = $('.dx-dropdowneditor-button:eq(1)');
+                const dropDown = $('.dx-dropdowneditor-button').eq(1);
                 dropDown.trigger('dxclick');
                 const dropDownList = $('.dx-list');
 
@@ -2405,30 +2406,30 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // act
-        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
-        const dropDown2 = $('.dx-dropdowneditor-button:eq(1)');
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+        const dropDown2 = $('.dx-dropdowneditor-button').eq(1);
 
         dropDown1.trigger('dxclick');
         dropDown2.trigger('dxclick');
 
         // assert
-        const dropDownList1 = $('.dx-list:eq(0)');
-        const dropDownList2 = $('.dx-list:eq(1)');
+        const dropDownList1 = $('.dx-list').eq(0);
+        const dropDownList2 = $('.dx-list').eq(1);
 
         assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
 
         assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
-        assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
-        assert.strictEqual(dropDownList2.find('.dx-item:eq(2)').text(), 'value2');
+        assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList2.find('.dx-item').eq(2).text(), 'value2');
 
         // act
-        dropDownList1.find('.dx-item:eq(1)').trigger('dxclick');
+        dropDownList1.find('.dx-item').eq(1).trigger('dxclick');
 
         // assert
         assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
-        assert.strictEqual(dropDownList2.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
     });
 
     // T1103389
@@ -2456,16 +2457,16 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // act
-        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
 
         dropDown1.trigger('dxclick');
 
         // assert
-        const dropDownList1 = $('.dx-list:eq(0)');
+        const dropDownList1 = $('.dx-list').eq(0);
 
         assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
     });
 
     // T1099516
@@ -2504,76 +2505,92 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // act
-        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
 
         dropDown1.trigger('dxclick');
 
         // assert
-        const dropDownList1 = $('.dx-list:eq(0)');
+        const dropDownList1 = $('.dx-list').eq(0);
 
         assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
 
         // act
         this.getDataSource().reload();
 
         // assert
         assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
     });
 
-    // T1098872
-    QUnit.test('Lookup select box should pass correct group load options for dataGrid dataSource', function(assert) {
+    [
+        false, // T1098872
+        true, // T1111398
+    ].forEach(groupPaging => {
+        QUnit.test(`Lookup select box should pass correct group load options for dataGrid dataSource, groupPaging = ${groupPaging}`, function(assert) {
         // arrange
-        const loadSpy = sinon.spy((loadOptions) => {
-            const d = $.Deferred();
-            new ArrayStore([
-                { column1: 1, text: 1 },
-                { column1: 2, text: 2 },
-            ]).load(loadOptions).done(items => d.resolve({
-                data: items,
-                totalCount: 2,
-            }));
+            const loadSpy = sinon.spy((loadOptions) => {
+                const d = $.Deferred();
+                new ArrayStore([
+                    { column1: 1, text: 1 },
+                    { column1: 2, text: 2 },
+                ]).load(loadOptions).done(items => {
+                    d.resolve({
+                        data: items,
+                        totalCount: 2,
+                    });
+                });
 
-            return d;
-        });
+                return d;
+            });
 
-        const $testElement = $('#container');
+            const $testElement = $('#container');
 
-        this.options.columns = [{
-            dataField: 'column1',
-            allowFiltering: true,
-            calculateDisplayValue: 'text',
-            lookup: {
-                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
-                valueExpr: 'id',
-                displayExpr: 'value'
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                calculateDisplayValue: 'text',
+                lookup: {
+                    dataSource: {
+                        store: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        paginate: true,
+                    },
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }];
+            this.options.dataSource = { load: loadSpy };
+            this.options.remoteOperations = groupPaging ? { groupPaging: true } : true;
+            this.options.syncLookupFilterValues = true;
+
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                initViews: true
+            });
+            this.columnHeadersView.render($testElement);
+
+            // act
+            const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+            dropDown1.trigger('dxclick');
+
+            // assert
+            const loadOptions = loadSpy.getCall(1).args[0];
+            assert.deepEqual(loadOptions.group, [{
+                isExpanded: true,
+                selector: 'column1'
+            },
+            {
+                isExpanded: false,
+                selector: 'text'
+            }]);
+
+            if(groupPaging) {
+                assert.strictEqual(loadOptions.skip, 0);
+                assert.strictEqual(loadOptions.take, 20);
             }
-        }];
-        this.options.dataSource = { load: loadSpy };
-        this.options.remoteOperations = true;
-        this.options.syncLookupFilterValues = true;
-
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
-            initViews: true
         });
-        this.columnHeadersView.render($testElement);
-
-        // act
-        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
-        dropDown1.trigger('dxclick');
-
-        // assert
-        assert.deepEqual(loadSpy.getCall(1).args[0].group, [{
-            isExpanded: true,
-            selector: 'column1'
-        },
-        {
-            isExpanded: false,
-            selector: 'text'
-        }]);
     });
+
 
     // T1100782
     [true, false].forEach((hasLookupOptimization) => {
@@ -2615,7 +2632,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             this.columnHeadersView.render($testElement);
 
             // act
-            const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+            const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
             dropDown1.trigger('dxclick');
 
             // assert
@@ -2625,7 +2642,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
                 assert.strictEqual(loadSpy.getCall(0).args[0].skip, undefined);
             }
 
-            const dropDownList1 = $('.dx-list:eq(0)');
+            const dropDownList1 = $('.dx-list').eq(0);
             assert.strictEqual(dropDownList1.find('.dx-item').length, 91); // 90 rows + (All)
             assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value10');
             assert.strictEqual(dropDownList1.find('.dx-item:eq(-1)').text(), 'value99');
@@ -2657,11 +2674,11 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // act
-        const dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
         dropDown1.trigger('dxclick');
 
         // assert
-        const dropDownList1 = $('.dx-list:eq(0)');
+        const dropDownList1 = $('.dx-list').eq(0);
 
         assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
         assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
@@ -2692,26 +2709,25 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         this.columnHeadersView.render($testElement);
 
         // act
-        let dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        let dropDown1 = $('.dx-dropdowneditor-button').eq(0);
         dropDown1.trigger('dxclick');
 
         // assert
-        let dropDownList1 = $('.dx-list:eq(0)');
+        let dropDownList1 = $('.dx-list').eq(0);
 
         assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
 
         // act
         this.option('syncLookupFilterValues', false);
-        dropDown1 = $('.dx-dropdowneditor-button:eq(0)');
+        dropDown1 = $('.dx-dropdowneditor-button').eq(0);
         dropDown1.trigger('dxclick');
 
         // assert
-        dropDownList1 = $('.dx-list:eq(0)');
+        dropDownList1 = $('.dx-list').eq(0);
         assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
-        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
-
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
     });
 
     // T1097980
