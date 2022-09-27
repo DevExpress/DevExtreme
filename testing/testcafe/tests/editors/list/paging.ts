@@ -222,7 +222,7 @@ test('Should not initiate load next page if not reach the bottom when pullRefres
         pageSize: 2,
       },
       pullRefreshEnabled: true,
-      height: 100,
+      height: 120,
       width: 200,
       pageLoadMode: 'scrollBottom',
       valueExpr: 'id',
