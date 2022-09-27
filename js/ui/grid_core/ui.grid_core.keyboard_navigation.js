@@ -1368,11 +1368,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _isLastRow: function(rowIndex) {
         const dataController = this._dataController;
+        const visibleItems = dataController.items().filter((item) => item.visible !== false);
 
         if(this._isVirtualRowRender()) {
             return rowIndex >= dataController.getMaxRowIndex();
         }
-        return rowIndex === dataController.items().length - 1;
+
+        return rowIndex === visibleItems.length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;
