@@ -3942,6 +3942,7 @@
             "MvcAdditionalFiles": [
               "/ViewModels/ToolbarViewModel.cs",
               "/Views/Toolbar/Multiline.cshtml",
+              "/Models/SimpleData.cs",
               "/Models/FontStyle.cs",
               "/Models/ListType.cs",
               "/Models/TextAlign.cs",
