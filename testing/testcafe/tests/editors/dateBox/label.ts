@@ -26,5 +26,18 @@ themes.forEach((theme) => {
         value: new Date(1900, 0, 1),
       });
     });
+
+    test(`Symbol parts in label should not be cropped in ${theme} with stylingMode=${stylingMode}`, async (t) => {
+      await t.debug();
+      await t.expect(await compareScreenshot(t, `label-symbols-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+    }).before(async () => {
+      await changeTheme(theme);
+
+      return createWidget('dxDateBox', {
+        label: 'qwertyuiopasdfghjklzxcvbmn QWERTYUIOPLKJHGFDSAZXCVBNM 1234567890',
+        stylingMode,
+        value: new Date(1900, 0, 1),
+      });
+    });
   });
 });
