@@ -28,7 +28,6 @@ themes.forEach((theme) => {
     });
 
     test(`Symbol parts in label should not be cropped in ${theme} with stylingMode=${stylingMode}`, async (t) => {
-      await t.debug();
       await t.expect(await compareScreenshot(t, `label-symbols-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
     }).before(async () => {
       await changeTheme(theme);
