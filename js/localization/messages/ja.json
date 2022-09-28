@@ -133,7 +133,7 @@
         "dxDataGrid-exportAll": "すべてのデータのエクスポート先：{0}",
         "dxDataGrid-exportSelectedRows": "行のエクスポート先：{0}",
         "dxDataGrid-headerFilterLabel": "フィルタオプション",
-        "dxDataGrid-headerFilterIndicatorLabel": "列のフィルターオプションを開きます:{0}",
+        "dxDataGrid-headerFilterIndicatorLabel": "列'{0}'のフィルターオプションを表示する",
         "dxDataGrid-headerFilterEmptyValue": "(空白)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "キャンセル",
