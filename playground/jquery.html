@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -31,99 +30,16 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-
-    <style>
-        body .custom-item {
-            padding-left: 7px;
-            padding-right: 7px;
-        }
-
-        .custom-item>img {
-            height: 30px;
-            width: 40px;
-            float: left;
-            margin-top: 2px;
-        }
-
-        .custom-item>div.product-name {
-            margin-left: 40px;
-            line-height: 34px;
-            font-size: 14px;
-        }
-
-        body .custom-item input {
-            background-color: transparent;
-        }
-
-        body .dx-popup-content .custom-item {
-            padding-top: 7px;
-            padding-bottom: 8px;
-        }
-
-        .dx-popup-content .custom-item>div {
-            padding-left: 8px;
-            text-indent: 0;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-    </style>
 </head>
-
 <body>
-    <div class="dx-viewport demo-container">
-        <div class="form">
-            <div class="dx-fieldset">
-                <div class="dx-field">
-                    <div class="dx-field-label">Add custom items</div>
-                    <div class="dx-field-value">
-                        <div id="productsEdit"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <div id="button"></div>
     <script>
-        const simpleProducts = [
-            'HD Video Player',
-            'SuperHD Video Player',
-            'SuperPlasma 50',
-            'SuperLED 50',
-            'SuperLED 42',
-            'SuperLCD 55',
-            'SuperLCD 42',
-            'SuperPlasma 65',
-            'SuperLCD 70',
-            'Projector Plus',
-            'Projector PlusHT',
-            'ExcelRemote IR',
-            'ExcelRemote Bluetooth',
-            'ExcelRemote IP',
-        ];
-
-        $(() => {
-            $('#productsEdit').dxTagBox({
-                items: simpleProducts,
-                acceptCustomValue: true,
-                onCustomItemCreating(args) {
-                    const newValue = args.text;
-                    const { component } = args;
-                    const currentItems = component.option('items');
-
-                    const isExist = currentItems.indexOf(newValue) !== -1
-
-                    if (isExist) {
-                        return false
-                    }
-                    
-                    currentItems.unshift(newValue);
-                    component.option('items', currentItems);
-                    args.customItem = newValue;
-                },
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
 </body>
-
 </html>
