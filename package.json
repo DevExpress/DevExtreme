@@ -163,7 +163,7 @@
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-test-renderer": "16.14.0",
-    "recast": "0.21.2",
+    "recast": "0.21.5",
     "sass-embedded": "1.54.4",
     "shelljs": "0.8.5",
     "sinon": "1.10.3",
