@@ -69,13 +69,27 @@
       </div>
     </div>
     <div class="dx-fieldset">
-      <div class="dx-fieldset-header">Event Handling and API</div>
+      <div class="dx-fieldset-header">Handle Value Change</div>
       <div class="dx-field">
-        <DxSlider
-          v-model:value="sliderValue"
-          :min="0"
-          :max="100"
-        />
+        <div class="dx-field-label">On slider handle moving</div>
+        <div class="dx-field-value">
+          <DxSlider
+            v-model:value="sliderValue"
+            :min="0"
+            :max="100"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
+        <div class="dx-field-label">On moving complete</div>
+        <div class="dx-field-value">
+          <DxSlider
+            v-model:value="sliderValue"
+            :min="0"
+            :max="100"
+            call-value-change="onMovingComplete"
+          />
+        </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Slider value</div>

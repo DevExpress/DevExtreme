@@ -74,24 +74,38 @@
     </div>
   </div>
   <div class="dx-fieldset">
-    <div class="dx-fieldset-header">Event Handling and API</div>
+    <div class="dx-fieldset-header">Handle Value Change</div>
     <div class="dx-field">
-      <dx-range-slider
-        #rangeSlider
-        [min]="0"
-        [max]="100"
-        [start]="10"
-        [end]="90"
-      ></dx-range-slider>
+      <div class="dx-field-label">On slider handle moving</div>
+      <div class="dx-field-value">
+        <dx-range-slider
+          [(start)]="start"
+          [(end)]="end"
+          [min]="0"
+          [max]="100"
+        ></dx-range-slider>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">On moving complete</div>
+      <div class="dx-field-value">
+        <dx-range-slider
+          [(start)]="start"
+          [(end)]="end"
+          [min]="0"
+          [max]="100"
+          callValueChange="onMovingComplete"
+        ></dx-range-slider>
+      </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Start value</div>
       <div class="dx-field-value">
         <dx-number-box
+          [(value)]="start"
           [min]="0"
           [max]="100"
           [showSpinButtons]="true"
-          [(value)]="rangeSlider.start"
         ></dx-number-box>
       </div>
     </div>
@@ -99,10 +113,10 @@
       <div class="dx-field-label">End value</div>
       <div class="dx-field-value">
         <dx-number-box
+          [(value)]="end"
           [min]="0"
           [max]="100"
           [showSpinButtons]="true"
-          [(value)]="rangeSlider.end"
         ></dx-number-box>
       </div>
     </div>

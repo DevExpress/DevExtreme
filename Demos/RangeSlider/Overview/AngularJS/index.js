@@ -79,9 +79,18 @@ DemoApp.controller('DemoController', ($scope) => {
       end: 75,
       disabled: true,
     },
-    handler: {
+    onMovingOptions: {
       min: 0,
       max: 100,
+      bindingOptions: {
+        start: 'startValue',
+        end: 'endValue',
+      },
+    },
+    onMovingCompleteOptions: {
+      min: 0,
+      max: 100,
+      callValueChange: 'onMovingComplete',
       bindingOptions: {
         start: 'startValue',
         end: 'endValue',

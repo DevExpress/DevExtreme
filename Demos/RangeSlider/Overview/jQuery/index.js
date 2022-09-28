@@ -62,14 +62,28 @@ $(() => {
     disabled: true,
   });
 
-  const handlerRangeSlider = $('#handler-range-slider').dxRangeSlider({
+  const handleOnMovingSlider = $('#slider-on-moving').dxRangeSlider({
     min: 0,
     max: 100,
     start: 10,
     end: 90,
-    onValueChanged(data) {
-      startValue.option('value', data.start);
-      endValue.option('value', data.end);
+    onValueChanged({ value, start, end }) {
+      handleOnMovingCompleteSlider.option('value', value);
+      startValue.option('value', start);
+      endValue.option('value', end);
+    },
+  }).dxRangeSlider('instance');
+
+  const handleOnMovingCompleteSlider = $('#slider-on-moving-complete').dxRangeSlider({
+    min: 0,
+    max: 100,
+    start: 10,
+    end: 90,
+    callValueChange: 'onMovingComplete',
+    onValueChanged({ value, start, end }) {
+      handleOnMovingSlider.option('value', value);
+      startValue.option('value', start);
+      endValue.option('value', end);
     },
   }).dxRangeSlider('instance');
 
@@ -78,8 +92,9 @@ $(() => {
     min: 0,
     max: 100,
     showSpinButtons: true,
-    onValueChanged(data) {
-      handlerRangeSlider.option('start', data.value);
+    onValueChanged({ value }) {
+      handleOnMovingSlider.option('start', value);
+      handleOnMovingCompleteSlider.option('start', value);
     },
   }).dxNumberBox('instance');
 
@@ -88,8 +103,9 @@ $(() => {
     min: 0,
     max: 100,
     showSpinButtons: true,
-    onValueChanged(data) {
-      handlerRangeSlider.option('end', data.value);
+    onValueChanged({ value }) {
+      handleOnMovingSlider.option('end', value);
+      handleOnMovingCompleteSlider.option('end', value);
     },
   }).dxNumberBox('instance');
 });

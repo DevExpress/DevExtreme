@@ -79,14 +79,29 @@ class App extends React.Component {
           </div>
         </div>
         <div className="dx-fieldset">
-          <div className="dx-fieldset-header">Event Handling and API</div>
+          <div className="dx-fieldset-header">Handle Value Change</div>
           <div className="dx-field">
-            <RangeSlider
-              min={0}
-              max={100}
-              start={this.state.startValue}
-              end={this.state.endValue}
-              onValueChanged={this.onRangeChanged} />
+            <div className="dx-field-label">On slider handle moving</div>
+            <div className="dx-field-value">
+              <RangeSlider
+                min={0}
+                max={100}
+                start={this.state.startValue}
+                end={this.state.endValue}
+                onValueChanged={this.onRangeChanged} />
+            </div>
+          </div>
+          <div className="dx-field">
+            <div className="dx-field-label">On moving complete</div>
+            <div className="dx-field-value">
+              <RangeSlider
+                min={0}
+                max={100}
+                start={this.state.startValue}
+                end={this.state.endValue}
+                callValueChange='onMovingComplete'
+                onValueChanged={this.onRangeChanged} />
+            </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Start value</div>

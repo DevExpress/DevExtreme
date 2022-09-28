@@ -62,9 +62,23 @@
   </div>
 </div>
 <div class="dx-fieldset">
-  <div class="dx-fieldset-header">Event Handling and API</div>
+  <div class="dx-fieldset-header">Handle Value Change</div>
   <div class="dx-field">
-    <dx-slider #slider [min]="0" [max]="100" [value]="10"></dx-slider>
+    <div class="dx-field-label">On slider handle moving</div>
+    <div class="dx-field-value">
+      <dx-slider [min]="0" [max]="100" [(value)]="value"></dx-slider>
+    </div>
+  </div>
+  <div class="dx-field">
+    <div class="dx-field-label">On moving complete</div>
+    <div class="dx-field-value">
+      <dx-slider
+        [min]="0"
+        [max]="100"
+        callValueChange="onMovingComplete"
+        [(value)]="value"
+      ></dx-slider>
+    </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Slider value</div>
@@ -73,7 +87,7 @@
         [min]="0"
         [max]="100"
         [showSpinButtons]="true"
-        [(value)]="slider.value"
+        [(value)]="value"
       ></dx-number-box>
     </div>
   </div>

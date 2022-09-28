@@ -15,6 +15,10 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
+  start = 10;
+
+  end = 90;
+
   label: any;
 
   tooltip: any;
