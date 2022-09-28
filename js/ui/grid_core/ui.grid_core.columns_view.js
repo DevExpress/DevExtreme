@@ -258,11 +258,13 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 const isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS));
 
                 const isDataRowWithTemplate = isDataRow && (!column || column.cellTemplate);
+                const isEditorShown = isDataRow && cellOptions && (rowOptions.isEditing || cellOptions.isEditing || column?.showEditorAlways);
                 const isHeaderRowWithTemplate = isHeaderRow && (!column || column.headerCellTemplate);
                 const isGroupCellWithTemplate = isGroupRow && (!column || (column.groupIndex && column.groupCellTemplate));
 
                 const shouldShowHint = !isMasterDetailRow
                                     && !isFilterRow
+                                    && !isEditorShown
                                     && !isDataRowWithTemplate
                                     && !isHeaderRowWithTemplate
                                     && !isGroupCellWithTemplate;
