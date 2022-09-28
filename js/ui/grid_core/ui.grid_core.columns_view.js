@@ -245,26 +245,35 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 const $element = $(e.target);
                 const $cell = $(e.currentTarget);
                 const $row = $cell.parent();
-                const isDataRow = $row.hasClass('dx-data-row');
-                const isHeaderRow = $row.hasClass('dx-header-row');
-                const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
-                const isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
-                const isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS));
                 const visibleColumns = that._columnsController.getVisibleColumns();
                 const rowOptions = $row.data('options');
                 const columnIndex = $cell.index();
                 const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
                 const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
 
-                if(!isMasterDetailRow && !isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
-                    (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
-                    (!isGroupRow || (isGroupRow && column && (column.groupIndex === undefined || !column.groupCellTemplate)))) {
+                const isHeaderRow = $row.hasClass('dx-header-row');
+                const isDataRow = $row.hasClass('dx-data-row');
+                const isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
+                const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
+                const isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS));
+
+                const isDataRowWithTemplate = isDataRow && (!column || column.cellTemplate);
+                const isHeaderRowWithTemplate = isHeaderRow && (!column || column.headerCellTemplate);
+                const isGroupCellWithTemplate = isGroupRow && (!column || (column.groupIndex && column.groupCellTemplate));
+
+                const shouldShowHint = !isMasterDetailRow
+                                    && !isFilterRow
+                                    && !isDataRowWithTemplate
+                                    && !isHeaderRowWithTemplate
+                                    && !isGroupCellWithTemplate;
+
+                if(shouldShowHint) {
                     if($element.data(CELL_HINT_VISIBLE)) {
                         $element.removeAttr('title');
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    const difference = $element[0].scrollWidth - $element[0].clientWidth; // T598499
+                    const difference = $element[0].scrollWidth - $element[0].clientWidth;
                     if(difference > 0 && !isDefined($element.attr('title'))) {
                         $element.attr('title', $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
