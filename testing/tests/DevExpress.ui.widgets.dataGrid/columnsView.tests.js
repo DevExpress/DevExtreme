@@ -398,6 +398,28 @@ QUnit.module('API methods', {
         assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
     });
 
+    // T1117557
+    QUnit.test('Not set title attribute when cell is editing', function(assert) {
+        // arrange
+        const that = this;
+        const $container = $('#container').width(200);
+
+        that.option('cellHintEnabled', true);
+
+        that.columns.length = 0;
+        that.columns.push({ caption: 'Column 2', width: 100, showEditorAlways: true });
+
+        const $table = $(that.columnsView._createTable());
+        $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
+
+        // act
+        const firstCellElement = $table.find('td').first();
+        firstCellElement.trigger('mousemove');
+
+        // assert
+        assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in cell');
+    });
+
     QUnit.test('Invalidate instead of render for options', function(assert) {
         // arrange
         let renderCounter = 0;
