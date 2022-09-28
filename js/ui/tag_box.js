@@ -341,11 +341,6 @@ const TagBox = SelectBox.inherit({
             */
 
             /**
-            * @name dxTagBoxOptions.valueChangeEvent
-            * @hidden
-            */
-
-            /**
             * @name dxTagBoxOptions.onCopy
             * @hidden
             * @action
@@ -1325,8 +1320,6 @@ const TagBox = SelectBox.inherit({
         const lastValue = values[values.length - 1];
         return lastValue ?? null;
     },
-
-    _valueChangeEventHandler: noop,
 
     _shouldRenderSearchEvent: function() {
         return this.option('searchEnabled') || this.option('acceptCustomValue');

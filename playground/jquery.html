@@ -110,6 +110,12 @@
                     const newValue = args.text;
                     const { component } = args;
                     const currentItems = component.option('items');
+
+                    const isExist = currentItems.indexOf(newValue) !== -1
+
+                    if (isExist) {
+                        return false
+                    }
                     
                     currentItems.unshift(newValue);
                     component.option('items', currentItems);
