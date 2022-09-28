@@ -68,12 +68,14 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const config = this.callBase.apply(this, arguments);
 
                     const plainItems = config.plainItems;
-                    config.plainItems = (all) => {
-                        if(all) {
-                            return this._dataController.getCachedStoreData() || [];
+                    config.plainItems = (cached) => {
+                        let result;
+                        if(cached) {
+                            result = this._dataController.getCachedStoreData();
                         }
 
-                        return plainItems.apply(this, arguments).map(item => item.data);
+                        result ||= plainItems.apply(this, arguments).map(item => item.data);
+                        return result || [];
                     };
                     config.isItemSelected = (item) => {
                         const key = this._dataController.keyOf(item);
