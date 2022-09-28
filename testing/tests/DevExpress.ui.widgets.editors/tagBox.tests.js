@@ -3747,7 +3747,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
     QUnit.test('search was work if acceptCustomValue is set to true', function(assert) {
         const $element = $('#tagBox').dxTagBox({
-            dataSource: ['item 1', 'element 1', 'item 2'],
+            dataSource: ['item 1', 'element 1', 'item 2', 'item 3'],
             searchEnabled: true,
             searchTimeout: 0,
             acceptCustomValue: true
@@ -3756,10 +3756,9 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('1');
 
-        $($input).trigger('change');
-        const listItems = $('.dx-list-item');
+        const itemsCount = $('.dx-list-item').length;
 
-        assert.equal(listItems.length, 2, 'search was performed');
+        assert.strictEqual(itemsCount, 2, 'search was performed');
     });
 
     QUnit.test('tag should be added after enter press key if popup was not opened early', function(assert) {

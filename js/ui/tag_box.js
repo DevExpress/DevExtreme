@@ -1321,6 +1321,8 @@ const TagBox = SelectBox.inherit({
         return lastValue ?? null;
     },
 
+    _valueChangeEventHandler: noop,
+
     _shouldRenderSearchEvent: function() {
         return this.option('searchEnabled') || this.option('acceptCustomValue');
     },
