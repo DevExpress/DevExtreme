@@ -8,7 +8,7 @@ describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
     // NOTE: Different SVG parsers produce different headers.
     // For opentype.js: first five glyphs are empty
-    const countEmptySvg = 5;
+    const countEmptySvg = 4;
 
     // eslint-disable-next-line spellcheck/spell-checker, @typescript-eslint/no-unsafe-member-access
     return loadSync(pathToFont).glyphs.length - countEmptySvg;
