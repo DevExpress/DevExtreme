@@ -1,7 +1,7 @@
 name: QUnit tests for renovation
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
