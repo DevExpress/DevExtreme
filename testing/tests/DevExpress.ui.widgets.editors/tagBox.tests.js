@@ -5070,6 +5070,32 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
     });
 });
 
+
+QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
+    QUnit.test('custom item has been added when valueChangeEvent=\'focusout\'', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: ['item 1'],
+            acceptCustomValue: true,
+            valueChangeEvent: 'focusout',
+            onCustomItemCreating(args) {
+                args.customItem = args.text;
+            },
+        });
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const customValue = 'Custom value';
+
+        keyboardMock($input).type(customValue);
+        $($input).trigger('focusout');
+
+
+        const instance = $tagBox.dxTagBox('instance');
+        const customItemHasBeenAdded = instance.option('selectedItems').includes(customValue);
+
+        assert.strictEqual(customItemHasBeenAdded, true, 'custom item was added');
+    });
+});
+
 QUnit.module('options changing', moduleSetup, () => {
     ['readOnly', 'disabled'].forEach((optionName) => {
         QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
