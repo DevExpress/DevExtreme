@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isString } from '../../core/utils/type';
@@ -10,6 +9,7 @@ import devices from '../../core/devices';
 import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
+import { isElementInDom } from '../../core/utils/dom';
 import Scrollable from '../scroll_view/ui.scrollable';
 import Popup from '../popup/ui.popup';
 import {
@@ -102,7 +102,9 @@ export const editingFormBasedModule = {
                         const editRowKey = this.option('editing.editRowKey');
                         const hasEditRow = args?.items?.some((item) => equalByValue(item.key, editRowKey));
 
-                        if(args.changeType === 'refresh' || hasEditRow) {
+                        const onlyInsertChanges = args.changeTypes?.length && args.changeTypes.every(item => item === 'insert');
+
+                        if((args.changeType === 'refresh' || hasEditRow) && !onlyInsertChanges) {
                             this._repaintEditPopup();
                         }
                     }
@@ -217,12 +219,15 @@ export const editingFormBasedModule = {
                 _repaintEditPopup: function() {
                     const rowIndex = this._getVisibleEditRowIndex();
 
-                    if(this._editPopup?.option('visible') && rowIndex >= 0) {
-                        const defaultAnimation = this._editPopup.option('animation');
+                    if(rowIndex >= 0) {
+                        const defaultAnimation = this._editPopup?.option('animation');
 
-                        this._editPopup.option('animation', null);
+                        this._editPopup?.option('animation', null);
                         this._showEditPopup(rowIndex, true);
-                        this._editPopup.option('animation', defaultAnimation);
+
+                        if(defaultAnimation !== undefined) {
+                            this._editPopup.option('animation', defaultAnimation);
+                        }
                     }
                 },
 
@@ -301,7 +306,7 @@ export const editingFormBasedModule = {
                     cellOptions.value = column.calculateCellValue(rowData);
 
                     const template = this._getFormEditItemTemplate.bind(this)(cellOptions, column);
-                    this._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
+                    this._rowsView.renderTemplate($container, template, cellOptions, !!isElementInDom($container)).done(() => {
                         this._rowsView._updateCell($container, cellOptions);
                     });
                     return cellOptions;

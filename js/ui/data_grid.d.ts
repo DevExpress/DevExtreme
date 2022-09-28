@@ -1418,6 +1418,11 @@ export interface Pager {
      * @default "auto"
      */
     visible?: boolean | Mode;
+    /**
+     * @docid GridBaseOptions.pager.label
+     * @default "Page Navigation"
+     */
+    label?: string;
 }
 
 export interface SearchPanel {
@@ -2509,6 +2514,7 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     setCellValue?: ((newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+    defaultSetCellValue?: ColumnBase['setCellValue'];
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false

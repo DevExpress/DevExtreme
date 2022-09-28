@@ -29,7 +29,7 @@ QUnit.testStart(function() {
             .horizontal .test-item {\
                 display: inline-block;\
             }\
-            #qunit-fixture {\
+            #qunit-fixture, :scope .shadow-container {\
                 left: 0;\
                 top: 0;\
             }\

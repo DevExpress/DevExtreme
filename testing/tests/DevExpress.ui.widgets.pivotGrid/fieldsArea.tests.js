@@ -1,9 +1,13 @@
 import $ from 'jquery';
+import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
+
 
 QUnit.testStart(function() {
     const markup = '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 

@@ -169,7 +169,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isFocusedViewCorrect = this._focusedView && this._focusedView.name === rowsView.name;
             let needUpdateFocus = false;
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-            const $focusedElement = $(':focus');
+            const root = $(domAdapter.getRootNode($rowsView.get && $rowsView.get(0)));
+            const $focusedElement = root.find(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
 
             eventsEngine.off($rowsView, 'focusin', rowsViewFocusHandler);
@@ -420,7 +421,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _upDownKeysHandler: function(eventArgs, isEditing) {
-        let rowIndex = this._focusedCellPosition.rowIndex;
         const visibleRowIndex = this.getVisibleRowIndex();
         const $row = this._focusedView && this._focusedView.getRow(visibleRowIndex);
         const $event = eventArgs.originalEvent;
@@ -435,7 +435,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             if(!this._navigateNextCell($event, eventArgs.keyName)) {
                 if(this._isVirtualRowRender() && isUpArrow && dataSource && !dataSource.isLoading()) {
                     const rowHeight = getOuterHeight($row);
-                    rowIndex = this._focusedCellPosition.rowIndex - 1;
+                    const rowIndex = this._focusedCellPosition.rowIndex - 1;
                     this._scrollBy(0, -rowHeight, rowIndex, $event);
                 }
             }
@@ -971,7 +971,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         } else {
             this.setRowFocusType();
             this.setFocusedRowIndex(args.prevRowIndex);
-            $cell = this._getFocusedCell();
             if(this._editingController.isEditing() && isCellEditMode) {
                 this._closeEditCell();
             }
@@ -1370,11 +1369,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _isLastRow: function(rowIndex) {
         const dataController = this._dataController;
+        const visibleItems = dataController.items().filter((item) => item.visible !== false);
 
         if(this._isVirtualRowRender()) {
             return rowIndex >= dataController.getMaxRowIndex();
         }
-        return rowIndex === dataController.items().length - 1;
+
+        return rowIndex === visibleItems.length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;

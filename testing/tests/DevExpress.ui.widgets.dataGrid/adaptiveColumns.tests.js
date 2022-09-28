@@ -31,7 +31,7 @@ const dataGridWrapper = new DataGridWrapper('.dx-datagrid');
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
-        return $dataGridContainer ? $dataGridContainer : renderer('.dx-datagrid');
+        return $dataGridContainer ? $dataGridContainer : renderer($('.dx-datagrid'));
     };
 
     if(that.columns !== null) {
@@ -4389,7 +4389,7 @@ QUnit.module('Validation', {
         // act
         this.editingController.editCell(0, 0);
 
-        $('input')
+        $('#qunit-fixture').find('input')
             .val('new value')
             .change();
 

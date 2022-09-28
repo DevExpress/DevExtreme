@@ -1,8 +1,8 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { isDefined, isString } from '../../core/utils/type';
+import { isElementInDom } from '../../core/utils/dom';
 import { name as clickEventName } from '../../events/click';
 import pointerEvents from '../../events/pointer';
 import { addNamespace } from '../../events/utils/index';
@@ -67,12 +67,11 @@ export default {
 
                             if(this.isCellOrBatchEditMode() && !this._editCellInProgress) {
                                 const isEditorPopup = checkEditorPopup($target) || checkEditorPopup(targetComponent?.$element());
-                                const isDomElement = !!$target.closest(getWindow().document).length;
                                 const isAnotherComponent = targetComponent && !targetComponent._disposed && targetComponent !== this.component;
                                 const isAddRowButton = !!$target.closest(`.${this.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
                                 const isFocusOverlay = $target.hasClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                                 const isCellEditMode = this.isCellEditMode();
-                                if(!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isDomElement || isAnotherComponent)) {
+                                if(!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isElementInDom($target) || isAnotherComponent)) {
                                     this._closeEditItem.bind(this)($target);
                                 }
                             }

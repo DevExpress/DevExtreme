@@ -1284,11 +1284,23 @@ export const columnsControllerModule = {
                     return result;
                 },
 
-                getVisibleColumns: function(rowIndex) {
-                    this._visibleColumns = this._visibleColumns || this._getVisibleColumnsCore();
+                _shouldReturnVisibleColumns: function() {
+                    return true;
+                },
+
+                _compileVisibleColumns: function(rowIndex) {
+                    this._visibleColumns = this._visibleColumns || this._compileVisibleColumnsCore();
                     rowIndex = isDefined(rowIndex) ? rowIndex : this._visibleColumns.length - 1;
 
                     return this._visibleColumns[rowIndex] || [];
+                },
+
+                getVisibleColumns: function(rowIndex) {
+                    if(!this._shouldReturnVisibleColumns()) {
+                        return [];
+                    }
+
+                    return this._compileVisibleColumns.apply(this, arguments);
                 },
                 getFixedColumns: function(rowIndex) {
                     this._fixedColumns = this._fixedColumns || this._getFixedColumnsCore();
@@ -1469,7 +1481,7 @@ export const columnsControllerModule = {
                 _isColumnVisible: function(column) {
                     return column.visible && this.isParentColumnVisible(column.index);
                 },
-                _getVisibleColumnsCore: function() {
+                _compileVisibleColumnsCore: function() {
                     const that = this;
                     let i;
                     const result = [];
@@ -2005,7 +2017,13 @@ export const columnsControllerModule = {
                                         selector === column.calculateGroupValue ||
                                         selector === column.calculateDisplayValue
                                     ) {
-                                        column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
+
+                                        if(fromDataSource) {
+                                            column.sortOrder = 'sortOrder' in column ? column.sortOrder : (sortParameters[i].desc ? 'desc' : 'asc');
+                                        } else {
+                                            column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
+                                        }
+
 
                                         if(isExpanded !== undefined) {
                                             column.autoExpandGroup = isExpanded;

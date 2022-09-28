@@ -18,8 +18,9 @@ export const getWrappedDataSource = dataSource => {
     if(dataSource instanceof DataSource) {
         return dataSource;
     }
+
     const result = {
-        store: normalizeDataSourceOptions(dataSource).store,
+        ...normalizeDataSourceOptions(dataSource),
         pageSize: 0
     };
 
