@@ -26,6 +26,7 @@ import {
 export {
     TooltipShowMode,
     VerticalEdge,
+    ValueChangedCallMode,
 };
 
 /** @public */
