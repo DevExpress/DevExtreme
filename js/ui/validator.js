@@ -194,52 +194,33 @@ const Validator = DOMComponent.inherit({
     },
 
     validate(args) {
-        const { _validationInfo: validationInfo } = this;
-
         const adapter = this.option('adapter');
         const name = this.option('name');
         const bypass = adapter.bypass && adapter.bypass();
-        const value = args?.value !== undefined ? args.value : adapter.getValue();
-        const currentError = adapter.getCurrentValidationError?.();
+        const value = (args && args.value !== undefined) ? args.value : adapter.getValue();
+        const currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError();
         const rules = this._getValidationRules();
-        const currentResult = validationInfo?.result;
-        const { status, value: currentValue } = currentResult ? currentResult : {};
-
-        if(status === VALIDATION_STATUS_PENDING && currentValue === value) {
+        const currentResult = this._validationInfo && this._validationInfo.result;
+        if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
             return extend({}, currentResult);
         }
-
         let result;
-
         if(bypass) {
-            result = {
-                isValid: true,
-                status: VALIDATION_STATUS_VALID,
-            };
+            result = { isValid: true, status: VALIDATION_STATUS_VALID };
         } else if(currentError && currentError.editorSpecific) {
             currentError.validator = this;
-
-            result = {
-                isValid: false,
-                status: VALIDATION_STATUS_INVALID,
-                brokenRule: currentError,
-                brokenRules: [currentError],
-            };
+            result = { isValid: false, status: VALIDATION_STATUS_INVALID, brokenRule: currentError, brokenRules: [currentError] };
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
-
         result.id = new Guid().toString();
-
         this._applyValidationResult(result, adapter);
-
         result.complete && result.complete.then((res) => {
-            if(res.id === currentResult.id) {
+            if(res.id === this._validationInfo.result.id) {
                 this._applyValidationResult(res, adapter);
             }
         });
-
-        return extend({}, currentResult);
+        return extend({}, this._validationInfo.result);
     },
 
     reset() {
