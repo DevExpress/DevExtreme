@@ -53,6 +53,7 @@ export {
     PaletteExtensionMode,
     ScaleBreakLineStyle,
     VisualRangeUpdateMode,
+    ValueChangedCallMode,
 };
 
 /** @public */
