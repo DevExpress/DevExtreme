@@ -22,6 +22,10 @@ import {
     VizTimeInterval,
 } from './common';
 
+import {
+  ValueChangedCallMode,
+} from '../common';
+
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
@@ -53,8 +57,6 @@ export {
 
 /** @public */
 export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
-/** @public */
-export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
 /** @public */
 export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
 /** @public */
