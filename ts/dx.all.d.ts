@@ -1999,7 +1999,6 @@ declare module DevExpress.core {
     | String
     | number
     | Number
-    | bigint
     | BigInteger
     | boolean
     | Boolean
