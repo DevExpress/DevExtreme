@@ -1,6 +1,6 @@
 window.onload = function () {
   const zoomLevels = ['month', 'year', 'decade', 'century'];
-  const holydays = [[1, 0], [4, 6], [25, 11]];
+  const holidays = [[1, 0], [4, 6], [25, 11]];
   const useCellTemplate = ko.observable(false);
   const disableWeekend = ko.observable(false);
   const cellTemplate = ko.computed(() => {
@@ -38,9 +38,9 @@ window.onload = function () {
     let cssClass = '';
     if (isWeekend(data.date)) { cssClass = 'weekend'; }
 
-    $.each(holydays, (_, item) => {
+    $.each(holidays, (_, item) => {
       if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
-        cssClass = 'holyday';
+        cssClass = 'holiday';
         return false;
       }
       return true;

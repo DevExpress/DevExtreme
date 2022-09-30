@@ -40,7 +40,7 @@ export class AppComponent {
 
   cellTemplate = 'cell';
 
-  holydays: any = [[1, 0], [4, 6], [25, 11]];
+  holidays: any = [[1, 0], [4, 6], [25, 11]];
 
   isWeekend(date) {
     const day = date.getDay();
@@ -104,9 +104,9 @@ export class AppComponent {
       } else {
         if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-        this.holydays.forEach((item) => {
+        this.holidays.forEach((item) => {
           if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-            cssClass = 'holyday';
+            cssClass = 'holiday';
             return false;
           }
         });

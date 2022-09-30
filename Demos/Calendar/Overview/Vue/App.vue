@@ -1,5 +1,5 @@
 <template>
-  <div id="calendar-demo">
+  <div>
     <div class="widget-container">
       <DxCalendar
         id="calendar-container"
@@ -73,7 +73,6 @@
       <div class="option">
         <span>Zoom level</span>
         <DxSelectBox
-          id="zoom-level"
           :data-source="zoomLevels"
           v-model:value="zoomLevel"
         />
@@ -161,7 +160,7 @@ export default {
     },
     getCellCssClass({ date, view }) {
       let cssClass = '';
-      const holydays = [[1, 0], [4, 6], [25, 11]];
+      const holidays = [[1, 0], [4, 6], [25, 11]];
 
       if (view === 'month') {
         if (!date) {
@@ -169,9 +168,9 @@ export default {
         } else {
           if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-          holydays.forEach((item) => {
+          holidays.forEach((item) => {
             if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-              cssClass = 'holyday';
+              cssClass = 'holiday';
             }
           });
         }
@@ -192,7 +191,7 @@ export default {
 }
 
 .dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
-.dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+.dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
   text-shadow: none;
   font-weight: bold;
 }
@@ -205,11 +204,11 @@ export default {
   color: #8080ff;
 }
 
-.dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+.dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
   color: #ff3030;
 }
 
-.dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+.dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
   color: #ff8080;
 }
 

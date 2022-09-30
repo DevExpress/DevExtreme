@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 ::ng-deep .widget-container {
   margin-right: 320px;
 }
@@ -7,7 +11,7 @@
 }
 
 ::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
-::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
   text-shadow: none;
   font-weight: bold;
 }
@@ -20,11 +24,11 @@
   color: #8080ff;
 }
 
-::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
   color: #ff3030;
 }
 
-::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holyday {
+::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
   color: #ff8080;
 }
 

@@ -54,7 +54,7 @@ DemoApp.controller('DemoController', ($scope) => {
     }
   };
 
-  const holydays = [[1, 0], [4, 6], [25, 11]];
+  const holidays = [[1, 0], [4, 6], [25, 11]];
 
   function isWeekend(date) {
     const day = date.getDay();
@@ -68,9 +68,9 @@ DemoApp.controller('DemoController', ($scope) => {
     if (data.view === 'month') {
       if (isWeekend(data.date)) { cssClass = 'weekend'; }
 
-      $.each(holydays, (_, item) => {
+      $.each(holidays, (_, item) => {
         if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
-          cssClass = 'holyday';
+          cssClass = 'holiday';
           return false;
         }
         return true;
