@@ -2430,6 +2430,9 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     calculateCellValue?: ((rowData: TRowData) => any);
+    /**
+     * @public
+     */
     defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
     /**
      * @docid GridBaseColumn.calculateDisplayValue
@@ -2443,6 +2446,9 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+    /**
+     * @public
+     */
     defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
     /**
      * @docid GridBaseColumn.calculateSortValue
@@ -2620,6 +2626,9 @@ export interface ColumnBase<TRowData = any> {
      * @public
      */
     setCellValue?: ((newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+    /**
+     * @public
+     */
     defaultSetCellValue?: ColumnBase['setCellValue'];
     /**
      * @docid GridBaseColumn.showEditorAlways
