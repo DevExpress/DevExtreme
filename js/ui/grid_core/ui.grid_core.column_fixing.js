@@ -270,7 +270,7 @@ const baseFixedColumns = {
         }
 
         if(column.command !== COMMAND_TRANSPARENT) {
-            this.callBase($cell, options);
+            this.callBase.apply(this, arguments);
         }
     },
 
