@@ -5106,7 +5106,8 @@ QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
                 const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 const keyboard = keyboardMock($input);
                 const customValue = 't';
-                const [first, second] = eventValue.split(' ');
+                // const [first, second] = eventValue.split(' ');
+                const eventsArray = eventValue.split(' ');
 
                 switch(eventValue) {
                     case 'keyup':
@@ -5127,8 +5128,8 @@ QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
                         break;
                     default:
                         keyboard.type(customValue);
-                        $($input).trigger(first);
-                        $($input).trigger(second);
+                        $($input).trigger(eventsArray[0]);
+                        $($input).trigger(eventsArray[1]);
                         break;
                 }
 
