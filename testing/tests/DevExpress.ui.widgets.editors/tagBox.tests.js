@@ -3747,7 +3747,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
     QUnit.test('search was work if acceptCustomValue is set to true', function(assert) {
         const $element = $('#tagBox').dxTagBox({
-            dataSource: ['item 1', 'element 1', 'item 2', 'item 3'],
+            dataSource: ['item 1', 'element 1', 'item 2'],
             searchEnabled: true,
             searchTimeout: 0,
             acceptCustomValue: true
