@@ -19,9 +19,10 @@ export type Xor<T1, T2 = never, T3 = never, T4 = never, T5 = never, T6 = never, 
   | Seal<T8, KeysOf<T1, T2, T3, T4, T5, T6, T7, T9>>
   | Seal<T9, KeysOf<T1, T2, T3, T4, T5, T6, T7, T8>>;
 
-export type DeepPartial<T> = T extends object ? {
-  [P in keyof T]?: T[P] extends Function ? T[P] : DeepPartial<T[P]>;
-} : T;
+export type Scalar = undefined | null | string | String | number | Number | bigint | BigInteger | boolean | Boolean | Date | Function | Symbol | Array<unknown>;
+export type DeepPartial<T> = T extends Scalar ? T : {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
 
 // Omit does not exist in TS < 3.5.1
 export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
