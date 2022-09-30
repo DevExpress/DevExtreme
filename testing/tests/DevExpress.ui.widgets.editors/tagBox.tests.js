@@ -5071,7 +5071,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 });
 
 
-QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
+QUnit.module('the "valueChangeEvent" option', moduleSetup, () => {
     const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
     const eventCouples = [
         'keyup blur',
@@ -5106,11 +5106,11 @@ QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
                 const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 const keyboard = keyboardMock($input);
                 const customValue = 't';
-                // const [first, second] = eventValue.split(' ');
-                const eventsArray = eventValue.split(' ');
+                const [firstEvent, secondEvent] = eventValue.split(' ');
 
                 switch(eventValue) {
                     case 'keyup':
+                        $($input).trigger('focusin');
                         $input.val(customValue);
                         keyboard.keyUp(customValue);
                         break;
@@ -5128,12 +5128,12 @@ QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
                         break;
                     default:
                         keyboard.type(customValue);
-                        $($input).trigger(eventsArray[0]);
-                        $($input).trigger(eventsArray[1]);
+                        $($input).trigger(firstEvent);
+                        $($input).trigger(secondEvent);
                         break;
                 }
 
-                assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the \'onCustomItemCreating\' was fired once');
+                assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
             });
         });
     });
