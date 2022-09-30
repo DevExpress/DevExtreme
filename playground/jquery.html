@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -31,15 +32,23 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
+
 <body>
-    <div id="button"></div>
+    <div class="dx-viewport demo-container">
+        <div id="tagbox"></div>
+    </div>
+
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+        $(() => {
+            $('#tagbox').dxTagBox({
+                items: [true, false],
+            }).dxValidator({
+                validationRules: [
+                    { type: 'required', message: 'Parameter can not be empty' }
+                ]
             });
         });
     </script>
 </body>
+
 </html>

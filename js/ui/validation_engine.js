@@ -63,9 +63,9 @@ class RequiredRuleValidator extends BaseRuleValidator {
 
     _validate(value, rule) {
         if(!isDefined(value)) return false;
-        // if(value === false) {
-        //     return false;
-        // }
+        if(value === false) {
+            return false;
+        }
         value = String(value);
         if(rule.trim || !isDefined(rule.trim)) {
             value = value.trim();
