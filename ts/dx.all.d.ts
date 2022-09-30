@@ -2141,11 +2141,11 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DeepPartial<T> = T extends object
-    ? {
-        [P in keyof T]?: T[P] extends Function ? T[P] : DeepPartial<T[P]>;
-      }
-    : T;
+  export type DeepPartial<T> = T extends Scalar
+    ? T
+    : {
+        [P in keyof T]?: DeepPartial<T[P]>;
+      };
   export type DefaultOptionsRule<T> = {
     device?: Device | Device[] | ((device: Device) => boolean);
     options: DeepPartial<T>;
@@ -2222,6 +2222,24 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type Scalar =
+    | undefined
+    | null
+    | string
+    | String
+    | number
+    | Number
+    | bigint
+    | BigInteger
+    | boolean
+    | Boolean
+    | Date
+    | Function
+    | Symbol
+    | Array<unknown>;
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
