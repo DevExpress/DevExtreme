@@ -5072,35 +5072,68 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
 
 QUnit.module('the \'valueChangeEvent\' option', moduleSetup, () => {
-    ['keyup', 'blur', 'change', 'input', 'focusout'].forEach((eventName) => {
-        QUnit.test(`custom item has been added when valueChangeEvent='${eventName}'`, function(assert) {
-            const $tagBox = $('#tagBox').dxTagBox({
-                items: ['item 1'],
-                acceptCustomValue: true,
-                valueChangeEvent: eventName,
-                onCustomItemCreating(args) {
-                    args.customItem = args.text;
-                },
+    const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
+    const eventCouples = [
+        'keyup blur',
+        'keyup change',
+        'keyup input',
+        'keyup focusout',
+        'blur change',
+        'blur input',
+        'blur focusout',
+        'change input',
+        'change focusout',
+        'input focusout',
+    ];
+
+    const valueChangeEventValues = [ events, eventCouples ];
+
+    valueChangeEventValues.forEach((events) => {
+        events.forEach((eventValue) => {
+            QUnit.test(`custom item has been added when valueChangeEvent='${eventValue}'`, function(assert) {
+                const onCustomItemCreatingSpy = sinon.spy();
+
+                const $tagBox = $('#tagBox').dxTagBox({
+                    items: ['item 1'],
+                    acceptCustomValue: true,
+                    valueChangeEvent: eventValue,
+                    onCustomItemCreating(args) {
+                        onCustomItemCreatingSpy();
+                        args.customItem = args.text;
+                    },
+                });
+
+                const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const keyboard = keyboardMock($input);
+                const customValue = 't';
+                const [first, second] = eventValue.split(' ');
+
+                switch(eventValue) {
+                    case 'keyup':
+                        $input.val(customValue);
+                        keyboard.keyUp(customValue);
+                        break;
+                    case 'input':
+                        keyboard.type(customValue);
+                        break;
+                    case 'change':
+                        keyboard.type(customValue);
+                        $($input).trigger('change');
+                        break;
+                    case 'blur':
+                    case 'focusout':
+                        keyboard.type(customValue);
+                        $($input).trigger(eventValue);
+                        break;
+                    default:
+                        keyboard.type(customValue);
+                        $($input).trigger(first);
+                        $($input).trigger(second);
+                        break;
+                }
+
+                assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the \'onCustomItemCreating\' was fired once');
             });
-
-            const instance = $tagBox.dxTagBox('instance');
-            const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const keyboard = keyboardMock($input);
-            const customValue = 't';
-
-            if(eventName === 'keyup') {
-                $input.val(customValue);
-                keyboard.keyUp(customValue);
-            } else if(eventName === 'input') {
-                keyboard.type(customValue);
-            } else {
-                keyboard.type(customValue);
-                $($input).trigger(eventName);
-            }
-
-            const customItemHasBeenAdded = instance.option('selectedItems').includes(customValue);
-
-            assert.strictEqual(customItemHasBeenAdded, true, 'custom item was added');
         });
     });
 });
