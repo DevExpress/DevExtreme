@@ -1760,7 +1760,21 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type Scalar = string | number | Function | Date | Boolean | Array<unknown>;
+  export type Scalar =
+    | undefined
+    | null
+    | string
+    | String
+    | number
+    | Number
+    | bigint
+    | BigInteger
+    | boolean
+    | Boolean
+    | Date
+    | Function
+    | Symbol
+    | Array<unknown>;
   /**
    * [descr:template]
    */
