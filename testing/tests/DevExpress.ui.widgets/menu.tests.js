@@ -1456,7 +1456,7 @@ QUnit.module('Menu tests', {
     QUnit.test('Hover root menu item -> move mouse pointer to the first submenu item (disabled)', function(assert) {
         if(!isDeviceDesktop(assert)) return;
 
-        const menu$ = $('#menu').dxMenu({
+        const $menu = $('#menu').dxMenu({
             items: [{
                 text: 'Item 1',
                 items: [{
@@ -1466,9 +1466,9 @@ QUnit.module('Menu tests', {
             showFirstSubmenuMode: { name: 'onHover', delay: 0 },
             hideSubmenuOnMouseLeave: true
         });
-        const $rootMenuItem = $(menu$).find('.' + DX_MENU_ITEM_CLASS);
+        const $rootMenuItem = $($menu).find('.' + DX_MENU_ITEM_CLASS);
 
-        menu$.trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
+        $menu.trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
 
         $($rootMenuItem).trigger('dxpointermove');
         this.clock.tick(100);
@@ -1483,7 +1483,7 @@ QUnit.module('Menu tests', {
             return oldQuerySelector(selectors);
         };
 
-        menu$.trigger($.Event('dxhoverend', { target: $rootMenuItem.get(0), relatedTarget: $subMenuItem }));
+        $menu.trigger($.Event('dxhoverend', { target: $rootMenuItem.get(0), relatedTarget: $subMenuItem }));
         this.clock.tick(100);
 
         submenu = getSubMenuInstance($rootMenuItem);

@@ -1474,7 +1474,6 @@ declare module DevExpress.common {
   export type SingleOrMultiple = 'single' | 'multiple';
   export type SingleOrNone = 'single' | 'none';
   export type SlideOutMenuPosition = 'inverted' | 'normal';
-  export type SliderCallValueChange = 'onMoving' | 'onMovingComplete';
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
   export type SubmenuShowMode = 'onClick' | 'onHover';
@@ -1496,6 +1495,7 @@ declare module DevExpress.common {
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
+  export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
 }
@@ -20274,7 +20274,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSliderBaseOptions.callValueChange]
      */
-    callValueChange?: DevExpress.common.SliderCallValueChange;
+    callValueChange?: DevExpress.common.ValueChangedCallMode;
   }
   /**
    * @deprecated use Properties instead
@@ -34053,7 +34053,6 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxRangeSelector> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
-    export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRangeSelector,
       MouseEvent | TouchEvent
@@ -34109,7 +34108,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
        */
-      callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
+      callValueChanged?: DevExpress.common.ValueChangedCallMode;
       /**
        * [descr:dxRangeSelectorOptions.behavior.manualRangeSelectionEnabled]
        */

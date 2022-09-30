@@ -495,10 +495,14 @@ const SelectBox = DropDownList.inherit({
         }
 
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
-            const { selectedItem: initialSelectedItem, text } = this.option();
+            const {
+                acceptCustomValue,
+                text,
+                selectedItem: initialSelectedItem,
+            } = this.option();
 
-            if(this.option('acceptCustomValue')) {
-                if(!saveEditingValue) {
+            if(acceptCustomValue) {
+                if(!saveEditingValue && !this._isValueChanging) {
                     this._updateField(initialSelectedItem ?? this._createCustomItem(text));
                     this._clearFilter();
                 }
@@ -528,6 +532,7 @@ const SelectBox = DropDownList.inherit({
     _focusOutHandler: function(e) {
         if(!this._preventNestedFocusEvent(e)) {
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
+
             if(!isOverlayTarget) {
                 this._restoreInputText();
                 this._clearSearchTimer();
@@ -686,7 +691,6 @@ const SelectBox = DropDownList.inherit({
         if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this._isValueChanging) {
             this._isValueChanging = true;
             this._customItemAddedHandler(e);
-            this._isValueChanging = false;
         }
     },
 
@@ -738,6 +742,7 @@ const SelectBox = DropDownList.inherit({
         this._cancelSearchIfNeed();
         this._setValue(this._valueGetter(item));
         this._renderDisplayText(this._displayGetter(item));
+        this._isValueChanging = false;
     },
 
     _clearValueHandler: function(e) {
@@ -844,7 +849,7 @@ const SelectBox = DropDownList.inherit({
             default:
                 this.callBase(args);
         }
-    }
+    },
 });
 
 registerComponent('dxSelectBox', SelectBox);
