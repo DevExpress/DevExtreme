@@ -7,7 +7,15 @@ const parseArgs = require('minimist');
 require('nconf').argv();
 
 let testCafe;
-createTestCafe('localhost', 1437, 1438)
+
+const options = {
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    proxyless: true // eslint-disable-line spellcheck/spell-checker
+};
+
+createTestCafe(options)
     .then(tc => {
         testCafe = tc;
 
