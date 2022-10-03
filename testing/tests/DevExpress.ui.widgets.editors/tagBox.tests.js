@@ -5078,6 +5078,7 @@ QUnit.module('the "valueChangeEvent" option', {
         this.$tagBox = $('#tagBox').dxTagBox({
             items: ['item 1'],
             acceptCustomValue: true,
+            focusStateEnabled: true,
             onCustomItemCreating: (args) => {
                 this.onCustomItemCreatingSpy();
                 args.customItem = args.text;
