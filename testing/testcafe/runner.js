@@ -4,6 +4,7 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
+const dashboardReporter = require('@vasily.strelyaev/testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
 let testCafe;
@@ -14,7 +15,7 @@ createTestCafe('localhost', 1437, 1438)
         const args = getArgs();
         const testName = args.test.trim();
         const meta = args.meta.trim();
-        const reporter = args.reporter.trim();
+        const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
         const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
@@ -104,7 +105,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: 'minimal',
+            reporter: ['minimal', dashboardReporter],
             componentFolder: '',
             file: '*',
             cache: true,
