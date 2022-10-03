@@ -1018,7 +1018,7 @@ export class DataGridStateStoring {
 @ComponentBindings()
 export class DataGridFilterPanel {
   @Event()
-  customizeText?: (e: FilterPanelCustomizeTextArg<DxDataGrid>) => string;
+  customizeText?: (e: FilterPanelCustomizeTextArg) => string;
 
   @OneWay()
   filterEnabled?: boolean;
