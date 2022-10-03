@@ -5091,7 +5091,7 @@ QUnit.module('the "valueChangeEvent" option', {
         this.customValue = 't';
     }
 }, () => {
-    const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
+    const events = ['keyup', 'change', 'input', 'focusout'];
 
     events.forEach((eventValue) => {
         QUnit.test(`custom item has been added when valueChangeEvent='${eventValue}'`, function(assert) {
@@ -5112,10 +5112,9 @@ QUnit.module('the "valueChangeEvent" option', {
                     keyboard.type(customValue);
                     $input.trigger('change');
                     break;
-                case 'blur':
                 case 'focusout':
                     instance.focus();
-                    $input.val(customValue);
+                    keyboard.type(customValue);
                     $input.trigger(eventValue);
                     break;
             }
@@ -5125,13 +5124,9 @@ QUnit.module('the "valueChangeEvent" option', {
     });
 
     const eventCouples = [
-        'keyup blur',
         'keyup change',
         'keyup input',
         'keyup focusout',
-        'blur change',
-        'blur input',
-        'blur focusout',
         'change input',
         'change focusout',
         'input focusout',
@@ -5139,13 +5134,12 @@ QUnit.module('the "valueChangeEvent" option', {
 
     eventCouples.forEach((eventValue) => {
         QUnit.test(`custom item has been added when valueChangeEvent='${eventValue}'`, function(assert) {
-            const { $input, customValue, instance, onCustomItemCreatingSpy } = this;
+            const { $input, customValue, keyboard, instance, onCustomItemCreatingSpy } = this;
 
             instance.option('valueChangeEvent', eventValue);
             const [firstEvent, secondEvent] = eventValue.split(' ');
 
-            instance.focus();
-            $input.val(customValue);
+            keyboard.type(customValue);
             $input.trigger(firstEvent);
             $input.trigger(secondEvent);
 
