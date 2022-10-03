@@ -292,8 +292,7 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
  * @public
  * @namespace DevExpress.common
  */
-
-export type SliderCallValueChange = 'onMoving' | 'onMovingComplete';
+export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
 
 /**
  * @public
