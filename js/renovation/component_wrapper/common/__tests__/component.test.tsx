@@ -1,6 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+// import ko from 'knockout';
+import variableWrapper from '../../../../core/utils/variable_wrapper';
 // eslint-disable-next-line import/named
 import renderer, { dxElementWrapper } from '../../../../core/renderer';
 import './utils/test_components/empty';
@@ -449,6 +451,10 @@ describe('Widget\'s container manipulations', () => {
 });
 
 describe('option', () => {
+  afterEach(() => {
+    variableWrapper.resetInjection();
+  });
+
   it('should return default props of component', () => {
     $('#component').dxOptionsTestWidget({});
 
@@ -675,6 +681,20 @@ describe('option', () => {
 
     expect($component.dxTestWidget('getLastPassedProps')).toMatchObject(options);
   });
+
+  it('unwrap knockout observable props (T1117147)', () => {
+    function koObservableFake() { return 'value'; }
+    variableWrapper.inject({
+      unwrap: (v) => (v === koObservableFake ? v() : v),
+    });
+    const options = {
+      text: koObservableFake,
+    };
+    $('#component').dxOptionsTestWidget(options);
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject({
+      text: 'value',
+    });
+  });
 });
 
 describe('templates and slots', () => {
@@ -734,7 +754,7 @@ describe('templates and slots', () => {
   it('should unsubscribe from all events for nested jquery components when disposing parent component', () => {
     $('#component').dxTemplatedTestWidget({
       template(_: never, element: Element) {
-        one(element, 'dxFakeEvent', () => {});
+        one(element, 'dxFakeEvent', () => { });
         $(element).html('<span>Template content</span>');
       },
     });
