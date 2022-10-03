@@ -106,15 +106,15 @@ export class TimeZoneCalculator {
     return this.options.getClientOffset(date);
   }
 
-  protected getCommonOffset(date: Date): number {
-    return this.options.getCommonOffset(date);
+  protected getCommonOffset(date: Date): number | undefined {
+    return this.options.tryGetCommonOffset(date);
   }
 
   protected getAppointmentOffset(
     date: Date,
     appointmentTimezone: string | undefined,
-  ): number {
-    return this.options.getAppointmentOffset(date, appointmentTimezone);
+  ): number | undefined {
+    return this.options.tryGetAppointmentOffset(date, appointmentTimezone);
   }
 
   protected getConvertedDate(
