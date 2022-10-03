@@ -26,22 +26,18 @@ export const fontFamilies = [
 export const fontStyles = [
   {
     icon: 'bold',
-    style: 'bold',
     hint: 'Bold',
   },
   {
     icon: 'italic',
-    style: 'italic',
     hint: 'Italic',
   },
   {
     icon: 'underline',
-    style: 'underline',
     hint: 'Underlined',
   },
   {
     icon: 'strike',
-    style: 'strike',
     hint: 'Strikethrough',
   },
 ];

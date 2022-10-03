@@ -19,8 +19,6 @@ export class FontFamilies {
 export class FontStyle {
   icon: string;
 
-  style: string;
-
   hint: string;
 }
 
@@ -72,22 +70,18 @@ const fontFamilies: FontFamilies[] = [
 const fontStyles: FontStyle[] = [
   {
     icon: 'bold',
-    style: 'bold',
     hint: 'Bold',
   },
   {
     icon: 'italic',
-    style: 'italic',
     hint: 'Italic',
   },
   {
     icon: 'underline',
-    style: 'underline',
     hint: 'Underlined',
   },
   {
     icon: 'strike',
-    style: 'strike',
     hint: 'Strikethrough',
   },
 ];

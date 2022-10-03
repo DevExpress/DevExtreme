@@ -301,7 +301,7 @@ export default {
       return {
         displayExpr: 'text',
         items: fontStyles,
-        keyExpr: 'style',
+        keyExpr: 'icon',
         stylingMode: 'outlined',
         selectionMode: 'multiple',
         onItemClick(e) {

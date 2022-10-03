@@ -118,7 +118,7 @@ export class AppComponent {
   fontStyleOptions = {
     displayExpr: 'text',
     items: this.fontStyles,
-    keyExpr: 'style',
+    keyExpr: 'icon',
     stylingMode: 'outlined',
     selectionMode: 'multiple',
     onItemClick: this.onItemClick,

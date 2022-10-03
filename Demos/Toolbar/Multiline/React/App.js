@@ -210,7 +210,7 @@ function App() {
             <Item location="before">
               <ButtonGroup
                 displayExpr="text"
-                keyExpr="style"
+                keyExpr="icon"
                 stylingMode="outlined"
                 selectionMode="multiple"
                 items={fontStyles}
