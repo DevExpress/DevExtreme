@@ -13,7 +13,9 @@ import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import type { UserDefinedElement } from '../../../core/element';
-import { isDefined, isRenderer, isString } from '../../../core/utils/type';
+import {
+  isDefined, isRenderer, isString,
+} from '../../../core/utils/type';
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
@@ -157,11 +159,23 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     ) as Record<string, unknown>;
   }
 
+  _getUnwrappedOption(): Record<string, unknown> {
+    const unwrappedProps = {};
+    Object
+      .keys(this.option())
+      .forEach((key) => {
+        unwrappedProps[key] = this.option(key);
+      });
+    return unwrappedProps;
+  }
+
   _initializeComponent(): void {
     super._initializeComponent();
 
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
-    this._props = this._optionsWithDefaultTemplates(this.option());
+    const optionProxy = this._getUnwrappedOption();
+
+    this._props = this._optionsWithDefaultTemplates(optionProxy);
     this._propsInfo.templates.forEach((template) => {
       this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
     });
@@ -219,7 +233,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       const { attributes } = element;
       const attrs = Array.from<{ name: string; value: unknown }>(attributes)
         .filter((attr) => !this._propsInfo.templates.includes(attr.name)
-      && attributes[attr.name]?.specified)
+          && attributes[attr.name]?.specified)
         .reduce((result, { name, value }) => {
           const updatedAttributes = result;
           const isDomAttr = name in element;
