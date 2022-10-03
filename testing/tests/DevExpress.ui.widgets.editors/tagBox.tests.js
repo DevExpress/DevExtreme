@@ -5110,12 +5110,12 @@ QUnit.module('the "valueChangeEvent" option', {
                     break;
                 case 'change':
                     keyboard.type(customValue);
-                    $($input).trigger('change');
+                    $input.trigger('change');
                     break;
                 case 'blur':
                 case 'focusout':
                     keyboard.type(customValue);
-                    $($input).trigger(eventValue);
+                    $input.trigger(eventValue);
                     break;
             }
 
@@ -5144,8 +5144,8 @@ QUnit.module('the "valueChangeEvent" option', {
             const [firstEvent, secondEvent] = eventValue.split(' ');
 
             keyboard.type(customValue);
-            $($input).trigger(firstEvent);
-            $($input).trigger(secondEvent);
+            $input.trigger(firstEvent);
+            $input.trigger(secondEvent);
 
             assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
         });
