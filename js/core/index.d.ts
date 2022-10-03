@@ -34,3 +34,19 @@ export type PropertyType<T, TProp extends string> =
     : OwnPropertyType<T, TProp>;
 
 export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
+
+export type ExcludeFromTuple<T extends unknown[], E> = T extends [infer Head, ... infer Tail] ? Head extends E ? ExcludeFromTuple<Tail, E> : [Head, ... ExcludeFromTuple<Tail, E>] : [];
+
+/**
+ * Generates all possible {@link https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n k-permutations} (k = [1...n])
+ */
+export type AllPermutations<T extends string[]> = T extends [infer Last] ? Last : Permutations<T> | {
+  [K in T[number]]: AllPermutations<ExcludeFromTuple<T, K>>
+}[T[number]];
+
+/**
+ * Generates {@link https://en.wikipedia.org/wiki/Permutation permutations} from a string tuple
+ */
+export type Permutations<T extends string[]> = T extends [] ? any : T extends [infer Last] ? Last : {
+  [K in T[number]]: `${K} ${Permutations<ExcludeFromTuple<T, K>>}`
+}[T[number]];
