@@ -1,11 +1,11 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
-DemoApp.controller('DemoController', ($scope) => {
+DemoApp.controller('DemoController', ($scope, $http, $q) => {
   let firstName = '';
   let lastName = '';
   const position = positions[0];
-  let city = '';
   let state = '';
+  let currentClient = '';
 
   $scope.fullInfo = '';
 
@@ -32,16 +32,6 @@ DemoApp.controller('DemoController', ($scope) => {
       value: position,
       disabled: true,
     },
-    customSearchOptions: {
-      dataSource: cities,
-      minSearchLength: 2,
-      searchTimeout: 500,
-      placeholder: 'Type two symbols to search...',
-      onValueChanged(data) {
-        city = data.value;
-        updateEmployeeInfo();
-      },
-    },
     customItemTemplate: {
       dataSource: new DevExpress.data.ODataStore({
         url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
@@ -58,15 +48,49 @@ DemoApp.controller('DemoController', ($scope) => {
         updateEmployeeInfo();
       },
     },
+    customStoreUsage: {
+      dataSource: new DevExpress.data.CustomStore({
+        key: 'Value',
+        useDefaultSearch: true,
+        load(loadOptions) {
+          const params = {};
+          [
+            'skip',
+            'take',
+            'filter',
+          ].forEach((option) => {
+            if (option in loadOptions && isNotEmpty(loadOptions[option])) {
+              params[option] = JSON.stringify(loadOptions[option]);
+            }
+          });
+          return $http.get('https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup', { params })
+            .then((response) => ({
+              data: response.data.data,
+            }), () => $q.reject('Data Loading Error'));
+        },
+      }),
+      minSearchLength: 2,
+      searchTimeout: 500,
+      placeholder: 'Type client name...',
+      valueExpr: 'Text',
+      onValueChanged(data) {
+        currentClient = data.value;
+        updateEmployeeInfo();
+      },
+    },
   };
 
   function updateEmployeeInfo() {
     let result = '';
     result += $.trim(`${firstName || ''} ${lastName || ''}`);
-    result += (result && position) ? (`, ${position}`) : position;
-    result += (result && city) ? (`, ${city}`) : city;
-    result += (result && state) ? (`, ${state}`) : state;
+    result += (result && position) ? (`, ${position}`) : position || '';
+    result += (result && state) ? (`, ${state}`) : state || '';
+    result += (result && currentClient) ? (`, ${currentClient}`) : currentClient || '';
 
     $scope.fullInfo = result;
+  }
+
+  function isNotEmpty(value) {
+    return value !== undefined && value !== null && value !== '';
   }
 });

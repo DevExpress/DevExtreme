@@ -4137,6 +4137,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Autocomplete",
+            "Badge": "Updated",
+            "Modules": "whatwg-fetch",
             "MvcAdditionalFiles": [
               "/Models/SampleData/Names.cs",
               "/Models/SampleData/Surnames.cs",
