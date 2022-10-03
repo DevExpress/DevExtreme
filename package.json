@@ -64,7 +64,7 @@
     "@types/react": "16.14.32",
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/experimental-utils": "5.38.1",
-    "@vasily.strelyaev/tcd-screenshot-updater": "0.1.0",
+    "@vasily.strelyaev/tcd-screenshot-updater": "0.1.1",
     "@vasily.strelyaev/testcafe-reporter-dashboard-devextreme": "1.0.0",
     "angular": "1.8.3",
     "ast-types": "0.14.2",
@@ -239,7 +239,7 @@
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "test-typescript": "gulp test-ts",
-    "load-screenshots": "tcd-update"
+    "tcd-update": "tcd-update"
   },
   "browserslist": [
     "last 2 versions",
