@@ -69,7 +69,6 @@
           <DxItem
             location="before"
             widget="dxButtonGroup"
-            display-expr="text"
             :options="listOptions"
           />
           <DxItem

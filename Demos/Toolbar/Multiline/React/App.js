@@ -230,7 +230,7 @@ function App() {
               menuItemRender={renderTextAlignMenu}
             ></Item>
 
-            <Item location="before" displayExpr="text">
+            <Item location="before">
               <ButtonGroup
                 keyExpr="alignment"
                 stylingMode="outlined"

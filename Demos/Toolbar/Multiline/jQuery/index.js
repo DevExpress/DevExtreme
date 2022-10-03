@@ -140,7 +140,6 @@ const toolbarItems = [
   {
     location: 'before',
     widget: 'dxButtonGroup',
-    displayExpr: 'text',
     options: {
       items: listTypes,
       keyExpr: 'alignment',
