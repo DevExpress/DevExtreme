@@ -1075,7 +1075,7 @@ export const virtualScrollingModule = {
                         }
                     },
                     _updateLoadViewportParams: function() {
-                        const viewportParams = this._rowsScrollController.getViewportParams();
+                        const viewportParams = this._rowsScrollController?.getViewportParams();
                         const pageSize = this.pageSize();
 
                         if(viewportParams && !isVirtualPaging(this) && pageSize > 0) {
@@ -1289,12 +1289,12 @@ export const virtualScrollingModule = {
                     },
                     getLoadPageParams: function(byLoadedPage) {
                         const pageSize = this.pageSize();
-                        const viewportParams = this._loadViewportParams;
+                        const viewportParams = this._loadViewportParams || { skip: 0, take: 0 };
                         const lastLoadOptions = this._dataSource?.lastLoadOptions();
                         const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
                         const loadedTake = lastLoadOptions?.take || 0;
 
-                        const isScrollingBack = this._rowsScrollController.isScrollingBack();
+                        const isScrollingBack = this._rowsScrollController?.isScrollingBack();
                         const topPreloadCount = isScrollingBack ? this.getPreloadedRowCount() : 0;
                         const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
                         const totalCountCorrection = this._dataSource?.totalCountCorrection() || 0;
@@ -1336,9 +1336,16 @@ export const virtualScrollingModule = {
                         const loadedPageParams = this.getLoadPageParams(true);
                         const { pageIndex, loadPageCount } = this.getLoadPageParams();
                         const pageIndexIsValid = this._pageIndexIsValid(pageIndex);
+                        const pageIndexChanged = pageIndex !== loadedPageParams.pageIndex;
+                        const loadPageCountChanged = loadPageCount !== loadedPageParams.loadPageCount;
                         let result = null;
-
-                        if(!this._isLoading && pageIndexIsValid && (pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount)) {
+                        if(
+                            !this._isLoading
+                            && (
+                                (pageIndexChanged && pageIndexIsValid)
+                                || loadPageCountChanged
+                            )
+                        ) {
                             result = {
                                 pageIndex,
                                 loadPageCount
@@ -1553,6 +1560,13 @@ export const virtualScrollingModule = {
                     reset: function() {
                         this._itemCount = 0;
                         this._allItems = null;
+                        this.callBase.apply(this, arguments);
+                    },
+                    _applyFilter: function() {
+                        this._loadViewportParams = null;
+                        const loadCountChanged = this._getChangedLoadParams()?.loadPageCount;
+                        if(loadCountChanged) this._dataSource.loadPageCount(loadCountChanged);
+                        this._updateLoadViewportParams();
                         this.callBase.apply(this, arguments);
                     }
                 };
