@@ -342,6 +342,9 @@ QUnit.module('Column chooser', {
         assert.equal($toolbarButtons.length, 2, 'there are 2 buttons in toolbar');
         assert.ok($toolbarButtons.eq(1).hasClass('dx-datagrid-column-chooser-button'), 'second button is column chooser');
 
+        // T1109671
+        assert.equal($toolbarButtons.eq(1).attr('aria-haspopup'), 'dialog', 'column chooser button has aria-haspopup="dialog" attribute');
+
         // T102389
         assert.ok($toolbarButtons.eq(0).hasClass('dx-edit-button'), 'first element is edit (insert) button');
     });

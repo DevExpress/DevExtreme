@@ -640,17 +640,17 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         this._setCellAriaAttributes($cell, cellOptions);
 
-        this._renderCellContent($cell, cellOptions);
+        this._renderCellContent($cell, cellOptions, options);
 
         $row.get(0).appendChild($cell.get(0));
 
         return $cell;
     },
 
-    _renderCellContent: function($cell, options) {
+    _renderCellContent: function($cell, options, renderOptions) {
         const template = this._getCellTemplate(options);
 
-        when(!template || this.renderTemplate($cell, template, options)).done(() => {
+        when(!template || this.renderTemplate($cell, template, options, undefined, renderOptions.change)).done(() => {
             this._updateCell($cell, options);
         });
     },

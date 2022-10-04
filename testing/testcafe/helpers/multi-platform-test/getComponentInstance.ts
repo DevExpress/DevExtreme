@@ -20,7 +20,7 @@ export function getComponentInstance(
       const widgetNames = elementData.dxComponents;
 
       if (name) {
-        return elementData[name];
+        return elementData[name] ?? elementData[widgetNames[0]];
       }
       if (widgetNames.length > 1) {
         throw new Error(`Cannot update options for multiple widgets: ${widgetNames}`);

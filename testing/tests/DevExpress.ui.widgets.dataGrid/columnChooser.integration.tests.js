@@ -10,7 +10,7 @@ QUnit.testStart(function() {
 
 import $ from 'jquery';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
+import messageLocalization from 'localization/message';
 
 QUnit.module('Column chooser', baseModuleConfig, () => {
     // T862537
@@ -31,6 +31,27 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
         // assert
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 1, 'one drag action for hiding column');
+    });
+
+    // T1109671
+    QUnit.test('Column Chooser popup should have label, role attributes', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{ dataField: 'field1', allowHiding: false }, { dataField: 'field2' }],
+            dataSource: [],
+            columnChooser: { enabled: true },
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const popupContainer = dataGrid.getView('columnChooserView')._popupContainer;
+        const $popupContent = popupContainer.$content().parent();
+
+        assert.strictEqual($popupContent.attr('aria-label'), messageLocalization.format('dxDataGrid-columnChooserTitle'), 'has aria-label attribute');
+        assert.strictEqual($popupContent.attr('role'), 'dialog', 'has role="dialog" attribute');
     });
 
     QUnit.test('Correct runtime changing of a columnChooser mode (string)', function(assert) {

@@ -159,8 +159,8 @@ const ColumnsControllerExtender = (function() {
 
             return fixedColumns;
         },
-        getVisibleColumns: function(rowIndex, isBase) {
-            if(isBase || !this.isVirtualMode()) {
+        _compileVisibleColumns: function(rowIndex, isBase) {
+            if(isBase || !this.isVirtualMode() || !this._shouldReturnVisibleColumns()) {
                 return this.callBase(rowIndex);
             }
 
