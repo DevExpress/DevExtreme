@@ -33,33 +33,37 @@ import { ExcludeFromTuple } from '../../js/core';
 import { AllPermutations } from '../../js/core';
 
 {
+  const expected0: AllPermutations<'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'> = ANY as string;
+
   type Expected1 = 'a';
-  const expected11: AllPermutations<['a']> = ANY as Expected1;
-  const expected12: Expected1 = ANY as AllPermutations<['a']>;
+  const expected11: AllPermutations<'a'> = ANY as Expected1;
+  const expected12: Expected1 = ANY as AllPermutations<'a'>;
 
   type Expected2 = 'a' | 'b' | 'a b' | 'b a';
-  const expected21: AllPermutations<['a', 'b']> = ANY as Expected2;
-  const expected22: Expected2 = ANY as AllPermutations<['a', 'b']>;
+  const expected21: AllPermutations<'a' | 'b'> = ANY as Expected2;
+  const expected22: Expected2 = ANY as AllPermutations<'a' | 'b'>;
 
   type Expected3 = 'a' | 'b' | 'c' | 'a b' | 'a c' | 'b a' | 'b c' | 'c a' | 'c b' | 'a b c' | 'a c b' | 'b a c' | 'b c a' | 'c a b' | 'c b a';
-  const expected31: AllPermutations<['a', 'b', 'c']> = ANY as Expected3;
-  const expected32: Expected3 = ANY as AllPermutations<['a', 'b', 'c']>;
+  const expected31: AllPermutations<'a' | 'b' | 'c'> = ANY as Expected3;
+  const expected32: Expected3 = ANY as AllPermutations<'a' | 'b' | 'c'>;
 }
 
 import { Permutations } from '../../js/core';
 
 {
+  const expected0: Permutations<'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'> = ANY as string;
+
   type Expected1 = 'a';
-  const expected11: Permutations<['a']> = ANY as Expected1;
-  const expected12: Expected1 = ANY as Permutations<['a']>;
+  const expected11: Permutations<'a'> = ANY as Expected1;
+  const expected12: Expected1 = ANY as Permutations<'a'>;
 
   type Expected2 = 'a b' | 'b a';
-  const expected21: Permutations<['a', 'b']> = ANY as Expected2;
-  const expected22: Expected2 = ANY as Permutations<['a', 'b']>;
+  const expected21: Permutations<'a' | 'b'> = ANY as Expected2;
+  const expected22: Expected2 = ANY as Permutations<'a' | 'b'>;
 
   type Expected3 = 'a b c' | 'a c b' | 'b a c' | 'b c a' | 'c a b' | 'c b a';
-  const expected31: Permutations<['a', 'b', 'c']> = ANY as Expected3;
-  const expected32: Expected3 = ANY as Permutations<['a', 'b', 'c']>;
+  const expected31: Permutations<'a' | 'b' | 'c'> = ANY as Expected3;
+  const expected32: Expected3 = ANY as Permutations<'a' | 'b' | 'c'>;
 }
 
 import { Scalar } from '../../js/core';
