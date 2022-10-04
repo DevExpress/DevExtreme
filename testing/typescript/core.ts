@@ -12,24 +12,6 @@ import {
   toAssertion,
 } from './consts';
 
-import { ExcludeFromTuple } from '../../js/core';
-
-{
-  type Target = ['a', 'b', 'c'];
-
-  type Expected1 = ['b', 'c'];
-  const expected11: ExcludeFromTuple<Target, 'a'> = ANY as Expected1;
-  const expected13: Expected1 = ANY as ExcludeFromTuple<Target, 'a'>;
-
-  type Expected2 = ['a', 'c'];
-  const expected21: ExcludeFromTuple<Target, 'b'> = ANY as Expected2;
-  const expected23: Expected2 = ANY as ExcludeFromTuple<Target, 'b'>;
-
-  type Expected3 = ['a', 'b'];
-  const expected31: ExcludeFromTuple<Target, 'c'> = ANY as Expected3;
-  const expected33: Expected3 = ANY as ExcludeFromTuple<Target, 'c'>;
-}
-
 import { AllPermutations } from '../../js/core';
 
 {

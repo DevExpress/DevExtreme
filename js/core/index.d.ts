@@ -35,8 +35,6 @@ export type PropertyType<T, TProp extends string> =
 
 export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
 
-export type ExcludeFromTuple<T extends unknown[], E> = T extends [infer Head, ... infer Tail] ? Head extends E ? ExcludeFromTuple<Tail, E> : [Head, ... ExcludeFromTuple<Tail, E>] : [];
-
 /**
  * IncrementalCounter[1]=2, IncrementalCounter[2]=3, IncrementalCounter[3]=4, ...
  */
