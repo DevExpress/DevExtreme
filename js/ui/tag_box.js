@@ -615,7 +615,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
-        if(!this._preventNestedFocusEvent(e)) {
+        if(!this._preventNestedFocusEvent(e) && !this._hasBlurValueChangeEvent()) {
             this._clearTagFocus();
             this._scrollContainer('start');
         }

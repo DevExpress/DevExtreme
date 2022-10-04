@@ -32,14 +32,69 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="tagBox"></div>
+
     <script>
+        const TEXTBOX_CLASS = 'dx-texteditor-input';
+        const element = document.getElementById('tagBox')
+
+        const tagBox = new DevExpress.ui.dxTagBox(element, {
+            items: ['item 1'],
+            valueChangeEvent: 'blur',
+            acceptCustomValue: true,
+            focusStateEnabled: true,
+            onCustomItemCreating: (args) => {
+                const newValue = args.text;
+                const { component } = args;
+                const currentItems = component.option('items');
+                
+                const isExist = currentItems.indexOf(newValue) !== -1
+
+                if (isExist) {
+                    return false
+                }
+                
+                currentItems.unshift(newValue);
+                component.option('items', currentItems);
+                console.log(component.option('items'))
+                args.customItem = newValue;
+            },
+        });
+
+        const $element = $(tagBox.element());
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+
+        // $input[0].addEventListener('blur', () => {
+        //     debugger
+        // })
+    </script>
+
+    <!-- <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            $('#tagBox').dxTagBox({
+                items: ['item 1'],
+                valueChangeEvent: 'blur',
+                acceptCustomValue: true,
+                focusStateEnabled: true,
+                onCustomItemCreating: (args) => {
+                    debugger
+                    const newValue = args.text;
+                    const { component } = args;
+                    const currentItems = component.option('items');
+                    
+                    const isExist = currentItems.indexOf(newValue) !== -1
+
+                    if (isExist) {
+                        return false
+                    }
+                    
+                    currentItems.unshift(newValue);
+                    component.option('items', currentItems);
+                    console.log(component.option('items'))
+                    args.customItem = newValue;
+                },
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
