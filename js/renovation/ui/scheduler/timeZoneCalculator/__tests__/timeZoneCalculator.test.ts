@@ -12,8 +12,8 @@ describe('TimeZoneCalculator', () => {
 
     const mock: TimeZoneCalculatorOptions = {
       getClientOffset: () => localOffset,
-      getCommonOffset: () => commonOffset,
-      getAppointmentOffset: () => appointmentOffset,
+      tryGetCommonOffset: () => commonOffset,
+      tryGetAppointmentOffset: () => appointmentOffset,
     };
 
     ['Grid', 'Appointment'].forEach((path) => {
@@ -144,8 +144,8 @@ describe('TimeZoneCalculator', () => {
     beforeEach(() => {
       calculator = new TimeZoneCalculator({
         getClientOffset: () => -1 * clientOffset * hoursInMs,
-        getCommonOffset: () => commonOffset,
-        getAppointmentOffset: () => appointmentOffset,
+        tryGetCommonOffset: () => commonOffset,
+        tryGetAppointmentOffset: () => appointmentOffset,
       });
     });
 
