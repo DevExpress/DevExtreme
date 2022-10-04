@@ -10,8 +10,11 @@ const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymont
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
+const MS_IN_HOUR = 1000 * 60 * 60;
+const MS_IN_DAY = MS_IN_HOUR * 24;
 
 let recurrence = null;
+
 export function getRecurrenceProcessor() {
     if(!recurrence) {
         recurrence = new RecurrenceProcessor();
@@ -81,9 +84,15 @@ class RecurrenceProcessor {
     }
 
     _convertRruleResult(rruleIntervalParams, options, rruleDate) {
+        const localTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
+        // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
+        // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
+        const additionalWorkaroundOffsetForRrule =
+            localTimezoneOffset / MS_IN_HOUR <= -13 ? -MS_IN_DAY : 0;
         const convertedBackDate = timeZoneUtils.setOffsetsToDate(
             rruleDate, [
-                timeZoneUtils.getClientTimezoneOffset(rruleDate),
+                localTimezoneOffset,
+                additionalWorkaroundOffsetForRrule,
                 -options.appointmentTimezoneOffset,
                 rruleIntervalParams.startIntervalDateDSTShift,
             ]);
