@@ -61,6 +61,11 @@
     position: absolute;
     direction: ltr;
     table-layout: fixed;
+
+    .dx-calendar-week-number-cell {
+      text-align: center;
+      cursor: default;
+    }
   }
 
   td {

@@ -8,6 +8,8 @@ import 'generic_light.css!';
 import 'ui/calendar';
 
 const CALENDAR_CLASS = 'dx-calendar';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_WEEK_NUMBER_HEADER_CLASS = 'dx-week-number-header';
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
@@ -161,6 +163,104 @@ QUnit.module('Calendar footer', {
             showTodayButton: false
         }).dxCalendar('instance');
         assert.equal($element.find(toSelector(CALENDAR_FOOTER_CLASS)).length, 0, 'footer doesn\'t exist');
+    });
+});
+
+QUnit.module('showWeekNumbers', {
+    beforeEach: function(assert) {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+        this.calendar = this.$element.dxCalendar().dxCalendar('instance');
+
+        this.reinit = (options) => {
+            this.$element.remove();
+            this.$element = $('<div>').appendTo('#qunit-fixture');
+            this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
+        };
+
+        this.cacheTableElements = () => {
+            this.$table = this.$element.find('table').eq(0);
+            this.$headerRow = this.$table.find('thead').eq(0).children().eq(0);
+            this.$firstBodyRow = this.$table.find('tbody').eq(0).children().eq(0);
+        };
+
+        this.checkColumnCount = (expectedColumnCount) => {
+            this.cacheTableElements();
+
+            assert.strictEqual(this.$headerRow.children().length, expectedColumnCount);
+            assert.strictEqual(this.$firstBodyRow.children().length, expectedColumnCount);
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('table should have additional column if showWeekNumbers=true', function() {
+        this.reinit({ showWeekNumbers: true });
+
+        this.checkColumnCount(8);
+    });
+
+    QUnit.test('table should not have additional column if showWeekNumbers=false', function() {
+        this.reinit({ showWeekNumbers: false });
+
+        this.checkColumnCount(7);
+    });
+
+    QUnit.test('table should be rerendered with additional column after runtime change of showWeekNumbers', function(assert) {
+        this.reinit({});
+
+        this.checkColumnCount(7);
+
+        this.calendar.option('showWeekNumbers', true);
+
+        this.checkColumnCount(8);
+    });
+
+    QUnit.test('first header cell should have "dx-week-number-header" class when showWeekNumbers=true', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.cacheTableElements();
+        const $firstHeaderCell = this.$headerRow.children().eq(0);
+
+        assert.ok($firstHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
+    });
+
+    QUnit.test('first cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.cacheTableElements();
+        const $firstBodyCell = this.$firstBodyRow.children().eq(0);
+
+        assert.ok($firstBodyCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
+    });
+
+    QUnit.test('last header cell should have "dx-week-number-header" class when showWeekNumbers=true and rtlEnabled=true', function(assert) {
+        this.reinit({ showWeekNumbers: true, rtlEnabled: true });
+        this.cacheTableElements();
+        const $lastHeaderCell = this.$headerRow.children().eq(7);
+
+        assert.ok($lastHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
+    });
+
+    QUnit.test('last cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true and rtlEnabled=true', function(assert) {
+        this.reinit({ showWeekNumbers: true, rtlEnabled: true });
+        this.cacheTableElements();
+        const $lastBodyRowCell = this.$firstBodyRow.children().eq(7);
+
+        assert.ok($lastBodyRowCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
+    });
+
+    QUnit.test('calendar with zoomLevel!=="month" and showWeekNumbers=true should not have additional column', function(assert) {
+        this.reinit({ showWeekNumbers: true, zoomLevel: 'year' });
+        this.cacheTableElements();
+
+        assert.strictEqual(this.$firstBodyRow.children().length, 4);
+    });
+
+    QUnit.test('calendar with zoomLevel="month" and showWeekNumbers=true should not have additional column after zoomLevel runtime change', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.calendar.option('zoomLevel', 'year');
+        this.cacheTableElements();
+
+        assert.strictEqual(this.$firstBodyRow.children().length, 4);
     });
 });
 

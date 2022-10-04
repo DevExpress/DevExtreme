@@ -371,8 +371,16 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _showHiddenCellsInView: function({ $cells, isCommandColumn }) {
-        const cssClassNameToRemove = isCommandColumn ? COMMAND_ADAPTIVE_HIDDEN_CLASS : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
-        $cells.removeClass(cssClassNameToRemove);
+        let cssClassNameToRemove = this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+        if(isCommandColumn) {
+            cssClassNameToRemove = COMMAND_ADAPTIVE_HIDDEN_CLASS;
+            $cells.attr({
+                tabIndex: 0,
+                'aria-hidden': null
+            }).removeClass(cssClassNameToRemove);
+        } else {
+            $cells.removeClass(cssClassNameToRemove);
+        }
     },
 
     _showHiddenColumns: function() {
@@ -458,7 +466,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     _hideVisibleCellInView: function({ $cell, isCommandColumn }) {
         const cssClassNameToAdd = isCommandColumn ? COMMAND_ADAPTIVE_HIDDEN_CLASS : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
-        $cell.addClass(cssClassNameToAdd);
+        $cell.attr({
+            tabIndex: -1,
+            'aria-hidden': true
+        }).addClass(cssClassNameToAdd);
     },
 
     _getEditMode: function() {
@@ -1149,7 +1160,9 @@ export const adaptivityModule = {
             },
             keyboardNavigation: {
                 _isCellValid: function($cell) {
-                    return this.callBase.apply(this, arguments) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    return this.callBase.apply(this, arguments)
+                        && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS))
+                        && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
                 },
 
                 _processNextCellInMasterDetail: function($nextCell) {

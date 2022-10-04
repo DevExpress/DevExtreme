@@ -231,9 +231,9 @@ describe('CheckBox', () => {
             ${false} | ${null}
             ${null}  | ${true}
           `
-            .it('value="$initial" should be changed to "$expected" by click if allowIndeterminateStateByClick is true', ({ initial, expected }) => {
+            .it('value="$initial" should be changed to "$expected" by click if enableThreeStateBehavior is true', ({ initial, expected }) => {
               const checkBox = new CheckBox({
-                allowIndeterminateStateByClick: true,
+                enableThreeStateBehavior: true,
                 value: initial,
               });
               checkBox.onWidgetClick({} as Event);

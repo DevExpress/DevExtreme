@@ -14,6 +14,7 @@ const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 
 const UP_ARROW_KEY_CODE = 'ArrowUp';
 const DOWN_ARROW_KEY_CODE = 'ArrowDown';
@@ -195,6 +196,25 @@ QUnit.module('MonthView', {
         const cellDate = $(dateCell).data().value;
 
         assert.strictEqual(cellDate.substring(0, 4), '0014');
+    });
+
+    QUnit.test('onCellClick should not be fired on week number cells', function(assert) {
+        const clickHandler = sinon.spy(noop);
+
+        this.reinit({
+            currentDate: new Date(2010, 10, 10),
+            focusStateEnabled: true,
+            showWeekNumbers: true,
+            zoomLevel: 'month',
+            onCellClick: clickHandler
+        });
+
+        const $weekCell = this.$element.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+        assert.strictEqual($weekCell.length, 6, 'week cells count');
+
+        $($weekCell.eq(2)).trigger('dxclick');
+
+        assert.strictEqual(clickHandler.callCount, 0, 'onCellClick was not called');
     });
 });
 

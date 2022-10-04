@@ -68,6 +68,11 @@ export interface LoadOptions<T = any> {
      * @docid
      * @public
      */
+     endDate?: Date;
+    /**
+     * @docid
+     * @public
+     */
     expand?: Array<string>;
     /**
      * @docid
@@ -102,6 +107,11 @@ export interface LoadOptions<T = any> {
      * @public
      */
     requireTotalCount?: boolean;
+    /**
+     * @docid
+     * @public
+     */
+     startDate?: Date;
     /**
      * @docid
      * @type getter|Array<getter>

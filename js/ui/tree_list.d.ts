@@ -31,24 +31,24 @@ import {
 } from '../common';
 
 import {
-    GridBase,
+    AdaptiveDetailRowPreparingInfo,
     ColumnBase,
     ColumnButtonBase,
-    EditingBase,
-    EditingTextsBase,
-    GridBaseOptions,
-    PagingBase,
-    ScrollingBase,
-    SelectionBase,
-    AdaptiveDetailRowPreparingInfo,
-    DataErrorOccurredInfo,
     DataChangeInfo,
-    DragStartEventInfo,
-    RowDraggingEventInfo,
+    DataErrorOccurredInfo,
     DragDropInfo,
     DragReorderInfo,
+    DragStartEventInfo,
+    EditingBase,
+    EditingTextsBase,
+    GridBase,
+    GridBaseOptions,
     KeyDownInfo,
     NewRowInfo,
+    PagingBase,
+    ReducedNativeEventInfo,
+    RowDraggingEventInfo,
+    RowDraggingTemplateData,
     RowInsertedInfo,
     RowInsertingInfo,
     RowKeyInfo,
@@ -58,10 +58,11 @@ import {
     RowUpdatingInfo,
     RowValidatingInfo,
     SavingInfo,
+    ScrollingBase,
+    SelectionBase,
     SelectionChangedInfo,
     ToolbarPreparingInfo,
-    RowDraggingTemplateDataModel,
-} from './data_grid';
+} from '../common/grids';
 
 import { dxToolbarItem } from './toolbar';
 
@@ -89,21 +90,45 @@ export {
 
 export {
     ApplyFilterMode,
+    ColumnChooser,
     ColumnChooserMode,
+    ColumnCustomizeTextArg,
+    ColumnFixing,
+    ColumnFixingTexts,
+    ColumnHeaderFilter,
+    ColumnLookup,
+    ColumnResizeMode,
+    DataChange,
     DataChangeType,
     DataRenderMode,
     EnterKeyAction,
     EnterKeyDirection,
     FilterOperation,
+    FilterPanelTexts,
+    FilterRow,
+    FilterRowOperationDescriptions,
+    FilterType,
     GridsEditMode,
     GridsEditRefreshMode,
     GroupExpandMode,
+    HeaderFilter,
+    HeaderFilterGroupInterval,
+    HeaderFilterTexts,
+    KeyboardNavigation,
+    LoadPanel,
     NewRowPosition,
+    Pager,
     PagerDisplayMode,
     PagerPageSize,
+    RowDraggingTemplateData,
+    SearchPanel,
     SelectedFilterOperation,
     SelectionColumnDisplayMode,
+    Sorting,
     StartEditAction,
+    StateStoreType,
+    StateStoring,
+    SummaryType,
 } from '../common/grids';
 
 export {
@@ -360,25 +385,25 @@ export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTree
 export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
 
 /** @public */
-export type RowDraggingAddEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingAddEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & DragStartEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
+export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & DragStartEventInfo<TRowData>;
 
 /** @public */
-export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
+export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
 
 /** @public */
-export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
+export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
 /** @public */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
@@ -435,9 +460,6 @@ export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly columnIndex: number;
     readonly column: Column<TRowData, TKey>;
 };
-
-/** @public */
-export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataModel<TRowData>;
 
 /**
  * @deprecated use Properties instead

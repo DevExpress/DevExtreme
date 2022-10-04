@@ -54,7 +54,7 @@ export const getPathParts = (path, includeFullPath) => {
 };
 
 export const getEscapedFileName = function(fileName) {
-    return fileName.replace(/\//g, '//');
+    return fileName.replace(/\/{1,1}/g, '//');
 };
 
 export const pathCombine = function() {

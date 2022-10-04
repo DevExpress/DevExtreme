@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { GridBase } from '../../../../../ui/data_grid';
+import { GridBase } from '../../../../../common/grids';
 
 export interface GridBaseInstance extends GridBase {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

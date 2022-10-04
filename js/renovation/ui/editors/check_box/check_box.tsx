@@ -100,7 +100,7 @@ export class CheckBoxProps extends EditorProps {
 
   @OneWay() iconSize?: number | string;
 
-  @OneWay() allowIndeterminateStateByClick = false;
+  @OneWay() enableThreeStateBehavior = false;
 
   // overrides default value
   @OneWay() activeStateEnabled = true;
@@ -142,13 +142,13 @@ export class CheckBox extends JSXComponent<CheckBoxPropsType>() {
 
   onWidgetClick(event: Event): void {
     const {
-      value, readOnly, allowIndeterminateStateByClick, saveValueChangeEvent,
+      value, readOnly, enableThreeStateBehavior, saveValueChangeEvent,
     } = this.props;
 
     if (!readOnly) {
       saveValueChangeEvent?.(event);
 
-      if (allowIndeterminateStateByClick) {
+      if (enableThreeStateBehavior) {
         this.props.value = value === null || (!value ? null : false);
       } else {
         this.props.value = !(value ?? false);
