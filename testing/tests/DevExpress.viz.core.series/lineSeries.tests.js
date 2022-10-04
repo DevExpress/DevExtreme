@@ -2290,7 +2290,7 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.equal(this.renderer.stub('path').callCount, 1);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 361);
         assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
 
         $.each(this.renderer.stub('path').getCall(0).args[0], function(_, pt) {
@@ -2376,10 +2376,10 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.equal(this.renderer.stub('path').callCount, 1);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 4);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 3);
         assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
         assert.deepEqual(getPositionRendererPoints(this.renderer.stub('path').getCall(0).args[0]),
-            [{ x: 20, y: 20 }, { x: 30, y: 30 }, { x: 30, y: 30 }, { x: 40, y: 40 }]);
+            [{ x: 30, y: 30 }, { x: 30, y: 30 }, { x: 40, y: 40 }]);
     });
 
     QUnit.test('draw polar line. Two point with equal angle', function(assert) {
@@ -2447,7 +2447,7 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 361);
         $.each(this.renderer.stub('path').getCall(0).args[0], function(_, pt) {
             assert.equal(pt.x, pt.y);
         });
@@ -2470,7 +2470,7 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 361);
         assert.equal(this.renderer.stub('path').getCall(0).args[0][20].x, 40);
         $.each(this.renderer.stub('path').getCall(0).args[0], function(_, pt) {
             assert.equal(pt.x, pt.y);
@@ -2494,9 +2494,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 363);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, 0.30009999999998627);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][362].angle, -359.6999);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -0.6999000000000137);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][361].angle, -359.6999);
     });
 
     QUnit.test('draw polar line. inverted (T248175)', function(assert) {
@@ -2516,9 +2516,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 363);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
         assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -359.9995);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][362].angle, 0.0005);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][361].angle, 0.0005);
     });
 
     QUnit.test('draw polar line. difference between normalize angle of the first and the last points are zero', function(assert) {
@@ -2538,9 +2538,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 363);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, 0);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][362].angle, -360);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -1);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][361].angle, -360);
     });
 
     QUnit.test('draw polar line. angle of last point is more than 360', function(assert) {
@@ -2560,9 +2560,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 722);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, 0);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][721].angle, -720);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 721);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -1);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][720].angle, -720);
     });
 })();
 
