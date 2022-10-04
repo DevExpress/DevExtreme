@@ -570,7 +570,6 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field component:object
    * @default undefined
-   * @type_function_return Array<any>|Store|DataSourceOptions
    * @type Array<any>|Store|DataSourceOptions|Function|null
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void);
