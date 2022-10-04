@@ -75,7 +75,7 @@ export const FooterView = ColumnsView.inherit((function() {
 
         _renderCellContent: function($cell, options) {
             renderSummaryCell($cell, options);
-            this.callBase($cell, options);
+            this.callBase.apply(this, arguments);
         },
 
         _renderCore: function(change) {

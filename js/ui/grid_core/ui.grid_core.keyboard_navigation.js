@@ -1369,11 +1369,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _isLastRow: function(rowIndex) {
         const dataController = this._dataController;
+        const visibleItems = dataController.items().filter((item) => item.visible !== false);
 
         if(this._isVirtualRowRender()) {
             return rowIndex >= dataController.getMaxRowIndex();
         }
-        return rowIndex === dataController.items().length - 1;
+
+        return rowIndex === visibleItems.length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;
@@ -1583,6 +1585,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const keyDownEvent = createEvent(eventArgs, { type: 'keydown', target: $input.get(0) });
         const keyPressEvent = createEvent(eventArgs, { type: 'keypress', target: $input.get(0) });
         const inputEvent = createEvent(eventArgs, { type: 'input', target: $input.get(0) });
+
+        if(inputEvent.originalEvent) {
+            inputEvent.originalEvent = createEvent(inputEvent.originalEvent, { data: editorValue }); // T1116105
+        }
 
         $input.get(0).select?.();
         eventsEngine.trigger($input, keyDownEvent);

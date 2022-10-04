@@ -1131,4 +1131,52 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // assert
         assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1644, 5, 'scroll top3');
     });
+
+    QUnit.test('Detail row heights should be synced with fixed columns with async templates (react) (T1103945)', function(assert) {
+        const templateDeferred = $.Deferred();
+
+        // arrange
+        const template = sinon.spy(function(container, options) {
+            templateDeferred.done(() => {
+                $('<div>')
+                    .css('height', '40px')
+                    .appendTo(container);
+            });
+        });
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [...new Array(20).keys()].map(i => ({ id: i })),
+            keyExpr: 'id',
+            height: 400,
+            columnFixing: {
+                enabled: true
+            },
+            masterDetail: {
+                enabled: true,
+                template,
+            }
+        }).dxDataGrid('instance');
+
+        const originalRenderTemplate = dataGrid.getView('rowsView').renderTemplate;
+        sinon.stub(dataGrid.getView('rowsView'), 'renderTemplate', function() {
+            const r = originalRenderTemplate.apply(this, arguments);
+            if(arguments[2].rowType === 'detail') {
+                arguments[4].templateDeferreds.pop();
+                arguments[4].templateDeferreds.push(templateDeferred);
+            }
+            return r;
+        });
+
+        // act
+        this.clock.tick();
+        dataGrid.expandRow(1);
+        templateDeferred.resolve();
+
+        // assert
+        const fixedDetailRowHeight = $('#dataGrid').find('.dx-master-detail-row').eq(0).css('height');
+        const notFixedDetailRowHeight = $('#dataGrid').find('.dx-master-detail-row').eq(1).css('height');
+
+        assert.strictEqual(fixedDetailRowHeight, notFixedDetailRowHeight, 'detail rows are equal');
+        assert.strictEqual(fixedDetailRowHeight, '81px');
+    });
 });

@@ -3597,6 +3597,29 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.strictEqual(dataGrid.totalCount(), 1, 'totalCount after removing rows');
     });
+
+    // T1113974
+    QUnit.test('Show editing popup if editRowKey is specified in popup edit mode', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test11', field2: 'test12' },
+            ],
+            keyExpr: 'id',
+            columns: ['field1', 'field2'],
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+                editRowKey: 1,
+            },
+        });
+        this.clock.tick();
+
+        // assert
+        const $popupContent = dataGrid.getController('editing').getPopupContent() || [];
+
+        assert.equal($popupContent.length, 1, 'There is editing popup');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
