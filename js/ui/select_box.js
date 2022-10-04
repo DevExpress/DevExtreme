@@ -536,9 +536,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _focusOutHandler: function(e) {
-        const a = !this._hasBlurValueChangeEvent();
-
-        if(!this._preventNestedFocusEvent(e) && a) {
+        if(!this._preventNestedFocusEvent(e) && !this._hasBlurValueChangeEvent()) {
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
             if(!isOverlayTarget) {
