@@ -9,11 +9,11 @@ export enum PathTimeZoneConversion {
 
 export interface TimeZoneCalculatorOptions {
   getClientOffset: (date: Date) => number;
-  getCommonOffset: (date: Date, timeZone?: string) => number;
-  getAppointmentOffset: (
+  tryGetCommonOffset: (date: Date, timeZone?: string) => number | undefined;
+  tryGetAppointmentOffset: (
     date: Date,
     appointmentTimezone?: string,
-  ) => number;
+  ) => number | undefined;
 }
 
 export interface TimeZoneOffsetsType {

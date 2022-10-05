@@ -465,6 +465,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       width: auto;
       max-width: 100%;
       display: block;
+      margin-bottom: -1px;
     }
   }
 
@@ -892,7 +893,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           font-size: $material-texteditor-label-font-size;
           top: 0;
           margin-top: 0;
-          height: $material-texteditor-label-font-size;
+          height: $material-texteditor-label-font-size + 1px;
           line-height: $material-texteditor-label-font-size;
         }
       }

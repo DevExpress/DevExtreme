@@ -1,3 +1,11 @@
+import type {
+    OmitInternal,
+} from './core';
+
+import type dxDraggable from './ui/draggable';
+import type dxScrollable from './ui/scroll_view/ui.scrollable';
+import type dxSortable from './ui/sortable';
+
 /**
  * @public
  * @namespace DevExpress.common
@@ -33,6 +41,12 @@ export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'da
  * @namespace DevExpress.common
  */
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type Draggable = OmitInternal<dxDraggable>;
 
 /**
  * @public
@@ -140,6 +154,12 @@ export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | '
  * @public
  * @namespace DevExpress.common
  */
+export type Scrollable = OmitInternal<dxScrollable>;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
 
 /**
@@ -206,6 +226,12 @@ export type SlideOutMenuPosition = 'inverted' | 'normal';
  * @public
  * @namespace DevExpress.common
  */
+export type Sortable = OmitInternal<dxSortable>;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SortOrder = 'asc' | 'desc';
 
 /**
@@ -266,8 +292,7 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
  * @public
  * @namespace DevExpress.common
  */
-
-export type SliderCallValueChange = 'onMoving' | 'onMovingComplete';
+export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
 
 /**
  * @public

@@ -224,7 +224,7 @@ const BaseView = Widget.inherit({
         this._createCellClickAction();
 
         eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, 'td', ((e) => {
+        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `td:not(.${CALENDAR_WEEK_NUMBER_CELL_CLASS})`, ((e) => {
             if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                 this._cellClickAction({
                     event: e,

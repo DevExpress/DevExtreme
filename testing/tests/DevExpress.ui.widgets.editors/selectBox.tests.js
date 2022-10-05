@@ -5490,6 +5490,36 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         assert.strictEqual(selectBox.option('text'), initialCustomValue, 'text was not restored');
     });
 
+    QUnit.test('only one item added in data array after blur if acceptCustomValue=true (T1116923)', function(assert) {
+        const customValue = 'custom';
+        const initialItems = [];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: initialItems,
+            acceptCustomValue: true,
+            onCustomItemCreating(data) {
+                if(!data.text) {
+                    data.customItem = null;
+                    return;
+                }
+
+                initialItems.push(customValue);
+                data.customItem = customValue;
+            },
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .focus()
+            .type(customValue);
+
+        $input.blur();
+
+        assert.strictEqual(initialItems.length, 1, 'one item should be added in data array');
+    });
+
     QUnit.test('custom value should be added on enter key when acceptCustomValue=true and dd is initially closed', function(assert) {
         const onCustomItemCreating = sinon.stub().returns('Custom item');
         const $selectBox = $('#selectBox').dxSelectBox({

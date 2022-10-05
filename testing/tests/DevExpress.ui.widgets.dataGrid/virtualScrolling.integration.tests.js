@@ -5989,6 +5989,68 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
+    // T1115547
+    QUnit.test('Virtual columns in combination with fixed columns and stateStoring (T1115547)', function(assert) {
+        createDataGrid({
+            dataSource: generateDataSource(100),
+            columns: [
+                { dataField: 'firstName', dataType: 'string', width: 100 },
+                { dataField: 'lastName', dataType: 'string', width: 200 },
+                { name: 'fixedColumns', width: 70, fixed: true, fixedPosition: 'right' },
+            ],
+            stateStoring: {
+                enabled: true,
+                storageKey: 'datagridState',
+                type: 'localStorage'
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                mode: 'virtual'
+            }
+        });
+
+
+        this.clock.tick(1000);
+
+
+        assert.ok(true, 'no errors');
+    });
+
+    // T1111033
+    QUnit.test('DataGrid should load all rows if pageSize is less than window and repaint mode is turned on', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+            },
+            height: 500,
+            editing: {
+                refreshMode: 'repaint',
+            },
+            paging: {
+                pageSize: 5
+            },
+        });
+
+        this.clock.tick(300);
+
+        const visibleRows = dataGrid.getVisibleRows();
+
+        assert.strictEqual(visibleRows.length, 15);
+    });
 });
 
 
