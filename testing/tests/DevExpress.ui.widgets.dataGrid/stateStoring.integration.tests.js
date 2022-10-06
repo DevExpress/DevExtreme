@@ -506,4 +506,26 @@ QUnit.module('State storing', baseModuleConfig, () => {
         assert.strictEqual(columns[1].index, 1, 'second column index');
         assert.strictEqual(columns[2].index, 2, 'third column index');
     });
+
+    // T1118077
+    QUnit.test('Filter row editor\'s value should be reset after resetting state', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            columns: ['field1'],
+            dataSource: [],
+            filterRow: {
+                visible: true,
+                applyFilter: 'onClick',
+            },
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.element()).find('.dx-datagrid-filter-row .dx-texteditor-input').first().val('test').trigger('change');
+        dataGrid.state(null);
+
+        // assert
+        assert.strictEqual($(dataGrid.element()).find('.dx-datagrid-filter-row .dx-texteditor-input').first().val(), '', 'editor value is reset');
+    });
 });
