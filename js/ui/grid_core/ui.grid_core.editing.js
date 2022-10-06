@@ -512,24 +512,26 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _handleChangesChange: function(args) {
             const dataController = this._dataController;
+            const changes = args.value;
 
             if(!args.value.length && !args.previousValue.length) {
                 return;
             }
 
-            this._processInsertChanges(args.value);
+            changes.forEach(change => {
+                if(change.type === 'insert') {
+                    this._addInsertInfo(change);
+                } else {
+                    const items = dataController.items();
+                    const rowIndex = dataController.getRowIndexByKey(change.key);
+
+                    this._addInternalData({ key: change.key, oldData: items[rowIndex]?.data });
+                }
+            });
 
             dataController.updateItems({
                 repaintChangesOnly: true,
                 isLiveUpdate: false
-            });
-        },
-
-        _processInsertChanges: function(changes) {
-            changes.forEach(change => {
-                if(change.type === 'insert') {
-                    this._addInsertInfo(change);
-                }
             });
         },
 
