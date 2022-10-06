@@ -5349,9 +5349,14 @@ QUnit.module('the "valueChangeEvent" option', {
                     keyboard.type(customValue);
                     $input.trigger(eventValue);
                     break;
+                default:
+                    break;
             }
 
+            const selectedItems = instance.option('selectedItems');
+
             assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
+            assert.strictEqual(selectedItems.includes(customValue), true, 'new custom item has been selected');
         });
     });
 
@@ -5379,7 +5384,10 @@ QUnit.module('the "valueChangeEvent" option', {
             $input.trigger(firstEvent);
             $input.trigger(secondEvent);
 
+            const selectedItems = instance.option('selectedItems');
+
             assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
+            assert.strictEqual(selectedItems.includes(customValue), true, 'new custom item has been selected');
         });
     });
 });
