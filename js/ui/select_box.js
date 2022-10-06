@@ -535,8 +535,12 @@ const SelectBox = DropDownList.inherit({
         return valueChangeEvent?.includes('blur') ?? false;
     },
 
+    _isPreventedNestedFocusOrIncludedBlur: function(e) {
+        return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
+    },
+
     _focusOutHandler: function(e) {
-        if(!this._preventNestedFocusEvent(e) && !this._valueChangeEventIncludesBlur()) {
+        if(!this._isPreventedNestedFocusOrIncludedBlur(e)) {
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
             if(!isOverlayTarget) {
