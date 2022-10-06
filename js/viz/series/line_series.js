@@ -534,24 +534,16 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
         const tan = (prevPoint.radius - point.radius) / betweenAngle;
         let i;
 
-        const getAngles = () => {
-            if(isLastSegment) {
-                return betweenAngle;
-            } else if(betweenAngle > 0) {
-                return betweenAngle - 1;
-            } else {
-                return betweenAngle + 1;
-            }
-        };
-
         if(betweenAngle === 0) {
             tangentPoints = [prevPoint, point];
         } else if(betweenAngle > 0) {
-            for(i = getAngles(); i >= 0; i--) {
+            const angle = isLastSegment ? betweenAngle : betweenAngle - 1;
+            for(i = angle; i >= 0; i--) {
                 tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, i));
             }
         } else {
-            for(i = 0; i >= getAngles(); i--) {
+            const angle = isLastSegment ? betweenAngle : betweenAngle + 1;
+            for(i = 0; i >= angle; i--) {
                 tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, (betweenAngle - i)));
             }
         }
