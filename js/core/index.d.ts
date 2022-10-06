@@ -35,3 +35,34 @@ export type PropertyType<T, TProp extends string> =
   TProp extends `${infer TOwnProp}.${infer TNestedProps}`
     ? PropertyType<OwnPropertyType<T, TOwnProp>, TNestedProps>
     : OwnPropertyType<T, TProp>;
+
+/**
+ * IncrementalCounter[1]=2, IncrementalCounter[2]=3, IncrementalCounter[3]=4, ...
+ */
+type IncrementalCounter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+/**
+ * Returns the number of union elements or unknown if it is too large.
+ */
+type UnionLength<T extends string> = UnionLengthInner<T, 1>;
+type UnionLengthInner<T extends string, C extends number> = C extends undefined ? unknown : {
+  [K in T]: Exclude<T, K> extends never ? C : UnionLengthInner<Exclude<T, K>, IncrementalCounter[C]>
+}[T];
+
+type PermutedUnionLength = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+
+/**
+ * Returns {@link https://en.wikipedia.org/wiki/Permutation permutations} from a string tuple.
+ * If union contains more than 7 elements, returns string.
+ */
+export type Permutations<T extends string> = UnionLength<T> extends PermutedUnionLength ? {
+  [K in T]: Exclude<T, K> extends never ? K : `${Permutations<Exclude<T, K>>} ${K}`
+}[T] : string;
+
+/**
+ * Returns all possible {@link https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n k-permutations} (k = [1...n])
+ * If union contains more than 7 elements, returns string.
+ */
+export type AllPermutations<T extends string> = UnionLength<T> extends PermutedUnionLength ? {
+  [K in T]: Permutations<T> | AllPermutations<Exclude<T, K>>
+}[T] : string;
