@@ -532,7 +532,7 @@ const SelectBox = DropDownList.inherit({
     _valueChangeEventIncludesBlur: function() {
         const valueChangeEvent = this.option('valueChangeEvent');
 
-        return valueChangeEvent?.includes('blur') ?? false;
+        return valueChangeEvent.includes('blur');
     },
 
     _isPreventedNestedFocusOrIncludedBlur: function(e) {
