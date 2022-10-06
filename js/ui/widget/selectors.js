@@ -10,7 +10,7 @@ const focusableFn = function(element, tabIndex) {
     const isDisabled = element.disabled;
     const isDefaultFocus = /^(input|select|textarea|button|object|iframe)$/.test(nodeName);
     const isHyperlink = nodeName === 'a';
-    let isFocusable = true;
+    let isFocusable;
     const isContentEditable = element.isContentEditable;
 
     if(isDefaultFocus || isContentEditable) {

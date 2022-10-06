@@ -338,7 +338,7 @@ const FrameAnimationStrategy = {
             };
 
             each(to, function(propName, endPropValue) {
-                if(typeof endPropValue === 'string' && parseFloat(endPropValue, 10) === false) {
+                if(typeof endPropValue === 'string' && parseFloat(endPropValue) === false) {
                     return true;
                 }
 
@@ -354,7 +354,7 @@ const FrameAnimationStrategy = {
     },
 
     _normalizeValue: function(value) {
-        const numericValue = parseFloat(value, 10);
+        const numericValue = parseFloat(value);
 
         if(numericValue === false) {
             return value;

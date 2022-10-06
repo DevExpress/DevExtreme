@@ -16,12 +16,10 @@ const normalizeNewDate = (
     return currentDate as Date;
   }
 
-  let result = newDate;
-
   const normalizedDate = dateSerialization.deserializeDate(newDate) as Date;
   const normalizedOppositeDate = dateSerialization.deserializeDate(currentOppositeDate) as Date;
 
-  result = normalizedDate;
+  let result = normalizedDate;
 
   if (
     normalizedOppositeDate
