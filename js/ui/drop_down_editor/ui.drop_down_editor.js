@@ -212,7 +212,26 @@ const DropDownEditor = TextBox.inherit({
         this._initVisibilityActions();
         this._initPopupInitializedAction();
         this._updatePopupPosition(this.option('rtlEnabled'));
+        this._mergeDropDownOptions();
+
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+    },
+
+    _mergeDropDownOptions: function() {
+        const options = this.option('dropDownOptions');
+        const defaultConfig = this._popupConfig();
+        const wrapperClasses = this._mergeWrapperClasses(defaultConfig, options);
+
+        options.wrapperAttr.class = wrapperClasses;
+
+        this.option('dropDownOptions', options);
+    },
+
+    _mergeWrapperClasses: function(defaultOptions, userOptions) {
+        const userWrapperClasses = userOptions.wrapperAttr?.class || '';
+        const defaultWrapperClasses = defaultOptions.wrapperAttr.class;
+
+        return `${defaultWrapperClasses} ${userWrapperClasses}`.trim();
     },
 
     _updatePopupPosition: function(isRtlEnabled) {
