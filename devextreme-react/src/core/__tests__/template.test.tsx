@@ -2,6 +2,7 @@
 import * as events from 'devextreme/events';
 import { cleanup, render, screen } from '@testing-library/react';
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import { Component } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { Template } from '../template';
@@ -15,7 +16,7 @@ import { TemplateWrapperRenderer } from '../template-wrapper';
 
 jest.useFakeTimers();
 
-const waitForceUpdateFromTemplateRenderer = () => new Promise((ok) => requestAnimationFrame(ok));
+const waitForceUpdateFromTemplateRenderer = () => act(() => new Promise((ok: any) => requestAnimationFrame(ok)));
 
 const templateProps = [{
   tmplOption: 'item',
@@ -112,7 +113,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate({ text: 'with data' }, ref.current);
+    act(() => { renderItemTemplate({ text: 'with data' }, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template with data</div>');
   });
@@ -129,7 +130,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate({ text: 'with data' }, ref.current);
+    act(() => { renderItemTemplate({ text: 'with data' }, ref.current) });
 
     expect(screen.getByText('Text')?.outerHTML)
       .toBe('<div>Text<div><div>Template</div><div style=\"display: none;\"></div></div></div>');
@@ -151,7 +152,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate(undefined, ref.current);
+    act(() => { renderItemTemplate(undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Second Template</div>');
   });
@@ -187,7 +188,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate({}, ref.current);
+    act(() => { renderItemTemplate({}, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template</div>');
   });
@@ -209,7 +210,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate({ text: 'with data' }, ref.current);
+    act(() => { renderItemTemplate({ text: 'with data' }, ref.current) });
 
     expect((container.firstChild?.firstChild as HTMLDivElement).outerHTML)
       .toContain('<div>Template with data<div style=\"display: none;\"></div><span style=\"display: none;\"></span></div>');
@@ -237,7 +238,7 @@ function testTemplateOption(testedOption: string) {
     );
 
     const table = document.createElement('table');
-    renderItemTemplate({ text: 'with data' }, table);
+    act(() => { renderItemTemplate({ text: 'with data' }, table) });
 
     expect(table.innerHTML)
       .toBe('<tbody><tr><td>Template with data</td></tr></tbody><tbody style=\"display: none;\"></tbody>');
@@ -263,7 +264,7 @@ function testTemplateOption(testedOption: string) {
     );
 
     const table = document.createElement('tbody');
-    renderItemTemplate({ text: 'with data' }, table);
+    act(() => { renderItemTemplate({ text: 'with data' }, table) });
 
     expect(table.innerHTML)
       .toBe('<tr><td>Template with data</td></tr><tr style=\"display: none;\"></tr>');
@@ -286,7 +287,7 @@ function testTemplateOption(testedOption: string) {
     );
     const onRendered: () => void = jest.fn();
 
-    renderItemTemplate({ text: 'with data' }, undefined, undefined, onRendered);
+    act(() => { renderItemTemplate({ text: 'with data' }, undefined, undefined, onRendered) });
 
     jest.runAllTimers();
     expect(onRendered).toBeCalled();
@@ -304,7 +305,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate({ text: 1 }, ref.current);
+    act(() => { renderItemTemplate({ text: 1 }, ref.current) });
     expect(() => rerender(
       <ComponentWithTemplates {...elementOptions} />,
     )).not.toThrow();
@@ -327,8 +328,8 @@ function testTemplateOption(testedOption: string) {
     const componentInstance = ref.current as unknown as {
       _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
 
-    renderItemTemplate({ text: 1 });
-    renderItemTemplate({ text: 2 });
+    act(() => { renderItemTemplate({ text: 1 }) });
+    act(() => { renderItemTemplate({ text: 2 }) });
 
     const templatesKeys = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
     expect(templatesKeys.length).toBe(2);
@@ -353,9 +354,9 @@ function testTemplateOption(testedOption: string) {
       _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
 
     const container = document.createElement('div');
-    renderItemTemplate({ text: 1 }, container);
+    act(() => { renderItemTemplate({ text: 1 }, container) });
     events.triggerHandler(container, 'dxremove');
-    renderItemTemplate({ text: 1 }, document.createElement('div'));
+    act(() => { renderItemTemplate({ text: 1 }, document.createElement('div')) });
 
     const templatesKeys = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
     expect(templatesKeys.length).toBe(1);
@@ -376,8 +377,8 @@ function testTemplateOption(testedOption: string) {
       <ComponentWithTemplates {...elementOptions} ref={ref} />,
     );
 
-    renderItemTemplate({ text: 1 });
-    renderItemTemplate({ text: 2 });
+    act(() => { renderItemTemplate({ text: 1 }) });
+    act(() => { renderItemTemplate({ text: 2 }) });
 
     const componentInstance = ref.current as unknown as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
 
@@ -406,8 +407,7 @@ function testTemplateOption(testedOption: string) {
 
     const componentInstance = ref.current as unknown as { _templatesStore: TemplatesStore };
 
-    renderItemTemplate({}, refContainer.current);
-
+    act(() => { renderItemTemplate({}, refContainer.current) });
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(1);
 
     expect(screen.getByText('Template').outerHTML)
@@ -451,10 +451,8 @@ function testTemplateOption(testedOption: string) {
 
     const componentInstance = ref.current as unknown as { _templatesStore: TemplatesStore };
 
-    renderItemTemplate(undefined, refContainer.current);
-
+    act(() => { renderItemTemplate(undefined, refContainer.current) });
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(1);
-
     const templateContent = container.querySelector('.template') as HTMLElement;
 
     const { parentElement } = templateContent;
@@ -489,8 +487,7 @@ describe('function template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-    renderItemTemplate('with data', ref.current);
-
+    act(() => { renderItemTemplate('with data', ref.current) });
     expect(itemRender).toBeCalled();
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template with data</div>');
@@ -510,8 +507,7 @@ describe('function template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-    renderItemTemplate(undefined, ref.current, 5);
-
+    act(() => { renderItemTemplate(undefined, ref.current, 5) });
     expect(itemRender).toBeCalled();
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Index 5</div>');
   });
@@ -547,7 +543,7 @@ describe('component template', () => {
       </ComponentWithTemplates>,
     );
 
-    renderItemTemplate({ value: 'Value' }, ref.current, 5);
+    act(() => { renderItemTemplate({ value: 'Value' }, ref.current, 5) });
 
     expect(container.querySelector('.template')?.textContent).toBe('value: Value, index: 5');
   });
@@ -599,7 +595,7 @@ describe('nested template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-    renderTemplate('item1', undefined, ref.current);
+    act(() => { renderTemplate('item1', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template</div>');
   });
@@ -614,7 +610,7 @@ describe('nested template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-    renderTemplate('item1', undefined, ref.current);
+    act(() => { renderTemplate('item1', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML)
       .toBe('<div class="template">Template</div>');
@@ -630,7 +626,7 @@ describe('nested template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-    renderTemplate('item1', undefined, ref.current);
+    act(() => { renderTemplate('item1', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">First Template</div>');
 
@@ -656,7 +652,7 @@ describe('nested template', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-    renderTemplate('item1', undefined, ref.current);
+    act(() => { renderTemplate('item1', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">First Template</div>');
 
@@ -682,7 +678,7 @@ describe('nested template', () => {
       </ComponentWithTemplates>,
     );
 
-    renderTemplate('item1', { text: 1 });
+    act(() => { renderTemplate('item1', { text: 1 }) });
     const componentInstance = ref.current as any;
     const templates = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
     expect(templates.length).toBe(1);
@@ -954,7 +950,7 @@ describe('component/render in nested options', () => {
         <div ref={ref} />
       </TestComponent>,
     );
-    renderTemplate('option.item', undefined, ref.current);
+    act(() => { renderTemplate('option.item', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">First Template</div>');
 
@@ -981,7 +977,7 @@ describe('component/render in nested options', () => {
         <div ref={ref} />
       </TestComponent>,
     );
-    renderTemplate('collection[0].template', undefined, ref.current);
+    act(() => { renderTemplate('collection[0].template', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">First Template</div>');
 
@@ -1020,7 +1016,7 @@ describe('component/render in nested options', () => {
       <TestContainer value="test2" />,
     );
 
-    renderTemplate('collection[0].option.item', undefined, ref.current);
+    act(() => { renderTemplate('collection[0].option.item', undefined, ref.current) });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">test2</div>');
   });
@@ -1055,7 +1051,6 @@ describe('component/render in nested options', () => {
       'collection[0].template',
       'collection[1].template',
     ]);
-
     expect(updatedOptions[1][0]).toBe('collection');
     expect(updatedOptions[1][1].length).toBe(2);
     expect(updatedOptions[1][1][0].template).toBe('collection[0].template');
@@ -1163,7 +1158,7 @@ describe('async template', () => {
       </ComponentWithAsyncTemplates>,
     );
 
-    renderItemTemplate({ text: 'with data' }, ref.current);
+    act(() => { renderItemTemplate({ text: 'with data' }, ref.current) });
 
     expect(container.querySelector('.template')).toBeNull();
 
@@ -1195,8 +1190,8 @@ describe('async template', () => {
       'renderWrappers',
     );
 
-    renderItemTemplate({ text: 'with data1' }, ref.current);
-    renderItemTemplate({ text: 'with data2' }, ref.current);
+    act(() => { renderItemTemplate({ text: 'with data1' }, ref.current) });
+    act(() => { renderItemTemplate({ text: 'with data2' }, ref.current) });
 
     expect(renderSpy.mock.calls.length).toBe(0);
 

@@ -1,5 +1,6 @@
 import { render as testingRender, cleanup } from '@testing-library/react';
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import config, { getOption } from '../config';
 import {
   TestComponent,
@@ -52,10 +53,10 @@ describe('useLegacyTemplateEngine', () => {
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
-    render({
+    act(() => { render({
       container: ref.current,
       model: { value: 'Value', key: 'key_1' },
-    });
+    }) });
 
     expect(container.querySelector('.template')?.textContent)
       .toBe('value: Value, key: key_1, dxkey: key_1');
@@ -86,10 +87,10 @@ describe('useLegacyTemplateEngine', () => {
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
-    render({
+    act(() => render({
       container: ref.current,
       model: { value: 'Value', key: 'key_1' },
-    });
+    }));
 
     expect(container.querySelector('.template')?.textContent).toBe('value: Value, dxkey: key_1');
   });

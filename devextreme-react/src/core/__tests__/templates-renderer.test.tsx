@@ -3,6 +3,7 @@ import { requestAnimationFrame } from 'devextreme/animation/frame';
 import { deferUpdate } from 'devextreme/core/utils/common';
 import { render } from '@testing-library/react';
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import { TemplatesRenderer } from '../templates-renderer';
 import { TemplatesStore } from '../templates-store';
 
@@ -55,7 +56,7 @@ jest.mock('devextreme/core/utils/common', () => ({
       expect(ref.current).not.toBeNull();
 
       expect(() => ref.current?.scheduleUpdate(useDeferUpdate)).not.toThrow();
-      expect(() => updateCallback()).not.toThrow();
+      expect(act(() => updateCallback())).resolves.not.toThrow();
 
       unmount();
       expect(ref.current).toBeNull();
