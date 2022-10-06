@@ -209,7 +209,6 @@ function App() {
 
             <Item location="before">
               <ButtonGroup
-                displayExpr="text"
                 keyExpr="icon"
                 stylingMode="outlined"
                 selectionMode="multiple"

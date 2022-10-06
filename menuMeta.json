@@ -3940,11 +3940,8 @@
             "Badge": "New",
             "DemoType": "Web",
             "MvcAdditionalFiles": [
-              "/ViewModels/ToolbarViewModel.cs",
-              "/Views/Toolbar/Multiline.cshtml",
               "/Models/SimpleData.cs",
-              "/Models/SampleData/ToolbarData.cs",
-              "/Controllers/ToolbarController.cs"
+              "/Models/SampleData/ToolbarData.cs"
             ]
           }
         ]
