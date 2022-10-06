@@ -39,11 +39,7 @@ const LIST_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
-<<<<<<< HEAD
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-=======
-const TEXTBOX_INPUT_CLASS = 'dx-texteditor-input';
->>>>>>> 0d734b6b33 (Rename)
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
@@ -313,11 +309,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('1');
@@ -474,13 +466,8 @@ QUnit.module('tags', moduleSetup, () => {
 
         const renderTagsStub = sinon.stub(tagBox, '_renderTags');
 
-<<<<<<< HEAD
         $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusin');
         $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusout');
-=======
-        $($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`)).trigger('focusin');
-        $($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`)).trigger('focusout');
->>>>>>> 0d734b6b33 (Rename)
 
         assert.equal(renderTagsStub.callCount, 0, 'tags weren\'t rerendered');
     });
@@ -492,11 +479,7 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         $($input).trigger('dxclick');
         $($input).trigger('blur');
 
@@ -1091,11 +1074,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input, true);
 
         keyboard.type('i');
@@ -1119,11 +1098,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('i');
@@ -1143,11 +1118,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('i');
@@ -1167,11 +1138,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -1333,11 +1300,7 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
             onValueChanged: spy
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         keyboardMock($input).press('backspace');
         assert.notOk(spy.called, 'onValueChanged is not fired');
@@ -2023,15 +1986,9 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             opened: true
         });
 
-<<<<<<< HEAD
         $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusin');
         $('.dx-list-item').first().trigger('dxclick');
         $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusout');
-=======
-        $($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`)).trigger('focusin');
-        $('.dx-list-item').first().trigger('dxclick');
-        $($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`)).trigger('focusout');
->>>>>>> 0d734b6b33 (Rename)
 
         assert.equal($tagBox.find('.dx-tag').length, 1, 'tag is present');
     });
@@ -2202,11 +2159,7 @@ QUnit.module('keyboard navigation', {
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-<<<<<<< HEAD
             this.$input = this.$element.find('.' + TEXTEDITOR_INPUT_CLASS);
-=======
-            this.$input = this.$element.find('.' + TEXTBOX_INPUT_CLASS);
->>>>>>> 0d734b6b33 (Rename)
             this.keyboard = keyboardMock(this.$input);
         };
 
@@ -2638,11 +2591,7 @@ QUnit.module('keyboard navigation through tags', {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox('instance');
-<<<<<<< HEAD
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-            this.$input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
             this.keyboard = keyboardMock(this.$input, true);
 
             this.getTags = () => {
@@ -3220,11 +3169,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
             this.init = (options) => {
                 this.$element = $('#tagBox').dxTagBox(options);
-<<<<<<< HEAD
                 this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-                this.$input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
                 this.keyboard = keyboardMock(this.$input);
                 this.instance = this.$element.dxTagBox('instance');
             };
@@ -3354,11 +3299,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('te');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3377,11 +3318,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         this.clock.tick();
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('Lon');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3401,11 +3338,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             width: 1000
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const inputLeft = $input.offset().left;
 
         $tagBox.dxTagBox('option', 'value', ['Moscow']);
@@ -3419,11 +3352,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchEnabled: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const inputWidth = $input.width();
 
         keyboardMock($input).type('test text');
@@ -3439,11 +3368,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             });
 
             const text = 'wwwwwwwwwwwwwwwwwwww';
-<<<<<<< HEAD
             const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-            const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
             $input.css('padding', '0 10px');
 
             keyboardMock($input).type(text);
@@ -3463,19 +3388,11 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             items: ['test1', 'test2']
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const initInputWidth = $input.width();
 
         $tagBox.dxTagBox('option', 'value', ['test1']);
         assert.roughEqual($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
-        const initInputWidth = $input.width();
-
-        $tagBox.dxTagBox('option', 'value', ['test1']);
-        assert.roughEqual($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
->>>>>>> 0d734b6b33 (Rename)
     });
 
     QUnit.test('space entering should increase input element size (T923429)', function(assert) {
@@ -3484,11 +3401,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const text = '123456789          ';
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type(text);
@@ -3498,11 +3411,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             .appendTo('#qunit-fixture');
         const textWidth = getWidth($inputCopy);
 
-<<<<<<< HEAD
         const currentWidth = getWidth($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
-=======
-        const currentWidth = getWidth($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`));
->>>>>>> 0d734b6b33 (Rename)
         assert.ok(currentWidth > textWidth, `input width (${currentWidth}) should be grester then input text width (${textWidth})`);
         $inputCopy.remove();
     });
@@ -3513,11 +3422,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: false
         });
 
-<<<<<<< HEAD
         const input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0);
-=======
-        const input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`).get(0);
->>>>>>> 0d734b6b33 (Rename)
         const { width: inputWidth } = input.getBoundingClientRect();
 
         // NOTE: width should be 0.1 because of T393423
@@ -3530,11 +3435,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             placeholder: 'placeholder'
         });
 
-<<<<<<< HEAD
         keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).type('test');
-=======
-        keyboardMock($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`)).type('test');
->>>>>>> 0d734b6b33 (Rename)
 
         const $placeholder = $tagBox.find('.dx-placeholder');
 
@@ -3550,11 +3451,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -3575,11 +3472,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('3');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3626,11 +3519,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('3');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3652,11 +3541,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox('instance');
 
         const $removeTag = $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`);
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         const pointer = pointerMock($removeTag).start().down();
         $($input).trigger('blur');
@@ -3708,11 +3593,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.press('backspace');
@@ -3747,11 +3628,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal(loadedCount, 1, 'data source loaded data');
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.press('backspace');
@@ -3770,11 +3647,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: 0
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('It');
@@ -3794,11 +3667,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: 0
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const searchValue = '123';
 
         $input.val(searchValue);
@@ -3815,11 +3684,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $input.val('one');
         $('.dx-list-item').eq(0).trigger('dxclick');
@@ -3836,11 +3701,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $input.val('one');
         $('.dx-list-item').eq(0).trigger('dxclick');
@@ -3857,11 +3718,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchEnabled: true
         });
 
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const searchValue = '123';
 
         $input.val(searchValue);
@@ -3880,11 +3737,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
 
         instance.focus();
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $input.val('123');
         instance.blur();
@@ -3900,12 +3753,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
-
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('1');
 
         const itemsCount = $('.dx-list-item').length;
@@ -3924,11 +3772,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             deferRendering: true
         });
 
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $input.focus();
 
@@ -3954,11 +3798,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
         const handlerStub = sinon.stub(instance._popup, 'repaint');
 
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         $input.focus();
 
         keyboardMock($input).type('American Samo');
@@ -3997,11 +3837,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const { top: initialTop } = popupContent.offset();
 
         $element
-<<<<<<< HEAD
             .find(`.${TEXTEDITOR_INPUT_CLASS}`)
-=======
-            .find(`.${TEXTBOX_INPUT_CLASS}`)
->>>>>>> 0d734b6b33 (Rename)
             .val('testtesttesttest')
             .trigger('input');
 
@@ -4040,11 +3876,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             minSearchLength: 2
         });
         const instance = $element.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         instance.open();
@@ -4143,11 +3975,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             showDropDownButton: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const $dropDownButton = $tagBox.find('.dx-dropdowneditor-button');
         $dropDownButton.click();
 
@@ -4168,11 +3996,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         keyboardMock($input).type('1');
         $('.dx-list-item').trigger('dxclick');
@@ -4349,11 +4173,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4387,11 +4207,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4430,11 +4246,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4467,11 +4279,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4507,11 +4315,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4574,11 +4378,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT * 3);
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         keyboardMock($input).type('item');
 
@@ -4695,11 +4495,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
         const height = getHeight(instance._popup._$popupContent);
 
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         $input.focus();
 
         keyboardMock($input).type('American Samo');
@@ -4742,11 +4538,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
             }
         });
 
-<<<<<<< HEAD
         $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('dxclick');
-=======
-        $($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`)).trigger('dxclick');
->>>>>>> 0d734b6b33 (Rename)
         this.clock.tick(TIME_TO_WAIT);
 
         const $popup = $('.dx-popup-content');
@@ -4785,11 +4577,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
         });
         this.clock.tick(2000);
 
-<<<<<<< HEAD
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         const keyboard = keyboardMock($input);
         keyboard.type('Z');
@@ -4835,11 +4623,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         const keyboard = keyboardMock($input);
         keyboard.type('test');
@@ -4861,11 +4645,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
         keyboard.press('enter');
 
@@ -4877,11 +4657,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         keyboardMock($input)
             .type('custom')
@@ -4895,11 +4671,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true,
             items: [1, 2, 3]
         });
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const tagBoxInstance = $tagBox.dxTagBox('instance');
 
         keyboardMock($input)
@@ -5314,11 +5086,7 @@ QUnit.module('the "valueChangeEvent" option', {
         });
 
         this.instance = this.$tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         this.$input = this.$tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        this.$input = this.$tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         this.keyboard = keyboardMock(this.$input);
         this.customValue = 't';
     },
@@ -5349,14 +5117,9 @@ QUnit.module('the "valueChangeEvent" option', {
                     keyboard.type(customValue);
                     $input.trigger(eventValue);
                     break;
-                default:
-                    break;
             }
 
-            const selectedItems = instance.option('selectedItems');
-
             assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
-            assert.strictEqual(selectedItems.includes(customValue), true, 'new custom item has been selected');
         });
     });
 
@@ -5384,10 +5147,7 @@ QUnit.module('the "valueChangeEvent" option', {
             $input.trigger(firstEvent);
             $input.trigger(secondEvent);
 
-            const selectedItems = instance.option('selectedItems');
-
             assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
-            assert.strictEqual(selectedItems.includes(customValue), true, 'new custom item has been selected');
         });
     });
 });
@@ -5405,11 +5165,7 @@ QUnit.module('options changing', moduleSetup, () => {
             tagBox.option(optionName, true);
             tagBox.option(optionName, false);
 
-<<<<<<< HEAD
             keyboardMock($element.find(`.${TEXTEDITOR_INPUT_CLASS}`))
-=======
-            keyboardMock($element.find(`.${TEXTBOX_INPUT_CLASS}`))
->>>>>>> 0d734b6b33 (Rename)
                 .focus()
                 .keyDown('backspace');
 
@@ -5623,11 +5379,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             opened: true
         });
 
-<<<<<<< HEAD
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const $doneButton = $('.dx-button.dx-popup-done');
 
         keyboardMock($input)
@@ -5652,11 +5404,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             opened: true
         });
 
-<<<<<<< HEAD
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         keyboardMock($input)
             .focus()
@@ -5823,11 +5571,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('aaa');
@@ -5978,11 +5722,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
             animation: null
         });
 
-<<<<<<< HEAD
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         keyboardMock($input).type('1').change();
 
         this.clock.tick(loadTimeout);
@@ -6178,11 +5918,7 @@ QUnit.module('single line mode', {
 
     QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout (T390041)', function(assert) {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-<<<<<<< HEAD
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         assert.equal($container.scrollLeft(), 0, 'scroll position is correct on rendering');
 
@@ -6269,11 +6005,7 @@ QUnit.module('single line mode', {
 
     QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
-<<<<<<< HEAD
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $inputWrapper.on('mousedown', e => {
             assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
@@ -6285,11 +6017,7 @@ QUnit.module('single line mode', {
 
     QUnit.test('mousedown should not be prevented on first focusin (T1102475)', function(assert) {
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
-<<<<<<< HEAD
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $inputWrapper.on('mousedown', e => {
             assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
@@ -6320,11 +6048,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox('instance');
-<<<<<<< HEAD
             this.keyboard = keyboardMock(this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`));
-=======
-            this.keyboard = keyboardMock(this.$element.find(`.${TEXTBOX_INPUT_CLASS}`));
->>>>>>> 0d734b6b33 (Rename)
             this.getFocusedTag = () => {
                 return this.$element.find('.' + TAGBOX_TAG_CLASS + '.' + FOCUSED_CLASS);
             };
@@ -6617,11 +6341,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             opened: true,
             searchEnabled: true
         });
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('4');
@@ -6662,11 +6382,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-<<<<<<< HEAD
         const kb = keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
-=======
-        const kb = keyboardMock($tagBox.find(`.${TEXTBOX_INPUT_CLASS}`));
->>>>>>> 0d734b6b33 (Rename)
 
         tagBox.open();
         assert.notOk(load.called, 'load has not been called');
@@ -7405,11 +7121,7 @@ QUnit.module('regression', {
 
         $(getList(tagBox).find('.dx-list-item').eq(0)).trigger('dxclick');
 
-<<<<<<< HEAD
         const $input = tagBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = tagBox.$element().find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const kb = keyboardMock($input);
 
         kb.type('4');
@@ -7504,11 +7216,7 @@ QUnit.module('regression', {
             grouped: true
         });
 
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
         const keyboard = keyboardMock($input);
 
         keyboard.type('3');
@@ -7564,11 +7272,7 @@ QUnit.module('regression', {
 
     QUnit.testInActiveWindow('focusout event should remove focus class from the widget', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({});
-<<<<<<< HEAD
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-        const $input = $tagBox.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
 
         $input.focus();
         assert.ok($tagBox.hasClass(FOCUSED_CLASS), 'focused class was applied');
@@ -7658,11 +7362,7 @@ QUnit.module('valueChanged should receive correct event parameter', {
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-<<<<<<< HEAD
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-=======
-            this.$input = this.$element.find(`.${TEXTBOX_INPUT_CLASS}`);
->>>>>>> 0d734b6b33 (Rename)
             this.keyboard = keyboardMock(this.$input);
             this.$listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
             this.$firstItem = this.$listItems.eq(0);
