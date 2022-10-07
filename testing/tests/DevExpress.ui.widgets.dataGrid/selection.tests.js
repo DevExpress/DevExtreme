@@ -4087,6 +4087,52 @@ QUnit.module('Deferred selection', {
         assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'checkboxes is visible');
     });
 
+    // T1116383
+    QUnit.test('The selectionFilter should be saved to correctly to state storage', function(assert) {
+        // arrange
+        const customSave = sinon.spy();
+
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, value: 1 },
+                { id: 2, value: 2 },
+                { id: 3, value: 3 },
+                { id: 4, value: 4 },
+                { id: 5, value: 5 },
+                { id: 6, value: 6 },
+            ],
+            keyExpr: 'id',
+            columns: [
+                { dataField: 'id', dataType: 'number' },
+                { dataField: 'value', filterValue: 1, dataType: 'number' },
+            ],
+            selection: { mode: 'multiple', deferred: true },
+            stateStoring: {
+                enabled: true,
+                savingTimeout: 0,
+                type: 'custom',
+                customSave
+            }
+        });
+
+        this.clock.tick();
+
+        this.selectRows([1, 3, 4, 6], true);
+        this.clock.tick();
+        this.deselectRows([3, 6]);
+        this.clock.tick();
+        this.selectRows([1, 2, 4, 5]);
+        this.clock.tick();
+
+        // assert
+        const expectedSelectionFilter = [
+            ['id', '=', 1], 'or', ['id', '=', 2], 'or', ['id', '=', 4], 'or', ['id', '=', 5]
+        ];
+
+        const savedState = customSave.args[3][0];
+        assert.deepEqual(savedState.selectionFilter, expectedSelectionFilter, 'selectionFilter is correct');
+    });
+
     QUnit.test('selectRows', function(assert) {
         const data = this.data;
         const onSelectionCalls = [];

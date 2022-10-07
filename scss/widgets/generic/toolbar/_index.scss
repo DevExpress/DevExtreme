@@ -68,7 +68,8 @@
   .dx-toolbar-item-auto-hide {
     padding: $generic-list-item-vertical-padding;
 
-    > .dx-button {
+    > .dx-button,
+    > .dx-toolbar-item-content > .dx-button {
       .dx-button-content {
         padding: 0;
       }

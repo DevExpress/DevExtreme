@@ -25,7 +25,7 @@ import { equalByValue } from '../../core/utils/common';
 import filterUtils from '../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
-const USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'selectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
+const USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
 const IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true };
 const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
@@ -1284,11 +1284,23 @@ export const columnsControllerModule = {
                     return result;
                 },
 
-                getVisibleColumns: function(rowIndex) {
-                    this._visibleColumns = this._visibleColumns || this._getVisibleColumnsCore();
+                _shouldReturnVisibleColumns: function() {
+                    return true;
+                },
+
+                _compileVisibleColumns: function(rowIndex) {
+                    this._visibleColumns = this._visibleColumns || this._compileVisibleColumnsCore();
                     rowIndex = isDefined(rowIndex) ? rowIndex : this._visibleColumns.length - 1;
 
                     return this._visibleColumns[rowIndex] || [];
+                },
+
+                getVisibleColumns: function(rowIndex) {
+                    if(!this._shouldReturnVisibleColumns()) {
+                        return [];
+                    }
+
+                    return this._compileVisibleColumns.apply(this, arguments);
                 },
                 getFixedColumns: function(rowIndex) {
                     this._fixedColumns = this._fixedColumns || this._getFixedColumnsCore();
@@ -1469,7 +1481,7 @@ export const columnsControllerModule = {
                 _isColumnVisible: function(column) {
                     return column.visible && this.isParentColumnVisible(column.index);
                 },
-                _getVisibleColumnsCore: function() {
+                _compileVisibleColumnsCore: function() {
                     const that = this;
                     let i;
                     const result = [];

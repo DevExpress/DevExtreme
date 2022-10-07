@@ -2808,6 +2808,25 @@ QUnit.module('Editing', {
         assert.strictEqual(value, 1, 'value === 1');
         assert.notOk(this.editingController._deferreds.length, 'deferreds should be empty');
     });
+
+
+    QUnit.test('HighlightDataCell should not trigger for non editable templates (T1109778)', function(assert) {
+        this.columns.length = 0;
+        this.columns.push({
+            cellTemplate: function(container, options) {
+                $('<div>').appendTo(container).dxTextBox({
+                    readOnly: true,
+                    editable: false,
+                    value: options.value
+                });
+            }
+        });
+        const spy = sinon.spy(this.editingController, 'highlightDataCell');
+
+        this.rowsView.render(this.gridContainer);
+
+        assert.notOk(spy.called);
+    });
 });
 
 QUnit.module('Editing with real dataController', {
@@ -21250,6 +21269,155 @@ QUnit.module('Editing - public arguments of the events/templates', {
                 assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
                 assert.strictEqual(args.text, 'Alex', 'text arg');
             }
+        });
+
+        // T1118182
+        QUnit.test(`${editMode} mode - onRowInserting/onRowInserted should have correct arguments when inserting row via 'editing.changes' option`, function(assert) {
+            // arrange
+            const onRowInsertingSpy = sinon.spy();
+            const onRowInsertedSpy = sinon.spy();
+            const items = [
+                { id: 0, name: 'test1' },
+                { id: 1, name: 'test2' },
+                { id: 2, name: 'test3' },
+                { id: 3, name: 'test4' }
+            ];
+
+            this.options.onRowInserting = onRowInsertingSpy;
+            this.options.onRowInserted = onRowInsertedSpy;
+            this.options.editing = {
+                mode: editMode.toLowerCase()
+            };
+            this.options.dataSource = {
+                store: {
+                    data: items.slice(),
+                    type: 'array',
+                    key: 'id'
+                }
+            };
+
+            this.setupModules();
+            this.renderRowsView();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
+
+            // act
+            this.option('editing.changes', [{
+                type: 'insert',
+                data: { id: 123, name: 'new' },
+            }]);
+            this.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 5, 'count rows');
+            assert.strictEqual(onRowInsertingSpy.callCount, 1, 'onRowInserting event - call count');
+            assert.strictEqual(onRowInsertedSpy.callCount, 1, 'onRowInserted event - call count');
+            assert.deepEqual(onRowInsertingSpy.getCall(0).args[0], { cancel: false, data: { id: 123, name: 'new' } }, 'onRowInserting event - args');
+            assert.deepEqual(onRowInsertedSpy.getCall(0).args[0], { key: 123, data: { id: 123, name: 'new' } }, 'onRowInserted event - args');
+        });
+
+        // T1118182
+        QUnit.test(`${editMode} mode - onRowUpdating/onRowUpdated should have correct arguments when updating row via 'editing.changes' option`, function(assert) {
+            // arrange
+            const onRowUpdatingSpy = sinon.spy();
+            const onRowUpdatedSpy = sinon.spy();
+            const items = [
+                { id: 0, name: 'test1' },
+                { id: 1, name: 'test2' },
+                { id: 2, name: 'test3' },
+                { id: 3, name: 'test4' }
+            ];
+
+            this.options.onRowUpdating = onRowUpdatingSpy;
+            this.options.onRowUpdated = onRowUpdatedSpy;
+            this.options.editing = {
+                mode: editMode.toLowerCase()
+            };
+            this.options.dataSource = {
+                store: {
+                    data: items.slice(),
+                    type: 'array',
+                    key: 'id'
+                }
+            };
+
+            this.setupModules();
+            this.renderRowsView();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
+
+            // act
+            this.option('editing.changes', [{
+                type: 'update',
+                key: 1,
+                data: { name: 'update' }
+            }]);
+            this.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
+            assert.strictEqual(onRowUpdatingSpy.callCount, 1, 'onRowUpdating event - call count');
+            assert.strictEqual(onRowUpdatedSpy.callCount, 1, 'onRowUpdated event - call count');
+            assert.deepEqual(onRowUpdatingSpy.getCall(0).args[0], { cancel: false, key: 1, newData: { name: 'update' }, oldData: { id: 1, name: 'update' } }, 'onRowUpdating event - args');
+            assert.deepEqual(onRowUpdatedSpy.getCall(0).args[0], { key: 1, data: { id: 1, name: 'update' } }, 'onRowUpdated event - args');
+        });
+
+        // T1118182
+        QUnit.test(`${editMode} mode - onRowRemoving/onRowRemoved should have correct arguments when removing row via 'editing.changes' option`, function(assert) {
+            // arrange
+            const onRowRemovingSpy = sinon.spy();
+            const onRowRemovedSpy = sinon.spy();
+            const items = [
+                { id: 0, name: 'test1' },
+                { id: 1, name: 'test2' },
+                { id: 2, name: 'test3' },
+                { id: 3, name: 'test4' }
+            ];
+
+            this.options.onRowRemoving = onRowRemovingSpy;
+            this.options.onRowRemoved = onRowRemovedSpy;
+            this.options.editing = {
+                mode: editMode.toLowerCase(),
+                confirmDelete: false,
+                texts: {
+                    confirmDeleteMessage: ''
+                }
+            };
+            this.options.dataSource = {
+                store: {
+                    data: items.slice(),
+                    type: 'array',
+                    key: 'id'
+                }
+            };
+
+            this.setupModules();
+            this.renderRowsView();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 4, 'count rows');
+
+            // act
+            this.option('editing.changes', [{
+                type: 'remove',
+                key: 1,
+            }]);
+            this.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 3, 'count rows');
+            assert.strictEqual(onRowRemovingSpy.callCount, 1, 'onRowRemoving event - call count');
+            assert.strictEqual(onRowRemovedSpy.callCount, 1, 'onRowRemoved event - call count');
+            assert.deepEqual(onRowRemovingSpy.getCall(0).args[0], { cancel: false, key: 1, data: items[1] }, 'onRowRemoving event - args');
+            assert.deepEqual(onRowRemovedSpy.getCall(0).args[0], { key: 1, data: items[1] }, 'onRowRemoved event - args');
         });
 
         [true, false].forEach((repaintChangesOnly) => {
