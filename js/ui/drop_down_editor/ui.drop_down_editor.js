@@ -7,6 +7,7 @@ import { focused } from '../widget/selectors';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
+import { getUniqueValues } from '../../core/utils/array';
 import { getPublicElement } from '../../core/element';
 import errors from '../widget/ui.errors';
 import animationPosition from '../../animation/position';
@@ -230,10 +231,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _mergeWrapperClasses: function(defaultOptions, userOptions) {
-        const userWrapperClasses = userOptions.wrapperAttr?.class || '';
-        const defaultWrapperClasses = defaultOptions.wrapperAttr?.class || '';
+        const userWrapperClasses = (userOptions.wrapperAttr?.class || '').split(' ');
+        const defaultWrapperClasses = (defaultOptions.wrapperAttr?.class || '').split(' ');
+        const finalClasses = getUniqueValues([...userWrapperClasses, ...defaultWrapperClasses]).join(' ');
 
-        return `${defaultWrapperClasses} ${userWrapperClasses}`.trim();
+        return finalClasses.trim();
     },
 
     _updatePopupPosition: function(isRtlEnabled) {
