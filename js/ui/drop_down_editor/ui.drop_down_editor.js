@@ -7,7 +7,6 @@ import { focused } from '../widget/selectors';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { getUniqueValues } from '../../core/utils/array';
 import { getPublicElement } from '../../core/element';
 import errors from '../widget/ui.errors';
 import animationPosition from '../../animation/position';
@@ -213,28 +212,8 @@ const DropDownEditor = TextBox.inherit({
         this._initVisibilityActions();
         this._initPopupInitializedAction();
         this._updatePopupPosition(this.option('rtlEnabled'));
-        this._mergeDropDownOptions();
 
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
-    },
-
-    _mergeDropDownOptions: function() {
-        const options = this.option('dropDownOptions');
-        const defaultConfig = this._popupConfig();
-        const wrapperClasses = this._mergeWrapperClasses(defaultConfig, options);
-
-        if(options.wrapperAttr?.class) {
-            options.wrapperAttr.class = wrapperClasses;
-        }
-
-        this.option('dropDownOptions', options);
-    },
-
-    _mergeWrapperClasses: function(defaultOptions, userOptions) {
-        const userWrapperClasses = (userOptions.wrapperAttr?.class || '').split(' ');
-        const defaultWrapperClasses = (defaultOptions.wrapperAttr?.class || '').split(' ');
-
-        return getUniqueValues([...userWrapperClasses, ...defaultWrapperClasses]).join(' ');
     },
 
     _updatePopupPosition: function(isRtlEnabled) {
@@ -658,7 +637,9 @@ const DropDownEditor = TextBox.inherit({
         }
     },
 
-    _popupShowingHandler: noop,
+    _popupShowingHandler() {
+        $(this._popup.$wrapper()).addClass(DROP_DOWN_EDITOR_OVERLAY);
+    },
 
     _popupHidingHandler: function() {
         this.option('opened', false);
