@@ -233,9 +233,8 @@ const DropDownEditor = TextBox.inherit({
     _mergeWrapperClasses: function(defaultOptions, userOptions) {
         const userWrapperClasses = (userOptions.wrapperAttr?.class || '').split(' ');
         const defaultWrapperClasses = (defaultOptions.wrapperAttr?.class || '').split(' ');
-        const finalClasses = getUniqueValues([...userWrapperClasses, ...defaultWrapperClasses]).join(' ');
 
-        return finalClasses.trim();
+        return getUniqueValues([...userWrapperClasses, ...defaultWrapperClasses]).join(' ');
     },
 
     _updatePopupPosition: function(isRtlEnabled) {
