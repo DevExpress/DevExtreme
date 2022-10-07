@@ -222,14 +222,16 @@ const DropDownEditor = TextBox.inherit({
         const defaultConfig = this._popupConfig();
         const wrapperClasses = this._mergeWrapperClasses(defaultConfig, options);
 
-        options.wrapperAttr.class = wrapperClasses;
+        if(options.wrapperAttr?.class) {
+            options.wrapperAttr.class = wrapperClasses;
+        }
 
         this.option('dropDownOptions', options);
     },
 
     _mergeWrapperClasses: function(defaultOptions, userOptions) {
         const userWrapperClasses = userOptions.wrapperAttr?.class || '';
-        const defaultWrapperClasses = defaultOptions.wrapperAttr.class;
+        const defaultWrapperClasses = defaultOptions.wrapperAttr?.class || '';
 
         return `${defaultWrapperClasses} ${userWrapperClasses}`.trim();
     },
