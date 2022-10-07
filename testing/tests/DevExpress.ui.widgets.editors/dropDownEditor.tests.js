@@ -1228,6 +1228,26 @@ QUnit.module('options', () => {
         assert.equal(dropDownEditor.option('opened'), false, 'not opened by field click');
     });
 
+    QUnit.testInActiveWindow('wrapperAttr', function(assert) {
+        devices.current({ platform: 'ios' });
+
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            openOnFieldClick: true,
+            dropDownOptions: {
+                wrapperAttr: {
+                    class: 'custom-class',
+                },
+            },
+        });
+
+        const $input = $dropDownEditor.find('.dx-texteditor-input');
+        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+        $input.trigger('dxclick');
+
+        assert.strictEqual(dropDownEditor.option('opened'), true, 'Drop Down Popup does not close after opening when the "wrapperAttr" property is added to "dropDownOptions" on iOS (T1118164)');
+    });
+
     QUnit.testInActiveWindow('focus editor in the case when \'openOnFieldClick\' is false', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             openOnFieldClick: false
