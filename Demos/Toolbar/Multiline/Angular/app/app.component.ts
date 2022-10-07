@@ -44,7 +44,7 @@ export class AppComponent {
       value: true,
     },
     {
-      text: 'Singleline mode',
+      text: 'Single-line mode',
       value: false,
     },
   ];
@@ -71,15 +71,15 @@ export class AppComponent {
 
   undoButtonOptions = {
     icon: 'undo',
-    onClick: () => {
-      notify('Undo button has been clicked!');
+    onClick: (): void => {
+      this.onButtonClick('Undo');
     },
   };
 
   redoButtonOptions = {
     icon: 'redo',
-    onClick: () => {
-      notify('Redo button has been clicked!');
+    onClick: (): void => {
+      this.onButtonClick('Redo');
     },
   };
 
@@ -92,7 +92,7 @@ export class AppComponent {
     selectedItemKey: this.fontSizes[2].size,
     itemTemplate: 'fontSizeTemplate',
     onSelectionChanged: (): void => {
-      notify('Font size value has been changed!');
+      this.onSelectionChanged('Font Size');
     },
   };
 
@@ -105,7 +105,7 @@ export class AppComponent {
     items: this.lineHeights,
     selectedItemKey: this.lineHeight,
     onSelectionChanged: (): void => {
-      notify('Line height value has been changed!');
+      this.onSelectionChanged('Line Height');
     },
   };
 
@@ -113,6 +113,9 @@ export class AppComponent {
     placeholder: 'Font',
     displayExpr: 'text',
     dataSource: new DataSource(this.fontFamilies),
+    onItemClick: (): void => {
+      this.onFontFamilyClick();
+    },
   };
 
   fontStyleOptions = {
@@ -121,27 +124,34 @@ export class AppComponent {
     keyExpr: 'icon',
     stylingMode: 'outlined',
     selectionMode: 'multiple',
-    onItemClick: this.onItemClick,
+    onItemClick: (e: { itemData: { hint: string } }) => {
+      this.onButtonClick(e.itemData.hint);
+    },
   };
 
   listOptions = {
     items: this.listTypes,
     keyExpr: 'alignment',
     stylingMode: 'outlined',
-    onItemClick: this.onItemClick,
+    onItemClick: (e: { itemData: { hint: string } }) => {
+      this.onButtonClick(e.itemData.hint);
+    },
   };
 
   dateBoxOptions = {
     width: 200,
     type: 'date',
     value: new Date(2022, 9, 7),
+    onValueChanged: (): void => {
+      this.onDateBoxValueChanged();
+    },
   };
 
   checkBoxOptions = {
     value: false,
-    text: 'Checkbox text',
+    text: 'Navigation Pane',
     onOptionChanged: (): void => {
-      notify('Checkbox value has been changed!');
+      this.onCheckBoxValueChanged();
     },
   };
 
@@ -149,7 +159,7 @@ export class AppComponent {
     icon: 'attach',
     text: 'Attach',
     onClick: (): void => {
-      notify('Attach button has been clicked!');
+      this.onButtonClick('Attach');
     },
   };
 
@@ -157,7 +167,7 @@ export class AppComponent {
     icon: 'add',
     text: 'Add',
     onClick: (): void => {
-      notify('Add button has been clicked!');
+      this.onButtonClick('Add');
     },
   };
 
@@ -165,7 +175,7 @@ export class AppComponent {
     icon: 'trash',
     text: 'Remove',
     onClick: (): void => {
-      notify('Remove button has been clicked!');
+      this.onButtonClick('Remove');
     },
   };
 
@@ -173,14 +183,34 @@ export class AppComponent {
     icon: 'help',
     text: 'About',
     onClick: (): void => {
-      notify('About button has been clicked!');
+      this.onButtonClick('About');
     },
   };
 
   constructor(private service: Service) {}
 
-  onItemClick(e: { itemData: { hint: string } }): void {
-    notify(`The "${e.itemData.hint}" button was clicked`);
+  onTextAlignChanged(e: { itemData: { hint: string } }): void {
+    this.onButtonClick(e.itemData.hint);
+  }
+
+  onButtonClick(name: string) {
+    notify(`The "${name}" button was clicked`);
+  }
+
+  onSelectionChanged(name: string) {
+    notify(`The "${name}" value was changed`);
+  }
+
+  onCheckBoxValueChanged() {
+    notify('The "Navigation Pane" checkbox value was changed');
+  }
+
+  onDateBoxValueChanged() {
+    notify('The "DateBox" value was changed');
+  }
+
+  onFontFamilyClick() {
+    notify('The "Font Family" value was changed');
   }
 }
 

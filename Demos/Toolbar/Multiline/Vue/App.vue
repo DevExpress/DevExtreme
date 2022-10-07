@@ -226,7 +226,7 @@ export default {
           value: true,
         },
         {
-          text: 'Singleline mode',
+          text: 'Single-line mode',
           value: false,
         },
       ];
@@ -243,8 +243,8 @@ export default {
     undoButtonOptions() {
       return {
         icon: 'undo',
-        onClick() {
-          notify('Undo button has been clicked!');
+        onClick: () => {
+          this.onButtonClick('Undo');
         },
       };
     },
@@ -252,8 +252,8 @@ export default {
     redoButtonOptions() {
       return {
         icon: 'redo',
-        onClick() {
-          notify('Redo button has been clicked!');
+        onClick: () => {
+          this.onButtonClick('Redo');
         },
       };
     },
@@ -268,7 +268,7 @@ export default {
         itemTemplate: 'fontSizeTemplate',
         selectedItemKey: this.fontSize,
         onSelectionChanged: () => {
-          notify('Font size value has been changed!');
+          this.onSelectionChanged('Font Size');
         },
       };
     },
@@ -283,7 +283,7 @@ export default {
         items: lineHeights,
         selectedItemKey: this.lineHeight,
         onSelectionChanged: () => {
-          notify('Line height value has been changed!');
+          this.onSelectionChanged('Line Height');
         },
       };
     },
@@ -293,6 +293,9 @@ export default {
         placeholder: 'Font',
         displayExpr: 'text',
         dataSource: fontFamilies,
+        onItemClick: () => {
+          this.onFontFamilyClick();
+        },
       };
     },
 
@@ -303,8 +306,8 @@ export default {
         keyExpr: 'icon',
         stylingMode: 'outlined',
         selectionMode: 'multiple',
-        onItemClick(e) {
-          notify(`The "${e.itemData.hint}" button was clicked`);
+        onItemClick: (e) => {
+          this.onButtonClick(e.itemData.hint);
         },
       };
     },
@@ -314,8 +317,8 @@ export default {
         items: listTypes,
         keyExpr: 'alignment',
         stylingMode: 'outlined',
-        onItemClick(e) {
-          notify(`The "${e.itemData.hint}" button was clicked`);
+        onItemClick: (e) => {
+          this.onButtonClick(e.itemData.hint);
         },
       };
     },
@@ -325,15 +328,18 @@ export default {
         width: 200,
         type: 'date',
         value: new Date(2022, 9, 7),
+        onValueChanged: () => {
+          this.onDateBoxValueChanged();
+        },
       };
     },
 
     checkBoxOptions() {
       return {
         value: false,
-        text: 'Checkbox text',
-        onOptionChanged() {
-          notify('Checkbox value has been changed!');
+        text: 'Navigation Pane',
+        onOptionChanged: () => {
+          this.onCheckBoxValueChanged();
         },
       };
     },
@@ -342,8 +348,8 @@ export default {
       return {
         icon: 'attach',
         text: 'Attach',
-        onClick() {
-          notify('Attach button has been clicked!');
+        onClick: () => {
+          this.onButtonClick('Attach');
         },
       };
     },
@@ -352,8 +358,8 @@ export default {
       return {
         icon: 'add',
         text: 'Add',
-        onClick() {
-          notify('Add button has been clicked!');
+        onClick: () => {
+          this.onButtonClick('Add');
         },
       };
     },
@@ -362,8 +368,8 @@ export default {
       return {
         icon: 'trash',
         text: 'Remove',
-        onClick() {
-          notify('Remove button has been clicked!');
+        onClick: () => {
+          this.onButtonClick('Remove');
         },
       };
     },
@@ -372,8 +378,8 @@ export default {
       return {
         icon: 'help',
         text: 'About',
-        onClick() {
-          notify('About button has been clicked!');
+        onClick: () => {
+          this.onButtonClick('About');
         },
       };
     },
@@ -385,7 +391,27 @@ export default {
 
       this.textAlign = alignment;
 
-      notify(`The "${hint}" button was clicked`);
+      this.onButtonClick(hint);
+    },
+
+    onButtonClick(name) {
+      notify(`The "${name}" button was clicked`);
+    },
+
+    onSelectionChanged(name) {
+      notify(`The "${name}" value was changed`);
+    },
+
+    onCheckBoxValueChanged() {
+      notify('The "Navigation Pane" checkbox value was changed');
+    },
+
+    onDateBoxValueChanged() {
+      notify('The "DateBox" value was changed');
+    },
+
+    onFontFamilyClick() {
+      notify('The "Font Family" value was changed');
     },
   },
 };

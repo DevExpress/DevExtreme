@@ -31,33 +31,49 @@ const toolbarLineModes = [
     value: true,
   },
   {
-    text: 'Singleline mode',
+    text: 'Single-line mode',
     value: false,
   },
 ];
 
+function onButtonClick(name) {
+  notify(`The "${name}" button was clicked`);
+}
+
+function onSelectionChanged(name) {
+  notify(`The "${name}" value was changed`);
+}
+
 const attachButtonOptions = {
   icon: 'attach',
   text: 'Attach',
-  onClick: () => notify('Attach button has been clicked!'),
+  onClick: () => {
+    onButtonClick('Attach');
+  },
 };
 
 const addButtonOptions = {
   icon: 'add',
   text: 'Add',
-  onClick: () => notify('Add button has been clicked!'),
+  onClick: () => {
+    onButtonClick('Add');
+  },
 };
 
 const removeButtonOptions = {
   icon: 'trash',
   text: 'Remove',
-  onClick: () => notify('Remove button has been clicked!'),
+  onClick: () => {
+    onButtonClick('Remove');
+  },
 };
 
 const aboutButtonOptions = {
   icon: 'help',
   text: 'About',
-  onClick: () => notify('About button has been clicked!'),
+  onClick: () => {
+    onButtonClick('About');
+  },
 };
 
 function App() {
@@ -67,38 +83,49 @@ function App() {
   const [multiline, setMultiline] = React.useState(true);
   const [checkBoxValue, setCheckBoxValue] = React.useState(false);
 
-  const onItemClick = React.useCallback((e) => {
-    notify(`The "${e.itemData.hint}" button was clicked`);
+  const onDateBoxValueChanged = React.useCallback(() => {
+    notify('The "DateBox" value was changed');
+  }, []);
+
+  const onFontFamilyClick = React.useCallback(() => {
+    notify('The "Font Family" value was changed');
   }, []);
 
   const onUndoButtonClick = React.useCallback(() => {
-    notify('Undo button has been clicked!');
+    onButtonClick('Undo');
+  }, []);
+
+  const onButtonGroupClick = React.useCallback((e) => {
+    onButtonClick(e.itemData.hint);
   }, []);
 
   const onRedoButtonClick = React.useCallback(() => {
-    notify('Redo button has been clicked!');
+    onButtonClick('Redo');
   }, []);
 
-  const onCheckBoxChange = React.useCallback(({ value }) => {
+  const onCheckBoxValueChanged = React.useCallback(({ value }) => {
     setCheckBoxValue(value);
-    notify('Checkbox value has been changed!');
+    notify('The "Navigation Pane" checkbox value was changed');
   }, [setCheckBoxValue]);
 
-  const onLineHeightChange = React.useCallback((e) => {
+  const onLineHeightChanged = React.useCallback((e) => {
     setLineHeight(e.item.lineHeight);
-    notify('Line height value has been changed!');
+    onSelectionChanged('Line Height');
   }, [setLineHeight]);
 
   const onFontSizeChange = React.useCallback((e) => {
     setFontSize(e.item.size);
-    notify('Font size value has been changed!');
+    onSelectionChanged('Font Size');
   }, [setFontSize]);
 
-  const onTextAlignChange = React.useCallback((e) => {
-    setTextAlign([e.itemData.alignment]);
+  const onTextAlignChanged = React.useCallback((e) => {
+    const { alignment, hint } = e.itemData;
+
+    setTextAlign([alignment]);
+    onButtonClick(hint);
   }, [setTextAlign]);
 
-  const onToolbarLineModeChange = React.useCallback(({ value }) => {
+  const onToolbarLineModeChanged = React.useCallback(({ value }) => {
     setMultiline(value);
   }, [setMultiline]);
 
@@ -112,9 +139,9 @@ function App() {
       stylingMode="outlined"
       items={textAlignItems}
       selectedItemKeys={textAlign}
-      onItemClick={onTextAlignChange}
+      onItemClick={onTextAlignChanged}
     ></ButtonGroup>
-  ), [textAlign, textAlignItems, onTextAlignChange]);
+  ), [textAlign, textAlignItems, onTextAlignChanged]);
 
   const renderTextAlignMenu = React.useCallback(() => (
     <ButtonGroup
@@ -123,9 +150,9 @@ function App() {
       stylingMode="outlined"
       items={textAlignItemsExtended}
       selectedItemKeys={textAlign}
-      onItemClick={onTextAlignChange}
+      onItemClick={onTextAlignChanged}
     ></ButtonGroup>
-  ), [textAlign, textAlignItemsExtended, onTextAlignChange]);
+  ), [textAlign, textAlignItemsExtended, onTextAlignChanged]);
 
   const renderMenuSeparator = React.useCallback(() => <div className="toolbar-menu-separator"></div>, []);
 
@@ -186,7 +213,7 @@ function App() {
                 useSelectMode={true}
                 items={lineHeights}
                 selectedItemKey={lineHeight}
-                onSelectionChanged={onLineHeightChange}
+                onSelectionChanged={onLineHeightChanged}
               ></DropDownButton>
             </Item>
 
@@ -195,6 +222,7 @@ function App() {
                 placeholder="Font"
                 displayExpr="text"
                 dataSource={fontFamilies}
+                onItemClick={onFontFamilyClick}
               ></SelectBox>
             </Item>
 
@@ -213,7 +241,7 @@ function App() {
                 stylingMode="outlined"
                 selectionMode="multiple"
                 items={fontStyles}
-                onItemClick={onItemClick}
+                onItemClick={onButtonGroupClick}
               ></ButtonGroup>
             </Item>
 
@@ -234,7 +262,7 @@ function App() {
                 keyExpr="alignment"
                 stylingMode="outlined"
                 items={listTypes}
-                onItemClick={onItemClick}
+                onItemClick={onButtonGroupClick}
               ></ButtonGroup>
             </Item>
 
@@ -252,6 +280,7 @@ function App() {
                 width={200}
                 type="date"
                 value={dateBoxValue}
+                onValueChanged={onDateBoxValueChanged}
               ></DateBox>
             </Item>
 
@@ -267,8 +296,8 @@ function App() {
             <Item location="before" locateInMenu="auto">
               <CheckBox
                 value={checkBoxValue}
-                text="Checkbox text"
-                onValueChanged={onCheckBoxChange}
+                text="Navigation Pane"
+                onValueChanged={onCheckBoxValueChanged}
               ></CheckBox>
             </Item>
 
@@ -313,7 +342,7 @@ function App() {
           value={multiline}
           layout="horizontal"
           valueExpr="value"
-          onValueChanged={onToolbarLineModeChange}
+          onValueChanged={onToolbarLineModeChanged}
         ></RadioGroup>
       </div>
     </React.Fragment>

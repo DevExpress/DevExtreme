@@ -90,7 +90,7 @@ const textAlignsExtended: TextAlignExtended[] = [
   {
     icon: 'alignleft',
     alignment: 'left',
-    hint: 'Align left',
+    hint: 'Align Left',
     text: 'Align left',
   },
   {
@@ -102,7 +102,7 @@ const textAlignsExtended: TextAlignExtended[] = [
   {
     icon: 'alignright',
     alignment: 'right',
-    hint: 'Align right',
+    hint: 'Align Right',
     text: 'Align right',
   },
   {

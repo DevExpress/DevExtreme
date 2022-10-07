@@ -1,3 +1,23 @@
+const onButtonClick = (name) => {
+  DevExpress.ui.notify(`The "${name}" button was clicked`);
+};
+
+const onSelectionChanged = (name) => {
+  DevExpress.ui.notify(`The "${name}" value was changed`);
+};
+
+const onCheckBoxValueChanged = () => {
+  DevExpress.ui.notify('The "Navigation Pane" checkbox value was changed');
+};
+
+const onDateBoxValueChanged = () => {
+  DevExpress.ui.notify('The "DateBox" value was changed');
+};
+
+const onFontFamilyClick = () => {
+  DevExpress.ui.notify('The "Font Family" value was changed');
+};
+
 const toolbarSeparator = {
   cssClass: 'toolbar-separator-container',
   locateInMenu: 'auto',
@@ -21,7 +41,7 @@ const toolbarItems = [
     options: {
       icon: 'undo',
       onClick() {
-        DevExpress.ui.notify('Undo button has been clicked!');
+        onButtonClick('Undo');
       },
     },
   },
@@ -31,7 +51,7 @@ const toolbarItems = [
     options: {
       icon: 'redo',
       onClick() {
-        DevExpress.ui.notify('Redo button has been clicked!');
+        onButtonClick('Redo');
       },
     },
   },
@@ -53,7 +73,7 @@ const toolbarItems = [
           .css('font-size', `${itemData.size}px`);
       },
       onSelectionChanged() {
-        DevExpress.ui.notify('Font size value has been changed!');
+        onSelectionChanged('Font Size');
       },
     },
   },
@@ -70,7 +90,7 @@ const toolbarItems = [
       items: lineHeights,
       selectedItemKey: 1.35,
       onSelectionChanged() {
-        DevExpress.ui.notify('Line height value has been changed!');
+        onSelectionChanged('Line Height');
       },
     },
   },
@@ -82,6 +102,9 @@ const toolbarItems = [
       placeholder: 'Font',
       displayExpr: 'text',
       dataSource: fontFamilies,
+      onItemClick() {
+        onFontFamilyClick();
+      },
     },
   },
   toolbarSeparator,
@@ -95,7 +118,7 @@ const toolbarItems = [
       stylingMode: 'outlined',
       selectionMode: 'multiple',
       onItemClick(e) {
-        DevExpress.ui.notify(`The "${e.itemData.hint}" button was clicked`);
+        onButtonClick(e.itemData.hint);
       },
     },
   },
@@ -116,7 +139,7 @@ const toolbarItems = [
         stylingMode: 'outlined',
         selectedItemKeys: ['left'],
         onItemClick(e) {
-          DevExpress.ui.notify(`The "${e.itemData.hint}" button was clicked`);
+          onButtonClick(e.itemData.hint);
         },
       });
 
@@ -130,7 +153,7 @@ const toolbarItems = [
         stylingMode: 'outlined',
         selectedItemKeys: ['left'],
         onItemClick(e) {
-          DevExpress.ui.notify(`The "${e.itemData.hint}" button was clicked`);
+          onButtonClick(e.itemData.hint);
         },
       });
 
@@ -145,7 +168,7 @@ const toolbarItems = [
       keyExpr: 'alignment',
       stylingMode: 'outlined',
       onItemClick(e) {
-        DevExpress.ui.notify(`The "${e.itemData.hint}" button was clicked`);
+        onButtonClick(e.itemData.hint);
       },
     },
   },
@@ -158,6 +181,9 @@ const toolbarItems = [
       width: 200,
       type: 'date',
       value: new Date(2022, 9, 7),
+      onValueChanged() {
+        onDateBoxValueChanged();
+      },
     },
   },
   toolbarSeparator,
@@ -167,9 +193,9 @@ const toolbarItems = [
     widget: 'dxCheckBox',
     options: {
       value: false,
-      text: 'Checkbox text',
+      text: 'Navigation Pane',
       onOptionChanged() {
-        DevExpress.ui.notify('Checkbox value has been changed!');
+        onCheckBoxValueChanged();
       },
     },
   },
@@ -181,7 +207,7 @@ const toolbarItems = [
       icon: 'attach',
       text: 'Attach',
       onClick() {
-        DevExpress.ui.notify('Attach button has been clicked!');
+        onButtonClick('Attach');
       },
     },
   },
@@ -194,7 +220,7 @@ const toolbarItems = [
       icon: 'add',
       text: 'Add',
       onClick() {
-        DevExpress.ui.notify('Add button has been clicked!');
+        onButtonClick('Add');
       },
     },
   },
@@ -207,7 +233,7 @@ const toolbarItems = [
       icon: 'trash',
       text: 'Remove',
       onClick() {
-        DevExpress.ui.notify('Remove button has been clicked!');
+        onButtonClick('Remove');
       },
     },
   },
@@ -219,7 +245,7 @@ const toolbarItems = [
       icon: 'help',
       text: 'About',
       onClick() {
-        DevExpress.ui.notify('About button has been clicked!');
+        onButtonClick('About');
       },
     },
   },
@@ -246,7 +272,7 @@ $(() => {
         value: true,
       },
       {
-        text: 'Singleline mode',
+        text: 'Single-line mode',
         value: false,
       },
     ],

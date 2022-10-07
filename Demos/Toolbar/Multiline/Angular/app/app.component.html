@@ -87,7 +87,7 @@
             stylingMode="outlined"
             [items]="textAlignItems"
             [(selectedItemKeys)]="selectedTextAlign"
-            (onItemClick)="onItemClick($event)"
+            (onItemClick)="onTextAlignChanged($event)"
           ></dx-button-group>
         </div>
       </dxi-item>
@@ -179,7 +179,7 @@
           stylingMode="outlined"
           [items]="textAlignItemsExtended"
           [selectedItemKeys]="selectedTextAlign"
-          (onItemClick)="onItemClick($event)"
+          (onItemClick)="onTextAlignChanged($event)"
         ></dx-button-group>
       </div>
     </dx-toolbar>

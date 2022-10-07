@@ -46,7 +46,7 @@ const textAlignItemsExtended = [
   {
     icon: 'alignleft',
     alignment: 'left',
-    hint: 'Align left',
+    hint: 'Align Left',
     text: 'Align left',
   },
   {
@@ -58,7 +58,7 @@ const textAlignItemsExtended = [
   {
     icon: 'alignright',
     alignment: 'right',
-    hint: 'Align right',
+    hint: 'Align Right',
     text: 'Align right',
   },
   {
