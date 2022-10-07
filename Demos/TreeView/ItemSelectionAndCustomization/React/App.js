@@ -70,7 +70,7 @@ class App extends React.Component {
           <div className="options-container">
             <div className="option">
               <span>Show Check Boxes Mode:</span>
-              <div classNamelint="editor-container">
+              <div className="editor-container">
                 <SelectBox
                   items={this.state.showCheckBoxesModes}
                   value={this.state.showCheckBoxesMode}
