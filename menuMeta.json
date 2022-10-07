@@ -5589,7 +5589,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/LoadIndicator/Overview/",
             "Widget": "LoadIndicator"
           }
         ]
