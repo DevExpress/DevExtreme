@@ -642,9 +642,25 @@ class BaseRenderingStrategy {
     getAppointmentDataCalculator() {
     }
 
+    _calculateVerticalAppointmentHeight(height, appointmentCount, appointmentCountPerCell) {
+        const overlappingMode = this.maxAppointmentsPerCell;
+
+        let res;
+        if(isNumeric(overlappingMode)) {
+            const visibleAppointmentsCount = Math.min(appointmentCount, appointmentCountPerCell);
+            res = height / visibleAppointmentsCount;
+        } else {
+            res = height / appointmentCountPerCell;
+        }
+
+        return res;
+    }
+
     _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
-        const index = coordinates.index;
-        const appointmentHeight = height / appointmentCountPerCell;
+        const { index, count } = coordinates;
+
+        const appointmentHeight = this._calculateVerticalAppointmentHeight(height, count, appointmentCountPerCell);
+
         const appointmentTop = coordinates.top + (index * appointmentHeight);
         const top = appointmentTop + topOffset;
         const width = coordinates.width;
