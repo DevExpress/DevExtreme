@@ -24,16 +24,11 @@
             "matchPackageNames": [
               "eslint-config-devextreme",
               "rrule",
+              "sass-embedded",
               "sinon",
               "systemjs"
             ],
             "enabled": false
-        },
-        {
-            "matchPackageNames": [
-                "sass-embedded"
-              ],
-              "enabled": false
         },
         {
             "matchPackageNames": [ "typescript", "typescript-min" ],
