@@ -1228,7 +1228,7 @@ QUnit.module('options', () => {
         assert.equal(dropDownEditor.option('opened'), false, 'not opened by field click');
     });
 
-    QUnit.testInActiveWindow('Drop Down Popup does not close after opening when the "wrapperAttr" property is added to "dropDownOptions" on iOS (T1118164)', function(assert) {
+    QUnit.testInActiveWindow('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
         devices.current({ platform: 'ios' });
 
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
@@ -1248,7 +1248,7 @@ QUnit.module('options', () => {
         assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
     });
 
-    QUnit.testInActiveWindow('Drop Down Popup does not close when the "wrapperAttr" property is added after init on iOS (T1118164)', function(assert) {
+    QUnit.testInActiveWindow('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
         this.clock = sinon.useFakeTimers();
         devices.current({ platform: 'ios' });
 
