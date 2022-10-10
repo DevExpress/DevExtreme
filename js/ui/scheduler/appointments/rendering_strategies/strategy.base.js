@@ -642,13 +642,14 @@ class BaseRenderingStrategy {
     getAppointmentDataCalculator() {
     }
 
-    _calculateVerticalAppointmentHeight(height, appointmentCount, appointmentCountPerCell) {
+    _calculateVerticalAppointmentHeight(height, totalAppointments, appointmentCountPerCell) {
         const overlappingMode = this.maxAppointmentsPerCell;
 
         let res;
         if(isNumeric(overlappingMode)) {
-            const visibleAppointmentsCount = Math.min(appointmentCount, appointmentCountPerCell);
-            res = height / visibleAppointmentsCount;
+            const dynamicAppointmentsCount = this._getDynamicAppointmentCountPerCell().allDay || this._getDynamicAppointmentCountPerCell();
+            const calculatedAppointmentsCount = totalAppointments <= dynamicAppointmentsCount ? dynamicAppointmentsCount : Math.min(totalAppointments, appointmentCountPerCell);
+            res = height / calculatedAppointmentsCount;
         } else {
             res = height / appointmentCountPerCell;
         }
