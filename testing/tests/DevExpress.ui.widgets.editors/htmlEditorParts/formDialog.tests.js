@@ -11,6 +11,7 @@ const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const BUTTON_WITH_TEXT_CLASS = 'dx-button-has-text';
+const CUSTOM_CLASS = 'custom-class';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -29,6 +30,14 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module('FormDialog', moduleConfig, () => {
+    test('Dialog has dialog class when the "wrapperAttr" property is added to "popupOption"', function(assert) {
+        new FormDialog(this.componentMock, { wrapperAttr: { class: CUSTOM_CLASS } });
+
+        const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
+
+        assert.strictEqual($dialog.length, 1, 'There is element with the FormDialog class');
+    });
+
     test('render FormDialog', function(assert) {
         const formDialog = new FormDialog(this.componentMock);
         const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
