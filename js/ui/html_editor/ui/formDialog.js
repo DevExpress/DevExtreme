@@ -66,7 +66,7 @@ class FormDialog {
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
-            wrapperAttr: { class: 'dx-formdialog' },
+            wrapperAttr: { class: DIALOG_CLASS },
             fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
