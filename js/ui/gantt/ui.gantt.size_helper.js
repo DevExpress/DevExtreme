@@ -19,10 +19,17 @@ export class GanttSizeHelper {
         this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView));
     }
     _getPanelsWidthByOption() {
-        return {
-            leftPanelWidth: this._gantt.option('taskListWidth'),
-            rightPanelWidth: getWidth(this._gantt._$element) - this._gantt.option('taskListWidth')
-        };
+        const ganttWidth = getWidth(this._gantt._$element);
+        const leftPanelWidth = this._gantt.option('taskListWidth');
+        let rightPanelWidth;
+        if(!isNaN(leftPanelWidth)) {
+            rightPanelWidth = ganttWidth - parseInt(leftPanelWidth);
+        } else if(leftPanelWidth.indexOf?.('px') > 0) {
+            rightPanelWidth = (ganttWidth - parseInt(leftPanelWidth.replace('px', ''))) + 'px';
+        } else if(leftPanelWidth.indexOf?.('%') > 0) {
+            rightPanelWidth = (100 - parseInt(leftPanelWidth.replace('%', ''))) + '%';
+        }
+        return { leftPanelWidth: leftPanelWidth, rightPanelWidth: rightPanelWidth };
     }
 
     onAdjustControl() {
@@ -51,8 +58,11 @@ export class GanttSizeHelper {
         if(!hasWindow()) {
             return;
         }
-        if(!widths) {
+        if(!widths) { // option changed
             widths = this._getPanelsWidthByOption();
+            this._gantt._splitter._setSplitterPositionLeft({ splitterPositionLeft: widths.leftPanelWidth });
+            this._setTreeListDimension('width', 0);
+            this._setGanttViewDimension('width', 0);
         }
         this._setTreeListDimension('width', widths.leftPanelWidth);
         this._setGanttViewDimension('width', widths.rightPanelWidth);

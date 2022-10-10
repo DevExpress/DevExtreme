@@ -21,10 +21,25 @@ QUnit.module('Options', moduleConfig, () => {
     test('taskListWidth', function(assert) {
         this.createInstance(options.tasksOnlyOptions);
         this.clock.tick();
+        this.instance.option('width', 1000);
         const treeListWrapperElement = this.$element.find(Consts.TREELIST_WRAPPER_SELECTOR);
-        assert.roughEqual(treeListWrapperElement.width(), 300, 0.01, '300px');
-        this.instance.option('taskListWidth', 500);
-        assert.equal(treeListWrapperElement.width(), 500, '500px');
+        const splitterWrapper = this.$element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
+        const ganttWrapperElement = this.$element.find(Consts.GANTT_VIEW_SELECTOR);
+
+        this.instance.option('taskListWidth', 300);
+        assert.roughEqual(treeListWrapperElement.width(), 300, 3, '300px');
+        assert.roughEqual(parseFloat(splitterWrapper.css('left')), 300, 3, 'splitter position 300');
+        assert.roughEqual(ganttWrapperElement.width(), 700, 3, '700px');
+
+        this.instance.option('taskListWidth', '400px');
+        assert.equal(treeListWrapperElement.width(), 400, '500px');
+        assert.equal(parseFloat(splitterWrapper.css('left')), 400, 'splitter position 400');
+        assert.roughEqual(ganttWrapperElement.width(), 600, 3, '600px');
+
+        this.instance.option('taskListWidth', '10%');
+        assert.roughEqual(treeListWrapperElement.width(), 100, 1, '100px');
+        assert.roughEqual(parseFloat(splitterWrapper.css('left')), 100, 1, 'splitter position 100');
+        assert.roughEqual(ganttWrapperElement.width(), 900, 3, '900px');
     });
     test('showResources', function(assert) {
         this.createInstance(options.allSourcesOptions);
