@@ -8,6 +8,7 @@ import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { extend } from 'core/utils/extend';
+import devices from 'core/devices';
 
 import 'generic_light.css!';
 
@@ -1136,6 +1137,46 @@ QUnit.module('common use cases', {
         this.listItems = this.list.itemElements();
     }
 }, () => {
+    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
+        devices.current({ platform: 'ios' });
+
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            dropDownOptions: {
+                wrapperAttr: {
+                    class: 'custom-class',
+                },
+            },
+        });
+
+        const $button = $dropDownButton.find('.dx-button');
+        const dropDownButton = $dropDownButton.dxDropDownButton('instance');
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(dropDownButton.option('opened'), true, 'DropDownButton is opened');
+    });
+
+    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
+        this.clock = sinon.useFakeTimers();
+        devices.current({ platform: 'ios' });
+
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            openOnFieldClick: true,
+        });
+
+        const $button = $dropDownButton.find('.dx-button');
+        const dropDownButton = $dropDownButton.dxDropDownButton('instance');
+
+        this.clock.setTimeout(50);
+
+        dropDownButton.option('dropDownOptions.wrapperAttr.class', 'custom-class');
+        $button.trigger('dxclick');
+
+        assert.strictEqual(dropDownButton.option('opened'), true, 'DropDownButton is opened');
+
+        this.clock.restore();
+    });
+
     QUnit.test('dataSource store should have correct key', function(assert) {
         const dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
