@@ -1183,6 +1183,50 @@ QUnit.module('Templates', () => {
     }
 });
 
+QUnit.module('Drop Down Popup', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        devices.current({ platform: 'ios' });
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            openOnFieldClick: true,
+            dropDownOptions: {
+                wrapperAttr: {
+                    class: 'custom-class',
+                },
+            },
+        });
+
+        const $input = $dropDownEditor.find('.dx-texteditor-input');
+        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+        $input.trigger('dxclick');
+
+        assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
+    });
+
+    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            openOnFieldClick: true,
+        });
+
+        const $input = $dropDownEditor.find('.dx-texteditor-input');
+        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+        this.clock.tick(500);
+
+        dropDownEditor.option('dropDownOptions.wrapperAttr.class', 'custom-class');
+        $input.trigger('dxclick');
+
+        assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
+    });
+});
+
 QUnit.module('options', () => {
     QUnit.test('acceptCustomValue', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
@@ -1226,50 +1270,6 @@ QUnit.module('options', () => {
 
         $input.trigger('dxclick');
         assert.equal(dropDownEditor.option('opened'), false, 'not opened by field click');
-    });
-
-    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
-        devices.current({ platform: 'ios' });
-
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            openOnFieldClick: true,
-            dropDownOptions: {
-                wrapperAttr: {
-                    class: 'custom-class',
-                },
-            },
-        });
-
-        const $input = $dropDownEditor.find('.dx-texteditor-input');
-        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-
-        $input.trigger('dxclick');
-
-        assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
-    });
-
-    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
-        this.clock = sinon.useFakeTimers();
-
-        try {
-            devices.current({ platform: 'ios' });
-
-            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-                openOnFieldClick: true,
-            });
-
-            const $input = $dropDownEditor.find('.dx-texteditor-input');
-            const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-
-            this.clock.tick(500);
-
-            dropDownEditor.option('dropDownOptions.wrapperAttr.class', 'custom-class');
-            $input.trigger('dxclick');
-
-            assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
-        } finally {
-            this.clock.restore();
-        }
     });
 
     QUnit.testInActiveWindow('focus editor in the case when \'openOnFieldClick\' is false', function(assert) {
