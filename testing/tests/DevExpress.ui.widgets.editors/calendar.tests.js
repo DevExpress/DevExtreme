@@ -1559,9 +1559,9 @@ QUnit.module('Options', {
         { weekNumberRule: 'firstFullWeek', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
     ].forEach(({ weekNumberRule, firstDayOfWeek, expectedCalls }) => {
         QUnit.test('weekNumberRule option', function(assert) {
-            const isoWeekNumberSpy = sinon.spy(dateUtils, 'getISO8601WeekOfYear');
-            const weekNumberSpy = sinon.spy(dateUtils, 'getWeekNumberFirstDayOfYear');
-            const weekNumberFullSpy = sinon.spy(dateUtils, 'getWeekNumberFirstFullWeekOfYear');
+            const getISO8601WeekOfYearSpy = sinon.spy(dateUtils, 'getISO8601WeekOfYear');
+            const getWeekNumberFirstDayOfYearSpy = sinon.spy(dateUtils, 'getWeekNumberFirstDayOfYear');
+            const getWeekNumberFirstFullWeekOfYearSpy = sinon.spy(dateUtils, 'getWeekNumberFirstFullWeekOfYear');
 
             this.calendar.option({
                 firstDayOfWeek,
@@ -1570,9 +1570,13 @@ QUnit.module('Options', {
                 currentDate: new Date(2020, 0, 1),
             });
 
-            assert.strictEqual(isoWeekNumberSpy.callCount, expectedCalls.getISO8601WeekOfYear, 'getISO8601WeekOfYear.callCount');
-            assert.strictEqual(weekNumberSpy.callCount, expectedCalls.getWeekNumberFirstDayOfYear, 'weekNumberSpy.callCount');
-            assert.strictEqual(weekNumberFullSpy.callCount, expectedCalls.getWeekNumberFirstFullWeekOfYear, 'weekNumberFullSpy.callCount');
+            assert.strictEqual(getISO8601WeekOfYearSpy.callCount, expectedCalls.getISO8601WeekOfYear, 'getISO8601WeekOfYear.callCount');
+            assert.strictEqual(getWeekNumberFirstDayOfYearSpy.callCount, expectedCalls.getWeekNumberFirstDayOfYear, 'weekNumberSpy.callCount');
+            assert.strictEqual(getWeekNumberFirstFullWeekOfYearSpy.callCount, expectedCalls.getWeekNumberFirstFullWeekOfYear, 'weekNumberFullSpy.callCount');
+
+            getISO8601WeekOfYearSpy.restore();
+            getWeekNumberFirstDayOfYearSpy.restore();
+            getWeekNumberFirstFullWeekOfYearSpy.restore();
         });
     });
 
