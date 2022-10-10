@@ -46,7 +46,7 @@ export default {
     const { FirstName, LastName } = this.templateData.data;
     return {
       dataSource: this.getTasks(this.templateData.key),
-      detailInfo: `${FirstName} ${LastName}'s Tasks`,
+      detailInfo: `${FirstName} ${LastName}'s Tasks:`,
     };
   },
   methods: {

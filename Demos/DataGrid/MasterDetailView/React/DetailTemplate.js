@@ -17,7 +17,7 @@ class DetailTemplate extends React.Component {
     return (
       <React.Fragment>
         <div className="master-detail-caption">
-          {`${FirstName} ${LastName}'s Tasks`}
+          {`${FirstName} ${LastName}'s Tasks:`}
         </div>
         <DataGrid
           dataSource={this.dataSource}
