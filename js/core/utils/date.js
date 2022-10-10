@@ -502,12 +502,91 @@ function getFirstWeekDate(date, firstDayOfWeek) {
     return result;
 }
 
-function getWeekNumber(date, firstDayOfWeekIndex = 0) {
-    const yearFirstDay = new Date(date.getFullYear(), 0, 1);
-    const differenceInDays = dateUtils.getDatesInterval(yearFirstDay, date, 'day');
-    const week = Math.floor((differenceInDays + (7 - firstDayOfWeekIndex) - 1) / 7) + 1;
+function getFirstDayOfYear(date) {
+    return new Date(date.getFullYear(), 0, 1);
+}
 
-    return week;
+function getUTCTime(date) {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getDayOfYear(date) {
+    const ms = getUTCTime(date) - getUTCTime(getFirstDayOfYear(date));
+
+    return 1 + Math.floor(ms / toMilliseconds('day'));
+}
+
+function getFullWeeks(date, firstDayOfWeek) {
+    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
+
+    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
+
+    const daysInFirstWeek = 8 - firstDayOfYear;
+
+    return Math.ceil((getDayOfYear(date) - daysInFirstWeek) / 7);
+}
+
+function getWeekNumberFirstFullWeekOfYear(date, firstDayOfWeek) {
+    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
+
+    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
+
+    const daysInFirstWeek = 8 - firstDayOfYear;
+
+    let result = getFullWeeks(date, firstDayOfWeek);
+
+    if(daysInFirstWeek === 7) { result++; }
+
+    if(result === 0) { return getWeekNumberFirstFullWeekOfYear(new Date(date.getFullYear() - 1, 11, 31), firstDayOfWeek); }
+
+    return result;
+}
+
+function getWeekNumberFirstDayOfYear(date, firstDayOfWeek) {
+    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
+
+    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
+
+    const daysInFirstWeek = 8 - firstDayOfYear;
+    const lastDate = new Date(date.getFullYear(), 11, 31);
+
+    let lastDayOfWeek = lastDate.getDay() - firstDayOfWeek + 1;
+
+    if(lastDayOfWeek <= 0) { lastDayOfWeek += 7; }
+
+    let result = getFullWeeks(date, firstDayOfWeek);
+
+    if(daysInFirstWeek > 0) { result++; }
+
+    const isSunday = firstDayOfYear === 7 || lastDayOfWeek === 7;
+
+    if((result > 52 && !isSunday) || result === 54) { result = 1; }
+
+    return result;
+}
+
+function getISO8601WeekOfYear(date, firstDayOfWeek) {
+    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
+
+    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
+
+    const daysInFirstWeek = 8 - firstDayOfYear;
+    const lastDate = new Date(date.getFullYear(), 11, 31);
+
+    let lastDayOfWeek = lastDate.getDay() - firstDayOfWeek + 1;
+
+    if(lastDayOfWeek <= 0) { lastDayOfWeek += 7; }
+
+    let result = getFullWeeks(date, firstDayOfWeek);
+
+    if(daysInFirstWeek > 3) { result++; }
+
+    const isThursday = firstDayOfYear === 4 || lastDayOfWeek === 4;
+
+    if(result > 52 && !isThursday) { result = 1; }
+    if(result === 0) { return getISO8601WeekOfYear(new Date(date.getFullYear() - 1, 11, 31), firstDayOfWeek); }
+
+    return result;
 }
 
 const normalizeDateByWeek = function(date, currentDate) {
@@ -680,7 +759,9 @@ const dateUtils = {
     getLastMonthDate: getLastMonthDate,
     getFirstMonthDate: getFirstMonthDate,
     getFirstWeekDate: getFirstWeekDate,
-    getWeekNumber: getWeekNumber,
+    getWeekNumberFirstDayOfYear: getWeekNumberFirstDayOfYear,
+    getWeekNumberFirstFullWeekOfYear: getWeekNumberFirstFullWeekOfYear,
+    getISO8601WeekOfYear: getISO8601WeekOfYear,
     normalizeDateByWeek: normalizeDateByWeek,
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,

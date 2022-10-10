@@ -7678,6 +7678,15 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
+    /** public */
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type WeekNumberRule =
+      | 'default'
+      | 'firstDay'
+      | 'firstFullWeek'
+      | 'firstFourDayWeek';
   }
   /**
    * @deprecated use Properties instead
@@ -7748,6 +7757,10 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.showWeekNumbers]
      */
     showWeekNumbers?: boolean;
+    /**
+     * [descr:dxCalendarOptions.weekNumberRule]
+     */
+    weekNumberRule?: DevExpress.ui.dxCalendar.WeekNumberRule;
     /**
      * [descr:dxCalendarOptions.value]
      */

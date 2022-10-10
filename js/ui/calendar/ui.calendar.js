@@ -18,6 +18,7 @@ import devices from '../../core/devices';
 import fx from '../../animation/fx';
 import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
+import dateLocalization from '../../localization/date';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { isCommandKeyPressed } from '../../events/utils/index';
 
@@ -95,6 +96,8 @@ const Calendar = Editor.inherit({
             showTodayButton: false,
 
             showWeekNumbers: false,
+
+            weekNumberRule: 'default',
 
             cellTemplate: 'cell',
 
@@ -640,12 +643,14 @@ const Calendar = Editor.inherit({
         let disabledDates = this.option('disabledDates');
 
         disabledDates = isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
+
         return {
             date: date,
             min: this._getMinDate(),
             max: this._getMaxDate(),
-            firstDayOfWeek: this.option('firstDayOfWeek'),
+            firstDayOfWeek: this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex(),
             showWeekNumbers: this.option('showWeekNumbers'),
+            weekNumberRule: this.option('weekNumberRule'),
             zoomLevel: this.option('zoomLevel'),
             value: this._dateOption('value'),
             tabIndex: undefined,
@@ -1235,6 +1240,7 @@ const Calendar = Editor.inherit({
                 break;
             case '_todayDate':
             case 'showWeekNumbers':
+            case 'weekNumberRule':
                 this._refreshViews();
                 break;
             default:
