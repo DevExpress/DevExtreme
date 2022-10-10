@@ -529,18 +529,8 @@ const SelectBox = DropDownList.inherit({
         }).bind(this));
     },
 
-    _valueChangeEventIncludesBlur: function() {
-        const valueChangeEvent = this.option('valueChangeEvent');
-
-        return valueChangeEvent.includes('blur');
-    },
-
-    _isPreventedNestedFocusOrIncludedBlur: function(e) {
-        return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
-    },
-
     _focusOutHandler: function(e) {
-        if(!this._isPreventedNestedFocusOrIncludedBlur(e)) {
+        if(!this._preventNestedFocusEvent(e)) {
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
             if(!isOverlayTarget) {
