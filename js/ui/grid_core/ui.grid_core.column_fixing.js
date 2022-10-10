@@ -124,7 +124,7 @@ const baseFixedColumns = {
                 columns: this._columnsController.getVisibleColumns()
             });
 
-            colspan = groupCellOptions.colspan - [...cellElements].slice(groupCellOptions.columnIndex + 2).length;
+            colspan = groupCellOptions.colspan - Math.max(0, cellElements.length - (groupCellOptions.columnIndex + 2));
         }
 
         for(let j = 0; j < cellElements.length; j++) {
