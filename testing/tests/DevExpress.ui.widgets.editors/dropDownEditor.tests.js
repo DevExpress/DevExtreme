@@ -1250,23 +1250,26 @@ QUnit.module('options', () => {
 
     QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
         this.clock = sinon.useFakeTimers();
-        devices.current({ platform: 'ios' });
 
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            openOnFieldClick: true,
-        });
+        try {
+            devices.current({ platform: 'ios' });
 
-        const $input = $dropDownEditor.find('.dx-texteditor-input');
-        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                openOnFieldClick: true,
+            });
 
-        this.clock.setTimeout(50);
+            const $input = $dropDownEditor.find('.dx-texteditor-input');
+            const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
 
-        dropDownEditor.option('dropDownOptions.wrapperAttr.class', 'custom-class');
-        $input.trigger('dxclick');
+            this.clock.tick(500);
 
-        assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
+            dropDownEditor.option('dropDownOptions.wrapperAttr.class', 'custom-class');
+            $input.trigger('dxclick');
 
-        this.clock.restore();
+            assert.strictEqual(dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
+        } finally {
+            this.clock.restore();
+        }
     });
 
     QUnit.testInActiveWindow('focus editor in the case when \'openOnFieldClick\' is false', function(assert) {

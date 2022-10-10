@@ -1158,23 +1158,26 @@ QUnit.module('common use cases', {
 
     QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
         this.clock = sinon.useFakeTimers();
-        devices.current({ platform: 'ios' });
 
-        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
-            openOnFieldClick: true,
-        });
+        try {
+            devices.current({ platform: 'ios' });
 
-        const $button = $dropDownButton.find('.dx-button');
-        const dropDownButton = $dropDownButton.dxDropDownButton('instance');
+            const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+                openOnFieldClick: true,
+            });
 
-        this.clock.setTimeout(50);
+            const $button = $dropDownButton.find('.dx-button');
+            const dropDownButton = $dropDownButton.dxDropDownButton('instance');
 
-        dropDownButton.option('dropDownOptions.wrapperAttr.class', 'custom-class');
-        $button.trigger('dxclick');
+            this.clock.tick(500);
 
-        assert.strictEqual(dropDownButton.option('opened'), true, 'DropDownButton is opened');
+            dropDownButton.option('dropDownOptions.wrapperAttr.class', 'custom-class');
+            $button.trigger('dxclick');
 
-        this.clock.restore();
+            assert.strictEqual(dropDownButton.option('opened'), true, 'DropDownButton is opened');
+        } finally {
+            this.clock.restore();
+        }
     });
 
     QUnit.test('dataSource store should have correct key', function(assert) {
