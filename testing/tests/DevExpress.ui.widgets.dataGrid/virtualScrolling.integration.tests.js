@@ -10,6 +10,7 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'animation/translator';
 import dataUtils from 'core/element_data';
+import ODataStore from 'data/odata/store';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
@@ -7441,6 +7442,63 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.equal(spyLoad.callCount, 7, 'load count is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].skip, 120, 'skip is not changed after scrolling up');
         assert.equal(spyLoad.args[spyLoad.callCount - 1][0].take, 20, 'take is not changed after scrolling up');
+    });
+
+    QUnit.test('There should be no extraneous data being requested when searching or resetting search via searchPanel(T1118229)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 30; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`,
+                    rating: i % 3
+                });
+            }
+            return items;
+        };
+
+        const store = new ODataStore({
+            key: 'id',
+            url: 'test',
+            data: getData(),
+            filter: ['rating', '>', 1],
+        });
+
+        store.load = sinon.spy(function(parameters) {
+            return $.Deferred().resolve(getData().slice(parameters.skip, parameters.take));
+        });
+
+        const dataGrid = createDataGrid({
+            height: 300,
+            showBorders: true,
+            searchPanel: { visible: true },
+            paging: {
+                pageSize: 10
+            },
+            dataSource: store,
+            remoteOperations: true,
+            pager: { visible: true },
+            scrolling: { mode: 'infinite' },
+        });
+        // act
+        this.clock.tick(300);
+
+        dataGrid.getScrollable().scrollTo({ top: 4000 });
+        this.clock.tick(300);
+
+        dataGrid.option('searchPanel.text', '12345');
+        this.clock.tick();
+
+        // assert
+        assert.equal(store.load.lastCall.args[0].take, 10, 'only a single page is requested');
+
+        // act
+        dataGrid.option('searchPanel.text', '');
+        this.clock.tick();
+
+        // assert
+        assert.equal(store.load.lastCall.args[0].take, 10, 'only a single page is requested');
     });
 
     QUnit.test('Refresh call should not reset scroll position during scrolling (T1076187)', function(assert) {
