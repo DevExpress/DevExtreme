@@ -5138,12 +5138,14 @@ QUnit.module('the "valueChangeEvent" option', {
 
     eventCouples.forEach((eventValue) => {
         QUnit.testInActiveWindow(`custom item has been added when valueChangeEvent='${eventValue}'`, function(assert) {
-            const { $input, customValue, keyboard, instance, onCustomItemCreatingSpy } = this;
+            const { $input, customValue, instance, onCustomItemCreatingSpy } = this;
 
             instance.option('valueChangeEvent', eventValue);
             const [firstEvent, secondEvent] = eventValue.split(' ');
 
-            keyboard.type(customValue);
+            instance.focus();
+            $input.val(customValue);
+
             $input.trigger(firstEvent);
             $input.trigger(secondEvent);
 
