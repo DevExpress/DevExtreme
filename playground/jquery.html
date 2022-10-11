@@ -32,23 +32,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="tagBox"></div>
+    <div id="button"></div>
     <script>
         $(function() {
-            $('#tagBox').dxTagBox({
-                items: ['item 1'],
-                acceptCustomValue: true,
-                focusStateEnabled: true,
-                valueChangeEvent: 'keyup blur',
-                onCustomItemCreating: (args) => {
-                    const { component, text } = args
-                    const currentItems = component.option('items');
-                    
-                    currentItems.push(text);
-                    component.option('items', currentItems);
-                    console.log(currentItems)
-                    args.customItem = text;
-                },
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
