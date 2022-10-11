@@ -638,7 +638,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupShowingHandler() {
-        $(this._popup.$wrapper()).addClass(DROP_DOWN_EDITOR_OVERLAY);
+        this._popup.$wrapper().addClass(DROP_DOWN_EDITOR_OVERLAY);
     },
 
     _popupHidingHandler: function() {
