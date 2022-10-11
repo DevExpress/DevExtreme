@@ -92,6 +92,16 @@ const subscribes = {
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
+        if(newCellIndex === -1) {
+            if(event.fromComponent === event.toComponent) {
+                this._appointments.moveAppointmentBack(event);
+                return;
+            } else {
+                return;
+            }
+        }
+
+
         if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, (function() {
 
