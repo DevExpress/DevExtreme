@@ -69,9 +69,9 @@
       </div>
     </div>
     <div class="dx-fieldset">
-      <div class="dx-fieldset-header">Handle Value Change</div>
+      <div class="dx-fieldset-header">Process Value Changes</div>
       <div class="dx-field">
-        <div class="dx-field-label">On slider handle moving</div>
+        <div class="dx-field-label">On handle movement</div>
         <div class="dx-field-value">
           <DxSlider
             v-model:value="sliderValue"
@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="dx-field">
-        <div class="dx-field-label">On moving complete</div>
+        <div class="dx-field-label">On handle release</div>
         <div class="dx-field-value">
           <DxSlider
             v-model:value="sliderValue"

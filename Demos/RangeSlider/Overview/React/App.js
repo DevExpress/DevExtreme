@@ -79,9 +79,9 @@ class App extends React.Component {
           </div>
         </div>
         <div className="dx-fieldset">
-          <div className="dx-fieldset-header">Handle Value Change</div>
+          <div className="dx-fieldset-header">Process Value Changes</div>
           <div className="dx-field">
-            <div className="dx-field-label">On slider handle moving</div>
+            <div className="dx-field-label">On handle movement</div>
             <div className="dx-field-value">
               <RangeSlider
                 min={0}
@@ -92,7 +92,7 @@ class App extends React.Component {
             </div>
           </div>
           <div className="dx-field">
-            <div className="dx-field-label">On moving complete</div>
+            <div className="dx-field-label">On handle release</div>
             <div className="dx-field-value">
               <RangeSlider
                 min={0}
