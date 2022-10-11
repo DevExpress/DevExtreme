@@ -136,7 +136,7 @@ test('appointments should have correct height in month view', async (t) => {
   new Date('2021-03-28T19:00:00.000Z'),
   new Date('2021-03-31T19:00:00.000Z'),
 ].forEach((currentDate) => {
-  const apptsCount = data.filter((it) => it.startDate === currentDate);
+  const apptsCount = data.filter((it) => it.startDate.toString() === currentDate.toString());
   test(`appointments should have correct height in timelineWeek view with ${apptsCount} appointments`, async (t) => {
     const {
       takeScreenshot,
