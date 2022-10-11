@@ -5122,36 +5122,6 @@ QUnit.module('the "valueChangeEvent" option', {
             assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
         });
     });
-
-    const eventCouples = [
-        'keyup blur',
-        'keyup change',
-        'keyup input',
-        'keyup focusout',
-        'blur change',
-        'blur input',
-        'blur focusout',
-        'change input',
-        'change focusout',
-        'input focusout',
-    ];
-
-    eventCouples.forEach((eventValue) => {
-        QUnit.testInActiveWindow(`custom item has been added when valueChangeEvent='${eventValue}'`, function(assert) {
-            const { $input, customValue, instance, onCustomItemCreatingSpy } = this;
-
-            instance.option('valueChangeEvent', eventValue);
-            const [firstEvent, secondEvent] = eventValue.split(' ');
-
-            instance.focus();
-            $input.val(customValue);
-
-            $input.trigger(firstEvent);
-            $input.trigger(secondEvent);
-
-            assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
-        });
-    });
 });
 
 QUnit.module('options changing', moduleSetup, () => {
