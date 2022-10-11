@@ -73,7 +73,7 @@ const data = [{
 
     t
       .expect(await takeScreenshot(
-        'maxAppointmentsPerCell-allDay.png',
+        `maxAppointmentsPerCell-${currentView}.png`,
         scheduler.element,
       ))
       .ok()
