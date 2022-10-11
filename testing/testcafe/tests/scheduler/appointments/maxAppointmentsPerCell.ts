@@ -57,14 +57,87 @@ const data = [{
   startDate: new Date('2021-03-31T19:00:00.000Z'),
   endDate: new Date('2021-03-31T20:00:00.000Z'),
   allDay: true,
+}, {
+  text: 'test_4_5',
+  startDate: new Date('2021-03-31T19:00:00.000Z'),
+  endDate: new Date('2021-03-31T20:00:00.000Z'),
+  allDay: true,
 }];
 
+test('appointments should have correct height in week view with all day', async (t) => {
+  const {
+    takeScreenshot,
+    compareResults,
+  } = createScreenshotsComparer(t);
+  const scheduler = new Scheduler('#container');
+
+  t
+    .expect(await takeScreenshot(
+      'maxAppointmentsPerCell-allDay.png',
+      scheduler.element,
+    ))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await restoreBrowserSize(t);
+  await createWidget(
+    'dxScheduler',
+    {
+      timeZone: 'America/Los_Angeles',
+      maxAppointmentsPerCell: 3,
+      dataSource: data,
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date('2021-03-28T18:00:00.000Z'),
+      allDayPanelMode: 'allDay',
+      startDayHour: 11,
+      height: 834,
+    },
+    true,
+  );
+});
+
+test('appointments should have correct height in month view', async (t) => {
+  const {
+    takeScreenshot,
+    compareResults,
+  } = createScreenshotsComparer(t);
+  const scheduler = new Scheduler('#container');
+
+  t
+    .expect(await takeScreenshot(
+      'maxAppointmentsPerCell-month.png',
+      scheduler.element,
+    ))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await restoreBrowserSize(t);
+  await createWidget(
+    'dxScheduler',
+    {
+      timeZone: 'America/Los_Angeles',
+      maxAppointmentsPerCell: 4,
+      dataSource: data,
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date('2021-03-28T18:00:00.000Z'),
+      allDayPanelMode: 'allDay',
+      startDayHour: 11,
+      height: 834,
+    },
+    true,
+  );
+});
+
 [
-  'week',
-  'month',
-  'timelineWeek',
-].forEach((currentView) => {
-  test(`appointments should have correct height in ${currentView} view`, async (t) => {
+  new Date('2021-03-28T19:00:00.000Z'),
+  new Date('2021-03-31T19:00:00.000Z'),
+].forEach((currentDate) => {
+  const apptsCount = data.filter((it) => it.startDate === currentDate);
+  test(`appointments should have correct height in timelineWeek view with ${apptsCount} appointments`, async (t) => {
     const {
       takeScreenshot,
       compareResults,
@@ -73,7 +146,7 @@ const data = [{
 
     t
       .expect(await takeScreenshot(
-        `maxAppointmentsPerCell-${currentView}.png`,
+        `maxAppointmentsPerCell-timelineWeek-${apptsCount}-appointments.png`,
         scheduler.element,
       ))
       .ok()
@@ -85,11 +158,11 @@ const data = [{
       'dxScheduler',
       {
         timeZone: 'America/Los_Angeles',
-        maxAppointmentsPerCell: currentView.length,
+        maxAppointmentsPerCell: 20,
         dataSource: data,
-        views: ['week', 'month', 'timelineWeek'],
-        currentView,
-        currentDate: new Date('2021-03-28T18:00:00.000Z'),
+        views: ['timelineWeek'],
+        currentView: 'timelineWeek',
+        currentDate,
         allDayPanelMode: 'allDay',
         startDayHour: 11,
         height: 834,
