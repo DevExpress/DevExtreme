@@ -3368,3 +3368,62 @@ test('Window should not be scrolled after clicking on freespace row (T1104035)',
   keyExpr: 'id',
   height: 1500,
 }));
+
+test('edit => scroll => command, should not result in grid scrolling back to edit', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.wait(100);
+  await ClientFunction(() => {
+    const grid = ($('#container') as any).dxDataGrid('instance');
+    setTimeout(() => {
+      grid.getCellElement(1, 1).trigger('dxclick');
+      setTimeout(() => {
+        grid.getScrollable().scrollTo({ x: 10000 });
+        setTimeout(() => { $('.dx-link-delete').first().trigger('focusin'); },
+          100);
+      }, 100);
+    }, 500);
+  })();
+
+  await t.wait(1000)
+    .expect(dataGrid.getScrollLeft())
+    .notEql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  width: 900,
+  scrolling: {
+    useNative: false,
+  },
+  dataSource: [
+    {
+      ID: 1, Prefix: '1', FirstName: '1', LastName: '1', StateID: '1', BirthDate: '1',
+    }, {
+      ID: 2, Prefix: '2', FirstName: '2', LastName: '2', StateID: '2', BirthDate: '2',
+    },
+  ],
+  columns: [
+    {
+      dataField: 'Prefix',
+      caption: 'Title',
+      width: 200,
+    },
+    { dataField: 'FirstName', width: 200 },
+    { dataField: 'LastName', width: 200 }, {
+      dataField: 'Position',
+      width: 200,
+    }, {
+      dataField: 'StateID',
+      caption: 'State',
+      width: 200,
+
+    }, {
+      dataField: 'BirthDate',
+      dataType: 'date',
+      width: 200,
+    },
+  ],
+}));
