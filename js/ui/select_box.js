@@ -715,6 +715,11 @@ const SelectBox = DropDownList.inherit({
     _customItemAddedHandler: function(e) {
         const searchValue = this._searchValue();
 
+        if(!searchValue) {
+            this._isValueChanging = false;
+            return;
+        }
+
         const item = this._createCustomItem(searchValue);
 
         this._saveValueChangeEvent(e);
