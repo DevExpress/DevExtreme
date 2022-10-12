@@ -136,8 +136,8 @@ test('appointments should have correct height in month view', async (t) => {
   new Date('2021-03-28T19:00:00.000Z'),
   new Date('2021-03-31T19:00:00.000Z'),
 ].forEach((currentDate) => {
-  const apptsCount = data.filter((it) => it.startDate.toString() === currentDate.toString());
-  test(`appointments should have correct height in timelineWeek view with ${apptsCount} appointments`, async (t) => {
+  const apptsCount = data.filter((it) => it.startDate.toString() === currentDate.toString()).length;
+  test(`appointments should have correct height in timelineDay view with ${apptsCount} appointments`, async (t) => {
     const {
       takeScreenshot,
       compareResults,
@@ -160,8 +160,8 @@ test('appointments should have correct height in month view', async (t) => {
         timeZone: 'America/Los_Angeles',
         maxAppointmentsPerCell: 20,
         dataSource: data,
-        views: ['timelineWeek'],
-        currentView: 'timelineWeek',
+        views: ['timelineDay'],
+        currentView: 'timelineDay',
         currentDate,
         allDayPanelMode: 'allDay',
         startDayHour: 11,
