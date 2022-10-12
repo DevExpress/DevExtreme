@@ -4218,6 +4218,13 @@ export interface ToolbarItem extends dxToolbarItem {
    * @public
    */
   location?: 'after' | 'before' | 'center';
+  /**
+   * @docid dxDataGridToolbarItem.showText
+   * @type Enums.ToolbarItemShowTextMode
+   * @default 'inMenu'
+   * @public
+   */
+  showText?: 'always' | 'inMenu';
 }
 
 /**

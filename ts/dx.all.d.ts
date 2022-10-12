@@ -24996,6 +24996,10 @@ declare module DevExpress.ui.dxDataGrid {
      * [descr:dxDataGridToolbarItem.location]
      */
     location?: 'after' | 'before' | 'center';
+    /**
+     * [descr:dxDataGridToolbarItem.showText]
+     */
+    showText?: 'always' | 'inMenu';
   }
 }
 declare module DevExpress.ui.dxDiagram {
