@@ -9,8 +9,8 @@ function formatTime(value) {
   return `00:00:${(`0${value}`).slice(-2)}`;
 }
 
-function statusFormat(value) {
-  return `Loading: ${value * 100}%`;
+function statusFormat(ratio) {
+  return `Loading: ${ratio * 100}%`;
 }
 
 let intervalId;

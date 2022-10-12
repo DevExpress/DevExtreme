@@ -15,8 +15,8 @@ DemoApp.controller('DemoController', ($scope) => {
     bindingOptions: {
       value: 'progressBarValue',
     },
-    statusFormat(value) {
-      return `Loading: ${value * 100}%`;
+    statusFormat(ratio) {
+      return `Loading: ${ratio * 100}%`;
     },
     onComplete(e) {
       inProgress = false;

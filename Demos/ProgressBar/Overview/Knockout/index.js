@@ -25,8 +25,8 @@ window.onload = function () {
       max: 100,
       value: progressBarValue,
       width: '90%',
-      statusFormat(value) {
-        return `Loading: ${value * 100}%`;
+      statusFormat(ratio) {
+        return `Loading: ${ratio * 100}%`;
       },
       onComplete(e) {
         inProgress = false;

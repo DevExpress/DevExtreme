@@ -57,8 +57,8 @@ export class AppComponent {
     }
   }
 
-  format(value) {
-    return `Loading: ${value * 100}%`;
+  format(ratio) {
+    return `Loading: ${ratio * 100}%`;
   }
 }
 

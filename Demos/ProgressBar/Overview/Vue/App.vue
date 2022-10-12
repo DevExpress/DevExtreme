@@ -27,8 +27,8 @@ import { DxProgressBar } from 'devextreme-vue/progress-bar';
 
 const maxValue = 10;
 
-function statusFormat(value) {
-  return `Loading: ${value * 100}%`;
+function statusFormat(ratio) {
+  return `Loading: ${ratio * 100}%`;
 }
 
 export default {

@@ -7,8 +7,8 @@ $(() => {
     min: 0,
     max: 100,
     width: '90%',
-    statusFormat(value) {
-      return `Loading: ${value * 100}%`;
+    statusFormat(ratio) {
+      return `Loading: ${ratio * 100}%`;
     },
     onComplete(e) {
       inProgress = false;
