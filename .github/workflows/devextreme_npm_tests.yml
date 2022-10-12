@@ -117,7 +117,8 @@ jobs:
       run: |
         npm run test:${{ matrix.framework }}
         
-    - run: ls -Rla
+    - if: ${{ failure() }}
+      run: ls -Rla
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
