@@ -124,7 +124,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/compared-screenshots/**/*
+        path: ${{ github.workspace }}/testing/renovation-npm/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
     - name: Copy failed test artifacts
