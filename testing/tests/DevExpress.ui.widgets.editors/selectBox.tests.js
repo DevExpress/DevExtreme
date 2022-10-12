@@ -3980,7 +3980,7 @@ QUnit.module('Async tests', {}, () => {
             searchEnabled: true,
             items: items,
             value: items[0],
-            valueChangeEvent: 'change',
+            customItemCreateEvent: 'change',
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
@@ -6035,8 +6035,8 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    QUnit.test('on input if valueChangeEvent=input and acceptCustomValue=true', function(assert) {
-        this.reinit({ acceptCustomValue: true, valueChangeEvent: 'input' });
+    QUnit.test('on input if customItemCreateEvent=input and acceptCustomValue=true', function(assert) {
+        this.reinit({ acceptCustomValue: true, customItemCreateEvent: 'input' });
 
         this.keyboard.type('1');
 
