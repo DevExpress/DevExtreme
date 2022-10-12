@@ -13,10 +13,10 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "[0-9][0-9]_[0-9]" ]
   pull_request:
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 1 * * *'
+  workflow_dispatch:
 
 jobs:
   analyze:
