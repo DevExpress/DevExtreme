@@ -22,7 +22,7 @@ let DeferredObj = function() {
 
     deferredConfig.forEach(function(config) {
         const methodName = config.method;
-        this[methodName + 'Callbacks'] = new Callbacks();
+        this[methodName + 'Callbacks'] = Callbacks();
 
         this[methodName] = function() {
             return this[methodName + 'With'](this._promise, arguments);

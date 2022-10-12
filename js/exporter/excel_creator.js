@@ -508,7 +508,7 @@ export const ExcelCreator = Class.inherit({
         const colsLength = this._colsArray.length;
         const rSpans = '1:' + colsLength;
         const headerRowCount = this._dataProvider.getHeaderRowCount ? this._dataProvider.getHeaderRowCount() : 1;
-        let xmlResult = [WORKSHEET_HEADER_XML];
+        const xmlResult = [WORKSHEET_HEADER_XML];
 
         xmlResult.push((this._needSheetPr) ? GROUP_SHEET_PR_XML : SINGLE_SHEET_PR_XML);
         xmlResult.push('<dimension ref="A1:C1"/>'); // 18.3.1.35 dimension (Worksheet Dimensions)
@@ -564,7 +564,6 @@ export const ExcelCreator = Class.inherit({
         }
 
         xmlResult.push(xmlRows.join(''));
-        xmlRows = [];
 
         const rightBottomCellRef = this._convertToExcelCellRef(this._maxRowIndex, this._maxColumnIndex);
         xmlResult.push(
@@ -578,7 +577,6 @@ export const ExcelCreator = Class.inherit({
 
         this._colsArray = [];
         this._cellsArray = [];
-        xmlResult = [];
     },
 
     _generateMergingXML: function() {

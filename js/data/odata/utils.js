@@ -324,8 +324,8 @@ const interpretJsonFormat = (obj, textStatus, transformOptions, ajaxOptions) => 
     }
 
     const value = 'd' in obj && (Array.isArray(obj.d) || isObject(obj.d))
-        ? interpretVerboseJsonFormat(obj, textStatus)
-        : interpretLightJsonFormat(obj, textStatus);
+        ? interpretVerboseJsonFormat(obj)
+        : interpretLightJsonFormat(obj);
 
     transformTypes(value, transformOptions);
 
