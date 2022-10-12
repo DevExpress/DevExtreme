@@ -32,41 +32,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="selectBox"></div>
+    <div id="button"></div>
     <script>
         $(function() {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                // acceptCustomValue: true,
-                items: [1, 2, 3],
-                searchEnabled: true,
-                applyValueMode: 'useButtons',
-                // valueChangeEvent: 'change',
-                searchTimeout: 0,
-                // opened: true
-                // onCustomItemCreating: (args) => {
-                //     if(!args.text) {
-                //         args.customItem = null;
-                //         return;
-                //     }
-
-                //     const { component, text } = args;
-                //     const currentItems = component.option('items');
-
-                //     const newItem = text.trim();
-
-                //     const itemInDataSource = currentItems.find((item) => item === newItem);
-
-                //     if(itemInDataSource) {
-                //         args.customItem = itemInDataSource;
-                //     } else {
-                //         currentItems.push(newItem);
-                //         component.option('items', currentItems);
-                //         args.customItem = newItem;
-                //     }
-                // },
-                // onValueChanged({ value }) {
-                //     console.log(value)
-                // },
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
