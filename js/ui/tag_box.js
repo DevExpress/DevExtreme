@@ -109,7 +109,7 @@ const TagBox = SelectBox.inherit({
                 }
 
                 if(this.option('opened')) {
-                    this._saveValueChangeEvent(e);
+                    this._saveCustomItemCreateEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -119,7 +119,7 @@ const TagBox = SelectBox.inherit({
                 const isInputActive = this._shouldRenderSearchEvent();
 
                 if(isOpened && !isInputActive) {
-                    this._saveValueChangeEvent(e);
+                    this._saveCustomItemCreateEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -160,7 +160,7 @@ const TagBox = SelectBox.inherit({
     _processKeyboardEvent: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        this._saveValueChangeEvent(e);
+        this._saveCustomItemCreateEvent(e);
     },
 
     _isEmpty: function() {
@@ -685,7 +685,7 @@ const TagBox = SelectBox.inherit({
         }
 
         this.callBase(e);
-        this._saveValueChangeEvent(undefined);
+        this._saveCustomItemCreateEvent(undefined);
     },
 
     _shouldClearFilter: function() {
@@ -1171,7 +1171,7 @@ const TagBox = SelectBox.inherit({
         const e = args.event;
 
         e.stopPropagation();
-        this._saveValueChangeEvent(e);
+        this._saveCustomItemCreateEvent(e);
 
         const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
         this._removeTagElement($tag);
@@ -1227,7 +1227,7 @@ const TagBox = SelectBox.inherit({
 
         if(!equalByValue(this._list.option('selectedItemKeys'), this.option('value'))) {
             const listSelectionChangeEvent = this._list._getSelectionChangeEvent();
-            listSelectionChangeEvent && this._saveValueChangeEvent(listSelectionChangeEvent);
+            listSelectionChangeEvent && this._saveCustomItemCreateEvent(listSelectionChangeEvent);
             this.option('value', value);
         }
         this._list._saveSelectionChangeEvent(undefined);
@@ -1414,7 +1414,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _applyButtonHandler: function(args) {
-        this._saveValueChangeEvent(args.event);
+        this._saveCustomItemCreateEvent(args.event);
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
         this.callBase();

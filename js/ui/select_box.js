@@ -101,7 +101,7 @@ const SelectBox = DropDownList.inherit({
                 const isCustomText = inputText && this._list && !this._list.option('focusedElement');
 
                 if(!inputText && isDefined(this.option('value')) && this.option('allowClearing')) {
-                    this._saveValueChangeEvent(e);
+                    this._saveCustomItemCreateEvent(e);
                     this.option({
                         selectedItem: null,
                         value: null
@@ -114,7 +114,7 @@ const SelectBox = DropDownList.inherit({
 
                         if(isCustomText) {
                             if(isOpened) this._toggleOpenState();
-                            this._valueChangeEventHandler(e);
+                            this._customItemCreateEventHandler(e);
                         }
 
                         return isOpened;
@@ -134,7 +134,7 @@ const SelectBox = DropDownList.inherit({
                 }
 
                 e.preventDefault();
-                this._valueChangeEventHandler(e);
+                this._customItemCreateEventHandler(e);
                 return true;
             },
             backspace: clearSelectBox,
@@ -148,7 +148,7 @@ const SelectBox = DropDownList.inherit({
 
             fieldTemplate: null,
 
-            valueChangeEvent: 'change',
+            customItemCreateEvent: 'change',
 
             acceptCustomValue: false,
 
@@ -201,6 +201,10 @@ const SelectBox = DropDownList.inherit({
 
     _popupWrapperClass: function() {
         return this.callBase() + ' ' + SELECTBOX_POPUP_WRAPPER_CLASS;
+    },
+
+    _saveCustomItemCreateEvent: function(e) {
+        this._saveValueChangeEvent(e);
     },
 
     _cancelEditing: function() {
@@ -319,7 +323,7 @@ const SelectBox = DropDownList.inherit({
             const isLastPage = this._dataController.isLastPage();
             const isLastItem = selectedIndex === this._items().length - 1;
 
-            this._saveValueChangeEvent(e);
+            this._saveCustomItemCreateEvent(e);
             const step = normalizeKeyName(e) === 'downArrow' ? 1 : -1;
 
             if(hasPages && !isLastPage && isLastItem && step > 0) {
@@ -580,7 +584,7 @@ const SelectBox = DropDownList.inherit({
     _clearTextValue: function() {
         if(this.option('selectedItem')) {
             if(this._savedTextRemoveEvent) {
-                this._saveValueChangeEvent(this._savedTextRemoveEvent);
+                this._saveCustomItemCreateEvent(this._savedTextRemoveEvent);
             }
             this.option('value', null);
         }
@@ -624,7 +628,7 @@ const SelectBox = DropDownList.inherit({
         const previousValue = this._getCurrentValue();
         this._focusListElement($(e.itemElement));
 
-        this._saveValueChangeEvent(e.event);
+        this._saveCustomItemCreateEvent(e.event);
 
         this._completeSelection(this._valueGetter(e.itemData));
 
@@ -687,7 +691,7 @@ const SelectBox = DropDownList.inherit({
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
 
-    _valueChangeEventHandler: function(e) {
+    _customItemCreateEventHandler: function(e) {
         if(this.option('acceptCustomValue') && this._isCustomItemSelected() && !this._isValueChanging) {
             this._isValueChanging = true;
             this._customItemAddedHandler(e);
@@ -717,7 +721,7 @@ const SelectBox = DropDownList.inherit({
 
         const item = this._createCustomItem(searchValue);
 
-        this._saveValueChangeEvent(e);
+        this._saveCustomItemCreateEvent(e);
 
         if(item === undefined) {
             this._renderValue();
