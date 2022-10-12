@@ -56,7 +56,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import dxSortable from './sortable';
 
 import {
-    dxToolbarOptions, dxToolbarItem,
+    dxToolbarOptions, dxToolbarItem, ShowTextMode,
 } from './toolbar';
 
 import {
@@ -4000,6 +4000,12 @@ export interface ToolbarItem extends dxToolbarItem {
    * @public
    */
   location?: ToolbarItemLocation;
+  /**
+   * @docid dxDataGridToolbarItem.showText
+   * @default 'inMenu'
+   * @public
+   */
+  showText?: ShowTextMode;
 }
 
 /**
