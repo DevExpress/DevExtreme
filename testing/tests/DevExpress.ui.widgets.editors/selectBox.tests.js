@@ -2115,8 +2115,12 @@ QUnit.module('editing', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($(toSelector(LIST_ITEM_CLASS)).length, 3, 'items is filtered');
-        assert.equal($selectBox.dxSelectBox('option', 'value'), 'it', 'value was set');
+        const listItems = $(toSelector(LIST_ITEM_CLASS));
+        const instance = $selectBox.dxSelectBox('instance');
+        const value = instance.option('value');
+
+        assert.equal(listItems.length, 3, 'items is filtered');
+        assert.equal(value, 'it', 'value was set');
     });
 
     QUnit.test('set existing item is succeeded value when acceptCustomValue is true', function(assert) {

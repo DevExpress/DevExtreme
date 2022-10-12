@@ -591,13 +591,13 @@ const TextEditorBase = Editor.inherit({
         }
     },
 
-    _getChangeEventOptionName: function() {
+    _getChangeValueEventOptionName: function() {
         return 'valueChangeEvent';
     },
 
     _renderValueChangeEvent: function() {
         const keyPressEvent = addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
-        const valueChangeEvent = addNamespace(this.option(this._getChangeEventOptionName()), `${this.NAME}ValueChange`);
+        const valueChangeEvent = addNamespace(this.option(this._getChangeValueEventOptionName()), `${this.NAME}ValueChange`);
         const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
         const $input = this._input();
 
