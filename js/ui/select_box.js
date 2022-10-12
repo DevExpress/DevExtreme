@@ -207,6 +207,13 @@ const SelectBox = DropDownList.inherit({
         this._saveValueChangeEvent(e);
     },
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'valueChangeEvent': { since: '22.2', alias: 'customItemCreateEvent' }
+        });
+    },
+
     _cancelEditing: function() {
         if(!this.option('searchEnabled') && this._list) {
             this._focusListElement(null);
