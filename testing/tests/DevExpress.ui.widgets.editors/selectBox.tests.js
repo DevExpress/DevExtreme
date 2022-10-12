@@ -2115,12 +2115,8 @@ QUnit.module('editing', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const listItems = $(toSelector(LIST_ITEM_CLASS));
-        const instance = $selectBox.dxSelectBox('instance');
-        const value = instance.option('value');
-
-        assert.equal(listItems.length, 3, 'items is filtered');
-        assert.equal(value, 'it', 'value was set');
+        assert.equal($(toSelector(LIST_ITEM_CLASS)).length, 3, 'items is filtered');
+        assert.equal($selectBox.dxSelectBox('option', 'value'), 'it', 'value was set');
     });
 
     QUnit.test('set existing item is succeeded value when acceptCustomValue is true', function(assert) {
@@ -3986,7 +3982,7 @@ QUnit.module('Async tests', {}, () => {
             searchEnabled: true,
             items: items,
             value: items[0],
-            customItemCreateEvent: 'change',
+            valueChangeEvent: 'change',
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
@@ -6041,8 +6037,8 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    QUnit.test('on input if customItemCreateEvent=input and acceptCustomValue=true', function(assert) {
-        this.reinit({ acceptCustomValue: true, customItemCreateEvent: 'input' });
+    QUnit.test('on input if valueChangeEvent=input and acceptCustomValue=true', function(assert) {
+        this.reinit({ acceptCustomValue: true, valueChangeEvent: 'input' });
 
         this.keyboard.type('1');
 
