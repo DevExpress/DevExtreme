@@ -756,6 +756,7 @@ const TextEditorBase = Editor.inherit({
 
         switch(name) {
             case 'valueChangeEvent':
+            case 'customItemCreateEvent':
                 this._refreshValueChangeEvent();
                 this._refreshFocusEvent();
                 this._refreshEvents();
