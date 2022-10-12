@@ -7,7 +7,7 @@ test('Sample app renders correctly', async(t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.resizeWindow(1000, 800);
-    await takeScreenshot(`shot-${process.env.framework}.png`));
+    await takeScreenshot(`shot-${process.env.framework}.png`);
 
     await t
         .expect(compareResults.isValid())
