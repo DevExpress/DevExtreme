@@ -116,6 +116,8 @@ jobs:
       working-directory: ./testing/renovation-npm
       run: |
         npm run test:${{ matrix.framework }}
+        
+    - run: ls -Rla
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
