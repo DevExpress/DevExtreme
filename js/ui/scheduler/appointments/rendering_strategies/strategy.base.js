@@ -239,6 +239,7 @@ class BaseRenderingStrategy {
             ...this.options
         });
     }
+
     generateAppointmentSettings(rawAppointment) {
         return this.getAppointmentSettingsGenerator(rawAppointment).create();
     }
@@ -643,18 +644,12 @@ class BaseRenderingStrategy {
     }
 
     _calculateVerticalAppointmentHeight(height, totalAppointments, appointmentCountPerCell) {
-        const overlappingMode = this.maxAppointmentsPerCell;
-
-        let res;
-        if(isNumeric(overlappingMode)) {
+        let calculatedAppointmentsCount = appointmentCountPerCell;
+        if(isNumeric(this.maxAppointmentsPerCell)) {
             const dynamicAppointmentsCount = this._getDynamicAppointmentCountPerCell().allDay || this._getDynamicAppointmentCountPerCell();
-            const calculatedAppointmentsCount = Math.min(totalAppointments <= dynamicAppointmentsCount ? dynamicAppointmentsCount : totalAppointments, appointmentCountPerCell);
-            res = height / calculatedAppointmentsCount;
-        } else {
-            res = height / appointmentCountPerCell;
+            calculatedAppointmentsCount = Math.min(totalAppointments <= dynamicAppointmentsCount ? dynamicAppointmentsCount : totalAppointments, appointmentCountPerCell);
         }
-
-        return res;
+        return height / calculatedAppointmentsCount;
     }
 
     _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
