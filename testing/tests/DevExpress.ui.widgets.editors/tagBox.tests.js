@@ -5071,7 +5071,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 });
 
 
-QUnit.module('the "valueChangeEvent" option', {
+QUnit.module('the "customItemCreateEvent" option', {
     beforeEach: function() {
         this.onCustomItemCreatingSpy = sinon.spy();
 
@@ -5094,10 +5094,10 @@ QUnit.module('the "valueChangeEvent" option', {
     const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
 
     events.forEach((eventValue) => {
-        QUnit.testInActiveWindow(`custom item has been added when valueChangeEvent='${eventValue}'`, function(assert) {
+        QUnit.testInActiveWindow(`custom item has been added when customItemCreateEvent='${eventValue}'`, function(assert) {
             const { $input, customValue, keyboard, instance, onCustomItemCreatingSpy } = this;
 
-            instance.option('valueChangeEvent', eventValue);
+            instance.option('customItemCreateEvent', eventValue);
 
             switch(eventValue) {
                 case 'keyup':
