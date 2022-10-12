@@ -160,10 +160,16 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
     showSelectionControls?: boolean;
     /**
      * @docid
+     * @deprecated dxSelectBox.customItemCreateEvent
+     */
+    valueChangeEvent?: string;
+
+    /**
+     * @docid
      * @default "change"
      * @public
      */
-    valueChangeEvent?: string;
+    customItemCreateEvent?: string;
 
     /**
      * @docid
