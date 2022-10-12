@@ -607,6 +607,10 @@ const SelectBox = DropDownList.inherit({
         return this.callBase() && $(activeElement).closest(this._input()).length > 0;
     },
 
+    _getChangeEventOptionName: function() {
+        return 'customItemCreateEvent';
+    },
+
     _renderValueChangeEvent: function() {
         if(this._isEditable()) {
             this.callBase();
@@ -704,6 +708,8 @@ const SelectBox = DropDownList.inherit({
             this._customItemAddedHandler(e);
         }
     },
+
+    _valueChangeEventHandler: noop,
 
     _initCustomItemCreatingAction: function() {
         this._customItemCreatingAction = this._createActionByOption('onCustomItemCreating');

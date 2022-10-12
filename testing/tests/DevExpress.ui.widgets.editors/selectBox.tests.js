@@ -2289,6 +2289,8 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'display ' + customValue, 'displayed value is correct');
         assert.ok(logStub.calledOnce, 'There was an one message');
         assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
+
+        logStub.restore();
     });
 
     QUnit.test('onCustomItemCreating should not be called when existing item selecting', function(assert) {
@@ -6101,5 +6103,63 @@ QUnit.module('displayExpr', moduleSetup, () => {
             instance.close();
             assert.strictEqual(displayExprSpy.callCount, 4, 'It was not called more times on DropDown hiding');
         });
+    });
+});
+
+
+QUnit.module('customItemCreateEvent', {
+    beforeEach: function() {
+        this.$selectBox = $('#selectBox');
+
+        const defaultOptions = {
+            items: ['item 1'],
+            acceptCustomValue: true,
+            onCustomItemCreating: (e) => {
+                e.customItem = e.text;
+            }
+        };
+
+        const init = (options = {}) => {
+            this.selectBox = this.$selectBox
+                .dxSelectBox($.extend({}, defaultOptions, options))
+                .dxSelectBox('instance');
+        };
+
+        this.reinit = (options) => {
+            this.selectBox.dispose();
+            init(options);
+        };
+
+        init();
+    }
+}, () => {
+    QUnit.test('valueChangeEvent prop using should raise a warning about deprecation', function(assert) {
+        const errorsSpy = sinon.spy(errors, 'log');
+
+        try {
+            this.selectBox.option('valueChangeEvent', 'change');
+
+            assert.deepEqual(errorsSpy.lastCall.args, [
+                'W0001',
+                'dxSelectBox',
+                'valueChangeEvent',
+                '22.2',
+                'Use the \'customItemCreateEvent\' option instead'
+            ], 'warning is raised with correct parameters');
+        } finally {
+            errorsSpy.restore();
+        }
+    });
+
+    QUnit.test('no warning should be logged on pure init', function(assert) {
+        const errorsSpy = sinon.spy(errors, 'log');
+
+        try {
+            this.reinit();
+            this.selectBox.option('customItemCreateEvent', 'change');
+        } finally {
+            assert.strictEqual(errorsSpy.callCount, 0, 'no warning is logged');
+            errorsSpy.restore();
+        }
     });
 });
