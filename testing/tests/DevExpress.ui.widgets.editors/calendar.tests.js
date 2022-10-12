@@ -1545,18 +1545,18 @@ QUnit.module('Options', {
     });
 
     [
-        { weekNumberRule: 'default', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
-        { weekNumberRule: 'default', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
-        { weekNumberRule: 'default', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
+        { weekNumberRule: 'auto', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
+        { weekNumberRule: 'auto', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
+        { weekNumberRule: 'auto', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
         { weekNumberRule: 'firstDay', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
         { weekNumberRule: 'firstDay', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
         { weekNumberRule: 'firstDay', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 36, getWeekNumberFirstFullWeekOfYear: 0 } },
-        { weekNumberRule: 'firstFourDayWeek', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
-        { weekNumberRule: 'firstFourDayWeek', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
-        { weekNumberRule: 'firstFourDayWeek', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
-        { weekNumberRule: 'firstFullWeek', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
-        { weekNumberRule: 'firstFullWeek', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
-        { weekNumberRule: 'firstFullWeek', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
+        { weekNumberRule: 'firstFourDays', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
+        { weekNumberRule: 'firstFourDays', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
+        { weekNumberRule: 'firstFourDays', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 36, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 0 } },
+        { weekNumberRule: 'fullWeek', firstDayOfWeek: 1, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
+        { weekNumberRule: 'fullWeek', firstDayOfWeek: 0, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
+        { weekNumberRule: 'fullWeek', firstDayOfWeek: 5, expectedCalls: { getISO8601WeekOfYear: 0, getWeekNumberFirstDayOfYear: 0, getWeekNumberFirstFullWeekOfYear: 36 } },
     ].forEach(({ weekNumberRule, firstDayOfWeek, expectedCalls }) => {
         QUnit.test('weekNumberRule option', function(assert) {
             const getISO8601WeekOfYearSpy = sinon.spy(dateUtils, 'getISO8601WeekOfYear');

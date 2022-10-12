@@ -97,7 +97,7 @@ const Calendar = Editor.inherit({
 
             showWeekNumbers: false,
 
-            weekNumberRule: 'default',
+            weekNumberRule: 'auto',
 
             cellTemplate: 'cell',
 

@@ -308,7 +308,7 @@ QUnit.module('MonthView', {
                 value: currentDate,
                 date: currentDate,
                 showWeekNumbers: true,
-                weekNumberRule: 'firstFourDayWeek',
+                weekNumberRule: 'firstFourDays',
                 firstDayOfWeek: 1,
                 zoomLevel: 'month',
             });
@@ -325,13 +325,13 @@ QUnit.module('MonthView', {
     [0, 1, 2, 3, 4, 5, 6].forEach((firstDayOfWeek) => {
         QUnit.test(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
             let count = 0;
-            let i;
-            for(i = 0; i < 400; i++) {
+
+            for(let i = 0; i < 400; i++) {
                 this.reinit({
                     value: new Date(2000 + i, 11, 31),
                     date: new Date(2000 + i, 11, 31),
                     showWeekNumbers: true,
-                    weekNumberRule: 'firstFourDayWeek',
+                    weekNumberRule: 'firstFourDays',
                     firstDayOfWeek,
                     zoomLevel: 'month',
                 });
@@ -350,13 +350,13 @@ QUnit.module('MonthView', {
 
         QUnit.test(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
             let count = 0;
-            let i;
-            for(i = 0; i < 400; i++) {
+
+            for(let i = 0; i < 400; i++) {
                 this.reinit({
                     value: new Date(2001 + i, 0, 1),
                     date: new Date(2001 + i, 0, 1),
                     showWeekNumbers: true,
-                    weekNumberRule: 'firstFourDayWeek',
+                    weekNumberRule: 'firstFourDays',
                     firstDayOfWeek,
                     zoomLevel: 'month',
                 });
@@ -375,13 +375,13 @@ QUnit.module('MonthView', {
 
         QUnit.test(`count years with iso week 52, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
             let count = 0;
-            let i;
-            for(i = 0; i < 400; i++) {
+
+            for(let i = 0; i < 400; i++) {
                 this.reinit({
                     value: new Date(2000 + i, 11, 31),
                     date: new Date(2000 + i, 11, 31),
                     showWeekNumbers: true,
-                    weekNumberRule: 'firstFourDayWeek',
+                    weekNumberRule: 'firstFourDays',
                     firstDayOfWeek,
                     zoomLevel: 'month',
                 });

@@ -129,15 +129,15 @@ const Views = {
             const { weekNumberRule, firstDayOfWeek } = this.option();
 
 
-            if(weekNumberRule === 'firstFourDayWeek' || (weekNumberRule === 'default' && firstDayOfWeek === 1)) {
+            if(weekNumberRule === 'firstFourDays' || (weekNumberRule === 'auto' && firstDayOfWeek === 1)) {
                 return dateUtils.getISO8601WeekOfYear(date, firstDayOfWeek);
             }
 
-            if(weekNumberRule === 'firstDay' || (weekNumberRule === 'default' && firstDayOfWeek !== 1)) {
+            if(weekNumberRule === 'firstDay' || (weekNumberRule === 'auto' && firstDayOfWeek !== 1)) {
                 return dateUtils.getWeekNumberFirstDayOfYear(date, firstDayOfWeek);
             }
 
-            if(weekNumberRule === 'firstFullWeek') {
+            if(weekNumberRule === 'fullWeek') {
                 return dateUtils.getWeekNumberFirstFullWeekOfYear(date, firstDayOfWeek);
             }
         },
