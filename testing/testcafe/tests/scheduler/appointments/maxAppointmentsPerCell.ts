@@ -71,7 +71,7 @@ test('appointments should have correct height in week view with all day', async 
   } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
-  t
+  await t
     .expect(await takeScreenshot(
       'maxAppointmentsPerCell-allDay.png',
       scheduler.element,
@@ -105,7 +105,7 @@ test('appointments should have correct height in month view', async (t) => {
   } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
-  t
+  await t
     .expect(await takeScreenshot(
       'maxAppointmentsPerCell-month.png',
       scheduler.element,
@@ -144,7 +144,7 @@ test('appointments should have correct height in month view', async (t) => {
     } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 
-    t
+    await t
       .expect(await takeScreenshot(
         `maxAppointmentsPerCell-timelineWeek-${apptsCount}-appointments.png`,
         scheduler.element,
