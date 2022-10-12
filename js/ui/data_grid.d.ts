@@ -33,6 +33,7 @@ import {
 
 import {
     dxToolbarItem,
+    ShowTextMode,
 } from './toolbar';
 
 import Widget, {
@@ -1522,6 +1523,12 @@ export interface ToolbarItem extends dxToolbarItem {
    * @public
    */
   location?: ToolbarItemLocation;
+  /**
+   * @docid dxDataGridToolbarItem.showText
+   * @default 'inMenu'
+   * @public
+   */
+  showText?: ShowTextMode;
 }
 
 /**

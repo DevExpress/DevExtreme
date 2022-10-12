@@ -25104,6 +25104,10 @@ declare module DevExpress.ui.dxDataGrid {
      * [descr:dxDataGridToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
+    /**
+     * [descr:dxDataGridToolbarItem.showText]
+     */
+    showText?: DevExpress.ui.dxToolbar.ShowTextMode;
   }
 }
 declare module DevExpress.ui.dxDiagram {
