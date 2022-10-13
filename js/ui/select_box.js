@@ -605,7 +605,7 @@ const SelectBox = DropDownList.inherit({
         return this.callBase() && $(activeElement).closest(this._input()).length > 0;
     },
 
-    _getChangeValueEventOptionName: function() {
+    _getValueChangeEventOptionName: function() {
         return 'customItemCreateEvent';
     },
 

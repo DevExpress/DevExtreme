@@ -69,7 +69,7 @@ const KEY_SPACE = ' ';
 
 const TIME_TO_WAIT = 500;
 
-const CHANGE_VALUE_EVENT_OPTIONS = ['valueChangeEvent', 'customItemCreateEvent'];
+const VALUE_CHANGE_EVENT_OPTIONS = ['valueChangeEvent', 'customItemCreateEvent'];
 
 const toSelector = (className) => {
     return '.' + className;
@@ -3977,7 +3977,7 @@ QUnit.module('Scrolling', {
 });
 
 QUnit.module('Async tests', {}, () => {
-    CHANGE_VALUE_EVENT_OPTIONS.forEach(eventOptionName => {
+    VALUE_CHANGE_EVENT_OPTIONS.forEach(eventOptionName => {
         QUnit.testInActiveWindow(`Value should be reset after on selectedItem after focusout when ${eventOptionName}='change'`, function(assert) {
             const done = assert.async();
             const items = [1, 2];
@@ -6041,7 +6041,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    CHANGE_VALUE_EVENT_OPTIONS.forEach(eventOptionName => {
+    VALUE_CHANGE_EVENT_OPTIONS.forEach(eventOptionName => {
         QUnit.test(`on input if ${eventOptionName}=input and acceptCustomValue=true`, function(assert) {
             this.reinit({
                 acceptCustomValue: true,

@@ -591,13 +591,13 @@ const TextEditorBase = Editor.inherit({
         }
     },
 
-    _getChangeValueEventOptionName: function() {
+    _getValueChangeEventOptionName: function() {
         return 'valueChangeEvent';
     },
 
     _renderValueChangeEvent: function() {
         const keyPressEvent = addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
-        const valueChangeEvent = addNamespace(this.option(this._getChangeValueEventOptionName()), `${this.NAME}ValueChange`);
+        const valueChangeEvent = addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`);
         const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
         const $input = this._input();
 
@@ -636,7 +636,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _changeValueEventIncludesBlur: function() {
-        const eventOption = this.option(this._getChangeValueEventOptionName());
+        const eventOption = this.option(this._getValueChangeEventOptionName());
 
         return eventOption.includes('blur');
     },
