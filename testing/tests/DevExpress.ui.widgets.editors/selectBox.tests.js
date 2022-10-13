@@ -5824,6 +5824,26 @@ QUnit.module('focus policy', {
         assert.strictEqual(focusStub.callCount, 1, 'new FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
+
+    QUnit.testInActiveWindow('Input value has not been restored after field focusout when customItemCreateEvent includes "blur"', function(assert) {
+        const customValue = 'custom value';
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            items: ['item 1'],
+            customItemCreateEvent: 'blur',
+            onFocusOut: function() {
+                assert.strictEqual($input.val(), customValue, 'value has not been restored');
+            }
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.type(customValue);
+
+        $input.focusout();
+    });
 });
 
 let helper;

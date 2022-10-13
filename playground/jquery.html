@@ -32,14 +32,60 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="selectBox"></div>
+    <!-- <div id="tagBox"></div> -->
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+            const customValue = 'custom value';
+
+            const $selectBox = $('#selectBox').dxSelectBox({
+                acceptCustomValue: true,
+                items: ['item 1'],
+                customItemCreateEvent: 'blur',
+                onFocusOut: function() {
+                    console.log($input.val())
+                }
+            })
+
+            const $input = $selectBox.find('.dx-texteditor-input');
         });
     </script>
+    <!-- <script>
+        $(function() {
+            const customValue = 'custom value';
+
+            const $tagBox = $('#tagBox').dxTagBox({
+                acceptCustomValue: true,
+                items: ['item 1'],
+                customItemCreateEvent: 'blur',
+                onCustomItemCreating: (args) => {
+                    if (!args.text) {
+                        args.customItem = null;
+                        return;
+                    }
+                    
+                    const { component, text } = args
+                    const currentItems = component.option('items');
+
+                    const newItem = text.trim()
+
+                    const itemInDataSource = currentItems.find((item) => item === newItem)
+
+                    if (itemInDataSource) {
+                        args.customItem = itemInDataSource;
+                    } else {    
+                        currentItems.push(newItem);
+                        component.option('items', currentItems);
+                        args.customItem = newItem;
+                    }
+                },
+                onFocusOut: function() {
+                    console.log($input.val())
+                }
+            })
+
+            const $input = $tagBox.find('.dx-texteditor-input');
+        });
+    </script> -->
 </body>
 </html>

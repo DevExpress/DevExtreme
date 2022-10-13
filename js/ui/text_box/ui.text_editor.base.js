@@ -635,14 +635,8 @@ const TextEditorBase = Editor.inherit({
         return element === this._input().get(0);
     },
 
-    _changeValueEventIncludesBlur: function() {
-        const eventOption = this.option(this._getValueChangeEventOptionName());
-
-        return eventOption.includes('blur');
-    },
-
     _preventNestedFocusEvent: function(event) {
-        if(event.isDefaultPrevented() || this._changeValueEventIncludesBlur()) {
+        if(event.isDefaultPrevented()) {
             return true;
         }
 
