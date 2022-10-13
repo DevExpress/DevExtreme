@@ -17,15 +17,15 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '15'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -46,7 +46,7 @@ jobs:
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: devextreme-artifacts
         path: artifacts.zip
@@ -133,17 +133,17 @@ jobs:
 #        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - uses: ./.github/actions/pin-browsers
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '15'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -153,7 +153,7 @@ jobs:
       run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Download artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: devextreme-artifacts
 
@@ -183,7 +183,7 @@ jobs:
 
     - name: Copy RawLog.txt
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
         path: ${{ github.workspace }}/testing/RawLog.txt
@@ -196,7 +196,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
