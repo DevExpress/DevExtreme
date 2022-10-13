@@ -84,7 +84,6 @@ test('appointments should have correct height in week view with all day', async 
   await createWidget(
     'dxScheduler',
     {
-      timeZone: 'America/Los_Angeles',
       maxAppointmentsPerCell: 3,
       dataSource: data,
       views: ['week'],
@@ -118,13 +117,11 @@ test('appointments should have correct height in month view', async (t) => {
   await createWidget(
     'dxScheduler',
     {
-      timeZone: 'America/Los_Angeles',
       maxAppointmentsPerCell: 4,
       dataSource: data,
       views: ['month'],
       currentView: 'month',
       currentDate: new Date('2021-03-28T18:00:00.000Z'),
-      allDayPanelMode: 'allDay',
       startDayHour: 11,
       height: 834,
     },
@@ -157,13 +154,11 @@ test('appointments should have correct height in month view', async (t) => {
     await createWidget(
       'dxScheduler',
       {
-        timeZone: 'America/Los_Angeles',
         maxAppointmentsPerCell: 20,
         dataSource: data,
         views: ['timelineDay'],
         currentView: 'timelineDay',
         currentDate,
-        allDayPanelMode: 'allDay',
         startDayHour: 11,
         height: 834,
       },
