@@ -79,8 +79,7 @@ const dxCircularGauge = dxGauge.inherit({
             }
         } else {
             const labelCorrection = _max(textParams.width, textParams.height);
-            const rangeContainerWidth = this._getOption('rangeContainer').width;
-            indentFromAxis -= (labelCorrection + rangeContainerWidth);
+            indentFromAxis -= labelCorrection;
             if(scaleOrientation === 'inside') {
                 indentFromAxis -= tickCorrection;
             } else if(scaleOrientation === 'center') {
