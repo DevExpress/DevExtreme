@@ -366,7 +366,7 @@ QUnit.module('MonthView', {
                     return Number($(this).text());
                 }).get();
 
-                if(actualWeekNumbers.indexOf(53) !== -1 || (dateUtils.getISO8601WeekOfYear(new Date(2000 + i, 11, 31)) === 53 && actualWeekNumbers[0] === 1)) {
+                if(actualWeekNumbers.indexOf(53) !== -1 || (dateUtils.getWeekNumber(new Date(2000 + i, 11, 31), firstDayOfWeek, 'firstFourDays') === 53 && actualWeekNumbers[0] === 1)) {
                     count++;
                 }
             }

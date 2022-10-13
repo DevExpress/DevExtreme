@@ -128,18 +128,11 @@ const Views = {
         _getWeekNumber: function(date) {
             const { weekNumberRule, firstDayOfWeek } = this.option();
 
-
-            if(weekNumberRule === 'firstFourDays' || (weekNumberRule === 'auto' && firstDayOfWeek === 1)) {
-                return dateUtils.getWeekNumber(date, firstDayOfWeek, 'firstFourDays');
+            if(weekNumberRule === 'auto') {
+                return dateUtils.getWeekNumber(date, firstDayOfWeek, firstDayOfWeek === 1 ? 'firstFourDays' : 'firstDay');
             }
 
-            if(weekNumberRule === 'firstDay' || (weekNumberRule === 'auto' && firstDayOfWeek !== 1)) {
-                return dateUtils.getWeekNumber(date, firstDayOfWeek, 'firstDay');
-            }
-
-            if(weekNumberRule === 'fullWeek') {
-                return dateUtils.getWeekNumber(date, firstDayOfWeek, 'fullWeek');
-            }
+            return dateUtils.getWeekNumber(date, firstDayOfWeek, weekNumberRule);
         },
 
         getNavigatorCaption: function() {
