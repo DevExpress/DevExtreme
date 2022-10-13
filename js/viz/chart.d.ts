@@ -3228,7 +3228,7 @@ export interface dxChartSeriesTypesCommonSeries {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.minBarSize
      * @default undefined
-     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BarSeries
+     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.RangeBarSeries
      * @public
      */
     minBarSize?: number;
