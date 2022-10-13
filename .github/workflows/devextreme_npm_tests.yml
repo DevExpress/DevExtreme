@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -23,14 +23,14 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Restore artifacts cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./artifacts
         key: build-npm-devextreme-artifacts-${{ github.sha }}
@@ -64,12 +64,12 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - uses: ./.github/actions/pin-browsers
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -146,7 +146,7 @@ jobs:
         node-version: '14'
 
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - uses: ./.github/actions/pin-browsers
 
@@ -154,7 +154,7 @@ jobs:
       run: cd ../ && ln -s DevExtreme devextreme
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -222,7 +222,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -284,7 +284,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - uses: ./.github/actions/pin-browsers
 
@@ -364,7 +364,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
