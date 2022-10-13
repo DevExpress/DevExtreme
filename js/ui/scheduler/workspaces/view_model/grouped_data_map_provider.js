@@ -118,7 +118,7 @@ export class GroupedDataMapProvider {
         } = this.groupedDataMap;
 
         const rows = isAllDay && !this._viewOptions.isVerticalGrouping
-            ? [allDayPanelGroupedMap[groupIndex]] || []
+            ? (allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : [])
             : dateTableGroupedMap[groupIndex] || [];
 
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {

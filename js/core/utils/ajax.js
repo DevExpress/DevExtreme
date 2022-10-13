@@ -303,7 +303,7 @@ const sendRequest = function(options) {
 
     if(async) {
         xhr.timeout = timeout;
-        timeoutId = setHttpTimeout(timeout, xhr, d);
+        timeoutId = setHttpTimeout(timeout, xhr);
     }
 
     xhr['onreadystatechange'] = function(e) {

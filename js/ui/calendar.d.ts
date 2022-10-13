@@ -37,6 +37,9 @@ export interface ComponentDisabledDate<T> {
 export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
 /** @public */
+export type WeekNumberRule = 'auto' | 'firstDay' | 'fullWeek' | 'firstFourDays';
+
+/** @public */
 export type ContentReadyEvent = EventInfo<dxCalendar>;
 
 /** @public */
@@ -154,6 +157,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @public
      */
     showWeekNumbers?: boolean;
+    /**
+     * @docid
+     * @default 'auto'
+     * @public
+     */
+    weekNumberRule?: WeekNumberRule;
     /**
      * @docid
      * @default null

@@ -407,7 +407,7 @@ export class DateGeneratorBaseStrategy {
             firstViewDate
         } = options;
         let { startDate } = options;
-        let resultDate = new Date(appointment.startDate);
+        let resultDate;
 
         if(this.appointmentTakesAllDay) {
             resultDate = dateUtils.normalizeDate(startDate, firstViewDate);

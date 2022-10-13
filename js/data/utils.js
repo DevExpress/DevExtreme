@@ -259,15 +259,11 @@ export const rejectedPromise = function() {
 
 function throttle(func, timeout) {
     let timeoutId;
-    let lastArgs;
     return function() {
-        lastArgs = arguments;
         if(!timeoutId) {
             timeoutId = setTimeout(() => {
                 timeoutId = undefined;
-                if(lastArgs) {
-                    func.call(this, lastArgs);
-                }
+                func.call(this);
             }, isFunction(timeout) ? timeout() : timeout);
         }
         return timeoutId;

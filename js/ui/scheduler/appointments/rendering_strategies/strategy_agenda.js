@@ -67,7 +67,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
                     let appointmentBatch = null;
 
                     if(!recurrenceBatch.indexes.length) {
-                        appointmentBatch = { parts: [] };
                         appointmentBatch = this.instance.getAppointmentsInstance()._processLongAppointment(appointment);
                         additionalAppointments = additionalAppointments.concat(appointmentBatch.parts);
                     }
