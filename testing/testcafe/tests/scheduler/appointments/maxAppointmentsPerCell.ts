@@ -156,6 +156,7 @@ const apptsCounts = [1, 5];
     await createWidget(
       'dxScheduler',
       {
+        timeZone: 'America/Los_Angeles',
         maxAppointmentsPerCell: 20,
         dataSource: data,
         views: ['timelineDay'],
