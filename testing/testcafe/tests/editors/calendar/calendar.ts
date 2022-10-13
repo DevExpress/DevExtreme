@@ -41,6 +41,7 @@ test('Calendar with showWeekNumbers rendered correct for last week of year value
   await createWidget('dxCalendar', {
     value: new Date('12.31.2021'),
     showWeekNumbers: true,
+    weekNumberRule: 'firstDay',
   });
 });
 

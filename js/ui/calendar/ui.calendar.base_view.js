@@ -81,16 +81,13 @@ const BaseView = Widget.inherit({
             prevCellDate: null
         };
 
-        const shouldRenderWeekColumn = this._shouldRenderWeekColumn();
-
         for(let rowIndex = 0, rowCount = this.option('rowCount'); rowIndex < rowCount; rowIndex++) {
             rowData.row = this._createRow();
             for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
                 this._renderCell(rowData, colIndex);
             }
-            if(shouldRenderWeekColumn) {
-                this._renderWeekNumberCell(rowData);
-            }
+
+            this._renderWeekNumberCell(rowData);
         }
     },
 
@@ -115,11 +112,6 @@ const BaseView = Widget.inherit({
         this._appendMethodName = rtlEnabled ?? this.option('rtlEnabled') ?
             'prepend' :
             'append';
-    },
-
-    _shouldRenderWeekColumn: function() {
-        const { showWeekNumbers, zoomLevel } = this.option();
-        return showWeekNumbers && zoomLevel === 'month';
     },
 
     _createCell: function(cellDate) {
@@ -161,32 +153,6 @@ const BaseView = Widget.inherit({
         }
 
         params.cellDate = this._getNextCellData(cellDate);
-    },
-
-    _renderWeekNumberCell: function(rowData) {
-        const { firstDayOfWeek, rtlEnabled, cellTemplate } = this.option();
-        const weekNumber = coreDateUtils.getWeekNumber(rowData.prevCellDate, firstDayOfWeek);
-
-        const cell = domAdapter.createElement('td');
-        const $cell = $(cell);
-
-        cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
-
-        if(cellTemplate) {
-            cellTemplate.render(this._prepareCellTemplateData(weekNumber, -1, $cell));
-        } else {
-            cell.innerHTML = weekNumber;
-        }
-
-        if(rtlEnabled) {
-            rowData.row.append(cell);
-        } else {
-            rowData.row.prepend(cell);
-        }
-        this.setAria({
-            'role': 'gridcell',
-            'label': `Week ${weekNumber}`,
-        }, $cell);
     },
 
     _getClassNameByDate: function(cellDate) {
