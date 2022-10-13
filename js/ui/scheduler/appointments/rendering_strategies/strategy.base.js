@@ -643,11 +643,12 @@ class BaseRenderingStrategy {
     getAppointmentDataCalculator() {
     }
 
-    _calculateVerticalAppointmentHeight(height, totalAppointments, appointmentCountPerCell) {
+    _calculateVerticalAppointmentHeight(height, totalAppointmentsCount, appointmentCountPerCell) {
         let calculatedAppointmentsCount = appointmentCountPerCell;
         if(isNumeric(this.maxAppointmentsPerCell)) {
             const dynamicAppointmentsCount = this._getDynamicAppointmentCountPerCell().allDay || this._getDynamicAppointmentCountPerCell();
-            calculatedAppointmentsCount = Math.min(totalAppointments <= dynamicAppointmentsCount ? dynamicAppointmentsCount : totalAppointments, appointmentCountPerCell);
+            const maxAppointmentsCount = totalAppointmentsCount > dynamicAppointmentsCount ? totalAppointmentsCount : dynamicAppointmentsCount;
+            calculatedAppointmentsCount = Math.min(maxAppointmentsCount, appointmentCountPerCell);
         }
         return height / calculatedAppointmentsCount;
     }
