@@ -130,15 +130,15 @@ const Views = {
 
 
             if(weekNumberRule === 'firstFourDays' || (weekNumberRule === 'auto' && firstDayOfWeek === 1)) {
-                return dateUtils.getISO8601WeekOfYear(date, firstDayOfWeek);
+                return dateUtils.getWeekNumber(date, firstDayOfWeek, 'firstFourDays');
             }
 
             if(weekNumberRule === 'firstDay' || (weekNumberRule === 'auto' && firstDayOfWeek !== 1)) {
-                return dateUtils.getWeekNumberFirstDayOfYear(date, firstDayOfWeek);
+                return dateUtils.getWeekNumber(date, firstDayOfWeek, 'firstDay');
             }
 
             if(weekNumberRule === 'fullWeek') {
-                return dateUtils.getWeekNumberFirstFullWeekOfYear(date, firstDayOfWeek);
+                return dateUtils.getWeekNumber(date, firstDayOfWeek, 'fullWeek');
             }
         },
 

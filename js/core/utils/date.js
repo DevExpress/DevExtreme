@@ -3,6 +3,11 @@ import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
 
+const DAYS_IN_WEEK = 7;
+const THURSDAY_WEEK_NUMBER = 4;
+const SUNDAY_WEEK_NUMBER = 7;
+const USUAL_WEEK_COUNT_IN_YEAR = 52;
+
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
 const toMilliseconds = function(value) {
@@ -494,7 +499,7 @@ const getLastMonthDate = function(date) {
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {
-    const delta = (date.getDay() - firstDayOfWeek + 7) % 7;
+    const delta = (date.getDay() - firstDayOfWeek + DAYS_IN_WEEK) % DAYS_IN_WEEK;
 
     const result = new Date(date);
     result.setDate(date.getDate() - delta);
@@ -502,91 +507,71 @@ function getFirstWeekDate(date, firstDayOfWeek) {
     return result;
 }
 
-function getFirstDayOfYear(date) {
-    return new Date(date.getFullYear(), 0, 1);
-}
-
 function getUTCTime(date) {
     return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-function getDayOfYear(date) {
-    const ms = getUTCTime(date) - getUTCTime(getFirstDayOfYear(date));
+function getDayNumber(date) {
+    const ms = getUTCTime(date) - getUTCTime(getFirstDateInYear(date.getFullYear()));
 
     return 1 + Math.floor(ms / toMilliseconds('day'));
 }
 
-function getFullWeeks(date, firstDayOfWeek) {
-    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
-
-    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
-
-    const daysInFirstWeek = 8 - firstDayOfYear;
-
-    return Math.ceil((getDayOfYear(date) - daysInFirstWeek) / 7);
+function getFirstDateInYear(year) {
+    return new Date(year, 0, 1);
 }
 
-function getWeekNumberFirstFullWeekOfYear(date, firstDayOfWeek) {
-    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
-
-    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
-
-    const daysInFirstWeek = 8 - firstDayOfYear;
-
-    let result = getFullWeeks(date, firstDayOfWeek);
-
-    if(daysInFirstWeek === 7) { result++; }
-
-    if(result === 0) { return getWeekNumberFirstFullWeekOfYear(new Date(date.getFullYear() - 1, 11, 31), firstDayOfWeek); }
-
-    return result;
+function getLastDateInYear(year) {
+    return new Date(year, 11, 31);
 }
 
-function getWeekNumberFirstDayOfYear(date, firstDayOfWeek) {
-    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
+function getDayWeekNumber(date, firstDayOfWeek) {
+    let day = date.getDay() - firstDayOfWeek + 1;
+    if(day <= 0) { day += DAYS_IN_WEEK; }
 
-    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
-
-    const daysInFirstWeek = 8 - firstDayOfYear;
-    const lastDate = new Date(date.getFullYear(), 11, 31);
-
-    let lastDayOfWeek = lastDate.getDay() - firstDayOfWeek + 1;
-
-    if(lastDayOfWeek <= 0) { lastDayOfWeek += 7; }
-
-    let result = getFullWeeks(date, firstDayOfWeek);
-
-    if(daysInFirstWeek > 0) { result++; }
-
-    const isSunday = firstDayOfYear === 7 || lastDayOfWeek === 7;
-
-    if((result > 52 && !isSunday) || result === 54) { result = 1; }
-
-    return result;
+    return day;
 }
 
-function getISO8601WeekOfYear(date, firstDayOfWeek) {
-    let firstDayOfYear = getFirstDayOfYear(date).getDay() - firstDayOfWeek + 1;
+function getWeekNumber(date, firstDayOfWeek, rule) {
+    const firstWeekDayInYear = getDayWeekNumber(getFirstDateInYear(date.getFullYear()), firstDayOfWeek);
+    const lastWeekDayInYear = getDayWeekNumber(getLastDateInYear(date.getFullYear()), firstDayOfWeek);
+    const daysInFirstWeek = DAYS_IN_WEEK - firstWeekDayInYear + 1;
 
-    if(firstDayOfYear <= 0) { firstDayOfYear += 7; }
+    let weekNumber = Math.ceil((getDayNumber(date) - daysInFirstWeek) / 7);
+    switch(rule) {
+        case 'fullWeek': {
+            if(daysInFirstWeek === DAYS_IN_WEEK) { weekNumber++; }
+            if(weekNumber === 0) {
+                const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
+                return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
+            }
+            return weekNumber;
+        }
+        case 'firstDay': {
+            if(daysInFirstWeek > 0) { weekNumber++; }
 
-    const daysInFirstWeek = 8 - firstDayOfYear;
-    const lastDate = new Date(date.getFullYear(), 11, 31);
+            const isSunday = firstWeekDayInYear === SUNDAY_WEEK_NUMBER
+                || lastWeekDayInYear === SUNDAY_WEEK_NUMBER;
+            if((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) { weekNumber = 1; }
 
-    let lastDayOfWeek = lastDate.getDay() - firstDayOfWeek + 1;
+            return weekNumber;
+        }
+        case 'firstFourDays': {
+            if(daysInFirstWeek > 3) { weekNumber++; }
 
-    if(lastDayOfWeek <= 0) { lastDayOfWeek += 7; }
+            const isThursday = firstWeekDayInYear === THURSDAY_WEEK_NUMBER
+                || lastWeekDayInYear === THURSDAY_WEEK_NUMBER;
+            if(weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) { weekNumber = 1; }
 
-    let result = getFullWeeks(date, firstDayOfWeek);
-
-    if(daysInFirstWeek > 3) { result++; }
-
-    const isThursday = firstDayOfYear === 4 || lastDayOfWeek === 4;
-
-    if(result > 52 && !isThursday) { result = 1; }
-    if(result === 0) { return getISO8601WeekOfYear(new Date(date.getFullYear() - 1, 11, 31), firstDayOfWeek); }
-
-    return result;
+            if(weekNumber === 0) {
+                const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
+                return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
+            }
+            return weekNumber;
+        }
+        default:
+            break;
+    }
 }
 
 const normalizeDateByWeek = function(date, currentDate) {
@@ -759,9 +744,7 @@ const dateUtils = {
     getLastMonthDate: getLastMonthDate,
     getFirstMonthDate: getFirstMonthDate,
     getFirstWeekDate: getFirstWeekDate,
-    getWeekNumberFirstDayOfYear: getWeekNumberFirstDayOfYear,
-    getWeekNumberFirstFullWeekOfYear: getWeekNumberFirstFullWeekOfYear,
-    getISO8601WeekOfYear: getISO8601WeekOfYear,
+    getWeekNumber: getWeekNumber,
     normalizeDateByWeek: normalizeDateByWeek,
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,
