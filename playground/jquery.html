@@ -45,11 +45,32 @@
         <br />
         <br />
         <br />
+
         <div id="scheduler"></div>
     </div>
 
     <script>
         $(() => {
+            // $('#scheduler').dxScheduler({
+            //     dataSource: [{
+            //         text: 'Increase Price - North Region',
+            //         startDate: '2018-11-26T02:00:00Z',
+            //         endDate: '2018-11-26T02:15:00Z',
+            //         recurrenceRule: 'FREQ=DAILY;COUNT=5',
+            //         recurrenceException: ''
+            //     }],
+            //     views: ['week'],
+            //     currentView: 'week',
+            //     currentDate: new Date(2018, 10, 26),
+            //     dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
+            //     timeZone: 'Etc/UTC',
+            //     editing: true,
+            //     onAppointmentUpdating: function(e) {
+            //         console.log('20181128T020000Z|', e.newData.recurrenceException);
+            //         //assert.equal(e.newData.recurrenceException, '20181128T020000Z', 'correct recurrence exception date');
+            //     }
+            // });
+
             const draggingGroupName = 'appointmentsGroup';
 
             const createItemElement = function (data) {
@@ -85,6 +106,23 @@
             tasks.forEach((task) => {
                 createItemElement(task);
             });
+
+            // $('#scheduler').dxScheduler({
+            //     dataSource: [ {
+            //         text: 'Increase Price - North Region',
+            //         startDate: '2018-11-26T02:00:00Z',
+            //         endDate: '2018-11-26T02:15:00Z',
+            //         recurrenceRule: 'FREQ=DAILY;COUNT=5',
+            //         recurrenceException: ''
+            //     }],
+            //     width: 800,
+            //     views: ['week'],
+            //     currentView: 'week',
+            //     currentDate: new Date(2018, 10, 26),
+            //     dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
+            //     timeZone: 'Etc/UTC',
+            //     editing: true,
+            // });
 
             $('#scheduler').dxScheduler({
                 width: 500,

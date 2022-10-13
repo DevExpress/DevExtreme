@@ -90,25 +90,24 @@ const subscribes = {
 
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
+
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
         if(newCellIndex === -1) {
-            if(event.fromComponent === event.toComponent) {
+            if(!isDragAndDropBetweenComponents) { // TODO dragging inside component
                 this._appointments.moveAppointmentBack(event);
-                return;
-            } else {
-                return;
             }
+            return;
         }
 
 
         if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, (function() {
+            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, () => {
 
                 this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
                     this._appointments.moveAppointmentBack(event);
                 }, event);
-            }).bind(this), undefined, undefined, event);
+            }, undefined, undefined, event);
         } else {
             this._appointments.moveAppointmentBack(event);
         }
