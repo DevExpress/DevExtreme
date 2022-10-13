@@ -538,14 +538,14 @@ const SelectBox = DropDownList.inherit({
         }).bind(this));
     },
 
-    _changeValueEventIncludesBlur: function() {
-        const eventOption = this.option(this._getValueChangeEventOptionName());
+    _valueChangeEventIncludesBlur: function() {
+        const valueChangeEvent = this.option(this._getValueChangeEventOptionName());
 
-        return eventOption.includes('blur');
+        return valueChangeEvent.includes('blur');
     },
 
     _isPreventedFocusOutEvent: function(e) {
-        return this._preventNestedFocusEvent(e) || this._changeValueEventIncludesBlur();
+        return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
     },
 
     _focusOutHandler: function(e) {
@@ -857,6 +857,11 @@ const SelectBox = DropDownList.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'customItemCreateEvent':
+                this._refreshValueChangeEvent();
+                this._refreshFocusEvent();
+                this._refreshEvents();
+                break;
             case 'onCustomItemCreating':
                 this._initCustomItemCreatingAction();
                 break;

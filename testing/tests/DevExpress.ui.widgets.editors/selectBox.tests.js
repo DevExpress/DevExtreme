@@ -6136,7 +6136,7 @@ QUnit.module('displayExpr', moduleSetup, () => {
 });
 
 
-QUnit.module('customItemCreateEvent', {
+QUnit.module('The "customItemCreateEvent" option warning', {
     beforeEach: function() {
         this.$selectBox = $('#selectBox');
 
@@ -6190,5 +6190,59 @@ QUnit.module('customItemCreateEvent', {
             assert.strictEqual(errorsSpy.callCount, 0, 'no warning is logged');
             errorsSpy.restore();
         }
+    });
+});
+
+QUnit.module('the "customItemCreateEvent" option', {
+    beforeEach: function() {
+        this.$selectBox = $('#selectBox').dxSelectBox({
+            items: ['item 1'],
+            acceptCustomValue: true,
+            focusStateEnabled: true,
+            onCustomItemCreating: (args) => {
+                const currentItems = args.component.option('items');
+
+                currentItems.push(args.text);
+                args.component.option('items', currentItems);
+                args.customItem = args.text;
+            },
+        });
+
+        this.instance = this.$selectBox.dxSelectBox('instance');
+        this.$input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.customValue = 't';
+    },
+}, () => {
+    const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
+
+    events.forEach((eventValue) => {
+        QUnit.testInActiveWindow(`custom item has been added when customItemCreateEvent='${eventValue}'`, function(assert) {
+            const { $input, customValue, keyboard, instance } = this;
+
+            instance.option('customItemCreateEvent', eventValue);
+
+            switch(eventValue) {
+                case 'keyup':
+                    instance.focus();
+                    $input.val(customValue);
+                    keyboard.keyUp(customValue);
+                    break;
+                case 'input':
+                    keyboard.type(customValue);
+                    break;
+                case 'change':
+                    keyboard.type(customValue);
+                    $input.trigger('change');
+                    break;
+                case 'blur':
+                case 'focusout':
+                    keyboard.type(customValue);
+                    $input.trigger(eventValue);
+                    break;
+            }
+
+            assert.strictEqual(instance.option('items').length, 2, 'custom item has been added');
+        });
     });
 });
