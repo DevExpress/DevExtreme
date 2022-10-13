@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -23,7 +23,7 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -53,7 +53,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -61,7 +61,7 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -78,7 +78,7 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -86,7 +86,7 @@ jobs:
         node-version: '15'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -108,7 +108,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
