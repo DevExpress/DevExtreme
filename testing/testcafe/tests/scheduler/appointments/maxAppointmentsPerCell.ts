@@ -74,7 +74,7 @@ test('appointments should have correct height in week view with all day', async 
   await t
     .expect(await takeScreenshot(
       'maxAppointmentsPerCell-allDay.png',
-      scheduler.element,
+      scheduler.allDayRow,
     ))
     .ok()
     .expect(compareResults.isValid())
@@ -107,7 +107,7 @@ test('appointments should have correct height in month view', async (t) => {
   await t
     .expect(await takeScreenshot(
       'maxAppointmentsPerCell-month.png',
-      scheduler.element,
+      scheduler.workSpace,
     ))
     .ok()
     .expect(compareResults.isValid())
@@ -146,7 +146,7 @@ const apptsCounts = [1, 5];
     await t
       .expect(await takeScreenshot(
         `maxAppointmentsPerCell-timelineWeek-${apptsCount}-appointments.png`,
-        scheduler.element,
+        scheduler.workSpace,
       ))
       .ok()
       .expect(compareResults.isValid())
