@@ -36,7 +36,7 @@ export interface ComponentDisabledDate<T> {
 /** @public */
 export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
-/** public */
+/** @public */
 export type WeekNumberRule = 'auto' | 'firstDay' | 'fullWeek' | 'firstFourDays';
 
 /** @public */
