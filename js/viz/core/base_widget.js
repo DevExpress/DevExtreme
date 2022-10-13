@@ -21,6 +21,7 @@ import {
     createEventTrigger,
     createResizeHandler,
     createIncidentOccurred } from './base_widget.utils';
+import resizeObserverSingleton from '../../core/resize_observer';
 const _floor = Math.floor;
 const _log = warnings.log;
 
@@ -180,7 +181,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         };
     },
 
-    _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED'],
+    _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED', 'USE_RESIZE_OBSERVER'],
 
     _initPlugins: function() {
         const that = this;
@@ -330,7 +331,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _layoutChangesOrder: ['ELEMENT_ATTR', 'CONTAINER_SIZE', 'LAYOUT'],
 
-    _customChangesOrder: ['DISABLED'],
+    _customChangesOrder: ['DISABLED', 'USE_RESIZE_OBSERVER'],
 
     _change_EVENTS: function() {
         this._eventTrigger.applyChanges();
@@ -378,6 +379,21 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
                     'filter': null
                 });
             }
+        }
+    },
+
+    _change_USE_RESIZE_OBSERVER() {
+        this._toggleObserverSubscription(this.option('useResizeObserver'));
+    },
+
+    _toggleObserverSubscription(needSubscription) {
+        const contentElement = this._$element[0];
+        if(needSubscription) {
+            resizeObserverSingleton.observe(contentElement, (e) => {
+                this.render();
+            });
+        } else {
+            resizeObserverSingleton.unobserve(contentElement);
         }
     },
 
@@ -438,6 +454,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         }
 
         that.callBase.apply(that, arguments);
+        that._toggleObserverSubscription(false);
         that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();
         that._layout.dispose();
@@ -643,7 +660,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         rtlEnabled: 'THEME',
         encodeHtml: 'THEME',
         elementAttr: 'ELEMENT_ATTR',
-        disabled: 'DISABLED'
+        disabled: 'DISABLED',
+        useResizeObserver: 'USE_RESIZE_OBSERVER'
     },
 
     _partialOptionChangesMap: { },
