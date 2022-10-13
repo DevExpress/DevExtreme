@@ -4153,7 +4153,8 @@
             "Name": "Overview",
             "Widget": "Calendar"
           }
-        ]
+        ],
+        "Badge": "Updated"
       },
       {
         "Name": "Check Box",

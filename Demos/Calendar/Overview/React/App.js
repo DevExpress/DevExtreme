@@ -6,12 +6,23 @@ import Calendar from 'devextreme-react/calendar';
 import CustomCell, { isWeekend } from './CustomCell.js';
 
 const zoomLevels = ['month', 'year', 'decade', 'century'];
+const weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
+const weekDays = [
+  { id: 0, text: 'Sunday' },
+  { id: 1, text: 'Monday' },
+  { id: 2, text: 'Tuesday' },
+  { id: 3, text: 'Wednesday' },
+  { id: 4, text: 'Thursday' },
+  { id: 5, text: 'Friday' },
+  { id: 6, text: 'Saturday' },
+];
 
 export default function App() {
   const [minDateValue, setMinDateValue] = React.useState(null);
   const [maxDateValue, setMaxDateValue] = React.useState(null);
   const [weekendDisabled, setWeekendDisabled] = React.useState(null);
   const [firstDay, setFirstDay] = React.useState(0);
+  const [weekNumberRule, setWeekNumberRule] = React.useState('auto');
   const [showWeekNumbers, setShowWeekNumbers] = React.useState(false);
   const [currentValue, setCurrentValue] = React.useState(new Date());
   const [useCellTemplate, setUseCellTemplate] = React.useState(null);
@@ -36,7 +47,7 @@ export default function App() {
     );
   }, [setMinDateValue]);
 
-  const onMaxDateChanged = React.useCallback(({ value }) => {
+  const onMaxDateChange = React.useCallback(({ value }) => {
     setMaxDateValue(
       value ? new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3) : null,
     );
@@ -47,8 +58,12 @@ export default function App() {
   }, [setWeekendDisabled]);
 
   const onFirstDayChange = React.useCallback(({ value }) => {
-    setFirstDay(value ? 1 : 0);
+    setFirstDay(value);
   }, [setFirstDay]);
+
+  const onWeekNumberRuleChange = React.useCallback(({ value }) => {
+    setWeekNumberRule(value);
+  }, [setWeekNumberRule]);
 
   const onShowWeekNumbersChange = React.useCallback(({ value }) => {
     setShowWeekNumbers(value);
@@ -67,10 +82,9 @@ export default function App() {
   }, [onZoomLevelChange]);
 
   return (
-    <React.Fragment>
-      <div className="widget-container">
+    <div id="container">
+      <div className="calendar-container">
         <Calendar
-          id="calendar-container"
           value={currentValue}
           onValueChanged={onCurrentValueChange}
           onOptionChanged={onOptionChange}
@@ -78,6 +92,7 @@ export default function App() {
           max={maxDateValue}
           disabledDates={weekendDisabled ? isDateDisabled : null}
           firstDayOfWeek={firstDay}
+          weekNumberRule={weekNumberRule}
           showWeekNumbers={showWeekNumbers}
           disabled={disabled}
           zoomLevel={zoomLevel}
@@ -97,7 +112,7 @@ export default function App() {
           <CheckBox
             defaultValue={false}
             text="Specified max value"
-            onValueChanged={onMaxDateChanged}
+            onValueChanged={onMaxDateChange}
           />
         </div>
         <div className="option">
@@ -105,13 +120,6 @@ export default function App() {
             defaultValue={false}
             text="Disable weekend"
             onValueChanged={onDisableWeekendChange}
-          />
-        </div>
-        <div className="option">
-          <CheckBox
-            defaultValue={false}
-            text="Monday as the first day of a week"
-            onValueChanged={onFirstDayChange}
           />
         </div>
         <div className="option">
@@ -152,8 +160,26 @@ export default function App() {
             onValueChanged={onCurrentValueChange}
           />
         </div>
+        <div className="option">
+          <span>First day of week</span>
+          <SelectBox
+            dataSource={weekDays}
+            displayExpr="text"
+            valueExpr="id"
+            value={firstDay}
+            onValueChanged={onFirstDayChange}
+          />
+        </div>
+        <div className="option">
+          <span>Week number rule</span>
+          <SelectBox
+            dataSource={weekNumberRules}
+            value={weekNumberRule}
+            onValueChanged={onWeekNumberRuleChange}
+          />
+        </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 

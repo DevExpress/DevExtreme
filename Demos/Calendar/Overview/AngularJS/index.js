@@ -4,9 +4,21 @@ DemoApp.controller('DemoController', ($scope) => {
   const now = new Date();
 
   $scope.zoomLevels = ['month', 'year', 'decade', 'century'];
+  $scope.weekDays = [
+    { id: 0, text: 'Sunday' },
+    { id: 1, text: 'Monday' },
+    { id: 2, text: 'Tuesday' },
+    { id: 3, text: 'Wednesday' },
+    { id: 4, text: 'Thursday' },
+    { id: 5, text: 'Friday' },
+    { id: 6, text: 'Saturday' },
+  ];
+  $scope.weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
   $scope.currentValue = new Date();
-  $scope.calendarDisabled = false;
-  $scope.isMondayFirst = 0;
+  $scope.firstDayOfWeek = 0;
+  $scope.showWeekNumbers = false;
+  $scope.weekNumberRule = 'auto';
+  $scope.disabled = false;
   $scope.minDateValue = null;
   $scope.maxDateValue = null;
   $scope.zoomLevel = $scope.zoomLevels[0];
@@ -35,14 +47,6 @@ DemoApp.controller('DemoController', ($scope) => {
       };
     } else {
       $scope.disabledDates = null;
-    }
-  };
-
-  $scope.setFirstDay = function (e) {
-    if (e.value) {
-      $scope.firstDay = 1;
-    } else {
-      $scope.firstDay = 0;
     }
   };
 

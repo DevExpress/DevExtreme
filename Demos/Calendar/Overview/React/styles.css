@@ -1,9 +1,13 @@
-.widget-container {
-  margin-right: 320px;
+#container {
+  display: flex;
 }
 
-#calendar-container {
-  margin: auto;
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
@@ -32,19 +36,14 @@
   font-style: italic;
 }
 
-.options {
-  padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 260px;
-}
-
 .caption {
   font-weight: 500;
   font-size: 18px;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .option {

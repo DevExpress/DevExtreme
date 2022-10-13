@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <div class="widget-container">
+  <div id="container">
+    <div class="calendar-container">
       <DxCalendar
-        id="calendar-container"
         v-model:value="currentValue"
+        v-model:zoom-level="zoomLevel"
         :min="minDateValue"
         :max="maxDateValue"
         :disabled-dates="disabledDates"
         :first-day-of-week="firstDay"
         :show-week-numbers="showWeekNumbers"
+        :week-number-rule="weekNumberRule"
         :disabled="disabled"
-        :zoom-level="zoomLevel"
         :cell-template="cellTemplate"
       >
         <template #custom="{ data: cell }">
@@ -45,16 +45,8 @@
       </div>
       <div class="option">
         <DxCheckBox
-          :value="false"
-          text="Monday as the first day of a week"
-          @value-changed="setFirstDay"
-        />
-      </div>
-      <div class="option">
-        <DxCheckBox
-          :value="false"
+          v-model:value="showWeekNumbers"
           text="Show week numbers"
-          @value-changed="setShowWeekNumbers"
         />
       </div>
       <div class="option">
@@ -73,16 +65,31 @@
       <div class="option">
         <span>Zoom level</span>
         <DxSelectBox
-          :data-source="zoomLevels"
           v-model:value="zoomLevel"
+          :data-source="zoomLevels"
         />
       </div>
       <div class="option">
         <span>Selected date</span>
         <DxDateBox
-          id="selected-date"
           v-model:value="currentValue"
           width="100%"
+        />
+      </div>
+      <div class="option">
+        <span>First day of week</span>
+        <DxSelectBox
+          v-model:value="firstDay"
+          :data-source="weekDays"
+          value-expr="id"
+          display-expr="text"
+        />
+      </div>
+      <div class="option">
+        <span>Week number rule</span>
+        <DxSelectBox
+          v-model:value="weekNumberRule"
+          :data-source="weekNumberRules"
         />
       </div>
     </div>
@@ -108,11 +115,22 @@ export default {
       disabledDates: null,
       firstDay: 0,
       showWeekNumbers: false,
+      weekNumberRule: 'auto',
       currentValue: new Date(),
       zoomLevels: ['month', 'year', 'decade', 'century'],
       cellTemplate: 'cell',
       disabled: false,
       zoomLevel: 'month',
+      weekDays: [
+        { id: 0, text: 'Sunday' },
+        { id: 1, text: 'Monday' },
+        { id: 2, text: 'Tuesday' },
+        { id: 3, text: 'Wednesday' },
+        { id: 4, text: 'Thursday' },
+        { id: 5, text: 'Friday' },
+        { id: 6, text: 'Saturday' },
+      ],
+      weekNumberRules: ['auto', 'firstDay', 'firstFourDays', 'fullWeek'],
     };
   },
   methods: {
@@ -140,16 +158,6 @@ export default {
       } else {
         this.disabledDates = null;
       }
-    },
-    setFirstDay(e) {
-      if (e.value) {
-        this.firstDay = 1;
-      } else {
-        this.firstDay = 0;
-      }
-    },
-    setShowWeekNumbers(e) {
-      this.showWeekNumbers = e.value;
     },
     useCellTemplate(e) {
       if (e.value) {
@@ -182,12 +190,16 @@ export default {
 };
 </script>
 <style scoped>
-.widget-container {
-  margin-right: 320px;
+#container {
+  display: flex;
 }
 
-#calendar-container {
-  margin: auto;
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .dx-calendar-cell:not(.dx-calendar-other-month) .weekend,
@@ -216,19 +228,14 @@ export default {
   font-style: italic;
 }
 
-.options {
-  padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 260px;
-}
-
 .caption {
   font-weight: 500;
   font-size: 18px;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .option {

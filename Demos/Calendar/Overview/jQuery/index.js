@@ -1,12 +1,23 @@
 $(() => {
   const zoomLevels = ['month', 'year', 'decade', 'century'];
+  const weekDays = [
+    { id: 0, text: 'Sunday' },
+    { id: 1, text: 'Monday' },
+    { id: 2, text: 'Tuesday' },
+    { id: 3, text: 'Wednesday' },
+    { id: 4, text: 'Thursday' },
+    { id: 5, text: 'Friday' },
+    { id: 6, text: 'Saturday' },
+  ];
+  const weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
   const date = new Date().getTime();
 
-  const calendar = $('#calendar-container').dxCalendar({
+  const calendar = $('#calendar').dxCalendar({
     value: new Date(),
     disabled: false,
     firstDayOfWeek: 0,
     showWeekNumbers: false,
+    weekNumberRule: 'auto',
     zoomLevel: zoomLevels[0],
     onValueChanged(data) {
       selectedDate.option('value', data.value);
@@ -51,17 +62,6 @@ $(() => {
     },
   });
 
-  $('#first-day').dxCheckBox({
-    text: 'Monday as the first day of a week',
-    onValueChanged(data) {
-      if (data.value) {
-        calendar.option('firstDayOfWeek', 1);
-      } else {
-        calendar.option('firstDayOfWeek', 0);
-      }
-    },
-  });
-
   $('#week-numbers').dxCheckBox({
     text: 'Show week numbers',
     onValueChanged(data) {
@@ -99,6 +99,24 @@ $(() => {
       calendar.option('value', data.value);
     },
   }).dxDateBox('instance');
+
+  $('#first-day-of-week').dxSelectBox({
+    dataSource: weekDays,
+    value: 0,
+    valueExpr: 'id',
+    displayExpr: 'text',
+    onValueChanged(data) {
+      calendar.option('firstDayOfWeek', data.value);
+    },
+  });
+
+  $('#week-number-rule').dxSelectBox({
+    dataSource: weekNumberRules,
+    value: weekNumberRules[0],
+    onValueChanged(data) {
+      calendar.option('weekNumberRule', data.value);
+    },
+  });
 
   const holidays = [[1, 0], [4, 6], [25, 11]];
 

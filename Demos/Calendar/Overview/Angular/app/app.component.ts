@@ -24,10 +24,6 @@ export class AppComponent {
 
   currentValue: Date = new Date();
 
-  firstDay = 0;
-
-  showWeekNumbers = false;
-
   minDateValue: Date | null = null;
 
   maxDateValue: Date | null = null;
@@ -36,6 +32,20 @@ export class AppComponent {
 
   zoomLevels: string[] = [
     'month', 'year', 'decade', 'century',
+  ];
+
+  weekDays: { id: number; text: string }[] = [
+    { id: 0, text: 'Sunday' },
+    { id: 1, text: 'Monday' },
+    { id: 2, text: 'Tuesday' },
+    { id: 3, text: 'Wednesday' },
+    { id: 4, text: 'Thursday' },
+    { id: 5, text: 'Friday' },
+    { id: 6, text: 'Saturday' },
+  ];
+
+  weekNumberRules: string[] = [
+    'auto', 'firstDay', 'firstFourDays', 'fullWeek',
   ];
 
   cellTemplate = 'cell';
@@ -73,18 +83,6 @@ export class AppComponent {
     } else {
       this.disabledDates = null;
     }
-  }
-
-  setFirstDay(e) {
-    if (e.value) {
-      this.firstDay = 1;
-    } else {
-      this.firstDay = 0;
-    }
-  }
-
-  setShowWeekNumbers(e) {
-    this.showWeekNumbers = e.value;
   }
 
   useCellTemplate(e) {

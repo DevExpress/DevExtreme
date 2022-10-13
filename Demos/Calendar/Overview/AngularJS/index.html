@@ -15,21 +15,22 @@
   </head>
   <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-      <div class="widget-container">
+      <div class="calendar-container">
         <div
-          id="calendar-container"
           dx-calendar="{
-                  bindingOptions: {
-                      min: 'minDateValue',
-                      max: 'maxDateValue',
-                      disabledDates: 'disabledDates',
-                      firstDayOfWeek: 'firstDay',
-                      disabled: 'calendarDisabled',
-                      value: 'currentValue',
-                      zoomLevel: 'zoomLevel',
-                      cellTemplate: 'cellTemplate'
-                  }
-              }"
+            bindingOptions: {
+              min: 'minDateValue',
+              max: 'maxDateValue',
+              disabledDates: 'disabledDates',
+              firstDayOfWeek: 'firstDayOfWeek',
+              showWeekNumbers: 'showWeekNumbers',
+              weekNumberRule: 'auto',
+              disabled: 'disabled',
+              value: 'currentValue',
+              zoomLevel: 'zoomLevel',
+              cellTemplate: 'cellTemplate'
+            }
+          }"
         ></div>
       </div>
       <div class="options">
@@ -37,67 +38,68 @@
         <div class="option">
           <div
             dx-check-box="{
-                      text: 'Specified min value',
-                      value: false,
-                      onValueChanged: setMinDate
-                  }"
+              text: 'Specified min value',
+              value: false,
+              onValueChanged: setMinDate
+            }"
           ></div>
         </div>
         <div class="option">
           <div
             dx-check-box="{
-                      text: 'Specified max value',
-                      value: false,
-                      onValueChanged: setMaxDate
-                  }"
+              text: 'Specified max value',
+              value: false,
+              onValueChanged: setMaxDate
+            }"
           ></div>
         </div>
         <div class="option">
           <div
             dx-check-box="{
-                      text: 'Disable weekend',
-                      value: false,
-                      onValueChanged: disableWeekend
-                  }"
+              text: 'Disable weekend',
+              value: false,
+              onValueChanged: disableWeekend
+            }"
           ></div>
         </div>
         <div class="option">
           <div
             dx-check-box="{
-                      text: 'Monday as the first day of a week',
-                      value: false,
-                      onValueChanged: setFirstDay
-                  }"
+              text: 'Show week numbers',
+              bindingOptions: {
+                value: 'showWeekNumbers'
+              }
+            }"
           ></div>
         </div>
         <div class="option">
           <div
             dx-check-box="{
-                      text: 'Use the Custom Cell Template',
-                      value: false,
-                      onValueChanged: useCellTemplate
-                  }"
+              text: 'Use the Custom Cell Template',
+              value: false,
+              onValueChanged: useCellTemplate
+            }"
           ></div>
         </div>
         <div class="option">
           <div
             dx-check-box="{
-                      text: 'Disabled',
-                      bindingOptions: {
-                          value: 'calendarDisabled'
-                      }
-                  }"
+              text: 'Disabled',
+              bindingOptions: {
+                  value: 'disabled'
+              }
+            }"
           ></div>
         </div>
         <div class="option">
           <span>Zoom level</span>
           <div
             dx-select-box="{
-                      dataSource: zoomLevels,
-                      bindingOptions: {
-                          value: 'zoomLevel'
-                      }
-              }"
+              dataSource: zoomLevels,
+              bindingOptions: {
+                value: 'zoomLevel'
+              }
+            }"
           ></div>
         </div>
         <div class="option">
@@ -105,11 +107,35 @@
           <div
             id="selected-date"
             dx-date-box="{
-                          width: '100%',
-                          bindingOptions: {
-                              value: 'currentValue'
-                          }
-                  }"
+              width: '100%',
+              bindingOptions: {
+                value: 'currentValue'
+              }
+            }"
+          ></div>
+        </div>
+        <div class="option">
+          <span>First day of week</span>
+          <div
+            dx-select-box="{
+              dataSource: weekDays,
+              bindingOptions: {
+                value: 'firstDayOfWeek'
+              },
+              displayExpr: 'text',
+              valueExpr: 'id',
+            }"
+          ></div>
+        </div>
+        <div class="option">
+          <span>Week number rule</span>
+          <div
+            dx-select-box="{
+              dataSource: weekNumberRules,
+              bindingOptions: {
+                value: 'weekNumberRule'
+              },
+            }"
           ></div>
         </div>
       </div>
