@@ -37,7 +37,7 @@ export function toggleItemFocusableElementTabIndex(context, item) {
             let $focusTarget = itemInstance._focusTarget?.();
 
             if(widget === 'dxDropDownButton') {
-                $focusTarget = $focusTarget.find(`.${BUTTON_GROUP_CLASS}`);
+                $focusTarget = $focusTarget && $focusTarget.find(`.${BUTTON_GROUP_CLASS}`);
             } else {
                 $focusTarget = $focusTarget ?? $(itemInstance.element());
             }
