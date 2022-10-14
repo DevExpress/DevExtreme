@@ -2,13 +2,8 @@
 
 // adduse
 
-
 .dx-toolbar {
   width: 100%;
-
-  .dx-button-content::after {
-    display: none;
-  }
 
   .dx-device-mobile &.dx-toolbar-multiline,
   &.dx-toolbar-multiline {
