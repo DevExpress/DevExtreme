@@ -4,11 +4,16 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
-const dashboardReporter = require('@vasily.strelyaev/testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
 let testCafe;
-createTestCafe('localhost', 1437, 1438)
+createTestCafe({
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    // eslint-disable-next-line spellcheck/spell-checker
+    proxyless: true,
+})
     .then(tc => {
         testCafe = tc;
 
@@ -105,7 +110,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: ['minimal', dashboardReporter],
+            reporter: ['spec'],
             componentFolder: '',
             file: '*',
             cache: true,
