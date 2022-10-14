@@ -441,26 +441,6 @@ QUnit.test('Compensate root coordinates on Unlock', function(assert) {
     }
 });
 
-QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) {
-    // arrange
-    const renderer = new Renderer({
-        container: this.container
-    });
-    this.boundingRect = { left: 123.34, top: 2.5 };
-
-    // act
-    renderer.fixPlacement();
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.move.callCount, 2);
-        assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.css.callCount, 1);
-    }
-});
-
 QUnit.test('Remove compensation before getting markup, compensate again after', function(assert) {
     // arrange
     const renderer = new Renderer({

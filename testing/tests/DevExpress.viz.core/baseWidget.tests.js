@@ -966,33 +966,6 @@ QUnit.module('Fix renderer root placement for sharping', $.extend({}, environmen
     }
 }));
 
-QUnit.test('Call renderer.fixPlacement on window resize', function(assert) {
-    this.createWidget();
-
-    this.triggerResizeCallback();
-
-    assert.strictEqual(this.renderer.fixPlacement.callCount, 1);
-});
-
-QUnit.test('Call renderer.fixPlacement on window resize even if redrawOnResize false', function(assert) {
-    this.createWidget({ redrawOnResize: false });
-
-    this.triggerResizeCallback();
-
-    assert.strictEqual(this.renderer.fixPlacement.callCount, 1);
-});
-
-QUnit.test('Call renderer.fixPlacement on container visibility change (show)', function(assert) {
-    // arrange
-    this.createWidget();
-    this.$container.trigger('dxhiding').hide();
-
-    // act
-    this.$container.show().trigger('dxshown');
-
-    assert.strictEqual(this.renderer.fixPlacement.callCount, 2);
-});
-
 QUnit.module('Incident occurred', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);

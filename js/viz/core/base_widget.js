@@ -507,7 +507,6 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
         const canvas = that._calculateCanvas();
 
-        that._renderer.fixPlacement();
         if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
             that._canvas = canvas;
             that._recreateSizeDependentObjects(true);
@@ -558,14 +557,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             that._removeResizeHandler();
         }
 
-        that._resizeHandler = createResizeHandler(function() {
-            if(redrawOnResize) {
+        if(redrawOnResize) {
+            that._resizeHandler = createResizeHandler(function() {
+
                 that._requestChange(['CONTAINER_SIZE']);
-            } else {
-                that._renderer.fixPlacement();
-            }
-        });
-        _windowResizeCallbacks.add(that._resizeHandler);
+            });
+            _windowResizeCallbacks.add(that._resizeHandler);
+        }
     },
 
     _removeResizeHandler: function() {
