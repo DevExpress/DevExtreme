@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isString } from '../../core/utils/type';
@@ -11,7 +10,7 @@ import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 import Scrollable from '../scroll_view/ui.scrollable';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import {
     EDIT_MODE_FORM,
     EDIT_MODE_POPUP,
@@ -21,6 +20,7 @@ import {
     DATA_EDIT_DATA_INSERT_TYPE,
     EDITING_FORM_OPTION_NAME
 } from './ui.grid_core.editing_constants';
+import { isElementInDom } from 'js/core/utils/dom';
 
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
@@ -306,7 +306,7 @@ export const editingFormBasedModule = {
                     cellOptions.value = column.calculateCellValue(rowData);
 
                     const template = this._getFormEditItemTemplate.bind(this)(cellOptions, column);
-                    this._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
+                    this._rowsView.renderTemplate($container, template, cellOptions, !!isElementInDom($container)).done(() => {
                         this._rowsView._updateCell($container, cellOptions);
                     });
                     return cellOptions;
