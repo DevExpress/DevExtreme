@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isString } from '../../core/utils/type';
@@ -9,9 +10,8 @@ import devices from '../../core/devices';
 import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
-import { isElementInDom } from '../../core/utils/dom';
 import Scrollable from '../scroll_view/ui.scrollable';
-import Popup from '../popup/ui.popup';
+import Popup from '../popup';
 import {
     EDIT_MODE_FORM,
     EDIT_MODE_POPUP,
@@ -104,7 +104,7 @@ export const editingFormBasedModule = {
 
                         const onlyInsertChanges = args.changeTypes?.length && args.changeTypes.every(item => item === 'insert');
 
-                        if((args.changeType === 'refresh' || hasEditRow) && !onlyInsertChanges) {
+                        if((args.changeType === 'refresh' || (hasEditRow && args.isOptionChanged)) && !onlyInsertChanges) {
                             this._repaintEditPopup();
                         }
                     }
@@ -306,7 +306,7 @@ export const editingFormBasedModule = {
                     cellOptions.value = column.calculateCellValue(rowData);
 
                     const template = this._getFormEditItemTemplate.bind(this)(cellOptions, column);
-                    this._rowsView.renderTemplate($container, template, cellOptions, !!isElementInDom($container)).done(() => {
+                    this._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
                         this._rowsView._updateCell($container, cellOptions);
                     });
                     return cellOptions;
