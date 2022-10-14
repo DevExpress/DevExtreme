@@ -6793,6 +6793,42 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         });
     });
 
+    // T1118387
+    QUnit.test('Focus should not be reset if field used in summary is changed and summary.recalculateWhileEditing is enabled', function(assert) {
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, value: 15, field: 'field' }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'popup'
+            },
+            repaintChangesOnly: true,
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [
+                    { column: 'value', summaryType: 'sum' }
+                ]
+            },
+            columns: ['id', 'value', 'field']
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        const popup = $(dataGrid.getController('editing').getPopupContent());
+        const valueInput = popup.find('.dx-texteditor-input').eq(1);
+        const fieldInput = popup.find('.dx-texteditor-input').eq(2);
+
+        valueInput.trigger('focus').val('35').trigger('change');
+        this.clock.tick();
+
+        fieldInput.trigger('focus');
+        this.clock.tick();
+
+        assert.deepEqual(document.activeElement.id, fieldInput.attr('id'), 'focus is not reset after changing the field used for a summary');
+    });
+
     QUnit.test('Pager should not be hidden after delete row using onSaving event handler', function(assert) {
         // arrange
         const items = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
