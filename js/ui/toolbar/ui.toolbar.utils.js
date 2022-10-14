@@ -34,9 +34,13 @@ export function toggleItemFocusableElementTabIndex(context, item) {
                 return;
             }
 
-            const $focusTarget = widget === 'dxDropDownButton'
-                ? itemInstance._focusTarget?.().find(`.${BUTTON_GROUP_CLASS}`)
-                : itemInstance._focusTarget?.() ?? $(itemInstance.element());
+            let $focusTarget = itemInstance._focusTarget?.();
+
+            if(widget === 'dxDropDownButton') {
+                $focusTarget = $focusTarget.find(`.${BUTTON_GROUP_CLASS}`);
+            } else {
+                $focusTarget = $focusTarget ?? $(itemInstance.element());
+            }
 
             const tabIndex = itemData.options?.tabIndex;
             if(isItemNotFocusable) {
