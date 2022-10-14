@@ -4151,10 +4151,10 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Calendar"
+            "Widget": "Calendar",
+            "Badge": "Updated"
           }
-        ],
-        "Badge": "Updated"
+        ]
       },
       {
         "Name": "Check Box",
