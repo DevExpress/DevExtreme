@@ -9,6 +9,7 @@ import devices from '../../core/devices';
 import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
+import { isElementInDom } from 'js/core/utils/dom';
 import Scrollable from '../scroll_view/ui.scrollable';
 import Popup from '../popup/ui.popup';
 import {
@@ -20,7 +21,6 @@ import {
     DATA_EDIT_DATA_INSERT_TYPE,
     EDITING_FORM_OPTION_NAME
 } from './ui.grid_core.editing_constants';
-import { isElementInDom } from 'js/core/utils/dom';
 
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
