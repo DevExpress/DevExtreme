@@ -3756,10 +3756,9 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('1');
 
-        $($input).trigger('change');
-        const listItems = $('.dx-list-item');
+        const itemsCount = $('.dx-list-item').length;
 
-        assert.equal(listItems.length, 2, 'search was performed');
+        assert.strictEqual(itemsCount, 2, 'search was performed');
     });
 
     QUnit.test('tag should be added after enter press key if popup was not opened early', function(assert) {
@@ -5068,6 +5067,60 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
+    });
+});
+
+
+QUnit.module('the "customItemCreateEvent" option', {
+    beforeEach: function() {
+        this.onCustomItemCreatingSpy = sinon.spy();
+
+        this.$tagBox = $('#tagBox').dxTagBox({
+            items: ['item 1'],
+            acceptCustomValue: true,
+            focusStateEnabled: true,
+            onCustomItemCreating: (args) => {
+                this.onCustomItemCreatingSpy();
+                args.customItem = args.text;
+            },
+        });
+
+        this.instance = this.$tagBox.dxTagBox('instance');
+        this.$input = this.$tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.customValue = 't';
+    },
+}, () => {
+    const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
+
+    events.forEach((eventValue) => {
+        QUnit.testInActiveWindow(`custom item has been added when customItemCreateEvent='${eventValue}'`, function(assert) {
+            const { $input, customValue, keyboard, instance, onCustomItemCreatingSpy } = this;
+
+            instance.option('customItemCreateEvent', eventValue);
+
+            switch(eventValue) {
+                case 'keyup':
+                    instance.focus();
+                    $input.val(customValue);
+                    keyboard.keyUp(customValue);
+                    break;
+                case 'input':
+                    keyboard.type(customValue);
+                    break;
+                case 'change':
+                    keyboard.type(customValue);
+                    $input.trigger('change');
+                    break;
+                case 'blur':
+                case 'focusout':
+                    keyboard.type(customValue);
+                    $input.trigger(eventValue);
+                    break;
+            }
+
+            assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
+        });
     });
 });
 

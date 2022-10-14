@@ -20550,8 +20550,14 @@ declare module DevExpress.ui {
     showSelectionControls?: boolean;
     /**
      * [descr:dxSelectBoxOptions.valueChangeEvent]
+     * @deprecated [depNote:dxSelectBoxOptions.valueChangeEvent]
      */
     valueChangeEvent?: string;
+
+    /**
+     * [descr:dxSelectBoxOptions.customItemCreateEvent]
+     */
+    customItemCreateEvent?: string;
 
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
