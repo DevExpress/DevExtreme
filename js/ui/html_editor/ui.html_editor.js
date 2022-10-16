@@ -197,7 +197,7 @@ const HtmlEditor = Editor.inherit({
             .find('script')
             .remove();
 
-        const sanitizedHtml = frameDocumentBody.innerHTML.trim();
+        const sanitizedHtml = frameDocumentBody.innerHTML;
 
         $frame.remove();
         return sanitizedHtml;
