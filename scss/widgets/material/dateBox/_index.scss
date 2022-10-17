@@ -53,15 +53,41 @@
   }
 }
 
+.dx-datebox-rollers {
+  .dx-dropdowneditor-icon {
+    @include dx-icon(eventall);
+    @include dx-dropdowneditor-button-icon();
+  }
+
+  &.dx-dropdowneditor-active {
+    .dx-dropdowneditor-icon {
+      @include dx-icon(eventall);
+      @include dx-dropdowneditor-button-icon();
+    }
+  }
+}
+
 .dx-datebox-calendar {
   .dx-dropdowneditor-icon {
-    @include dx-icon(spindown);
+    @include dx-icon(event);
     @include dx-dropdowneditor-button-icon();
+  }
+
+  &.dx-datebox-datetime {
+    .dx-dropdowneditor-icon {
+      @include dx-icon(eventall);
+      @include dx-dropdowneditor-button-icon();
+    }
   }
 
   &.dx-dropdowneditor-active {
     &.dx-editor-filled {
       background: $texteditor-hover-bg;
+    }
+
+    .dx-dropdowneditor-icon {
+      @include dx-icon(event);
+      @include dx-dropdowneditor-button-icon();
     }
   }
 
@@ -124,8 +150,15 @@
 
 .dx-datebox-list {
   .dx-dropdowneditor-icon {
-    @include dx-icon(spindown);
+    @include dx-icon(clock);
     @include dx-dropdowneditor-button-icon();
+  }
+
+  &.dx-dropdowneditor-active {
+    .dx-dropdowneditor-icon {
+      @include dx-icon(clock);
+      @include dx-dropdowneditor-button-icon();
+    }
   }
 }
 
@@ -148,4 +181,22 @@
 
 .dx-device-ios .dx-datebox.dx-texteditor-empty .dx-texteditor-input {
   min-height: $material-datebox-input-min-height;
+}
+
+.dx-editor-outlined,
+.dx-editor-filled {
+  .dx-texteditor-buttons-container {
+    > .dx-clear-button-area {
+      margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
+    }
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      &:last-child {
+        > .dx-clear-button-area {
+          margin-left: $material-filled-texteditor-spin-button-horizontal-padding;
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }
