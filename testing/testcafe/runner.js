@@ -7,6 +7,7 @@ const parseArgs = require('minimist');
 require('nconf').argv();
 
 let testCafe;
+let startDate;
 createTestCafe({
     hostname: 'localhost',
     port1: 1437,
@@ -82,6 +83,11 @@ createTestCafe({
         if(args.cache) {
             runner.cache = args.cache;
         }
+
+        startDate = Date.now();
+        // eslint-disable-next-line no-console
+        console.log('start test: ' + startDate);
+
         return runner.run({
             skipJsErrors: true,
             quarantineMode: args.quarantineMode
@@ -89,6 +95,13 @@ createTestCafe({
     })
     .then(failedCount => {
         testCafe.close();
+
+        const endDate = Date.now();
+        // eslint-disable-next-line no-console
+        console.log('end test: ' + endDate);
+        // eslint-disable-next-line no-console
+        console.log('diff: ' + endDate - startDate);
+
         process.exit(failedCount);
     });
 
@@ -111,7 +124,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: ['spec'],
+            reporter: ['minimal'],
             componentFolder: '',
             file: '*',
             cache: true,
