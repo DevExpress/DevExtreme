@@ -83,6 +83,7 @@ createTestCafe({
             runner.cache = args.cache;
         }
         return runner.run({
+            skipJsErrors: true,
             quarantineMode: args.quarantineMode
         });
     })
