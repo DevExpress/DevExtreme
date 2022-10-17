@@ -26,6 +26,7 @@ import CollectionWidget from '../collection/ui.collection_widget.live_update';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { Deferred } from '../../core/utils/deferred';
 import DataConverterMixin from '../shared/grouped_data_converter_mixin';
+import { getElementMargin } from '../../renovation/ui/scroll_view/utils/get_element_style';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -1038,7 +1039,8 @@ export const ListBase = CollectionWidget.inherit({
     scrollToItem: function(itemElement) {
         const $item = this._editStrategy.getItemElement(itemElement);
 
-        this._scrollView.scrollToElement($item?.get(0));
+        const item = $item?.get(0);
+        this._scrollView.scrollToElement(item, { bottom: getElementMargin(item, 'bottom') });
     },
 
     _dimensionChanged: function() {

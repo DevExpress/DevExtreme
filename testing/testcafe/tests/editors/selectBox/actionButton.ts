@@ -125,3 +125,38 @@ test('editor can be focused out after click on action button', async (t) => {
 }).before(async () => createWidget('dxSelectBox', {
   items: ['item1', 'item2'],
 }));
+
+test('selectbox should not be opened after click on disabled action button (T1117453)', async (t) => {
+  const selectBox = new SelectBox('#container');
+  const { getInstance } = selectBox;
+
+  await ClientFunction(
+    () => {
+      (getInstance() as any).option('buttons', [{
+        name: 'test',
+        options: {
+          icon: 'home',
+          type: 'default',
+          disabled: true,
+          onClick: () => {
+            (getInstance() as any).option('value', 'item2');
+          },
+        },
+      }]);
+    },
+    { dependencies: { getInstance } },
+  )();
+
+  const actionButton = selectBox.getButton(0);
+  await t
+    .click(actionButton.element)
+    .expect(selectBox.isFocused)
+    .notOk()
+    .expect(await selectBox.isOpened())
+    .notOk()
+    .expect(selectBox.value)
+    .eql('item1');
+}).before(async () => createWidget('dxSelectBox', {
+  items: ['item1', 'item2'],
+  value: 'item1',
+}));

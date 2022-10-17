@@ -5,10 +5,10 @@ import modules from './ui.grid_core.modules';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import messageLocalization from '../../localization/message';
 import { isMaterial as isMaterialTheme, isGeneric, current } from '../themes';
-import Button from '../button';
 import TreeView from '../tree_view';
 import devices from '../../core/devices';
 import Popup from '../popup';
+import Button from '../button';
 
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -114,6 +114,11 @@ const ColumnChooserView = ColumnsView.inherit({
         const isSelectMode = this.option('columnChooser.mode') === 'select';
         const columnChooserList = this._columnChooserList;
         const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
+
+        this._popupContainer.setAria({
+            role: 'dialog',
+            label: messageLocalization.format('dxDataGrid-columnChooserTitle')
+        });
 
         // T726413
         if(isSelectMode && columnChooserList && change && change.changeType === 'selection') {
@@ -477,7 +482,8 @@ export const columnChooserModule = {
                                 onClick: onClickHandler,
                                 hint: hintText,
                                 text: hintText,
-                                onInitialized: onInitialized
+                                onInitialized: onInitialized,
+                                elementAttr: { 'aria-haspopup': 'dialog' }
                             },
                             showText: 'inMenu',
                             location: 'after',

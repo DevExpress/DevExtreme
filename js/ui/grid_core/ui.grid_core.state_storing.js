@@ -129,7 +129,7 @@ export const stateStoringModule = {
                     const result = this.callBase.apply(this, arguments);
 
                     if(state !== undefined) {
-                        this.applyState(extend({}, state));
+                        this.applyState(extend(true, {}, state));
                     }
 
                     return result;
@@ -142,7 +142,9 @@ export const stateStoringModule = {
                         const newStateHash = getKeyHash(newState);
 
                         if(!equalByValue(oldStateHash, newStateHash)) {
+                            state = extend(true, {}, state);
                             extend(this._state, state);
+
                             this.save();
                         }
                     } else {
