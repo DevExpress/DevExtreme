@@ -189,7 +189,7 @@ const HtmlEditor = Editor.inherit({
             if(element.attributes) {
                 for(let i = 0; i < element.attributes.length; i++) {
                     const name = element.attributes[i].name;
-                    if(name.startsWith('on')) {
+                    if(name.indexOf('on') === 0) {
                         element.removeAttribute(name);
                     }
                 }
