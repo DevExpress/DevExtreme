@@ -476,7 +476,7 @@ const HtmlEditor = Editor.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value': {
-                const sanitizedValue = this._removeXSSVulnerableHtml(args.value);
+                const sanitizedValue = args.value ? this._removeXSSVulnerableHtml(args.value) : args.value;
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
