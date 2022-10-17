@@ -246,59 +246,71 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         instance.setSelection(0, 4);
         instance.format('color', 'red');
     });
-
-    test('clear the HTML value', function(assert) {
-        const done = assert.async();
-        const instance = $('#htmlEditor')
-            .dxHtmlEditor({
-                value: 'test',
-                onValueChanged: ({ value, previousValue }) => {
-                    assert.strictEqual(value, '');
-                    assert.strictEqual(previousValue, 'test');
-                    done();
-                }
-            })
-            .dxHtmlEditor('instance');
-
-        instance
-            .$element()
-            .find(getSelector(CONTENT_CLASS))
-            .html('');
-    });
-
-    test('render widget in detached container', function(assert) {
-        const $container = $('#htmlEditor');
-        const listMarkup = '<ul><li>t1</li><li>t2</li></ul>';
-        const quillMarkup = '<ol><li data-list="bullet"><span class="ql-ui" contenteditable="false">' +
-            '</span>t1</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>t2</li></ol>';
-
-        $container.detach();
-
-        $container.dxHtmlEditor({
-            value: listMarkup
-        });
-
-        $container.appendTo('#qunit-fixture');
-
-        const content = $container.find('.dx-htmleditor-content').html();
-        assert.strictEqual(content, quillMarkup);
-    });
-
-    test('it should keep value with nested lists if the widget has transcluded content', function(assert) {
-        const $container = $('#htmlEditor');
-        $container.html('123');
-        const expected = '<ol><li>vehicles<ol><li>cars<ol><li>electric cars</li></ol></li><li>ships<ol><li>sailing ships</li></ol></li><li>planes<ol><li>propeller air crafts</li><li>jet</li></ol></li></ol></li></ol>';
-
-        const instance = $container
-            .dxHtmlEditor({ 'value': expected })
-            .dxHtmlEditor('instance');
-
-        this.clock.tick();
-
-        assert.strictEqual(instance.option('value'), expected);
-    });
 });
 
+QUnit.module('xss security', {
+    beforeEach: function() {
+        window._isScriptExecuted = false;
+        window._isInlineHandlerExecuted = false;
+
+        this.htmlWithScript = '<script>window._isScriptExecuted = true;</script>';
+        this.htmlWithInlineHandler = '<img src="undefined" onerror="window._isInlineHandlerExecuted = true;"/>';
+    },
+    afterEach: function() {
+        delete window._isScriptExecuted;
+        delete window._isInlineHandlerExecuted;
+    }
+}, () => {
+    test('script embedded in html value should not be executed on init', function(assert) {
+        const done = assert.async();
+
+        $('#htmlEditor').dxHtmlEditor({
+            value: this.htmlWithScript
+        });
+
+        setTimeout(() => {
+            assert.strictEqual(window._isScriptExecuted, false, 'script was not executed');
+            done();
+        }, 100);
+    });
+
+    test('inline handler embedded in html value should not be executed on init', function(assert) {
+        const done = assert.async();
+
+        $('#htmlEditor').dxHtmlEditor({
+            value: this.htmlWithInlineHandler
+        });
+
+        setTimeout(() => {
+            assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+            done();
+        }, 100);
+    });
+
+    test('value change to html with embedded script should not execute the script', function(assert) {
+        const done = assert.async();
+
+        const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+        htmlEditor.option('value', this.htmlWithScript);
+
+        setTimeout(() => {
+            assert.strictEqual(window._isScriptExecuted, false, 'script was not executed');
+            done();
+        }, 100);
+    });
+
+    test('value change to html with embedded inline handler should not execute the handler', function(assert) {
+        const done = assert.async();
+
+        const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+        htmlEditor.option('value', this.htmlWithInlineHandler);
+
+        setTimeout(() => {
+            assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+            done();
+        }, 100);
+    });
+});
 
 QUnit.module('Value as Markdown markup', {
     beforeEach: function() {
