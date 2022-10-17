@@ -2,10 +2,8 @@ import React from 'react';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
 import { ButtonGroup } from 'devextreme-react/button-group';
-import RadioGroup from 'devextreme-react/radio-group';
 import Resizable from 'devextreme-react/resizable';
 import CheckBox from 'devextreme-react/check-box';
-import DateBox from 'devextreme-react/date-box';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import SelectBox from 'devextreme-react/select-box';
 import notify from 'devextreme/ui/notify';
@@ -15,6 +13,7 @@ import {
   lineHeights,
   fontFamilies,
   fontStyles,
+  headings,
   textAlignItems,
   textAlignItemsExtended,
   listTypes,
@@ -23,69 +22,22 @@ import {
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;
-const dateBoxValue = new Date(2022, 9, 7);
-
-const toolbarLineModes = [
-  {
-    text: 'Multiline mode',
-    value: true,
-  },
-  {
-    text: 'Single-line mode',
-    value: false,
-  },
-];
+const headingDefault = headings[0].text;
 
 function onButtonClick(name) {
-  notify(`The "${name}" button was clicked`);
+  notify(`The "${name}" button has been clicked`);
 }
 
 function onSelectionChanged(name) {
   notify(`The "${name}" value was changed`);
 }
 
-const attachButtonOptions = {
-  icon: 'attach',
-  text: 'Attach',
-  onClick: () => {
-    onButtonClick('Attach');
-  },
-};
-
-const addButtonOptions = {
-  icon: 'add',
-  text: 'Add',
-  onClick: () => {
-    onButtonClick('Add');
-  },
-};
-
-const removeButtonOptions = {
-  icon: 'trash',
-  text: 'Remove',
-  onClick: () => {
-    onButtonClick('Remove');
-  },
-};
-
-const aboutButtonOptions = {
-  icon: 'help',
-  text: 'About',
-  onClick: () => {
-    onButtonClick('About');
-  },
-};
-
 function App() {
   const [lineHeight, setLineHeight] = React.useState(lineHeightDefault);
   const [textAlign, setTextAlign] = React.useState(textAlignDefault);
   const [fontSize, setFontSize] = React.useState(fontSizeDefault);
+  const [heading, setHeading] = React.useState(headingDefault);
   const [multiline, setMultiline] = React.useState(true);
-  const [checkBoxValue, setCheckBoxValue] = React.useState(false);
-
-  const onDateBoxValueChanged = React.useCallback(() => {
-    notify('The "DateBox" value was changed');
-  }, []);
 
   const onFontFamilyClick = React.useCallback(() => {
     notify('The "Font Family" value was changed');
@@ -103,62 +55,117 @@ function App() {
     onButtonClick('Redo');
   }, []);
 
-  const onCheckBoxValueChanged = React.useCallback(({ value }) => {
-    setCheckBoxValue(value);
-    notify('The "Navigation Pane" checkbox value was changed');
-  }, [setCheckBoxValue]);
+  const onLinkButtonClick = React.useCallback(() => {
+    onButtonClick('Link');
+  }, []);
 
-  const onLineHeightChanged = React.useCallback((e) => {
-    setLineHeight(e.item.lineHeight);
-    onSelectionChanged('Line Height');
-  }, [setLineHeight]);
+  const onAddImageButtonClick = React.useCallback(() => {
+    onButtonClick('Add Image');
+  }, []);
 
-  const onFontSizeChange = React.useCallback((e) => {
-    setFontSize(e.item.size);
-    onSelectionChanged('Font Size');
-  }, [setFontSize]);
+  const onClearButtonClick = React.useCallback(() => {
+    onButtonClick('Clear Formating');
+  }, []);
 
-  const onTextAlignChanged = React.useCallback((e) => {
-    const { alignment, hint } = e.itemData;
+  const onCodeBlockButtonClick = React.useCallback(() => {
+    onButtonClick('Code Block');
+  }, []);
 
-    setTextAlign([alignment]);
-    onButtonClick(hint);
-  }, [setTextAlign]);
+  const onQuoteButtonClick = React.useCallback(() => {
+    onButtonClick('Blockquote');
+  }, []);
 
-  const onToolbarLineModeChanged = React.useCallback(({ value }) => {
-    setMultiline(value);
-  }, [setMultiline]);
+  const onAttachButtonClick = React.useCallback(() => {
+    onButtonClick('Attach');
+  }, []);
 
-  const renderFontSize = React.useCallback((itemData) => (
-    <div style={{ fontSize: `${itemData.size}px` }}>{itemData.text}</div>
-  ), []);
+  const onAboutButtonClick = React.useCallback(() => {
+    onButtonClick('Attach');
+  }, []);
 
-  const renderTextAlign = React.useCallback(() => (
-    <ButtonGroup
-      keyExpr="alignment"
-      stylingMode="outlined"
-      items={textAlignItems}
-      selectedItemKeys={textAlign}
-      onItemClick={onTextAlignChanged}
-    ></ButtonGroup>
-  ), [textAlign, textAlignItems, onTextAlignChanged]);
+  const onHeadingClick = React.useCallback(
+    (e) => {
+      setHeading(e.itemData.text);
+      notify('The "Heading" value was changed');
+    },
+    [setHeading],
+  );
 
-  const renderTextAlignMenu = React.useCallback(() => (
-    <ButtonGroup
-      displayExpr="text"
-      keyExpr="alignment"
-      stylingMode="outlined"
-      items={textAlignItemsExtended}
-      selectedItemKeys={textAlign}
-      onItemClick={onTextAlignChanged}
-    ></ButtonGroup>
-  ), [textAlign, textAlignItemsExtended, onTextAlignChanged]);
+  const onLineHeightChanged = React.useCallback(
+    (e) => {
+      setLineHeight(e.item.lineHeight);
+      onSelectionChanged('Line Height');
+    },
+    [setLineHeight],
+  );
 
-  const renderMenuSeparator = React.useCallback(() => <div className="toolbar-menu-separator"></div>, []);
+  const onFontSizeChange = React.useCallback(
+    (e) => {
+      setFontSize(e.item.size);
+      onSelectionChanged('Font Size');
+    },
+    [setFontSize],
+  );
+
+  const onTextAlignChanged = React.useCallback(
+    (e) => {
+      const { alignment, hint } = e.itemData;
+
+      setTextAlign([alignment]);
+      onButtonClick(hint);
+    },
+    [setTextAlign],
+  );
+
+  const onToolbarLineModeChanged = React.useCallback(
+    ({ value }) => {
+      setMultiline(value);
+    },
+    [setMultiline],
+  );
+
+  const renderFontSize = React.useCallback(
+    (itemData) => (
+      <div style={{ fontSize: `${itemData.size}px` }}>{itemData.text}</div>
+    ),
+    [],
+  );
+
+  const renderTextAlign = React.useCallback(
+    () => (
+      <ButtonGroup
+        keyExpr="alignment"
+        stylingMode="outlined"
+        items={textAlignItems}
+        selectedItemKeys={textAlign}
+        onItemClick={onTextAlignChanged}
+      ></ButtonGroup>
+    ),
+    [textAlign, textAlignItems, onTextAlignChanged],
+  );
+
+  const renderTextAlignMenu = React.useCallback(
+    () => (
+      <ButtonGroup
+        displayExpr="text"
+        keyExpr="alignment"
+        stylingMode="outlined"
+        items={textAlignItemsExtended}
+        selectedItemKeys={textAlign}
+        onItemClick={onTextAlignChanged}
+      ></ButtonGroup>
+    ),
+    [textAlign, textAlignItemsExtended, onTextAlignChanged],
+  );
+
+  const renderMenuSeparator = React.useCallback(
+    () => <div className="toolbar-menu-separator"></div>,
+    [],
+  );
 
   return (
     <React.Fragment>
-      <div className='widget-container'>
+      <div className="widget-container">
         <Resizable
           className="resizable-container"
           minWidth={500}
@@ -169,17 +176,11 @@ function App() {
         >
           <Toolbar multiline={multiline}>
             <Item location="before">
-              <Button
-                icon="undo"
-                onClick={onUndoButtonClick}
-              ></Button>
+              <Button icon="undo" onClick={onUndoButtonClick}></Button>
             </Item>
 
             <Item location="before">
-              <Button
-                icon="redo"
-                onClick={onRedoButtonClick}
-              ></Button>
+              <Button icon="redo" onClick={onRedoButtonClick}></Button>
             </Item>
 
             <Item
@@ -250,7 +251,7 @@ function App() {
             </Item>
 
             <Item
-              cssClass="dx-toolbar-hidden-button-group"
+              widget="dxButtonGroup"
               location="before"
               locateInMenu="auto"
               render={renderTextAlign}
@@ -276,12 +277,13 @@ function App() {
             </Item>
 
             <Item location="before" locateInMenu="auto">
-              <DateBox
-                width={200}
-                type="date"
-                value={dateBoxValue}
-                onValueChanged={onDateBoxValueChanged}
-              ></DateBox>
+              <SelectBox
+                displayExpr="text"
+                valueExpr="text"
+                dataSource={headings}
+                defaultValue={heading}
+                onItemClick={onHeadingClick}
+              ></SelectBox>
             </Item>
 
             <Item
@@ -293,43 +295,104 @@ function App() {
               <div className="toolbar-separator"></div>
             </Item>
 
-            <Item location="before" locateInMenu="auto">
-              <CheckBox
-                value={checkBoxValue}
-                text="Navigation Pane"
-                onValueChanged={onCheckBoxValueChanged}
-              ></CheckBox>
+            <Item
+              location="before"
+              locateInMenu="auto"
+              showText="inMenu"
+              widget="dxButton"
+            >
+              <Button
+                icon="link"
+                text="Link"
+                onClick={onLinkButtonClick}
+              ></Button>
             </Item>
 
             <Item
-              location="after"
-              showText="inMenu"
-              widget="dxButton"
-              options={attachButtonOptions}
-            ></Item>
-
-            <Item
-              location="after"
+              location="before"
               locateInMenu="auto"
               showText="inMenu"
               widget="dxButton"
-              options={addButtonOptions}
-            ></Item>
+            >
+              <Button
+                icon="image"
+                text="Add image"
+                onClick={onAddImageButtonClick}
+              ></Button>
+            </Item>
 
             <Item
-              location="after"
+              cssClass="toolbar-separator-container"
+              location="before"
+              locateInMenu="auto"
+              menuItemRender={renderMenuSeparator}
+            >
+              <div className="toolbar-separator"></div>
+            </Item>
+
+            <Item
+              location="before"
               locateInMenu="auto"
               showText="inMenu"
               widget="dxButton"
-              options={removeButtonOptions}
-            ></Item>
+            >
+              <Button
+                icon="clearformat"
+                text="Clear formating"
+                onClick={onClearButtonClick}
+              ></Button>
+            </Item>
 
             <Item
-              locateInMenu="always"
+              location="before"
+              locateInMenu="auto"
               showText="inMenu"
               widget="dxButton"
-              options={aboutButtonOptions}
-            ></Item>
+            >
+              <Button
+                icon="codeblock"
+                text="Code block"
+                onClick={onCodeBlockButtonClick}
+              ></Button>
+            </Item>
+
+            <Item
+              location="before"
+              locateInMenu="auto"
+              showText="inMenu"
+              widget="dxButton"
+            >
+              <Button
+                icon="blockquote"
+                text="Blockquote"
+                onClick={onQuoteButtonClick}
+              ></Button>
+            </Item>
+
+            <Item
+              cssClass="toolbar-separator-container"
+              location="before"
+              locateInMenu="auto"
+              menuItemRender={renderMenuSeparator}
+            >
+              <div className="toolbar-separator"></div>
+            </Item>
+
+            <Item location="after" showText="inMenu" widget="dxButton">
+              <Button
+                icon="attach"
+                text="Attach"
+                onClick={onAttachButtonClick}
+              ></Button>
+            </Item>
+
+            <Item locateInMenu="always" showText="inMenu" widget="dxButton">
+              <Button
+                icon="help"
+                text="About"
+                onClick={onAboutButtonClick}
+              ></Button>
+            </Item>
           </Toolbar>
         </Resizable>
       </div>
@@ -337,13 +400,11 @@ function App() {
       <div className="options-container">
         <div className="caption">Options</div>
 
-        <RadioGroup
-          items={toolbarLineModes}
+        <CheckBox
+          text="Multiline mode"
           value={multiline}
-          layout="horizontal"
-          valueExpr="value"
           onValueChanged={onToolbarLineModeChanged}
-        ></RadioGroup>
+        />
       </div>
     </React.Fragment>
   );

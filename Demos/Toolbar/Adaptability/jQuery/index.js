@@ -6,16 +6,12 @@ const onSelectionChanged = (name) => {
   DevExpress.ui.notify(`The "${name}" value was changed`);
 };
 
-const onCheckBoxValueChanged = () => {
-  DevExpress.ui.notify('The "Navigation Pane" checkbox value was changed');
-};
-
-const onDateBoxValueChanged = () => {
-  DevExpress.ui.notify('The "DateBox" value was changed');
-};
-
 const onFontFamilyClick = () => {
   DevExpress.ui.notify('The "Font Family" value was changed');
+};
+
+const onHeadingClick = () => {
+  DevExpress.ui.notify('The "Heading" value was changed');
 };
 
 const toolbarSeparator = {
@@ -176,29 +172,85 @@ const toolbarItems = [
   {
     locateInMenu: 'auto',
     location: 'before',
-    widget: 'dxDateBox',
+    widget: 'dxSelectBox',
     options: {
-      width: 200,
-      type: 'date',
-      value: new Date(2022, 9, 7),
-      onValueChanged() {
-        onDateBoxValueChanged();
+      displayExpr: 'text',
+      valueExpr: 'text',
+      value: headings[0].text,
+      dataSource: headings,
+      onItemClick() {
+        onHeadingClick();
       },
     },
   },
   toolbarSeparator,
   {
-    locateInMenu: 'auto',
     location: 'before',
-    widget: 'dxCheckBox',
+    locateInMenu: 'auto',
+    widget: 'dxButton',
+    showText: 'inMenu',
     options: {
-      value: false,
-      text: 'Navigation Pane',
-      onOptionChanged() {
-        onCheckBoxValueChanged();
+      icon: 'link',
+      text: 'Link',
+      onClick() {
+        onButtonClick('Link');
       },
     },
   },
+  {
+    location: 'before',
+    locateInMenu: 'auto',
+    widget: 'dxButton',
+    showText: 'inMenu',
+    options: {
+      icon: 'image',
+      text: 'Add image',
+      onClick() {
+        onButtonClick('Add Image');
+      },
+    },
+  },
+  toolbarSeparator,
+  {
+    location: 'before',
+    locateInMenu: 'auto',
+    widget: 'dxButton',
+    showText: 'inMenu',
+    options: {
+      icon: 'clearformat',
+      text: 'Clear formating',
+      onClick() {
+        onButtonClick('Clear Formating');
+      },
+    },
+  },
+  {
+    location: 'before',
+    locateInMenu: 'auto',
+    widget: 'dxButton',
+    showText: 'inMenu',
+    options: {
+      icon: 'codeblock',
+      text: 'Code block',
+      onClick() {
+        onButtonClick('Code Block');
+      },
+    },
+  },
+  {
+    location: 'before',
+    locateInMenu: 'auto',
+    widget: 'dxButton',
+    showText: 'inMenu',
+    options: {
+      icon: 'blockquote',
+      text: 'Blockquote',
+      onClick() {
+        onButtonClick('Blockquote');
+      },
+    },
+  },
+  toolbarSeparator,
   {
     location: 'after',
     widget: 'dxButton',
@@ -208,32 +260,6 @@ const toolbarItems = [
       text: 'Attach',
       onClick() {
         onButtonClick('Attach');
-      },
-    },
-  },
-  {
-    locateInMenu: 'auto',
-    location: 'after',
-    widget: 'dxButton',
-    showText: 'inMenu',
-    options: {
-      icon: 'add',
-      text: 'Add',
-      onClick() {
-        onButtonClick('Add');
-      },
-    },
-  },
-  {
-    locateInMenu: 'auto',
-    location: 'after',
-    widget: 'dxButton',
-    showText: 'inMenu',
-    options: {
-      icon: 'trash',
-      text: 'Remove',
-      onClick() {
-        onButtonClick('Remove');
       },
     },
   },
@@ -265,20 +291,9 @@ $(() => {
     multiline: true,
   }).dxToolbar('instance');
 
-  $('#toolbar-modes').dxRadioGroup({
-    items: [
-      {
-        text: 'Multiline mode',
-        value: true,
-      },
-      {
-        text: 'Single-line mode',
-        value: false,
-      },
-    ],
+  $('#toolbar-mode').dxCheckBox({
     value: true,
-    layout: 'horizontal',
-    valueExpr: 'value',
+    text: 'Multiline mode',
     onValueChanged(e) {
       toolbar.option('multiline', e.value);
     },

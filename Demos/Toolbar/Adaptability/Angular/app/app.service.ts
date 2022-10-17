@@ -12,7 +12,11 @@ export class LineHeight {
   text: string;
 }
 
-export class FontFamilies {
+export class FontFamily {
+  text: string;
+}
+
+export class Heading {
   text: string;
 }
 
@@ -57,7 +61,7 @@ const lineHeights: LineHeight[] = [
   { lineHeight: 2, text: '2' },
 ];
 
-const fontFamilies: FontFamilies[] = [
+const fontFamilies: FontFamily[] = [
   { text: 'Arial' },
   { text: 'Courier New' },
   { text: 'Georgia' },
@@ -65,6 +69,15 @@ const fontFamilies: FontFamilies[] = [
   { text: 'Lucida Console' },
   { text: 'Tahoma' },
   { text: 'Times New Roman' },
+];
+
+const headings: Heading[] = [
+  { text: 'Normal text' },
+  { text: 'Heading 1' },
+  { text: 'Heading 2' },
+  { text: 'Heading 3' },
+  { text: 'Heading 4' },
+  { text: 'Heading 5' },
 ];
 
 const fontStyles: FontStyle[] = [
@@ -136,8 +149,12 @@ export class Service {
     return lineHeights;
   }
 
-  getFontFamilies(): FontFamilies[] {
+  getFontFamilies(): FontFamily[] {
     return fontFamilies;
+  }
+
+  getHeadings(): Heading[] {
+    return headings;
   }
 
   getFontStyles(): FontStyle[] {

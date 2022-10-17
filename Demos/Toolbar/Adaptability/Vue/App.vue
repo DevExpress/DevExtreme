@@ -13,114 +13,249 @@
           <DxItem
             location="before"
             widget="dxButton"
-            :options="undoButtonOptions"
-          />
+          >
+            <DxButton
+              icon="undo"
+              :on-click="onUndoButtonClick"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             widget="dxButton"
-            :options="redoButtonOptions"
-          />
+          >
+            <DxButton
+              icon="redo"
+              :on-click="onRedoButtonClick"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             locate-in-menu="auto"
             template="separatorTemplate"
             menu-item-template="menuSeparatorTemplate"
           />
+
           <DxItem
             location="before"
             locate-in-menu="auto"
-            widget="dxDropDownButton"
-            :options="fontSizeOptions"
-          />
+          >
+            <DxDropDownButton
+              width="100%"
+              display-expr="text"
+              key-expr="size"
+              item-template="fontSizeTemplate"
+              :use-select-mode="true"
+              :items="fontSizes"
+              :selected-item-key="fontSize"
+              :on-selection-changed="onFontSizeSelectionChanged"
+            >
+              <template #fontSizeTemplate="{ data }">
+                <div :style="{ fontSize: data.size + 'px' }">
+                  {{ data.text }}
+                </div>
+              </template>
+            </DxDropDownButton>
+          </DxItem>
+
           <DxItem
             location="before"
             locate-in-menu="auto"
-            widget="dxDropDownButton"
-            :options="lineHeightOptions"
-          />
+          >
+            <DxDropDownButton
+              width="100%"
+              icon="indent"
+              display-expr="text"
+              key-expr="lineHeight"
+              :use-select-mode="true"
+              :items="lineHeights"
+              :selected-item-key="lineHeight"
+              :on-selection-changed="onLineHeightSelectionChanged"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             locate-in-menu="auto"
-            widget="dxSelectBox"
-            :options="fontFamilyOptions"
-          />
+          >
+            <DxSelectBox
+              placeholder="Font"
+              display-expr="text"
+              :data-source="fontFamilies"
+              :on-item-click="onFontFamilyClick"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             locate-in-menu="auto"
             template="separatorTemplate"
             menu-item-template="menuSeparatorTemplate"
           />
-          <DxItem
-            location="before"
-            widget="dxButtonGroup"
-            :options="fontStyleOptions"
-          />
+
+          <DxItem location="before">
+            <DxButtonGroup
+              display-expr="text"
+              key-expr="icon"
+              styling-mode="outlined"
+              selection-mode="multiple"
+              :items="fontStyles"
+              :on-item-click="onFontStyleItemClick"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             template="separatorTemplate"
           />
+
           <DxItem
-            css-class="dx-toolbar-hidden-button-group"
             location="before"
             locate-in-menu="auto"
             template="textAlignTemplate"
             menu-item-template="textAlignMenuTemplate"
-          />
-          <DxItem
-            location="before"
             widget="dxButtonGroup"
-            :options="listOptions"
           />
+
+          <DxItem location="before">
+            <DxButtonGroup
+              key-expr="alignment"
+              styling-mode="outlined"
+              :items="listTypes"
+              :on-item-click="onListTypeButtonClick"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             locate-in-menu="auto"
             template="separatorTemplate"
             menu-item-template="menuSeparatorTemplate"
           />
+
           <DxItem
             location="before"
             locate-in-menu="auto"
-            widget="dxDateBox"
-            :options="dateBoxOptions"
-          />
+          >
+            <DxSelectBox
+              display-expr="text"
+              value-expr="text"
+              :data-source="headings"
+              :value="heading"
+              :on-item-click="onHeadingClick"
+            />
+          </DxItem>
+
           <DxItem
             location="before"
             locate-in-menu="auto"
             template="separatorTemplate"
             menu-item-template="menuSeparatorTemplate"
           />
+
           <DxItem
             location="before"
             locate-in-menu="auto"
-            widget="dxCheckBox"
-            :options="checkBoxOptions"
-          />
-          <DxItem
-            location="after"
-            widget="dxButton"
             show-text="inMenu"
-            :options="attachButtonOptions"
-          />
+            widget="dxButton"
+          >
+            <DxButton
+              icon="link"
+              text="Link"
+              :on-click="onLinkButtonClick"
+            />
+          </DxItem>
+
           <DxItem
-            location="after"
+            location="before"
             locate-in-menu="auto"
-            widget="dxButton"
             show-text="inMenu"
-            :options="addButtonOptions"
+            widget="dxButton"
+          >
+            <DxButton
+              icon="image"
+              text="Add image"
+              :on-click="onAddImageButtonClick"
+            />
+          </DxItem>
+
+          <DxItem
+            location="before"
+            locate-in-menu="auto"
+            template="separatorTemplate"
+            menu-item-template="menuSeparatorTemplate"
           />
+
+          <DxItem
+            location="before"
+            locate-in-menu="auto"
+            show-text="inMenu"
+            widget="dxButton"
+          >
+            <DxButton
+              icon="clearformat"
+              text="Clear formating"
+              :on-click="onClearButtonClick"
+            />
+          </DxItem>
+
+          <DxItem
+            location="before"
+            locate-in-menu="auto"
+            show-text="inMenu"
+            widget="dxButton"
+          >
+            <DxButton
+              icon="codeblock"
+              text="Code block"
+              :on-click="onCodeBlockButtonClick"
+            />
+          </DxItem>
+
+          <DxItem
+            location="before"
+            locate-in-menu="auto"
+            show-text="inMenu"
+            widget="dxButton"
+          >
+            <DxButton
+              icon="blockquote"
+              text="Blockquote"
+              :on-click="onQuoteButtonClick"
+            />
+          </DxItem>
+
+          <DxItem
+            location="before"
+            locate-in-menu="auto"
+            template="separatorTemplate"
+            menu-item-template="menuSeparatorTemplate"
+          />
+
           <DxItem
             location="after"
-            locate-in-menu="auto"
             widget="dxButton"
             show-text="inMenu"
-            :options="removeButtonOptions"
-          />
+          >
+            <DxButton
+              icon="attach"
+              text="Attach"
+              :on-click="onAttachButtonClick"
+            />
+          </DxItem>
+
           <DxItem
             locate-in-menu="always"
             widget="dxButton"
             show-text="inMenu"
-            :options="aboutButtonOptions"
-          />
+          >
+            <DxButton
+              icon="help"
+              text="About"
+              :on-click="onAboutButtonClick"
+            />
+          </DxItem>
 
           <template #separatorTemplate>
             <div class="toolbar-separator"/>
@@ -128,10 +263,6 @@
 
           <template #menuSeparatorTemplate>
             <div class="toolbar-menu-separator"/>
-          </template>
-
-          <template #fontSizeTemplate="{ data }">
-            <div :style="{ fontSize: data.size + 'px' }">{{ data.text }}</div>
           </template>
 
           <template #textAlignTemplate>
@@ -161,11 +292,9 @@
     <div class="options-container">
       <div class="caption">Options</div>
 
-      <DxRadioGroup
+      <DxCheckBox
         v-model="multiline"
-        layout="horizontal"
-        value-expr="value"
-        :items="toolbarLineModes"
+        text="Multiline mode"
       />
     </div>
   </div>
@@ -174,18 +303,18 @@
 <script>
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
+import DxButton from 'devextreme-vue/button';
 import DxButtonGroup from 'devextreme-vue/button-group';
 import DxResizable from 'devextreme-vue/resizable';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
-import DxDateBox from 'devextreme-vue/date-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import DxRadioGroup from 'devextreme-vue/radio-group';
 import notify from 'devextreme/ui/notify';
 import {
   fontSizes,
   lineHeights,
   fontFamilies,
   fontStyles,
+  headings,
   textAlignItems,
   textAlignItemsExtended,
   listTypes,
@@ -195,17 +324,17 @@ import 'devextreme/ui/select_box';
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;
+const headingDefault = headings[0].text;
 
 export default {
   components: {
     DxCheckBox,
     DxToolbar,
+    DxButton,
     DxButtonGroup,
     DxItem,
     DxResizable,
-    DxRadioGroup,
     DxDropDownButton,
-    DxDateBox,
     DxSelectBox,
   },
 
@@ -215,173 +344,23 @@ export default {
       lineHeight: lineHeightDefault,
       textAlign: textAlignDefault,
       fontSize: fontSizeDefault,
+      heading: headingDefault,
+      fontSizes,
+      lineHeights,
+      fontFamilies,
+      fontStyles,
+      listTypes,
+      headings,
     };
   },
 
   computed: {
-    toolbarLineModes() {
-      return [
-        {
-          text: 'Multiline mode',
-          value: true,
-        },
-        {
-          text: 'Single-line mode',
-          value: false,
-        },
-      ];
-    },
-
     textAlignItems() {
       return textAlignItems;
     },
 
     textAlignItemsExtended() {
       return textAlignItemsExtended;
-    },
-
-    undoButtonOptions() {
-      return {
-        icon: 'undo',
-        onClick: () => {
-          this.onButtonClick('Undo');
-        },
-      };
-    },
-
-    redoButtonOptions() {
-      return {
-        icon: 'redo',
-        onClick: () => {
-          this.onButtonClick('Redo');
-        },
-      };
-    },
-
-    fontSizeOptions() {
-      return {
-        width: '100%',
-        displayExpr: 'text',
-        keyExpr: 'size',
-        useSelectMode: true,
-        items: fontSizes,
-        itemTemplate: 'fontSizeTemplate',
-        selectedItemKey: this.fontSize,
-        onSelectionChanged: () => {
-          this.onSelectionChanged('Font Size');
-        },
-      };
-    },
-
-    lineHeightOptions() {
-      return {
-        width: '100%',
-        icon: 'indent',
-        displayExpr: 'text',
-        keyExpr: 'lineHeight',
-        useSelectMode: true,
-        items: lineHeights,
-        selectedItemKey: this.lineHeight,
-        onSelectionChanged: () => {
-          this.onSelectionChanged('Line Height');
-        },
-      };
-    },
-
-    fontFamilyOptions() {
-      return {
-        placeholder: 'Font',
-        displayExpr: 'text',
-        dataSource: fontFamilies,
-        onItemClick: () => {
-          this.onFontFamilyClick();
-        },
-      };
-    },
-
-    fontStyleOptions() {
-      return {
-        displayExpr: 'text',
-        items: fontStyles,
-        keyExpr: 'icon',
-        stylingMode: 'outlined',
-        selectionMode: 'multiple',
-        onItemClick: (e) => {
-          this.onButtonClick(e.itemData.hint);
-        },
-      };
-    },
-
-    listOptions() {
-      return {
-        items: listTypes,
-        keyExpr: 'alignment',
-        stylingMode: 'outlined',
-        onItemClick: (e) => {
-          this.onButtonClick(e.itemData.hint);
-        },
-      };
-    },
-
-    dateBoxOptions() {
-      return {
-        width: 200,
-        type: 'date',
-        value: new Date(2022, 9, 7),
-        onValueChanged: () => {
-          this.onDateBoxValueChanged();
-        },
-      };
-    },
-
-    checkBoxOptions() {
-      return {
-        value: false,
-        text: 'Navigation Pane',
-        onOptionChanged: () => {
-          this.onCheckBoxValueChanged();
-        },
-      };
-    },
-
-    attachButtonOptions() {
-      return {
-        icon: 'attach',
-        text: 'Attach',
-        onClick: () => {
-          this.onButtonClick('Attach');
-        },
-      };
-    },
-
-    addButtonOptions() {
-      return {
-        icon: 'add',
-        text: 'Add',
-        onClick: () => {
-          this.onButtonClick('Add');
-        },
-      };
-    },
-
-    removeButtonOptions() {
-      return {
-        icon: 'trash',
-        text: 'Remove',
-        onClick: () => {
-          this.onButtonClick('Remove');
-        },
-      };
-    },
-
-    aboutButtonOptions() {
-      return {
-        icon: 'help',
-        text: 'About',
-        onClick: () => {
-          this.onButtonClick('About');
-        },
-      };
     },
   },
 
@@ -395,19 +374,67 @@ export default {
     },
 
     onButtonClick(name) {
-      notify(`The "${name}" button was clicked`);
+      notify(`The "${name}" button has been clicked`);
+    },
+
+    onUndoButtonClick() {
+      this.onButtonClick('Undo');
+    },
+
+    onRedoButtonClick() {
+      this.onButtonClick('Redo');
+    },
+
+    onFontStyleItemClick(e) {
+      this.onButtonClick(e.itemData.hint);
+    },
+
+    onListTypeButtonClick(e) {
+      this.onButtonClick(e.itemData.hint);
+    },
+
+    onLinkButtonClick() {
+      this.onButtonClick('Link');
+    },
+
+    onAddImageButtonClick() {
+      this.onButtonClick('Add Image');
+    },
+
+    onClearButtonClick() {
+      this.onButtonClick('Clear Formating');
+    },
+
+    onCodeBlockButtonClick() {
+      this.onButtonClick('Code Block');
+    },
+
+    onQuoteButtonClick() {
+      this.onButtonClick('Blockquote');
+    },
+
+    onAttachButtonClick() {
+      this.onButtonClick('Attach');
+    },
+
+    onAboutButtonClick() {
+      this.onButtonClick('About');
     },
 
     onSelectionChanged(name) {
       notify(`The "${name}" value was changed`);
     },
 
-    onCheckBoxValueChanged() {
-      notify('The "Navigation Pane" checkbox value was changed');
+    onFontSizeSelectionChanged() {
+      this.onSelectionChanged('Font Size');
     },
 
-    onDateBoxValueChanged() {
-      notify('The "DateBox" value was changed');
+    onLineHeightSelectionChanged() {
+      this.onSelectionChanged('Line Height');
+    },
+
+    onHeadingClick() {
+      notify('The "Heading" value was changed');
     },
 
     onFontFamilyClick() {
@@ -435,6 +462,10 @@ export default {
 
 .dx-toolbar.dx-toolbar-multiline .dx-toolbar-item {
   margin-bottom: 5px;
+}
+
+.dx-texteditor {
+  width: 150px;
 }
 
 .dx-toolbar-menu-section .dx-selectbox {

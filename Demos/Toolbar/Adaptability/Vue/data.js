@@ -23,6 +23,15 @@ export const fontFamilies = [
   { text: 'Times New Roman' },
 ];
 
+export const headings = [
+  { text: 'Normal text' },
+  { text: 'Heading 1' },
+  { text: 'Heading 2' },
+  { text: 'Heading 3' },
+  { text: 'Heading 4' },
+  { text: 'Heading 5' },
+];
+
 export const fontStyles = [
   {
     icon: 'bold',

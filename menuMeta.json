@@ -3934,8 +3934,8 @@
             ]
           },
           {
-            "Title": "Multiline",
-            "Name": "Multiline",
+            "Title": "Adaptability",
+            "Name": "Adaptability",
             "Widget": "Toolbar",
             "Badge": "New",
             "DemoType": "Web",
