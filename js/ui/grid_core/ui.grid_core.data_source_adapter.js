@@ -291,9 +291,6 @@ export default gridCore.Controller.inherit((function() {
             this._currentTotalCount = 0;
             this._totalCountCorrection = 0;
         },
-        resetTotalCountCorrection: function() {
-            this._totalCountCorrection = 0;
-        },
         resetCache: function() {
             this._cachedStoreData = undefined;
             this._cachedPagingData = undefined;
@@ -608,8 +605,13 @@ export default gridCore.Controller.inherit((function() {
                     options.extra.totalCount = options.data.length;
                 }
 
+
                 if(options.extra && options.extra.totalCount >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
                     options.extra.totalCount = -1;
+                }
+
+                if(!loadOptions.data && (storeLoadOptions.requireTotalCount || (options.extra?.totalCount ?? -1) >= 0)) {
+                    this._totalCountCorrection = 0;
                 }
 
                 this._handleDataLoadedCore(options);
