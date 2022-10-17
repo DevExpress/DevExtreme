@@ -160,12 +160,13 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, expectedMarkup);
     });
 
-    test("editor shouldn't create unexpected break lines", (assert) => {
-        const expectedMarkup = "<p>hi</p><ul><li>test</li></ul>";
-        const instance = $("#htmlEditor")
-            .html("<p>hi</p><ul><li>test</li></ul>")
+    test('editor shouldn\'t create unexpected break lines', function(assert) {
+        const htmlMarkup = '<p>hi</p><ul><li>test</li></ul>';
+        const expectedMarkup = '<p>hi</p><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>test</li></ol>';
+        const instance = $('#htmlEditor')
+            .html(htmlMarkup)
             .dxHtmlEditor()
-            .dxHtmlEditor("instance");
+            .dxHtmlEditor('instance');
 
         this.clock.tick();
 
