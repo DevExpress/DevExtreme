@@ -347,6 +347,28 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
     });
 }
 
+function updateRangeSeriesValues() {
+    const that = this;
+    const series = getVisibleSeries(that);
+    _each(series, function(_, singleSeries) {
+        const minBarSize = singleSeries.getOptions().minBarSize;
+        const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
+        const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
+        if(minShownBusinessValue) {
+            _each(singleSeries.getPoints(), function(_, point) {
+                if(!point.hasValue()) {
+                    return;
+                }
+                if(point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
+                    point.value = point.value.valueOf() + minShownBusinessValue / 2;
+                    point.minValue = point.minValue.valueOf() - minShownBusinessValue / 2;
+                }
+            });
+        }
+
+    });
+}
+
 function updateBarSeriesValues() {
     _each(this.series, function(_, singleSeries) {
         const minBarSize = singleSeries.getOptions().minBarSize;
@@ -432,6 +454,7 @@ export function SeriesFamily(options) {
             break;
         case 'rangebar':
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
+            that.updateSeriesValues = updateRangeSeriesValues;
             break;
 
         case 'fullstackedbar':
