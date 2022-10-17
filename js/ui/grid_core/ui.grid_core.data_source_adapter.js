@@ -291,6 +291,9 @@ export default gridCore.Controller.inherit((function() {
             this._currentTotalCount = 0;
             this._totalCountCorrection = 0;
         },
+        resetTotalCountCorrection: function() {
+            this._totalCountCorrection = 0;
+        },
         resetCache: function() {
             this._cachedStoreData = undefined;
             this._cachedPagingData = undefined;
@@ -354,14 +357,12 @@ export default gridCore.Controller.inherit((function() {
         _getKeyInfo: function() {
             return this.store();
         },
-        _applyBatch: function(changes) {
+        _applyBatch: function(changes, fromStore) {
             const keyInfo = this._getKeyInfo();
             const dataSource = this._dataSource;
             const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
-            const totalCount = this.totalCount();
             const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
             const isVirtualMode = this.option('scrolling.mode') === 'virtual';
-            const isLegacyMode = this.option('scrolling.legacyMode');
 
             changes = changes.filter(function(change) {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
@@ -369,7 +370,6 @@ export default gridCore.Controller.inherit((function() {
 
             const getItemCount = () => groupCount ? this.itemsCount() : this.items().length;
             const oldItemCount = getItemCount();
-
 
             applyBatch({
                 keyInfo,
@@ -388,9 +388,8 @@ export default gridCore.Controller.inherit((function() {
 
             const needUpdateTotalCountCorrection =
                 this._currentTotalCount > 0 || (
-                    !isReshapeMode &&
-                    isVirtualMode &&
-                    (!isLegacyMode || totalCount === oldItemCount)
+                    (fromStore || !isReshapeMode) &&
+                    isVirtualMode
                 );
 
             if(needUpdateTotalCountCorrection) {
@@ -404,7 +403,7 @@ export default gridCore.Controller.inherit((function() {
         },
         _handleChanging: function(e) {
             this.changing.fire(e);
-            this._applyBatch(e.changes);
+            this._applyBatch(e.changes, true);
         },
         _needCleanCacheByOperation: function(operationType, remoteOperations) {
             const operationTypesByOrder = ['filtering', 'sorting', 'paging'];
