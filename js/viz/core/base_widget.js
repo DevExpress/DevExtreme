@@ -9,7 +9,7 @@ import { extend } from '../../core/utils/extend';
 import { BaseThemeManager } from '../core/base_theme_manager';
 import DOMComponent from '../../core/dom_component';
 import { changes, replaceInherit } from './helpers';
-import { parseScalar as _parseScalar } from './utils';
+import { normalizeEnum, parseScalar as _parseScalar } from './utils';
 import warnings from './errors_warnings';
 import { Renderer } from './renderers/renderer';
 import { getWidth, getHeight } from '../../core/utils/size';
@@ -181,7 +181,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         };
     },
 
-    _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED', 'USE_RESIZE_OBSERVER'],
+    _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED'],
 
     _initPlugins: function() {
         const that = this;
@@ -331,7 +331,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _layoutChangesOrder: ['ELEMENT_ATTR', 'CONTAINER_SIZE', 'LAYOUT'],
 
-    _customChangesOrder: ['DISABLED', 'USE_RESIZE_OBSERVER'],
+    _customChangesOrder: ['DISABLED'],
 
     _change_EVENTS: function() {
         this._eventTrigger.applyChanges();
@@ -379,21 +379,6 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
                     'filter': null
                 });
             }
-        }
-    },
-
-    _change_USE_RESIZE_OBSERVER() {
-        this._toggleObserverSubscription(this.option('useResizeObserver'));
-    },
-
-    _toggleObserverSubscription(needSubscription) {
-        const contentElement = this._$element[0];
-        if(needSubscription) {
-            resizeObserverSingleton.observe(contentElement, (e) => {
-                this.render();
-            });
-        } else {
-            resizeObserverSingleton.unobserve(contentElement);
         }
     },
 
@@ -454,7 +439,6 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         }
 
         that.callBase.apply(that, arguments);
-        that._toggleObserverSubscription(false);
         that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();
         that._layout.dispose();
@@ -551,24 +535,33 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _setupResizeHandler: function() {
         const that = this;
+        const contentElement = this._$element[0];
         const redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
+        const resize = () => {
+            that._requestChange(['CONTAINER_SIZE']);
+        };
 
         if(that._resizeHandler) {
             that._removeResizeHandler();
         }
 
-        if(redrawOnResize) {
-            that._resizeHandler = createResizeHandler(function() {
-
-                that._requestChange(['CONTAINER_SIZE']);
+        if(normalizeEnum(redrawOnResize) === 'onlywindow') {
+            that._resizeHandler = createResizeHandler(resize, () => {
+                _windowResizeCallbacks.remove(this._resizeHandler);
             });
+
             _windowResizeCallbacks.add(that._resizeHandler);
+        } else if(redrawOnResize === true) {
+            that._resizeHandler = createResizeHandler(resize, () =>{
+                resizeObserverSingleton.unobserve(contentElement);
+            });
+
+            resizeObserverSingleton.observe(contentElement, that._resizeHandler);
         }
     },
 
     _removeResizeHandler: function() {
         if(this._resizeHandler) {
-            _windowResizeCallbacks.remove(this._resizeHandler);
             this._resizeHandler.dispose();
             this._resizeHandler = null;
         }
@@ -658,8 +651,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         rtlEnabled: 'THEME',
         encodeHtml: 'THEME',
         elementAttr: 'ELEMENT_ATTR',
-        disabled: 'DISABLED',
-        useResizeObserver: 'USE_RESIZE_OBSERVER'
+        disabled: 'DISABLED'
     },
 
     _partialOptionChangesMap: { },

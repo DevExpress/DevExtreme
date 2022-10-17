@@ -500,7 +500,7 @@ QUnit.test('Create and destroy / hidden', function(assert) {
 });
 
 QUnit.test('On window resize', function(assert) {
-    this.createWidget();
+    this.createWidget({ redrawOnResize: 'onlyWindow' });
     this.reset();
 
     this.$container.width(100);
@@ -1356,7 +1356,8 @@ QUnit.test('Timeout is reset after new call', function(assert) {
 
 QUnit.test('Callback disposing', function(assert) {
     const callback = sinon.spy();
-    const handler = this.create(callback);
+    const unsubscribe = sinon.spy();
+    const handler = this.create(callback, unsubscribe);
 
     handler();
     this.tick(40);
@@ -1364,6 +1365,7 @@ QUnit.test('Callback disposing', function(assert) {
     this.tick(60);
 
     assert.strictEqual(callback.callCount, 0);
+    assert.strictEqual(unsubscribe.callCount, 1);
 });
 
 QUnit.module('EventTrigger', {

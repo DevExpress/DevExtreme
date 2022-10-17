@@ -62,7 +62,7 @@ export let createIncidentOccurred = function(widgetName, eventTrigger) {
     };
 };
 
-export function createResizeHandler(callback) {
+export function createResizeHandler(callback, unsubscribe) {
     let timeout;
     const handler = function() {
         clearTimeout(timeout);
@@ -71,6 +71,7 @@ export function createResizeHandler(callback) {
 
     handler.dispose = function() {
         clearTimeout(timeout);
+        unsubscribe();
         return this;
     };
 
