@@ -210,7 +210,7 @@ QUnit.test('Not resized if container size is not changed', function(assert) {
 
 QUnit.test('Resized if container size is changed', function(assert) {
     this.setContainerSize(400, 200);
-    this.createMap();
+    this.createMap({ redrawOnResize: 'onlyWindow' });
     this.setContainerSize(500, 100);
 
     this.emulateResize();
@@ -262,7 +262,7 @@ QUnit.test('Resized with top title', function(assert) {
     this.title.stub('layoutOptions').returns({ horizontalAlignment: 'left', verticalAlignment: 'top' });
     this.title.stub('measure').returns([500, 50]);
 
-    this.createMap();
+    this.createMap({ redrawOnResize: 'onlyWindow' });
     this.setContainerSize(500, 100);
 
     this.emulateResize();
@@ -275,7 +275,7 @@ QUnit.test('Resized with bottom title', function(assert) {
     this.title.stub('layoutOptions').returns({ horizontalAlignment: 'left', verticalAlignment: 'bottom' });
     this.title.stub('measure').returns([500, 50]);
 
-    this.createMap();
+    this.createMap({ redrawOnResize: 'onlyWindow' });
     this.setContainerSize(500, 100);
 
     this.emulateResize();

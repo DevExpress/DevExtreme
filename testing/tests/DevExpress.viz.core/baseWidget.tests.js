@@ -7,6 +7,8 @@ const registerComponent = require('core/component_registrator');
 const logger = require('core/utils/console').logger;
 const mock = require('../../helpers/mockModule.js').mock;
 const errorsModule = require('viz/core/errors_warnings');
+const resizeObserverSingleton = require('core/resize_observer');
+const isFunction = require('core/utils/type').isFunction;
 errorsModule.ERROR_MESSAGES = {
     W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
     E100: 'Templated text 1: {0}, Templated text 2: {1}',
@@ -510,7 +512,7 @@ QUnit.test('On window resize', function(assert) {
 });
 
 QUnit.test('On window resize / size is not changed', function(assert) {
-    this.createWidget();
+    this.createWidget({ redrawOnResize: 'onlyWindow' });
     this.reset();
 
     this.emulateWindowResize();
@@ -520,7 +522,7 @@ QUnit.test('On window resize / size is not changed', function(assert) {
 
 QUnit.test('On window resize / hidden', function(assert) {
     this.$container.hide();
-    this.createWidget();
+    this.createWidget({ redrawOnResize: 'onlyWindow' });
     this.reset();
 
     this.$container.width(100);
@@ -853,6 +855,8 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.onApplySize = sinon.spy();
+        sinon.stub(resizeObserverSingleton, 'observe');
+        sinon.stub(resizeObserverSingleton, 'unobserve');
     },
 
     triggerCallback: function() {
@@ -865,6 +869,12 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
         const result = environment.createWidget.apply(this, arguments);
         this.onApplySize.reset();
         return result;
+    },
+
+    afterEach() {
+        environment.afterEach.apply(this, arguments);
+        resizeObserverSingleton.observe.restore();
+        resizeObserverSingleton.unobserve.restore();
     }
 }));
 
@@ -873,7 +883,7 @@ QUnit.test('option is not defined', function(assert) {
 
     this.triggerCallback();
 
-    assert.strictEqual(this.onApplySize.callCount, 1);
+    assert.strictEqual(resizeObserverSingleton.observe.callCount, 1);
 });
 
 QUnit.test('option is false', function(assert) {
@@ -882,20 +892,21 @@ QUnit.test('option is false', function(assert) {
     this.triggerCallback();
 
     assert.strictEqual(this.onApplySize.callCount, 0);
+    assert.strictEqual(resizeObserverSingleton.observe.callCount, 0);
 });
 
 QUnit.test('option changing 1', function(assert) {
     this.createWidget({ redrawOnResize: false });
 
     this.triggerCallback();
-    this.widget.option({ redrawOnResize: true });
+    this.widget.option({ redrawOnResize: 'onlyWindow' });
     this.triggerCallback();
 
     assert.strictEqual(this.onApplySize.callCount, 1);
 });
 
 QUnit.test('option changing 2', function(assert) {
-    this.createWidget({ redrawOnResize: true });
+    this.createWidget({ redrawOnResize: 'onlyWindow' });
 
     this.triggerCallback();
     this.widget.option({ redrawOnResize: false });
@@ -922,6 +933,77 @@ QUnit.test('disposing during delay', function(assert) {
     this.clock.tick(100);
 
     assert.strictEqual(this.onApplySize.callCount, 0);
+});
+
+QUnit.module('ResizeObserver', {
+    ...environment,
+    beforeEach() {
+        this.onApplySize = sinon.spy();
+        environment.beforeEach.apply(this, arguments);
+        sinon.stub(resizeObserverSingleton, 'observe');
+        sinon.stub(resizeObserverSingleton, 'unobserve');
+    },
+    afterEach() {
+        this.onApplySize.reset();
+        environment.afterEach.apply(this, arguments);
+        resizeObserverSingleton.observe.restore();
+        resizeObserverSingleton.unobserve.restore();
+    },
+    createWidget(options = {}) {
+        return environment.createWidget.call(this, {
+            redrawOnResize: true,
+            ...options
+        });
+    }
+});
+
+QUnit.test('Observe', function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(resizeObserverSingleton.observe.callCount, 1);
+});
+
+QUnit.test('Unobserve on optionChange', function(assert) {
+    const chart = this.createWidget();
+
+    chart.option('redrawOnResize', false);
+
+    assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 1);
+});
+
+QUnit.test('Unobserve on dispose', function(assert) {
+    this.createWidget();
+
+    this.$container.remove();
+
+    assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 1);
+});
+
+QUnit.test('Observe arguments', function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(resizeObserverSingleton.observe.lastCall.args[0], this.$container[0], 'element');
+    assert.ok(isFunction(resizeObserverSingleton.observe.lastCall.args[1]), 'callback');
+});
+
+QUnit.test('Unobserve arguments', function(assert) {
+    this.createWidget();
+
+    this.$container.remove();
+
+    assert.strictEqual(resizeObserverSingleton.unobserve.lastCall.args[0], this.$container[0], 'element');
+});
+
+QUnit.test('Rerender chart from observer callback', function(assert) {
+    this.createWidget();
+
+    this.onApplySize.reset();
+    this.$container.width(255);
+
+    resizeObserverSingleton.observe.lastCall.args[1]();
+    this.tick(100);
+
+    assert.strictEqual(this.onApplySize.callCount, 1);
 });
 
 QUnit.module('Visibility changing', $.extend({}, environment, {

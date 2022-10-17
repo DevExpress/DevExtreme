@@ -562,7 +562,8 @@ QUnit.test('Loading indicator is kept shown when data source is not defined', fu
 QUnit.test('Stop all animations on resize callback when container is resized', function(assert) {
     // arrange
     const chart = this.createChart({
-        dataSource: [{}]
+        dataSource: [{}],
+        redrawOnResize: 'onlyWindow'
     });
     chart._renderer.stopAllAnimations.reset();
     this.$container.width(500);

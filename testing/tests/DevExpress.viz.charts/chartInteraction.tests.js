@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
-import resizeObserverSingleton from 'core/resize_observer';
-import { isFunction } from 'core/utils/type';
 
 import 'viz/chart';
 import 'viz/polar_chart';
@@ -731,75 +729,4 @@ QUnit.test('two stub axis', function(assert) {
 
     assert.equal(verticalAxes[1].getOptions().grid.visible, false, 'second axis grid isn\'t visible');
     assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, 'second axis grid isn\'t visible');
-});
-
-QUnit.module('ResizeObserver', {
-    beforeEach() {
-        this.chartContainer = $('#chart');
-        sinon.stub(resizeObserverSingleton, 'observe');
-        sinon.stub(resizeObserverSingleton, 'unobserve');
-    },
-    afterEach() {
-        resizeObserverSingleton.observe.restore();
-        resizeObserverSingleton.unobserve.restore();
-    },
-    createChart(options = {}) {
-        return this.chartContainer.dxChart({
-            useResizeObserver: true,
-            ...options
-        }).dxChart('instance');
-    }
-});
-
-QUnit.test('Observe', function(assert) {
-    this.createChart();
-
-    assert.strictEqual(resizeObserverSingleton.observe.callCount, 1);
-});
-
-QUnit.test('Unobserve on optionChange', function(assert) {
-    const chart = this.createChart();
-
-    chart.option('useResizeObserver', false);
-
-    assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 1);
-});
-
-QUnit.test('Unobserve on dispose', function(assert) {
-    this.createChart();
-
-    this.chartContainer.remove();
-
-    assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 1);
-});
-
-QUnit.test('Observe arguments', function(assert) {
-    this.createChart();
-
-    assert.strictEqual(resizeObserverSingleton.observe.lastCall.args[0], this.chartContainer[0], 'element');
-    assert.ok(isFunction(resizeObserverSingleton.observe.lastCall.args[1]), 'callback');
-});
-
-QUnit.test('Unobserve arguments', function(assert) {
-    this.createChart();
-
-    this.chartContainer.remove();
-
-    assert.strictEqual(resizeObserverSingleton.unobserve.lastCall.args[0], this.chartContainer[0], 'element');
-});
-
-QUnit.test('Rerender chart from observer callback', function(assert) {
-    const drawn = sinon.spy();
-
-    this.createChart({
-        onDrawn: drawn
-    });
-
-    drawn.reset();
-
-    this.chartContainer.width(255);
-
-    resizeObserverSingleton.observe.lastCall.args[1]();
-
-    assert.strictEqual(drawn.callCount, 1);
 });
