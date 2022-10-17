@@ -484,7 +484,7 @@ const HtmlEditor = Editor.inherit({
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
                     } else {
-                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
+                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', sanitizedValue) : sanitizedValue;
                         this._updateHtmlContent(updatedValue);
                     }
                 } else {
