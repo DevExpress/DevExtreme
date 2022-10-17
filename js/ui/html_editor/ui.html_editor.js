@@ -478,22 +478,24 @@ const HtmlEditor = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "value":
+            case 'value': {
+                const sanitizedValue = this._removeXSSVulnerableHtml(args.value);
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
                     } else {
-                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
+                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
                         this._updateHtmlContent(updatedValue);
                     }
                 } else {
-                    this._$htmlContainer.html(args.value);
+                    this._$htmlContainer.html(sanitizedValue);
                 }
 
-                this._setSubmitValue(args.value);
+                this._setSubmitValue(sanitizedValue);
 
                 this.callBase(args);
                 break;
+            }
             case "placeholder":
             case "variables":
             case "toolbar":
