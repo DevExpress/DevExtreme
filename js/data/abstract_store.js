@@ -56,6 +56,8 @@ const Store = Class.inherit({
         this._useDefaultSearch = true;
     },
 
+    _clearCache: noop,
+
     _customLoadOptions: function() {
         return null;
     },
