@@ -1380,7 +1380,6 @@ export const virtualScrollingModule = {
                             result = true;
                             dataSourceAdapter.pageIndex(changedParams.pageIndex);
                             dataSourceAdapter.loadPageCount(changedParams.loadPageCount);
-                            dataSourceAdapter.resetTotalCountCorrection();
                             this._repaintChangesOnly = true;
                             this._needUpdateDimensions = true;
                             const viewportChanging = this._viewportChanging;
