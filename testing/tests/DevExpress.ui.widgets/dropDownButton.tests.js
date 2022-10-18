@@ -8,7 +8,6 @@ import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { extend } from 'core/utils/extend';
-import devices from 'core/devices';
 
 import 'generic_light.css!';
 
@@ -1114,49 +1113,6 @@ QUnit.module('list integration', {}, () => {
         instance.option('useSelectMode', true);
 
         assert.deepEqual(list.option('selectedItemKeys'), [0], 'List has correct selection');
-    });
-});
-
-QUnit.module('Drop Down Popup', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        devices.current({ platform: 'ios' });
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
-        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
-            dropDownOptions: {
-                wrapperAttr: {
-                    class: 'custom-class',
-                },
-            },
-        });
-
-        const $button = $dropDownButton.find('.dx-button');
-        const dropDownButton = $dropDownButton.dxDropDownButton('instance');
-
-        $button.trigger('dxclick');
-
-        assert.strictEqual(dropDownButton.option('opened'), true, 'DropDownButton is opened');
-    });
-
-    QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
-        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
-            openOnFieldClick: true,
-        });
-
-        const $button = $dropDownButton.find('.dx-button');
-        const dropDownButton = $dropDownButton.dxDropDownButton('instance');
-
-        this.clock.tick(500);
-
-        dropDownButton.option('dropDownOptions.wrapperAttr.class', 'custom-class');
-        $button.trigger('dxclick');
-
-        assert.strictEqual(dropDownButton.option('opened'), true, 'DropDownButton is opened');
     });
 });
 
