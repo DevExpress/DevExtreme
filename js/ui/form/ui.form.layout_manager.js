@@ -578,6 +578,7 @@ const LayoutManager = Widget.inherit({
             showColonAfterLabel: this.option('showColonAfterLabel'),
             managerLabelLocation: this.option('labelLocation'),
             template: item.template ? this._getTemplate(item.template) : null,
+            labelTemplate: item.label?.template ? this._getTemplate(item.label.template) : null,
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
             labelMode: this.option('labelMode'),

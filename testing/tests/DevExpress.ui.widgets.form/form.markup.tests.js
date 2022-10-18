@@ -1132,6 +1132,39 @@ QUnit.module('Grouping', () => {
         assert.equal($groups.eq(1).find('.template-biography').text(), 'bla-bla-bla', 'Template\'s content has correct data');
     });
 
+    test('Simple Item labelTemplate', function(assert) {
+        const $formContainer = $('#form').dxForm({
+            formData: {
+                firstName: 'John',
+            },
+            items: [
+                {
+                    itemType: 'group',
+                    caption: 'Personal info',
+                    items: [
+                        {
+                            dataField: 'firstName',
+                            label: {
+                                template: (data, container) => {
+                                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
+
+                                    $('<div>')
+                                        .text(data.text + ' ?')
+                                        .addClass('label-template')
+                                        .appendTo(container);
+                                }
+                            }
+                        }
+                    ]
+                }]
+        });
+        const $groups = $formContainer.find(`.${FIELD_ITEM_CLASS}`);
+
+        assert.equal($groups.length, 2, '2 groups rendered');
+        assert.equal($groups.eq(0).find('.label-template').length, 1, 'label template content');
+        assert.equal($groups.eq(0).find('.label-template').text(), 'First Name: ?', 'Labels\'s content has correct data');
+    });
+
     test('Template has correct component instance', function(assert) {
         let templateOwnerComponent;
 

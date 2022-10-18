@@ -1,6 +1,7 @@
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
-import { isEmpty } from '../../../core/utils/string';
+import { getPublicElement } from '../../../core/element';
+// import { isEmpty } from '../../../core/utils/string';
 import { getLabelMarkText } from '../ui.form.layout_manager.utils';
 
 import {
@@ -16,19 +17,35 @@ export const FIELD_ITEM_LABEL_LOCATION_CLASS = 'dx-field-item-label-location-';
 export const FIELD_ITEM_OPTIONAL_MARK_CLASS = 'dx-field-item-optional-mark';
 export const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
 
-export function renderLabel({ text, id, location, alignment, labelID = null, markOptions = {} }) {
-    if(!isDefined(text) || text.length <= 0) {
+export function renderLabel({ text, id, location, alignment, labelID = null, markOptions = {}, labelTemplate, labelTemplateData }) {
+    if((!isDefined(text) || text.length <= 0) && !isDefined(labelTemplate)) {
         return null;
     }
 
-    return $('<label>')
+    const $label = $('<label>')
         .addClass(FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location)
         .attr('for', id)
         .attr('id', labelID)
-        .css('textAlign', alignment)
+        .css('textAlign', alignment);
+
+    const $labelContainer = $('<span>').addClass(FIELD_ITEM_LABEL_CONTENT_CLASS);
+    let $labelContent = $('<span>').addClass(FIELD_ITEM_LABEL_TEXT_CLASS).text(text);
+
+    if(labelTemplate) {
+        $labelContent = $('<div>').addClass('dx-field-item-custom-label-content');
+
+        labelTemplateData.text = text;
+
+        labelTemplate.render({
+            container: getPublicElement($labelContent),
+            model: labelTemplateData,
+        });
+    }
+
+    return $label
         .append(
-            $('<span>').addClass(FIELD_ITEM_LABEL_CONTENT_CLASS).append(
-                $('<span>').addClass(FIELD_ITEM_LABEL_TEXT_CLASS).text(text),
+            $labelContainer.append(
+                $labelContent,
                 _renderLabelMark(markOptions)
             )
         );
@@ -79,6 +96,7 @@ function getLabelWidthByInnerHTML(options) {
         .appendTo('body');
 
     renderLabelOptions.text = ' '; // space was in initial PR https://hg/mobile/rev/27b4f57f10bb
+
     const $label = renderLabel(renderLabelOptions).appendTo($hiddenContainer);
 
     const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
@@ -104,7 +122,7 @@ function getLabelInnerHTML($FIELD_ITEM_LABEL_CONTENT_CLASS) {
         child = $FIELD_ITEM_LABEL_CONTENT_CLASS.children[i];
         // Was introduced in https://hg/mobile/rev/1f81a5afaab3 , "dxForm: fix test cafe tests":
         // It's not clear why "$labelTexts[i].children[0].innerHTML" doesn't meet the needs.
-        result = result + (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
+        result = result + child.innerHTML; // (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
     }
 
     return result;

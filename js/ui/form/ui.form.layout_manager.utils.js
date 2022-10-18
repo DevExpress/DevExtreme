@@ -16,6 +16,7 @@ export function convertToRenderFieldItemOptions({
     createComponentCallback,
     item,
     template,
+    labelTemplate,
     name,
     formLabelLocation,
     requiredMessageTemplate,
@@ -35,13 +36,17 @@ export function convertToRenderFieldItemOptions({
     const helpID = item.helpText ? ('dx-' + new Guid()) : null;
 
     const labelOptions = _convertToLabelOptions({
-        item, id: itemId, isRequired, managerMarkOptions,
+        item,
+        id: itemId,
+        isRequired,
+        managerMarkOptions,
         showColonAfterLabel,
         labelLocation: managerLabelLocation,
         formLabelMode: labelMode,
+        labelTemplate,
     });
 
-    const needRenderLabel = labelOptions.visible && labelOptions.text;
+    const needRenderLabel = labelOptions.visible && (labelOptions.text || labelOptions.labelTemplate);
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign = labelLocation !== 'top' && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(item.editorType);
 
@@ -74,8 +79,18 @@ export function convertToRenderFieldItemOptions({
         rootElementCssClassList,
         formOrLayoutManager,
         createComponentCallback,
-        labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,
-        item, isSimpleItem, isRequired, template, helpID, labelID, name, helpText,
+        labelOptions,
+        labelNeedBaselineAlign,
+        labelLocation,
+        needRenderLabel,
+        item,
+        isSimpleItem,
+        isRequired,
+        template,
+        helpID,
+        labelID,
+        name,
+        helpText,
         formLabelLocation,
         requiredMessageTemplate,
         validationGroup,
@@ -170,7 +185,7 @@ function _hasRequiredRuleInSet(rules) {
     return hasRequiredRule;
 }
 
-function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
+function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, labelTemplate, formLabelMode }) {
     const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(item.editorType);
     const labelOptions = extend(
         {
@@ -181,7 +196,10 @@ function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, show
             isRequired: isRequired,
         },
         item ? item.label : {},
-        { markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired) }
+        {
+            markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired),
+            labelTemplate,
+        }
     );
 
     const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
