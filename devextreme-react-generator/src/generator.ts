@@ -129,6 +129,7 @@ export function createPropTyping(
     return {
       propName: option.name,
       types: types || [],
+      acceptableType: restrictedTypes[0].type.toLowerCase(),
       acceptableValues: restrictedTypes[0].acceptableValues,
     };
   }

@@ -1004,6 +1004,61 @@ export {
     ).toBe(EXPECTED);
   });
 
+  it('adds check for acceptable values with common type', () => {
+    // #region EXPECTED
+    const EXPECTED = `
+import dxCLASS_NAME, {
+    Properties
+} from "DX/WIDGET/PATH";
+
+import * as PropTypes from "prop-types";
+import { Component as BaseComponent, IHtmlOptions } from "BASE_COMPONENT_PATH";
+
+type ICLASS_NAMEOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+}>
+
+class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOptions>> {
+
+  public get instance(): dxCLASS_NAME {
+    return this._instance;
+  }
+
+  protected _WidgetClass = dxCLASS_NAME;
+}
+(CLASS_NAME as any).propTypes = {
+  PROP1: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.oneOf([
+      "VALUE_1",
+      "VALUE_2"])
+  ])
+};
+export default CLASS_NAME;
+export {
+  CLASS_NAME,
+  ICLASS_NAMEOptions
+};
+`.trimLeft();
+    // #endregion
+
+    expect(
+      generate({
+        name: 'CLASS_NAME',
+        baseComponentPath: 'BASE_COMPONENT_PATH',
+        extensionComponentPath: 'EXTENSION_COMPONENT_PATH',
+        dxExportPath: 'DX/WIDGET/PATH',
+        propTypings: [
+          {
+            propName: 'PROP1',
+            types: [],
+            acceptableType: 'string',
+            acceptableValues: ['"VALUE_1"', '"VALUE_2"'],
+          },
+        ],
+      }),
+    ).toBe(EXPECTED);
+  });
+
   it('adds check for acceptable values', () => {
     // #region EXPECTED
     const EXPECTED = `
@@ -1028,8 +1083,7 @@ class CLASS_NAME extends BaseComponent<React.PropsWithChildren<ICLASS_NAMEOption
 (CLASS_NAME as any).propTypes = {
   PROP1: PropTypes.oneOf([
     "VALUE_1",
-    "VALUE_2"
-  ])
+    "VALUE_2"])
 };
 export default CLASS_NAME;
 export {
