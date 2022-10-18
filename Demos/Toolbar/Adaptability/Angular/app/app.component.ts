@@ -67,7 +67,7 @@ export class AppComponent {
   }
 
   onButtonClick(name: string) {
-    notify(`The "${name}" button was clicked`);
+    notify(`The "${name}" button has been clicked`);
   }
 
   onSelectionChanged(name: string) {

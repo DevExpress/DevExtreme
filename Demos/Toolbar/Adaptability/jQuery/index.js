@@ -1,5 +1,5 @@
 const onButtonClick = (name) => {
-  DevExpress.ui.notify(`The "${name}" button was clicked`);
+  DevExpress.ui.notify(`The "${name}" button has been clicked`);
 };
 
 const onSelectionChanged = (name) => {
