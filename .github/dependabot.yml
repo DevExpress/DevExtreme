@@ -13,3 +13,8 @@ updates:
       interval: 'daily'
     reviewers:
       - 'DevExpress/devextreme-devops'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
