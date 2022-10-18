@@ -4,7 +4,8 @@ import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 fixture`searchPanel`
-  .page(url(__dirname, '../containerMaterial.html'));
+  .page(url(__dirname, '../containerMaterial.html'))
+  .afterEach(async () => disposeWidgets());
 
 // T1046688
 test('searchPanel has correct view inside masterDetail', async (t) => {
