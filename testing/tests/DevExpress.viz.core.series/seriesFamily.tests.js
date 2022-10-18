@@ -302,6 +302,18 @@ const pointsForStacking = {
     }
 };
 
+const pointsForRange = {
+    point1: function() {
+        return [new MockPoint({ argument: 'First', minValue: 5, value: 5 }),
+            new MockPoint({ argument: 'Second', minValue: 6, value: 15 }),
+            new MockPoint({ argument: 'Third', minValue: 7, value: 12 })];
+    },
+    point2: function() {
+        return [new MockPoint({ argument: 'First', minValue: 0, value: 8 }),
+            new MockPoint({ argument: 'Second', minValue: 30, value: 32 }),
+            new MockPoint({ argument: 'Third', minValue: 1, value: 3 })];
+    },
+};
 const pointsForBubble = {
     points1: function() {
         return $.extend([], [
@@ -1517,6 +1529,24 @@ QUnit.test('Set single series', function(assert) {
     createSeriesFamily('rangebar', [series], { });
 
     checkSeries(assert, series, expectedWidth, 0);
+});
+
+QUnit.test('Set one series. minBarSize', function(assert) {
+    const series1 = createSeries({ points: pointsForRange.point1(), minBarSize: 10 });
+    const series = [series1];
+    const family = createSeriesFamily('rangebar', series);
+
+    checkStackedPointHeight(assert, family.series[0], 10, 20, 17, 0, 1, 2);
+});
+
+QUnit.test('Set one series with minBarSize. First point has not value', function(assert) {
+    const points1 = pointsForRange.point2();
+    points1[0].hasValue = sinon.stub().returns(false);
+    const series1 = createSeries({ points: points1, minBarSize: 10 });
+    const series = [series1];
+    const family = createSeriesFamily('rangebar', series);
+
+    checkStackedPointHeight(assert, family.series[0], 8, 37, 8, 0, 25, -4);
 });
 
 QUnit.test('Set two series', function(assert) {

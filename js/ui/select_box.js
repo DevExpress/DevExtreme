@@ -148,6 +148,8 @@ const SelectBox = DropDownList.inherit({
 
             fieldTemplate: null,
 
+            customItemCreateEvent: 'change',
+
             valueChangeEvent: 'change',
 
             acceptCustomValue: false,
@@ -201,6 +203,13 @@ const SelectBox = DropDownList.inherit({
 
     _popupWrapperClass: function() {
         return this.callBase() + ' ' + SELECTBOX_POPUP_WRAPPER_CLASS;
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'valueChangeEvent': { since: '22.2', alias: 'customItemCreateEvent' }
+        });
     },
 
     _cancelEditing: function() {
@@ -529,8 +538,18 @@ const SelectBox = DropDownList.inherit({
         }).bind(this));
     },
 
+    _valueChangeEventIncludesBlur: function() {
+        const valueChangeEvent = this.option(this._getValueChangeEventOptionName());
+
+        return valueChangeEvent.includes('blur');
+    },
+
+    _isPreventedFocusOutEvent: function(e) {
+        return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
+    },
+
     _focusOutHandler: function(e) {
-        if(!this._preventNestedFocusEvent(e)) {
+        if(!this._isPreventedFocusOutEvent(e)) {
             const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
             if(!isOverlayTarget) {
@@ -594,6 +613,10 @@ const SelectBox = DropDownList.inherit({
     _isFocused: function() {
         const activeElement = domAdapter.getActiveElement(this.element());
         return this.callBase() && $(activeElement).closest(this._input()).length > 0;
+    },
+
+    _getValueChangeEventOptionName: function() {
+        return 'customItemCreateEvent';
     },
 
     _renderValueChangeEvent: function() {
@@ -714,6 +737,7 @@ const SelectBox = DropDownList.inherit({
 
     _customItemAddedHandler: function(e) {
         const searchValue = this._searchValue();
+
         const item = this._createCustomItem(searchValue);
 
         this._saveValueChangeEvent(e);
@@ -833,6 +857,11 @@ const SelectBox = DropDownList.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'customItemCreateEvent':
+                this._refreshValueChangeEvent();
+                this._refreshFocusEvent();
+                this._refreshEvents();
+                break;
             case 'onCustomItemCreating':
                 this._initCustomItemCreatingAction();
                 break;

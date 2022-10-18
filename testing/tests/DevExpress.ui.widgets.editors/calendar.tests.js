@@ -14,6 +14,7 @@ import config from 'core/config';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import { normalizeKeyName } from 'events/utils/index';
+import localization from 'localization';
 
 import 'generic_light.css!';
 
@@ -1505,6 +1506,83 @@ QUnit.module('Options', {
 
         $firstWeekDayCell = getFirstWeekDayCell();
         assert.strictEqual($firstWeekDayCell.abbr, 'Monday', 'first day of week is correct after runtime option change');
+
+        this.calendar.option('firstDayOfWeek', 2);
+
+        $firstWeekDayCell = getFirstWeekDayCell();
+        assert.strictEqual($firstWeekDayCell.abbr, 'Tuesday', 'first day of week is correct after runtime option change');
+    });
+
+    [
+        { localeID: 'de', expectedFirstDayOfWeek: 'Montag' },
+        { localeID: 'en', expectedFirstDayOfWeek: 'Sunday' },
+        { localeID: 'ja', expectedFirstDayOfWeek: '日曜日' },
+        { localeID: 'ru', expectedFirstDayOfWeek: 'понедельник' },
+        { localeID: 'zh', expectedFirstDayOfWeek: '星期日' },
+        { localeID: 'hr', expectedFirstDayOfWeek: 'ponedjeljak' },
+        { localeID: 'ar', expectedFirstDayOfWeek: 'السبت' },
+        { localeID: 'el', expectedFirstDayOfWeek: 'Δευτέρα' },
+        { localeID: 'ca', expectedFirstDayOfWeek: 'dilluns' },
+    ].forEach(({ localeID, expectedFirstDayOfWeek }) => {
+        QUnit.test(`firstDayOfWeek should depend from locale: ${localeID}`, function(assert) {
+            const getFirstWeekDayCell = () => {
+                return getCurrentViewInstance(this.calendar).$element().find('th').get(0);
+            };
+
+            const currentLocale = localization.locale();
+
+            try {
+                localization.locale(localeID);
+
+                this.reinit({});
+
+                const $firstWeekDayCell = getFirstWeekDayCell();
+                assert.strictEqual($firstWeekDayCell.abbr, expectedFirstDayOfWeek, 'first day of week is correct');
+            } finally {
+                localization.locale(currentLocale);
+            }
+        });
+    });
+
+    [
+        { weekNumberRule: 'auto', firstDayOfWeek: 1, expectedCalls: { firstFourDays: 36, firstDay: 0, fullWeek: 0 } },
+        { weekNumberRule: 'auto', firstDayOfWeek: 0, expectedCalls: { firstFourDays: 0, firstDay: 36, fullWeek: 0 } },
+        { weekNumberRule: 'auto', firstDayOfWeek: 5, expectedCalls: { firstFourDays: 0, firstDay: 36, fullWeek: 0 } },
+        { weekNumberRule: 'firstDay', firstDayOfWeek: 1, expectedCalls: { firstFourDays: 0, firstDay: 36, fullWeek: 0 } },
+        { weekNumberRule: 'firstDay', firstDayOfWeek: 0, expectedCalls: { firstFourDays: 0, firstDay: 36, fullWeek: 0 } },
+        { weekNumberRule: 'firstDay', firstDayOfWeek: 5, expectedCalls: { firstFourDays: 0, firstDay: 36, fullWeek: 0 } },
+        { weekNumberRule: 'firstFourDays', firstDayOfWeek: 1, expectedCalls: { firstFourDays: 36, firstDay: 0, fullWeek: 0 } },
+        { weekNumberRule: 'firstFourDays', firstDayOfWeek: 0, expectedCalls: { firstFourDays: 36, firstDay: 0, fullWeek: 0 } },
+        { weekNumberRule: 'firstFourDays', firstDayOfWeek: 5, expectedCalls: { firstFourDays: 36, firstDay: 0, fullWeek: 0 } },
+        { weekNumberRule: 'fullWeek', firstDayOfWeek: 1, expectedCalls: { firstFourDays: 0, firstDay: 0, fullWeek: 36 } },
+        { weekNumberRule: 'fullWeek', firstDayOfWeek: 0, expectedCalls: { firstFourDays: 0, firstDay: 0, fullWeek: 36 } },
+        { weekNumberRule: 'fullWeek', firstDayOfWeek: 5, expectedCalls: { firstFourDays: 0, firstDay: 0, fullWeek: 36 } },
+    ].forEach(({ weekNumberRule, firstDayOfWeek, expectedCalls }) => {
+        QUnit.test(`weekNumberRule option: weekNumberRule="${weekNumberRule}", firstDayOfWeek="${firstDayOfWeek}"`, function(assert) {
+            const dateUtilsCallCountMap = {
+                firstDay: 0,
+                firstFourDays: 0,
+                fullWeek: 0
+            };
+            const getWeekNumberStub = sinon.stub(dateUtils, 'getWeekNumber', (date, firstDayOfWeek, rule) => {
+                dateUtilsCallCountMap[rule]++;
+            });
+
+            try {
+                this.calendar.option({
+                    firstDayOfWeek,
+                    weekNumberRule,
+                    showWeekNumbers: true,
+                    currentDate: new Date(2020, 0, 1),
+                });
+
+                ['firstDay', 'firstFourDays', 'fullWeek'].forEach((rule) => {
+                    assert.strictEqual(dateUtilsCallCountMap[rule], expectedCalls[rule], `getWeekNumber called ${expectedCalls[rule]} times for ${rule} rule`);
+                });
+            } finally {
+                getWeekNumberStub.restore();
+            }
+        });
     });
 
     QUnit.test('dateSerializationFormat option', function(assert) {

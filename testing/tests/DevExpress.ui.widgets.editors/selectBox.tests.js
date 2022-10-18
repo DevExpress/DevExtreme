@@ -69,6 +69,8 @@ const KEY_SPACE = ' ';
 
 const TIME_TO_WAIT = 500;
 
+const VALUE_CHANGE_EVENT_OPTIONS = ['valueChangeEvent', 'customItemCreateEvent'];
+
 const toSelector = (className) => {
     return '.' + className;
 };
@@ -2289,6 +2291,8 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'display ' + customValue, 'displayed value is correct');
         assert.ok(logStub.calledOnce, 'There was an one message');
         assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
+
+        logStub.restore();
     });
 
     QUnit.test('onCustomItemCreating should not be called when existing item selecting', function(assert) {
@@ -3973,35 +3977,37 @@ QUnit.module('Scrolling', {
 });
 
 QUnit.module('Async tests', {}, () => {
-    QUnit.testInActiveWindow('Value should be reset after on selectedItem after focusout', function(assert) {
-        const done = assert.async();
-        const items = [1, 2];
-        const $selectBox = $('#selectBox').dxSelectBox({
-            searchEnabled: true,
-            items: items,
-            value: items[0],
-            valueChangeEvent: 'change',
-            searchTimeout: 0
+    VALUE_CHANGE_EVENT_OPTIONS.forEach(eventOptionName => {
+        QUnit.testInActiveWindow(`Value should be reset after on selectedItem after focusout when ${eventOptionName}='change'`, function(assert) {
+            const done = assert.async();
+            const items = [1, 2];
+            const $selectBox = $('#selectBox').dxSelectBox({
+                searchEnabled: true,
+                items: items,
+                value: items[0],
+                [eventOptionName]: 'change',
+                searchTimeout: 0
+            });
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const keyboard = keyboardMock($input);
+
+            $input.focus();
+
+            keyboard
+                .press('end')
+                .press('backspace')
+                .type('2');
+
+            $input.blur();
+
+            setTimeout(() => {
+                assert.equal(selectBox.option('value'), items[0], 'value is not changed');
+                assert.equal(selectBox.option('selectedItem'), items[0], 'selectedItem is not changed');
+                assert.equal($input.val(), items[0], 'input is reset');
+                done();
+            }, 0);
         });
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        const keyboard = keyboardMock($input);
-
-        $input.focus();
-
-        keyboard
-            .press('end')
-            .press('backspace')
-            .type('2');
-
-        $input.blur();
-
-        setTimeout(() => {
-            assert.equal(selectBox.option('value'), items[0], 'value is not changed');
-            assert.equal(selectBox.option('selectedItem'), items[0], 'selectedItem is not changed');
-            assert.equal($input.val(), items[0], 'input is reset');
-            done();
-        }, 0);
     });
 
     QUnit.test('the selected item should be visible if the data source is loaded after the delay (T386513)', function(assert) {
@@ -5818,6 +5824,26 @@ QUnit.module('focus policy', {
         assert.strictEqual(focusStub.callCount, 1, 'new FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
+
+    QUnit.testInActiveWindow('Input value has not been restored after field focusout when customItemCreateEvent includes "blur"', function(assert) {
+        const customValue = 'custom value';
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            items: ['item 1'],
+            customItemCreateEvent: 'blur',
+            onFocusOut: function() {
+                assert.strictEqual($input.val(), customValue, 'value has not been restored');
+            }
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.type(customValue);
+
+        $input.focusout();
+    });
 });
 
 let helper;
@@ -6035,13 +6061,18 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    QUnit.test('on input if valueChangeEvent=input and acceptCustomValue=true', function(assert) {
-        this.reinit({ acceptCustomValue: true, valueChangeEvent: 'input' });
+    VALUE_CHANGE_EVENT_OPTIONS.forEach(eventOptionName => {
+        QUnit.test(`on input if ${eventOptionName}=input and acceptCustomValue=true`, function(assert) {
+            this.reinit({
+                acceptCustomValue: true,
+                [eventOptionName]: 'input',
+            });
 
-        this.keyboard.type('1');
+            this.keyboard.type('1');
 
-        this.checkEvent(assert, 'input', this.$input);
-        this.testProgramChange(assert);
+            this.checkEvent(assert, 'input', this.$input);
+            this.testProgramChange(assert);
+        });
     });
 
     ['del', 'backspace'].forEach(key => {
@@ -6100,6 +6131,118 @@ QUnit.module('displayExpr', moduleSetup, () => {
 
             instance.close();
             assert.strictEqual(displayExprSpy.callCount, 4, 'It was not called more times on DropDown hiding');
+        });
+    });
+});
+
+
+QUnit.module('The "customItemCreateEvent" option warning', {
+    beforeEach: function() {
+        this.$selectBox = $('#selectBox');
+
+        const defaultOptions = {
+            items: ['item 1'],
+            acceptCustomValue: true,
+            onCustomItemCreating: (e) => {
+                e.customItem = e.text;
+            }
+        };
+
+        const init = (options = {}) => {
+            this.selectBox = this.$selectBox
+                .dxSelectBox($.extend({}, defaultOptions, options))
+                .dxSelectBox('instance');
+        };
+
+        this.reinit = (options) => {
+            this.selectBox.dispose();
+            init(options);
+        };
+
+        init();
+    }
+}, () => {
+    QUnit.test('valueChangeEvent prop using should raise a warning about deprecation', function(assert) {
+        const errorsSpy = sinon.spy(errors, 'log');
+
+        try {
+            this.selectBox.option('valueChangeEvent', 'change');
+
+            assert.deepEqual(errorsSpy.lastCall.args, [
+                'W0001',
+                'dxSelectBox',
+                'valueChangeEvent',
+                '22.2',
+                'Use the \'customItemCreateEvent\' option instead'
+            ], 'warning is raised with correct parameters');
+        } finally {
+            errorsSpy.restore();
+        }
+    });
+
+    QUnit.test('no warning should be logged on pure init', function(assert) {
+        const errorsSpy = sinon.spy(errors, 'log');
+
+        try {
+            this.reinit();
+            this.selectBox.option('customItemCreateEvent', 'change');
+        } finally {
+            assert.strictEqual(errorsSpy.callCount, 0, 'no warning is logged');
+            errorsSpy.restore();
+        }
+    });
+});
+
+QUnit.module('the "customItemCreateEvent" option', {
+    beforeEach: function() {
+        this.$selectBox = $('#selectBox').dxSelectBox({
+            items: ['item 1'],
+            acceptCustomValue: true,
+            focusStateEnabled: true,
+            onCustomItemCreating: (args) => {
+                const currentItems = args.component.option('items');
+
+                currentItems.push(args.text);
+                args.component.option('items', currentItems);
+                args.customItem = args.text;
+            },
+        });
+
+        this.instance = this.$selectBox.dxSelectBox('instance');
+        this.$input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.customValue = 't';
+    },
+}, () => {
+    const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
+
+    events.forEach((eventValue) => {
+        QUnit.testInActiveWindow(`custom item has been added when customItemCreateEvent='${eventValue}'`, function(assert) {
+            const { $input, customValue, keyboard, instance } = this;
+
+            instance.option('customItemCreateEvent', eventValue);
+
+            switch(eventValue) {
+                case 'keyup':
+                    instance.focus();
+                    $input.val(customValue);
+                    keyboard.keyUp(customValue);
+                    break;
+                case 'input':
+                    keyboard.type(customValue);
+                    break;
+                case 'change':
+                    keyboard.type(customValue);
+                    $input.trigger('change');
+                    break;
+                case 'blur':
+                case 'focusout':
+                    keyboard.type(customValue);
+                    $input.trigger(eventValue);
+                    break;
+            }
+
+            assert.strictEqual(instance.option('items').length, 2, 'custom item has been added');
         });
     });
 });
