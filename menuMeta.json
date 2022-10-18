@@ -5032,14 +5032,12 @@
           {
             "Title": "Basics",
             "Name": "Basics",
-            "DocUrl": "Guide/UI_Components/ActionSheet/Overview/",
             "Widget": "ActionSheet",
             "DemoType": "Mobile"
           },
           {
             "Title": "Popover Mode",
             "Name": "PopoverMode",
-            "DocUrl": "Guide/UI_Components/ActionSheet/Specify_Display_Mode/",
             "Widget": "ActionSheet",
             "DemoType": "Mobile"
           }
