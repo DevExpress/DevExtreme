@@ -3,15 +3,15 @@ const onButtonClick = (name) => {
 };
 
 const onSelectionChanged = (name) => {
-  DevExpress.ui.notify(`The "${name}" value was changed`);
+  DevExpress.ui.notify(`The "${name}" value has been changed`);
 };
 
 const onFontFamilyClick = () => {
-  DevExpress.ui.notify('The "Font Family" value was changed');
+  DevExpress.ui.notify('The "Font Family" value has been changed');
 };
 
 const onHeadingClick = () => {
-  DevExpress.ui.notify('The "Heading" value was changed');
+  DevExpress.ui.notify('The "Heading" value has been changed');
 };
 
 const toolbarSeparator = {

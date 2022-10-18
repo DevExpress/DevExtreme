@@ -71,23 +71,23 @@ export class AppComponent {
   }
 
   onSelectionChanged(name: string) {
-    notify(`The "${name}" value was changed`);
+    notify(`The "${name}" value has been changed`);
   }
 
   onCheckBoxValueChanged() {
-    notify('The "Navigation Pane" checkbox value was changed');
+    notify('The "Navigation Pane" checkbox value has been changed');
   }
 
   onDateBoxValueChanged() {
-    notify('The "DateBox" value was changed');
+    notify('The "DateBox" value has been changed');
   }
 
   onFontFamilyClick() {
-    notify('The "Font Family" value was changed');
+    notify('The "Font Family" value has been changed');
   }
 
   onHeadingClick() {
-    notify('The "Heading" value was changed');
+    notify('The "Heading" value has been changed');
   }
 }
 

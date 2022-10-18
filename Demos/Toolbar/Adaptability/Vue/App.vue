@@ -422,7 +422,7 @@ export default {
     },
 
     onSelectionChanged(name) {
-      notify(`The "${name}" value was changed`);
+      notify(`The "${name}" value has been changed`);
     },
 
     onFontSizeSelectionChanged() {
@@ -434,11 +434,11 @@ export default {
     },
 
     onHeadingClick() {
-      notify('The "Heading" value was changed');
+      notify('The "Heading" value has been changed');
     },
 
     onFontFamilyClick() {
-      notify('The "Font Family" value was changed');
+      notify('The "Font Family" value has been changed');
     },
   },
 };

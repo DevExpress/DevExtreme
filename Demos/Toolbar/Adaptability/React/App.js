@@ -29,7 +29,7 @@ function onButtonClick(name) {
 }
 
 function onSelectionChanged(name) {
-  notify(`The "${name}" value was changed`);
+  notify(`The "${name}" value has been changed`);
 }
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
   const [multiline, setMultiline] = React.useState(true);
 
   const onFontFamilyClick = React.useCallback(() => {
-    notify('The "Font Family" value was changed');
+    notify('The "Font Family" value has been changed');
   }, []);
 
   const onUndoButtonClick = React.useCallback(() => {
@@ -86,7 +86,7 @@ function App() {
   const onHeadingClick = React.useCallback(
     (e) => {
       setHeading(e.itemData.text);
-      notify('The "Heading" value was changed');
+      notify('The "Heading" value has been changed');
     },
     [setHeading],
   );
