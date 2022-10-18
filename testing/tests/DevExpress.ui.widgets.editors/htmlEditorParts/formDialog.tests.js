@@ -30,12 +30,19 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module('FormDialog', moduleConfig, () => {
-    test('Dialog has dialog class when the "wrapperAttr" property is added to "popupOption"', function(assert) {
-        new FormDialog(this.componentMock, { wrapperAttr: { class: CUSTOM_CLASS } });
+    test('Wrapper has dialog class when the "wrapperAttr.class" property is added to "popupOption"', function(assert) {
+        const popupConfig = {
+            container: this.$element,
+            wrapperAttr: { class: CUSTOM_CLASS },
+        };
 
-        const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
+        const formDialog = new FormDialog(this.componentMock, popupConfig);
+        formDialog.show();
 
-        assert.strictEqual($dialog.length, 1, 'There is element with the FormDialog class');
+        const $wrapper = this.$element.find(`.${CUSTOM_CLASS}`)[0];
+        const wrapperHasDialogClass = Array.from($wrapper.classList).indexOf(CUSTOM_CLASS) !== -1;
+
+        assert.strictEqual(wrapperHasDialogClass, true, 'Wrapper with the FormDialog class');
     });
 
     test('render FormDialog', function(assert) {

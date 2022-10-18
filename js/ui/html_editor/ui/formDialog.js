@@ -61,12 +61,12 @@ class FormDialog {
             onInitialized: (e) => {
                 this._popup = e.component;
                 this._popup.on('hiding', () => { this.deferred.reject(); });
+                this._popup.on('showing', () => { this._popup.$wrapper().addClass(DIALOG_CLASS); });
                 this._popup.on('shown', () => { this._form.focus(); });
             },
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
-            wrapperAttr: { class: 'dx-formdialog' },
             fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
