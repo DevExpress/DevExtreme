@@ -4,8 +4,12 @@ updates:
     directory: '/'
     schedule:
       interval: 'daily'
+    reviewers:
+      - 'DevExpress/devextreme-devops'
 
   - package-ecosystem: 'npm'
     directory: '/themebuilder-scss/'
     schedule:
       interval: 'daily'
+    reviewers:
+      - 'DevExpress/devextreme-devops'
