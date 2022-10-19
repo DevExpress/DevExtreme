@@ -62,9 +62,7 @@ export const getDropDownViewSwitcher = (
           }
         },
         width: 'max-content',
-        wrapperAttr: {
-          class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS,
-        },
+        _wrapperClassExternal: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS,
       },
     },
     ...item,

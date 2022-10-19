@@ -39,9 +39,7 @@ describe('Reduced icon tooltip', () => {
         .toMatchObject({
           visible: true,
           target: 'some target',
-          wrapperAttr: {
-            class: 'dx-scheduler-reduced-icon-tooltip',
-          },
+          _wrapperClassExternal: 'dx-scheduler-reduced-icon-tooltip',
         });
 
       const content = layout.childAt(0);
