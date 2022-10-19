@@ -730,7 +730,7 @@ QUnit.module('Gauge - resizing', {
 QUnit.test('Resizable by default', function(assert) {
     assert.expect(2);
     const done = assert.async();
-    const gauge = this.createTestGauge({ redrawOnResize: 'onlyWindow' });
+    const gauge = this.createTestGauge({ redrawOnResize: 'windowOnly' });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.deepEqual(gauge._DEBUG_rootRect, [0, 0, 400, 200], 'resized');

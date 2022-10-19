@@ -545,7 +545,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             that._removeResizeHandler();
         }
 
-        if(normalizeEnum(redrawOnResize) === 'onlywindow') {
+        if(normalizeEnum(redrawOnResize) === 'windowonly') {
             that._resizeHandler = createResizeHandler(resize, () => {
                 _windowResizeCallbacks.remove(this._resizeHandler);
             });

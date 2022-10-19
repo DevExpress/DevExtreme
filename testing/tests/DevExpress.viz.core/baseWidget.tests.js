@@ -502,7 +502,7 @@ QUnit.test('Create and destroy / hidden', function(assert) {
 });
 
 QUnit.test('On window resize', function(assert) {
-    this.createWidget({ redrawOnResize: 'onlyWindow' });
+    this.createWidget({ redrawOnResize: 'windowOnly' });
     this.reset();
 
     this.$container.width(100);
@@ -512,7 +512,7 @@ QUnit.test('On window resize', function(assert) {
 });
 
 QUnit.test('On window resize / size is not changed', function(assert) {
-    this.createWidget({ redrawOnResize: 'onlyWindow' });
+    this.createWidget({ redrawOnResize: 'windowOnly' });
     this.reset();
 
     this.emulateWindowResize();
@@ -522,7 +522,7 @@ QUnit.test('On window resize / size is not changed', function(assert) {
 
 QUnit.test('On window resize / hidden', function(assert) {
     this.$container.hide();
-    this.createWidget({ redrawOnResize: 'onlyWindow' });
+    this.createWidget({ redrawOnResize: 'windowOnly' });
     this.reset();
 
     this.$container.width(100);
@@ -899,14 +899,14 @@ QUnit.test('option changing 1', function(assert) {
     this.createWidget({ redrawOnResize: false });
 
     this.triggerCallback();
-    this.widget.option({ redrawOnResize: 'onlyWindow' });
+    this.widget.option({ redrawOnResize: 'windowOnly' });
     this.triggerCallback();
 
     assert.strictEqual(this.onApplySize.callCount, 1);
 });
 
 QUnit.test('option changing 2', function(assert) {
-    this.createWidget({ redrawOnResize: 'onlyWindow' });
+    this.createWidget({ redrawOnResize: 'windowOnly' });
 
     this.triggerCallback();
     this.widget.option({ redrawOnResize: false });

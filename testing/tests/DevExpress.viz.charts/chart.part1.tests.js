@@ -563,7 +563,7 @@ QUnit.test('Stop all animations on resize callback when container is resized', f
     // arrange
     const chart = this.createChart({
         dataSource: [{}],
-        redrawOnResize: 'onlyWindow'
+        redrawOnResize: 'windowOnly'
     });
     chart._renderer.stopAllAnimations.reset();
     this.$container.width(500);
