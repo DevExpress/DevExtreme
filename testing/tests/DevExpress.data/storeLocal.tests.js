@@ -51,56 +51,59 @@ QUnit.test('immediate flush', function(assert) {
     assert.deepEqual(store3._array, []);
 });
 
-QUnit.test('load() must read window.localStorage', async function(assert) {
+QUnit.test('_clearCache must read data from backend', function(assert) {
+    const clock = sinon.useFakeTimers();
     const storeName = DX_LOCALSTORAGE_ITEM_NAME;
+    const storeData = [
+        { id: 1, name: '1' },
+        { id: 2, name: '2' }
+    ];
+
     localStorage.removeItem(storeName);
 
-    const storeData = [{ id: 0, name: new Date().toISOString() }];
     const store = new LocalStore({
         key: 'id',
         name: TEST_NAME,
-        immediate: true,
-        data: storeData
+        data: []
     });
 
     localStorage.setItem(
         storeName,
-        JSON.stringify([
-            { id: 1, name: '1' },
-            { id: 2, name: '2' }
-        ])
+        JSON.stringify(storeData)
     );
 
-    const dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
+    store._clearCache();
 
-    store.load();
-
-    const loadedData = store.createQuery().toArray();
-
-    assert.deepEqual(dataFromLocalStorage, loadedData);
+    assert.deepEqual(store.createQuery().toArray(), storeData);
+    clock.restore();
 });
 
-QUnit.test('totalCount() must read window.localStorage', async function(assert) {
+QUnit.test('store methods must get actual data', function(assert) {
+    const done = assert.async();
+    const clock = sinon.useFakeTimers();
     const storeName = DX_LOCALSTORAGE_ITEM_NAME;
     localStorage.removeItem(storeName);
 
-    const storeData = [{ id: 0, name: new Date().toISOString() }];
+    const storeData = [
+        { id: 0, name: '1' },
+        { id: 1, name: '2' },
+        { id: 2, name: '3' },
+    ];
+
     const store = new LocalStore({
         key: 'id',
         name: TEST_NAME,
-        immediate: true,
         data: storeData
     });
 
-    localStorage.setItem(
-        storeName,
-        JSON.stringify([
-            { id: 1, name: '1' },
-            { id: 2, name: '2' }
-        ])
-    );
+    assert.deepEqual(storeData, store.createQuery().toArray());
 
-    const dataFromLocalStorage = JSON.parse(localStorage.getItem(storeName));
+    store.insert({ id: 3, name: '4' }).done(r => {
+        assert.deepEqual([...storeData, { id: 3, name: '4' }], store.createQuery().toArray());
 
-    assert.equal(dataFromLocalStorage.length, await store.totalCount({}));
+        clock.restore();
+        done();
+    });
 });
+
+
