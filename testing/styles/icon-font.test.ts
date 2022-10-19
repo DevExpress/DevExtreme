@@ -17,9 +17,6 @@ describe('Equals svg to font', () => {
   const getCountElementInSvg = (pathToSvg: string): number => {
     const files = readdirSync(pathToSvg);
 
-    // eslint-disable-next-line no-console
-    console.log(files);
-
     return files.length;
   };
 
@@ -35,5 +32,15 @@ describe('Equals svg to font', () => {
     const countElementMaterialSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/material`);
 
     expect(countElementMaterialFont).toBe(countElementMaterialSvg);
+  });
+
+  test('check svg elements', () => {
+    const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
+    const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`);
+
+    const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));
+    const differenceGeneric = genericIcons.filter((svg) => !materialIcons.includes(svg));
+
+    expect(differenceMaterial).toBe(differenceGeneric);
   });
 });
