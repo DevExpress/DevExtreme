@@ -41,6 +41,6 @@ describe('Equals svg to font', () => {
     const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));
     const differenceGeneric = genericIcons.filter((svg) => !materialIcons.includes(svg));
 
-    expect(differenceMaterial).toBe(differenceGeneric);
+    expect(differenceMaterial.toString()).toBe(differenceGeneric.toString());
   });
 });
