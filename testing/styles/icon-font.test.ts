@@ -16,6 +16,10 @@ describe('Equals svg to font', () => {
 
   const getCountElementInSvg = (pathToSvg: string): number => {
     const files = readdirSync(pathToSvg);
+
+    // eslint-disable-next-line no-console
+    console.log(files);
+
     return files.length;
   };
 
