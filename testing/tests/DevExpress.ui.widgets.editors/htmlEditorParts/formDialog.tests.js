@@ -40,7 +40,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
         formDialog.show();
 
         const $wrapper = this.$element.find(`.${CUSTOM_CLASS}`)[0];
-        const wrapperHasDialogClass = Array.from($wrapper.classList).indexOf(CUSTOM_CLASS) !== -1;
+        const wrapperHasDialogClass = Array.from($wrapper.classList).includes(DIALOG_CLASS);
 
         assert.strictEqual(wrapperHasDialogClass, true, 'Wrapper with the FormDialog class');
     });

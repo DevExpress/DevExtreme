@@ -1724,25 +1724,31 @@ QUnit.module('popup integration', () => {
 
             this.$input = this.$dropDownEditor.find('.dx-texteditor-input');
             this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor('instance');
+
+            this.hasDropDownEditorOverlayClass = () => {
+                const $wrapper = this.dropDownEditor._popup.$wrapper()[0];
+
+                return Array.from($wrapper.classList).includes(DROP_DOWN_EDITOR_OVERLAY);
+            };
         },
         afterEach: function() {
             this.clock.restore();
         }
     }, () => {
-        QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
+        QUnit.test('Drop down popup wrapper has overlay class if the "wrapperAttr" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
             this.dropDownEditor.option('dropDownOptions.wrapperAttr.class', this.customClass);
             this.$input.trigger('dxclick');
 
-            assert.strictEqual(this.dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
+            assert.strictEqual(this.hasDropDownEditorOverlayClass(), true, 'drop down popup wrapper has overlay class');
         });
 
-        QUnit.test('Drop Down Popup will not close when opened if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
+        QUnit.test('Drop down popup wrapper has overlay class if the "wrapperAttr" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
             this.clock.tick(500);
 
             this.dropDownEditor.option('dropDownOptions.wrapperAttr.class', this.customClass);
             this.$input.trigger('dxclick');
 
-            assert.strictEqual(this.dropDownEditor.option('opened'), true, 'DropDownEditor is opened');
+            assert.strictEqual(this.hasDropDownEditorOverlayClass(), true, 'drop down popup wrapper has overlay class');
         });
     });
 });
