@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "已选行",
         "dxDataGrid-exportSelectedRows": "导出已选行",
         "dxDataGrid-exportAll": "导出所有数据",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(空白)",
         "dxDataGrid-headerFilterOK": "好",
         "dxDataGrid-headerFilterCancel": "取消",

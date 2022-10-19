@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Επιλεγμένες γραμμές",
         "dxDataGrid-exportSelectedRows": "Εξαγωγή επιλεγμένων γραμμών",
         "dxDataGrid-exportAll": "Εξαγωγή όλων των δεδομένων",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Blanks)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Ακύρωση",
