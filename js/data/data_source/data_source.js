@@ -508,9 +508,8 @@ export const DataSource = Class.inherit({
 
     reload() {
         const store = this.store();
-        if(store instanceof CustomStore) {
-            store.clearRawDataCache();
-        }
+
+        store._clearCache();
 
         this._init();
         return this.load();
