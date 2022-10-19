@@ -53,6 +53,7 @@ const ORDEREDLIST_FORMAT_CLASS = 'dx-orderedlist-format';
 const BULLETLIST_FORMAT_CLASS = 'dx-bulletlist-format';
 const CLEAR_FORMAT_CLASS = 'dx-clear-format';
 const IMAGE_FORMAT_CLASS = 'dx-image-format';
+const INSERT_TABLE_FORMAT_CLASS = 'dx-inserttable-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 
 const TABLE_OPERATIONS = [
@@ -1397,6 +1398,55 @@ testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
         assert.equal($separator.length, 1, 'Toolbar has a separator item');
         assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
     });
+
+    testModule('if menu was not opened yet', {
+        beforeEach: function() {
+            this.options.multiline = false;
+            this.openDropDownMenu = () => {
+                $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
+            };
+            this.getDisabledFormats = () => {
+                return this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
+            };
+            this.tableFormats = TABLE_OPERATIONS.map(name => ({ name, locateInMenu: 'always' }));
+        }
+    }, () => {
+        test('update table formats in menu on table focus (t1117604)', function(assert) {
+            this.options.items = this.tableFormats;
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+
+            toolbar.updateTableWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+            assert.ok(isInsertTableFormatDisabled, 'insert table format is disabled');
+        });
+
+        test('update table formats in menu on table unfocus', function(assert) {
+            this.options.items = this.tableFormats;
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+            toolbar.updateTableWidgets();
+
+            this.quillMock.getFormat = () => ({ table: false });
+            toolbar.updateTableWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 7, 'table is not focused -> all table operation buttons are disabled (except "insertTable")');
+            assert.notOk(isInsertTableFormatDisabled, 'insert table format is enabled');
+        });
+    });
 });
 
 testModule('tables', simpleModuleConfig, function() {
@@ -1439,7 +1489,7 @@ testModule('tables', simpleModuleConfig, function() {
 
         const $disabledFormatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
         const disabledItemsCount = $disabledFormatWidgets.length;
-        const isInsertTableOperationDisabled = $disabledFormatWidgets.first().hasClass('dx-inserttable-format');
+        const isInsertTableOperationDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
 
         assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
         assert.ok(isInsertTableOperationDisabled);
