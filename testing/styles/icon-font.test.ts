@@ -17,10 +17,6 @@ describe('Equals svg to font', () => {
   const getCountElementInSvg = (pathToSvg: string): number => {
     const files = readdirSync(pathToSvg);
 
-    files.forEach((file) => {
-      console.log(file);
-    });
-
     return files.length;
   };
 
