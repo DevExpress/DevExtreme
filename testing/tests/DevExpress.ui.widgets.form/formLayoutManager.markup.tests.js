@@ -2255,7 +2255,7 @@ QUnit.module('Templates', () => {
         assert.equal(textArea.option('value'), layoutManager.option('layoutData.test'), 'Widget\'s value equal to bound datafield');
     });
 
-    test('Check arguments of the template', function(assert) {
+    test('Check arguments of the label template', function(assert) {
         const labelTemplateStub = sinon.stub();
         const layoutManager = $('#container').dxLayoutManager({
             items: [{
@@ -2281,6 +2281,21 @@ QUnit.module('Templates', () => {
         assert.strictEqual(args.editorOptions.name, 'TestDataField', 'editorOptions.name argument');
         assert.strictEqual(args.editorOptions.text, 'TestText', 'editorOptions.text argument');
         assert.equal(args.component, layoutManager, 'component argument');
+    });
+
+    test('Label template should not be called for group items', function(assert) {
+        const labelTemplateStub = sinon.stub();
+        $('#container').dxLayoutManager({
+            items: [{
+                itemType: 'group',
+                caption: 'Personal info',
+                label: {
+                    template: labelTemplateStub
+                }
+            }]
+        });
+
+        assert.strictEqual(labelTemplateStub.callCount, 0, 'label template call count');
     });
 
     test('Check template bound to data', function(assert) {

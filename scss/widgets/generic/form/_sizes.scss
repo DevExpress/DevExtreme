@@ -5,6 +5,8 @@
 $generic-form-group-caption-font-size: null !default;
 $generic-form-group-content-padding-bottom: null !default;
 
+$generic-form-label-icon-size: 16px !default;
+
 @if $size == "default" {
   $generic-form-group-caption-font-size: 20px !default;
   $generic-form-group-content-padding-bottom: 20px !default;

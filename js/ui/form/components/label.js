@@ -5,7 +5,7 @@ import { getPublicElement } from '../../../core/element';
 import { getLabelMarkText } from '../ui.form.layout_manager.utils';
 
 import {
-    WIDGET_CLASS,
+    // WIDGET_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CLASS,
 } from '../constants';
@@ -89,40 +89,41 @@ export function setLabelWidthByMaxLabelWidth($targetContainer, labelsSelector, l
 }
 
 function getLabelWidthByInnerHTML(options) {
-    const { $FIELD_ITEM_LABEL_CONTENT_CLASS, ...renderLabelOptions } = options;
-    const $hiddenContainer = $('<div>')
-        .addClass(WIDGET_CLASS)
-        .addClass(GET_LABEL_WIDTH_BY_TEXT_CLASS)
-        .appendTo('body');
+    const { $FIELD_ITEM_LABEL_CONTENT_CLASS /* , ...renderLabelOptions */ } = options;
+    // const $hiddenContainer = $('<div>')
+    // .addClass(WIDGET_CLASS)
+    // .addClass(GET_LABEL_WIDTH_BY_TEXT_CLASS)
+    // .appendTo('body');
 
-    renderLabelOptions.text = ' '; // space was in initial PR https://hg/mobile/rev/27b4f57f10bb
+    // renderLabelOptions.text = ' '; // space was in initial PR https://hg/mobile/rev/27b4f57f10bb
 
-    const $label = renderLabel(renderLabelOptions).appendTo($hiddenContainer);
+    // const $label = renderLabel(renderLabelOptions).appendTo($hiddenContainer);
 
-    const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
+    // const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
 
     // this code has slow performance
     // innerHTML was added in https://hg/mobile/rev/3ed89cf230a4 for T350537
     // innerHTML is read from a DOMElement.innerHTML
-    labelTextElement.innerHTML = getLabelInnerHTML($FIELD_ITEM_LABEL_CONTENT_CLASS);
-    const result = labelTextElement.offsetWidth;
+    // labelTextElement.innerHTML =
+    const result = getLabelInnerHTMLOffsetWidth($FIELD_ITEM_LABEL_CONTENT_CLASS); // labelTextElement.offsetWidth;
 
-    $hiddenContainer.remove();
+    // $hiddenContainer.remove();
 
     return result;
 }
 
-function getLabelInnerHTML($FIELD_ITEM_LABEL_CONTENT_CLASS) {
+function getLabelInnerHTMLOffsetWidth($FIELD_ITEM_LABEL_CONTENT_CLASS) {
     const length = $FIELD_ITEM_LABEL_CONTENT_CLASS.children.length;
     let child;
-    let result = '';
+    let result = 0;
     let i;
 
     for(i = 0; i < length; i++) {
         child = $FIELD_ITEM_LABEL_CONTENT_CLASS.children[i];
         // Was introduced in https://hg/mobile/rev/1f81a5afaab3 , "dxForm: fix test cafe tests":
         // It's not clear why "$labelTexts[i].children[0].innerHTML" doesn't meet the needs.
-        result = result + child.innerHTML; // (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
+
+        result = result + child.offsetWidth; // (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
     }
 
     return result;

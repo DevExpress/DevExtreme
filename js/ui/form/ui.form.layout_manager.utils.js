@@ -46,7 +46,7 @@ export function convertToRenderFieldItemOptions({
         labelTemplate,
     });
 
-    const needRenderLabel = labelOptions.visible && (labelOptions.text || labelOptions.labelTemplate);
+    const needRenderLabel = labelOptions.visible && (labelOptions.text || (labelOptions.labelTemplate && isSimpleItem));
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign = labelLocation !== 'top' && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(item.editorType);
 

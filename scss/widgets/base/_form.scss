@@ -82,6 +82,10 @@
 
       .dx-field-item-custom-label-content {
         display: inline-block;
+
+        .dx-icon {
+          vertical-align: top;
+        }
       }
     }
 
@@ -114,6 +118,10 @@
 
   .dx-field-item-custom-label-content {
     display: inline-block;
+
+    .dx-icon {
+      vertical-align: top;
+    }
   }
 }
 

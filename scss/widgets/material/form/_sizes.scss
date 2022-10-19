@@ -10,6 +10,8 @@ $material-form-group-content-padding-bottom: null !default;
 $material-form-default-top-padding: null !default;
 
 $material-form-label-font-size: 12px !default;
+$material-form-label-icon-size: 14px !default;
+
 
 @if $size == "default" {
   $material-form-group-caption-bottom-margin: 6px !default;
