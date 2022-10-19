@@ -98,6 +98,9 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Run npm install
+      run: npx testcafe -v
+
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
