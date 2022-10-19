@@ -624,6 +624,7 @@ export default function() {
             assert.equal(localization.formatNumber(1, { type: 'decimal', precision: 2 }), '01');
             assert.equal(localization.formatNumber(1, { type: 'decimal', precision: 3 }), '001');
             assert.equal(localization.formatNumber(1.23456, { type: 'decimal' }), '1.23456');
+            assert.equal(localization.formatNumber(-0.004768895486559899, { type: 'decimal' }), '-0.004768895486559899');
         });
 
         QUnit.test('format: precision', function(assert) {
