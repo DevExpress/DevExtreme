@@ -29,8 +29,8 @@ describe('Equals svg to font', () => {
   });
 
   test('material themes', () => {
-    const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`);
-    const countElementMaterialSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/material`) - 1; // TODO
+    const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`) - 1; // TODO
+    const countElementMaterialSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/material`);
 
     expect(countElementMaterialFont).toBe(countElementMaterialSvg);
   });
