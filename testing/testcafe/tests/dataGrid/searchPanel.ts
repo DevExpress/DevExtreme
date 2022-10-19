@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-fixture`searchPanel`
+fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../containerMaterial.html'))
   .afterEach(async () => disposeWidgets());
 
