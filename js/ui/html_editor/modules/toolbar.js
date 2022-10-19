@@ -450,6 +450,14 @@ if(Quill) {
             TABLE_OPERATIONS.forEach((operationName) => {
                 const isInsertTable = operationName === 'insertTable';
                 const widget = this._toolbarWidgets.getByName(operationName);
+                if(!widget) {
+                    this.toolbarInstance.option('items').forEach(item => {
+                        if(item.name === operationName) {
+                            const isDisabled = isInsertTable ? isTableOperationsEnabled : !isTableOperationsEnabled;
+                            item.options.disabled = isDisabled;
+                        }
+                    });
+                }
 
                 this._updateManipulationWidget(widget, isInsertTable ? !isTableOperationsEnabled : isTableOperationsEnabled);
             });
