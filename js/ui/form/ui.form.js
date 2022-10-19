@@ -1144,7 +1144,9 @@ const Form = Widget.inherit({
         return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
     },
 
-    _visibilityChanged: function() {},
+    _visibilityChanged: function() {
+        this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
+    },
 
     _clearAutoColCountChangedTimeout: function() {
         if(this.autoColCountChangedTimeoutId) {
