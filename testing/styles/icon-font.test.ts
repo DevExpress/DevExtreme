@@ -1,6 +1,6 @@
 import { loadSync } from 'opentype.js';
 import { readdirSync } from 'fs';
-import { join } from 'path';
+import { join, extname } from 'path';
 
 const BASE_PATH = join(__dirname, '..', '..');
 
@@ -16,8 +16,9 @@ describe('Equals svg to font', () => {
 
   const getCountElementInSvg = (pathToSvg: string): number => {
     const files = readdirSync(pathToSvg);
+    const svgFiles = files.filter((file) => extname(file) === '.svg');
 
-    return files.length;
+    return svgFiles.length;
   };
 
   test('generic themes', () => {
