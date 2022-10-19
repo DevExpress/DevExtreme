@@ -131,7 +131,7 @@ export class ImageUploader {
                     ? DIALOG_IMAGE_UPDATE_BUTTON
                     : DIALOG_IMAGE_ADD_BUTTON),
             'toolbarItems[0].options.visible': !this.shouldHideAddButton(),
-            'wrapperAttr': { class: wrapperClasses }
+            '_wrapperClassExternal': wrapperClasses,
         });
     }
 
