@@ -581,7 +581,6 @@ const DropDownEditor = TextBox.inherit({
             width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
-            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
             hideOnParentScroll: true,
             hideOnOutsideClick: (e) => this._closeOutsideDropDownHandler(e),
             animation: {
@@ -595,7 +594,8 @@ const DropDownEditor = TextBox.inherit({
             toolbarItems: this._getPopupToolbarItems(),
             onPositioned: this._popupPositionedHandler.bind(this),
             fullScreen: false,
-            contentTemplate: null
+            contentTemplate: null,
+            _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
         };
     },
 
@@ -637,9 +637,7 @@ const DropDownEditor = TextBox.inherit({
         }
     },
 
-    _popupShowingHandler() {
-        this._popup.$wrapper().addClass(DROP_DOWN_EDITOR_OVERLAY);
-    },
+    _popupShowingHandler: noop,
 
     _popupHidingHandler: function() {
         this.option('opened', false);
