@@ -131,7 +131,7 @@ export class ImageUploader {
                     ? DIALOG_IMAGE_UPDATE_BUTTON
                     : DIALOG_IMAGE_ADD_BUTTON),
             'toolbarItems[0].options.visible': !this.shouldHideAddButton(),
-            '_wrapperClassExternal': wrapperClasses,
+            'wrapperAttr': { class: wrapperClasses },
         });
     }
 
@@ -143,7 +143,7 @@ export class ImageUploader {
         this.editorInstance.formDialogOption({
             'toolbarItems[0].options.text': localizationMessage.format('OK'),
             'toolbarItems[0].options.visible': true,
-            _wrapperClassExternal: FORM_DIALOG_CLASS,
+            wrapperAttr: { class: FORM_DIALOG_CLASS },
         });
     }
 

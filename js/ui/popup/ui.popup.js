@@ -259,7 +259,9 @@ const Popup = Overlay.inherit({
 
     _init: function() {
         const popupWrapperClassExternal = this.option('_wrapperClassExternal');
-        const popupWrapperClasses = popupWrapperClassExternal ? `${POPUP_WRAPPER_CLASS} ${popupWrapperClassExternal}` : POPUP_WRAPPER_CLASS;
+        const popupWrapperClasses = popupWrapperClassExternal
+            ? `${POPUP_WRAPPER_CLASS} ${popupWrapperClassExternal}`
+            : POPUP_WRAPPER_CLASS;
 
         this.callBase();
         this._updateResizeCallbackSkipCondition();
