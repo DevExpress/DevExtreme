@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "الصفوف المختارة",
         "dxDataGrid-exportSelectedRows": "تصدير الصفوف المحددة",
         "dxDataGrid-exportAll": "تصدير كافة البيانات",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(فراغات)",
         "dxDataGrid-headerFilterOK": "حسنا",
         "dxDataGrid-headerFilterCancel": "إلغاء",

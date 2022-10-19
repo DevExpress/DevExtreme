@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Izbrane vrstice",
         "dxDataGrid-exportSelectedRows": "Izvozi izbrane vrstice",
         "dxDataGrid-exportAll": "Izvozi vse podatke",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Prazno)",
         "dxDataGrid-headerFilterOK": "V redu",
         "dxDataGrid-headerFilterCancel": "Prekliči",
