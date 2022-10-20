@@ -1133,6 +1133,8 @@ QUnit.module('Grouping', () => {
     });
 
     test('Simple Item labelTemplate', function(assert) {
+        const labelClass = 'label-template';
+
         const $formContainer = $('#form').dxForm({
             formData: {
                 firstName: 'John',
@@ -1150,7 +1152,7 @@ QUnit.module('Grouping', () => {
 
                                     $('<div>')
                                         .text(data.text + ' ?')
-                                        .addClass('label-template')
+                                        .addClass(labelClass)
                                         .appendTo(container);
                                 }
                             }
@@ -1160,9 +1162,9 @@ QUnit.module('Grouping', () => {
         });
         const $groups = $formContainer.find(`.${FIELD_ITEM_CLASS}`);
 
-        assert.equal($groups.length, 2, '2 groups rendered');
-        assert.equal($groups.eq(0).find('.label-template').length, 1, 'label template content');
-        assert.equal($groups.eq(0).find('.label-template').text(), 'First Name: ?', 'Labels\'s content has correct data');
+        assert.strictEqual($groups.length, 2, '2 groups rendered');
+        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).length, 1, 'label template content');
+        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Labels\'s content has correct data');
     });
 
     test('Template has correct component instance', function(assert) {

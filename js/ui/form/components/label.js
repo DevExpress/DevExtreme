@@ -1,11 +1,9 @@
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
 import { getPublicElement } from '../../../core/element';
-// import { isEmpty } from '../../../core/utils/string';
 import { getLabelMarkText } from '../ui.form.layout_manager.utils';
 
 import {
-    // WIDGET_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CLASS,
 } from '../constants';
