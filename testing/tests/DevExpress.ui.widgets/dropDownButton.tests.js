@@ -710,6 +710,7 @@ QUnit.module('popup integration', {
 
     QUnit.module('ios tests', {
         beforeEach: function() {
+            this._savedDevice = devices.current();
             devices.current({ platform: 'ios' });
 
             const getWrapperClasses = (element) => {
@@ -719,6 +720,9 @@ QUnit.module('popup integration', {
             this.hasClass = (element, className) => {
                 return getWrapperClasses(element).includes(className);
             };
+        },
+        afterEach: function() {
+            devices.current(this._savedDevice);
         },
     }, () => {
         QUnit.test('DropDownButton popup wrapper has overlay and custom classes if the "wrapperAttr.class" property is added to "dropDownOptions" on init on iOS', function(assert) {
