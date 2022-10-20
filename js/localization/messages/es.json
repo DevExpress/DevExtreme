@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Filas seleccionadas",
         "dxDataGrid-exportSelectedRows": "Exportar filas seleccionadas a {0}",
         "dxDataGrid-exportAll": "Exportar todo a {0}",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Vacio)",
         "dxDataGrid-headerFilterOK": "Aceptar",
         "dxDataGrid-headerFilterCancel": "Cancelar",

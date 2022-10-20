@@ -762,8 +762,8 @@ export const DataController = Class.inherit((function() {
                 }
             });
 
-            skips[0] = skipByPath[[]];
-            takes[0] = takeByPath[[]];
+            skips[0] = skipByPath[''];
+            takes[0] = takeByPath[''];
 
             options.columnExpandedPaths.forEach(function(path, index) {
                 const skip = skipByPath[path];
@@ -1077,7 +1077,6 @@ export const DataController = Class.inherit((function() {
             const rowsInfo = that._rowsInfo;
             const scrollController = that._rowsScrollController;
             let rowspan;
-            let i;
 
             if(scrollController && !getAllData) {
                 const startIndex = scrollController.beginPageIndex() * that.rowPageSize();
@@ -1107,7 +1106,7 @@ export const DataController = Class.inherit((function() {
                         newRowsInfo[index].push(cell);
 
                         maxDepth = math.max(maxDepth, columnIndex + 1);
-                    } else if(i > endIndex) {
+                    } else {
                         return false;
                     }
                 });

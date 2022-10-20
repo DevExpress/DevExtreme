@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Các hàng được chọn",
         "dxDataGrid-exportSelectedRows": "Xuất ra các hàng được chọn",
         "dxDataGrid-exportAll": "Xuất ra tất cả dữ liệu",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Trống)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Hủy",

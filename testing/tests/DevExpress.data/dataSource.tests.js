@@ -8,6 +8,7 @@ import Store from 'data/abstract_store';
 import ArrayStore from 'data/array_store';
 import ODataStore from 'data/odata/store';
 import AggregateCalculator from 'ui/data_grid/aggregate_calculator';
+import LocalStore from 'data/local_store';
 
 const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -516,6 +517,50 @@ QUnit.test('reload', function(assert) {
 
     source.reload();
 });
+
+QUnit.test('reload must clean cache of LocalStore when reload', function(assert) {
+    const done = assert.async();
+    const clock = sinon.useFakeTimers();
+    const storeName = 'dx-local-store';
+    const firstData = [{ id: 1, name: '1' }];
+    const source = new DataSource({
+        store: new LocalStore({
+            key: 'id',
+            name: storeName,
+            data: firstData
+        })
+    });
+    const store = source.store();
+
+    const clearCacheSpy = sinon.spy();
+    const clearCacheOrig = store._clearCache.bind(store);
+
+    store._clearCache = () => {
+        clearCacheSpy();
+        clearCacheOrig();
+    };
+
+    assert.deepEqual(source.store().createQuery().toArray(), firstData);
+
+    const nextData = [
+        { id: 1, name: '1' },
+        { id: 2, name: '2' }
+    ];
+
+    localStorage.setItem(
+        `dx-data-localStore-${storeName}`,
+        JSON.stringify(nextData)
+    );
+
+    source.reload().done((r) => {
+        assert.equal(clearCacheSpy.callCount, 1);
+        assert.deepEqual(source.store().createQuery().toArray(), nextData);
+
+        clock.restore();
+        done();
+    });
+});
+
 
 QUnit.test('reload invalidates CustomStore\'s raw data cache', function(assert) {
     const done = assert.async();
