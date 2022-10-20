@@ -1385,6 +1385,7 @@ testModule('Toolbar items disable state update', {
     }
 }, () => {
     const COLOR_ITEMS = ['color', 'background'];
+    const BUTTON_FORMAT_ITEMS = ['bold', 'italic', 'link', 'strike', 'underline', 'blockquote', 'code-block', 'codeBlock', 'variable'];
 
     testModule('when items are located not in menu', {
 
@@ -1538,6 +1539,32 @@ testModule('Toolbar items disable state update', {
 
                 assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        BUTTON_FORMAT_ITEMS.forEach(buttonItemName => {
+            test(`${buttonItemName} button if format is applied`, function(assert) {
+                this.options.items = [buttonItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${buttonItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${buttonItemName} button if format is not applied`, function(assert) {
+                this.options.items = [buttonItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
             });
         });
     });
@@ -1720,6 +1747,36 @@ testModule('Toolbar items disable state update', {
 
                 assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        BUTTON_FORMAT_ITEMS.forEach(buttonItemName => {
+            test(`${buttonItemName} button in menu if format is applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([buttonItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${buttonItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${buttonItemName} button in menu if format is not applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([buttonItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
             });
         });
     });
