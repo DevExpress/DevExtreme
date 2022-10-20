@@ -1,25 +1,8 @@
 window.DevExpress = { viz: { map: { sources: {} } } };
 
-import $ from 'core/renderer';
-import { getWidth, setWidth } from 'core/utils/size';
-
-import 'viz/chart';
-import 'viz/pie_chart';
-import 'viz/polar_chart';
-import 'viz/linear_gauge';
-import 'viz/circular_gauge';
-import 'viz/bar_gauge';
-import 'viz/range_selector';
-import 'viz/vector_map';
-import 'viz/sparkline';
-import 'viz/bullet';
-import 'viz/tree_map';
-
-import '../../../artifacts/js/vectormap-data/world.js';
-import '../../../artifacts/js/vectormap-data/usa.js';
-
+const $ = require('jquery');
 const chartTestsSignature = {
-    getInitOptions() {
+    getInitOptions: function() {
         return {
             animation: {
                 enabled: false
@@ -28,19 +11,18 @@ const chartTestsSignature = {
             series: [{ type: 'line' }, { type: 'bar' }, { type: 'area' }]
         };
     },
-    getExpandedOptions() {
+    getExpandedOptions: function() {
         const initOptions = this.getInitOptions();
 
         initOptions.dataSource.push({ arg: initOptions.dataSource.length + 1, val: 10 });
         return { dataSource: initOptions.dataSource };
     }
 };
-
 const linearGaugeTestSignature = {
     animation: {
         enabled: false
     },
-    getInitOptions() {
+    getInitOptions: function() {
         return {
             scale: {
                 startValue: 0,
@@ -50,31 +32,26 @@ const linearGaugeTestSignature = {
             value: 4.3
         };
     },
-    getExpandedOptions() {
-        return {
-            ...this.getInitOptions(),
+    getExpandedOptions: function() {
+        return $.extend(this.getInitOptions(), {
             subvalues: [1, 2, 3]
-        };
+        });
     }
 };
-
 const widgets = {
-    dxChart: chartTestsSignature,
+    'dxChart': chartTestsSignature,
 
-    dxPieChart: {
-        getInitOptions() {
-            return {
-                ...widgets.dxChart.getInitOptions(),
-                series: [{}]
-            };
+    'dxPieChart': {
+        getInitOptions: function() {
+            return $.extend(widgets.dxChart.getInitOptions(), { series: [{}] });
         },
         getExpandedOptions: chartTestsSignature.getExpandedOptions
     },
-    dxPolarChart: chartTestsSignature,
-    dxLinearGauge: linearGaugeTestSignature,
-    dxCircularGauge: linearGaugeTestSignature,
-    dxBarGauge: {
-        getInitOptions() {
+    'dxPolarChart': chartTestsSignature,
+    'dxLinearGauge': linearGaugeTestSignature,
+    'dxCircularGauge': linearGaugeTestSignature,
+    'dxBarGauge': {
+        getInitOptions: function() {
             return {
                 animation: {
                     enabled: false
@@ -84,11 +61,11 @@ const widgets = {
                 values: [47, 65, 84, 71]
             };
         },
-        getExpandedOptions() {
+        getExpandedOptions: function() {
             return { values: this.getInitOptions().values.concat([1, 2, 3, 4]) };
         }
     },
-    dxRangeSelector: {
+    'dxRangeSelector': {
         getInitOptions: function() {
             return {
                 behavior: {
@@ -107,15 +84,15 @@ const widgets = {
             return initOptions;
         }
     },
-    dxVectorMap: {
-        getInitOptions() {
+    'dxVectorMap': {
+        getInitOptions: function() {
             return {
                 layers: {
                     dataSource: DevExpress.viz.map.sources.world
                 }
             };
         },
-        getExpandedOptions() {
+        getExpandedOptions: function() {
             return {
                 layers: {
                     dataSource: DevExpress.viz.map.sources['usa']
@@ -123,36 +100,36 @@ const widgets = {
             };
         }
     },
-    dxSparkline: {
-        getInitOptions() {
+    'dxSparkline': {
+        getInitOptions: function() {
             return { dataSource: chartTestsSignature.getInitOptions().dataSource };
         },
-        getExpandedOptions() {
+        getExpandedOptions: function() {
             return { dataSource: chartTestsSignature.getExpandedOptions().dataSource };
         }
     },
-    dxBullet: {
-        getInitOptions() {
+    'dxBullet': {
+        getInitOptions: function() {
             return {
                 startScaleValue: 0,
                 endScaleValue: 35,
                 target: 10
             };
         },
-        getExpandedOptions() {
+        getExpandedOptions: function() {
             const initOptions = this.getInitOptions();
 
             initOptions.target = 7;
             return initOptions;
         }
     },
-    dxTreeMap: {
-        getInitOptions() {
+    'dxTreeMap': {
+        getInitOptions: function() {
             return {
                 dataSource: [{ value: 1, text: '1' }, { value: 2, text: '2', items: [{ value: 2, text: '43' }] }]
             };
         },
-        getExpandedOptions() {
+        getExpandedOptions: function() {
             return {
                 dataSource: [{ value: 1, text: '22' }, { value: 1, text: '22' }]
             };
@@ -160,25 +137,24 @@ const widgets = {
     }
 };
 
-const environment = {
-    beforeEach() {
-        this.$container = $('#widgetContainer');
-    },
-    assertNodesCount(assert, initCount) {
-        assert.strictEqual(domNodesCount(this.$container[0]), initCount);
-    },
-    prepareDataForTest(widgetName, config) {
-        const widget = this.$container[widgetName](config.getInitOptions())[widgetName]('instance');
-        const initNodesCount = domNodesCount(this.$container[0]);
+require('viz/chart');
+require('viz/pie_chart');
+require('viz/polar_chart');
+require('viz/linear_gauge');
+require('viz/circular_gauge');
+require('viz/bar_gauge');
+require('viz/range_selector');
+require('viz/vector_map');
+require('viz/sparkline');
+require('viz/bullet');
+require('viz/tree_map');
 
-        return { widget: widget, initNodeCount: initNodesCount };
-    }
-};
+require('../../../artifacts/js/vectormap-data/world.js');
+require('../../../artifacts/js/vectormap-data/usa.js');
 
 function domNodesCount(node) {
     let i;
     let count = 1;
-
     const children = $(node).children();
 
     if(children.length) {
@@ -189,6 +165,21 @@ function domNodesCount(node) {
     return count;
 }
 
+const environment = {
+    beforeEach: function() {
+        this.$container = $('#widgetContainer');
+    },
+    assertNodesCount: function(assert, initCount) {
+        assert.strictEqual(domNodesCount(this.$container[0]), initCount);
+    },
+    prepareDataForTest: function(widgetName, config) {
+        const widget = this.$container[widgetName](config.getInitOptions())[widgetName]('instance');
+        const initNodesCount = domNodesCount(this.$container[0]);
+
+        return { widget: widget, initNodeCount: initNodesCount };
+    }
+};
+
 QUnit.testStart(function() {
     const markup = '<div id="widgetContainer" style="width: 300px; height: 150px;"></div>';
 
@@ -197,9 +188,7 @@ QUnit.testStart(function() {
 
 QUnit.module('options updating', environment);
 
-for(const widgetName in widgets) {
-    const config = widgets[widgetName];
-
+$.each(widgets, function(widgetName, config) {
     QUnit.test(widgetName + ' - creation & update', function(assert) {
         const data = this.prepareDataForTest(widgetName, config);
 
@@ -208,28 +197,26 @@ for(const widgetName in widgets) {
 
         this.assertNodesCount(assert, data.initNodeCount);
     });
-}
+});
 
 QUnit.module('resizing', environment);
 
-for(const widgetName in widgets) {
-    const config = widgets[widgetName];
-
+$.each(widgets, function(widgetName, config) {
     QUnit.test(widgetName + ' - resize', function(assert) {
-        const srcWidth = getWidth(this.$container);
-        const srcHeight = getWidth(this.$container);
+        const srcWidth = this.$container.width();
+        const srcHeight = this.$container.height();
         const data = this.prepareDataForTest(widgetName, config);
 
-        setWidth(this.$container, 100);
-        setWidth(this.$container.height, 100);
+        this.$container.width(100);
+        this.$container.height(100);
 
         data.widget.render();
 
-        setWidth(this.$container, srcWidth);
-        setWidth(this.$container, srcHeight);
+        this.$container.width(srcWidth);
+        this.$container.height(srcHeight);
 
         data.widget.render();
 
         this.assertNodesCount(assert, data.initNodeCount);
     });
-}
+});
