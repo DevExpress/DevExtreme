@@ -1,7 +1,7 @@
 window.DevExpress = { viz: { map: { sources: {} } } };
 
 import $ from 'core/renderer';
-import { getWidth, setWidth } from 'core/utils/size';
+import { getWidth, getHeight, setWidth, setHeight } from 'core/utils/size';
 
 import 'viz/chart';
 import 'viz/pie_chart';
@@ -217,16 +217,16 @@ for(const widgetName in widgets) {
 
     QUnit.test(widgetName + ' - resize', function(assert) {
         const srcWidth = getWidth(this.$container);
-        const srcHeight = getWidth(this.$container);
+        const srcHeight = getHeight(this.$container);
         const data = this.prepareDataForTest(widgetName, config);
 
         setWidth(this.$container, 100);
-        setWidth(this.$container, 100);
+        setHeight(this.$container, 100);
 
         data.widget.render();
 
         setWidth(this.$container, srcWidth);
-        setWidth(this.$container, srcHeight);
+        setHeight(this.$container, srcHeight);
 
         data.widget.render();
 
