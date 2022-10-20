@@ -1437,13 +1437,73 @@ testModule('Toolbar items disable state update', {
             this.quillMock.getFormat = () => ({ bold: true });
             toolbar.updateFormatWidgets();
 
-            this.quillMock.getFormat = () => ({ bold: false });
+            this.quillMock.getFormat = () => ({});
             toolbar.updateFormatWidgets();
 
             const $disabledFormatWidgets = this.getDisabledFormats();
             const isClearButtonDisabled = $disabledFormatWidgets.length === 1;
 
             assert.strictEqual(isClearButtonDisabled, true, 'clear button is disabled');
+        });
+
+        test('undo button if undo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: ['test'], redo: [] }
+            };
+            this.options.items = ['undo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('undo button if undo stack is empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = ['undo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, true, 'undo button is disabled');
+        });
+
+        test('redo button if redo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: ['test'] }
+            };
+            this.options.items = ['redo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('redo button if redo stack is empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = ['redo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, true, 'redo button is disabled');
         });
     });
 
@@ -1522,6 +1582,74 @@ testModule('Toolbar items disable state update', {
             const isClearButtonDisabled = $disabledFormatWidgets.length === 1;
 
             assert.strictEqual(isClearButtonDisabled, true, 'clear button is disabled');
+        });
+
+        test('undo button in menu if undo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: ['test'], redo: [] }
+            };
+            this.options.items = this.mapToMenuItems(['undo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('undo button in menu if undo stack is empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = this.mapToMenuItems(['undo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, true, 'undo button is disabled');
+        });
+
+        test('redo button in menu if redo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: ['test'] }
+            };
+            this.options.items = this.mapToMenuItems(['redo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('redo button in menu if redo stack is empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = this.mapToMenuItems(['redo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, true, 'redo button is disabled');
         });
     });
 });
