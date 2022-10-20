@@ -16,12 +16,12 @@ test('searchPanel has correct view inside masterDetail', async (t) => {
   // act
   await t.click(dataGrid.getDataRow(0).getCommandCell(0).element);
 
-  const masterRow = dataGrid.getMasterRow(0);
-  const masterGrid = masterRow.getDataGrid();
+  const masterRow = dataGrid.element.find('.dx-master-detail-row');
+  const masterGrid = masterRow.find('.dx-datagrid');
 
   // assert
   await t
-    .expect(await takeScreenshot('T1046688.searchPanel.png', masterGrid.element))
+    .expect(await takeScreenshot('T1046688.searchPanel.png', masterGrid))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
