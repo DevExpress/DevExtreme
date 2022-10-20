@@ -13,7 +13,7 @@ test('searchPanel has correct view inside masterDetail', async (t) => {
 
   const dataGrid = new DataGrid('#container');
 
-  // act
+  //  act
   await t.click(dataGrid.getDataRow(0).getCommandCell(0).element);
 
   const masterRow = dataGrid.getMasterRow(0);
