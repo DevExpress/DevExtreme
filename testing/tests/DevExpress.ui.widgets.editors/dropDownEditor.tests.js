@@ -1744,7 +1744,7 @@ QUnit.module('popup integration', () => {
                 },
             });
 
-            const $input = $dropDownEditor.find('.dx-texteditor-input');
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
 
             $input.trigger('dxclick');
@@ -1758,7 +1758,7 @@ QUnit.module('popup integration', () => {
                 openOnFieldClick: true,
             });
 
-            const $input = $dropDownEditor.find('.dx-texteditor-input');
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
 
             this.clock.tick(500);
