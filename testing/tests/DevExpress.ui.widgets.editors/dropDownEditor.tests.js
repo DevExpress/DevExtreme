@@ -1749,8 +1749,8 @@ QUnit.module('popup integration', () => {
 
             $input.trigger('dxclick');
 
-            assert.strictEqual(this.hasDropDownEditorOverlayClass(dropDownEditor), true, 'drop down popup wrapper has overlay class');
-            assert.strictEqual(this.hasDropDownEditorCustomClass(dropDownEditor), true, 'drop down popup wrapper has custom class');
+            assert.strictEqual(this.hasOverlayClass(dropDownEditor), true, 'drop down popup wrapper has overlay class');
+            assert.strictEqual(this.hasCustomClass(dropDownEditor), true, 'drop down popup wrapper has custom class');
         });
 
         QUnit.test('Drop down popup wrapper has overlay and custom classes if the "wrapperAttr.class" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
@@ -1767,8 +1767,8 @@ QUnit.module('popup integration', () => {
 
             $input.trigger('dxclick');
 
-            assert.strictEqual(this.hasDropDownEditorOverlayClass(dropDownEditor), true, 'drop down popup wrapper has overlay class');
-            assert.strictEqual(this.hasDropDownEditorCustomClass(dropDownEditor), true, 'drop down popup wrapper has custom class');
+            assert.strictEqual(this.hasOverlayClass(dropDownEditor), true, 'drop down popup wrapper has overlay class');
+            assert.strictEqual(this.hasCustomClass(dropDownEditor), true, 'drop down popup wrapper has custom class');
         });
     });
 });
