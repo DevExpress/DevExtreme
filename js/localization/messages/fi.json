@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Valitut tietueet",
         "dxDataGrid-exportSelectedRows": "Vie valitut tietueet",
         "dxDataGrid-exportAll": "Vie kaikki tiedot",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Tyhjät)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Peruuta",

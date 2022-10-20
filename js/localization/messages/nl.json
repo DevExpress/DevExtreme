@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Geselecteerde rijen",
         "dxDataGrid-exportSelectedRows": "Exporteer geselecteerde rijen",
         "dxDataGrid-exportAll": "Exporteer alle gegevens",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Leeg)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Annuleren",

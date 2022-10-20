@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Selectează rând",
         "dxDataGrid-exportSelectedRows": "Exportă rândul selectat",
         "dxDataGrid-exportAll": "Exportă toate datele ",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Gol)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Anulare",

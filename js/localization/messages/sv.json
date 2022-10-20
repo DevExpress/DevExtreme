@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Valda rader",
         "dxDataGrid-exportSelectedRows": "Exportera valda rader",
         "dxDataGrid-exportAll": "Exportera allt",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Tomma)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Avbryt",
