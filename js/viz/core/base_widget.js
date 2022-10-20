@@ -552,7 +552,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
             _windowResizeCallbacks.add(that._resizeHandler);
         } else if(redrawOnResize === true) {
-            that._resizeHandler = createResizeHandler(resize, () =>{
+            that._resizeHandler = createResizeHandler(resize, () => {
                 resizeObserverSingleton.unobserve(contentElement);
             });
 
