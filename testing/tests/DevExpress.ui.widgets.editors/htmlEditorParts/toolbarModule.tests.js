@@ -1370,10 +1370,21 @@ testModule('Toolbar items disable state update', {
 }, () => {
     const COLOR_ITEMS = ['color', 'background'];
     const BUTTON_FORMAT_ITEMS = ['bold', 'italic', 'link', 'strike', 'underline', 'blockquote', 'code-block', 'codeBlock', 'variable'];
+    const EDITOR_FORMAT_ITEMS = [{
+        name: 'size',
+        value: 'large',
+        acceptedValues: ['large']
+    }, {
+        name: 'font',
+        value: 'cursive',
+        acceptedValues: ['cursive']
+    }, {
+        name: 'header',
+        value: 3,
+        acceptedValues: [3]
+    }];
 
-    testModule('when items are located not in menu', {
-
-    }, () => {
+    testModule('when items are located not in menu', () => {
         test('table formats on table focus', function(assert) {
             this.options.items = TABLE_OPERATIONS;
             const toolbar = new Toolbar(this.quillMock, this.options);
@@ -1551,6 +1562,34 @@ testModule('Toolbar items disable state update', {
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
             });
         });
+
+        EDITOR_FORMAT_ITEMS.forEach((item) => {
+            const { name: editorItemName, value } = item;
+
+            test(`${editorItemName} editor if format is applied`, function(assert) {
+                this.options.items = [item];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+
+                toolbar.updateFormatWidgets();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, value, 'value is correct');
+            });
+
+            test(`${editorItemName} editor if format is not applied`, function(assert) {
+                this.options.items = [item];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, null, 'value is restored');
+            });
+        });
     });
 
     testModule('when items are located in menu and it was not opened yet', {
@@ -1559,7 +1598,19 @@ testModule('Toolbar items disable state update', {
             this.openDropDownMenu = () => {
                 $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
             };
-            this.mapToMenuItems = (items) => items.map(name => ({ name, locateInMenu: 'always' }));
+            this.mapToMenuItems = (items) => items.map(item => {
+                if(typeof item === 'string') {
+                    return {
+                        name: item,
+                        locateInMenu: 'always'
+                    };
+                } else {
+                    return {
+                        ...item,
+                        locateInMenu: 'always'
+                    };
+                }
+            });
         }
     }, () => {
         test('table formats in menu on table focus (t1117604)', function(assert) {
@@ -1761,6 +1812,38 @@ testModule('Toolbar items disable state update', {
 
                 const $formatItemElement = this.getFormatItemElement();
                 assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        EDITOR_FORMAT_ITEMS.forEach((item) => {
+            const { name: editorItemName, value } = item;
+
+            test(`${editorItemName} editor in menu if format is applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([item]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, value, 'value is correct');
+            });
+
+            test(`${editorItemName} editor in menu if format is not applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([item]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, null, 'value is restored');
             });
         });
     });
