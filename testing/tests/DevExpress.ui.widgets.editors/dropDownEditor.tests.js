@@ -1722,12 +1722,8 @@ QUnit.module('popup integration', () => {
                 return Array.from(element._popup.$wrapper()[0].classList);
             };
 
-            this.hasOverlayClass = (element) => {
-                return getWrapperClasses(element).includes(DROP_DOWN_EDITOR_OVERLAY);
-            };
-
-            this.hasCustomClass = (element) => {
-                return getWrapperClasses(element).includes(CUSTOM_CLASS);
+            this.hasClass = (element, className) => {
+                return getWrapperClasses(element).includes(className);
             };
         },
         afterEach: function() {
@@ -1749,8 +1745,8 @@ QUnit.module('popup integration', () => {
 
             $input.trigger('dxclick');
 
-            assert.strictEqual(this.hasOverlayClass(dropDownEditor), true, 'drop down popup wrapper has overlay class');
-            assert.strictEqual(this.hasCustomClass(dropDownEditor), true, 'drop down popup wrapper has custom class');
+            assert.strictEqual(this.hasClass(dropDownEditor, DROP_DOWN_EDITOR_OVERLAY), true, 'drop down popup wrapper has overlay class');
+            assert.strictEqual(this.hasClass(dropDownEditor, CUSTOM_CLASS), true, 'drop down popup wrapper has custom class');
         });
 
         QUnit.test('Drop down popup wrapper has overlay and custom classes if the "wrapperAttr.class" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
@@ -1767,8 +1763,8 @@ QUnit.module('popup integration', () => {
 
             $input.trigger('dxclick');
 
-            assert.strictEqual(this.hasOverlayClass(dropDownEditor), true, 'drop down popup wrapper has overlay class');
-            assert.strictEqual(this.hasCustomClass(dropDownEditor), true, 'drop down popup wrapper has custom class');
+            assert.strictEqual(this.hasClass(dropDownEditor, DROP_DOWN_EDITOR_OVERLAY), true, 'drop down popup wrapper has overlay class');
+            assert.strictEqual(this.hasClass(dropDownEditor, CUSTOM_CLASS), true, 'drop down popup wrapper has custom class');
         });
     });
 });

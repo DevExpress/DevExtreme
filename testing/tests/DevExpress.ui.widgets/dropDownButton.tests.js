@@ -716,12 +716,8 @@ QUnit.module('popup integration', {
                 return Array.from(element._popup.$wrapper()[0].classList);
             };
 
-            this.hasOverlayClass = (element) => {
-                return getWrapperClasses(element).includes(DROP_DOWN_EDITOR_OVERLAY_CLASS);
-            };
-
-            this.hasCustomClass = (element) => {
-                return getWrapperClasses(element).includes(CUSTOM_CLASS);
+            this.hasClass = (element, className) => {
+                return getWrapperClasses(element).includes(className);
             };
         },
     }, () => {
@@ -737,8 +733,8 @@ QUnit.module('popup integration', {
 
             dropDownButton.open();
 
-            assert.strictEqual(this.hasOverlayClass(dropDownButton), true, 'popup wrapper has overlay class');
-            assert.strictEqual(this.hasCustomClass(dropDownButton), true, 'popup wrapper has custom class');
+            assert.strictEqual(this.hasClass(dropDownButton, DROP_DOWN_EDITOR_OVERLAY_CLASS), true, 'popup wrapper has overlay class');
+            assert.strictEqual(this.hasClass(dropDownButton, CUSTOM_CLASS), true, 'popup wrapper has custom class');
         });
     });
 });
