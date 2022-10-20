@@ -8,11 +8,11 @@ The PivotGrid allows you to customize a header and a footer in the exported Exce
 
     - [exportColumnFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportColumnFieldHeaders)
 
-    - [exportDataFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportColumnFieldHeaders)
+    - [exportDataFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportDataFieldHeaders)
 
-    - [exportFilterFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportColumnFieldHeaders)
+    - [exportFilterFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportFilterFieldHeaders)
 
-    - [exportRowFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportColumnFieldHeaders)
+    - [exportRowFieldHeaders](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#exportRowFieldHeaders)
 
 4. Execute a promise after the [exportPivotGrid(options)](/Documentation/ApiReference/Common/Utils/excelExporter/#exportPivotGridoptions) method. In this promise, specify the position, appearance, and content of the header/footer. The functions used to generate header and footer sections utilize the following PivotGrid customization features:
 
