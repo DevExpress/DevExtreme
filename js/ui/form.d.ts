@@ -106,6 +106,9 @@ export type SimpleItemTemplateData = {
     readonly name?: string;
 };
 
+/** @public */
+export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: string };
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -634,6 +637,12 @@ export interface dxFormSimpleItem {
        * @default from showColonAfterLabel
        */
       showColon?: boolean;
+      /**
+       * @docid
+       * @type_function_return string|Element|jQuery
+       * @public
+       */
+      template?: template | ((itemData: SimpleItemLabelTemplateData, itemElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default undefined
