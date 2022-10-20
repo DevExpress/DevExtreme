@@ -1362,11 +1362,14 @@ testModule('Toolbar items disable state update', {
         this.getDisabledFormats = () => {
             return this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
         };
+        this.getFormatItemElement = () => this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
     },
     afterEach: function() {
         simpleModuleConfig.afterEach.apply(this, arguments);
     }
 }, () => {
+    const COLOR_ITEMS = ['color', 'background'];
+
     testModule('when items are located not in menu', {
 
     }, () => {
@@ -1488,6 +1491,38 @@ testModule('Toolbar items disable state update', {
             const $disabledFormatWidgets = this.getDisabledFormats();
             const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
             assert.strictEqual(isRedoButtonDisabled, true, 'redo button is disabled');
+        });
+
+        COLOR_ITEMS.forEach(colorItemName => {
+            test(`${colorItemName} button if ${colorItemName} format is applied`, function(assert) {
+                this.options.items = [colorItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgb(0, 0, 255)', `${colorItemName} button bottomBorderColor is correct`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${colorItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${colorItemName} button if ${colorItemName} format is not applied`, function(assert) {
+                this.options.items = [colorItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
         });
     });
 
@@ -1634,6 +1669,42 @@ testModule('Toolbar items disable state update', {
             const $disabledFormatWidgets = this.getDisabledFormats();
             const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
             assert.strictEqual(isRedoButtonDisabled, true, 'redo button is disabled');
+        });
+
+        COLOR_ITEMS.forEach(colorItemName => {
+            test(`${colorItemName} button in menu if ${colorItemName} format is applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([colorItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgb(0, 0, 255)', `${colorItemName} button bottomBorderColor is correct`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${colorItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${colorItemName} button in menu if ${colorItemName} format is not applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([colorItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
         });
     });
 });
