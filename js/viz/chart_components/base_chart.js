@@ -1441,6 +1441,7 @@ export const BaseChart = BaseWidget.inherit({
     },
 
     refresh: function() {
+        this._constantLinesGroup.clear();
         this._disposeSeries();
         this._disposeSeriesFamilies();
         this._requestChange(['CONTAINER_SIZE', 'REFRESH_SERIES_REINIT']);
