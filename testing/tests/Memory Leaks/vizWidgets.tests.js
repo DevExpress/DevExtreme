@@ -221,7 +221,7 @@ for(const widgetName in widgets) {
         const data = this.prepareDataForTest(widgetName, config);
 
         setWidth(this.$container, '100px');
-        setWidth(this.$container.height, '100px');
+        setWidth(this.$container, '100px');
 
         data.widget.render();
 
