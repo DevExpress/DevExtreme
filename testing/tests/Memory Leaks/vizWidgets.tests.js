@@ -216,12 +216,12 @@ for(const widgetName in widgets) {
     const config = widgets[widgetName];
 
     QUnit.test(widgetName + ' - resize', function(assert) {
-        const srcWidth = getWidth(this.$container[0]);
-        const srcHeight = getWidth(this.$container[0]);
+        const srcWidth = getWidth(this.$container);
+        const srcHeight = getWidth(this.$container);
         const data = this.prepareDataForTest(widgetName, config);
 
-        setWidth(this.$container, 100);
-        setWidth(this.$container.height, 100);
+        setWidth(this.$container, '100px');
+        setWidth(this.$container.height, '100px');
 
         data.widget.render();
 
