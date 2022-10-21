@@ -66,7 +66,6 @@ class FormDialog {
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
-            wrapperAttr: { class: 'dx-formdialog' },
             fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
@@ -111,7 +110,8 @@ class FormDialog {
                         }
                     }
                 }
-            ]
+            ],
+            _wrapperClassExternal: DIALOG_CLASS,
         }, this._popupUserConfig);
     }
 

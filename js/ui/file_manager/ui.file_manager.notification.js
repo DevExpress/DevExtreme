@@ -275,9 +275,6 @@ export default class FileManagerNotificationControl extends Widget {
 
             this._notificationPopup = this._createComponent($popup, Popup, {
                 container: this.$element(),
-                wrapperAttr: {
-                    class: FILE_MANAGER_NOTIFICATION_POPUP_CLASS
-                },
                 width: 'auto',
                 height: 'auto',
                 showTitle: false,
@@ -291,7 +288,8 @@ export default class FileManagerNotificationControl extends Widget {
                     at: 'right top',
                     of: this.option('positionTarget'),
                     offset: '-10 -5'
-                }
+                },
+                _wrapperClassExternal: FILE_MANAGER_NOTIFICATION_POPUP_CLASS,
             });
         }
         return this._notificationPopup;
