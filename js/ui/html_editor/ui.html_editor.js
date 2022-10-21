@@ -222,6 +222,54 @@ const HtmlEditor = Editor.inherit({
         return this._$submitElement;
     },
 
+    _removeXSSVulnerableHtml: function(value) {
+        // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
+        // "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+        // error can be logged to the console if the html value is XSS vulnerable.
+
+        const $frame = $('<iframe>')
+            .css('display', 'none')
+            .attr({
+                id: 'xss-frame',
+                sandbox: 'allow-same-origin'
+            })
+            .appendTo('body');
+
+        const frame = $frame.get(0);
+        const frameWindow = frame.contentWindow;
+        const frameDocument = frameWindow.document;
+        const frameDocumentBody = frameDocument.body;
+
+        frameDocumentBody.innerHTML = value;
+
+        const removeInlineHandlers = (element) => {
+            if(element.attributes) {
+                for(let i = 0; i < element.attributes.length; i++) {
+                    const name = element.attributes[i].name;
+                    if(name.indexOf('on') === 0) {
+                        element.removeAttribute(name);
+                    }
+                }
+            }
+            if(element.childNodes) {
+                for(let i = 0; i < element.childNodes.length; i++) {
+                    removeInlineHandlers(element.childNodes[i]);
+                }
+            }
+        };
+
+        removeInlineHandlers(frameDocumentBody);
+
+        $(frameDocumentBody)
+            .find('script')
+            .remove();
+
+        const sanitizedHtml = frameDocumentBody.innerHTML;
+
+        $frame.remove();
+        return sanitizedHtml;
+    },
+
     _updateContainerMarkup: function() {
         let markup = this.option("value");
 
@@ -231,7 +279,8 @@ const HtmlEditor = Editor.inherit({
         }
 
         if(markup) {
-            this._$htmlContainer.html(markup);
+            const sanitizedMarkup = this._removeXSSVulnerableHtml(markup);
+            this._$htmlContainer.html(sanitizedMarkup);
         }
     },
 
@@ -429,22 +478,24 @@ const HtmlEditor = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "value":
+            case 'value': {
+                const sanitizedValue = args.value ? this._removeXSSVulnerableHtml(args.value) : args.value;
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
                     } else {
-                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
+                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', sanitizedValue) : sanitizedValue;
                         this._updateHtmlContent(updatedValue);
                     }
                 } else {
-                    this._$htmlContainer.html(args.value);
+                    this._$htmlContainer.html(sanitizedValue);
                 }
 
-                this._setSubmitValue(args.value);
+                this._setSubmitValue(sanitizedValue);
 
                 this.callBase(args);
                 break;
+            }
             case "placeholder":
             case "variables":
             case "toolbar":
