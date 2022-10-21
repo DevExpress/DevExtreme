@@ -8,6 +8,7 @@ import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { extend } from 'core/utils/extend';
+import devices from 'core/devices';
 
 import 'generic_light.css!';
 
@@ -25,6 +26,8 @@ const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const POPUP_CLASS = 'dx-popup';
 const FOCUSED_CLASS = 'dx-state-focused';
+const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+const CUSTOM_CLASS = 'custom-class';
 
 QUnit.testStart(() => {
     const markup =
@@ -703,6 +706,40 @@ QUnit.module('popup integration', {
         eventsEngine.trigger($toggleButton, 'dxpointerdown');
         eventsEngine.trigger($toggleButton, 'dxclick');
         assert.notOk(this.instance.option('dropDownOptions.visible'), 'popup is hidden');
+    });
+
+    QUnit.module('ios tests', {
+        beforeEach: function() {
+            this._savedDevice = devices.current();
+            devices.current({ platform: 'ios' });
+
+            const getWrapperClasses = (element) => {
+                return Array.from(element._popup.$wrapper()[0].classList);
+            };
+
+            this.hasClass = (element, className) => {
+                return getWrapperClasses(element).includes(className);
+            };
+        },
+        afterEach: function() {
+            devices.current(this._savedDevice);
+        },
+    }, () => {
+        QUnit.test('DropDownButton popup wrapper has overlay and custom classes if the "wrapperAttr.class" property is added to "dropDownOptions" on init on iOS', function(assert) {
+            const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+                dropDownOptions: {
+                    wrapperAttr: {
+                        class: CUSTOM_CLASS,
+                    },
+                },
+            });
+            const dropDownButton = $dropDownButton.dxDropDownButton('instance');
+
+            dropDownButton.open();
+
+            assert.strictEqual(this.hasClass(dropDownButton, DROP_DOWN_EDITOR_OVERLAY_CLASS), true, 'popup wrapper has overlay class');
+            assert.strictEqual(this.hasClass(dropDownButton, CUSTOM_CLASS), true, 'popup wrapper has custom class');
+        });
     });
 });
 
