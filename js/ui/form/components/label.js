@@ -15,7 +15,7 @@ export const FIELD_ITEM_LABEL_LOCATION_CLASS = 'dx-field-item-label-location-';
 export const FIELD_ITEM_OPTIONAL_MARK_CLASS = 'dx-field-item-optional-mark';
 export const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
 
-export function renderLabel({ text, id, location, alignment, labelID = null, markOptions = {}, labelTemplate, labelTemplateData }) {
+export function renderLabel({ text, id, location, alignment, labelID = null, markOptions = {}, labelTemplate, labelTemplateData, onLabelsRendered }) {
     if((!isDefined(text) || text.length <= 0) && !isDefined(labelTemplate)) {
         return null;
     }
@@ -37,6 +37,9 @@ export function renderLabel({ text, id, location, alignment, labelID = null, mar
         labelTemplate.render({
             container: getPublicElement($labelContent),
             model: labelTemplateData,
+            onRendered() {
+                onLabelsRendered?.();
+            }
         });
     }
 

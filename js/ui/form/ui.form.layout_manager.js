@@ -320,7 +320,7 @@ const LayoutManager = Widget.inherit({
 
     _renderTemplates: function(templatesInfo) {
         const that = this;
-        each(templatesInfo, function(_, info) {
+        each(templatesInfo, function(index, info) {
             switch(info.itemType) {
                 case 'empty':
                     renderEmptyItem(info);
@@ -328,8 +328,11 @@ const LayoutManager = Widget.inherit({
                 case 'button':
                     that._renderButtonItem(info);
                     break;
-                default:
-                    that._renderFieldItem(info);
+                default: {
+                    const isLastFieldItem = index === templatesInfo.length - 1;
+
+                    that._renderFieldItem(info, isLastFieldItem);
+                }
             }
         });
     },
@@ -551,7 +554,7 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _renderFieldItem: function({ item, $parent, rootElementCssClassList }) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClassList }, isLastFieldItem) {
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -560,6 +563,13 @@ const LayoutManager = Widget.inherit({
         }
 
         const name = item.dataField || item.name;
+        const formOrLayoutManager = this._getFormOrThis();
+
+        const onLabelsRendered = () => {
+            if(formOrLayoutManager.option('templatesRenderAsynchronously')) {
+                isLastFieldItem && formOrLayoutManager._alignLabels(this, this.isSingleColumnMode(formOrLayoutManager));
+            }
+        };
 
         const { $fieldEditorContainer, widgetInstance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
             $parent,
@@ -582,6 +592,7 @@ const LayoutManager = Widget.inherit({
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
             labelMode: this.option('labelMode'),
+            onLabelsRendered: isLastFieldItem ? onLabelsRendered : null,
         }));
 
         this.option('onFieldItemRendered')?.();

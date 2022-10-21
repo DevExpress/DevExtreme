@@ -90,7 +90,7 @@ function test_3Columns_4Items_AlignedLabels(wrapper) {
     wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 348, 74, 19);
     wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 421, 229, 34);
     wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 8, 681, 74, 19);
-    wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 1, 754, 244, 34);
+    wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 1, 755, 244, 34);
     wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 0, 74, 19);
     wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 75, 244, 34);
 }
@@ -1008,7 +1008,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> form.colCount:3 [a.colSpan:1, abc.colSpan:2, text,colSpan:2, longText.colSpan:2 ]', function(assert) {
@@ -1026,7 +1026,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> form.colCount:3 [a.colSpan:2, abc.colSpan:1, text.colSpan:1, longText.colSpan:1 ]', function(assert) {
@@ -1076,11 +1076,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> form.colCount:3 [a.colSpan:2, abc.colSpan:2, text.colSpan:1, longText.colSpan:1 ]', function(assert) {
@@ -1111,11 +1111,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> form.colCount:3 [a.colSpan:2, abc.colSpan:2, text,colSpan:2, longText.colSpan:1 ]', function(assert) {
@@ -1129,11 +1129,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> form.colCount:3 [a.colSpan:2, abc.colSpan:2, text,colSpan:2, longText.colSpan:2 ]', function(assert) {
@@ -1147,11 +1147,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> group.colCount:3.alignItemLabels:false [a, abc, text, longText ]', function(assert) {
@@ -1272,7 +1272,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> group.colCount:3 [a.colSpan:1, abc.colSpan:2, text,colSpan:2, longText.colSpan:2 ]', function(assert) {
@@ -1287,7 +1287,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> group.colCount:3 [a.colSpan:2, abc.colSpan:1, text.colSpan:1, longText.colSpan:1 ]', function(assert) {
@@ -1328,11 +1328,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> group.colCount:3 [a.colSpan:2, abc.colSpan:2, text.colSpan:1, longText.colSpan:1 ]', function(assert) {
@@ -1358,11 +1358,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> group.colCount:3 [a.colSpan:2, abc.colSpan:2, text,colSpan:2, longText.colSpan:2 ]', function(assert) {
@@ -1374,11 +1374,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 244, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                 wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                 wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
             });
 
             QUnit.test('3 column-> group.colCount:3 [group[a], group[abc], group[text], group[longText] ]', function(assert) {
@@ -1424,7 +1424,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                     wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 348, 74, 19);
                     wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 421, 229, 34);
                     wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 8, 681, 74, 19);
-                    wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 1, 754, 244, 34);
+                    wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 1, 755, 244, 34);
                     wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 0, 74, 19);
                     wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 75, 577, 34);
                 } else {
@@ -1531,7 +1531,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
                     } else {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 25, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 26, 293, 34);
@@ -1540,7 +1540,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
                     }
                 });
 
@@ -1559,7 +1559,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
                     } else {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 25, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 26, 293, 34);
@@ -1568,7 +1568,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 611, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 244, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 244, 34);
                     }
                 });
 
@@ -1583,7 +1583,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 348, 74, 19);
@@ -1611,7 +1611,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 348, 74, 19);
@@ -1639,11 +1639,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 242, 34);
                     } else {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 25, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 26, 627, 34);
@@ -1652,7 +1652,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 610, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 242, 34);
                     }
                 });
 
@@ -1667,11 +1667,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 242, 34);
                     } else {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 25, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 26, 627, 34);
@@ -1680,7 +1680,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 610, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 242, 34);
                     }
                 });
 
@@ -1695,11 +1695,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 755, 242, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 75, 577, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 242, 34);
                     } else {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 25, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 26, 627, 34);
@@ -1708,7 +1708,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 610, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 755, 242, 34);
                     }
                 });
             });
