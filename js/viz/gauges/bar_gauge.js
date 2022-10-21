@@ -252,26 +252,51 @@ export const dxBarGauge = BaseGauge.inherit({
         const bars = that._bars;
         const overlapStrategy = _normalizeEnum(that._getOption('resolveLabelOverlapping', true));
 
+
         if(overlapStrategy === 'none') {
             return;
-        }
+        } else if(overlapStrategy === 'shift') {
+            const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
 
-        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+            let currentIndex = 0;
+            let nextIndex = 1;
 
-        let currentIndex = 0;
-        let nextIndex = 1;
-        while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
-            const current = sortedBars[currentIndex];
-            const next = sortedBars[nextIndex];
 
-            if(current.checkIntersect(next)) {
-                next.hideLabel();
-                nextIndex++;
-            } else {
-                currentIndex = nextIndex;
-                nextIndex = currentIndex + 1;
+            while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
+                const current = sortedBars[currentIndex];
+                const next = sortedBars[nextIndex];
+
+
+                if(current.checkIntersect(next)) {
+                    currentIndex = nextIndex;
+                    nextIndex = currentIndex + 1;
+                } else {
+                    currentIndex = nextIndex;
+                    nextIndex = currentIndex + 1;
+                }
+            }
+        } else {
+            const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+
+            let currentIndex = 0;
+            let nextIndex = 1;
+
+            while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
+                const current = sortedBars[currentIndex];
+                const next = sortedBars[nextIndex];
+
+
+                if(current.checkIntersect(next)) {
+                    next.hideLabel();
+                    nextIndex++;
+                } else {
+                    currentIndex = nextIndex;
+                    nextIndex = currentIndex + 1;
+                }
             }
         }
+
+
     },
 
     _animateBars: function() {
@@ -462,10 +487,43 @@ _extend(BarWrapper.prototype, {
         that._background.attr(_extend({}, that._settings, { startAngle: context.endAngle, endAngle: context.startAngle, fill: that._context.backgroundColor }));
         that._bar.attr({ x: context.x, y: context.y, outerRadius: that._settings.outerRadius, innerRadius: that._settings.innerRadius, fill: that._color });
         that._tracker.attr(that._settings);
+
         if(context.textEnabled) {
-            that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius - context.textIndent], stroke: context.lineColor || that._color }).sharp();
+
+
+            const p = { x: 0, y: 0 };
+            p.x = context.x + 100;
+            p.y = context.y - context.textRadius - context.textIndent;
+            const cos = _Number(Math.cos((90 + this._processValue(this.getValue())) * PI_DIV_180).toFixed(3));
+            const sin = _Number(Math.sin((90 + this._processValue(this.getValue())) * PI_DIV_180).toFixed(3));
+
+
+            const xNew = context.x + (p.x - context.x) * cos - (p.y - _Number(context.y - context.textRadius - context.textIndent)) * sin;
+            const yNew = p.y + (p.x - context.x) * sin + (p.y - _Number(context.y - context.textRadius - context.textIndent)) * cos;
+
+
+            // console.log(p.x - context.x, 'p.x - context.x');
+            // console.log(p.x, 'p.x ');
+            // console.log(p.y, 'p.y ');
+            // console.log(this._processValue(this.getValue()), ' this._processValue(this.getValue())');
+            // console.log((p.x - context.x) * cos - (p.y - _Number(context.y - context.textRadius - context.textIndent)) * sin, 'p.x - context.x', (p.x - context.x) * sin + (p.y - _Number(context.y - context.textRadius - context.textIndent)) * cos, 'p.y -');
+            // console.log(cos, 'cos');
+            // console.log(sin, 'sin');
+            // console.log('------------------');
+            that._line
+                .attr({ points: [
+                    context.x, context.y - that._settings.innerRadius,
+                    context.x, context.y - context.textRadius - context.textIndent,
+                    xNew, yNew
+                ],
+                stroke: context.lineColor || that._color }).sharp();
             that._text.css({ fill: context.textColor || that._color });
         }
+
+
+        // console.log(that._angle);
+        // console.log(Math.tan(that._angle));
+
         return that;
     },
 
@@ -512,6 +570,8 @@ _extend(BarWrapper.prototype, {
 
             const text = _formatValue(that._value, context.formatOptions, { index: that.index });
             const visibility = text === '' ? 'hidden' : null;
+
+
             that._text.attr({
                 text: text,
                 x: x,
