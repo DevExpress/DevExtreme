@@ -86,7 +86,7 @@ if(Quill) {
                 // Possible better solutions:
                 // - rework or extend a toolbar menu api or life cycle;
                 // - support a separate cache for toolbar items' state and apply it on each item's initialization.
-                const toolbarMenu = this.toolbarInstance._layoutStrategy._menu;
+                const toolbarMenu = this.toolbarInstance._menu._dropDownMenu;
                 if(toolbarMenu) {
                     const _renderPopup = toolbarMenu._renderPopup;
                     toolbarMenu._renderPopup = (...args) => {
