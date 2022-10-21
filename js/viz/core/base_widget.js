@@ -4,12 +4,11 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
 import { extend } from '../../core/utils/extend';
 import { BaseThemeManager } from '../core/base_theme_manager';
 import DOMComponent from '../../core/dom_component';
 import { changes, replaceInherit } from './helpers';
-import { normalizeEnum, parseScalar as _parseScalar } from './utils';
+import { parseScalar as _parseScalar } from './utils';
 import warnings from './errors_warnings';
 import { Renderer } from './renderers/renderer';
 import { getWidth, getHeight } from '../../core/utils/size';
@@ -21,7 +20,6 @@ import {
     createEventTrigger,
     createResizeHandler,
     createIncidentOccurred } from './base_widget.utils';
-import resizeObserverSingleton from '../../core/resize_observer';
 const _floor = Math.floor;
 const _log = warnings.log;
 
@@ -535,35 +533,19 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _setupResizeHandler: function() {
         const that = this;
-        const contentElement = this._$element[0];
-        const redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
-        const resize = () => {
-            that._requestChange(['CONTAINER_SIZE']);
-        };
+        const redrawOnResize = _parseScalar(that._getOption('redrawOnResize', true), true);
 
-        if(that._resizeHandler) {
+        if(that._disposeResizeHandler) {
             that._removeResizeHandler();
         }
 
-        if(normalizeEnum(redrawOnResize) === 'windowonly') {
-            that._resizeHandler = createResizeHandler(resize, () => {
-                _windowResizeCallbacks.remove(this._resizeHandler);
-            });
-
-            _windowResizeCallbacks.add(that._resizeHandler);
-        } else if(redrawOnResize === true) {
-            that._resizeHandler = createResizeHandler(resize, () => {
-                resizeObserverSingleton.unobserve(contentElement);
-            });
-
-            resizeObserverSingleton.observe(contentElement, that._resizeHandler);
-        }
+        that._disposeResizeHandler = createResizeHandler(that._$element[0], redrawOnResize, () => that._requestChange(['CONTAINER_SIZE']));
     },
 
     _removeResizeHandler: function() {
-        if(this._resizeHandler) {
-            this._resizeHandler.dispose();
-            this._resizeHandler = null;
+        if(this._disposeResizeHandler) {
+            this._disposeResizeHandler();
+            this._disposeResizeHandler = null;
         }
     },
 

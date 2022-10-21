@@ -855,6 +855,7 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.onApplySize = sinon.spy();
+        this.onRender = sinon.spy();
         sinon.stub(resizeObserverSingleton, 'observe');
         sinon.stub(resizeObserverSingleton, 'unobserve');
     },
@@ -933,6 +934,17 @@ QUnit.test('disposing during delay', function(assert) {
     this.clock.tick(100);
 
     assert.strictEqual(this.onApplySize.callCount, 0);
+});
+
+QUnit.test('Doudle resize', function(assert) {
+    this.createWidget({ redrawOnResize: 'windowOnly' });
+
+    this.triggerCallback();
+    this.clock.tick(50);
+    this.triggerCallback();
+    this.clock.tick(100);
+
+    assert.strictEqual(this.onRender.callCount, 1);
 });
 
 QUnit.module('ResizeObserver', {
@@ -1390,7 +1402,9 @@ QUnit.module('createResizeHandler', {
         this.clock.restore();
     },
 
-    create: DEBUG_createResizeHandler,
+    create(resize) {
+        return DEBUG_createResizeHandler({}, 'windowOnly', resize);
+    },
 
     tick: function(count) {
         this.clock.tick(count);
@@ -1399,10 +1413,9 @@ QUnit.module('createResizeHandler', {
 
 QUnit.test('Callback is called after delay', function(assert) {
     const callback = sinon.spy();
-    const handler = this.create(callback);
+    this.create(callback);
 
-    handler();
-
+    resizeCallbacks.fire();
     assert.strictEqual(callback.callCount, 0, 'not called immediately');
     this.tick(40);
     assert.strictEqual(callback.callCount, 0, 'not called if timeout not passed');
@@ -1410,44 +1423,17 @@ QUnit.test('Callback is called after delay', function(assert) {
     assert.strictEqual(callback.callCount, 1, 'called if timeout passed');
 });
 
-QUnit.test('Single callback is called for multiple calls', function(assert) {
-    const callback = sinon.spy();
-    const handler = this.create(callback);
-
-    handler();
-    handler();
-
-    this.tick(100);
-    assert.strictEqual(callback.callCount, 1);
-});
-
-QUnit.test('Timeout is reset after new call', function(assert) {
-    const callback = sinon.spy();
-    const handler = this.create(callback);
-
-    handler();
-    this.tick(60);
-    handler();
-    this.tick(40);
-
-    assert.strictEqual(callback.callCount, 0, 'not called if first timeout passed');
-    this.tick(60);
-    assert.strictEqual(callback.callCount, 1, 'called if second timeout passed');
-
-});
-
 QUnit.test('Callback disposing', function(assert) {
     const callback = sinon.spy();
-    const unsubscribe = sinon.spy();
-    const handler = this.create(callback, unsubscribe);
+    const dispose = this.create(callback);
 
-    handler();
+    resizeCallbacks.fire();
+
     this.tick(40);
-    handler.dispose();
+    dispose();
     this.tick(60);
 
     assert.strictEqual(callback.callCount, 0);
-    assert.strictEqual(unsubscribe.callCount, 1);
 });
 
 QUnit.module('EventTrigger', {
