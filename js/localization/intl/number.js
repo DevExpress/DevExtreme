@@ -35,8 +35,8 @@ export default {
         let config;
 
         if(format === 'decimal') {
-            const decimalDigits = String(value).split('.')[1];
-            const maxFD = decimalDigits ? decimalDigits.length : undefined;
+            const fractionDigits = String(value).split('.')[1];
+            const maxFD = fractionDigits ? fractionDigits.length : undefined;
             config = {
                 minimumIntegerDigits: formatConfig.precision || undefined,
                 useGrouping: false,
