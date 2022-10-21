@@ -58,19 +58,23 @@ const linearGaugeTestSignature = {
     }
 };
 
-const widgets = {
+const charts = {
     dxChart: chartTestsSignature,
 
     dxPieChart: {
         getInitOptions() {
             return {
-                ...widgets.dxChart.getInitOptions(),
+                ...allWidgets.dxChart.getInitOptions(),
                 series: [{}]
             };
         },
         getExpandedOptions: chartTestsSignature.getExpandedOptions
     },
-    dxPolarChart: chartTestsSignature,
+    dxPolarChart: chartTestsSignature
+};
+
+const allWidgets = {
+    ...charts,
     dxLinearGauge: linearGaugeTestSignature,
     dxCircularGauge: linearGaugeTestSignature,
     dxBarGauge: {
@@ -197,8 +201,8 @@ QUnit.testStart(function() {
 
 QUnit.module('options updating', environment);
 
-for(const widgetName in widgets) {
-    const config = widgets[widgetName];
+for(const widgetName in allWidgets) {
+    const config = allWidgets[widgetName];
 
     QUnit.test(widgetName + ' - creation & update', function(assert) {
         const data = this.prepareDataForTest(widgetName, config);
@@ -212,8 +216,8 @@ for(const widgetName in widgets) {
 
 QUnit.module('resizing', environment);
 
-for(const widgetName in widgets) {
-    const config = widgets[widgetName];
+for(const widgetName in allWidgets) {
+    const config = allWidgets[widgetName];
 
     QUnit.test(widgetName + ' - resize', function(assert) {
         const srcWidth = getWidth(this.$container);
@@ -231,5 +235,19 @@ for(const widgetName in widgets) {
         data.widget.render();
 
         this.assertNodesCount(assert, data.initNodeCount);
+    });
+}
+
+QUnit.module('Refresh', environment);
+
+for(const widgetName in charts) {
+    const config = charts[widgetName];
+
+    QUnit.test(`${widgetName} - refresh`, function(assert) {
+        const { widget, initNodeCount } = this.prepareDataForTest(widgetName, config);
+
+        widget.refresh();
+
+        this.assertNodesCount(assert, initNodeCount);
     });
 }
