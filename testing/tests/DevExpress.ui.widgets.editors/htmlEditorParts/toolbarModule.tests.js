@@ -12,6 +12,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import localization from 'localization';
+import resizeCallbacks from 'core/utils/resize_callbacks.js';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -1356,7 +1357,7 @@ testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
     });
 });
 
-testModule('Toolbar items disable state update', {
+testModule('Toolbar items state update', {
     beforeEach: function() {
         simpleModuleConfig.beforeEach.apply(this, arguments);
         this.getDisabledFormats = () => {
@@ -1845,6 +1846,25 @@ testModule('Toolbar items disable state update', {
                 const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
                 assert.strictEqual(actualValue, null, 'value is restored');
             });
+        });
+
+        test('state of the items in menu should be synchronized after toolbar repaint (t1117604)', function(assert) {
+            this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+            toolbar.updateTableWidgets();
+            this.openDropDownMenu();
+
+            resizeCallbacks.fire();
+            toolbar.updateTableWidgets();
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+            assert.ok(isInsertTableFormatDisabled, 'insert table format is disabled');
         });
     });
 });
