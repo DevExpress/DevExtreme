@@ -893,7 +893,7 @@ export const BaseChart = BaseWidget.inherit({
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-        that._constantLinesGroup.above.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._constantLinesGroup.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._stripLabelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
