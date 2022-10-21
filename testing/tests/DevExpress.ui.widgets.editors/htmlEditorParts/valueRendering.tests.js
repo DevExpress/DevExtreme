@@ -366,6 +366,69 @@ export default function() {
         });
     });
 
+    testModule('xss security', {
+        beforeEach: function() {
+            window._isScriptExecuted = false;
+            window._isInlineHandlerExecuted = false;
+
+            this.htmlWithScript = '<script>window._isScriptExecuted = true;</script>';
+            this.htmlWithInlineHandler = '<img src="undefined" onerror="window._isInlineHandlerExecuted = true;"/>';
+        },
+        afterEach: function() {
+            delete window._isScriptExecuted;
+            delete window._isInlineHandlerExecuted;
+        }
+    }, () => {
+        test('script embedded in html value should not be executed on init', function(assert) {
+            const done = assert.async();
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: this.htmlWithScript
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(window._isScriptExecuted, false, 'script was not executed');
+                done();
+            }, 100);
+        });
+
+        test('inline handler embedded in html value should not be executed on init', function(assert) {
+            const done = assert.async();
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: this.htmlWithInlineHandler
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+                done();
+            }, 100);
+        });
+
+        test('value change to html with embedded script should not execute the script', function(assert) {
+            const done = assert.async();
+
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+            htmlEditor.option('value', this.htmlWithScript);
+
+            setTimeout(() => {
+                assert.strictEqual(window._isScriptExecuted, false, 'script was not executed');
+                done();
+            }, 100);
+        });
+
+        test('value change to html with embedded inline handler should not execute the handler', function(assert) {
+            const done = assert.async();
+
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+            htmlEditor.option('value', this.htmlWithInlineHandler);
+
+            setTimeout(() => {
+                assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+                done();
+            }, 100);
+        });
+    });
 
     testModule('Value as Markdown markup', {
         beforeEach: function() {
