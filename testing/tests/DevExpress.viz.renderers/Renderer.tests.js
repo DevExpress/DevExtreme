@@ -2,7 +2,6 @@ const $ = require('jquery');
 const animation = require('viz/core/renderers/animation');
 const renderers = require('viz/core/renderers/renderer');
 const vizMocks = require('../../helpers/vizMocks.js');
-const browser = require('core/utils/browser');
 
 $('<div>')
     .attr('id', 'qunit-fixture')
@@ -388,90 +387,6 @@ QUnit.test('Several renderers share same backup container', function(assert) {
     renderer.unlock();
 
     assert.ok(!container.parentNode, 'container is removed after second renderer');
-});
-
-QUnit.module('Fix sharping', {
-    before: setMockElements,
-    after: resetMockElements,
-    beforeEach: function() {
-        const that = this;
-        this.boundingRect = { left: 123.76, top: 2.15 };
-        this.container = document.createElement('div');
-        sinon.stub(this.container, 'getBoundingClientRect', function() {
-            return that.boundingRect;
-        });
-    }
-});
-
-QUnit.test('Compensate root coordinates on creation', function(assert) {
-    // arrange
-    // act
-    const renderer = new Renderer({
-        container: this.container
-    });
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.move.firstCall.args, [-0.76, -0.15]);
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.css.callCount, 1);
-    }
-});
-
-QUnit.test('Compensate root coordinates on Unlock', function(assert) {
-    // arrange
-    const renderer = new Renderer({
-        container: this.container
-    });
-    renderer.lock();
-    $('#qunit-fixture').append(this.container);
-    this.boundingRect = { left: 123.34, top: 2.5 };
-
-    // act
-    renderer.unlock();
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.move.callCount, 2);
-        assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.css.callCount, 1);
-    }
-});
-
-QUnit.test('Remove compensation before getting markup, compensate again after', function(assert) {
-    // arrange
-    const renderer = new Renderer({
-        container: this.container
-    });
-    this.boundingRect = { left: 123.34, top: 2.5 };
-    renderer.root.stub('attr').reset();
-    renderer.root.stub('css').reset();
-    renderer.root.stub('markup').reset();
-    renderer.root.stub('move').reset();
-
-    // act
-    renderer.svg();
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.attr.callCount, 1);
-        assert.deepEqual(renderer.root.attr.getCall(0).args, [{ transform: null }]);
-
-        assert.strictEqual(renderer.root.markup.callCount, 1);
-        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.attr.getCall(0)));
-
-        assert.deepEqual(renderer.root.move.callCount, 1);
-        assert.deepEqual(renderer.root.move.getCall(0).args, [-0.34, -0.5]);
-        assert.ok(renderer.root.move.getCall(0).calledAfter(renderer.root.markup.getCall(0)));
-
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.stub('css').callCount, 0);
-        assert.strictEqual(renderer.root.markup.callCount, 1);
-    }
 });
 
 QUnit.module('Renderer drawing API', {
