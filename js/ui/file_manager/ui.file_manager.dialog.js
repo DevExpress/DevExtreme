@@ -58,7 +58,8 @@ class FileManagerDialogBase extends Widget {
                 component.registerKeyHandler('enter', this._applyDialogChanges.bind(this));
             },
             onHidden: this._onPopupHidden.bind(this),
-            onShown: this._onPopupShown.bind(this)
+            onShown: this._onPopupShown.bind(this),
+            _wrapperClassExternal: `${FILE_MANAGER_DIALOG_POPUP} ${options.popupCssClass ?? ''}`
         };
         if(isDefined(options.height)) {
             popupOptions.height = options.height;
