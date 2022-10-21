@@ -5,6 +5,7 @@ import openXmlCurrencyFormat from '../open_xml_currency_format';
 import accountingFormats from '../cldr-data/accounting_formats';
 
 const CURRENCY_STYLES = ['standard', 'accounting'];
+const MAX_FRACTION_DIGITS = 20;
 
 const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/;
 const formattersCache = {};
@@ -40,7 +41,7 @@ export default {
             config = {
                 minimumIntegerDigits: formatConfig.precision || undefined,
                 useGrouping: false,
-                maximumFractionDigits: maxFD > 20 ? 20 : maxFD,
+                maximumFractionDigits: maxFD > MAX_FRACTION_DIGITS ? MAX_FRACTION_DIGITS : maxFD,
                 round: value < 0 ? 'ceil' : 'floor'
             };
         } else {
@@ -64,7 +65,7 @@ export default {
         if(precision === null) {
             config = {
                 minimumFractionDigits: 0,
-                maximumFractionDigits: 20
+                maximumFractionDigits: MAX_FRACTION_DIGITS
             };
         } else {
             config = {
