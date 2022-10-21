@@ -348,6 +348,9 @@ if(Quill) {
                             e.component.$element().toggleClass(`dx-${item.name.toLowerCase()}-format`, !!item.name);
                             this._toolbarWidgets.add(item.name, e.component);
                         }
+                    },
+                    onDisposing: () => {
+                        this._toolbarWidgets.remove(item.name);
                     }
                 }
             };
