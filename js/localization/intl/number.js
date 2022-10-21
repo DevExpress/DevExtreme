@@ -37,11 +37,10 @@ export default {
 
         if(format === 'decimal') {
             const fractionDigits = String(value).split('.')[1];
-            const maxFD = fractionDigits ? fractionDigits.length : undefined;
             config = {
                 minimumIntegerDigits: formatConfig.precision || undefined,
                 useGrouping: false,
-                maximumFractionDigits: maxFD > MAX_FRACTION_DIGITS ? MAX_FRACTION_DIGITS : maxFD,
+                maximumFractionDigits: fractionDigits && fractionDigits.length,
                 round: value < 0 ? 'ceil' : 'floor'
             };
         } else {
