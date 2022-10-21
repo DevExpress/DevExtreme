@@ -756,8 +756,8 @@ dataGridCore.registerModule('export', {
                                 class: DATAGRID_EXPORT_BUTTON_CLASS
                             },
                             dropDownOptions: {
-                                wrapperAttr: { class: DATAGRID_EXPORT_MENU_CLASS },
-                                width: 'auto'
+                                width: 'auto',
+                                _wrapperClassExternal: DATAGRID_EXPORT_MENU_CLASS,
                             },
                         };
 
