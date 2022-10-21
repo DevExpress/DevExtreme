@@ -35,12 +35,12 @@ export default {
         let config;
 
         if(format === 'decimal') {
-            const decimalDigits = String(value).length - 1 - String(value).includes('-');
-            const maxFD = decimalDigits >= 20 ? 20 : decimalDigits;
+            const decimalDigits = String(value).split('.')[1];
+            const maxFD = decimalDigits ? decimalDigits.length : undefined;
             config = {
                 minimumIntegerDigits: formatConfig.precision || undefined,
                 useGrouping: false,
-                maximumFractionDigits: maxFD,
+                maximumFractionDigits: maxFD > 20 ? 20 : maxFD,
                 round: value < 0 ? 'ceil' : 'floor'
             };
         } else {
