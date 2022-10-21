@@ -6043,11 +6043,16 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.deleteRow(dataGrid.getRowIndexByKey(lastRowKey));
         this.clock.tick();
 
+        // assert
         assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'before scroll');
 
+        // act
+        // scroll is triggered cause content's height is changed
+        // totalCount should be correct both before scroll (before data loading) and after
         $(scrollable.container()).trigger('scroll');
         this.clock.tick();
 
+        // assert
         assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'after scroll');
     });
 
