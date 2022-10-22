@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,185 +31,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-
-    <div class="dx-viewport demo-container">
-        <div id="scroll">
-            <div id="list"></div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
-        <div id="scheduler"></div>
-    </div>
-
+    <div id="button"></div>
     <script>
-        $(() => {
-            // $('#scheduler').dxScheduler({
-            //     dataSource: [{
-            //         text: 'Increase Price - North Region',
-            //         startDate: '2018-11-26T02:00:00Z',
-            //         endDate: '2018-11-26T02:15:00Z',
-            //         recurrenceRule: 'FREQ=DAILY;COUNT=5',
-            //         recurrenceException: ''
-            //     }],
-            //     views: ['week'],
-            //     currentView: 'week',
-            //     currentDate: new Date(2018, 10, 26),
-            //     dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
-            //     timeZone: 'Etc/UTC',
-            //     editing: true,
-            //     onAppointmentUpdating: function(e) {
-            //         console.log('20181128T020000Z|', e.newData.recurrenceException);
-            //         //assert.equal(e.newData.recurrenceException, '20181128T020000Z', 'correct recurrence exception date');
-            //     }
-            // });
-
-            const draggingGroupName = 'appointmentsGroup';
-
-            const createItemElement = function (data) {
-                $('<div>')
-                    .text(data.text)
-                    .addClass('item dx-card dx-theme-background-color dx-theme-text-color')
-                    .appendTo('#list')
-                    .dxDraggable({
-                        group: draggingGroupName,
-                        data,
-                        clone: true,
-                        onDragEnd(e) {
-                            if (e.toData) {
-                                e.cancel = true;
-                            }
-                        },
-                        onDragStart(e) {
-                            e.itemData = e.fromData;
-                        },
-                    });
-            };
-
-            $('#scroll').dxScrollView({});
-
-            $('#list').dxDraggable({
-                data: 'dropArea',
-                group: draggingGroupName,
-                onDragStart(e) {
-                    e.cancel = true;
-                },
-            });
-
-            tasks.forEach((task) => {
-                createItemElement(task);
-            });
-
-            // $('#scheduler').dxScheduler({
-            //     dataSource: [ {
-            //         text: 'Increase Price - North Region',
-            //         startDate: '2018-11-26T02:00:00Z',
-            //         endDate: '2018-11-26T02:15:00Z',
-            //         recurrenceRule: 'FREQ=DAILY;COUNT=5',
-            //         recurrenceException: ''
-            //     }],
-            //     width: 800,
-            //     views: ['week'],
-            //     currentView: 'week',
-            //     currentDate: new Date(2018, 10, 26),
-            //     dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
-            //     timeZone: 'Etc/UTC',
-            //     editing: true,
-            // });
-
-            $('#scheduler').dxScheduler({
-                width: 500,
-                timeZone: 'America/Los_Angeles',
-                dataSource: appointments,
-                views: [{
-                    type: 'day',
-                    intervalCount: 3,
-                }],
-                onAppointmentUpdated(e) {
-                    console.log(`updated`)
-                },
-                onAppointmentUpdating(e) {
-                    console.log("updating");
-                },
-                onAppointmentDeleting(e) {
-                    console.log("deleting")
-                },
-                currentDate: new Date(2021, 3, 26),
-                startDayHour: 9,
-                height: 600,
-                editing: true,
-                appointmentDragging: {
-                    group: draggingGroupName,
-                    onRemove(e) {
-                        e.component.deleteAppointment(e.itemData);
-                        createItemElement(e.itemData);
-                    },
-                    onAdd(e) {
-                        e.component.addAppointment(e.itemData);
-                        e.itemElement.remove();
-                    },
-                },
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
-
-
-        const tasks = [{
-            text: 'New Brochures',
-        }, {
-            text: 'Brochure Design Review',
-        }, {
-            text: 'Upgrade Personal Computers',
-        }, {
-            text: 'Install New Router in Dev Room',
-        }, {
-            text: 'Upgrade Server Hardware',
-        }, {
-            text: 'Install New Database',
-        }, {
-            text: 'Website Re-Design Plan',
-        }, {
-            text: 'Create Icons for Website',
-        }, {
-            text: 'Submit New Website Design',
-        }, {
-            text: 'Launch New Website',
-        }, ];
-
-        const appointments = [{
-            text: 'Book Flights to San Fran for Sales Trip',
-            startDate: new Date('2021-04-26T19:00:00.000Z'),
-            endDate: new Date('2021-04-26T20:00:00.000Z'),
-            allDay: true,
-        }, {
-            text: 'Approve Personal Computer Upgrade Plan',
-            startDate: new Date('2021-04-27T17:00:00.000Z'),
-            endDate: new Date('2021-04-27T18:00:00.000Z'),
-        }, {
-            text: 'Final Budget Review',
-            startDate: new Date('2021-04-27T19:00:00.000Z'),
-            endDate: new Date('2021-04-27T20:35:00.000Z'),
-        }, {
-            text: 'Approve New Online Marketing Strategy',
-            startDate: new Date('2021-04-28T19:00:00.000Z'),
-            endDate: new Date('2021-04-28T21:00:00.000Z'),
-        }, {
-            text: 'Customer Workshop',
-            startDate: new Date('2021-04-29T18:00:00.000Z'),
-            endDate: new Date('2021-04-29T19:00:00.000Z'),
-            allDay: true,
-        }, {
-            text: 'Prepare 2021 Marketing Plan',
-            startDate: new Date('2021-04-29T18:00:00.000Z'),
-            endDate: new Date('2021-04-29T20:30:00.000Z'),
-        }, ];
-
     </script>
 </body>
-
 </html>
