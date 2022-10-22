@@ -119,7 +119,7 @@ export class CompactAppointmentsHelper {
                 getItemSettings,
             };
 
-            workSpace._createDragBehaviorBase($element, options);
+            workSpace._createDragBehaviorBase($element, $(this.instance.element()), options);
         };
     }
 
