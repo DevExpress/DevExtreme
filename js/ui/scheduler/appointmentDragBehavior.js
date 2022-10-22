@@ -51,8 +51,8 @@ export default class AppointmentDragBehavior {
         return $(itemElement);
     }
 
-    onDragEnd(e) {
-        const element = this.getAppointmentElement(e);
+    onDragEnd(event) {
+        const element = this.getAppointmentElement(event);
 
         const rawAppointment = this.appointments._getItemData(element);
         const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
@@ -62,7 +62,7 @@ export default class AppointmentDragBehavior {
         const oldCellIndex = this.workspace.getCellIndexByCoordinates(this.initialPosition);
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
-            event: e,
+            event,
             element,
             rawAppointment,
             newCellIndex,

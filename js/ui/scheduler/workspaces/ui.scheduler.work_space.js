@@ -2037,13 +2037,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.dragBehavior && scheduler) {
             this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
-            this._createDragBehavior(this.getWorkArea());
-            this._createDragBehavior(this.getAllDayContainer());
-            this._createDragBehavior(this._$allDayPanel);
+            const element = scheduler.element();
+
+            this._createDragBehavior(this.getWorkArea(), element);
+            this._createDragBehavior(this.getAllDayContainer(), element);
+            this._createDragBehavior(this._$allDayPanel), element;
         }
     }
 
-    _createDragBehavior($element) {
+    _createDragBehavior(targetElement, rootElement) {
         const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
         const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
@@ -2052,10 +2054,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             getItemSettings,
         };
 
-        this._createDragBehaviorBase($element, options);
+        this._createDragBehaviorBase(targetElement, rootElement, options);
     }
 
-    _createDragBehaviorBase($element, options) {
+    _createDragBehaviorBase(targetElement, rootElement, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
         const disableDefaultDragging = () => {
@@ -2071,8 +2073,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
 
-        this.dragBehavior.addTo($element, createDragBehaviorConfig(
+        this.dragBehavior.addTo(targetElement, createDragBehaviorConfig(
             container,
+            rootElement,
             this.isDefaultDraggingMode,
             this.dragBehavior,
             enableDefaultDragging,
@@ -3082,6 +3085,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
 const createDragBehaviorConfig = (
     container,
+    rootElement,
     isDefaultDraggingMode,
     dragBehavior,
     enableDefaultDragging,
@@ -3179,6 +3183,9 @@ const createDragBehaviorConfig = (
             domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const dateTables = getDateTables();
+
+        const isRoot = !!elements.find(el => el === rootElement.get(0));
+
         const droppableCell = elements.find(el => {
             const classList = el.classList;
 
@@ -3199,7 +3206,7 @@ const createDragBehaviorConfig = (
             }
 
             $(droppableCell).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-        } else {
+        } else if(!isRoot) {
             removeDroppableCellClass();
         }
     };

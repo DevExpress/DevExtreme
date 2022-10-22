@@ -90,14 +90,12 @@ const subscribes = {
 
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
-        //
         if(newCellIndex === -1) {
             if(!isDragAndDropBetweenComponents) { // TODO dragging inside component
                 this._appointments.moveAppointmentBack(event);
             }
             return;
         }
-        //
 
         if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, () => {
