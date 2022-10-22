@@ -71,7 +71,7 @@ const subscribes = {
         return this._getUpdatedData(rawAppointment);
     },
 
-    updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
+    updateAppointmentAfterDrag: function({ event, element, rawAppointment, newCellIndex, oldCellIndex }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
         const appointment = createAppointmentAdapter(rawAppointment, this._dataAccessors, this.timeZoneCalculator);
@@ -82,9 +82,6 @@ const subscribes = {
         );
         const targetedRawAppointment = targetedAppointment.source();
 
-        const newCellIndex = this._workSpace.getDroppableCellIndex();
-        const oldCellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-
         const becomeAllDay = targetedAppointment.allDay;
         const wasAllDay = appointment.allDay;
 
@@ -93,13 +90,14 @@ const subscribes = {
 
         const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
+        //
         if(newCellIndex === -1) {
             if(!isDragAndDropBetweenComponents) { // TODO dragging inside component
                 this._appointments.moveAppointmentBack(event);
             }
             return;
         }
-
+        //
 
         if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, () => {

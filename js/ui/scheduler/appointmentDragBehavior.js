@@ -58,11 +58,15 @@ export default class AppointmentDragBehavior {
         const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
         container.append(element);
 
+        const newCellIndex = this.workspace.getDroppableCellIndex();
+        const oldCellIndex = this.workspace.getCellIndexByCoordinates(this.initialPosition);
+
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
             element,
             rawAppointment,
-            coordinates: this.initialPosition
+            newCellIndex,
+            oldCellIndex
         });
     }
 

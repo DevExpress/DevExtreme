@@ -3199,6 +3199,8 @@ const createDragBehaviorConfig = (
             }
 
             $(droppableCell).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        } else {
+            removeDroppableCellClass();
         }
     };
 
