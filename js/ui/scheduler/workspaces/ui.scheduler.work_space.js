@@ -3182,9 +3182,8 @@ const createDragBehaviorConfig = (
             domAdapter.elementsFromPoint(newX, newY) :
             domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
+        const isMoveUnderControl = !!elements.find(el => el === rootElement.get(0));
         const dateTables = getDateTables();
-
-        const isRoot = !!elements.find(el => el === rootElement.get(0));
 
         const droppableCell = elements.find(el => {
             const classList = el.classList;
@@ -3199,14 +3198,12 @@ const createDragBehaviorConfig = (
         });
 
         if(droppableCell) {
-            const oldDroppableCell = getDroppableCell();
-
-            if(!oldDroppableCell.is(droppableCell)) {
+            if(!getDroppableCell().is(droppableCell)) {
                 removeDroppableCellClass();
             }
 
             $(droppableCell).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-        } else if(!isRoot) {
+        } else if(!isMoveUnderControl) {
             removeDroppableCellClass();
         }
     };
