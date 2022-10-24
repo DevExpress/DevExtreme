@@ -1,5 +1,6 @@
 import treeListCore from './ui.tree_list.core';
 import { gridViewModule } from '../grid_core/ui.grid_core.grid_view';
+import { deferRender, deferUpdate } from '../../core/utils/common';
 
 const GridView = gridViewModule.views.gridView.inherit((function() {
     return {
@@ -21,6 +22,22 @@ treeListCore.registerModule('gridView', {
     extenders: {
         controllers: {
             resizing: {
+                _synchronizeColumns: function() {
+                    const wordWrap = this.option('wordWrapEnabled');
+                    if(wordWrap) this._toggleBestFitMode(true);
+                    this.callBase(arguments);
+
+                    if(wordWrap) {
+                        deferUpdate(() => {
+                            deferRender(() => {
+                                deferUpdate(() => {
+                                    this._toggleBestFitMode(false);
+                                });
+                            });
+                        });
+                    }
+                },
+
                 _toggleBestFitMode: function(isBestFit) {
                     this.callBase(isBestFit);
 
