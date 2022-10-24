@@ -39,13 +39,13 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
     intervalCount: 2,
   }],
   onAppointmentUpdated() {
-    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdated';
+    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdated';
   },
   onAppointmentUpdating() {
-    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdating';
+    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdating';
   },
   onAppointmentDeleting() {
-    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentDeleting';
+    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentDeleting';
   },
   currentDate: new Date(2021, 3, 26),
   startDayHour: 9,
@@ -98,13 +98,13 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     intervalCount: 2,
   }],
   onAppointmentUpdated() {
-    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdated';
+    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdated';
   },
   onAppointmentUpdating() {
-    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdating';
+    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdating';
   },
   onAppointmentDeleting() {
-    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentDeleting';
+    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentDeleting';
   },
   currentDate: new Date(2021, 3, 26),
   startDayHour: 9,
