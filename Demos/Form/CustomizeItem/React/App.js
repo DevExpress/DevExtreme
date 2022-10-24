@@ -1,61 +1,67 @@
 import React from 'react';
 import 'devextreme-react/text-area';
 
-import Form, { Item } from 'devextreme-react/form';
+import Form, { Item, GroupItem, Label } from 'devextreme-react/form';
+import LabelTemplate from './LabelTemplate.js';
+import LabelNotesTemplate from './LabelNotesTemplate.js';
 import service from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.employee = service.getEmployee();
-    this.positions = service.getPositions();
-    this.rules = { X: /[02-9]/ };
+const employee = service.getEmployee();
 
-    this.validationRules = {
-      position: [
-        { type: 'required', message: 'Position is required.' },
-      ],
-      hireDate: [
-        { type: 'required', message: 'Hire Date is required.' },
-      ],
-    };
+const validationRules = {
+  position: [
+    { type: 'required', message: 'Position is required.' },
+  ],
+  hireDate: [
+    { type: 'required', message: 'Hire Date is required.' },
+  ],
+};
 
-    this.nameEditorOptions = { disabled: true };
-    this.positionEditorOptions = { items: this.positions, searchEnabled: true, value: '' };
-    this.hireDateEditorOptions = { width: '100%', value: null };
-    this.birthDateEditorOptions = { width: '100%', disabled: true };
-    this.notesEditorOptions = { height: 90 };
-    this.phonesEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: this.rules };
+const nameEditorOptions = { disabled: true };
+const positionEditorOptions = { items: service.getPositions(), searchEnabled: true, value: '' };
+const hireDateEditorOptions = { width: '100%', value: null };
+const birthDateEditorOptions = { width: '100%', disabled: true };
+const notesEditorOptions = { height: 90, maxLength: 200 };
+const phonesEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
 
-    this.validateForm = (e) => {
-      e.component.validate();
-    };
-  }
+export default function App() {
+  const validateForm = React.useCallback((e) => {
+    e.component.validate();
+  }, []);
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="long-title"><h3>Employee Details</h3></div>
-        <div className="form-container">
-          <Form
-            onContentReady={this.validateForm}
-            colCount={2}
-            id="form"
-            formData={this.employee}>
-            <Item dataField="FirstName" editorOptions={this.nameEditorOptions} />
-            <Item dataField="Position" editorType="dxSelectBox" editorOptions={this.positionEditorOptions} validationRules={this.validationRules.position} />
-            <Item dataField="LastName" editorOptions={this.nameEditorOptions} />
-            <Item dataField="HireDate" editorType="dxDateBox" editorOptions={this.hireDateEditorOptions} validationRules={this.validationRules.hireDate} />
-            <Item dataField="BirthDate" editorType="dxDateBox" editorOptions={this.birthDateEditorOptions} />
-            <Item dataField="Address" />
-            <Item dataField="Notes" colSpan={2} editorType="dxTextArea" editorOptions={this.notesEditorOptions} />
-            <Item dataField="Phone" editorOptions={this.phonesEditorOptions} />
-            <Item dataField="Email" />
-          </Form>
-        </div>
-      </React.Fragment>
-    );
-  }
+  return (
+    <Form
+      onContentReady={validateForm}
+      formData={employee}>
+      <GroupItem colCount={2} caption="Employee Details">
+        <Item dataField="FirstName" editorOptions={nameEditorOptions}>
+          <Label render={LabelTemplate('user')} />
+        </Item>
+        <Item dataField="Position" editorType="dxSelectBox" editorOptions={positionEditorOptions} validationRules={validationRules.position}>
+          <Label render={LabelTemplate('info')} />
+        </Item>
+        <Item dataField="LastName" editorOptions={nameEditorOptions}>
+          <Label render={LabelTemplate('user')} />
+        </Item>
+        <Item dataField="HireDate" editorType="dxDateBox" editorOptions={hireDateEditorOptions} validationRules={validationRules.hireDate}>
+          <Label render={LabelTemplate('event')} />
+        </Item>
+        <Item dataField="BirthDate" editorType="dxDateBox" editorOptions={birthDateEditorOptions}>
+          <Label render={LabelTemplate('event')} />
+        </Item>
+        <Item dataField="Address">
+          <Label render={LabelTemplate('home')} />
+        </Item>
+        <Item dataField="Notes" colSpan={2} editorType="dxTextArea" editorOptions={notesEditorOptions}>
+          <Label render={LabelNotesTemplate} />
+        </Item>
+        <Item dataField="Phone" editorOptions={phonesEditorOptions}>
+          <Label render={LabelTemplate('tel')} />
+        </Item>
+        <Item dataField="Email">
+          <Label render={LabelTemplate('email')} />
+        </Item>
+      </GroupItem>
+    </Form>
+  );
 }
-
-export default App;

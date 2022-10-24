@@ -8,6 +8,7 @@ import {
   DxTextAreaModule,
   DxFormModule,
   DxFormComponent,
+  DxTooltipModule,
 } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
@@ -30,12 +31,37 @@ export class AppComponent implements AfterViewInit {
 
   positions: string[];
 
-  rules: Object;
+  nameEditorOptions: Object;
+
+  positionEditorOptions: Object;
+
+  validationRules: Object;
+
+  hireDateEditorOptions: Object;
+
+  birthDateEditorOptions: Object;
+
+  notesEditorOptions: Object;
+
+  phonesEditorOptions: Object;
 
   constructor(service: Service) {
     this.employee = service.getEmployee();
-    this.positions = service.getPositions();
-    this.rules = { X: /[02-9]/ };
+
+    this.nameEditorOptions = { disabled: true };
+    this.positionEditorOptions = { items: service.getPositions(), searchEnabled: true, value: '' };
+    this.validationRules = {
+      position: [
+        { type: 'required', message: 'Position is required.' },
+      ],
+      hireDate: [
+        { type: 'required', message: 'Hire Date is required.' },
+      ],
+    };
+    this.hireDateEditorOptions = { width: '100%', value: null };
+    this.birthDateEditorOptions = { width: '100%', disabled: true };
+    this.notesEditorOptions = { height: 90, maxLength: 200 };
+    this.phonesEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
   }
 
   ngAfterViewInit() {
@@ -49,6 +75,7 @@ export class AppComponent implements AfterViewInit {
     DxSelectBoxModule,
     DxTextAreaModule,
     DxFormModule,
+    DxTooltipModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
