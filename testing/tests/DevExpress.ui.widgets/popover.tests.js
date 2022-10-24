@@ -952,7 +952,10 @@ QUnit.module('content positioning', () => {
     QUnit.test('content should be positioned taking into account arrow size after popover content dimension change (T1123018)', function(assert) {
         fixtures.collisionTopLeft.create();
 
-        const done = assert.async();
+        const timeToWaitResizeObserver = 50;
+        const repositionOnOpeningIsDone = assert.async();
+        const repositionOnDraggingIsDone = assert.async();
+
         const $target = $('#where');
         const $popover = $('#what');
         const $popoverContent = $('<div>')
@@ -969,15 +972,17 @@ QUnit.module('content positioning', () => {
         const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
         const $arrow = wrapper().find(`.${POPOVER_ARROW_CLASS}`);
 
-        $popoverContent.height(200);
-
         setTimeout(() => {
-            const expectedContentTop = getHeight($target) + getHeight($arrow);
-            assert.strictEqual($popupContent.offset().top, expectedContentTop, 'popover content top offset is correct');
+            $popoverContent.height(200);
+            setTimeout(() => {
+                const expectedContentTop = getHeight($target) + getHeight($arrow);
+                assert.strictEqual($popupContent.offset().top, expectedContentTop, 'popover content top offset is correct');
 
-            fixtures.collisionTopLeft.drop();
-            done();
-        }, 50);
+                fixtures.collisionTopLeft.drop();
+                repositionOnDraggingIsDone();
+            }, timeToWaitResizeObserver);
+            repositionOnOpeningIsDone();
+        }, timeToWaitResizeObserver);
     });
 });
 
