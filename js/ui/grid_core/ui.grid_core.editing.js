@@ -531,7 +531,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             dataController.updateItems({
                 repaintChangesOnly: true,
-                isLiveUpdate: false
+                isLiveUpdate: false,
+                isOptionChanged: true
             });
         },
 
