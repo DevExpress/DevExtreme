@@ -4,7 +4,6 @@ import { getWindow } from '../../../core/utils/window';
 import callOnce from '../../../core/utils/call_once';
 
 import eventsEngine from '../../../events/core/events_engine';
-import browser from '../../../core/utils/browser';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
 import { normalizeBBox, rotateBBox, normalizeEnum } from '../utils';
@@ -125,14 +124,6 @@ function roundValue(value, exp) {
     value = value.toString().split('e');
 
     return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
-}
-
-function getBoundingClientRect(element) {
-    let box;
-    try {
-        box = element.getBoundingClientRect();
-    } catch(e) {}
-    return box || { left: 0, top: 0 };
 }
 
 const preserveAspectRatioMap = {
@@ -1855,7 +1846,6 @@ export function Renderer(options) {
     that.pathModified = !!options.pathModified;
     that._$container = $(options.container);
     that.root.append({ element: options.container });
-    that.fixPlacement();
     that._locker = 0;
     that._backed = false;
 }
@@ -1869,30 +1859,6 @@ Renderer.prototype = {
 
         that._animationController = new AnimationController(that.root.element);
         that._animation = { enabled: true, duration: 1000, easing: 'easeOutCubic' };
-    },
-
-    fixPlacement: function() {
-        if(!browser.mozilla) {
-            return;
-        }
-
-        const box = getBoundingClientRect(this._$container.get(0));
-        const dx = roundValue(box.left % 1, 2);
-        const dy = roundValue(box.top % 1, 2);
-
-        if(browser.mozilla) {
-            this.root.move(-dx, -dy);
-        }
-    },
-
-    removePlacementFix: function() {
-        if(!browser.mozilla) {
-            return;
-        }
-
-        if(browser.mozilla) {
-            this.root.attr({ transform: null });
-        }
     },
 
     setOptions: function(options) {
@@ -1930,7 +1896,6 @@ Renderer.prototype = {
         if(that._locker === 0) {
             if(that._backed) {
                 restoreRoot(that.root, that._$container[0]);
-                that.fixPlacement();
             }
             that._backed = false;
         }
@@ -1979,10 +1944,7 @@ Renderer.prototype = {
     },
 
     svg: function() {
-        this.removePlacementFix();
-        const markup = this.root.markup();
-        this.fixPlacement();
-        return markup;
+        return this.root.markup();
     },
 
     getRootOffset: function() {
