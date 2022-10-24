@@ -312,13 +312,13 @@ const Popover = Popup.inherit({
         this.callBase();
     },
 
-    _areContentDimensionsRendered: function() {
+    _areContentDimensionsRendered: function(entry) {
         if(this._isContentResizedForArrow) {
             this._isContentResizedForArrow = false;
             return true;
         }
 
-        return this.callBase(arguments);
+        return this.callBase(entry);
     },
 
     _renderPosition: function() {
