@@ -198,8 +198,11 @@
   display: none;
 }
 
-.dx-toolbar-item-content > .dx-texteditor {
-  width: 150px;
+.dx-toolbar-item-content {
+  > .dx-texteditor,
+  &.dx-texteditor {
+    width: 150px;
+  }
 }
 
 .dx-toolbar-item-invisible {
