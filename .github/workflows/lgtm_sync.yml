@@ -36,11 +36,10 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/send-teams-notification
+      - uses: actions/checkout@v3
+      - uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
-          run_id: ${{github.run_id}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
           specific_branch: 22_2

@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Vybrané řádky",
         "dxDataGrid-exportSelectedRows": "Export vybraných řádků",
         "dxDataGrid-exportAll": "Exportovat všechny záznamy",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(prázdné)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Zrušit",

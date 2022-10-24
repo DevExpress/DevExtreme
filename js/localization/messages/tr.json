@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Seçili satırlar",
         "dxDataGrid-exportSelectedRows": "Seçili satırları aktar",
         "dxDataGrid-exportAll": "Tüm verileri dışa aktar",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Blanks)",
         "dxDataGrid-headerFilterOK": "Tamam",
         "dxDataGrid-headerFilterCancel": "İptal",

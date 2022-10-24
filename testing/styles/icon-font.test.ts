@@ -1,6 +1,6 @@
 import { loadSync } from 'opentype.js';
 import { readdirSync } from 'fs';
-import { join } from 'path';
+import { join, extname } from 'path';
 
 const BASE_PATH = join(__dirname, '..', '..');
 
@@ -16,7 +16,9 @@ describe('Equals svg to font', () => {
 
   const getCountElementInSvg = (pathToSvg: string): number => {
     const files = readdirSync(pathToSvg);
-    return files.length;
+    const svgFiles = files.filter((file) => extname(file) === '.svg');
+
+    return svgFiles.length;
   };
 
   test('generic themes', () => {
@@ -27,9 +29,19 @@ describe('Equals svg to font', () => {
   });
 
   test('material themes', () => {
-    const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`);
+    const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`) - 1; // TODO
     const countElementMaterialSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/material`);
 
     expect(countElementMaterialFont).toBe(countElementMaterialSvg);
+  });
+
+  test('check svg elements', () => {
+    const genericIcons = readdirSync(`${BASE_PATH}/images/icons/generic`);
+    const materialIcons = readdirSync(`${BASE_PATH}/images/icons/material`);
+
+    const differenceMaterial = materialIcons.filter((svg) => !genericIcons.includes(svg));
+    const differenceGeneric = genericIcons.filter((svg) => !materialIcons.includes(svg));
+
+    expect(differenceMaterial.toString()).toBe(differenceGeneric.toString());
   });
 });

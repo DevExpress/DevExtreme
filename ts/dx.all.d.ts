@@ -7678,6 +7678,11 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
+    export type WeekNumberRule =
+      | 'auto'
+      | 'firstDay'
+      | 'fullWeek'
+      | 'firstFourDays';
   }
   /**
    * @deprecated use Properties instead
@@ -7748,6 +7753,10 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.showWeekNumbers]
      */
     showWeekNumbers?: boolean;
+    /**
+     * [descr:dxCalendarOptions.weekNumberRule]
+     */
+    weekNumberRule?: DevExpress.ui.dxCalendar.WeekNumberRule;
     /**
      * [descr:dxCalendarOptions.value]
      */
@@ -13585,6 +13594,9 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxForm> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxFormOptions;
+    export type SimpleItemLabelTemplateData = SimpleItemTemplateData & {
+      text: string;
+    };
     export type SimpleItemTemplateData = {
       readonly component: dxForm;
       readonly dataField?: string;
@@ -13877,6 +13889,15 @@ declare module DevExpress.ui {
        * [descr:dxFormSimpleItem.label.showColon]
        */
       showColon?: boolean;
+      /**
+       * [descr:dxFormSimpleItem.label.template]
+       */
+      template?:
+        | DevExpress.core.template
+        | ((
+            itemData: DevExpress.ui.dxForm.SimpleItemLabelTemplateData,
+            itemElement: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
       /**
        * [descr:dxFormSimpleItem.label.text]
        */
@@ -20541,8 +20562,14 @@ declare module DevExpress.ui {
     showSelectionControls?: boolean;
     /**
      * [descr:dxSelectBoxOptions.valueChangeEvent]
+     * @deprecated [depNote:dxSelectBoxOptions.valueChangeEvent]
      */
     valueChangeEvent?: string;
+
+    /**
+     * [descr:dxSelectBoxOptions.customItemCreateEvent]
+     */
+    customItemCreateEvent?: string;
 
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]

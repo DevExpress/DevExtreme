@@ -79,6 +79,14 @@
       .dx-field-item-label-content {
         display: block;
       }
+
+      .dx-field-item-custom-label-content {
+        display: inline-block;
+
+        .dx-icon {
+          vertical-align: top;
+        }
+      }
     }
 
     .dx-field-item-content {
@@ -107,6 +115,14 @@
 
 .dx-field-item-label-location-top {
   display: block;
+
+  .dx-field-item-custom-label-content {
+    display: inline-block;
+
+    .dx-icon {
+      vertical-align: top;
+    }
+  }
 }
 
 .dx-form-group-content {

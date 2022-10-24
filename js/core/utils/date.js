@@ -3,6 +3,11 @@ import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
 
+const DAYS_IN_WEEK = 7;
+const THURSDAY_WEEK_NUMBER = 4;
+const SUNDAY_WEEK_NUMBER = 7;
+const USUAL_WEEK_COUNT_IN_YEAR = 52;
+
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
 const toMilliseconds = function(value) {
@@ -494,7 +499,7 @@ const getLastMonthDate = function(date) {
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {
-    const delta = (date.getDay() - firstDayOfWeek + 7) % 7;
+    const delta = (date.getDay() - firstDayOfWeek + DAYS_IN_WEEK) % DAYS_IN_WEEK;
 
     const result = new Date(date);
     result.setDate(date.getDate() - delta);
@@ -502,12 +507,71 @@ function getFirstWeekDate(date, firstDayOfWeek) {
     return result;
 }
 
-function getWeekNumber(date, firstDayOfWeekIndex = 0) {
-    const yearFirstDay = new Date(date.getFullYear(), 0, 1);
-    const differenceInDays = dateUtils.getDatesInterval(yearFirstDay, date, 'day');
-    const week = Math.floor((differenceInDays + (7 - firstDayOfWeekIndex) - 1) / 7) + 1;
+function getUTCTime(date) {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
 
-    return week;
+function getDayNumber(date) {
+    const ms = getUTCTime(date) - getUTCTime(getFirstDateInYear(date.getFullYear()));
+
+    return 1 + Math.floor(ms / toMilliseconds('day'));
+}
+
+function getFirstDateInYear(year) {
+    return new Date(year, 0, 1);
+}
+
+function getLastDateInYear(year) {
+    return new Date(year, 11, 31);
+}
+
+function getDayWeekNumber(date, firstDayOfWeek) {
+    let day = date.getDay() - firstDayOfWeek + 1;
+    if(day <= 0) { day += DAYS_IN_WEEK; }
+
+    return day;
+}
+
+function getWeekNumber(date, firstDayOfWeek, rule) {
+    const firstWeekDayInYear = getDayWeekNumber(getFirstDateInYear(date.getFullYear()), firstDayOfWeek);
+    const lastWeekDayInYear = getDayWeekNumber(getLastDateInYear(date.getFullYear()), firstDayOfWeek);
+    const daysInFirstWeek = DAYS_IN_WEEK - firstWeekDayInYear + 1;
+
+    let weekNumber = Math.ceil((getDayNumber(date) - daysInFirstWeek) / 7);
+    switch(rule) {
+        case 'fullWeek': {
+            if(daysInFirstWeek === DAYS_IN_WEEK) { weekNumber++; }
+            if(weekNumber === 0) {
+                const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
+                return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
+            }
+            return weekNumber;
+        }
+        case 'firstDay': {
+            if(daysInFirstWeek > 0) { weekNumber++; }
+
+            const isSunday = firstWeekDayInYear === SUNDAY_WEEK_NUMBER
+                || lastWeekDayInYear === SUNDAY_WEEK_NUMBER;
+            if((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) { weekNumber = 1; }
+
+            return weekNumber;
+        }
+        case 'firstFourDays': {
+            if(daysInFirstWeek > 3) { weekNumber++; }
+
+            const isThursday = firstWeekDayInYear === THURSDAY_WEEK_NUMBER
+                || lastWeekDayInYear === THURSDAY_WEEK_NUMBER;
+            if(weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) { weekNumber = 1; }
+
+            if(weekNumber === 0) {
+                const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
+                return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
+            }
+            return weekNumber;
+        }
+        default:
+            break;
+    }
 }
 
 const normalizeDateByWeek = function(date, currentDate) {

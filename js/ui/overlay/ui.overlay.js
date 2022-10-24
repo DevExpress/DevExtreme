@@ -869,6 +869,9 @@ const Overlay = Widget.inherit({
             transclude,
             onRendered: () => {
                 whenContentRendered.resolve();
+                if(this.option('templatesRenderAsynchronously')) {
+                    this._dimensionChanged();
+                }
             }
         });
 

@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Kiválasztott sorok",
         "dxDataGrid-exportSelectedRows": "Kiválasztott sorok exportálása",
         "dxDataGrid-exportAll": "Az összes adat exportálása",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Üresek)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Mégse",
