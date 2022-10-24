@@ -624,7 +624,7 @@ const Popup = Overlay.inherit({
 
             this._stopAnimation();
             if(options?.shouldOnlyReposition) {
-                this._positionController.positionContent();
+                this._renderPosition();
             } else {
                 this._renderGeometryImpl(options?.isDimensionChange);
             }

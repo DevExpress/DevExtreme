@@ -950,6 +950,37 @@ QUnit.module('content positioning', () => {
             fixtures.frameAdapted.drop();
         }
     });
+
+    QUnit.test('content should be positioned taking into account arrow size after popover content dimension change (T1123018)', function(assert) {
+        fixtures.collisionTopLeft.create();
+
+        const done = assert.async();
+        const $target = $('#where');
+        const $popover = $('#what');
+        const $popoverContent = $('<div>')
+            .attr('id', 'content')
+            .height(100)
+            .width(200);
+
+        new Popover($popover, {
+            visible: true,
+            target: $target,
+            contentTemplate: () => $popoverContent,
+        });
+
+        const $popupContent = wrapper().find('.dx-popup-content');
+        const $arrow = wrapper().find(`.${POPOVER_ARROW_CLASS}`);
+
+        $popoverContent.height(200);
+
+        setTimeout(() => {
+            const expectedContentTop = getHeight($target) + getHeight($arrow);
+            assert.strictEqual($popupContent.offset().top, expectedContentTop, 'popover content top offset is correct');
+
+            fixtures.collisionTopLeft.drop();
+            done();
+        }, 50);
+    });
 });
 
 QUnit.module('positioning', () => {
