@@ -458,12 +458,6 @@
     }
   },
   {
-    "name": "ui/nav_bar",
-    "exports": {
-      "default": { "path": "ui.dxNavBar", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/notify",
     "exports": {
       "default": { "path": "ui.notify" }

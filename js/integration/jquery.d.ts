@@ -30,7 +30,6 @@ import dxLookup, { Properties as LookupProperties } from '../ui/lookup';
 import dxMap, { Properties as MapProperties } from '../ui/map';
 import dxMenu, { Properties as MenuProperties } from '../ui/menu';
 import dxMultiView, { Properties as MultiViewProperties } from '../ui/multi_view';
-import dxNavBar, { Properties as NavBarProperties } from '../ui/nav_bar';
 import dxNumberBox, { Properties as NumberBoxProperties } from '../ui/number_box';
 import dxPivotGrid, { Properties as PivotGridProperties } from '../ui/pivot_grid';
 import dxPivotGridFieldChooser, { Properties as PivotGridFieldChooserProperties } from '../ui/pivot_grid_field_chooser';
@@ -334,12 +333,6 @@ declare global {
         dxMultiView(options: MultiViewProperties): JQuery;
         dxMultiView(options: string): any;
         dxMultiView(options: string, ...params: any[]): any;
-
-        dxNavBar(): JQuery;
-        dxNavBar(options: 'instance'): dxNavBar;
-        dxNavBar(options: NavBarProperties): JQuery;
-        dxNavBar(options: string): any;
-        dxNavBar(options: string, ...params: any[]): any;
 
         dxNumberBox(): JQuery;
         dxNumberBox(options: 'instance'): dxNumberBox;

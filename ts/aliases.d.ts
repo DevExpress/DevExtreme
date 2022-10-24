@@ -224,9 +224,6 @@ declare module DevExpress.ui {
     /** @deprecated Use DevExpress.ui.dxMultiViewItem */
     export type dxMultiViewItemTemplate = DevExpress.ui.dxMultiViewItem;
 
-    /** @deprecated Use DevExpress.ui.dxNavBarItem */
-    export type dxNavBarItemTemplate = DevExpress.ui.dxNavBarItem;
-
     /** @deprecated Use DevExpress.ui.dxResponsiveBoxItem */
     export type dxResponsiveBoxItemTemplate = DevExpress.ui.dxResponsiveBoxItem;
 

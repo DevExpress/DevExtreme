@@ -31,7 +31,6 @@ const MenuBase = require('ui/context_menu/ui.menu_base');
 const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
-const NavBar = require('ui/nav_bar');
 const Widget = require('ui/widget/ui.widget');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
@@ -868,13 +867,6 @@ testComponentDefaults(TabPanel,
     { platform: 'generic' },
     {
         animationEnabled: false
-    }
-);
-
-testComponentDefaults(NavBar,
-    {},
-    {
-        scrollingEnabled: false
     }
 );
 

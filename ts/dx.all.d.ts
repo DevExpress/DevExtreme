@@ -233,12 +233,6 @@ declare global {
     dxMultiView(options: string): any;
     dxMultiView(options: string, ...params: any[]): any;
 
-    dxNavBar(): JQuery;
-    dxNavBar(options: 'instance'): DevExpress.ui.dxNavBar;
-    dxNavBar(options: DevExpress.ui.dxNavBar.Properties): JQuery;
-    dxNavBar(options: string): any;
-    dxNavBar(options: string, ...params: any[]): any;
-
     dxNumberBox(): JQuery;
     dxNumberBox(options: 'instance'): DevExpress.ui.dxNumberBox;
     dxNumberBox(options: DevExpress.ui.dxNumberBox.Properties): JQuery;
@@ -17422,109 +17416,6 @@ declare module DevExpress.ui {
     TKey = any
   > extends DevExpress.ui.dxMultiView.Properties<TItem, TKey> {}
   /**
-   * [descr:dxNavBar]
-   * @deprecated [depNote:dxNavBar]
-   */
-  export class dxNavBar<
-    TItem extends DevExpress.ui.dxNavBar.ItemLike = any,
-    TKey = any
-  > extends dxTabs<dxNavBarOptions<TItem, TKey>, TItem, TKey> {}
-  module dxNavBar {
-    export type ContentReadyEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxNavBar<TItem, TKey>>;
-    export type DisposingEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxNavBar<TItem, TKey>>;
-    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
-      Properties: Properties<TItem, TKey>;
-      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
-      DisposingEvent: DisposingEvent<TItem, TKey>;
-      InitializedEvent: InitializedEvent<TItem, TKey>;
-      ItemClickEvent: ItemClickEvent<TItem, TKey>;
-      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
-      ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
-      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
-      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
-      SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
-    };
-    export type InitializedEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.InitializedEventInfo<dxNavBar<TItem, TKey>>;
-    export type ItemClickEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.NativeEventInfo<
-      dxNavBar<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent
-    > &
-      DevExpress.events.ItemInfo<TItem>;
-    export type ItemContextMenuEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.NativeEventInfo<
-      dxNavBar<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
-    > &
-      DevExpress.events.ItemInfo<TItem>;
-    export type ItemHoldEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.NativeEventInfo<
-      dxNavBar<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
-    > &
-      DevExpress.events.ItemInfo<TItem>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type ItemLike = string | Item | any;
-    export type ItemRenderedEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxNavBar<TItem, TKey>> &
-      DevExpress.events.ItemInfo<TItem>;
-    export type OptionChangedEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxNavBar<TItem, TKey>> &
-      DevExpress.events.ChangedOptionInfo;
-    export type Properties<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = dxNavBarOptions<TItem, TKey>;
-    export type SelectionChangedEvent<
-      TItem extends ItemLike = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxNavBar<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
-  }
-  /**
-   * @deprecated Use Item instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxNavBarItem extends DevExpress.ui.dxTabs.Item {
-    /**
-     * [descr:dxNavBarItem.badge]
-     */
-    badge?: string;
-  }
-  /**
-   * @deprecated use Properties instead
-   */
-  export interface dxNavBarOptions<
-    TItem extends DevExpress.ui.dxNavBar.ItemLike = any,
-    TKey = any
-  > extends dxTabsBaseOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
-    /**
-     * [descr:dxNavBarOptions.scrollByContent]
-     */
-    scrollByContent?: boolean;
-  }
-  /**
    * [descr:dxNumberBox]
    */
   export class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {}
@@ -25176,9 +25067,6 @@ declare module DevExpress.ui.dxMenu {
 }
 declare module DevExpress.ui.dxMultiView {
   export type Item = dxMultiViewItem;
-}
-declare module DevExpress.ui.dxNavBar {
-  export type Item = dxNavBarItem;
 }
 declare module DevExpress.ui.dxOverlay {
   /**

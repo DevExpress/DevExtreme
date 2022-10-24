@@ -38,7 +38,6 @@ export const dependencies: FlatStylesDependencies = {
   sortable: [],
   lookup: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list', 'popover'],
   map: [],
-  navbar: ['validation', 'button', 'tabs'],
   radiogroup: ['validation'],
   tooltip: ['validation', 'button', 'popup', 'popover'],
   slider: ['validation', 'button', 'popup', 'popover', 'tooltip'],
