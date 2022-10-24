@@ -314,7 +314,9 @@ const Popover = Popup.inherit({
 
     _renderPosition: function() {
         this.callBase();
+        this._observeContentResize(false);
         this._renderOverlayPosition();
+        this._observeContentResize(true);
         this._actions.onPositioned();
     },
 
