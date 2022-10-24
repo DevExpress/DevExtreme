@@ -321,11 +321,11 @@ const LayoutManager = Widget.inherit({
     _renderTemplates: function(templatesInfo) {
         const that = this;
 
-        let itemsCountWithLabelTemplate = 0;
+        let itemsWithLabelTemplateCount = 0;
 
         templatesInfo.forEach(({ item }) => {
             if(item?.label?.template) {
-                itemsCountWithLabelTemplate++;
+                itemsWithLabelTemplateCount++;
             }
         });
 
@@ -338,7 +338,7 @@ const LayoutManager = Widget.inherit({
                     that._renderButtonItem(info);
                     break;
                 default: {
-                    that._renderFieldItem(info, itemsCountWithLabelTemplate);
+                    that._renderFieldItem(info, itemsWithLabelTemplateCount);
                 }
             }
         });
@@ -561,7 +561,7 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _renderFieldItem: function({ item, $parent, rootElementCssClassList }, itemsCountWithLabelTemplate) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClassList }, itemsWithLabelTemplateCount) {
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -575,7 +575,7 @@ const LayoutManager = Widget.inherit({
         const onLabelTemplateRendered = () => {
             this._incTemplateRenderedCallCount();
 
-            if(formOrLayoutManager.option('templatesRenderAsynchronously') && this._shouldAlignLabelsOnTemplateRendered(itemsCountWithLabelTemplate)) {
+            if(this._shouldAlignLabelsOnTemplateRendered(formOrLayoutManager, itemsWithLabelTemplateCount)) {
                 formOrLayoutManager._alignLabels(this, this.isSingleColumnMode(formOrLayoutManager));
             }
         };
@@ -619,11 +619,11 @@ const LayoutManager = Widget.inherit({
     },
 
     _incTemplateRenderedCallCount() {
-        this._labelTemplateRenderedCall = (this._labelTemplateRenderedCall ?? 0) + 1;
+        this._labelTemplateRenderedCallCount = (this._labelTemplateRenderedCallCount ?? 0) + 1;
     },
 
-    _shouldAlignLabelsOnTemplateRendered(totalItemsWithLabelTemplate) {
-        return this._labelTemplateRenderedCall === totalItemsWithLabelTemplate;
+    _shouldAlignLabelsOnTemplateRendered(formOrLayoutManager, totalItemsWithLabelTemplate) {
+        return formOrLayoutManager.option('templatesRenderAsynchronously') && this._labelTemplateRenderedCallCount === totalItemsWithLabelTemplate;
     },
 
     _getMarkOptions: function() {
