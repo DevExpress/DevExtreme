@@ -1115,7 +1115,7 @@ const Overlay = Widget.inherit({
 
             this._stopAnimation();
             if(options?.shouldOnlyReposition) {
-                this._renderPosition();
+                this._renderPosition(false);
             } else {
                 this._renderGeometryImpl(options?.isDimensionChange);
             }
