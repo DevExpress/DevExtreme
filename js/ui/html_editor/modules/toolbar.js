@@ -77,6 +77,24 @@ if(Quill) {
                 this._addCallbacks();
                 this._renderToolbar();
 
+                // NOTE: Fixes the synchronization of the states of items placed in a menu that is rendered postponed.
+                // See bug t1117604: menu items' state could be updated after selection change before the menu is rendered.
+                // We cannot just modify items' state using a toolbar api because of:
+                // - runtime adding in-line styles for color formats' icon;
+                // - "dx-format-active" class toggling (using elementAttr will trigger toolbar item rerendering);
+                // - changing the value of non-button items.
+                // Possible better solutions:
+                // - rework or extend a toolbar menu api or life cycle;
+                // - support a separate cache for toolbar items' state and apply it on each item's initialization.
+                const toolbarMenu = this.toolbarInstance._menu._dropDownMenu;
+                if(toolbarMenu) {
+                    const _renderPopup = toolbarMenu._renderPopup;
+                    toolbarMenu._renderPopup = (...args) => {
+                        _renderPopup.apply(toolbarMenu, ...args);
+                        toolbarMenu._popup.on('showing', () => { this._updateToolbar(true); });
+                    };
+                }
+
                 this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
                     const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
 
@@ -330,6 +348,9 @@ if(Quill) {
                             e.component.$element().toggleClass(`dx-${item.name.toLowerCase()}-format`, !!item.name);
                             this._toolbarWidgets.add(item.name, e.component);
                         }
+                    },
+                    onDisposing: () => {
+                        this._toolbarWidgets.remove(item.name);
                     }
                 }
             };
