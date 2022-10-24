@@ -484,6 +484,7 @@ describe('Appointments view model', () => {
               direction: 'horizontal',
               isRecurrent: false,
               appointment: {
+                allDay: false,
                 startDate: new Date(2021, 8, 23),
                 endDate: new Date(2021, 8, 24),
                 normalizedEndDate: new Date(2021, 8, 24),
@@ -495,7 +496,6 @@ describe('Appointments view model', () => {
               },
               appointmentReduced: 'head',
               dateText: '12:00 AM - 12:00 AM',
-              resourceColor: undefined,
               sourceAppointment: {
                 startDate: new Date(2021, 8, 23),
                 endDate: new Date(2021, 8, 24),
