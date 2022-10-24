@@ -34,6 +34,7 @@ const ESC_KEY_CODE = 'Escape';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const CUSTOM_CLASS = 'custom-class';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -1710,6 +1711,63 @@ QUnit.module('popup integration', () => {
             });
             $dropDownEditor.remove();
         }
+    });
+
+    QUnit.module('ios tests', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+            this._savedDevice = devices.current();
+            devices.current({ platform: 'ios' });
+
+            const getWrapperClasses = (element) => {
+                return Array.from(element._popup.$wrapper()[0].classList);
+            };
+
+            this.hasClass = (element, className) => {
+                return getWrapperClasses(element).includes(className);
+            };
+        },
+        afterEach: function() {
+            this.clock.restore();
+            devices.current(this._savedDevice);
+        }
+    }, () => {
+        QUnit.test('Drop down popup wrapper has overlay and custom classes if the "wrapperAttr.class" property is added to "dropDownOptions" on init on iOS (T1118164)', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                openOnFieldClick: true,
+                dropDownOptions: {
+                    wrapperAttr: {
+                        class: CUSTOM_CLASS,
+                    },
+                },
+            });
+
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+            $input.trigger('dxclick');
+
+            assert.strictEqual(this.hasClass(dropDownEditor, DROP_DOWN_EDITOR_OVERLAY), true, 'drop down popup wrapper has overlay class');
+            assert.strictEqual(this.hasClass(dropDownEditor, CUSTOM_CLASS), true, 'drop down popup wrapper has custom class');
+        });
+
+        QUnit.test('Drop down popup wrapper has overlay and custom classes if the "wrapperAttr.class" property is added to "dropDownOptions" after init on iOS (T1118164)', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                openOnFieldClick: true,
+            });
+
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+            this.clock.tick(500);
+
+            dropDownEditor.option('dropDownOptions.wrapperAttr.class', CUSTOM_CLASS);
+
+            $input.trigger('dxclick');
+
+            assert.strictEqual(this.hasClass(dropDownEditor, DROP_DOWN_EDITOR_OVERLAY), true, 'drop down popup wrapper has overlay class');
+            assert.strictEqual(this.hasClass(dropDownEditor, CUSTOM_CLASS), true, 'drop down popup wrapper has custom class');
+        });
     });
 });
 
