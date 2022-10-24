@@ -9,7 +9,7 @@ fixture.disablePageReloads`Master detail`
   .afterEach(async () => disposeWidgets());
 
 ['material.blue.light', 'generic.light'].forEach((theme) => {
-  test(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {
+  test.skip(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // assert
