@@ -6,6 +6,7 @@ import errors from '../../core/errors';
 
 // eslint-disable-next-line no-restricted-imports
 import 'globalize/number';
+const MAX_FRACTION_DIGITS = 20;
 
 if(Globalize && Globalize.formatNumber) {
     if(Globalize.locale().locale === 'en') {
@@ -51,7 +52,7 @@ if(Globalize && Globalize.formatNumber) {
                     minimumIntegerDigits: formatConfig.precision || 1,
                     useGrouping: false,
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 20,
+                    maximumFractionDigits: MAX_FRACTION_DIGITS,
                     round: value < 0 ? 'ceil' : 'floor'
                 };
             } else {
@@ -70,7 +71,7 @@ if(Globalize && Globalize.formatNumber) {
             if(precision === null) {
                 config = {
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 20
+                    maximumFractionDigits: MAX_FRACTION_DIGITS
                 };
             } else {
                 config = {
