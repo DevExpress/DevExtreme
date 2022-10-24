@@ -3,17 +3,20 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
+const SCHEDULER_SELECTOR = '#container';
+const EVENT_BOX_SELECTOR = '#event-text-box';
+
 fixture`T1118059`
   .page(url(__dirname, './pages/T1118059.html'));
 
 test('After drag to draggable component, should be called onAppointmentDeleting event only', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#drag-container'));
 
   await t
-    .expect(Selector('#event-text-box').innerText)
+    .expect(Selector(EVENT_BOX_SELECTOR).innerText)
     .eql('onAppointmentDeleting');
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{
@@ -36,13 +39,13 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
     intervalCount: 2,
   }],
   onAppointmentUpdated() {
-    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdated';
+    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdated';
   },
   onAppointmentUpdating() {
-    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdating';
+    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdating';
   },
   onAppointmentDeleting() {
-    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentDeleting';
+    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentDeleting';
   },
   currentDate: new Date(2021, 3, 26),
   startDayHour: 9,
@@ -57,7 +60,7 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
 }, true));
 
 test('After drag over component area, shouldn\'t called onAppointment* data events and appointment shouldn\'t change position', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
   await t
     .dragToElement(scheduler.getAppointment('All day test app 2').element, Selector('#space-right'));
@@ -95,13 +98,13 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     intervalCount: 2,
   }],
   onAppointmentUpdated() {
-    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdated';
+    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdated';
   },
   onAppointmentUpdating() {
-    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentUpdating';
+    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentUpdating';
   },
   onAppointmentDeleting() {
-    document.querySelector('#event-text-box')!.innerHTML = 'onAppointmentDeleting';
+    document.querySelector(EVENT_BOX_SELECTOR)!.innerHTML = 'onAppointmentDeleting';
   },
   currentDate: new Date(2021, 3, 26),
   startDayHour: 9,

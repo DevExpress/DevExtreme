@@ -2037,11 +2037,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.dragBehavior && scheduler) {
             this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
-            const element = $(scheduler.element());
+            const $rootElement = $(scheduler.element());
 
-            this._createDragBehavior(this.getWorkArea(), element);
-            this._createDragBehavior(this.getAllDayContainer(), element);
-            this._createDragBehavior(this._$allDayPanel, element);
+            this._createDragBehavior(this.getWorkArea(), $rootElement);
+            this._createDragBehavior(this.getAllDayContainer(), $rootElement);
+            this._createDragBehavior(this._$allDayPanel, $rootElement);
         }
     }
 

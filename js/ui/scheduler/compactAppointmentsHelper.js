@@ -103,6 +103,7 @@ export class CompactAppointmentsHelper {
     _createTooltipDragBehavior($appointmentCollector) {
         return (e) => {
             const $element = $(e.element);
+            const $schedulerElement = $(this.instance.element());
             const workSpace = this.instance.getWorkSpace();
 
             const getItemData = (itemElement) => $(itemElement).data(LIST_ITEM_DATA_KEY)?.appointment;
@@ -119,7 +120,7 @@ export class CompactAppointmentsHelper {
                 getItemSettings,
             };
 
-            workSpace._createDragBehaviorBase($element, $(this.instance.element()), options);
+            workSpace._createDragBehaviorBase($element, $schedulerElement, options);
         };
     }
 
