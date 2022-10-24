@@ -314,18 +314,9 @@ const Popover = Popup.inherit({
 
     _renderPosition: function() {
         this.callBase();
-        this._isContentResizedForArrow = true;
+        this._cacheDimensions();
         this._renderOverlayPosition();
         this._actions.onPositioned();
-    },
-
-    _areContentDimensionsRendered: function(entry) {
-        if(this._isContentResizedForArrow) {
-            this._isContentResizedForArrow = false;
-            return true;
-        }
-
-        return this.callBase(entry);
     },
 
     _renderOverlayPosition: function() {
