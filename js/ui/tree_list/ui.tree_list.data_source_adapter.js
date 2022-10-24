@@ -499,7 +499,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return baseChanges;
         },
 
-        _isCopyingDataObjectInChangesNeeded: function() {
+        _needToCopyDataObject: function() {
             return true;
         },
 

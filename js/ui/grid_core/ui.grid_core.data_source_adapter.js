@@ -354,7 +354,7 @@ export default gridCore.Controller.inherit((function() {
         _getKeyInfo: function() {
             return this.store();
         },
-        _isCopyingDataObjectInChangesNeeded() {
+        _needToCopyDataObject() {
             return false;
         },
         _applyBatch: function(changes, fromStore) {
@@ -377,7 +377,7 @@ export default gridCore.Controller.inherit((function() {
                 changes,
                 groupCount: groupCount,
                 useInsertIndex: true,
-                skipCopying: this._isCopyingDataObjectInChangesNeeded(),
+                skipCopying: this._needToCopyDataObject(),
             });
             applyBatch({
                 keyInfo,
@@ -385,7 +385,7 @@ export default gridCore.Controller.inherit((function() {
                 changes,
                 groupCount: groupCount,
                 useInsertIndex: true,
-                skipCopying: this._isCopyingDataObjectInChangesNeeded(),
+                skipCopying: this._needToCopyDataObject(),
             });
 
             const needUpdateTotalCountCorrection =
