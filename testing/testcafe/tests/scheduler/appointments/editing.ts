@@ -1,32 +1,36 @@
 import { ClientFunction } from 'testcafe';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Appointment Editing`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+const CLICK_OPTIONS = { speed: 0.1 };
+const SCHEDULER_SELECTOR = '#container';
+const INITIAL_APPOINTMENT_TITLE = 'appointment';
+const ADDITIONAL_TITLE_TEXT = '-updated';
+const UPDATED_APPOINTMENT_TITLE = `${INITIAL_APPOINTMENT_TITLE}${ADDITIONAL_TITLE_TEXT}`;
+
+fixture`Appointment Editing`
+  .page(url(__dirname, '../../container.html'));
 
 test('Should correctly update appointment if dataSource is a simple array', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const expectedSubject = 'appt-01updated';
-  const appointment = scheduler.getAppointment('appt-01');
-  const updatedAppointment = scheduler.getAppointment(expectedSubject);
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
+  const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
   const { appointmentPopup } = scheduler;
 
   await t
-    .doubleClick(appointment.element)
-    .click(appointmentPopup.subjectElement)
-    .typeText(appointmentPopup.subjectElement, 'updated')
+    .doubleClick(appointment.element, CLICK_OPTIONS)
+    .click(appointmentPopup.subjectElement, CLICK_OPTIONS)
+    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .expect(appointmentPopup.subjectElement.value)
-    .eql(expectedSubject)
-    .click(appointmentPopup.doneButton)
+    .eql(UPDATED_APPOINTMENT_TITLE)
+    .click(appointmentPopup.doneButton, CLICK_OPTIONS)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     id: 1,
-    text: 'appt-01',
+    text: INITIAL_APPOINTMENT_TITLE,
     startDate: new Date(2021, 2, 29, 9, 30),
     endDate: new Date(2021, 2, 29, 11, 30),
   }],
@@ -39,31 +43,33 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
 }, true));
 
 test('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const expectedSubject = 'appt-01updated';
-  const appointment = scheduler.getAppointment('appt-01');
-  const updatedAppointment = scheduler.getAppointment(expectedSubject);
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
+  const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
   const { appointmentPopup } = scheduler;
 
   await t
-    .doubleClick(appointment.element)
-    .click(appointmentPopup.subjectElement)
-    .typeText(appointmentPopup.subjectElement, 'updated')
+    .doubleClick(appointment.element, CLICK_OPTIONS)
+    .click(appointmentPopup.subjectElement, CLICK_OPTIONS)
+    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .expect(appointmentPopup.subjectElement.value)
-    .eql(expectedSubject)
-    .click(appointmentPopup.doneButton)
+    .eql(UPDATED_APPOINTMENT_TITLE)
+    .click(appointmentPopup.doneButton, CLICK_OPTIONS)
     .expect(updatedAppointment.element.exists)
     .ok();
-}).before(async () => ClientFunction(() => {
-  (window as any).widget = ($('#container') as any)
-    .dxScheduler({
-      dataSource: new (window as any).DevExpress.data.DataSource({
+}).before(async () => {
+  const initScheduler = ClientFunction(() => {
+    const $scheduler = $(SCHEDULER_SELECTOR) as any;
+    const devExpress = (window as any).DevExpress;
+
+    $scheduler.dxScheduler({
+      dataSource: new devExpress.data.DataSource({
         store: {
           type: 'array',
           key: 'id',
           data: [{
             id: 1,
-            text: 'appt-01',
+            text: INITIAL_APPOINTMENT_TITLE,
             startDate: new Date(2021, 2, 29, 9, 30),
             endDate: new Date(2021, 2, 29, 11, 30),
           }],
@@ -75,7 +81,9 @@ test('Should correctly update appointment if dataSource is a Store with key arra
       startDayHour: 9,
       endDayHour: 14,
       height: 600,
-    })
-    .dxScheduler('instance');
-  (window as any).DevExpress.fx.off = true;
-})());
+    }).dxScheduler('instance');
+    devExpress.fx.off = true;
+  }, { dependencies: { SCHEDULER_SELECTOR, INITIAL_APPOINTMENT_TITLE } });
+
+  await initScheduler();
+});
