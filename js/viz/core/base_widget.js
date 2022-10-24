@@ -4,7 +4,6 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
 import { extend } from '../../core/utils/extend';
 import { BaseThemeManager } from '../core/base_theme_manager';
 import DOMComponent from '../../core/dom_component';
@@ -490,7 +489,6 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
         const canvas = that._calculateCanvas();
 
-        that._renderer.fixPlacement();
         if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
             that._canvas = canvas;
             that._recreateSizeDependentObjects(true);
@@ -535,27 +533,19 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _setupResizeHandler: function() {
         const that = this;
-        const redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
+        const redrawOnResize = _parseScalar(that._getOption('redrawOnResize', true), true);
 
-        if(that._resizeHandler) {
+        if(that._disposeResizeHandler) {
             that._removeResizeHandler();
         }
 
-        that._resizeHandler = createResizeHandler(function() {
-            if(redrawOnResize) {
-                that._requestChange(['CONTAINER_SIZE']);
-            } else {
-                that._renderer.fixPlacement();
-            }
-        });
-        _windowResizeCallbacks.add(that._resizeHandler);
+        that._disposeResizeHandler = createResizeHandler(that._$element[0], redrawOnResize, () => that._requestChange(['CONTAINER_SIZE']));
     },
 
     _removeResizeHandler: function() {
-        if(this._resizeHandler) {
-            _windowResizeCallbacks.remove(this._resizeHandler);
-            this._resizeHandler.dispose();
-            this._resizeHandler = null;
+        if(this._disposeResizeHandler) {
+            this._disposeResizeHandler();
+            this._disposeResizeHandler = null;
         }
     },
 
