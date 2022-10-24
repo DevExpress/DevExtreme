@@ -318,13 +318,13 @@ const Popover = Popup.inherit({
         this._actions.onPositioned();
     },
 
-    _areContentDimensionsRendered: function() {
+    _areContentDimensionsRendered: function(entry) {
         if(this._isContentResizedForArrow) {
             this._isContentResizedForArrow = false;
             return true;
         }
 
-        return this.callBase(arguments);
+        return this.callBase(entry);
     },
 
     _renderOverlayPosition: function() {
