@@ -6017,6 +6017,49 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(true, 'no errors');
     });
 
+    // T1119514
+    QUnit.test('DataGrid should not remove two rows on remove button click with virtual scrolling and many pages', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: generateDataSource(30),
+            keyExpr: 'id',
+            height: 200,
+            editing: {
+                allowDeleting: true,
+                confirmDelete: false,
+                refreshMode: 'repaint',
+            },
+            scrolling: {
+                mode: 'virtual'
+            }
+        });
+
+        this.clock.tick(1000);
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        const lastRowKey = 30;
+        dataGrid.navigateToRow(lastRowKey);
+        this.clock.tick();
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick();
+
+        dataGrid.deleteRow(dataGrid.getRowIndexByKey(lastRowKey));
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'before scroll');
+
+        // act
+        // scroll is triggered cause content's height is changed
+        // totalCount should be correct both before scroll (before data loading) and after
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'after scroll');
+    });
+
     // T1111033
     QUnit.test('DataGrid should load all rows if pageSize is less than window and repaint mode is turned on', function(assert) {
         // arrange
