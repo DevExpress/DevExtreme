@@ -13,6 +13,10 @@ export default class WidgetCollector {
         this._collection.push({ name, instance });
     }
 
+    remove(name) {
+        this._collection = this._collection.filter(item => item.name !== name);
+    }
+
     getByName(widgetName) {
         let widget = null;
 
