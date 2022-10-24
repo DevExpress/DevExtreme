@@ -290,7 +290,8 @@ export default class FileManagerNotificationControl extends Widget {
                     at: 'right top',
                     of: this.option('positionTarget'),
                     offset: '-10 -5'
-                }
+                },
+                _wrapperClassExternal: FILE_MANAGER_NOTIFICATION_POPUP_CLASS,
             });
         }
         return this._notificationPopup;
