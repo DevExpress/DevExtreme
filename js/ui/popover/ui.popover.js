@@ -314,6 +314,7 @@ const Popover = Popup.inherit({
 
     _renderPosition: function() {
         this.callBase();
+        this._isContentResizedForArrow = true;
         this._renderOverlayPosition();
         this._actions.onPositioned();
     },
@@ -367,7 +368,6 @@ const Popover = Popup.inherit({
         if((containerLocation.h.oversize > 0) && this._isHorizontalSide() && !containerLocation.h.fit) {
             const newContainerWidth = getWidth(this.$overlayContent()) - containerLocation.h.oversize;
 
-            this._isContentResizedForArrow = true;
             setWidth(this.$overlayContent(), newContainerWidth);
         }
 
@@ -375,7 +375,6 @@ const Popover = Popup.inherit({
             const newOverlayContentHeight = getHeight(this.$overlayContent()) - containerLocation.v.oversize;
             const newPopupContentHeight = getHeight(this.$content()) - containerLocation.v.oversize;
 
-            this._isContentResizedForArrow = true;
             setHeight(this.$overlayContent(), newOverlayContentHeight);
             setHeight(this.$content(), newPopupContentHeight);
         }
