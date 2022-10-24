@@ -65,7 +65,7 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
   await t
     .dragToElement(scheduler.getAppointment('All day test app 2').element, Selector('#space-right'));
   await t
-    .expect(Selector('#event-text-box').innerText)
+    .expect(Selector(EVENT_BOX_SELECTOR).innerText)
     .eql('')
     .expect(scheduler.getAppointment('All day test app 2').date.time)
     .eql('12:00 AM - 12:01 AM');
@@ -73,7 +73,7 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#left-right'));
   await t
-    .expect(Selector('#event-text-box').innerText)
+    .expect(Selector(EVENT_BOX_SELECTOR).innerText)
     .eql('')
     .expect(scheduler.getAppointment('Regular test app').date.time)
     .eql('10:30 AM - 11:00 AM');

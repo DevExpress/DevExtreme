@@ -2045,7 +2045,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    _createDragBehavior(targetElement, rootElement) {
+    _createDragBehavior($targetElement, $rootElement) {
         const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
         const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
@@ -2054,7 +2054,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             getItemSettings,
         };
 
-        this._createDragBehaviorBase(targetElement, rootElement, options);
+        this._createDragBehaviorBase($targetElement, $rootElement, options);
     }
 
     _createDragBehaviorBase(targetElement, rootElement, options) {
