@@ -500,7 +500,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _needToCopyDataObject: function() {
-            return true;
+            return false;
         },
 
         _applyRemove: function(change) {
