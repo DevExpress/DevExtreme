@@ -30,7 +30,7 @@ export function convertToRenderFieldItemOptions({
     itemId,
     managerMarkOptions,
     labelMode,
-    onLabelsRendered,
+    onLabelTemplateRendered,
 }) {
     const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
@@ -45,7 +45,7 @@ export function convertToRenderFieldItemOptions({
         labelLocation: managerLabelLocation,
         formLabelMode: labelMode,
         labelTemplate,
-        onLabelsRendered,
+        onLabelTemplateRendered,
     });
 
     const needRenderLabel = labelOptions.visible && (labelOptions.text || (labelOptions.labelTemplate && isSimpleItem));
@@ -187,7 +187,7 @@ function _hasRequiredRuleInSet(rules) {
     return hasRequiredRule;
 }
 
-function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, labelTemplate, formLabelMode, onLabelsRendered }) {
+function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, labelTemplate, formLabelMode, onLabelTemplateRendered }) {
     const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(item.editorType);
     const labelOptions = extend(
         {
@@ -201,7 +201,7 @@ function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, show
         {
             markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired),
             labelTemplate,
-            onLabelsRendered,
+            onLabelTemplateRendered,
         }
     );
 

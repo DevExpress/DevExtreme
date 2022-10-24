@@ -320,6 +320,15 @@ const LayoutManager = Widget.inherit({
 
     _renderTemplates: function(templatesInfo) {
         const that = this;
+
+        let itemsCountWithLabelTemplate = 0;
+
+        templatesInfo.forEach(({ item }) => {
+            if(item?.label?.template) {
+                itemsCountWithLabelTemplate++;
+            }
+        });
+
         each(templatesInfo, function(index, info) {
             switch(info.itemType) {
                 case 'empty':
@@ -329,9 +338,7 @@ const LayoutManager = Widget.inherit({
                     that._renderButtonItem(info);
                     break;
                 default: {
-                    const isLastFieldItem = index === templatesInfo.length - 1;
-
-                    that._renderFieldItem(info, isLastFieldItem);
+                    that._renderFieldItem(info, itemsCountWithLabelTemplate);
                 }
             }
         });
@@ -554,7 +561,7 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _renderFieldItem: function({ item, $parent, rootElementCssClassList }, isLastFieldItem) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClassList }, itemsCountWithLabelTemplate) {
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -565,9 +572,11 @@ const LayoutManager = Widget.inherit({
         const name = item.dataField || item.name;
         const formOrLayoutManager = this._getFormOrThis();
 
-        const onLabelsRendered = () => {
-            if(formOrLayoutManager.option('templatesRenderAsynchronously')) {
-                isLastFieldItem && formOrLayoutManager._alignLabels(this, this.isSingleColumnMode(formOrLayoutManager));
+        const onLabelTemplateRendered = () => {
+            this._incTemplateRenderedCallCount();
+
+            if(formOrLayoutManager.option('templatesRenderAsynchronously') && this._shouldAlignLabelsOnTemplateRendered(itemsCountWithLabelTemplate)) {
+                formOrLayoutManager._alignLabels(this, this.isSingleColumnMode(formOrLayoutManager));
             }
         };
 
@@ -592,7 +601,7 @@ const LayoutManager = Widget.inherit({
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
             labelMode: this.option('labelMode'),
-            onLabelsRendered: isLastFieldItem ? onLabelsRendered : null,
+            onLabelTemplateRendered,
         }));
 
         this.option('onFieldItemRendered')?.();
@@ -607,6 +616,14 @@ const LayoutManager = Widget.inherit({
             guid: item.guid,
             $itemContainer: $rootElement
         });
+    },
+
+    _incTemplateRenderedCallCount() {
+        this._labelTemplateRenderedCall = (this._labelTemplateRenderedCall ?? 0) + 1;
+    },
+
+    _shouldAlignLabelsOnTemplateRendered(totalItemsWithLabelTemplate) {
+        return this._labelTemplateRenderedCall === totalItemsWithLabelTemplate;
     },
 
     _getMarkOptions: function() {
