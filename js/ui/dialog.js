@@ -110,7 +110,6 @@ export const custom = function(options) {
         width: options.width,
         showCloseButton: options.showCloseButton || false,
         ignoreChildEvents: false,
-        container: $element,
         visualContainer: window,
         onContentReady: function(args) {
             args.component.$content()
