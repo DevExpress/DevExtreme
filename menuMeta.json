@@ -811,7 +811,6 @@
             "Title": "Overview",
             "Name": "PDFOverview",
             "Widget": "DataGrid",
-            "Badge": "New",
             "Modules": "jspdf",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
@@ -823,7 +822,6 @@
             "Title": "Cell Customization",
             "Name": "PDFCellCustomization",
             "Widget": "DataGrid",
-            "Badge": "New",
             "Modules": "jspdf",
             "MvcAdditionalFiles": [
               "/Scripts/data/companies.js",
@@ -835,7 +833,6 @@
             "Title": "Header and Footer",
             "Name": "PDFHeaderAndFooter",
             "Widget": "DataGrid",
-            "Badge": "New",
             "Modules": "jspdf",
             "Credits": "www.wikipedia.org",
             "MvcAdditionalFiles": [
@@ -847,7 +844,6 @@
             "Title": "Export Multiple Grids",
             "Name": "PDFExportMultipleGrids",
             "Widget": "DataGrid",
-            "Badge": "New",
             "Modules": "jspdf",
             "DemoType": "Web"
           },
@@ -855,7 +851,6 @@
             "Title": "Export Images",
             "Name": "PDFExportImages",
             "Widget": "DataGrid",
-            "Badge": "New",
             "Modules": "jspdf",
             "MvcAdditionalFiles": [
               "/Scripts/data/employeesEI.js"
@@ -1792,8 +1787,7 @@
             "Title": "All Day Panel Mode",
             "Name": "AllDayPanelMode",
             "Widget": "Scheduler",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1952,8 +1946,7 @@
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/HtmlEditor/Overview/",
             "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Badge": "Updated"
+            "DemoType": "Web"
           }
         ]
       },
@@ -4388,6 +4381,7 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Validation",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Views/Validation/SuccessValidation.cshtml",
               "/ViewModels/EditorsViewModel.cs",
@@ -4551,7 +4545,8 @@
           {
             "Title": "Customize Item",
             "Name": "CustomizeItem",
-            "Widget": "Form"
+            "Widget": "Form",
+            "Badge": "Updated"
           },
           {
             "Title": "Grouped Fields",
@@ -4734,10 +4729,10 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "RangeSlider"
+            "Widget": "RangeSlider",
+            "Badge": "Updated"
           }
-        ],
-        "Badge": "Updated"
+        ]
       },
       {
         "Name": "Responsive Box",
@@ -4775,10 +4770,10 @@
             "Title": "Overview",
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/Slider/Customize_Widget_Appearance/",
-            "Widget": "Slider"
+            "Widget": "Slider",
+            "Badge": "Updated"
           }
-        ],
-        "Badge": "Updated"
+        ]
       },
       {
         "Name": "Sortable",
@@ -5321,7 +5316,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Badge": "New",
             "DocUrl": "",
             "Widget": "Resizable",
             "MvcAdditionalFiles": [
@@ -5673,7 +5667,6 @@
           {
             "Title": "Stack",
             "Name": "Stack",
-            "Badge": "New",
             "DocUrl": "Guide/UI_Components/Toast/Getting_Started_with_Toast/#Display_a_Toast_notification/Use_the_notify_Method/",
             "Widget": "Toast"
           }
