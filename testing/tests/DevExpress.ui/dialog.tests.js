@@ -311,6 +311,17 @@ module('dialog tests', {
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'event'));
         assert.strictEqual(clickArgs.component.NAME, 'dxButton');
     });
+
+    test('container should not be specified by default (T1120202)', function(assert) {
+        custom({
+            title: 'title',
+            messageHtml: 'message',
+            showTitle: true,
+        }).show();
+
+        const popup = $('.dx-popup').dxPopup('instance');
+        assert.strictEqual(popup.option('container'), undefined, 'container is not specified');
+    });
 });
 
 QUnit.module('width on android', {
