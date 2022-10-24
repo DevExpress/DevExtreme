@@ -1,6 +1,6 @@
 import { parseScalar as _parseScalar } from '../core/utils';
 import { Projection } from './projection.main';
-import { ControlBar } from './control_bar';
+import { ControlBar } from './control_bar/control_bar';
 import { GestureHandler } from './gesture_handler';
 import { Tracker } from './tracker';
 import { DataExchanger } from './data_exchanger';

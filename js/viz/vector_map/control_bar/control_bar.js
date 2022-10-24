@@ -5,7 +5,8 @@ const _round = _math.round;
 const _floor = _math.floor;
 const _sqrt = _math.sqrt;
 
-import { parseScalar as _parseScalar, enumParser } from '../core/utils';
+import { parseScalar as _parseScalar, enumParser } from '../../core/utils';
+import { createTracker, createVisibilityGroup, toggleDisplay } from './utils';
 const parseHorizontalAlignment = enumParser(['left', 'center', 'right']);
 const parseVerticalAlignment = enumParser(['top', 'bottom']);
 
@@ -147,19 +148,22 @@ ControlBar.prototype = {
         const that = this;
 
         that._root = renderer.g().attr({ 'class': 'dxm-control-bar' }).linkOn(container, 'control-bar');
-        const buttonsGroups = that._buttonsGroup = renderer.g().attr({ 'class': 'dxm-control-buttons' }).append(that._root);
-        const trackersGroup = renderer.g().attr({ stroke: 'none', 'stroke-width': 0, fill: '#000000', opacity: 0.0001 }).css({ cursor: 'pointer' }).append(that._root);
-        that._createButtons(renderer, dataKey, buttonsGroups);
-        that._createTrackers(renderer, dataKey, trackersGroup);
+        const panControl = that._panControl = createVisibilityGroup(renderer, that._root, 'dxm-pan-control');
+        const zoomBar = that._zoomBar = createVisibilityGroup(renderer, that._root, 'dxm-zoom-bar');
+        const trackersPan = that._trackersPan = createTracker(renderer, that._root);
+        const trackersZoom = that._trackersZoom = createTracker(renderer, that._root);
+
+        that._createTrackersPan(renderer, dataKey, trackersPan);
+        that._createTrackersZoom(renderer, dataKey, trackersZoom);
+        that._createPanControl(renderer, dataKey, panControl);
+        that._createZoomBar(renderer, dataKey, zoomBar);
     },
 
-    _createButtons: function(renderer, dataKey, group) {
-        const that = this;
+    _createPanControl: function(renderer, dataKey, group) {
         const options = SIZE_OPTIONS;
         const size = options.buttonSize / 2;
         const offset1 = options.arrowButtonOffset - size;
         const offset2 = options.arrowButtonOffset;
-        const incDecButtonSize = options.incDecButtonSize / 2;
         const directionOptions = { 'stroke-linecap': 'square', fill: 'none' };
         const line = 'line';
 
@@ -170,6 +174,12 @@ ControlBar.prototype = {
         renderer.path([offset1, -size, offset2, 0, offset1, size], line).attr(directionOptions).append(group);
         renderer.path([size, offset1, 0, offset2, -size, offset1], line).attr(directionOptions).append(group);
         renderer.path([-offset1, size, -offset2, 0, -offset1, -size], line).attr(directionOptions).append(group);
+    },
+
+    _createZoomBar: function(renderer, dataKey, group) {
+        const that = this;
+        const options = SIZE_OPTIONS;
+        const incDecButtonSize = options.incDecButtonSize / 2;
 
         renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).append(group);
         renderer.path([[-incDecButtonSize, options.incButtonOffset, incDecButtonSize, options.incButtonOffset], [0, options.incButtonOffset - incDecButtonSize, 0, options.incButtonOffset + incDecButtonSize]], 'area').append(group);
@@ -184,7 +194,7 @@ ControlBar.prototype = {
         that._sliderLineLength = options.sliderLineEndOffset - options.sliderLineStartOffset;
     },
 
-    _createTrackers: function(renderer, dataKey, group) {
+    _createTrackersPan: function(renderer, dataKey, group) {
         const options = SIZE_OPTIONS;
         const size = _round((options.arrowButtonOffset - options.trackerGap) / 2);
         const offset1 = options.arrowButtonOffset - size;
@@ -196,6 +206,11 @@ ControlBar.prototype = {
         renderer.rect(offset1, -size, size2, size * 2).data(dataKey, { index: COMMAND_MOVE_RIGHT, name: EVENT_TARGET_TYPE }).append(group);
         renderer.rect(-size, offset1, size * 2, size2).data(dataKey, { index: COMMAND_MOVE_DOWN, name: EVENT_TARGET_TYPE }).append(group);
         renderer.rect(-offset2, -size, size2, size * 2).data(dataKey, { index: COMMAND_MOVE_LEFT, name: EVENT_TARGET_TYPE }).append(group);
+
+    },
+
+    _createTrackersZoom: function(renderer, dataKey, group) {
+        const options = SIZE_OPTIONS;
 
         renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).data(dataKey, { index: COMMAND_ZOOM_IN, name: EVENT_TARGET_TYPE }).append(group);
         renderer.circle(0, options.decButtonOffset, options.smallCircleSize / 2).data(dataKey, { index: COMMAND_ZOOM_OUT, name: EVENT_TARGET_TYPE }).append(group);
@@ -223,11 +238,18 @@ ControlBar.prototype = {
     _update: function() {
         const that = this;
         that._isActive = that._isEnabled && that._flags && that._params.projection.isInvertible();
+
+        const groupPan = [that._panControl, that._trackersPan];
+        const groupZoom = [that._zoomBar, that._trackersZoom];
+
         if(that._isActive) {
             that._root.linkAppend();
+            toggleDisplay(groupPan, that._isPanVisible);
+            toggleDisplay(groupZoom, that._isZoomVisible);
         } else {
             that._root.linkRemove();
         }
+
         that._processEnd();
         that.updateLayout();
     },
@@ -249,6 +271,8 @@ ControlBar.prototype = {
 
     setOptions: function(options) {
         const that = this;
+        const styleSvg = { 'stroke-width': options.borderWidth, stroke: options.borderColor, fill: options.color, 'fill-opacity': options.opacity };
+
         that._isEnabled = !!_parseScalar(options.enabled, true);
         that._margin = options.margin || 0;
         that._layoutOptions = {
@@ -257,7 +281,12 @@ ControlBar.prototype = {
             horizontalAlignment: parseHorizontalAlignment(options.horizontalAlignment, 'left'),
             verticalAlignment: parseVerticalAlignment(options.verticalAlignment, 'top')
         };
-        that._buttonsGroup.attr({ 'stroke-width': options.borderWidth, stroke: options.borderColor, fill: options.color, 'fill-opacity': options.opacity });
+        that._isPanVisible = !!_parseScalar(options.panVisible, true);
+        that._isZoomVisible = !!_parseScalar(options.zoomVisible, true);
+
+        that._panControl.attr(styleSvg);
+        that._zoomBar.attr(styleSvg);
+
         that._update();
     },
 
