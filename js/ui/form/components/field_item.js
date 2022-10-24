@@ -74,7 +74,14 @@ export function renderFieldItem({
     // Setup $label:
     //
 
-    const $label = needRenderLabel ? renderLabel(labelOptions) : null;
+    let $label = null;
+
+    if(needRenderLabel) {
+        labelOptions.labelTemplateData = getTemplateData(item, editorOptions, formOrLayoutManager);
+
+        $label = renderLabel(labelOptions);
+    }
+
     if($label) {
         $rootElement.append($label);
         if(labelLocation === 'top' || labelLocation === 'left') {
@@ -107,13 +114,7 @@ export function renderFieldItem({
     if(template) {
         template.render({
             container: getPublicElement($fieldEditorContainer),
-            model: {
-                dataField: item.dataField,
-                editorType: item.editorType,
-                editorOptions,
-                component: formOrLayoutManager,
-                name: item.name
-            },
+            model: getTemplateData(item, editorOptions, formOrLayoutManager),
             onRendered() {
                 const $validationTarget = getValidationTarget($fieldEditorContainer);
                 const validationTargetInstance = tryGetValidationTargetInstance($validationTarget);
@@ -227,4 +228,14 @@ function subscribeWrapperInvalidClassToggle(validationTargetInstance) {
             .on('focusOut', toggleInvalidClass)
             .on('enterKey', toggleInvalidClass);
     }
+}
+
+function getTemplateData(item, editorOptions, formOrLayoutManager) {
+    return {
+        dataField: item.dataField,
+        editorType: item.editorType,
+        editorOptions,
+        component: formOrLayoutManager,
+        name: item.name
+    };
 }

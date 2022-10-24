@@ -148,7 +148,6 @@ QUnit.module('Layout manager', () => {
                 itemType: 'simple',
                 isRequired: true,
                 template: function(data, element) {
-
                     $('<div>')
                         .appendTo(element)
                         .dxButton({
@@ -174,6 +173,32 @@ QUnit.module('Layout manager', () => {
         const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
         assert.equal($items.length, 2, 'field items is rendered');
+    });
+
+    test('Default render with label template', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            layoutData: {
+                firstName: 'Alex',
+                address: 'Winnipeg'
+            },
+            items: [{
+                dataField: 'FirstName',
+                itemType: 'simple',
+                isRequired: true,
+                label: {
+                    template: function(data, element) {
+                        $('<div>')
+                            .appendTo(element)
+                            .dxButton({
+                                icon: 'find',
+                                text: 'find'
+                            });
+                    }
+                }
+            }]
+        });
+        const $button = $testContainer.find(`.${'dx-button'}`);
+        assert.equal($button.length, 1, 'field item label with button is rendered');
     });
 
     test('Default render with marks', function(assert) {
@@ -2196,8 +2221,42 @@ QUnit.module('Templates', () => {
         assert.equal(textArea.option('value'), layoutManager.option('layoutData.test'), 'Widget\'s value equal to bound datafield');
     });
 
-    test('Check arguments of the template', function(assert) {
-        const templateStub = sinon.stub();
+    test('Render label template', function(assert) {
+        const $testContainer = $('#container');
+
+        $testContainer.dxLayoutManager({
+            layoutData: {
+                test: 'abc'
+            },
+            items: [{
+                dataField: 'test',
+                template: function(data, container) {
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
+
+                    $(container).append($('<span>').text('Template'));
+
+                    data.editorOptions.onValueChanged = function(args) {
+                        data.component.option('layoutData.' + data.dataField, args.value);
+                    };
+
+                    $('<div>')
+                        .dxTextArea(data.editorOptions)
+                        .appendTo(container);
+                }
+            }]
+        });
+
+        const $fieldItemWidget = $testContainer.find('.' + FIELD_ITEM_CONTENT_CLASS);
+        const spanText = $fieldItemWidget.find('span').text();
+        const textArea = $fieldItemWidget.find('.dx-textarea').dxTextArea('instance');
+        const layoutManager = $testContainer.dxLayoutManager('instance');
+
+        assert.equal(spanText, 'Template');
+        assert.equal(textArea.option('value'), layoutManager.option('layoutData.test'), 'Widget\'s value equal to bound datafield');
+    });
+
+    test('Check arguments of the label template', function(assert) {
+        const labelTemplateStub = sinon.stub();
         const layoutManager = $('#container').dxLayoutManager({
             items: [{
                 name: 'TestName',
@@ -2206,18 +2265,37 @@ QUnit.module('Templates', () => {
                 editorOptions: {
                     text: 'TestText'
                 },
-                template: templateStub
+                label: {
+                    showColon: true,
+                    template: labelTemplateStub
+                }
             }]
         }).dxLayoutManager('instance');
 
-        const args = templateStub.firstCall.args[0];
+        const args = labelTemplateStub.firstCall.args[0];
         assert.strictEqual(args.name, 'TestName', 'name argument');
+        assert.strictEqual(args.text, 'Test Data Field:', 'text argument');
         assert.strictEqual(args.dataField, 'TestDataField', 'dataField argument');
         assert.strictEqual(args.editorType, 'dxColorBox', 'editorType argument');
         assert.deepEqual(args.editorOptions.inputAttr, {}, 'editorOptions.inputAttr argument');
         assert.strictEqual(args.editorOptions.name, 'TestDataField', 'editorOptions.name argument');
         assert.strictEqual(args.editorOptions.text, 'TestText', 'editorOptions.text argument');
         assert.equal(args.component, layoutManager, 'component argument');
+    });
+
+    test('Label template should not be called for group items', function(assert) {
+        const labelTemplateStub = sinon.stub();
+        $('#container').dxLayoutManager({
+            items: [{
+                itemType: 'group',
+                caption: 'Personal info',
+                label: {
+                    template: labelTemplateStub
+                }
+            }]
+        });
+
+        assert.strictEqual(labelTemplateStub.callCount, 0, 'label template call count');
     });
 
     test('Check template bound to data', function(assert) {

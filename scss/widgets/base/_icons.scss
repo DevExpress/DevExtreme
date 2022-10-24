@@ -23,6 +23,7 @@
 .dx-icon-edit,
 .dx-icon-email,
 .dx-icon-event,
+.dx-icon-eventall,
 .dx-icon-favorites,
 .dx-icon-find,
 .dx-icon-folder,
@@ -104,7 +105,8 @@
 .dx-icon-addcolumnleft,
 .dx-icon-addcolumnright,
 .dx-icon-addtable,
-.dx-icon-removetable {
+.dx-icon-removetable,
+.dx-icon-bell {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -220,6 +222,7 @@ $icons: (
     "edit": "\f023",
     "email": "\f024",
     "event": "\f026",
+    "eventall": "\f043",
     "favorites": "\f025",
     "find": "\f027",
     "filter": "\f050",
@@ -420,7 +423,7 @@ $icons: (
     "unlock": "\f155",
     "imgarlock": "\f156",
     "imgarunlock": "\f157",
-    "bell": "\f158"
+    "bell": "\f158",
 );
 
 // stylelint-enable

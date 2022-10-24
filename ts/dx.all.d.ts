@@ -13594,6 +13594,9 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxForm> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxFormOptions;
+    export type SimpleItemLabelTemplateData = SimpleItemTemplateData & {
+      text: string;
+    };
     export type SimpleItemTemplateData = {
       readonly component: dxForm;
       readonly dataField?: string;
@@ -13886,6 +13889,15 @@ declare module DevExpress.ui {
        * [descr:dxFormSimpleItem.label.showColon]
        */
       showColon?: boolean;
+      /**
+       * [descr:dxFormSimpleItem.label.template]
+       */
+      template?:
+        | DevExpress.core.template
+        | ((
+            itemData: DevExpress.ui.dxForm.SimpleItemLabelTemplateData,
+            itemElement: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
       /**
        * [descr:dxFormSimpleItem.label.text]
        */

@@ -241,12 +241,16 @@ const CustomStore = Store.inherit({
         this._removeFunc = options[REMOVE];
     },
 
+    _clearCache() {
+        delete this.__rawData;
+    },
+
     createQuery: function() {
         throw errors.Error('E4010');
     },
 
     clearRawDataCache: function() {
-        delete this.__rawData;
+        this._clearCache();
     },
 
     _totalCountImpl: function(options) {

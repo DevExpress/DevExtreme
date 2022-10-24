@@ -1,9 +1,11 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/form";
+@use "../../base/icons" as *;
 @use "../textEditor/sizes" as *;
 
 // adduse
@@ -123,4 +125,11 @@
 .dx-field-item-required .dx-label > span::after,
 .dx-field-item-required-mark {
   color: $form-field-required-color;
+}
+
+.dx-field-item-custom-label-content {
+  .dx-icon {
+    @include dx-icon-sizing($material-form-label-icon-size);
+    @include dx-icon-margin(math.div($material-base-icon-size, 3));
+  }
 }

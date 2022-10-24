@@ -144,6 +144,8 @@
         "dxDataGrid-selectedRows": "Valgte rader",
         "dxDataGrid-exportSelectedRows": "Eksportér valgte rader",
         "dxDataGrid-exportAll": "Eksportér all data",
+        "dxDataGrid-headerFilterLabel": "Filter options",
+        "dxDataGrid-headerFilterIndicatorLabel": "Show filter options for column '{0}'",
         "dxDataGrid-headerFilterEmptyValue": "(Tom)",
         "dxDataGrid-headerFilterOK": "OK",
         "dxDataGrid-headerFilterCancel": "Avbryt",
