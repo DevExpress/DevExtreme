@@ -599,18 +599,6 @@
     }
   },
   {
-    "name": "ui/slide_out",
-    "exports": {
-      "default": { "path": "ui.dxSlideOut", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/slide_out_view",
-    "exports": {
-      "default": { "path": "ui.dxSlideOutView", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/slider",
     "exports": {
       "default": { "path": "ui.dxSlider", "isWidget": true }

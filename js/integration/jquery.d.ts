@@ -45,8 +45,6 @@ import dxScheduler, { Properties as SchedulerProperties } from '../ui/scheduler'
 import dxScrollView, { Properties as ScrollViewProperties } from '../ui/scroll_view';
 import dxSelectBox, { Properties as SelectBoxProperties } from '../ui/select_box';
 import dxSlider, { Properties as SliderProperties } from '../ui/slider';
-import dxSlideOut, { Properties as SlideOutProperties } from '../ui/slide_out';
-import dxSlideOutView, { Properties as SlideOutViewProperties } from '../ui/slide_out_view';
 import dxSortable, { Properties as SortableProperties } from '../ui/sortable';
 import dxSpeedDialAction, { Properties as SpeedDialActionProperties } from '../ui/speed_dial_action';
 import dxSwitch, { Properties as SwitchProperties } from '../ui/switch';
@@ -441,18 +439,6 @@ declare global {
         dxSelectBox(options: SelectBoxProperties): JQuery;
         dxSelectBox(options: string): any;
         dxSelectBox(options: string, ...params: any[]): any;
-
-        dxSlideOut(): JQuery;
-        dxSlideOut(options: 'instance'): dxSlideOut;
-        dxSlideOut(options: SlideOutProperties): JQuery;
-        dxSlideOut(options: string): any;
-        dxSlideOut(options: string, ...params: any[]): any;
-
-        dxSlideOutView(): JQuery;
-        dxSlideOutView(options: 'instance'): dxSlideOutView;
-        dxSlideOutView(options: SlideOutViewProperties): JQuery;
-        dxSlideOutView(options: string): any;
-        dxSlideOutView(options: string, ...params: any[]): any;
 
         dxSlider(): JQuery;
         dxSlider(options: 'instance'): dxSlider;

@@ -47,8 +47,6 @@ export const dependencies: FlatStylesDependencies = {
   tagbox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list', 'checkbox', 'selectbox'],
   textarea: ['validation', 'button', 'loadindicator', 'textbox'],
   tileview: ['loadindicator', 'loadpanel', 'scrollview'],
-  slideoutview: [],
-  slideout: ['slideoutview', 'validation', 'button', 'loadindicator', 'loadpanel', 'scrollview', 'list'],
   accordion: [],
   treeview: ['validation', 'button', 'loadindicator', 'textbox', 'checkbox'],
   menu: ['validation', 'button', 'loadindicator', 'textbox', 'contextmenu', 'checkbox', 'treeview'],

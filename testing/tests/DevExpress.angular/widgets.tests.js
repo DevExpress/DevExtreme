@@ -1049,10 +1049,6 @@ const noModelWidgets = [
         name: 'dxPopup',
         options: { visible: true }
     },
-    {
-        name: 'dxSlideOutView',
-        options: {}
-    }
 ];
 
 noModelWidgets.forEach(function(widget) {

@@ -50,8 +50,6 @@ const widgetsList = {
     Scheduler: require('ui/scheduler'),
     ScrollView: require('ui/scroll_view'),
     SelectBox: require('ui/select_box'),
-    SlideOut: require('ui/slide_out'),
-    SlideOutView: require('ui/slide_out_view'),
     Slider: require('ui/slider'),
     Sparkline: require('viz/sparkline'),
     Switch: require('ui/switch'),

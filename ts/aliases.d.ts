@@ -230,9 +230,6 @@ declare module DevExpress.ui {
     /** @deprecated Use DevExpress.ui.dxSchedulerAppointment */
     export type dxSchedulerAppointmentTemplate = DevExpress.ui.dxSchedulerAppointment;
 
-    /** @deprecated Use DevExpress.ui.dxSlideOutItem */
-    export type dxSlideOutItemTemplate = DevExpress.ui.dxSlideOutItem;
-
     /** @deprecated Use DevExpress.ui.dxTabsItem */
     export type dxTabsItemTemplate = DevExpress.ui.dxTabsItem;
 
