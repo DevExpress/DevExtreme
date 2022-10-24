@@ -409,26 +409,45 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Customize \'Done\' and \'Cancel\' buttons', function(assert) {
+    QUnit.test('Customize "Today", "Done" and "Cancel" buttons', function(assert) {
+        const expectedTodayText = 'newTodayText';
         const expectedDoneText = 'newDoneText';
         const expectedCancelText = 'newCancelText';
 
-        const $dateBox = $('#dateBox').dxDateBox({
-            applyButtonText: expectedDoneText,
-            cancelButtonText: expectedCancelText,
+        this.instance.option({
             type: 'datetime',
             pickerType: 'calendarWithTime',
-            opened: true
+            opened: true,
+            applyButtonText: expectedDoneText,
+            cancelButtonText: expectedCancelText,
+            todayButtonText: expectedTodayText,
         });
 
-        const instance = $dateBox.dxDateBox('instance');
-        const $popupButtons = instance._popup._$bottom;
+        const $popupButtons = this.instance._popup._$bottom;
 
+        const realTodayText = $popupButtons.find('.dx-button-today').text();
         const realDoneText = $popupButtons.find('.dx-popup-done').text();
         const realCancelText = $popupButtons.find('.dx-popup-cancel').text();
 
+        assert.equal(realTodayText, expectedTodayText, 'today text customized correctly');
         assert.equal(realDoneText, expectedDoneText, 'done text customized correctly');
         assert.equal(realCancelText, expectedCancelText, 'cancel text customized correctly');
+
+        this.clock.tick(200);
+
+        this.instance.option('todayButtonText', expectedTodayText + expectedTodayText);
+        this.instance.option('applyButtonText', expectedDoneText + expectedDoneText);
+        this.instance.option('cancelButtonText', expectedCancelText + expectedCancelText);
+
+        const $popupButtonsUpdated = this.instance._popup._$bottom;
+
+        const newRealTodayText = $popupButtonsUpdated.find('.dx-button-today').text();
+        const newRealDoneText = $popupButtonsUpdated.find('.dx-popup-done').text();
+        const newRealCancelText = $popupButtonsUpdated.find('.dx-popup-cancel').text();
+
+        assert.equal(newRealTodayText, expectedTodayText + expectedTodayText, 'today text customized correctly after runtime changing');
+        assert.equal(newRealDoneText, expectedDoneText + expectedDoneText, 'done text customized correctly after runtime changing');
+        assert.equal(newRealCancelText, expectedCancelText + expectedCancelText, 'cancel text customized correctly after runtime changing');
     });
 
     QUnit.test('T378630 - the displayFormat should not be changed if the type option is set', function(assert) {
