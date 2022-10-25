@@ -136,7 +136,7 @@ jobs:
         export TESTCAFE_DASHBOARD_DEVEXTREME_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         all_args="--concurrency 2 --browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $PLATFORM"
         echo "$all_args"
-        npm run test-testcafe -- $all_args
+        npm run test-testcafe -- $all_args --dev
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
