@@ -3,7 +3,7 @@ const vizMocks = require('../../../helpers/vizMocks.js');
 const dxVectorMapUtils = require('viz/vector_map/vector_map.utils');
 
 const projectionModule = require('viz/vector_map/projection.main');
-const controlBarModule = require('viz/vector_map/control_bar');
+const controlBarModule = require('viz/vector_map/control_bar/control_bar');
 const gestureHandlerModule = require('viz/vector_map/gesture_handler');
 const trackerModule = require('viz/vector_map/tracker');
 const themeManagerModule = require('viz/core/base_theme_manager');

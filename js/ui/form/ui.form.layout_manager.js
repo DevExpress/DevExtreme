@@ -320,7 +320,16 @@ const LayoutManager = Widget.inherit({
 
     _renderTemplates: function(templatesInfo) {
         const that = this;
-        each(templatesInfo, function(_, info) {
+
+        let itemsWithLabelTemplateCount = 0;
+
+        templatesInfo.forEach(({ item }) => {
+            if(item?.label?.template) {
+                itemsWithLabelTemplateCount++;
+            }
+        });
+
+        each(templatesInfo, function(index, info) {
             switch(info.itemType) {
                 case 'empty':
                     renderEmptyItem(info);
@@ -328,8 +337,9 @@ const LayoutManager = Widget.inherit({
                 case 'button':
                     that._renderButtonItem(info);
                     break;
-                default:
-                    that._renderFieldItem(info);
+                default: {
+                    that._renderFieldItem(info, itemsWithLabelTemplateCount);
+                }
             }
         });
     },
@@ -551,7 +561,7 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _renderFieldItem: function({ item, $parent, rootElementCssClassList }) {
+    _renderFieldItem: function({ item, $parent, rootElementCssClassList }, itemsWithLabelTemplateCount) {
         const editorValue = this._getDataByField(item.dataField);
         let canAssignUndefinedValueToEditor = false;
         if(editorValue === undefined) {
@@ -560,6 +570,15 @@ const LayoutManager = Widget.inherit({
         }
 
         const name = item.dataField || item.name;
+        const formOrLayoutManager = this._getFormOrThis();
+
+        const onLabelTemplateRendered = () => {
+            this._incTemplateRenderedCallCount();
+
+            if(this._shouldAlignLabelsOnTemplateRendered(formOrLayoutManager, itemsWithLabelTemplateCount)) {
+                formOrLayoutManager._alignLabels(this, this.isSingleColumnMode(formOrLayoutManager));
+            }
+        };
 
         const { $fieldEditorContainer, widgetInstance, $rootElement } = renderFieldItem(convertToRenderFieldItemOptions({
             $parent,
@@ -582,6 +601,7 @@ const LayoutManager = Widget.inherit({
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
             labelMode: this.option('labelMode'),
+            onLabelTemplateRendered,
         }));
 
         this.option('onFieldItemRendered')?.();
@@ -596,6 +616,14 @@ const LayoutManager = Widget.inherit({
             guid: item.guid,
             $itemContainer: $rootElement
         });
+    },
+
+    _incTemplateRenderedCallCount() {
+        this._labelTemplateRenderedCallCount = (this._labelTemplateRenderedCallCount ?? 0) + 1;
+    },
+
+    _shouldAlignLabelsOnTemplateRendered(formOrLayoutManager, totalItemsWithLabelTemplate) {
+        return formOrLayoutManager.option('templatesRenderAsynchronously') && this._labelTemplateRenderedCallCount === totalItemsWithLabelTemplate;
     },
 
     _getMarkOptions: function() {

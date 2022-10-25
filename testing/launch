@@ -27,7 +27,7 @@ function waitForRunner() {
     const timestamp = Date.now();
 
     http
-        .request({ port: PORT }, openBrowser)
+        .request({ port: PORT, family: 4 }, openBrowser)
         .on('error', () => setTimeout(
             () => {
                 console.log('waiting...');

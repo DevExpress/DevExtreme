@@ -35962,6 +35962,14 @@ declare module DevExpress.viz {
        */
       enabled?: boolean;
       /**
+       * [descr:dxVectorMapOptions.controlBar.panVisible]
+       */
+      panVisible?: boolean;
+      /**
+       * [descr:dxVectorMapOptions.controlBar.zoomVisible]
+       */
+      zoomVisible?: boolean;
+      /**
        * [descr:dxVectorMapOptions.controlBar.horizontalAlignment]
        */
       horizontalAlignment?: DevExpress.common.HorizontalAlignment;

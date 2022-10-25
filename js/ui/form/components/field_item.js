@@ -43,7 +43,7 @@ export function renderFieldItem({
     editorOptions, isSimpleItem, isRequired, template, helpID, labelID, name, helpText, // TODO: move to 'item' ?
 
     requiredMessageTemplate,
-    validationGroup
+    validationGroup,
 }) {
 
     const $rootElement = $('<div>')
@@ -77,7 +77,9 @@ export function renderFieldItem({
     let $label = null;
 
     if(needRenderLabel) {
-        labelOptions.labelTemplateData = getTemplateData(item, editorOptions, formOrLayoutManager);
+        if(labelOptions.labelTemplate) {
+            labelOptions.labelTemplateData = getTemplateData(item, editorOptions, formOrLayoutManager);
+        }
 
         $label = renderLabel(labelOptions);
     }

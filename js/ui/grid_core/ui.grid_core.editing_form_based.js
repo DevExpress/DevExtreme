@@ -104,7 +104,7 @@ export const editingFormBasedModule = {
 
                         const onlyInsertChanges = args.changeTypes?.length && args.changeTypes.every(item => item === 'insert');
 
-                        if((args.changeType === 'refresh' || hasEditRow) && !onlyInsertChanges) {
+                        if((args.changeType === 'refresh' || (hasEditRow && args.isOptionChanged)) && !onlyInsertChanges) {
                             this._repaintEditPopup();
                         }
                     }
