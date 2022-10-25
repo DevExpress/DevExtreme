@@ -5594,7 +5594,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/LoadPanel/Overview/",
             "Widget": "LoadPanel",
             "MvcAdditionalFiles": [
               "/Scripts/data/employee.js"
