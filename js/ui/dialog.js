@@ -112,6 +112,7 @@ export const custom = function(options) {
         ignoreChildEvents: false,
         container: $element,
         visualContainer: window,
+        dragAndResizeArea: window,
         onContentReady: function(args) {
             args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)

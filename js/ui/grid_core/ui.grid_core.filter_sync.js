@@ -243,7 +243,8 @@ const DataControllerFilterSyncExtender = {
     },
 
     skipCalculateColumnFilters: function() {
-        return isDefined(this.option('filterValue')) && this.isFilterSyncActive();
+        const filterSyncController = this.getController('filterSync');
+        return (isDefined(this.option('filterValue')) || filterSyncController._skipSyncColumnOptions) && this.isFilterSyncActive();
     },
 
     _calculateAdditionalFilter: function() {

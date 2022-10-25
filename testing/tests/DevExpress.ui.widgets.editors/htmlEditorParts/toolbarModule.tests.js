@@ -12,6 +12,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import localization from 'localization';
+import resizeCallbacks from 'core/utils/resize_callbacks.js';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -53,6 +54,7 @@ const ORDEREDLIST_FORMAT_CLASS = 'dx-orderedlist-format';
 const BULLETLIST_FORMAT_CLASS = 'dx-bulletlist-format';
 const CLEAR_FORMAT_CLASS = 'dx-clear-format';
 const IMAGE_FORMAT_CLASS = 'dx-image-format';
+const INSERT_TABLE_FORMAT_CLASS = 'dx-inserttable-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 
 const TABLE_OPERATIONS = [
@@ -1371,6 +1373,518 @@ testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
     });
 });
 
+testModule('Toolbar items state update', {
+    beforeEach: function() {
+        simpleModuleConfig.beforeEach.apply(this, arguments);
+        this.getDisabledFormats = () => {
+            return this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
+        };
+        this.getFormatItemElement = () => this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+    },
+    afterEach: function() {
+        simpleModuleConfig.afterEach.apply(this, arguments);
+    }
+}, () => {
+    const COLOR_ITEMS = ['color', 'background'];
+    const BUTTON_FORMAT_ITEMS = ['bold', 'italic', 'link', 'strike', 'underline', 'blockquote', 'code-block', 'codeBlock', 'variable'];
+    const EDITOR_FORMAT_ITEMS = [{
+        name: 'size',
+        value: 'large',
+        acceptedValues: ['large']
+    }, {
+        name: 'font',
+        value: 'cursive',
+        acceptedValues: ['cursive']
+    }, {
+        name: 'header',
+        value: 3,
+        acceptedValues: [3]
+    }];
+
+    testModule('when items are located not in menu', () => {
+        test('table formats on table focus', function(assert) {
+            this.options.items = TABLE_OPERATIONS;
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+
+            toolbar.updateTableWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+            assert.ok(isInsertTableFormatDisabled, 'insert table format is disabled');
+        });
+
+        test('table formats on table unfocus', function(assert) {
+            this.options.items = TABLE_OPERATIONS;
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+            toolbar.updateTableWidgets();
+
+            this.quillMock.getFormat = () => ({ table: false });
+            toolbar.updateTableWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 7, 'table is not focused -> all table operation buttons are disabled (except "insertTable")');
+            assert.notOk(isInsertTableFormatDisabled, 'insert table format is enabled');
+        });
+
+        test('clear button if some format is applied', function(assert) {
+            this.options.items = ['clear'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ bold: true });
+
+            toolbar.updateFormatWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isClearButtonDisabled = $disabledFormatWidgets.length === 1;
+
+            assert.strictEqual(isClearButtonDisabled, false, 'clear button is enabled');
+        });
+
+        test('clear button if no format is applied', function(assert) {
+            this.options.items = ['clear'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ bold: true });
+            toolbar.updateFormatWidgets();
+
+            this.quillMock.getFormat = () => ({});
+            toolbar.updateFormatWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isClearButtonDisabled = $disabledFormatWidgets.length === 1;
+
+            assert.strictEqual(isClearButtonDisabled, true, 'clear button is disabled');
+        });
+
+        test('undo button if undo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: ['test'], redo: [] }
+            };
+            this.options.items = ['undo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('undo button if undo stack is empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = ['undo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, true, 'undo button is disabled');
+        });
+
+        test('redo button if redo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: ['test'] }
+            };
+            this.options.items = ['redo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('redo button if redo stack is empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = ['redo'];
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, true, 'redo button is disabled');
+        });
+
+        COLOR_ITEMS.forEach(colorItemName => {
+            test(`${colorItemName} button if ${colorItemName} format is applied`, function(assert) {
+                this.options.items = [colorItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgb(0, 0, 255)', `${colorItemName} button bottomBorderColor is correct`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${colorItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${colorItemName} button if ${colorItemName} format is not applied`, function(assert) {
+                this.options.items = [colorItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        BUTTON_FORMAT_ITEMS.forEach(buttonItemName => {
+            test(`${buttonItemName} button if format is applied`, function(assert) {
+                this.options.items = [buttonItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${buttonItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${buttonItemName} button if format is not applied`, function(assert) {
+                this.options.items = [buttonItemName];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        EDITOR_FORMAT_ITEMS.forEach((item) => {
+            const { name: editorItemName, value } = item;
+
+            test(`${editorItemName} editor if format is applied`, function(assert) {
+                this.options.items = [item];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+
+                toolbar.updateFormatWidgets();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, value, 'value is correct');
+            });
+
+            test(`${editorItemName} editor if format is not applied`, function(assert) {
+                this.options.items = [item];
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, null, 'value is restored');
+            });
+        });
+    });
+
+    testModule('when items are located in menu and it was not opened yet', {
+        beforeEach: function() {
+            this.options.multiline = false;
+            this.openDropDownMenu = () => {
+                $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
+            };
+            this.mapToMenuItems = (items) => items.map(item => {
+                if(typeof item === 'string') {
+                    return {
+                        name: item,
+                        locateInMenu: 'always'
+                    };
+                } else {
+                    return {
+                        ...item,
+                        locateInMenu: 'always'
+                    };
+                }
+            });
+        }
+    }, () => {
+        test('table formats in menu on table focus (t1117604)', function(assert) {
+            this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+
+            toolbar.updateTableWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+            assert.ok(isInsertTableFormatDisabled, 'insert table format is disabled');
+        });
+
+        test('table formats in menu on table unfocus', function(assert) {
+            this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+            toolbar.updateTableWidgets();
+
+            this.quillMock.getFormat = () => ({ table: false });
+            toolbar.updateTableWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 7, 'table is not focused -> all table operation buttons are disabled (except "insertTable")');
+            assert.notOk(isInsertTableFormatDisabled, 'insert table format is enabled');
+        });
+
+        test('clear button in menu if some format is applied', function(assert) {
+            this.options.items = this.mapToMenuItems(['clear']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ bold: true });
+
+            toolbar.updateFormatWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isClearButtonDisabled = $disabledFormatWidgets.length === 1;
+
+            assert.strictEqual(isClearButtonDisabled, false, 'clear button is enabled');
+        });
+
+        test('clear button in menu if no format is applied', function(assert) {
+            this.options.items = this.mapToMenuItems(['clear']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ bold: true });
+            toolbar.updateFormatWidgets();
+
+            this.quillMock.getFormat = () => ({});
+            toolbar.updateFormatWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isClearButtonDisabled = $disabledFormatWidgets.length === 1;
+
+            assert.strictEqual(isClearButtonDisabled, true, 'clear button is disabled');
+        });
+
+        test('undo button in menu if undo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: ['test'], redo: [] }
+            };
+            this.options.items = this.mapToMenuItems(['undo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('undo button in menu if undo stack is empty', function(assert) {
+            this.quillMock.history = {
+                undo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = this.mapToMenuItems(['undo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isUndoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isUndoButtonDisabled, true, 'undo button is disabled');
+        });
+
+        test('redo button in menu if redo stack is not empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: ['test'] }
+            };
+            this.options.items = this.mapToMenuItems(['redo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, false, 'undo button is enabled');
+        });
+
+        test('redo button in menu if redo stack is empty', function(assert) {
+            this.quillMock.history = {
+                redo: sinon.stub(),
+                stack: { undo: [], redo: [] }
+            };
+            this.options.items = this.mapToMenuItems(['redo']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+
+            toolbar.updateHistoryWidgets();
+
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const isRedoButtonDisabled = $disabledFormatWidgets.length === 1;
+            assert.strictEqual(isRedoButtonDisabled, true, 'redo button is disabled');
+        });
+
+        COLOR_ITEMS.forEach(colorItemName => {
+            test(`${colorItemName} button in menu if ${colorItemName} format is applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([colorItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgb(0, 0, 255)', `${colorItemName} button bottomBorderColor is correct`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${colorItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${colorItemName} button in menu if ${colorItemName} format is not applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([colorItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [colorItemName]: 'blue' });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                const $icon = $formatItemElement.find(`.${ICON_CLASS}`);
+
+                assert.strictEqual($icon.css('borderBottomColor'), 'rgba(0, 0, 0, 0)', `${colorItemName} button bottomBorderColor is transparent`);
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${colorItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        BUTTON_FORMAT_ITEMS.forEach(buttonItemName => {
+            test(`${buttonItemName} button in menu if format is applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([buttonItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), true, `${buttonItemName} button has ${ACTIVE_FORMAT_CLASS} class`);
+            });
+
+            test(`${buttonItemName} button in menu if format is not applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([buttonItemName]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [buttonItemName]: true });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const $formatItemElement = this.getFormatItemElement();
+                assert.strictEqual($formatItemElement.hasClass(ACTIVE_FORMAT_CLASS), false, `${buttonItemName} button has no ${ACTIVE_FORMAT_CLASS} class`);
+            });
+        });
+
+        EDITOR_FORMAT_ITEMS.forEach((item) => {
+            const { name: editorItemName, value } = item;
+
+            test(`${editorItemName} editor in menu if format is applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([item]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, value, 'value is correct');
+            });
+
+            test(`${editorItemName} editor in menu if format is not applied`, function(assert) {
+                this.options.items = this.mapToMenuItems([item]);
+                const toolbar = new Toolbar(this.quillMock, this.options);
+                this.quillMock.getFormat = () => ({ [editorItemName]: value });
+                toolbar.updateFormatWidgets();
+
+                this.quillMock.getFormat = () => ({});
+                toolbar.updateFormatWidgets();
+
+                this.openDropDownMenu();
+
+                const actualValue = this.getFormatItemElement().dxSelectBox('instance').option('value');
+                assert.strictEqual(actualValue, null, 'value is restored');
+            });
+        });
+
+        test('state of the items in menu should be synchronized after toolbar repaint (t1117604)', function(assert) {
+            this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            this.quillMock.getFormat = () => ({ table: true });
+            toolbar.updateTableWidgets();
+            this.openDropDownMenu();
+
+            resizeCallbacks.fire();
+            toolbar.updateTableWidgets();
+            this.openDropDownMenu();
+
+            const $disabledFormatWidgets = this.getDisabledFormats();
+            const disabledItemsCount = $disabledFormatWidgets.length;
+            const isInsertTableFormatDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
+
+            assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+            assert.ok(isInsertTableFormatDisabled, 'insert table format is disabled');
+        });
+    });
+});
+
 testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
     test('Render toolbar with adaptive mode', function(assert) {
         this.options.multiline = false;
@@ -1455,7 +1969,7 @@ testModule('tables', simpleModuleConfig, function() {
 
         const $disabledFormatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
         const disabledItemsCount = $disabledFormatWidgets.length;
-        const isInsertTableOperationDisabled = $disabledFormatWidgets.first().hasClass('dx-inserttable-format');
+        const isInsertTableOperationDisabled = $disabledFormatWidgets.first().hasClass(INSERT_TABLE_FORMAT_CLASS);
 
         assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
         assert.ok(isInsertTableOperationDisabled);

@@ -12,6 +12,8 @@ import domAdapter from 'core/dom_adapter';
 const { module, test, testInActiveWindow } = QUnit;
 
 const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
+const DIALOG_CLASS = 'dx-dialog';
+const POPUP_CLASS = 'dx-popup';
 
 module('dialog tests', {
     beforeEach: function() {
@@ -37,7 +39,7 @@ module('dialog tests', {
                 .eq(index)
                 .trigger('dxclick');
         };
-        this.isPopupDraggable = () => $('.dx-popup').dxPopup('instance').option('dragEnabled');
+        this.isPopupDraggable = () => $(`.${POPUP_CLASS}`).dxPopup('instance').option('dragEnabled');
     },
     afterEach: function() {
         fx.off = false;
@@ -286,7 +288,7 @@ module('dialog tests', {
             }
         }).show();
 
-        const popup = $('.dx-popup').dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`).dxPopup('instance');
 
         assert.equal(popup.option('customOption'), 'Test', 'custom option is defined');
         assert.equal(popup.option('title'), 'Popup title', 'user option is redefined');
@@ -310,6 +312,30 @@ module('dialog tests', {
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'component'));
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'event'));
         assert.strictEqual(clickArgs.component.NAME, 'dxButton');
+    });
+
+    test('dragAndResizeContainer should be window by default (T1120202)', function(assert) {
+        custom({
+            title: 'title',
+            messageHtml: 'message',
+            showTitle: true,
+        }).show();
+
+        const popup = $(`.${POPUP_CLASS}`).dxPopup('instance');
+        const { dragAndResizeArea } = popup.option();
+        assert.strictEqual(dragAndResizeArea, window, 'dragAndResizeArea is not specified');
+    });
+
+    test('container should be equal to the root element by default', function(assert) {
+        custom({
+            title: 'title',
+            messageHtml: 'message',
+            showTitle: true,
+        }).show();
+
+        const popup = $(`.${POPUP_CLASS}`).dxPopup('instance');
+        const { container } = popup.option();
+        assert.strictEqual(container.get(0), $(`.${DIALOG_CLASS}`).get(0), 'container is a root element');
     });
 });
 
