@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture`Scheduler - All day appointments`
-  .page(url(__dirname, './containerAllDay.html'));
+  .page(url(__dirname, './containers/containerAllDay.html'));
 
 const data = [{
   text: '0',
