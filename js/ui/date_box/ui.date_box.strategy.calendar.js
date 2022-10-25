@@ -134,24 +134,37 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         };
     },
 
+    _isCalendarVisible: function() {
+        const isOptionsEmpty = isEmptyObject(this.dateBox.option('calendarOptions'));
+        const isVisible = () => this.dateBox.option('calendarOptions.visible') !== false;
+
+        return isOptionsEmpty || isVisible();
+    },
+
     _getPopupToolbarItems(toolbarItems) {
-        if(this.dateBox.option('applyValueMode') === 'useButtons' && this._isCalendarVisible()) {
-            toolbarItems.unshift(this._getTodayButtonConfig());
+        const applyModeUsedButtons = this.dateBox.option('applyValueMode') === 'useButtons';
+        const usedButtonsAndIsVisible = applyModeUsedButtons && this._isCalendarVisible();
+
+        if(usedButtonsAndIsVisible) {
+            const todayButton = this._getTodayButtonConfig();
+
+            return [
+                todayButton,
+                ...toolbarItems,
+            ];
         }
 
         return toolbarItems;
     },
 
     popupConfig: function(popupConfig) {
+        const toolbarItems = this._getPopupToolbarItems(popupConfig.toolbarItems);
+
         return extend(true, popupConfig, {
-            toolbarItems: this._getPopupToolbarItems(popupConfig.toolbarItems),
+            toolbarItems,
             position: { collision: 'flipfit flip' },
             width: 'auto'
         });
-    },
-
-    _isCalendarVisible: function() {
-        return isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
     },
 
     _escapeHandler: function() {
