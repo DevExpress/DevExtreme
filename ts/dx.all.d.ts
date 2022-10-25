@@ -10003,6 +10003,10 @@ declare module DevExpress.ui {
      */
     showAnalogClock?: boolean;
     /**
+     * [descr:dxDateBoxOptions.todayButtonText]
+     */
+    todayButtonText?: string;
+    /**
      * [descr:dxDateBoxOptions.type]
      */
     type?: DevExpress.ui.dxDateBox.DateType;
