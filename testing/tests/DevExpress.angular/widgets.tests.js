@@ -22,7 +22,6 @@ import 'ui/menu';
 import 'ui/popup';
 import 'ui/popover';
 import 'ui/date_box';
-import 'ui/slide_out_view';
 import 'ui/tabs';
 import 'ui/text_box';
 import 'ui/toolbar';
