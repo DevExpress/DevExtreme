@@ -1,11 +1,14 @@
 import HorizontalMonthLineRenderingStrategy from './strategy_horizontal_month_line';
 import { getGroupWidth } from '../../workspaces/helpers/positionHelper';
+import dateUtils from '../../../../core/utils/date';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 const MONTH_APPOINTMENT_MIN_OFFSET = 26;
 const MONTH_APPOINTMENT_MAX_OFFSET = 30;
 const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
+
+const toMs = dateUtils.dateToMilliseconds;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrategy {
     get endViewDate() { return this.options.endViewDate; }
@@ -18,9 +21,42 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
         return this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
     }
 
-    _getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth) {
+    _getChunkCount(
+        fullChunksWidth,
+        firstChunkWidth,
+        weekWidth,
+        settings) {
+        const { groupIndex, info: { appointment: { startDate } } } = settings;
         const rawFullChunksWidth = fullChunksWidth - firstChunkWidth + weekWidth;
-        return Math.ceil(rawFullChunksWidth / weekWidth);
+        const allChunksCount = Math.ceil(rawFullChunksWidth / weekWidth);
+
+        const viewRowIndex = this._tryGetRowIndexInView(startDate);
+
+        if(viewRowIndex !== undefined) {
+            const viewChunksCount = this.viewDataProvider.getRowCountInGroup(groupIndex);
+            const allowedChunksCount = viewChunksCount - viewRowIndex;
+            return allChunksCount <= allowedChunksCount ? allChunksCount : allowedChunksCount;
+        }
+
+        return allChunksCount;
+    }
+
+    // NOTE: This method tries to get real row index inside appointment's group view.
+    // We cannot use settings.rowIndex, because this row index for all date table and not for special group.
+    _tryGetRowIndexInView(positionStartDate) {
+        const columnsCount = this.viewDataProvider.getColumnsCount();
+
+        if(this.options.dataRange?.length < 1 || !columnsCount) {
+            return undefined;
+        }
+
+        const [startViewDate] = this.options.dateRange;
+        // NOTE: We cannot take cellDuration from options,
+        // because startDayHour/endDayHour takes affect in renovation scheduler.
+        const dayDurationMs = toMs('day');
+        const timeFromStart = positionStartDate.getTime() - startViewDate.getTime();
+
+        return Math.floor(timeFromStart / dayDurationMs / columnsCount);
     }
 
     _getChunkWidths(geometry) {
@@ -47,7 +83,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
         const leftPosition = this._getLeftPosition(settings);
 
         const hasTailChunk = this.endViewDate > settings.info.appointment.endDate;
-        const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth);
+        const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth, settings);
 
         const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
 
