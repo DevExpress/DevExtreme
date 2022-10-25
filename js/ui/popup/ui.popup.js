@@ -335,6 +335,18 @@ const Popup = Overlay.inherit({
         }
     },
 
+    _areContentDimensionsRendered: function(entry) {
+        const contentBox = entry.contentBoxSize?.[0];
+        if(contentBox) {
+            return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
+                    && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
+        }
+
+        const contentRect = entry.contentRect;
+        return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
+                && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
+    },
+
     _renderContentImpl: function() {
         this._renderTitle();
         this.callBase();
@@ -620,7 +632,7 @@ const Popup = Overlay.inherit({
 
             this._stopAnimation();
             if(options?.shouldOnlyReposition) {
-                this._positionController.positionContent();
+                this._renderPosition(false);
             } else {
                 this._renderGeometryImpl(options?.isDimensionChange);
             }
