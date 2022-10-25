@@ -158,10 +158,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        const toolbarItems = this._getPopupToolbarItems(popupConfig.toolbarItems);
-
         return extend(true, popupConfig, {
-            toolbarItems,
             position: { collision: 'flipfit flip' },
             width: 'auto'
         });
