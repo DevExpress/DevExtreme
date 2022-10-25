@@ -16,6 +16,7 @@ import { isFunction, isObject, isPromise, isWindow } from '../../core/utils/type
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
+import uiErrors from '../widget/ui.errors';
 import eventsEngine from '../../events/core/events_engine';
 import {
     move as dragEventMove
@@ -941,7 +942,14 @@ const Overlay = Widget.inherit({
     },
 
     _moveToContainer: function() {
-        this._$wrapper.appendTo(this._positionController.$container);
+        const $wrapperContainer = this._positionController.$container;
+
+        const containerExists = $($wrapperContainer).length > 0;
+        if(!containerExists) {
+            uiErrors.log('W1021', this.NAME);
+        }
+
+        this._$wrapper.appendTo($wrapperContainer);
         this._$content.appendTo(this._$wrapper);
     },
 
