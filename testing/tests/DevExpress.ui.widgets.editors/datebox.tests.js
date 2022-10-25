@@ -510,9 +510,9 @@ QUnit.module('datebox tests', moduleConfig, () => {
 QUnit.module('toolbar buttons testing', {
     beforeEach: function() {
         this.data = [
-            { selector: TODAY_BUTTON_SELECTOR, expectedText: 'newTodayText' },
-            { selector: APPLY_BUTTON_SELECTOR, expectedText: 'newDoneText' },
-            { selector: CANCEL_BUTTON_SELECTOR, expectedText: 'newCancelText' },
+            { selector: TODAY_BUTTON_SELECTOR, expectedText: 'newTodayText', key: 'todayButtonText' },
+            { selector: APPLY_BUTTON_SELECTOR, expectedText: 'newDoneText', key: 'applyButtonText' },
+            { selector: CANCEL_BUTTON_SELECTOR, expectedText: 'newCancelText', key: 'cancelButtonText' },
         ];
 
         const defaultOptions = {
@@ -542,11 +542,10 @@ QUnit.module('toolbar buttons testing', {
     },
 }, () => {
     QUnit.test('Customize "Today", "Done" and "Cancel" buttons on init', function(assert) {
-        const options = {
-            todayButtonText: this.data[0].expectedText,
-            applyButtonText: this.data[1].expectedText,
-            cancelButtonText: this.data[2].expectedText,
-        };
+        const options = this.data.reduce((accumulator, item) => {
+            accumulator[item.key] = item.expectedText;
+            return accumulator;
+        }, {});
 
         const realTexts = this.getRealTexts(this.getInstance(options));
 
@@ -556,9 +555,9 @@ QUnit.module('toolbar buttons testing', {
     QUnit.test('Customize "Today", "Done" and "Cancel" buttons after init', function(assert) {
         const instance = this.getInstance();
 
-        instance.option('todayButtonText', this.data[0].expectedText);
-        instance.option('applyButtonText', this.data[1].expectedText);
-        instance.option('cancelButtonText', this.data[2].expectedText);
+        this.data.forEach((item) => {
+            instance.option(item.key, item.expectedText);
+        });
 
         const realTexts = this.getRealTexts(instance);
 
