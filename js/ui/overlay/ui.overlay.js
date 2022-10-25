@@ -549,6 +549,7 @@ const Overlay = Widget.inherit({
         const hidingArgs = { cancel: false };
 
         if(this._isShowingActionCanceled) {
+            delete this._isShowingActionCanceled;
             this._hidingDeferred.resolve();
         } else {
             this._actions.onHiding(hidingArgs);
