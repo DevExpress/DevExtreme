@@ -124,8 +124,10 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             toolbar: position[0],
             location: position[1] === 'after' ? 'before' : position[1],
             options: {
-                onInitialized: (e) => e.component.registerKeyHandler('escape', this._escapeHandler),
-                onClick: (args) => this._widget._toTodayView(args),
+                onInitialized: function(e) {
+                    e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
+                }.bind(this),
+                onClick: (args) => { this._widget._toTodayView(args); },
                 text: this.dateBox.option('todayButtonText'),
                 type: 'today',
             }

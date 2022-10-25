@@ -409,6 +409,9 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
     });
 
+    /**
+     * TODO. Разделить тесты, вынести в отдельный модуль Toolbar buttons testing
+     */
     QUnit.test('Customize "Today", "Done" and "Cancel" buttons', function(assert) {
         const expectedTodayText = 'newTodayText';
         const expectedDoneText = 'newDoneText';
