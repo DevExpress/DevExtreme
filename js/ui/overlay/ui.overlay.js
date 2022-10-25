@@ -621,6 +621,7 @@ const Overlay = Widget.inherit({
         }
 
         if(visible) {
+            this._checkContainerExists();
             this._moveToContainer();
             this._renderGeometry();
 
@@ -926,21 +927,20 @@ const Overlay = Widget.inherit({
 
     _moveFromContainer: function() {
         this._$content.appendTo(this.$element());
-
-        this._detachWrapperToContainer();
-    },
-
-    _detachWrapperToContainer: function() {
         this._$wrapper.detach();
     },
 
-    _moveToContainer: function() {
+    _checkContainerExists() {
         const $wrapperContainer = this._positionController.$container;
 
         const containerExists = $($wrapperContainer).length > 0;
         if(!containerExists) {
             uiErrors.log('W1021', this.NAME);
         }
+    },
+
+    _moveToContainer: function() {
+        const $wrapperContainer = this._positionController.$container;
 
         this._$wrapper.appendTo($wrapperContainer);
         this._$content.appendTo(this._$wrapper);

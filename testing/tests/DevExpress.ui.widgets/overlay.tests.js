@@ -2433,37 +2433,47 @@ testModule('container', moduleConfig, () => {
         assert.strictEqual(getHeight($wrapper), getHeight($(window)), 'height is restored after container option value changed to window');
     });
 
-    test('content should not be moved to container', function(assert) {
-        const overlay = $('#overlay').dxOverlay({
-            container: '#customTargetContainer'
-        }).dxOverlay('instance');
+    QUnit.module('content markup move', {
+        beforeEach: function() {
+            this.$container = $('#customTargetContainer');
+            this.isContentInContainer = () => {
+                return this.$container.children(toSelector(OVERLAY_WRAPPER_CLASS)).length === 1;
+            };
+        }
+    }, () => {
+        test('content should be moved to container', function(assert) {
+            const overlay = $('#overlay').dxOverlay({
+                container: this.$container
+            }).dxOverlay('instance');
 
-        overlay.show();
-        assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-    });
+            overlay.show();
 
-    test('content should not be moved to container before content ready action', function(assert) {
-        assert.expect(1);
+            assert.ok(this.isContentInContainer(), 'content is in container');
+        });
 
-        const overlay = $('#overlay').dxOverlay({
-            container: '#customTargetContainer',
-            onContentReady: function() {
-                assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
-            }
-        }).dxOverlay('instance');
+        test('content should be moved to container before content ready action', function(assert) {
+            assert.expect(1);
 
-        overlay.show();
-    });
+            const overlay = $('#overlay').dxOverlay({
+                container: this.$container,
+                onContentReady: () => {
+                    assert.ok(this.isContentInContainer(), 'content is in container');
+                }
+            }).dxOverlay('instance');
 
-    test('content should not be moved to container before content ready action only if content visible', function(assert) {
-        assert.expect(1);
+            overlay.show();
+        });
 
-        $('#overlay').dxOverlay({
-            container: '#customTargetContainer',
-            onContentReady: function() {
-                assert.strictEqual($('#customTargetContainer').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
-            },
-            deferRendering: false
+        test('content should not be moved to container before content ready action if it is not visible', function(assert) {
+            assert.expect(1);
+
+            $('#overlay').dxOverlay({
+                container: this.$container,
+                onContentReady: () => {
+                    assert.notOk(this.isContentInContainer(), 'content is not in container');
+                },
+                deferRendering: false
+            });
         });
     });
 
