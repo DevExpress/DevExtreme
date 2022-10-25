@@ -103,6 +103,7 @@ test.skip('The updateDimensions method should render the grid if a container was
   await showDataGrid();
 
   await t
+    .wait(200)
     .expect(Selector('#wrapperContainer').visible)
     .ok();
 
