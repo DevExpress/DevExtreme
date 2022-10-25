@@ -989,6 +989,51 @@ testModule('visibility', moduleConfig, () => {
             });
             this.overlay.show();
         });
+
+        test('overlay closing should not be cancelled if previous showing was cancelled (T1120608)', function(assert) {
+            let shouldCancelOpening = true;
+            const $overlay = $('#overlay').dxOverlay({
+                onShowing: (e) => {
+                    e.cancel = shouldCancelOpening;
+                }
+            });
+            const overlay = $overlay.dxOverlay('instance');
+
+            const isVisible = () => !$overlay.is(':hidden');
+
+            overlay.show();
+            assert.strictEqual(isVisible(), false, 'showing is cancelled');
+
+            shouldCancelOpening = false;
+            overlay.show();
+            assert.strictEqual(isVisible(), true, 'showing is not cancelled');
+
+            overlay.hide();
+            assert.strictEqual(isVisible(), false, 'hiding is not cancelled');
+        });
+
+        test('overlay showing should not be cancelled if previous hiding was cancelled', function(assert) {
+            let shouldCancelHiding = true;
+            const $overlay = $('#overlay').dxOverlay({
+                onHiding: (e) => {
+                    e.cancel = shouldCancelHiding;
+                },
+                visible: true
+            });
+            const overlay = $overlay.dxOverlay('instance');
+
+            const isVisible = () => !$overlay.is(':hidden');
+
+            overlay.hide();
+            assert.strictEqual(isVisible(), true, 'hiding is cancelled');
+
+            shouldCancelHiding = false;
+            overlay.hide();
+            assert.strictEqual(isVisible(), false, 'hiding is not cancelled');
+
+            overlay.show();
+            assert.strictEqual(isVisible(), true, 'showing is not cancelled');
+        });
     });
 });
 
