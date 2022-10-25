@@ -74,6 +74,7 @@ const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
 
 const widgetName = 'dxDateBox';
 const { module: testModule, test } = QUnit;
@@ -409,50 +410,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
     });
 
-    /**
-     * TODO. Разделить тесты, вынести в отдельный модуль Toolbar buttons testing
-     */
-    QUnit.test('Customize "Today", "Done" and "Cancel" buttons', function(assert) {
-        const expectedTodayText = 'newTodayText';
-        const expectedDoneText = 'newDoneText';
-        const expectedCancelText = 'newCancelText';
-
-        this.instance.option({
-            type: 'datetime',
-            pickerType: 'calendarWithTime',
-            opened: true,
-            applyButtonText: expectedDoneText,
-            cancelButtonText: expectedCancelText,
-            todayButtonText: expectedTodayText,
-        });
-
-        const $popupButtons = this.instance._popup._$bottom;
-
-        const realTodayText = $popupButtons.find('.dx-button-today').text();
-        const realDoneText = $popupButtons.find('.dx-popup-done').text();
-        const realCancelText = $popupButtons.find('.dx-popup-cancel').text();
-
-        assert.equal(realTodayText, expectedTodayText, 'today text customized correctly');
-        assert.equal(realDoneText, expectedDoneText, 'done text customized correctly');
-        assert.equal(realCancelText, expectedCancelText, 'cancel text customized correctly');
-
-        this.clock.tick(200);
-
-        this.instance.option('todayButtonText', expectedTodayText + expectedTodayText);
-        this.instance.option('applyButtonText', expectedDoneText + expectedDoneText);
-        this.instance.option('cancelButtonText', expectedCancelText + expectedCancelText);
-
-        const $popupButtonsUpdated = this.instance._popup._$bottom;
-
-        const newRealTodayText = $popupButtonsUpdated.find('.dx-button-today').text();
-        const newRealDoneText = $popupButtonsUpdated.find('.dx-popup-done').text();
-        const newRealCancelText = $popupButtonsUpdated.find('.dx-popup-cancel').text();
-
-        assert.equal(newRealTodayText, expectedTodayText + expectedTodayText, 'today text customized correctly after runtime changing');
-        assert.equal(newRealDoneText, expectedDoneText + expectedDoneText, 'done text customized correctly after runtime changing');
-        assert.equal(newRealCancelText, expectedCancelText + expectedCancelText, 'cancel text customized correctly after runtime changing');
-    });
-
     QUnit.test('T378630 - the displayFormat should not be changed if the type option is set', function(assert) {
         const displayFormat = 'Y';
 
@@ -547,6 +504,65 @@ QUnit.module('datebox tests', moduleConfig, () => {
             opened: true
         });
 
+    });
+});
+
+QUnit.module('toolbar buttons testing', {
+    beforeEach: function() {
+        this.data = [
+            { selector: TODAY_BUTTON_SELECTOR, expectedText: 'newTodayText' },
+            { selector: APPLY_BUTTON_SELECTOR, expectedText: 'newDoneText' },
+            { selector: CANCEL_BUTTON_SELECTOR, expectedText: 'newCancelText' },
+        ];
+
+        const defaultOptions = {
+            type: 'datetime',
+            pickerType: 'calendarWithTime',
+            opened: true,
+        };
+
+        this.getInstance = (options = {}) => {
+            return $('#dateBox').dxDateBox({
+                ...defaultOptions,
+                ...options,
+            }).dxDateBox('instance');
+        };
+
+        this.getRealTexts = (instance) => {
+            const $popupButtons = instance._popup._$bottom;
+
+            return this.data.map(({ selector }) => $popupButtons.find(selector).text());
+        };
+
+        this.compareTexts = (texts, assert) => {
+            texts.forEach((text, index) => {
+                assert.equal(text, this.data[index].expectedText, `${text} text customized correctly`);
+            });
+        };
+    },
+}, () => {
+    QUnit.test('Customize "Today", "Done" and "Cancel" buttons on init', function(assert) {
+        const options = {
+            todayButtonText: this.data[0].expectedText,
+            applyButtonText: this.data[1].expectedText,
+            cancelButtonText: this.data[2].expectedText,
+        };
+
+        const realTexts = this.getRealTexts(this.getInstance(options));
+
+        this.compareTexts(realTexts, assert);
+    });
+
+    QUnit.test('Customize "Today", "Done" and "Cancel" buttons after init', function(assert) {
+        const instance = this.getInstance();
+
+        instance.option('todayButtonText', this.data[0].expectedText);
+        instance.option('applyButtonText', this.data[1].expectedText);
+        instance.option('cancelButtonText', this.data[2].expectedText);
+
+        const realTexts = this.getRealTexts(instance);
+
+        this.compareTexts(realTexts, assert);
     });
 });
 
