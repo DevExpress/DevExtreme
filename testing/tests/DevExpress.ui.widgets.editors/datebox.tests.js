@@ -507,61 +507,48 @@ QUnit.module('datebox tests', moduleConfig, () => {
     });
 });
 
-QUnit.module('toolbar buttons testing', {
-    beforeEach: function() {
-        this.data = [
-            { selector: TODAY_BUTTON_SELECTOR, expectedText: 'newTodayText', key: 'todayButtonText' },
-            { selector: APPLY_BUTTON_SELECTOR, expectedText: 'newDoneText', key: 'applyButtonText' },
-            { selector: CANCEL_BUTTON_SELECTOR, expectedText: 'newCancelText', key: 'cancelButtonText' },
-        ];
+QUnit.module('toolbar buttons testing', {}, () => {
+    const buttons = [
+        { key: 'todayButtonText', name: 'Today', text: 'newTodayText', selector: TODAY_BUTTON_SELECTOR },
+        { key: 'applyButtonText', name: 'Done', text: 'newDoneText', selector: APPLY_BUTTON_SELECTOR },
+        { key: 'cancelButtonText', name: 'Cancel', text: 'newCancelText', selector: CANCEL_BUTTON_SELECTOR },
+    ];
 
-        const defaultOptions = {
-            type: 'datetime',
-            pickerType: 'calendarWithTime',
-            opened: true,
-        };
-
-        this.getInstance = (options = {}) => {
-            return $('#dateBox').dxDateBox({
-                ...defaultOptions,
-                ...options,
-            }).dxDateBox('instance');
-        };
-
-        this.getRealTexts = (instance) => {
-            const $popupButtons = instance._popup._$bottom;
-
-            return this.data.map(({ selector }) => $popupButtons.find(selector).text());
-        };
-
-        this.compareTexts = (texts, assert) => {
-            texts.forEach((text, index) => {
-                assert.equal(text, this.data[index].expectedText, `${text} text customized correctly`);
+    buttons.forEach(button => {
+        QUnit.test(`Customize "${button.name}" button on init`, function(assert) {
+            const $dateBox = $('#dateBox').dxDateBox({
+                type: 'datetime',
+                pickerType: 'calendarWithTime',
+                opened: true,
+                [button.key]: button.text,
             });
-        };
-    },
-}, () => {
-    QUnit.test('Customize "Today", "Done" and "Cancel" buttons on init', function(assert) {
-        const options = this.data.reduce((accumulator, item) => {
-            accumulator[item.key] = item.expectedText;
-            return accumulator;
-        }, {});
 
-        const realTexts = this.getRealTexts(this.getInstance(options));
+            const instance = $dateBox.dxDateBox('instance');
 
-        this.compareTexts(realTexts, assert);
+            const $popupButtons = instance._popup._$bottom;
+            const realText = $popupButtons.find(button.selector).text();
+
+            assert.equal(realText, button.text, `${button.name} text customized correctly`);
+        });
     });
 
-    QUnit.test('Customize "Today", "Done" and "Cancel" buttons after init', function(assert) {
-        const instance = this.getInstance();
+    buttons.forEach(button => {
+        QUnit.test(`Customize "${button.name}" button after init`, function(assert) {
+            const $dateBox = $('#dateBox').dxDateBox({
+                type: 'datetime',
+                pickerType: 'calendarWithTime',
+                opened: true,
+            });
 
-        this.data.forEach((item) => {
-            instance.option(item.key, item.expectedText);
+            const instance = $dateBox.dxDateBox('instance');
+
+            instance.option(button.key, button.text);
+
+            const $popupButtons = instance._popup._$bottom;
+            const realText = $popupButtons.find(button.selector).text();
+
+            assert.equal(realText, button.text, `${button.name} text customized correctly`);
         });
-
-        const realTexts = this.getRealTexts(instance);
-
-        this.compareTexts(realTexts, assert);
     });
 });
 
