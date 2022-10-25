@@ -32,17 +32,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="dateBox"></div>
-
+    <div id="button"></div>
     <script>
         $(function() {
-            const expectedTodayText = 'newTodayText';
-            
-            $('#dateBox').dxDateBox({
-                type: 'datetime',
-                pickerType: 'calendarWithTime',
-                opened: true,
-                todayButtonText: expectedTodayText,
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
