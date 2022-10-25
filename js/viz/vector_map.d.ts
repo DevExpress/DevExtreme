@@ -308,6 +308,16 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default 'left'
        */
+       panVisible?: boolean;
+       /**
+        * @docid
+        * @default 'true'
+        */
+        zoomVisible?: boolean;
+       /**
+        * @docid
+        * @default 'true'
+        */
       horizontalAlignment?: HorizontalAlignment;
       /**
        * @docid

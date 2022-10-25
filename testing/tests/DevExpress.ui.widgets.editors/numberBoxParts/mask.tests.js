@@ -819,6 +819,19 @@ QUnit.module('format: minimum and maximum', moduleConfig, () => {
         assert.equal(this.input.val(), '1', 'text is adjusted to min');
         assert.equal(this.instance.option('value'), 1, 'value is adjusted to min');
     });
+
+    [0, '', null, undefined].forEach(value => {
+        QUnit.test(`minus sign can be entered if max is negative: value=${value} (T1122681)`, function(assert) {
+            this.instance.option({
+                max: -1,
+                format: '###',
+                value,
+            });
+
+            this.keyboard.type('-');
+            assert.strictEqual(this.input.val(), '-', 'minus sign was entered');
+        });
+    });
 });
 
 QUnit.module('format: arabic digit shaping', {

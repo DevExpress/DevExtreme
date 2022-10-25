@@ -636,7 +636,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _applyRevertedSign: function(e, caret, preserveSelectedText) {
         const newValue = -1 * ensureDefined(this._parsedValue, null);
 
-        if(this._isValueInRange(newValue)) {
+        if(this._isValueInRange(newValue) || newValue === 0) {
             this._parsedValue = newValue;
 
             if(preserveSelectedText) {

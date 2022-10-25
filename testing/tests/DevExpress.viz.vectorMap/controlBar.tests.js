@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const vizMocks = require('../../helpers/vizMocks.js');
-const controlBarModule = require('viz/vector_map/control_bar');
+const controlBarModule = require('viz/vector_map/control_bar/control_bar');
 
 function returnValue(value) {
     return function() {
@@ -32,8 +32,8 @@ const environment = {
             tracker: this.tracker
         });
         this.root = this.renderer.g.getCall(0).returnValue;
-        this.zoomDrag = this.renderer.rect.getCall(0).returnValue;
-        this.zoomDragTracker = this.renderer.rect.getCall(7).returnValue;
+        this.zoomDrag = this.renderer.rect.getCall(7).returnValue;
+        this.zoomDragTracker = this.renderer.rect.getCall(6).returnValue;
         this.zoomLine = this.renderer.path.getCall(6).returnValue;
         this.updateLayout = this.controlBar.updateLayout = sinon.spy();
     },
@@ -70,12 +70,21 @@ QUnit.test('Elements are destroyed on dispose', function(assert) {
 
 QUnit.test('Groups settings', function(assert) {
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.attr.lastCall.args, [{
-        'class': 'dxm-control-buttons'
+        'class': 'dxm-pan-control'
     }], 'elements group settings');
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.attr.lastCall.args, [{
+        'class': 'dxm-zoom-bar'
+    }], 'elements group settings');
+    assert.deepEqual(this.renderer.g.getCall(3).returnValue.attr.lastCall.args, [{
         'stroke-width': 0, stroke: 'none', fill: '#000000', opacity: 0.0001
     }], 'trackers group settings');
-    assert.deepEqual(this.renderer.g.getCall(2).returnValue.css.lastCall.args, [{
+    assert.deepEqual(this.renderer.g.getCall(4).returnValue.attr.lastCall.args, [{
+        'stroke-width': 0, stroke: 'none', fill: '#000000', opacity: 0.0001
+    }], 'trackers group settings');
+    assert.deepEqual(this.renderer.g.getCall(3).returnValue.css.lastCall.args, [{
+        cursor: 'pointer'
+    }], 'trackers group styles');
+    assert.deepEqual(this.renderer.g.getCall(4).returnValue.css.lastCall.args, [{
         cursor: 'pointer'
     }], 'trackers group styles');
 });
@@ -89,33 +98,37 @@ QUnit.test('Set options', function(assert) {
 });
 
 QUnit.test('Elements settings', function(assert) {
-    const elements = this.renderer.g.firstCall.returnValue.children[0].children;
-    assert.deepEqual(elements[0]._stored_settings, { cx: 0, cy: 0, r: 29 }, 'big circle');
-    assert.deepEqual(elements[1]._stored_settings, { cx: 0, cy: 0, r: 5, fill: 'none' }, 'reset button');
-    assert.deepEqual(elements[2]._stored_settings, { points: [-5, -15, 0, -20, 5, -15], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move N button');
-    assert.deepEqual(elements[3]._stored_settings, { points: [15, -5, 20, 0, 15, 5], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move E button');
-    assert.deepEqual(elements[4]._stored_settings, { points: [5, 15, 0, 20, -5, 15], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move S button');
-    assert.deepEqual(elements[5]._stored_settings, { points: [-15, 5, -20, 0, -15, -5], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move W button');
-    assert.deepEqual(elements[6]._stored_settings, { cx: 0, cy: 66, r: 14 }, 'zoom in circle');
-    assert.deepEqual(elements[7]._stored_settings, { points: [[-5.5, 66, 5.5, 66], [0, 60.5, 0, 71.5]], type: 'area' }, 'zoom in button');
-    assert.deepEqual(elements[8]._stored_settings, { cx: 0, cy: 227, r: 14 }, 'zoom out circle');
-    assert.deepEqual(elements[9]._stored_settings, { points: [-5.5, 227, 5.5, 227], type: 'area' }, 'zoom out button');
-    assert.deepEqual(elements[10]._stored_settings, { points: [], type: 'line' }, 'zoom line');
-    assert.deepEqual(elements[11]._stored_settings, { x: -10, y: 201, width: 20, height: 8 }, 'zoom drag');
+    const elementsPan = this.renderer.g.firstCall.returnValue.children[0].children;
+    const elementsZoom = this.renderer.g.firstCall.returnValue.children[1].children;
+
+    assert.deepEqual(elementsPan[0]._stored_settings, { cx: 0, cy: 0, r: 29 }, 'big circle');
+    assert.deepEqual(elementsPan[1]._stored_settings, { cx: 0, cy: 0, r: 5, fill: 'none' }, 'reset button');
+    assert.deepEqual(elementsPan[2]._stored_settings, { points: [-5, -15, 0, -20, 5, -15], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move N button');
+    assert.deepEqual(elementsPan[3]._stored_settings, { points: [15, -5, 20, 0, 15, 5], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move E button');
+    assert.deepEqual(elementsPan[4]._stored_settings, { points: [5, 15, 0, 20, -5, 15], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move S button');
+    assert.deepEqual(elementsPan[5]._stored_settings, { points: [-15, 5, -20, 0, -15, -5], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move W button');
+    assert.deepEqual(elementsZoom[0]._stored_settings, { cx: 0, cy: 66, r: 14 }, 'zoom in circle');
+    assert.deepEqual(elementsZoom[1]._stored_settings, { points: [[-5.5, 66, 5.5, 66], [0, 60.5, 0, 71.5]], type: 'area' }, 'zoom in button');
+    assert.deepEqual(elementsZoom[2]._stored_settings, { cx: 0, cy: 227, r: 14 }, 'zoom out circle');
+    assert.deepEqual(elementsZoom[3]._stored_settings, { points: [-5.5, 227, 5.5, 227], type: 'area' }, 'zoom out button');
+    assert.deepEqual(elementsZoom[4]._stored_settings, { points: [], type: 'line' }, 'zoom line');
+    assert.deepEqual(elementsZoom[5]._stored_settings, { x: -10, y: 201, width: 20, height: 8 }, 'zoom drag');
 });
 
 QUnit.test('Trackers settings', function(assert) {
-    const trackers = this.renderer.g.firstCall.returnValue.children[1].children;
-    assert.deepEqual(trackers[0]._stored_settings, { x: -8, y: -8, width: 16, height: 16 }, 'reset button');
-    assert.deepEqual(trackers[1]._stored_settings, { x: -8, y: -28, width: 16, height: 16 }, 'move N button');
-    assert.deepEqual(trackers[2]._stored_settings, { x: 12, y: -8, width: 16, height: 16 }, 'move E button');
-    assert.deepEqual(trackers[3]._stored_settings, { x: -8, y: 12, width: 16, height: 16 }, 'move S button');
-    assert.deepEqual(trackers[4]._stored_settings, { x: -28, y: -8, width: 16, height: 16 }, 'move W button');
-    assert.deepEqual(trackers[5]._stored_settings, { cx: 0, cy: 66, r: 14 }, 'zoom in button');
-    assert.deepEqual(trackers[6]._stored_settings, { cx: 0, cy: 227, r: 14 }, 'zoom out button');
-    assert.deepEqual(trackers[7]._stored_settings, { x: -2, y: 86.5, width: 4, height: 121 }, 'zoom drag line');
-    assert.deepEqual(trackers[7]._stored_styles, { cursor: 'default' }, 'zoom drag line styles');
-    assert.deepEqual(trackers[8]._stored_settings, { x: -10, y: 201.5, width: 20, height: 8 }, 'zoom drag');
+    const trackersPan = this.renderer.g.firstCall.returnValue.children[2].children;
+    const trackersZoom = this.renderer.g.firstCall.returnValue.children[3].children;
+
+    assert.deepEqual(trackersPan[0]._stored_settings, { x: -8, y: -8, width: 16, height: 16 }, 'reset button');
+    assert.deepEqual(trackersPan[1]._stored_settings, { x: -8, y: -28, width: 16, height: 16 }, 'move N button');
+    assert.deepEqual(trackersPan[2]._stored_settings, { x: 12, y: -8, width: 16, height: 16 }, 'move E button');
+    assert.deepEqual(trackersPan[3]._stored_settings, { x: -8, y: 12, width: 16, height: 16 }, 'move S button');
+    assert.deepEqual(trackersPan[4]._stored_settings, { x: -28, y: -8, width: 16, height: 16 }, 'move W button');
+    assert.deepEqual(trackersZoom[0]._stored_settings, { cx: 0, cy: 66, r: 14 }, 'zoom in button');
+    assert.deepEqual(trackersZoom[1]._stored_settings, { cx: 0, cy: 227, r: 14 }, 'zoom out button');
+    assert.deepEqual(trackersZoom[2]._stored_settings, { x: -2, y: 86.5, width: 4, height: 121 }, 'zoom drag line');
+    assert.deepEqual(trackersZoom[2]._stored_styles, { cursor: 'default' }, 'zoom drag line styles');
+    assert.deepEqual(trackersZoom[3]._stored_settings, { x: -10, y: 201.5, width: 20, height: 8 }, 'zoom drag');
 });
 
 QUnit.test('Root appending and removing on set options', function(assert) {
@@ -304,6 +317,22 @@ QUnit.test('Layout option - disabled', function(assert) {
     this.controlBar.setInteraction({});
 
     assert.strictEqual(this.controlBar.getLayoutOptions(), null);
+});
+
+QUnit.test('Controlbar option panVisible - false', function(assert) {
+    this.controlBar.setOptions({ panVisible: false });
+    this.controlBar.setInteraction({});
+
+    assert.strictEqual(this.renderer.g.getCall(1).returnValue.css.lastCall.args[0].display, 'none');
+    assert.strictEqual(this.renderer.g.getCall(3).returnValue.css.lastCall.args[0].display, 'none');
+});
+
+QUnit.test('Controlbar option zoomVisible - false', function(assert) {
+    this.controlBar.setOptions({ zoomVisible: false });
+    this.controlBar.setInteraction({});
+
+    assert.strictEqual(this.renderer.g.getCall(2).returnValue.css.lastCall.args[0].display, 'none');
+    assert.strictEqual(this.renderer.g.getCall(4).returnValue.css.lastCall.args[0].display, 'none');
 });
 
 QUnit.test('Layout options - no interaction', function(assert) {
