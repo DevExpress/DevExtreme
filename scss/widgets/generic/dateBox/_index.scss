@@ -10,6 +10,7 @@
 @use "../textEditor/colors" as *;
 @use "../calendar/sizes" as *;
 @use "../../base/dateBox";
+@use "mixins" as *;
 
 // adduse
 @use "../timeView";
@@ -54,12 +55,19 @@
   }
 }
 
-.dx-datebox-calendar {
-  .dx-dropdowneditor-icon {
-    @include dx-icon(event);
-    @include dx-dropdowneditor-button-icon();
-  }
+.dx-datebox-time {
+  @include dx-dropdowneditor-button-icon-styling(clock);
+}
 
+.dx-datebox-date {
+  @include dx-dropdowneditor-button-icon-styling(event);
+}
+
+.dx-datebox-datetime {
+  @include dx-dropdowneditor-button-icon-styling(eventall);
+}
+
+.dx-datebox-calendar {
   &.dx-rtl {
     &.dx-dropdowneditor-active {
       .dx-dropdowneditor-button {
@@ -126,13 +134,6 @@
         }
       }
     }
-  }
-}
-
-.dx-datebox-list {
-  .dx-dropdowneditor-icon {
-    @include dx-icon(clock);
-    @include dx-dropdowneditor-button-icon();
   }
 }
 
