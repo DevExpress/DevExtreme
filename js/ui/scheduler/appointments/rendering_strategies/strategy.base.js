@@ -643,20 +643,23 @@ class BaseRenderingStrategy {
     getAppointmentDataCalculator() {
     }
 
-    _calculateVerticalAppointmentHeight(height, totalAppointmentsCount, appointmentCountPerCell) {
-        let calculatedAppointmentsCount = appointmentCountPerCell;
+    getVerticalAppointmentHeight(cellHeight, appointmentCountInCell, maxAppointmentsPerCell) {
+        let resultMaxAppointmentsPerCell = maxAppointmentsPerCell;
+
         if(isNumeric(this.maxAppointmentsPerCell)) {
-            const dynamicAppointmentsCount = this._getDynamicAppointmentCountPerCell().allDay || this._getDynamicAppointmentCountPerCell();
-            const maxAppointmentsCount = totalAppointmentsCount > dynamicAppointmentsCount ? totalAppointmentsCount : dynamicAppointmentsCount;
-            calculatedAppointmentsCount = Math.min(maxAppointmentsCount, appointmentCountPerCell);
+            const dynamicAppointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
+
+            const entireAppointmentCount = dynamicAppointmentCountPerCell.allDay || dynamicAppointmentCountPerCell;
+            const maxAppointmentsCount = Math.max(appointmentCountInCell, entireAppointmentCount);
+            resultMaxAppointmentsPerCell = Math.min(maxAppointmentsCount, maxAppointmentsPerCell);
         }
-        return height / calculatedAppointmentsCount;
+        return cellHeight / resultMaxAppointmentsPerCell;
     }
 
-    _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
+    _customizeCoordinates(coordinates, cellHeight, appointmentCountPerCell, topOffset, isAllDay) {
         const { index, count } = coordinates;
 
-        const appointmentHeight = this._calculateVerticalAppointmentHeight(height, count, appointmentCountPerCell);
+        const appointmentHeight = this.getVerticalAppointmentHeight(cellHeight, count, appointmentCountPerCell);
 
         const appointmentTop = coordinates.top + (index * appointmentHeight);
         const top = appointmentTop + topOffset;
@@ -673,7 +676,7 @@ class BaseRenderingStrategy {
             width: width,
             top: top,
             left: left,
-            empty: this._isAppointmentEmpty(height, width)
+            empty: this._isAppointmentEmpty(cellHeight, width)
         };
     }
 
