@@ -10,6 +10,7 @@
 @use "../textEditor/colors" as *;
 @use "../calendar/sizes" as *;
 @use "../../base/dateBox";
+@use "mixins" as *;
 
 // adduse
 @use "../timeView";
@@ -53,41 +54,23 @@
   }
 }
 
-.dx-datebox-rollers {
-  .dx-dropdowneditor-icon {
-    @include dx-icon(eventall);
-    @include dx-dropdowneditor-button-icon();
-  }
-
-  &.dx-dropdowneditor-active {
-    .dx-dropdowneditor-icon {
-      @include dx-icon(eventall);
-      @include dx-dropdowneditor-button-icon();
-    }
-  }
+.dx-datebox-time {
+  @include dx-dropdowneditor-button-icon-styling(clock);
 }
 
+.dx-datebox-date {
+  @include dx-dropdowneditor-button-icon-styling(event);
+}
+
+.dx-datebox-datetime {
+  @include dx-dropdowneditor-button-icon-styling(eventall);
+}
+
+
 .dx-datebox-calendar {
-  .dx-dropdowneditor-icon {
-    @include dx-icon(event);
-    @include dx-dropdowneditor-button-icon();
-  }
-
-  &.dx-datebox-datetime {
-    .dx-dropdowneditor-icon {
-      @include dx-icon(eventall);
-      @include dx-dropdowneditor-button-icon();
-    }
-  }
-
   &.dx-dropdowneditor-active {
     &.dx-editor-filled {
       background: $texteditor-hover-bg;
-    }
-
-    .dx-dropdowneditor-icon {
-      @include dx-icon(event);
-      @include dx-dropdowneditor-button-icon();
     }
   }
 
@@ -148,20 +131,6 @@
   }
 }
 
-.dx-datebox-list {
-  .dx-dropdowneditor-icon {
-    @include dx-icon(clock);
-    @include dx-dropdowneditor-button-icon();
-  }
-
-  &.dx-dropdowneditor-active {
-    .dx-dropdowneditor-icon {
-      @include dx-icon(clock);
-      @include dx-dropdowneditor-button-icon();
-    }
-  }
-}
-
 .dx-datebox-wrapper-list .dx-popup-content {
   padding: 0;
 }
@@ -184,19 +153,11 @@
 }
 
 .dx-editor-outlined,
-.dx-editor-filled {
-  .dx-texteditor-buttons-container {
-    > .dx-clear-button-area {
-      margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
-    }
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      &:last-child {
-        > .dx-clear-button-area {
-          margin-left: $material-filled-texteditor-spin-button-horizontal-padding;
-          margin-right: 0;
-        }
-      }
+.dx-editor-filled,
+.dx-editor-underlined {
+  &.dx-datebox-native {
+    .dx-texteditor-input {
+      padding-right: $material-filled-texteditor-spin-button-horizontal-padding;
     }
   }
 }

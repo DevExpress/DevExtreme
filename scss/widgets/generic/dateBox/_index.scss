@@ -140,7 +140,7 @@
   padding: 0;
 }
 
-.dx-datebox {
+.dx-datebox:not(.dx-datebox-native) {
   input[type="date"] {
     line-height: normal;
   }
