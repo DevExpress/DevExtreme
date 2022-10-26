@@ -10,6 +10,12 @@ const CalendarStrategy = DateBoxStrategy.inherit({
 
     NAME: 'Calendar',
 
+    getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
+        });
+    },
+
     supportedKeys: function() {
         const homeEndHandler = function(e) {
             if(this.option('opened')) {
@@ -107,45 +113,54 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         this.dateBox.setAria('activedescendant', e.actionValue);
     },
 
-    popupConfig: function(popupConfig) {
-        const toolbarItems = popupConfig.toolbarItems;
+    _getTodayButtonConfig() {
         const buttonsLocation = this.dateBox.option('buttonsLocation');
+        const isButtonsLocationDefault = buttonsLocation === 'default';
 
-        let position = [];
+        const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
 
-        if(buttonsLocation !== 'default') {
-            position = splitPair(buttonsLocation);
-        } else {
-            position = ['bottom', 'center'];
-        }
-
-        if(this.dateBox.option('applyValueMode') === 'useButtons' && this._isCalendarVisible()) {
-            toolbarItems.unshift({
-                widget: 'dxButton',
-                toolbar: position[0],
-                location: position[1] === 'after' ? 'before' : position[1],
-                options: {
-                    onInitialized: function(e) {
-                        e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
-                    }.bind(this),
-                    onClick: (args) => { this._widget._toTodayView(args); },
-                    text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    type: 'today'
-                }
-            });
-        }
-
-        return extend(true, popupConfig, {
-            toolbarItems: toolbarItems,
-            position: {
-                collision: 'flipfit flip'
-            },
-            width: 'auto'
-        });
+        return {
+            widget: 'dxButton',
+            toolbar: position[0],
+            location: position[1] === 'after' ? 'before' : position[1],
+            options: {
+                onInitialized: function(e) {
+                    e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
+                }.bind(this),
+                onClick: (args) => { this._widget._toTodayView(args); },
+                text: this.dateBox.option('todayButtonText'),
+                type: 'today',
+            }
+        };
     },
 
     _isCalendarVisible: function() {
-        return isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
+        const { calendarOptions } = this.dateBox.option();
+
+        return isEmptyObject(calendarOptions) || calendarOptions.visible !== false;
+    },
+
+    _getPopupToolbarItems(toolbarItems) {
+        const useButtons = this.dateBox.option('applyValueMode') === 'useButtons';
+        const shouldRenderTodayButton = useButtons && this._isCalendarVisible();
+
+        if(shouldRenderTodayButton) {
+            const todayButton = this._getTodayButtonConfig();
+
+            return [
+                todayButton,
+                ...toolbarItems,
+            ];
+        }
+
+        return toolbarItems;
+    },
+
+    popupConfig: function(popupConfig) {
+        return extend(true, popupConfig, {
+            position: { collision: 'flipfit flip' },
+            width: 'auto'
+        });
     },
 
     _escapeHandler: function() {
@@ -189,7 +204,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             dateBox.option('opened', false);
             this.dateBoxValue(this.getValue(), e.event);
         }
-    }
+    },
 });
 
 export default CalendarStrategy;
