@@ -1,4 +1,4 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
@@ -65,20 +65,11 @@ const data = [{
 }];
 
 test('appointments should have correct height in week view with all day', async (t) => {
-  const {
-    takeScreenshot,
-    compareResults,
-  } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
   await t
-    .expect(await takeScreenshot(
-      'maxAppointmentsPerCell-allDay.png',
-      scheduler.allDayRow,
-    ))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+    .expect(await compareScreenshot(t, 'maxAppointmentsPerCell-allDay.png', scheduler.allDayRow)).ok();
+  // .expect(await takeScreenshot('maxAppointmentsPerCell-allDay.png', scheduler.allDayRow))
 }).before(async (t) => {
   await restoreBrowserSize(t);
   await createWidget(
