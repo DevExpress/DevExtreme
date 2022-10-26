@@ -507,47 +507,47 @@ QUnit.module('datebox tests', moduleConfig, () => {
     });
 });
 
-QUnit.module('toolbar buttons testing', {}, () => {
+QUnit.module('toolbar buttons', {}, () => {
     const buttons = [
-        { key: 'todayButtonText', name: 'Today', text: 'newTodayText', selector: TODAY_BUTTON_SELECTOR },
-        { key: 'applyButtonText', name: 'Done', text: 'newDoneText', selector: APPLY_BUTTON_SELECTOR },
-        { key: 'cancelButtonText', name: 'Cancel', text: 'newCancelText', selector: CANCEL_BUTTON_SELECTOR },
+        { optionName: 'todayButtonText', name: 'Today', newText: 'newTodayText', selector: TODAY_BUTTON_SELECTOR },
+        { optionName: 'applyButtonText', name: 'Done', newText: 'newDoneText', selector: APPLY_BUTTON_SELECTOR },
+        { optionName: 'cancelButtonText', name: 'Cancel', newText: 'newCancelText', selector: CANCEL_BUTTON_SELECTOR },
     ];
 
     buttons.forEach(button => {
-        QUnit.test(`Customize "${button.name}" button on init`, function(assert) {
+        QUnit.test(`"${button.optionName}" should customize ${button.name} button on init`, function(assert) {
             const $dateBox = $('#dateBox').dxDateBox({
                 type: 'datetime',
-                pickerType: 'calendarWithTime',
+                pickerType: 'calendar',
                 opened: true,
-                [button.key]: button.text,
+                [button.optionName]: button.newText,
             });
 
             const instance = $dateBox.dxDateBox('instance');
 
-            const $popupButtons = instance._popup._$bottom;
-            const realText = $popupButtons.find(button.selector).text();
+            const $overlayContent = $(instance.content()).parent();
+            const buttonText = $overlayContent.find(button.selector).text();
 
-            assert.equal(realText, button.text, `${button.name} text customized correctly`);
+            assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
         });
     });
 
     buttons.forEach(button => {
-        QUnit.test(`Customize "${button.name}" button after init`, function(assert) {
+        QUnit.test(`"${button.optionName}" should customize ${button.name} button after init`, function(assert) {
             const $dateBox = $('#dateBox').dxDateBox({
                 type: 'datetime',
-                pickerType: 'calendarWithTime',
+                pickerType: 'calendar',
                 opened: true,
             });
 
             const instance = $dateBox.dxDateBox('instance');
 
-            instance.option(button.key, button.text);
+            instance.option(button.optionName, button.newText);
 
-            const $popupButtons = instance._popup._$bottom;
-            const realText = $popupButtons.find(button.selector).text();
+            const $overlayContent = $(instance.content()).parent();
+            const buttonText = $overlayContent.find(button.selector).text();
 
-            assert.equal(realText, button.text, `${button.name} text customized correctly`);
+            assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
         });
     });
 });

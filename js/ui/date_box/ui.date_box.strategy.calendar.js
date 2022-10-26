@@ -135,17 +135,16 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _isCalendarVisible: function() {
-        const isOptionsEmpty = isEmptyObject(this.dateBox.option('calendarOptions'));
-        const isVisible = () => this.dateBox.option('calendarOptions.visible') !== false;
+        const { calendarOptions } = this.dateBox.option();
 
-        return isOptionsEmpty || isVisible();
+        return isEmptyObject(calendarOptions) || calendarOptions.visible !== false;
     },
 
     _getPopupToolbarItems(toolbarItems) {
-        const applyModeUsedButtons = this.dateBox.option('applyValueMode') === 'useButtons';
-        const usedButtonsAndIsVisible = applyModeUsedButtons && this._isCalendarVisible();
+        const useButtons = this.dateBox.option('applyValueMode') === 'useButtons';
+        const shouldRenderTodayButton = useButtons && this._isCalendarVisible();
 
-        if(usedButtonsAndIsVisible) {
+        if(shouldRenderTodayButton) {
             const todayButton = this._getTodayButtonConfig();
 
             return [
