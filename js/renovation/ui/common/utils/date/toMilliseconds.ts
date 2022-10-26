@@ -1,4 +1,13 @@
-import { TimeUnit } from './types';
+type TimeUnit =
+  | 'millisecond'
+  | 'second'
+  | 'minute'
+  | 'hour'
+  | 'day'
+  | 'month'
+  | 'week'
+  | 'quarter'
+  | 'year';
 
 export function toMilliseconds(value: TimeUnit): number {
   const timeIntervals: { [key: string]: number } = {
