@@ -12,6 +12,8 @@ import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
 import messageLocalization from 'localization/message';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
@@ -572,19 +574,28 @@ QUnit.module('toolbar buttons', {}, () => {
             });
 
             QUnit.test(`The "${button.optionName}" value should be localized by default when type="${type}"`, function(assert) {
-                const $dateBox = $('#dateBox').dxDateBox({
-                    type,
-                    pickerType: 'calendar',
-                    opened: true,
-                    applyValueMode: 'useButtons',
-                });
+                const defaultLocale = localization.locale();
 
-                const instance = $dateBox.dxDateBox('instance');
+                try {
+                    localization.loadMessages(ja);
+                    localization.locale('ja');
 
-                const $overlayContent = $(instance.content()).parent();
-                const buttonText = $overlayContent.find(button.selector).text();
+                    const $dateBox = $('#dateBox').dxDateBox({
+                        type,
+                        pickerType: 'calendar',
+                        opened: true,
+                        applyValueMode: 'useButtons',
+                    });
 
-                assert.strictEqual(buttonText, messageLocalization.format(button.localizationMessageKey), `the default "${button.optionName}" value is localized`);
+                    const instance = $dateBox.dxDateBox('instance');
+
+                    const $overlayContent = $(instance.content()).parent();
+                    const buttonText = $overlayContent.find(button.selector).text();
+
+                    assert.strictEqual(buttonText, messageLocalization.format(button.localizationMessageKey), `the default "${button.optionName}" value is localized`);
+                } finally {
+                    localization.locale(defaultLocale);
+                }
             });
         });
     });
