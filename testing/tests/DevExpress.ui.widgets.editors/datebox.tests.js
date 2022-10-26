@@ -508,6 +508,8 @@ QUnit.module('datebox tests', moduleConfig, () => {
 });
 
 QUnit.module('toolbar buttons', {}, () => {
+    const types = [ 'date', 'datetime' ];
+
     const buttons = [
         {
             optionName: 'todayButtonText',
@@ -532,57 +534,62 @@ QUnit.module('toolbar buttons', {}, () => {
         },
     ];
 
-    buttons.forEach(button => {
-        QUnit.test(`"${button.optionName}" should customize ${button.name} button on init`, function(assert) {
-            const $dateBox = $('#dateBox').dxDateBox({
-                type: 'datetime',
-                pickerType: 'calendar',
-                opened: true,
-                [button.optionName]: button.newText,
+    types.forEach(type => {
+        buttons.forEach(button => {
+            QUnit.test(`"${button.optionName}" should customize ${button.name} button on init when type="${type}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    type,
+                    pickerType: 'calendar',
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                    [button.optionName]: button.newText,
+                });
+
+                const instance = $dateBox.dxDateBox('instance');
+
+                const $overlayContent = $(instance.content()).parent();
+                const buttonText = $overlayContent.find(button.selector).text();
+
+                assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
             });
-
-            const instance = $dateBox.dxDateBox('instance');
-
-            const $overlayContent = $(instance.content()).parent();
-            const buttonText = $overlayContent.find(button.selector).text();
-
-            assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
         });
-    });
 
-    buttons.forEach(button => {
-        QUnit.test(`"${button.optionName}" should customize ${button.name} button after init`, function(assert) {
-            const $dateBox = $('#dateBox').dxDateBox({
-                type: 'datetime',
-                pickerType: 'calendar',
-                opened: true,
+        buttons.forEach(button => {
+            QUnit.test(`"${button.optionName}" should customize ${button.name} button after init when type="${type}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    type,
+                    pickerType: 'calendar',
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                });
+
+                const instance = $dateBox.dxDateBox('instance');
+
+                instance.option(button.optionName, button.newText);
+
+                const $overlayContent = $(instance.content()).parent();
+                const buttonText = $overlayContent.find(button.selector).text();
+
+                assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
             });
-
-            const instance = $dateBox.dxDateBox('instance');
-
-            instance.option(button.optionName, button.newText);
-
-            const $overlayContent = $(instance.content()).parent();
-            const buttonText = $overlayContent.find(button.selector).text();
-
-            assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
         });
-    });
 
-    buttons.forEach(button => {
-        QUnit.test(`The "${button.optionName}" value should be localized by default`, function(assert) {
-            const $dateBox = $('#dateBox').dxDateBox({
-                type: 'datetime',
-                pickerType: 'calendar',
-                opened: true,
+        buttons.forEach(button => {
+            QUnit.test(`The "${button.optionName}" value should be localized by default when type="${type}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    type,
+                    pickerType: 'calendar',
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                });
+
+                const instance = $dateBox.dxDateBox('instance');
+
+                const $overlayContent = $(instance.content()).parent();
+                const buttonText = $overlayContent.find(button.selector).text();
+
+                assert.strictEqual(buttonText, messageLocalization.format(button.localizationMessageKey), `the default "${button.optionName}" value is localized`);
             });
-
-            const instance = $dateBox.dxDateBox('instance');
-
-            const $overlayContent = $(instance.content()).parent();
-            const buttonText = $overlayContent.find(button.selector).text();
-
-            assert.strictEqual(buttonText, messageLocalization.format(button.localizationMessageKey), `the default "${button.optionName}" value is localized`);
         });
     });
 });
