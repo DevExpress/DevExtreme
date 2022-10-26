@@ -25,12 +25,10 @@
 
 .dx-calendar-navigator {
   position: relative;
-  text-align: center;
   width: 100%;
 
   .dx-button {
     position: absolute;
-    display: inline-block;
 
     &.dx-calendar-disabled-navigator-link {
       visibility: hidden;

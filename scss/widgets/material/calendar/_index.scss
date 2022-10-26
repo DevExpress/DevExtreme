@@ -43,14 +43,11 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
 }
 
 .dx-calendar-navigator {
-  line-height: $material-calendar-navigator-line-height;
   height: $material-calendar-navigator-height;
-  display: table;
   border-collapse: collapse;
 
   .dx-button {
     height: 100%;
-    display: table-cell;
 
     @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
 
@@ -82,17 +79,9 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
   }
 
   .dx-calendar-caption-button {
-    font-size: $material-calendar-navigator-fontsize;
-    line-height: 1.2;
     text-transform: uppercase;
     right: $material-nav-button-width;
     left: $material-nav-button-width;
-
-    &.dx-button {
-      .dx-button-content {
-        padding: $material-calendar-caption-button-padding;
-      }
-    }
   }
 }
 
@@ -102,10 +91,6 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
 
   &.dx-button {
     margin: 0 2px;
-  }
-
-  .dx-button-content {
-    padding: 0;
   }
 
   &.dx-state-hover {
@@ -120,10 +105,6 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
 
   &.dx-button {
     margin: 0 1px;
-  }
-
-  .dx-button-content {
-    padding: 0;
   }
 }
 

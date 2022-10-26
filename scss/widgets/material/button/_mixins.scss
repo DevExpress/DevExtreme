@@ -27,10 +27,6 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 @mixin dx-button-onlyicon-sizing() {
   min-width: $material-button-height;
 
-  .dx-button-content {
-    width: 100%;
-  }
-
   @include dx-button-sizing(0, $material-button-icon-size, 0);
 }
 

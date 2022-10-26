@@ -28,8 +28,10 @@
 .dx-button-content {
   display: inherit;
   align-items: center;
-  vertical-align: middle;
   justify-content: center;
+  flex-shrink: 0;
+  flex-grow: 1;
+  vertical-align: middle;
 
   .dx-button-has-text & {
     @include dx-overflow();

@@ -1471,6 +1471,7 @@ QUnit.module('widget sizing render', {}, () => {
         const $element = $('#dateBox').appendTo($parent);
         const component = $('#dateBox').dxDateBox({
             width: undefined,
+            pickerType: 'calendar',
             showDropDownButton: false
         }).dxDateBox('instance');
         const { width: initialWidth } = $element.get(0).getBoundingClientRect();
