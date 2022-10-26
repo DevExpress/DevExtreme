@@ -4,7 +4,7 @@ import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
-import errors from 'ui/widget/ui.errors';
+import uiErrors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
@@ -255,6 +255,46 @@ QUnit.module('render', () => {
         } finally {
             fixtures.simple.drop();
         }
+    });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            fixtures.simple.create();
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                new Popover($('#what'), {
+                    visible: true,
+                    container: 'invalid',
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxPopover',
+                ], 'args of the log method');
+            } finally {
+                fixtures.simple.drop();
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            fixtures.simple.create();
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                new Popover($('#what'), {
+                    visible: true,
+                    container: 'body',
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                fixtures.simple.drop();
+                uiErrors.log.restore();
+            }
+        });
     });
 });
 
@@ -1605,7 +1645,7 @@ QUnit.module('behavior', () => {
             fixtures.simple.create();
             this.$target = $('#where');
             this.$popover = $('#what');
-            this.stub = sinon.stub(errors, 'log');
+            this.stub = sinon.stub(uiErrors, 'log');
             this.popover = new Popover(this.$popover, {
                 target: this.$target,
                 hideEvent: 'mouseleave',
