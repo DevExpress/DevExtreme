@@ -20,6 +20,7 @@ import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
+import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
@@ -530,6 +531,42 @@ QUnit.module('basic', () => {
             scrollView.scrollTo(100);
 
             assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scroll position does not changed');
+        });
+    });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#popup').dxPopup({
+                    container: 'invalid',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxPopup',
+                ], 'args of the log method');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#popup').dxPopup({
+                    container: 'body',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                uiErrors.log.restore();
+            }
         });
     });
 });
