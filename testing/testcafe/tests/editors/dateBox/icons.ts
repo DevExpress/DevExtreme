@@ -31,7 +31,7 @@ themes.forEach((theme) => {
               .click(dropDownEditorButton)
               .wait(TIME_TO_WAIT);
 
-            await t.expect(await compareScreenshot(t, `datebox-opened-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+            await t.expect(await compareScreenshot(t, `db-opened-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
           }).before(async (t) => {
             await t.resizeWindow(300, 400);
             await changeTheme(theme);
