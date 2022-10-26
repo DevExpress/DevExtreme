@@ -12,6 +12,7 @@ import Editor from '../editor/editor';
 import Overlay from '../overlay/ui.overlay';
 import Menu from '../menu';
 import { selectView } from '../shared/accessibility';
+import { equalByValue } from '../../core/utils/common';
 
 const OPERATION_ICONS = {
     '=': 'filter-operation-equals',
@@ -702,9 +703,13 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                     const filter = this._dataController.getCombinedFilter();
                     applyFilterViewController.setCurrentColumnForFiltering(null);
 
-                    const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                    const editorDataSource = editor.option('dataSource');
 
-                    editor.option('dataSource', lookupDataSource);
+                    if(!equalByValue(editorDataSource.__dataGridSourceFilter, filter)) {
+                        const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                        editor.option('dataSource', lookupDataSource);
+                    }
+
                 }
             });
         },
