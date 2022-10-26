@@ -6,8 +6,6 @@
 @use "../../base/icons" as *;
 
 $material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
-$material-button-icononly-padding: $material-button-vertical-padding;
-$material-button-icon-size: $material-base-icon-size;
 $material-button-icon-text-padding: 12px;
 $material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
 $material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
@@ -20,7 +18,8 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   }
 
   .dx-icon {
-    @include dx-icon-sizing($icon-size);
+    font-size: $icon-size;
+
     @include dx-icon-margin($icon-margin);
   }
 }
@@ -28,15 +27,19 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 @mixin dx-button-onlyicon-sizing() {
   min-width: $material-button-height;
 
-  @include dx-button-sizing($material-button-icononly-padding, $material-button-icon-size, 0);
+  .dx-button-content {
+    width: 100%;
+  }
+
+  @include dx-button-sizing(0, $material-button-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, math.div($material-button-icon-size, 2));
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size, math.div($material-button-icon-size, 2));
 }
 
 @mixin dx-button-text-and-icon-sizing() {
-  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, 8px);
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size, 8px);
 
   .dx-button-content {
     padding-left: $material-button-icon-text-padding;

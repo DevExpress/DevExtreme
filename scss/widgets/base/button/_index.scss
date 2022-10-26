@@ -8,7 +8,7 @@
 }
 
 .dx-button {
-  display: inline-block;
+  display: inline-flex;
   cursor: pointer;
   text-align: center;
   vertical-align: middle;
@@ -20,26 +20,19 @@
 
   .dx-icon {
     -webkit-user-drag: none;
-    display: inline-block;
+    display: inherit;
     vertical-align: middle;
   }
 }
 
 .dx-button-content {
-  height: 100%;
-  max-height: 100%;
+  display: inherit;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
 
   .dx-button-has-text & {
     @include dx-overflow();
-  }
-
-  &::after {
-    display: inline-block;
-    position: relative;
-    height: 100%;
-    content: '';
-    vertical-align: middle;
-    font-size: 0;
   }
 
   > .dx-inkripple {
@@ -49,11 +42,6 @@
 
 .dx-button-link {
   text-decoration: none;
-}
-
-.dx-button-text {
-  display: inline;
-  vertical-align: middle;
 }
 
 .dx-button-submit-input {
