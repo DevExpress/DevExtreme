@@ -101,13 +101,17 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
   }
 }
 
+.dx-treelist-content .dx-treelist-table .dx-row .dx-editor-cell {
+  padding-left: $generic-grid-base-cell-padding;
+}
+
 .dx-treelist-checkbox-size {
   line-height: 0;
 }
 
 .dx-treelist-cell-expandable,
 .dx-treelist-select-all {
-  .dx-checkbox {
+  .dx-select-checkbox {
     position: absolute;
   }
 }
