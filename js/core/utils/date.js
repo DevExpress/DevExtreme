@@ -2,7 +2,7 @@ import { isObject, isString, isDate, isDefined, isNumeric } from './type';
 import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
-import { toMilliseconds } from '../../renovation/ui/common/utils/date';
+import { toMilliseconds } from '../../renovation/ui/common/utils/date/index';
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;
