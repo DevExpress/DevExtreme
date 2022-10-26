@@ -509,9 +509,27 @@ QUnit.module('datebox tests', moduleConfig, () => {
 
 QUnit.module('toolbar buttons', {}, () => {
     const buttons = [
-        { optionName: 'todayButtonText', name: 'Today', newText: 'newTodayText', selector: TODAY_BUTTON_SELECTOR },
-        { optionName: 'applyButtonText', name: 'Done', newText: 'newDoneText', selector: APPLY_BUTTON_SELECTOR },
-        { optionName: 'cancelButtonText', name: 'Cancel', newText: 'newCancelText', selector: CANCEL_BUTTON_SELECTOR },
+        {
+            optionName: 'todayButtonText',
+            name: 'Today',
+            newText: 'newTodayText',
+            selector: TODAY_BUTTON_SELECTOR,
+            localizationMessageKey: 'dxCalendar-todayButtonText',
+        },
+        {
+            optionName: 'applyButtonText',
+            name: 'Done',
+            newText: 'newDoneText',
+            selector: APPLY_BUTTON_SELECTOR,
+            localizationMessageKey: 'OK',
+        },
+        {
+            optionName: 'cancelButtonText',
+            name: 'Cancel',
+            newText: 'newCancelText',
+            selector: CANCEL_BUTTON_SELECTOR,
+            localizationMessageKey: 'Cancel',
+        },
     ];
 
     buttons.forEach(button => {
@@ -548,6 +566,23 @@ QUnit.module('toolbar buttons', {}, () => {
             const buttonText = $overlayContent.find(button.selector).text();
 
             assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
+        });
+    });
+
+    buttons.forEach(button => {
+        QUnit.test(`The "${button.optionName}" value should be localized by default`, function(assert) {
+            const $dateBox = $('#dateBox').dxDateBox({
+                type: 'datetime',
+                pickerType: 'calendar',
+                opened: true,
+            });
+
+            const instance = $dateBox.dxDateBox('instance');
+
+            const $overlayContent = $(instance.content()).parent();
+            const buttonText = $overlayContent.find(button.selector).text();
+
+            assert.strictEqual(buttonText, messageLocalization.format(button.localizationMessageKey), `the default "${button.optionName}" value is localized`);
         });
     });
 });
