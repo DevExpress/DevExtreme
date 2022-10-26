@@ -352,7 +352,7 @@ const calculatePosition = function(what, options) {
 const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
     const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
     if(stylePropIsValid) {
-        element.style.transform = isEmpty ? transformProp.replace(scale, '') : transformProp;
+        element.style.setProperty('transform', isEmpty ? transformProp.replace(scale, '') : transformProp);
     } else {
         element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr);
     }
