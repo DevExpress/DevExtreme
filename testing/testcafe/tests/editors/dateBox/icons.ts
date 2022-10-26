@@ -4,6 +4,8 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DateBox from '../../../model/dateBox';
 
+const TIME_TO_WAIT = 500;
+
 const stylingMods = ['outlined', 'underlined', 'filled'];
 const themes = ['generic.light', 'material.blue.light'];
 const pickerTypes = ['calendar', 'list', 'native', 'rollers'];
@@ -22,9 +24,12 @@ themes.forEach((theme) => {
         [true, false].forEach((rtlEnabled) => {
           test(`Icon for dxDateBox ${theme} stylingMode=${stylingMode} pickerType=${pickerType} type=${type} rtlEnabled=${rtlEnabled}`, async (t) => {
             const dateBox = new DateBox('#container');
+            const { dropDownEditorButton } = dateBox;
             await t.expect(await compareScreenshot(t, `datebox-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
 
-            await t.click(dateBox.input);
+            await t
+              .click(dropDownEditorButton)
+              .wait(TIME_TO_WAIT);
 
             await t.expect(await compareScreenshot(t, `datebox-opened-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
           }).before(async (t) => {
