@@ -552,9 +552,7 @@ QUnit.module('toolbar buttons', {}, () => {
 
                 assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
             });
-        });
 
-        buttons.forEach(button => {
             QUnit.test(`"${button.optionName}" should customize ${button.name} button after init when type="${type}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
                     type,
@@ -572,9 +570,7 @@ QUnit.module('toolbar buttons', {}, () => {
 
                 assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
             });
-        });
 
-        buttons.forEach(button => {
             QUnit.test(`The "${button.optionName}" value should be localized by default when type="${type}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
                     type,
