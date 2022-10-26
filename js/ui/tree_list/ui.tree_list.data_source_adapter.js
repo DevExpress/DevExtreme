@@ -499,6 +499,10 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return baseChanges;
         },
 
+        _needToCopyDataObject: function() {
+            return false;
+        },
+
         _applyRemove: function(change) {
             let baseChanges = [];
             const node = this.getNodeByKey(change.key);
