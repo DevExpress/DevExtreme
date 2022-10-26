@@ -1,1 +1,0 @@
-DevExtreme provides a comprehensive set of Navigation JavaScript components that includes Menu, NavBar, TabPanel, Toolbar and many others. Making use of the MVVM pattern, these navigation components support two-way binding to view model properties. Discover their key features from demos in this section.
