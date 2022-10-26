@@ -34,6 +34,7 @@ themes.forEach((theme) => {
             return createWidget('dxDateBox', {
               label: 'label text',
               stylingMode,
+              showClearButton: true,
               pickerType,
               type,
               rtlEnabled,
