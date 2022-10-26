@@ -940,7 +940,7 @@ const Overlay = Widget.inherit({
     _checkContainerExists() {
         const $wrapperContainer = this._positionController.$container;
 
-        const containerExists = $($wrapperContainer).length > 0;
+        const containerExists = $wrapperContainer.length > 0;
         if(!containerExists) {
             uiErrors.log('W1021', this.NAME);
         }
