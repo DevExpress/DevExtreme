@@ -2,33 +2,9 @@ import { isObject, isString, isDate, isDefined, isNumeric } from './type';
 import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
+import { toMilliseconds } from '../../renovation/ui/common/utils/date';
 
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
-
-const toMilliseconds = function(value) {
-    switch(value) {
-        case 'millisecond':
-            return 1;
-        case 'second':
-            return toMilliseconds('millisecond') * 1000;
-        case 'minute':
-            return toMilliseconds('second') * 60;
-        case 'hour':
-            return toMilliseconds('minute') * 60;
-        case 'day':
-            return toMilliseconds('hour') * 24;
-        case 'week':
-            return toMilliseconds('day') * 7;
-        case 'month':
-            return toMilliseconds('day') * 30;
-        case 'quarter':
-            return toMilliseconds('month') * 3;
-        case 'year':
-            return toMilliseconds('day') * 365;
-        default:
-            return 0;
-    }
-};
 
 const getDatesInterval = function(startDate, endDate, intervalUnit) {
     const delta = endDate.getTime() - startDate.getTime();
