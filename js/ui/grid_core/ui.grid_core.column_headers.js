@@ -203,6 +203,7 @@ export const columnHeadersModule = {
                 _renderCore: function() {
                     const that = this;
                     const $container = that.element();
+                    const change = {};
 
                     if(that._tableElement && !that._dataController.isLoaded() && !that._hasRowElements) {
                         return;
@@ -215,7 +216,7 @@ export const columnHeadersModule = {
 
                     that.setAria('role', 'presentation', $container);
 
-                    that._updateContent(that._renderTable());
+                    that._updateContent(that._renderTable({ change }), change);
 
                     if(that.getRowCount() > 1) {
                         $container.addClass(MULTI_ROW_HEADER_CLASS);
