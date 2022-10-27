@@ -1,3 +1,4 @@
+import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-platform-test';
 
@@ -26,4 +27,4 @@ test('It should not cut appointment if end date is concides with the begining of
     currentView: 'workWeek',
     currentDate: new Date(2021, 2, 28),
   }, true);
-});
+}).after(async (t) => restoreBrowserSize(t));

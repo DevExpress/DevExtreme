@@ -1,3 +1,4 @@
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -50,4 +51,4 @@ test('Popup should have correct width', async (t) => {
     width: 400,
     height: 600,
   }),
-);
+).after(async (t) => restoreBrowserSize(t));

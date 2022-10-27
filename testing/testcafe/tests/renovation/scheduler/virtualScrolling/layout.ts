@@ -26,7 +26,8 @@ const scrollTo = (scrollableContent, position) => ClientFunction(() => {
   },
 })();
 
-fixture('Scheduler: Virtual Scrolling');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Virtual Scrolling');
 
 const createScheduler = async (
   platform: PlatformType,

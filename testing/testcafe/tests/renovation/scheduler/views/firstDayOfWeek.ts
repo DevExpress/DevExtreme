@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -33,4 +34,4 @@ test('WorkWeek should generate correct start view date',
       height: 600,
     });
   },
-);
+).after(async (t) => restoreBrowserSize(t));

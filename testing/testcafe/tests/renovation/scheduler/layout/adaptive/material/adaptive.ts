@@ -16,7 +16,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Adaptive material theme layout');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Adaptive material theme layout');
 
 const createScheduler = async (
   platform: PlatformType,
@@ -44,7 +45,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${crossScrollingEnabled}.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -75,7 +76,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${crossScrollingEnabled}-horizontal.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -108,7 +109,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-vertical.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${crossScrollingEnabled}-vertical.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
