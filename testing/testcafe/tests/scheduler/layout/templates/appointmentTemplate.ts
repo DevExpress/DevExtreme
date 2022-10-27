@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -8,7 +9,7 @@ fixture`Layout:Templates:appointmentTemplate`
   .page(url(__dirname, '../../../container.html'));
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {
-  test(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t) => {
+  safeSizeTest(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

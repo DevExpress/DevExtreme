@@ -1,5 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
@@ -7,7 +8,7 @@ import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils
 fixture`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../containerMaterial.html'));
 
-test('Scheduler should have correct height in month view (T927862)', async (t) => {
+safeSizeTest('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const boundingClientRect = await scheduler.dateTable.boundingClientRect;
@@ -37,7 +38,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
-    test(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    safeSizeTest(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
@@ -50,7 +51,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    safeSizeTest(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });

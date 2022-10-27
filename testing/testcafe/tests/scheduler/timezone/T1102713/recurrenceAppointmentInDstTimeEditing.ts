@@ -1,10 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import AppointmentDialog from '../../../../model/scheduler/appointment/dialog';
 import Appointment from '../../../../model/scheduler/appointment';
+
+fixture`Editing recurrent appointment in DST time`
+  .page(url(__dirname, '../../../container.html'));
 
 interface ITestResizeOptions {
   direction: keyof Appointment['resizableHandle'];
@@ -93,8 +96,6 @@ async function resizeTestFunction(t: TestController,
 }
 
 async function configureScheduler(t: TestController, { start, end }: { start: Date; end: Date }) {
-  await restoreBrowserSize(t);
-
   await createWidget('dxScheduler', {
     dataSource: [{
       startDate: start,
@@ -112,24 +113,21 @@ async function configureScheduler(t: TestController, { start, end }: { start: Da
   });
 }
 
-fixture`Editing recurrent appointment in DST time`
-  .page(url(__dirname, '../../../container.html'));
-
 // === EDITING POPUP ===
-test('Editing popup: should have correctly been edited from editing popup. DST - winter time', async (t) => {
+safeSizeTest('Editing popup: should have correctly been edited from editing popup. DST - winter time', async (t) => {
   await editingPopupTestFunction(t, 'popup__winter-time');
 }).before(async (t) => {
   await configureScheduler(t, APPOINTMENT_DATETIME.winter);
 });
 
-test('Editing popup: should have correctly been edited from editing popup. DST - summer time', async (t) => {
+safeSizeTest('Editing popup: should have correctly been edited from editing popup. DST - summer time', async (t) => {
   await editingPopupTestFunction(t, 'popup__summer-time');
 }).before(async (t) => {
   await configureScheduler(t, APPOINTMENT_DATETIME.summer);
 });
 
 // === DRAG_N_DROP ===
-test('Drag-n-drop up: should have correctly been edited. DST - winter time', async (t) => {
+safeSizeTest('Drag-n-drop up: should have correctly been edited. DST - winter time', async (t) => {
   await dragAndDropTestFunction(t, 'drag-n-drop-up__winter-time', {
     rowIdx: 1,
     cellIdx: 1,
@@ -138,7 +136,7 @@ test('Drag-n-drop up: should have correctly been edited. DST - winter time', asy
   await configureScheduler(t, APPOINTMENT_DATETIME.winter);
 });
 
-test('Drag-n-drop down: should have correctly been edited. DST - winter time', async (t) => {
+safeSizeTest('Drag-n-drop down: should have correctly been edited. DST - winter time', async (t) => {
   await dragAndDropTestFunction(t, 'drag-n-drop-down__winter-time', {
     rowIdx: 4,
     cellIdx: 1,
@@ -147,7 +145,7 @@ test('Drag-n-drop down: should have correctly been edited. DST - winter time', a
   await configureScheduler(t, APPOINTMENT_DATETIME.winter);
 });
 
-test('Drag-n-drop up: should have correctly been edited. DST - summer time', async (t) => {
+safeSizeTest('Drag-n-drop up: should have correctly been edited. DST - summer time', async (t) => {
   await dragAndDropTestFunction(t, 'drag-n-drop-up__summer-time', {
     rowIdx: 1,
     cellIdx: 1,
@@ -156,7 +154,7 @@ test('Drag-n-drop up: should have correctly been edited. DST - summer time', asy
   await configureScheduler(t, APPOINTMENT_DATETIME.summer);
 });
 
-test('Drag-n-drop down: should have correctly been edited. DST - summer time', async (t) => {
+safeSizeTest('Drag-n-drop down: should have correctly been edited. DST - summer time', async (t) => {
   await dragAndDropTestFunction(t, 'drag-n-drop-down__summer-time', {
     rowIdx: 4,
     cellIdx: 1,
@@ -166,7 +164,7 @@ test('Drag-n-drop down: should have correctly been edited. DST - summer time', a
 });
 
 // === RESIZE ===
-test('Resize top: should have correctly been edited. DST - winter time', async (t) => {
+safeSizeTest('Resize top: should have correctly been edited. DST - winter time', async (t) => {
   await resizeTestFunction(t, 'resize-top__winter-time', {
     direction: 'top',
     value: 100,
@@ -175,7 +173,7 @@ test('Resize top: should have correctly been edited. DST - winter time', async (
   await configureScheduler(t, APPOINTMENT_DATETIME.winter);
 });
 
-test('Resize bottom: should have correctly been edited. DST - winter time', async (t) => {
+safeSizeTest('Resize bottom: should have correctly been edited. DST - winter time', async (t) => {
   await resizeTestFunction(t, 'resize-bottom__winter-time', {
     direction: 'bottom',
     value: 100,
@@ -184,7 +182,7 @@ test('Resize bottom: should have correctly been edited. DST - winter time', asyn
   await configureScheduler(t, APPOINTMENT_DATETIME.winter);
 });
 
-test('Resize top: should have correctly been edited. DST - summer time', async (t) => {
+safeSizeTest('Resize top: should have correctly been edited. DST - summer time', async (t) => {
   await resizeTestFunction(t, 'resize-top__summer-time', {
     direction: 'top',
     value: 100,
@@ -193,7 +191,7 @@ test('Resize top: should have correctly been edited. DST - summer time', async (
   await configureScheduler(t, APPOINTMENT_DATETIME.summer);
 });
 
-test('Resize bottom: should have correctly been edited. DST - summer time', async (t) => {
+safeSizeTest('Resize bottom: should have correctly been edited. DST - summer time', async (t) => {
   await resizeTestFunction(t, 'resize-bottom__summer-time', {
     direction: 'bottom',
     value: 100,

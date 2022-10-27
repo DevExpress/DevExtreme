@@ -2,12 +2,13 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Scheduler header: material theme`
   .page(url(__dirname, '../../containerMaterial.html'));
 
-test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
+safeSizeTest('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   await t
@@ -25,7 +26,7 @@ test('dateNavigator buttons should have "text" styling mode with material theme'
   height: 580,
 }));
 
-test('viewSwitcher dropdown button popup should have a specified class', async (t) => {
+safeSizeTest('viewSwitcher dropdown button popup should have a specified class', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const dropDownButton = toolbar.viewSwitcher.getDropDownButton();
 
@@ -42,7 +43,7 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
   height: 580,
 }));
 
-test('The toolbar should not display if the config is empty', async (t) => {
+safeSizeTest('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');
@@ -68,7 +69,7 @@ test('The toolbar should not display if the config is empty', async (t) => {
   toolbar: [],
 }, true));
 
-test('The viewSwitcher should not drop down if only one view', async (t) => {
+safeSizeTest('The viewSwitcher should not drop down if only one view', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const { toolbar } = new Scheduler('#container');

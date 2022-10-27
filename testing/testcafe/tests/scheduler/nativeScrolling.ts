@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
 fixture`Scheduler: NativeScrolling`
@@ -15,7 +16,7 @@ const scrollToTime = ClientFunction(() => {
   instance.scrollToTime(date.getHours() - 1, 30, date);
 });
 
-test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async (t) => {
+safeSizeTest('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const views = [{

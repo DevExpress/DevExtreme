@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -11,7 +12,7 @@ const showAppointmentPopup = ClientFunction(() => {
   instance.showAppointmentPopup();
 });
 
-test('Invoke showAppointmentPopup method shouldn\'t raise error if value of currentDate property as a string', async (t) => {
+safeSizeTest('Invoke showAppointmentPopup method shouldn\'t raise error if value of currentDate property as a string', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await showAppointmentPopup();
@@ -29,7 +30,7 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
   height: 600,
 }, true));
 
-test('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
+safeSizeTest('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointmentByIndex(0);
 

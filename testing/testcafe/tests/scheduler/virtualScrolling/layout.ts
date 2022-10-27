@@ -1,6 +1,7 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import {
   resources,
@@ -32,8 +33,7 @@ const createScheduler = async (
   }, true);
 };
 
-test('Virtual scrolling layout in scheduler views', async (t) => {
-  await t.resizeWindow(1200, 800);
+safeSizeTest('Virtual scrolling layout in scheduler views', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -63,8 +63,7 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
   await createScheduler({});
 });
 
-test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled', async (t) => {
-  await t.resizeWindow(1200, 800);
+safeSizeTest('Virtual scrolling layout in scheduler views when horizontal grouping is enabled', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -97,8 +96,7 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
   });
 });
 
-test('Virtual scrolling layout in scheduler views when grouping by date is enabled', async (t) => {
-  await t.resizeWindow(1200, 800);
+safeSizeTest('Virtual scrolling layout in scheduler views when grouping by date is enabled', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -132,8 +130,7 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
   });
 });
 
-test('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used', async (t) => {
-  await t.resizeWindow(1200, 800);
+safeSizeTest('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('currentDate', new Date(2020, 11, 1));
