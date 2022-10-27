@@ -25,7 +25,7 @@ themes.forEach((theme) => {
           test(`Icon for dxDateBox ${theme} stylingMode=${stylingMode} pickerType=${pickerType} type=${type} rtlEnabled=${rtlEnabled}`, async (t) => {
             const dateBox = new DateBox('#container');
             const { dropDownEditorButton } = dateBox;
-            await t.expect(await compareScreenshot(t, `datebox-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+            await t.expect(await compareScreenshot(t, `db-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
 
             await t
               .click(dropDownEditorButton)
