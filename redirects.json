@@ -38,6 +38,8 @@
 	{ "Widget": "Scheduler", "Name": "AdaptiveAppointments", "NewWidget": "Scheduler", "NewName": "LimitAppointmentCountPerCell" },
     { "Widget": "Drawer", "Name": "HorizontalOpening", "NewWidget": "Drawer", "NewName": "LeftOrRightPosition" },
     { "Widget": "Drawer", "Name": "VerticalOpening", "NewWidget": "Drawer", "NewName": "TopOrBottomPosition" },
+    { "Widget": "NavBar", "Name": "Overview", "NewWidget": "Tabs", "NewName": "Overview" },
+    { "Widget": "Slideout", "Name": "Overview", "NewWidget": "Drawer", "NewName": "LeftOrRightPosition" },
     { "Widget": "Reporting", "Name": "PollingReport", "NewWidget": "Reporting", "NewName": "EmployeePerformanceReview" },
     { "Widget": "Common", "Name": "StylingMode", "NewWidget": "Common", "NewName": "EditorAppearanceVariants" }
 ]

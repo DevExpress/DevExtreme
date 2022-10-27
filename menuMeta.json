@@ -3815,34 +3815,6 @@
         ]
       },
       {
-        "Name": "NavBar",
-        "Hidden": true,
-        "Breadcrumb": true,
-        "Equivalents": "NavigationBar, dxNavBar, dx-nav-bar",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "NavBar",
-            "DemoType": "Mobile"
-          }
-        ]
-      },
-      {
-        "Name": "Slideout",
-        "Hidden": true,
-        "Breadcrumb": true,
-        "Equivalents": "Navigation Drawer, dxSlideOut, dx-slide-out",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "Slideout",
-            "DemoType": "Mobile"
-          }
-        ]
-      },
-      {
         "Name": "Drawer",
         "Breadcrumb": true,
         "Equivalents": "Drawer, dxDrawer, dx-drawer",
