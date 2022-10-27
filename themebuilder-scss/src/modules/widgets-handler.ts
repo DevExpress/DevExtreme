@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 
@@ -29,7 +30,9 @@ export default class WidgetsHandler {
 
     let match = widgetRegex.exec(widgetsListString);
     while (match !== null) {
-      result.push({ widgetName: match[1].toLowerCase(), widgetImportString: match[0] });
+      if (match[1].toLowerCase() !== 'slideout' || match[1].toLowerCase() !== 'slideoutview') {
+        result.push({ widgetName: match[1].toLowerCase(), widgetImportString: match[0] });
+      }
       match = widgetRegex.exec(widgetsListString);
     }
 
