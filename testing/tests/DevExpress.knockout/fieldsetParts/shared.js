@@ -5,7 +5,7 @@ const devices = require('core/devices');
 
 require('../../../helpers/executeAsyncMock.js');
 require('integration/knockout');
-require('bundles/modules/parts/widgets-all');
+require('bundles/modules/parts/widgets-web');
 
 const LABEL = '.dx-field-label';
 const VALUE = '.dx-field-value';
