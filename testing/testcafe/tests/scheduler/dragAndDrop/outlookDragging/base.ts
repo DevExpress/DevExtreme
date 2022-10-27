@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Outlook dragging base tests`
@@ -53,7 +54,7 @@ test('Basic drag-n-drop movements in groups', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
+safeSizeTest('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -100,7 +101,7 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
+safeSizeTest('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -162,7 +163,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
     endDate: new Date(2021, 2, 3, 11, 0),
   }],
 }].forEach(({ currentView, dataSource }) => {
-  test(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
+  safeSizeTest(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
     const scheduler = new Scheduler('#container');
     const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -190,7 +191,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   }));
 });
 
-test('Basic drag-n-drop movements', async (t) => {
+safeSizeTest('Basic drag-n-drop movements', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -229,7 +230,7 @@ test('Basic drag-n-drop movements', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop movements with mouse offset', async (t) => {
+safeSizeTest('Basic drag-n-drop movements with mouse offset', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -268,7 +269,7 @@ test('Basic drag-n-drop movements with mouse offset', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop all day appointment movements', async (t) => {
+safeSizeTest('Basic drag-n-drop all day appointment movements', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -307,7 +308,7 @@ test('Basic drag-n-drop all day appointment movements', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop movements within the cell', async (t) => {
+safeSizeTest('Basic drag-n-drop movements within the cell', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -342,7 +343,7 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop small appointments', async (t) => {
+safeSizeTest('Basic drag-n-drop small appointments', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -381,7 +382,7 @@ test('Basic drag-n-drop small appointments', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop long appointments', async (t) => {
+safeSizeTest('Basic drag-n-drop long appointments', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 

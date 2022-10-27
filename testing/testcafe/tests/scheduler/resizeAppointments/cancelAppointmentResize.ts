@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from '../dragAndDrop/init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -6,7 +7,7 @@ import Scheduler from '../../../model/scheduler';
 fixture`Cancel appointment D-n-D`
   .page(url(__dirname, '../../container.html'));
 
-test('onAppointmentUpdating - newDate should be correct after cancel appointment resize and cellDuration=24h (T1070565)', async (t) => {
+safeSizeTest('onAppointmentUpdating - newDate should be correct after cancel appointment resize and cellDuration=24h (T1070565)', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Test Resize');
   const etalonISOEndDate = 'Fri Jun 04 2021';

@@ -1,7 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
+
+fixture`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
+  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 interface TestAppointment {
   id: number;
@@ -81,10 +85,7 @@ const createSchedulerWithRemoteDataSource = async (
   }, { dependencies: { selector, options, appointments } })();
 };
 
-fixture`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
-  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
-
-test('Should set correct start and end dates in drag&dropped appointment', async (t) => {
+safeSizeTest('Should set correct start and end dates in drag&dropped appointment', async (t) => {
   const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
   const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
 
