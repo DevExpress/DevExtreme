@@ -43,7 +43,6 @@ ui.dxLoadPanel = require('../../../ui/load_panel');
 ui.dxLookup = require('../../../ui/lookup');
 ui.dxMap = require('../../../ui/map');
 ui.dxMultiView = require('../../../ui/multi_view');
-ui.dxNavBar = require('../../../ui/nav_bar');
 ui.dxNumberBox = require('../../../ui/number_box');
 ui.dxOverlay = require('../../../ui/overlay/ui.overlay');
 ui.dxPopover = require('../../../ui/popover');

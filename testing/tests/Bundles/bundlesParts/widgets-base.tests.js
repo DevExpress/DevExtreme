@@ -30,7 +30,6 @@ QUnit.test('widgets-base', function(assert) {
         'dxLookup',
         'dxMap',
         'dxMultiView',
-        'dxNavBar',
         'dxNumberBox',
         'dxOverlay',
         'dxPopover',

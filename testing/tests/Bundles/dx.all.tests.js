@@ -29,4 +29,3 @@ require('./bundlesParts/data.odata.tests.js');
 require('./bundlesParts/animation.tests.js');
 require('./bundlesParts/widgets-base.tests.js');
 require('./bundlesParts/widgets-web.tests.js');
-require('./bundlesParts/widgets-mobile.tests.js');

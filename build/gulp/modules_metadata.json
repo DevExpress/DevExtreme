@@ -458,12 +458,6 @@
     }
   },
   {
-    "name": "ui/nav_bar",
-    "exports": {
-      "default": { "path": "ui.dxNavBar", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/notify",
     "exports": {
       "default": { "path": "ui.notify" }
@@ -602,18 +596,6 @@
     "name": "ui/set_template_engine",
     "exports": {
       "default": { "path": "setTemplateEngine" }
-    }
-  },
-  {
-    "name": "ui/slide_out",
-    "exports": {
-      "default": { "path": "ui.dxSlideOut", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/slide_out_view",
-    "exports": {
-      "default": { "path": "ui.dxSlideOutView", "isWidget": true }
     }
   },
   {
