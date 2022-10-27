@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -60,7 +61,7 @@ const resources = [{
         resourceCellTemplate: (props) => props.text,
       });
     },
-  );
+  ).after(async (t) => restoreBrowserSize(t));
 
   testReact(`cell templates should work in React in ${view}`,
     async (t, { screenshotComparerOptions }) => {
@@ -96,5 +97,5 @@ const resources = [{
         resourceCellTemplate: ({ data }) => data.text,
       });
     },
-  );
+  ).after(async (t) => restoreBrowserSize(t));
 });

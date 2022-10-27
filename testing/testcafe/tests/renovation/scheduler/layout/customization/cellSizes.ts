@@ -8,7 +8,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Layout Customization: Cell Sizes');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Layout Customization: Cell Sizes');
 
 const createScheduler = async (
   platform: PlatformType,
