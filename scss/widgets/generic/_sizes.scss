@@ -47,7 +47,9 @@ $generic-base-inline-widget-vertical-padding:
   $generic-base-inline-widget-height -
   $generic-base-inline-block-height !default;
 $generic-base-inline-widget-top-padding: floor(math.div($generic-base-inline-widget-vertical-padding, 2)) !default;
-$generic-base-inline-widget-bottom-padding: floor(math.div($generic-base-inline-widget-vertical-padding, 2)) !default;
+$generic-base-inline-widget-bottom-padding:
+  $generic-base-inline-widget-vertical-padding -
+  $generic-base-inline-widget-top-padding !default;
 
 // Base bordered inline widgets sizes
 $generic-base-border-width: 1px !default;
