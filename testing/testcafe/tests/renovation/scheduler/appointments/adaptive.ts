@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -99,5 +100,5 @@ fixture('Renovated scheduler - Adaptive appointments');
         showCurrentTimeIndicator: false,
       });
     },
-  );
+  ).after(async (t) => restoreBrowserSize(t));
 });

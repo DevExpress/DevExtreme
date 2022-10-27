@@ -1,4 +1,5 @@
 import url from '../../../../helpers/getPageUrl';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -79,7 +80,7 @@ fixture`Resources`
         label: 'Priority',
       }],
     },
-  ));
+  )).after(async (t) => restoreBrowserSize(t));
 });
 
 test('Scheduler should renders correctly if resource dataSource is not set', async (t) => {
@@ -117,4 +118,4 @@ test('Scheduler should renders correctly if resource dataSource is not set', asy
       label: 'Room',
     }],
   },
-));
+)).after(async (t) => restoreBrowserSize(t));
