@@ -1,11 +1,12 @@
 import createWidget from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Agenda:Editing`
   .page(url(__dirname, '../../container.html'));
 
-test('It should be possible to delete an appointment', async (t) => {
+safeSizeTest('It should be possible to delete an appointment', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -39,7 +40,7 @@ test('It should be possible to delete an appointment', async (t) => {
   }, true);
 });
 
-test('It should be possible to change the data source of agenda resources', async (t) => {
+safeSizeTest('It should be possible to change the data source of agenda resources', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

@@ -1,12 +1,12 @@
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`Scheduler API - deleteRecurrence`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture`Scheduler API - deleteRecurrence`
+  .page(url(__dirname, '../../container.html'));
 
-test('should delete recurrent appointment if mode is "series"', async (t) => {
+safeSizeTest('should delete recurrent appointment if mode is "series"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('test-appt');
   const { appointmentTooltip } = scheduler;
@@ -50,7 +50,7 @@ test('should delete recurrent appointment if mode is "series"', async (t) => {
   },
 ));
 
-test('should exclude from recurrence if mode is "occurrence"', async (t) => {
+safeSizeTest('should exclude from recurrence if mode is "occurrence"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment0 = scheduler.getAppointment('test-appt', 0);
   const appointment1 = scheduler.getAppointment('test-appt', 1);
@@ -109,7 +109,7 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
   },
 ));
 
-test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
+safeSizeTest('should show delete recurrence dialog if mode is "dialog"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('test-appt');
   const { appointmentTooltip } = scheduler;

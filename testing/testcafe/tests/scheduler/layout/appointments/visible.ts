@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -8,7 +9,7 @@ fixture`Layout:Appointments:visible`
 
 [1, 0].forEach((maxAppointmentsPerCell) => {
   [true, false, undefined].forEach((visible) => {
-    test(`Appointments should be filtered by visible property(visible='${visible}', maxAppointmentsPerCell='${maxAppointmentsPerCell}'`, async (t) => {
+    safeSizeTest(`Appointments should be filtered by visible property(visible='${visible}', maxAppointmentsPerCell='${maxAppointmentsPerCell}'`, async (t) => {
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

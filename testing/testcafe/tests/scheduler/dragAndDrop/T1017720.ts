@@ -3,12 +3,13 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { extend } from '../../../../../js/core/utils/extend';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`T1017720`
   .page(url(__dirname, './pages/containerWithDnD.html'));
 
-test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
+safeSizeTest('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
   const scheduler = new Scheduler('#scheduler');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('text');

@@ -1,5 +1,6 @@
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
 fixture`Week view in adaptive mode`
@@ -75,8 +76,7 @@ const roughEqual = (actual: number, expected: number): boolean => {
   windowWidth: 800,
   name: 'align by center in tablet',
 }].forEach((testCase) => {
-  test(`Mobile tooltip should be ${testCase.name} screen`, async (t) => {
-    await t.resizeWindow(testCase.windowWidth, 700);
+  safeSizeTest(`Mobile tooltip should be ${testCase.name} screen`, async (t) => {
     await t
       .click(scheduler.collectors.get(0).element);
 
@@ -94,12 +94,10 @@ const roughEqual = (actual: number, expected: number): boolean => {
       .ok()
       .expect(roughEqual(width, testCase.width))
       .ok();
-  }).before(async () => createScheduler(sampleData, '80%'));
+  }, [testCase.windowWidth, 700]).before(async () => createScheduler(sampleData, '80%'));
 });
 
-test('Compact appointment should be center by vertical alignment', async (t) => {
-  await t.resizeWindow(350, 600);
-
+safeSizeTest('Compact appointment should be center by vertical alignment', async (t) => {
   await t
     .expect(scheduler.getAppointmentCount()).eql(0)
     .expect(scheduler.collectors.count).eql(3);
@@ -117,11 +115,9 @@ test('Compact appointment should be center by vertical alignment', async (t) => 
     .ok()
     .expect(roughEqual(await scheduler.collectors.get(2).element.getBoundingClientRectProperty('left'), 177))
     .ok();
-}).before(async () => createScheduler(sampleDataNotRoundedMinutes));
+}, [350, 600]).before(async () => createScheduler(sampleDataNotRoundedMinutes));
 
-test('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
-  await t.resizeWindow(350, 600);
-
+safeSizeTest('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
   await t
     .expect(scheduler.getAppointmentCount()).eql(0)
     .expect(scheduler.collectors.count).eql(2)
@@ -151,4 +147,4 @@ test('With a large browser width, should be visible common appointment instead o
     .ok()
     .expect(roughEqual(await scheduler.collectors.get(1).element.getBoundingClientRectProperty('left'), 236.5))
     .ok();
-}).before(async () => createScheduler(sampleData));
+}, [350, 600]).before(async () => createScheduler(sampleData));

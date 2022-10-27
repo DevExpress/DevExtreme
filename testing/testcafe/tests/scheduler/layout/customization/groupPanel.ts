@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Scheduler: Layout Customization: Group Panel`
@@ -61,7 +62,7 @@ const views = [{
 }];
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test('Group panel customization should work', async (t) => {
+  safeSizeTest('Group panel customization should work', async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
