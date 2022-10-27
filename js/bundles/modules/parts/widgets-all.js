@@ -1,2 +1,2 @@
-import './widgets-mobile';
+import './widgets-base';
 import './widgets-web';

@@ -15,7 +15,6 @@ const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',
     'js/bundles/modules/parts/data.js',
     'js/bundles/modules/parts/widgets-base.js',
-    'js/bundles/modules/parts/widgets-mobile.js',
     'js/bundles/modules/parts/widgets-web.js',
     'js/bundles/modules/parts/viz.js',
     'js/bundles/modules/parts/aspnet.js'
