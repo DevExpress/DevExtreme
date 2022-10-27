@@ -5,7 +5,7 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('generic_light.css!');
 
-require('bundles/modules/parts/widgets-all');
+require('bundles/modules/parts/widgets-web');
 
 GoogleStaticProvider.remapConstant('/mapURL?');
 
