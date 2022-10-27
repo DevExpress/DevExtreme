@@ -480,33 +480,41 @@ const VirtualScrollingRowsViewExtender = (function() {
             let $freeSpaceRowElements;
             const contentElement = this._findContentElement();
             const changeType = change && change.changeType;
+            const d = Deferred();
 
             const contentTable = contentElement.children().first();
             if(changeType === 'append' || changeType === 'prepend') {
-                const $tBodies = this._getBodies(tableElement);
-                if($tBodies.length === 1) {
-                    this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
-                } else {
-                    $tBodies[changeType === 'append' ? 'appendTo' : 'prependTo'](contentTable);
-                }
+                this._waitAsyncTemplates(change).done(() => {
+                    const $tBodies = this._getBodies(tableElement);
+                    if($tBodies.length === 1) {
+                        this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
+                    } else {
+                        $tBodies[changeType === 'append' ? 'appendTo' : 'prependTo'](contentTable);
+                    }
 
-                tableElement.remove();
-                $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
-                removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
+                    tableElement.remove();
+                    $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
+                    removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
 
-                if(change.removeCount) {
-                    this._removeRowsElements(contentTable, change.removeCount, changeType);
-                }
+                    if(change.removeCount) {
+                        this._removeRowsElements(contentTable, change.removeCount, changeType);
+                    }
 
-                this._restoreErrorRow(contentTable);
-            } else {
-                this.callBase.apply(this, arguments);
-                if(changeType === 'update') {
                     this._restoreErrorRow(contentTable);
-                }
+                    d.resolve();
+                }).fail(d.reject);
+            } else {
+                this.callBase.apply(this, arguments).done(() => {
+                    if(changeType === 'update') {
+                        this._restoreErrorRow(contentTable);
+                    }
+                    d.resolve();
+                }).fail(d.reject);
             }
 
-            this._updateBottomLoading();
+            return d.promise().done(() => {
+                this._updateBottomLoading();
+            });
         },
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;

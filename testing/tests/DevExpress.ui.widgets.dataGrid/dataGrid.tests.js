@@ -4682,6 +4682,61 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.ok($freeSpaceRow.hasClass('dx-freespace-row'), 'freespace row is last');
         assert.ok($freeSpaceRow.is('tbody'), 'freespace row as tbody tag');
     });
+
+    // T1107403
+    QUnit.module('allowRenderToDetachedContainer', () => {
+        ['headerCellTemplate', 'cellTemplate', 'editCellTemplate', 'groupCellTemplate'].forEach((templateName) => {
+            QUnit.test(`Render column with ${templateName}`, function(assert) {
+                // arrange
+                assert.expect(2);
+
+                const column = {
+                    dataField: 'field2',
+                    renderAsync: true,
+                    showEditorAlways: templateName === 'editCellTemplate',
+                    groupIndex: templateName === 'groupCellTemplate' ? 0 : undefined
+                };
+
+                column[templateName] = (container, options) => {
+                    // assert
+                    assert.strictEqual($(container).closest(document).length, 0, 'container is not attached to DOM');
+                };
+
+                // act
+                createDataGrid({
+                    renderAsync: true,
+                    allowRenderToDetachedContainer: true,
+                    dataSource: [{ field1: 'test1', field2: 'test2' }],
+                    columns: ['field1', column]
+                });
+                this.clock.tick(100);
+            });
+        });
+
+        QUnit.test('Render column buttons with template', function(assert) {
+            // arrange
+            assert.expect(2);
+
+            // act
+            createDataGrid({
+                renderAsync: true,
+                allowRenderToDetachedContainer: true,
+                dataSource: [{ field1: 'test1', field2: 'test2' }],
+                columns: ['field1', 'field2', {
+                    name: 'test',
+                    type: 'buttons',
+                    renderAsync: true,
+                    buttons: [{
+                        template: (container, options) => {
+                            // assert
+                            assert.strictEqual($(container).closest(document).length, 0, 'container is not attached to DOM');
+                        }
+                    }]
+                }],
+            });
+            this.clock.tick(100);
+        });
+    });
 });
 
 QUnit.module('Modules', {
