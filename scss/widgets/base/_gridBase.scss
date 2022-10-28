@@ -691,14 +691,14 @@
 
   .dx-#{$widget-name}-filter-row {
     .dx-editor-cell {
-      .dx-menu {
+      .dx-dropdownbutton {
         display: none;
       }
 
       .dx-editor-with-menu {
         position: relative;
 
-        .dx-menu {
+        .dx-dropdownbutton {
           display: block;
         }
 
@@ -726,66 +726,32 @@
       }
     }
 
-    .dx-menu {
+    .dx-dropdownbutton {
       z-index: 1;
       position: absolute;
       top: 0;
       left: 0;
-      cursor: pointer;
-      margin-left: -2px;
-      margin-top: -2px;
       height: 100%;
       overflow: visible;
 
-      .dx-menu-horizontal {
+      .dx-buttongroup {
         height: 100%;
 
-        .dx-menu-item-text,
-        .dx-menu-item-popout {
+        .dx-button-text {
           display: none;
         }
       }
     }
 
-    .dx-menu-item.dx-state-focused {
+    .dx-button.dx-state-focused {
       &::after {
         position: absolute;
-        left: 2px;
-        top: 2px;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 102%;
         content: '';
       }
-    }
-
-    & > td:first-child .dx-menu,
-    & > .dx-first-cell .dx-menu {
-      margin-left: 0;
-    }
-
-    .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
-      padding: 5px;
-      padding-right: 30px;
-    }
-
-    .dx-menu ul.dx-menu-horizontal > li > .dx-menu-item {
-      padding: 8px 5px 7px 5px;
-    }
-
-    .dx-menu ul.dx-menu-horizontal > li > .dx-menu-item.dx-state-disabled:hover {
-      padding: 9px 6px 8px 6px;
-    }
-
-    .dx-menu-caption {
-      padding-left: 6px;
-    }
-
-    .dx-menu ul .dx-menu-item .dx-menu-chouser-down {
-      display: none;
-    }
-
-    .dx-menu-item-highlight {
-      font-weight: normal;
     }
   }
 
@@ -1103,25 +1069,25 @@
         }
       }
 
-      .dx-menu {
+      .dx-dropdownbutton {
         right: 0;
         left: auto;
         margin-left: 0;
         margin-right: -2px;
       }
 
-      & > td:first-child .dx-menu {
+      & > td:first-child .dx-dropdownbutton {
         margin-left: 0;
       }
 
-      .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
-        padding: 5px;
-        padding-left: 30px;
-      }
+      // .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
+      //   padding: 5px;
+      //   padding-left: 30px;
+      // }
 
-      .dx-menu-caption {
-        padding-right: 6px;
-      }
+      // .dx-menu-caption {
+      //   padding-right: 6px;
+      // }
     }
 
     .dx-#{$widget-name}-header-panel {

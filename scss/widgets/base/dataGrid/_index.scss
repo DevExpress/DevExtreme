@@ -123,7 +123,7 @@ $datagrid-text-stub-background-image-path: null !default;
   }
 
   &.dx-filter-menu {
-    .dx-menu-item-content .dx-icon {
+    .dx-dropdownbutton .dx-button-content .dx-icon {
       @include dx-icon-sizing(14px);
     }
   }

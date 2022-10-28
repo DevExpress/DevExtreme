@@ -43,7 +43,7 @@ $grid-masterdetail-padding: 20px;
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
     &.dx-filter-menu {
-      .dx-menu-item-has-icon {
+      .dx-dropdownbutton .dx-button-has-icon {
         .dx-icon {
           color: $datagrid-menu-icon-color;
         }
@@ -462,51 +462,11 @@ $grid-masterdetail-padding: 20px;
   }
 
   .dx-#{$widget-name}-filter-row {
-    .dx-menu {
-      .dx-overlay-content {
-        color: $menu-color;
-      }
-    }
-
-    .dx-menu-item {
-      &.dx-state-focused {
-        background-color: transparent;
-
-        &::after {
-          border: 2px solid $datagrid-focused-border-color;
-        }
-
-        &.dx-menu-item-expanded {
-          background-color: $datagrid-base-background-color;
-
-          &::after {
-            border-color: transparent;
-          }
-        }
-      }
-    }
-
-    .dx-menu-item-has-submenu {
-      &.dx-state-hover {
-        background-color: transparent;
-      }
-
-      &.dx-menu-item-expanded.dx-state-hover {
-        background-color: $datagrid-editor-bg;
-      }
-    }
-
     .dx-highlight-outline,
     .dx-cell-modified,
     .dx-#{$widget-name}-invalid {
       &::after {
         border-color: $datagrid-cell-modified-border-color;
-      }
-    }
-
-    .dx-menu-item-content {
-      .dx-icon {
-        color: $datagrid-menu-icon-color;
       }
     }
 
@@ -544,33 +504,34 @@ $grid-masterdetail-padding: 20px;
     }
   }
 
-  .dx-filter-menu {
-    &.dx-menu {
-      background-color: transparent;
-      height: 100%;
+  .dx-filter-menu.dx-dropdownbutton  {
+    background-color: transparent;
+    height: 100%;
 
-      .dx-menu-item {
-        .dx-menu-item-content {
-          padding: $generic-grid-base-menu-item-padding;
+    .dx-buttongroup .dx-button {
+      &.dx-state-hover {
+        background-color: $datagrid-base-background-color;
+      }
 
-          .dx-icon {
-            margin: 0 3px;
-          }
+      &.dx-state-focused {
+        background-color: transparent;
+
+        &::after {
+          border: 2px solid $datagrid-focused-border-color;
         }
       }
-    }
+      
+      .dx-button-content {
+        padding: $generic-grid-base-menu-item-padding;
 
-    .dx-menu-item-content {
-      .dx-icon.dx-icon-filter-operation-default {
-        margin-top: 2px;
-      }
-    }
-  }
-
-  .dx-editor-with-menu .dx-filter-menu {
-    .dx-menu-item-content {
-      .dx-icon.dx-icon-filter-operation-default {
-        margin-top: 2px;
+        .dx-icon {
+          margin: 2px 0;
+          font-size: 15px;
+          width: 1em;
+          height: 18px;
+          line-height: 18px;
+          color: $datagrid-menu-icon-color;
+        }
       }
     }
   }
@@ -1015,10 +976,10 @@ $grid-masterdetail-padding: 20px;
     }
 
     .dx-#{$widget-name}-filter-row {
-      .dx-menu {
-        .dx-menu-item-has-submenu.dx-menu-item-has-icon {
+      .dx-dropdownbutton {
+        .dx-buttongroup-item.dx-button-has-icon {
           .dx-icon {
-            margin: 0 3px;
+            margin: 0;
           }
         }
       }

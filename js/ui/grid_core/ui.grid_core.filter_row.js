@@ -10,8 +10,8 @@ import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import Editor from '../editor/editor';
 import Overlay from '../overlay/ui.overlay';
-import Menu from '../menu';
 import { selectView } from '../shared/accessibility';
+import DropDownButton from '../drop_down_button';
 
 const OPERATION_ICONS = {
     '=': 'filter-operation-equals',
@@ -48,7 +48,7 @@ const FILTER_ROW_CLASS = 'filter-row';
 const FILTER_RANGE_OVERLAY_CLASS = 'filter-range-overlay';
 const FILTER_RANGE_START_CLASS = 'filter-range-start';
 const FILTER_RANGE_END_CLASS = 'filter-range-end';
-const MENU_CLASS = 'dx-menu';
+const DROPDOWN_CLASS = 'dx-dropdownbutton';
 const EDITOR_WITH_MENU_CLASS = 'dx-editor-with-menu';
 const EDITOR_CONTAINER_CLASS = 'dx-editor-container';
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
@@ -181,7 +181,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             let $cell;
             let $editorContainer;
             let $editorRangeElements;
-            let $menu;
+            let $dropDownBtn;
 
             if(gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
                 const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
@@ -205,10 +205,10 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 }
                 if(optionNames.selectedFilterOperation || optionNames.bufferedSelectedFilterOperation) {
                     if(visibleIndex >= 0 && column) {
-                        $menu = $cell.find('.' + MENU_CLASS);
+                        $dropDownBtn = $cell.find('.' + DROPDOWN_CLASS);
 
-                        if($menu.length) {
-                            that._updateFilterOperationChooser($menu, column, $editorContainer);
+                        if($dropDownBtn.length) {
+                            that._updateFilterOperationChooser($dropDownBtn, column, $editorContainer);
 
                             if(getColumnSelectedFilterOperation(that, column) === 'between') {
                                 that._renderFilterRangeContent($cell, column);
@@ -314,7 +314,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 onHidden: function() {
                     column = that._columnsController.columnOption(column.index);
 
-                    $cell.find('.' + MENU_CLASS).parent().addClass(EDITOR_WITH_MENU_CLASS);
+                    $cell.find('.' + DROPDOWN_CLASS).parent().addClass(EDITOR_WITH_MENU_CLASS);
                     if(getColumnSelectedFilterOperation(that, column) === 'between') {
                         that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
                         that.component.updateDimensions();
@@ -531,28 +531,60 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             }
         },
 
-        _updateFilterOperationChooser: function($menu, column, $editorContainer) {
+        _updateFilterOperationChooser: function($dropDownBtn, column, $editorContainer) {
             const that = this;
+
             let isCellWasFocused;
+            let isBtnHovered = false;
+            let isPopupHovered = false;
+
+            const getDropDownBtnInstance = () => DropDownButton.getInstance($dropDownBtn);
+
             const restoreFocus = function() {
-                const menu = Menu.getInstance($menu);
-                menu && menu.option('focusedElement', null);
                 isCellWasFocused && that._focusEditor($editorContainer);
             };
+            const checkToResetFilter = function() {
+                const dropDownBtn = getDropDownBtnInstance();
+                const isReset = dropDownBtn && dropDownBtn.option('selectedItemKey') === null;
 
-            that._createComponent($menu, Menu, {
-                integrationOptions: {},
-                activeStateEnabled: false,
-                selectionMode: 'single',
-                cssClass: that.getWidgetContainerClass() + ' ' + CELL_FOCUS_DISABLED_CLASS + ' ' + FILTER_MENU,
-                showFirstSubmenuMode: 'onHover',
-                hideSubmenuOnMouseLeave: true,
-                items: [{
-                    disabled: column.filterOperations && column.filterOperations.length ? false : true,
-                    icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
-                    selectable: false,
-                    items: that._getFilterOperationMenuItems(column)
-                }],
+                if(isReset) {
+                    dropDownBtn.option('selectedItemKey', 'default');
+                }
+            };
+            const onHoverChange = function() {
+                const dropDownBtn = getDropDownBtnInstance();
+
+                dropDownBtn.toggle(isBtnHovered || isPopupHovered);
+            };
+
+            that._createComponent($dropDownBtn, DropDownButton, {
+                keyExpr: 'name',
+                displayExpr: 'text',
+                useSelectMode: true,
+                icon: 'search',
+                showArrowIcon: false,
+                stylingMode: 'text',
+                useItemTextAsTitle: false,
+                hoverStateEnabled: true,
+                rtlEnabled: that.option('rtlEnabled'),
+                items: that._getFilterOperationMenuItems(column),
+                elementAttr: {
+                    class: that.getWidgetContainerClass() + ' ' + CELL_FOCUS_DISABLED_CLASS + ' ' + FILTER_MENU,
+                },
+                dropDownOptions: {
+                    width: '210px',
+                    hoverStateEnabled: true,
+
+                    onOptionChanged: function(change) {
+                        if(change.name === 'hoveredElement') {
+                            isPopupHovered = !!change.value;
+                            onHoverChange();
+                        }
+                    },
+                    onContentReady: function(e) {
+                        e.component._$content.addClass(that.getWidgetContainerClass());
+                    }
+                },
                 onItemClick: function(properties) {
                     const selectedFilterOperation = properties.itemData.name;
                     const columnSelectedFilterOperation = getColumnSelectedFilterOperation(that, column);
@@ -592,23 +624,40 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                     } else {
                         that._showFilterRange($editorContainer.closest('.' + EDITOR_CELL_CLASS), column);
                     }
+
+                    // After onItemClick dropDownButton component refocuses on itself,
+                    // so to prevent it we can return false. And by doing this we need to close the dropdown here.
+                    properties.component.close();
+                    return false;
                 },
-                onSubmenuShowing: function() {
-                    isCellWasFocused = that._isEditorFocused($editorContainer);
-                    that.getController('editorFactory').loseFocus();
-                },
-                onSubmenuHiding: function() {
-                    eventsEngine.trigger($menu, 'blur');
-                    restoreFocus();
+                onOptionChanged: function(change) {
+                    if(change.name === 'hoveredElement') {
+                        // To remove redundant opening and closing of the dropdown when
+                        // mouse leaves the button and enters the dropdown, we need setTimeout here
+                        setTimeout(() => {
+                            isBtnHovered = !!change.value;
+                            onHoverChange();
+                        }, 10);
+                    } else if(change.name === 'opened') {
+                        if(change.value === true) {
+                            isCellWasFocused = that._isEditorFocused($editorContainer);
+                            that.getController('editorFactory').loseFocus();
+                        } else {
+                            restoreFocus();
+                        }
+                    }
                 },
                 onContentReady: function(e) {
-                    eventsEngine.on($menu, 'blur', () => {
-                        const menu = e.component;
-                        menu._hideSubmenuAfterTimeout();
-                        restoreFocus();
-                    });
+                    checkToResetFilter();
                 },
-                rtlEnabled: that.option('rtlEnabled')
+                onSelectionChanged: function(e) {
+                    checkToResetFilter();
+                },
+                onButtonClick: function(e) {
+                    // because the dropdown button toggles after a click,
+                    // we need to close it so it will toggle to open state
+                    e.component.close();
+                }
             });
         },
 
@@ -623,12 +672,12 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
         _renderFilterOperationChooser: function($container, column, $editorContainer) {
             const that = this;
-            let $menu;
+            let $dropDownBtn;
 
             if(that.option('filterRow.showOperationChooser')) {
                 $container.addClass(EDITOR_WITH_MENU_CLASS);
-                $menu = $('<div>').prependTo($container);
-                that._updateFilterOperationChooser($menu, column, $editorContainer);
+                $dropDownBtn = $('<div>').prependTo($container);
+                that._updateFilterOperationChooser($dropDownBtn, column, $editorContainer);
             }
         },
 
@@ -657,6 +706,14 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                     name: null,
                     text: filterRowOptions && filterRowOptions.resetOperationText,
                     icon: OPERATION_ICONS['default']
+                });
+
+                // This item will be selected instead of 'Reset' item
+                result.push({
+                    name: 'default',
+                    text: 'Search',
+                    icon: OPERATION_ICONS['default'],
+                    visible: false
                 });
             }
 
