@@ -54,8 +54,6 @@ const Drawer = Widget.inherit({
             */
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
 
-            target: undefined,
-
             /**
             * @name dxDrawerOptions.onContentReady
             * @hidden true
@@ -76,14 +74,6 @@ const Drawer = Widget.inherit({
             * @name dxDrawerOptions.tabIndex
             * @hidden
             */
-        });
-    },
-
-    _setDeprecatedOptions() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'target': { since: '20.1', message: 'Functionality associated with this option is not intended for the Drawer widget.' }
         });
     },
 
@@ -302,7 +292,7 @@ const Drawer = Widget.inherit({
     },
 
     getOverlayTarget() {
-        return this._options.silent('target') || this._$wrapper;
+        return this._$wrapper;
     },
 
     getOverlay() {
@@ -529,7 +519,6 @@ const Drawer = Widget.inherit({
                 this._invalidate();
                 break;
             case 'openedStateMode':
-            case 'target':
                 this._initStrategy();
                 this._refreshOpenedStateModeClass(args.previousValue);
 

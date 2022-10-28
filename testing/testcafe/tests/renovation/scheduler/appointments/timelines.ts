@@ -6,7 +6,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Timeline Appointments');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Timeline Appointments');
 
 const ignore = true;
 if (!ignore) {

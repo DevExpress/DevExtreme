@@ -9,7 +9,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Material theme layout');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Material theme layout');
 
 const createScheduler = async (
   platform: PlatformType,

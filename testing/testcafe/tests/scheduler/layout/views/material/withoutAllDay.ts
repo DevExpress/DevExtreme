@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
 fixture`Scheduler: Material theme without all-day panel`
   .page(url(__dirname, '../../../../containerMaterial.html'));
 
-test('Week view without all-day panel should be rendered correctly', async (t) => {
+safeSizeTest('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
@@ -6,7 +7,7 @@ import url from '../../../../../helpers/getPageUrl';
 fixture`Layout:Appointments:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
-test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
+safeSizeTest('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -44,7 +45,7 @@ test('Long all day appointment should be render, if him ended on next view day i
   }, true);
 });
 
-test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
+safeSizeTest('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

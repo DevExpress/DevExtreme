@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Scheduler: Layout Customization: Time Panel`
@@ -61,7 +62,7 @@ const createScheduler = async (
 
 [false, true].forEach((crossScrollingEnabled) => {
   ['week', 'agenda'].forEach((view) => {
-    test(`Time panel customization should work in ${view} view`, async (t) => {
+    safeSizeTest(`Time panel customization should work in ${view} view`, async (t) => {
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

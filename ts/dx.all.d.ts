@@ -11686,11 +11686,6 @@ declare module DevExpress.ui {
      */
     shading?: boolean;
     /**
-     * [descr:dxDrawerOptions.target]
-     * @deprecated [depNote:dxDrawerOptions.target]
-     */
-    target?: string | DevExpress.core.UserDefinedElement;
-    /**
      * [descr:dxDrawerOptions.template]
      */
     template?:

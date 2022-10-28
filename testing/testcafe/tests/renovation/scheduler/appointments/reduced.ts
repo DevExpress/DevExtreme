@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -124,7 +125,7 @@ test('it should render reduced appointment correctly if currentView is month', a
       showCurrentTimeIndicator: false,
     });
   },
-);
+).after(async (t) => restoreBrowserSize(t));
 
 test('it should render reduced appointment correctly if currentView is timelineDay', async (t, { screenshotComparerOptions }) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
@@ -199,4 +200,4 @@ test('it should render reduced appointment correctly if currentView is timelineD
       showCurrentTimeIndicator: false,
     });
   },
-);
+).after(async (t) => restoreBrowserSize(t));
