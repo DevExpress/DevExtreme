@@ -1,6 +1,10 @@
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
+
+fixture`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
+  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
@@ -28,10 +32,7 @@ const getSchedulerOptions = (dataSource) => ({
   },
 });
 
-fixture`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
-  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
-
-test('Should not lose drag-n-dropped appointment in the second scheduler', async (t) => {
+safeSizeTest('Should not lose drag-n-dropped appointment in the second scheduler', async (t) => {
   const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
   const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
 

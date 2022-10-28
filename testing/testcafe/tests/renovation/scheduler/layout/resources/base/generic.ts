@@ -9,7 +9,8 @@ const test = multiPlatformTest({
   platforms: [/* 'jquery', */'react'], // TODO unskip jQuery after fix children in Inferno
 });
 
-fixture('Scheduler: Generic theme layout');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Generic theme layout');
 
 const createScheduler = async (
   platform: PlatformType,

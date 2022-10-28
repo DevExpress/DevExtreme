@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 const CLICK_OPTIONS = { speed: 0.1 };
@@ -12,7 +13,7 @@ const UPDATED_APPOINTMENT_TITLE = `${INITIAL_APPOINTMENT_TITLE}${ADDITIONAL_TITL
 fixture`Appointment Editing`
   .page(url(__dirname, '../../container.html'));
 
-test('Should correctly update appointment if dataSource is a simple array', async (t) => {
+safeSizeTest('Should correctly update appointment if dataSource is a simple array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
@@ -42,7 +43,7 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
   height: 600,
 }, true));
 
-test('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
+safeSizeTest('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);

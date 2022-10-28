@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
-import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
 fixture`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'));
@@ -114,7 +114,7 @@ const resourceDataSource = [{
   currentView: 'timelineDay',
   currentDate: new Date(2017, 4, 26),
 }].forEach(({ currentView, currentDate }) => {
-  test(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
+  safeSizeTest(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -143,7 +143,5 @@ const resourceDataSource = [{
       startDayHour: 9,
       height: 600,
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 });

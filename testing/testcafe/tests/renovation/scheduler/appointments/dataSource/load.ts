@@ -6,7 +6,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler - DataSource loading');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler - DataSource loading');
 
 test('it should correctly load items with post processing', async (t) => {
   const scheduler = new Scheduler('#container');

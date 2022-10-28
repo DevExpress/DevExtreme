@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 import { getRenderCount } from '../../../../helpers/diagnostic';
@@ -30,7 +31,7 @@ test('Default', async (t, { platform }) => {
       text: 'test',
     }],
   });
-});
+}).after(async (t) => restoreBrowserSize(t));
 
 test('Virtual scrolling', async (t, { platform }) => {
   const scheduler = new Scheduler('#container');
@@ -69,4 +70,4 @@ test('Virtual scrolling', async (t, { platform }) => {
       text: 'test',
     }],
   });
-});
+}).after(async (t) => restoreBrowserSize(t));
