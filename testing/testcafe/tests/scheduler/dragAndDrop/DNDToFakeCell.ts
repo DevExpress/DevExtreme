@@ -1,12 +1,13 @@
 import { Selector } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Drag-n-drop to fake cell`
   .page(url(__dirname, './pages/containerWithFakeCell.html'));
 
-test('Should not select cells outside the scheduler(T1040795)', async (t) => {
+safeSizeTest('Should not select cells outside the scheduler(T1040795)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { element } = scheduler.getAppointment('app');

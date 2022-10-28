@@ -1,5 +1,6 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Layout:AppointmentForm:TimezoneEditors(T1080932)`
@@ -18,7 +19,7 @@ const inputClassName = '.dx-texteditor-input';
 const startDateTimeZoneValue = '(GMT -10:00) Etc - GMT+10';
 const endDateTimeZoneValue = '(GMT -08:00) US - Alaska';
 
-test('TimeZone editors should be have data after hide forms data(T1080932)', async (t) => {
+safeSizeTest('TimeZone editors should be have data after hide forms data(T1080932)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -47,7 +48,7 @@ test('TimeZone editors should be have data after hide forms data(T1080932)', asy
   }, true);
 });
 
-test('TimeZone editors should be have data in default case(T1080932)', async (t) => {
+safeSizeTest('TimeZone editors should be have data in default case(T1080932)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
