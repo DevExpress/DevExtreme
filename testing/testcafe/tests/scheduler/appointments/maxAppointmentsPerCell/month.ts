@@ -3,16 +3,16 @@ import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: max appointments per cell: All day`
+fixture`Scheduler: max appointments per cell: Month`
   .page(url(__dirname, '../../../container.html'));
 
-[undefined, 'auto', 'unlimited', 3, 10].forEach((maxAppointmentsPerCellValue) => {
-  test(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
+[undefined, 'auto', 'unlimited', 1, 3, 10].forEach((maxAppointmentsPerCellValue) => {
+  test(`Month appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 
     await t
-      .expect(await takeScreenshot(`all-day-appointment-maxAppointmentsPerCell=${maxAppointmentsPerCellValue}.png`, scheduler.allDayRow))
+      .expect(await takeScreenshot(`month-appointment-maxAppointmentsPerCell=${maxAppointmentsPerCellValue}.png`, scheduler.workSpace))
       .ok();
 
     await t
@@ -98,11 +98,11 @@ fixture`Scheduler: max appointments per cell: All day`
           allDay: true,
         }],
         maxAppointmentsPerCell: maxAppointmentsPerCellValue,
-        views: ['week'],
-        currentView: 'week',
+        views: ['month'],
+        currentView: 'month',
         currentDate: new Date(2021, 3, 29),
         startDayHour: 9,
-        allDayPanelMode: 'allDay',
+        height: 700,
       },
     );
   });
