@@ -18,6 +18,8 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   }
 
   .dx-icon {
+    width: $icon-size;
+    height: $icon-size;
     font-size: $icon-size;
 
     @include dx-icon-margin($icon-margin);

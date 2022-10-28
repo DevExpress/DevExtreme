@@ -18,6 +18,8 @@ $generic-editor-custom-button-margin: 1px;
   }
 
   .dx-icon {
+    width: $icon-size;
+    height: $icon-size;
     font-size: $icon-size;
 
     @include dx-icon-margin($icon-margin);
