@@ -6,7 +6,7 @@ import Scheduler from '../../../../model/scheduler';
 fixture`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'));
 
-[undefined, 'auto', 'unlimited', 3, 10].forEach((maxAppointmentsPerCellValue) => {
+['auto', 'unlimited', 3, 10].forEach((maxAppointmentsPerCellValue) => {
   test(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
