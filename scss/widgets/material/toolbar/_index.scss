@@ -91,25 +91,17 @@
       height: $material-list-item-height;
       padding: 0;
 
+      &.dx-button-back {
+        border-radius: 0;
+      }
+
       .dx-button-text {
         text-transform: none;
         font-weight: 400;
-        font-size: $material-list-main-font-size;
       }
 
       .dx-button-content {
         padding: 0 $material-list-item-horizontal-padding;
-
-        .dx-icon {
-          margin-right: $material-list-item-horizontal-padding;
-
-          @include dx-icon-sizing($material-button-icon-size);
-
-          .dx-rtl & {
-            margin-right: 0;
-            margin-left: $material-list-item-horizontal-padding;
-          }
-        }
       }
     }
   }
@@ -143,13 +135,6 @@
 }
 
 .dx-toolbar-button {
-  .dx-button-has-text {
-    .dx-button-content .dx-icon {
-      @include dx-icon-sizing($material-button-icon-size);
-      @include dx-icon-margin(6px);
-    }
-  }
-
   &.dx-toolbar-text-auto-hide .dx-button {
     @include dx-button-onlyicon-sizing();
 

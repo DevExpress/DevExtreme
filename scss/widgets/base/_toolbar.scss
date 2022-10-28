@@ -146,21 +146,11 @@
       background: none;
       margin: 0;
       width: 100%;
-      text-align: left;
       padding: 10px;
       box-shadow: none;
 
-      .dx-button-text {
-        line-height: normal;
-      }
-
       .dx-button-content {
-        text-align: left;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          text-align: right;
-        }
+        justify-content: left;
       }
     }
   }
