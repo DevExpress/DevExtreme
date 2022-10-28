@@ -100,6 +100,52 @@ test('Popup wrapper left top corner should be the same as the container right le
   }, false, '#innerContainer');
 });
 
+test('Popup wrapper should be positioned correctly if it is rendered during container animation', async () => {
+  await t.wait(500);
+
+  const wrapper = Selector('#content .dx-overlay-wrapper');
+  const container = wrapper.parent();
+
+  const wrapperRect: { top: number; left: number } = { top: 0, left: 0 };
+  const containerRect: { top: number; left: number } = { top: 0, left: 0 };
+
+  await asyncForEach(['left', 'top'], async (prop) => {
+    wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
+    containerRect[prop] = await container.getBoundingClientRectProperty(prop);
+  });
+
+  await t
+    .expect(wrapperRect.top)
+    .within(containerRect.top - 0.5, containerRect.top + 0.5);
+
+  await t
+    .expect(wrapperRect.left)
+    .within(containerRect.left - 0.5, containerRect.left + 0.5);
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'content', {});
+  await setStyleAttribute(Selector('#content'), 'width: 100%; height: 100%;');
+  await createWidget('dxPopup', {
+    width: 600,
+    height: 400,
+    visible: true,
+  });
+
+  await appendElementTo('#container', 'div', 'innerContainer', {});
+  await t.wait(500);
+
+  return createWidget('dxPopup', {
+    position: { of: '#content' },
+    container: '#content',
+    onInitialized: ({ component }) => {
+      setTimeout(() => {
+        component.show();
+      }, 100);
+    },
+    width: 100,
+    height: 100,
+  }, false, '#innerContainer');
+});
+
 test('There should not be any errors when position.of is html (T946851)', async () => {
   await t
     .expect(true).ok();

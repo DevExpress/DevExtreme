@@ -6,7 +6,7 @@ import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import domAdapter from '../core/dom_adapter';
-import { isWindow, isDefined } from '../core/utils/type';
+import { isWindow } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
 import browser from '../core/utils/browser';
@@ -345,39 +345,32 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
-// NOTE: Setting the 'element.style.transform.scale' requires the inline style when both of the conditions met:
-//       - a form contains an input with the name property set to "style";
-//       - a form contains a dx-validator (or other popup widget).
-//       T941581
-const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
-    const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
-    if(stylePropIsValid) {
-        element.style.setProperty('transform', isEmpty ? transformProp.replace(scale, '') : transformProp);
-    } else {
-        element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr);
+const getScaleFactor = function($element) {
+    const element = $element.get(0);
+    if(!element) {
+        return 1;
     }
+
+    const style = element.getAttribute?.('style') ?? '';
+
+    let scaleFactor = 1;
+    if(scaleRe.test(style)) {
+        const width = element.offsetWidth;
+        const scaledWidth = element.getBoundingClientRect().width;
+        scaleFactor = width ? scaledWidth / width : 1;
+    }
+
+    return scaleFactor * getScaleFactor($element.parent());
 };
 
-const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
-    const currentElement = $currentElement.get(0);
-    if(!currentElement) {
-        return $startElement.offset();
-    }
+const getOffsetWithoutScale = function($element) {
+    const { left, top } = $element.offset();
+    const scaleFactor = getScaleFactor($element);
 
-    const style = currentElement.getAttribute?.('style') || '';
-    const transform = currentElement.style?.transform;
-    const scale = style.match(scaleRe)?.[0];
-    let offset;
-
-    if(scale) {
-        setScaleProperty(currentElement, scale, transform, style, true);
-        offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-        setScaleProperty(currentElement, scale, transform, style, false);
-    } else {
-        offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-    }
-
-    return offset;
+    return {
+        left: left / scaleFactor,
+        top: top / scaleFactor
+    };
 };
 
 const position = function(what, options) {
