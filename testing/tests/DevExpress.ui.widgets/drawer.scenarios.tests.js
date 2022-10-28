@@ -535,7 +535,7 @@ const changeOpenedStateModeConfigs = [];
 ['slide', 'expand'].forEach(revealMode => {
     [undefined, 25].forEach(minSize => {
         ['left', 'top', 'right', 'bottom'].forEach(position => {
-            // TODO: templateSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
+            // TODO: templateSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, template overflow and/or view overflow
             changeOpenedStateModeConfigs.push({ position, revealMode, minSize });
         });
     });
