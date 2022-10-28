@@ -1,7 +1,7 @@
 import GoogleStaticProvider from 'ui/map/provider.google_static';
 import fx from 'animation/fx';
 import { each } from 'core/utils/iterator';
-import 'bundles/modules/parts/widgets-all';
+import 'bundles/modules/parts/widgets-web';
 
 const { module: testModule, test } = QUnit;
 

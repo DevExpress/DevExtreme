@@ -118,7 +118,7 @@ function createObjectWithChanges(target, changes) {
     return deepExtendArraySafe(result, changes, true, true);
 }
 
-function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache, logError }) {
+function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache, logError, skipCopying }) {
     const resultItems = immutable === true ? [...data] : data;
 
     changes.forEach(item => {
@@ -128,7 +128,7 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
 
         switch(item.type) {
             case 'update': update(keyInfo, items, item.key, item.data, true, immutable, logError); break;
-            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true, logError); break;
+            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true, logError, skipCopying); break;
             case 'remove': remove(keyInfo, items, item.key, true, logError); break;
         }
     });
@@ -196,11 +196,11 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
     }
 }
 
-function insert(keyInfo, array, data, index, isBatch, logError) {
+function insert(keyInfo, array, data, index, isBatch, logError, skipCopying) {
     let keyValue;
     const keyExpr = keyInfo.key();
 
-    const obj = isPlainObject(data) ? extend({}, data) : data;
+    const obj = isPlainObject(data) && !skipCopying ? extend({}, data) : data;
 
     if(keyExpr) {
         keyValue = keyInfo.keyOf(obj);

@@ -352,15 +352,18 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 }
 
 .dx-editor-outlined,
-.dx-editor-filled {
+.dx-editor-filled,
+.dx-editor-underlined {
   .dx-texteditor-buttons-container {
-    > .dx-button {
+    > .dx-button,
+    > .dx-clear-button-area {
       margin-left: $material-editor-custom-button-margin;
       margin-right: $material-editor-custom-button-margin;
     }
 
     &:first-child {
-      > .dx-button {
+      > .dx-button,
+      > .dx-clear-button-area {
         &:first-child {
           margin-left: $material-editor-custom-button-margin * 2;
         }
@@ -372,7 +375,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
 
     &:last-child {
-      > .dx-button {
+      > .dx-button,
+      > .dx-clear-button-area {
         &:first-child {
           margin-left: 0;
         }
@@ -395,7 +399,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
     @at-root #{selector-append(".dx-rtl", &)} {
       &:first-child {
-        > .dx-button {
+        > .dx-button,
+        > .dx-clear-button-area {
           &:first-child {
             margin-left: $material-editor-custom-button-margin;
             margin-right: $material-editor-custom-button-margin * 2;
@@ -414,7 +419,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
 
       &:last-child {
-        > .dx-button {
+        > .dx-button,
+        > .dx-clear-button-area {
           &:first-child {
             margin-left: $material-editor-custom-button-margin;
             margin-right: 0;

@@ -220,12 +220,6 @@ export type SingleOrNone = 'single' | 'none';
  * @public
  * @namespace DevExpress.common
  */
-export type SlideOutMenuPosition = 'inverted' | 'normal';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
 export type Sortable = OmitInternal<dxSortable>;
 
 /**

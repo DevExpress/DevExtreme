@@ -136,6 +136,17 @@
     border-bottom: none;
   }
 
+  .dx-button {
+    .dx-button-content {
+      justify-content: left;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        justify-content: right;
+      }
+    }
+  }
+
   .dx-toolbar-hidden-button {
     .dx-toolbar-item-auto-hide {
       padding: 0;
@@ -148,10 +159,6 @@
       width: 100%;
       padding: 10px;
       box-shadow: none;
-
-      .dx-button-content {
-        justify-content: left;
-      }
     }
   }
 

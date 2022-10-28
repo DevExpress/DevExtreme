@@ -1,6 +1,7 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import uiErrors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
 
 import 'generic_light.css!';
@@ -126,6 +127,42 @@ QUnit.module('init', {
             visible: true,
             position: { of: '#non-exist' }
         }).dxLoadPanel('instance');
+    });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#loadPanel').dxLoadPanel({
+                    container: 'invalid',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxLoadPanel',
+                ], 'args of the log method');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#loadPanel').dxLoadPanel({
+                    container: 'body',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
     });
 });
 
