@@ -143,13 +143,6 @@
 }
 
 .dx-toolbar-button {
-  .dx-button-has-text {
-    .dx-button-content .dx-icon {
-      @include dx-icon-sizing($material-button-icon-size);
-      @include dx-icon-margin(6px);
-    }
-  }
-
   &.dx-toolbar-text-auto-hide .dx-button {
     @include dx-button-onlyicon-sizing();
 
