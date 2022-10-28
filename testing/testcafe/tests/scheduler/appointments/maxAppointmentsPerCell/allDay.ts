@@ -4,7 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Scheduler: max appointments per cell`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 ['auto', 'unlimited', 3, 10].forEach((maxAppointmentsPerCellValue) => {
   test(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
