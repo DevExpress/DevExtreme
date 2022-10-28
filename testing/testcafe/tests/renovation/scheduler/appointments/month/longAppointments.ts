@@ -7,7 +7,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: long appointments in month view');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: long appointments in month view');
 
 [false, true].forEach((rtlEnabled) => {
   [

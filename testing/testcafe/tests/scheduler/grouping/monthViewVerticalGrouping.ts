@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 const CLICK_OPTIONS = { speed: 0.1 };
@@ -10,7 +10,7 @@ const SCHEDULER_SELECTOR = '#container';
 fixture`Month view vertical grouping `
   .page(url(__dirname, '../../container.html'));
 
-test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
+safeSizeTest('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -22,7 +22,7 @@ test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appo
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).before(async () => {
   await createWidget(
     'dxScheduler',
     {
@@ -60,5 +60,4 @@ test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appo
       ],
     },
   );
-  await restoreBrowserSize(t);
 });

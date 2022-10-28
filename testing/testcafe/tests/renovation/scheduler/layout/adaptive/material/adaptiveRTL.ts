@@ -20,7 +20,8 @@ const testJQuery = multiPlatformTest({
   platforms: ['jquery'],
 });
 
-fixture('Scheduler: Adaptive Material theme layout in RTL');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Adaptive Material theme layout in RTL');
 
 const createScheduler = async (
   platform: PlatformType,
@@ -49,7 +50,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${crossScrollingEnabled}-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -76,7 +77,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -107,7 +108,7 @@ const createScheduler = async (
       // Another bug in RTL in month view
       if (crossScrollingEnabled || view.type !== 'month') {
         await t.expect(
-          await takeScreenshot(`material-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
+          await takeScreenshot(`material-view=${view.type}-crossScrolling=${crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
         ).ok();
       }
     }

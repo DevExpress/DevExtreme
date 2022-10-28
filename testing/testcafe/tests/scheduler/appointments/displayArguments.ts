@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -7,7 +8,7 @@ fixture`Display* arguments in appointment templates and events`
   .page(url(__dirname, '../../container.html'));
 
 [undefined, 'America/Los_Angeles'].forEach((timeZone) => {
-  test(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {
+  safeSizeTest(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const etalon = '09:30:00 10:00:00';
 

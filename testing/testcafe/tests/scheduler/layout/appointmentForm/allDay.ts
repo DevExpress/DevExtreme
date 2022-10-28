@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -6,7 +7,7 @@ import url from '../../../../helpers/getPageUrl';
 fixture`Layout:AppointmentForm:AllDay`
   .page(url(__dirname, '../../../container.html'));
 
-test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
+safeSizeTest('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -56,7 +57,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
   }, true);
 });
 
-test('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
+safeSizeTest('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -100,7 +101,7 @@ test('Start and end dates should be reflect the current day(create new appointme
   }, true);
 });
 
-test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
+safeSizeTest('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 

@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
 fixture`Outlook dragging, for case scheduler in container with transform style`
   .page(url(__dirname, './containerWithTransform.html'));
 
-test('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
-  await t.resizeWindow(1200, 800);
+safeSizeTest('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
   const scheduler = new Scheduler('.dx-scheduler');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

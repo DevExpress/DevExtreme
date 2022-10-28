@@ -1,3 +1,4 @@
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -63,4 +64,4 @@ test('it should be focused correctly', async (t) => {
       width: 400,
     });
   },
-);
+).after(async (t) => restoreBrowserSize(t));

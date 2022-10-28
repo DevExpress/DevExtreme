@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-platform-test';
 
@@ -73,5 +74,5 @@ fixture('Layout:Templates:appointmentTemplate');
       appointmentTemplate,
       height: 600,
     });
-  });
+  }).after(async (t) => restoreBrowserSize(t));
 });
