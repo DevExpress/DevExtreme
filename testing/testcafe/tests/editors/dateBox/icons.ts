@@ -7,7 +7,7 @@ import Guid from '../../../../../js/core/guid';
 import { appendElementTo } from '../../navigation/helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 const pickerTypes = ['calendar', 'list', 'native', 'rollers'];
 const labelModes = ['static', 'floating', 'hidden'];
 const types = ['date', 'datetime', 'time'];
