@@ -7,7 +7,7 @@ import Scheduler from '../../../../model/scheduler';
 fixture`Scheduler: max appointments per cell: Timeline`
   .page(url(__dirname, '../../../container.html'));
 
-['auto', 'unlimited', 3, 10, 20].forEach((maxAppointmentsPerCellValue) => {
+['auto', 'unlimited', 1, 3, 10, 20].forEach((maxAppointmentsPerCellValue) => {
   safeSizeTest(`Timeline appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
@@ -95,7 +95,7 @@ fixture`Scheduler: max appointments per cell: Timeline`
           startDate: new Date(2021, 3, 27, 12),
           endDate: new Date(2021, 3, 27, 13, 30),
         }],
-        maxAppointmentsPerCell: 200,
+        maxAppointmentsPerCell: maxAppointmentsPerCellValue,
         views: ['timelineDay'],
         currentView: 'timelineDay',
         currentDate: new Date(2021, 3, 27),
