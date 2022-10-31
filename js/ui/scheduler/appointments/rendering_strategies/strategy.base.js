@@ -642,9 +642,24 @@ class BaseRenderingStrategy {
     getAppointmentDataCalculator() {
     }
 
-    _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
-        const index = coordinates.index;
-        const appointmentHeight = height / appointmentCountPerCell;
+    getVerticalAppointmentHeight(cellHeight, currentAppointmentCountInCell, maxAppointmentsPerCell) {
+        let resultMaxAppointmentsPerCell = maxAppointmentsPerCell;
+
+        if(isNumeric(this.maxAppointmentsPerCell)) {
+            const dynamicAppointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
+            const maxAppointmentCountDisplayedInCell = dynamicAppointmentCountPerCell.allDay || dynamicAppointmentCountPerCell;
+
+            const maxAppointmentsCount = Math.max(currentAppointmentCountInCell, maxAppointmentCountDisplayedInCell);
+            resultMaxAppointmentsPerCell = Math.min(maxAppointmentsCount, maxAppointmentsPerCell);
+        }
+        return cellHeight / resultMaxAppointmentsPerCell;
+    }
+
+    _customizeCoordinates(coordinates, cellHeight, appointmentCountPerCell, topOffset, isAllDay) {
+        const { index, count } = coordinates;
+
+        const appointmentHeight = this.getVerticalAppointmentHeight(cellHeight, count, appointmentCountPerCell);
+
         const appointmentTop = coordinates.top + (index * appointmentHeight);
         const top = appointmentTop + topOffset;
         const width = coordinates.width;
@@ -660,7 +675,7 @@ class BaseRenderingStrategy {
             width: width,
             top: top,
             left: left,
-            empty: this._isAppointmentEmpty(height, width)
+            empty: this._isAppointmentEmpty(cellHeight, width)
         };
     }
 
