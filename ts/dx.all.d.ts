@@ -1495,7 +1495,11 @@ declare module DevExpress.common {
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
+  /**
+   * @deprecated Use the `ValueChangeMode` type instead.
+   */
   export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
+  export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
 }
@@ -20544,9 +20548,11 @@ declare module DevExpress.ui {
       showMode?: DevExpress.common.TooltipShowMode;
     };
     /**
-     * [descr:dxSliderBaseOptions.callValueChange]
+     * [descr:dxSliderBaseOptions.valueChangeMode]
      */
-    callValueChange?: DevExpress.common.ValueChangedCallMode;
+    valueChangeMode?:
+      | DevExpress.common.ValueChangedCallMode
+      | DevExpress.common.ValueChangeMode;
   }
   /**
    * @deprecated use Properties instead
