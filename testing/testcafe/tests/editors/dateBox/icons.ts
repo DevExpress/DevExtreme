@@ -1,10 +1,13 @@
 /* eslint-disable no-restricted-syntax */
+import { Selector } from 'testcafe';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Guid from '../../../../../js/core/guid';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import {
+  appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
+} from '../../navigation/helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
@@ -19,22 +22,26 @@ fixture`DateBox_Icon`
   });
 
 themes.forEach((theme) => {
-  ['dx-dropdowneditor-active', false].forEach((state) => {
-    test(`DateBox styles, state=${state ? 'active' : ''} ${theme}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `datebox-styling,${state ? 'state=active' : ''}theme=${theme.replace(/\./g, '-')}.png`, '#container')).ok();
-    }).before(async () => {
-      await changeTheme(theme);
+  (['dx-dropdowneditor-active', 'dx-state-focused', false] as string[]).forEach((state) => {
+    [true, false].forEach((rtlEnabled) => {
+      test(`DateBox styles, state=${state ? 'active' : ''} ${theme}`, async (t) => {
+        await t.expect(
+          await compareScreenshot(t, `db-styling,${state ? `${state.replace('dx-', '')}` : ''},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`, '#container'),
+        )
+          .ok();
+      }).before(async () => {
+        await changeTheme(theme);
 
-      for (const stylingMode of stylingModes) {
-        for (const type of types) {
-          for (const pickerType of pickerTypes) {
-            for (const rtlEnabled of [true, false]) {
+        for (const stylingMode of stylingModes) {
+          for (const type of types) {
+            for (const pickerType of pickerTypes) {
               for (const labelMode of labelModes) {
-                const id = `${new Guid()}`;
+                const id = `${`dx${new Guid()}`}`;
 
                 await appendElementTo('#container', 'div', id, { });
 
                 const options: any = {
+                  width: 160,
                   label: 'label text',
                   labelMode,
                   stylingMode,
@@ -45,18 +52,20 @@ themes.forEach((theme) => {
                   value: new Date(2021, 9, 17, 16, 34),
                 };
 
+                await createWidget('dxDateBox', options, false, `#${id}`);
+
                 if (state) {
-                  options.elementAttr = {
-                    class: 'dx-dropdowneditor-active',
-                  };
+                  await setClassAttribute(Selector(`#${id}`), state);
                 }
 
-                await createWidget('dxDateBox', options, false, `#${id}`);
+                await insertStylesheetRule('.dx-datebox { display: inline-block }', 0);
               }
             }
           }
         }
-      }
+      }).after(async () => {
+        await deleteStylesheetRule(0);
+      });
     });
   });
 });

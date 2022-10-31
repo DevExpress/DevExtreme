@@ -33,6 +33,20 @@ export const setStyleAttribute = ClientFunction((selector, styleValue) => {
   element.setAttribute('style', updatedStyles);
 });
 
+export const getClassAttribute = ClientFunction((selector) => {
+  const element = selector();
+  return element.getAttribute('class');
+});
+
+export const setClassAttribute = ClientFunction((selector, styleValue) => {
+  const element = selector();
+
+  const styles = element.getAttribute('class') || '';
+  const updatedStyles = `${styles} ${styleValue}`;
+
+  element.setAttribute('class', updatedStyles);
+});
+
 export const appendElementTo = ClientFunction((
   containerSelector: string,
   tagName: string,
