@@ -284,9 +284,16 @@ export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 
 /**
  * @public
+ * @deprecated Use the `ValueChangeMode` type instead.
  * @namespace DevExpress.common
  */
 export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+ export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
 
 /**
  * @public
