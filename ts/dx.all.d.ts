@@ -19060,7 +19060,7 @@ declare module DevExpress.ui {
     appointmentTooltipTemplate?:
       | DevExpress.core.template
       | ((
-          model: DevExpress.ui.dxScheduler.AppointmentTemplateData,
+          model: DevExpress.ui.dxScheduler.AppointmentTooltipTemplateData,
           itemIndex: number,
           contentElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
