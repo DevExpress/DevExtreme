@@ -318,7 +318,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
-    appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+    appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 30
