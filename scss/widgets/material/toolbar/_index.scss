@@ -12,6 +12,7 @@
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
+@use "../../base/icons" as *;
 
 // adduse
 @use "../dropDownMenu";
@@ -66,6 +67,28 @@
 
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
+
+  .dx-list-item-content {
+    font-size: $material-base-font-size;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 1;
+    vertical-align: middle;
+
+    .dx-list-item-icon-container {
+      height: $material-button-icon-size;
+      width: $material-button-icon-size;
+
+      @include dx-icon-margin(math.div($material-button-icon-size, 2));
+
+      .dx-icon {
+        font-size: $material-button-icon-size;
+
+        @include dx-icon-sizing($material-button-icon-size);
+      }
+    }
+  }
 
   .dx-toolbar-hidden-button,
   .dx-toolbar-hidden-button-group {
