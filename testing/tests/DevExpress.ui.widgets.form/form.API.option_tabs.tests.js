@@ -225,6 +225,58 @@ module('Public API: option method', function() {
         });
     });
 
+    test('onItemRendered event should be rised on every tab render, deferRendering: false', function() {
+        const onItemRenderedSpy = sinon.spy();
+
+        new FormTestWrapper({
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    onItemRendered: onItemRenderedSpy,
+                    deferRendering: false,
+                },
+                tabs: [{
+                    title: 'Phone',
+                    items: ['Phone'],
+                }, {
+                    title: 'Skype',
+                    items: ['Skype'],
+                }, {
+                    title: 'Email',
+                    items: ['Email'],
+                }]
+            }]
+        });
+
+        assert.strictEqual(onItemRenderedSpy.callCount, 3, 'onItemRendered was called on every tab render');
+    });
+
+    test('onItemRendered event should be rised on the first tab render, deferRendering: true', function() {
+        const onItemRenderedSpy = sinon.spy();
+
+        new FormTestWrapper({
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    onItemRendered: onItemRenderedSpy,
+                    deferRendering: true,
+                },
+                tabs: [{
+                    title: 'Phone',
+                    items: ['Phone'],
+                }, {
+                    title: 'Skype',
+                    items: ['Skype'],
+                }, {
+                    title: 'Email',
+                    items: ['Email'],
+                }]
+            }]
+        });
+
+        assert.strictEqual(onItemRenderedSpy.callCount, 1, 'onItemRendered was called on the first tab render');
+    });
+
     [false, true].forEach(deferRendering => {
         [false, true].forEach(repaintChangesOnly => {
             test(`Add new tab to end, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
