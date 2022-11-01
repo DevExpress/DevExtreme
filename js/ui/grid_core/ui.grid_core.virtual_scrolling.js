@@ -430,7 +430,9 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         renderDelayedTemplates: function(e) {
-            this._updateContentPosition(true);
+            this._waitAsyncTemplates(e).done(() => {
+                this._updateContentPosition(true);
+            });
             this.callBase.apply(this, arguments);
         },
 
