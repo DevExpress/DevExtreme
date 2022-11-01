@@ -12,7 +12,7 @@ export class Marker {
   tooltip: Tooltip;
 }
 
-const markerUrl = 'https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png';
+const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 
 const markers: Marker[] = [{
   location: [40.755833, -73.986389],

@@ -6,7 +6,7 @@ import CheckBox from 'devextreme-react/check-box';
 
 import { markersData } from './data.js';
 
-const markerUrl = 'https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png';
+const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 
 class App extends React.Component {
   constructor(props) {

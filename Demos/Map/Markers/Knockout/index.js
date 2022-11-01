@@ -1,5 +1,5 @@
 window.onload = function () {
-  const markerUrl = 'https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png';
+  const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
   const markerUrlValue = ko.observable(markerUrl);
   const markersData = [{
     location: [40.755833, -73.986389],

@@ -1,7 +1,7 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
-  const markerUrl = 'https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png';
+  const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
   const markersData = [{
     location: [40.755833, -73.986389],
     tooltip: {

@@ -34,7 +34,7 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxButton from 'devextreme-vue/button';
 import { markersData } from './data.js';
 
-const markerUrl = 'https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png';
+const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 
 export default {
   components: {
