@@ -46,7 +46,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('It should be posible to scroll to the last row when columnAutoWidth: true (T1121483)', function(assert) {
+    QUnit.test('It should be possible to scroll to the last row when columnAutoWidth: true (T1121483)', function(assert) {
         // arrange
         const employees = [
             {
@@ -225,7 +225,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
         }).dxTreeList('instance');
 
-        this.clock.tick(300);
+        this.clock.tick(1000);
         let visibleRows = treeList.getVisibleRows();
         // assert
 
