@@ -656,7 +656,7 @@ const CollectionWidget = Widget.inherit({
     }),
 
     _renderContent: function() {
-        this._resetActiveState();
+        this.option('isActive', false);
         this._fireContentReadyAction();
     },
 
