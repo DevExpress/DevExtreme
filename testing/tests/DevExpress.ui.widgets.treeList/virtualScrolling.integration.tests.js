@@ -225,7 +225,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
         }).dxTreeList('instance');
 
-        this.clock.tick(1000);
+        this.clock.tick(300);
         let visibleRows = treeList.getVisibleRows();
         // assert
 
@@ -236,7 +236,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         treeList.getScrollable().scrollTo({ top: 100000 });
-        this.clock.tick(500);
+        this.clock.tick(300);
         visibleRows = treeList.getVisibleRows();
 
 
