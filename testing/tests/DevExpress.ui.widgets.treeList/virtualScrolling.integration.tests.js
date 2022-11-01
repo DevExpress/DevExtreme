@@ -205,7 +205,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const treeList = $('#treeList').dxTreeList({
             dataSource: employees,
             keyExpr: 'ID',
-            height: 500,
+            height: 480,
             width: 500,
             wordWrapEnabled: true,
             columns: [{
