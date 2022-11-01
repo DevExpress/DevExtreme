@@ -206,6 +206,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: employees,
             keyExpr: 'ID',
             height: 500,
+            width: 500,
             wordWrapEnabled: true,
             columns: [{
                 dataField: 'Title',
