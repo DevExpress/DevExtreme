@@ -19,14 +19,12 @@ import {
 
 import {
     TooltipShowMode,
-    ValueChangeMode,
     VerticalEdge,
 } from '../common';
 
 export {
     TooltipShowMode,
     VerticalEdge,
-    ValueChangeMode,
 };
 
 /** @public */
@@ -43,6 +41,9 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
 
 /**
  * @deprecated use Properties instead

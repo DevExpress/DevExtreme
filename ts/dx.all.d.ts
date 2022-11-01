@@ -1495,8 +1495,6 @@ declare module DevExpress.common {
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationMessageMode = 'always' | 'auto';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
-  export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
-  export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
 }
@@ -20471,6 +20469,7 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
+    export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   }
   /**
    * [descr:dxSliderBase]
@@ -20547,7 +20546,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSliderBaseOptions.valueChangeMode]
      */
-    valueChangeMode?: DevExpress.common.ValueChangeMode;
+    valueChangeMode?: DevExpress.ui.dxSlider.ValueChangeMode;
   }
   /**
    * @deprecated use Properties instead
@@ -33620,6 +33619,7 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxRangeSelector> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
+    export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRangeSelector,
       MouseEvent | TouchEvent
@@ -33675,7 +33675,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
        */
-      callValueChanged?: DevExpress.common.ValueChangedCallMode;
+      callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
       /**
        * [descr:dxRangeSelectorOptions.behavior.manualRangeSelectionEnabled]
        */
