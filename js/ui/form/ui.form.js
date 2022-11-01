@@ -448,7 +448,11 @@ const Form = Widget.inherit({
         const $tabPanel = $('<div>').appendTo($container);
         const tabPanelOptions = extend({}, item.tabPanelOptions, {
             dataSource: item.tabs,
-            onItemRendered: args => triggerShownEvent(args.itemElement),
+            onItemRendered: args => {
+                item.tabPanelOptions?.onItemRendered?.(args);
+
+                triggerShownEvent(args.itemElement);
+            },
             itemTemplate: (itemData, e, container) => {
                 const $container = $(container);
                 const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
