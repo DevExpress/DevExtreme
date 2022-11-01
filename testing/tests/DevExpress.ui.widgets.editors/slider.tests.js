@@ -306,14 +306,14 @@ module('render', moduleOptions, () => {
         assert.equal(instance.option('value'), 300, 'value set after dxswipestart');
     });
 
-    ['onMoving', 'onMovingComplete'].forEach(mode => {
+    ['onHandleMove', 'onHandleRelease'].forEach(mode => {
         test('value option should be updated on click', function(assert) {
             const $element = $('#slider').dxSlider({
                 max: 500,
                 min: 0,
                 value: 0,
                 width: 500 + 2 * SLIDER_PADDING,
-                callValueChange: mode
+                valueChangeMode: mode
             });
             const instance = $element.dxSlider('instance');
 
@@ -1765,11 +1765,11 @@ module('if only the single value is possible', moduleOptions, () => {
     });
 });
 
-module('callValueChange option', {
+module('valueChangeMode option', {
     beforeEach: function() {
         this.valueChangedHandler = sinon.stub();
         this.$element = $('#slider').dxSlider({
-            callValueChange: 'onMovingComplete',
+            valueChangeMode: 'onHandleRelease',
             onValueChanged: this.valueChangedHandler,
             tooltip: {
                 enabled: true,
@@ -1787,7 +1787,7 @@ module('callValueChange option', {
         this.getTooltipText = () => $.trim(this.getTooltip().text());
     }
 }, () => {
-    test('slider value should not change on swipe with "onMovingComplete" callValueChange', function(assert) {
+    test('slider value should not change on swipe with "onHandleRelease" valueChangeMode', function(assert) {
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
         this.pointer.swipe(20);
@@ -1800,7 +1800,7 @@ module('callValueChange option', {
         assert.strictEqual(this.instance.option('value'), 90);
     });
 
-    test('slider tooltip value should change on swipe if callValueChange = onMovingComplete', function(assert) {
+    test('slider tooltip value should change on swipe if valueChangeMode = onHandleRelease', function(assert) {
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
         this.pointer.swipe(20);
@@ -1812,8 +1812,8 @@ module('callValueChange option', {
         assert.strictEqual(this.getTooltipText(), '90');
     });
 
-    test('slider should change its value on every step after runtime change callValueChange to onMoving', function(assert) {
-        this.instance.option('callValueChange', 'onMoving');
+    test('slider should change its value on every step after runtime change valueChangeMode to onHandleMove', function(assert) {
+        this.instance.option('valueChangeMode', 'onHandleMove');
 
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart();
@@ -1826,8 +1826,8 @@ module('callValueChange option', {
         assert.strictEqual(this.instance.option('value'), 70);
     });
 
-    test('slider should change its value on moving complete after runtime change callValueChange to onMovingComplete', function(assert) {
-        this.instance.option('callValueChange', 'onMovingComplete');
+    test('slider should change its value on moving complete after runtime change valueChangeMode to onHandleRelease', function(assert) {
+        this.instance.option('valueChangeMode', 'onHandleRelease');
 
         this.pointer.start({ x: SLIDER_PADDING });
         this.pointer.swipeStart().swipe(20);
@@ -1842,13 +1842,13 @@ module('callValueChange option', {
     });
 
     test('tooltip value should be correctly updated on left arrow pressed', function(assert) {
-        this.instance.option('callValueChange', 'onMoving');
+        this.instance.option('valueChangeMode', 'onHandleMove');
         this.keyboard.press('leftArrow');
         assert.strictEqual(this.getTooltipText(), '49');
     });
 
     test('tooltip value should be correctly updated on right arrow pressed', function(assert) {
-        this.instance.option('callValueChange', 'onMoving');
+        this.instance.option('valueChangeMode', 'onHandleMove');
         this.keyboard.press('rightArrow');
         assert.strictEqual(this.getTooltipText(), '51');
     });
