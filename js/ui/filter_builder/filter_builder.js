@@ -766,9 +766,6 @@ const FilterBuilder = Widget.inherit({
         const $popup = $('<div>')
             .addClass(options.menu.cssClass).appendTo($container);
         this._createComponent($popup, Popup, {
-            wrapperAttr: {
-                class: options.menu.cssClass
-            },
             onHiding: options.menu.onHiding,
             onHidden: options.menu.onHidden,
             rtlEnabled: options.menu.rtlEnabled,
@@ -792,7 +789,8 @@ const FilterBuilder = Widget.inherit({
             shading: false,
             width: 'auto',
             height: 'auto',
-            showTitle: false
+            showTitle: false,
+            _wrapperClassExternal: options.menu.cssClass,
         });
     },
 

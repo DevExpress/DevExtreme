@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -6,7 +7,7 @@ import Scheduler from '../../../model/scheduler';
 fixture`Appointment (T1080232)`
   .page(url(__dirname, './pages/T1080232.html'));
 
-test('it should correctly drag external item to the appointment after drag appointment', async (t) => {
+safeSizeTest('it should correctly drag external item to the appointment after drag appointment', async (t) => {
   const scheduler = new Scheduler('#container');
   const dragItem = Selector('.drag-item');
   const cell01 = scheduler.getDateTableCell(1, 0);

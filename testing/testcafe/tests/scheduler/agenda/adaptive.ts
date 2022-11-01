@@ -1,6 +1,8 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { ADAPTIVE_SIZE } from '../const';
 
 fixture`Agenda:adaptive`
   .page(url(__dirname, '../../container.html'));
@@ -59,12 +61,8 @@ Promise<void> => {
     groups: ['priorityId'],
     text: 'groups',
   }].forEach((testCase) => {
-    test(testCase.text, async (t) => {
-      await t.resizeWindow(400, 600);
+    safeSizeTest(testCase.text, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
-    }).before(async () => createScheduler(testCase.groups, rtlEnabled))
-      .after(async (t) => {
-        await t.resizeWindow(1200, 800);
-      });
+    }, ADAPTIVE_SIZE).before(async () => createScheduler(testCase.groups, rtlEnabled));
   });
 });

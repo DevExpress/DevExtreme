@@ -1,5 +1,6 @@
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Cancel drag-n-drop when dragging an appointment inside the scheduler`
@@ -27,7 +28,7 @@ const getSchedulerOptions = () => ({
 });
 
 METHODS_TO_CANCEL.forEach((methodName) => {
-  test(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
+  safeSizeTest(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     const appointmentToMoveElement = scheduler

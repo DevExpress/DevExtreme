@@ -1,11 +1,12 @@
 import createWidget from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Agenda:Tooltip`
   .page(url(__dirname, '../../container.html'));
 
-test('Tooltip\'s date should be equal to date of current appointment(T1037028)', async (t) => {
+safeSizeTest('Tooltip\'s date should be equal to date of current appointment(T1037028)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointmentName = 'Text';
 

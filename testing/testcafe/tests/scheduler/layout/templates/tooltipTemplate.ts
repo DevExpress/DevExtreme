@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -7,7 +8,7 @@ import url from '../../../../helpers/getPageUrl';
 fixture`Layout:Templates:appointmentTooltipTemplate`
   .page(url(__dirname, '../../../container.html'));
 
-test('appointmentTooltipTemplate layout should be rendered right', async (t) => {
+safeSizeTest('appointmentTooltipTemplate layout should be rendered right', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

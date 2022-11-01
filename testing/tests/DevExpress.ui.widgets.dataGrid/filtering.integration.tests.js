@@ -1452,6 +1452,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 1, 'one contentReady on start');
     });
 
+
     // T1072812
     QUnit.test('getCombinedFilter returns actual value when called in onOptionChanged', function(assert) {
         let filterChangedCount = 0;
@@ -1464,6 +1465,39 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 visible: true,
             },
             onOptionChanged: (e) => {
+                const filter = e.component.getCombinedFilter();
+
+                if(filterChangedCount === 0) {
+                    assert.strictEqual(filter[2], 35);
+                } else if(filterChangedCount === 1) {
+                    assert.strictEqual(filter, undefined);
+                }
+
+                filterChangedCount++;
+            },
+        });
+
+        dataGrid.columnOption(0, 'filterValue', 35);
+        dataGrid.columnOption(0, 'filterValue', null);
+    });
+
+    // T1118433
+    QUnit.test('getCombinedFilter returns actual value when called in onOptionChanged with filterSyncEnabled', function(assert) {
+        let filterChangedCount = 0;
+
+        const dataGrid = createDataGrid({
+            columns: [{ dataField: 'column1' }],
+            dataSource: [],
+            loadingTimeout: null,
+            filterSyncEnabled: true,
+            filterRow: {
+                visible: true,
+            },
+            onOptionChanged: (e) => {
+                if(e.fullName !== 'filterValue') {
+                    return;
+                }
+
                 const filter = e.component.getCombinedFilter();
 
                 if(filterChangedCount === 0) {

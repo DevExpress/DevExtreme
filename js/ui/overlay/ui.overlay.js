@@ -641,6 +641,7 @@ const Overlay = Widget.inherit({
         const hidingArgs = { cancel: false };
 
         if(this._isShowingActionCanceled) {
+            delete this._isShowingActionCanceled;
             this._hidingDeferred.resolve();
         } else {
             this._actions.onHiding(hidingArgs);
@@ -942,6 +943,9 @@ const Overlay = Widget.inherit({
             transclude,
             onRendered: () => {
                 whenContentRendered.resolve();
+                if(this.option('templatesRenderAsynchronously')) {
+                    this._dimensionChanged();
+                }
             }
         });
 
@@ -1112,7 +1116,7 @@ const Overlay = Widget.inherit({
 
             this._stopAnimation();
             if(options?.shouldOnlyReposition) {
-                this._positionController.positionContent();
+                this._renderPosition(false);
             } else {
                 this._renderGeometryImpl(options?.isDimensionChange);
             }
