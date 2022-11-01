@@ -1514,6 +1514,57 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'filterValue', null);
     });
 
+    // T1122553
+    QUnit.test('dataGrid should not make second request after changing filterRow selectbox value', function(assert) {
+        // arrange
+        const load = sinon.spy(function(loadOptions) {
+            return new ArrayStore([
+                { column1: 1, column2: 1 },
+                { column1: 2, column2: 2 },
+            ]).load(loadOptions).then(data => ({
+                data,
+                totalCount: 2,
+            }));
+        });
+        createDataGrid({
+            columns: [{
+                dataField: 'column1',
+                allowFiltering: true,
+                visible: false,
+            }, {
+                dataField: 'column2',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }],
+            dataSource: { load },
+            filterRow: {
+                visible: true,
+            },
+            remoteOperations: true,
+        });
+
+        this.clock.tick();
+
+        // act
+        const selectBox = $('.dx-datagrid-filter-row').find('.dx-selectbox').eq(0).dxSelectBox('instance');
+
+        selectBox.open();
+        this.clock.tick();
+
+        selectBox.option('value', 1);
+        this.clock.tick();
+
+        // assert
+
+        const groupRequests = load.getCalls().map(l => l.args[0]).filter(l => l.group);
+
+        assert.deepEqual(groupRequests.length, 1);
+    });
+
     // T1093656, T1096053
     QUnit.testInActiveWindow('Filter row editor should have focus when filterPanel is visible', function(assert) {
         // arrange
