@@ -56,7 +56,7 @@
         <DxLabel template="notesLabel"/>
       </DxItem>
       <DxItem
-        :editor-options="phonesEditorOptions"
+        :editor-options="phoneEditorOptions"
         data-field="Phone"
       >
         <DxLabel template="phoneLabel"/>
@@ -151,7 +151,7 @@ export default {
       hireDateEditorOptions: { width: '100%', value: null },
       birthDateEditorOptions: { width: '100%', disabled: true },
       notesEditorOptions: { height: 90, maxLength: 200 },
-      phonesEditorOptions: { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } },
+      phoneEditorOptions: { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } },
     };
   },
   methods: {

@@ -22,7 +22,7 @@ const positionEditorOptions = { items: service.getPositions(), searchEnabled: tr
 const hireDateEditorOptions = { width: '100%', value: null };
 const birthDateEditorOptions = { width: '100%', disabled: true };
 const notesEditorOptions = { height: 90, maxLength: 200 };
-const phonesEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
+const phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
 
 export default function App() {
   const validateForm = React.useCallback((e) => {
@@ -55,7 +55,7 @@ export default function App() {
         <Item dataField="Notes" colSpan={2} editorType="dxTextArea" editorOptions={notesEditorOptions}>
           <Label render={LabelNotesTemplate} />
         </Item>
-        <Item dataField="Phone" editorOptions={phonesEditorOptions}>
+        <Item dataField="Phone" editorOptions={phoneEditorOptions}>
           <Label render={LabelTemplate('tel')} />
         </Item>
         <Item dataField="Email">

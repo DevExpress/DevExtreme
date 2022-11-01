@@ -86,7 +86,7 @@ $(() => {
               showEvent: 'mouseenter',
               hideEvent: 'mouseleave',
               contentTemplate(args) {
-                args.html('<b>This field must not exceed 200 characters</b>');
+                args.html('<div id="tooltip-content">This field must not exceed 200 characters</div>');
               },
             }).appendTo(element);
           },

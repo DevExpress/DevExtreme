@@ -17,7 +17,7 @@ function LabelNotesTemplate(data) {
         showEvent="mouseenter"
         hideEvent="mouseleave"
       >
-        <b>This field must not exceed 200 characters</b>
+        <div id="tooltip-content">This field must not exceed 200 characters</div>
       </Tooltip>
     </React.Fragment>
   );

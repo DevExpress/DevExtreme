@@ -2,7 +2,7 @@
   <dx-form id="form" [formData]="employee">
     <dxi-item itemType="group" [colCount]="2" caption="Employee Details">
       <dxi-item dataField="FirstName" [editorOptions]="nameEditorOptions">
-        <dxo-label template="nameLabel"></dxo-label>
+        <dxo-label template="name"></dxo-label>
       </dxi-item>
       <dxi-item
         dataField="Position"
@@ -13,10 +13,10 @@
           type="required"
           message="Position is required"
         ></dxi-validation-rule>
-        <dxo-label template="positionLabel"></dxo-label>
+        <dxo-label template="position"></dxo-label>
       </dxi-item>
       <dxi-item dataField="LastName" [editorOptions]="nameEditorOptions">
-        <dxo-label template="nameLabel"></dxo-label>
+        <dxo-label template="name"></dxo-label>
       </dxi-item>
       <dxi-item
         dataField="HireDate"
@@ -27,17 +27,17 @@
           type="required"
           message="Hire date is required"
         ></dxi-validation-rule>
-        <dxo-label template="dateLabel"></dxo-label>
+        <dxo-label template="date"></dxo-label>
       </dxi-item>
       <dxi-item
         dataField="BirthDate"
         editorType="dxDateBox"
         [editorOptions]="birthDateEditorOptions"
       >
-        <dxo-label template="dateLabel"></dxo-label>
+        <dxo-label template="date"></dxo-label>
       </dxi-item>
       <dxi-item dataField="Address">
-        <dxo-label template="addressLabel"></dxo-label>
+        <dxo-label template="address"></dxo-label>
       </dxi-item>
       <dxi-item
         dataField="Notes"
@@ -45,41 +45,23 @@
         [editorOptions]="notesEditorOptions"
         [colSpan]="2"
       >
-        <dxo-label template="notesLabel"></dxo-label>
+        <dxo-label template="notes"></dxo-label>
       </dxi-item>
-      <dxi-item dataField="Phone" [editorOptions]="phonesEditorOptions">
-        <dxo-label template="phonesLabel"></dxo-label>
+      <dxi-item dataField="Phone" [editorOptions]="phoneEditorOptions">
+        <dxo-label template="phone"></dxo-label>
       </dxi-item>
       <dxi-item dataField="Email">
-        <dxo-label template="emailLabel"></dxo-label>
+        <dxo-label template="email"></dxo-label>
       </dxi-item>
     </dxi-item>
 
-    <div *dxTemplate="let data of 'nameLabel'">
-      <span><i class="dx-icon dx-icon-user"></i>{{ data.text }}</span>
-    </div>
+    <ng-container *ngFor="let label of labelTemplates">
+      <div *dxTemplate="let data of label.name">
+        <span><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</span>
+      </div>
+    </ng-container>
 
-    <div *dxTemplate="let data of 'positionLabel'">
-      <span><i class="dx-icon dx-icon-info"></i>{{ data.text }}</span>
-    </div>
-
-    <div *dxTemplate="let data of 'dateLabel'">
-      <span><i class="dx-icon dx-icon-event"></i>{{ data.text }}</span>
-    </div>
-
-    <div *dxTemplate="let data of 'addressLabel'">
-      <span><i class="dx-icon dx-icon-home"></i>{{ data.text }}</span>
-    </div>
-
-    <div *dxTemplate="let data of 'phonesLabel'">
-      <span><i class="dx-icon dx-icon-tel"></i>{{ data.text }}</span>
-    </div>
-
-    <div *dxTemplate="let data of 'emailLabel'">
-      <span><i class="dx-icon dx-icon-email"></i>{{ data.text }}</span>
-    </div>
-
-    <div *dxTemplate="let data of 'notesLabel'">
+    <div *dxTemplate="let data of 'notes'">
       <span>
         <i class="dx-icon dx-icon-comment"></i>Additional
         <br />
@@ -92,7 +74,9 @@
         hideEvent="mouseleave"
       >
         <div *dxTemplate="let data = data; of: 'content'">
-          <b>This field must not exceed 200 characters</b>
+          <div id="tooltip-content">
+            This field must not exceed 200 characters
+          </div>
         </div>
       </dx-tooltip>
     </div>

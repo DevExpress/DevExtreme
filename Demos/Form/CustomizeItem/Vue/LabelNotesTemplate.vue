@@ -12,7 +12,7 @@
       hide-event="mouseleave"
     >
       <template #content>
-        <b>This field must not exceed 200 characters</b>
+        <div id="tooltip-content">This field must not exceed 200 characters</div>
       </template>
     </DxTooltip>
   </span>
@@ -35,5 +35,10 @@ export default {
 <style scoped>
 #helpedInfo {
   color: #42a5f5;
+}
+
+#tooltip-content {
+  font-size: 14px;
+  font-weight: bold;
 }
 </style>

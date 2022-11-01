@@ -1,3 +1,8 @@
 ::ng-deep #helpedInfo {
   color: #42a5f5;
 }
+
+::ng-deep #tooltip-content {
+  font-size: 14px;
+  font-weight: bold;
+}
