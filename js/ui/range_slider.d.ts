@@ -11,14 +11,13 @@ import {
 
 import {
     dxSliderBaseOptions,
-    ValueChangeMode,
 } from './slider';
 
 import dxTrackBar from './track_bar';
 
 export {
     ValueChangeMode,
-};
+} from './slider';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxRangeSlider>;
