@@ -562,15 +562,10 @@ const CollectionWidget = Widget.inherit({
             }
 
             this._forgetNextPageLoading();
-            this._refreshActiveOption();
             this._refreshContent();
         } else {
             this.option('items', newItems.slice());
         }
-    },
-
-    _refreshActiveOption() {
-        this.option('isActive', false);
     },
 
     _refreshContent: function() {
