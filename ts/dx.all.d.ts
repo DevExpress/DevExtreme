@@ -6974,25 +6974,30 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.calculateCellValue]
        */
-      calculateCellValue?: (rowData: TRowData) => any;
-      defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
+      calculateCellValue?: (this: ColumnBase, rowData: TRowData) => any;
+      defaultCalculateCellValue?: this['calculateCellValue'];
       /**
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
-      calculateDisplayValue?: string | ((rowData: TRowData) => any);
+      calculateDisplayValue?:
+        | string
+        | ((this: ColumnBase, rowData: TRowData) => any);
       /**
        * [descr:GridBaseColumn.calculateFilterExpression]
        */
       calculateFilterExpression?: (
+        this: ColumnBase,
         filterValue: any,
         selectedFilterOperation: string,
         target: string
       ) => string | Array<any> | Function;
-      defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
+      defaultCalculateFilterExpression?: this['calculateFilterExpression'];
       /**
        * [descr:GridBaseColumn.calculateSortValue]
        */
-      calculateSortValue?: string | ((rowData: TRowData) => any);
+      calculateSortValue?:
+        | string
+        | ((this: ColumnBase, rowData: TRowData) => any);
       /**
        * [descr:GridBaseColumn.caption]
        */
@@ -7005,6 +7010,7 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.customizeText]
        */
       customizeText?: (
+        this: ColumnBase,
         cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
       ) => string;
       /**
@@ -7101,11 +7107,12 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.setCellValue]
        */
       setCellValue?: (
+        this: ColumnBase,
         newData: DevExpress.core.DeepPartial<TRowData>,
         value: any,
         currentRowData: TRowData
       ) => void | PromiseLike<void>;
-      defaultSetCellValue?: ColumnBase['setCellValue'];
+      defaultSetCellValue?: this['setCellValue'];
       /**
        * [descr:GridBaseColumn.showEditorAlways]
        */
@@ -7125,7 +7132,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.sortingMethod]
        */
-      sortingMethod?: (value1: any, value2: any) => number;
+      sortingMethod?: (this: ColumnBase, value1: any, value2: any) => number;
       /**
        * [descr:GridBaseColumn.trueText]
        */
@@ -8812,7 +8819,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
      */
-    calculateGroupValue?: string | ((rowData: TRowData) => any);
+    calculateGroupValue?:
+      | string
+      | ((this: DevExpress.ui.dxDataGrid.ColumnBase, rowData: TRowData) => any);
     /**
      * [descr:dxDataGridColumn.cellTemplate]
      */
@@ -25124,9 +25133,8 @@ declare module DevExpress.ui.dxDataGrid {
   };
   /**
    * [descr:dxDataGridToolbarItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface ToolbarItem extends dxToolbarItem {
+  export type ToolbarItem = dxToolbarItem & {
     /**
      * [descr:dxDataGridToolbarItem.name]
      */
@@ -25135,7 +25143,7 @@ declare module DevExpress.ui.dxDataGrid {
      * [descr:dxDataGridToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
-  }
+  };
 }
 declare module DevExpress.ui.dxDiagram {
   export type Item = dxDiagramItem;
