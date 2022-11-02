@@ -32,15 +32,17 @@ test('Should focus first item after changing selection mode (T811770)', async (t
 test('There is hover class in hovered list item (T1110076)', async (t) => {
   const list = new List('#container');
 
-  await list.refresh();
+  await list.setOptionForRepaintOnItemClick();
 
-  const item = list.getItem(1);
+  const firstItem = list.getItem(0);
+  const secondItem = list.getItem(1);
 
   await t
-    .expect(item.isHovered)
+    .click(firstItem.element)
+    .expect(secondItem.isHovered)
     .notOk()
-    .hover(item.element)
-    .expect(item.isHovered)
+    .hover(secondItem.element)
+    .expect(secondItem.isHovered)
     .ok();
 }).before(async () => createWidget('dxList', {
   items: ['item1', 'item2', 'item3'],
