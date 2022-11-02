@@ -1509,8 +1509,9 @@ export type dxDataGridToolbarItem = ToolbarItem;
  * @docid dxDataGridToolbarItem
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxDataGrid
+ * @public
  */
-export interface ToolbarItem extends dxToolbarItem {
+export type ToolbarItem = dxToolbarItem & {
   /**
    * @docid dxDataGridToolbarItem.name
    * @public
@@ -1869,10 +1870,11 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     buttons?: Array<DataGridPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
-     * @type_function_param1 rowData:object
+     * @type_function_param1 this:GridBaseColumn
+     * @type_function_param2 rowData:object
      * @public
      */
-    calculateGroupValue?: string | ((rowData: TRowData) => any);
+    calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
      * @type_function_param2 cellInfo:object
