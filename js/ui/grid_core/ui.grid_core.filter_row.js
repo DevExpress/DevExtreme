@@ -668,11 +668,11 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             this.callBase.apply(this, arguments);
 
             if(e.operationTypes?.filtering || e.operationTypes?.fullReload) {
-                this.updateLookupDataSource();
+                this.updateLookupDataSource(e.operationTypes?.filtering);
             }
         },
 
-        updateLookupDataSource: function() {
+        updateLookupDataSource: function(filterChanged) {
             if(!this.option('syncLookupFilterValues')) {
                 return;
             }
@@ -704,8 +704,11 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                     applyFilterViewController.setCurrentColumnForFiltering(null);
 
                     const editorDataSource = editor.option('dataSource');
+                    const shouldUpdateFilter =
+                        !filterChanged ||
+                        !equalByValue(editorDataSource.__dataGridSourceFilter, filter);
 
-                    if(!equalByValue(editorDataSource.__dataGridSourceFilter, filter)) {
+                    if(shouldUpdateFilter) {
                         const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
                         editor.option('dataSource', lookupDataSource);
                     }
