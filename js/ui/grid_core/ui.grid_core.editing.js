@@ -1828,7 +1828,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 const row = dataController.getVisibleRows()[rowIndex];
 
                 if(row) {
-                    options.row = row; // T1122209
+                    options.row.values = row.values; // T1122209
                     options.values = row.values;
                 }
 
