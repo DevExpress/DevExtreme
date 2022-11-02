@@ -1,11 +1,11 @@
 import {
-  NgModule, Component, enableProdMode, ViewChild,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxDataGridModule, DxTemplateModule, DxButtonModule,
+  DxDataGridModule, DxTemplateModule,
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
