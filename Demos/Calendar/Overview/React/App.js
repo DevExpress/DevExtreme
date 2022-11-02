@@ -104,14 +104,14 @@ export default function App() {
         <div className="option">
           <CheckBox
             defaultValue={false}
-            text="Specified min value"
+            text="Specify min value"
             onValueChanged={onMinDateChange}
           />
         </div>
         <div className="option">
           <CheckBox
             defaultValue={false}
-            text="Specified max value"
+            text="Specify max value"
             onValueChanged={onMaxDateChange}
           />
         </div>
@@ -132,7 +132,7 @@ export default function App() {
         <div className="option">
           <CheckBox
             defaultValue={false}
-            text="Use the Custom Cell Template"
+            text="Use custom cell template"
             onValueChanged={onUseCellTemplateChange}
           />
         </div>
@@ -141,23 +141,6 @@ export default function App() {
             value={disabled}
             text="Disabled"
             onValueChanged={onDisabledChange}
-          />
-        </div>
-        <div className="option">
-          <span>Zoom level</span>
-          <SelectBox
-            dataSource={zoomLevels}
-            value={zoomLevel}
-            onValueChanged={onZoomLevelChange}
-          />
-        </div>
-        <div className="option">
-          <span>Selected date</span>
-          <DateBox
-            id="selected-date"
-            value={currentValue}
-            width="100%"
-            onValueChanged={onCurrentValueChange}
           />
         </div>
         <div className="option">
@@ -176,6 +159,24 @@ export default function App() {
             dataSource={weekNumberRules}
             value={weekNumberRule}
             onValueChanged={onWeekNumberRuleChange}
+          />
+        </div>
+        <div className="option">
+          <span>Zoom level</span>
+          <SelectBox
+            dataSource={zoomLevels}
+            value={zoomLevel}
+            onValueChanged={onZoomLevelChange}
+          />
+        </div>
+        <div className="option">
+          <span>Selected date</span>
+          <DateBox
+            id="selected-date"
+            value={currentValue}
+            onValueChanged={onCurrentValueChange}
+            min={minDateValue}
+            max={maxDateValue}
           />
         </div>
       </div>

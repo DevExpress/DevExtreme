@@ -25,7 +25,7 @@
     <div class="caption">Options</div>
     <div class="option">
       <dx-check-box
-        text="Specified min value"
+        text="Specify min value"
         [value]="false"
         (onValueChanged)="setMinDate($event)"
       >
@@ -33,7 +33,7 @@
     </div>
     <div class="option">
       <dx-check-box
-        text="Specified max value"
+        text="Specify max value"
         [value]="false"
         (onValueChanged)="setMaxDate($event)"
       >
@@ -56,7 +56,7 @@
     </div>
     <div class="option">
       <dx-check-box
-        text="Use the Custom Cell Template"
+        text="Use custom cell template"
         [value]="false"
         (onValueChanged)="useCellTemplate($event)"
       >
@@ -67,16 +67,6 @@
       </dx-check-box>
     </div>
     <div class="option">
-      <span>Zoom level</span>
-      <dx-select-box [dataSource]="zoomLevels" [(value)]="calendar.zoomLevel">
-      </dx-select-box>
-    </div>
-    <div class="option">
-      <span>Selected date</span>
-      <dx-date-box id="selected-date" width="100%" [(value)]="currentValue">
-      </dx-date-box>
-    </div>
-    <div class="option">
       <span>First day of week</span>
       <dx-select-box
         [dataSource]="weekDays"
@@ -85,13 +75,27 @@
         displayExpr="text"
       ></dx-select-box>
     </div>
-
     <div class="option">
       <span>Week number rule</span>
       <dx-select-box
         [dataSource]="weekNumberRules"
         [(value)]="calendar.weekNumberRule"
       ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Zoom level</span>
+      <dx-select-box [dataSource]="zoomLevels" [(value)]="calendar.zoomLevel">
+      </dx-select-box>
+    </div>
+    <div class="option">
+      <span>Selected date</span>
+      <dx-date-box
+        id="selected-date"
+        [min]="minDateValue"
+        [max]="maxDateValue"
+        [(value)]="currentValue"
+      >
+      </dx-date-box>
     </div>
   </div>
 </div>

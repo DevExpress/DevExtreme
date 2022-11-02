@@ -38,7 +38,7 @@
         <div class="option">
           <div
             dx-check-box="{
-              text: 'Specified min value',
+              text: 'Specify min value',
               value: false,
               onValueChanged: setMinDate
             }"
@@ -47,7 +47,7 @@
         <div class="option">
           <div
             dx-check-box="{
-              text: 'Specified max value',
+              text: 'Specify max value',
               value: false,
               onValueChanged: setMaxDate
             }"
@@ -75,7 +75,7 @@
         <div class="option">
           <div
             dx-check-box="{
-              text: 'Use the Custom Cell Template',
+              text: 'Use custom cell template',
               value: false,
               onValueChanged: useCellTemplate
             }"
@@ -87,29 +87,6 @@
               text: 'Disabled',
               bindingOptions: {
                   value: 'disabled'
-              }
-            }"
-          ></div>
-        </div>
-        <div class="option">
-          <span>Zoom level</span>
-          <div
-            dx-select-box="{
-              dataSource: zoomLevels,
-              bindingOptions: {
-                value: 'zoomLevel'
-              }
-            }"
-          ></div>
-        </div>
-        <div class="option">
-          <span>Selected date</span>
-          <div
-            id="selected-date"
-            dx-date-box="{
-              width: '100%',
-              bindingOptions: {
-                value: 'currentValue'
               }
             }"
           ></div>
@@ -135,6 +112,30 @@
               bindingOptions: {
                 value: 'weekNumberRule'
               },
+            }"
+          ></div>
+        </div>
+        <div class="option">
+          <span>Zoom level</span>
+          <div
+            dx-select-box="{
+              dataSource: zoomLevels,
+              bindingOptions: {
+                value: 'zoomLevel'
+              }
+            }"
+          ></div>
+        </div>
+        <div class="option">
+          <span>Selected date</span>
+          <div
+            id="selected-date"
+            dx-date-box="{
+              bindingOptions: {
+                value: 'currentValue',
+                min: 'minDateValue',
+                max: 'maxDateValue',
+              }
             }"
           ></div>
         </div>

@@ -1,4 +1,5 @@
 $(() => {
+  const msInDay = 1000 * 60 * 60 * 24;
   const zoomLevels = ['month', 'year', 'decade', 'century'];
   const weekDays = [
     { id: 0, text: 'Sunday' },
@@ -30,24 +31,22 @@ $(() => {
   }).dxCalendar('instance');
 
   $('#min-date').dxCheckBox({
-    text: 'Specified min value',
+    text: 'Specify min value',
     onValueChanged(data) {
-      if (data.value) {
-        calendar.option('min', new Date(date - 1000 * 60 * 60 * 24 * 3));
-      } else {
-        calendar.option('min', null);
-      }
+      const minDate = new Date(date - msInDay * 3);
+
+      calendar.option('min', data.value ? minDate : null);
+      selectedDate.option('min', data.value ? minDate : null);
     },
   });
 
   $('#max-date').dxCheckBox({
-    text: 'Specified max value',
+    text: 'Specify max value',
     onValueChanged(data) {
-      if (data.value) {
-        calendar.option('max', new Date(date + 1000 * 60 * 60 * 24 * 3));
-      } else {
-        calendar.option('max', null);
-      }
+      const maxDate = new Date(date + msInDay * 3);
+
+      calendar.option('max', data.value ? maxDate : null);
+      selectedDate.option('max', data.value ? maxDate : null);
     },
   });
 
@@ -77,7 +76,7 @@ $(() => {
   });
 
   $('#custom-cell').dxCheckBox({
-    text: 'Use the Custom Cell Template',
+    text: 'Use custom cell template',
     value: false,
     onValueChanged(data) {
       calendar.option('cellTemplate', data.value ? getCellTemplate : 'cell');
@@ -94,7 +93,6 @@ $(() => {
 
   const selectedDate = $('#selected-date').dxDateBox({
     value: new Date(),
-    width: '100%',
     onValueChanged(data) {
       calendar.option('value', data.value);
     },

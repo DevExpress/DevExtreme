@@ -58,39 +58,26 @@ export class AppComponent {
     return day === 0 || day === 6;
   }
 
-  setMinDate(e) {
-    if (e.value) {
-      this.minDateValue = new Date(this.now.getTime() - 1000 * 60 * 60 * 24 * 3);
-    } else {
-      this.minDateValue = null;
-    }
+  setMinDate({ value }) {
+    this.minDateValue = value
+      ? new Date(this.now.getTime() - 1000 * 60 * 60 * 24 * 3)
+      : null;
   }
 
-  setMaxDate(e) {
-    if (e.value) {
-      this.maxDateValue = new Date(this.now.getTime() + 1000 * 60 * 60 * 24 * 3);
-    } else {
-      this.maxDateValue = null;
-    }
+  setMaxDate({ value }) {
+    this.maxDateValue = value
+      ? new Date(this.now.getTime() + 1000 * 60 * 60 * 24 * 3)
+      : null;
   }
 
-  disableWeekend(e) {
-    if (e.value) {
-      const that = this;
-      that.disabledDates = function (data) {
-        return data.view === 'month' && that.isWeekend(data.date);
-      };
-    } else {
-      this.disabledDates = null;
-    }
+  disableWeekend({ value }) {
+    this.disabledDates = value
+      ? (data) => data.view === 'month' && this.isWeekend(data.date)
+      : null;
   }
 
-  useCellTemplate(e) {
-    if (e.value) {
-      this.cellTemplate = 'custom';
-    } else {
-      this.cellTemplate = 'cell';
-    }
+  useCellTemplate({ value }) {
+    this.cellTemplate = value ? 'custom' : 'cell';
   }
 
   getCellCssClass({ date, view }) {
