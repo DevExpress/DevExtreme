@@ -1523,7 +1523,7 @@ export type ToolbarItem = dxToolbarItem & {
    * @public
    */
   location?: ToolbarItemLocation;
-}
+};
 
 /**
  * @public
