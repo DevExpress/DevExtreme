@@ -95,7 +95,7 @@
             v-model:end="end"
             :min="0"
             :max="100"
-            call-value-change="onMovingComplete"
+            call-value-change="onHandleRelease"
           />
         </div>
       </div>

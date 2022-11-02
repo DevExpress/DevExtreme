@@ -79,7 +79,7 @@ DemoApp.controller('DemoController', ($scope) => {
       end: 75,
       disabled: true,
     },
-    onMovingOptions: {
+    onHandleMoveOptions: {
       min: 0,
       max: 100,
       bindingOptions: {
@@ -87,10 +87,10 @@ DemoApp.controller('DemoController', ($scope) => {
         end: 'endValue',
       },
     },
-    onMovingCompleteOptions: {
+    onHandleReleaseOptions: {
       min: 0,
       max: 100,
-      callValueChange: 'onMovingComplete',
+      valueChangeMode: 'onHandleRelease',
       bindingOptions: {
         start: 'startValue',
         end: 'endValue',

@@ -63,17 +63,17 @@ DemoApp.controller('DemoController', ($scope) => {
       value: 50,
       disabled: true,
     },
-    onMovingOptions: {
+    onHandleMoveOptions: {
       min: 0,
       max: 100,
       bindingOptions: {
         value: 'value',
       },
     },
-    onMovingCompleteOptions: {
+    onHandleReleaseOptions: {
       min: 0,
       max: 100,
-      callValueChange: 'onMovingComplete',
+      valueChangeMode: 'onHandleRelease',
       bindingOptions: {
         value: 'value',
       },

@@ -62,26 +62,26 @@ $(() => {
     disabled: true,
   });
 
-  const handleOnMovingSlider = $('#slider-on-moving').dxRangeSlider({
+  const onHandleMoveRangeSlider = $('#slider-on-handle-move').dxRangeSlider({
     min: 0,
     max: 100,
     start: 10,
     end: 90,
     onValueChanged({ value, start, end }) {
-      handleOnMovingCompleteSlider.option('value', value);
+      onHandleReleaseRangeSlider.option('value', value);
       startValue.option('value', start);
       endValue.option('value', end);
     },
   }).dxRangeSlider('instance');
 
-  const handleOnMovingCompleteSlider = $('#slider-on-moving-complete').dxRangeSlider({
+  const onHandleReleaseRangeSlider = $('#slider-on-handle-release').dxRangeSlider({
     min: 0,
     max: 100,
     start: 10,
     end: 90,
-    callValueChange: 'onMovingComplete',
+    valueChangeMode: 'onHandleRelease',
     onValueChanged({ value, start, end }) {
-      handleOnMovingSlider.option('value', value);
+      onHandleMoveRangeSlider.option('value', value);
       startValue.option('value', start);
       endValue.option('value', end);
     },
@@ -93,8 +93,8 @@ $(() => {
     max: 100,
     showSpinButtons: true,
     onValueChanged({ value }) {
-      handleOnMovingSlider.option('start', value);
-      handleOnMovingCompleteSlider.option('start', value);
+      onHandleMoveRangeSlider.option('start', value);
+      onHandleReleaseRangeSlider.option('start', value);
     },
   }).dxNumberBox('instance');
 
@@ -104,8 +104,8 @@ $(() => {
     max: 100,
     showSpinButtons: true,
     onValueChanged({ value }) {
-      handleOnMovingSlider.option('end', value);
-      handleOnMovingCompleteSlider.option('end', value);
+      onHandleMoveRangeSlider.option('end', value);
+      onHandleReleaseRangeSlider.option('end', value);
     },
   }).dxNumberBox('instance');
 });

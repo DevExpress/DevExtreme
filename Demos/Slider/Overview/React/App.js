@@ -73,7 +73,7 @@ class App extends React.Component {
               <Slider min={0}
                 max={100}
                 value={this.state.sliderValue}
-                callValueChange='onMovingComplete'
+                valueChangeMode="onHandleRelease"
                 onValueChanged={this.setSliderValue} />
             </div>
           </div>

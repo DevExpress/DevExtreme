@@ -57,23 +57,23 @@ $(() => {
     disabled: true,
   });
 
-  const handleOnMovingSlider = $('#slider-on-moving').dxSlider({
+  const onHandleMoveSlider = $('#slider-on-handle-move').dxSlider({
     min: 0,
     max: 100,
     value: 10,
     onValueChanged({ value }) {
-      handleOnMovingCompleteSlider.option('value', value);
+      onHandleReleaseSlider.option('value', value);
       sliderValue.option('value', value);
     },
   }).dxSlider('instance');
 
-  const handleOnMovingCompleteSlider = $('#slider-on-moving-complete').dxSlider({
+  const onHandleReleaseSlider = $('#slider-on-handle-release').dxSlider({
     min: 0,
     max: 100,
     value: 10,
-    callValueChange: 'onMovingComplete',
+    valueChangeMode: 'onHandleRelease',
     onValueChanged({ value }) {
-      handleOnMovingSlider.option('value', value);
+      onHandleMoveSlider.option('value', value);
       sliderValue.option('value', value);
     },
   }).dxSlider('instance');
@@ -84,8 +84,8 @@ $(() => {
     max: 100,
     showSpinButtons: true,
     onValueChanged({ value }) {
-      handleOnMovingSlider.option('value', value);
-      handleOnMovingCompleteSlider.option('value', value);
+      onHandleMoveSlider.option('value', value);
+      onHandleReleaseSlider.option('value', value);
     },
   }).dxNumberBox('instance');
 });
