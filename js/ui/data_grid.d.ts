@@ -4235,7 +4235,7 @@ export type ToolbarItem = dxToolbarItem & {
    * @public
    */
   location?: 'after' | 'before' | 'center';
-}
+};
 
 /**
  * @public
