@@ -800,7 +800,7 @@ export const ListBase = CollectionWidget.inherit({
             this._$nextButton = null;
         }
         delete this._inkRipple;
-        this._toggleActiveState(this._eventBindingTarget(), false);
+        this._resetActiveState();
         this.callBase.apply(this, arguments);
     },
 

@@ -47,15 +47,11 @@ export default class List extends Widget {
     return new ListGroup(this.element.find(`.${CLASS.group}`).nth(index));
   }
 
-  setOptionForRepaintOnItemClick(): Promise<void> {
+  repaint(): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        (getInstance() as any).option('onItemClick', () => {
-          (getInstance() as any).repaint();
-        });
-      },
+      () => { (getInstance() as any).repaint(); },
       { dependencies: { getInstance } },
     )();
   }
