@@ -3314,7 +3314,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.calculateSummaryValue]
      */
-    calculateSummaryValue?: (e: DevExpress.ui.dxPivotGridSummaryCell) => number;
+    calculateSummaryValue?: (
+      e: DevExpress.ui.dxPivotGridSummaryCell
+    ) => number | null;
     /**
      * [descr:PivotGridDataSourceOptions.fields.caption]
      */
