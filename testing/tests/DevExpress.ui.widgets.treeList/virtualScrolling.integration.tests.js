@@ -74,7 +74,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
         let visibleRows = treeList.getVisibleRows();
-        // assert
+        const scrollable = treeList.getScrollable();
 
         // assert
         assert.equal(visibleRows.length, 16, 'rows are rendered initially');
@@ -82,25 +82,27 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[visibleRows.length - 1].key, 16, 'initial last visible row');
 
         // act
-        treeList.getScrollable().scrollTo({ top: 10000 });
+        scrollable.scrollTo({ top: 3000 });
+        $(scrollable.container()).trigger('scroll');
         this.clock.tick(300);
         visibleRows = treeList.getVisibleRows();
 
 
         // assert
-        assert.equal(visibleRows.length, 11, 'rows are rendered at the bottom');
-        assert.equal(visibleRows[0].key, 10, 'first visible row at the bottom');
+        assert.equal(visibleRows.length, 12, 'rows are rendered at the bottom');
+        assert.equal(visibleRows[0].key, 9, 'first visible row at the bottom');
         assert.equal(visibleRows[visibleRows.length - 1].key, 20, 'last visible row at the bottom');
         assert.ok(treeListWrapper.rowsView.isRowVisible(11), 'last row visible');
 
         // act
-        treeList.getScrollable().scrollTo({ top: 10000 });
+        scrollable.scrollTo({ top: 3000 });
+        $(scrollable.container()).trigger('scroll');
         this.clock.tick(300);
         visibleRows = treeList.getVisibleRows();
 
         // assert
-        assert.equal(visibleRows.length, 11, 'rows are rendered at the bottom second time');
-        assert.equal(visibleRows[0].key, 10, 'first visible row at the bottom second time');
+        assert.equal(visibleRows.length, 12, 'rows are rendered at the bottom second time');
+        assert.equal(visibleRows[0].key, 9, 'first visible row at the bottom second time');
         assert.equal(visibleRows[visibleRows.length - 1].key, 20, 'last visible row at the bottom second time');
         assert.ok(treeListWrapper.rowsView.isRowVisible(11), 'last row visible');
 
