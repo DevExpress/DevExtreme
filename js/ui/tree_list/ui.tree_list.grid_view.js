@@ -24,14 +24,14 @@ treeListCore.registerModule('gridView', {
             resizing: {
                 _synchronizeColumns: function() {
                     const wordWrap = this.option('wordWrapEnabled');
-                    if(wordWrap) this._toggleBestFitMode(true);
+                    if(wordWrap) this._toggleContentMinHeight(true);
                     this.callBase(arguments);
 
                     if(wordWrap) {
                         deferUpdate(() => {
                             deferRender(() => {
                                 deferUpdate(() => {
-                                    this._toggleBestFitMode(false);
+                                    this._toggleContentMinHeight(false);
                                 });
                             });
                         });
