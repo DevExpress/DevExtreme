@@ -15,6 +15,10 @@ import {
 
 import dxTrackBar from './track_bar';
 
+export {
+    ValueChangeMode,
+} from './slider';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxRangeSlider>;
 
