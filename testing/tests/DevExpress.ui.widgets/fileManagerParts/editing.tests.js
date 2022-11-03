@@ -532,6 +532,34 @@ QUnit.module('Editing operations', moduleConfig, () => {
         }
     });
 
+    test('request for uploading an empty file has correct chunk count in metadata - T1122867', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                uploadFileChunk: uploadChunkSpy
+            }),
+            upload: { chunkSize }
+        });
+
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1, 0)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+        assert.strictEqual(uploadChunkSpy.callCount, 1, 'uploadFileChunk called for each chunk');
+
+        const uploadInfo = uploadChunkSpy.args[0][1];
+        assert.strictEqual(uploadChunkSpy.args.length, 1, 'there is only one chunk');
+        assert.strictEqual(uploadInfo.chunkCount, 1, 'chunkCount correct');
+        assert.strictEqual(uploadInfo.chunkIndex, 0, 'chunkIndex correct');
+        assert.strictEqual(uploadInfo.bytesUploaded, 0, 'bytesUploaded correct');
+    });
+
     test('copying file must be completed in progress panel and current directory must be changed to the destination', function(assert) {
         const longPath = 'Files/Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1';
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
