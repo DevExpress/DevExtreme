@@ -57,16 +57,17 @@
 
     <ng-container *ngFor="let label of labelTemplates">
       <div *dxTemplate="let data of label.name">
-        <span><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</span>
+        <div><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</div>
       </div>
     </ng-container>
 
     <div *dxTemplate="let data of 'notes'">
-      <span>
-        <i class="dx-icon dx-icon-comment"></i>Additional
+      <div id="template-content">
+        <i id="helpedInfo" class="dx-icon dx-icon-info"></i>
+        Additional
         <br />
-        <i id="helpedInfo" class="dx-icon dx-icon-info"></i>{{ data.text }}
-      </span>
+        {{ data.text }}
+      </div>
 
       <dx-tooltip
         target="#helpedInfo"

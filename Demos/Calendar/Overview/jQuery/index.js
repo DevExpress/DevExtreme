@@ -31,7 +31,7 @@ $(() => {
   }).dxCalendar('instance');
 
   $('#min-date').dxCheckBox({
-    text: 'Specify min value',
+    text: 'Set minimum date',
     onValueChanged(data) {
       const minDate = new Date(date - msInDay * 3);
 
@@ -41,7 +41,7 @@ $(() => {
   });
 
   $('#max-date').dxCheckBox({
-    text: 'Specify max value',
+    text: 'Set maximum date',
     onValueChanged(data) {
       const maxDate = new Date(date + msInDay * 3);
 
@@ -51,7 +51,7 @@ $(() => {
   });
 
   $('#disable-dates').dxCheckBox({
-    text: 'Disable weekend',
+    text: 'Disable weekends',
     onValueChanged(data) {
       if (data.value) {
         calendar.option('disabledDates', (d) => d.view === 'month' && isWeekend(d.date));
@@ -69,7 +69,7 @@ $(() => {
   });
 
   $('#disabled').dxCheckBox({
-    text: 'Disabled',
+    text: 'Disable the calendar',
     onValueChanged(data) {
       calendar.option('disabled', data.value);
     },

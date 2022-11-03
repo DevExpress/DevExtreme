@@ -104,21 +104,21 @@ export default function App() {
         <div className="option">
           <CheckBox
             defaultValue={false}
-            text="Specify min value"
+            text="Set minimum date"
             onValueChanged={onMinDateChange}
           />
         </div>
         <div className="option">
           <CheckBox
             defaultValue={false}
-            text="Specify max value"
+            text="Set maximum date"
             onValueChanged={onMaxDateChange}
           />
         </div>
         <div className="option">
           <CheckBox
             defaultValue={false}
-            text="Disable weekend"
+            text="Disable weekends"
             onValueChanged={onDisableWeekendChange}
           />
         </div>
@@ -139,7 +139,7 @@ export default function App() {
         <div className="option">
           <CheckBox
             value={disabled}
-            text="Disabled"
+            text="Disable the calendar"
             onValueChanged={onDisabledChange}
           />
         </div>

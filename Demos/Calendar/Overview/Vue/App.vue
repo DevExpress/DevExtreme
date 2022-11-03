@@ -25,21 +25,21 @@
       <div class="option">
         <DxCheckBox
           :value="false"
-          text="Specify min value"
+          text="Set minimum date"
           @value-changed="setMinDate"
         />
       </div>
       <div class="option">
         <DxCheckBox
           :value="false"
-          text="Specify max value"
+          text="Set maximum date"
           @value-changed="setMaxDate"
         />
       </div>
       <div class="option">
         <DxCheckBox
           :value="false"
-          text="Disable weekend"
+          text="Disable weekends"
           @value-changed="disableWeekend"
         />
       </div>
@@ -59,7 +59,7 @@
       <div class="option">
         <DxCheckBox
           v-model:value="disabled"
-          text="Disabled"
+          text="Disable the calendar"
         />
       </div>
       <div class="option">

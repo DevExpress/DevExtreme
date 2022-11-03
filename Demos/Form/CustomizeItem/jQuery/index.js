@@ -76,10 +76,10 @@ $(() => {
         label: {
           template: (data, element) => {
             const lineBreak = '<br>';
-            const commentIcon = '<i class="dx-icon dx-icon-comment"></i>';
             const infoIcon = '<i id="helpedInfo" class="dx-icon dx-icon-info"></i>';
+            const labelText = `Additional${lineBreak}${data.text}`;
 
-            element.append(`<span>${commentIcon}Additional${lineBreak}${infoIcon}${data.text}</span>`);
+            element.append(`<div id='template-content'>${infoIcon}${labelText}</div>`);
 
             $('<div>').dxTooltip({
               target: '#helpedInfo',
@@ -112,6 +112,6 @@ $(() => {
   $('#form').dxForm('instance').validate();
 
   function labelTemplate(iconName) {
-    return (data) => $(`<span><i class='dx-icon dx-icon-${iconName}'></i>${data.text}</span>`);
+    return (data) => $(`<div><i class='dx-icon dx-icon-${iconName}'></i>${data.text}</div>`);
   }
 });

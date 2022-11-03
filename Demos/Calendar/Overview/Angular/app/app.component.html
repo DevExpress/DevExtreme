@@ -25,7 +25,7 @@
     <div class="caption">Options</div>
     <div class="option">
       <dx-check-box
-        text="Specify min value"
+        text="Set minimum date"
         [value]="false"
         (onValueChanged)="setMinDate($event)"
       >
@@ -33,7 +33,7 @@
     </div>
     <div class="option">
       <dx-check-box
-        text="Specify max value"
+        text="Set maximum date"
         [value]="false"
         (onValueChanged)="setMaxDate($event)"
       >
@@ -41,7 +41,7 @@
     </div>
     <div class="option">
       <dx-check-box
-        text="Disable weekend"
+        text="Disable weekends"
         [value]="false"
         (onValueChanged)="disableWeekend($event)"
       >
@@ -63,7 +63,7 @@
       </dx-check-box>
     </div>
     <div class="option">
-      <dx-check-box [(value)]="calendar.disabled" text="Disabled">
+      <dx-check-box [(value)]="calendar.disabled" text="Disable the calendar">
       </dx-check-box>
     </div>
     <div class="option">
