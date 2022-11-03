@@ -277,7 +277,7 @@ export interface PivotGridDataSourceField {
      * @default undefined
      * @public
      */
-    calculateSummaryValue?: ((e: dxPivotGridSummaryCell) => number);
+    calculateSummaryValue?: ((e: dxPivotGridSummaryCell) => number | null);
     /**
      * @docid PivotGridDataSourceOptions.fields.caption
      * @default undefined
@@ -473,7 +473,7 @@ export interface PivotGridDataSourceField {
  * @public
  */
 export default class PivotGridDataSource {
-    constructor(options?: Options)
+    constructor(options?: Options);
     /**
      * @docid
      * @publicName collapseAll(id)
