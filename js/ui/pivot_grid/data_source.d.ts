@@ -305,7 +305,7 @@ export interface PivotGridDataSourceField {
      * @default undefined
      * @public
      */
-    calculateSummaryValue?: ((e: dxPivotGridSummaryCell) => number);
+    calculateSummaryValue?: ((e: dxPivotGridSummaryCell) => number | null);
     /**
      * @docid PivotGridDataSourceOptions.fields.caption
      * @default undefined
