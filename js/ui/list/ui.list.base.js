@@ -805,7 +805,6 @@ export const ListBase = CollectionWidget.inherit({
             this._$nextButton.remove();
             this._$nextButton = null;
         }
-        delete this._inkRipple;
         this.callBase.apply(this, arguments);
     },
 
