@@ -13,9 +13,12 @@ import {
 } from '../resizable_container';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 import { InternalPagerProps } from '../common/pager_props';
+import * as GetElementWidth from '../utils/get_element_width';
 
 jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/utils/resize_callbacks');
+jest.spyOn(GetElementWidth, 'getElementContentWidth');
+jest.spyOn(GetElementWidth, 'getElementWidth');
 
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
@@ -119,6 +122,21 @@ describe('resizable-container', () => {
             infoText: true,
           });
         });
+      });
+
+      it('calculate elementsWidth should use rigth width methods', () => {
+        const component = createComponent({
+          width: 400, pageSizes: 100, info: 50, pages: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(GetElementWidth.getElementContentWidth)
+          .toHaveBeenNthCalledWith(1, component.parentRef.current);
+        expect(GetElementWidth.getElementWidth)
+          .toHaveBeenCalledWith(component.pageSizesRef.current);
+        expect(GetElementWidth.getElementWidth)
+          .toHaveBeenCalledWith(component.infoTextRef.current);
+        expect(GetElementWidth.getElementWidth)
+          .toHaveBeenCalledWith(component.pagesRef.current);
       });
 
       it('first render should update elementsWidth', () => {

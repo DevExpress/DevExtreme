@@ -7,9 +7,16 @@ export function getElementStyle(
   const computedStyle = getElementComputedStyle(element) ?? {};
   return toNumber(computedStyle[name]);
 }
+export function getElementContentWidth(element: Element | null | undefined): number {
+  const padding = getElementStyle('paddingLeft', element) + getElementStyle('paddingRight', element);
+  const width = getElementStyle('width', element);// element?.getBoundingClientRect().width ?? 0;
+  return width - padding;
+}
 
 export function getElementWidth(element: Element | null | undefined): number {
-  return getElementStyle('width', element);
+  const margin = getElementStyle('marginLeft', element) + getElementStyle('marginRight', element);
+  const width = getElementStyle('width', element);// element?.getBoundingClientRect().width ?? 0;
+  return margin + width;
 }
 export function getElementMinWidth(element: Element | null | undefined): number {
   return getElementStyle('minWidth', element);
