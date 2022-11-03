@@ -1,16 +1,18 @@
 .dx-resizable-handle::after {
   content: "";
-  background-color: #337ab7;
   position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 1px solid #337ab7;
-  top: 50%;
-  transform: translateY(-7px);
+  width: 9px;
+  height: 36px;
+  border: none;
+  border-radius: 50px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.24);
 }
 
 .dx-resizable-handle-right::after {
-  right: -7px;
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%);
 }
 
 .dx-toolbar.dx-toolbar-multiline .dx-toolbar-item {
@@ -32,7 +34,7 @@
 .resizable-container {
   padding: 10px;
   height: 300px;
-  border: 1px dashed #dbdbdb;
+  border: 1px dotted #999;
   border-radius: 4px;
   box-sizing: border-box;
 }
