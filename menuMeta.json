@@ -2875,7 +2875,6 @@
           {
             "Title": "Range Bar",
             "Name": "RangeBar",
-            "DocUrl": "Guide/UI_Components/Chart/Series_Types/Range_Series/",
             "Credits": "www.tax.state.ak.us",
             "Widget": "Charts",
             "DemoType": "Viz",
