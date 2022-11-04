@@ -25,15 +25,6 @@
     $generic-toolbar-item-spacing
   );
 
-  .dx-device-mobile & {
-    @include dx-toolbar-sizing(
-      $generic-mobile-toolbar-height,
-      $generic-mobile-toolbar-padding,
-      $generic-mobile-toolbar-label-font-size,
-      $generic-mobile-toolbar-item-spacing
-    );
-  }
-
   &.dx-state-disabled {
     opacity: 1;
   }
@@ -48,12 +39,6 @@
 .dx-toolbar-after {
   .dx-toolbar-item {
     @include dx-toolbar-item-padding($generic-toolbar-item-spacing);
-  }
-
-  .dx-device-mobile & {
-    .dx-toolbar-item {
-      @include dx-toolbar-item-padding($generic-mobile-toolbar-item-spacing);
-    }
   }
 }
 

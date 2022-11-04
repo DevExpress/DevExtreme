@@ -15,8 +15,6 @@
 // adduse
 @use "../badge";
 
-$generic-mobile-list-item-horizontal-padding: 15px;
-
 $generic-list-border: $generic-list-border-width solid $list-border-color;
 $generic-list-item-border: $generic-list-item-border-width solid $list-border-color;
 $generic-list-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
@@ -383,7 +381,3 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 }
 
 @include dx-list-sizing($generic-list-item-horizontal-padding);
-
-.dx-device-mobile {
-  @include dx-list-sizing($generic-mobile-list-item-horizontal-padding);
-}
