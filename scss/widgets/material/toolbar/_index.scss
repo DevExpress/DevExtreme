@@ -28,20 +28,10 @@
     $material-toolbar-item-spacing
   );
 
-  .dx-device-mobile & {
-    @include dx-toolbar-sizing(
-      $material-mobile-toolbar-height,
-      $material-mobile-toolbar-padding,
-      $material-mobile-toolbar-label-font-size,
-      $material-mobile-toolbar-item-spacing
-    );
-  }
-
   &.dx-state-disabled {
     opacity: 1;
   }
 
-  .dx-device-mobile &.dx-toolbar-multiline,
   &.dx-toolbar-multiline {
     .dx-toolbar-item {
       line-height: $material-toolbar-height;
@@ -52,12 +42,6 @@
 .dx-toolbar-after {
   .dx-toolbar-item {
     @include dx-toolbar-item-padding($material-toolbar-item-spacing);
-  }
-
-  .dx-device-mobile & {
-    .dx-toolbar-item {
-      @include dx-toolbar-item-padding($material-mobile-toolbar-item-spacing);
-    }
   }
 }
 

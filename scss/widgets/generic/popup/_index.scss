@@ -95,15 +95,6 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
       $generic-popup-toolbar-label-font-size,
       $generic-popup-toolbar-item-spacing
     );
-
-    .dx-device-mobile & {
-      @include dx-toolbar-sizing(
-        $generic-popup-toolbar-height,
-        $generic-popup-toolbarbottom-padding,
-        $generic-popup-toolbar-label-font-size,
-        $generic-popup-toolbar-item-spacing
-      );
-    }
   }
 
   .dx-button {

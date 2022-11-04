@@ -34,7 +34,6 @@ $generic-editor-custom-button-margin: 1px;
   @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, math.div($generic-button-icon-size, 2));
 }
 
-
 @mixin dx-button-styling-variant(
     $background-color, $border-color, $text-color,
     $hover-background-color, $hover-border-color,
