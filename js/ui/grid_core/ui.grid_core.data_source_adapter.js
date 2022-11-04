@@ -354,6 +354,9 @@ export default gridCore.Controller.inherit((function() {
         _getKeyInfo: function() {
             return this.store();
         },
+        _needToCopyDataObject() {
+            return true;
+        },
         _applyBatch: function(changes, fromStore) {
             const keyInfo = this._getKeyInfo();
             const dataSource = this._dataSource;
@@ -373,14 +376,16 @@ export default gridCore.Controller.inherit((function() {
                 data: this._items,
                 changes,
                 groupCount: groupCount,
-                useInsertIndex: true
+                useInsertIndex: true,
+                skipCopying: !this._needToCopyDataObject(),
             });
             applyBatch({
                 keyInfo,
                 data: dataSource.items(),
                 changes,
                 groupCount: groupCount,
-                useInsertIndex: true
+                useInsertIndex: true,
+                skipCopying: !this._needToCopyDataObject(),
             });
 
             const needUpdateTotalCountCorrection =

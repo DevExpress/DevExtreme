@@ -54,7 +54,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   },
 }));
 
-test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the left when columnRenderingMode is virtual', async (t) => {
+test.skip('DataGrid should not scroll back to the focused cell after horizontal scrolling to the left when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollTo({ x: 1500 });
@@ -92,7 +92,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
 }));
 
 // T1090735
-test('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
+test.skip('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

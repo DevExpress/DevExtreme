@@ -5,6 +5,7 @@ import url from '../../../../helpers/getPageUrl';
 fixture`DataSource`
   .page(url(__dirname, './pages/containerWithArrayStore.html'));
 
+// TODO SKIPPED TEST: Why this test is skipped?
 test.skip('Appointment key should be deleted when removing an appointment from series (T1024213)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

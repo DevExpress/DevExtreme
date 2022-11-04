@@ -1,9 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture`Scheduler - All day appointments`
-  .page(url(__dirname, './containerAllDay.html'));
+  .page(url(__dirname, './containers/containerAllDay.html'));
 
 const data = [{
   text: '0',
@@ -23,9 +24,7 @@ const data = [{
   endDate: new Date(2021, 3, 4, 23, 59, 59),
 }];
 
-test('it should skip weekend days in workWeek', async (t) => {
-  await t.resizeWindow(1200, 800);
-
+safeSizeTest('it should skip weekend days in workWeek', async (t) => {
   const {
     takeScreenshot,
     compareResults,
@@ -54,7 +53,7 @@ test('it should skip weekend days in workWeek', async (t) => {
   '#workweek',
 ));
 
-test('it should skip weekend days in timelineWorkWeek', async (t) => {
+safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
   const {
     takeScreenshot,
     compareResults,

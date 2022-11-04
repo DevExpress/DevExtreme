@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 import url from '../../helpers/getPageUrl';
 
@@ -20,7 +21,7 @@ const dispose = ClientFunction((container) => {
   ($(container) as any).dxScheduler('dispose');
 });
 
-test('First scheduler should work after removing second (T1063130)', async (t) => {
+safeSizeTest('First scheduler should work after removing second (T1063130)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { navigator } = scheduler.toolbar;
 

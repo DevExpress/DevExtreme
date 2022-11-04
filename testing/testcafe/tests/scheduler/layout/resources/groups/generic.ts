@@ -1,6 +1,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 
 fixture`Scheduler: Generic theme layout`
@@ -27,7 +28,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
 
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
   ['day', 'week', 'workWeek', 'month'].forEach((view) => {
-    test(`Base views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
+    safeSizeTest(`Base views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
     }).before(async () => createScheduler(view, groupOrientation));
@@ -36,7 +37,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
 
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
+    safeSizeTest(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
     }).before(async () => createScheduler(view, groupOrientation));

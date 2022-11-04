@@ -1,12 +1,13 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Scheduler: View with cross-scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-test('Scrollable synchronization should work after changing current date (T1027231)', async (t) => {
+safeSizeTest('Scrollable synchronization should work after changing current date (T1027231)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('currentDate', new Date(2021, 4, 5));
@@ -48,7 +49,7 @@ test('Scrollable synchronization should work after changing current date (T10272
   }, true);
 });
 
-test('Scrollable should be prepared correctly after change visibility (T1032171)', async (t) => {
+safeSizeTest('Scrollable should be prepared correctly after change visibility (T1032171)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('visible', true);

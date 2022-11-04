@@ -591,6 +591,8 @@ const CollectionWidget = Widget.inherit({
     _clean: function() {
         this._cleanFocusState();
         this._cleanItemContainer();
+        this._inkRipple && delete this._inkRipple;
+        this._resetActiveState();
     },
 
     _cleanItemContainer: function() {
