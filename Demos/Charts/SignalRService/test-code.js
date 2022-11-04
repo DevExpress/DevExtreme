@@ -32,7 +32,8 @@ testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, 
         length: 'hour',
         endValue: new Date(1539775980000),
       });
-      chart.option = function () { };
+
+      testUtils.mockOptionMethod(chart);
     })
     .then(() => testUtils.postponeUntil(() => isReady, 100, 30000))
     .then(() => testUtils.postpone(500));

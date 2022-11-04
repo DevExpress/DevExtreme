@@ -15,7 +15,7 @@ testUtils.importAnd(() => 'devextreme/viz/polar_chart', () => DevExpress.viz.dxP
       const instance = dxPolarChart.getInstance(document.querySelector('#zoomedChart'));
       instance.option('dataSource', dataSource);
       instance.option('valueAxis.visualRange', [0, 8]);
-      instance.option = function () { };
+      testUtils.mockOptionMethod(instance);
     })
     .then(() => testUtils.postpone(2000));
 });

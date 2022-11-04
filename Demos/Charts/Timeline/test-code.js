@@ -117,7 +117,8 @@ testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, 
     .then(() => {
       const instance = dxChart.getInstance(document.querySelector('#chart'));
       instance.option('dataSource', dataSource);
-      instance.option = function () { };
+
+      testUtils.mockOptionMethod(instance);
     })
     .then(() => testUtils.postpone(2000));
 });

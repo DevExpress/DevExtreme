@@ -9,7 +9,6 @@ testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/viz/range_selecto
     chart.option('autoHidePointMarkers', false);
     chart.option('dataSource', ds);
     rangeSelector.option('dataSource', ds);
-    chart.option = function () { };
-    rangeSelector.option = function () { };
+    [chart, rangeSelector].forEach(testUtils.mockOptionMethod);
   }).then(() => testUtils.postpone(2000));
 });
