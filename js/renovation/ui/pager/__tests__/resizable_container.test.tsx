@@ -124,6 +124,7 @@ describe('resizable-container', () => {
         });
       });
 
+      // T1125402
       it('calculate elementsWidth should use rigth width methods', () => {
         const component = createComponent({
           width: 400, pageSizes: 100, info: 50, pages: 100,
