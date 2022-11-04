@@ -65,15 +65,6 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
       $material-popup-toolbar-label-font-size,
       $material-popup-toolbar-item-spacing
     );
-
-    .dx-device-mobile & {
-      @include dx-toolbar-sizing(
-        $material-popup-bottom-toolbar-height,
-        $material-popup-toolbarbottom-padding,
-        $material-popup-toolbar-label-font-size,
-        $material-popup-toolbar-item-spacing
-      );
-    }
   }
 }
 
@@ -105,15 +96,6 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
         $material-popup-toolbar-label-font-size,
         $material-popup-toolbar-item-spacing
       );
-
-      .dx-device-mobile & {
-        @include dx-toolbar-sizing(
-          $material-popup-bottom-toolbar-height,
-          $material-popup-toolbarbottom-padding-rtl,
-          $material-popup-toolbar-label-font-size,
-          $material-popup-toolbar-item-spacing
-        );
-      }
     }
   }
 }

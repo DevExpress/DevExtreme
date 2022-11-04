@@ -5,7 +5,6 @@
 
 $generic-toolbar-menu-top-padding: null !default;
 $generic-toolbar-menu-bottom-padding: null !default;
-$generic-mobile-toolbar-height: 36px !default;
 
 @if $size == "default" {
   $generic-toolbar-menu-top-padding: 7px !default;
@@ -22,7 +21,3 @@ $generic-toolbar-padding: 0 !default;
 $generic-toolbar-item-spacing: 5px !default;
 $generic-toolbar-label-font-size: $generic-m-font-size !default;
 $generic-toolbar-section-padding: 15px !default;
-
-$generic-mobile-toolbar-padding: 0 !default;
-$generic-mobile-toolbar-item-spacing: 5px !default;
-$generic-mobile-toolbar-label-font-size: 20px !default;
