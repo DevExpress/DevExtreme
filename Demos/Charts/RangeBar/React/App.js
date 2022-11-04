@@ -7,6 +7,7 @@ import Chart, {
   Label,
   Export,
   Legend,
+  Tooltip,
 } from 'devextreme-react/chart';
 import { oilPrices } from './data.js';
 
@@ -19,9 +20,11 @@ class App extends React.Component {
         palette="Violet"
         title="Crude Oil Prices in 2005"
       >
+        <Tooltip enabled={true}></Tooltip>
         <CommonSeriesSettings
           argumentField="date"
           type="rangebar"
+          minBarSize={2}
         />
         <Series
           rangeValue1Field="aVal1"

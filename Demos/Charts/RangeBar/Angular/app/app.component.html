@@ -7,6 +7,7 @@
   <dxo-common-series-settings
     argumentField="date"
     type="rangeBar"
+    [minBarSize]="2"
   ></dxo-common-series-settings>
   <dxi-value-axis>
     <dxo-title text="$ per barrel"></dxo-title>
@@ -29,4 +30,5 @@
     rangeValue2Field="tVal2"
     name="West Texas Intermediate"
   ></dxi-series>
+  <dxo-tooltip [enabled]="true"></dxo-tooltip>
 </dx-chart>

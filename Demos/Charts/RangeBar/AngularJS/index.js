@@ -8,6 +8,7 @@ DemoApp.controller('DemoController', ($scope) => {
     commonSeriesSettings: {
       argumentField: 'date',
       type: 'rangeBar',
+      minBarSize: 2,
     },
     series: [
       {
@@ -24,6 +25,9 @@ DemoApp.controller('DemoController', ($scope) => {
       title: {
         text: '$ per barrel',
       },
+    },
+    tooltip: {
+      enabled: true,
     },
     argumentAxis: {
       label: {

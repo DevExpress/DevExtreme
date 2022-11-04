@@ -8,6 +8,7 @@
     <DxCommonSeriesSettings
       argument-field="date"
       type="rangebar"
+      :min-bar-size="2"
     />
     <DxSeries
       range-value1-field="aVal1"
@@ -18,6 +19,9 @@
       range-value1-field="tVal1"
       range-value2-field="tVal2"
       name="West Texas Intermediate"
+    />
+    <DxTooltip
+      :enabled="true"
     />
 
     <DxArgumentAxis>
@@ -42,6 +46,7 @@ import DxChart, {
   DxLabel,
   DxExport,
   DxLegend,
+  DxTooltip,
 } from 'devextreme-vue/chart';
 import { oilPrices } from './data.js';
 
@@ -55,6 +60,7 @@ export default {
     DxLabel,
     DxExport,
     DxLegend,
+    DxTooltip,
   },
   data() {
     return {

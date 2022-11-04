@@ -7,6 +7,7 @@ window.onload = function () {
       commonSeriesSettings: {
         argumentField: 'date',
         type: 'rangeBar',
+        minBarSize: 2,
       },
       series: [
         {
@@ -30,6 +31,9 @@ window.onload = function () {
         },
       },
       export: {
+        enabled: true,
+      },
+      tooltip: {
         enabled: true,
       },
       legend: {

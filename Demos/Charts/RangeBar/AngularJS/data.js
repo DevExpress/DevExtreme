@@ -67,7 +67,7 @@ const dataSource = [{
 }, {
   date: new Date(2005, 11, 1),
   aVal1: 55.22,
-  aVal2: 59.22,
+  aVal2: 55.22,
   tVal1: 57.34,
-  tVal2: 61.37,
+  tVal2: 57.37,
 }];

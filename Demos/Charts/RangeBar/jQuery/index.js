@@ -6,6 +6,7 @@ $(() => {
     commonSeriesSettings: {
       argumentField: 'date',
       type: 'rangeBar',
+      minBarSize: 2,
     },
     series: [
       {
@@ -22,6 +23,9 @@ $(() => {
       title: {
         text: '$ per barrel',
       },
+    },
+    tooltip: {
+      enabled: true,
     },
     argumentAxis: {
       label: {
