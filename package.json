@@ -33,5 +33,9 @@
 		"typescript:watch": "npm run typescript:build -- --watch",
 		"typescript:clean": "rimraf ./{services,shared,packages}/*/{lib,dist,*.tsbuildinfo}",
 		"update:tsconfig": "ts-node-esm scripts/update-package-tsconfig.ts"
-	}
+	},
+  "workspaces": [
+    "packages/*",
+    "playgrounds/*"
+  ]
 }

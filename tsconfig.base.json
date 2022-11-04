@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "CommonJS",
+    "module": "es2020",
     "moduleResolution": "NodeNext",
     "noEmitOnError": true,
     "useDefineForClassFields": true,

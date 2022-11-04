@@ -3,9 +3,6 @@
 	"files": [],
 	"references": [
 		{
-			"path": "shared\\shared-template\\tsconfig.package.json"
-		},
-		{
 			"path": "packages\\core\\tsconfig.package.json"
 		},
 		{
@@ -13,9 +10,6 @@
 		},
 		{
 			"path": "packages\\react\\tsconfig.package.json"
-		},
-		{
-			"path": "services\\service-template\\tsconfig.package.json"
 		},
 		{
 			"path": "packages\\jquery\\tsconfig.package.json"
