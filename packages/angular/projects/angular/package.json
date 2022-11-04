@@ -1,0 +1,13 @@
+{
+  "name": "@devexpress/angular",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": "14.x.x",
+    "@angular/core": "14.x.x",
+    "@angular/forms": "14.x.x"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@devexpress/core": "^1.0.0"
+  }
+}

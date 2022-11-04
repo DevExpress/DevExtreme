@@ -1,0 +1,39 @@
+{
+    "name": "@devexpress/core",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "build": "rollup -c rollup/rollup.config.js",
+        "watch": "rollup -c rollup/rollup.config.js --watch"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@rollup/plugin-typescript": "^8.3.3",
+        "rollup": "^2.77.1",
+        "rollup-plugin-copy": "^3.4.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "ts-essentials": "^9.3.0",
+        "typescript": "^4.7.4"
+    },
+    "dependencies": {
+        "tslib": "^2.3.0"
+    },
+    "exports": {
+        "./pager": {
+            "types": "./lib/esm/components/pager/index.d.ts",
+            "import": "./lib/esm/components/pager/index.js",
+            "require": "./lib/cjs/components/pager/index.cjs"
+        },
+        "./slideToggle": {
+            "types": "./lib/esm/components/slideToggle/index.d.ts",
+            "import": "./lib/esm/components/slideToggle/index.js",
+            "require": "./lib/cjs/components/slideToggle/index.cjs"
+        },
+        "./internal": {
+            "types": "./lib/esm/internal/index.d.js",
+            "import": "./lib/esm/internal/index.js",
+            "require": "./lib/cjs/internal/index.cjs"
+        }
+    }
+}

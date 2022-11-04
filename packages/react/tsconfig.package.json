@@ -1,0 +1,21 @@
+// File generated automatically, use npm run update:tsconfig for update
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"test",
+		"lib"
+	],
+  "paths": {
+    "@devexpress/core/*": [ "./node_modules/@devexpress/core/*"]
+  },
+  "types": [
+    "@devexpress/core",
+  ]
+}

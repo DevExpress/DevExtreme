@@ -1,0 +1,45 @@
+<h2>Component customization examples</h2>
+
+<div class="example">
+  <div class="example__title">items example</div>
+  <div class="example__control">
+    <dx-pager
+      [selectedPage]="1"
+      [selectedPageSize]="20"
+      [pageCount]="20"
+      [pageSizes]="[20, 40, 60]"
+      [pageNumberItemView]="customComponents.pageNumberItem"
+      [pageNumberFakeItemView]="customComponents.pageNumberFakeItem"
+      [pageSizeItemView]="customComponents.pageSizeItem">
+    </dx-pager>
+  </div>
+</div>
+
+<div class="example">
+  <div class="example__title">reuse default templates example</div>
+  <div class="example__control">
+    <dx-pager
+      [selectedPage]="1"
+      [selectedPageSize]="20"
+      [pageCount]="20"
+      [pageSizes]="[20, 40, 60]"
+      [pageNumberView]="customComponents.pageNumber"
+      [pageSizeView]="customComponents.pageSize">
+    </dx-pager>
+  </div>
+</div>
+
+<div class="example">
+  <div class="example__title">main template example</div>
+  <div class="example__control">
+    <dx-pager
+      [selectedPage]="1"
+      [selectedPageSize]="20"
+      [pageCount]="20"
+      [pageSizes]="[20, 40, 60]"
+      [pagerView]="customComponents.pager"
+      [pageNumberItemView]="customComponents.pageNumberItem"
+      [pageNumberFakeItemView]="customComponents.pageNumberFakeItem">
+    </dx-pager>
+  </div>
+</div>

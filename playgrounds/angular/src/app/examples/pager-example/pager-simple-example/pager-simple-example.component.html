@@ -1,0 +1,54 @@
+<div *ngIf="state$ | async as state" class="example">
+  <div class="example__title">Simple pager example</div>
+  <div class="example__control">
+    <dx-pager
+      [selectedPage]="state.selectedPage"
+      [selectedPageSize]="state.selectedPageSize"
+      [pageCount]="state.pageCount"
+      [pageSizes]="state.pageSizes"
+      (selectedPageChange)="onPageChanged($event)"
+      (selectedPageSizeChange)="onPageSizeChanged($event)">
+      >
+    </dx-pager>
+  </div>
+  <div class="example__info">
+    <div class="example__play-part">
+      <span>Select page sizes:</span>
+      <select class="example-input"
+              [value]="0"
+              (change)="changePageSizes($event)">
+        <option *ngFor="let pageSizeArray of allowedPageSizes; let idx = index"
+                [value]="idx">
+          {{ pageSizeArray }}
+        </option>
+      </select>
+    </div>
+    <div class="example__play-part">
+      <span>Set page count:</span>
+      <input class="example-input"
+             type="number"
+             min="1"
+             [value]="state.pageCount"
+             (change)="changePageCount($event)"
+      />
+    </div>
+    <div class="example__play-part">
+      <div>
+        <span>Selected page: </span>
+        <span>{{ state.selectedPage }}</span>
+      </div>
+      <div>
+        <span>Selected page size:</span>
+        <span>{{ state.selectedPageSize }}</span>
+      </div>
+      <div>
+        <span>Page count:</span>
+        <span>{{ state.pageCount }}</span>
+      </div>
+      <div>
+        <span>Page sizes:</span>
+        <span>{{state.pageSizes }}</span>
+      </div>
+    </div>
+  </div>
+</div>

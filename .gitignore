@@ -15,6 +15,7 @@
 /js/renovation/code_coverage
 /scss/bundles/*.scss
 bin
+/packages/**/lib
 node_modules
 obj
 yarn.lock

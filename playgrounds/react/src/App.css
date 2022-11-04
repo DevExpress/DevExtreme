@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.example {
+  margin: 20px;
+  padding: 0 0 20px 0;
+}
+
+.example__title {
+   font-weight: 500;
+   font-size: 20px;
+   margin: 0 0 20px 0;
+}
+
+.example__info {
+   margin: 20px 0 0 0;
+}
+
+.example__play-part {
+    margin: 20px 0 0 0;
+}
+
+.example-input {
+    padding: 10px;
+    margin: 0 10px;
+    border: 1px solid #ececec;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px;
+}
+
+.example-input:focus {
+    border: 1px solid #f05b41;
+}
+
+.example:not(:last-of-type) {
+   border-bottom: 1px solid #ececec;
+}
+

@@ -1,0 +1,11 @@
+{
+	"verbose": true,
+	"preset": "ts-jest/presets/default-esm",
+	"testEnvironment": "node",
+	"testMatch": ["<rootDir>/{services,shared}/*/test/**/*.test.ts", "./**/?(*.)(spec|test).ts?(x)"],
+    "globals": {
+        "ts-jest": {
+            "useESM": true
+        }
+    }
+}

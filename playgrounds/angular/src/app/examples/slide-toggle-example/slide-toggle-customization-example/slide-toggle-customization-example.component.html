@@ -1,0 +1,55 @@
+<div *ngIf="controlConfig$ | async as config"
+     class="example">
+  <div class="example__title">
+    Customization via components example
+  </div>
+  <div class="example__control">
+    <dx-slide-toggle [text]="config.text"
+                     [textPosition]="config.textPosition"
+                     [indicatorView]="indicatorView"
+                     [textView]="textView">
+    </dx-slide-toggle>
+  </div>
+  <div class="example__play-part">
+    <span>Select text position:</span>
+    <select class="example-input"
+            [value]="config.textPosition"
+            (change)="changeControlTextPosition($event)">
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+    </select>
+  </div>
+  <div class="example__play-part">
+    <span>Set text:</span>
+    <input class="example-input"
+           type="text"
+           [value]="config.text"
+           (input)="changeControlText($event)"
+    />
+  </div>
+</div>
+
+<div class="example">
+  <div class="example__title">
+    Customization via templates example
+  </div>
+  <div class="example__control">
+    <dx-slide-toggle [text]="'Template'"
+                     [indicatorView]="indicatorTemplate"
+                     [textView]="textTemplate">
+    </dx-slide-toggle>
+  </div>
+
+  <ng-template #indicatorTemplate let-data>
+    <div class="custom-indicator">
+      <img class="custom-indicator__image" *ngIf="data.viewModel.model.value" src="/assets/cat.jpeg" alt="cat" />
+      <img class="custom-indicator__image" *ngIf="!data.viewModel.model.value" src="/assets/dog.webp" alt="dog" />
+    </div>
+  </ng-template>
+
+  <ng-template #textTemplate let-data>
+    <div class="custom-text">
+      {{ data.viewModel.config.text }}
+    </div>
+  </ng-template>
+</div>

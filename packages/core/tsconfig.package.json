@@ -1,0 +1,17 @@
+// File generated automatically, use npm run update:tsconfig for update
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+        "composite": true
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"test",
+		"lib"
+	],
+	"references": []
+}

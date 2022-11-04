@@ -1,50 +1,15 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "allowJs": true,
-    "module": "es6",
-    "target": "es5",
-    "jsx": "preserve",
-    "declaration": false,
-    "strict": true,
-    "alwaysStrict": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "moduleResolution": "node",
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "downlevelIteration": true,
-    "sourceMap": false,
-    "esModuleInterop": true,
-    "lib": [
-      "es6",
-      "es7",
-      "es2017.object",
-      "dom"
-    ],
-    "baseUrl": "./",
-    "stripInternal": true,
+    "noEmit": true,
+    "baseUrl": ".",
     "paths": {
-      "*": [
-        "node_modules"
+      "@devexpress/*": [
+        "./packages/*/src"
+      ],
+      "@playgrounds/*": [
+        "./playgrounds/*/src"
       ]
-    },
-    "outDir": "dist"
-  },
-  "exclude": [
-    "artifacts",
-    "node_modules",
-    "**/dist",
-    "playground"
-  ],
-  "include": [
-    "js/renovation",
-    "themebuilder-scss",
-    "themebuilder",
-    "testing/testcafe"
-  ]
+    }
+  }
 }

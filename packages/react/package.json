@@ -1,0 +1,66 @@
+{
+    "name": "@devexpress/react",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "build": "rollup -c ./rollup/rollup.config.js",
+        "watch": "rollup -c ./rollup/rollup.config.js --watch"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@devexpress/core": "workspace:^1.0.0",
+        "rxjs": "^7.5.6",
+        "ts-essentials": "^9.3.0",
+        "tslib": "^2.3.0"
+    },
+    "peerDependencies": {
+        "react": ">=17.x.x",
+        "react-dom": ">=17.x.x"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^22.0.1",
+        "@rollup/plugin-node-resolve": "^13.3.0",
+        "@rollup/plugin-typescript": "^8.3.3",
+        "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^13.3.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^16.11.45",
+        "@types/react": "^18.0.15",
+        "@types/react-dom": "^18.0.6",
+        "postcss": "^8.4.14",
+        "rollup": "^2.77.1",
+        "rollup-plugin-copy": "^3.4.0",
+        "rollup-plugin-delete": "^2.0.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "rollup-plugin-postcss": "^4.0.2",
+        "sass": "^1.54.0",
+        "typescript": "^4.7.4"
+    },
+    "exports": {
+        "./pager": {
+            "types": "./lib/cjs/components/pager/index.d.ts",
+            "import": "./lib/esm/components/pager/index.js",
+            "require": "./lib/cjs/components/pager/index.cjs"
+        },
+        "./pager.css": {
+            "import": "./lib/esm/pager.css",
+            "require": "./lib/esm/pager.css"
+        },
+        "./slideToggle": {
+            "types": "./lib/cjs/components/slideToggle/index.d.ts",
+            "import": "./lib/esm/components/slideToggle/index.js",
+            "require": "./lib/cjs/components/slideToggle/index.cjs"
+        },
+        "./slideToggle.css": {
+            "import": "./lib/esm/slideToggle.css",
+            "require": "./lib/esm/slideToggle.css"
+        },
+        "./internal": {
+            "types": "./lib/cjs/internal/index.d.ts",
+            "import": "./lib/esm/internal/index.js",
+            "require": "./lib/cjs/internal/index.cjs"
+        }
+    }
+}
