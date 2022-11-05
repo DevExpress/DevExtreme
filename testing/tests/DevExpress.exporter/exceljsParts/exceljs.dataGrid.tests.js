@@ -6445,43 +6445,6 @@ const moduleConfig = {
     });
 });
 
-QUnit.module('Deprecated warnings', moduleConfig, () => {
-    QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
-        assert.expect(4);
-        this.stub.restore();
-        this.stub = sinon.stub(errors, 'log', () => {
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0003',
-                'CustomizeCell handler argument',
-                'cell',
-                '20.1',
-                'Use the \'excelCell\' field instead'
-            ], 'args of the log method');
-        });
-
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            dataSource: ds,
-            loadingTimeout: null,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-
-        exportDataGrid({
-            component: dataGrid,
-            worksheet: this.worksheet,
-            customizeCell: function({ cell, excelCell, gridCell }) {
-                assert.strictEqual(cell, excelCell, '\'cell\' field is the same that \'excelCell\' field');
-                assert.notStrictEqual(gridCell, undefined, 'gridCell');
-            }
-        }).then(() => {
-            assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
-            done();
-        });
-    });
-});
-
 QUnit.module('OutlineLevel', moduleConfig, () => {
     QUnit.test('Outlinelevel property was applied before customizeCell callbacks were called', function(assert) {
         const done = assert.async();
