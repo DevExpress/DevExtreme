@@ -187,7 +187,7 @@
     "vinyl": "2.2.1",
     "vinyl-named": "1.1.0",
     "webpack": "5.74.0",
-    "webpack-stream": "6.1.2",
+    "webpack-stream": "7.0.0",
     "yaml": "1.10.2",
     "yargs": "7.1.2"
   },
