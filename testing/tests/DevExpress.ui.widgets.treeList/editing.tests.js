@@ -1386,6 +1386,40 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             assert.strictEqual(rows.length, 2);
         });
 
+        QUnit.test('Push insert without index', function(assert) {
+            // arrange
+            this.options.dataSource.store.data = [
+                { id: 1, field1: 'test1', },
+            ];
+            this.setupTreeList();
+
+            // act
+            this.getDataSource().store().push([{ type: 'insert', data: { id: 2, field1: 'test2', parentId: 1 } }]);
+            this.clock.tick();
+            // assert
+            let rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 1);
+            assert.strictEqual(rows[0].node.children.length, 1);
+            assert.ok(rows[0].node.hasChildren);
+
+            // act
+            this.expandRow(1);
+            this.clock.tick();
+
+            // assert
+            rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 2);
+
+            // act
+            this.getDataSource().store().push([{ type: 'insert', data: { id: 3, field1: 'test3', parentId: 1 } }]);
+            this.clock.tick();
+
+            rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 3);
+
+
+        });
+
         // T836724
         QUnit.test('The added nodes should be displayed when there is a filter', function(assert) {
             // arrange
