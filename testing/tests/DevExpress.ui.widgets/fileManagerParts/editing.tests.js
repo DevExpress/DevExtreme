@@ -560,6 +560,35 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(uploadInfo.bytesUploaded, 0, 'bytesUploaded correct');
     });
 
+    test('uploading an empty file completes with 100% of total progress - T1122867', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                uploadFileChunk: uploadChunkSpy
+            }),
+            upload: { chunkSize }
+        });
+
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1, 0)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+        assert.strictEqual(uploadChunkSpy.callCount, 1, 'fileUploaded');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is present');
+
+        const common = infos[0].common;
+        assert.equal(common.commonText, 'Uploaded an item to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 100, 'task is completed');
+    });
+
     test('copying file must be completed in progress panel and current directory must be changed to the destination', function(assert) {
         const longPath = 'Files/Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1';
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
