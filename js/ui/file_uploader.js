@@ -1129,7 +1129,14 @@ class FileUploader extends Editor {
         });
     }
     _updateTotalProgress(totalFilesSize, totalLoadedFilesSize) {
-        const progress = totalFilesSize ? this._getProgressValue(totalLoadedFilesSize / totalFilesSize) : 0;
+        let progress = 0;
+        if(isDefined(totalFilesSize)) {
+            if(this._files.length > 0 && totalFilesSize === 0 && totalLoadedFilesSize === 0) {
+                progress = this._getProgressValue(1);
+            } else if(totalFilesSize) {
+                progress = this._getProgressValue(totalLoadedFilesSize / totalFilesSize);
+            }
+        }
         this.option('progress', progress);
         this._setLoadedSize(totalLoadedFilesSize);
     }

@@ -1082,6 +1082,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         this.clock.tick();
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
+        assert.strictEqual($fileUploader.dxFileUploader('option', 'progress'), 100, 'progress is 100%');
     });
 });
 
