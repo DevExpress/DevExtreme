@@ -98,12 +98,24 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
   }
 }
 
-.dx-calendar-navigator-previous-month {
+.dx-calendar-navigator-previous-view,
+.dx-calendar-navigator-next-view {
   width: $generic-nav-button-width;
   background: none;
 
   &.dx-button {
+    .dx-icon {
+      color: $calendar-shevron-icon-color;
+    }
+  }
+}
+
+.dx-calendar-navigator-previous-view {
+  left: 0;
+
+  &.dx-button {
     margin: 0 2px;
+    border-radius: $calendar-navigator-border-radius 0 0 $calendar-navigator-border-radius;
   }
 
   &.dx-state-hover {
@@ -111,40 +123,12 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
   }
 }
 
-.dx-calendar-navigator-previous-month,
 .dx-calendar-navigator-next-view {
-  width: $generic-nav-button-width;
-  background: none;
-
-  &.dx-button {
-    margin: 0 1px;
-  }
-}
-
-
-.dx-calendar-navigator-previous-view,
-.dx-calendar-navigator-previous-month {
-  left: 0;
-
-  &.dx-button {
-    border-radius: $calendar-navigator-border-radius 0 0 $calendar-navigator-border-radius;
-
-    .dx-icon {
-      color: $calendar-shevron-icon-color;
-    }
-  }
-}
-
-.dx-calendar-navigator-next-view,
-.dx-calendar-navigator-next-month {
   right: 0;
 
   &.dx-button {
+    margin: 0 1px;
     border-radius: 0 $calendar-navigator-border-radius $calendar-navigator-border-radius 0;
-
-    .dx-icon {
-      color: $calendar-shevron-icon-color;
-    }
   }
 }
 

@@ -58,6 +58,10 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
     margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
     padding: 0;
+
+    span:last-child {
+      line-height: normal;
+    }
   }
 
   &.dx-button.dx-button-default {
