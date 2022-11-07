@@ -1,9 +1,9 @@
-import {getRollupConfig} from "./rollup.utils";
+import {getRollupConfig} from './rollup.utils.mjs';
 
 const OUTPUT_DIR = './lib';
 const COMPONENTS = [
     'slideToggle',
-    'pager',
+    'pager'
 ];
 
 export default getRollupConfig(COMPONENTS, OUTPUT_DIR);

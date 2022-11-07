@@ -3,14 +3,14 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "build": "rollup -c rollup/rollup.config.js",
-        "watch": "rollup -c rollup/rollup.config.js --watch"
+        "build": "rollup -c rollup/rollup.config.mjs",
+        "watch": "rollup -c rollup/rollup.config.mjs --watch"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@rollup/plugin-typescript": "^8.3.3",
-        "rollup": "^2.77.1",
+        "@rollup/plugin-typescript": "^9.0.2",
+        "rollup": "^3.2.5",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-peer-deps-external": "^2.2.4",
         "ts-essentials": "^9.3.0",

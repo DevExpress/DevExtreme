@@ -91,8 +91,8 @@ importers:
 
   packages/core:
     specifiers:
-      '@rollup/plugin-typescript': ^8.3.3
-      rollup: ^2.77.1
+      '@rollup/plugin-typescript': ^9.0.2
+      rollup: ^3.2.5
       rollup-plugin-copy: ^3.4.0
       rollup-plugin-peer-deps-external: ^2.2.4
       ts-essentials: ^9.3.0
@@ -101,10 +101,10 @@ importers:
     dependencies:
       tslib: 2.4.1
     devDependencies:
-      '@rollup/plugin-typescript': 8.5.0_ee2lsxs7bbggrcawnn34dqpc4e
-      rollup: 2.79.1
+      '@rollup/plugin-typescript': 9.0.2_skqhbvp355vci76ty3pdffvjrq
+      rollup: 3.2.5
       rollup-plugin-copy: 3.4.0
-      rollup-plugin-peer-deps-external: 2.2.4_rollup@2.79.1
+      rollup-plugin-peer-deps-external: 2.2.4_rollup@3.2.5
       ts-essentials: 9.3.0_typescript@4.8.4
       typescript: 4.8.4
 
@@ -188,9 +188,9 @@ importers:
   packages/react:
     specifiers:
       '@devexpress/core': workspace:^1.0.0
-      '@rollup/plugin-commonjs': ^22.0.1
-      '@rollup/plugin-node-resolve': ^13.3.0
-      '@rollup/plugin-typescript': ^8.3.3
+      '@rollup/plugin-commonjs': ^23.0.2
+      '@rollup/plugin-node-resolve': ^15.0.1
+      '@rollup/plugin-typescript': ^9.0.2
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^13.3.0
       '@testing-library/user-event': ^13.5.0
@@ -199,7 +199,7 @@ importers:
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       postcss: ^8.4.14
-      rollup: ^2.77.1
+      rollup: ^3.2.5
       rollup-plugin-copy: ^3.4.0
       rollup-plugin-delete: ^2.0.0
       rollup-plugin-peer-deps-external: ^2.2.4
@@ -215,9 +215,9 @@ importers:
       ts-essentials: 9.3.0_typescript@4.8.4
       tslib: 2.4.1
     devDependencies:
-      '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.1
-      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.1
-      '@rollup/plugin-typescript': 8.5.0_ee2lsxs7bbggrcawnn34dqpc4e
+      '@rollup/plugin-commonjs': 23.0.2_rollup@3.2.5
+      '@rollup/plugin-node-resolve': 15.0.1_rollup@3.2.5
+      '@rollup/plugin-typescript': 9.0.2_skqhbvp355vci76ty3pdffvjrq
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0
       '@testing-library/user-event': 13.5.0
@@ -226,10 +226,10 @@ importers:
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.8
       postcss: 8.4.18
-      rollup: 2.79.1
+      rollup: 3.2.5
       rollup-plugin-copy: 3.4.0
       rollup-plugin-delete: 2.0.0
-      rollup-plugin-peer-deps-external: 2.2.4_rollup@2.79.1
+      rollup-plugin-peer-deps-external: 2.2.4_rollup@3.2.5
       rollup-plugin-postcss: 4.0.2_postcss@8.4.18
       sass: 1.56.0
       typescript: 4.8.4
@@ -4272,20 +4272,22 @@ packages:
       rollup: 2.79.1
     dev: false
 
-  /@rollup/plugin-commonjs/22.0.2_rollup@2.79.1:
-    resolution: {integrity: sha512-//NdP6iIwPbMTcazYsiBMbJW7gfmpHom33u1beiIoHDEM0Q9clvtQB1T0efvMqHeKsGohiHo97BCPCkBXdscwg==}
-    engines: {node: '>= 12.0.0'}
+  /@rollup/plugin-commonjs/23.0.2_rollup@3.2.5:
+    resolution: {integrity: sha512-e9ThuiRf93YlVxc4qNIurvv+Hp9dnD+4PjOqQs5vAYfcZ3+AXSrcdzXnVjWxcGQOa6KGJFcRZyUI3ktWLavFjg==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^2.68.0
+      rollup: ^2.68.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
+      '@rollup/pluginutils': 5.0.2_rollup@3.2.5
       commondir: 1.0.1
       estree-walker: 2.0.2
-      glob: 7.2.3
+      glob: 8.0.3
       is-reference: 1.2.1
-      magic-string: 0.25.9
-      resolve: 1.22.1
-      rollup: 2.79.1
+      magic-string: 0.26.7
+      rollup: 3.2.5
     dev: true
 
   /@rollup/plugin-json/4.1.0_rollup@2.79.1:
@@ -4327,6 +4329,24 @@ packages:
       rollup: 2.79.1
     dev: true
 
+  /@rollup/plugin-node-resolve/15.0.1_rollup@3.2.5:
+    resolution: {integrity: sha512-ReY88T7JhJjeRVbfCyNj+NXAG3IIsVMsX9b5/9jC98dRP8/yxlZdz7mHZbHk5zHr24wZZICS5AcXsFZAXYUQEg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^2.78.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 5.0.2_rollup@3.2.5
+      '@types/resolve': 1.20.2
+      deepmerge: 4.2.2
+      is-builtin-module: 3.2.0
+      is-module: 1.0.0
+      resolve: 1.22.1
+      rollup: 3.2.5
+    dev: true
+
   /@rollup/plugin-replace/2.4.2_rollup@2.79.1:
     resolution: {integrity: sha512-IGcu+cydlUMZ5En85jxHH4qj2hta/11BHq95iHEyb2sbgiN0eCdzvUcHw5gt9pBL5lTi4JDYJ1acCoMGpTvEZg==}
     peerDependencies:
@@ -4337,20 +4357,22 @@ packages:
       rollup: 2.79.1
     dev: false
 
-  /@rollup/plugin-typescript/8.5.0_ee2lsxs7bbggrcawnn34dqpc4e:
-    resolution: {integrity: sha512-wMv1/scv0m/rXx21wD2IsBbJFba8wGF3ErJIr6IKRfRj49S85Lszbxb4DCo8iILpluTjk2GAAu9CoZt4G3ppgQ==}
-    engines: {node: '>=8.0.0'}
+  /@rollup/plugin-typescript/9.0.2_skqhbvp355vci76ty3pdffvjrq:
+    resolution: {integrity: sha512-/sS93vmHUMjzDUsl5scNQr1mUlNE1QjBBvOhmRwJCH8k2RRhDIm3c977B3wdu3t3Ap17W6dDeXP3hj1P1Un1bA==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^2.14.0
+      rollup: ^2.14.0||^3.0.0
       tslib: '*'
       typescript: '>=3.7.0'
     peerDependenciesMeta:
+      rollup:
+        optional: true
       tslib:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
+      '@rollup/pluginutils': 5.0.2_rollup@3.2.5
       resolve: 1.22.1
-      rollup: 2.79.1
+      rollup: 3.2.5
       tslib: 2.4.1
       typescript: 4.8.4
     dev: true
@@ -4365,6 +4387,21 @@ packages:
       estree-walker: 1.0.1
       picomatch: 2.3.1
       rollup: 2.79.1
+
+  /@rollup/pluginutils/5.0.2_rollup@3.2.5:
+    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@types/estree': 1.0.0
+      estree-walker: 2.0.2
+      picomatch: 2.3.1
+      rollup: 3.2.5
+    dev: true
 
   /@rushstack/eslint-patch/1.2.0:
     resolution: {integrity: sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==}
@@ -4846,6 +4883,10 @@ packages:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
       '@types/node': 16.18.3
+
+  /@types/resolve/1.20.2:
+    resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+    dev: true
 
   /@types/retry/0.12.0:
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}
@@ -13530,6 +13571,7 @@ packages:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
     dependencies:
       sourcemap-codec: 1.4.8
+    dev: false
 
   /magic-string/0.26.2:
     resolution: {integrity: sha512-NzzlXpclt5zAbmo6h6jNc8zl2gNRGHvmsZW4IvZhTC4W7k4OlLP+S5YLussa/r3ixNT66KOQfNORlXHSOy/X4A==}
@@ -17158,12 +17200,12 @@ packages:
       del: 5.1.0
     dev: true
 
-  /rollup-plugin-peer-deps-external/2.2.4_rollup@2.79.1:
+  /rollup-plugin-peer-deps-external/2.2.4_rollup@3.2.5:
     resolution: {integrity: sha512-AWdukIM1+k5JDdAqV/Cxd+nejvno2FVLVeZ74NKggm3Q5s9cbbcOgUPGdbxPi4BXu7xGaZ8HG12F+thImYu/0g==}
     peerDependencies:
       rollup: '*'
     dependencies:
-      rollup: 2.79.1
+      rollup: 3.2.5
     dev: true
 
   /rollup-plugin-postcss/4.0.2_postcss@8.4.18:
@@ -17229,6 +17271,14 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
+
+  /rollup/3.2.5:
+    resolution: {integrity: sha512-/Ha7HhVVofduy+RKWOQJrxe4Qb3xyZo+chcpYiD8SoQa4AG7llhupUtyfKSSrdBM2mWJjhM8wZwmbY23NmlIYw==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
 
   /rrule/2.6.6:
     resolution: {integrity: sha512-h6tb/hRo9SNv8xKjcvsEfdmhXvElMXsU3Yz0KmqMehUqxP6a4Qjmth2EuL1FsjdawADjajLS0eBbWfsZzn3SIw==}

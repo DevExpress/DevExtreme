@@ -26,7 +26,7 @@ function getEsmConfig(componentName, outputDir) {
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
                     outDir: `${outputDir}/esm`,
-                    module: 'ES2020'
+                    module: 'NodeNext',
                 }
             }),
             postcss({
@@ -57,7 +57,7 @@ function getCjsConfig(componentName, outputDir) {
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
                     outDir: `${outputDir}/cjs`,
-                    module: 'ESNEXT'
+                    module: 'NodeNext',
                 }
             }),
             postcss({
@@ -83,6 +83,7 @@ function getRootConfig(outputDir) {
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
                     outDir: `${outputDir}/esm`,
+                    module: 'NodeNext',
                 }
             }),
             postcss({
