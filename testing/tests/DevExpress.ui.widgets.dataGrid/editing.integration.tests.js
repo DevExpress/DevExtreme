@@ -3557,10 +3557,92 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    // T1122209
+    QUnit.test('The form edit mode - Validation should work if value of a column with custom setCellValue changed', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowAdding: true
+                },
+                columns: [
+                    {
+                        dataField: 'field1',
+                        setCellValue: function(newData, value) {
+                            this.defaultSetCellValue(newData, value);
+                        },
+                        validationRules: [{ type: 'required' }]
+                    },
+                    {
+                        dataField: 'field2',
+                        validationRules: [{
+                            type: 'custom',
+                            validationCallback: function(data) {
+                                return data.value !== 'incorrect';
+                            }
+                        }]
+                    },
+                    {
+                        dataField: 'field3',
+                        validationRules: [{ type: 'required' }]
+                    }
+                ],
+            });
+
+            this.clock.tick(100);
+
+            const isValidCell = (rowIndex, columnIndex) => {
+                return !$(dataGrid.getCellElement(rowIndex, columnIndex)).find('.dx-invalid').length;
+            };
+
+            const setCellValue = (rowIndex, columnIndex, value) => {
+                const $input = $(dataGrid.getCellElement(rowIndex, columnIndex)).find('input');
+
+                $input.val(value);
+                $input.trigger('change');
+            };
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+
+            // assert
+            assert.ok(isNewRowExists(dataGrid, editMode), 'there is a new row');
+
+            // act
+            setCellValue(0, 0, 'test');
+            this.clock.tick();
+
+            // assert
+            assert.ok(isValidCell(0, 0), 'first cell is valid');
+            assert.ok(isValidCell(0, 1), 'second cell is valid');
+            assert.ok(isValidCell(0, 2), 'third cell is valid');
+
+            // act
+            setCellValue(0, 1, 'incorrect');
+            this.clock.tick();
+
+            setCellValue(0, 2, 'test');
+            this.clock.tick();
+            setCellValue(0, 2, '');
+            this.clock.tick();
+
+            // assert
+            assert.notOk(isValidCell(0, 1), 'second cell is not valid');
+            assert.notOk(isValidCell(0, 2), 'third cell is not valid');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
     // T1121812
     QUnit.test('The form edit mode - Only one validation message should be shown', function(assert) {
         try {
-            // $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
             const editMode = 'form';
 
             // arrange
