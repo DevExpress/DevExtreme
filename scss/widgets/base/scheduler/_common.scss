@@ -44,6 +44,8 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
   .dx-scheduler-appointment-collector-content,
   .dx-button-content {
+    display: block;
+
     @include dx-overflow();
 
     margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
