@@ -99,22 +99,3 @@
     }
   }
 }
-
-.dx-state-disabled {
-  .dx-calendar,
-  &.dx-calendar {
-    .dx-calendar-navigator-previous-month,
-    .dx-calendar-navigator-next-month {
-      cursor: default;
-    }
-  }
-
-  .dx-calendar-body {
-    table {
-      th,
-      td {
-        cursor: default;
-      }
-    }
-  }
-}
