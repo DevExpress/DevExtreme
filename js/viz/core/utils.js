@@ -444,6 +444,50 @@ export function getVizRangeObject(value) {
     }
 }
 
+export function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
+    let isCircle;
+    let noArc = true;
+    const angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
+    if(angleDiff) {
+        if((abs(angleDiff) % 360) === 0) {
+            startAngle = 0;
+            endAngle = 360;
+            isCircle = true;
+            endAngle -= 0.01;
+        }
+
+        if(startAngle > 360) {
+            startAngle = startAngle % 360;
+        }
+
+        if(endAngle > 360) {
+            endAngle = endAngle % 360;
+        }
+
+        if(startAngle > endAngle) {
+            startAngle -= 360;
+        }
+        noArc = false;
+    }
+
+    startAngle = startAngle * PI_DIV_180;
+    endAngle = endAngle * PI_DIV_180;
+
+    return [
+        x,
+        y,
+        Math.min(outerR, innerR),
+        Math.max(outerR, innerR),
+        Math.cos(startAngle),
+        Math.sin(startAngle),
+        Math.cos(endAngle),
+        Math.sin(endAngle),
+        isCircle,
+        floor(abs(endAngle - startAngle) / PI) % 2 ? '1' : '0',
+        noArc
+    ];
+}
+
 export function convertVisualRangeObject(visualRange, convertToVisualRange) {
     if(convertToVisualRange) {
         return visualRange;

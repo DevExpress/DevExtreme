@@ -90,6 +90,8 @@ export interface TooltipInfo {
 }
 
 /** @public */
+export type BarGaugeLabelOverlap = 'hide' | 'none' | 'shift';
+/** @public */
 export type DisposingEvent = EventInfo<dxBarGauge>;
 
 /** @public */
@@ -271,7 +273,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default 'hide'
      * @public
      */
-    resolveLabelOverlapping?: LabelOverlap;
+    resolveLabelOverlapping?: BarGaugeLabelOverlap;
     /**
      * @docid
      * @default 0

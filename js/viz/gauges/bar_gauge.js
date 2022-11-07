@@ -8,13 +8,16 @@ const _max = Math.max;
 import registerComponent from '../../core/component_registrator';
 import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
+import { overlapping } from '../chart_components/base_chart';
 import { extend } from '../../core/utils/extend';
-import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions } from '../core/utils';
+import { clearOverlappingLabels, clearLabelsCrossTitle, dividePoints, drawConnector } from './utils/resolve_label_overlapping';
+import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions, getVerticallyShiftedAngularCoords } from '../core/utils';
 import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
+import dxCircularGauge from './circular_gauge';
+import { plugin as pluginLegend } from '../components/legend';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
-import dxCircularGauge from './circular_gauge';
 const _isArray = Array.isArray;
 const _convertAngleToRendererSpace = convertAngleToRendererSpace;
 const _getCosAndSin = getCosAndSin;
@@ -23,7 +26,7 @@ const _Number = Number;
 const _isFinite = isFinite;
 const _noop = noop;
 const _extend = extend;
-import { plugin as pluginLegend } from '../components/legend';
+
 
 const OPTION_VALUES = 'values';
 let BarWrapper;
@@ -251,26 +254,25 @@ export const dxBarGauge = BaseGauge.inherit({
         const that = this;
         const bars = that._bars;
         const overlapStrategy = _normalizeEnum(that._getOption('resolveLabelOverlapping', true));
+        const { connectorWidth } = that._getOption('label');
+
+        function shiftFunction(box, length) {
+            return getVerticallyShiftedAngularCoords(box, -length, that._context);
+        }
 
         if(overlapStrategy === 'none') {
             return;
         }
+        if(overlapStrategy === 'shift') {
+            const titleCoords = that._title.getLayoutOptions() || { x: 0, y: 0, height: 0, width: 0 };
+            const newBars = dividePoints(bars);
 
-        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
-
-        let currentIndex = 0;
-        let nextIndex = 1;
-        while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
-            const current = sortedBars[currentIndex];
-            const next = sortedBars[nextIndex];
-
-            if(current.checkIntersect(next)) {
-                next.hideLabel();
-                nextIndex++;
-            } else {
-                currentIndex = nextIndex;
-                nextIndex = currentIndex + 1;
-            }
+            overlapping.resolveLabelOverlappingInOneDirection(newBars.left, that._canvas, false, false, shiftFunction);
+            overlapping.resolveLabelOverlappingInOneDirection(newBars.right, that._canvas, false, false, shiftFunction);
+            clearLabelsCrossTitle(bars, titleCoords.y + titleCoords.height);
+            drawConnector(bars, connectorWidth);
+        } else {
+            clearOverlappingLabels(bars,);
         }
     },
 
