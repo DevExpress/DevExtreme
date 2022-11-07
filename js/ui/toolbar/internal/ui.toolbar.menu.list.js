@@ -12,7 +12,8 @@ const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 export default class ToolbarMenuList extends ListBase {
     _init() {
         super._init();
-        this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}`;
+
+        this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}:not(.${TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS})`;
     }
 
     _initMarkup() {

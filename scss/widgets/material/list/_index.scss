@@ -17,7 +17,6 @@
 
 $material-list-item-border-width: 1px;
 $material-list-border-width: 1px;
-$material-mobile-list-item-horizontal-padding: 15px;
 $material-list-border: $material-list-border-width solid $list-border-color;
 $material-list-item-border: $material-list-item-border-width solid $list-border-color;
 
@@ -511,7 +510,3 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 }
 
 @include dx-list-sizing($material-list-item-horizontal-padding);
-
-.dx-device-mobile {
-  @include dx-list-sizing($material-mobile-list-item-horizontal-padding);
-}
