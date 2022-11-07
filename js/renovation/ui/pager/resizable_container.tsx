@@ -5,7 +5,7 @@ import {
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import { InternalPagerProps } from './common/pager_props';
-import { getElementWidth, getElementStyle } from './utils/get_element_width';
+import { getElementWidth, getElementStyle, getElementContentWidth } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 import { PagerContentProps } from './content';
 import { isDefined } from '../../../core/utils/type';
@@ -54,7 +54,7 @@ export function calculateInfoTextVisible({
 function getElementsWidth({
   parent, pageSizes, pages, info,
 }: AllElements<HTMLElement | null | undefined>): AllElements<number> {
-  const parentWidth = getElementWidth(parent);
+  const parentWidth = getElementContentWidth(parent);
   const pageSizesWidth = getElementWidth(pageSizes);
   const infoWidth = getElementWidth(info);
   const pagesHtmlWidth = getElementWidth(pages);
