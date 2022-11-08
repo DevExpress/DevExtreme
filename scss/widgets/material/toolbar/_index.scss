@@ -34,7 +34,7 @@
 
   &.dx-toolbar-multiline {
     .dx-toolbar-item {
-      line-height: $material-toolbar-height;
+      height: $material-toolbar-height;
     }
   }
 }
