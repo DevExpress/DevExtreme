@@ -1010,9 +1010,13 @@ class FileUploader extends Editor {
         }
     }
 
+    _areAllFilesLoaded() {
+        return this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
+    }
+
     _handleAllFilesUploaded() {
-        const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
-        if(areAllFilesLoaded) {
+        this._recalculateProgress();
+        if(this._areAllFilesLoaded()) {
             this._filesUploadedAction();
         }
     }
@@ -1130,7 +1134,7 @@ class FileUploader extends Editor {
     _updateTotalProgress(totalFilesSize, totalLoadedFilesSize) {
         let progress = 0;
         if(isDefined(totalFilesSize)) {
-            if(this._files.length > 0 && totalFilesSize === 0 && totalLoadedFilesSize === 0) {
+            if(this._files.length > 0 && this._areAllFilesLoaded() && totalFilesSize === 0 && totalLoadedFilesSize === 0) {
                 progress = this._getProgressValue(1);
             } else if(totalFilesSize) {
                 progress = this._getProgressValue(totalLoadedFilesSize / totalFilesSize);
