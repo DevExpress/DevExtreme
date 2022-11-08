@@ -3556,7 +3556,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             }
         });
     });
-  
+
     // T1122209
     QUnit.test('The form edit mode - Validation should work if value of a column with custom setCellValue changed', function(assert) {
         try {
@@ -3639,7 +3639,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok(false, 'exception is thrown');
         }
     });
-    
+
     // T1121812
     QUnit.test('The form edit mode - Only one validation message should be shown', function(assert) {
         try {
