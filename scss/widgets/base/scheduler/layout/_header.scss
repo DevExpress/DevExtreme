@@ -85,6 +85,7 @@ $arrow-down: "\f016";
 @mixin header-buttons-material(
   $base-color,
   $text-color,
+  $icon-font-size,
 ) {
   .dx-toolbar {
     .dx-button {
@@ -98,6 +99,12 @@ $arrow-down: "\f016";
     .dx-scheduler-navigator {
       .dx-buttongroup {
         .dx-button {
+          .dx-icon {
+            width: $icon-font-size;
+            height: $icon-font-size;
+            font-size: $icon-font-size;
+          }
+
           &.dx-item-selected {
             color: $text-color;
 
