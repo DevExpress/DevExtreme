@@ -115,7 +115,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 
 .dx-calendar-navigator-next-view {
   &.dx-button {
-    margin: 0 1px;
     border-radius: 0 $calendar-navigator-border-radius $calendar-navigator-border-radius 0;
   }
 }
