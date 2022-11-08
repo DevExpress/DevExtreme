@@ -10,6 +10,7 @@ const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 QUnit.module('Focusing');
 
@@ -27,7 +28,7 @@ QUnit.testInActiveWindow('item should have focus-state class after click on it',
     $item.trigger('dxpointerdown');
 
     assert.equal(isRenderer(treeView.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($node.hasClass('dx-state-focused'), 'focus state was toggle after click');
+    assert.ok($node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
 QUnit.testInActiveWindow('disabled item should not have focus-state class after click on it', function(assert) {
@@ -43,7 +44,7 @@ QUnit.testInActiveWindow('disabled item should not have focus-state class after 
 
     $item.trigger('dxpointerdown');
 
-    assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
+    assert.ok(!$node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
 QUnit.testInActiveWindow('widget should not have focus-state class after click on arrow', function(assert) {
@@ -57,7 +58,7 @@ QUnit.testInActiveWindow('widget should not have focus-state class after click o
 
     $arrow.trigger('dxclick');
 
-    assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
+    assert.ok(!$node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
 const configs = [];
@@ -212,6 +213,31 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
     }
 });
 
+QUnit.test('First node should not has been focused when focusing on SelectAll item (T1109632)', function(assert) {
+    const $treeView = initTree({
+        items: [
+            { id: 1, text: 'item 1' },
+            { id: 2, text: 'item 2' }
+        ],
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        height: 40,
+    });
+    const $selectAllItem = $treeView.find('.' + SELECT_ALL_ITEM_CLASS).first();
+    const $firstItem = $treeView.find('.' + ITEM_CLASS).first();
+
+    const clock = sinon.useFakeTimers();
+
+    try {
+        $selectAllItem.trigger('focusin');
+        clock.tick();
+
+        assert.notOk($firstItem.hasClass(FOCUSED_STATE_CLASS), 'scroll top position');
+    } finally {
+        clock.restore();
+    }
+});
+
 QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', function(assert) {
     const $treeView = initTree({
         items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
@@ -251,5 +277,5 @@ QUnit.testInActiveWindow('Focusing widget when there is search editor', function
 
     instance.focus();
 
-    assert.ok($treeView.children('.dx-treeview-search').hasClass('dx-state-focused'), 'search editor is focused');
+    assert.ok($treeView.children('.dx-treeview-search').hasClass(FOCUSED_STATE_CLASS), 'search editor is focused');
 });
