@@ -351,6 +351,8 @@ test('Header container should have padding-right after expanding the master row 
   await dataGrid.scrollTo({ x: 210 });
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
+  await t.resizeWindow(600, 250);
+
   // assert
   await t
     .expect(await getRightPadding())
