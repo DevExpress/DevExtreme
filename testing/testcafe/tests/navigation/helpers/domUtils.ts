@@ -42,9 +42,9 @@ export const setClassAttribute = ClientFunction((selector, styleValue) => {
   const element = selector();
 
   const styles = element.getAttribute('class') || '';
-  const updatedStyles = `${styles} ${styleValue}`;
+  const updatedClasses = `${styles} ${styleValue}`;
 
-  element.setAttribute('class', updatedStyles);
+  element.setAttribute('class', updatedClasses);
 });
 
 export const appendElementTo = ClientFunction((
