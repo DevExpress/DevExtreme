@@ -21,8 +21,7 @@
                 require('core/templates/template_engine_registry').setTemplateEngine,
                 aspnet,
                 function() { return require('ui/widget/ui.errors'); },
-                function() { return require('../../helpers/ajaxMock.js'); },
-                require('core/utils/console')
+                function() { return require('../../helpers/ajaxMock.js'); }
             );
         });
     } else {
@@ -31,11 +30,10 @@
             DevExpress.setTemplateEngine,
             DevExpress.aspnet,
             function() { return window.DevExpress_ui_widget_errors; },
-            function() { return window.ajaxMock; },
-            DevExpress.utils.console
+            function() { return window.ajaxMock; }
         );
     }
-}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor, console) {
+}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
 
     if(QUnit.urlParams['nojquery']) {
         return;
@@ -266,21 +264,16 @@
             setTemplateEngine('default');
         }
     }, function() {
-        const testTemplate = function(name, templateSource, expected, enableAlternativeTemplateTags) {
+        const testTemplate = function(name, templateSource, expected) {
             QUnit.test(name, function(assert) {
                 const $template = $('#simpleTemplate');
 
                 $template.text(templateSource);
 
-                aspnet.enableAlternativeTemplateTags(enableAlternativeTemplateTags !== false);
-                try {
-                    $('#button').dxButton({
-                        text: 'Test button',
-                        template: $template
-                    });
-                } finally {
-                    aspnet.enableAlternativeTemplateTags(true);
-                }
+                $('#button').dxButton({
+                    text: 'Test button',
+                    template: $template
+                });
 
                 assert.equal($('.dx-button-content').text(), expected);
             });
@@ -348,10 +341,7 @@
         testTemplate('WA from T954324, nempty string', '<% var value = \'\'; %><%- (value != null ? value : \'\') %>', '');
         testTemplate('WA from T954324, nonempty string', '<% var value = \'a\'; %><%- (value != null ? value : \'\') %>', 'a');
 
-        QUnit.module('Alternative syntax (T831170)', function() {
-            testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
-            testTemplate('disabled', '[%= 123 %]', '[%= 123 %]', false);
-        });
+        testTemplate('Alternative syntax (T831170)', 'a [%= \'b\' %] c', 'a b c');
     });
 
     QUnit.test('Transcluded content (T691770, T693379)', function(assert) {
@@ -573,28 +563,6 @@
         } finally {
             setTemplateEngine('default');
             delete window.__createCheckBox;
-        }
-    });
-
-    QUnit.test('Warn https://github.com/dotnet/aspnetcore/issues/17028', function(assert) {
-        aspnet.setTemplateEngine();
-        const spy = sinon.spy(console.logger, 'warn');
-        try {
-            aspnet.warnBug17028();
-
-            $('#qunit-fixture').html(`
-                <div id=widget1></div>
-                <div id=widget2></div>
-                <script id=template1 type=text/html><%= %></script>
-            `);
-
-            [1, 2].forEach(i => $('#widget' + i).dxButton({ template: $('#template1') }));
-
-            assert.equal(spy.callCount, 1);
-            assert.ok(spy.args[0][0].indexOf('alternative template syntax') > -1);
-        } finally {
-            setTemplateEngine('default');
-            spy.restore();
         }
     });
 

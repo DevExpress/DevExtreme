@@ -59,7 +59,6 @@ export class DateGeneratorBaseStrategy {
         let dateSettings = this._createGridAppointmentList(appointmentList, appointmentAdapter);
 
         dateSettings = this._cropAppointmentsByStartDayHour(dateSettings, this.rawAppointment);
-
         dateSettings = this._fillNormalizedEndDate(dateSettings, this.rawAppointment);
 
         if(this._needSeparateLongParts()) {
@@ -111,7 +110,7 @@ export class DateGeneratorBaseStrategy {
         if(!appointment.isRecurrent && appointments.length === 0) {
             appointments.push({
                 startDate: appointment.startDate,
-                endDate: appointment.endDate
+                endDate: appointment.endDate,
             });
         }
 
@@ -275,11 +274,11 @@ export class DateGeneratorBaseStrategy {
         return result;
     }
 
-    _createGridAppointmentList(appointmentList, appointment) {
+    _createGridAppointmentList(appointmentList, appointmentAdapter) {
         return appointmentList.map(source => {
-            const offsetDifference = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
+            const offsetDifference = appointmentAdapter.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
-            if(offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointment)) {
+            if(offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
                 source.startDate = new Date(source.startDate.getTime() + offsetDifference * toMs('minute'));
                 source.endDate = new Date(source.endDate.getTime() + offsetDifference * toMs('minute'));
                 source.exceptionDate = new Date(source.startDate);
@@ -291,6 +290,7 @@ export class DateGeneratorBaseStrategy {
             return {
                 startDate,
                 endDate,
+                allDay: appointmentAdapter.allDay || false,
                 source // TODO
             };
         });
@@ -391,9 +391,14 @@ export class DateGeneratorBaseStrategy {
                 firstViewDate
             });
 
-            return !this.isAllDayRowAppointment
-                ? appointment.endDate > appointment.startDate
-                : true;
+            if(this.isAllDayRowAppointment) {
+                return true;
+            }
+
+            // NOTE: The scheduler displays all-day appointment if its duration in the view is zero
+            return appointment.allDay
+                ? appointment.endDate >= appointment.startDate
+                : appointment.endDate > appointment.startDate;
         });
     }
 

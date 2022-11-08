@@ -16,6 +16,7 @@ import { isFunction, isObject, isPromise, isWindow } from '../../core/utils/type
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
+import uiErrors from '../widget/ui.errors';
 import eventsEngine from '../../events/core/events_engine';
 import {
     move as dragEventMove
@@ -280,18 +281,6 @@ const Overlay = Widget.inherit({
         this._proxiedDocumentDownHandler = (...args) => {
             return this._documentDownHandler(...args);
         };
-    },
-
-    _areContentDimensionsRendered: function(entry) {
-        const contentBox = entry.contentBoxSize?.[0];
-        if(contentBox) {
-            return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
-                    && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
-        }
-
-        const contentRect = entry.contentRect;
-        return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
-                && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
     _initMarkup() {
@@ -639,6 +628,7 @@ const Overlay = Widget.inherit({
         }
 
         if(visible) {
+            this._checkContainerExists();
             this._moveToContainer();
             this._renderGeometry();
 
@@ -944,16 +934,22 @@ const Overlay = Widget.inherit({
 
     _moveFromContainer: function() {
         this._$content.appendTo(this.$element());
-
-        this._detachWrapperToContainer();
-    },
-
-    _detachWrapperToContainer: function() {
         this._$wrapper.detach();
     },
 
+    _checkContainerExists() {
+        const $wrapperContainer = this._positionController.$container;
+
+        const containerExists = $wrapperContainer.length > 0;
+        if(!containerExists) {
+            uiErrors.log('W1021', this.NAME);
+        }
+    },
+
     _moveToContainer: function() {
-        this._$wrapper.appendTo(this._positionController.$container);
+        const $wrapperContainer = this._positionController.$container;
+
+        this._$wrapper.appendTo($wrapperContainer);
         this._$content.appendTo(this._$wrapper);
     },
 

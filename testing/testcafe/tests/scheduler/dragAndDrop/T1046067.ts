@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`T1046067`
   .page(url(__dirname, './pages/T1046067.html'));
 
-test('Drag-n-Drop appointment where disabled property is set as a function (T1046067)', async (t) => {
+safeSizeTest('Drag-n-Drop appointment where disabled property is set as a function (T1046067)', async (t) => {
   const scheduler = new Scheduler('#scheduler');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const disabledAppointment = scheduler.getAppointment('disabled-appt');

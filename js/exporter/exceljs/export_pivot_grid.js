@@ -54,13 +54,6 @@ class PivotGridHelpers {
             + (this._allowExportDataFieldHeaders() || this._allowExportColumnFieldHeaders());
     }
 
-    _getCustomizeCellOptions(excelCell, pivotCell) {
-        return {
-            excelCell: excelCell,
-            pivotCell: pivotCell
-        };
-    }
-
     _isFrozenZone() {
         return true;
     }
@@ -133,7 +126,7 @@ class PivotGridHelpers {
 
     _customizeCell(excelCell, pivotCell, shouldPreventCall) {
         if(isFunction(this.customizeCell) && !shouldPreventCall) {
-            this.customizeCell(this._getCustomizeCellOptions(excelCell, pivotCell));
+            this.customizeCell({ excelCell, pivotCell });
         }
     }
 

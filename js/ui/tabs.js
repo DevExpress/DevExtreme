@@ -243,7 +243,7 @@ const Tabs = CollectionWidget.inherit({
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);
 
-        return maxTabWidth > elementWidth / $visibleItems.length;
+        return maxTabWidth >= elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {

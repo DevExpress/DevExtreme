@@ -860,13 +860,13 @@ export const createHugeFileSystem = () => {
     return result;
 };
 
-export const createUploaderFiles = count => {
+export const createUploaderFiles = (count, size) => {
     const result = [];
 
     for(let i = 0; i < count; i++) {
-        const size = 300000 + i * 200000;
+        const fileSize = (size !== null && size !== undefined) ? size : (300000 + i * 200000);
         const fileName = `Upload file ${i}.txt`;
-        const content = generateString(size, i.toString());
+        const content = generateString(fileSize, i.toString());
 
         const file = createFileObject(fileName, content);
         result.push(file);
@@ -948,10 +948,14 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
     chunkSize = chunkSize || 200000;
 
     const bytesUploaded = chunkIndex * chunkSize;
-    const chunkCount = Math.ceil(file.size / chunkSize);
+    const chunkCount = getFileChunkCount(file, chunkSize);
     const chunkBlob = file.slice(bytesUploaded, Math.min(file.size, bytesUploaded + chunkSize));
 
     return { bytesUploaded, chunkCount, customData, chunkBlob, chunkIndex };
+};
+
+export const getFileChunkCount = (file, chunkSize) => {
+    return file.size === 0 ? 1 : Math.ceil(file.size / chunkSize);
 };
 
 export const stubFileReader = object => {

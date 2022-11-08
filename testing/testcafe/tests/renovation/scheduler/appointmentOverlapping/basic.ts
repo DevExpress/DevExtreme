@@ -8,9 +8,10 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Appointment overlapping in Scheduler');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Appointment overlapping in Scheduler');
 
-test('Multi-day appointment should not overlap other appointments when specific width is set, "auto" mode (T864456)', async (t) => {
+test('Multi-day appointment should not overlap other appointments when specific width is set, \'auto\' mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Appointment 1', 1);
 
@@ -29,7 +30,7 @@ test('Multi-day appointment should not overlap other appointments when specific 
   },
 ));
 
-test('Simple appointment should not overlap allDay appointment when specific width is set, "auto" mode (T864456)', async (t) => {
+test('Simple appointment should not overlap allDay appointment when specific width is set, \'auto\' mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('Appointment 4');
 

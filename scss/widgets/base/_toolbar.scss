@@ -5,9 +5,11 @@
 .dx-toolbar {
   width: 100%;
 
-  .dx-device-mobile &.dx-toolbar-multiline,
   &.dx-toolbar-multiline {
     .dx-toolbar-items-container {
+      display: flex;
+      flex: 0 1 auto;
+      flex-wrap: wrap;
       height: 100%;
 
       .dx-toolbar-before {
@@ -16,7 +18,9 @@
     }
 
     .dx-toolbar-item {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      flex: 0 1 auto;
     }
   }
 }
@@ -143,7 +147,6 @@
 
     .dx-button {
       border: none;
-      background: none;
       margin: 0;
       width: 100%;
       text-align: left;
@@ -198,8 +201,11 @@
   display: none;
 }
 
-.dx-toolbar-item-content > .dx-texteditor {
-  width: 150px;
+.dx-toolbar-item-content {
+  > .dx-texteditor,
+  &.dx-texteditor {
+    width: 150px;
+  }
 }
 
 .dx-toolbar-item-invisible {

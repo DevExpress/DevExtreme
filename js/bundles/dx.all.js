@@ -1,4 +1,4 @@
-import './modules/parts/widgets-all';
+import './modules/parts/widgets-web';
 import './modules/parts/viz';
 import DevExpress from './modules/core';
 import { EventsStrategy } from '../core/events_strategy';

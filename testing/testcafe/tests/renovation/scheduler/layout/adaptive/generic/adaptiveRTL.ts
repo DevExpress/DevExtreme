@@ -15,7 +15,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Adaptive Generic theme layout in RTL');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Adaptive Generic theme layout in RTL');
 
 const createScheduler = async (
   platform: PlatformType,
@@ -44,7 +45,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${crossScrollingEnabled}-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -71,7 +72,7 @@ const createScheduler = async (
         .ok();
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -101,7 +102,7 @@ const createScheduler = async (
         .wait(100);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
+        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 

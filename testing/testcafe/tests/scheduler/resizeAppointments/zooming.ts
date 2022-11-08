@@ -1,16 +1,14 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Resize appointments - Zooming`
   .page(url(__dirname, './pages/zooming.html'));
 
-test('Vertical resize with zooming', async (t) => {
+safeSizeTest('Vertical resize with zooming', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Appt-01');
-
-  await t
-    .resizeWindow(1200, 800);
 
   await t
     .drag(resizableAppointment.resizableHandle.bottom, 0, 430, { offsetY: 20 });

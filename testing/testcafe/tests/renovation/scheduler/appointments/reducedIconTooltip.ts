@@ -1,3 +1,4 @@
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -61,5 +62,5 @@ fixture('Renovated scheduler - Reduced icon tooltip');
       views: ['timelineDay', 'week'],
       currentView,
     });
-  });
+  }).after(async (t) => restoreBrowserSize(t));
 });

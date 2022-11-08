@@ -220,12 +220,6 @@ export type SingleOrNone = 'single' | 'none';
  * @public
  * @namespace DevExpress.common
  */
-export type SlideOutMenuPosition = 'inverted' | 'normal';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
 export type Sortable = OmitInternal<dxSortable>;
 
 /**
@@ -287,12 +281,6 @@ export type ValidationMessageMode = 'always' | 'auto';
  * @namespace DevExpress.common
  */
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
-export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
 
 /**
  * @public

@@ -1682,11 +1682,17 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
             blobReader: new FileBlobReader(realFile, this.chunkSize),
             guid: new Guid(),
             fileSize: realFile.size,
-            count: Math.ceil(realFile.size / this.chunkSize),
+            count: this._getFileChunksCount(realFile),
             customData: {}
         };
         file.chunksData = chunksData;
         this._sendChunk(file, chunksData);
+    }
+
+    _getFileChunksCount(jsFile) {
+        return jsFile.size === 0
+            ? 1
+            : Math.ceil(jsFile.size / this.chunkSize);
     }
 
     _sendChunk(file, chunksData) {

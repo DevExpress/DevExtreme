@@ -450,7 +450,12 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         _handleChanging: function(e) {
             this.callBase.apply(this, arguments);
 
-            e.postProcessChanges = this._processChanges.bind(this);
+            const processChanges = (changes) => {
+                const changesToProcess = changes.filter(item => item.type === 'update');
+                return this._processChanges(changesToProcess);
+            };
+
+            e.postProcessChanges = processChanges;
         },
 
         _applyBatch: function(changes) {
@@ -497,6 +502,10 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
 
             return baseChanges;
+        },
+
+        _needToCopyDataObject: function() {
+            return false;
         },
 
         _applyRemove: function(change) {
@@ -648,7 +657,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             if(isNeedReshape) {
                 this._isReload = true;
             }
-
+            changes.forEach(change => change.index ??= -1);
             this.callBase.apply(this, arguments);
         },
 
