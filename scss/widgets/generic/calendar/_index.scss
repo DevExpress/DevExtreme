@@ -52,7 +52,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 
 .dx-calendar-navigator {
   height: $generic-calendar-navigator-height;
-  border-collapse: collapse;
 
   .dx-button {
     height: 100%;
@@ -60,7 +59,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
     border-color: $calendar-navigator-border-color;
 
     &.dx-calendar-disabled-navigator-link {
-      border-collapse: collapse;
       visibility: visible;
       opacity: 1;
 
@@ -101,7 +99,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 .dx-calendar-navigator-previous-view,
 .dx-calendar-navigator-next-view {
   width: $generic-nav-button-width;
-  background: none;
 
   &.dx-button {
     .dx-icon {
@@ -111,21 +108,12 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
 }
 
 .dx-calendar-navigator-previous-view {
-  left: 0;
-
   &.dx-button {
-    margin: 0 2px;
     border-radius: $calendar-navigator-border-radius 0 0 $calendar-navigator-border-radius;
-  }
-
-  &.dx-state-hover {
-    z-index: 1;
   }
 }
 
 .dx-calendar-navigator-next-view {
-  right: 0;
-
   &.dx-button {
     margin: 0 1px;
     border-radius: 0 $calendar-navigator-border-radius $calendar-navigator-border-radius 0;

@@ -60,7 +60,11 @@ $scheduler-popup-scrollable-content-padding: 20px;
     padding: 0;
 
     span:last-child {
-      line-height: normal;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: math.div($scheduler-appointment-collector-height, 1.5);
+      height: $scheduler-appointment-collector-height;
+      padding-left: 2px;
     }
   }
 

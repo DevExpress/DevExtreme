@@ -100,6 +100,8 @@ $arrow-down: "\f016";
       .dx-buttongroup {
         .dx-button {
           .dx-icon {
+            width: $icon-font-size;
+            height: $icon-font-size;
             font-size: $icon-font-size;
           }
 
