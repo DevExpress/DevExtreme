@@ -1,14 +1,18 @@
+/* eslint-disable no-restricted-syntax */
+import { Selector } from 'testcafe';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import DateBox from '../../../model/dateBox';
+import Guid from '../../../../../js/core/guid';
+import {
+  appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
+} from '../../navigation/helpers/domUtils';
 
-const TIME_TO_WAIT = 500;
-
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
+const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 const pickerTypes = ['calendar', 'list', 'native', 'rollers'];
+const labelModes = ['static', 'floating', 'hidden'];
 const types = ['date', 'datetime', 'time'];
 
 fixture`DateBox_Icon`
@@ -18,37 +22,49 @@ fixture`DateBox_Icon`
   });
 
 themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    pickerTypes.forEach((pickerType) => {
-      types.forEach((type) => {
-        [true, false].forEach((rtlEnabled) => {
-          test(`Icon for dxDateBox ${theme} stylingMode=${stylingMode} pickerType=${pickerType} type=${type} rtlEnabled=${rtlEnabled}`, async (t) => {
-            const dateBox = new DateBox('#container');
-            const { dropDownEditorButton } = dateBox;
-            await t.expect(await compareScreenshot(t, `db-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+  (['dx-dropdowneditor-active', 'dx-state-focused', false] as string[]).forEach((state) => {
+    [true, false].forEach((rtlEnabled) => {
+      test(`DateBox styles, state=${state ? 'active' : ''} ${theme}`, async (t) => {
+        await t.expect(
+          await compareScreenshot(t, `db-styling,${state ? `${state.replace('dx-', '')}` : ''},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`, '#container'),
+        )
+          .ok();
+      }).before(async () => {
+        await changeTheme(theme);
 
-            if (pickerType !== 'native') {
-              await t
-                .click(dropDownEditorButton)
-                .wait(TIME_TO_WAIT);
+        for (const stylingMode of stylingModes) {
+          for (const type of types) {
+            for (const pickerType of pickerTypes) {
+              for (const labelMode of labelModes) {
+                const id = `${`dx${new Guid()}`}`;
 
-              await t.expect(await compareScreenshot(t, `db-opened-icon-stMode=${stylingMode},pType=${pickerType},type=${type},rtl=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+                await appendElementTo('#container', 'div', id, { });
+
+                const options: any = {
+                  width: 160,
+                  label: 'label text',
+                  labelMode,
+                  stylingMode,
+                  showClearButton: true,
+                  pickerType,
+                  type,
+                  rtlEnabled,
+                  value: new Date(2021, 9, 17, 16, 34),
+                };
+
+                await createWidget('dxDateBox', options, false, `#${id}`);
+
+                if (state) {
+                  await setClassAttribute(Selector(`#${id}`), state);
+                }
+
+                await insertStylesheetRule('.dx-datebox { display: inline-block }', 0);
+              }
             }
-          }).before(async (t) => {
-            await t.resizeWindow(300, 400);
-            await changeTheme(theme);
-
-            return createWidget('dxDateBox', {
-              label: 'label text',
-              stylingMode,
-              showClearButton: true,
-              pickerType,
-              type,
-              rtlEnabled,
-              value: new Date(1900, 0, 1),
-            });
-          });
-        });
+          }
+        }
+      }).after(async () => {
+        await deleteStylesheetRule(0);
       });
     });
   });
