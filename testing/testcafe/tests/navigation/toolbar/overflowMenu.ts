@@ -1,15 +1,30 @@
+/* eslint-disable no-restricted-syntax */
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector, ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
-import { appendElementTo } from '../helpers/domUtils';
+import Guid from '../../../../../js/core/guid';
+import { changeTheme } from '../../../helpers/changeTheme';
+import {
+  appendElementTo, setClassAttribute,
+} from '../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const ACTIVE_STATE_CLASS = 'dx-state-active';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
+const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
+const stylingModes = ['text', 'outlined', 'contained'];
+const types = ['back', 'danger', 'default', 'normal', 'success'];
+const states = [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`, false] as string[];
+
 fixture`Toolbar_OverflowMenu`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {
+    await changeTheme('generic.light');
+  });
 
 test('Drop down button should lost hover and active state', async (t) => {
   const toolbar = new Toolbar('#container');
@@ -166,3 +181,251 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
     { text: 'item3', locateInMenu: 'always' },
   ],
 }));
+
+['always', 'auto'].forEach((locateInMenu) => {
+  states.forEach((state) => {
+    let ids = [] as string[];
+    themes.forEach((theme) => {
+      test(`Toolbar buttons appearence,${state ? `${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        const toolbar = new Toolbar('#container');
+        let targetContainer = Selector('#container');
+
+        await t
+          .click(toolbar.getOverflowMenu().element);
+
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+        for (const id of ids) {
+          if (state) {
+            await setClassAttribute(Selector(`#${id}`), state);
+          }
+        }
+
+        await t
+          .expect(await takeScreenshot(`Toolbar-buttons-appearence,${state ? `${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        ids = [];
+        await changeTheme(theme);
+
+        const items = [] as any;
+
+        for (const stylingMode of stylingModes) {
+          for (const type of types) {
+            const id = `${`dx${new Guid()}`}`;
+
+            ids.push(id);
+            items.push({
+              widget: 'dxButton',
+              locateInMenu,
+              options: {
+                stylingMode,
+                text: 'Button Text',
+                type,
+                hint: `stylingMode=${stylingMode}, type=${type}`,
+                icon: 'home',
+                elementAttr: {
+                  id,
+                },
+              },
+            });
+          }
+        }
+
+        await createWidget('dxToolbar', {
+          width: 50,
+          multiline: false,
+          items,
+        });
+      });
+
+      test(`Toolbar buttons as template appearence,${state ? `${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        const toolbar = new Toolbar('#container');
+        let targetContainer = Selector('#container');
+
+        await t
+          .click(toolbar.getOverflowMenu().element);
+
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+        for (const id of ids) {
+          if (state) {
+            await setClassAttribute(Selector(`#${id}`), state);
+          }
+        }
+
+        await t
+          .expect(await takeScreenshot(`Toolbar-buttons-as-template-appearence,${state ? `${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        ids = [];
+        await changeTheme(theme);
+
+        const items = [] as any;
+
+        for (const stylingMode of stylingModes) {
+          for (const type of types) {
+            const id = `${`dx${new Guid()}`}`;
+
+            ids.push(id);
+
+            const template = ClientFunction(() => ($('<div>') as any).dxButton({
+              stylingMode,
+              text: 'Button Text',
+              type,
+              hint: `stylingMode=${stylingMode}, type=${type}`,
+              icon: 'home',
+              elementAttr: {
+                id,
+              },
+            }), { dependencies: { stylingMode, id, type } });
+
+            items.push({
+              locateInMenu,
+              template,
+            });
+          }
+        }
+
+        await createWidget('dxToolbar', {
+          width: 50,
+          multiline: false,
+          items,
+        });
+      });
+    });
+
+    ['generic.light', 'material.blue.light'].forEach((theme) => {
+      test(`Toolbar button group appearence,${state ? `${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        const toolbar = new Toolbar('#container');
+        let targetContainer = Selector('#container');
+
+        await t
+          .click(toolbar.getOverflowMenu().element);
+
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+        for (const id of ids) {
+          if (state) {
+            await setClassAttribute(Selector(`#${id}`), state);
+          }
+        }
+
+        await t
+          .expect(await takeScreenshot(`Toolbar-buttons-appearence,${state ? `${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        ids = [];
+        await changeTheme(theme);
+
+        const items = [] as any;
+
+        for (const stylingMode of stylingModes) {
+          const buttons = [] as any;
+          for (const type of types) {
+            const id = `${`dx${new Guid()}`}`;
+
+            ids.push(id);
+
+            buttons.push({
+              text: 'Button Text',
+              type,
+              icon: 'home',
+              elementAttr: {
+                id,
+              },
+            });
+          }
+
+          items.push({
+            widget: 'dxButtonGroup',
+            locateInMenu,
+            options: {
+              stylingMode,
+              items: buttons,
+            },
+          });
+        }
+
+        await createWidget('dxToolbar', {
+          width: 50,
+          items,
+        });
+      });
+
+      test(`Toolbar button group as template appearence,${state ? `${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        const toolbar = new Toolbar('#container');
+        let targetContainer = Selector('#container');
+
+        await t
+          .click(toolbar.getOverflowMenu().element);
+
+        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+        for (const id of ids) {
+          if (state) {
+            await setClassAttribute(Selector(`#${id}`), state);
+          }
+        }
+
+        await t
+          .expect(await takeScreenshot(`Toolbar-buttons-appearence,${state ? `${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        ids = [];
+        await changeTheme(theme);
+
+        const items = [] as any;
+
+        for (const stylingMode of stylingModes) {
+          const buttons = [] as any;
+          for (const type of types) {
+            const id = `${`dx${new Guid()}`}`;
+
+            ids.push(id);
+
+            buttons.push({
+              text: 'Button Text',
+              type,
+              icon: 'home',
+              elementAttr: {
+                id,
+              },
+            });
+          }
+
+          const template = ClientFunction(() => ($('<div>') as any).dxButtonGroup({
+            stylingMode,
+            items: buttons,
+          }), { dependencies: { stylingMode, buttons } });
+
+          items.push({
+            locateInMenu,
+            template,
+          });
+        }
+
+        await createWidget('dxToolbar', {
+          width: 50,
+          items,
+        });
+      });
+    });
+  });
+});
