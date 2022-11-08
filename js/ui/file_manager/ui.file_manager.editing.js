@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import { each } from '../../core/utils/iterator';
 import { format } from '../../core/utils/string';
+import { isDefined } from '../../core/utils/type';
 
 import messageLocalization from '../../localization/message';
 
@@ -67,7 +68,8 @@ class FileManagerEditingControl extends Widget {
             getController: this._getFileUploaderController.bind(this),
             dropZonePlaceholderContainer: this.option('uploadDropZonePlaceholderContainer'),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
-            onUploadProgress: e => this._onUploadProgress(e)
+            onUploadProgress: e => this._onUploadProgress(e),
+            onUploadFinished: e => this._onUploadFinished(e)
         });
     }
 
@@ -201,8 +203,14 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadProgress({ sessionId, fileIndex, commonValue, fileValue }) {
-        const operationInfo = this._uploadOperationInfoMap[sessionId];
+        const { operationInfo } = this._uploadOperationInfoMap[sessionId];
         this._notificationControl.updateOperationItemProgress(operationInfo, fileIndex, fileValue * 100, commonValue * 100);
+    }
+
+    _onUploadFinished({ sessionId, commonValue }) {
+        const { operationInfo } = this._uploadOperationInfoMap[sessionId];
+        this._notificationControl.finishOperation(operationInfo, commonValue * 100);
+        this._scheduleUploadSessionDisposal(sessionId, 'uploader');
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
@@ -220,7 +228,7 @@ class FileManagerEditingControl extends Widget {
                 {
                     const sessionId = actionInfo.customData.sessionInfo.sessionId;
                     operationInfo.uploadSessionId = sessionId;
-                    this._uploadOperationInfoMap[sessionId] = operationInfo;
+                    this._uploadOperationInfoMap[sessionId] = { operationInfo };
                 }
                 break;
             case 'rename':
@@ -263,7 +271,15 @@ class FileManagerEditingControl extends Widget {
         this._completeAction(operationInfo, context);
 
         if(actionInfo.name === 'upload') {
-            delete this._uploadOperationInfoMap[actionInfo.customData.sessionInfo.sessionId];
+            this._scheduleUploadSessionDisposal(actionInfo.customData.sessionInfo.sessionId, 'controller');
+        }
+    }
+
+    _scheduleUploadSessionDisposal(sessionId, requester) {
+        if(isDefined(this._uploadOperationInfoMap[sessionId].requester) && this._uploadOperationInfoMap[sessionId].requester !== requester) {
+            delete this._uploadOperationInfoMap[sessionId];
+        } else {
+            this._uploadOperationInfoMap[sessionId].requester = requester;
         }
     }
 
