@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "build": "rollup -c rollup/rollup.config.mjs",
+        "build": "tsc -b ./tsconfig.package.json && rollup -c rollup/rollup.config.mjs",
         "watch": "rollup -c rollup/rollup.config.mjs --watch"
     },
     "author": "",

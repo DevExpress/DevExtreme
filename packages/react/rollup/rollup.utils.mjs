@@ -1,13 +1,15 @@
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+// import typescript from 'rollup-plugin-typescript2';
 import typescript from "@rollup/plugin-typescript";
-import postcss from "rollup-plugin-postcss";
+import postcss from 'rollup-plugin-postcss';
+import copy from 'rollup-plugin-copy';
 
 function checkExternalPackage(id) {
     return ['@devexpress'].includes(id.split('/')[0]);
 }
 
 function getEsmConfig(componentName, outputDir) {
-    const inputPath = `src/components/${componentName}/index.ts`;
+    const inputPath = `tsc-out/components/${componentName}/index.js`;
 
     return {
         input: inputPath,
@@ -21,14 +23,20 @@ function getEsmConfig(componentName, outputDir) {
             preserveModulesRoot: 'src',
         },
         plugins: [
-            peerDepsExternal(),
-            typescript({
-                tsconfig: './tsconfig.package.json',
-                compilerOptions: {
-                    outDir: `${outputDir}/esm`,
-                    module: 'NodeNext',
-                }
+            copy({
+                targets: [
+                    { src: 'src/**/*.scss', dest: 'tsc-out' }
+                ],
+                flatten: false
             }),
+            peerDepsExternal(),
+            // typescript({
+            //     tsconfig: './tsconfig.package.json',
+            //     compilerOptions: {
+            //         outDir: `${outputDir}/esm`,
+            //         module: 'NodeNext',
+            //     }
+            // }),
             postcss({
                 extract: `${componentName}.css`,
             })
@@ -38,7 +46,7 @@ function getEsmConfig(componentName, outputDir) {
 }
 
 function getCjsConfig(componentName, outputDir) {
-    const inputPath = `src/components/${componentName}/index.ts`;
+    const inputPath = `tsc-out/components/${componentName}/index.js`;
 
     return {
         input: inputPath,
@@ -52,14 +60,16 @@ function getCjsConfig(componentName, outputDir) {
             preserveModulesRoot: 'src',
         },
         plugins: [
+
             peerDepsExternal(),
-            typescript({
-                tsconfig: './tsconfig.package.json',
-                compilerOptions: {
-                    outDir: `${outputDir}/cjs`,
-                    module: 'NodeNext',
-                }
-            }),
+            // typescript({
+            //     tsconfig: './tsconfig.package.json',
+            //     compilerOptions: {
+            //         outDir: `${outputDir}/cjs`,
+            //         module: 'NodeNext',
+            //         moduleResolution: 'NodeNext',
+            //     }
+            // }),
             postcss({
                 inject: false,
                 extract: false,
@@ -84,6 +94,7 @@ function getRootConfig(outputDir) {
                 compilerOptions: {
                     outDir: `${outputDir}/esm`,
                     module: 'NodeNext',
+                    moduleResolution: 'NodeNext',
                 }
             }),
             postcss({
@@ -100,7 +111,7 @@ function getRollupConfig(components, outputPath) {
     return [
         ...components.map((componentName) => getEsmConfig(componentName, outputPath)),
         ...components.map((componentName) => getCjsConfig(componentName, outputPath)),
-        getRootConfig(outputPath),
+        // getRootConfig(outputPath),
     ];
 }
 
