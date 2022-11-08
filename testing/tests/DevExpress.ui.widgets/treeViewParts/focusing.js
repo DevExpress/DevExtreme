@@ -232,7 +232,7 @@ QUnit.test('First node should not has been focused when focusing on SelectAll it
         $selectAllItem.trigger('focusin');
         clock.tick();
 
-        assert.notOk($firstItem.hasClass(FOCUSED_STATE_CLASS), 'scroll top position');
+        assert.notOk($firstItem.hasClass(FOCUSED_STATE_CLASS), 'first item has not focus state class');
     } finally {
         clock.restore();
     }
