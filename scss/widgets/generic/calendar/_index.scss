@@ -58,10 +58,6 @@ $generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navi
     border-radius: 0;
     border-color: $calendar-navigator-border-color;
 
-    .dx-icon {
-      font-size: $generic-calendar-navigator-fontsize;
-    }
-
     &.dx-calendar-disabled-navigator-link {
       visibility: visible;
       opacity: 1;

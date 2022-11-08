@@ -10,7 +10,7 @@
 // adduse
 
 
-$material-calendar-navigator-icon-fontsize: $material-base-icon-size;
+$material-calendar-navigator-icon-font-size: $material-base-icon-size;
 $material-calendar-navigator-fontsize: 14px;
 $material-calendar-navigator-line-height: 1.6;
 $material-calendar-width: $material-calendar-body-width;
@@ -43,7 +43,6 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
 }
 
 .dx-calendar-navigator {
-  line-height: $material-calendar-navigator-line-height;
   height: $material-calendar-navigator-height;
 
   .dx-button {
@@ -56,7 +55,7 @@ $material-calendar-height: $material-calendar-body-height + $material-calendar-n
     }
 
     .dx-icon {
-      font-size: $material-calendar-navigator-icon-fontsize;
+      font-size: $material-calendar-navigator-icon-font-size;
     }
 
     &.dx-calendar-disabled-navigator-link {

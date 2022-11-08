@@ -140,6 +140,21 @@
     border-bottom: none;
   }
 
+  .dx-toolbar-item-content,
+  .dx-list-item-content {
+    > .dx-button,
+    > .dx-buttongroup {
+      .dx-button-content {
+        justify-content: left;
+
+        @at-root #{selector-append(".dx-rtl", &)},
+        .dx-rtl & {
+          justify-content: right;
+        }
+      }
+    }
+  }
+
   .dx-toolbar-hidden-button {
     .dx-toolbar-item-auto-hide {
       padding: 0;
@@ -149,22 +164,8 @@
       border: none;
       margin: 0;
       width: 100%;
-      text-align: left;
       padding: 10px;
       box-shadow: none;
-
-      .dx-button-text {
-        line-height: normal;
-      }
-
-      .dx-button-content {
-        text-align: left;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          text-align: right;
-        }
-      }
     }
   }
 
@@ -185,12 +186,6 @@
 
         .dx-buttongroup-item {
           border: none;
-          text-align: left;
-
-          @at-root #{selector-append(".dx-rtl", &)},
-          .dx-rtl & {
-            text-align: right;
-          }
         }
       }
     }

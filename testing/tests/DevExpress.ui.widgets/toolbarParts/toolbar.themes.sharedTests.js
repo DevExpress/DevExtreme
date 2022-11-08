@@ -39,7 +39,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                         widget: 'dxButton',
                         locateInMenu: config.locateInMenu,
                         showText: config.showText,
-                        options: { icon: 'plus', text: `text(${config.locateInMenu})` }
+                        options: { icon: 'home', text: `text(${config.locateInMenu})` }
                     }]
                 };
 
@@ -64,7 +64,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
                     const buttonRect = menuButtonElement.getBoundingClientRect();
                     assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
-                    assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
+                    assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).justifyContent, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
                 }
             });
         });
