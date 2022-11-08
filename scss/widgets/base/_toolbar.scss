@@ -7,6 +7,9 @@
 
   &.dx-toolbar-multiline {
     .dx-toolbar-items-container {
+      display: flex;
+      flex: 0 1 auto;
+      flex-wrap: wrap;
       height: 100%;
 
       .dx-toolbar-before {
@@ -15,7 +18,9 @@
     }
 
     .dx-toolbar-item {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      flex: 0 1 auto;
     }
   }
 }
@@ -153,12 +158,37 @@
     border-bottom: none;
   }
 
-  // TODO improve selector
   .dx-toolbar-item-content,
-  .dx-list-item-content {
+  .dx-list-item-content,
+  .dx-toolbar-item-auto-hide {
     > .dx-button,
-    > .dx-buttongroup {
+    &.dx-button,
+    > .dx-buttongroup,
+    &.dx-buttongroup {
       width: 100%;
+
+      .dx-button-content {
+        justify-content: left;
+
+        @at-root #{selector-append(".dx-rtl", &)},
+        .dx-rtl & {
+          justify-content: right;
+        }
+      }
+    }
+  }
+
+  .dx-toolbar-hidden-button {
+    .dx-toolbar-item-auto-hide {
+      padding: 0;
+    }
+
+    .dx-button {
+      border: none;
+      margin: 0;
+      width: 100%;
+      padding: 10px;
+      box-shadow: none;
     }
   }
 
@@ -169,12 +199,6 @@
 
         .dx-buttongroup-item {
           border: none;
-          text-align: left;
-
-          @at-root #{selector-append(".dx-rtl", &)},
-          .dx-rtl & {
-            text-align: right;
-          }
         }
       }
     }
