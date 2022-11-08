@@ -466,14 +466,6 @@ export default {
   margin-bottom: 5px;
 }
 
-.dx-texteditor {
-  width: 150px;
-}
-
-.dx-toolbar-menu-section .dx-selectbox {
-  width: auto;
-}
-
 .widget-container {
   margin-right: 6px;
 }

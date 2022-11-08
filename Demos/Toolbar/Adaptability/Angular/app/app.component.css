@@ -23,10 +23,6 @@
   margin-bottom: 5px;
 }
 
-::ng-deep .dx-toolbar-menu-section .dx-selectbox {
-  width: auto;
-}
-
 ::ng-deep .dx-toolbar-menu-section .toolbar-separator-container {
   height: 1px;
 }
