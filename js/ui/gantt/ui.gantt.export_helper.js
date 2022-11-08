@@ -81,6 +81,9 @@ export class GanttExportHelper {
             styles: styleForExport
         };
     }
+    getTreeListEmptyDataCellInfo() {
+        return { content: this._treeList.option('noDataText') };
+    }
     _ensureColumnWidthCache(colIndex) {
         this._cache['columnWidths'] ??= { };
         if(!this._cache['columnWidths'][colIndex]) {
