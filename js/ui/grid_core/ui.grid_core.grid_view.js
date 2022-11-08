@@ -792,7 +792,7 @@ export const gridViewModule = {
     defaultOptions: function() {
         return {
             showBorders: false,
-            renderAsync: false
+            renderAsync: undefined
         };
     },
     controllers: {
