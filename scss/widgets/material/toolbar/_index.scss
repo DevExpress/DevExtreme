@@ -54,10 +54,6 @@
 
   .dx-list-item-content {
     font-size: $material-base-font-size;
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-    flex-grow: 1;
     vertical-align: middle;
 
     .dx-list-item-icon-container {
