@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -31,236 +30,16 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <style>
-        .form>h4 {
-            margin-bottom: 20px;
-        }
-
-        .form>div,
-        #treeview {
-            display: inline-block;
-            vertical-align: top;
-        }
-
-        .selected-container {
-            padding: 20px;
-            margin-left: 20px;
-            background-color: rgba(191, 191, 191, 0.15);
-            font-size: 115%;
-            font-weight: bold;
-        }
-
-        #selected-employees {
-            margin-top: 20px;
-        }
-
-        .dx-list-item-content {
-            padding-left: 0;
-        }
-
-        .options {
-            padding: 20px;
-            background-color: rgba(191, 191, 191, 0.15);
-            margin-top: 20px;
-            box-sizing: border-box;
-        }
-
-        .caption {
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .option {
-            width: 24%;
-            margin-top: 10px;
-            margin-right: 9px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .options-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-        }
-
-        .editor-container {
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .editor-container>* {
-            width: 100%;
-        }
-
-        .option:last-of-type {
-            margin-right: 0;
-        }
-    </style>
 </head>
-
 <body>
-    <div class="dx-viewport">
-        <div class="demo-container">
-            <div class="form">
-                <div id="treeview"></div>
-            </div>
-        </div>
-    </div>
-
+    <div id="button"></div>
     <script>
-        const employees = [
-            {
-                id: 1,
-                fullName: 'John Heart',
-                prefix: 'Dr.',
-                position: 'CEO',
-                expanded: false,
-                items: [{
-                    id: 2,
-                    fullName: 'Samantha Bright',
-                    prefix: 'Dr.',
-                    position: 'COO',
-                    expanded: false,
-                    items: [{
-                        id: 3,
-                        fullName: 'Kevin Carter',
-                        prefix: 'Mr.',
-                        position: 'Shipping Manager',
-                    }, {
-                        id: 14,
-                        fullName: 'Victor Norris',
-                        prefix: 'Mr.',
-                        selected: false,
-                        position: 'Shipping Assistant',
-                    }],
-                }, {
-                    id: 4,
-                    fullName: 'Brett Wade',
-                    prefix: 'Mr.',
-                    position: 'IT Manager',
-                    expanded: false,
-                    items: [{
-                        id: 5,
-                        fullName: 'Amelia Harper',
-                        prefix: 'Mrs.',
-                        position: 'Network Admin',
-                    }, {
-                        id: 6,
-                        fullName: 'Wally Hobbs',
-                        prefix: 'Mr.',
-                        position: 'Programmer',
-                    }, {
-                        id: 7,
-                        fullName: 'Brad Jameson',
-                        prefix: 'Mr.',
-                        position: 'Programmer',
-                    }, {
-                        id: 8,
-                        fullName: 'Violet Bailey',
-                        prefix: 'Ms.',
-                        position: 'Jr Graphic Designer',
-                    }],
-                }, {
-                    id: 9,
-                    fullName: 'Barb Banks',
-                    prefix: 'Mrs.',
-                    position: 'Support Manager',
-                    expanded: false,
-                    items: [{
-                        id: 10,
-                        fullName: 'Kelly Rodriguez',
-                        prefix: 'Ms.',
-                        position: 'Support Assistant',
-                    }, {
-                        id: 11,
-                        fullName: 'James Anderson',
-                        prefix: 'Mr.',
-                        position: 'Support Assistant',
-                    }],
-                }],
-            },
-            {
-                id: 345,
-                fullName: 'John Heart 2',
-                prefix: 'Dr.',
-                position: 'CEO',
-                expanded: false,
-                items: [{
-                    id: 3452,
-                    fullName: 'Samantha Bright',
-                    prefix: 'Dr.',
-                    position: 'COO',
-                    expanded: false,
-                    items: [{
-                        id: 34546345,
-                        fullName: 'Kevin Carter',
-                        prefix: 'Mr.',
-                        position: 'Shipping Manager',
-                    }, {
-                        id: 143844853,
-                        fullName: 'Victor Norris',
-                        prefix: 'Mr.',
-                        selected: false,
-                        position: 'Shipping Assistant',
-                    }],
-                }, {
-                    id: 400340,
-                    fullName: 'Brett Wade',
-                    prefix: 'Mr.',
-                    position: 'IT Manager',
-                    expanded: false,
-                    items: [{
-                        id: 529290375,
-                        fullName: 'Amelia Harper',
-                        prefix: 'Mrs.',
-                        position: 'Network Admin',
-                    }, {
-                        id: 6345634,
-                        fullName: 'Wally Hobbs',
-                        prefix: 'Mr.',
-                        position: 'Programmer',
-                    }, {
-                        id: 7234546,
-                        fullName: 'Brad Jameson',
-                        prefix: 'Mr.',
-                        position: 'Programmer',
-                    }, {
-                        id: 812345,
-                        fullName: 'Violet Bailey',
-                        prefix: 'Ms.',
-                        position: 'Jr Graphic Designer',
-                    }],
-                }, {
-                    id: 9456898,
-                    fullName: 'Barb Banks',
-                    prefix: 'Mrs.',
-                    position: 'Support Manager',
-                    expanded: false,
-                    items: [{
-                        id: 1087979686,
-                        fullName: 'Kelly Rodriguez',
-                        prefix: 'Ms.',
-                        position: 'Support Assistant',
-                    }, {
-                        id: 113456890,
-                        fullName: 'James Anderson',
-                        prefix: 'Mr.',
-                        position: 'Support Assistant',
-                    }],
-                }],
-            }
-        ];
-
-        const treeView = $('#treeview').dxTreeView({
-            items: employees,
-            displayExpr: 'fullName',
-            showCheckBoxesMode: 'selectAll',
-        }).dxTreeView('instance');
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
+        });
     </script>
 </body>
-
 </html>
