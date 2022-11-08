@@ -40,27 +40,27 @@
     },
     "exports": {
         "./pager": {
-            "types": "./lib/cjs/components/pager/index.d.ts",
-            "import": "./lib/esm/components/pager/index.js",
-            "require": "./lib/cjs/components/pager/index.cjs"
+            "types": "./lib/esm/components/pager/index.d.ts",
+            "import": "./lib/esm/pager.js",
+            "require": "./lib/cjs/pager.js"
         },
         "./pager.css": {
             "import": "./lib/esm/pager.css",
             "require": "./lib/esm/pager.css"
         },
         "./slideToggle": {
-            "types": "./lib/cjs/components/slideToggle/index.d.ts",
-            "import": "./lib/esm/components/slideToggle/index.js",
-            "require": "./lib/cjs/components/slideToggle/index.cjs"
+            "types": "./lib/esm/components/slideToggle/index.d.ts",
+            "import": "./lib/esm/slideToggle.js",
+            "require": "./lib/cjs/slideToggle.js"
         },
         "./slideToggle.css": {
-            "import": "./lib/esm/slideToggle.css",
-            "require": "./lib/esm/slideToggle.css"
+            "import": "./lib/esm/pager.css",
+            "require": "./lib/esm/pager.css"
         },
         "./internal": {
             "types": "./lib/cjs/internal/index.d.ts",
-            "import": "./lib/esm/internal/index.js",
-            "require": "./lib/cjs/internal/index.cjs"
+            "import": "./lib/esm/internal.js",
+            "require": "./lib/cjs/internal.js"
         }
     }
 }

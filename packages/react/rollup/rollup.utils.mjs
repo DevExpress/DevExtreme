@@ -1,3 +1,4 @@
+import Path from 'path';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 // import typescript from 'rollup-plugin-typescript2';
 import typescript from "@rollup/plugin-typescript";
@@ -8,68 +9,66 @@ function checkExternalPackage(id) {
     return ['@devexpress'].includes(id.split('/')[0]);
 }
 
-function getEsmConfig(componentName, outputDir) {
-    const inputPath = `tsc-out/components/${componentName}/index.js`;
+const OUTPUT_DIR = './lib';
+const TSC_OUT = 'tsc-out'
 
+const inputPaths = {
+    pager: Path.join(TSC_OUT, `components/pager`, 'index.js'),
+    slideToggle: Path.join(TSC_OUT, `components/slideToggle`, 'index.js'),
+    internal: Path.join(TSC_OUT, `internal`, 'index.js'),
+}
+
+function getOutputConfig(outDir, format) {
     return {
-        input: inputPath,
-        output: {
-            dir: `${outputDir}/esm`,
-            entryFileNames: '[name].js',
-            format: 'esm',
-            sourcemap: true,
-            exports: 'named',
-            preserveModules: true,
-            preserveModulesRoot: 'src',
-        },
+        dir: outDir,
+        entryFileNames: `[name].js`,
+        format,
+        sourcemap: true,
+        exports: 'named',
+    }
+}
+
+function getInputPath(path) {
+    return Path.join('tsc-out', path, 'index.js')
+}
+
+function getRootConfig() {
+    return {
+        input: getInputPath(''),
+        output: OUTPUT_DIR,
         plugins: [
             copy({
                 targets: [
-                    { src: 'src/**/*.scss', dest: 'tsc-out' }
+                    { src: 'src/**/*.scss', dest: 'tsc-out' },
+                    { src: 'tsc-out/**/*.d.ts', dest: `${OUTPUT_DIR}/esm` }
                 ],
+                copyOnce: true,
                 flatten: false
             }),
+        ],
+    }
+}
+
+function getEsmConfig() {
+    return {
+        input: inputPaths,
+        output: getOutputConfig(`${OUTPUT_DIR}/esm`, 'esm'),
+        plugins: [
             peerDepsExternal(),
-            // typescript({
-            //     tsconfig: './tsconfig.package.json',
-            //     compilerOptions: {
-            //         outDir: `${outputDir}/esm`,
-            //         module: 'NodeNext',
-            //     }
-            // }),
             postcss({
-                extract: `${componentName}.css`,
+                extract: true,
             })
         ],
         external: checkExternalPackage,
     }
 }
 
-function getCjsConfig(componentName, outputDir) {
-    const inputPath = `tsc-out/components/${componentName}/index.js`;
-
+function getCjsConfig() {
     return {
-        input: inputPath,
-        output: {
-            dir: `${outputDir}/cjs`,
-            entryFileNames: '[name].cjs',
-            format: 'cjs',
-            sourcemap: true,
-            exports: 'named',
-            preserveModules: true,
-            preserveModulesRoot: 'src',
-        },
+        input: inputPaths,
+        output: getOutputConfig(`${OUTPUT_DIR}/cjs`, 'cjs'),
         plugins: [
-
             peerDepsExternal(),
-            // typescript({
-            //     tsconfig: './tsconfig.package.json',
-            //     compilerOptions: {
-            //         outDir: `${outputDir}/cjs`,
-            //         module: 'NodeNext',
-            //         moduleResolution: 'NodeNext',
-            //     }
-            // }),
             postcss({
                 inject: false,
                 extract: false,
@@ -79,45 +78,16 @@ function getCjsConfig(componentName, outputDir) {
     };
 }
 
-function getRootConfig(outputDir) {
-    return {
-        input: './src/index.ts',
-        output: {
-            dir: `${outputDir}/esm`,
-            format: 'esm',
-            preserveModules: true,
-            preserveModulesRoot: 'src',
-        },
-        plugins: [
-            typescript({
-                tsconfig: './tsconfig.package.json',
-                compilerOptions: {
-                    outDir: `${outputDir}/esm`,
-                    module: 'NodeNext',
-                    moduleResolution: 'NodeNext',
-                }
-            }),
-            postcss({
-                inject: false,
-                extract: false,
-            }),
-
-        ],
-        external: checkExternalPackage,
-    };
-}
-
-function getRollupConfig(components, outputPath) {
+function getRollupConfig() {
     return [
-        ...components.map((componentName) => getEsmConfig(componentName, outputPath)),
-        ...components.map((componentName) => getCjsConfig(componentName, outputPath)),
-        // getRootConfig(outputPath),
-    ];
+        getRootConfig(),
+        getEsmConfig(),
+        getCjsConfig()
+    ]
 }
 
 export {
     getEsmConfig,
     getCjsConfig,
-    getRootConfig,
     getRollupConfig,
 }

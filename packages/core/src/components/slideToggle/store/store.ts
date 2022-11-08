@@ -1,9 +1,9 @@
 import { DeepPartial } from 'ts-essentials';
 import { createStore, Store } from '../../../internal/index';
 import { SlideToggleContracts } from '../types/index';
-import { SLIDE_TOGGLE_ACTIONS, SlideToggleActions } from './actions/slideToggleActions.js';
-import { getStateFromContracts } from './common/getStateFromContracts.js';
-import { SLIDE_TOGGLE_DEFAULT_STATE, SlideToggleState } from './state.js';
+import { SLIDE_TOGGLE_ACTIONS, SlideToggleActions } from './actions/slideToggleActions';
+import { getStateFromContracts } from './common/getStateFromContracts';
+import { SLIDE_TOGGLE_DEFAULT_STATE, SlideToggleState } from './state';
 
 type SlideToggleStore = Store<SlideToggleActions, SlideToggleState>;
 

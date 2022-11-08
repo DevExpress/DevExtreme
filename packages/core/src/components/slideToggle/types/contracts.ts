@@ -1,4 +1,4 @@
-import { TTextPosition } from './index.js';
+import { TTextPosition } from './index';
 
 /* models */
 export interface SlideToggleContractModels {
