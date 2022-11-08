@@ -7,6 +7,9 @@
 
   &.dx-toolbar-multiline {
     .dx-toolbar-items-container {
+      display: flex;
+      flex: 0 1 auto;
+      flex-wrap: wrap;
       height: 100%;
 
       .dx-toolbar-before {
@@ -15,7 +18,9 @@
     }
 
     .dx-toolbar-item {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      flex: 0 1 auto;
     }
   }
 }
