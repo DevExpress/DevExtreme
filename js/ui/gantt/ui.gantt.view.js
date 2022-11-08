@@ -381,6 +381,9 @@ export class GanttView extends Widget {
     getTreeListCellInfo(rowIndex, colIndex, key) {
         return this.callExportHelperMethod('getTreeListCellInfo', key, colIndex);
     }
+    getTreeListEmptyDataCellInfo() {
+        return this.callExportHelperMethod('getTreeListEmptyDataCellInfo');
+    }
     callExportHelperMethod(methodName, ...args) {
         const helper = this.option('exportHelper');
         return helper[methodName](...args);
