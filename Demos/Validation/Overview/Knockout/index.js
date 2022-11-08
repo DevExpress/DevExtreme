@@ -152,6 +152,7 @@ window.onload = function () {
     };
 
     that.submitButtonOptions = {
+      width: '100%',
       text: 'Register',
       type: 'success',
       useSubmitBehavior: true,

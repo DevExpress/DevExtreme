@@ -1,6 +1,6 @@
 ::ng-deep .button {
   width: 280px;
-  display: block;
+  display: flex;
   margin: 20px auto;
 }
 

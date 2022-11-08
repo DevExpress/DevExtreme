@@ -165,7 +165,7 @@
     <div class="dx-fieldset">
       <DxValidationSummary id="summary"/>
       <DxButton
-        id="button"
+        width="100%"
         :use-submit-behavior="true"
         text="Register"
         type="success"
@@ -262,9 +262,5 @@ export default {
   padding-left: 10px;
   margin-top: 20px;
   margin-bottom: 10px;
-}
-
-#button {
-  display: block;
 }
 </style>

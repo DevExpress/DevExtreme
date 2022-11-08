@@ -172,6 +172,7 @@ class App extends React.Component {
         <div className="dx-fieldset">
           <ValidationSummary id="summary"></ValidationSummary>
           <Button
+            width="100%"
             id="button"
             text="Register"
             type="success"

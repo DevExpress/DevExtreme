@@ -151,6 +151,7 @@ DemoApp.controller('DemoController', ($scope) => {
   };
 
   $scope.submitButtonOptions = {
+    width: '100%',
     text: 'Register',
     type: 'success',
     useSubmitBehavior: true,
