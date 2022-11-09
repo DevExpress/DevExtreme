@@ -55,6 +55,8 @@
   .dx-list-item-content {
     font-size: $material-base-font-size;
     vertical-align: middle;
+    min-height: $material-list-item-height;
+    padding: $material-toolbar-item-vertical-padding $material-list-item-horizontal-padding;
 
     .dx-list-item-icon-container {
       height: $material-button-icon-size;
@@ -130,10 +132,6 @@
         }
       }
     }
-  }
-
-  .dx-toolbar-item-auto-hide {
-    padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding $material-list-item-vertical-padding - 1px;
   }
 }
 

@@ -168,6 +168,11 @@
   .dx-list-item-content {
     padding: 0;
 
+    > .dx-list,
+    &.dx-list {
+      padding: 0;
+    }
+
     > .dx-button,
     &.dx-button {
       width: 100%;
