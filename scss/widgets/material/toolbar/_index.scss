@@ -52,8 +52,13 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
+  .dx-list-item {
+    .dx-list-item-content {
+      display: flex;
+    }
+  }
+
   .dx-list-item-content {
-    display: flex;
     flex: 1 1 auto;
     align-items: center;
     font-size: $material-base-font-size;
