@@ -946,7 +946,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     paging?: PagingBase;
     /**
      * @docid
-     * @default false
+     * @default undefined
      * @public
      */
     renderAsync?: boolean;

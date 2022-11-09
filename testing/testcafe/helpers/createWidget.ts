@@ -19,7 +19,6 @@ export type WidgetName =
 'dxPivotGrid' |
 'dxPivotGridFieldChooser' |
 'dxDataGrid' |
-'dxDataGridNext' |
 'dxTreeList' |
 'dxPager' |
 'dxRadioGroup' |

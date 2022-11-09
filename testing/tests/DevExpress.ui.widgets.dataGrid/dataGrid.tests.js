@@ -58,6 +58,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
+import { generateItems } from '../../helpers/dataGridMocks.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -4675,6 +4676,250 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.strictEqual($rowElements.filter('.dx-freespace-row').length, 1, 'freespace row count');
         assert.ok($freeSpaceRow.hasClass('dx-freespace-row'), 'freespace row is last');
         assert.ok($freeSpaceRow.is('tbody'), 'freespace row as tbody tag');
+    });
+
+    // T1107403
+    QUnit.test('Grid should not flicker on paging when cellTemplate is set and renderAsync = false', function(assert) {
+        // arrange
+        assert.expect(4);
+
+        const dataGrid = createDataGrid({
+            renderAsync: false,
+            dataSource: generateItems(100),
+            height: 600,
+            columns: [{
+                dataField: 'field1',
+                cellTemplate: '#testTemplate'
+            }],
+            paging: {
+                pageSize: 20
+            }
+        });
+        this.clock.tick(100);
+
+        dataGrid.getView('rowsView')._templatesCache = {};
+        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+            // assert
+            assert.strictEqual(selector, '#testTemplate', 'template name');
+
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 100);
+                }
+            };
+        });
+        const tableElement = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0);
+
+        // act
+        dataGrid.pageIndex(1);
+        this.clock.tick(50);
+
+        // assert
+        assert.deepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0), tableElement, 'table is not re-render');
+
+        // act
+        this.clock.tick(100);
+
+        // assert
+        assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0), tableElement, 'table is re-render');
+    });
+
+    // T1107403
+    QUnit.test('Grid should not flicker on sorting when cellTemplate is set and renderAsync = false', function(assert) {
+        // arrange
+        assert.expect(4);
+
+        const dataGrid = createDataGrid({
+            renderAsync: false,
+            dataSource: generateItems(100),
+            height: 600,
+            columns: [{
+                dataField: 'field1',
+                cellTemplate: '#testTemplate'
+            }],
+            paging: {
+                pageSize: 20
+            }
+        });
+        this.clock.tick(100);
+
+        dataGrid.getView('rowsView')._templatesCache = {};
+        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+            // assert
+            assert.strictEqual(selector, '#testTemplate', 'template name');
+
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 100);
+                }
+            };
+        });
+        const tableElement = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0);
+
+        // act
+        dataGrid.columnOption('field1', 'sortOrder', 'desc');
+        this.clock.tick(50);
+
+        // assert
+        assert.deepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0), tableElement, 'table is not re-render');
+
+        // act
+        this.clock.tick(100);
+
+        // assert
+        assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0), tableElement, 'table is re-render');
+    });
+
+    // T1107403
+    QUnit.test('Grid should not flicker on filtering when cellTemplate is set and renderAsync = false', function(assert) {
+        // arrange
+        assert.expect(4);
+
+        const dataGrid = createDataGrid({
+            renderAsync: false,
+            dataSource: generateItems(100),
+            height: 600,
+            columns: [{
+                dataField: 'field1',
+                cellTemplate: '#testTemplate'
+            }],
+            paging: {
+                pageSize: 20
+            }
+        });
+        this.clock.tick(100);
+
+        dataGrid.getView('rowsView')._templatesCache = {};
+        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+            // assert
+            assert.strictEqual(selector, '#testTemplate', 'template name');
+
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 100);
+                }
+            };
+        });
+        const tableElement = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0);
+
+        // act
+        dataGrid.columnOption('field1', 'filterValue', 1);
+        this.clock.tick(50);
+
+        // assert
+        assert.deepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0), tableElement, 'table is not re-render');
+
+        // act
+        this.clock.tick(100);
+
+        // assert
+        assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-table').get(0), tableElement, 'table is re-render');
+    });
+
+    // T1112852
+    QUnit.test('The cell should be focused when switching to edit state when editing.mode=\'batch\' and editCellTemplate is set', function(assert) {
+        // arrange
+        assert.expect(7);
+
+        const dataGrid = createDataGrid({
+            dataSource: generateItems(10),
+            height: 600,
+            columns: [{
+                dataField: 'field1',
+                editCellTemplate: '#testTemplate'
+            }],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            }
+        });
+        this.clock.tick(100);
+
+        dataGrid.getView('rowsView')._templatesCache = {};
+        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+            // assert
+            assert.strictEqual(selector, '#testTemplate', 'template name');
+
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        $(options.container).append('<input type=\'text\'/>');
+                        options.deferred && options.deferred.resolve();
+                    }, 100);
+                }
+            };
+        });
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(200);
+
+        // assert
+        const $focusOverlay = $(dataGrid.element()).find('.dx-datagrid-focus-overlay');
+        const offsetFocusOverlay = $focusOverlay.get(0).getBoundingClientRect();
+        const cellOffset = $(dataGrid.getCellElement(0, 0)).get(0).getBoundingClientRect();
+
+        assert.ok($focusOverlay.is(':visible'), 'focus overlay is visible');
+        assert.roughEqual(offsetFocusOverlay.left, cellOffset.left, 1.01, 'focus overlay - left position');
+        assert.roughEqual(offsetFocusOverlay.top, cellOffset.top, 1.01, 'focus overlay - top position');
+        assert.roughEqual(offsetFocusOverlay.width, cellOffset.width, 1.01, 'focus overlay - width');
+        assert.roughEqual(offsetFocusOverlay.height, cellOffset.height, 1.01, 'focus overlay - height');
+    });
+
+    // T1100603
+    QUnit.test('Cells should display without delay when using cellTemplate, virtual scrolling mode and renderAsync = false', function(assert) {
+        // arrange
+        assert.expect(4);
+
+        const dataGrid = createDataGrid({
+            renderAsync: false,
+            dataSource: generateItems(100),
+            height: 600,
+            columns: [{
+                dataField: 'field1',
+                cellTemplate: '#testTemplate'
+            }, 'field2'],
+            scrolling: {
+                mode: 'virtual'
+            }
+        });
+        this.clock.tick(100);
+
+        dataGrid.getView('rowsView')._templatesCache = {};
+        sinon.stub(dataGrid, '_getTemplate', function(selector) {
+            // assert
+            assert.strictEqual(selector, '#testTemplate', 'template name');
+
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 100);
+                }
+            };
+        });
+        const lastRowElement = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-data-row').get(-1);
+
+        // act
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 3000 });
+        $(scrollable.content()).trigger('scroll');
+        this.clock.tick(50);
+
+        // assert
+        assert.deepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-data-row').get(-1), lastRowElement, 'rows are not re-render');
+
+        // act
+        this.clock.tick(100);
+
+        // assert
+        assert.notDeepEqual($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-data-row').get(-1), lastRowElement, 'rows are re-render');
     });
 });
 

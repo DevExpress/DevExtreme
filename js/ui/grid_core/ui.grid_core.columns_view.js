@@ -397,8 +397,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
             const options = templateParameters.options;
             const doc = domAdapter.getDocument();
+            const renderAsync = this.option('renderAsync');
 
-            if(!isAsync || $(options.container).closest(doc).length) {
+            if(!isAsync || $(options.container).closest(doc).length || renderAsync === false) {
                 if(change) {
                     options.change = change;
                 }
@@ -885,9 +886,18 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $scrollContainer;
     },
 
-    _updateContent: function($newTableElement) {
-        this.setTableElement($newTableElement);
-        this._wrapTableInScrollContainer($newTableElement);
+    _waitAsyncTemplates: function(change, forceWaiting) {
+        const renderAsync = this.option('renderAsync');
+        const templateDeferreds = (forceWaiting || renderAsync === false && (change?.changeType !== 'update' || change?.isLiveUpdate)) && change?.templateDeferreds ? change?.templateDeferreds : [];
+
+        return when.apply(this, templateDeferreds);
+    },
+
+    _updateContent: function($newTableElement, change) {
+        return this._waitAsyncTemplates(change).done(() => {
+            this.setTableElement($newTableElement);
+            this._wrapTableInScrollContainer($newTableElement);
+        });
     },
 
     _findContentElement: noop,
