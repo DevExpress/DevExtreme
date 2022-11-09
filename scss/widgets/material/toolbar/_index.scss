@@ -52,6 +52,11 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
+  .dx-list-item-content,
+  .dx-toolbar-item-auto-hide {
+    padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding $material-list-item-vertical-padding - 1px;
+  }
+
   .dx-list-item-content {
     font-size: $material-base-font-size;
     vertical-align: middle;

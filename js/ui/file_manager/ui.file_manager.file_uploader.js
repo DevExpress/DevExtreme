@@ -50,6 +50,7 @@ class FileManagerFileUploader extends Widget {
             onValueChanged: e => this._onFileUploaderValueChanged(e),
             onProgress: e => this._onFileUploaderProgress(e),
             onUploaded: e => this._onFileUploaderUploaded(e),
+            onFilesUploaded: e => this._onFileUploaderAllFilesUploaded(e),
             onUploadAborted: e => this._onFileUploaderUploadAborted(e),
             onUploadError: e => this._onFileUploaderUploadError(e),
             onDropZoneEnter: () => this._setDropZonePlaceholderVisible(true),
@@ -134,6 +135,11 @@ class FileManagerFileUploader extends Widget {
             fileValue
         };
         this._raiseUploadProgress(args);
+    }
+
+    _onFileUploaderAllFilesUploaded({ component }) {
+        const { session } = this._findSessionByFile(component, component._files[0].value);
+        this._raiseUploadFinished({ sessionId: session.id, commonValue: component.option('progress') / 100 });
     }
 
     _onFileUploaderUploaded({ component, file }) {
@@ -284,10 +290,15 @@ class FileManagerFileUploader extends Widget {
         this._actions.onUploadProgress(args);
     }
 
+    _raiseUploadFinished(args) {
+        this._actions.onUploadFinished(args);
+    }
+
     _initActions() {
         this._actions = {
             onUploadSessionStarted: this._createActionByOption('onUploadSessionStarted'),
-            onUploadProgress: this._createActionByOption('onUploadProgress')
+            onUploadProgress: this._createActionByOption('onUploadProgress'),
+            onUploadFinished: this._createActionByOption('onUploadFinished')
         };
     }
 
@@ -296,6 +307,7 @@ class FileManagerFileUploader extends Widget {
             getController: null,
             onUploadSessionStarted: null,
             onUploadProgress: null,
+            onUploadFinished: null,
             splitterElement: null
         });
     }
@@ -309,6 +321,7 @@ class FileManagerFileUploader extends Widget {
                 break;
             case 'onUploadSessionStarted':
             case 'onUploadProgress':
+            case 'onUploadFinished':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             case 'dropZone':
