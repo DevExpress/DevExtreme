@@ -49,21 +49,15 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-list-item-content,
-  .dx-toolbar-item-auto-hide {
+  .dx-list-item-content {
     padding: $generic-list-item-vertical-padding;
-
-    > .dx-button,
-    > .dx-toolbar-item-content > .dx-button {
-      .dx-button-content {
-        padding: 0;
-      }
-    }
   }
 
   .dx-toolbar-hidden-button {
     .dx-button {
-      padding: $generic-list-item-vertical-padding;
+      .dx-button-content {
+        padding: $generic-list-item-vertical-padding;
+      }
     }
 
     .dx-button-default,

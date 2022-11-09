@@ -135,8 +135,11 @@
     .dx-toolbar-item-content,
     .dx-toolbar-item-auto-hide,
     .dx-list-item-content {
+      padding: 0;
+
       > .dx-button,
       &.dx-button {
+        padding: 0;
         display: inline-flex;
       }
 
@@ -176,7 +179,6 @@
       border: none;
       margin: 0;
       width: 100%;
-      padding: 10px;
       box-shadow: none;
     }
   }
