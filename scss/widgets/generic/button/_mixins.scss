@@ -6,11 +6,9 @@
 @use "../../base/icons" as *;
 
 $generic-button-padding:
-  $generic-base-inline-widget-top-padding - $generic-button-border-weight
-  $generic-button-horizontal-padding
-  $generic-base-inline-widget-bottom-padding - $generic-button-border-weight;
+  $generic-base-inline-widget-top-padding
+  $generic-button-horizontal-padding;
 
-$generic-button-icononly-padding: $generic-button-icon-horizontal-padding;
 $generic-button-icon-size: $generic-base-icon-size;
 $generic-editor-custom-button-margin: 1px;
 
@@ -20,13 +18,16 @@ $generic-editor-custom-button-margin: 1px;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($icon-size);
+    width: $icon-size;
+    height: $icon-size;
+    font-size: $icon-size;
+
     @include dx-icon-margin($icon-margin);
   }
 }
 
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icononly-padding, $generic-button-icon-size, 0);
+  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {

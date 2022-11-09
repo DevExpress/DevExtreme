@@ -12,6 +12,7 @@
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
+@use "../../base/icons" as *;
 
 // adduse
 @use "../dropDownMenu";
@@ -33,7 +34,7 @@
 
   &.dx-toolbar-multiline {
     .dx-toolbar-item {
-      line-height: $material-toolbar-height;
+      height: $material-toolbar-height;
     }
   }
 }
@@ -50,6 +51,24 @@
 
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
+
+  .dx-list-item-content {
+    font-size: $material-base-font-size;
+    vertical-align: middle;
+
+    .dx-list-item-icon-container {
+      height: $material-button-icon-size;
+      width: $material-button-icon-size;
+
+      @include dx-icon-margin(math.div($material-button-icon-size, 2));
+
+      .dx-icon {
+        font-size: $material-button-icon-size;
+
+        @include dx-icon-sizing($material-button-icon-size);
+      }
+    }
+  }
 
   .dx-toolbar-hidden-button,
   .dx-toolbar-hidden-button-group {
@@ -75,25 +94,17 @@
       height: $material-list-item-height;
       padding: 0;
 
+      &.dx-button-back {
+        border-radius: 0;
+      }
+
       .dx-button-text {
         text-transform: none;
         font-weight: 400;
-        font-size: $material-list-main-font-size;
       }
 
       .dx-button-content {
         padding: 0 $material-list-item-horizontal-padding;
-
-        .dx-icon {
-          margin-right: $material-list-item-horizontal-padding;
-
-          @include dx-icon-sizing($material-button-icon-size);
-
-          .dx-rtl & {
-            margin-right: 0;
-            margin-left: $material-list-item-horizontal-padding;
-          }
-        }
       }
     }
   }
@@ -127,13 +138,6 @@
 }
 
 .dx-toolbar-button {
-  .dx-button-has-text {
-    .dx-button-content .dx-icon {
-      @include dx-icon-sizing($material-button-icon-size);
-      @include dx-icon-margin(6px);
-    }
-  }
-
   &.dx-toolbar-text-auto-hide .dx-button {
     @include dx-button-onlyicon-sizing();
 

@@ -3640,6 +3640,58 @@ QUnit.module('Editing', baseModuleConfig, () => {
         }
     });
 
+    // T1121812
+    QUnit.test('The form edit mode - Only one validation message should be shown', function(assert) {
+        try {
+            // $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowEditing: true
+                },
+                columns: [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        validationRules: [{ type: 'required' }]
+                    }
+                ],
+            });
+            const navigationController = dataGrid.getController('keyboardNavigation');
+            this.clock.tick(0);
+
+            const emulateEnterKeyPress = () => {
+                const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
+                navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
+            };
+
+            // act
+            dataGrid.editRow(0);
+
+            const $input = $(dataGrid.getCellElement(0, 1)).find('input');
+            $input.val('');
+            $input.trigger('change');
+            this.clock.tick();
+            $input.trigger('focus');
+            this.clock.tick();
+
+            emulateEnterKeyPress();
+            this.clock.tick();
+            emulateEnterKeyPress();
+            this.clock.tick();
+
+            const validationMessages = $('.dx-invalid-message.dx-widget');
+            assert.strictEqual(validationMessages.length, 1, 'only 1 validation message must be shown');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
     // T1089428
     QUnit.test('totalCount should be correct after removing/adding rows when refreshMode is reshape and scrolling.mode is virtual', function(assert) {
         // arrange
