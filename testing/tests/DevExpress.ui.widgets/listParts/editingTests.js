@@ -256,30 +256,32 @@ QUnit.module('keyboard navigation', {
     }
 });
 
-QUnit.test('item deletion by keyboard', function(assert) {
-    const items = ['1', '2', '3'];
+['del', 'backspace'].forEach(key => {
+    QUnit.test(`item deletion with '${key}' button`, function(assert) {
+        const items = ['1', '2', '3'];
 
-    const $list = $('#list').dxList({
-        items: items,
-        editEnabled: true,
-        allowItemDeleting: false,
-        focusStateEnabled: true
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            allowItemDeleting: false,
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+
+        const keyboard = keyboardMock($list);
+
+        $list.focusin();
+        keyboard.keyDown(key);
+
+        assert.deepEqual(list.option('items'), items, `deletion with ${key} button is impossible if 'allowItemDeleting' = false`);
+
+        list.option('allowItemDeleting', true);
+        list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1));
+
+        keyboard.keyDown(key);
+
+        assert.deepEqual(list.option('items'), ['1', '3'], 'item was deleted');
     });
-    const list = $list.dxList('instance');
-
-    const keyboard = keyboardMock($list);
-
-    $list.focusin();
-    keyboard.keyDown('del');
-
-    assert.deepEqual(list.option('items'), items, 'deletion by keyboard is impossible if \'allowItemDeleting\' = false ');
-
-    list.option('allowItemDeleting', true);
-    list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1));
-
-    keyboard.keyDown('del');
-
-    assert.deepEqual(list.option('items'), ['1', '3'], 'item was deleted');
 });
 
 QUnit.test('items reordering by keyboard', function(assert) {

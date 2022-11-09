@@ -62,6 +62,7 @@ const ListEdit = ListBase.inherit({
 
         return extend({}, parent, {
             del: deleteFocusedItem,
+            backspace: deleteFocusedItem,
             upArrow: e => moveFocusedItem(e, true),
             downArrow: e => moveFocusedItem(e),
             enter,
