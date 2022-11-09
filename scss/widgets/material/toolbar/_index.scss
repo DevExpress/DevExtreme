@@ -52,19 +52,14 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-list-item {
-    .dx-list-item-content {
-      display: flex;
-    }
+  .dx-list-item-content,
+  .dx-toolbar-item-auto-hide {
+    padding: $material-toolbar-item-vertical-padding $material-list-item-horizontal-padding;
   }
 
   .dx-list-item-content {
-    flex: 1 1 auto;
-    align-items: center;
     font-size: $material-base-font-size;
     vertical-align: middle;
-    min-height: $material-list-item-height;
-    padding: $material-toolbar-item-vertical-padding $material-list-item-horizontal-padding;
 
     .dx-list-item-icon-container {
       height: $material-button-icon-size;
