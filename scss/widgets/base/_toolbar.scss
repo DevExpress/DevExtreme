@@ -135,8 +135,6 @@
     .dx-toolbar-item-content,
     .dx-toolbar-item-auto-hide,
     .dx-list-item-content {
-      padding: 0;
-
       > .dx-button,
       &.dx-button {
         display: inline-flex;
@@ -165,6 +163,8 @@
   .dx-toolbar-item-auto-hide,
   .dx-toolbar-item-content,
   .dx-list-item-content {
+    padding: 0;
+
     > .dx-button,
     &.dx-button {
       width: 100%;
