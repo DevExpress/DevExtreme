@@ -148,12 +148,6 @@
     }
   }
 
-  .dx-button {
-    &.dx-button-back {
-      border-radius: 0;
-    }
-  }
-
   .dx-toolbar-hidden-button,
   .dx-toolbar-hidden-button-group {
     .dx-toolbar-item-auto-hide {
@@ -164,6 +158,10 @@
     .dx-button-mode-outlined,
     .dx-button-mode-contained {
       border: none;
+
+      &.dx-button {
+        border-radius: 0;
+      }
 
       @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
 
@@ -183,10 +181,6 @@
     .dx-button {
       height: $material-list-item-height;
       padding: 0;
-
-      &.dx-button-back {
-        border-radius: 0;
-      }
 
       .dx-button-text {
         text-transform: none;
