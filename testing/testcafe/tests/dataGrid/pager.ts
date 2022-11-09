@@ -140,6 +140,7 @@ test('Resize without navigation buttons', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
+      .resizeWindow(700, 600)
       .expect(await takeScreenshot(`compact-pager-in-the-${theme.replace(/\./g, '-')}-theme.png`, pagerElement))
       .ok()
       .expect(compareResults.isValid())
