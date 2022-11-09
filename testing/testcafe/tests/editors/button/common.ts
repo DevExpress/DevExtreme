@@ -31,7 +31,7 @@ themes.forEach((theme) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
 
-    await insertStylesheetRule(`.${BUTTON_TEXT_CLASS} { width: 70px }`, 0);
+    await insertStylesheetRule(`.${BUTTON_CLASS} { width: 70px }`, 0);
 
     await t
       .expect(await takeScreenshot(`buttons-render-with-overflow-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
