@@ -54,7 +54,7 @@
 
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
-    padding: $material-toolbar-item-vertical-padding $material-list-item-horizontal-padding;
+    padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding $material-list-item-vertical-padding - 1px;
   }
 
   .dx-list-item-content {
