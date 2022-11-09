@@ -1,9 +1,8 @@
 import Path from 'path';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-// import typescript from 'rollup-plugin-typescript2';
-import typescript from "@rollup/plugin-typescript";
 import postcss from 'rollup-plugin-postcss';
 import copy from 'rollup-plugin-copy';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 function checkExternalPackage(id) {
     return ['@devexpress'].includes(id.split('/')[0]);
@@ -54,6 +53,7 @@ function getEsmConfig() {
         input: inputPaths,
         output: getOutputConfig(`${OUTPUT_DIR}/esm`, 'esm'),
         plugins: [
+            sourcemaps(),
             peerDepsExternal(),
             postcss({
                 extract: true,
@@ -68,6 +68,7 @@ function getCjsConfig() {
         input: inputPaths,
         output: getOutputConfig(`${OUTPUT_DIR}/cjs`, 'cjs'),
         plugins: [
+            sourcemaps(),
             peerDepsExternal(),
             postcss({
                 inject: false,

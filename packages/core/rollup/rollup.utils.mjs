@@ -1,4 +1,4 @@
-import typescript from "@rollup/plugin-typescript";
+import typescript from '@rollup/plugin-typescript';
 
 function getEs6Config(path, outputDir) {
     return {
@@ -19,7 +19,6 @@ function getEs6Config(path, outputDir) {
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
                     outDir: `${outputDir}/esm`,
-                    module: 'ES2020'
                 }
             }),
         ]
@@ -45,7 +44,6 @@ function getCjsConfig(path, outputDir) {
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
                     outDir: `${outputDir}/cjs`,
-                    module: 'ESNEXT',
                     // declaration: false,
                     // declarationMap: false
                 }

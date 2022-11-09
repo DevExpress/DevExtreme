@@ -35,6 +35,7 @@
         "rollup-plugin-delete": "^2.0.0",
         "rollup-plugin-peer-deps-external": "^2.2.4",
         "rollup-plugin-postcss": "^4.0.2",
+        "rollup-plugin-sourcemaps": "^0.6.3",
         "sass": "^1.54.0",
         "typescript": "^4.7.4"
     },
