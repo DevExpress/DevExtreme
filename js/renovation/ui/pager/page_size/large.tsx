@@ -54,7 +54,7 @@ export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSiz
       return {
         className,
         click: this.onPageSizeChange(processedPageSize),
-        label: format(messageLocalization.getFormatter('dxPager-pageSize'), processedPageSize || messageLocalization.getFormatter("dxPager-pageSizesAllText")),
+        label: format(messageLocalization.getFormatter('dxPager-pageSize'), processedPageSize || messageLocalization.getFormatter('dxPager-pageSizesAllText')),
         text,
       };
     });
