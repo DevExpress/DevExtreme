@@ -53,19 +53,11 @@
     padding: $generic-list-item-vertical-padding;
   }
 
-  .dx-toolbar-hidden-button {
+  .dx-toolbar-hidden-button,
+  .dx-toolbar-hidden-button-group {
     .dx-button {
       .dx-button-content {
         padding: $generic-list-item-vertical-padding;
-      }
-    }
-
-    .dx-button-default,
-    .dx-button-success,
-    .dx-button-danger {
-      &,
-      & .dx-icon {
-        color: $button-normal-color;
       }
     }
   }
@@ -73,14 +65,6 @@
   .dx-toolbar-hidden-button-group {
     margin-top: $generic-toolbar-item-spacing;
     margin-bottom: $generic-toolbar-item-spacing;
-
-    .dx-buttongroup-wrapper {
-      .dx-buttongroup-item.dx-button {
-        .dx-button-content {
-          padding: $generic-list-item-vertical-padding;
-        }
-      }
-    }
   }
 }
 
