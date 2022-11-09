@@ -509,7 +509,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
 
           await t
-            .expect(await takeScreenshot(`Toolbar-buttonGroup-customtemplate-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+            .expect(await takeScreenshot(`Toolbar-buttonGroup-custom-${templateName}-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -608,7 +608,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
         await t
-          .expect(await takeScreenshot(`Toolbar all widgets appearance,theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .expect(await takeScreenshot(`Toolbar all widgets as ${templateName} appearance,theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
