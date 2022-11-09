@@ -49,7 +49,8 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-list-item-content {
+  .dx-list-item-content,
+  .dx-toolbar-item-auto-hide {
     padding: $generic-list-item-vertical-padding;
   }
 
@@ -64,6 +65,10 @@
     .dx-button-mode-contained,
     .dx-button-mode-outlined,
     .dx-button-mode-text {
+      &.dx-button {
+        border-radius: 0;
+      }
+
       @include dx-button-mode-text-styling();
     }
   }

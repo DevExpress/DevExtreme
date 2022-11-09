@@ -185,15 +185,17 @@
 
   .dx-toolbar-hidden-button {
     .dx-button {
+      width: 100%;
       border: none;
       margin: 0;
-      width: 100%;
       box-shadow: none;
     }
   }
 
   .dx-toolbar-hidden-button-group {
     .dx-buttongroup {
+      width: 100%;
+
       .dx-buttongroup-wrapper {
         flex-direction: column;
 
@@ -209,6 +211,7 @@
   display: none;
 }
 
+.dx-list-item-content,
 .dx-toolbar-item-content {
   > .dx-texteditor,
   &.dx-texteditor {
