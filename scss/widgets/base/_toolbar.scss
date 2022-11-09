@@ -167,6 +167,12 @@
     border-bottom: none;
   }
 
+  .dx-list-item-content {
+    &::before {
+      content: none;
+    }
+  }
+
   .dx-toolbar-item-auto-hide,
   .dx-toolbar-item-content,
   .dx-list-item-content {
