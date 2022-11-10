@@ -15,7 +15,6 @@ const onHeadingClick = () => {
 };
 
 const toolbarSeparator = {
-  cssClass: 'toolbar-separator-container',
   locateInMenu: 'auto',
   location: 'before',
   template(itemData, itemIndex, element) {

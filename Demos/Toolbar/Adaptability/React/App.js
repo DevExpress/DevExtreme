@@ -184,7 +184,6 @@ function App() {
             </Item>
 
             <Item
-              cssClass="toolbar-separator-container"
               location="before"
               locateInMenu="auto"
               menuItemRender={renderMenuSeparator}
@@ -228,7 +227,6 @@ function App() {
             </Item>
 
             <Item
-              cssClass="toolbar-separator-container"
               location="before"
               locateInMenu="auto"
               menuItemRender={renderMenuSeparator}
@@ -268,7 +266,6 @@ function App() {
             </Item>
 
             <Item
-              cssClass="toolbar-separator-container"
               location="before"
               locateInMenu="auto"
               menuItemRender={renderMenuSeparator}
@@ -287,7 +284,6 @@ function App() {
             </Item>
 
             <Item
-              cssClass="toolbar-separator-container"
               location="before"
               locateInMenu="auto"
               menuItemRender={renderMenuSeparator}
@@ -322,7 +318,6 @@ function App() {
             </Item>
 
             <Item
-              cssClass="toolbar-separator-container"
               location="before"
               locateInMenu="auto"
               menuItemRender={renderMenuSeparator}
@@ -370,7 +365,6 @@ function App() {
             </Item>
 
             <Item
-              cssClass="toolbar-separator-container"
               location="before"
               locateInMenu="auto"
               menuItemRender={renderMenuSeparator}
