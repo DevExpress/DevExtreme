@@ -244,6 +244,7 @@ QUnit.module('Work with knockout', {
             getCellTextCallCount++;
             return options.rowIndex + ' - ' + options.text;
         };
+        this.viewModel.gridOptions.renderAsync = undefined;
         this.viewModel.gridOptions.columns[0] = {
             dataField: 'field1',
             cssClass: 'test-cell',

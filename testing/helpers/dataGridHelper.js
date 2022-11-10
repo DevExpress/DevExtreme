@@ -1,8 +1,9 @@
 import 'generic_light.css!';
 
-import { baseModuleConfig, createDataGrid } from './baseDataGridHelper.js';
+import { baseModuleConfig, createDataGrid, findShadowHostOrDocument } from './baseDataGridHelper.js';
 
 export {
     baseModuleConfig,
-    createDataGrid
+    createDataGrid,
+    findShadowHostOrDocument,
 };

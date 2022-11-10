@@ -24,3 +24,9 @@ export const createDataGrid = (options, $container) => {
     const dataGrid = dataGridElement.dxDataGrid('instance');
     return dataGrid;
 };
+
+export const findShadowHostOrDocument = (element) => {
+    const shadowHost = element.getRootNode && element.getRootNode().host;
+
+    return shadowHost || document;
+};
