@@ -19,7 +19,6 @@ import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
-import errors from '../widget/ui.errors';
 import { nativeScrolling } from '../../core/utils/support';
 import { getRelativeOffset } from '../../renovation/ui/scroll_view/utils/get_relative_offset';
 import { SCROLLABLE_CONTENT_CLASS, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
@@ -1600,12 +1599,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const node = this._dataAdapter.getNodeByKey(key);
             return this._dataAdapter.getPublicNode(node);
         });
-    },
-
-    // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
-    getSelectedNodesKeys: function() {
-        errors.log('W0002', 'dxTreeView', 'getSelectedNodesKeys', '20.1', 'Use the \'getSelectedNodeKeys\' method instead');
-        return this.getSelectedNodeKeys();
     },
 
     getSelectedNodeKeys: function() {
