@@ -46,8 +46,8 @@
             "require": "./lib/cjs/pager.js"
         },
         "./pager.css": {
-            "import": "./lib/esm/pager.css",
-            "require": "./lib/esm/pager.css"
+            "import": "./lib/pager.css",
+            "require": "./lib/pager.css"
         },
         "./slideToggle": {
             "types": "./lib/esm/components/slideToggle/index.d.ts",
@@ -55,8 +55,8 @@
             "require": "./lib/cjs/slideToggle.js"
         },
         "./slideToggle.css": {
-            "import": "./lib/esm/pager.css",
-            "require": "./lib/esm/pager.css"
+            "import": "./lib/slideToggle.css",
+            "require": "./lib/slideToggle.css"
         },
         "./internal": {
             "types": "./lib/cjs/internal/index.d.ts",
