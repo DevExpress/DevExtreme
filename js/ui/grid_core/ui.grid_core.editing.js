@@ -2540,10 +2540,12 @@ export const editingModule = {
                     this.callBase.apply(this, arguments);
                     clearTimeout(this._pointerDownTimeout);
                 },
-                _renderCore: function() {
+                _renderCore: function(change) {
                     this.callBase.apply(this, arguments);
 
-                    this._editingController._focusEditorIfNeed();
+                    this._waitAsyncTemplates(change, true).done(() => {
+                        this._editingController._focusEditorIfNeed();
+                    });
                 }
             },
 

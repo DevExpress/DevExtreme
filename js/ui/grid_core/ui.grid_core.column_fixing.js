@@ -11,6 +11,7 @@ import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { move } from '../../animation/translator';
 import Scrollable from '../scroll_view/ui.scrollable';
+import { when } from '../../core/utils/deferred';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -156,6 +157,7 @@ const baseFixedColumns = {
 
             if(change?.virtualColumnsScrolling && this.option('scrolling.legacyMode') !== true) {
                 this._partialUpdateFixedTable(fixedColumns);
+                this._isFixedTableRendering = false;
             } else {
                 const columnIndices = change?.columnIndices;
 
@@ -163,14 +165,15 @@ const baseFixedColumns = {
 
                 $fixedTable = this._createTable(fixedColumns);
                 this._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
-                this._updateContent($fixedTable, change);
+                when(this._updateContent($fixedTable, change)).done(() => {
+                    this._isFixedTableRendering = false;
+                });
 
                 if(columnIndices) {
                     change.columnIndices = columnIndices;
                 }
-            }
 
-            this._isFixedTableRendering = false;
+            }
         } else {
             this._fixedTableElement && this._fixedTableElement.parent().remove();
             this._fixedTableElement = null;
