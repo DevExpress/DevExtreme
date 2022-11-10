@@ -38,6 +38,6 @@
   },
   "workspaces": [
     "packages/*",
-    "playgrounds/*"
+    "playgrounds/react"
   ]
 }
