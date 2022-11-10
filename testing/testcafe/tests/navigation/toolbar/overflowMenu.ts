@@ -15,12 +15,11 @@ const ACTIVE_STATE_CLASS = 'dx-state-active';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const themes = ['generic.light'/* , 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact' */];
+const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxDropDownButton'];
 const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['back', 'danger', 'default', 'normal', 'success'];
-// eslint-disable-next-line max-len
-const states = [/* HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`, */false] as any[];
+const states = [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`, false] as any[];
 
 fixture`Toolbar_OverflowMenu`
   .page(url(__dirname, '../../container.html'))
@@ -509,7 +508,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
 
           await t
-            .expect(await takeScreenshot(`Toolbar-buttonGroup-custom-${templateName}-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+            .expect(await takeScreenshot(`Toolbar-buttonGroup-custom-${templateName}-${templateName}-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
