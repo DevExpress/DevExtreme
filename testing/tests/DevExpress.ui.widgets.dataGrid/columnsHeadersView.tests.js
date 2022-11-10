@@ -8,6 +8,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
@@ -2979,11 +2980,13 @@ QUnit.module('Render templates with renderAsync', {
             this._getTemplate = function() {
                 return {
                     render: function(options) {
+                        const container = $(options.container).get(0);
+
                         // assert
                         if(renderAsync === false) {
-                            assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
+                            assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
                         } else {
-                            assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
+                            assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
                         }
                         setTimeout(() => {
                             options.deferred && options.deferred.resolve();

@@ -42,6 +42,7 @@ import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from '../../helpers/dataGridMocks.js';
+import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'localization/number';
 import virtualScrollingCore from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import ODataStore from 'data/odata/store';
@@ -7655,11 +7656,13 @@ QUnit.module('Render templates with renderAsync', {
                 rowsView.component._getTemplate = function() {
                     return {
                         render: function(options) {
+                            const container = $(options.container).get(0);
+
                             // assert
                             if(renderAsync === false) {
-                                assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
                             } else {
-                                assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
                             }
                             setTimeout(() => {
                                 options.deferred && options.deferred.resolve();
@@ -7697,11 +7700,13 @@ QUnit.module('Render templates with renderAsync', {
             rowsView.component._getTemplate = function() {
                 return {
                     render: function(options) {
+                        const container = $(options.container).get(0);
+
                         // assert
                         if(renderAsync === false) {
-                            assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
+                            assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
                         } else {
-                            assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
+                            assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
                         }
 
                         setTimeout(() => {

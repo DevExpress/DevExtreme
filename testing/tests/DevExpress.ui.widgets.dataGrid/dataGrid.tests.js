@@ -56,7 +56,7 @@ import config from 'core/config';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 
@@ -76,12 +76,6 @@ fx.off = true;
 QUnit.testDone(function() {
     ajaxMock.clear();
 });
-
-function findShadowHostOrDocument(element) {
-    const shadowHost = element.getRootNode && element.getRootNode().host;
-
-    return shadowHost || document;
-}
 
 QUnit.module('Initialization', baseModuleConfig, () => {
 
