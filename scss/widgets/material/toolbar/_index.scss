@@ -123,7 +123,7 @@
   }
 
   .dx-button {
-    &.dx-button-back {
+    &.dx-button-back:not(.dx-buttongroup-item) {
       border-radius: $material-base-border-radius;
     }
   }
