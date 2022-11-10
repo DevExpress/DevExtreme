@@ -206,7 +206,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const { type } = this.props;
 
     if (type === 'back') {
-      errors.log('W0016', 'dxButton', 'type', '22.2', 'Use the \'icon\' property with \'back\' icon without \'text\' property instead');
+      errors.log('W0016', 'type', 'back', '22.2', 'Use the \'back\' icon instead');
     }
   }
 
