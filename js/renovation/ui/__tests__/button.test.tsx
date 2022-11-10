@@ -621,7 +621,7 @@ describe('Button', () => {
       const component = new Button({ type: 'back' });
       component.checkDeprecation();
       expect(errors.log).toBeCalledTimes(1);
-      expect(errors.log).toHaveBeenNthCalledWith(1, 'W0016', 'type', 'back', '22.2', "Use the 'icon' property with 'back' icon without 'text' property instead");
+      expect(errors.log).toHaveBeenNthCalledWith(1, 'W0016', 'type', 'back', '22.2', "Use the 'back' icon instead");
     });
 
     it('no deprecation error', () => {
