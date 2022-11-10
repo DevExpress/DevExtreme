@@ -46,13 +46,16 @@
   background-color: $toolbar-bg;
 }
 
+.dx-dropdownmenu-popup-wrapper {
+  .dx-toolbar-menu-custom:not(.dx-toolbar-hidden-button):not(.dx-toolbar-hidden-button-group) {
+    > .dx-list-item-content {
+      padding: $generic-list-item-vertical-padding;
+    }
+  }
+}
+
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
-
-  .dx-list-item-content,
-  .dx-toolbar-item-auto-hide {
-    padding: $generic-list-item-vertical-padding;
-  }
 
   .dx-toolbar-hidden-button,
   .dx-toolbar-hidden-button-group {
