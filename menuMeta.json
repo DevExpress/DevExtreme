@@ -2735,7 +2735,6 @@
           {
             "Title": "Palette",
             "Name": "Palette",
-            "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
