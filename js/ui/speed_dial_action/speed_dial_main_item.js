@@ -366,7 +366,7 @@ export function initAction(newAction) {
             }
         });
 
-        delete speedDialMainItem._options.silent('position');
+        delete speedDialMainItem._options.position;
 
         if(!isActionExist) {
             if(speedDialMainItem._getVisibleActions(savedActions).length >= speedDialMainItem.option('maxSpeedDialActionCount')) {
