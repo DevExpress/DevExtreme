@@ -3233,6 +3233,11 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      */
     export?: Export<TRowData, TKey>;
     /**
+     * @hidden
+     * @docid
+     */
+    focusStateEnabled?: boolean;
+    /**
      * @docid
      * @type object
      * @public
