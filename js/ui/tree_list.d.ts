@@ -518,6 +518,11 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      */
     filterMode?: TreeListFilterMode;
     /**
+     * @hidden
+     * @docid
+     */
+    focusStateEnabled?: boolean;
+    /**
      * @docid
      * @public
      */
