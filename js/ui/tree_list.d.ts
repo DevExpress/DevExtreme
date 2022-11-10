@@ -454,6 +454,11 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      */
     filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
     /**
+     * @hidden
+     * @docid
+     */
+    focusStateEnabled?: boolean;
+    /**
      * @docid
      * @public
      */

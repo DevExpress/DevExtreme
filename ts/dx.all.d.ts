@@ -8587,6 +8587,10 @@ declare module DevExpress.ui {
      */
     export?: DevExpress.ui.dxDataGrid.Export<TRowData, TKey>;
     /**
+     * [descr:dxDataGridOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
+    /**
      * [descr:dxDataGridOptions.groupPanel]
      */
     groupPanel?: DevExpress.ui.dxDataGrid.GroupPanel;
@@ -22922,6 +22926,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.filterMode]
      */
     filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
+    /**
+     * [descr:dxTreeListOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
