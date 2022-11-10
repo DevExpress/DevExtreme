@@ -3,6 +3,7 @@ import { mount, shallow } from 'enzyme';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
 import { current } from '../../../ui/themes';
+import errors from '../../../core/errors';
 import {
   clear as clearEventHandlers,
   defaultEvent,
@@ -34,6 +35,8 @@ jest.mock('../../../ui/themes', () => ({
   ...jest.requireActual('../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
+
+jest.mock('../../../core/errors');
 
 describe('Button', () => {
   describe('Render', () => {
@@ -606,6 +609,25 @@ describe('Button', () => {
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });
+    });
+  });
+
+  describe('checkDeprecation', () => {
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('check deprecation error', () => {
+      const component = new Button({ type: 'back' });
+      component.checkDeprecation();
+      expect(errors.log).toBeCalledTimes(1);
+      expect(errors.log).toHaveBeenNthCalledWith(1, 'W0016', 'dxButton', 'type', '22.2', "Use the 'icon' property with 'back' icon without 'text' property instead");
+    });
+
+    it('no deprecation error', () => {
+      const component = new Button({ icon: 'back' });
+      component.checkDeprecation();
+      expect(errors.log).toBeCalledTimes(0);
     });
   });
 });
