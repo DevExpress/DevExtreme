@@ -8,14 +8,7 @@ function checkExternalPackage(id) {
     return ['@devexpress'].includes(id.split('/')[0]);
 }
 
-const OUTPUT_DIR = './lib';
-const TSC_OUT = 'tsc-out'
-
-const inputPaths = {
-    pager: Path.join(TSC_OUT, `components/pager`, 'index.js'),
-    slideToggle: Path.join(TSC_OUT, `components/slideToggle`, 'index.js'),
-    internal: Path.join(TSC_OUT, `internal`, 'index.js'),
-}
+const TSC_OUT_DIR = 'tsc-out';
 
 function getOutputConfig(outDir, format) {
     return {
@@ -27,19 +20,17 @@ function getOutputConfig(outDir, format) {
     }
 }
 
-function getInputPath(path) {
-    return Path.join('tsc-out', path, 'index.js')
-}
-
-function getRootConfig() {
+function getRootConfig(outDir) {
     return {
-        input: getInputPath(''),
-        output: OUTPUT_DIR,
+        input: Path.join(TSC_OUT_DIR, 'index.js'),
+        output: {
+            dir: outDir
+        },
         plugins: [
             copy({
                 targets: [
                     { src: 'src/**/*.scss', dest: 'tsc-out' },
-                    { src: 'tsc-out/**/*.d.ts', dest: `${OUTPUT_DIR}/esm` }
+                    { src: 'tsc-out/**/*.d.ts', dest: `${outDir}/esm` }
                 ],
                 copyOnce: true,
                 flatten: false
@@ -48,25 +39,26 @@ function getRootConfig() {
     }
 }
 
-function getEsmConfig() {
+function getEsmConfig(input, outDir) {
     return {
-        input: inputPaths,
-        output: getOutputConfig(`${OUTPUT_DIR}/esm`, 'esm'),
+        input,
+        output: getOutputConfig(`${outDir}/esm`, 'esm'),
         plugins: [
             sourcemaps(),
             peerDepsExternal(),
             postcss({
-                extract: true,
+                inject: false,
+                extract: false,
             })
         ],
         external: checkExternalPackage,
     }
 }
 
-function getCjsConfig() {
+function getCjsConfig(input, outDir) {
     return {
-        input: inputPaths,
-        output: getOutputConfig(`${OUTPUT_DIR}/cjs`, 'cjs'),
+        input,
+        output: getOutputConfig(`${outDir}/cjs`, 'cjs'),
         plugins: [
             sourcemaps(),
             peerDepsExternal(),
@@ -79,16 +71,40 @@ function getCjsConfig() {
     };
 }
 
-function getRollupConfig() {
+function getCSSConfigs(components, inputPaths, outDir) {
+    return components.map(componentName => {
+        return {
+            input: inputPaths[componentName],
+            output: {
+                file: Path.join(outDir, `${componentName}.css`)
+            },
+            plugins: [
+                peerDepsExternal(),
+                postcss({
+                    extract: true,
+                }),
+            ],
+            external: checkExternalPackage,
+        }
+    })
+}
+
+function getRollupConfig(components, outDir) {
+    const inputPaths = {
+        internal: Path.join(TSC_OUT_DIR, `internal`, 'index.js'),
+    }
+    components.forEach(componentName => {
+        inputPaths[componentName] = Path.join(TSC_OUT_DIR, 'components', componentName, 'index.js')
+    })
+
     return [
-        getRootConfig(),
-        getEsmConfig(),
-        getCjsConfig()
+        getRootConfig(outDir),
+        getEsmConfig(inputPaths, outDir),
+        getCjsConfig(inputPaths, outDir),
+        ...getCSSConfigs(components, inputPaths, outDir),
     ]
 }
 
 export {
-    getEsmConfig,
-    getCjsConfig,
     getRollupConfig,
 }
