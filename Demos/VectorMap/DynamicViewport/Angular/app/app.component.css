@@ -8,21 +8,29 @@
   margin-top: 20px;
 }
 
+::ng-deep .wrapper-option {
+  display: flex;
+  gap: 24px;
+  padding-top: 16px;
+}
+
+::ng-deep .column {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+::ng-deep .option {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+}
+
 ::ng-deep .caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option {
-  margin-top: 10px;
-}
-
 ::ng-deep .option > span {
   width: 140px;
-  display: inline-block;
-}
-
-::ng-deep .option > .dx-widget {
-  display: inline-block;
-  vertical-align: middle;
 }

@@ -1,6 +1,8 @@
 window.onload = function () {
   const zoomFactorValue = ko.observable('1.00');
   const centerValue = ko.observable('0.000, 46.036');
+  const panVisible = ko.observable(true);
+  const zoomVisible = ko.observable(true);
 
   const viewModel = {
     vectorMapOptions: {
@@ -15,6 +17,16 @@ window.onload = function () {
         centerValue(`${e.center[0].toFixed(3)
         }, ${e.center[1].toFixed(3)}`);
       },
+      controlBar: {
+        panVisible,
+        zoomVisible,
+      },
+    },
+    switchPan: {
+      value: panVisible,
+    },
+    switchZoom: {
+      value: zoomVisible,
     },
     chooseContinent: {
       dataSource: viewportCoordinates,

@@ -4,7 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxVectorMapModule, DxSelectBoxModule, DxTextBoxModule, DxVectorMapComponent,
+  DxVectorMapModule, DxSelectBoxModule, DxTextBoxModule, DxVectorMapComponent, DxSwitchModule,
 } from 'devextreme-angular';
 
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
@@ -30,6 +30,10 @@ export class AppComponent {
   centerValue: string;
 
   viewportData: ViewportCoordinate[];
+
+  panVisible: boolean;
+
+  zoomVisible: boolean;
 
   @ViewChild(DxVectorMapComponent, { static: false }) map: DxVectorMapComponent;
 
@@ -58,6 +62,7 @@ export class AppComponent {
     BrowserModule,
     DxVectorMapModule,
     DxSelectBoxModule,
+    DxSwitchModule,
     DxTextBoxModule,
   ],
   declarations: [AppComponent],

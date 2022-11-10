@@ -24,17 +24,31 @@
       <div id="vector-map" dx-vector-map="vectorMapOptions"></div>
       <div class="options">
         <div class="caption">Options</div>
-        <div class="option">
-          <span>Continent</span>
-          <div dx-select-box="chooseContinent"></div>
-        </div>
-        <div class="option">
-          <span>Zoom factor</span>
-          <div dx-text-box="zoomFactor"></div>
-        </div>
-        <div class="option">
-          <span>Center</span>
-          <div dx-text-box="center"></div>
+        <div class="wrapper-option">
+          <div class="column">
+            <div class="option">
+              <span>Continent</span>
+              <div dx-select-box="chooseContinent"></div>
+            </div>
+            <div class="option">
+              <span>Zoom factor</span>
+              <div dx-text-box="zoomFactor"></div>
+            </div>
+            <div class="option">
+              <span>Center</span>
+              <div dx-text-box="center"></div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="option">
+              <span>Pan control</span>
+              <div dx-switch="handlePanVisibleSwitch"></div>
+            </div>
+            <div class="option">
+              <span>Zoom bar</span>
+              <div dx-switch="handleZoomVisibleSwitch"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -3,10 +3,16 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', ($scope) => {
   $scope.zoomFactorValue = '1.00';
   $scope.centerValue = '0.000, 46.036';
+  $scope.panVisible = true;
+  $scope.zoomVisible = true;
 
   $scope.vectorMapOptions = {
     layers: {
       dataSource: DevExpress.viz.map.sources.world,
+    },
+    controlBar: {
+      panVisible: 'panVisible',
+      zoomVisible: 'zoomVisible',
     },
     bounds: [-180, 85, 180, -60],
     onZoomFactorChanged(e) {
@@ -15,6 +21,18 @@ DemoApp.controller('DemoController', ($scope) => {
     onCenterChanged(e) {
       $scope.centerValue = `${e.center[0].toFixed(3)
       }, ${e.center[1].toFixed(3)}`;
+    },
+  };
+
+  $scope.handlePanVisibleSwitch = {
+    bindingOptions: {
+      value: 'panVisible',
+    },
+  };
+
+  $scope.handleZoomVisibleSwitch = {
+    bindingOptions: {
+      value: 'zoomVisible',
     },
   };
 

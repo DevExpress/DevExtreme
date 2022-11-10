@@ -2877,7 +2877,8 @@
             "Credits": "www.tax.state.ak.us",
             "Widget": "Charts",
             "DemoType": "Viz",
-            "Equivalents": "rangeBar"
+            "Equivalents": "rangeBar",
+            "Badge": "Updated"
           },
           {
             "Title": "Timeline Chart",
@@ -5423,6 +5424,7 @@
             "DocUrl": "Guide/UI_Components/VectorMap/End-User_Interaction/#Panning/Pan_in_Code",
             "Widget": "VectorMap",
             "Modules": "vectormap",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Models/SampleData/ViewportCoordinateData.cs",
               "/Models/ViewportCoordinate.cs"

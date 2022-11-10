@@ -13,6 +13,16 @@ $(() => {
     },
   }).dxVectorMap('instance');
 
+  $('#switchPan').dxSwitch({
+    value: true,
+    onValueChanged: (e) => map.option('controlBar.panVisible', e.value),
+  });
+
+  $('#switchZoom').dxSwitch({
+    value: true,
+    onValueChanged: (e) => map.option('controlBar.zoomVisible', e.value),
+  });
+
   $('#choose-continent').dxSelectBox({
     dataSource: viewportCoordinates,
     width: 210,
