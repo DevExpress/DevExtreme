@@ -5,7 +5,6 @@
       "options": {
         "cacheableOperations": [
           "build",
-          "build:packages",
           "watch"
         ]
       }
@@ -19,10 +18,12 @@
       ]
     },
     "watch": {
-      "dependsOn": ["^watch"],
       "outputs": [
         "{projectRoot}/packages/{angular, core, react}/{lib, dist, tsc-out}"
       ]
+    },
+    "start": {
+      "dependsOn": ["^build"]
     }
   },
   "defaultBase": "22_2"

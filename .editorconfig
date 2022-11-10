@@ -8,4 +8,4 @@ indent_style = space
 indent_size = 4
 
 [*.{json,yml,ts,tsx,scss,code-workspace}]
-indent_size = 2
+indent_size = 4
