@@ -21,19 +21,19 @@
     },
     "exports": {
         "./pager": {
-            "types": "./lib/esm/components/pager/index.d.ts",
-            "import": "./lib/esm/components/pager/index.js",
-            "require": "./lib/cjs/components/pager/index.cjs"
+            "types": "./lib/components/pager/index.d.ts",
+            "import": "./lib/pager.mjs",
+            "require": "./lib/pager.cjs"
         },
         "./slideToggle": {
-            "types": "./lib/esm/components/slideToggle/index.d.ts",
-            "import": "./lib/esm/components/slideToggle/index.js",
-            "require": "./lib/cjs/components/slideToggle/index.cjs"
+            "types": "./lib/components/slideToggle/index.d.ts",
+            "import": "./lib/slideToggle.mjs",
+            "require": "./lib/slideToggle.cjs"
         },
         "./internal": {
-            "types": "./lib/esm/internal/index.d.js",
-            "import": "./lib/esm/internal/index.js",
-            "require": "./lib/cjs/internal/index.cjs"
+            "types": "./lib/internal/index.d.js",
+            "import": "./lib/internal.mjs",
+            "require": "./lib/internal.cjs"
         }
     }
 }

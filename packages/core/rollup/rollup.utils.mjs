@@ -1,49 +1,46 @@
 import typescript from '@rollup/plugin-typescript';
+import Path from "path";
 
-function getEs6Config(path, outputDir) {
+function getEs6Config(input, outputDir) {
     return {
-        input: `src/${path}/index.ts`,
+        input,
         output: [
             {
-                dir: `${outputDir}/esm`,
-                entryFileNames: '[name].js',
+                dir: outputDir,
+                entryFileNames: '[name].mjs',
                 format: 'esm',
                 sourcemap: true,
                 exports: 'named',
-                preserveModules: true,
-                preserveModulesRoot: 'src',
             }
         ],
         plugins: [
             typescript({
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
-                    outDir: `${outputDir}/esm`,
+                    outDir: outputDir,
                 }
             }),
         ]
     }
 }
 
-function getCjsConfig(path, outputDir) {
+function getCjsConfig(input, outputDir) {
     return {
-        input: `src/${path}/index.ts`,
+        input,
         output: [
             {
-                dir: `${outputDir}/cjs`,
+                dir: outputDir,
                 entryFileNames: '[name].cjs',
                 format: 'cjs',
                 sourcemap: true,
                 exports: 'named',
-                preserveModules: true,
-                preserveModulesRoot: 'src',
             }
         ],
         plugins: [
             typescript({
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
-                    outDir: `${outputDir}/cjs`,
+                    outDir: outputDir,
                     // declaration: false,
                     // declarationMap: false
                 }
@@ -70,11 +67,16 @@ function getRootConfig(outputDir) {
 }
 
 function getRollupConfig(components, outputDir) {
+    const inputPaths = {
+        internal: Path.join('src', `internal`, 'index.ts'),
+    }
+    components.forEach(componentName => {
+        inputPaths[componentName] = Path.join('src', 'components', componentName, 'index.ts')
+    })
+
     return [
-        ...components.map((componentName) => getEs6Config(`components/${componentName}`, outputDir)),
-        ...components.map((componentName) => getCjsConfig(`components/${componentName}`, outputDir)),
-        getEs6Config('internal', outputDir),
-        getCjsConfig('internal', outputDir),
+        getEs6Config(inputPaths, outputDir),
+        getCjsConfig(inputPaths, outputDir),
        // getRootConfig(outputDir),
     ];
 }
