@@ -187,7 +187,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
   let ids = [] as string[];
   themes.forEach((theme) => {
     states.forEach((state) => {
-      test(`Toolbar buttons appearence${state ? `,${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+      test(`Toolbar buttons appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
         const toolbar = new Toolbar('#container');
@@ -205,7 +205,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         }
 
         await t
-          .expect(await takeScreenshot(`Toolbar-buttons-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .expect(await takeScreenshot(`Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
@@ -245,7 +245,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
       });
 
       ['template', 'menuItemTemplate'].forEach((templateName) => {
-        test(`Toolbar buttons as ${templateName} appearence${state ? `,${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        test(`Toolbar buttons as ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           const toolbar = new Toolbar('#container');
@@ -263,7 +263,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
 
           await t
-            .expect(await takeScreenshot(`Toolbar-buttons-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+            .expect(await takeScreenshot(`Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -305,7 +305,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           });
         });
 
-        test(`Toolbar buttons as custom ${templateName} appearence${state ? `,${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        test(`Toolbar buttons as custom ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           const toolbar = new Toolbar('#container');
@@ -323,7 +323,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
 
           await t
-            .expect(await takeScreenshot(`Toolbar-buttons-custom-${templateName}-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+            .expect(await takeScreenshot(`Toolbar-buttons-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -365,7 +365,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         });
       });
 
-      test(`Toolbar button group appearence${state ? `,${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+      test(`Toolbar button group appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
         const toolbar = new Toolbar('#container');
@@ -383,7 +383,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         }
 
         await t
-          .expect(await takeScreenshot(`Toolbar-buttonGroup-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+          .expect(await takeScreenshot(`Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
@@ -427,7 +427,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
       });
 
       ['template', 'menuItemTemplate'].forEach((templateName) => {
-        test(`Toolbar button group as ${templateName} appearence${state ? `,${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        test(`Toolbar button group as ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           const toolbar = new Toolbar('#container');
@@ -445,7 +445,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
 
           await t
-            .expect(await takeScreenshot(`Toolbar-buttonGroup-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+            .expect(await takeScreenshot(`Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
@@ -490,7 +490,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           });
         });
 
-        test(`Toolbar button group as custom ${templateName} appearence${state ? `,${state.replace('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
+        test(`Toolbar button group as custom ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           const toolbar = new Toolbar('#container');
@@ -508,7 +508,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
 
           await t
-            .expect(await takeScreenshot(`Toolbar-buttonGroup-custom-${templateName}-${templateName}-appearence${state ? `,${state.replace('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
+            .expect(await takeScreenshot(`Toolbar-buttonGroup-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''},theme=${theme.replace(/\./g, '-')}.png`, targetContainer))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
