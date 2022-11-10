@@ -1,0 +1,29 @@
+{
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "build:packages",
+          "watch"
+        ]
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        "{projectRoot}/packages/{angular, core, react}/{lib, dist, tsc-out}"
+      ]
+    },
+    "watch": {
+      "dependsOn": ["^watch"],
+      "outputs": [
+        "{projectRoot}/packages/{angular, core, react}/{lib, dist, tsc-out}"
+      ]
+    }
+  },
+  "defaultBase": "22_2"
+}
