@@ -9,11 +9,15 @@ function checkExternalPackage(id) {
 }
 
 const TSC_OUT_DIR = 'tsc-out';
+const FORMAT_EXTENSIONS = {
+    esm: 'mjs',
+    cjs: 'cjs',
+}
 
 function getOutputConfig(outDir, format) {
     return {
         dir: outDir,
-        entryFileNames: `[name].js`,
+        entryFileNames: `[name].${FORMAT_EXTENSIONS[format]}`,
         format,
         sourcemap: true,
         exports: 'named',
@@ -30,7 +34,8 @@ function getRootConfig(outDir) {
             copy({
                 targets: [
                     { src: 'src/**/*.scss', dest: 'tsc-out' },
-                    { src: 'tsc-out/**/*.d.ts', dest: `${outDir}/esm` }
+                    { src: 'tsc-out/**/*.d.ts', dest: `${outDir}` },
+                    { src: 'tsc-out/**/*.d.ts.map', dest: `${outDir}` }
                 ],
                 copyOnce: true,
                 flatten: false
@@ -42,7 +47,7 @@ function getRootConfig(outDir) {
 function getEsmConfig(input, outDir) {
     return {
         input,
-        output: getOutputConfig(`${outDir}/esm`, 'esm'),
+        output: getOutputConfig(`${outDir}`, 'esm'),
         plugins: [
             sourcemaps(),
             peerDepsExternal(),
@@ -58,7 +63,7 @@ function getEsmConfig(input, outDir) {
 function getCjsConfig(input, outDir) {
     return {
         input,
-        output: getOutputConfig(`${outDir}/cjs`, 'cjs'),
+        output: getOutputConfig(`${outDir}`, 'cjs'),
         plugins: [
             sourcemaps(),
             peerDepsExternal(),
