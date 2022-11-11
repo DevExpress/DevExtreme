@@ -414,7 +414,7 @@ interface dxTreeListOptionsBlank<TRowData = any, TKey = any> extends GridBaseOpt
  * @namespace DevExpress.ui
  * @public
  */
-export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<dxTreeListOptionsBlank, 'focusStateEnabled'> & {
+export type dxTreeListOptions<TRowData = any, TKey = any> = Skip<dxTreeListOptionsBlank, 'focusStateEnabled'> & {
     /**
      * @docid
      * @default false

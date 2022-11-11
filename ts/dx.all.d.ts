@@ -8558,7 +8558,10 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<
+  export type dxDataGridOptions<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.core.Skip<
     dxDataGridOptionsBlank<TRowData, TKey>,
     'focusStateEnabled'
   > & {
@@ -22899,10 +22902,10 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<
-    dxTreeListOptionsBlank,
-    'focusStateEnabled'
-  > & {
+  export type dxTreeListOptions<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.core.Skip<dxTreeListOptionsBlank, 'focusStateEnabled'> & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */

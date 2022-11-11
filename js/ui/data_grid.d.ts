@@ -3243,7 +3243,7 @@ interface dxDataGridOptionsBlank<TRowData = any, TKey = any> extends GridBaseOpt
  * @namespace DevExpress.ui
  * @deprecated use Properties instead
  */
-export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<dxDataGridOptionsBlank<TRowData, TKey>, 'focusStateEnabled'> & {
+export type dxDataGridOptions<TRowData = any, TKey = any> = Skip<dxDataGridOptionsBlank<TRowData, TKey>, 'focusStateEnabled'> & {
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
