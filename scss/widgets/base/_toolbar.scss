@@ -191,18 +191,14 @@
 
   .dx-toolbar-hidden-button {
     .dx-button {
+      width: 100%;
       border: none;
       margin: 0;
-      width: 100%;
       box-shadow: none;
     }
   }
 
   .dx-toolbar-hidden-button-group {
-    &.dx-state-hover {
-      background-color: transparent;
-    }
-
     .dx-buttongroup {
       width: 100%;
 
@@ -221,6 +217,7 @@
   display: none;
 }
 
+.dx-list-item-content,
 .dx-toolbar-item-content {
   > .dx-texteditor,
   &.dx-texteditor {

@@ -81,27 +81,37 @@
       padding: 0;
     }
 
+    .dx-button-mode-text,
+    .dx-button-mode-outlined,
     .dx-button-mode-contained {
+      border: none;
+
+      &.dx-button,
+      &.dx-button.dx-button-back {
+        border-radius: 0;
+      }
+
+      &.dx-button-normal,
+      &.dx-button-back {
+        @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
+      }
+
       &.dx-button-default {
-        @include dx-button-flat-color-styling($button-default-bg, transparent, transparent, transparent);
+        @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
       }
 
       &.dx-button-danger {
-        @include dx-button-flat-color-styling($button-danger-bg, transparent, transparent, transparent);
+        @include dx-button-flat-color-styling($button-danger-bg, $button-danger-text-hover-bg, $button-danger-text-focused-bg, $button-danger-text-active-bg);
       }
 
       &.dx-button-success {
-        @include dx-button-flat-color-styling($button-success-bg, transparent, transparent, transparent);
+        @include dx-button-flat-color-styling($button-success-bg, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
       }
     }
 
     .dx-button {
       height: $material-list-item-height;
       padding: 0;
-
-      &.dx-button-back {
-        border-radius: 0;
-      }
 
       .dx-button-text {
         text-transform: none;
@@ -111,6 +121,12 @@
       .dx-button-content {
         padding: 0 $material-list-item-horizontal-padding;
       }
+    }
+  }
+
+  .dx-button {
+    &.dx-button-back:not(.dx-buttongroup-item) {
+      border-radius: $material-base-border-radius;
     }
   }
 
@@ -175,10 +191,6 @@
       }
     }
   }
-}
-
-.dx-toolbar-menu-action .dx-button.dx-button-has-icon:not(.dx-button-has-text) {
-  border-radius: 0;
 }
 
 .dx-toolbar .dx-tab {
