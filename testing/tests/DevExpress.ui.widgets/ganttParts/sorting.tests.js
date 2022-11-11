@@ -490,4 +490,36 @@ QUnit.module('Sorting', moduleConfig, () => {
         assert.equal(treeListTitleText3, taskText3);
     });
 
+    test('check task count after sorting (T1118628)', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 3, 'parentId': 1, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            sorting: { mode: 'single' },
+            columns:
+            [
+                { dataField: 'id', },
+                { dataField: 'title' }
+            ]
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 3);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 3);
+
+        const $treeListIdHeader = this.$element.find(Consts.TREELIST_HEADER_ROW_SELECTOR).children().eq(0);
+        $treeListIdHeader.trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 3);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 3);
+    });
+
 });
