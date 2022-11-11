@@ -86,7 +86,8 @@
     .dx-button-mode-contained {
       border: none;
 
-      &.dx-button {
+      &.dx-button,
+      &.dx-button.dx-button-back {
         border-radius: 0;
       }
 
