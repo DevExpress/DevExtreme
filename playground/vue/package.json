@@ -22,7 +22,7 @@
     "eslint-plugin-vue": "6.2.2",
     "sass": "1.56.1",
     "sass-loader": "8.0.2",
-    "vue-template-compiler": "2.7.13"
+    "vue-template-compiler": "2.7.14"
   },
   "browserslist": [
     "> 1%",
