@@ -16,6 +16,7 @@ import {
 import {
     DashStyle,
     LegendMarkerState,
+    SeriesType as CommonSeriesType,
 } from '../common/charts';
 
 import type * as Common from '../common/charts';
@@ -321,7 +322,6 @@ export interface BaseLegendItem {
  * @docid
  * @type object
  * @inherits dxChartSeriesTypes.CommonSeries
- * @namespace DevExpress.common.charts
  * @hidden
  */
 export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
@@ -343,5 +343,5 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      * @type Enums.SeriesType
      * @public
      */
-    type?: Common.SeriesType;
+    type?: CommonSeriesType;
 }

@@ -1967,25 +1967,6 @@ declare module DevExpress.common.charts {
   }
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
-  /**
-   * [descr:ChartSeries]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ChartSeries
-    extends DevExpress.viz.dxChartSeriesTypesCommonSeries {
-    /**
-     * [descr:ChartSeries.name]
-     */
-    name?: string;
-    /**
-     * [descr:ChartSeries.tag]
-     */
-    tag?: any;
-    /**
-     * [descr:ChartSeries.type]
-     */
-    type?: Common.SeriesType;
-  }
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
@@ -26745,6 +26726,24 @@ declare module DevExpress.viz {
     size?: number | string;
   }
   /**
+   * [descr:ChartSeries]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
+    /**
+     * [descr:ChartSeries.name]
+     */
+    name?: string;
+    /**
+     * [descr:ChartSeries.tag]
+     */
+    tag?: any;
+    /**
+     * [descr:ChartSeries.type]
+     */
+    type?: DevExpress.common.charts.SeriesType;
+  }
+  /**
    * [descr:chartSeriesObject]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -28508,9 +28507,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.series]
      */
-    series?:
-      | DevExpress.common.charts.ChartSeries
-      | Array<DevExpress.common.charts.ChartSeries>;
+    series?: ChartSeries | Array<ChartSeries>;
     /**
      * [descr:dxChartOptions.seriesSelectionMode]
      */
@@ -28522,9 +28519,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.seriesTemplate.customizeSeries]
        */
-      customizeSeries?: (
-        seriesName: any
-      ) => DevExpress.common.charts.ChartSeries;
+      customizeSeries?: (seriesName: any) => ChartSeries;
       /**
        * [descr:dxChartOptions.seriesTemplate.nameField]
        */
@@ -33870,9 +33865,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.series]
        */
-      series?:
-        | DevExpress.common.charts.ChartSeries
-        | Array<DevExpress.common.charts.ChartSeries>;
+      series?: ChartSeries | Array<ChartSeries>;
       /**
        * [descr:dxRangeSelectorOptions.chart.seriesTemplate]
        */
@@ -33880,9 +33873,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.chart.seriesTemplate.customizeSeries]
          */
-        customizeSeries?: (
-          seriesName: any
-        ) => DevExpress.common.charts.ChartSeries;
+        customizeSeries?: (seriesName: any) => ChartSeries;
         /**
          * [descr:dxRangeSelectorOptions.chart.seriesTemplate.nameField]
          */
