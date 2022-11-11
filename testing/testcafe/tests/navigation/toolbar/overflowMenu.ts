@@ -244,7 +244,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         });
       });
 
-      ['template', 'menuItemTemplate'].forEach((templateName) => {
+      ['template'].forEach((templateName) => { // 'menuItemTemplate'
         test(`Toolbar buttons as ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -426,7 +426,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         });
       });
 
-      ['template', 'menuItemTemplate'].forEach((templateName) => {
+      ['template'].forEach((templateName) => { // 'menuItemTemplate'
         test(`Toolbar button group as ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu},theme=${theme}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -594,7 +594,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
       });
     });
 
-    ['template', 'menuItemTemplate'].forEach((templateName) => {
+    ['template'].forEach((templateName) => { // 'menuItemTemplate'
       test(`Toolbar all widgets as ${templateName} appearance,theme=${theme},locateInMenu=${locateInMenu}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

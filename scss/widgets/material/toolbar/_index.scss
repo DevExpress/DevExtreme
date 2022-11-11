@@ -90,7 +90,8 @@
         border-radius: 0;
       }
 
-      &.dx-button-normal {
+      &.dx-button-normal,
+      &.dx-button-back {
         @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
       }
 
