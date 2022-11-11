@@ -231,5 +231,48 @@ QUnit.module('Filtering', moduleConfig, () => {
 
         assert.equal(this.$element.find(Consts.TASK_SELECTOR).length, 2);
     });
+    test('check expand state after filter (T1118628)', function(assert) {
+        const tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-22'), 'progress': 0 },
+            { 'id': 3, 'parentId': 1, 'title': 'Determine project scope', 'start': new Date('2019-02-19'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            validation: { autoUpdateParentTasks: false },
+            columns:
+            [
+                {
+                    dataField: 'id',
+                    sortOrder: 'desc'
+                },
+                {
+                    dataField: 'title'
+                },
+            ],
+            filterRow: {
+                visible: true
+            }
 
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+
+        const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+
+        const $filterRow = this.$element.find(Consts.TREELIST_FILTER_ROW_SELECTOR);
+        assert.equal($filterRow.length, 1);
+
+        const $filterRowInput = $filterRow.find('.dx-texteditor-input').eq(1);
+        $filterRowInput.val('project');
+        $filterRowInput.trigger('keyup');
+        this.clock.tick(1000);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 2);
+    });
 });
