@@ -7,17 +7,17 @@ import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ApplyValueMode = 'instantly' | 'useButtons';
 
 /**
-* @docid
-* @public
-* @namespace DevExpress.common
-* @type object
-*/
+ * @docid
+ * @public
+ * @namespace DevExpress.common
+ * @type object
+ */
 export type AsyncRule = {
   /**
   * @docid
@@ -59,23 +59,23 @@ export type AsyncRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ButtonStyle = 'text' | 'outlined' | 'contained';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
 
 /**
-* @docid
-* @public
-* @namespace DevExpress.common
-* @type object
-*/
+ * @docid
+ * @public
+ * @namespace DevExpress.common
+ * @type object
+ */
 export type CompareRule = {
   /**
   * @docid
@@ -110,17 +110,17 @@ export type CompareRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type CustomRule = {
   /**
   * @docid
@@ -161,53 +161,53 @@ export type CustomRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type DataStructure = 'plain' | 'tree';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Draggable = OmitInternal<dxDraggable>;
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type DragDirection = 'both' | 'horizontal' | 'vertical';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type DragHighlight = 'push' | 'indicate';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type EditorStyle = 'outlined' | 'underlined' | 'filled';
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type EmailRule = {
   /**
   * @docid
@@ -230,65 +230,65 @@ export type EmailRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type FieldChooserLayout = 0 | 1 | 2;
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type HorizontalAlignment = 'center' | 'left' | 'right';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type HorizontalEdge = 'left' | 'right';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type LabelMode = 'static' | 'floating' | 'hidden';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type MaskMode = 'always' | 'onFocus';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Mode = 'auto'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type NumericRule = {
   /**
   * @docid
@@ -311,29 +311,29 @@ export type NumericRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Orientation = 'horizontal' | 'vertical';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type PageLoadMode = 'nextButton' | 'scrollBottom';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type PageOrientation = 'portrait' | 'landscape';
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type PatternRule = {
   /**
   * @docid
@@ -361,23 +361,23 @@ export type PatternRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Position = 'bottom' | 'left' | 'right' | 'top';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top';
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type RangeRule = {
   /**
   * @docid
@@ -416,11 +416,11 @@ export type RangeRule = {
 };
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type RequiredRule = {
   /**
   * @docid
@@ -443,95 +443,95 @@ export type RequiredRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Scrollable = OmitInternal<dxScrollable>;
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ScrollMode = 'standard' | 'virtual';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SearchMode = 'contains' | 'startswith' | 'equals';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SelectAllMode = 'allPages' | 'page';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SimplifiedSearchMode = 'contains' | 'startswith';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SingleMultipleAllOrNone = 'single' | 'multiple' | 'all' | 'none';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SingleOrMultiple = 'single' | 'multiple';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SingleOrNone = 'single' | 'none';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Sortable = OmitInternal<dxSortable>;
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SortOrder = 'asc' | 'desc';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type StoreType = 'array' | 'local' | 'odata';
 
 /**
-* @docid
-* @public
-* @type object
-* @namespace DevExpress.common
-*/
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
 export type StringLengthRule = {
   /**
   * @docid
@@ -570,45 +570,45 @@ export type StringLengthRule = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type SubmenuShowMode = 'onClick' | 'onHover';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type TextEditorButtonLocation = 'after' | 'before';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ToolbarItemLocation = 'after' | 'before' | 'center';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type TooltipShowMode = 'always' | 'onHover';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ValidationCallbackData = {
   value?: any;
   rule: any;
@@ -619,37 +619,37 @@ export type ValidationCallbackData = {
 };
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ValidationMessageMode = 'always' | 'auto';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ValidationRule = AsyncRule | CompareRule | CustomRule | EmailRule | NumericRule | PatternRule | RangeRule | RequiredRule | StringLengthRule;
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ValidationRuleType = 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type VerticalAlignment = 'bottom' | 'center' | 'top';
 
 /**
-* @public
-* @namespace DevExpress.common
-*/
+ * @public
+ * @namespace DevExpress.common
+ */
 export type VerticalEdge = 'bottom' | 'top';
