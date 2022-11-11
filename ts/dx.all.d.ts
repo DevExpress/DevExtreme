@@ -8558,8 +8558,10 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxDataGridOptions<TRowData = any, TKey = any>
-    extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
+  export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<
+    dxDataGridOptionsBlank<TRowData, TKey>,
+    'focusStateEnabled'
+  > & {
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -8586,10 +8588,6 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.export]
      */
     export?: DevExpress.ui.dxDataGrid.Export<TRowData, TKey>;
-    /**
-     * [descr:dxDataGridOptions.focusStateEnabled]
-     */
-    focusStateEnabled?: boolean;
     /**
      * [descr:dxDataGridOptions.groupPanel]
      */
@@ -8791,6 +8789,17 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
+  };
+  /**
+   * [descr:dxDataGridOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface dxDataGridOptionsBlank<TRowData = any, TKey = any>
+    extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
+    /**
+     * [descr:dxDataGridOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: any;
   }
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
@@ -22890,8 +22899,10 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxTreeListOptions<TRowData = any, TKey = any>
-    extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
+  export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<
+    dxTreeListOptionsBlank,
+    'focusStateEnabled'
+  > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -22926,10 +22937,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.filterMode]
      */
     filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
-    /**
-     * [descr:dxTreeListOptions.focusStateEnabled]
-     */
-    focusStateEnabled?: boolean;
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
@@ -23081,6 +23088,17 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
+  };
+  /**
+   * [descr:dxTreeListOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface dxTreeListOptionsBlank<TRowData = any, TKey = any>
+    extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
+    /**
+     * [descr:dxTreeListOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: any;
   }
   /**
    * @deprecated 
