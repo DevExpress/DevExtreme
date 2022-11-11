@@ -1,6 +1,5 @@
 {
     "name": "@devexpress/react",
-    "root": "packages/react",
     "sourceRoot": "packages/react/src",
     "projectType": "library",
     "generators": {},

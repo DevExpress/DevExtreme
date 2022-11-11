@@ -1,0 +1,95 @@
+{
+    "name": "ng-test",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "playgrounds/ng-test/src",
+    "prefix": "app",
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/playgrounds/ng-test",
+                "index": "playgrounds/ng-test/src/index.html",
+                "main": "playgrounds/ng-test/src/main.ts",
+                "polyfills": "playgrounds/ng-test/src/polyfills.ts",
+                "tsConfig": "playgrounds/ng-test/tsconfig.app.json",
+                "inlineStyleLanguage": "scss",
+                "assets": [
+                    "playgrounds/ng-test/src/favicon.ico",
+                    "playgrounds/ng-test/src/assets"
+                ],
+                "styles": ["playgrounds/ng-test/src/styles.scss"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "500kb",
+                            "maximumError": "1mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "2kb",
+                            "maximumError": "4kb"
+                        }
+                    ],
+                    "fileReplacements": [
+                        {
+                            "replace": "playgrounds/ng-test/src/environments/environment.ts",
+                            "with": "playgrounds/ng-test/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "vendorChunk": true,
+                    "extractLicenses": false,
+                    "sourceMap": true,
+                    "namedChunks": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "browserTarget": "ng-test:build:production"
+                },
+                "development": {
+                    "browserTarget": "ng-test:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "browserTarget": "ng-test:build"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "playgrounds/ng-test/**/*.ts",
+                    "playgrounds/ng-test/**/*.html"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "playgrounds/ng-test/jest.config.ts",
+                "passWithNoTests": true
+            }
+        }
+    },
+    "tags": []
+}
