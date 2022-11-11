@@ -1,4 +1,6 @@
-import { createTempate, L1, L2 } from './template';
+import {
+  createTempate, L1, L2, L3,
+} from './template';
 
 import {
   createKeyComparator,
@@ -61,6 +63,7 @@ type IOption = {
 interface IPropTyping {
   propName: string;
   types: string[];
+  acceptableType?: string;
   acceptableValues?: string[];
 }
 
@@ -428,10 +431,19 @@ function buildPropsTypeName(className: string) {
   return `I${className}Props`;
 }
 
+function acceptableTypes(acceptableType: string | undefined, acceptableValues: string[]): string {
+  const indent = acceptableType ? L3 : L2;
+  const acceptableTemplate = `PropTypes.oneOf([${indent}${acceptableValues.join(`,${indent}`)}])`;
+  return acceptableType ? `PropTypes.oneOfType([
+    PropTypes.${acceptableType},
+    ${acceptableTemplate}
+  ])` : acceptableTemplate;
+}
+
 function createPropTypingModel(typing: IPropTyping): IRenderedPropTyping {
   const types = typing.types.map((t) => `PropTypes.${t}`);
   if (typing.acceptableValues && isNotEmptyArray(typing.acceptableValues)) {
-    types.push(`PropTypes.oneOf([\n    ${typing.acceptableValues.join(',\n    ')}\n  ])`);
+    types.push(acceptableTypes(typing.acceptableType, typing.acceptableValues));
   }
   return {
     propName: typing.propName,
