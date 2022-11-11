@@ -19,7 +19,7 @@ const themes = ['generic.light', 'material.blue.light']; // 'generic.light.compa
 const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxDropDownButton'];
 const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['back', 'danger', 'default', 'normal', 'success'];
-const states = [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`, false] as any[];
+const states = [HOVER_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`, false] as any[]; // FOCUSED_STATE_CLASS,
 
 fixture`Toolbar_OverflowMenu`
   .page(url(__dirname, '../../container.html'))
