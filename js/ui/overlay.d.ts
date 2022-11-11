@@ -65,6 +65,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @deprecated dxOverlayOptions.wrapperAttr
+     * @hidden
      * @default {}
      * @public
      */

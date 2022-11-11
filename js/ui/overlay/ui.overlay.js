@@ -132,8 +132,6 @@ const Overlay = Widget.inherit({
 
             _ignoreCopyRootClassesToWrapperDeprecation: false,
 
-            _ignoreElementAttrDeprecation: false,
-
             onShowing: null,
 
             onShown: null,
@@ -203,20 +201,11 @@ const Overlay = Widget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
 
-        function createWrapperAttrDeprecationInfo() {
-            return {
+        if(options?.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
+            this._logDeprecatedOptionWarning('copyRootClassesToWrapper', {
                 since: '21.2',
                 message: 'Use the "wrapperAttr" option instead'
-            };
-        }
-
-        if(options) {
-            if(options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
-                this._logDeprecatedOptionWarning('copyRootClassesToWrapper', createWrapperAttrDeprecationInfo());
-            }
-            if(options.elementAttr && !options._ignoreElementAttrDeprecation) {
-                this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
-            }
+            });
         }
     },
 
