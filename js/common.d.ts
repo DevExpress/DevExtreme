@@ -15,7 +15,6 @@ export type ApplyValueMode = 'instantly' | 'useButtons';
 /**
 * @docid
 * @public
-* @section dxValidator
 * @namespace DevExpress.common
 * @type object
 */
@@ -74,7 +73,6 @@ export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
 /**
 * @docid
 * @public
-* @section dxValidator
 * @namespace DevExpress.common
 * @type object
 */
@@ -122,7 +120,6 @@ export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' 
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type CustomRule = {
   /**
@@ -210,7 +207,6 @@ export type EditorStyle = 'outlined' | 'underlined' | 'filled';
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type EmailRule = {
   /**
@@ -292,7 +288,6 @@ export type Mode = 'auto'; // eslint-disable-line @typescript-eslint/no-type-ali
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type NumericRule = {
   /**
@@ -338,7 +333,6 @@ export type PageOrientation = 'portrait' | 'landscape';
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type PatternRule = {
   /**
@@ -383,7 +377,6 @@ export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | '
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type RangeRule = {
   /**
@@ -427,7 +420,6 @@ export type RangeRule = {
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type RequiredRule = {
   /**
@@ -539,7 +531,6 @@ export type StoreType = 'array' | 'local' | 'odata';
 * @public
 * @type object
 * @namespace DevExpress.common
-* @section dxValidator
 */
 export type StringLengthRule = {
   /**
