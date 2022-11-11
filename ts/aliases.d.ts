@@ -451,3 +451,14 @@ declare module DevExpress.ui {
     /** @deprecated Use DevExpress.common.ValidationRuleType instead */
     export type ValidationRuleType = DevExpress.common.ValidationRuleType;
 }
+
+declare module DevExpress.viz {
+    /** @deprecated Use DevExpress.common.ScaleBreak instead */
+    export type ScaleBreak = DevExpress.common.charts.ScaleBreak
+    /** @deprecated Use DevExpress.common.SeriesType instead */
+    export type SeriesType = DevExpress.common.charts.SeriesType
+    /** @deprecated Use DevExpress.common.VisualRange instead */
+    export type VisualRange = DevExpress.common.charts.VisualRange
+    /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
+    export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
+}
