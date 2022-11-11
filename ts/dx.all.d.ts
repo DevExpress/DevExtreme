@@ -1379,8 +1379,92 @@ declare module DevExpress.animation {
 }
 declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
+  /**
+   * [descr:AsyncRule]
+   */
+  export type AsyncRule = {
+    /**
+     * [descr:AsyncRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:AsyncRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:AsyncRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:AsyncRule.type]
+     */
+    type: 'async';
+    /**
+     * [descr:AsyncRule.validationCallback]
+     */
+    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
+  };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  /**
+   * [descr:CompareRule]
+   */
+  export type CompareRule = {
+    /**
+     * [descr:CompareRule.comparisonTarget]
+     */
+    comparisonTarget?: () => any;
+    /**
+     * [descr:CompareRule.comparisonType]
+     */
+    comparisonType?: ComparisonOperator;
+    /**
+     * [descr:CompareRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:CompareRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:CompareRule.type]
+     */
+    type: 'compare';
+  };
+  export type ComparisonOperator =
+    | '!='
+    | '!=='
+    | '<'
+    | '<='
+    | '=='
+    | '==='
+    | '>'
+    | '>=';
+  /**
+   * [descr:CustomRule]
+   */
+  export type CustomRule = {
+    /**
+     * [descr:CustomRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:CustomRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:CustomRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:CustomRule.type]
+     */
+    type: 'custom';
+    /**
+     * [descr:CustomRule.validationCallback]
+     */
+    validationCallback?: (options: ValidationCallbackData) => boolean;
+  };
   export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
@@ -1395,6 +1479,23 @@ declare module DevExpress.common {
     DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
   export type DragHighlight = 'push' | 'indicate';
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
+  /**
+   * [descr:EmailRule]
+   */
+  export type EmailRule = {
+    /**
+     * [descr:EmailRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:EmailRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:EmailRule.type]
+     */
+    type: 'email';
+  };
   export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
   export type FieldChooserLayout = 0 | 1 | 2;
   export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -1433,9 +1534,47 @@ declare module DevExpress.common {
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
 
+  /**
+   * [descr:NumericRule]
+   */
+  export type NumericRule = {
+    /**
+     * [descr:NumericRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:NumericRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:NumericRule.type]
+     */
+    type: 'numeric';
+  };
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
+  /**
+   * [descr:PatternRule]
+   */
+  export type PatternRule = {
+    /**
+     * [descr:PatternRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:PatternRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:PatternRule.pattern]
+     */
+    pattern?: RegExp | string;
+    /**
+     * [descr:PatternRule.type]
+     */
+    type: 'pattern';
+  };
   export type Position = 'bottom' | 'left' | 'right' | 'top';
   export type PositionAlignment =
     | 'bottom'
@@ -1447,6 +1586,35 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+  /**
+   * [descr:RangeRule]
+   */
+  export type RangeRule = {
+    /**
+     * [descr:RangeRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:RangeRule.max]
+     */
+    max?: Date | number;
+    /**
+     * [descr:RangeRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:RangeRule.min]
+     */
+    min?: Date | number;
+    /**
+     * [descr:RangeRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:RangeRule.type]
+     */
+    type: 'range';
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1461,6 +1629,23 @@ declare module DevExpress.common {
       'component' | 'event'
     >
   >;
+  /**
+   * [descr:RequiredRule]
+   */
+  export type RequiredRule = {
+    /**
+     * [descr:RequiredRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:RequiredRule.trim]
+     */
+    trim?: boolean;
+    /**
+     * [descr:RequiredRule.type]
+     */
+    type: 'required';
+  };
   export type Scrollable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
@@ -1476,6 +1661,35 @@ declare module DevExpress.common {
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
+  /**
+   * [descr:StringLengthRule]
+   */
+  export type StringLengthRule = {
+    /**
+     * [descr:StringLengthRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:StringLengthRule.max]
+     */
+    max?: number;
+    /**
+     * [descr:StringLengthRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:StringLengthRule.min]
+     */
+    min?: number;
+    /**
+     * [descr:StringLengthRule.trim]
+     */
+    trim?: boolean;
+    /**
+     * [descr:StringLengthRule.type]
+     */
+    type: 'stringLength';
+  };
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TextBoxPredefinedButton = 'clear';
 
@@ -1493,7 +1707,35 @@ declare module DevExpress.common {
     | 'dxDropDownButton';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
+  export type ValidationCallbackData = {
+    value?: any;
+    rule: any;
+    validator: any;
+    data?: any;
+    column?: any;
+    formItem?: any;
+  };
   export type ValidationMessageMode = 'always' | 'auto';
+  export type ValidationRule =
+    | AsyncRule
+    | CompareRule
+    | CustomRule
+    | EmailRule
+    | NumericRule
+    | PatternRule
+    | RangeRule
+    | RequiredRule
+    | StringLengthRule;
+  export type ValidationRuleType =
+    | 'required'
+    | 'numeric'
+    | 'range'
+    | 'stringLength'
+    | 'custom'
+    | 'compare'
+    | 'pattern'
+    | 'email'
+    | 'async';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
@@ -1503,6 +1745,226 @@ declare module DevExpress.common.charts {
   export type AnnotationType = 'text' | 'image' | 'custom';
   export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
   export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
+  /**
+   * [descr:BaseLegend]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface BaseLegend {
+    /**
+     * [descr:BaseLegend.backgroundColor]
+     */
+    backgroundColor?: string;
+    /**
+     * [descr:BaseLegend.border]
+     */
+    border?: {
+      /**
+       * [descr:BaseLegend.border.color]
+       */
+      color?: string;
+      /**
+       * [descr:BaseLegend.border.cornerRadius]
+       */
+      cornerRadius?: number;
+      /**
+       * [descr:BaseLegend.border.dashStyle]
+       */
+      dashStyle?: DashStyle;
+      /**
+       * [descr:BaseLegend.border.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:BaseLegend.border.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:BaseLegend.border.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:BaseLegend.columnCount]
+     */
+    columnCount?: number;
+    /**
+     * [descr:BaseLegend.columnItemSpacing]
+     */
+    columnItemSpacing?: number;
+    /**
+     * [descr:BaseLegend.font]
+     */
+    font?: DevExpress.viz.Font;
+    /**
+     * [descr:BaseLegend.horizontalAlignment]
+     */
+    horizontalAlignment?: HorizontalAlignment;
+    /**
+     * [descr:BaseLegend.itemTextPosition]
+     */
+    itemTextPosition?: Position;
+    /**
+     * [descr:BaseLegend.itemsAlignment]
+     */
+    itemsAlignment?: HorizontalAlignment;
+    /**
+     * [descr:BaseLegend.margin]
+     */
+    margin?:
+      | number
+      | {
+          /**
+           * [descr:BaseLegend.margin.bottom]
+           */
+          bottom?: number;
+          /**
+           * [descr:BaseLegend.margin.left]
+           */
+          left?: number;
+          /**
+           * [descr:BaseLegend.margin.right]
+           */
+          right?: number;
+          /**
+           * [descr:BaseLegend.margin.top]
+           */
+          top?: number;
+        };
+    /**
+     * [descr:BaseLegend.markerSize]
+     */
+    markerSize?: number;
+    /**
+     * [descr:BaseLegend.orientation]
+     */
+    orientation?: Orientation;
+    /**
+     * [descr:BaseLegend.paddingLeftRight]
+     */
+    paddingLeftRight?: number;
+    /**
+     * [descr:BaseLegend.paddingTopBottom]
+     */
+    paddingTopBottom?: number;
+    /**
+     * [descr:BaseLegend.rowCount]
+     */
+    rowCount?: number;
+    /**
+     * [descr:BaseLegend.rowItemSpacing]
+     */
+    rowItemSpacing?: number;
+    /**
+     * [descr:BaseLegend.title]
+     */
+    title?:
+      | {
+          /**
+           * [descr:BaseLegend.title.font]
+           */
+          font?: DevExpress.viz.Font;
+          /**
+           * [descr:BaseLegend.title.horizontalAlignment]
+           */
+          horizontalAlignment?: HorizontalAlignment;
+          /**
+           * [descr:BaseLegend.title.margin]
+           */
+          margin?: {
+            /**
+             * [descr:BaseLegend.title.margin.bottom]
+             */
+            bottom?: number;
+            /**
+             * [descr:BaseLegend.title.margin.left]
+             */
+            left?: number;
+            /**
+             * [descr:BaseLegend.title.margin.right]
+             */
+            right?: number;
+            /**
+             * [descr:BaseLegend.title.margin.top]
+             */
+            top?: number;
+          };
+          /**
+           * [descr:BaseLegend.title.placeholderSize]
+           */
+          placeholderSize?: number;
+          /**
+           * [descr:BaseLegend.title.subtitle]
+           */
+          subtitle?:
+            | {
+                /**
+                 * [descr:BaseLegend.title.subtitle.font]
+                 */
+                font?: DevExpress.viz.Font;
+                /**
+                 * [descr:BaseLegend.title.subtitle.offset]
+                 */
+                offset?: number;
+                /**
+                 * [descr:BaseLegend.title.subtitle.text]
+                 */
+                text?: string;
+              }
+            | string;
+          /**
+           * [descr:BaseLegend.title.text]
+           */
+          text?: string;
+          /**
+           * [descr:BaseLegend.title.verticalAlignment]
+           */
+          verticalAlignment?: VerticalEdge;
+        }
+      | string;
+    /**
+     * [descr:BaseLegend.verticalAlignment]
+     */
+    verticalAlignment?: VerticalEdge;
+    /**
+     * [descr:BaseLegend.visible]
+     */
+    visible?: boolean;
+  }
+  /**
+   * [descr:BaseLegendItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface BaseLegendItem {
+    /**
+     * [descr:BaseLegendItem.marker]
+     */
+    marker?: {
+      /**
+       * [descr:BaseLegendItem.marker.fill]
+       */
+      fill?: string;
+      /**
+       * [descr:BaseLegendItem.marker.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:BaseLegendItem.marker.size]
+       */
+      size?: number;
+      /**
+       * [descr:BaseLegendItem.marker.state]
+       */
+      state?: LegendMarkerState;
+    };
+    /**
+     * [descr:BaseLegendItem.text]
+     */
+    text?: string;
+    /**
+     * [descr:BaseLegendItem.visible]
+     */
+    visible?: boolean;
+  }
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
@@ -1545,6 +2007,19 @@ declare module DevExpress.common.charts {
     | 'triangleDown'
     | 'triangleUp';
   export type RelativePosition = 'inside' | 'outside';
+  /**
+   * [descr:ScaleBreak]
+   */
+  export type ScaleBreak = {
+    /**
+     * [descr:ScaleBreak.endValue]
+     */
+    endValue?: number | Date | string;
+    /**
+     * [descr:ScaleBreak.startValue]
+     */
+    startValue?: number | Date | string;
+  };
   export type ScaleBreakLineStyle = 'straight' | 'waved';
   export type SeriesHoverMode =
     | 'allArgumentPoints'
@@ -1561,6 +2036,30 @@ declare module DevExpress.common.charts {
     | 'includePoints'
     | 'none'
     | 'onlyPoint';
+  export type SeriesType =
+    | 'area'
+    | 'bar'
+    | 'bubble'
+    | 'candlestick'
+    | 'fullstackedarea'
+    | 'fullstackedbar'
+    | 'fullstackedline'
+    | 'fullstackedspline'
+    | 'fullstackedsplinearea'
+    | 'line'
+    | 'rangearea'
+    | 'rangebar'
+    | 'scatter'
+    | 'spline'
+    | 'splinearea'
+    | 'stackedarea'
+    | 'stackedbar'
+    | 'stackedline'
+    | 'stackedspline'
+    | 'stackedsplinearea'
+    | 'steparea'
+    | 'stepline'
+    | 'stock';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
     | 'generic.dark'
@@ -1586,6 +2085,50 @@ declare module DevExpress.common.charts {
     | 'second'
     | 'week'
     | 'year';
+  /**
+   * [descr:VizTimeInterval]
+   */
+  export type TimeIntervalConfig =
+    | number
+    | {
+        /**
+         * [descr:VizTimeInterval.days]
+         */
+        days?: number;
+        /**
+         * [descr:VizTimeInterval.hours]
+         */
+        hours?: number;
+        /**
+         * [descr:VizTimeInterval.milliseconds]
+         */
+        milliseconds?: number;
+        /**
+         * [descr:VizTimeInterval.minutes]
+         */
+        minutes?: number;
+        /**
+         * [descr:VizTimeInterval.months]
+         */
+        months?: number;
+        /**
+         * [descr:VizTimeInterval.quarters]
+         */
+        quarters?: number;
+        /**
+         * [descr:VizTimeInterval.seconds]
+         */
+        seconds?: number;
+        /**
+         * [descr:VizTimeInterval.weeks]
+         */
+        weeks?: number;
+        /**
+         * [descr:VizTimeInterval.years]
+         */
+        years?: number;
+      }
+    | TimeInterval;
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -1593,6 +2136,23 @@ declare module DevExpress.common.charts {
     | 'stdDeviation'
     | 'stdError'
     | 'variance';
+  /**
+   * [descr:VisualRange]
+   */
+  export type VisualRange = {
+    /**
+     * [descr:VisualRange.endValue]
+     */
+    endValue?: number | Date | string;
+    /**
+     * [descr:VisualRange.length]
+     */
+    length?: TimeIntervalConfig;
+    /**
+     * [descr:VisualRange.startValue]
+     */
+    startValue?: number | Date | string;
+  };
   export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
@@ -1818,7 +2378,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.validationRules]
      */
-    validationRules?: Array<DevExpress.ui.ValidationRule>;
+    validationRules?: Array<ValidationRule>;
     /**
      * [descr:GridBaseColumn.visible]
      */
@@ -3342,7 +3902,7 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowValidatingInfo<TRowData = any, TKey = any> {
-    readonly brokenRules: Array<DevExpress.ui.ValidationRule>;
+    readonly brokenRules: Array<ValidationRule>;
     isValid: boolean;
     readonly key: TKey;
     readonly newData: DevExpress.core.DeepPartial<TRowData>;
@@ -6465,32 +7025,6 @@ declare module DevExpress.pdfExporter {
 }
 declare module DevExpress.ui {
   /**
-   * [descr:AsyncRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface AsyncRule {
-    /**
-     * [descr:AsyncRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:AsyncRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:AsyncRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:AsyncRule.type]
-     */
-    type: 'async';
-    /**
-     * [descr:AsyncRule.validationCallback]
-     */
-    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
-  }
-  /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6669,44 +7203,6 @@ declare module DevExpress.ui {
      */
     selectedItems?: Array<TItem>;
   }
-  /**
-   * [descr:CompareRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface CompareRule {
-    /**
-     * [descr:CompareRule.comparisonTarget]
-     */
-    comparisonTarget?: () => any;
-    /**
-     * [descr:CompareRule.comparisonType]
-     */
-    comparisonType?: ComparisonOperator;
-    /**
-     * [descr:CompareRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:CompareRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:CompareRule.type]
-     */
-    type: 'compare';
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type ComparisonOperator =
-    | '!='
-    | '!=='
-    | '<'
-    | '<='
-    | '=='
-    | '==='
-    | '>'
-    | '>=';
   export interface CustomDialogOptions {
     title?: string;
     messageHtml?: string;
@@ -6714,32 +7210,6 @@ declare module DevExpress.ui {
     showTitle?: boolean;
     message?: string;
     dragEnabled?: boolean;
-  }
-  /**
-   * [descr:CustomRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface CustomRule {
-    /**
-     * [descr:CustomRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:CustomRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:CustomRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:CustomRule.type]
-     */
-    type: 'custom';
-    /**
-     * [descr:CustomRule.validationCallback]
-     */
-    validationCallback?: (options: ValidationCallbackData) => boolean;
   }
   /**
    * [descr:DataExpressionMixin]
@@ -13916,15 +14386,15 @@ declare module DevExpress.ui {
      * [descr:dxFormSimpleItem.validationRules]
      */
     validationRules?: Array<
-      | RequiredRule
-      | NumericRule
-      | RangeRule
-      | StringLengthRule
-      | CustomRule
-      | CompareRule
-      | PatternRule
-      | EmailRule
-      | AsyncRule
+      | DevExpress.common.RequiredRule
+      | DevExpress.common.NumericRule
+      | DevExpress.common.RangeRule
+      | DevExpress.common.StringLengthRule
+      | DevExpress.common.CustomRule
+      | DevExpress.common.CompareRule
+      | DevExpress.common.PatternRule
+      | DevExpress.common.EmailRule
+      | DevExpress.common.AsyncRule
     >;
     /**
      * [descr:dxFormSimpleItem.visible]
@@ -23889,15 +24359,15 @@ declare module DevExpress.ui {
      * [descr:dxValidationGroupResult.brokenRules]
      */
     brokenRules?: Array<
-      | RequiredRule
-      | NumericRule
-      | RangeRule
-      | StringLengthRule
-      | CustomRule
-      | CompareRule
-      | PatternRule
-      | EmailRule
-      | AsyncRule
+      | DevExpress.common.RequiredRule
+      | DevExpress.common.NumericRule
+      | DevExpress.common.RangeRule
+      | DevExpress.common.StringLengthRule
+      | DevExpress.common.CustomRule
+      | DevExpress.common.CompareRule
+      | DevExpress.common.PatternRule
+      | DevExpress.common.EmailRule
+      | DevExpress.common.AsyncRule
     >;
     /**
      * [descr:dxValidationGroupResult.complete]
@@ -24042,9 +24512,9 @@ declare module DevExpress.ui {
       name?: string;
       isValid?: boolean;
       value?: any;
-      validationRules?: Array<ValidationRule>;
-      brokenRule?: ValidationRule;
-      brokenRules?: ValidationRule;
+      validationRules?: Array<DevExpress.common.ValidationRule>;
+      brokenRule?: DevExpress.common.ValidationRule;
+      brokenRules?: DevExpress.common.ValidationRule;
       status?: DevExpress.common.ValidationStatus;
     };
     export type ValidationResult = dxValidatorResult;
@@ -24100,7 +24570,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorOptions.validationRules]
      */
-    validationRules?: Array<ValidationRule>;
+    validationRules?: Array<DevExpress.common.ValidationRule>;
   }
   /**
    * [descr:dxValidatorResult]
@@ -24111,11 +24581,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.brokenRule]
      */
-    brokenRule?: ValidationRule;
+    brokenRule?: DevExpress.common.ValidationRule;
     /**
      * [descr:dxValidatorResult.brokenRules]
      */
-    brokenRules?: Array<ValidationRule>;
+    brokenRules?: Array<DevExpress.common.ValidationRule>;
     /**
      * [descr:dxValidatorResult.complete]
      */
@@ -24127,7 +24597,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.pendingRules]
      */
-    pendingRules?: Array<AsyncRule>;
+    pendingRules?: Array<DevExpress.common.AsyncRule>;
     /**
      * [descr:dxValidatorResult.status]
      */
@@ -24135,7 +24605,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.validationRules]
      */
-    validationRules?: Array<ValidationRule>;
+    validationRules?: Array<DevExpress.common.ValidationRule>;
     /**
      * [descr:dxValidatorResult.value]
      */
@@ -24217,24 +24687,6 @@ declare module DevExpress.ui {
      * [descr:EditorOptions.stylingMode]
      */
     stylingMode?: DevExpress.common.EditorStyle;
-  }
-  /**
-   * [descr:EmailRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface EmailRule {
-    /**
-     * [descr:EmailRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:EmailRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:EmailRule.type]
-     */
-    type: 'email';
   }
   /**
    * [descr:Format]
@@ -24364,97 +24816,9 @@ declare module DevExpress.ui {
    */
   export function notify(options: any, stack?: Stack): void;
   /**
-   * [descr:NumericRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface NumericRule {
-    /**
-     * [descr:NumericRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:NumericRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:NumericRule.type]
-     */
-    type: 'numeric';
-  }
-  /**
-   * [descr:PatternRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface PatternRule {
-    /**
-     * [descr:PatternRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:PatternRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:PatternRule.pattern]
-     */
-    pattern?: RegExp | string;
-    /**
-     * [descr:PatternRule.type]
-     */
-    type: 'pattern';
-  }
-  /**
-   * [descr:RangeRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface RangeRule {
-    /**
-     * [descr:RangeRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:RangeRule.max]
-     */
-    max?: Date | number;
-    /**
-     * [descr:RangeRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:RangeRule.min]
-     */
-    min?: Date | number;
-    /**
-     * [descr:RangeRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:RangeRule.type]
-     */
-    type: 'range';
-  }
-  /**
    * [descr:ui.repaintFloatingActionButton()]
    */
   export function repaintFloatingActionButton(): void;
-  /**
-   * [descr:RequiredRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface RequiredRule {
-    /**
-     * [descr:RequiredRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:RequiredRule.trim]
-     */
-    trim?: boolean;
-    /**
-     * [descr:RequiredRule.type]
-     */
-    type: 'required';
-  }
   /**
    * [descr:SearchBoxMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -24537,36 +24901,6 @@ declare module DevExpress.ui {
       | 'right-stack';
   }
   /**
-   * [descr:StringLengthRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface StringLengthRule {
-    /**
-     * [descr:StringLengthRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:StringLengthRule.max]
-     */
-    max?: number;
-    /**
-     * [descr:StringLengthRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:StringLengthRule.min]
-     */
-    min?: number;
-    /**
-     * [descr:StringLengthRule.trim]
-     */
-    trim?: boolean;
-    /**
-     * [descr:StringLengthRule.type]
-     */
-    type: 'stringLength';
-  }
-  /**
    * [descr:ui.template]
    * @deprecated [depNote:ui.template]
    */
@@ -24593,34 +24927,6 @@ declare module DevExpress.ui {
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
   }
-  export interface ValidationCallbackData {
-    value?: any;
-    rule: any;
-    validator: any;
-    data?: any;
-    column?: any;
-    formItem?: any;
-  }
-  export type ValidationRule =
-    | AsyncRule
-    | CompareRule
-    | CustomRule
-    | EmailRule
-    | NumericRule
-    | PatternRule
-    | RangeRule
-    | RequiredRule
-    | StringLengthRule;
-  export type ValidationRuleType =
-    | 'required'
-    | 'numeric'
-    | 'range'
-    | 'stringLength'
-    | 'custom'
-    | 'compare'
-    | 'pattern'
-    | 'email'
-    | 'async';
   /**
    * [descr:Widget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -24922,7 +25228,8 @@ declare module DevExpress.viz {
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BarGaugeLegendItem extends BaseLegendItem {
+  export interface BarGaugeLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:BarGaugeLegendItem.item]
      */
@@ -25017,7 +25324,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartLegend extends BaseLegend {
+  export interface BaseChartLegend extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:BaseChartOptions.legend.customizeItems]
      */
@@ -25038,7 +25345,8 @@ declare module DevExpress.viz {
    * [descr:BaseChartLegendItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartLegendItem extends BaseLegendItem {
+  export interface BaseChartLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:BaseChartLegendItem.series]
      */
@@ -25521,226 +25829,6 @@ declare module DevExpress.viz {
      * [descr:baseLabelObject.show(holdVisible)]
      */
     show(holdVisible: boolean): void;
-  }
-  /**
-   * [descr:BaseLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseLegend {
-    /**
-     * [descr:BaseLegend.backgroundColor]
-     */
-    backgroundColor?: string;
-    /**
-     * [descr:BaseLegend.border]
-     */
-    border?: {
-      /**
-       * [descr:BaseLegend.border.color]
-       */
-      color?: string;
-      /**
-       * [descr:BaseLegend.border.cornerRadius]
-       */
-      cornerRadius?: number;
-      /**
-       * [descr:BaseLegend.border.dashStyle]
-       */
-      dashStyle?: DevExpress.common.charts.DashStyle;
-      /**
-       * [descr:BaseLegend.border.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:BaseLegend.border.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:BaseLegend.border.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:BaseLegend.columnCount]
-     */
-    columnCount?: number;
-    /**
-     * [descr:BaseLegend.columnItemSpacing]
-     */
-    columnItemSpacing?: number;
-    /**
-     * [descr:BaseLegend.font]
-     */
-    font?: Font;
-    /**
-     * [descr:BaseLegend.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:BaseLegend.itemTextPosition]
-     */
-    itemTextPosition?: DevExpress.common.Position;
-    /**
-     * [descr:BaseLegend.itemsAlignment]
-     */
-    itemsAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:BaseLegend.margin]
-     */
-    margin?:
-      | number
-      | {
-          /**
-           * [descr:BaseLegend.margin.bottom]
-           */
-          bottom?: number;
-          /**
-           * [descr:BaseLegend.margin.left]
-           */
-          left?: number;
-          /**
-           * [descr:BaseLegend.margin.right]
-           */
-          right?: number;
-          /**
-           * [descr:BaseLegend.margin.top]
-           */
-          top?: number;
-        };
-    /**
-     * [descr:BaseLegend.markerSize]
-     */
-    markerSize?: number;
-    /**
-     * [descr:BaseLegend.orientation]
-     */
-    orientation?: DevExpress.common.Orientation;
-    /**
-     * [descr:BaseLegend.paddingLeftRight]
-     */
-    paddingLeftRight?: number;
-    /**
-     * [descr:BaseLegend.paddingTopBottom]
-     */
-    paddingTopBottom?: number;
-    /**
-     * [descr:BaseLegend.rowCount]
-     */
-    rowCount?: number;
-    /**
-     * [descr:BaseLegend.rowItemSpacing]
-     */
-    rowItemSpacing?: number;
-    /**
-     * [descr:BaseLegend.title]
-     */
-    title?:
-      | {
-          /**
-           * [descr:BaseLegend.title.font]
-           */
-          font?: Font;
-          /**
-           * [descr:BaseLegend.title.horizontalAlignment]
-           */
-          horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-          /**
-           * [descr:BaseLegend.title.margin]
-           */
-          margin?: {
-            /**
-             * [descr:BaseLegend.title.margin.bottom]
-             */
-            bottom?: number;
-            /**
-             * [descr:BaseLegend.title.margin.left]
-             */
-            left?: number;
-            /**
-             * [descr:BaseLegend.title.margin.right]
-             */
-            right?: number;
-            /**
-             * [descr:BaseLegend.title.margin.top]
-             */
-            top?: number;
-          };
-          /**
-           * [descr:BaseLegend.title.placeholderSize]
-           */
-          placeholderSize?: number;
-          /**
-           * [descr:BaseLegend.title.subtitle]
-           */
-          subtitle?:
-            | {
-                /**
-                 * [descr:BaseLegend.title.subtitle.font]
-                 */
-                font?: Font;
-                /**
-                 * [descr:BaseLegend.title.subtitle.offset]
-                 */
-                offset?: number;
-                /**
-                 * [descr:BaseLegend.title.subtitle.text]
-                 */
-                text?: string;
-              }
-            | string;
-          /**
-           * [descr:BaseLegend.title.text]
-           */
-          text?: string;
-          /**
-           * [descr:BaseLegend.title.verticalAlignment]
-           */
-          verticalAlignment?: DevExpress.common.VerticalEdge;
-        }
-      | string;
-    /**
-     * [descr:BaseLegend.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalEdge;
-    /**
-     * [descr:BaseLegend.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:BaseLegendItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseLegendItem {
-    /**
-     * [descr:BaseLegendItem.marker]
-     */
-    marker?: {
-      /**
-       * [descr:BaseLegendItem.marker.fill]
-       */
-      fill?: string;
-      /**
-       * [descr:BaseLegendItem.marker.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:BaseLegendItem.marker.size]
-       */
-      size?: number;
-      /**
-       * [descr:BaseLegendItem.marker.state]
-       */
-      state?: DevExpress.common.charts.LegendMarkerState;
-    };
-    /**
-     * [descr:BaseLegendItem.text]
-     */
-    text?: string;
-    /**
-     * [descr:BaseLegendItem.visible]
-     */
-    visible?: boolean;
   }
   /**
    * [descr:basePointObject]
@@ -26577,11 +26665,15 @@ declare module DevExpress.viz {
     /**
      * [descr:chartAxisObject.visualRange()]
      */
-    visualRange(): VizRange;
+    visualRange(): DevExpress.common.charts.VisualRange;
     /**
      * [descr:chartAxisObject.visualRange(visualRange)]
      */
-    visualRange(visualRange: Array<number | string | Date> | VizRange): void;
+    visualRange(
+      visualRange:
+        | Array<number | string | Date>
+        | DevExpress.common.charts.VisualRange
+    ): void;
   }
   /**
    * [descr:chartPointAggregationInfoObject]
@@ -26659,7 +26751,7 @@ declare module DevExpress.viz {
     /**
      * [descr:ChartSeries.type]
      */
-    type?: SeriesType;
+    type?: DevExpress.common.charts.SeriesType;
   }
   /**
    * [descr:chartSeriesObject]
@@ -26852,7 +26944,8 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxBarGaugeLegend extends BaseLegend {
+  export interface dxBarGaugeLegend
+    extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:dxBarGaugeOptions.legend.customizeHint]
      */
@@ -27220,8 +27313,8 @@ declare module DevExpress.viz {
         readonly rangeStart: Date | number;
         readonly rangeEnd: Date | number;
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
-        readonly previousRange: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
+        readonly previousRange: DevExpress.common.charts.VisualRange;
         readonly actionType: DevExpress.common.charts.ZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
@@ -27229,7 +27322,7 @@ declare module DevExpress.viz {
     export type ZoomStartEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
         readonly actionType?: DevExpress.common.charts.ZoomPanAction;
       };
   }
@@ -27259,7 +27352,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.aggregationInterval]
      */
-    aggregationInterval?: VizTimeInterval;
+    aggregationInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.argumentType]
      */
@@ -27271,7 +27364,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.breaks]
      */
-    breaks?: Array<ScaleBreak>;
+    breaks?: Array<DevExpress.common.charts.ScaleBreak>;
     /**
      * [descr:dxChartOptions.argumentAxis.categories]
      */
@@ -27311,7 +27404,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.minVisualRangeLength]
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.minorTickCount]
      */
@@ -27319,7 +27412,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.position]
      */
@@ -27347,7 +27440,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.title]
      */
@@ -27359,7 +27452,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.visualRange]
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxChartOptions.argumentAxis.visualRangeUpdateMode]
      */
@@ -27367,7 +27462,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.wholeRange]
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxChartOptions.argumentAxis.workWeek]
      */
@@ -28045,7 +28142,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonSeriesSettings.type]
      */
-    type?: SeriesType;
+    type?: DevExpress.common.charts.SeriesType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -30487,7 +30584,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.breaks]
      */
-    breaks?: Array<ScaleBreak>;
+    breaks?: Array<DevExpress.common.charts.ScaleBreak>;
     /**
      * [descr:dxChartOptions.valueAxis.categories]
      */
@@ -30523,7 +30620,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.minVisualRangeLength]
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.valueAxis.minorTickCount]
      */
@@ -30531,7 +30628,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.valueAxis.multipleAxesSpacing]
      */
@@ -30571,7 +30668,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.valueAxis.title]
      */
@@ -30587,7 +30684,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.visualRange]
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
      */
@@ -30595,7 +30694,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.wholeRange]
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -30941,7 +31042,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxFunnelLegend extends BaseLegend {
+  export interface dxFunnelLegend extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:dxFunnelOptions.legend.customizeHint]
      */
@@ -32079,8 +32180,8 @@ declare module DevExpress.viz {
         MouseEvent | TouchEvent
       > & {
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
-        readonly previousRange: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
+        readonly previousRange: DevExpress.common.charts.VisualRange;
         readonly actionType: DevExpress.common.charts.ZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
@@ -32091,7 +32192,7 @@ declare module DevExpress.viz {
         MouseEvent | TouchEvent
       > & {
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
         readonly actionType: DevExpress.common.charts.ZoomPanAction;
       };
   }
@@ -32171,7 +32272,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.argumentAxis.originValue]
      */
@@ -32195,7 +32296,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.argumentAxis.type]
      */
@@ -33430,7 +33531,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.minVisualRangeLength]
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.valueAxis.minorTickCount]
      */
@@ -33438,7 +33539,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.valueAxis.showZero]
      */
@@ -33454,7 +33555,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.valueAxis.type]
      */
@@ -33470,7 +33571,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRange]
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
      */
@@ -33478,7 +33581,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.wholeRange]
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -33595,7 +33700,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelector.setValue(value)]
      */
-    setValue(value: Array<number | string | Date> | VizRange): void;
+    setValue(
+      value:
+        | Array<number | string | Date>
+        | DevExpress.common.charts.VisualRange
+    ): void;
   }
   module dxRangeSelector {
     export type AxisScale =
@@ -33860,7 +33969,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
-      aggregationInterval?: VizTimeInterval;
+      aggregationInterval?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
        */
@@ -33889,7 +33998,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.breaks]
        */
-      breaks?: Array<ScaleBreak>;
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
       /**
        * [descr:dxRangeSelectorOptions.scale.categories]
        */
@@ -33990,11 +34099,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.maxRange]
        */
-      maxRange?: VizTimeInterval;
+      maxRange?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.minRange]
        */
-      minRange?: VizTimeInterval;
+      minRange?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.minorTick]
        */
@@ -34023,7 +34132,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.minorTickInterval]
        */
-      minorTickInterval?: VizTimeInterval;
+      minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.placeholderHeight]
        */
@@ -34060,7 +34169,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.tickInterval]
        */
-      tickInterval?: VizTimeInterval;
+      tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.type]
        */
@@ -34167,7 +34276,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelectorOptions.value]
      */
-    value?: Array<number | string | Date> | VizRange;
+    value?:
+      | Array<number | string | Date>
+      | DevExpress.common.charts.VisualRange;
   }
   /**
    * [descr:dxSankey]
@@ -35472,7 +35583,8 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxVectorMapLegends extends BaseLegend {
+  export interface dxVectorMapLegends
+    extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:dxVectorMapOptions.legends.customizeHint]
      */
@@ -35960,7 +36072,8 @@ declare module DevExpress.viz {
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface FunnelLegendItem extends BaseLegendItem {
+  export interface FunnelLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:FunnelLegendItem.item]
      */
@@ -36073,7 +36186,8 @@ declare module DevExpress.viz {
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface PieChartLegendItem extends BaseLegendItem {
+  export interface PieChartLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:PieChartLegendItem.argument]
      */
@@ -36192,51 +36306,11 @@ declare module DevExpress.viz {
    */
   export function registerTheme(customTheme: any, baseTheme: string): void;
   /**
-   * [descr:ScaleBreak]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ScaleBreak {
-    /**
-     * [descr:ScaleBreak.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:ScaleBreak.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type SeriesType =
-    | 'area'
-    | 'bar'
-    | 'bubble'
-    | 'candlestick'
-    | 'fullstackedarea'
-    | 'fullstackedbar'
-    | 'fullstackedline'
-    | 'fullstackedspline'
-    | 'fullstackedsplinearea'
-    | 'line'
-    | 'rangearea'
-    | 'rangebar'
-    | 'scatter'
-    | 'spline'
-    | 'splinearea'
-    | 'stackedarea'
-    | 'stackedbar'
-    | 'stackedline'
-    | 'stackedspline'
-    | 'stackedsplinearea'
-    | 'steparea'
-    | 'stepline'
-    | 'stock';
-  /**
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface VectorMapLegendItem extends BaseLegendItem {
+  export interface VectorMapLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:VectorMapLegendItem.color]
      */
@@ -36277,69 +36351,6 @@ declare module DevExpress.viz {
      */
     to?: (coordinates: Array<number>) => Array<number>;
   }
-  /**
-   * [descr:VizRange]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface VizRange {
-    /**
-     * [descr:VizRange.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:VizRange.length]
-     */
-    length?: VizTimeInterval;
-    /**
-     * [descr:VizRange.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * [descr:VizTimeInterval]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type VizTimeInterval =
-    | number
-    | {
-        /**
-         * [descr:VizTimeInterval.days]
-         */
-        days?: number;
-        /**
-         * [descr:VizTimeInterval.hours]
-         */
-        hours?: number;
-        /**
-         * [descr:VizTimeInterval.milliseconds]
-         */
-        milliseconds?: number;
-        /**
-         * [descr:VizTimeInterval.minutes]
-         */
-        minutes?: number;
-        /**
-         * [descr:VizTimeInterval.months]
-         */
-        months?: number;
-        /**
-         * [descr:VizTimeInterval.quarters]
-         */
-        quarters?: number;
-        /**
-         * [descr:VizTimeInterval.seconds]
-         */
-        seconds?: number;
-        /**
-         * [descr:VizTimeInterval.weeks]
-         */
-        weeks?: number;
-        /**
-         * [descr:VizTimeInterval.years]
-         */
-        years?: number;
-      }
-    | DevExpress.common.charts.TimeInterval;
   export type VizWidget =
     | dxChart
     | dxPieChart

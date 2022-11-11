@@ -119,10 +119,38 @@ export type PointSymbol = 'circle' | 'cross' | 'polygon' | 'square' | 'triangle'
 export type RelativePosition = 'inside' | 'outside';
 
 /**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common.charts
+ * @hidden
+ */
+export type ScaleBreak = {
+    /**
+    * @docid
+    * @default undefined
+    * @public
+    */
+    endValue?: number | Date | string;
+    /**
+    * @docid
+    * @default undefined
+    * @public
+    */
+    startValue?: number | Date | string;
+};
+
+/**
  * @public
  * @namespace DevExpress.common.charts
  */
 export type ScaleBreakLineStyle = 'straight' | 'waved';
+
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 /**
  * @public
@@ -155,6 +183,34 @@ export type Theme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'gen
 export type TimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 
 /**
+ * @docid VizTimeInterval
+ * @public
+ * @namespace DevExpress.common.charts
+ * @hidden
+ * @default undefined
+ */
+export type TimeIntervalConfig = number | {
+    /** @docid VizTimeInterval.days */
+    days?: number;
+    /** @docid VizTimeInterval.hours */
+    hours?: number;
+    /** @docid VizTimeInterval.milliseconds */
+    milliseconds?: number;
+    /** @docid VizTimeInterval.minutes */
+    minutes?: number;
+    /** @docid VizTimeInterval.months */
+    months?: number;
+    /** @docid VizTimeInterval.quarters */
+    quarters?: number;
+    /** @docid VizTimeInterval.seconds */
+    seconds?: number;
+    /** @docid VizTimeInterval.weeks */
+    weeks?: number;
+    /** @docid VizTimeInterval.years */
+    years?: number;
+} | TimeInterval;
+
+/**
  * @public
  * @namespace DevExpress.common.charts
  */
@@ -165,6 +221,38 @@ export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
  * @namespace DevExpress.common.charts
  */
 export type ValueErrorBarType = 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance';
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common.charts
+ * @hidden
+ */
+export type VisualRange = {
+    /**
+    * @docid
+    * @default undefined
+    * @fires BaseWidgetOptions.onOptionChanged
+    * @public
+    */
+    endValue?: number | Date | string;
+    /**
+    * @docid
+    * @inherits VizTimeInterval
+    * @type number|object|Enums.TimeInterval
+    * @default undefined
+    * @public
+    */
+    length?: TimeIntervalConfig;
+    /**
+    * @docid
+    * @default undefined
+    * @fires BaseWidgetOptions.onOptionChanged
+    * @public
+    */
+    startValue?: number | Date | string;
+};
 
 /**
  * @public
@@ -183,8 +271,3 @@ export type WordWrap = 'normal' | 'breakWord' | 'none';
  * @namespace DevExpress.common.charts
  */
 export type ZoomPanAction = 'zoom' | 'pan';
-
-/**
- * @public
- * @namespace DevExpress.common.charts
- */

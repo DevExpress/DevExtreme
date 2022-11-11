@@ -12,6 +12,7 @@ import {
   SingleMultipleOrNone,
   Sortable,
   SortOrder,
+  ValidationRule,
 } from '../common';
 
 import {
@@ -68,10 +69,6 @@ import {
 import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
-
-import {
-  ValidationRule,
-} from '../ui/validation_rules';
 
 /**
  * @namespace DevExpress.common.grids
