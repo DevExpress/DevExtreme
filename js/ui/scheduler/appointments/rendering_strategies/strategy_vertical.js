@@ -384,8 +384,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const config = super._calculateGeometryConfig(coordinates);
+        const minAppointmentCountPerCell = Math.min(config.appointmentCountPerCell, this._getDynamicAppointmentCountPerCell().allDay);
 
-        if(coordinates.allDay && coordinates.count <= config.appointmentCountPerCell) {
+        if(coordinates.allDay && coordinates.count <= minAppointmentCountPerCell) {
             config.offset = 0;
         }
 
