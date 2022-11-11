@@ -126,7 +126,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.E1035
      */
-    E1035: 'The editor cannot be created because of an internal error: {0}',
+    E1035: 'The editor cannot be created: {0}',
 
     /**
      * @name ErrorsUIWidgets.E1037
