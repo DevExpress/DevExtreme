@@ -422,3 +422,32 @@ declare module DevExpress.common.charts {
     /** @deprecated Use DevExpress.common.grids.SummaryType instead */
     export type SummaryType = DevExpress.common.grids.SummaryType;
 }
+
+// v22.2
+
+declare module DevExpress.ui {
+    /** @deprecated Use DevExpress.common.AsyncRule instead */
+    export type AsyncRule = DevExpress.common.AsyncRule;
+    /** @deprecated Use DevExpress.common.CompareRule instead */
+    export type CompareRule = DevExpress.common.CompareRule;
+    /** @deprecated Use DevExpress.common.CustomRule instead */
+    export type CustomRule = DevExpress.common.CustomRule;
+    /** @deprecated Use DevExpress.common.EmailRule instead */
+    export type EmailRule = DevExpress.common.EmailRule;
+    /** @deprecated Use DevExpress.common.NumericRule instead */
+    export type NumericRule = DevExpress.common.NumericRule;
+    /** @deprecated Use DevExpress.common.PatternRule instead */
+    export type PatternRule = DevExpress.common.PatternRule;
+    /** @deprecated Use DevExpress.common.RangeRule instead */
+    export type RangeRule = DevExpress.common.RangeRule;
+    /** @deprecated Use DevExpress.common.RequiredRule instead */
+    export type RequiredRule = DevExpress.common.RequiredRule;
+    /** @deprecated Use DevExpress.common.StringLengthRule instead */
+    export type StringLengthRule = DevExpress.common.StringLengthRule;
+    /** @deprecated Use DevExpress.common.ValidationCallbackData instead */
+    export type ValidationCallbackData = DevExpress.common.ValidationCallbackData;
+    /** @deprecated Use DevExpress.common.ValidationRule instead */
+    export type ValidationRule = DevExpress.common.ValidationRule;
+    /** @deprecated Use DevExpress.common.ValidationRuleType instead */
+    export type ValidationRuleType = DevExpress.common.ValidationRuleType;
+}

@@ -1379,8 +1379,92 @@ declare module DevExpress.animation {
 }
 declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
+  /**
+   * [descr:AsyncRule]
+   */
+  export type AsyncRule = {
+    /**
+     * [descr:AsyncRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:AsyncRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:AsyncRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:AsyncRule.type]
+     */
+    type: 'async';
+    /**
+     * [descr:AsyncRule.validationCallback]
+     */
+    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
+  };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  /**
+   * [descr:CompareRule]
+   */
+  export type CompareRule = {
+    /**
+     * [descr:CompareRule.comparisonTarget]
+     */
+    comparisonTarget?: () => any;
+    /**
+     * [descr:CompareRule.comparisonType]
+     */
+    comparisonType?: ComparisonOperator;
+    /**
+     * [descr:CompareRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:CompareRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:CompareRule.type]
+     */
+    type: 'compare';
+  };
+  export type ComparisonOperator =
+    | '!='
+    | '!=='
+    | '<'
+    | '<='
+    | '=='
+    | '==='
+    | '>'
+    | '>=';
+  /**
+   * [descr:CustomRule]
+   */
+  export type CustomRule = {
+    /**
+     * [descr:CustomRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:CustomRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:CustomRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:CustomRule.type]
+     */
+    type: 'custom';
+    /**
+     * [descr:CustomRule.validationCallback]
+     */
+    validationCallback?: (options: ValidationCallbackData) => boolean;
+  };
   export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
@@ -1395,6 +1479,23 @@ declare module DevExpress.common {
     DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
   export type DragHighlight = 'push' | 'indicate';
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
+  /**
+   * [descr:EmailRule]
+   */
+  export type EmailRule = {
+    /**
+     * [descr:EmailRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:EmailRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:EmailRule.type]
+     */
+    type: 'email';
+  };
   export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
   export type FieldChooserLayout = 0 | 1 | 2;
   export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -1433,9 +1534,47 @@ declare module DevExpress.common {
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
 
+  /**
+   * [descr:NumericRule]
+   */
+  export type NumericRule = {
+    /**
+     * [descr:NumericRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:NumericRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:NumericRule.type]
+     */
+    type: 'numeric';
+  };
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
+  /**
+   * [descr:PatternRule]
+   */
+  export type PatternRule = {
+    /**
+     * [descr:PatternRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:PatternRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:PatternRule.pattern]
+     */
+    pattern?: RegExp | string;
+    /**
+     * [descr:PatternRule.type]
+     */
+    type: 'pattern';
+  };
   export type Position = 'bottom' | 'left' | 'right' | 'top';
   export type PositionAlignment =
     | 'bottom'
@@ -1447,6 +1586,35 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+  /**
+   * [descr:RangeRule]
+   */
+  export type RangeRule = {
+    /**
+     * [descr:RangeRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:RangeRule.max]
+     */
+    max?: Date | number;
+    /**
+     * [descr:RangeRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:RangeRule.min]
+     */
+    min?: Date | number;
+    /**
+     * [descr:RangeRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:RangeRule.type]
+     */
+    type: 'range';
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1461,6 +1629,23 @@ declare module DevExpress.common {
       'component' | 'event'
     >
   >;
+  /**
+   * [descr:RequiredRule]
+   */
+  export type RequiredRule = {
+    /**
+     * [descr:RequiredRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:RequiredRule.trim]
+     */
+    trim?: boolean;
+    /**
+     * [descr:RequiredRule.type]
+     */
+    type: 'required';
+  };
   export type Scrollable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
@@ -1476,6 +1661,35 @@ declare module DevExpress.common {
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
+  /**
+   * [descr:StringLengthRule]
+   */
+  export type StringLengthRule = {
+    /**
+     * [descr:StringLengthRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:StringLengthRule.max]
+     */
+    max?: number;
+    /**
+     * [descr:StringLengthRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:StringLengthRule.min]
+     */
+    min?: number;
+    /**
+     * [descr:StringLengthRule.trim]
+     */
+    trim?: boolean;
+    /**
+     * [descr:StringLengthRule.type]
+     */
+    type: 'stringLength';
+  };
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TextBoxPredefinedButton = 'clear';
 
@@ -1493,7 +1707,35 @@ declare module DevExpress.common {
     | 'dxDropDownButton';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
+  export type ValidationCallbackData = {
+    value?: any;
+    rule: any;
+    validator: any;
+    data?: any;
+    column?: any;
+    formItem?: any;
+  };
   export type ValidationMessageMode = 'always' | 'auto';
+  export type ValidationRule =
+    | AsyncRule
+    | CompareRule
+    | CustomRule
+    | EmailRule
+    | NumericRule
+    | PatternRule
+    | RangeRule
+    | RequiredRule
+    | StringLengthRule;
+  export type ValidationRuleType =
+    | 'required'
+    | 'numeric'
+    | 'range'
+    | 'stringLength'
+    | 'custom'
+    | 'compare'
+    | 'pattern'
+    | 'email'
+    | 'async';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
@@ -1809,7 +2051,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.validationRules]
      */
-    validationRules?: Array<DevExpress.ui.ValidationRule>;
+    validationRules?: Array<ValidationRule>;
     /**
      * [descr:GridBaseColumn.visible]
      */
@@ -3333,7 +3575,7 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowValidatingInfo<TRowData = any, TKey = any> {
-    readonly brokenRules: Array<DevExpress.ui.ValidationRule>;
+    readonly brokenRules: Array<ValidationRule>;
     isValid: boolean;
     readonly key: TKey;
     readonly newData: DevExpress.core.DeepPartial<TRowData>;
@@ -6456,32 +6698,6 @@ declare module DevExpress.pdfExporter {
 }
 declare module DevExpress.ui {
   /**
-   * [descr:AsyncRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface AsyncRule {
-    /**
-     * [descr:AsyncRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:AsyncRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:AsyncRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:AsyncRule.type]
-     */
-    type: 'async';
-    /**
-     * [descr:AsyncRule.validationCallback]
-     */
-    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
-  }
-  /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6660,44 +6876,6 @@ declare module DevExpress.ui {
      */
     selectedItems?: Array<TItem>;
   }
-  /**
-   * [descr:CompareRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface CompareRule {
-    /**
-     * [descr:CompareRule.comparisonTarget]
-     */
-    comparisonTarget?: () => any;
-    /**
-     * [descr:CompareRule.comparisonType]
-     */
-    comparisonType?: ComparisonOperator;
-    /**
-     * [descr:CompareRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:CompareRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:CompareRule.type]
-     */
-    type: 'compare';
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type ComparisonOperator =
-    | '!='
-    | '!=='
-    | '<'
-    | '<='
-    | '=='
-    | '==='
-    | '>'
-    | '>=';
   export interface CustomDialogOptions {
     title?: string;
     messageHtml?: string;
@@ -6705,32 +6883,6 @@ declare module DevExpress.ui {
     showTitle?: boolean;
     message?: string;
     dragEnabled?: boolean;
-  }
-  /**
-   * [descr:CustomRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface CustomRule {
-    /**
-     * [descr:CustomRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:CustomRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:CustomRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:CustomRule.type]
-     */
-    type: 'custom';
-    /**
-     * [descr:CustomRule.validationCallback]
-     */
-    validationCallback?: (options: ValidationCallbackData) => boolean;
   }
   /**
    * [descr:DataExpressionMixin]
@@ -13905,15 +14057,15 @@ declare module DevExpress.ui {
      * [descr:dxFormSimpleItem.validationRules]
      */
     validationRules?: Array<
-      | RequiredRule
-      | NumericRule
-      | RangeRule
-      | StringLengthRule
-      | CustomRule
-      | CompareRule
-      | PatternRule
-      | EmailRule
-      | AsyncRule
+      | DevExpress.common.RequiredRule
+      | DevExpress.common.NumericRule
+      | DevExpress.common.RangeRule
+      | DevExpress.common.StringLengthRule
+      | DevExpress.common.CustomRule
+      | DevExpress.common.CompareRule
+      | DevExpress.common.PatternRule
+      | DevExpress.common.EmailRule
+      | DevExpress.common.AsyncRule
     >;
     /**
      * [descr:dxFormSimpleItem.visible]
@@ -23878,15 +24030,15 @@ declare module DevExpress.ui {
      * [descr:dxValidationGroupResult.brokenRules]
      */
     brokenRules?: Array<
-      | RequiredRule
-      | NumericRule
-      | RangeRule
-      | StringLengthRule
-      | CustomRule
-      | CompareRule
-      | PatternRule
-      | EmailRule
-      | AsyncRule
+      | DevExpress.common.RequiredRule
+      | DevExpress.common.NumericRule
+      | DevExpress.common.RangeRule
+      | DevExpress.common.StringLengthRule
+      | DevExpress.common.CustomRule
+      | DevExpress.common.CompareRule
+      | DevExpress.common.PatternRule
+      | DevExpress.common.EmailRule
+      | DevExpress.common.AsyncRule
     >;
     /**
      * [descr:dxValidationGroupResult.complete]
@@ -24031,9 +24183,9 @@ declare module DevExpress.ui {
       name?: string;
       isValid?: boolean;
       value?: any;
-      validationRules?: Array<ValidationRule>;
-      brokenRule?: ValidationRule;
-      brokenRules?: ValidationRule;
+      validationRules?: Array<DevExpress.common.ValidationRule>;
+      brokenRule?: DevExpress.common.ValidationRule;
+      brokenRules?: DevExpress.common.ValidationRule;
       status?: DevExpress.common.ValidationStatus;
     };
     export type ValidationResult = dxValidatorResult;
@@ -24089,7 +24241,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorOptions.validationRules]
      */
-    validationRules?: Array<ValidationRule>;
+    validationRules?: Array<DevExpress.common.ValidationRule>;
   }
   /**
    * [descr:dxValidatorResult]
@@ -24100,11 +24252,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.brokenRule]
      */
-    brokenRule?: ValidationRule;
+    brokenRule?: DevExpress.common.ValidationRule;
     /**
      * [descr:dxValidatorResult.brokenRules]
      */
-    brokenRules?: Array<ValidationRule>;
+    brokenRules?: Array<DevExpress.common.ValidationRule>;
     /**
      * [descr:dxValidatorResult.complete]
      */
@@ -24116,7 +24268,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.pendingRules]
      */
-    pendingRules?: Array<AsyncRule>;
+    pendingRules?: Array<DevExpress.common.AsyncRule>;
     /**
      * [descr:dxValidatorResult.status]
      */
@@ -24124,7 +24276,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.validationRules]
      */
-    validationRules?: Array<ValidationRule>;
+    validationRules?: Array<DevExpress.common.ValidationRule>;
     /**
      * [descr:dxValidatorResult.value]
      */
@@ -24206,24 +24358,6 @@ declare module DevExpress.ui {
      * [descr:EditorOptions.stylingMode]
      */
     stylingMode?: DevExpress.common.EditorStyle;
-  }
-  /**
-   * [descr:EmailRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface EmailRule {
-    /**
-     * [descr:EmailRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:EmailRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:EmailRule.type]
-     */
-    type: 'email';
   }
   /**
    * [descr:Format]
@@ -24353,97 +24487,9 @@ declare module DevExpress.ui {
    */
   export function notify(options: any, stack?: Stack): void;
   /**
-   * [descr:NumericRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface NumericRule {
-    /**
-     * [descr:NumericRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:NumericRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:NumericRule.type]
-     */
-    type: 'numeric';
-  }
-  /**
-   * [descr:PatternRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface PatternRule {
-    /**
-     * [descr:PatternRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:PatternRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:PatternRule.pattern]
-     */
-    pattern?: RegExp | string;
-    /**
-     * [descr:PatternRule.type]
-     */
-    type: 'pattern';
-  }
-  /**
-   * [descr:RangeRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface RangeRule {
-    /**
-     * [descr:RangeRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:RangeRule.max]
-     */
-    max?: Date | number;
-    /**
-     * [descr:RangeRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:RangeRule.min]
-     */
-    min?: Date | number;
-    /**
-     * [descr:RangeRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:RangeRule.type]
-     */
-    type: 'range';
-  }
-  /**
    * [descr:ui.repaintFloatingActionButton()]
    */
   export function repaintFloatingActionButton(): void;
-  /**
-   * [descr:RequiredRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface RequiredRule {
-    /**
-     * [descr:RequiredRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:RequiredRule.trim]
-     */
-    trim?: boolean;
-    /**
-     * [descr:RequiredRule.type]
-     */
-    type: 'required';
-  }
   /**
    * [descr:SearchBoxMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -24526,36 +24572,6 @@ declare module DevExpress.ui {
       | 'right-stack';
   }
   /**
-   * [descr:StringLengthRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface StringLengthRule {
-    /**
-     * [descr:StringLengthRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:StringLengthRule.max]
-     */
-    max?: number;
-    /**
-     * [descr:StringLengthRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:StringLengthRule.min]
-     */
-    min?: number;
-    /**
-     * [descr:StringLengthRule.trim]
-     */
-    trim?: boolean;
-    /**
-     * [descr:StringLengthRule.type]
-     */
-    type: 'stringLength';
-  }
-  /**
    * [descr:ui.template]
    * @deprecated [depNote:ui.template]
    */
@@ -24582,34 +24598,6 @@ declare module DevExpress.ui {
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
   }
-  export interface ValidationCallbackData {
-    value?: any;
-    rule: any;
-    validator: any;
-    data?: any;
-    column?: any;
-    formItem?: any;
-  }
-  export type ValidationRule =
-    | AsyncRule
-    | CompareRule
-    | CustomRule
-    | EmailRule
-    | NumericRule
-    | PatternRule
-    | RangeRule
-    | RequiredRule
-    | StringLengthRule;
-  export type ValidationRuleType =
-    | 'required'
-    | 'numeric'
-    | 'range'
-    | 'stringLength'
-    | 'custom'
-    | 'compare'
-    | 'pattern'
-    | 'email'
-    | 'async';
   /**
    * [descr:Widget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
