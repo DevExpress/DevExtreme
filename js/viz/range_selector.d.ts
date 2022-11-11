@@ -745,7 +745,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @fires dxRangeSelectorOptions.onValueChanged
      * @notUsedInTheme
      * @public
-     * @type Array<number | string | Date> | VizRange
      */
     value?: Array<number | string | Date> | VisualRange;
 }
@@ -773,7 +772,6 @@ export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> 
     /**
      * @docid
      * @publicName setValue(value)
-     * @param1 value:Array<number|string|Date>|VizRange
      * @public
      */
     setValue(value: Array<number | string | Date> | VisualRange): void;

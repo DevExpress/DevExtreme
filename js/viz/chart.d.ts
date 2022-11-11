@@ -491,14 +491,12 @@ export interface chartAxisObject {
     /**
      * @docid
      * @publicName visualRange()
-     * @return VizRange
      * @public
      */
     visualRange(): VisualRange;
     /**
      * @docid
      * @publicName visualRange(visualRange)
-     * @param1 visualRange:Array<number|string|Date>|VizRange
      * @public
      */
     visualRange(visualRange: Array<number | string | Date> | VisualRange): void;
@@ -1016,8 +1014,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field rangeEnd:Date|Number:deprecated(range)
      * @type_function_param1_field actionType:Enums.ZoomPanAction
      * @type_function_param1_field component:dxChart
-     * @type_function_param1_field range:VizRange
-     * @type_function_param1_field previousRange:VizRange
      * @notUsedInTheme
      * @action
      * @public
@@ -1030,7 +1026,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field component:dxChart
      * @type_function_param1_field event:event
      * @type_function_param1_field actionType:Enums.ZoomPanAction
-     * @type_function_param1_field range:VizRange
      * @notUsedInTheme
      * @action
      * @public
@@ -1385,7 +1380,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.visualRange
      * @fires BaseWidgetOptions.onOptionChanged
-     * @type VizRange | Array<number | string | Date>
      * @notUsedInTheme
      * @public
      */
@@ -1399,7 +1393,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.wholeRange
      * @default undefined
-     * @type VizRange | Array<number | string | Date>
      * @public
      */
     wholeRange?: VisualRange | Array<number | string | Date>;
@@ -2433,7 +2426,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @fires BaseWidgetOptions.onOptionChanged
      * @notUsedInTheme
      * @public
-     * @type VizRange | Array<number | string | Date>
      */
     visualRange?: VisualRange | Array<number | string | Date>;
     /**
@@ -2445,7 +2437,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.wholeRange
      * @default undefined
-     * @type VizRange | Array<number | string | Date>
      * @public
      */
     wholeRange?: VisualRange | Array<number | string | Date>;

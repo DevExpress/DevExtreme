@@ -372,8 +372,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1_field component:dxPolarChart
      * @type_function_param1_field event:event
      * @type_function_param1_field actionType:Enums.ZoomPanAction
-     * @type_function_param1_field range:VizRange
-     * @type_function_param1_field previousRange:VizRange
      * @notUsedInTheme
      * @action
      * @public
@@ -386,7 +384,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1_field component:dxPolarChart
      * @type_function_param1_field event:event
      * @type_function_param1_field actionType:Enums.ZoomPanAction
-     * @type_function_param1_field range:VizRange
      * @notUsedInTheme
      * @action
      * @public
@@ -1172,7 +1169,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     valueType?: ChartsDataType;
     /**
      * @docid dxPolarChartOptions.valueAxis.visualRange
-     * @type VizRange | Array<number | string | Date>
      * @fires BaseWidgetOptions.onOptionChanged
      * @notUsedInTheme
      * @public
@@ -1186,7 +1182,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
     /**
      * @docid dxPolarChartOptions.valueAxis.wholeRange
-     * @type VizRange | Array<number | string | Date>
      * @default undefined
      * @public
      */

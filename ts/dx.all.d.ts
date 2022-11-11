@@ -2137,19 +2137,19 @@ declare module DevExpress.common.charts {
     | 'stdError'
     | 'variance';
   /**
-   * [descr:VizRange]
+   * [descr:VisualRange]
    */
   export type VisualRange = {
     /**
-     * [descr:VizRange.endValue]
+     * [descr:VisualRange.endValue]
      */
     endValue?: number | Date | string;
     /**
-     * [descr:VizRange.length]
+     * [descr:VisualRange.length]
      */
     length?: TimeIntervalConfig;
     /**
-     * [descr:VizRange.startValue]
+     * [descr:VisualRange.startValue]
      */
     startValue?: number | Date | string;
   };

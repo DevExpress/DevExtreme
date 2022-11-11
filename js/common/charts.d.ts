@@ -223,7 +223,7 @@ export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
 export type ValueErrorBarType = 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance';
 
 /**
- * @docid VizRange
+ * @docid
  * @public
  * @type object
  * @namespace DevExpress.common.charts
@@ -231,14 +231,14 @@ export type ValueErrorBarType = 'fixed' | 'percent' | 'stdDeviation' | 'stdError
  */
 export type VisualRange = {
     /**
-    * @docid VizRange.endValue
+    * @docid
     * @default undefined
     * @fires BaseWidgetOptions.onOptionChanged
     * @public
     */
     endValue?: number | Date | string;
     /**
-    * @docid VizRange.length
+    * @docid
     * @inherits VizTimeInterval
     * @type number|object|Enums.TimeInterval
     * @default undefined
@@ -246,7 +246,7 @@ export type VisualRange = {
     */
     length?: TimeIntervalConfig;
     /**
-    * @docid VizRange.startValue
+    * @docid
     * @default undefined
     * @fires BaseWidgetOptions.onOptionChanged
     * @public
