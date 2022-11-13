@@ -700,7 +700,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
                 if(editor) {
                     applyFilterViewController.setCurrentColumnForFiltering(column);
-                    const filter = this._dataController.getCombinedFilter();
+                    const filter = this._dataController.getCombinedFilter() || null;
                     applyFilterViewController.setCurrentColumnForFiltering(null);
 
                     const editorDataSource = editor.option('dataSource');
