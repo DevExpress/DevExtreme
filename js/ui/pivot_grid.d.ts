@@ -90,19 +90,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
 export type DisposingEvent = EventInfo<dxPivotGrid>;
 
 /** @public */
-export type ExportedEvent = EventInfo<dxPivotGrid>;
-
-/** @public */
 export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
-    fileName?: string;
-};
-
-/** @public */
-export type FileSavingEvent = Cancelable & {
-    readonly component: dxPivotGrid;
-    readonly element: DxElement;
-    readonly data?: Blob;
-    readonly format?: string;
     fileName?: string;
 };
 
@@ -169,12 +157,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @default false
        */
       enabled?: boolean;
-      /**
-       * @docid
-       * @default "PivotGrid"
-       * @deprecated
-       */
-      fileName?: string;
     };
     /**
      * @docid
@@ -462,16 +444,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
     /**
      * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPivotGrid
-     * @action
-     * @public
-     * @deprecated
-     */
-    onExported?: ((e: ExportedEvent) => void);
-    /**
-     * @docid
      * @type_function_param1 e:object
      * @default null
      * @type_function_param1_field component:dxPivotGrid
@@ -479,15 +451,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @public
      */
     onExporting?: ((e: ExportingEvent) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @default null
-     * @action
-     * @public
-     * @deprecated
-     */
-    onFileSaving?: ((e: FileSavingEvent) => void);
     /**
      * @docid
      * @default "standard"
@@ -668,13 +631,6 @@ export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
      * @public
      */
     bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean; dataFieldsDisplayMode?: string; putDataFieldsInto?: string; alternateDataFields?: boolean; processCell?: Function; customizeChart?: Function; customizeSeries?: Function }): Function & null;
-    /**
-     * @docid
-     * @publicName exportToExcel()
-     * @deprecated excelExporter.exportPivotGrid
-     * @public
-     */
-    exportToExcel(): void;
     /**
      * @docid
      * @publicName getDataSource()
