@@ -24,12 +24,33 @@
         },
         "test": {
             "dependsOn": ["^build"],
-            "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+            "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/jest.preset.js"
+            ]
         }
     },
     "defaultBase": "22_2",
+    "defaultProject": "react-test",
     "workspaceLayout": {
         "appsDir": "playgrounds",
         "libsDir": "packages"
+    },
+    "generators": {
+        "@nrwl/react": {
+            "application": {
+                "style": "scss",
+                "linter": "eslint",
+                "babel": true
+            },
+            "component": {
+                "style": "scss"
+            },
+            "library": {
+                "style": "scss",
+                "linter": "eslint"
+            }
+        }
     }
 }

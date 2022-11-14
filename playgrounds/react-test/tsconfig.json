@@ -12,16 +12,16 @@
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node16"
     },
     "files": [],
     "include": [],
     "references": [
         {
-            "path": "./tsconfig.app.json"
+            "path": "..\\..\\packages\\core\\tsconfig.package.json"
         },
         {
-            "path": "./tsconfig.spec.json"
+            "path": "..\\..\\packages\\react\\tsconfig.package.json"
         }
     ]
 }

@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "serve": "npm start",
     "build": "ng build",
     "cache:clean": "ng cache clean"
   },
@@ -19,12 +20,10 @@
     "@angular/router": "^14.1.0",
     "@devexpress/angular": "file:../../packages/angular",
     "@devexpress/core": "file:../../packages/core",
-    "concurrently": "^7.3.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
-  "peerDependencies": {},
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.1.0",
     "@angular/cli": "~14.1.0",
