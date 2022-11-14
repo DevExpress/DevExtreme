@@ -5420,7 +5420,6 @@
           {
             "Title": "Dynamic Viewport",
             "Name": "DynamicViewport",
-            "DocUrl": "Guide/UI_Components/VectorMap/End-User_Interaction/#Panning/Pan_in_Code",
             "Widget": "VectorMap",
             "Modules": "vectormap",
             "Badge": "Updated",
