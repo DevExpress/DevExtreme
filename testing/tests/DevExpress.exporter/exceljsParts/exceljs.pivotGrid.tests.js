@@ -2,8 +2,6 @@ import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
-import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
@@ -45,18 +43,10 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
-    before: function() {
-        initializeDxObjectAssign();
-        initializeDxArrayFind();
-    },
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
         helper = new ExcelJSPivotGridTestHelper(this.worksheet);
-    },
-    after: function() {
-        clearDxObjectAssign();
-        clearDxArrayFind();
     }
 };
 

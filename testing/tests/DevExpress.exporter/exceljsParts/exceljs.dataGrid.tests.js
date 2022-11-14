@@ -4,8 +4,6 @@ import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
 import { Export } from 'exporter/exceljs/export';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
-import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
@@ -39,10 +37,6 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
-    before: function() {
-        initializeDxObjectAssign();
-        initializeDxArrayFind();
-    },
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
@@ -55,10 +49,6 @@ const moduleConfig = {
     afterEach: function() {
         this.stub.restore();
     },
-    after: function() {
-        clearDxObjectAssign();
-        clearDxArrayFind();
-    }
 };
 
 // How to view a generated ExcelJS workbook in Excel:
