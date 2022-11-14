@@ -117,7 +117,7 @@ export const fileSaver = {
         }
     },
 
-    saveAs: function(fileName, format, data, proxyURL, forceProxy) {
+    saveAs: function(fileName, format, data) {
         const fileExtension = FILE_EXTESIONS[format];
         if(fileExtension) {
             fileName += '.' + fileExtension;
