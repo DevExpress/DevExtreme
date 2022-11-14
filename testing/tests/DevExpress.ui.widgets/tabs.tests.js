@@ -306,7 +306,7 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok(!scrollable.option('scrollByContent'), 'scrollByContent was set');
     });
 
-    QUnit.test('tabs should not crash in IE and Firefox after creation', function(assert) {
+    QUnit.test('tabs should not crash in Firefox after creation', function(assert) {
         $('#tabs').addClass('bigtab').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
             scrollingEnabled: true,
