@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import eventsEngine from 'events/core/events_engine';
 import { fileSaver } from 'exporter';
 import errors from 'ui/widget/ui.errors';
 import typeUtils from 'core/utils/type';
@@ -178,15 +177,4 @@ QUnit.test('SaveBlobAs is called after saveAs', function(assert) {
     fileSaver._saveBlobAs = saveBlobAs;
 
     assert.ok(isSaveBlobAs);
-});
-
-QUnit.test('Force using proxy', function(assert) {
-    sinon.stub(eventsEngine, 'trigger');
-    try {
-        fileSaver.saveAs('test', 'EXCEl', undefined, 'http://localhost/', true);
-
-        assert.deepEqual(eventsEngine.trigger.lastCall.args[1], 'submit');
-    } finally {
-        eventsEngine.trigger.restore();
-    }
 });
