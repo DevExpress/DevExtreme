@@ -1022,13 +1022,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
 
             if(typeUtils.isObject(options)) {
-                for(const key in options) {
-                    if(typeUtils.isObject(that.options[key])) {
-                        that.options[key] = $.extend(true, that.options[key], options[key]);
-                    } else {
-                        that.options[key] = options[key];
-                    }
-                }
+                $.extend(true, that.options, options);
             }
 
             if(!arguments.length) {
