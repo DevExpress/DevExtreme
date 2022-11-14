@@ -1820,7 +1820,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.equal(changeHandler.callCount, 1, 'change event has not been fired if value is not changed');
     });
 
-    QUnit.test('change event should be fired after extra digits have been entered (IE bug)', function(assert) {
+    QUnit.test('change event should be fired after extra digits have been entered', function(assert) {
         const changeHandler = sinon.spy();
 
         this.instance.option({
