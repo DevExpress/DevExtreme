@@ -95,19 +95,6 @@ QUnit.test('saveAs - check revokeObjectURL', function(assert) {
     }
 });
 
-QUnit.test('Proxy Url exportForm generate', function(assert) {
-    const originalTrigger = eventsEngine.trigger;
-    eventsEngine.trigger = $.noop;
-    const testForm = fileSaver._saveByProxy('#', 'testFile.xlsx', 'EXCEL', 'testData');
-
-    assert.equal(testForm.attr('action'), '#', 'Set proxy as form action');
-    assert.equal(testForm.children('input[name=contentType]').eq(0).val(), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'Set contentType in form Post data');
-    assert.equal(testForm.children('input[name=fileName]').eq(0).val(), 'testFile.xlsx', 'Set fileName in form Post data');
-    assert.equal(testForm.children('input[name=data]').eq(0).val(), 'testData', 'Set data in form Post data');
-
-    eventsEngine.trigger = originalTrigger;
-});
-
 QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
     if(typeUtils.isFunction(window.Blob)) {
         const _winJSBlobSave = fileSaver._winJSBlobSave;
@@ -201,19 +188,5 @@ QUnit.test('Force using proxy', function(assert) {
         assert.deepEqual(eventsEngine.trigger.lastCall.args[1], 'submit');
     } finally {
         eventsEngine.trigger.restore();
-    }
-});
-
-QUnit.test('Using proxyUrl is now deprecated', function(assert) {
-    sinon.stub(eventsEngine, 'trigger');
-    sinon.stub(errors, 'log');
-    try {
-        fileSaver.saveAs('test', 'EXCEl', undefined, 'http://localhost/', true);
-
-        assert.equal(errors.log.callCount, 1);
-        assert.equal(errors.log.getCall(0).args[0], 'W0001');
-    } finally {
-        eventsEngine.trigger.restore();
-        errors.log.restore();
     }
 });

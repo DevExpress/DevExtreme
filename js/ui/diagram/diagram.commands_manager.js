@@ -869,7 +869,7 @@ const DiagramCommandsManager = {
         if(window && window.atob && isFunction(window.Blob)) {
             const blob = this._getBlobByDataURI(window, dataURI, mimeString);
             const options = widget.option('export');
-            fileSaver.saveAs(options.fileName || 'foo', format, blob, options.proxyURL);
+            fileSaver.saveAs(options.fileName || 'foo', format, blob);
         }
     },
     _getBlobByDataURI(window, dataURI, mimeString) {

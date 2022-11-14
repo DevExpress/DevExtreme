@@ -608,13 +608,11 @@ function getExportOptions(widget, exportOptions, fileName, format) {
     return {
         format: format || DEFAULT_EXPORT_FORMAT,
         fileName: fileName || exportOptions.fileName || 'file',
-        proxyUrl: exportOptions.proxyUrl,
         backgroundColor: exportOptions.backgroundColor,
         width,
         height,
         margin: exportOptions.margin,
         svgToCanvas: exportOptions.svgToCanvas,
-        forceProxy: exportOptions.forceProxy,
         exportingAction: widget._createActionByOption('onExporting', { excludeValidators: ['disabled'] }),
         exportedAction: widget._createActionByOption('onExported', { excludeValidators: ['disabled'] }),
         fileSavingAction: widget._createActionByOption('onFileSaving', { excludeValidators: ['disabled'] })
@@ -681,7 +679,6 @@ export const plugin = {
             options.exportedAction = null;
             options.margin = 0;
             options.format = 'PNG';
-            options.forceProxy = true;
             options.fileSavingAction = eventArgs => {
                 print(`data:image/png;base64,${eventArgs.data}`, { width: options.width, __test: options.__test });
                 eventArgs.cancel = true;

@@ -457,7 +457,6 @@ class DiagramToolbar extends DiagramPanel {
             isMobileView: false,
             export: {
                 fileName: 'Diagram',
-                proxyUrl: undefined
             },
             locateInMenu: 'auto',
             buttonStylingMode: 'text',

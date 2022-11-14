@@ -9274,11 +9274,6 @@ declare module DevExpress.ui {
        */
       ignoreExcelErrors?: boolean;
       /**
-       * [descr:dxDataGridOptions.export.proxyUrl]
-       * @deprecated [depNote:dxDataGridOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
-      /**
        * [descr:dxDataGridOptions.export.texts]
        */
       texts?: ExportTexts;
@@ -11545,11 +11540,6 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.export.fileName]
        */
       fileName?: string;
-      /**
-       * [descr:dxDiagramOptions.export.proxyUrl]
-       * @deprecated [depNote:dxDiagramOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
     };
     /**
      * [descr:dxDiagramOptions.fullScreen]
@@ -18461,11 +18451,6 @@ declare module DevExpress.ui {
        * @deprecated [depNote:dxPivotGridOptions.export.ignoreExcelErrors]
        */
       ignoreExcelErrors?: boolean;
-      /**
-       * [descr:dxPivotGridOptions.export.proxyUrl]
-       * @deprecated [depNote:dxPivotGridOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
     };
     /**
      * [descr:dxPivotGridOptions.fieldChooser]
@@ -26317,11 +26302,6 @@ declare module DevExpress.viz {
      * [descr:BaseWidgetOptions.export.printingEnabled]
      */
     printingEnabled?: boolean;
-    /**
-     * [descr:BaseWidgetOptions.export.proxyUrl]
-     * @deprecated [depNote:BaseWidgetOptions.export.proxyUrl]
-     */
-    proxyUrl?: string;
     /**
      * [descr:BaseWidgetOptions.export.svgToCanvas]
      */
@@ -36006,7 +35986,6 @@ declare module DevExpress.viz {
       fileName?: string;
       format?: string;
       backgroundColor?: string;
-      proxyUrl?: string;
       width?: number;
       height?: number;
       onExporting?: Function;
@@ -36035,7 +36014,6 @@ declare module DevExpress.viz {
       gridLayout?: boolean;
       verticalAlignment?: DevExpress.common.VerticalAlignment;
       horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-      proxyUrl?: string;
       onExporting?: Function;
       onExported?: Function;
       onFileSaving?: Function;
