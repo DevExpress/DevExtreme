@@ -1130,18 +1130,6 @@ export type Export<TRowData = any, TKey = any> = {
    */
   fileName?: string;
   /**
-   * @docid dxDataGridOptions.export.ignoreExcelErrors
-   * @default true
-   * @deprecated
-   */
-  ignoreExcelErrors?: boolean;
-  /**
-   * @docid dxDataGridOptions.export.proxyUrl
-   * @default undefined
-   * @deprecated
-   */
-  proxyUrl?: string;
-  /**
    * @docid dxDataGridOptions.export.texts
    * @type object
    */

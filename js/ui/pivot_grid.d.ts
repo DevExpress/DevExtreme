@@ -175,18 +175,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @deprecated
        */
       fileName?: string;
-      /**
-       * @docid
-       * @default true
-       * @deprecated
-       */
-      ignoreExcelErrors?: boolean;
-      /**
-       * @docid
-       * @default undefined
-       * @deprecated
-       */
-      proxyUrl?: string;
     };
     /**
      * @docid

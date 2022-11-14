@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,14 +32,252 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="toolbar"></div>
+    <!-- <div id="button"></div> -->
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
-        });
+        $(() => {
+            $("#toolbar").dxToolbar({
+                width: 400,
+                items: [
+                 {
+                    location: 'before',
+    widget: 'dxButton',
+    options: {
+      icon: 'plus',
+      stylingMode: 'contained',
+      type: 'default',
+      text: 'Add Task'
+    },
+                 },
+                {
+    location: 'before',
+    widget: 'dxButton',
+    options: {
+      icon: 'exportxlsx',
+    },
+  },
+  {
+    location: 'before',
+    widget: 'dxButton',
+    options: {
+      icon: 'exportpdf',
+    },
+  },
+  {
+    location: 'before',
+    widget: 'dxButton',
+    options: {
+      icon: 'refresh',
+    },
+  },
+  {
+    location: 'before',
+    widget: 'dxButton',
+    options: {
+      icon: 'attach',
+    },
+  },
+  {
+                    location: 'after',
+                    locateInMenu: 'auto',
+    //                 template() {
+    //                     return $('<div>').dxButton({
+    //                         icon: 'plus',
+    //   stylingModes: 'contained',
+    //   type: 'default',
+    //   text: 'Add Task'
+    //                     })
+    //                 }
+    widget: 'dxButton',
+    options: {
+      icon: 'plus',
+      stylingModes: 'contained',
+      type: 'default',
+      text: 'Add Task'
+    },
+                 },
+                {
+                    location: 'after',
+                    locateInMenu: 'auto',
+    widget: 'dxButton',
+    options: {
+      icon: 'exportxlsx',
+      text: 'Export XLSX File'
+    },
+  },
+  {
+    location: 'after',
+                    locateInMenu: 'auto',
+    widget: 'dxButton',
+    options: {
+      icon: 'exportpdf',
+      text: 'Export PDF File'
+    },
+  },
+  {
+    location: 'after',
+                    locateInMenu: 'auto',
+    widget: 'dxButton',
+    options: {
+      icon: 'refresh',
+      text: 'Refresh'
+    },
+  },
+  {
+    location: 'after',
+                    locateInMenu: 'auto',
+    widget: 'dxButton',
+    options: {
+      icon: 'attach',
+      text: 'Attach Image'
+    },
+  }]
+            })
+            const productTypes = [{
+  id: 1,
+  text: 'All',
+}, {
+  id: 2,
+  text: 'Video Players',
+}, {
+  id: 3,
+  text: 'Televisions',
+}, {
+  id: 4,
+  text: 'Monitors',
+}, {
+  id: 5,
+  text: 'Projectors',
+}];
+
+const products = [{
+  text: 'HD Video Player',
+  type: 2,
+}, {
+  text: 'SuperHD Video Player',
+  type: 2,
+}, {
+  text: 'SuperLCD 42',
+  type: 3,
+}, {
+  text: 'SuperLED 42',
+  type: 3,
+}, {
+  text: 'SuperLED 50',
+  type: 3,
+}, {
+  text: 'SuperLCD 55',
+  type: 3,
+}, {
+  text: 'DesktopLCD 19',
+  type: 4,
+}, {
+  text: 'DesktopLCD 21',
+  type: 4,
+}, {
+  text: 'DesktopLED 21',
+  type: 4,
+}, {
+  text: 'Projector Plus',
+  type: 5,
+}, {
+  text: 'Projector PlusHD',
+  type: 5,
+}];
+
+  $('#button').dxToolbar({
+    items: [{
+      location: 'before',
+      widget: 'dxButton',
+      options: {
+        type: 'back',
+        onClick() {
+          DevExpress.ui.notify('Back button has been clicked!');
+        },
+      },
+    }, {
+      location: 'before',
+      widget: 'dxButton',
+      locateInMenu: 'auto',
+      options: {
+        icon: 'refresh',
+        onClick() {
+          DevExpress.ui.notify('Refresh button has been clicked!');
+        },
+      },
+    }, {
+      location: 'center',
+      locateInMenu: 'never',
+      template() {
+        return $("<div class='toolbar-label'><b>Tom's Club</b> Products</div>");
+      },
+    }, {
+      location: 'after',
+      widget: 'dxSelectBox',
+      locateInMenu: 'auto',
+      options: {
+        width: 140,
+        items: productTypes,
+        valueExpr: 'id',
+        displayExpr: 'text',
+        value: productTypes[0].id,
+        onValueChanged(args) {
+          if (args.value > 1) {
+            productsStore.filter('type', '=', args.value);
+          } else {
+            productsStore.filter(null);
+          }
+          productsStore.load();
+        },
+      },
+    }, {
+      location: 'after',
+      widget: 'dxButton',
+      locateInMenu: 'auto',
+      options: {
+        icon: 'plus',
+        onClick() {
+          DevExpress.ui.notify('Add button has been clicked!');
+        },
+      },
+    }, {
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      options: {
+        text: 'Save',
+        onClick() {
+          DevExpress.ui.notify('Save option has been clicked!');
+        },
+      },
+    }, {
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      options: {
+        text: 'Print',
+        onClick() {
+          DevExpress.ui.notify('Print option has been clicked!');
+        },
+      },
+    }, {
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      options: {
+        text: 'Settings',
+        onClick() {
+          DevExpress.ui.notify('Settings option has been clicked!');
+        },
+      },
+    },
+    ],
+  });
+
+  const productsStore = new DevExpress.data.DataSource(products);
+
+  $('#products').dxList({
+    dataSource: productsStore,
+  });
+});
+
     </script>
 </body>
 </html>

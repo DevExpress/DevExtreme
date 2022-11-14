@@ -9269,16 +9269,6 @@ declare module DevExpress.ui {
        */
       fileName?: string;
       /**
-       * [descr:dxDataGridOptions.export.ignoreExcelErrors]
-       * @deprecated [depNote:dxDataGridOptions.export.ignoreExcelErrors]
-       */
-      ignoreExcelErrors?: boolean;
-      /**
-       * [descr:dxDataGridOptions.export.proxyUrl]
-       * @deprecated [depNote:dxDataGridOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
-      /**
        * [descr:dxDataGridOptions.export.texts]
        */
       texts?: ExportTexts;
@@ -18456,16 +18446,6 @@ declare module DevExpress.ui {
        * @deprecated [depNote:dxPivotGridOptions.export.fileName]
        */
       fileName?: string;
-      /**
-       * [descr:dxPivotGridOptions.export.ignoreExcelErrors]
-       * @deprecated [depNote:dxPivotGridOptions.export.ignoreExcelErrors]
-       */
-      ignoreExcelErrors?: boolean;
-      /**
-       * [descr:dxPivotGridOptions.export.proxyUrl]
-       * @deprecated [depNote:dxPivotGridOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
     };
     /**
      * [descr:dxPivotGridOptions.fieldChooser]

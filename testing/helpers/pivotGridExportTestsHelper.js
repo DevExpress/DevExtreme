@@ -13,7 +13,6 @@ pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles =
 
     options.loadingTimeout = null;
     options.export = options.export || {};
-    options.export.ignoreExcelErrors = false;
     if(!isDefined(styles)) {
         options.export.customizeExcelCell = e => e.clearStyle();
     }

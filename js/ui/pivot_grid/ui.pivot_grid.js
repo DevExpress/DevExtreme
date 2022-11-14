@@ -185,8 +185,6 @@ const PivotGrid = Widget.inherit({
             'export': {
                 enabled: false,
                 fileName: 'PivotGrid',
-                proxyUrl: undefined,
-                ignoreExcelErrors: true
             },
             showRowTotals: true,
             showRowGrandTotals: true,

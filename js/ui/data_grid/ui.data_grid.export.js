@@ -634,7 +634,6 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
             selectedRowsOnly: !!selectedRowsOnly,
             autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
             rtlEnabled: that.option('rtlEnabled'),
-            ignoreErrors: that.option('export.ignoreExcelErrors'),
             exportingAction: that.getAction('onExporting'),
             exportedAction: that.getAction('onExported'),
             fileSavingAction: that.getAction('onFileSaving')
@@ -679,7 +678,6 @@ dataGridCore.registerModule('export', {
                 excelWrapTextEnabled: undefined,
                 proxyUrl: undefined,
                 allowExportSelectedData: false,
-                ignoreExcelErrors: true,
                 texts: {
                     exportTo: messageLocalization.format('dxDataGrid-exportTo'),
                     exportAll: messageLocalization.format('dxDataGrid-exportAll'),
