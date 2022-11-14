@@ -220,13 +220,6 @@ export interface BaseWidgetExport {
      */
     printingEnabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.export.proxyUrl
-     * @default undefined
-     * @deprecated
-     * @public
-     */
-    proxyUrl?: string;
-    /**
      * @docid BaseWidgetOptions.export.svgToCanvas
      * @type_function_return Promise<void>
      * @default undefined

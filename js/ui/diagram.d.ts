@@ -559,12 +559,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @default "Diagram"
        */
       fileName?: string;
-      /**
-       * @docid
-       * @default undefined
-       * @deprecated
-       */
-      proxyUrl?: string;
     };
     /**
      * @docid

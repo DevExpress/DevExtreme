@@ -182,7 +182,7 @@ const PivotGrid = Widget.inherit({
             },
             dataFieldArea: 'column',
 
-            'export': {
+            export: {
                 enabled: false,
                 fileName: 'PivotGrid',
             },

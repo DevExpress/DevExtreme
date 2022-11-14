@@ -756,7 +756,7 @@ export const imageCreator = {
 
         return imageCreator.getImageData(markup, options).then(binaryData => {
             const mimeType = 'image/' + options.format;
-            const data = isFunction(window.Blob) && !options.forceProxy ?
+            const data = isFunction(window.Blob) ?
                 that._getBlob(binaryData, mimeType) :
                 that._getBase64(binaryData);
             return data;

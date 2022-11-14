@@ -1849,7 +1849,6 @@ QUnit.module('ExportController', {
                 enabled: true,
                 excelFilterEnabled: true,
                 fileName: 'testName',
-                proxyUrl: 'testProxy'
             }
         });
         sinon.stub(this.exportController, 'getAction', function(arg) {
@@ -1875,7 +1874,6 @@ QUnit.module('ExportController', {
             fileName: 'testName',
             fileSavingAction: onFileSavingStub,
             format: 'xlsx',
-            proxyUrl: 'testProxy',
             rtlEnabled: false,
             selectedRowsOnly: false,
         }, 'options');
@@ -1900,7 +1898,6 @@ QUnit.module('ExportController', {
             fileName: 'DataGrid',
             fileSavingAction: undefined,
             format: 'xlsx',
-            proxyUrl: undefined,
             rtlEnabled: false,
             selectedRowsOnly: false,
         }, 'options');

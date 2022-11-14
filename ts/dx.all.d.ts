@@ -11535,11 +11535,6 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.export.fileName]
        */
       fileName?: string;
-      /**
-       * [descr:dxDiagramOptions.export.proxyUrl]
-       * @deprecated [depNote:dxDiagramOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
     };
     /**
      * [descr:dxDiagramOptions.fullScreen]
@@ -26298,11 +26293,6 @@ declare module DevExpress.viz {
      */
     printingEnabled?: boolean;
     /**
-     * [descr:BaseWidgetOptions.export.proxyUrl]
-     * @deprecated [depNote:BaseWidgetOptions.export.proxyUrl]
-     */
-    proxyUrl?: string;
-    /**
      * [descr:BaseWidgetOptions.export.svgToCanvas]
      */
     svgToCanvas?: (
@@ -35986,7 +35976,6 @@ declare module DevExpress.viz {
       fileName?: string;
       format?: string;
       backgroundColor?: string;
-      proxyUrl?: string;
       width?: number;
       height?: number;
       onExporting?: Function;
@@ -36015,7 +36004,6 @@ declare module DevExpress.viz {
       gridLayout?: boolean;
       verticalAlignment?: DevExpress.common.VerticalAlignment;
       horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-      proxyUrl?: string;
       onExporting?: Function;
       onExported?: Function;
       onFileSaving?: Function;

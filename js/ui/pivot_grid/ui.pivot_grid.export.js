@@ -19,7 +19,6 @@ export const ExportController = {
 
         exportMethod(that.getDataProvider(), {
             fileName: that.option('export.fileName'),
-            proxyUrl: that.option('export.proxyUrl'),
             format: 'EXCEL',
             rtlEnabled: that.option('rtlEnabled'),
             exportingAction: that._actions.onExporting,
