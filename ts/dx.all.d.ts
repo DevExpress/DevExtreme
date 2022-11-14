@@ -6301,45 +6301,6 @@ declare module DevExpress.excelExporter {
   ): DevExpress.core.utils.DxPromise<CellRange>;
   export type PivotGridCell = ExcelPivotGridCell;
 }
-declare module DevExpress.exporter {
-  /**
-   * [descr:ExcelFont]
-   * @deprecated [depNote:ExcelFont]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ExcelFont {
-    /**
-     * [descr:ExcelFont.bold]
-     */
-    bold?: boolean;
-    /**
-     * [descr:ExcelFont.color]
-     */
-    color?: string;
-    /**
-     * [descr:ExcelFont.italic]
-     */
-    italic?: boolean;
-    /**
-     * [descr:ExcelFont.name]
-     */
-    name?: string;
-    /**
-     * [descr:ExcelFont.size]
-     */
-    size?: number;
-    /**
-     * [descr:ExcelFont.underline]
-     */
-    underline?: ExcelUnderlineType;
-  }
-  export type ExcelUnderlineType =
-    | 'double'
-    | 'doubleAccounting'
-    | 'none'
-    | 'single'
-    | 'singleAccounting';
-}
 declare module DevExpress.fileManagement {
   /**
    * [descr:CustomFileSystemProvider]
@@ -8626,11 +8587,6 @@ declare module DevExpress.ui {
      */
     expandRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:dxDataGrid.exportToExcel(selectionOnly)]
-     * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
-     */
-    exportToExcel(selectionOnly: boolean): void;
-    /**
      * [descr:dxDataGrid.getSelectedRowKeys()]
      */
     getSelectedRowKeys(): Array<TKey> &
@@ -9096,54 +9052,6 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly row?: Row<TRowData, TKey>;
     };
-    export type ExcelCellHorizontalAlignment =
-      | 'center'
-      | 'centerContinuous'
-      | 'distributed'
-      | 'fill'
-      | 'general'
-      | 'justify'
-      | 'left'
-      | 'right';
-    export type ExcelCellInfo<TRowData = any, TKey = any> = {
-      readonly component: dxDataGrid<TRowData, TKey>;
-      horizontalAlignment?: ExcelCellHorizontalAlignment;
-      verticalAlignment?: ExcelCellVerticalAlignment;
-      wrapTextEnabled?: boolean;
-      backgroundColor?: string;
-      fillPatternType?: ExcelCellPatternType;
-      fillPatternColor?: string;
-      font?: DevExpress.exporter.ExcelFont;
-      readonly value?: string | number | Date;
-      numberFormat?: string;
-      gridCell?: DevExpress.excelExporter.DataGridCell;
-    };
-    export type ExcelCellPatternType =
-      | 'darkDown'
-      | 'darkGray'
-      | 'darkGrid'
-      | 'darkHorizontal'
-      | 'darkTrellis'
-      | 'darkUp'
-      | 'darkVertical'
-      | 'gray0625'
-      | 'gray125'
-      | 'lightDown'
-      | 'lightGray'
-      | 'lightGrid'
-      | 'lightHorizontal'
-      | 'lightTrellis'
-      | 'lightUp'
-      | 'lightVertical'
-      | 'mediumGray'
-      | 'none'
-      | 'solid';
-    export type ExcelCellVerticalAlignment =
-      | 'bottom'
-      | 'center'
-      | 'distributed'
-      | 'justify'
-      | 'top';
     export type ExplicitTypes<TRowData, TKey> = {
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
@@ -9176,12 +9084,9 @@ declare module DevExpress.ui {
       EditingStartEvent: EditingStartEvent<TRowData, TKey>;
       EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
       EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
-      ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
-      Export: Export<TRowData, TKey>;
-      ExportedEvent: ExportedEvent<TRowData, TKey>;
+      Export: Export;
       ExportingEvent: ExportingEvent<TRowData, TKey>;
       ExportTexts: ExportTexts;
-      FileSavingEvent: FileSavingEvent<TRowData, TKey>;
       FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
       FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
       FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
@@ -9235,53 +9140,24 @@ declare module DevExpress.ui {
       ToolbarItem: ToolbarItem;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
     };
-    export type Export<TRowData = any, TKey = any> = {
+    export type Export = {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
        */
       allowExportSelectedData?: boolean;
       /**
-       * [descr:dxDataGridOptions.export.customizeExcelCell]
-       * @deprecated [depNote:dxDataGridOptions.export.customizeExcelCell]
-       */
-      customizeExcelCell?: (options: ExcelCellInfo<TRowData, TKey>) => void;
-      /**
        * [descr:dxDataGridOptions.export.enabled]
        */
       enabled?: boolean;
-      /**
-       * [descr:dxDataGridOptions.export.excelFilterEnabled]
-       * @deprecated [depNote:dxDataGridOptions.export.excelFilterEnabled]
-       */
-      excelFilterEnabled?: boolean;
-      /**
-       * [descr:dxDataGridOptions.export.excelWrapTextEnabled]
-       * @deprecated [depNote:dxDataGridOptions.export.excelWrapTextEnabled]
-       */
-      excelWrapTextEnabled?: boolean;
       /**
        * [descr:dxDataGridOptions.export.formats]
        */
       formats?: ('xlsx' | 'pdf' | string)[];
       /**
-       * [descr:dxDataGridOptions.export.fileName]
-       * @deprecated [depNote:dxDataGridOptions.export.fileName]
-       */
-      fileName?: string;
-      /**
-       * [descr:dxDataGridOptions.export.ignoreExcelErrors]
-       * @deprecated [depNote:dxDataGridOptions.export.ignoreExcelErrors]
-       */
-      ignoreExcelErrors?: boolean;
-      /**
        * [descr:dxDataGridOptions.export.texts]
        */
       texts?: ExportTexts;
     };
-    export type ExportedEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
     export type ExportingEvent<
       TRowData = any,
       TKey = any
@@ -9304,16 +9180,6 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.export.texts.exportTo]
        */
       exportTo?: string;
-    };
-    export type FileSavingEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.events.Cancelable & {
-      readonly component: dxDataGrid<TRowData, TKey>;
-      readonly element: DevExpress.core.DxElement;
-      fileName?: string;
-      format?: string;
-      readonly data: Blob;
     };
     export type FilterPanel<
       TRowData = any,
@@ -10089,21 +9955,13 @@ declare module DevExpress.ui {
       columns: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey>>
     ) => void;
     /**
-     * [descr:dxDataGridOptions.customizeExportData]
-     * @deprecated [depNote:dxDataGridOptions.customizeExportData]
-     */
-    customizeExportData?: (
-      columns: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey>>,
-      rows: Array<DevExpress.ui.dxDataGrid.Row<TRowData, TKey>>
-    ) => void;
-    /**
      * [descr:dxDataGridOptions.editing]
      */
     editing?: DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
     /**
      * [descr:dxDataGridOptions.export]
      */
-    export?: DevExpress.ui.dxDataGrid.Export<TRowData, TKey>;
+    export?: DevExpress.ui.dxDataGrid.Export;
     /**
      * [descr:dxDataGridOptions.groupPanel]
      */
@@ -10169,24 +10027,10 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxDataGrid.EditorPreparingEvent<TRowData, TKey>
     ) => void;
     /**
-     * [descr:dxDataGridOptions.onExported]
-     * @deprecated [depNote:dxDataGridOptions.onExported]
-     */
-    onExported?: (
-      e: DevExpress.ui.dxDataGrid.ExportedEvent<TRowData, TKey>
-    ) => void;
-    /**
      * [descr:dxDataGridOptions.onExporting]
      */
     onExporting?: (
       e: DevExpress.ui.dxDataGrid.ExportingEvent<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:dxDataGridOptions.onFileSaving]
-     * @deprecated [depNote:dxDataGridOptions.onFileSaving]
-     */
-    onFileSaving?: (
-      e: DevExpress.ui.dxDataGrid.FileSavingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxDataGridOptions.onFocusedCellChanged]
@@ -18165,11 +18009,6 @@ declare module DevExpress.ui {
       }
     ): Function & null;
     /**
-     * [descr:dxPivotGrid.exportToExcel()]
-     * @deprecated [depNote:dxPivotGrid.exportToExcel()]
-     */
-    exportToExcel(): void;
-    /**
      * [descr:dxPivotGrid.getDataSource()]
      */
     getDataSource(): DevExpress.data.PivotGridDataSource;
@@ -18219,18 +18058,10 @@ declare module DevExpress.ui {
         items?: Array<any>;
       };
     export type DisposingEvent = DevExpress.events.EventInfo<dxPivotGrid>;
-    export type ExportedEvent = DevExpress.events.EventInfo<dxPivotGrid>;
     export type ExportingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPivotGrid> & {
         fileName?: string;
       };
-    export type FileSavingEvent = DevExpress.events.Cancelable & {
-      readonly component: dxPivotGrid;
-      readonly element: DevExpress.core.DxElement;
-      readonly data?: Blob;
-      readonly format?: string;
-      fileName?: string;
-    };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPivotGrid>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPivotGrid> &
@@ -18441,16 +18272,6 @@ declare module DevExpress.ui {
        * [descr:dxPivotGridOptions.export.enabled]
        */
       enabled?: boolean;
-      /**
-       * [descr:dxPivotGridOptions.export.fileName]
-       * @deprecated [depNote:dxPivotGridOptions.export.fileName]
-       */
-      fileName?: string;
-      /**
-       * [descr:dxPivotGridOptions.export.ignoreExcelErrors]
-       * @deprecated [depNote:dxPivotGridOptions.export.ignoreExcelErrors]
-       */
-      ignoreExcelErrors?: boolean;
     };
     /**
      * [descr:dxPivotGridOptions.fieldChooser]
@@ -18666,19 +18487,9 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxPivotGrid.ContextMenuPreparingEvent
     ) => void;
     /**
-     * [descr:dxPivotGridOptions.onExported]
-     * @deprecated [depNote:dxPivotGridOptions.onExported]
-     */
-    onExported?: (e: DevExpress.ui.dxPivotGrid.ExportedEvent) => void;
-    /**
      * [descr:dxPivotGridOptions.onExporting]
      */
     onExporting?: (e: DevExpress.ui.dxPivotGrid.ExportingEvent) => void;
-    /**
-     * [descr:dxPivotGridOptions.onFileSaving]
-     * @deprecated [depNote:dxPivotGridOptions.onFileSaving]
-     */
-    onFileSaving?: (e: DevExpress.ui.dxPivotGrid.FileSavingEvent) => void;
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */

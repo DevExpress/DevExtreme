@@ -21,7 +21,6 @@ export const ExportController = {
             fileName: that.option('export.fileName'),
             format: 'EXCEL',
             rtlEnabled: that.option('rtlEnabled'),
-            ignoreErrors: that.option('export.ignoreExcelErrors'),
             exportingAction: that._actions.onExporting,
             exportedAction: that._actions.onExported,
             fileSavingAction: that._actions.onFileSaving

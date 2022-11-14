@@ -115,10 +115,6 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         e.cancel = true;
     };
 
-    if(!isDefined(options.export.ignoreExcelErrors)) {
-        options.export.ignoreExcelErrors = false;
-    }
-
     const dataGrid = $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
 
     if(fixedColumnWidth_100) {
