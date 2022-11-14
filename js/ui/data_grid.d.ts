@@ -690,7 +690,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type object
      * @public
      */
-    export?: Export<TRowData, TKey>;
+    export?: Export;
     /**
      * @docid
      * @type object
@@ -1968,7 +1968,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   EditingStartEvent: EditingStartEvent<TRowData, TKey>;
   EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
   EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
-  Export: Export<TRowData, TKey>;
+  Export: Export;
   ExportingEvent: ExportingEvent<TRowData, TKey>;
   ExportTexts: ExportTexts;
   FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;

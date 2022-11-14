@@ -9084,7 +9084,7 @@ declare module DevExpress.ui {
       EditingStartEvent: EditingStartEvent<TRowData, TKey>;
       EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
       EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
-      Export: Export<TRowData, TKey>;
+      Export: Export;
       ExportingEvent: ExportingEvent<TRowData, TKey>;
       ExportTexts: ExportTexts;
       FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
@@ -9961,7 +9961,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.export]
      */
-    export?: DevExpress.ui.dxDataGrid.Export<TRowData, TKey>;
+    export?: DevExpress.ui.dxDataGrid.Export;
     /**
      * [descr:dxDataGridOptions.groupPanel]
      */
