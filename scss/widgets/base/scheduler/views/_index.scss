@@ -232,6 +232,10 @@ $scheduler-month-date-text-padding: 6px;
   border-bottom: 1px solid $scheduler-base-border-color;
   border-right: 1px solid $scheduler-base-border-color;
   margin-top: $scheduler-header-panel-top-gap;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
 .dx-scheduler-header-tables-container {
