@@ -4679,12 +4679,13 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     // T1107403
-    QUnit.test('Grid should not flicker on paging when cellTemplate is set and renderAsync = false', function(assert) {
+    QUnit.test('Grid should not flicker on paging when cellTemplate is set and templatesRenderAsynchronously = true', function(assert) {
         // arrange
         assert.expect(4);
 
         const dataGrid = createDataGrid({
             renderAsync: false,
+            templatesRenderAsynchronously: true,
             dataSource: generateItems(100),
             height: 600,
             columns: [{
@@ -4727,12 +4728,13 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     // T1107403
-    QUnit.test('Grid should not flicker on sorting when cellTemplate is set and renderAsync = false', function(assert) {
+    QUnit.test('Grid should not flicker on sorting when cellTemplate is set and templatesRenderAsynchronously = true', function(assert) {
         // arrange
         assert.expect(4);
 
         const dataGrid = createDataGrid({
             renderAsync: false,
+            templatesRenderAsynchronously: true,
             dataSource: generateItems(100),
             height: 600,
             columns: [{
@@ -4775,12 +4777,13 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     // T1107403
-    QUnit.test('Grid should not flicker on filtering when cellTemplate is set and renderAsync = false', function(assert) {
+    QUnit.test('Grid should not flicker on filtering when cellTemplate is set and templatesRenderAsynchronously = true', function(assert) {
         // arrange
         assert.expect(4);
 
         const dataGrid = createDataGrid({
             renderAsync: false,
+            templatesRenderAsynchronously: true,
             dataSource: generateItems(100),
             height: 600,
             columns: [{
@@ -4873,12 +4876,13 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     // T1100603
-    QUnit.test('Cells should display without delay when using cellTemplate, virtual scrolling mode and renderAsync = false', function(assert) {
+    QUnit.test('Cells should display without delay when using cellTemplate, virtual scrolling mode and templatesRenderAsynchronously = true', function(assert) {
         // arrange
         assert.expect(4);
 
         const dataGrid = createDataGrid({
             renderAsync: false,
+            templatesRenderAsynchronously: true,
             dataSource: generateItems(100),
             height: 600,
             columns: [{

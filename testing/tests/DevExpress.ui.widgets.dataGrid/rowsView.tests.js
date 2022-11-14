@@ -7613,7 +7613,7 @@ QUnit.module('Custom Loading', {
 });
 
 // T1107403
-QUnit.module('Render templates with renderAsync', {
+QUnit.module('Render templates with renderAsync and templatesRenderAsynchronously', {
     beforeEach: function() {
         this.items = [
             { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0 }
@@ -7632,32 +7632,78 @@ QUnit.module('Render templates with renderAsync', {
         this.clock.restore();
     }
 }, () => {
-    [undefined, true, false].forEach((renderAsync) => {
-        ['cellTemplate', 'editCellTemplate', 'groupCellTemplate'].forEach((templateName) => {
-            QUnit.test(`Render column with ${templateName} when renderAsync = ${renderAsync}`, function(assert) {
+    [true, false].forEach((templatesRenderAsynchronously) => {
+        [true, false].forEach((renderAsync) => {
+            ['cellTemplate', 'editCellTemplate', 'groupCellTemplate'].forEach((templateName) => {
+                QUnit.test(`Render column with ${templateName} when renderAsync = ${renderAsync} and templatesRenderAsynchronously = ${templatesRenderAsynchronously}`, function(assert) {
+                    // arrange
+                    assert.expect(1);
+
+                    const items = templateName === 'groupCellTemplate' ? this.groupItems : this.items;
+                    const $testElement = $('#container');
+                    const columns = [{
+                        dataField: 'name',
+                        showEditorAlways: templateName === 'editCellTemplate',
+                        groupIndex: templateName === 'groupCellTemplate' ? 0 : undefined
+                    }];
+
+                    columns[0][templateName] = '#testTemplate';
+                    const rowsView = this.createRowsView(items, null, columns, null, { renderAsync, templatesRenderAsynchronously });
+
+                    rowsView.component._getTemplate = function() {
+                        return {
+                            render: function(options) {
+                                const container = $(options.container).get(0);
+
+                                // assert
+                                if(templatesRenderAsynchronously && renderAsync === false) {
+                                    assert.strictEqual($(container).closest(document).length, 0, 'container is detached to DOM');
+                                } else {
+                                    assert.strictEqual($(container).closest(document).length, 1, 'container is attached to DOM');
+                                }
+                                setTimeout(() => {
+                                    options.deferred && options.deferred.resolve();
+                                }, 50);
+                            }
+                        };
+                    };
+
+                    // act
+                    rowsView.render($testElement, { changeType: 'refresh' });
+                    this.clock.tick(50);
+                });
+            });
+
+            QUnit.test(`Render column buttons with template when renderAsync = ${renderAsync}  and templatesRenderAsynchronously = ${templatesRenderAsynchronously}`, function(assert) {
                 // arrange
                 assert.expect(1);
 
-                const items = templateName === 'groupCellTemplate' ? this.groupItems : this.items;
+                const items = [
+                    { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', null], rowType: 'data', dataIndex: 0 }
+                ];
                 const $testElement = $('#container');
-                const columns = [{
-                    dataField: 'name',
-                    showEditorAlways: templateName === 'editCellTemplate',
-                    groupIndex: templateName === 'groupCellTemplate' ? 0 : undefined
-                }];
+                const column = {
+                    name: 'test',
+                    command: 'edit',
+                    type: 'buttons',
+                    buttons: [{
+                        template: '#testTemplate'
+                    }]
+                };
+                const columns = [{ dataField: 'name' }, column];
+                const rowsView = this.createRowsView(items, null, columns, null, { renderAsync, templatesRenderAsynchronously });
 
-                columns[0][templateName] = '#testTemplate';
-                const rowsView = this.createRowsView(items, null, columns, null, { renderAsync });
-
+                columns[1] = $.extend({}, columns[1], column);
                 rowsView.component._getTemplate = function() {
                     return {
                         render: function(options) {
                             // assert
-                            if(renderAsync === false) {
+                            if(templatesRenderAsynchronously && renderAsync === false) {
                                 assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
                             } else {
                                 assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
                             }
+
                             setTimeout(() => {
                                 options.deferred && options.deferred.resolve();
                             }, 50);
@@ -7669,48 +7715,6 @@ QUnit.module('Render templates with renderAsync', {
                 rowsView.render($testElement, { changeType: 'refresh' });
                 this.clock.tick(50);
             });
-        });
-
-        QUnit.test(`Render column buttons with template when renderAsync = ${renderAsync}`, function(assert) {
-            // arrange
-            assert.expect(1);
-
-            const items = [
-                { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', null], rowType: 'data', dataIndex: 0 }
-            ];
-            const $testElement = $('#container');
-            const column = {
-                name: 'test',
-                command: 'edit',
-                type: 'buttons',
-                buttons: [{
-                    template: '#testTemplate'
-                }]
-            };
-            const columns = [{ dataField: 'name' }, column];
-            const rowsView = this.createRowsView(items, null, columns, null, { renderAsync });
-
-            columns[1] = $.extend({}, columns[1], column);
-            rowsView.component._getTemplate = function() {
-                return {
-                    render: function(options) {
-                        // assert
-                        if(renderAsync === false) {
-                            assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
-                        } else {
-                            assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
-                        }
-
-                        setTimeout(() => {
-                            options.deferred && options.deferred.resolve();
-                        }, 50);
-                    }
-                };
-            };
-
-            // act
-            rowsView.render($testElement, { changeType: 'refresh' });
-            this.clock.tick(50);
         });
     });
 });

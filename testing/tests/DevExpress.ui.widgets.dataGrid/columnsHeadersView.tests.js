@@ -2956,40 +2956,43 @@ QUnit.module('Render templates with renderAsync', {
         this.clock.restore();
     }
 }, () => {
-    [undefined, true, false].forEach((renderAsync) => {
-        QUnit.test(`Render column with headerCellTemplate when renderAsync = ${renderAsync}`, function(assert) {
-            // arrange
-            assert.expect(1);
+    [true, false].forEach((templatesRenderAsynchronously) => {
+        [true, false].forEach((renderAsync) => {
+            QUnit.test(`Render column with headerCellTemplate when renderAsync = ${renderAsync} and templatesRenderAsynchronously=${templatesRenderAsynchronously}`, function(assert) {
+                // arrange
+                assert.expect(1);
 
-            const $testElement = $('#container');
-            const options = {
-                columns: [{
-                    dataField: 'name',
-                    headerCellTemplate: '#testTemplate'
-                }],
-                renderAsync
-            };
-
-            this.setupDataGrid(options);
-            this._getTemplate = function() {
-                return {
-                    render: function(options) {
-                        // assert
-                        if(renderAsync === false) {
-                            assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
-                        } else {
-                            assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
-                        }
-                        setTimeout(() => {
-                            options.deferred && options.deferred.resolve();
-                        }, 50);
-                    }
+                const $testElement = $('#container');
+                const options = {
+                    columns: [{
+                        dataField: 'name',
+                        headerCellTemplate: '#testTemplate'
+                    }],
+                    renderAsync,
+                    templatesRenderAsynchronously
                 };
-            };
 
-            // act
-            this.columnHeadersView.render($testElement);
-            this.clock.tick(50);
+                this.setupDataGrid(options);
+                this._getTemplate = function() {
+                    return {
+                        render: function(options) {
+                            // assert
+                            if(templatesRenderAsynchronously && renderAsync === false) {
+                                assert.strictEqual($(options.container).closest(document).length, 0, 'container is detached to DOM');
+                            } else {
+                                assert.strictEqual($(options.container).closest(document).length, 1, 'container is attached to DOM');
+                            }
+                            setTimeout(() => {
+                                options.deferred && options.deferred.resolve();
+                            }, 50);
+                        }
+                    };
+                };
+
+                // act
+                this.columnHeadersView.render($testElement);
+                this.clock.tick(50);
+            });
         });
     });
 });
