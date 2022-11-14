@@ -397,9 +397,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
             const options = templateParameters.options;
             const doc = domAdapter.getDocument();
-            const renderAsync = this.option('renderAsync');
+            const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
 
-            if(!isAsync || $(options.container).closest(doc).length || renderAsync === false) {
+            if(!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
                 if(change) {
                     options.change = change;
                 }
@@ -886,9 +886,13 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $scrollContainer;
     },
 
+    _needWaitAsyncTemplates: function() {
+        return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
+    },
+
     _waitAsyncTemplates: function(change, forceWaiting) {
-        const renderAsync = this.option('renderAsync');
-        const templateDeferreds = (forceWaiting || renderAsync === false && (change?.changeType !== 'update' || change?.isLiveUpdate)) && change?.templateDeferreds ? change?.templateDeferreds : [];
+        const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
+        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate)) && change?.templateDeferreds ? change?.templateDeferreds : [];
 
         return when.apply(this, templateDeferreds);
     },
