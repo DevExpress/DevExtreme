@@ -566,7 +566,6 @@ QUnit.test('exportFromMarkup method. Set options', function(assert) {
     const options = {
         format: 'jpeg',
         fileName: 'file1',
-        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
@@ -574,7 +573,6 @@ QUnit.test('exportFromMarkup method. Set options', function(assert) {
         onFileSaving: 'file saving callback',
         onExporting: 'exporting callback',
         onExported: 'exported callback',
-        forceProxy: true
     };
     const markup = 'testMarkup';
 
@@ -587,11 +585,9 @@ QUnit.test('exportFromMarkup method. Set options', function(assert) {
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
         format: 'JPEG',
         fileName: 'file1',
-        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
-        forceProxy: true,
         backgroundColor: '#00ff00',
         onFileSaving: 'file saving callback',
         onExporting: 'exporting callback',
@@ -609,7 +605,6 @@ QUnit.test('exportFromMarkup unsupported image format - export as PNG', function
     const options = {
         format: 'gif',
         fileName: 'file1',
-        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
@@ -617,7 +612,6 @@ QUnit.test('exportFromMarkup unsupported image format - export as PNG', function
         onFileSaving: 'file saving callback',
         onExporting: 'exporting callback',
         onExported: 'exported callback',
-        forceProxy: true
     };
     const markup = 'testMarkup data-backgroundcolor="someColor"';
 
@@ -628,11 +622,9 @@ QUnit.test('exportFromMarkup unsupported image format - export as PNG', function
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
         format: 'PNG',
         fileName: 'file1',
-        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
-        forceProxy: true,
         backgroundColor: '#00ff00',
         onFileSaving: 'file saving callback',
         onExporting: 'exporting callback',
@@ -729,7 +721,6 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
     const options = {
         format: 'jpeg',
         fileName: 'file1',
-        proxyUrl: 'testUrl',
         width: 1000,
         height: 2000,
         margin: 0,
@@ -737,7 +728,6 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
         onFileSaving: 'file saving callback',
         onExporting: 'exporting callback',
         onExported: 'exported callback',
-        forceProxy: true,
         gridLayout: true,
         verticalAlignment: 'bottom',
         horizontalAlignment: 'right'
@@ -763,11 +753,9 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
         format: 'JPEG',
         fileName: 'file1',
-        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
-        forceProxy: true,
         backgroundColor: '#00ff00',
         onFileSaving: 'file saving callback',
         onExporting: 'exporting callback',

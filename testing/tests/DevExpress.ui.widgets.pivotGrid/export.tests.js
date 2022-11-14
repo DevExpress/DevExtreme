@@ -188,7 +188,6 @@ QUnit.module('dxPivotGrid', {
         assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, 'First arg is data');
 
         assert.equal(clientExporter.export.getCall(0).args[1].format, 'EXCEL', 'format');
-        assert.strictEqual(clientExporter.export.getCall(0).args[1].proxyUrl, undefined, 'proxyUrl');
         assert.strictEqual(clientExporter.export.getCall(0).args[1].rtlEnabled, false, 'rtlEnabled');
         assert.strictEqual(clientExporter.export.getCall(0).args[1].fileName, 'PivotGrid', 'fileName');
         assert.strictEqual(clientExporter.export.getCall(0).args[1].ignoreErrors, true, 'ignoreErrors');
