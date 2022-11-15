@@ -2,6 +2,9 @@
     "private": true,
     "type": "module",
     "devDependencies": {
+        "@angular-eslint/eslint-plugin": "^14.1.2",
+        "@angular-eslint/eslint-plugin-template": "^14.1.2",
+        "@angular-eslint/template-parser": "^14.1.2",
         "@nrwl/angular": "^15.0.13",
         "@nrwl/cypress": "^15.0.13",
         "@nrwl/eslint-plugin-nx": "^15.0.13",
@@ -25,6 +28,7 @@
         "eslint-plugin-cypress": "^2.10.3",
         "eslint-plugin-import": "2.26.0",
         "eslint-plugin-jsx-a11y": "6.6.1",
+        "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-react": "7.31.8",
         "eslint-plugin-react-hooks": "4.6.0",
         "jest": "28.1.1",
@@ -49,8 +53,8 @@
         "test:e2e": "nx run-many --target=e2e",
         "test:jest": "NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.json --no-cache",
         "lint": "npm run lint:eslint",
-        "lint:eslint": "eslint --ignore-path .gitignore {packages,playgrounds}/*/src/**/*.ts",
-        "lint:eslint:fix": "eslint --ignore-path .gitignore --fix {packages,playgrounds}/*/src/**/*.ts",
+        "lint:eslint": "eslint --ignore-path .eslintignore {packages,playgrounds}/*/src/**/*.ts",
+        "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix {packages,playgrounds}/*/src/**/*.ts",
         "tsc:build": "tsc --build ./tsconfig.project.json",
         "tsc:watch": "npm run tsc:build -- --watch",
         "update:tsconfig": "ts-node-esm scripts/update-package-tsconfig.ts"

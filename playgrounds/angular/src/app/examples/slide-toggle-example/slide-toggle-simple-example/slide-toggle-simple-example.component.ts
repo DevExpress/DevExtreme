@@ -24,11 +24,11 @@ export class SlideToggleSimpleExampleComponent {
     readonly state$ = this.stateSubject.asObservable();
 
     onValueChanged(changedValue: boolean): void {
-        this.updateControlState(({value}) => ({value: changedValue}));
+        this.updateControlState(({ value }) => ({ value: changedValue }));
     }
 
     changeValue(): void {
-        this.updateControlState(({value}) => ({value: !value}));
+        this.updateControlState(({ value }) => ({ value: !value }));
     }
 
     changeControlText(event: Event): void {

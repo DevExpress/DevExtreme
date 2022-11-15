@@ -1,16 +1,16 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageNumberItemViewContracts} from '@devexpress/angular';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DxPagerPageNumberItemViewContracts } from '@devexpress/angular';
 
 @Component({
-  selector: 'custom-page-number-item',
-  template: `
+    selector: 'custom-page-number-item',
+    template: `
     <div class="custom-pager-item"
          [class.--selected]="viewModel.selected"
          (click)=actions.selectPage(viewModel.value)>
       {{ viewModel.label }}
     </div>
   `,
-  styles: [`
+    styles: [`
     .custom-pager-item {
       padding: 10px;
       background-color: #fff;
@@ -32,7 +32,7 @@ import {DxPagerPageNumberItemViewContracts} from '@devexpress/angular';
       background-color: #f05b41;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomPageNumberItemComponent extends DxPagerPageNumberItemViewContracts {
 }

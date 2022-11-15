@@ -1,13 +1,13 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageNumberItemViewContracts} from '@devexpress/angular';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DxPagerPageNumberItemViewContracts } from '@devexpress/angular';
 
 @Component({
-  selector: 'custom-page-number-divider',
-  template: `
+    selector: 'custom-page-number-divider',
+    template: `
     <div class="divider__line">
     </div>
   `,
-  styles: [`
+    styles: [`
     :host {
       width: 1px;
       padding: 10px;
@@ -21,7 +21,7 @@ import {DxPagerPageNumberItemViewContracts} from '@devexpress/angular';
       background-color: #d4d4d4;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomPageNumberDividerComponent extends DxPagerPageNumberItemViewContracts {
 }

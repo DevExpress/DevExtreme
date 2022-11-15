@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerViewComponent} from '@devexpress/angular';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DxPagerViewComponent } from '@devexpress/angular';
 
 @Component({
-  selector: 'custom-pager',
-  template: `
+    selector: 'custom-pager',
+    template: `
     <dx-pager-page-size-view
       class="custom-pager__item"
       [viewModel]="viewModel.pageSizeViewModel"
@@ -15,7 +15,7 @@ import {DxPagerViewComponent} from '@devexpress/angular';
       [actions]="{ selectPage: actions.selectPage }">
     </dx-pager-page-number-view>
   `,
-  styles: [`
+    styles: [`
     :host {
       display: flex;
       flex-direction: column;
@@ -26,7 +26,7 @@ import {DxPagerViewComponent} from '@devexpress/angular';
       margin: 10px;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomPagerComponent extends DxPagerViewComponent {
 

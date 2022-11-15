@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { DxSlideToggleIndicatorViewComponent } from '@devexpress/angular';
 
 @Component({
-  selector: 'app-custom-indicator',
-  template: `
+    selector: 'app-custom-indicator',
+    template: `
     <div class="custom-indicator">
       <img class="custom-indicator__image" *ngIf="viewModel.model.value" src="/assets/cat.jpeg" alt="cat"/>
       <img class="custom-indicator__image" *ngIf="!viewModel.model.value" src="/assets/dog.webp" alt="dog"/>
   </div>`,
-  styles: [`
+    styles: [`
     .custom-indicator {
       width: 100px;
       height: 100px;

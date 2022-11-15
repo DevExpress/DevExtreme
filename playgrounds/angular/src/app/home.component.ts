@@ -1,12 +1,12 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-home',
-  template:`
+    selector: 'app-home',
+    template: `
     <a routerLink="/slideToggle">slideToggle examples</a>
     <a routerLink="/pager">pager examples</a>
   `,
-  styles: [`
+    styles: [`
     :host {
       width: 100%;
       height: 100vh;
@@ -21,7 +21,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
       margin: 10px;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
 }

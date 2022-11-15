@@ -3,7 +3,6 @@ import { TTextPosition } from '@devexpress/core/lib/esm/components/slideToggle';
 import { BehaviorSubject, take } from 'rxjs';
 import { CustomIndicatorComponent, CustomTextComponent } from '../custom-components';
 
-
 @Component({
     selector: 'app-slide-toggle-customization-example',
     templateUrl: './slide-toggle-customization-example.component.html',
@@ -17,7 +16,9 @@ export class SlideToggleCustomizationExampleComponent {
     });
 
     controlConfig$ = this.controlConfig.asObservable();
+
     indicatorView = CustomIndicatorComponent;
+
     textView = CustomTextComponent;
 
     changeControlText(event: Event): void {

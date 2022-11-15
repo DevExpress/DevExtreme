@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageNumberViewComponent} from '@devexpress/angular';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DxPagerPageNumberViewComponent } from '@devexpress/angular';
 
 @Component({
-  selector: 'custom-page-number',
-  template: `
+    selector: 'custom-page-number',
+    template: `
     <dx-pager-page-number-item-view
       class="custom-pager-numbers__content"
       *ngFor="let item of viewModel.items"
@@ -11,7 +11,7 @@ import {DxPagerPageNumberViewComponent} from '@devexpress/angular';
       [actions]="actions">
     </dx-pager-page-number-item-view>
   `,
-  styles: [`
+    styles: [`
     :host {
       display: flex;
       align-items: center;
@@ -24,7 +24,7 @@ import {DxPagerPageNumberViewComponent} from '@devexpress/angular';
       box-shadow: rgba(149, 157, 165, .2) 0 8px 24px;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomPageNumberComponent extends DxPagerPageNumberViewComponent {
 }

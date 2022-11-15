@@ -4,8 +4,8 @@
 		"node": true
 	},
 	"extends": [
-//		"airbnb-base",
-//		"plugin:import/errors",
+		"airbnb-base",
+		"plugin:import/errors",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
 		"plugin:@typescript-eslint/recommended"
@@ -43,7 +43,7 @@
 		"import/no-default-export": ["error"],
 		"no-restricted-syntax": ["error", "WithStatement"],
 		"linebreak-style": ["error", "unix"],
-		"comma-dangle": ["error", "never"],
+		"comma-dangle": ["error", "only-multiline"],
 		"no-param-reassign": ["error", {
 			"props": false
 		}],

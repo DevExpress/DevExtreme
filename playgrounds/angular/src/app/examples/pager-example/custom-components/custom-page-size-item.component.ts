@@ -1,16 +1,16 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageSizeItemViewComponent} from '@devexpress/angular';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DxPagerPageSizeItemViewComponent } from '@devexpress/angular';
 
 @Component({
-  selector: 'custom-page-size-item',
-  template: `
+    selector: 'custom-page-size-item',
+    template: `
     <div class="custom-pager-item"
          [class.--selected]="viewModel.selected"
          (click)="actions.selectPageSize(viewModel.value)">
       {{ viewModel.value }}
     </div>
   `,
-  styles: [`
+    styles: [`
     .custom-pager-item {
       padding: 10px;
       background-color: #fff;
@@ -32,7 +32,7 @@ import {DxPagerPageSizeItemViewComponent} from '@devexpress/angular';
       background-color: #f05b41;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomPageSizeItemComponent extends DxPagerPageSizeItemViewComponent {
 }
