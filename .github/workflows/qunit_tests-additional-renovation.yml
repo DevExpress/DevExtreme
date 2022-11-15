@@ -68,8 +68,6 @@ jobs:
           { CONSTEL: "ui.editors", TZ: 'Japan', name: 'ui.editors-Japan' },
           { CONSTEL: "ui.editors", TZ: 'Australia/ACT', name: 'ui.editors-Australia' },
           { CONSTEL: "ui.editors", TZ: 'Europe/London', name: 'ui.editors-Europe' },
-          { CONSTEL: "ui.htmlEditor", TZ: 'Australia/ACT', name: 'ui.htmlEditor-Australia' },
-          { CONSTEL: "ui.htmlEditor", TZ: 'Europe/London', name: 'ui.htmlEditor-Europe' },
           { CONSTEL: "ui.grid", TZ: 'PST8PDT', name: 'ui.grid-PST8PDT' },
           { CONSTEL: "ui.scheduler", TZ: 'PST8PDT', name: 'ui.scheduler-PST8PDT' },
           { CONSTEL: "ui.scheduler", TZ: 'Japan', name: 'ui.scheduler-Japan' },
