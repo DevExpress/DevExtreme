@@ -56,7 +56,7 @@ QUnit.module('Real DataController and ColumnsController', {
         }, this.options);
 
         setupDataGridModules(this, [
-            'data', 'columns', 'columnHeaders', 'rows',
+            'data', 'columns', 'columnHeaders', 'rows', 'pager',
             'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'focus',
             'keyboardNavigation', 'validating', 'masterDetail', 'selection',
             'grouping'
@@ -1624,5 +1624,63 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // assert
         assert.notOk(result.preventDefault, 'prevent default is not called');
+    });
+
+    QUnit.test('Navigation shouldn\'t get stuck on cell templates with links in them when navigating from outside the grid (T1123129)', function(assert) {
+        // arrange
+        this.options = ({
+            dataSource: { store: {
+                type: 'array',
+                data: [
+                    { name: 'Alex', phone: '555555' },
+                    { name: 'Dan', phone: '553355' }
+                ],
+                key: 'name'
+            },
+            paginate: true },
+            keyExpr: 'name',
+            columns: ['name', {
+                cellTemplate: cellElement => $(cellElement).append('<a  href=\'#\' >Link</a>'),
+            }, 'phone'],
+            paging: {
+                pageSize: 2,
+                enabled: true
+            },
+            pager: {
+                enabled: true,
+                visible: true,
+                showInfo: true,
+                showPageSizeSelector: true,
+                allowedPageSizes: [2]
+            }
+        });
+        const getFocusedElement = () => $(':focus')[0];
+
+        this.setupModule();
+        this.gridView.render($('#container'));
+        this.clock.tick(500);
+        const sizeButton = $('.dx-page-size').eq(0);
+        let focusedElement;
+
+        const tabFromOutside = () => {
+            sizeButton.click().focus();
+            this.triggerKeyDown('tab', false, true, sizeButton);
+            this.clock.tick();
+            focusedElement = getFocusedElement();
+            this.triggerKeyDown('tab', false, true, sizeButton);
+            this.clock.tick();
+        };
+
+        // act
+        tabFromOutside();
+
+        // assert
+        assert.notEqual(focusedElement === getFocusedElement(), 'focus should not be stuck after tabbing to grid on initial render');
+
+        // act
+        tabFromOutside();
+
+        // assert
+        assert.notEqual(focusedElement === getFocusedElement(), 'focus should not be stuck after tabbing to grid on refocus render');
     });
 });
