@@ -1999,6 +1999,26 @@ QUnit.module('datebox and calendar integration', () => {
         assert.equal(stub.callCount, 2, '\'opened\' optionChanged event has been raised');
     });
 
+    QUnit.test('onValueChanged callback should be fired once', function(assert) {
+        const stub = sinon.stub();
+
+        const dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            pickerType: 'calendar',
+            onValueChanged: () => stub(),
+        }).dxDateBox('instance');
+
+        assert.deepEqual(stub.callCount, 0, 'onValueChanged not been fired');
+
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
+        const kb = keyboardMock($input);
+
+        dateBox.option('opened', true);
+        kb.press('enter');
+
+        assert.deepEqual(stub.callCount, 1, 'onValueChanged has been fired once');
+    });
+
     QUnit.test('Today button should be hidden if calendar is hidden', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             pickerType: 'calendar',
