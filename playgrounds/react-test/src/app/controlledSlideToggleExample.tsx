@@ -27,18 +27,18 @@ function ControlledSlideToggleExample() {
         }), [config]);
 
     return (
-        <div className="example">
-            <div className="example__title">
+        <div className='example'>
+            <div className='example__title'>
         Controlled mode
             </div>
-            <div className="example__control">
+            <div className='example__control'>
                 <DxSlideToggle value={state}
                     text={config.text}
                     textPosition={config.textPosition}
                     valueChange={handleValueChange}/>
             </div>
-            <div className="example__info">
-                <div className="example__play-part">
+            <div className='example__info'>
+                <div className='example__play-part'>
                     <button onClick={appClick}>
             Toggle
                     </button>
@@ -46,16 +46,16 @@ function ControlledSlideToggleExample() {
             App value: {state.toString()}
                     </div>
                 </div>
-                <div className="example__play-part">
+                <div className='example__play-part'>
                     <span>Select text position:</span>
-                    <select className="example-input" value={config.textPosition} onChange={changeTextPosition}>
+                    <select className='example-input' value={config.textPosition} onChange={changeTextPosition}>
                         <option value={'left'}>Left</option>
                         <option value={'right'}>Right</option>
                     </select>
                 </div>
-                <div className="example__play-part">
+                <div className='example__play-part'>
                     <span>Set text:</span>
-                    <input className="example-input" type="text" value={config.text} onChange={changeText}/>
+                    <input className='example-input' type='text' value={config.text} onChange={changeText}/>
                 </div>
             </div>
         </div>

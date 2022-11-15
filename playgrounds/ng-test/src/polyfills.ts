@@ -7,7 +7,7 @@
  *   2. Application imports. Files imported after ZoneJS that should be loaded before your main
  *      file.
  *
- * The current setup is for so-called "evergreen" browsers; the last versions of browsers that
+ * The current setup is for so-called 'evergreen' browsers; the last versions of browsers that
  * automatically update themselves. This includes recent versions of Safari, Chrome (including
  * Opera), Edge on the desktop, and iOS and Chrome on mobile.
  *
@@ -45,7 +45,7 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-import "zone.js"; // Included with Angular CLI.
+import 'zone.js'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

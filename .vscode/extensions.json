@@ -2,6 +2,8 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "stylelint.vscode-stylelint",
-        "firsttris.vscode-jest-runner"
+        "firsttris.vscode-jest-runner",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode"
     ]
 }

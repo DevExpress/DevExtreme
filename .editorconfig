@@ -7,5 +7,10 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{json,yml,ts,tsx,scss,code-workspace}]
-indent_size = 4
+[*.{yml,ts,tsx,js,jsx,scss,code-workspace}]
+quote_type = single
+ij_javascript_use_double_quotes = false
+ij_typescript_use_double_quotes = false
+ij_css_use_double_quotes = false
+ij_sass_use_double_quotes = false
+ij_scss_use_double_quotes = false
