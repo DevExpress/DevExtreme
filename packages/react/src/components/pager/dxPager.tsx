@@ -15,8 +15,8 @@ import './dxPager.scss';
 
 // TODO jQuery: export here for the inferno generator.
 // TODO Vitik: React.memo isn't implemented for 'inferno'
-//export const DxPager = React.memo(
-//TODO Vitik: export 'const DxPager = ...' isn't supported by generator
+// export const DxPager = React.memo(
+// TODO Vitik: export 'const DxPager = ...' isn't supported by generator
 //* Component={"name":"DxPager", "jQueryRegistered":true, "hasApiMethod":false}
 export function DxPager(props: DxPagerProps) {
     const isControlled = useIsControlled(props);
@@ -37,7 +37,7 @@ export function DxPager(props: DxPagerProps) {
     );
 }
 
-//);
+// );
 
 // TODO Vitik: required for component wrapper
 DxPager.defaultProps = {
@@ -46,4 +46,3 @@ DxPager.defaultProps = {
     pageCount: 20,
     pageSizes: [10, 20, 30]
 };
-

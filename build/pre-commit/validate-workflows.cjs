@@ -2,7 +2,7 @@
 
 const yaml = require('yaml');
 const { readFileSync } = require('fs');
-const chalks = require('./chalks');
+const chalks = require('./chalks.cjs');
 
 const exceptions = [
     '.github/workflows/renovate_autoapprove.yml'

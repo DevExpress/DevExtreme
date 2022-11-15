@@ -1,7 +1,7 @@
 'use strict';
 
 const MAX_LENGTH = 150;
-const chalks = require('./chalks');
+const chalks = require('./chalks.cjs');
 
 module.exports = (results) => {
     const longFiles = results

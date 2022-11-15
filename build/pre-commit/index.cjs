@@ -1,8 +1,8 @@
 'use strict';
 
 const stagedFiles = require('staged-git-files');
-const validateMaxPath = require('./validate-max-path');
-const validateWorkflows = require('./validate-workflows');
+const validateMaxPath = require('./validate-max-path.cjs');
+const validateWorkflows = require('./validate-workflows.cjs');
 
 const fileStatuses = {
     Added: true,
@@ -18,7 +18,7 @@ const fileStatuses = {
 stagedFiles((err, results) => {
     let result = 0;
     const staged = results.filter(x => fileStatuses[x.status]);
-    
+
     result = result | validateMaxPath(staged);
     result = result | validateWorkflows(staged);
 
