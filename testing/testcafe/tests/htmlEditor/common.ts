@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
+import url from '../../helpers/getPageUrl';
 
 fixture`HtmlEditor`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';
