@@ -221,7 +221,7 @@ export default Class.inherit((function() {
         const dataSourceCells = dataSource.values;
 
         if(newDataSourceCells) {
-            for(newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
+            for(newRowIndex = 0; newRowIndex < newDataSourceCells.length; newRowIndex++) {
                 newRowCells = newDataSourceCells[newRowIndex];
                 rowIndex = newRowItemIndexesToCurrent[newRowIndex];
                 if(!isDefined(rowIndex)) {
@@ -231,7 +231,7 @@ export default Class.inherit((function() {
                     if(!dataSourceCells[rowIndex]) {
                         dataSourceCells[rowIndex] = [];
                     }
-                    for(newColumnIndex = 0; newColumnIndex <= newRowCells.length; newColumnIndex++) {
+                    for(newColumnIndex = 0; newColumnIndex < newRowCells.length; newColumnIndex++) {
                         newCell = newRowCells[newColumnIndex];
                         columnIndex = newColumnItemIndexesToCurrent[newColumnIndex];
                         if(!isDefined(columnIndex)) {

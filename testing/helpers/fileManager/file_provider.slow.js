@@ -28,13 +28,21 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
 
         super(providerPredefinedOptions);
         this._realProviderInstance = options['realProviderInstance'] || new ObjectFileSystemProvider({ data: createTestFileSystem() });
-        stubFileReader(this._realProviderInstance);
+        this._realProviderInstance['_createFileReader'] && stubFileReader(this._realProviderInstance);
         this._operationTimeout = options['operationDelay'];
+        this._operationTimeouts = options['operationDelays'];
+        this._operationIndex = 0;
         this._operationsToDelay = options['operationsToDelay'];
     }
 
     _doDelay(action, operationType) {
         const promise = new Deferred();
+        let operationTimeout = 0;
+        if(this._operationsToDelay.indexOf(operationType) !== -1) {
+            operationTimeout = this._operationTimeouts && this._operationTimeouts.length > this._operationIndex
+                ? this._operationTimeouts[this._operationIndex++]
+                : this._operationTimeout;
+        }
 
         setTimeout(function() {
             try {
@@ -47,7 +55,7 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
             } catch(e) {
                 promise.reject(e);
             }
-        }, this._operationsToDelay.indexOf(operationType) !== -1 ? this._operationTimeout : 0);
+        }, operationTimeout);
 
         return promise.promise();
     }

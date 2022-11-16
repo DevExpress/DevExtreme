@@ -1274,7 +1274,7 @@ export const validatingModule = {
                         const $tooltips = $element && $element.closest('.' + this.addWidgetPrefix(ROWS_VIEW_CLASS)).find(this._getTooltipsSelector());
                         $tooltips && $tooltips.remove();
 
-                        if($element?.hasClass('dx-row')) {
+                        if($element?.hasClass('dx-row') || $element?.hasClass('dx-master-detail-cell')) {
                             return this.callBase($element, hideBorder);
                         }
 
