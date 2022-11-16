@@ -44,17 +44,13 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                         const viewValue = this._getContouredValue();
                         const lastActionElement = this._lastActionElement;
                         const shouldCloseDropDown = this._closeDropDownByEnter();
-                        const initialMaskValue = this.dateBox._initialMaskValue;
 
                         if(shouldCloseDropDown && viewValue && lastActionElement === 'calendar') {
                             this.dateBoxValue(viewValue, e);
                         }
 
                         shouldCloseDropDown && this.dateBox.close();
-
-                        if(initialMaskValue !== null) {
-                            this.dateBox._valueChangeEventHandler(e);
-                        }
+                        this.dateBox._valueChangeEventHandler(e);
 
                         return !shouldCloseDropDown;
                     } else {
