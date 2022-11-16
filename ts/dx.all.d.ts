@@ -36171,9 +36171,9 @@ declare module DevExpress.viz.map {
    */
   export const projection: {
     /**
-     * [descr:viz.map.projection.add(name, projection)]
+     * [descr:viz.map.projection.add(name, projectionConfig)]
      */
-    add(name: string, projection: VectorMapProjectionConfig | any): void;
+    add(name: string, projectionConfig: VectorMapProjectionConfig | any): void;
 
     /**
      * [descr:viz.map.projection.get(name)]
