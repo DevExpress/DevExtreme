@@ -267,7 +267,7 @@ export class GanttView extends Widget {
     }
     _sortAndFilter(args) {
         this._sieveOptions = args;
-        this._update(true);
+        this._update(!args?.expandTasks);
         const selectedRowKey = this.option('selectedRowKey');
         this._selectTask(selectedRowKey);
     }
@@ -380,6 +380,9 @@ export class GanttView extends Widget {
     }
     getTreeListCellInfo(rowIndex, colIndex, key) {
         return this.callExportHelperMethod('getTreeListCellInfo', key, colIndex);
+    }
+    getTreeListEmptyDataCellInfo() {
+        return this.callExportHelperMethod('getTreeListEmptyDataCellInfo');
     }
     callExportHelperMethod(methodName, ...args) {
         const helper = this.option('exportHelper');

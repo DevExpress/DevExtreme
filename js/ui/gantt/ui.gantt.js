@@ -236,6 +236,7 @@ class Gantt extends Widget {
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = validatedData;
             const forceUpdate = !this._ganttTreeList?.getDataSource() && !this._ganttView;
+            this._ganttTreeList?.saveExpandedKeys();
             this._ganttTreeList?.updateDataSource(validatedData, forceUpdate);
         }
     }
@@ -348,7 +349,8 @@ class Gantt extends Widget {
 
         if(sieveColumn || isClearSieving) {
             const sievedItems = this._ganttTreeList.getSievedItems();
-            const sieveOptions = { sievedItems: sievedItems, sieveColumn: sieveColumn };
+            const expandTasks = !!filterColumn && this._treeList.option('expandNodesOnFiltering');
+            const sieveOptions = { sievedItems: sievedItems, sieveColumn: sieveColumn, expandTasks: expandTasks };
             this.isSieving = !isClearSieving;
             this._setGanttViewOption('sieve', isClearSieving ? undefined : sieveOptions);
         }

@@ -15,10 +15,6 @@
 
 // adduse
 
-
-$generic-html-editor-toolbar-height: $generic-base-inline-widget-height;
-$generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
-
 .dx-htmleditor {
   .dx-htmleditor-toolbar-wrapper {
     padding: 5px;
@@ -250,11 +246,7 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   }
 
   .dx-htmleditor-toolbar-separator {
-    height: $generic-html-editor-toolbar-height;
-
-    .dx-device-mobile & {
-      height: $generic-mobile-html-editor-toolbar-height;
-    }
+    height: $generic-toolbar-height;
   }
 }
 

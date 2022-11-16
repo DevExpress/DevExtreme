@@ -501,13 +501,10 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             width: dropDownMenuWidth
         });
 
-        const borderWidth = parseInt(this.$element.css('borderLeftWidth'));
-
         this.overflowMenu.click();
 
         assert.strictEqual(this.instance.option('width'), dropDownMenuWidth);
         assert.strictEqual(getOuterWidth(this.$element), dropDownMenuWidth, 'outer width of the element must be equal to custom width');
-        assert.strictEqual(getOuterWidth(this.overflowMenu.$popup()), dropDownMenuWidth - 2 * borderWidth, 'outer width of the popup must be equal to custom width minus border');
     });
 
     QUnit.test('change width', function(assert) {
@@ -520,12 +517,11 @@ QUnit.module('widget sizing render', moduleConfig, () => {
         });
 
         const customWidth = 400;
-        const borderWidth = parseInt(this.$element.css('borderLeftWidth'));
 
         this.instance.option('width', customWidth);
         this.overflowMenu.click();
 
-        assert.strictEqual(getOuterWidth(this.overflowMenu.$popup()), customWidth - 2 * borderWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(this.$element), customWidth, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.module('keyboard navigation', {

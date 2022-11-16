@@ -48,5 +48,25 @@ QUnit.module('Expand state T1105252', moduleConfig, () => {
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
         assert.equal(this.instance._treeList.getVisibleRows().length, 1);
     });
+    test('check state after datasource updte (T1125635)', function(assert) {
+        const options = {
+            tasks: { dataSource: tasks.slice() },
+            editing: { enabled: true }
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+        const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+        this.clock.tick();
+        this.instance.option('tasks', { dataSource: tasks.slice() });
+        this.clock.tick(1000);
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+    });
 });
 

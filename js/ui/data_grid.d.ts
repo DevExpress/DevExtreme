@@ -24,14 +24,6 @@ import {
 } from '../events/index';
 
 import {
-    DataGridCell as ExcelCell,
-} from '../excel_exporter';
-
-import {
-    ExcelFont,
-} from '../exporter/excel/excel.doc_comments';
-
-import {
     dxToolbarItem,
 } from './toolbar';
 
@@ -182,22 +174,12 @@ export {
     ToolbarPreparingInfo,
 } from '../common/grids';
 
-export {
-    ExcelUnderlineType,
-} from '../exporter/excel/excel.doc_comments';
-
 /** @public */
 export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 /** @public */
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 /** @public */
 export type DataGridScrollMode = 'infinite' | 'standard' | 'virtual';
-/** @public */
-export type ExcelCellHorizontalAlignment = 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
-/** @public */
-export type ExcelCellPatternType = 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
-/** @public */
-export type ExcelCellVerticalAlignment = 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
 /** @public */
 export type DataGridPredefinedColumnButton = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 /** @public */
@@ -406,22 +388,10 @@ export type EditorPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataG
 };
 
 /** @public */
-export type ExportedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>>;
-
-/** @public */
 export type ExportingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & {
   fileName?: string;
   selectedRowsOnly: boolean;
   format: DataGridExportFormat | string;
-};
-
-/** @public */
-export type FileSavingEvent<TRowData = any, TKey = any> = Cancelable & {
-  readonly component: dxDataGrid<TRowData, TKey>;
-  readonly element: DxElement;
-  fileName?: string;
-  format?: string;
-  readonly data: Blob;
 };
 
 /** @public */
@@ -711,14 +681,6 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     customizeColumns?: ((columns: Array<Column<TRowData, TKey>>) => void);
     /**
      * @docid
-     * @deprecated
-     * @type_function_param1 columns:Array<dxDataGridColumn>
-     * @type_function_param2 rows:Array<dxDataGridRowObject>
-     * @public
-     */
-    customizeExportData?: ((columns: Array<Column<TRowData, TKey>>, rows: Array<Row<TRowData, TKey>>) => void);
-    /**
-     * @docid
      * @public
      * @type object
      */
@@ -728,7 +690,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type object
      * @public
      */
-    export?: Export<TRowData, TKey>;
+    export?: Export;
     /**
      * @docid
      * @type object
@@ -856,16 +818,6 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @action
-     * @public
-     * @deprecated
-     */
-    onExported?: ((e: ExportedEvent<TRowData, TKey>) => void);
-    /**
-     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field component:dxDataGrid
      * @type_function_param1_field format:Enums.DataGridExportFormat|string
@@ -874,15 +826,6 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @public
      */
     onExporting?: ((e: ExportingEvent<TRowData, TKey>) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @default null
-     * @action
-     * @public
-     * @deprecated
-     */
-    onFileSaving?: ((e: FileSavingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1069,78 +1012,23 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
 }
 
 /** @public */
-export type ExcelCellInfo<TRowData = any, TKey = any> = {
-  readonly component: dxDataGrid<TRowData, TKey>;
-  horizontalAlignment?: ExcelCellHorizontalAlignment;
-  verticalAlignment?: ExcelCellVerticalAlignment;
-  wrapTextEnabled?: boolean;
-  backgroundColor?: string;
-  fillPatternType?: ExcelCellPatternType;
-  fillPatternColor?: string;
-  font?: ExcelFont;
-  readonly value?: string | number | Date;
-  numberFormat?: string;
-  gridCell?: ExcelCell;
-};
-
-/** @public */
-export type Export<TRowData = any, TKey = any> = {
+export type Export = {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
    * @default false
    */
   allowExportSelectedData?: boolean;
   /**
-   * @docid dxDataGridOptions.export.customizeExcelCell
-   * @deprecated
-   * @type_function_param1 options:object
-   * @type_function_param1_field horizontalAlignment:Enums.ExcelCellHorizontalAlignment
-   * @type_function_param1_field verticalAlignment:Enums.ExcelCellVerticalAlignment
-   * @type_function_param1_field fillPatternType:Enums.ExcelCellPatternType
-   * @type_function_param1_field gridCell:ExcelDataGridCell
-   */
-  customizeExcelCell?: ((options: ExcelCellInfo<TRowData, TKey>) => void);
-  /**
    * @docid dxDataGridOptions.export.enabled
    * @default false
    */
   enabled?: boolean;
-  /**
-   * @docid dxDataGridOptions.export.excelFilterEnabled
-   * @default false
-   * @deprecated
-   */
-  excelFilterEnabled?: boolean;
-  /**
-   * @docid dxDataGridOptions.export.excelWrapTextEnabled
-   * @default undefined
-   * @deprecated
-   */
-  excelWrapTextEnabled?: boolean;
   /**
    * @docid dxDataGridOptions.export.formats
    * @type Array<Enums.DataGridExportFormat,string>
    * @default "DataGrid"
    */
   formats?: ('xlsx' | 'pdf' | string)[];
-  /**
-   * @docid dxDataGridOptions.export.fileName
-   * @default "DataGrid"
-   * @deprecated
-   */
-  fileName?: string;
-  /**
-   * @docid dxDataGridOptions.export.ignoreExcelErrors
-   * @default true
-   * @deprecated
-   */
-  ignoreExcelErrors?: boolean;
-  /**
-   * @docid dxDataGridOptions.export.proxyUrl
-   * @default undefined
-   * @deprecated
-   */
-  proxyUrl?: string;
   /**
    * @docid dxDataGridOptions.export.texts
    * @type object
@@ -1509,8 +1397,9 @@ export type dxDataGridToolbarItem = ToolbarItem;
  * @docid dxDataGridToolbarItem
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxDataGrid
+ * @public
  */
-export interface ToolbarItem extends dxToolbarItem {
+export type ToolbarItem = dxToolbarItem & {
   /**
    * @docid dxDataGridToolbarItem.name
    * @public
@@ -1522,7 +1411,7 @@ export interface ToolbarItem extends dxToolbarItem {
    * @public
    */
   location?: ToolbarItemLocation;
-}
+};
 
 /**
  * @public
@@ -1699,13 +1588,6 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     expandRow(key: TKey): DxPromise<void>;
     /**
      * @docid
-     * @publicName exportToExcel(selectionOnly)
-     * @deprecated excelExporter.exportDataGrid
-     * @public
-     */
-    exportToExcel(selectionOnly: boolean): void;
-    /**
-     * @docid
      * @publicName getSelectedRowKeys()
      * @return Array<any> | Promise<any>
      * @public
@@ -1869,10 +1751,11 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     buttons?: Array<DataGridPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
-     * @type_function_param1 rowData:object
+     * @type_function_param1 this:GridBaseColumn
+     * @type_function_param2 rowData:object
      * @public
      */
-    calculateGroupValue?: string | ((rowData: TRowData) => any);
+    calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
      * @type_function_param2 cellInfo:object
@@ -2085,12 +1968,9 @@ export type ExplicitTypes<TRowData, TKey> = {
   EditingStartEvent: EditingStartEvent<TRowData, TKey>;
   EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
   EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
-  ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
-  Export: Export<TRowData, TKey>;
-  ExportedEvent: ExportedEvent<TRowData, TKey>;
+  Export: Export;
   ExportingEvent: ExportingEvent<TRowData, TKey>;
   ExportTexts: ExportTexts;
-  FileSavingEvent: FileSavingEvent<TRowData, TKey>;
   FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
   FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
   FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;

@@ -3241,56 +3241,6 @@ QUnit.module('DataGrid export tests', {
         );
     });
 
-    QUnit.test('ignoreExcelErrors - empty grid', function(assert) {
-        const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="4">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf></cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-        const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols></cols>' +
-        '<sheetData></sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:A1" numberStoredAsText="1" /></ignoredErrors>' +
-        '</worksheet>';
-        const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
-
-        helper.runGeneralTest(
-            assert,
-            {
-                export: {
-                    ignoreExcelErrors: true
-                }
-            },
-            { styles, worksheet, sharedStrings });
-    });
-
-    QUnit.test('ignoreExcelErrors - 3x1 grid', function(assert) {
-        const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c><c r="B2" s="3" t="n"><v>2</v></c><c r="C2" s="3" t="n"><v>3</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors>' +
-        '</worksheet>';
-
-        helper.runGeneralTest(
-            assert,
-            {
-                columns: ['f1', 'f2', 'f3'],
-                dataSource: [{ f1: 1, f2: 2, f3: 3 }],
-                export: {
-                    ignoreExcelErrors: true
-                }
-            },
-            { worksheet }
-        );
-    });
-
     QUnit.test('Update cell values in \'customizeExportData\'', function(assert) {
         const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +

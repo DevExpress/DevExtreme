@@ -142,12 +142,3 @@
   $material-fieldset-header-vertical-margin,
   $material-field-vertical-margin
 );
-
-.dx-device-mobile {
-  @include dx-fieldset-sizing(
-    $material-mobile-fieldset-vertical-margin,
-    $material-mobile-fieldset-horizontal-margin,
-    $material-mobile-fieldset-header-vertical-margin,
-    $material-mobile-field-vertical-margin
-  );
-}

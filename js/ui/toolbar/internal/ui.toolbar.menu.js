@@ -254,7 +254,7 @@ export default class DropDownMenu extends Widget {
                 this._itemClickAction(e);
             },
             tabIndex: -1,
-            focusStateEnabled: this.option('focusStateEnabled'),
+            focusStateEnabled: false,
             activeStateEnabled: true,
             onItemRendered: this.option('onItemRendered'),
             _areaTarget: this.$element(),

@@ -38,11 +38,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    VizRange,
-    VizTimeInterval,
-} from './common';
-
-import {
     Font,
     FileSavingEventInfo,
     ExportInfo,
@@ -67,8 +62,10 @@ import {
     RelativePosition,
     SeriesHoverMode,
     SeriesSelectionMode,
+    TimeIntervalConfig,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
+    VisualRange,
     ZoomPanAction,
 } from '../common/charts';
 
@@ -166,8 +163,8 @@ export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
 /** @public */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
-    readonly range: VizRange;
-    readonly previousRange: VizRange;
+    readonly range: VisualRange;
+    readonly previousRange: VisualRange;
     readonly actionType: ZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
@@ -175,7 +172,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent
 /** @public */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
-    readonly range: VizRange;
+    readonly range: VisualRange;
     readonly actionType: ZoomPanAction;
 };
 
@@ -540,7 +537,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: TimeIntervalConfig;
     /**
      * @docid dxPolarChartOptions.argumentAxis.originValue
      * @default undefined
@@ -579,7 +576,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: TimeIntervalConfig;
     /**
      * @docid dxPolarChartOptions.argumentAxis.type
      * @default undefined
@@ -1111,7 +1108,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: TimeIntervalConfig;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickCount
      * @default undefined
@@ -1124,7 +1121,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: TimeIntervalConfig;
     /**
      * @docid dxPolarChartOptions.valueAxis.showZero
      * @default undefined
@@ -1151,7 +1148,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: TimeIntervalConfig;
     /**
      * @docid dxPolarChartOptions.valueAxis.type
      * @default undefined
@@ -1176,7 +1173,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @notUsedInTheme
      * @public
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?: VisualRange | Array<number | string | Date>;
     /**
      * @docid dxPolarChartOptions.valueAxis.visualRangeUpdateMode
      * @default 'auto'
@@ -1188,7 +1185,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?: VisualRange | Array<number | string | Date>;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {

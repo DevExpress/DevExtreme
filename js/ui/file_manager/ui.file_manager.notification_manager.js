@@ -161,6 +161,10 @@ class NotificationManager extends NotificationManagerBase {
         this._progressPanel.completeOperationItem(operationInfo, itemIndex, commonProgress);
     }
 
+    finishOperation(operationInfo, commonProgress) {
+        this._progressPanel.updateOperationCommonProgress(operationInfo, commonProgress);
+    }
+
     completeOperation(operationInfo, commonText, isError, statusText) {
         this._operationInProgressCount--;
         if(isError) {
