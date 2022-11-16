@@ -7,10 +7,17 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('@vasily.strelyaev/testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
-const changeTheme = require('./helpers/changeTheme');
+const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
+    // eslint-disable-next-line no-undef
+    window.DevExpress.ui.themes.ready(resolve);
+    // eslint-disable-next-line no-undef
+    window.DevExpress.ui.themes.current(themeName);
+}),
+{ dependencies: { themeName } })();
+
 
 let testCafe;
-createTestCafe('localhost', 1437, 1438)
+createTestCafe('localhost', 1440, 1441)
     .then(tc => {
         testCafe = tc;
 
@@ -23,7 +30,8 @@ createTestCafe('localhost', 1437, 1438)
         const file = args.file.trim();
 
         setTestingPlatform(args);
-
+        // eslint-disable-next-line no-console
+        console.log('Theme', args.theme);
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
@@ -36,7 +44,6 @@ createTestCafe('localhost', 1437, 1438)
         const runner = testCafe.createRunner()
             .browsers(browsers)
             .reporter(reporter)
-
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         runner.compilerOptions({
@@ -79,16 +86,16 @@ createTestCafe('localhost', 1437, 1438)
         if(args.cache) {
             runner.cache = args.cache;
         }
-        runner.hooks = {
-            fixture: {
-                before: async() => {
-                    await changeTheme('material.blue.light');
-                    // console.log('Fixture');
-                }
-            }
-        };
+
         return runner.run({
-            quarantineMode: args.quarantineMode
+            quarantineMode: args.quarantineMode,
+            hooks: {
+                test: {
+                    before: async() => {
+                        await changeTheme(args.theme);
+                    }
+                },
+            }
         });
     })
     .then(failedCount => {
@@ -121,7 +128,8 @@ function getArgs() {
             cache: true,
             quarantineMode: false,
             indices: '',
-            platform: ''
+            platform: '',
+            theme: '',
         }
     });
 }
