@@ -7,6 +7,8 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('@vasily.strelyaev/testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
+const changeTheme = require('./helpers/changeTheme');
+
 let testCafe;
 createTestCafe('localhost', 1437, 1438)
     .then(tc => {
@@ -79,9 +81,9 @@ createTestCafe('localhost', 1437, 1438)
         }
         runner.hooks = {
             fixture: {
-                before: () => {
-                    // eslint-disable-next-line no-console
-                    console.log('Fixture');
+                before: async() => {
+                    await changeTheme('material.blue.light');
+                    // console.log('Fixture');
                 }
             }
         };
