@@ -77,6 +77,14 @@ createTestCafe('localhost', 1437, 1438)
         if(args.cache) {
             runner.cache = args.cache;
         }
+        runner.hooks = {
+            fixture: {
+                before: () => {
+                    // eslint-disable-next-line no-console
+                    console.log('Fixture');
+                }
+            }
+        };
         return runner.run({
             quarantineMode: args.quarantineMode
         });
