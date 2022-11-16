@@ -1,14 +1,11 @@
-import createTestCafe from 'testcafe';
-import fs from 'fs';
-import { argv, env, exit } from 'process';
-import parseArgs from 'minimist';
-import dashboardReporter from '@vasily.strelyaev/testcafe-reporter-dashboard-devextreme';
-import changeTheme from './helpers/changeTheme';
+/* eslint-env node */
 
-// eslint-disable-next-line spellcheck/spell-checker
-import nconf from 'nconf';
-// eslint-disable-next-line spellcheck/spell-checker
-nconf.argv();
+const createTestCafe = require('testcafe');
+const fs = require('fs');
+const process = require('process');
+const parseArgs = require('minimist');
+const dashboardReporter = require('@vasily.strelyaev/testcafe-reporter-dashboard-devextreme');
+require('nconf').argv();
 
 let testCafe;
 createTestCafe('localhost', 1437, 1438)
@@ -24,7 +21,6 @@ createTestCafe('localhost', 1437, 1438)
         const file = args.file.trim();
 
         setTestingPlatform(args);
-        setTestingTheme(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
@@ -32,7 +28,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         const browsers = args.browsers.split(' ').map(expandBrowserAlias);
-        // eslint-disable-next-line no-undef, no-console
+        // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
         const runner = testCafe.createRunner()
@@ -81,32 +77,18 @@ createTestCafe('localhost', 1437, 1438)
         if(args.cache) {
             runner.cache = args.cache;
         }
-
-        runner.hooks = {
-            fixture: {
-                before: async function() {
-                    await changeTheme('material.blue.light');
-                },
-            }
-        };
-
         return runner.run({
             quarantineMode: args.quarantineMode
         });
     })
     .then(failedCount => {
         testCafe.close();
-        exit(failedCount);
+        process.exit(failedCount);
     });
 
 function setTestingPlatform(args) {
-    env.platform = args.platform;
+    process.env.platform = args.platform;
 }
-
-function setTestingTheme(args) {
-    env.theme = args.theme;
-}
-
 
 function expandBrowserAlias(browser) {
     switch(browser) {
@@ -117,7 +99,7 @@ function expandBrowserAlias(browser) {
 }
 
 function getArgs() {
-    return parseArgs(argv.slice(1), {
+    return parseArgs(process.argv.slice(1), {
         default: {
             concurrency: 0,
             browsers: 'chrome',
@@ -129,8 +111,7 @@ function getArgs() {
             cache: true,
             quarantineMode: false,
             indices: '',
-            platform: '',
-            theme: '',
+            platform: ''
         }
     });
 }
