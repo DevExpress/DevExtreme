@@ -129,6 +129,11 @@ export default class FileManagerNotificationControl extends Widget {
         notificationManager.completeOperationItem(operationInfo, itemIndex, commonProgress);
     }
 
+    finishOperation(operationInfo, commonProgress) {
+        const notificationManager = this._getNotificationManager(operationInfo);
+        notificationManager.finishOperation(operationInfo, commonProgress);
+    }
+
     completeOperation(operationInfo, commonText, isError, statusText) {
         const notificationManager = this._getNotificationManager(operationInfo);
         if(!isError) {

@@ -267,7 +267,7 @@ export class GanttView extends Widget {
     }
     _sortAndFilter(args) {
         this._sieveOptions = args;
-        this._update(true);
+        this._update(!args?.expandTasks);
         const selectedRowKey = this.option('selectedRowKey');
         this._selectTask(selectedRowKey);
     }
