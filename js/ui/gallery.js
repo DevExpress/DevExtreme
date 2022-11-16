@@ -377,7 +377,7 @@ const Gallery = CollectionWidget.inherit({
     _cloneItemForDuplicate: function(item, $container) {
         if(item) {
             $(item)
-                .clone(true)
+                .clone(false)
                 .addClass(GALLERY_LOOP_ITEM_CLASS)
                 .css('margin', 0)
                 .appendTo($container);

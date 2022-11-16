@@ -187,13 +187,17 @@ export class GanttTreeList {
         }
     }
     saveExpandedKeys() {
-        this._savedExpandedKeys = this.getOption('expandedRowKeys');
+        const keys = this.getOption('expandedRowKeys');
+        if(keys?.length > 0) {
+            this._savedExpandedKeys = keys;
+        }
     }
     _onNodesInitialized(e) {
-        if(this._savedExpandedKeys) {
+        const expandedKeys = this._savedExpandedKeys?.filter(k => !!this._treeList.getNodeByKey(k));
+        if(expandedKeys?.length > 0) {
             this.setOption('expandedRowKeys', this._savedExpandedKeys);
-            delete this._savedExpandedKeys;
         }
+        delete this._savedExpandedKeys;
     }
 
     getOffsetHeight() {

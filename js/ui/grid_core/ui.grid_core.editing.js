@@ -1828,6 +1828,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 const row = dataController.getVisibleRows()[rowIndex];
 
                 if(row) {
+                    options.row.values = row.values; // T1122209
                     options.values = row.values;
                 }
 
@@ -2081,7 +2082,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 $container.append($button, '&nbsp;');
 
                 if(button.template) {
-                    this._rowsView.renderTemplate($button, button.template, options, true, change);
+                    this._rowsView.renderTemplate($button, button.template, { ...options, column: undefined }, true, change);
                 }
             }
         },
@@ -2536,10 +2537,12 @@ export const editingModule = {
                     this.callBase.apply(this, arguments);
                     clearTimeout(this._pointerDownTimeout);
                 },
-                _renderCore: function() {
+                _renderCore: function(change) {
                     this.callBase.apply(this, arguments);
 
-                    this._editingController._focusEditorIfNeed();
+                    this._waitAsyncTemplates(change, true).done(() => {
+                        this._editingController._focusEditorIfNeed();
+                    });
                 }
             },
 

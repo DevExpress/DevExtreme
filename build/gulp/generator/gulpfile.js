@@ -38,9 +38,7 @@ const SRC = [
 
 const IGNORE_PATHS_BY_FRAMEWORKS = {
     vue: [],
-    react: [
-        '!js/renovation/ui/grids/data_grid_next/data_grid_next_full.tsx'
-    ],
+    react: [],
 };
 
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
