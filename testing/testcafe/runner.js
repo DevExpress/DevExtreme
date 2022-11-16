@@ -84,8 +84,8 @@ createTestCafe('localhost', 1437, 1438)
 
         runner.hooks = {
             fixture: {
-                before: async function() {
-                    await changeTheme('material.blue.light');
+                before: function() {
+                    changeTheme('material.blue.light');
                 },
             }
         };
