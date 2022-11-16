@@ -98,11 +98,6 @@ const USE_REQUEST_ANIMATION_FRAME: Set<string> = new Set([
   'dxDataGrid',
 ]);
 
-const USE_DETACHED_TABLE: Set<string> = new Set([
-  'dxDataGrid',
-  'dxTreeList',
-]);
-
 function getIndent(indent: number) {
   return Array(indent * 2 + 1).join(' ');
 }
@@ -358,7 +353,6 @@ const renderComponent: (model: {
   renderedPropTypings?: string[];
   isPortalComponent?: boolean;
   useRequestAnimationFrameFlag?: boolean;
-  allowRenderToDetachedTable?: boolean;
   typeParams: string[] | undefined;
 }) => string = createTempate(
   `class <#= it.className #>${TYPE_PARAMS_WITH_DEFAULTS} extends BaseComponent<React.PropsWithChildren<<#= it.optionsName #>${TYPE_PARAMS}>> {
@@ -371,10 +365,6 @@ const renderComponent: (model: {
 
 + `<#? it.useRequestAnimationFrameFlag #>${
   L1}protected useRequestAnimationFrameFlag = true;\n`
-+ '<#?#>'
-
-+ `<#? it.allowRenderToDetachedTable #>${
-  L1}protected allowRenderToDetachedTable = true;\n`
 + '<#?#>'
 
 + `<#? it.isPortalComponent #>${
@@ -610,7 +600,6 @@ function generate(component: IComponent): string {
       renderedPropTypings,
       expectedChildren: component.expectedChildren,
       useRequestAnimationFrameFlag: USE_REQUEST_ANIMATION_FRAME.has(widgetName),
-      allowRenderToDetachedTable: USE_DETACHED_TABLE.has(widgetName),
       isPortalComponent: PORTAL_COMPONENTS.has(widgetName),
       typeParams: component.optionsTypeParams?.length ? component.optionsTypeParams : undefined,
     }),
