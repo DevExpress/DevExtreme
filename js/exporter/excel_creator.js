@@ -489,14 +489,6 @@ export const ExcelCreator = Class.inherit({
         return '';
     },
 
-    _getIgnoredErrorsXML: function(maxCellIndex) {
-        if(this._options.ignoreErrors) {
-            return '<ignoredErrors><ignoredError sqref="A1:' + maxCellIndex + '" numberStoredAsText="1" /></ignoredErrors>';
-        }
-
-        return '';
-    },
-
     _generateWorksheetXML: function() {
         let colIndex;
         let rowIndex;
@@ -570,7 +562,6 @@ export const ExcelCreator = Class.inherit({
             '</sheetData>' +
             this._getAutoFilterXML(rightBottomCellRef) +
             this._generateMergingXML() +
-            this._getIgnoredErrorsXML(rightBottomCellRef) +
             '</worksheet>');
 
         this._zip.folder(XL_FOLDER_NAME).folder(WORKSHEETS_FOLDER).file(WORKSHEET_FILE_NAME, xmlResult.join(''));

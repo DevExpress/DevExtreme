@@ -1686,7 +1686,6 @@ class Diagram extends Widget {
             },
             export: {
                 fileName: 'Diagram',
-                proxyUrl: undefined
             },
 
             onItemClick: null,

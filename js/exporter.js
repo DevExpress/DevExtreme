@@ -50,7 +50,7 @@ function _export(data, options, getData) {
 
             if(!eventArgs.cancel) {
                 const format = options.format === 'xlsx' ? 'EXCEL' : options.format;
-                fileSaver.saveAs(eventArgs.fileName, format, blob, options.proxyUrl, options.forceProxy);
+                fileSaver.saveAs(eventArgs.fileName, format, blob);
             }
         });
     }

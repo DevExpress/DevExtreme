@@ -42,6 +42,7 @@ import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from '../../helpers/dataGridMocks.js';
+import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'localization/number';
 import virtualScrollingCore from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import ODataStore from 'data/odata/store';
@@ -7612,6 +7613,115 @@ QUnit.module('Custom Loading', {
         assert.ok($loadPanelElement.length, 'has load panel');
         assert.equal($loadPanelElement.position().top, loadPanelPosition.top, 'position of the load panel is not changed');
         assert.ok(that.rowsView._loadPanel.option('visible'), 'visible load panel');
+    });
+});
+
+// T1107403
+QUnit.module('Render templates with renderAsync and templatesRenderAsynchronously', {
+    beforeEach: function() {
+        this.items = [
+            { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0 }
+        ];
+
+        this.groupItems = [
+            { data: { key: 'TestGroup', items: null }, values: ['TestGroup'], rowType: 'group', groupIndex: 0 }
+        ];
+
+        this.clock = sinon.useFakeTimers();
+
+        this.createRowsView = createRowsView;
+    },
+    afterEach: function() {
+        this.dataGrid && this.dataGrid.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    [true, false].forEach((templatesRenderAsynchronously) => {
+        [true, false].forEach((renderAsync) => {
+            ['cellTemplate', 'editCellTemplate', 'groupCellTemplate'].forEach((templateName) => {
+                QUnit.test(`Render column with ${templateName} when renderAsync = ${renderAsync} and templatesRenderAsynchronously = ${templatesRenderAsynchronously}`, function(assert) {
+                    // arrange
+                    assert.expect(1);
+
+                    const items = templateName === 'groupCellTemplate' ? this.groupItems : this.items;
+                    const $testElement = $('#container');
+                    const columns = [{
+                        dataField: 'name',
+                        showEditorAlways: templateName === 'editCellTemplate',
+                        groupIndex: templateName === 'groupCellTemplate' ? 0 : undefined
+                    }];
+
+                    columns[0][templateName] = '#testTemplate';
+                    const rowsView = this.createRowsView(items, null, columns, null, { renderAsync, templatesRenderAsynchronously });
+
+                    rowsView.component._getTemplate = function() {
+                        return {
+                            render: function(options) {
+                                const container = $(options.container).get(0);
+
+                                // assert
+                                if(templatesRenderAsynchronously && renderAsync === false) {
+                                    assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
+                                } else {
+                                    assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
+                                }
+                                setTimeout(() => {
+                                    options.deferred && options.deferred.resolve();
+                                }, 50);
+                            }
+                        };
+                    };
+
+                    // act
+                    rowsView.render($testElement, { changeType: 'refresh' });
+                    this.clock.tick(50);
+                });
+            });
+
+            QUnit.test(`Render column buttons with template when renderAsync = ${renderAsync}  and templatesRenderAsynchronously = ${templatesRenderAsynchronously}`, function(assert) {
+                // arrange
+                assert.expect(1);
+
+                const items = [
+                    { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', null], rowType: 'data', dataIndex: 0 }
+                ];
+                const $testElement = $('#container');
+                const column = {
+                    name: 'test',
+                    command: 'edit',
+                    type: 'buttons',
+                    buttons: [{
+                        template: '#testTemplate'
+                    }]
+                };
+                const columns = [{ dataField: 'name' }, column];
+                const rowsView = this.createRowsView(items, null, columns, null, { renderAsync, templatesRenderAsynchronously });
+
+                columns[1] = $.extend({}, columns[1], column);
+                rowsView.component._getTemplate = function() {
+                    return {
+                        render: function(options) {
+                            const container = $(options.container).get(0);
+
+                            // assert
+                            if(templatesRenderAsynchronously && renderAsync === false) {
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
+                            } else {
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
+                            }
+
+                            setTimeout(() => {
+                                options.deferred && options.deferred.resolve();
+                            }, 50);
+                        }
+                    };
+                };
+
+                // act
+                rowsView.render($testElement, { changeType: 'refresh' });
+                this.clock.tick(50);
+            });
+        });
     });
 });
 

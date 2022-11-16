@@ -58,7 +58,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ field1: 42 }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.clearStyle();
@@ -99,7 +98,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ field1: 42 }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.horizontalAlignment = null;
@@ -195,7 +193,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.clearStyle();
                         e.backgroundColor = '#FFFF00';
@@ -232,7 +229,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.backgroundColor = null;
                         e.fillPatternColor = null;
@@ -297,7 +293,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.horizontalAlignment = null;
                         e.verticalAlignment = null;
@@ -346,7 +341,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.clearStyle();
                         e.font = {
@@ -398,7 +392,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => e.font = null,
                 },
             },
@@ -512,7 +505,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.clearStyle();
                         e.numberFormat = formats.shift();
@@ -550,7 +542,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.numberFormat = null;
                     },
@@ -601,7 +592,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.numberFormat = columnFormats[e.gridCell.column.dataField];
                     },
@@ -643,7 +633,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.numberFormat = '#,##0';
                     },
@@ -684,7 +673,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.numberFormat = '#,##0';
                     },
@@ -726,7 +714,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.numberFormat = 'dd/mmm/yyyy hh:mm';
                     },
@@ -1311,7 +1298,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
                             e.clearStyle();
@@ -1343,7 +1329,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: undefined }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = 'a';
@@ -1371,7 +1356,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: undefined }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = 42;
@@ -1401,7 +1385,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: null }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = 'a';
@@ -1429,7 +1412,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: null }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = 42;
@@ -1459,7 +1441,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = undefined;
@@ -1489,7 +1470,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = null;
@@ -1521,7 +1501,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 'b';
                     },
@@ -1550,7 +1529,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = 42;
@@ -1581,7 +1559,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = Number.NaN;
@@ -1612,7 +1589,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = Number.POSITIVE_INFINITY;
@@ -1643,7 +1619,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = Number.NEGATIVE_INFINITY;
@@ -1673,7 +1648,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = new Date(2018, 0, 22, 16, 55);
@@ -1703,7 +1677,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 dataSource: [{ f1: 'a' }],
                 showColumnHeaders: false,
                 export: {
-                    ignoreExcelErrors: false,
                     enabled: true,
                     customizeExcelCell: e => {
                         e.value = true;
@@ -1732,7 +1705,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 42;
                     },
@@ -1760,7 +1732,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 42;
                     },
@@ -1788,7 +1759,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = undefined;
                     },
@@ -1816,7 +1786,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = null;
                     },
@@ -1846,7 +1815,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 'a';
                     },
@@ -1874,7 +1842,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 43;
                     },
@@ -1904,7 +1871,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = Number.NaN;
                     },
@@ -1934,7 +1900,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = Number.POSITIVE_INFINITY;
                     },
@@ -1964,7 +1929,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = Number.NEGATIVE_INFINITY;
                     },
@@ -1992,7 +1956,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = new Date(2018, 0, 22, 16, 55);
                     },
@@ -2020,7 +1983,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = true;
                     },
@@ -2050,7 +2012,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = new Date(2019, 0, 22, 16, 55);
                     },
@@ -2080,7 +2041,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = new Date(2019, 0, 22, 16, 55);
                     },
@@ -2112,7 +2072,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 'a';
                     },
@@ -2142,7 +2101,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = undefined;
                     },
@@ -2172,7 +2130,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = undefined;
                     },
@@ -2202,7 +2159,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 42;
                     },
@@ -2236,7 +2192,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
                             e.value = new Date(2018, 0, 22, 16, 55);
@@ -2270,7 +2225,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = true;
                     },
@@ -2302,7 +2256,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 'a';
                     },
@@ -2333,7 +2286,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = 42;
                     },
@@ -2364,7 +2316,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         e.value = new Date(2018, 0, 22, 16, 55);
                     },
@@ -2397,7 +2348,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.gridCell.value) {
                             e.value = 'false';
@@ -2443,7 +2393,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.gridCell !== undefined && e.gridCell.rowType === 'group' && e.gridCell.column.dataField === 'f1') {
                             e.value = e.gridCell.value + 10;
@@ -2497,7 +2446,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.gridCell !== undefined && e.gridCell.rowType === 'group' && e.gridCell.column.dataField === 'f3') {
                             e.value = e.gridCell.groupSummaryItems.map(item => `${item.name}: ${item.value}`).join('\n');
@@ -2548,7 +2496,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.gridCell !== undefined && e.gridCell.rowType === 'group' && e.gridCell.column.dataField === 'f1') {
                             const groupSummaryText = e.gridCell.groupSummaryItems.map(item => `${item.name}: ${item.value}`).join(', ');
@@ -2605,7 +2552,6 @@ QUnit.module('DataGrid customizeExcelCell tests', {
                 showColumnHeaders: false,
                 export: {
                     enabled: true,
-                    ignoreExcelErrors: false,
                     customizeExcelCell: e => {
                         if(e.gridCell !== undefined && e.gridCell.rowType === 'totalFooter' && e.gridCell.column.dataField === 'f2') {
                             e.value = e.gridCell.totalSummaryItemName + ': ' + e.gridCell.value;

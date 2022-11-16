@@ -15,9 +15,6 @@ import {
 import {
     AsyncRule,
     ValidationRule,
-} from './validation_rules';
-
-import {
     ValidationStatus,
 } from '../common';
 

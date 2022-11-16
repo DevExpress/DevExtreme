@@ -17,9 +17,6 @@ import {
 
 import {
     ChartSeries,
-    ScaleBreak,
-    VizRange,
-    VizTimeInterval,
 } from './common';
 
 import BaseWidget, {
@@ -37,7 +34,10 @@ import {
     LabelOverlap,
     Palette,
     PaletteExtensionMode,
+    ScaleBreak,
     ScaleBreakLineStyle,
+    TimeIntervalConfig,
+    VisualRange,
     VisualRangeUpdateMode,
 } from '../common/charts';
 
@@ -366,7 +366,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.TimeInterval
        */
-      aggregationInterval?: VizTimeInterval;
+      aggregationInterval?: TimeIntervalConfig;
       /**
        * @docid
        * @default 'betweenLabels'
@@ -521,13 +521,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.TimeInterval
        */
-      maxRange?: VizTimeInterval;
+      maxRange?: TimeIntervalConfig;
       /**
        * @docid
        * @inherits VizTimeInterval
        * @type number|object|Enums.TimeInterval
        */
-      minRange?: VizTimeInterval;
+      minRange?: TimeIntervalConfig;
       /**
        * @docid
        */
@@ -563,7 +563,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.TimeInterval
        */
-      minorTickInterval?: VizTimeInterval;
+      minorTickInterval?: TimeIntervalConfig;
       /**
        * @docid
        * @default undefined
@@ -610,7 +610,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.TimeInterval
        */
-      tickInterval?: VizTimeInterval;
+      tickInterval?: TimeIntervalConfig;
       /**
        * @docid
        * @default undefined
@@ -746,7 +746,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @notUsedInTheme
      * @public
      */
-    value?: Array<number | string | Date> | VizRange;
+    value?: Array<number | string | Date> | VisualRange;
 }
 /**
  * @docid
@@ -774,7 +774,7 @@ export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> 
      * @publicName setValue(value)
      * @public
      */
-    setValue(value: Array<number | string | Date> | VizRange): void;
+    setValue(value: Array<number | string | Date> | VisualRange): void;
 }
 
 /** @public */

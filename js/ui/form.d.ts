@@ -28,18 +28,6 @@ import {
 } from './tab_panel';
 
 import {
-    AsyncRule,
-    CompareRule,
-    CustomRule,
-    EmailRule,
-    NumericRule,
-    PatternRule,
-    RangeRule,
-    RequiredRule,
-    StringLengthRule,
-} from './validation_rules';
-
-import {
     ValidationResult,
 } from './validation_group';
 
@@ -48,8 +36,17 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
+    AsyncRule,
+    CompareRule,
+    CustomRule,
+    EmailRule,
     HorizontalAlignment,
     Mode,
+    NumericRule,
+    PatternRule,
+    RangeRule,
+    RequiredRule,
+    StringLengthRule,
     VerticalAlignment,
 } from '../common';
 

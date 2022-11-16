@@ -52,41 +52,42 @@
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
     padding: $generic-list-item-vertical-padding;
-
-    > .dx-button,
-    > .dx-toolbar-item-content > .dx-button {
-      .dx-button-content {
-        padding: 0;
-      }
-    }
   }
 
-  .dx-toolbar-hidden-button {
+  .dx-toolbar-hidden-button,
+  .dx-toolbar-hidden-button-group {
     .dx-button {
-      padding: $generic-list-item-vertical-padding;
+      .dx-button-content {
+        padding: $generic-list-item-vertical-padding;
+      }
     }
 
-    .dx-button-default,
-    .dx-button-success,
-    .dx-button-danger {
-      &,
-      & .dx-icon {
-        color: $button-normal-color;
+    .dx-button-mode-contained,
+    .dx-button-mode-outlined,
+    .dx-button-mode-text {
+      &.dx-button {
+        border-radius: 0;
       }
+
+      @include dx-button-mode-text-styling();
     }
   }
 
   .dx-toolbar-hidden-button-group {
     margin-top: $generic-toolbar-item-spacing;
     margin-bottom: $generic-toolbar-item-spacing;
+  }
 
-    .dx-buttongroup-wrapper {
-      .dx-buttongroup-item.dx-button {
-        .dx-button-content {
-          padding: $generic-list-item-vertical-padding;
-        }
-      }
-    }
+  .dx-button-mode-contained {
+    @include dx-button-mode-contained-styling();
+  }
+
+  .dx-button-mode-outlined {
+    @include dx-button-mode-outlined-styling();
+  }
+
+  .dx-button-mode-text {
+    @include dx-button-mode-text-styling();
   }
 }
 
