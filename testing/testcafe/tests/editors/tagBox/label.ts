@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
@@ -10,10 +9,7 @@ const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
 
 fixture`TagBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
   test(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {

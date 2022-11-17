@@ -2,15 +2,11 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`DateBox ValidationMessagePosition`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../container.html'));
 
 const positions = ['top', 'right', 'bottom', 'left'];
 positions.forEach((position) => {

@@ -7,6 +7,7 @@ import { virtualData } from './virtualData.js';
 import { dataOptions } from './virtualDataOptions.js';
 import PivotGrid from '../../../model/pivotGrid';
 import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`PivotGrid_scrolling`
   .page(url(__dirname, '../../container.html'))
@@ -25,7 +26,7 @@ fixture`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: -150 });
 
     await t
-      .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}.png`, '#container'))
+      .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}${getThemePostfix()}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -83,7 +84,7 @@ fixture`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: -150 });
 
     await t
-      .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}.png`, '#container'))
+      .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}${getThemePostfix}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
@@ -12,7 +13,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`${testItem1ColSpan2}.png`, '#container'))
+        .expect(await takeScreenshot(`${testItem1ColSpan2}${getThemePostfix()}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -28,7 +29,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`${testItem1ColSpan2Item2}.png`, '#container'))
+        .expect(await takeScreenshot(`${testItem1ColSpan2Item2}${getThemePostfix()}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -47,7 +48,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`${testItem1Item2ColSpan2}.png`, '#container'))
+        .expect(await takeScreenshot(`${testItem1Item2ColSpan2}${getThemePostfix()}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -66,7 +67,7 @@ fixture`Form`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`${testItem1ColSpan2Item2ColSpan2}.png`, '#container'))
+        .expect(await takeScreenshot(`${testItem1ColSpan2Item2ColSpan2}${getThemePostfix()}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());

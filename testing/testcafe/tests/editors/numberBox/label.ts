@@ -1,5 +1,4 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { getThemePostfix } from '../../../helpers/getPostfix';
@@ -7,10 +6,7 @@ import { getThemePostfix } from '../../../helpers/getPostfix';
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
 fixture`NumberBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../container.html'));
 
 stylingMods.forEach((stylingMode) => {
   test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {

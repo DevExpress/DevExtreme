@@ -23,9 +23,8 @@ fixture`DateBox_Icon`
 (['dx-dropdowneditor-active', 'dx-state-focused', false] as string[]).forEach((state) => {
   [true, false].forEach((rtlEnabled) => {
     test(`DateBox styles, state=${state ? 'active' : ''}`, async (t) => {
-      await t.expect(
-        await compareScreenshot(t, `db-styling,${state ? `${state.replace('dx-', '')}` : ''},rtl=${rtlEnabled}${getThemePostfix()}.png`, '#container'),
-      )
+      await t
+        .expect(await compareScreenshot(t, `db-styling${state ? `,${state.replace('dx-', '')}` : ''},rtl=${rtlEnabled}${getThemePostfix()}.png`, '#container'))
         .ok();
     }).before(async () => {
       for (const stylingMode of stylingModes) {

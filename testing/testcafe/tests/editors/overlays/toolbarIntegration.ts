@@ -5,6 +5,7 @@ import Popup from '../../../model/popup';
 import Popover from '../../../model/popover';
 import Toolbar from '../../../model/toolbar/toolbar';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
@@ -28,7 +29,7 @@ fixture`Popup_toolbar`
         }
 
         await t
-          .expect(await takeScreenshot(`${name}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`))
+          .expect(await takeScreenshot(`${name}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}${getThemePostfix()}.png`))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());

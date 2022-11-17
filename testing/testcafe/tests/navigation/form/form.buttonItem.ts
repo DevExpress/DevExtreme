@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
@@ -10,7 +11,7 @@ test(testName, async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot(`${testName}.png`, '#container'))
+    .expect(await takeScreenshot(`${testName}${getThemePostfix()}.png`, '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

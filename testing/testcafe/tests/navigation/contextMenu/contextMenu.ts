@@ -7,8 +7,7 @@ import { appendElementTo } from '../helpers/domUtils';
 fixture`ContextMenu`
   .page(url(__dirname, '../../container.html'));
 
-// T755681
-test('Context menu should be shown in the same position when item was added in runtime', async (t) => {
+test('Context menu should be shown in the same position when item was added in runtime (T755681)', async (t) => {
   const contextMenu = new ContextMenu('#container');
   const target = Selector('#menuTarget');
 

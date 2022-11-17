@@ -4,6 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { sales } from './data.js';
 import PivotGrid from '../../../model/pivotGrid';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`PivotGrid_fieldChooser`
   .page(url(__dirname, '../../container.html'));
@@ -24,7 +25,7 @@ test('Change dataFiels order with one invisible field (T1079461)', async (t) => 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
+    .expect(await takeScreenshot(`Change_dataField_order_with_invisible_fields${getThemePostfix}.png`, '.dx-overlay-content.dx-popup-draggable'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -130,7 +131,7 @@ test('Change dataFiels order with two invisible fields', async (t) => {
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
+    .expect(await takeScreenshot(`Change_dataField_order_with_invisible_fields${getThemePostfix()}.png`, '.dx-overlay-content.dx-popup-draggable'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -244,7 +245,7 @@ test('Change dataFiels order with three invisible fields (T1079461)', async (t) 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_three_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
+    .expect(await takeScreenshot(`Change_dataField_order_with_three_invisible_fields${getThemePostfix()}.png`, '.dx-overlay-content.dx-popup-draggable'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
