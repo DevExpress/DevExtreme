@@ -1,4 +1,4 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
@@ -47,11 +47,17 @@ test('Item collection should be updated after direct option changing (T817436)',
 
 [false, true].forEach((rtlEnabled) => {
   test(`DropDownButton renders correctly (${rtlEnabled ? 'rtl' : 'ltr'})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
     await asyncForEach([1, 2, 3, 4], async (index) => {
       await t.hover(Selector(`#drop-down-button${index} .dx-button:first-child`));
 
-      await t.expect(await compareScreenshot(t, `DropDownButton${index}-rtlEnabled=${rtlEnabled}${getThemePostfix()}.png`, '#container')).ok();
+      await t.expect(await takeScreenshot(`DropDownButton${index}-rtlEnabled=${rtlEnabled}${getThemePostfix()}.png`, '#container')).ok();
     });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
     await setAttribute('#container', 'style', 'width: 500px;');
