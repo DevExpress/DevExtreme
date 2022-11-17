@@ -90,21 +90,9 @@ jobs:
           { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
         ]
         include:
-          -ARGS.componentFolder: "editors"
+          -ARGS.componentFolder: ["editors", "navigation"]
           THEME: "material.blue.light"
-          # -ARGS.name: editors (2/3)
-          # THEME: material.blue.light
-          # -ARGS.name: editors (3/3)
-          # THEME: material.blue.light
-          # -ARGS.name: navigation (1/4)
-          # THEME: material.blue.light
-          # -ARGS.name: navigation (2/4)
-          # THEME: material.blue.light
-          # -ARGS.name: navigation (3/4)
-          # THEME: material.blue.light
-          # -ARGS.name: navigation (4/4)
-          # THEME: material.blue.light
-    runs-on: devextreme-shr2
+          
     timeout-minutes: 90
 
     steps:
