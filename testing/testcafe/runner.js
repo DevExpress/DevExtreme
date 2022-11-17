@@ -89,7 +89,7 @@ createTestCafe('localhost', 1437, 1438)
 
         const runOptions = { quarantineMode: args.quarantineMode };
 
-        if(args.theme) {
+        if(args.theme !== 'generic.light') {
             runOptions.hooks = {
                 test: {
                     before: async() => {
