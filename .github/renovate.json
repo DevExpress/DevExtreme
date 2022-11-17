@@ -18,8 +18,9 @@
     "packageRules": [
         {
             "matchPackagePatterns": [
-              "^@?devextreme",
-              "^devexpress",
+              "^@devextreme-generator/",
+              "devexpress-gantt",
+              "devexpress-diagram",
               "eslint-config-devextreme",
               "rrule",
               "sass-embedded",
