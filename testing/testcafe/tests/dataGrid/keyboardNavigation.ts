@@ -3430,3 +3430,47 @@ test('edit => scroll => command, should not result in grid scrolling back to edi
     },
   ],
 }));
+
+test('Navigation shouldn\'t get stuck on cell templates with links in them when navigating from outside the grid (T1123129)', async (t) => {
+  const getFocusedElement = () => Selector(':focus').nth(0);
+
+  let focusedElement: Selector | null = null;
+
+  const tabFromOutside = async () => {
+    await t.click(Selector('.dx-page-size').nth(0));
+    await t.pressKey('shift+tab');
+    focusedElement = Selector(':focus');
+    await t.pressKey('shift+tab');
+  };
+
+  await tabFromOutside();
+
+  await t.expect(focusedElement === getFocusedElement())
+    .notOk();
+
+  await tabFromOutside();
+
+  await t.expect(focusedElement === getFocusedElement())
+    .notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: {
+    store: {
+      type: 'array',
+      data: [
+        { name: 'Alex', phone: '555555' },
+        { name: 'Dan', phone: '553355' },
+      ],
+      key: 'name',
+    },
+    paginate: true,
+  },
+  keyExpr: 'name',
+  columns: ['name', {
+    cellTemplate: (cellElement) => $(cellElement).append('<a  href=\'#\' >Link</a>'),
+  }, 'phone'],
+  pager: {
+    visible: true,
+    allowedPageSizes: [1, 2],
+    showPageSizeSelector: true,
+  },
+}));

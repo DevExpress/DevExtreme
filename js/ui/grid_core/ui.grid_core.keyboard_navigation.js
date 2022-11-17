@@ -149,12 +149,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const rowsViewFocusHandler = (event) => {
             const $element = $(event.target);
             const isRelatedTargetInRowsView = $(event.relatedTarget).closest(rowsView.element()).length;
-            const isCommandButton = $element.hasClass('dx-link');
-            const isTemplate = this._columnsController.getVisibleColumns()[this._getCellPosition($element)?.columnIndex]?.cellTemplate;
             if(event.relatedTarget
                 && this._isEventInCurrentGrid(event)
                 && !isRelatedTargetInRowsView
-                && (isCommandButton || isTemplate)
             ) {
                 let $focusedCell = this._getFocusedCell();
 
