@@ -2,7 +2,7 @@ const $ = require('jquery');
 const GoogleProvider = require('ui/map/provider.dynamic.google');
 const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
 
-require('bundles/modules/parts/widgets-all');
+require('bundles/modules/parts/widgets-web');
 
 GoogleProvider.remapConstant('http://fakeUrl');
 

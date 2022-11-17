@@ -8,7 +8,7 @@ define(function(require) {
     const DataSource = require('data/data_source/data_source').DataSource;
 
     require('../../helpers/ignoreQuillTimers.js');
-    require('bundles/modules/parts/widgets-all');
+    require('bundles/modules/parts/widgets-web');
 
     if(!devices.real().generic) {
         return;

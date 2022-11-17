@@ -1261,33 +1261,6 @@ supportedScrollingModes.forEach(scrollingMode => {
             }
         });
 
-        test('T697037. Recurrence exception date should equal date of appointment, which excluded from recurrence', function(assert) {
-            const scheduler = this.createInstance({
-                dataSource: [ {
-                    text: 'Increase Price - North Region',
-                    startDate: '2018-11-26T02:00:00Z',
-                    endDate: '2018-11-26T02:15:00Z',
-                    recurrenceRule: 'FREQ=DAILY;COUNT=5',
-                    recurrenceException: ''
-                }],
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2018, 10, 26),
-                dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
-                timeZone: 'Etc/UTC',
-                editing: true,
-                onAppointmentUpdating: function(e) {
-                    assert.equal(e.newData.recurrenceException, '20181128T020000Z', 'correct recurrence exception date');
-                }
-            });
-            const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2);
-            const pointer = pointerMock($appointment).start();
-
-            pointer.down().move(0, -30).up();
-
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-        });
-
         test('Single changed appointment should be rendered correctly in specified timeZone', function(assert) {
             if(!isDesktopEnvironment()) {
                 assert.ok(true, 'This test is for desktop only');

@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement,
 } from '../core/element';
 
@@ -105,12 +104,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @public
      */
     shading?: boolean;
-    /**
-     * @docid
-     * @deprecated
-     * @public
-     */
-    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default 'panel'

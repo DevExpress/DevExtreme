@@ -359,6 +359,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   @include header-buttons-material(
     $base-accent,
     $material-scheduler-toolbar-color,
+    $material-scheduler-navigator-icon-font-size,
   );
 
   background-color: $scheduler-header-bg;

@@ -1,5 +1,18 @@
-const width = 1200;
-const height = 800;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type BrowserSizeType = [number, number];
+const DEFAULT_BROWSER_SIZE: BrowserSizeType = [1200, 800];
 
-export const restoreBrowserSize = async (t: TestController):
-Promise<any> => t.resizeWindow(width, height);
+const restoreBrowserSize = async (t: TestController):
+Promise<any> => {
+  const [width, height] = DEFAULT_BROWSER_SIZE;
+  await t.resizeWindow(width, height);
+};
+
+export type {
+  BrowserSizeType,
+};
+
+export {
+  DEFAULT_BROWSER_SIZE,
+  restoreBrowserSize,
+};

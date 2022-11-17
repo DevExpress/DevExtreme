@@ -19,6 +19,7 @@ import { combineClasses } from '../utils/combine_classes';
 import { getImageSourceType } from '../../core/utils/icon';
 import { camelize } from '../../core/utils/inflector';
 import { Icon } from './common/icon';
+import errors from '../../core/errors';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
@@ -198,6 +199,15 @@ export class Button extends JSXComponent(ButtonProps) {
     }
 
     return undefined;
+  }
+
+  @Effect()
+  checkDeprecation(): void {
+    const { type } = this.props;
+
+    if (type === 'back') {
+      errors.log('W0016', 'type', 'back', '22.2', 'Use the \'back\' icon instead');
+    }
   }
 
   onActive(event: Event): void {

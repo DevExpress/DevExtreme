@@ -7,7 +7,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Layout:Appointments:visible');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Layout:Appointments:visible');
 
 [1, 0].forEach((maxAppointmentsPerCell) => {
   [true, false, undefined].forEach((visible) => {

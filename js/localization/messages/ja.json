@@ -173,6 +173,7 @@
 
         "dxPager-infoText": "ページ {0} / {1} ({2} アイテム)",
         "dxPager-pagesCountText": "/",
+        "dxPager-pageSize": "ページあたりのアイテム数: {0}",
         "dxPager-pageSizesAllText": "すべて",
         "dxPager-page": "ページ {0}",
         "dxPager-prevPage": "前のページ",

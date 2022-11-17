@@ -1,3 +1,4 @@
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -8,7 +9,7 @@ fixture`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'));
 
 ['week', 'month'].forEach((view) => {
-  test(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {
+  safeSizeTest(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const firstAppointment = scheduler.getAppointment('Website Re-Design Plan');
     const secondAppointment = scheduler.getAppointment('Book Flights to San Fran for Sales Trip');
@@ -32,7 +33,7 @@ fixture`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 
-  test(`Remove appointment in the "${view}" view (Del)`, async (t) => {
+  safeSizeTest(`Remove appointment in the "${view}" view (Del)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -48,7 +49,7 @@ fixture`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 
-  test(`Show appointment popup in the "${view}" view (Enter)`, async (t) => {
+  safeSizeTest(`Show appointment popup in the "${view}" view (Enter)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Website Re-Design Plan');
     const { appointmentPopup } = scheduler;
@@ -65,7 +66,7 @@ fixture`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 
-  test(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
+  safeSizeTest(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const collector = scheduler.collectors.find('3');
     const { appointmentPopup } = scheduler;
@@ -92,7 +93,7 @@ fixture`Hotkeys for appointments update and navigation`
   }));
 });
 
-test('Navigate between toolbar items', async (t) => {
+safeSizeTest('Navigate between toolbar items', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const { navigator, viewSwitcher } = toolbar;
 
@@ -126,7 +127,7 @@ test('Navigate between toolbar items', async (t) => {
   currentView: 'day',
 }));
 
-test('Navigate between custom toolbar items', async (t) => {
+safeSizeTest('Navigate between custom toolbar items', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const { navigator, viewSwitcher } = toolbar;
 

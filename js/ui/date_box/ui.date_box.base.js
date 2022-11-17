@@ -339,6 +339,12 @@ const DateBox = DropDownEditor.inherit({
         this._renderPopupWrapper();
     },
 
+    _getPopupToolbarItems() {
+        const defaultItems = this.callBase();
+
+        return this._strategy._getPopupToolbarItems?.(defaultItems) ?? defaultItems;
+    },
+
     _popupConfig: function() {
         const popupConfig = this.callBase();
         return extend(this._strategy.popupConfig(popupConfig), {
@@ -677,6 +683,9 @@ const DateBox = DropDownEditor.inherit({
             case 'readOnly':
                 this.callBase.apply(this, arguments);
                 this._formatValidationIcon();
+                break;
+            case 'todayButtonText':
+                this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
                 break;
             case 'invalidDateMessage':
             case 'dateOutOfRangeMessage':

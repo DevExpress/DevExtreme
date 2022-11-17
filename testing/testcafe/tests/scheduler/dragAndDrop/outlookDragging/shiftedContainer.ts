@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Outlook dragging base tests in shifted container`
   .page(url(__dirname, 'shiftedContainer.html'));
 
-test('Basic drag-n-drop movements in shifted container', async (t) => {
+safeSizeTest('Basic drag-n-drop movements in shifted container', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 

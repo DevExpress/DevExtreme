@@ -149,7 +149,7 @@ const Slider = TrackBar.inherit({
 
             focusStateEnabled: true,
 
-            callValueChange: 'onMoving'
+            valueChangeMode: 'onHandleMove'
         });
     },
 
@@ -402,7 +402,7 @@ const Slider = TrackBar.inherit({
             }
             startAction({ event: e });
 
-            if(this.option('callValueChange') === 'onMovingComplete') {
+            if(this.option('valueChangeMode') === 'onHandleRelease') {
                 this.option('value', this._getActualValue());
                 this._actualValue = undefined;
             }
@@ -450,7 +450,7 @@ const Slider = TrackBar.inherit({
         this._saveValueChangeEvent(e.event);
         this._changeValueOnSwipe(ratio);
 
-        if(this.option('callValueChange') === 'onMovingComplete') {
+        if(this.option('valueChangeMode') === 'onHandleRelease') {
             this.option('value', this._getActualValue());
         }
 
@@ -537,7 +537,7 @@ const Slider = TrackBar.inherit({
     _setValueOnSwipe: function(value) {
         this._actualValue = value;
 
-        if(this.option('callValueChange') === 'onMovingComplete') {
+        if(this.option('valueChangeMode') === 'onHandleRelease') {
             SliderHandle.getInstance(this._activeHandle()).option('value', value);
         } else {
             this.option('value', value);
@@ -630,7 +630,7 @@ const Slider = TrackBar.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
-            case 'callValueChange':
+            case 'valueChangeMode':
                 break;
             default:
                 this.callBase(args);

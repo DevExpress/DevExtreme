@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -22,13 +23,13 @@ fixture`Drag-and-drop appointments in the Scheduler basic views`
   dataSource,
 })));
 
-test('Drag-n-drop in the "month" view', async (t) => {
+safeSizeTest('Drag-n-drop in the "month" view', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Brochure Design Review');
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-    .expect(draggableAppointment.size.height).eql('19px')
+    .expect(draggableAppointment.size.height).eql('23.75px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
 }).before(async () => createScheduler({
@@ -38,7 +39,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
   height: 834,
 }));
 
-test('Drag-n-drop when browser has horizontal scroll', async (t) => {
+safeSizeTest('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
@@ -57,7 +58,7 @@ test('Drag-n-drop when browser has horizontal scroll', async (t) => {
   width: 1800,
 }));
 
-test('Drag-n-drop when browser has vertical scroll', async (t) => {
+safeSizeTest('Drag-n-drop when browser has vertical scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
@@ -76,7 +77,7 @@ test('Drag-n-drop when browser has vertical scroll', async (t) => {
   height: 1800,
 }));
 
-test('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
+safeSizeTest('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Recurrence two');
   const collector = scheduler.collectors.find('2');
@@ -123,7 +124,7 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
   currentDate: new Date(2019, 2, 26),
 }));
 
-test('Drag-n-drop the appointment to the left column to the cell that has the same time', async (t) => {
+safeSizeTest('Drag-n-drop the appointment to the left column to the cell that has the same time', async (t) => {
   const scheduler = new Scheduler('#container');
   const screenshotZone = scheduler.workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

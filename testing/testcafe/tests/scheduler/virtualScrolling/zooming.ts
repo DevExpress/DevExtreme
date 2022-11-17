@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import {
   resources,
@@ -30,7 +31,7 @@ const createScheduler = async (
   }, true);
 };
 
-test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled and zooming is used', async (t) => {
+safeSizeTest('Virtual scrolling layout in scheduler views when horizontal grouping is enabled and zooming is used', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

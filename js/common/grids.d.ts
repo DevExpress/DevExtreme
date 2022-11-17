@@ -12,6 +12,7 @@ import {
   SingleMultipleOrNone,
   Sortable,
   SortOrder,
+  ValidationRule,
 } from '../common';
 
 import {
@@ -68,10 +69,6 @@ import {
 import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
-
-import {
-  ValidationRule,
-} from '../ui/validation_rules';
 
 /**
  * @namespace DevExpress.common.grids
@@ -161,30 +158,40 @@ export interface ColumnBase<TRowData = any> {
   allowSorting?: boolean;
   /**
    * @docid GridBaseColumn.calculateCellValue
-   * @type_function_param1 rowData:object
+   * @type_function_param1 this:GridBaseColumn
+   * @type_function_param2 rowData:object
    * @public
    */
-  calculateCellValue?: ((rowData: TRowData) => any);
-  defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
+  calculateCellValue?: ((this: ColumnBase, rowData: TRowData) => any);
+  /**
+   * @public
+   */
+  defaultCalculateCellValue?: this['calculateCellValue'];
   /**
    * @docid GridBaseColumn.calculateDisplayValue
-   * @type_function_param1 rowData:object
+   * @type_function_param1 this:GridBaseColumn
+   * @type_function_param2 rowData:object
    * @public
    */
-  calculateDisplayValue?: string | ((rowData: TRowData) => any);
+  calculateDisplayValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
   /**
    * @docid GridBaseColumn.calculateFilterExpression
+   * @type_function_param1 this:GridBaseColumn
    * @type_function_return Filter expression
    * @public
    */
-  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
-  defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
+  calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
   /**
-   * @docid GridBaseColumn.calculateSortValue
-   * @type_function_param1 rowData:object
    * @public
    */
-  calculateSortValue?: string | ((rowData: TRowData) => any);
+  defaultCalculateFilterExpression?: this['calculateFilterExpression'];
+  /**
+   * @docid GridBaseColumn.calculateSortValue
+   * @type_function_param1 this:GridBaseColumn
+   * @type_function_param2 rowData:object
+   * @public
+   */
+  calculateSortValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
   /**
    * @docid GridBaseColumn.caption
    * @default undefined
@@ -199,10 +206,11 @@ export interface ColumnBase<TRowData = any> {
   cssClass?: string;
   /**
    * @docid GridBaseColumn.customizeText
-   * @type_function_param1 cellInfo:object
+   * @type_function_param1 this:GridBaseColumn
+   * @type_function_param2 cellInfo:object
    * @public
    */
-  customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
+  customizeText?: ((this: ColumnBase, cellInfo: ColumnCustomizeTextArg) => string);
   /**
    * @docid GridBaseColumn.dataField
    * @default undefined
@@ -341,13 +349,17 @@ export interface ColumnBase<TRowData = any> {
   selectedFilterOperation?: SelectedFilterOperation;
   /**
    * @docid GridBaseColumn.setCellValue
-   * @type_function_param1 newData:object
-   * @type_function_param3 currentRowData:object
+   * @type_function_param1 this:GridBaseColumn
+   * @type_function_param2 newData:object
+   * @type_function_param4 currentRowData:object
    * @type_function_return void|Promise<void>
    * @public
    */
-  setCellValue?: ((newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
-  defaultSetCellValue?: ColumnBase['setCellValue'];
+  setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+  /**
+   * @public
+   */
+  defaultSetCellValue?: this['setCellValue'];
   /**
    * @docid GridBaseColumn.showEditorAlways
    * @default false
@@ -378,9 +390,10 @@ export interface ColumnBase<TRowData = any> {
   /**
    * @docid GridBaseColumn.sortingMethod
    * @default undefined
+   * @type_function_param1 this:GridBaseColumn
    * @public
    */
-  sortingMethod?: ((value1: any, value2: any) => number);
+  sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number);
   /**
    * @docid GridBaseColumn.trueText
    * @default "true"

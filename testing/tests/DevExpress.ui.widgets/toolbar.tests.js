@@ -1342,7 +1342,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
     });
 
 
-    QUnit.test('toolbar menu should have correct focused element', function(assert) {
+    QUnit.test('toolbar menu items should have focused state', function(assert) {
         this.instance.option({
             items: [
                 {
@@ -1358,12 +1358,6 @@ QUnit.module('adaptivity', moduleConfig, () => {
             ]
         });
 
-
-        if(!this.overflowMenu.instance().option('focusStateEnabled')) {
-            assert.expect(0);
-            return;
-        }
-
         this.overflowMenu.click();
 
         const $item1 = $('.dx-list-item').eq(0);
@@ -1372,7 +1366,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         $($item2).trigger('dxpointerdown');
         this.clock.tick();
 
-        assert.ok($item2.hasClass('dx-state-focused'), 'only item2 is focused');
+        assert.ok(!$item2.hasClass('dx-state-focused'), 'only item2 is focused');
         assert.ok(!$item1.hasClass('dx-state-focused'), 'only item2 is focused');
     });
 

@@ -405,7 +405,7 @@ module('selection single', () => {
         eventsEngine.trigger($checkBox, 'dxclick');
 
         treeView.checkSelected([0], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1], 'node was not removed from selected nodes array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [1], 'node was not removed from selected nodes array');
         assert.ok($checkBox.dxCheckBox('instance').option('value'), 'node\'s checkbox is still checked');
     });
 
@@ -424,7 +424,7 @@ module('selection single', () => {
         eventsEngine.trigger($item, 'dxclick');
 
         treeView.checkSelected([0], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1], 'node was not removed from selected nodes array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [1], 'node was not removed from selected nodes array');
     });
 
     test('last item should not be deselected when selectionRequired is used with api', function(assert) {
@@ -439,7 +439,7 @@ module('selection single', () => {
         treeView.instance.unselectItem(1);
 
         treeView.checkSelected([0], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1], 'node was not removed from selected nodes array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [1], 'node was not removed from selected nodes array');
     });
 
     test('last item should not be deselected when selectionRequired is used with multiple selection', function(assert) {
@@ -454,11 +454,11 @@ module('selection single', () => {
         treeView.instance.unselectItem(1);
 
         treeView.checkSelected([1], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [2], 'node was removed from selected nodes array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [2], 'node was removed from selected nodes array');
 
         treeView.instance.unselectItem(2);
         treeView.checkSelected([1], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [2], 'node was not removed from selected nodes array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [2], 'node was not removed from selected nodes array');
     });
 
     test('last item should not be deselected when selectionRequired is used with recursive selection', function(assert) {
@@ -473,7 +473,7 @@ module('selection single', () => {
 
         treeView.instance.unselectItem(1);
         treeView.checkSelected([0, 1], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1, 11], 'all nodes are still in the selected array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [1, 11], 'all nodes are still in the selected array');
     });
 
     test('last item should not be deselected when selectionRequired is used with select all', function(assert) {
@@ -488,7 +488,7 @@ module('selection single', () => {
         treeView.instance.unselectAll();
 
         treeView.checkSelected([2], items);
-        assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [2], 'last noder is still in the selected array');
+        assert.deepEqual(treeView.instance.getSelectedNodeKeys(), [2], 'last noder is still in the selected array');
     });
 
     test('selectByClick option should select item  by single click', function(assert) {

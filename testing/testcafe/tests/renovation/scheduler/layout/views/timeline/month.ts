@@ -7,7 +7,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Layout Views: Timeline Month');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Layout Views: Timeline Month');
 
 test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t, { platform, screenshotComparerOptions }) => {
   const scheduler = new Scheduler('#container');

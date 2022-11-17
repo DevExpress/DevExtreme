@@ -115,7 +115,7 @@ gulp.task('clean-cldr-data', function() {
     return del('js/localization/cldr-data/**', { force: true });
 });
 
-gulp.task('validate-localization-messages', () => {
+gulp.task('generate-community-locales', () => {
     const defaultFile = fs.readFileSync(path.join(DICTIONARY_SOURCE_FOLDER, DEFAULT_LOCALE + '.json')).toString();
     const defaultDictionaryKeys = Object.keys(JSON.parse(defaultFile)[DEFAULT_LOCALE]);
     const needToUpdate = [];
@@ -242,7 +242,6 @@ gulp.task('localization-generated-sources', gulp.parallel([
 gulp.task('localization',
     gulp.series(
         'clean-cldr-data',
-        'validate-localization-messages',
         'localization-messages',
         'localization-generated-sources'
     )
