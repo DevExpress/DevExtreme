@@ -603,9 +603,10 @@ export const columnsControllerModule = {
             };
 
             function assignColumns(that, columns) {
+                that._previousColumns = that._columns;
                 that._columns = columns;
                 resetColumnsCache(that);
-                that.updateColumnDataTypes();
+                that.updateColumnDataTypes(undefined);
             }
 
             const updateColumnChanges = function(that, changeType, optionName, columnIndex) {
@@ -653,7 +654,9 @@ export const columnsControllerModule = {
                     }
                     that._columnChanges = undefined;
                     if(needReinit(columnChanges.optionNames)) {
-                        that.reinit();
+                        that._reinitAfterLookupChanges = columnChanges?.optionNames['lookup'];
+                        that.reinit(undefined);
+                        that._reinitAfterLookupChanges = undefined;
                     } else {
                         that.columnsChanged.fire(columnChanges);
                     }
@@ -1211,7 +1214,7 @@ export const columnsControllerModule = {
                 reinit: function(ignoreColumnOptionNames) {
                     this._columnsUserState = this.getUserState();
                     this._ignoreColumnOptionNames = ignoreColumnOptionNames || null;
-                    this.init();
+                    this.init(undefined);
 
                     if(ignoreColumnOptionNames) {
                         this._ignoreColumnOptionNames = null;
@@ -1818,6 +1821,13 @@ export const columnsControllerModule = {
                 },
                 _updateColumnOptions: function(column, columnIndex) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
+                    if(this._reinitAfterLookupChanges && this._previousColumns) {
+                        column.selector.columnIndex = columnIndex;
+                        column.selector.originalCallback = this._previousColumns[columnIndex].selector.originalCallback;
+                    } else {
+                        column.selector.columnIndex = columnIndex;
+                        column.selector.originalCallback = column.selector;
+                    }
 
                     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         const calculateCallback = column[calculateCallbackName];
@@ -1862,7 +1872,7 @@ export const columnsControllerModule = {
                         column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate && !column.lookup);
                     }
                 },
-                updateColumnDataTypes: function(dataSource) {
+                updateColumnDataTypes: function(dataSource, originalColumns) {
                     const that = this;
                     const dateSerializationFormat = that.option('dateSerializationFormat');
                     const firstItems = that._getFirstItems(dataSource);
@@ -1930,7 +1940,7 @@ export const columnsControllerModule = {
                             }
                         }
 
-                        that._updateColumnOptions(column, index);
+                        that._updateColumnOptions(column, index, originalColumns);
                     });
 
                     return isColumnDataTypesUpdated;
