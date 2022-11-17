@@ -1,39 +1,50 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture`Calendar`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../container.html'));
 
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
-themes.forEach((theme) => {
-  test(`Calendar with showWeekNumbers rendered correct (${theme})`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Calendar with showWeekNumbers rendered correct', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`calendar-with-showWeekNumbers-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+  await t
+    .expect(await takeScreenshot(`calendar-with-showWeekNumbers${getThemePostfix()}.png`, '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCalendar', {
+  value: new Date('01.01.2022'),
+  showWeekNumbers: true,
+}));
 
-    await createWidget('dxCalendar', {
-      value: new Date('01.01.2022'),
-      showWeekNumbers: true,
-    });
-  });
-});
+// const themes = ['generic.light.compact', 'material.blue.light.compact'];
+// themes.forEach((theme) => {
+//   test(`Calendar with showWeekNumbers rendered correct (${theme})`, async (t) => {
+//     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+//     await t
+// eslint-disable-next-line max-len
+//       .expect(await takeScreenshot(`calendar-with-showWeekNumbers${getThemePostfix(theme)}.png`, '#container'))
+//       .ok()
+//       .expect(compareResults.isValid())
+//       .ok(compareResults.errorMessages());
+//   }).before(async () => {
+//     await changeTheme(theme);
+
+//     await createWidget('dxCalendar', {
+//       value: new Date('01.01.2022'),
+//       showWeekNumbers: true,
+//     });
+//   });
+// });
 
 test('Calendar with showWeekNumbers rendered correct for last week of year value', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('calendar-with-showWeekNumbers-last-week.png', '#container'))
+    .expect(await takeScreenshot(`calendar-with-showWeekNumbers-last-week${getThemePostfix()}.png`, '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -49,7 +60,7 @@ test('Calendar with showWeekNumbers rendered correct with rtlEnabled', async (t)
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('calendar-with-showWeekNumbers-rtl-enabled.png', '#container'))
+    .expect(await takeScreenshot(`calendar-with-showWeekNumbers-rtl-enabled${getThemePostfix()}.png`, '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -65,7 +76,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('calendar-with-showWeekNumbers-and-cell-template.png', '#container'))
+    .expect(await takeScreenshot(`calendar-with-showWeekNumbers-and-cell-template${getThemePostfix()}.png`, '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

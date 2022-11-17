@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        THEME: ['material.blue.light']
+        THEME: ['generic.light', 'material.blue.light']
         ARGS: [
           { componentFolder: "treeList", name: "treeList", quarantineMode: true },
           { componentFolder: "dataGrid", name: "dataGrid (1/3)", quarantineMode: true, indices: "1/3" },

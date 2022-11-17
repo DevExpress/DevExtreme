@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`HtmlEditor`
   .page(url(__dirname, '../../container.html'));
@@ -15,10 +16,10 @@ fixture`HtmlEditor`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`${baseScreenName}.png`, selector))
+      .expect(await takeScreenshot(`${baseScreenName}${getThemePostfix()}.png`, selector))
       .ok()
       .click(Selector(clickTarget))
-      .expect(await takeScreenshot(`${baseScreenName}-focused.png`, selector))
+      .expect(await takeScreenshot(`${baseScreenName}-focused${getThemePostfix()}.png`, selector))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

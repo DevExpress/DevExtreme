@@ -29,9 +29,14 @@ createTestCafe('localhost', 1440, 1441)
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
 
+        if(args.theme === 'material.blue.light' && componentFolder !== 'editors') {
+            testCafe.close();
+            process.exit();
+        }
+
         setTestingPlatform(args);
-        // eslint-disable-next-line no-console
-        console.log('Theme', args.theme);
+        setTestingTheme(args);
+
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
@@ -105,6 +110,10 @@ createTestCafe('localhost', 1440, 1441)
 
 function setTestingPlatform(args) {
     process.env.platform = args.platform;
+}
+
+function setTestingTheme(args) {
+    process.env.theme = args.theme;
 }
 
 function expandBrowserAlias(browser) {
