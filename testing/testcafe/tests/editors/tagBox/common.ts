@@ -2,6 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
 import createWidget from '../../../helpers/createWidget';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`TagBox`
   .page(url(__dirname, '../../container.html'));
@@ -128,7 +129,7 @@ test('Placeholder is visible after items option change when value is not chosen 
   await tagBox.option('items', [1, 2, 3]);
 
   await t
-    .expect(await compareScreenshot(t, 'TagBox_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .expect(await compareScreenshot(t, `TagBox_placeholder${getThemePostfix()}.png`, '#container'))
     .ok();
 }).before(async () => createWidget('dxTagBox', {
   width: 300,

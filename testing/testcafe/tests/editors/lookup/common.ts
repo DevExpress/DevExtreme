@@ -4,15 +4,14 @@ import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 
 fixture`Lookup`
   .page(url(__dirname, '../../container.html'));
 
-test('Popup should not be closed if lookup is placed at the page bottom in material theme (T1018037)', async (t) => {
+test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async (t) => {
   const lookup = new Lookup('#container');
 
   const { getInstance } = lookup;
@@ -44,8 +43,6 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
     .expect(popupContentTop)
     .lt(popupWrapperTop);
 }).before(async () => {
-  await changeTheme('material.blue.light');
-
   await ClientFunction(() => {
     const $element = $('#container');
     $element.css({ top: $(window).height() - $element.height() });
@@ -61,8 +58,6 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
       hideOnParentScroll: false,
     },
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('Popover should have correct vertical position (T1048128)', async (t) => {
@@ -81,50 +76,44 @@ test('Popover should have correct vertical position (T1048128)', async (t) => {
   items: Array.from(Array(100).keys()),
 }));
 
-themes.forEach((theme) => {
-  test(`Check popup height with no found data option, theme=${theme}`, async (t) => {
-    await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+test('Check popup height with no found data option', async (t) => {
+  await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
-    await t
-      .expect(await compareScreenshot(t, `Lookup_with_no_found_data,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok();
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-    await changeTheme(theme);
+  await t
+    .expect(await compareScreenshot(t, `Lookup_with_no_found_data${getThemePostfix()}.png`))
+    .ok();
+}).before(async (t) => {
+  await t.resizeWindow(300, 400);
 
-    return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
-  });
+  return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
+}).after(async (t) => {
+  await restoreBrowserSize(t);
+});
 
-  test(`Check popup height in loading state, theme=${theme}`, async (t) => {
-    await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+test('Check popup height in loading state', async (t) => {
+  await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
-    await t
-      .expect(await compareScreenshot(t, `Lookup_in_loading,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok();
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-    await changeTheme(theme);
+  await t
+    .expect(await compareScreenshot(t, `Lookup_in_loading${getThemePostfix()}.png`))
+    .ok();
+}).before(async (t) => {
+  await t.resizeWindow(300, 400);
 
-    return createWidget('dxLookup', {
-      dataSource: {
-        load() {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve([1, 2, 3]);
-            }, 5000);
-          });
-        },
+  return createWidget('dxLookup', {
+    dataSource: {
+      load() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([1, 2, 3]);
+          }, 5000);
+        });
       },
-      valueExpr: 'id',
-      displayExpr: 'text',
-    });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
+    },
+    valueExpr: 'id',
+    displayExpr: 'text',
   });
+}).after(async (t) => {
+  await restoreBrowserSize(t);
 });
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
@@ -133,9 +122,59 @@ test('Placeholder is visible after items option change when value is not chosen 
   await lookup.option('items', [1, 2, 3]);
 
   await t
-    .expect(await compareScreenshot(t, 'Lookup_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .expect(await compareScreenshot(t, `Lookup_placeholder_after_items_change_if_value_is_not_choosen${getThemePostfix}.png`, '#container'))
     .ok();
 }).before(async () => createWidget('dxLookup', {
   width: 300,
   placeholder: 'Choose a value',
 }));
+
+// eslint-disable-next-line max-len
+// const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
+// themes.forEach((theme) => {
+//   test(`Check popup height with no found data option, theme=${theme}`, async (t) => {
+//     await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+
+//     await t
+// eslint-disable-next-line max-len
+//       .expect(await compareScreenshot(t, `Lookup_with_no_found_data,theme=${theme.replace(/\./g, '-')}.png`))
+//       .ok();
+//   }).before(async (t) => {
+//     await t.resizeWindow(300, 400);
+//     await changeTheme(theme);
+
+//     return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
+//   }).after(async (t) => {
+//     await restoreBrowserSize(t);
+//     await changeTheme('generic.light');
+//   });
+
+//   test(`Check popup height in loading state, theme=${theme}`, async (t) => {
+//     await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+
+//     await t
+// eslint-disable-next-line max-len
+//       .expect(await compareScreenshot(t, `Lookup_in_loading,theme=${theme.replace(/\./g, '-')}.png`))
+//       .ok();
+//   }).before(async (t) => {
+//     await t.resizeWindow(300, 400);
+//     await changeTheme(theme);
+
+//     return createWidget('dxLookup', {
+//       dataSource: {
+//         load() {
+//           return new Promise((resolve) => {
+//             setTimeout(() => {
+//               resolve([1, 2, 3]);
+//             }, 5000);
+//           });
+//         },
+//       },
+//       valueExpr: 'id',
+//       displayExpr: 'text',
+//     });
+//   }).after(async (t) => {
+//     await restoreBrowserSize(t);
+//     await changeTheme('generic.light');
+//   });
+// });

@@ -1,13 +1,13 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
-const themes = ['generic.light', 'material.blue.light'];
 
 fixture`TagBox_Label`
   .page(url(__dirname, '../../container.html'))
@@ -15,81 +15,84 @@ fixture`TagBox_Label`
     await changeTheme('generic.light');
   });
 
-themes.forEach((theme) => {
-  stylingModes.forEach((stylingMode) => {
-    test(`Label for dxTagBox ${theme} stylingMode=${stylingMode}`, async (t) => {
-      await t.click('#otherContainer');
+stylingModes.forEach((stylingMode) => {
+  test(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await t
-        .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`))
-        .ok();
-    }).before(async (t) => {
-      await t.resizeWindow(300, 800);
-      await changeTheme(theme);
+    await t.click('#otherContainer');
 
-      const componentOption = {
-        label: 'label text',
-        items: [...Array(10)].map((_, i) => `item${i}`),
-        value: [...Array(5)].map((_, i) => `item${i}`),
-        stylingMode,
-      };
+    await t
+      .expect(await takeScreenshot(`label-tag-box-styleMode=${stylingMode}${getThemePostfix()}.png`))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await t.resizeWindow(300, 800);
 
-      await createWidget('dxTagBox', {
-        ...componentOption,
-        multiline: false,
-      });
+    const componentOption = {
+      label: 'label text',
+      items: [...Array(10)].map((_, i) => `item${i}`),
+      value: [...Array(5)].map((_, i) => `item${i}`),
+      stylingMode,
+    };
 
-      return createWidget('dxTagBox', {
-        ...componentOption,
-        multiline: true,
-      }, true, '#otherContainer');
+    await createWidget('dxTagBox', {
+      ...componentOption,
+      multiline: false,
     });
 
-    labelModes.forEach((labelMode) => {
-      test(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
-        const tagBox = new TagBox('#container');
+    return createWidget('dxTagBox', {
+      ...componentOption,
+      multiline: true,
+    }, true, '#otherContainer');
+  });
 
-        await t.click(tagBox.element);
+  labelModes.forEach((labelMode) => {
+    test(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const tagBox = new TagBox('#container');
 
-        const screenshotName = `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`;
+      await t.click(tagBox.element);
 
-        await t
-          .expect(await compareScreenshot(t, screenshotName))
-          .ok();
+      const screenshotName = `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode}${getThemePostfix()}.png`;
 
-        await t.click(tagBox.element);
-        await t.click(tagBox.element);
+      await t
+        .expect(await takeScreenshot(screenshotName))
+        .ok();
 
-        await t
-          .expect(await compareScreenshot(t, screenshotName))
-          .ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
-        await changeTheme(theme);
+      await t.click(tagBox.element);
+      await t.click(tagBox.element);
 
-        await setAttribute('#container', 'style', 'top: 250px');
+      await t
+        .expect(await takeScreenshot(screenshotName))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      await t.resizeWindow(300, 400);
 
-        return createWidget('dxTagBox', {
-          width: 200,
-          label: 'Label text',
-          labelMode,
-          stylingMode,
-          dataSource: {
-            load() {
-              return new Promise((resolve) => {
-                resolve([
-                  { text: 'item_1' },
-                  { text: 'item_2' },
-                  { text: 'item_3' },
-                  { text: 'item_4' },
-                ]);
-              });
-            },
-            paginate: true,
-            pageSize: 20,
+      await setAttribute('#container', 'style', 'top: 250px');
+
+      return createWidget('dxTagBox', {
+        width: 200,
+        label: 'Label text',
+        labelMode,
+        stylingMode,
+        dataSource: {
+          load() {
+            return new Promise((resolve) => {
+              resolve([
+                { text: 'item_1' },
+                { text: 'item_2' },
+                { text: 'item_3' },
+                { text: 'item_4' },
+              ]);
+            });
           },
-        }, true);
-      });
+          paginate: true,
+          pageSize: 20,
+        },
+      }, true);
     });
   });
 });

@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`popup_height_on_first_load`
   .page(url(__dirname, '../../container.html'))
@@ -12,126 +12,105 @@ fixture`popup_height_on_first_load`
   })
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
-    await changeTheme('generic.light');
   });
 
-const themes = ['generic.light', 'material.blue.light'];
+test('SelectBox without data', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-themes.forEach((theme) => {
-  test(`SelectBox without data, theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const selectBox = new SelectBox('#container');
 
-    const selectBox = new SelectBox('#container');
+  await t.click(selectBox.element);
 
-    await t.click(selectBox.element);
+  await t
+    .expect(await takeScreenshot(`SelectBox_no_data${getThemePostfix()}.png`))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-    await t
-      .expect(await takeScreenshot(`SelectBox_no_data,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+test('SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    return createWidget('dxSelectBox', {
-      dataSource: {
-        store: [],
-        paginate: true,
-        pageSize: 3,
-      },
-    });
+  const selectBox = new SelectBox('#container');
+
+  await t.click(selectBox.element);
+
+  await selectBox.option('dataSource', {
+    store: [1, 2, 3],
+    paginate: true,
+    pageSize: 3,
   });
 
-  test(`SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881), theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(await takeScreenshot(`SelectBox_pagesize_equal_datasource_items_count${getThemePostfix()}.png`))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-    const selectBox = new SelectBox('#container');
+test('SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.click(selectBox.element);
+  const selectBox = new SelectBox('#container');
 
-    await selectBox.option('dataSource', {
-      store: [1, 2, 3],
-      paginate: true,
-      pageSize: 3,
-    });
+  await t.click(selectBox.element);
 
-    await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_equal_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxSelectBox', {
-      dataSource: {
-        store: [],
-        paginate: true,
-        pageSize: 3,
-      },
-    });
+  await selectBox.option('dataSource', {
+    store: [1, 2, 3],
+    paginate: true,
+    pageSize: 2,
   });
 
-  test(`SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count, theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(await takeScreenshot(`SelectBox_pagesize_less_datasource_items_count${getThemePostfix()}.png`))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-    const selectBox = new SelectBox('#container');
+test('SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.click(selectBox.element);
+  const selectBox = new SelectBox('#container');
 
-    await selectBox.option('dataSource', {
-      store: [1, 2, 3],
-      paginate: true,
-      pageSize: 2,
-    });
+  await t.click(selectBox.element);
 
-    await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_less_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxSelectBox', {
-      dataSource: {
-        store: [],
-        paginate: true,
-        pageSize: 3,
-      },
-    });
+  await selectBox.option('dataSource', {
+    store: [1, 2, 3],
+    paginate: true,
+    pageSize: 5,
   });
 
-  test(`SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count, theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    const selectBox = new SelectBox('#container');
-
-    await t.click(selectBox.element);
-
-    await selectBox.option('dataSource', {
-      store: [1, 2, 3],
-      paginate: true,
-      pageSize: 5,
-    });
-
-    await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_more_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxSelectBox', {
-      dataSource: {
-        store: [],
-        paginate: true,
-        pageSize: 3,
-      },
-    });
-  });
-});
+  await t
+    .expect(await takeScreenshot(`SelectBox_pagesize_more_datasource_items_count${getThemePostfix()}.png`))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
 fixture`popup_height_after_last_page_load`
   .page(url(__dirname, '../../container.html'))
@@ -159,7 +138,7 @@ test('SelectBox does not change a popup height after load the last page', async 
   await list.scrollTo(100);
 
   await t
-    .expect(await takeScreenshot('SelectBox_popup_height_after_last_page_load.png'))
+    .expect(await takeScreenshot(`SelectBox_popup_height_after_last_page_load${getThemePostfix()}.png`))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
