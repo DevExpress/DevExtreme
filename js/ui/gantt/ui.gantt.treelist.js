@@ -20,7 +20,7 @@ export class GanttTreeList {
     getTreeList() {
         const { keyExpr, parentIdExpr } = this._gantt.option(GANTT_TASKS);
         this._treeList = this._gantt._createComponent(this._$treeList, dxTreeList, {
-            dataSource: this.createDataSource(this._gantt._tasksRaw),
+            dataSource: this.createDataSource(this._gantt._tasksRaw, keyExpr),
             keyExpr: keyExpr,
             filterSyncEnabled: true,
             parentIdExpr: parentIdExpr,
@@ -175,8 +175,13 @@ export class GanttTreeList {
     setDataSource(data) {
         this.setOption('dataSource', this.createDataSource(data));
     }
-    createDataSource(data) {
-        return data && new DataSource({ store: new ArrayStore(data) });
+    createDataSource(data, key) {
+        return data && new DataSource({
+            store: new ArrayStore({
+                data: data,
+                key: key || this.getOption('keyExpr')
+            })
+        });
     }
 
     onRowClick(e) {
