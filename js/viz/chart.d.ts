@@ -31,10 +31,6 @@ import {
 
 import {
     ChartSeries,
-    ScaleBreak,
-    SeriesType,
-    VizRange,
-    VizTimeInterval,
 } from './common';
 
 import {
@@ -55,8 +51,8 @@ import {
     ArgumentAxisHoverMode,
     AxisScaleType,
     ChartsAxisLabelOverlap,
-    ChartsLabelOverlap,
     ChartsDataType,
+    ChartsLabelOverlap,
     DashStyle,
     DiscreteAxisDivisionMode,
     HatchDirection,
@@ -64,12 +60,16 @@ import {
     PointInteractionMode,
     PointSymbol,
     RelativePosition,
+    ScaleBreak,
     ScaleBreakLineStyle,
     SeriesHoverMode,
     SeriesSelectionMode,
+    SeriesType,
     TextOverflow,
+    TimeIntervalConfig,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
+    VisualRange,
     VisualRangeUpdateMode,
     WordWrap,
     ZoomPanAction,
@@ -198,8 +198,8 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | To
     readonly rangeStart: Date | number;
     readonly rangeEnd: Date | number;
     readonly axis: chartAxisObject;
-    readonly range: VizRange;
-    readonly previousRange: VizRange;
+    readonly range: VisualRange;
+    readonly previousRange: VisualRange;
     readonly actionType: ZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
@@ -208,7 +208,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | To
 /** @public */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
-    readonly range: VizRange;
+    readonly range: VisualRange;
     readonly actionType?: ZoomPanAction;
 };
 
@@ -493,13 +493,13 @@ export interface chartAxisObject {
      * @publicName visualRange()
      * @public
      */
-    visualRange(): VizRange;
+    visualRange(): VisualRange;
     /**
      * @docid
      * @publicName visualRange(visualRange)
      * @public
      */
-    visualRange(visualRange: Array<number | string | Date> | VizRange): void;
+    visualRange(visualRange: Array<number | string | Date> | VisualRange): void;
 }
 
 /**
@@ -1222,7 +1222,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    aggregationInterval?: VizTimeInterval;
+    aggregationInterval?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.argumentAxis.argumentType
      * @default undefined
@@ -1306,7 +1306,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickCount
      * @default undefined
@@ -1319,7 +1319,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.argumentAxis.position
      * @default 'bottom'
@@ -1364,7 +1364,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.argumentAxis.title
      * @type string|object
@@ -1383,7 +1383,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @notUsedInTheme
      * @public
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?: VisualRange | Array<number | string | Date>;
     /**
      * @docid dxChartOptions.argumentAxis.visualRangeUpdateMode
      * @default 'auto'
@@ -1395,7 +1395,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?: VisualRange | Array<number | string | Date>;
     /**
      * @docid dxChartOptions.argumentAxis.workWeek
      * @default [1, 2, 3, 4, 5]
@@ -2325,7 +2325,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.valueAxis.minorTickCount
      * @default undefined
@@ -2338,7 +2338,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.valueAxis.multipleAxesSpacing
      * @default 5
@@ -2402,7 +2402,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @type number|object|Enums.TimeInterval
      * @public
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: TimeIntervalConfig;
     /**
      * @docid dxChartOptions.valueAxis.title
      * @type string|object
@@ -2427,7 +2427,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @notUsedInTheme
      * @public
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?: VisualRange | Array<number | string | Date>;
     /**
      * @docid dxChartOptions.valueAxis.visualRangeUpdateMode
      * @default 'auto'
@@ -2439,7 +2439,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @default undefined
      * @public
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?: VisualRange | Array<number | string | Date>;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartValueAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {

@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../helpers/multi-platform-test';
 
@@ -36,4 +37,4 @@ test('cellDuration modification should work correctly',
       cellDuration: 60,
     });
   },
-);
+).after(async (t) => restoreBrowserSize(t));

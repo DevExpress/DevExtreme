@@ -2768,6 +2768,36 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.ok(true, 'no exceptions');
     });
 
+    // T1097980
+    QUnit.test('Filtering should not throw an exception when dataSource is null', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            visible: false,
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = null;
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no exceptions');
+    });
 
     if(device.deviceType === 'desktop') {
     // T306751

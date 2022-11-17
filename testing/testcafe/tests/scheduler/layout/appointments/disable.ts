@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -6,7 +7,7 @@ import url from '../../../../helpers/getPageUrl';
 fixture`Layout:Appointments:disable`
   .page(url(__dirname, '../../../container.html'));
 
-test('Appointment popup should be readOnly if appointment is disabled', async (t) => {
+safeSizeTest('Appointment popup should be readOnly if appointment is disabled', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

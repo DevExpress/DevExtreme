@@ -6,8 +6,8 @@
 $nav-button-width: 25px;
 $icon-size: 16px;
 
-@mixin dx-tabs-ie-hack() {
-  a { /* END TODO */ /* TODO: IE hack */
+@mixin dx-tabs-link() {
+  a {
     position: absolute;
     top: 0;
     left: 0;
@@ -18,10 +18,6 @@ $icon-size: 16px;
     text-decoration: none;
     opacity: 0.001;
   }
-}
-
-.dx-tabs-ie-hack {
-  @include dx-tabs-ie-hack();
 }
 
 .dx-tabs {
@@ -106,7 +102,7 @@ $icon-size: 16px;
   cursor: pointer;
   white-space: nowrap;
 
-  @include dx-tabs-ie-hack();
+  @include dx-tabs-link();
 
   .dx-icon {
     width: $icon-size;
@@ -135,10 +131,4 @@ $icon-size: 16px;
 .dx-tabs-item-badge {
   display: inline-block;
   vertical-align: top;
-}
-
-.dx-state-disabled {
-  .dx-tab {
-    cursor: default;
-  }
 }

@@ -1,3 +1,4 @@
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
@@ -71,4 +72,4 @@ test('Resource color should be correct if groups is set in "views"', async (t) =
       }],
     }],
   },
-));
+)).after(async (t) => restoreBrowserSize(t));

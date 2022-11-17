@@ -12,8 +12,7 @@
                 require('./core/utils/iterator'),
                 require('./core/utils/dom').extractTemplateMarkup,
                 require('./core/utils/string').encodeHtml,
-                require('./core/utils/ajax'),
-                require('./core/utils/console')
+                require('./core/utils/ajax')
             );
         });
     } else {
@@ -26,20 +25,15 @@
             DevExpress.utils.iterator,
             DevExpress.utils.dom.extractTemplateMarkup,
             DevExpress.utils.string.encodeHtml,
-            DevExpress.utils.ajax,
-            DevExpress.utils.console
+            DevExpress.utils.ajax
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax, console) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
     var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
-    var enableAlternativeTemplateTags = true;
-    var warnBug17028 = false;
 
     function createTemplateCompiler() {
-        var OPEN_TAG = '<%',
-            CLOSE_TAG = '%>',
-            ENCODE_QUALIFIER = '-',
+        var ENCODE_QUALIFIER = '-',
             INTERPOLATE_QUALIFIER = '=';
 
         var EXTENDED_OPEN_TAG = /[<[]%/g,
@@ -74,19 +68,12 @@
 
         return function(text) {
             var bag = ['var _ = [];', 'with(obj||{}) {'],
-                chunks = text.split(enableAlternativeTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
-
-            if(warnBug17028 && chunks.length > 1) {
-                if(text.indexOf(OPEN_TAG) > -1) {
-                    console.logger.warn('Please use an alternative template syntax: https://community.devexpress.com/blogs/aspnet/archive/2020/01/29/asp-net-core-new-syntax-to-fix-razor-issue.aspx');
-                    warnBug17028 = false;
-                }
-            }
+                chunks = text.split(EXTENDED_OPEN_TAG);
 
             acceptText(bag, chunks.shift());
 
             for(var i = 0; i < chunks.length; i++) {
-                var tmp = chunks[i].split(enableAlternativeTemplateTags ? EXTENDED_CLOSE_TAG : CLOSE_TAG);
+                var tmp = chunks[i].split(EXTENDED_CLOSE_TAG);
                 if(tmp.length !== 2) {
                     throw 'Template syntax error';
                 }
@@ -200,14 +187,6 @@
             if(setTemplateEngine) {
                 setTemplateEngine(createTemplateEngine());
             }
-        },
-
-        enableAlternativeTemplateTags: function(value) {
-            enableAlternativeTemplateTags = value;
-        },
-
-        warnBug17028: function() {
-            warnBug17028 = true;
         },
 
         createValidationSummaryItems: function(validationGroup, editorNames) {

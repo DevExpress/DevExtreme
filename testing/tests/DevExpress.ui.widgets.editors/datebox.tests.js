@@ -12,6 +12,8 @@ import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
 import messageLocalization from 'localization/message';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
@@ -74,6 +76,7 @@ const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
 
 const widgetName = 'dxDateBox';
 const { module: testModule, test } = QUnit;
@@ -409,28 +412,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Customize \'Done\' and \'Cancel\' buttons', function(assert) {
-        const expectedDoneText = 'newDoneText';
-        const expectedCancelText = 'newCancelText';
-
-        const $dateBox = $('#dateBox').dxDateBox({
-            applyButtonText: expectedDoneText,
-            cancelButtonText: expectedCancelText,
-            type: 'datetime',
-            pickerType: 'calendarWithTime',
-            opened: true
-        });
-
-        const instance = $dateBox.dxDateBox('instance');
-        const $popupButtons = instance._popup._$bottom;
-
-        const realDoneText = $popupButtons.find('.dx-popup-done').text();
-        const realCancelText = $popupButtons.find('.dx-popup-cancel').text();
-
-        assert.equal(realDoneText, expectedDoneText, 'done text customized correctly');
-        assert.equal(realCancelText, expectedCancelText, 'cancel text customized correctly');
-    });
-
     QUnit.test('T378630 - the displayFormat should not be changed if the type option is set', function(assert) {
         const displayFormat = 'Y';
 
@@ -525,6 +506,98 @@ QUnit.module('datebox tests', moduleConfig, () => {
             opened: true
         });
 
+    });
+});
+
+QUnit.module('toolbar buttons', {}, () => {
+    const types = [ 'date', 'datetime' ];
+
+    const buttons = [
+        {
+            optionName: 'todayButtonText',
+            name: 'Today',
+            newText: 'newTodayText',
+            selector: TODAY_BUTTON_SELECTOR,
+            localizationMessageKey: 'dxCalendar-todayButtonText',
+        },
+        {
+            optionName: 'applyButtonText',
+            name: 'Done',
+            newText: 'newDoneText',
+            selector: APPLY_BUTTON_SELECTOR,
+            localizationMessageKey: 'OK',
+        },
+        {
+            optionName: 'cancelButtonText',
+            name: 'Cancel',
+            newText: 'newCancelText',
+            selector: CANCEL_BUTTON_SELECTOR,
+            localizationMessageKey: 'Cancel',
+        },
+    ];
+
+    types.forEach(type => {
+        buttons.forEach(button => {
+            QUnit.test(`"${button.optionName}" should customize ${button.name} button on init when type="${type}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    type,
+                    pickerType: 'calendar',
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                    [button.optionName]: button.newText,
+                });
+
+                const instance = $dateBox.dxDateBox('instance');
+
+                const $overlayContent = $(instance.content()).parent();
+                const buttonText = $overlayContent.find(button.selector).text();
+
+                assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
+            });
+
+            QUnit.test(`"${button.optionName}" should customize ${button.name} button after init when type="${type}"`, function(assert) {
+                const $dateBox = $('#dateBox').dxDateBox({
+                    type,
+                    pickerType: 'calendar',
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                });
+
+                const instance = $dateBox.dxDateBox('instance');
+
+                instance.option(button.optionName, button.newText);
+
+                const $overlayContent = $(instance.content()).parent();
+                const buttonText = $overlayContent.find(button.selector).text();
+
+                assert.strictEqual(buttonText, button.newText, `${button.name} text customized correctly`);
+            });
+
+            QUnit.test(`The "${button.optionName}" value should be localized by default when type="${type}"`, function(assert) {
+                const defaultLocale = localization.locale();
+
+                try {
+                    localization.loadMessages(ja);
+                    localization.locale('ja');
+
+                    const $dateBox = $('#dateBox').dxDateBox({
+                        type,
+                        pickerType: 'calendar',
+                        opened: true,
+                        applyValueMode: 'useButtons',
+                    });
+
+                    const instance = $dateBox.dxDateBox('instance');
+
+                    const $overlayContent = $(instance.content()).parent();
+                    const buttonText = $overlayContent.find(button.selector).text();
+
+                    assert.strictEqual(buttonText, messageLocalization.format(button.localizationMessageKey), `the default "${button.optionName}" value is localized`);
+                } finally {
+                    localization.locale(defaultLocale);
+                }
+            });
+        });
     });
 });
 
@@ -1471,6 +1544,7 @@ QUnit.module('widget sizing render', {}, () => {
         const $element = $('#dateBox').appendTo($parent);
         const component = $('#dateBox').dxDateBox({
             width: undefined,
+            pickerType: 'calendar',
             showDropDownButton: false
         }).dxDateBox('instance');
         const { width: initialWidth } = $element.get(0).getBoundingClientRect();

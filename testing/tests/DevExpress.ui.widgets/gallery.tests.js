@@ -12,6 +12,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/gallery';
+import 'ui/button';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -1026,6 +1027,23 @@ QUnit.module('render', {
                 done();
             })
             .attr('src', '../../testing/content/LightBlueSky.jpg');
+    });
+
+    QUnit.test('gallary with loop should not remove component content from templates (T1125857)', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            dataSource: [1, 2],
+            loop: true,
+            itemTemplate() {
+                return $('<div>').dxButton({});
+            },
+        });
+        const items = $gallery.find(`.${GALLERY_ITEM_CLASS}`).toArray().slice(0, 2);
+
+        items.forEach(item => {
+            const $button = $(item).find('.dx-button');
+
+            assert.equal($button.children().length, 1);
+        });
     });
 });
 

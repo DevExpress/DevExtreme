@@ -19,14 +19,12 @@ import {
 
 import {
     TooltipShowMode,
-    ValueChangedCallMode,
     VerticalEdge,
 } from '../common';
 
 export {
     TooltipShowMode,
     VerticalEdge,
-    ValueChangedCallMode,
 };
 
 /** @public */
@@ -43,6 +41,9 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
 
 /**
  * @deprecated use Properties instead
@@ -163,10 +164,10 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
     };
     /**
      * @docid
-     * @default 'onMoving'
+     * @default 'onHandleMove'
      * @public
      */
-     callValueChange?: ValueChangedCallMode;
+     valueChangeMode?: ValueChangeMode;
 }
 
 /** @public */

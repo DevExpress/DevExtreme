@@ -4,6 +4,7 @@ import RadioButton from './radioButton';
 const CLASS = {
   disabled: 'dx-state-disabled',
   focused: 'dx-state-focused',
+  hovered: 'dx-state-hover',
   reorderHandle: 'dx-list-reorder-handle',
 };
 
@@ -16,6 +17,8 @@ export default class ListItem {
 
   isFocused: Promise<boolean>;
 
+  isHovered: Promise<boolean>;
+
   radioButton: RadioButton;
 
   reorderHandle: Selector;
@@ -27,6 +30,7 @@ export default class ListItem {
     this.checkBox = new CheckBox(element);
     this.isDisabled = element.hasClass(CLASS.disabled);
     this.isFocused = element.hasClass(CLASS.focused);
+    this.isHovered = element.hasClass(CLASS.hovered);
     this.radioButton = new RadioButton(element);
     this.reorderHandle = element.find(`.${CLASS.reorderHandle}`);
     this.text = element.textContent;

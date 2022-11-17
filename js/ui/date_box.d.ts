@@ -193,6 +193,12 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     showAnalogClock?: boolean;
     /**
      * @docid
+     * @default "Today"
+     * @public
+     */
+    todayButtonText?: string;
+    /**
+     * @docid
      * @default "date"
      * @public
      */

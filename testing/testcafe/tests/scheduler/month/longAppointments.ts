@@ -1,6 +1,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Scheduler: long appointments in month view`
@@ -22,27 +23,23 @@ fixture`Scheduler: long appointments in month view`
       endDate: new Date(2020, 0, 20),
     },
   ].forEach((appointment) => {
-    test(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async (t) => {
+    safeSizeTest(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async (t) => {
       const scheduler = new Scheduler('#container');
       await t.expect(await compareScreenshot(t, `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`, scheduler.workSpace)).ok();
     })
       .meta({ renovation: true })
-      .before(async (t) => {
-        await t.resizeWindow(1200, 800);
-
-        return createWidget('dxScheduler', {
-          dataSource: [appointment],
-          views: ['month'],
-          currentView: 'month',
-          rtlEnabled,
-          currentDate: new Date(2020, 0, 1),
-        });
-      });
+      .before(async () => createWidget('dxScheduler', {
+        dataSource: [appointment],
+        views: ['month'],
+        currentView: 'month',
+        rtlEnabled,
+        currentDate: new Date(2020, 0, 1),
+      }));
   });
 });
 
 [false, true].forEach((rtlEnabled) => {
-  test(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async (t) => {
+  safeSizeTest(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async (t) => {
     const { toolbar, workSpace } = new Scheduler('#container');
 
     await t
@@ -55,24 +52,20 @@ fixture`Scheduler: long appointments in month view`
     await t
       .click(toolbar.navigator.nextButton)
       .expect(await compareScreenshot(t, `month-long-appointment-several-months-march(rtl=${rtlEnabled}).png`, workSpace)).ok();
-  }).before(async (t) => {
-    await t.resizeWindow(1200, 800);
-
-    return createWidget('dxScheduler', {
-      dataSource: [{
-        text: 'Text',
-        startDate: new Date(2020, 0, 6),
-        endDate: new Date(2020, 2, 10),
-      }],
-      views: ['month'],
-      currentView: 'month',
-      rtlEnabled,
-      currentDate: new Date(2020, 0, 1),
-    });
-  });
+  }).before(async () => createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'Text',
+      startDate: new Date(2020, 0, 6),
+      endDate: new Date(2020, 2, 10),
+    }],
+    views: ['month'],
+    currentView: 'month',
+    rtlEnabled,
+    currentDate: new Date(2020, 0, 1),
+  }));
 });
 
-test('Long recurrence appointment should display valid on month view', async (t) => {
+safeSizeTest('Long recurrence appointment should display valid on month view', async (t) => {
   const { toolbar, workSpace } = new Scheduler('#container');
 
   await t
@@ -81,18 +74,14 @@ test('Long recurrence appointment should display valid on month view', async (t)
   await t
     .click(toolbar.navigator.nextButton)
     .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-february.png', workSpace)).ok();
-}).before(async (t) => {
-  await t.resizeWindow(1200, 800);
-
-  return createWidget('dxScheduler', {
-    dataSource: [{
-      text: 'Text',
-      startDate: new Date(2020, 0, 6),
-      endDate: new Date(2020, 0, 10),
-      recurrenceRule: 'FREQ=DAILY;INTERVAL=5',
-    }],
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2020, 0, 1),
-  });
-});
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Text',
+    startDate: new Date(2020, 0, 6),
+    endDate: new Date(2020, 0, 10),
+    recurrenceRule: 'FREQ=DAILY;INTERVAL=5',
+  }],
+  views: ['month'],
+  currentView: 'month',
+  currentDate: new Date(2020, 0, 1),
+}));

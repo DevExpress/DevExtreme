@@ -16,40 +16,27 @@ import {
 import {
     DashStyle,
     LegendMarkerState,
-    TimeInterval,
+    SeriesType as CommonSeriesType,
 } from '../common/charts';
 
-export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+import type * as Common from '../common/charts';
 
-/**
- * @docid
- * @hidden
- * @default undefined
- */
-export type VizTimeInterval = number | {
-  /** @docid */
-  days?: number;
-  /** @docid */
-  hours?: number;
-  /** @docid */
-  milliseconds?: number;
-  /** @docid */
-  minutes?: number;
-  /** @docid */
-  months?: number;
-  /** @docid */
-  quarters?: number;
-  /** @docid */
-  seconds?: number;
-  /** @docid */
-  weeks?: number;
-  /** @docid */
-  years?: number;
-} | TimeInterval;
+/** @deprecated Use SeriesType from 'devextreme/common/charts' instead */
+export type SeriesType = Common.SeriesType;
+
+/** @deprecated Use TimeIntervalConfig from 'devextreme/common/charts' instead */
+export type VizTimeInterval = Common.TimeIntervalConfig;
+
+/** @deprecated Use ScaleBreak from 'devextreme/common/charts' instead */
+export type ScaleBreak = Common.ScaleBreak;
+
+/** @deprecated Use VisualRange from 'devextreme/common/charts' instead */
+export type VisualRange = Common.VisualRange;
 
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.common.charts
  * @hidden
  */
 export interface BaseLegend {
@@ -293,6 +280,7 @@ export interface BaseLegend {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.common.charts
  * @hidden
  */
 export interface BaseLegendItem {
@@ -352,59 +340,8 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * @docid
      * @default 'line'
+     * @type Enums.SeriesType
      * @public
      */
-    type?: SeriesType;
-}
-
-/**
- * @docid
- * @type object
- * @namespace DevExpress.viz
- * @hidden
- */
-export interface ScaleBreak {
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    endValue?: number | Date | string;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    startValue?: number | Date | string;
-}
-
-/**
- * @docid
- * @type object
- * @namespace DevExpress.viz
- * @hidden
- */
-export interface VizRange {
-    /**
-     * @docid
-     * @default undefined
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @public
-     */
-    endValue?: number | Date | string;
-    /**
-     * @docid
-     * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeInterval
-     * @default undefined
-     * @public
-     */
-    length?: VizTimeInterval;
-    /**
-     * @docid
-     * @default undefined
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @public
-     */
-    startValue?: number | Date | string;
+    type?: CommonSeriesType;
 }

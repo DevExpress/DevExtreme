@@ -1,8 +1,6 @@
 /* global Windows */
-import $ from '../core/renderer';
 import domAdapter from '../core/dom_adapter';
 import { getWindow, getNavigator } from '../core/utils/window';
-import eventsEngine from '../events/core/events_engine';
 import errors from '../ui/widget/ui.errors';
 import { isDefined, isFunction } from '../core/utils/type';
 import { logger } from '../core/utils/console';
@@ -51,36 +49,6 @@ export const fileSaver = {
         exportLinkElement.target = '_blank'; // cors policy
 
         return exportLinkElement;
-    },
-
-    _formDownloader: function(proxyUrl, fileName, contentType, data) {
-        const formAttributes = { method: 'post', action: proxyUrl, enctype: 'multipart/form-data' };
-        const exportForm = $('<form>').css({ 'display': 'none' }).attr(formAttributes);
-
-        function setAttributes(element, attributes) {
-            for(const key in attributes) {
-                element.setAttribute(key, attributes[key]);
-            }
-
-            return element;
-        }
-
-        exportForm.append(setAttributes(domAdapter.createElement('input'), { type: 'hidden', name: 'fileName', value: fileName }));
-        exportForm.append(setAttributes(domAdapter.createElement('input'), { type: 'hidden', name: 'contentType', value: contentType }));
-        exportForm.append(setAttributes(domAdapter.createElement('input'), { type: 'hidden', name: 'data', value: data }));
-
-        exportForm.appendTo('body');
-        eventsEngine.trigger(exportForm, 'submit');
-
-        if(eventsEngine.trigger(exportForm, 'submit')) exportForm.remove();
-        ///#DEBUG
-        return exportForm;
-        ///#ENDDEBUG
-    },
-
-    _saveByProxy: function(proxyUrl, fileName, format, data) {
-        const contentType = this._getMimeType(format);
-        return this._formDownloader(proxyUrl, fileName, contentType, data);
     },
 
     _winJSBlobSave: function(blob, fileName, format) {
@@ -149,29 +117,19 @@ export const fileSaver = {
         }
     },
 
-    saveAs: function(fileName, format, data, proxyURL, forceProxy) {
+    saveAs: function(fileName, format, data) {
         const fileExtension = FILE_EXTESIONS[format];
         if(fileExtension) {
             fileName += '.' + fileExtension;
         }
 
-        if(isDefined(proxyURL)) {
-            errors.log('W0001', 'Export', 'proxyURL', '19.2', 'This option is no longer required');
-        }
-
-        if(forceProxy) {
-            this._saveByProxy(proxyURL, fileName, format, data);
-        } else if(isFunction(window.Blob)) {
+        if(isFunction(window.Blob)) {
             this._saveBlobAs(fileName, format, data);
         } else {
-            if(isDefined(proxyURL) && !isDefined(navigator.userAgent.match(/iPad/i))) {
-                this._saveByProxy(proxyURL, fileName, format, data);
-            } else {
-                if(!isDefined(navigator.userAgent.match(/iPad/i))) errors.log('E1034');
+            if(!isDefined(navigator.userAgent.match(/iPad/i))) errors.log('E1034');
 
-                const downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
-                this._click(downloadLink);
-            }
+            const downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
+            this._click(downloadLink);
         }
     }
 };

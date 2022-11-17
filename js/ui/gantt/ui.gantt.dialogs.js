@@ -106,7 +106,8 @@ class DialogInfoBase {
                 items: this._getFormItems(),
                 elementAttr: {
                     class: this._getFormCssClass()
-                }
+                },
+                rtlEnabled: false
             });
             return content;
         };

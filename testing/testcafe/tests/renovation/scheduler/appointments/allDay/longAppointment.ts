@@ -7,9 +7,10 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Layout:Appointments:AllDay');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Layout:Appointments:AllDay');
 
-test('Long all day appointment should be render, if him ended on next view day in currentView: "day" (T1021963)', async (t, { screenshotComparerOptions }) => {
+test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\' (T1021963)', async (t, { screenshotComparerOptions }) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

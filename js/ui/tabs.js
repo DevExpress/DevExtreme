@@ -228,7 +228,6 @@ const Tabs = CollectionWidget.inherit({
     _isItemsWidthExceeded: function() {
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
-        // NOTE: "-1" is a hack fix for IE (T190044)
         return tabItemsWidth - 1 > getWidth(this.$element());
     },
 
@@ -243,7 +242,7 @@ const Tabs = CollectionWidget.inherit({
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);
 
-        return maxTabWidth > elementWidth / $visibleItems.length;
+        return maxTabWidth >= elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {

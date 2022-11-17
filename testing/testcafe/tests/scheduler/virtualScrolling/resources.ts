@@ -1,11 +1,12 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../container.html'));
 
-test('Should correctly render view if virtual scrolling and groupByDate', async (t) => {
+safeSizeTest('Should correctly render view if virtual scrolling and groupByDate', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointmentByIndex(0);
 

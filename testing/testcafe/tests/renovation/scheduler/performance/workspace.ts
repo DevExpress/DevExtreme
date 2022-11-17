@@ -1,5 +1,6 @@
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 import { getRenderCount } from '../../../../helpers/diagnostic';
+import { restoreBrowserSize } from '../../../../helpers/restoreBrowserSize';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
@@ -22,4 +23,4 @@ test('Default render', async (t, { platform }) => {
     height: 600,
     width: 800,
   });
-});
+}).after(async (t) => restoreBrowserSize(t));

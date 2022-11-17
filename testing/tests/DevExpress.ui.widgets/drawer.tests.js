@@ -3,7 +3,6 @@ import fx from 'animation/fx';
 import translator from 'animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
-import errors from 'core/errors';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
@@ -393,18 +392,6 @@ QUnit.module('Drawer behavior', () => {
         instance.option('openedStateMode', 'overlap');
 
         assert.ok(true, 'Drawer works correctly');
-    });
-
-    QUnit.test('target option', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            openedStateMode: 'overlap'
-        });
-        const instance = $element.dxDrawer('instance');
-
-        assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-wrapper'), 'default target is ok');
-
-        instance.option('target', $element.find('.dx-drawer-content'));
-        assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-content'), 'target is ok');
     });
 
     QUnit.test('content() function', function(assert) {
@@ -2137,52 +2124,5 @@ QUnit.module('Modes changing', {
         const $panel = this.instance.$element().find('.' + DRAWER_PANEL_CONTENT_CLASS);
 
         assert.equal($panel.length, 1, 'one panel is rendered');
-    });
-});
-
-QUnit.module('Deprecated options', {
-    beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-        this.stub.restore();
-    }
-}, () => {
-    ['shrink', 'overlap', 'push'].forEach((openedStateMode) => {
-        QUnit.test(`warnings for deprecated 'target' option, ${openedStateMode}, target: notInitialized`, function(assert) {
-            assert.expect(1);
-            this.stub = sinon.stub(errors, 'log', () => {
-                assert.strictEqual(true, false, 'error.log should not be called');
-            });
-
-            $('#drawer').dxDrawer({
-                openedStateMode: openedStateMode
-            });
-
-            assert.strictEqual(this.stub.callCount, 0, 'error.log.callCount');
-        });
-
-        [null, undefined, '#someID'].forEach((target) => {
-            QUnit.test(`warnings for deprecated 'target' option, openedStateMode: ${openedStateMode}, target: ${target}`, function(assert) {
-                assert.expect(2);
-                this.stub = sinon.stub(errors, 'log', () => {
-                    assert.deepEqual(errors.log.lastCall.args, [
-                        'W0001',
-                        'dxDrawer',
-                        'target',
-                        '20.1',
-                        'Functionality associated with this option is not intended for the Drawer widget.'
-                    ], 'args of the log method');
-                });
-
-                $('#drawer').dxDrawer({
-                    openedStateMode: openedStateMode,
-                    target: target
-                });
-
-                assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
-            });
-        });
     });
 });

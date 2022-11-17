@@ -582,6 +582,10 @@ export default {
     },
 
     getWrappedLookupDataSource(column, dataSource, filter) {
+        if(!dataSource) {
+            return [];
+        }
+
         const lookupDataSourceOptions = this.normalizeLookupDataSource(column.lookup);
 
         if(column.calculateCellValue !== column.defaultCalculateCellValue) {

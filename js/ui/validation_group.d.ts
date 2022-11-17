@@ -22,9 +22,6 @@ import {
     RangeRule,
     RequiredRule,
     StringLengthRule,
-} from './validation_rules';
-
-import {
     ValidationStatus,
 } from '../common';
 

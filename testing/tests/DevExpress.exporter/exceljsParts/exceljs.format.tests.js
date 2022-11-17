@@ -2,8 +2,6 @@ import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper, ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid, exportPivotGrid } from 'excel_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
-import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 
 import 'ui/data_grid';
 import 'ui/pivot_grid/ui.pivot_grid';
@@ -12,17 +10,9 @@ const ExcelJSLocalizationFormatTests = {
     runCurrencyTests(values) {
         let helper;
         QUnit.module('Format', {
-            before: function() {
-                initializeDxObjectAssign();
-                initializeDxArrayFind();
-            },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
                 helper = new ExcelJSDataGridTestHelper(this.worksheet);
-            },
-            after: function() {
-                clearDxObjectAssign();
-                clearDxArrayFind();
             }
         }, () => {
             values.forEach((currency) => {
@@ -74,17 +64,9 @@ const ExcelJSLocalizationFormatTests = {
     runPivotGridCurrencyTests(values) {
         let helper;
         QUnit.module('PivotGrid currency Format', {
-            before: function() {
-                initializeDxObjectAssign();
-                initializeDxArrayFind();
-            },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
                 helper = new ExcelJSPivotGridTestHelper(this.worksheet);
-            },
-            after: function() {
-                clearDxObjectAssign();
-                clearDxArrayFind();
             }
         }, () => {
             values.forEach((currency) => {

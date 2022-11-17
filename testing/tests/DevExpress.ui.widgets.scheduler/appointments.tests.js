@@ -490,46 +490,6 @@ QUnit.module('Appointments', moduleOptions, () => {
         assert.equal($('#allDayContainer .dx-scheduler-appointment').length, 1, 'appointment is in allDayContainer');
     });
 
-    QUnit.test('Appointment tooltip should be hidden when drag is started', function(assert) {
-        const item = {
-            itemData: {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 8),
-                endDate: new Date(2015, 1, 9, 9)
-            },
-            settings: [{
-                info: {
-                    sourceAppointment: {
-                        startDate: new Date(2015, 1, 9, 8),
-                        endDate: new Date(2015, 1, 9, 9),
-                    },
-                    appointment: {
-                        startDate: new Date(2015, 1, 9, 8),
-                        endDate: new Date(2015, 1, 9, 9),
-                    },
-                },
-            }],
-        };
-
-        const instance = createInstance({
-            items: [item],
-            fixedContainer: $('#fixedContainer'),
-        }, testConfig);
-
-        const updateSpy = sinon.spy(commonUtils.noop);
-
-        instance.notifyObserver = updateSpy;
-
-        const $appointment = instance.$element().find('.dx-scheduler-appointment');
-        const pointer = pointerMock($appointment).start();
-
-        pointer.down().move(0, 60);
-
-        assert.deepEqual(updateSpy.getCall(0).args[0], 'hideAppointmentTooltip', 'Correct method of observer is called');
-
-        pointer.up();
-    });
-
     QUnit.test('Appointment should be rendered a many times if coordinates array contains a few items', function(assert) {
         const item = {
             itemData: {
