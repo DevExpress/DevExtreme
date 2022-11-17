@@ -90,7 +90,7 @@ jobs:
           { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
         ]
         include:
-          -ARGS.componentFolder: ["editors", "navigation"]
+          -ARGS.componentFolder: "editors"
           THEME: "material.blue.light"
           
     timeout-minutes: 90
