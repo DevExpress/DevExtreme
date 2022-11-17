@@ -17,11 +17,9 @@
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [ "^@devextreme-generator/" ],
-            "enabled": false
-        },
-        {
-            "matchPackageNames": [
+            "matchPackagePatterns": [
+              "^@?devextreme",
+              "^devexpress",
               "eslint-config-devextreme",
               "rrule",
               "sass-embedded",
