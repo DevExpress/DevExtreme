@@ -1,9 +1,9 @@
-import SelectBox from '../../../model/selectBox';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import SelectBox from '../../model/selectBox';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
 
 fixture`HtmlEditor - formats`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {
   const selectBox = new SelectBox('.dx-font-format');
@@ -22,16 +22,18 @@ test('HtmlEditor should keep actual format after "enter" key pressed (T922236)',
     .pressKey('enter')
     .expect(selectBox.value)
     .eql('Arial');
-}).before(async () => createWidget('dxHtmlEditor', {
-  height: 400,
-  width: 200,
-  toolbar: {
-    items: [
-      'bold',
-      {
-        name: 'font',
-        acceptedValues: ['Arial', 'Terminal'],
-      },
-    ],
-  },
-}));
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 400,
+    width: 200,
+    toolbar: {
+      items: [
+        'bold',
+        {
+          name: 'font',
+          acceptedValues: ['Arial', 'Terminal'],
+        },
+      ],
+    },
+  });
+});

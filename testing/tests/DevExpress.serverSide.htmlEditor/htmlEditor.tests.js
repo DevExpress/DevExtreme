@@ -1,3 +1,5 @@
+import markupTests from '../DevExpress.ui.widgets.htmlEditor/htmlEditorParts/markup.tests.js';
+
 QUnit.testStart(() => {
     const element = document.createElement('div');
     element.setAttribute('id', 'htmlEditor');
@@ -5,4 +7,4 @@ QUnit.testStart(() => {
     document.getElementById('qunit-fixture').appendChild(element);
 });
 
-import '../DevExpress.ui.widgets.editors/htmlEditorParts/markup.tests.js';
+markupTests();

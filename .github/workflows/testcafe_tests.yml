@@ -74,6 +74,7 @@ jobs:
           { componentFolder: "editors", name: "editors (1/3)", quarantineMode: false, indices: "1/3" },
           { componentFolder: "editors", name: "editors (2/3)", quarantineMode: false, indices: "2/3" },
           { componentFolder: "editors", name: "editors (3/3)", quarantineMode: false, indices: "3/3" },
+          { componentFolder: "htmlEditor", name: "htmlEditor", quarantineMode: false },
           { componentFolder: "navigation", name: "navigation (1/4)", quarantineMode: false, indices: "1/4" },
           { componentFolder: "navigation", name: "navigation (2/4)", quarantineMode: false, indices: "2/4" },
           { componentFolder: "navigation", name: "navigation (3/4)", quarantineMode: false, indices: "3/4" },

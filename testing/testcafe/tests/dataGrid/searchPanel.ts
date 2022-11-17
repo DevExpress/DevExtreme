@@ -8,7 +8,7 @@ fixture`Search Panel`
   .afterEach(async () => disposeWidgets());
 
 // T1046688
-test('searchPanel has correct view inside masterDetail', async (t) => {
+test.skip('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');

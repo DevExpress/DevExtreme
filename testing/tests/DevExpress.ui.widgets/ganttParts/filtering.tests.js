@@ -259,7 +259,7 @@ QUnit.module('Filtering', moduleConfig, () => {
         this.createInstance(options);
         this.clock.tick();
 
-        const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
+        let expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger('dxclick');
         this.clock.tick();
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
@@ -272,6 +272,18 @@ QUnit.module('Filtering', moduleConfig, () => {
         $filterRowInput.val('project');
         $filterRowInput.trigger('keyup');
         this.clock.tick(1000);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 2);
+
+        expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+
+        const $treeListIdHeader = this.$element.find(Consts.TREELIST_HEADER_ROW_SELECTOR).children().eq(0);
+        $treeListIdHeader.trigger('dxclick');
+        this.clock.tick(500);
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
         assert.equal(this.instance._treeList.getVisibleRows().length, 2);
     });
