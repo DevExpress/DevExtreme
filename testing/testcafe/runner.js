@@ -92,16 +92,19 @@ createTestCafe('localhost', 1437, 1438)
             runner.cache = args.cache;
         }
 
-        return runner.run({
-            quarantineMode: args.quarantineMode,
-            hooks: {
+        const runOptions = { quarantineMode: args.quarantineMode };
+
+        if(args.theme !== 'generic.light') {
+            runOptions.hooks = {
                 test: {
                     before: async() => {
                         await changeTheme(args.theme);
                     }
                 },
-            }
-        });
+            };
+        }
+
+        return runner.run(runOptions);
     })
     .then(failedCount => {
         testCafe.close();
