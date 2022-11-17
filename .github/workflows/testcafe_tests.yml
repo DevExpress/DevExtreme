@@ -91,7 +91,9 @@ jobs:
         ]
         include:
           -THEME: "material.blue.light"
-          ARGS.componentFolder: ["editors", "navigation"]
+          ARGS.componentFolder: "editors" 
+          # -THEME: "material.blue.light"
+          # ARGS.componentFolder: "navigation"
           
     timeout-minutes: 90
 
