@@ -89,7 +89,14 @@ class Gantt extends Widget {
     }
     _refresh() {
         this._isGanttRendered = false;
+        this._contentReadyRaised = false;
         super._refresh();
+    }
+    _fireContentReadyAction() {
+        if(!this._contentReadyRaised) {
+            super._fireContentReadyAction();
+        }
+        this._contentReadyRaised = true;
     }
     _dimensionChanged() {
         this._ganttView?._onDimensionChanged();
@@ -193,11 +200,24 @@ class Gantt extends Widget {
             taskContentTemplate: this._ganttTemplatesManager.getTaskContentTemplateFunc(this.option('taskContentTemplate')),
             onTaskClick: (e) => { this._ganttTreeList.onRowClick(e); },
             onTaskDblClick: (e) => { this._ganttTreeList.onRowDblClick(e); },
-            onAdjustControl: () => { this._sizeHelper.onAdjustControl(); }
+            onAdjustControl: () => { this._sizeHelper.onAdjustControl(); },
+            onContentReady: this._onGanttViewContentReady.bind(this)
         });
-        this._fireContentReadyAction();
     }
-
+    _onGanttViewContentReady(e) {
+        if(!this._isParentAutoUpdateMode()) {
+            this._fireContentReadyAction();
+        }
+    }
+    _isParentAutoUpdateMode() {
+        return this.option('validation.autoUpdateParentTasks');
+    }
+    _onTreeListContentReady(e) {
+        if(this._isParentAutoUpdateMode() && this._treeListParentRecalculatedDataUpdating) {
+            this._fireContentReadyAction();
+        }
+        delete this._treeListParentRecalculatedDataUpdating;
+    }
     _refreshDataSource(name) {
         let dataOption = this[`_${name}Option`];
         if(dataOption) {
@@ -335,29 +355,42 @@ class Gantt extends Widget {
             const setters = GanttHelper.compileSettersByOption(this.option(GANTT_TASKS));
             const treeDataSource = this._customFieldsManager.appendCustomFields(data.map(GanttHelper.prepareSetterMapHandler(setters)));
             // split threads for treelist filter|sort and datasource update (T1082108)
-            setTimeout(() => this._ganttTreeList?.setDataSource(treeDataSource));
+            setTimeout(() => {
+                this._treeListParentRecalculatedDataUpdating = true;
+                this._ganttTreeList?.setDataSource(treeDataSource);
+            });
         }
         this.isSieving = false;
     }
 
     _sortAndFilter() {
-        const columns = this._treeList.getVisibleColumns();
-        const sortColumn = columns.filter(c => c.sortIndex === 0)[0];
-        const filterColumn = columns.filter(c => isDefined(c.filterValue) || c.filterValues?.length)[0];
-        const sieveColumn = sortColumn || filterColumn;
-        const isClearSieving = (this.sieveColumn && !sieveColumn);
+        const treeList = this._treeList;
+        const columns = treeList.getVisibleColumns();
 
+        const sortedColumns = columns.filter(c => c.sortIndex > -1);
+        const sortedState = sortedColumns.map(c => ({ sortIndex: c.sortIndex, sortOrder: c.sortOrder }));
+        const sortedStateChanged = !this._compareSortedState(this._savedSortFilterState?.sort, sortedState);
+
+        const filterValue = treeList.option('filterValue');
+        const filterChanged = treeList.option('expandNodesOnFiltering') && filterValue !== this._savedSortFilterState?.filter;
+
+        const sieveColumn = sortedColumns[0] || columns.filter(c => isDefined(c.filterValue) || c.filterValues?.length)[0];
+        const isClearSieving = (this._savedSortFilterState?.sieveColumn && !sieveColumn);
         if(sieveColumn || isClearSieving) {
-            const sievedItems = this._ganttTreeList.getSievedItems();
-            const expandTasks = !!filterColumn && this._treeList.option('expandNodesOnFiltering');
-            const sieveOptions = { sievedItems: sievedItems, sieveColumn: sieveColumn, expandTasks: expandTasks };
+            const sieveOptions = sieveColumn && {
+                sievedItems: this._ganttTreeList.getSievedItems(),
+                sieveColumn: sieveColumn,
+                expandTasks: filterChanged || (filterValue && sortedStateChanged)
+            };
             this.isSieving = !isClearSieving;
-            this._setGanttViewOption('sieve', isClearSieving ? undefined : sieveOptions);
+            this._setGanttViewOption('sieve', sieveOptions);
         }
-
-        this.sieveColumn = sieveColumn;
+        this._savedSortFilterState = { sort: sortedState, filter: filterValue, sieveColumn: sieveColumn };
     }
-
+    _compareSortedState(state1, state2) {
+        if(!state1 || !state2 || state1.length !== state2.length) { return false; }
+        return state1.every((c, i) => c.sortIndex === state2[i].sortIndex && c.sortOrder === state2[i].sortOrder);
+    }
     _getToolbarItems() {
         const items = this.option('toolbar.items');
         return items ? items : [];
