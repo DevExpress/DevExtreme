@@ -22,6 +22,7 @@ export class GanttTreeList {
         this._treeList = this._gantt._createComponent(this._$treeList, dxTreeList, {
             dataSource: this.createDataSource(this._gantt._tasksRaw),
             keyExpr: keyExpr,
+            filterSyncEnabled: true,
             parentIdExpr: parentIdExpr,
             columns: this.getColumns(),
             columnResizingMode: 'nextColumn',
@@ -64,6 +65,7 @@ export class GanttTreeList {
         } else {
             this._postponedGanttInitRequired = true;
         }
+        this._gantt._onTreeListContentReady(e);
     }
 
     _initGanttOnContentReady(e) {
