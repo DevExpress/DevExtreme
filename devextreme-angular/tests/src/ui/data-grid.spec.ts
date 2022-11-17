@@ -3,7 +3,8 @@
 import {
     Component,
     ViewChildren,
-    QueryList
+    QueryList,
+    ViewChild
 } from '@angular/core';
 
 import {
@@ -40,17 +41,17 @@ class TestContainerComponent {
         { dataField: 'number' }
     ];
 
-    dataSourceWithUndefined = [{ obj: { field: undefined }}];
+    dataSourceWithUndefined = [{ obj: { field: undefined } }];
 
     columsChanged = 0;
     @ViewChildren(DxDataGridComponent) innerWidgets: QueryList<DxDataGridComponent>;
 
-    testMethod() {}
+    testMethod() { }
 
     getCellValue() {
         return {};
     }
-    onRowPrepared() {}
+    onRowPrepared() { }
 
     onOptionChanged(e) {
         if (e.name === 'columns') {
@@ -313,6 +314,83 @@ describe('DxDataGrid', () => {
         expect(fixture.componentInstance.isDestroyed).toBe(true);
         jasmine.clock().uninstall();
     });
+
+    // https://supportcenter.devexpress.com/internal/ticket/details/T1124163
+    it('should update template with dynamic name', () => {
+        const columnsA = [
+            { field: 'SomeFieldA', caption: 'FieldA', cellTemplateName: 'templateA' },
+            { field: 'otherField', caption: 'Other field1', cellTemplateName: undefined }
+        ];
+
+        const columnsB = [
+            { field: 'SomeFieldB', caption: 'FieldB', cellTemplateName: 'templateB' },
+            { field: 'otherField', caption: 'Other field2', cellTemplateName: undefined }
+        ];
+        @Component({
+            selector: 'test-container-component',
+            template: ''
+        })
+        class TestGridComponent {
+            @ViewChild('#gridContainer') grid: DxDataGridComponent;
+            dataSource: any[];
+            columns: any[];
+
+            constructor() {
+                this.dataSource = [{ ID: 0, SomeFieldA: 'a0', otherField: 'b0' }];
+                this.columns = columnsA;
+            }
+            toggleData() {
+                if (this.columns[0].field === 'SomeFieldA') {
+                    this.columns = columnsB;
+                } else {
+                    this.columns = columnsA;
+                }
+            }
+        }
+
+        TestBed.configureTestingModule({
+            declarations: [TestGridComponent],
+            imports: [DxDataGridModule]
+        });
+
+        TestBed.overrideComponent(TestGridComponent, {
+            set: {
+                template: `
+                <dx-data-grid id="gridContainer" [dataSource]="dataSource" [repaintChangesOnly]="true">
+                  <dxo-sorting mode="none"></dxo-sorting>
+                
+                  <ng-container *ngFor="let col of columns">
+                    <dxi-column [caption]="col.caption" [dataField]="col.field" [cellTemplate]="col.cellTemplateName">
+                    </dxi-column>
+                
+                    <div *dxTemplate="let cell of col.cellTemplateName">
+                      <div *ngIf="col.cellTemplateName === 'templateA'">
+                        someTemplateA
+                      </div>
+                      <div *ngIf="col.cellTemplateName === 'templateB'">
+                        <div class="templBClass">someTemplateB</div>
+                      </div>
+                    </div>
+                
+                  </ng-container>
+                </dx-data-grid>`
+            }
+        });
+
+        jasmine.clock().uninstall();
+        jasmine.clock().install();
+
+        let fixture = TestBed.createComponent(TestGridComponent);
+        fixture.detectChanges();
+
+        const component = fixture.componentInstance;
+        component.toggleData();
+        fixture.detectChanges();
+
+        jasmine.clock().tick(101);
+        expect(fixture.nativeElement.querySelector('.templBClass')).toBeTruthy();
+        jasmine.clock().uninstall();
+    });
 });
 
 describe('Nested DxDataGrid', () => {
@@ -329,7 +407,7 @@ describe('Nested DxDataGrid', () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
     });
 
-    afterEach(function() {
+    afterEach(function () {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
 

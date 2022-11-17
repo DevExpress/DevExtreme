@@ -12,6 +12,7 @@ import {
 import {
     DxChartModule, DxChartComponent, DxScrollViewModule
 } from 'devextreme-angular';
+import dxChart from 'devextreme/viz/chart';
 
 @Component({
     selector: 'test-container-component',
@@ -79,7 +80,7 @@ describe('DxChart', () => {
 
         let testComponent = fixture.componentInstance,
             chart = testComponent.chart,
-            spy = spyOn(chart.instance, '_applyChanges');
+            spy = spyOn<dxChart & {_applyChanges?: any}>(chart.instance, '_applyChanges');
 
         testComponent.dataSource = [{
             name: 1,
@@ -109,7 +110,7 @@ describe('DxChart', () => {
 
         let testComponent = fixture.componentInstance,
             chart = testComponent.chart,
-            spy = spyOn(chart.instance, '_applyChanges');
+            spy = spyOn<dxChart & {_applyChanges?: any}>(chart.instance, '_applyChanges');
 
         testComponent.dataSource.push({
             name: 1,

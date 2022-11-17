@@ -122,8 +122,18 @@ export class TestContainerComponent {
 
     @Output() onInnerElementClicked = new EventEmitter<any>();
 
+    dynamicTemplateName: string;
+
+    constructor() {
+        this.dynamicTemplateName = 'start';
+    }
+
     testFunction() {
         this.onInnerElementClicked.next();
+    }
+
+    switchTemplateName() {
+        this.dynamicTemplateName = this.dynamicTemplateName === 'start' ? 'end' : 'start';
     }
 }
 
@@ -227,6 +237,45 @@ describe('DevExtreme Angular widget\'s template', () => {
         });
 
         fixture.nativeElement.querySelector('.elem').click();
+    });
+
+    it('should work with dynamic template name', () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+                template: `
+            <dx-test-widget [testTemplate]="dynamicTemplateName">
+                <div *dxTemplate="let d of dynamicTemplateName">
+                    <div [class]="dynamicTemplateName">
+                        Template content: {{dynamicTemplateName}}
+                    </div>
+                </div>
+            </dx-test-widget>
+           `}
+        });
+        let fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
+
+        let testComponent = fixture.componentInstance,
+            innerComponent = testComponent.widget,
+            template = innerComponent.testTemplate,
+            templatesHash = innerComponent.instance.option('integrationOptions.templates'),
+            container = document.createElement('div');
+
+        expect(template).not.toBeUndefined;
+
+        templatesHash[template].render({ container: container });
+        fixture.detectChanges();
+
+        expect(container.querySelector('.start')).not.toBeNull();
+
+        testComponent.switchTemplateName();
+        fixture.detectChanges();
+        expect(template).not.toBeUndefined;
+
+        templatesHash[template].render({ container: container });
+        fixture.detectChanges();
+
+        expect(container.querySelector('.end')).not.toBeNull();
     });
 });
 

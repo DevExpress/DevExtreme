@@ -34,11 +34,11 @@ import {
 
 let serverStateKey;
 export const getServerStateKey = () => {
-  if (!serverStateKey) {
-    serverStateKey = makeStateKey<any>('DX_isPlatformServer');
-  }
+    if (!serverStateKey) {
+        serverStateKey = makeStateKey<any>('DX_isPlatformServer');
+    }
 
-  return serverStateKey;
+    return serverStateKey;
 };
 
 @Component({
@@ -58,14 +58,17 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     removedNestedComponents = [];
     recreatedNestedComponents: any[];
     widgetUpdateLocked = false;
+    templateUpdateRequired = false;
 
-    private _initTemplates() {
-        if (this.templates.length) {
-            let initialTemplates = {};
+    private _updateTemplates() {
+        if (this.templates.length && this.templateUpdateRequired) {
+            let updatedTemplates = {};
             this.templates.forEach(template => {
-                initialTemplates[template.name] = template;
+                updatedTemplates[template.name] = template;
             });
-            this.instance.option('integrationOptions.templates', initialTemplates);
+            this.instance.option('integrationOptions.templates', updatedTemplates);
+            this.templates = Object.values(updatedTemplates);
+            this.templateUpdateRequired = false;
         }
     }
 
@@ -105,7 +108,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
             return strategy;
         };
 
-        this._initialOptions.nestedComponentOptions = function(component) {
+        this._initialOptions.nestedComponentOptions = function (component) {
             return {
                 eventsStrategy: (instance) => { return new NgEventsStrategy(instance, zone); },
                 nestedComponentOptions: component.option('nestedComponentOptions')
@@ -216,13 +219,14 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
 
     ngAfterContentChecked() {
+        this._updateTemplates();
         this.applyOptions();
         this.resetOptions();
         this.unlockWidgetUpdate();
     }
 
     ngAfterViewInit() {
-        this._initTemplates();
+        this._updateTemplates();
         this.instance.endUpdate();
         this.recreatedNestedComponents = [];
     }
@@ -241,9 +245,9 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
             this.removedNestedComponents.filter(option => option &&
                 !this.isRecreated(option) &&
                 collectionName ? option.startsWith(collectionName) : true)
-            .forEach(option => {
-                this.instance.resetOption(option);
-            });
+                .forEach(option => {
+                    this.instance.resetOption(option);
+                });
 
             this.removedNestedComponents = [];
             this.recreatedNestedComponents = [];
@@ -252,11 +256,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
     isRecreated(name: string): boolean {
         return this.recreatedNestedComponents &&
-                this.recreatedNestedComponents.some(nestedComponent => nestedComponent.getOptionPath() === name);
+            this.recreatedNestedComponents.some(nestedComponent => nestedComponent.getOptionPath() === name);
     }
 
     setTemplate(template: DxTemplateDirective) {
         this.templates.push(template);
+        this.templateUpdateRequired = true;
     }
 
     setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
