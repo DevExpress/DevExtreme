@@ -17,7 +17,7 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 
 
 let testCafe;
-createTestCafe('localhost', 1440, 1441)
+createTestCafe('localhost', 1437, 1438)
     .then(tc => {
         testCafe = tc;
 
