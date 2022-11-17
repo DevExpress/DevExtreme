@@ -29,11 +29,6 @@ createTestCafe('localhost', 1437, 1438)
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
 
-        if(args.theme === 'material.blue.light' && componentFolder !== 'editors') {
-            testCafe.close();
-            process.exit();
-        }
-
         setTestingPlatform(args);
         setTestingTheme(args);
 
