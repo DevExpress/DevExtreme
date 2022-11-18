@@ -1,4 +1,4 @@
 export const getThemePostfix = (theme?: string): string => {
-  const themeName = (theme ?? process.env.theme as string) || 'generic.light';
+  const themeName = (theme ?? process.env.theme) ?? 'generic.light';
   return `-theme=${themeName.replace(/\./g, '-')}`;
 };
