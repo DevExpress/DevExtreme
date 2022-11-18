@@ -18,14 +18,19 @@
     "packageRules": [
         {
             "matchPackagePatterns": [
-              "^@devextreme-generator/",
-              "devexpress-gantt",
-              "devexpress-diagram",
-              "eslint-config-devextreme",
-              "rrule",
-              "sass-embedded",
-              "sinon",
-              "systemjs"
+                "^@devextreme-generator/"
+            ],
+            "enabled": false
+        },
+        {
+            "matchPackageNames": [
+                "devexpress-gantt",
+                "devexpress-diagram",
+                "eslint-config-devextreme",
+                "rrule",
+                "sass-embedded",
+                "sinon",
+                "systemjs"
             ],
             "enabled": false
         },
