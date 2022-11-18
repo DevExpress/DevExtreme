@@ -49,7 +49,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import { generateItems, MockEditingController } from '../../helpers/dataGridMocks.js';
+import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -3710,10 +3710,6 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowUpdating: true
                 },
                 columns: ['selected', 'field2'],
-            });
-            dataGrid._controllers.editing = new MockEditingController({
-                mode: editMode,
-                allowUpdating: true
             });
             this.clock.tick(0);
 
