@@ -411,6 +411,14 @@ module.exports = {
                 '@typescript-eslint/consistent-type-definitions': 'off',
                 'react/sort-comp': 'off',
             }
+        },
+        {
+            'files': [
+                './js/**/*.js'
+            ],
+            'rules': {
+                'import/no-commonjs': 'error'
+            }
         }
     ]
 };
