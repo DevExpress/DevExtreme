@@ -90,9 +90,9 @@ jobs:
         ]
         include: 
           - ARGS.componentFolder: "editors"
-            ARGS.theme: "material.blue.light"
+            THEME: "material.blue.light"
           - ARGS.componentFolder: "navigation"
-            ARGS.theme: "material.blue.light"
+            THEME: "material.blue.light"
 
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -139,7 +139,7 @@ jobs:
         npx gulp build-renovation-testing
 
     - name: Run TestCafe tests
-      if: matrix.THEME != 'material.blue.light' || matrix.ARGS.componentFolder == 'editors' || matrix.ARGS.componentFolder == 'navigation'
+      # if: matrix.THEME != 'material.blue.light' || matrix.ARGS.componentFolder == 'editors' || matrix.ARGS.componentFolder == 'navigation'
       run: |
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
