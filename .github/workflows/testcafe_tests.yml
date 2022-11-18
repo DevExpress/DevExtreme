@@ -89,8 +89,10 @@ jobs:
           { componentFolder: "renovation", name: "renovation (react) (4/4)", platform: "react", quarantineMode: false, indices: "4/4" },
         ]
         include: 
-          - ARGS.THEME: "material.blue.light"
-          # ARGS.componentFolder: "editors"
+          - ARGS.componentFolder: "editors"
+            ARGS.theme: "material.blue.light"
+          - ARGS.componentFolder: "navigation"
+            ARGS.theme: "material.blue.light"
 
     runs-on: devextreme-shr2
     timeout-minutes: 90
