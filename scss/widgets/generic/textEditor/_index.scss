@@ -623,7 +623,13 @@ $generic-texteditor-label-transition:
 
       .dx-label {
         padding: 0 2px;
+        border-right: 1px solid transparent;
         border-bottom: 1px solid $texteditor-border-color;
+
+        @at-root #{selector-append(".dx-rtl", &)} {
+          border-left: 1px solid transparent;
+          border-right: none;
+        }
 
         span {
           transform: translate(0, -$label-offset-y);
