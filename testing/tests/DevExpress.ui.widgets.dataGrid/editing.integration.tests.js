@@ -49,7 +49,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import { generateItems } from '../../helpers/dataGridMocks.js';
+import { generateItems, MockEditingController } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -3686,6 +3686,52 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             const validationMessages = $('.dx-invalid-message.dx-widget');
             assert.strictEqual(validationMessages.length, 1, 'only 1 validation message must be shown');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
+    // T1126699
+    QUnit.test('The cell edit mode - editCell method should be called only one time if clicking on cell with showEditorAlways = true', function(assert) {
+        // editing.editCell was called 2 times, when clicking on a cell with showEditorAlways='true'
+        // and editing.mode='cell'. First time on mousedown event, second time on click event
+        try {
+            const editMode = 'cell';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: {
+                    store: [{ selected: true, field2: 'test1' }, { selected: true, field2: 'test2' }],
+                    filter: ['selected', '=', true]
+                },
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowUpdating: true
+                },
+                columns: ['selected', 'field2'],
+            });
+            dataGrid._controllers.editing = new MockEditingController({
+                mode: editMode,
+                allowUpdating: true
+            });
+            this.clock.tick(0);
+
+            // act
+            const clickWithMouseDownEvent = (element) => {
+                $(element).trigger('dxpointerdown');
+                this.clock.tick();
+                $(element).trigger('dxclick');
+                this.clock.tick();
+            };
+
+            const checkbox2 = $(dataGrid.getCellElement(0, 0)).find('.dx-checkbox');
+            const checkbox1 = $(dataGrid.getCellElement(1, 0)).find('.dx-checkbox');
+
+            clickWithMouseDownEvent(checkbox1);
+            clickWithMouseDownEvent(checkbox2);
+
+            assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no items should be in the grid');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
         }
