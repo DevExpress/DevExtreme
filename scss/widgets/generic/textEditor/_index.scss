@@ -444,9 +444,15 @@ $generic-texteditor-label-transition:
       height: 100%;
 
       .dx-label {
+        border-right: 1px $borderStyle transparent;
         border-bottom: $border-width $borderStyle $borderColor;
         border-top: $border-width $borderStyle $borderColor;
         height: 100%;
+
+        @at-root #{selector-append(".dx-rtl", &)} {
+          border-left: 1px $borderStyle transparent;
+          border-right: none;
+        }
 
         span {
           transition: $generic-texteditor-label-transition;
