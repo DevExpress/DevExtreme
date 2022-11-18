@@ -80,8 +80,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                         return this.isRowSelected(key);
                     };
-                    config.isSelectableItem = () => {
-                        return true;
+                    config.isSelectableItem = (item) => {
+                        return !!item;
                     };
                     config.getItemData = (item) => {
                         return item;
