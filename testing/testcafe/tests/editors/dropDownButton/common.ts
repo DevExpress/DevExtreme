@@ -58,8 +58,7 @@ test('Item collection should be updated after direct option changing (T817436)',
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
+  }).before(async () => {
     await setAttribute('#container', 'style', 'width: 500px;');
 
     const baseConfig = {
