@@ -679,8 +679,9 @@ const VirtualScrollingRowsViewExtender = (function() {
         _handleScroll: function(e) {
             const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
             const zeroTopPosition = e.scrollOffset.top === 0;
+            const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;
 
-            if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+            if((isScrollTopChanged || e.forceUpdateScrollPosition) && (this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
                 this._scrollTop = e.scrollOffset.top;
 
                 if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false) {
