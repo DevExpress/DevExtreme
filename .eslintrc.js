@@ -14,7 +14,8 @@ module.exports = {
         }
     },
     'plugins': [
-        'no-only-tests'
+        'no-only-tests',
+        'i18n'
     ],
     'overrides': [
         {
@@ -38,6 +39,12 @@ module.exports = {
                 'exports': true
             },
             'rules': {
+                'i18n/no-russian-character': [
+                    'error',
+                    {
+                        'includeIdentifier': true
+                    }
+                ],
                 'block-spacing': 'error',
                 'comma-spacing': 'error',
                 'computed-property-spacing': 'error',
@@ -189,6 +196,12 @@ module.exports = {
                 'devextreme/typescript'
             ],
             'rules': {
+                'i18n/no-russian-character': [
+                    'error',
+                    {
+                        'includeIdentifier': true
+                    }
+                ],
                 'no-only-tests/no-only-tests': 'error',
                 '@typescript-eslint/adjacent-overload-signatures': 'error',
                 '@typescript-eslint/array-type': 'error',
@@ -397,14 +410,6 @@ module.exports = {
                 '@typescript-eslint/prefer-interface': 'off',
                 '@typescript-eslint/consistent-type-definitions': 'off',
                 'react/sort-comp': 'off',
-            }
-        },
-        {
-            'files': [
-                './js/**/*.js'
-            ],
-            'rules': {
-                'import/no-commonjs': 'error'
             }
         }
     ]
