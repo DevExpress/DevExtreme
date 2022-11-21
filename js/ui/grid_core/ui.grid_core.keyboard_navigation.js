@@ -496,10 +496,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const editingOptions = this.option('editing');
         const direction = eventArgs.shift ? 'previous' : 'next';
 
-        const isCellPositionDefined =
-            isDefined(this._focusedCellPosition)
-            && !isEmptyObject(this._focusedCellPosition)
-            && !(this._focusedCellPosition.rowIndex === -1 && this._focusedCellPosition.columnIndex === -1);
+        const isCellPositionDefined = isDefined(this._focusedCellPosition) && !isEmptyObject(this._focusedCellPosition);
 
         let isOriginalHandlerRequired =
             !isCellPositionDefined
