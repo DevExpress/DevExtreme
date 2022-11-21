@@ -441,11 +441,11 @@ export const focusModule = {
                     this.setRowFocusType();
 
                     this._focusedCellPosition = {};
-                    if(isDefined(rowIndex)) {
-                        this._focusedCellPosition.rowIndex = this.option('focusedRowIndex');
+                    if(isDefined(rowIndex) && rowIndex >= 0) {
+                        this._focusedCellPosition.rowIndex = rowIndex;
                     }
-                    if(isDefined(columnIndex)) {
-                        this._focusedCellPosition.columnIndex = this.option('focusedColumnIndex');
+                    if(isDefined(rowIndex) && columnIndex >= 0) {
+                        this._focusedCellPosition.columnIndex = columnIndex;
                     }
                 },
 
