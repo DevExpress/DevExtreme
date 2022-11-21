@@ -494,7 +494,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _tabKeyHandler: function(eventArgs, isEditing) {
         const editingOptions = this.option('editing');
         const direction = eventArgs.shift ? 'previous' : 'next';
-
         const isCellPositionDefined = isDefined(this._focusedCellPosition) && !isEmptyObject(this._focusedCellPosition);
 
         let isOriginalHandlerRequired =
