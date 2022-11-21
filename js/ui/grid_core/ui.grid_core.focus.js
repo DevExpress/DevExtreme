@@ -444,7 +444,7 @@ export const focusModule = {
                     if(isDefined(rowIndex) && rowIndex >= 0) {
                         this._focusedCellPosition.rowIndex = rowIndex;
                     }
-                    if(isDefined(rowIndex) && columnIndex >= 0) {
+                    if(isDefined(columnIndex) && columnIndex >= 0) {
                         this._focusedCellPosition.columnIndex = columnIndex;
                     }
                 },
