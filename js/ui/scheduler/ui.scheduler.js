@@ -1358,17 +1358,15 @@ class Scheduler extends Widget {
         );
 
         const deletingOptions = this.fireOnAppointmentDeleting(appointment, targetedAdapter);
-        if(!deletingOptions.cancel) {
-            this._checkRecurringAppointment(
-                appointment,
-                targetedAppointment,
-                targetedAdapter.startDate,
-                () => {
-                    this.processDeleteAppointment(appointment, deletingOptions);
-                },
-                true
-            );
-        }
+        this._checkRecurringAppointment(
+            appointment,
+            targetedAppointment,
+            targetedAdapter.startDate,
+            () => {
+                this.processDeleteAppointment(appointment, deletingOptions);
+            },
+            true
+        );
     }
 
     _getExtraAppointmentTooltipOptions() {
