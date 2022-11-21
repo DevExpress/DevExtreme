@@ -574,6 +574,8 @@ const DateBox = DropDownEditor.inherit({
         if(this._strategy.isAdaptivityChanged()) {
             this._refreshStrategy();
         }
+
+        this.setAria('controls', this._popupContentId ?? null);
     },
 
     _getPopupTitle: function() {

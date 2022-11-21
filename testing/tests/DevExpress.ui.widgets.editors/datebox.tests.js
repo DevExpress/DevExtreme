@@ -4947,6 +4947,16 @@ QUnit.module('aria accessibility', {}, () => {
             assert.ok(true, 'skip test on devices');
         }
     });
+
+    QUnit.test('aria-controls should be set if the popup has been rendered', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            value: new Date(),
+            deferRendering: false,
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual(Boolean($input.attr('aria-controls')), true, 'aria-controls attribute has been setted');
+    });
 });
 
 QUnit.module('pickerType', {
