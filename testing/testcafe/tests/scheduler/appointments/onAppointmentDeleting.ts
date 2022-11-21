@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Display arguments in appointment templates and events`
+fixture`Delete or leave appointment based on e.cancel value`
   .page(url(__dirname, '../../container.html'));
 
 const data = [
@@ -21,7 +21,7 @@ const data = [
   cancel: true,
   expectedCount: 1,
 }].forEach(({ cancel, expectedCount }) => {
-  test('based on the boolean value must delete or leave the appointment', async (t) => {
+  test(`Based on e.cancel value must delete or leave the appointment. Case: ${cancel}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
     const { appointmentTooltip } = scheduler;
@@ -49,7 +49,7 @@ const data = [
     }),
   }, true));
 
-  test('should leave or delete appointment if the Promise has been resolved', async (t) => {
+  test(`If the Promise has been resolved, depending on e.cancel value must delete or leave appointment. Case: ${cancel}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
     const { appointmentTooltip } = scheduler;
