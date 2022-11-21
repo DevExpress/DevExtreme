@@ -454,6 +454,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 actualOptions.focusedRowKey = options.focusedItemKey;
             } else {
                 actualOptions.focusedRowIndex = -1;
+                this._resetScrollTopPosition(); // TODO
             }
         }
 
@@ -461,6 +462,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         this._refreshDeferred = new Deferred();
         return this._refreshDeferred.promise();
+    }
+
+    _getScrollable() {
+        return this._filesView.getScrollable();
     }
 
     getSelectedItems() {
