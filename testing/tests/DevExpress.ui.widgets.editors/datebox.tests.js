@@ -4949,11 +4949,11 @@ QUnit.module('aria accessibility', {}, () => {
     });
 
     QUnit.test('aria-controls should be set if the popup has been rendered', function(assert) {
-        const $element = $('#dateBox').dxDateBox({
-            value: new Date(),
-            deferRendering: false,
-        });
+        const $element = $('#dateBox').dxDateBox({ value: new Date() });
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        const $button = $element.find(`.${DROP_DOWN_BUTTON_CLASS}`);
+        $($button).trigger('dxclick');
 
         assert.strictEqual(Boolean($input.attr('aria-controls')), true, 'aria-controls attribute has been setted');
     });
