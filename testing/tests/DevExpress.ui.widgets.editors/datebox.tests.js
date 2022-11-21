@@ -4949,13 +4949,19 @@ QUnit.module('aria accessibility', {}, () => {
     });
 
     QUnit.test('aria-controls should be set if the popup has been rendered', function(assert) {
-        const $element = $('#dateBox').dxDateBox({ value: new Date() });
-        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const isDesktop = devices.real().deviceType === 'desktop';
 
-        const $button = $element.find(`.${DROP_DOWN_BUTTON_CLASS}`);
-        $($button).trigger('dxclick');
+        if(isDesktop) {
+            const $element = $('#dateBox').dxDateBox({ value: new Date() });
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual(Boolean($input.attr('aria-controls')), true, 'aria-controls attribute has been setted');
+            const $button = $element.find(`.${DROP_DOWN_BUTTON_CLASS}`);
+            $($button).trigger('dxclick');
+
+            assert.strictEqual(Boolean($input.attr('aria-controls')), true, 'aria-controls attribute has been setted');
+        } else {
+            assert.ok(true, 'skip test on devices');
+        }
     });
 });
 
