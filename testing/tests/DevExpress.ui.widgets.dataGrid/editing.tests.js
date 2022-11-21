@@ -17898,7 +17898,7 @@ QUnit.module('Edit Form', {
     });
 
     // T562662
-    QUnit.test('Render detail form row - creation а validator should not throw an exception when editCellTemplate  specified for column', function(assert) {
+    QUnit.test('Render detail form row - creation a validator should not throw an exception when editCellTemplate specified for column', function(assert) {
         // arrange
         this.setupModules(this);
 

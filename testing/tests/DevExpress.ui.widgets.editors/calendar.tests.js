@@ -1517,6 +1517,7 @@ QUnit.module('Options', {
         { localeID: 'de', expectedFirstDayOfWeek: 'Montag' },
         { localeID: 'en', expectedFirstDayOfWeek: 'Sunday' },
         { localeID: 'ja', expectedFirstDayOfWeek: '日曜日' },
+        // eslint-disable-next-line i18n/no-russian-character
         { localeID: 'ru', expectedFirstDayOfWeek: 'понедельник' },
         { localeID: 'zh', expectedFirstDayOfWeek: '星期日' },
         { localeID: 'hr', expectedFirstDayOfWeek: 'ponedjeljak' },

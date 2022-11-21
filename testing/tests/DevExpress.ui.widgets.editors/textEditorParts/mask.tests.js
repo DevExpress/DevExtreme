@@ -1704,12 +1704,14 @@ QUnit.module('build-in mask rules', moduleConfig, () => {
     testMaskRule('\'0\' is digit only', { mask: '0000000', text: '+- Az9$', result: ' 9' });
     testMaskRule('\'9\' is digit or space', { mask: '9999999', text: '+- Az9$', result: ' 9' });
     testMaskRule('\'#\' is digit or space|\'+\'|\'-\'', { mask: '#######', text: '+- Az9$', result: '+- 9' });
+    /* eslint-disable i18n/no-russian-character */
     testMaskRule('\'L\' is literal only', { mask: 'LLLLLLL', text: ' Az9$яШ', result: ' AzяШ' });
     testMaskRule('\'l\' is literal only or space', { mask: 'lllllll', text: ' Az9$яШ', result: ' AzяШ' });
     testMaskRule('\'C\' is any char except space', { mask: 'CCCCCCC', text: ' Az9$яШ', result: ' Az9$яШ' });
     testMaskRule('\'c\' is any char', { mask: 'ccccccc', text: ' Az9$яШ', result: ' Az9$яШ' });
     testMaskRule('\'A\' is alphanumeric', { mask: 'AAAAAAA', text: ' Az9$яШ', result: ' Az9яШ' });
     testMaskRule('\'a\' is alphanumeric or space', { mask: 'aaaaaaa', text: ' Az9$яШ', result: ' Az9яШ' });
+    /* eslint-enable */
 });
 
 QUnit.module('custom mask maskRules', moduleConfig, () => {

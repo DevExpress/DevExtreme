@@ -6405,7 +6405,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
                 instance.endUpdate();
             } catch(e) {
-                assert.ok(false, 'Сannot update tagbox size bacause of input value is initRender[] object');
+                assert.ok(false, 'Cannot update tagbox size because of input value is initRender[] object');
             }
             instance.endUpdate();
         }, 1000);

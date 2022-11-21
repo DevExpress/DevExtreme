@@ -1631,11 +1631,13 @@ function() {
                 'dxPager-nextPage': 'test Next Page',
             },
             'ru': {
+                /* eslint-disable i18n/no-russian-character */
                 'dxPager-pageSize': 'test Количество элементов на странице: {0}',
                 'dxPager-pageSizesAllText': 'test Все',
                 'dxPager-page': 'test Страница {0}',
                 'dxPager-prevPage': 'test Предыдущая Страница',
                 'dxPager-nextPage': 'test Следующая Страница',
+                /* eslint-enable */
             }
         };
         localization.loadMessages(dictionary);
