@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Delete or leave appointment based on e.cancel value`
+fixture`onAppointmentDeleting event`
   .page(url(__dirname, '../../container.html'));
 
 const data = [
@@ -21,7 +21,7 @@ const data = [
   cancel: true,
   expectedCount: 1,
 }].forEach(({ cancel, expectedCount }) => {
-  test(`Based on e.cancel value must delete or leave the appointment. Case: ${cancel}`, async (t) => {
+  test(`UI behaviour should be valid in case argument pass boolean value, e.cancel=${cancel}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
     const { appointmentTooltip } = scheduler;
@@ -49,7 +49,7 @@ const data = [
     }),
   }, true));
 
-  test(`If the Promise has been resolved, depending on e.cancel value must delete or leave appointment. Case: ${cancel}`, async (t) => {
+  test(`UI behaviour should be valid in case argument pass Promise resolved, e.cancel=${cancel}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
     const { appointmentTooltip } = scheduler;
