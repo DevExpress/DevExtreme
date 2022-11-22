@@ -522,9 +522,9 @@ const DropDownEditor = TextBox.inherit({
         this._setPopupOption('visible', opened);
 
         this.setAria({
-            'expanded': opened
+            'expanded': opened,
+            'controls': this._popupContentId ?? null,
         });
-
         this.setAria('owns', ((opened || undefined) && this._popupContentId), this.$element());
     },
 

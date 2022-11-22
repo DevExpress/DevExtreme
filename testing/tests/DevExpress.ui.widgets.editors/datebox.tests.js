@@ -4947,35 +4947,6 @@ QUnit.module('aria accessibility', {}, () => {
             assert.ok(true, 'skip test on devices');
         }
     });
-
-
-    QUnit.module('aria-controls', {}, () => {
-        const attrName = 'aria-controls';
-        const pickerTypes = ['calendar', 'list', 'rollers'];
-        const deferRenderings = [true, false];
-
-        pickerTypes.forEach(pickerType => {
-            deferRenderings.forEach(deferRendering => {
-                QUnit.test(`${attrName} should be set if pickerType=${pickerType}, deferRendering="${deferRendering}"`, function(assert) {
-                    const dateBox = $('#dateBox').dxDateBox({ deferRendering, pickerType }).dxDateBox('instance');
-                    const $input = $(dateBox.field());
-                    const hasAttr = () => $input[0].hasAttribute(attrName);
-
-                    assert.strictEqual(hasAttr(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
-
-                    dateBox.open();
-                    const popupId = $(dateBox.content()).attr('id');
-
-                    assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
-                    assert.ok(hasAttr(), `${attrName} attribute has been set`);
-
-                    dateBox.close();
-                    assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
-                    assert.ok(hasAttr(), `${attrName} attribute has been set`);
-                });
-            });
-        });
-    });
 });
 
 QUnit.module('pickerType', {
