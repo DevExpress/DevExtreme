@@ -1,7 +1,6 @@
 import {
   Component,
   ComponentBindings,
-  ForwardRef,
   OneWay,
   JSXComponent,
   Ref,
@@ -50,8 +49,6 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class DomComponentWrapperProps {
-  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
@@ -93,13 +90,6 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
       componentInstance.dispose();
       this.instance = null;
     };
-  }
-
-  @Effect({ run: 'once' }) setRootElementRef(): void {
-    const { rootElementRef } = this.props;
-    if (rootElementRef) {
-      rootElementRef.current = this.widgetRef.current;
-    }
   }
 
   @Effect()
