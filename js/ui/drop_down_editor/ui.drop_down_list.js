@@ -901,6 +901,7 @@ const DropDownList = DropDownEditor.inherit({
             case 'groupTemplate':
             case 'wrapItemText':
             case 'noDataText':
+            case 'encodeNoDataText':
             case 'useItemTextAsTitle':
                 this._setListOption(args.name);
                 break;

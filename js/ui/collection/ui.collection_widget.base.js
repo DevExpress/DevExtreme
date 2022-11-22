@@ -489,6 +489,7 @@ const CollectionWidget = Widget.inherit({
                 this._renderEmptyMessage();
                 break;
             case 'noDataText':
+            case 'encodeNoDataText':
                 this._renderEmptyMessage();
                 break;
             case 'itemTemplate':
