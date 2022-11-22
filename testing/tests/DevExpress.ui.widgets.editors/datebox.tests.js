@@ -4950,24 +4950,28 @@ QUnit.module('aria accessibility', {}, () => {
 
 
     QUnit.module('aria-controls', {}, () => {
+        const attrName = 'aria-controls';
         const pickerTypes = ['calendar', 'list', 'rollers'];
         const deferRenderings = [true, false];
 
         pickerTypes.forEach(pickerType => {
             deferRenderings.forEach(deferRendering => {
-                QUnit.test(`aria-controls should be set if pickerType=${pickerType}, deferRendering="${deferRendering}"`, function(assert) {
-                    const attrName = 'aria-controls';
+                QUnit.test(`${attrName} should be set if pickerType=${pickerType}, deferRendering="${deferRendering}"`, function(assert) {
                     const dateBox = $('#dateBox').dxDateBox({ deferRendering, pickerType }).dxDateBox('instance');
                     const $input = $(dateBox.field());
-                    const isSet = () => Boolean($input.attr(attrName));
+                    const hasAttr = () => $input[0].hasAttribute(attrName);
 
-                    assert.strictEqual(isSet(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
+                    assert.strictEqual(hasAttr(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
 
                     dateBox.open();
-                    assert.strictEqual(isSet(), true, `${attrName} attribute has been set`);
+
+                    assert.ok($input.attr(attrName), `input has correct ${attrName} attribute`);
+                    assert.ok(hasAttr(), `${attrName} attribute has been set`);
 
                     dateBox.close();
-                    assert.strictEqual(isSet(), true, `${attrName} attribute has been set`);
+
+                    assert.ok($input.attr(attrName), `input has correct ${attrName} attribute`);
+                    assert.ok(hasAttr(), `${attrName} attribute has been set`);
                 });
             });
         });
