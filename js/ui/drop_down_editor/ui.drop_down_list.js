@@ -85,6 +85,8 @@ const DropDownList = DropDownEditor.inherit({
 
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
+            encodeNoDataText: false,
+
             onSelectionChanged: null,
 
             onItemClick: noop,
@@ -525,6 +527,7 @@ const DropDownList = DropDownEditor.inherit({
             _templates: this.option('_templates'),
             templateProvider: this.option('templateProvider'),
             noDataText: this.option('noDataText'),
+            encodeNoDataText: this.option('encodeNoDataText'),
             grouped: this.option('grouped'),
             wrapItemText: this.option('wrapItemText'),
             useItemTextAsTitle: this.option('useItemTextAsTitle'),
