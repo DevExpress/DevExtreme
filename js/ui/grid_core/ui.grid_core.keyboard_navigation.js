@@ -497,7 +497,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const editingOptions = this.option('editing');
         const direction = eventArgs.shift ? 'previous' : 'next';
         const isCellPositionDefined = isDefined(this._focusedCellPosition) && !isEmptyObject(this._focusedCellPosition);
-        let isOriginalHandlerRequired = !isCellPositionDefined || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition)) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+
+        let isOriginalHandlerRequired =
+            !isCellPositionDefined
+            || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition))
+            || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+
         const eventTarget = eventArgs.originalEvent.target;
         const focusedViewElement = this._focusedView && this._focusedView.element();
 
