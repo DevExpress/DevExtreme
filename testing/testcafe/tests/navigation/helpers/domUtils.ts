@@ -47,6 +47,15 @@ export const setClassAttribute = ClientFunction((selector, styleValue) => {
   element.setAttribute('class', updatedClasses);
 });
 
+export const removeClassAttribute = ClientFunction((selector, styleValue) => {
+  const element = selector();
+
+  const styles = element.getAttribute('class') || '';
+  const updatedClasses = `${styles.replace(styleValue, '')}`;
+
+  element.setAttribute('class', updatedClasses);
+});
+
 export const appendElementTo = ClientFunction((
   containerSelector: string,
   tagName: string,
