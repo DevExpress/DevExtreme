@@ -4961,13 +4961,13 @@ QUnit.module('aria accessibility', {}, () => {
                     const $input = $(dateBox.field());
                     const isSet = () => Boolean($input.attr(attrName));
 
-                    assert.strictEqual(isSet(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been setted`);
+                    assert.strictEqual(isSet(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
 
                     dateBox.open();
-                    assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+                    assert.strictEqual(isSet(), true, `${attrName} attribute has been set`);
 
                     dateBox.close();
-                    assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+                    assert.strictEqual(isSet(), true, `${attrName} attribute has been set`);
                 });
             });
         });
