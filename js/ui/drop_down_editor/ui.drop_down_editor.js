@@ -512,6 +512,10 @@ const DropDownEditor = TextBox.inherit({
         }
     },
 
+    _getControlsAria() {
+        return this._popupContentId;
+    },
+
     _renderOpenedState: function() {
         const opened = this.option('opened');
         if(opened) {
@@ -523,7 +527,7 @@ const DropDownEditor = TextBox.inherit({
 
         this.setAria({
             'expanded': opened,
-            'controls': this._popupContentId ?? null,
+            'controls': this._getControlsAria(),
         });
         this.setAria('owns', ((opened || undefined) && this._popupContentId), this.$element());
     },
