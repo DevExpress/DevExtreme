@@ -4948,20 +4948,21 @@ QUnit.module('aria accessibility', {}, () => {
         }
     });
 
-    QUnit.test('aria-controls should be set if the popup has been rendered', function(assert) {
-        const isDesktop = devices.real().deviceType === 'desktop';
+    [true, false].forEach(deferRendering => {
+        QUnit.test(`aria-controls should be set if the popup has been rendered when deferRendering="${deferRendering}"`, function(assert) {
+            const attrName = 'aria-controls';
+            const dateBox = $('#dateBox').dxDateBox({ deferRendering }).dxDateBox('instance');
+            const $input = $(dateBox.field());
+            const isSet = () => Boolean($input.attr(attrName));
 
-        if(isDesktop) {
-            const $element = $('#dateBox').dxDateBox({ value: new Date() });
-            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            assert.strictEqual(isSet(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been setted`);
 
-            const $button = $element.find(`.${DROP_DOWN_BUTTON_CLASS}`);
-            $($button).trigger('dxclick');
+            dateBox.open();
+            assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
 
-            assert.strictEqual(Boolean($input.attr('aria-controls')), true, 'aria-controls attribute has been setted');
-        } else {
-            assert.ok(true, 'skip test on devices');
-        }
+            dateBox.close();
+            assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+        });
     });
 });
 
