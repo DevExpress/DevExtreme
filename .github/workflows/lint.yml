@@ -112,6 +112,31 @@ jobs:
         DEBUG: eslint:cli-engine
       run: npm run lint-js
 
+  texts:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Check texts
+      run: npm run lint-texts
+
   CSS:
     runs-on: devextreme-shr2
     timeout-minutes: 60
@@ -180,7 +205,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [Renovation, TS, JS, CSS, package_lock, package_lock_npm_6]
+    needs: [Renovation, TS, JS, CSS, texts, package_lock, package_lock_npm_6]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
