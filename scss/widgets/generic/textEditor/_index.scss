@@ -87,14 +87,14 @@ $generic-texteditor-label-transition:
   }
 }
 
-@mixin label-border-radius($borderColor, $borderStyle) {
+@mixin label-border-radius($borderWidth, $borderColor, $borderStyle) {
   .dx-label {
-    border-left: 1px $borderStyle transparent;
-    border-bottom: 1px solid $borderColor;
-    margin-left: -1px;
+    border-left: $borderWidth $borderStyle transparent;
+    border-bottom: $borderWidth $borderStyle $borderColor;
+    margin-left: -$borderWidth;
 
     @at-root #{selector-append(".dx-rtl", &)} {
-      border-right: 1px solid transparent;
+      border-right: $borderWidth $borderStyle transparent;
       border-left: none;
     }
   }
@@ -384,8 +384,7 @@ $generic-texteditor-label-transition:
 }
 
 .dx-editor-outlined {
-  $border-width: 1px;
-  $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
+  $label-offset-y: math.div(($generic-texteditor-border-width + $generic-base-font-size), 2);
   $label-default-transform: translate(0, 0);
 
   @mixin dx-state($borderColor, $borderStyle) {
@@ -396,7 +395,7 @@ $generic-texteditor-label-transition:
       height: 100%;
 
       .dx-label {
-        border-bottom: $border-width $borderStyle $borderColor;
+        border-bottom: $generic-texteditor-border-width $borderStyle $borderColor;
         border-top: 0;
         height: 100%;
         padding: 0 2px;
@@ -423,8 +422,8 @@ $generic-texteditor-label-transition:
 
       .dx-label-before,
       .dx-label-after {
-        border-top: $border-width $borderStyle $borderColor;
-        border-bottom: $border-width $borderStyle $borderColor;
+        border-top: $generic-texteditor-border-width $borderStyle $borderColor;
+        border-bottom: $generic-texteditor-border-width $borderStyle $borderColor;
         height: 100%;
       }
     }
@@ -436,13 +435,13 @@ $generic-texteditor-label-transition:
     &.dx-rtl {
       .dx-texteditor-label {
         .dx-label-before {
-          border-right: $border-width $borderStyle $borderColor;
+          border-right: $generic-texteditor-border-width $borderStyle $borderColor;
           border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
           border-left: 0;
         }
 
         .dx-label-after {
-          border-left: $border-width $borderStyle $borderColor;
+          border-left: $generic-texteditor-border-width $borderStyle $borderColor;
           border-radius: $texteditor-border-radius 0 0 $texteditor-border-radius;
           border-right: 0;
         }
@@ -456,7 +455,7 @@ $generic-texteditor-label-transition:
     .dx-texteditor-label {
       height: 100%;
 
-      @include label-border-radius($borderColor, $borderStyle);
+      @include label-border-radius($generic-texteditor-border-width, $borderColor, $borderStyle);
 
       .dx-label {
         height: 100%;
@@ -486,8 +485,8 @@ $generic-texteditor-label-transition:
       .dx-label-before,
       .dx-label-after {
         height: 100%;
-        border-top: $border-width $borderStyle $borderColor;
-        border-bottom: $border-width $borderStyle $borderColor;
+        border-top: $generic-texteditor-border-width $borderStyle $borderColor;
+        border-bottom: $generic-texteditor-border-width $borderStyle $borderColor;
       }
     }
 
@@ -628,7 +627,7 @@ $generic-texteditor-label-transition:
     .dx-texteditor-label {
       height: 100%;
 
-      @include label-border-radius($texteditor-border-color, solid);
+      @include label-border-radius($generic-base-border-width, $texteditor-border-color, solid);
 
       .dx-label {
         padding: 0 2px;
@@ -644,14 +643,14 @@ $generic-texteditor-label-transition:
       }
 
       .dx-label-before {
-        border-left-width: 1px;
+        border-left-width: $generic-texteditor-border-width;
         border-right-width: 0;
         border-color: $texteditor-border-color;
         border-style: solid;
       }
 
       .dx-label-after {
-        border-right-width: 1px;
+        border-right-width: $generic-texteditor-border-width;
         border-left-width: 0;
         border-color: $texteditor-border-color;
         border-style: solid;
@@ -660,8 +659,8 @@ $generic-texteditor-label-transition:
       .dx-label-before,
       .dx-label-after {
         height: 100%;
-        border-top: 1px solid $texteditor-border-color;
-        border-bottom: 1px solid $texteditor-border-color;
+        border-top: $generic-texteditor-border-width solid $texteditor-border-color;
+        border-bottom: $generic-texteditor-border-width solid $texteditor-border-color;
       }
     }
 
@@ -669,13 +668,13 @@ $generic-texteditor-label-transition:
     .dx-rtl & {
       .dx-texteditor-label {
         .dx-label-before {
-          border-right-width: 1px;
+          border-right-width: $generic-texteditor-border-width;
           border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
           border-left-width: 0;
         }
 
         .dx-label-after {
-          border-left-width: 1px;
+          border-left-width: $generic-texteditor-border-width;
           border-radius: $texteditor-border-radius 0 0 $texteditor-border-radius;
           border-right-width: 0;
         }
