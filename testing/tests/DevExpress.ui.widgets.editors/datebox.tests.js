@@ -4948,20 +4948,28 @@ QUnit.module('aria accessibility', {}, () => {
         }
     });
 
-    [true, false].forEach(deferRendering => {
-        QUnit.test(`aria-controls should be set if the popup has been rendered when deferRendering="${deferRendering}"`, function(assert) {
-            const attrName = 'aria-controls';
-            const dateBox = $('#dateBox').dxDateBox({ deferRendering }).dxDateBox('instance');
-            const $input = $(dateBox.field());
-            const isSet = () => Boolean($input.attr(attrName));
 
-            assert.strictEqual(isSet(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been setted`);
+    QUnit.module('aria-controls', {}, () => {
+        const pickerTypes = ['calendar', 'list', 'rollers'];
+        const deferRenderings = [true, false];
 
-            dateBox.open();
-            assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+        pickerTypes.forEach(pickerType => {
+            deferRenderings.forEach(deferRendering => {
+                QUnit.test(`aria-controls should be set if pickerType=${pickerType}, deferRendering="${deferRendering}"`, function(assert) {
+                    const attrName = 'aria-controls';
+                    const dateBox = $('#dateBox').dxDateBox({ deferRendering, pickerType }).dxDateBox('instance');
+                    const $input = $(dateBox.field());
+                    const isSet = () => Boolean($input.attr(attrName));
 
-            dateBox.close();
-            assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+                    assert.strictEqual(isSet(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been setted`);
+
+                    dateBox.open();
+                    assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+
+                    dateBox.close();
+                    assert.strictEqual(isSet(), true, `${attrName} attribute has been setted`);
+                });
+            });
         });
     });
 });
