@@ -87,6 +87,19 @@ $generic-texteditor-label-transition:
   }
 }
 
+@mixin label-border-radius($borderColor, $borderStyle) {
+  .dx-label {
+    border-left: 1px $borderStyle transparent;
+    border-bottom: 1px solid $borderColor;
+    margin-left: -1px;
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      border-right: 1px solid transparent;
+      border-left: none;
+    }
+  }
+}
+
 .dx-texteditor {
   &.dx-editor-outlined {
     background: $texteditor-bg;
@@ -443,16 +456,11 @@ $generic-texteditor-label-transition:
     .dx-texteditor-label {
       height: 100%;
 
-      .dx-label {
-        border-right: 1px $borderStyle transparent;
-        border-bottom: $border-width $borderStyle $borderColor;
-        border-top: $border-width $borderStyle $borderColor;
-        height: 100%;
+      @include label-border-radius($borderColor, $borderStyle);
 
-        @at-root #{selector-append(".dx-rtl", &)} {
-          border-left: 1px $borderStyle transparent;
-          border-right: none;
-        }
+      .dx-label {
+        height: 100%;
+        border-top: 1px $borderStyle $borderColor;
 
         span {
           transition: $generic-texteditor-label-transition;
@@ -460,7 +468,7 @@ $generic-texteditor-label-transition:
           font-size: $generic-base-font-size;
           top: 50%;
           height: $generic-base-inline-block-height;
-          margin-top: math.div(- $generic-base-inline-block-height, 2);
+          margin-top: math.div(-$generic-base-inline-block-height, 2);
           line-height: $generic-base-line-height;
         }
       }
@@ -620,16 +628,10 @@ $generic-texteditor-label-transition:
     .dx-texteditor-label {
       height: 100%;
 
+      @include label-border-radius($texteditor-border-color, solid);
 
       .dx-label {
         padding: 0 2px;
-        border-right: 1px solid transparent;
-        border-bottom: 1px solid $texteditor-border-color;
-
-        @at-root #{selector-append(".dx-rtl", &)} {
-          border-left: 1px solid transparent;
-          border-right: none;
-        }
 
         span {
           transform: translate(0, -$label-offset-y);
