@@ -10,7 +10,7 @@
     "license": "ISC",
     "devDependencies": {
         "@rollup/plugin-typescript": "^9.0.2",
-        "@types/jest": "^29.2.1",
+        "@types/jest": "^29.2.3",
         "@typescript-eslint/eslint-plugin": "^5.42.0",
         "@typescript-eslint/parser": "^5.42.0",
         "@typescript-eslint/typescript-estree": "^5.42.0",
@@ -19,7 +19,7 @@
         "eslint-config-airbnb-typescript": "^12.3.1",
         "eslint-config-devextreme": "^0.2.0",
         "eslint-plugin-spellcheck": "^0.0.19",
-        "jest": "^29.2.2",
+        "jest": "^29.3.1",
         "jest-environment-jsdom": "^29.2.2",
         "rollup": "^3.2.5",
         "rollup-plugin-copy": "^3.4.0",
@@ -30,20 +30,10 @@
         "tslib": "^2.3.0"
     },
     "exports": {
-        "./pager": {
-            "types": "./lib/components/pager/index.d.ts",
-            "import": "./lib/pager.mjs",
-            "require": "./lib/pager.cjs"
-        },
-        "./slideToggle": {
-            "types": "./lib/components/slideToggle/index.d.ts",
-            "import": "./lib/slideToggle.mjs",
-            "require": "./lib/slideToggle.cjs"
-        },
-        "./internal": {
-            "types": "./lib/internal/index.d.js",
-            "import": "./lib/internal.mjs",
-            "require": "./lib/internal.cjs"
+        ".": {
+            "types": "./lib/index.d.ts",
+            "import": "./lib/index.mjs",
+            "require": "./lib/index.cjs"
         }
     }
 }

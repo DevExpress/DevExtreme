@@ -5,7 +5,7 @@ extends:
   - 'devextreme/jest'
 parserOptions:
   createDefaultProgram: true
-  project: './tsconfig.json'
+  project: './tsconfig.package.json'
 overrides:
   - files:
       - '*.ts'

@@ -49,11 +49,13 @@ function getCjsConfig(input, outputDir) {
     }
 }
 
-function getRootConfig(outputDir) {
+function getRootConfig(outputDir, format) {
     return {
         input: './src/index.ts',
         output: {
             dir: outputDir,
+            entryFileNames: `[name].${format === 'cjs' ? 'cjs' : 'mjs'}`,
+            format,
         },
         plugins: [
             typescript({
@@ -67,17 +69,18 @@ function getRootConfig(outputDir) {
 }
 
 function getRollupConfig(components, outputDir) {
-    const inputPaths = {
-        internal: Path.join('src', `internal`, 'index.ts'),
-    }
-    components.forEach(componentName => {
-        inputPaths[componentName] = Path.join('src', 'components', componentName, 'index.ts')
-    })
+    // const inputPaths = {
+    //     internal: Path.join('src', `internal`, 'index.ts'),
+    // }
+    // components.forEach(componentName => {
+    //     inputPaths[componentName] = Path.join('src', 'components', componentName, 'index.ts')
+    // })
 
     return [
-        getEs6Config(inputPaths, outputDir),
-        getCjsConfig(inputPaths, outputDir),
-       // getRootConfig(outputDir),
+        // getEs6Config(inputPaths, outputDir),
+        // getCjsConfig(inputPaths, outputDir),
+       getRootConfig(outputDir, 'esm'),
+       getRootConfig(outputDir, 'cjs'),
     ];
 }
 
