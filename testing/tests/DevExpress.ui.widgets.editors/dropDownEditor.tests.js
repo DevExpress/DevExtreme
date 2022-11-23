@@ -2005,4 +2005,29 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
+
+    QUnit.module('aria-controls', {}, () => {
+        const attrName = 'aria-controls';
+        const deferRenderings = [true, false];
+
+        deferRenderings.forEach(deferRendering => {
+            QUnit.test(`'aria-controls' should be set if deferRendering="${deferRendering}"`, function(assert) {
+                const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ deferRendering }).dxDropDownEditor('instance');
+                const $input = $(dropDownEditor.field());
+                const hasAttr = () => $input[0].hasAttribute(attrName);
+
+                assert.strictEqual(hasAttr(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
+
+                dropDownEditor.open();
+                const popupId = $(dropDownEditor.content()).attr('id');
+
+                assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
+                assert.ok(hasAttr(), `${attrName} attribute has been set`);
+
+                dropDownEditor.close();
+                assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
+                assert.ok(hasAttr(), `${attrName} attribute has been set`);
+            });
+        });
+    });
 });
