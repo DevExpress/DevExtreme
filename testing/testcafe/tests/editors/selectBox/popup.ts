@@ -7,9 +7,6 @@ import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture`popup_height_on_first_load`
   .page(url(__dirname, '../../container.html'))
-  .beforeEach(async (t) => {
-    await t.resizeWindow(300, 400);
-  })
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
     await changeTheme('generic.light');
@@ -30,7 +27,8 @@ themes.forEach((theme) => {
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.resizeWindow(300, 400);
     await changeTheme(theme);
 
     return createWidget('dxSelectBox', {
@@ -40,7 +38,7 @@ themes.forEach((theme) => {
         pageSize: 3,
       },
     });
-  });
+  }).after(async (t) => restoreBrowserSize(t));
 
   test(`SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881), theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -60,7 +58,8 @@ themes.forEach((theme) => {
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.resizeWindow(300, 400);
     await changeTheme(theme);
 
     return createWidget('dxSelectBox', {
@@ -70,7 +69,7 @@ themes.forEach((theme) => {
         pageSize: 3,
       },
     });
-  });
+  }).after(async (t) => restoreBrowserSize(t));
 
   test(`SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count, theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -90,7 +89,8 @@ themes.forEach((theme) => {
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.resizeWindow(300, 400);
     await changeTheme(theme);
 
     return createWidget('dxSelectBox', {
@@ -100,7 +100,7 @@ themes.forEach((theme) => {
         pageSize: 3,
       },
     });
-  });
+  }).after(async (t) => restoreBrowserSize(t));
 
   test(`SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count, theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -120,7 +120,8 @@ themes.forEach((theme) => {
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.resizeWindow(300, 400);
     await changeTheme(theme);
 
     return createWidget('dxSelectBox', {
@@ -130,14 +131,11 @@ themes.forEach((theme) => {
         pageSize: 3,
       },
     });
-  });
+  }).after(async (t) => restoreBrowserSize(t));
 });
 
 fixture`popup_height_after_last_page_load`
   .page(url(__dirname, '../../container.html'))
-  .beforeEach(async (t) => {
-    await t.resizeWindow(300, 400);
-  })
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
   });
@@ -163,10 +161,14 @@ test('SelectBox does not change a popup height after load the last page', async 
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxSelectBox', {
-  dataSource: {
-    store: [],
-    paginate: true,
-    pageSize: 3,
-  },
-}));
+}).before(async (t) => {
+  await t.resizeWindow(300, 400);
+
+  return createWidget('dxSelectBox', {
+    dataSource: {
+      store: [],
+      paginate: true,
+      pageSize: 3,
+    },
+  });
+});
