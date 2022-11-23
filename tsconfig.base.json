@@ -17,6 +17,7 @@
     "declarationMap": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["jest", "node"]
   }
 }
