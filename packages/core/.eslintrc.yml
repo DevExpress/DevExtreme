@@ -1,11 +1,3 @@
-extends:
-  - 'devextreme/typescript'
-  - 'devextreme/javascript'
-  - 'devextreme/spell-check'
-  - 'devextreme/jest'
-parserOptions:
-  createDefaultProgram: true
-  project: './tsconfig.package.json'
 overrides:
   - files:
       - '*.ts'
