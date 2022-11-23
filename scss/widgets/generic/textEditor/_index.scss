@@ -449,25 +449,10 @@ $generic-texteditor-label-transition:
   }
 
   .dx-texteditor-label {
-    top: 0;
-    left: 0;
-    right: 0;
-
     .dx-label {
-      padding: 0;
-
       span {
-        position: relative;
         font-size: $generic-base-font-size;
-        top: 0;
-        margin-top: 0;
       }
-    }
-
-    .dx-label-after,
-    .dx-label-before {
-      display: block;
-      box-sizing: border-box;
     }
 
     .dx-label-before {
@@ -477,7 +462,6 @@ $generic-texteditor-label-transition:
 
     .dx-label-after {
       min-width: $generic-base-inline-borderedwidget-horizontal-padding;
-      flex-grow: 1;
       border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
     }
   }
@@ -566,8 +550,6 @@ $generic-texteditor-label-transition:
     }
 
     .dx-texteditor-label {
-      height: 100%;
-
       @include label-border-radius($generic-base-border-width, $texteditor-border-color, solid);
 
       .dx-label {
@@ -660,8 +642,6 @@ $generic-texteditor-label-transition:
 
     .dx-texteditor-label {
       transform: $label-transform;
-      top: 0;
-      margin-top: 0;
       height: $generic-base-inline-block-height;
       line-height: $generic-base-line-height;
     }
@@ -679,15 +659,6 @@ $generic-texteditor-label-transition:
     &.dx-textarea {
       .dx-texteditor-container {
         padding-top: $input-top-padding;
-      }
-
-      .dx-placeholder::before,
-      .dx-texteditor-input {
-        padding-top: 0;
-      }
-
-      .dx-texteditor-label {
-        top: 0;
       }
     }
   }
@@ -734,10 +705,6 @@ $generic-texteditor-label-transition:
     &.dx-state-focused,
     &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
-      .dx-placeholder {
-        display: block;
-      }
-
       .dx-lookup-field {
         font-size: $generic-base-font-size;
       }
@@ -749,12 +716,6 @@ $generic-texteditor-label-transition:
         margin-top: 0;
         height: $generic-base-inline-block-height;
         line-height: $generic-base-line-height;
-      }
-
-      &.dx-textarea {
-        .dx-texteditor-label {
-          top: 0;
-        }
       }
     }
   }

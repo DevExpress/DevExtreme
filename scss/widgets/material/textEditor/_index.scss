@@ -651,7 +651,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           inset #{$shadowOffset}px 0 transparent,
           inset -#{$shadowOffset}px 0 transparent;
 
-
         span {
           transition: $material-editor-label-transition;
           transform: $label-default-transform;
@@ -718,25 +717,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   }
 
   .dx-texteditor-label {
-    top: 0;
-    left: 0;
-    right: 0;
-
     .dx-label {
-      padding: 0;
-
       span {
-        position: relative;
         font-size: $material-texteditor-font-size;
-        top: 0;
-        margin-top: 0;
       }
-    }
-
-    .dx-label-after,
-    .dx-label-before {
-      display: block;
-      box-sizing: border-box;
     }
 
     .dx-label-before {
@@ -745,7 +729,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
 
     .dx-label-after {
-      flex-grow: 1;
       min-width: $material-filled-texteditor-input-horizontal-padding;
       border-radius: 0 $texteditor-input-border-radius $texteditor-input-border-radius 0;
     }
@@ -840,8 +823,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
 
     .dx-texteditor-label {
-      height: 100%;
-
       .dx-label {
         padding: 0 4px;
         box-shadow:
@@ -931,8 +912,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
       transform: $label-transform;
-      top: 0;
-      margin-top: 0;
       height: $material-texteditor-label-font-size;
       line-height: $material-texteditor-label-font-size;
     }
@@ -951,23 +930,11 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-texteditor-container {
         padding-top: $input-top-padding;
       }
-
-      .dx-placeholder::before,
-      .dx-texteditor-input {
-        padding-top: 0;
-      }
-
-      .dx-texteditor-label {
-        top: 0;
-      }
     }
 
     &.dx-state-focused,
+    &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
-      .dx-placeholder {
-        display: block;
-      }
-
       .dx-lookup-field {
         font-size: $material-texteditor-font-size;
       }
@@ -979,12 +946,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         line-height: $material-texteditor-label-font-size;
         top: 0;
         margin-top: 0;
-      }
-
-      &.dx-textarea {
-        .dx-texteditor-label {
-          top: 0;
-        }
       }
     }
 
