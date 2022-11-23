@@ -46,17 +46,17 @@ themes.forEach((theme) => {
     test(`Textbox render, rtl=${rtlEnabled} theme=${theme}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 60px; }', 0);
+      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 80px; }', 0);
       await t.debug();
       await t
-        .expect(await takeScreenshot(`textbox render with limited width,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`))
+        .expect(await takeScreenshot(`textbox render with limited width,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
         .ok();
 
       await deleteStylesheetRule(0);
-      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 130px; }', 0);
+      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 230px; }', 0);
 
       await t
-        .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`))
+        .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
         .ok();
 
       for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
@@ -65,7 +65,7 @@ themes.forEach((theme) => {
         }
 
         await t
-          .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled},${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`))
+          .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled},${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`, '#container'))
           .ok();
 
         for (const id of ids) {
