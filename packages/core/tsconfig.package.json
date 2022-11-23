@@ -10,8 +10,7 @@
 		"src"
 	],
 	"exclude": [
-		"test",
-		"lib"
+		"**/*.test.ts"
 	],
 	"references": []
 }
