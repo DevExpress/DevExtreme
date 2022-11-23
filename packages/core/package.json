@@ -4,7 +4,8 @@
     "description": "",
     "scripts": {
         "build": "rollup -c rollup/rollup.config.mjs",
-        "watch": "rollup -c rollup/rollup.config.mjs --watch"
+        "watch": "rollup -c rollup/rollup.config.mjs --watch",
+        "test": "jest"
     },
     "author": "",
     "license": "ISC",
