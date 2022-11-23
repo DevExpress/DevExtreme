@@ -29,6 +29,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const TIME_TO_WAIT = 500;
 
@@ -344,6 +345,39 @@ QUnit.module('displayExpr', moduleConfig, () => {
 });
 
 QUnit.module('items & dataSource', moduleConfig, () => {
+    QUnit.test('No data text message - custom value with link, encodeNoDataText: false', function(assert) {
+        let noDataText = '<a href="javascript:alert(1)">link</a>';
+
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            noDataText,
+            encodeNoDataText: false,
+            deferRendering: false,
+        }).dxDropDownList('instance');
+
+        assert.strictEqual($(`.${EMPTY_MESSAGE_CLASS}`).html(), noDataText);
+
+        noDataText = noDataText + 'no data';
+        dropDownList.option({ noDataText });
+        assert.strictEqual($(`.${EMPTY_MESSAGE_CLASS}`).html(), noDataText);
+    });
+
+    QUnit.test('No data text message - custom value with link, encodeNoDataText: true', function(assert) {
+        let noDataText = '<a href="javascript:alert(1)">link</a>';
+        const encodedNoDataText = '&lt;a href="javascript:alert(1)"&gt;link&lt;/a&gt;';
+
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            noDataText,
+            encodeNoDataText: true,
+            deferRendering: false,
+        }).dxDropDownList('instance');
+
+        assert.strictEqual($(`.${EMPTY_MESSAGE_CLASS}`).html(), encodedNoDataText);
+
+        noDataText = noDataText + 'no data';
+        dropDownList.option({ noDataText });
+        assert.strictEqual($(`.${EMPTY_MESSAGE_CLASS}`).html(), encodedNoDataText + 'no data');
+    });
+
     QUnit.test('default value is null', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList();
         const instance = $dropDownList.dxDropDownList('instance');
