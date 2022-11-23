@@ -485,14 +485,15 @@ const DropDownList = DropDownEditor.inherit({
         eventsEngine.on(this._$list, eventName, (e) => e.preventDefault());
     },
 
+    _getControlsAria() {
+        return this._list && this._listId;
+    },
+
     _renderOpenedState: function() {
         this.callBase();
 
         this._list && this._updateActiveDescendant();
-        this.setAria({
-            'controls': this._list && this._listId,
-            'owns': this._popup && this._popupContentId
-        });
+        this.setAria('owns', this._popup && this._popupContentId);
     },
 
     _setDefaultAria: function() {
