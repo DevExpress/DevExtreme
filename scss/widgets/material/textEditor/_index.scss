@@ -544,6 +544,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-texteditor-label {
         font-size: $material-texteditor-label-font-size;
         height: $material-texteditor-label-font-size;
+        margin-top: 0;
         line-height: $material-texteditor-label-font-size;
         top: $label-position-top;
       }
