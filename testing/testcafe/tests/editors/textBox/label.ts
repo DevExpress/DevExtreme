@@ -20,6 +20,7 @@ const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const themes = ['generic.light', 'material.blue.light'];
 
+const TEXTBOX_CLASS = 'dx-textbox';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
@@ -46,14 +47,14 @@ themes.forEach((theme) => {
     test(`Textbox render, rtl=${rtlEnabled} theme=${theme}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 80px; }', 0);
+      await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`, 0);
       await t.debug();
       await t
         .expect(await takeScreenshot(`textbox render with limited width,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
         .ok();
 
       await deleteStylesheetRule(0);
-      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 230px; }', 0);
+      await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 220px; margin: 5px; }`, 0);
 
       await t
         .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
