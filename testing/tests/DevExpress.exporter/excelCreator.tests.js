@@ -75,7 +75,6 @@ QUnit.test('Date time format as function converting', function(assert) {
     const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const day_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const day_names_short = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const day_names_short2 = ['Вс', 'Пн', 'Вт', 'Cр', 'Чт', 'Пт', 'Сб'];
     const day_names_es = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
     const convertDate = function(formatter) {
@@ -106,7 +105,6 @@ QUnit.test('Date time format as function converting', function(assert) {
         '[$-9]yyyy MMMM': function(value) { return value.getFullYear().toString() + ' ' + month_names[value.getMonth()]; },
         '[$-9]d': function(value) { return value.getDate().toString(); },
         '[$-9]dd': function(value) { return leftPad(value.getDate().toString(), 2, '0'); },
-        '[$-9]ddd': [function(value) { return day_names_short[value.getDay()]; }, function(value) { return day_names_short2[value.getDay()]; }],
         '[$-9]dddd': [function(value) { return day_names[value.getDay()]; }, function(value) { return day_names_es[value.getDay()]; }],
         '[$-9]d,ddd': function(value) { return value.getDate().toString() + ',' + day_names_short[value.getDay()]; },
         '[$-9]yyyy\\/MM\\/dd': function(value) { return expected['[$-9]yyyy'](value) + '/' + expected['[$-9]MM'](value) + '/' + expected['[$-9]dd'](value); },

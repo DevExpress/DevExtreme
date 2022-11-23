@@ -3287,8 +3287,8 @@ QUnit.module('dxPivotGrid', {
     QUnit.test('Custom localize grandTotal and total text', function(assert) {
         createPivotGrid({
             texts: {
-                grandTotal: 'Гранд тотал',
-                total: 'Это мой {0} Тотал'
+                grandTotal: 'Custom Grand Total',
+                total: 'Custom {0} Total'
             },
             dataSource: this.dataSource
         });
@@ -3297,9 +3297,9 @@ QUnit.module('dxPivotGrid', {
             return $(elements[index]).text();
         }
 
-        assert.equal(getText($('.dx-pivotgrid-horizontal-headers .dx-total'), 0), 'Это мой 2010 Тотал', 'total');
-        assert.equal(getText($('.dx-pivotgrid-horizontal-headers .dx-grandtotal'), 0), 'Гранд тотал', 'grand total');
-        assert.equal(getText($('.dx-pivotgrid-vertical-headers .dx-grandtotal'), 0), 'Гранд тотал', 'grand total');
+        assert.equal(getText($('.dx-pivotgrid-horizontal-headers .dx-total'), 0), 'Custom 2010 Total', 'total');
+        assert.equal(getText($('.dx-pivotgrid-horizontal-headers .dx-grandtotal'), 0), 'Custom Grand Total', 'grand total');
+        assert.equal(getText($('.dx-pivotgrid-vertical-headers .dx-grandtotal'), 0), 'Custom Grand Total', 'grand total');
     });
 
     QUnit.test('dxPivotGrid with vertical scroll and minimum width without horizontal scroller (columns stretch to less)', function(assert) {

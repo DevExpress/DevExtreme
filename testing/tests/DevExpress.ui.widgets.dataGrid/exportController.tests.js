@@ -503,7 +503,7 @@ QUnit.module('ExportController', {
                 }
             }, {
                 dataField: 'TestField2', width: 90, dataType: 'boolean', customizeText: function(cellInfo) {
-                    return cellInfo.value ? 'да' : 'нет';
+                    return cellInfo.value ? 'yes' : 'no';
                 }
             }]
         });
@@ -517,10 +517,10 @@ QUnit.module('ExportController', {
         assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
 
         assert.equal(dataProvider.getCellData(0, 0).value, '$1 current price', '1 row 1 cell');
-        assert.equal(dataProvider.getCellData(0, 1).value, 'да', '1 row 2 cell');
+        assert.equal(dataProvider.getCellData(0, 1).value, 'yes', '1 row 2 cell');
 
         assert.equal(dataProvider.getCellData(1, 0).value, '$12 current price', '2 row 1 cell');
-        assert.equal(dataProvider.getCellData(1, 1).value, 'нет', '2 row 2 cell');
+        assert.equal(dataProvider.getCellData(1, 1).value, 'no', '2 row 2 cell');
     });
 
     QUnit.test('Get cell value when value is not finite', function(assert) {
