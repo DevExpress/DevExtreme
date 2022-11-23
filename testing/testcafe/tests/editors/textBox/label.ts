@@ -47,7 +47,14 @@ themes.forEach((theme) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`textbox-render${getThemePostfix(theme)}.png`, '#container'))
+        .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`))
+        .ok();
+
+      await deleteStylesheetRule(0);
+      await insertStylesheetRule('.dx-textbox { display: inline-block, width: 200 }', 0);
+
+      await t
+        .expect(await takeScreenshot(`textbox render with limited width,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`))
         .ok();
 
       for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
@@ -56,7 +63,7 @@ themes.forEach((theme) => {
         }
 
         await t
-          .expect(await takeScreenshot(`textbox-render,${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`, '#container'))
+          .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled}${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`))
           .ok();
 
         for (const id of ids) {
@@ -64,11 +71,11 @@ themes.forEach((theme) => {
         }
       }
 
+      await deleteStylesheetRule(0);
+
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-
-      await deleteStylesheetRule(0);
     }).before(async (t) => {
       ids = [];
       await restoreBrowserSize(t);
@@ -84,7 +91,7 @@ themes.forEach((theme) => {
                 ids.push(id);
                 await appendElementTo('#container', 'div', id, { });
                 await createWidget('dxTextBox', {
-                  width: 200,
+                  width: 100,
                   label,
                   text,
                   placeholder,
@@ -98,43 +105,7 @@ themes.forEach((theme) => {
         }
       }
 
-      await insertStylesheetRule('.dx-textbox { display: inline-block }', 0);
-    });
-  });
-
-  stylingModes.forEach((stylingMode) => {
-    labelModes.forEach((labelMode) => {
-      test(`Label for dxTextBox labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-        await t.click('#otherContainer');
-
-        await t
-          .expect(await takeScreenshot(`label-dxTextBox-labelMode=${labelMode}-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-          .ok()
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
-        await changeTheme(theme);
-
-        await createWidget('dxTextBox', {
-          width: 100,
-          label: 'Label text',
-          text: '',
-          placeholder: 'Placeholder',
-          labelMode,
-          stylingMode,
-        });
-
-        return createWidget('dxTextBox', {
-          label: `this label is ${'very '.repeat(10)}long`,
-          text: `this content is ${'very '.repeat(10)}long`,
-          items: ['item1', 'item2'],
-          labelMode,
-          stylingMode,
-        }, false, '#otherContainer');
-      }).after(async (t) => restoreBrowserSize(t));
+      await insertStylesheetRule('.dx-textbox { display: inline-block, width: 80 }', 0);
     });
   });
 });
