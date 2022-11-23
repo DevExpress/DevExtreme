@@ -606,7 +606,7 @@ export const columnsControllerModule = {
                 that._previousColumns = that._columns;
                 that._columns = columns;
                 resetColumnsCache(that);
-                that.updateColumnDataTypes(undefined);
+                that.updateColumnDataTypes();
             }
 
             const updateColumnChanges = function(that, changeType, optionName, columnIndex) {
@@ -655,7 +655,7 @@ export const columnsControllerModule = {
                     that._columnChanges = undefined;
                     if(needReinit(columnChanges.optionNames)) {
                         that._reinitAfterLookupChanges = columnChanges?.optionNames['lookup'];
-                        that.reinit(undefined);
+                        that.reinit();
                         that._reinitAfterLookupChanges = undefined;
                     } else {
                         that.columnsChanged.fire(columnChanges);
@@ -1214,7 +1214,7 @@ export const columnsControllerModule = {
                 reinit: function(ignoreColumnOptionNames) {
                     this._columnsUserState = this.getUserState();
                     this._ignoreColumnOptionNames = ignoreColumnOptionNames || null;
-                    this.init(undefined);
+                    this.init();
 
                     if(ignoreColumnOptionNames) {
                         this._ignoreColumnOptionNames = null;
@@ -1872,7 +1872,7 @@ export const columnsControllerModule = {
                         column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate && !column.lookup);
                     }
                 },
-                updateColumnDataTypes: function(dataSource, originalColumns) {
+                updateColumnDataTypes: function(dataSource) {
                     const that = this;
                     const dateSerializationFormat = that.option('dateSerializationFormat');
                     const firstItems = that._getFirstItems(dataSource);
@@ -1940,7 +1940,7 @@ export const columnsControllerModule = {
                             }
                         }
 
-                        that._updateColumnOptions(column, index, originalColumns);
+                        that._updateColumnOptions(column, index);
                     });
 
                     return isColumnDataTypesUpdated;
