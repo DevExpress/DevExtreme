@@ -516,10 +516,6 @@ const DropDownEditor = TextBox.inherit({
         return this._popup && this._popupContentId;
     },
 
-    _getOwnsAria() {
-        return this._popup && this._popupContentId;
-    },
-
     _renderOpenedState: function() {
         const opened = this.option('opened');
 
@@ -536,7 +532,7 @@ const DropDownEditor = TextBox.inherit({
         };
 
         this.setAria(arias);
-        this.setAria('owns', this._getOwnsAria(), this.$element());
+        this.setAria('owns', ((opened || undefined) && this._popupContentId), this.$element());
     },
 
     _createPopup: function() {
