@@ -449,39 +449,17 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 }
 
 .dx-texteditor-label {
-  position: absolute;
   font-size: $material-texteditor-label-font-size;
   color: $texteditor-label-color;
-  white-space: nowrap;
-  user-select: none;
-  pointer-events: none;
-  cursor: text;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  top: 0;
-  left: 0;
 
   .dx-label {
-    display: flex;
-
     span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: auto;
-      max-width: 100%;
-      display: block;
       margin-bottom: -1px;
     }
   }
 
   .dx-invalid & {
     color: $base-invalid-color;
-  }
-
-  .dx-rtl & {
-    left: auto;
-    right: 0;
   }
 }
 
@@ -492,16 +470,12 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   .dx-texteditor-label {
     .dx-label-after,
     .dx-label-before {
-      display: block;
-      box-sizing: border-box;
       min-width: $material-filled-texteditor-input-horizontal-padding;
     }
   }
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    position: relative;
-
     .dx-texteditor-input,
     &.dx-lookup .dx-lookup-field {
       padding-top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
@@ -541,14 +515,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     &.dx-lookup-empty,
     &.dx-texteditor-empty.dx-state-readonly,
     &.dx-lookup-empty.dx-state-readonly {
-      .dx-placeholder {
-        display: none;
-      }
-
-      .dx-lookup-field {
-        font-size: 0;
-      }
-
       .dx-texteditor-label {
         transition: $material-editor-label-transition;
         font-size: $material-texteditor-font-size;
@@ -561,14 +527,9 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       &.dx-textarea {
         .dx-texteditor-label {
           top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
-          margin-top: 0;
           font-size: $material-texteditor-font-size;
           line-height: $material-texteditor-font-size;
           height: $material-texteditor-font-size;
-        }
-
-        .dx-placeholder {
-          display: none;
         }
       }
     }
@@ -576,10 +537,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     &.dx-state-focused,
     &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
-      .dx-placeholder {
-        display: block;
-      }
-
       .dx-lookup-field {
         font-size: $material-texteditor-font-size;
       }
@@ -589,7 +546,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         height: $material-texteditor-label-font-size;
         line-height: $material-texteditor-label-font-size;
         top: $label-position-top;
-        margin-top: 0;
       }
 
       &.dx-textarea {
@@ -1260,13 +1216,5 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     .dx-pending-indicator {
       @include dx-pending-indicator-material();
     }
-  }
-}
-
-.dx-rtl {
-  .dx-placeholder,
-  .dx-placeholder::before {
-    right: 0;
-    left: auto;
   }
 }

@@ -233,38 +233,11 @@ $generic-texteditor-label-transition:
 }
 
 .dx-texteditor-label {
-  position: absolute;
   font-size: $generic-texteditor-label-size;
   color: $texteditor-label-color;
-  white-space: nowrap;
-  user-select: none;
-  pointer-events: none;
-  cursor: text;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  top: 0;
-  left: 0;
-
-  .dx-label {
-    display: flex;
-
-    span {
-      text-overflow: ellipsis;
-      width: auto;
-      max-width: 100%;
-      overflow: hidden;
-      display: block;
-    }
-  }
 
   .dx-invalid & {
     color: $base-invalid-color;
-  }
-
-  .dx-rtl & {
-    left: auto;
-    right: 0;
   }
 }
 
@@ -274,16 +247,12 @@ $generic-texteditor-label-transition:
   .dx-texteditor-label {
     .dx-label-after,
     .dx-label-before {
-      display: block;
-      box-sizing: border-box;
       min-width: $generic-base-inline-borderedwidget-horizontal-padding;
     }
   }
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    position: relative;
-
     .dx-texteditor-input,
     &.dx-lookup .dx-lookup-field {
       padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
@@ -323,20 +292,11 @@ $generic-texteditor-label-transition:
     &.dx-lookup-empty,
     &.dx-texteditor-empty.dx-state-readonly,
     &.dx-lookup-empty.dx-state-readonly {
-      .dx-placeholder {
-        display: none;
-      }
-
-      .dx-lookup-field {
-        font-size: 0;
-      }
-
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
         font-size: $generic-base-font-size;
         height: $generic-base-inline-block-height;
         line-height: $generic-base-line-height;
-        top: 50%;
         margin-top: math.div(-$generic-base-inline-block-height, 2);
       }
 
@@ -344,13 +304,8 @@ $generic-texteditor-label-transition:
         .dx-texteditor-label {
           font-size: $generic-base-font-size;
           top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
-          margin-top: 0;
           height: $generic-base-inline-block-height;
           line-height: $generic-base-line-height;
-        }
-
-        .dx-placeholder {
-          display: none;
         }
       }
     }
@@ -358,10 +313,6 @@ $generic-texteditor-label-transition:
     &.dx-state-focused,
     &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
-      .dx-placeholder {
-        display: block;
-      }
-
       .dx-lookup-field {
         font-size: $generic-base-font-size;
       }
@@ -369,7 +320,6 @@ $generic-texteditor-label-transition:
       .dx-texteditor-label {
         font-size: $generic-texteditor-label-size;
         top: 0;
-        margin-top: 0;
         height: $generic-base-inline-block-height;
         line-height: $generic-base-line-height;
       }
@@ -480,13 +430,6 @@ $generic-texteditor-label-transition:
         border-color: $borderColor;
         border-style: $borderStyle;
       }
-
-      .dx-label-before,
-      .dx-label-after {
-        height: 100%;
-        border-top: $generic-texteditor-border-width $borderStyle $borderColor;
-        border-bottom: $generic-texteditor-border-width $borderStyle $borderColor;
-      }
     }
 
     &.dx-textarea {
@@ -591,7 +534,6 @@ $generic-texteditor-label-transition:
       }
     }
   }
-
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
@@ -998,9 +940,6 @@ $generic-texteditor-label-transition:
 .dx-rtl {
   .dx-placeholder,
   .dx-placeholder::before {
-    right: 0;
-    left: auto;
-
     @at-root #{selector-append(".dx-editor-underlined", &)} {
       padding-right: 0;
     }

@@ -129,6 +129,100 @@
   }
 }
 
+.dx-texteditor-label {
+  position: absolute;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: text;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+
+  .dx-label {
+    display: flex;
+
+    span {
+      text-overflow: ellipsis;
+      width: auto;
+      max-width: 100%;
+      overflow: hidden;
+      display: block;
+    }
+  }
+
+  .dx-rtl & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.dx-editor-filled {
+  .dx-texteditor-label {
+    .dx-label-after,
+    .dx-label-before {
+      display: block;
+      box-sizing: border-box;
+    }
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    position: relative;
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
+      .dx-texteditor-label {
+        top: 50%;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          margin-top: 0;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-dropdowneditor-active,
+    &.dx-textarea.dx-state-focused {
+      .dx-placeholder {
+        display: block;
+      }
+
+      .dx-texteditor-label {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.dx-rtl {
+  .dx-placeholder,
+  .dx-placeholder::before {
+    right: 0;
+    left: auto;
+  }
+}
+
 .dx-device-android {
   .dx-texteditor-input {
     -webkit-user-modify: read-write-plaintext-only;
