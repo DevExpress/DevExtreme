@@ -40,54 +40,54 @@ test('Label max-width changed with container size', async (t) => {
 }));
 
 themes.forEach((theme) => {
-  let ids = [] as string[];
+  [true, false].forEach((rtlEnabled) => {
+    let ids = [] as string[];
 
-  test(`Textbox render-theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    test(`Textbox render, rtl=${rtlEnabled} theme=${theme}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await insertStylesheetRule('.dx-textbox { display: inline-block; width: 60px; }', 0);
-    await t.debug();
-    await t
-      .expect(await takeScreenshot(`textbox render with limited width${getThemePostfix(theme)}.png`))
-      .ok();
-
-    await deleteStylesheetRule(0);
-    await insertStylesheetRule('.dx-textbox { display: inline-block; width: 130px; }', 0);
-
-    await t
-      .expect(await takeScreenshot(`textbox render${getThemePostfix(theme)}.png`))
-      .ok();
-
-    for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
-      for (const id of ids) {
-        await setClassAttribute(Selector(`#${id}`), state);
-      }
-
+      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 60px; }', 0);
+      await t.debug();
       await t
-        .expect(await takeScreenshot(`textbox render${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`))
+        .expect(await takeScreenshot(`textbox render with limited width,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`))
         .ok();
 
-      for (const id of ids) {
-        await removeClassAttribute(Selector(`#${id}`), state);
+      await deleteStylesheetRule(0);
+      await insertStylesheetRule('.dx-textbox { display: inline-block; width: 130px; }', 0);
+
+      await t
+        .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`))
+        .ok();
+
+      for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
+        for (const id of ids) {
+          await setClassAttribute(Selector(`#${id}`), state);
+        }
+
+        await t
+          .expect(await takeScreenshot(`textbox render,rtl=${rtlEnabled},${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`))
+          .ok();
+
+        for (const id of ids) {
+          await removeClassAttribute(Selector(`#${id}`), state);
+        }
       }
-    }
 
-    await deleteStylesheetRule(0);
+      await deleteStylesheetRule(0);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    ids = [];
-    await restoreBrowserSize(t);
-    await changeTheme(theme);
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      ids = [];
+      await restoreBrowserSize(t);
+      await changeTheme(theme);
 
-    for (const stylingMode of stylingModes) {
-      for (const labelMode of labelModes) {
-        for (const placeholder of ['Placeholder', '']) {
-          for (const text of ['Text value', '']) {
-            for (const label of ['Label Text', '']) {
-              for (const rtlEnabled of [true, false]) {
+      for (const stylingMode of stylingModes) {
+        for (const labelMode of labelModes) {
+          for (const placeholder of ['Placeholder', '']) {
+            for (const text of ['Text value', '']) {
+              for (const label of ['Label Text', '']) {
                 const id = `${`dx${new Guid()}`}`;
 
                 ids.push(id);
@@ -105,6 +105,6 @@ themes.forEach((theme) => {
           }
         }
       }
-    }
+    });
   });
 });
