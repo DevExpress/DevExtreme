@@ -1,11 +1,17 @@
 import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
 import { DeepPartial } from '../core/index';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
+import { GroupItem, ResolvedData } from './custom_store';
 
 export type Options<
     TItem = any,
     TKey = any,
 > = StoreOptions<TItem, TKey>;
+
+export type LoadResult<TItem> = DxPromise<ResolvedData<TItem>>
+  | PromiseLike<ResolvedData<TItem>>
+  | Array<GroupItem>
+  | Array<TItem>;
 
 /**
  * @namespace DevExpress.data
@@ -153,7 +159,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    load(): DxExtendedPromise<Array<TItem>>;
+    load(): DxExtendedPromise<LoadResult<TItem>>;
     /**
      * @docid
      * @publicName load(options)

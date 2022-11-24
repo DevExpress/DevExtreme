@@ -4370,13 +4370,7 @@ declare module DevExpress.data {
      */
     load: (
       options: LoadOptions<TItem>
-    ) =>
-      | DevExpress.core.utils.DxPromise<
-          DevExpress.data.CustomStore.ResolvedData<TItem>
-        >
-      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
-      | Array<DevExpress.data.CustomStore.GroupItem>
-      | Array<TItem>;
+    ) => DevExpress.data.Store.LoadResult<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -5643,7 +5637,9 @@ declare module DevExpress.data {
     /**
      * [descr:Store.load()]
      */
-    load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+    load(): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.Store.LoadResult<TItem>
+    >;
     /**
      * [descr:Store.load(options)]
      */
@@ -5718,6 +5714,16 @@ declare module DevExpress.data {
       | 'removing'
       | 'modified'
       | 'modifying';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type LoadResult<TItem> =
+      | DevExpress.core.utils.DxPromise<
+          DevExpress.data.CustomStore.ResolvedData<TItem>
+        >
+      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
+      | Array<DevExpress.data.CustomStore.GroupItem>
+      | Array<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
