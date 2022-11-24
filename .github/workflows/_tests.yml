@@ -1,0 +1,49 @@
+name: Test
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+    pull_request:
+        branches: [renovation_2_0_monorepo]
+    push:
+        branches: [renovation_2_0_monorepo]
+
+jobs:
+  Test:
+    runs-on: devextreme-shr2
+    timeout-minutes: 30
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Test
+      run: npm run test
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [Test]
+    if: false
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 22_2
