@@ -2390,8 +2390,8 @@ export interface ColumnBase<TRowData = any> {
     allowSorting?: boolean;
     /**
      * @docid GridBaseColumn.calculateCellValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 rowData:object
      * @public
      */
     calculateCellValue?: ((this: ColumnBase, rowData: TRowData) => any);
@@ -2401,14 +2401,14 @@ export interface ColumnBase<TRowData = any> {
     defaultCalculateCellValue?: this['calculateCellValue'];
     /**
      * @docid GridBaseColumn.calculateDisplayValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 rowData:object
      * @public
      */
     calculateDisplayValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
-     * @type_function_param1 this:GridBaseColumn
+     * @type_function_context GridBaseColumn
      * @type_function_return Filter expression
      * @public
      */
@@ -2419,8 +2419,8 @@ export interface ColumnBase<TRowData = any> {
     defaultCalculateFilterExpression?: this['calculateFilterExpression'];
     /**
      * @docid GridBaseColumn.calculateSortValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 rowData:object
      * @public
      */
     calculateSortValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
@@ -2438,8 +2438,8 @@ export interface ColumnBase<TRowData = any> {
     cssClass?: string;
     /**
      * @docid GridBaseColumn.customizeText
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 cellInfo:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 cellInfo:object
      * @public
      */
     customizeText?: ((this: ColumnBase, cellInfo: ColumnCustomizeTextArg) => string);
@@ -2580,9 +2580,9 @@ export interface ColumnBase<TRowData = any> {
     selectedFilterOperation?: SelectedFilterOperation;
     /**
      * @docid GridBaseColumn.setCellValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 newData:object
-     * @type_function_param4 currentRowData:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 newData:object
+     * @type_function_param3 currentRowData:object
      * @type_function_return void|Promise<void>
      * @public
      */
@@ -2621,7 +2621,7 @@ export interface ColumnBase<TRowData = any> {
     /**
      * @docid GridBaseColumn.sortingMethod
      * @default undefined
-     * @type_function_param1 this:GridBaseColumn
+     * @type_function_context GridBaseColumn
      * @public
      */
     sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number);
@@ -4364,8 +4364,8 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     buttons?: Array<DataGridPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 rowData:object
      * @public
      */
     calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
