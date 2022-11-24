@@ -19,6 +19,7 @@ DemoApp.controller('DemoController', ($scope) => {
     position: {
       at: 'bottom',
       my: 'center',
+      collision: 'fit',
     },
     bindingOptions: {
       visible: 'visiblePopup',

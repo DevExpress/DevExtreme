@@ -26,6 +26,7 @@
         at="bottom"
         my="center"
         v-model:of="positionOf"
+        collision="fit"
       />
       <DxToolbarItem
         widget="dxButton"

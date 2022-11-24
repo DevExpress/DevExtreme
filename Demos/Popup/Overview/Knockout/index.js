@@ -22,6 +22,7 @@ window.onload = function () {
         at: 'bottom',
         my: 'center',
         of: that.positionOf,
+        collision: 'fit',
       },
       toolbarItems: [{
         widget: 'dxButton',

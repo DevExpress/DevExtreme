@@ -46,7 +46,8 @@
       [options]="closeButtonOptions"
     >
     </dxi-toolbar-item>
-    <dxo-position at="bottom" my="center" [of]="positionOf"> </dxo-position>
+    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+    </dxo-position>
     <div *dxTemplate="let data of 'content'">
       <p>
         Full Name:

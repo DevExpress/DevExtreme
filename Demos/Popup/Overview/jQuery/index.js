@@ -24,6 +24,7 @@ $(() => {
     position: {
       at: 'bottom',
       my: 'center',
+      collision: 'fit',
     },
     toolbarItems: [{
       locateInMenu: 'always',
