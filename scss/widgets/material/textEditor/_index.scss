@@ -931,6 +931,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
             inset 0 1px $texteditor-border-color,
             inset -1px 0 $texteditor-border-color,
             inset 1px 0 transparent;
+          clip-path: inset(-1px -1px -1px 1px);
         }
 
         .dx-label-after {
@@ -940,6 +941,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
             inset 0 1px $texteditor-border-color,
             inset -1px 0 transparent,
             inset 1px 0  $texteditor-border-color;
+          clip-path: inset(-1px 1px -1px -1px);
         }
       }
     }
