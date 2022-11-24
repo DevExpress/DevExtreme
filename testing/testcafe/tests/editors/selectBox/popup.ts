@@ -4,8 +4,9 @@ import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
-fixture`popup_height_on_first_load`
+fixture`popup height on first load`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
@@ -23,7 +24,7 @@ themes.forEach((theme) => {
     await t.click(selectBox.element);
 
     await t
-      .expect(await takeScreenshot(`SelectBox_no_data,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox no data${getThemePostfix(theme)}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -54,7 +55,7 @@ themes.forEach((theme) => {
     });
 
     await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_equal_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox pagesize equal datasource items count${getThemePostfix(theme)}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -85,7 +86,7 @@ themes.forEach((theme) => {
     });
 
     await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_less_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox pagesize less datasource items count${getThemePostfix(theme)}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -116,7 +117,7 @@ themes.forEach((theme) => {
     });
 
     await t
-      .expect(await takeScreenshot(`SelectBox_pagesize_more_datasource_items_count,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await takeScreenshot(`SelectBox pagesize more datasource items count${getThemePostfix(theme)}.png`))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -134,7 +135,7 @@ themes.forEach((theme) => {
   }).after(async (t) => restoreBrowserSize(t));
 });
 
-fixture`popup_height_after_last_page_load`
+fixture`popup height after last page load`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async (t) => {
     await restoreBrowserSize(t);
@@ -157,7 +158,7 @@ test('SelectBox does not change a popup height after load the last page', async 
   await list.scrollTo(100);
 
   await t
-    .expect(await takeScreenshot('SelectBox_popup_height_after_last_page_load.png'))
+    .expect(await takeScreenshot('SelectBox popup height after last page load.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
