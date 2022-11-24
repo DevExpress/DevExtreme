@@ -385,6 +385,8 @@ $generic-texteditor-label-transition:
       .dx-label {
         border-bottom: $border-width $borderStyle $borderColor;
         border-top: 0;
+        border-left: $border-width $borderStyle transparent;
+        margin-left: -1px;
         height: 100%;
         padding: 0 2px;
 
