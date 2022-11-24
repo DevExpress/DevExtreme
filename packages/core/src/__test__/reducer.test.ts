@@ -14,7 +14,7 @@ describe('reducer', () => {
 
     expect(handler).toBeCalledTimes(1);
     expect(handler).toBeCalledWith(state, actionValue);
-    expect(actualReturnValue).toBe(expectedReturnValue);
+    expect(actualReturnValue).toBe({});
   });
 
   it('does not call other events handlers', () => {
