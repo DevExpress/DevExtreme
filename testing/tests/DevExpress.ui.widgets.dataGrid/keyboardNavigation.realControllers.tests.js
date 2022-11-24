@@ -1570,7 +1570,7 @@ QUnit.module('Real DataController and ColumnsController', {
         $commandCell = $(this.getCellElement(0, 0));
 
         // assert
-        assert.ok($commandCell.is(':focus'), 'command cell is still focused afteк expanding');
+        assert.ok($commandCell.is(':focus'), 'command cell is still focused after expanding');
         assert.equal($commandCell.find('.dx-datagrid-group-opened').length, 1, 'cell is rendered as expanded');
     });
 

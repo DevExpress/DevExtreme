@@ -1987,10 +1987,12 @@ testModule('tables', simpleModuleConfig, function() {
 testModule('Toolbar localization', simpleModuleConfig, function() {
     const messages = {
         'ru': {
+            /* eslint-disable i18n/no-russian-character */
             'dxHtmlEditor-italic': 'Курсив',
             'dxHtmlEditor-list': 'Список',
             'dxHtmlEditor-ordered': 'Нумерованный',
             'dxHtmlEditor-bullet': 'Маркированный'
+            /* eslint-enable */
         }
     };
 
@@ -2031,11 +2033,13 @@ testModule('Toolbar localization', simpleModuleConfig, function() {
 
     function getExpectedData(locatedInMenu) {
         return {
+            /* eslint-disable i18n/no-russian-character */
             buttonText: 'Курсив',
             buttonTitle: 'Курсив',
             isButtonTextVisible: locatedInMenu,
             selectBoxItemsText: 'НумерованныйМаркированный',
             selectBoxPlaceholder: 'Список'
+            /* eslint-enable */
         };
     }
 

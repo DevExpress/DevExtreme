@@ -9362,7 +9362,7 @@ QUnit.module('Customization of the command columns', {
         }, 'select column');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering selection', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering selection', function(assert) {
         // arrange
         this.applyOptions({
             selection: {
@@ -9376,7 +9376,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'index');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering command column', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering command column', function(assert) {
         // arrange
         this.applyOptions({
             columns: [{
@@ -9388,7 +9388,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'index');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering grouping', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering grouping', function(assert) {
         // arrange
         this.applyOptions({
             columns: ['field1', {
@@ -9402,7 +9402,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'regular column');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering reordering', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering reordering', function(assert) {
         // arrange
         this.applyOptions({
             columns: [{

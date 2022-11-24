@@ -4036,7 +4036,7 @@ QUnit.module('disabled option', () => {
         assert.equal($fileInput.css('display'), 'none', 'input is hidden');
     });
 
-    QUnit.test('label text must be visible when disabled option chаnged dynamically', function(assert) {
+    QUnit.test('label text must be visible when disabled option changed dynamically', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             disabled: true,
             useDragOver: true,
