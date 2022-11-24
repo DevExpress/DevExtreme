@@ -1,8 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Handlers<TState> = Record<PropertyKey, (state: TState, value: any) => Partial<TState>>;
+import { ObjectType } from './utils';
 
-type Reducer<
-  TState,
+export type Handlers<TState extends ObjectType> =
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Record<PropertyKey, (state: TState, value: any) => Partial<TState>>;
+
+export type Reducer<
+  TState extends ObjectType,
   THandlers extends Handlers<TState>,
 > = <TAction extends keyof THandlers>(
   state: TState,
@@ -10,7 +13,7 @@ type Reducer<
   value: Parameters<THandlers[TAction]>[1]
 ) => Partial<TState>;
 
-export function createReducer<TState>() {
+export function createReducer<TState extends ObjectType>() {
   return <THandlers extends Handlers<TState>>(
     handlers: THandlers,
   ): Reducer<TState, THandlers> => {

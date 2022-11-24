@@ -1,4 +1,4 @@
-import { shadowComparer } from '../shadowComparer';
+import { shadowComparer } from '../shadow-comparer';
 
 describe('Core: Utils: shadowComparer', () => {
   it('Returns false for arguments of different type', () => {

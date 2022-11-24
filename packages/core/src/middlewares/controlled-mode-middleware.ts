@@ -1,14 +1,14 @@
 import { ObjectType } from '../utils';
-import { ModelConfigMap } from './types';
-import { getChangedKeys } from './getChangedKeys';
+import { StateConfigMap } from './types';
+import { getChangedKeys } from './get-changed-keys';
 
-type ModelChangesTuple<TModel extends ObjectType> = [newModel: TModel, hasChanges: boolean];
+type ModelChangesTuple<TState extends ObjectType> = [newModel: TState, hasChanges: boolean];
 
-export function controlledModeMiddleware<TModel extends ObjectType>(
-  prev: TModel,
-  next: TModel,
-  config: ModelConfigMap<TModel> = {},
-): ModelChangesTuple<TModel> {
+export function controlledModeMiddleware<TState extends ObjectType>(
+  prev: TState,
+  next: TState,
+  config: StateConfigMap<TState> = {},
+): ModelChangesTuple<TState> {
   const result = { ...next };
   const changedKeys = getChangedKeys(prev, next);
   const controlledModeKeys = changedKeys

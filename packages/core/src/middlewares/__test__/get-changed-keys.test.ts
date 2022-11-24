@@ -1,5 +1,5 @@
 import { getKeys } from '../../utils';
-import { getChangedKeys } from '../getChangedKeys';
+import { getChangedKeys } from '../get-changed-keys';
 
 jest.mock('../../utils');
 const getKeysMock = jest.mocked(getKeys);

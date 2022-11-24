@@ -3,57 +3,25 @@ import {
   createObservableEmitter,
   Disposable,
   DISPOSE,
-  DisposeFunc,
-  getKeys,
-  memoize,
+  memoize, ObjectType,
   Observable,
-  pipe,
   shadowComparer,
   SubscribeFunc,
 } from './utils';
 
-type WriteableViewModel<TViewProps> = {
-  [K in keyof TViewProps]: Observable<TViewProps[K]>
+export type Selector<TState extends ObjectType, TViewProps> = (state: TState) => TViewProps;
+
+export type ViewModel<TViewProps> = Disposable<Observable<TViewProps>>;
+
+export type SelectorMap<TState extends ObjectType, TViewModels extends ObjectType> = {
+  [K in keyof TViewModels]?: Selector<TState, TViewModels[K]>
 };
 
-type Selector<TState, TViewValue> = (state: TState) => TViewValue;
-
-type ViewModelMap<TState, TProps> = {
-  [K in keyof TProps]: Selector<TState, TProps[K]>
+export type ViewModelMap<TViewModels extends ObjectType> = {
+  [K in keyof TViewModels]?: ViewModel<TViewModels[K]>
 };
 
-export type ViewModel<TViewProps> = Readonly<WriteableViewModel<TViewProps>>;
-
-export function createViewModel<TStateProps, TViewProps>(
-  initialState: TStateProps,
-  subscribeToUpdates: SubscribeFunc<TStateProps>,
-  viewModelMap: ViewModelMap<TStateProps, TViewProps>,
-): Disposable<ViewModel<TViewProps>> {
-  const disposeFunctions: DisposeFunc[] = [];
-
-  const viewModel = getKeys(viewModelMap)
-    .reduce((vm, key) => {
-      const map = viewModelMap[key];
-      const { emit, subscribe, getValue } = createObservableEmitter(map(initialState));
-      const unsubscribe = subscribeToUpdates((value) => emit(map(value)));
-
-      disposeFunctions.push(unsubscribe);
-
-      // eslint-disable-next-line no-param-reassign
-      vm[key] = {
-        subscribe,
-        getValue,
-      };
-      return vm;
-    }, {} as WriteableViewModel<TViewProps>);
-
-  return {
-    ...viewModel,
-    [DISPOSE]: pipe(...disposeFunctions),
-  };
-}
-
-export function createSelector<TState, TParam extends Record<PropertyKey, unknown>, TViewProp>(
+export function createSelector<TState extends ObjectType, TParam extends ObjectType, TViewProp>(
   buildViewProp: (params: TParam) => TViewProp,
   paramsGetter: (state: TState | undefined) => TParam,
   paramsComparer: Comparer<[TParam]> = shadowComparer,
@@ -61,4 +29,19 @@ export function createSelector<TState, TParam extends Record<PropertyKey, unknow
   const cached = memoize(buildViewProp, paramsComparer);
 
   return (state: TState | undefined) => cached(paramsGetter(state));
+}
+
+export function createViewModel<TState extends ObjectType, TViewProps>(
+  initialState: TState,
+  subscribeToUpdates: SubscribeFunc<TState>,
+  selector: Selector<TState, TViewProps>,
+): ViewModel<TViewProps> {
+  const { emit, subscribe, getValue } = createObservableEmitter(selector(initialState));
+  const unsubscribe = subscribeToUpdates((value) => emit(selector(value)));
+
+  return {
+    subscribe,
+    getValue,
+    [DISPOSE]: unsubscribe,
+  };
 }

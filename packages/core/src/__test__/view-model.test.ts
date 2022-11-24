@@ -5,181 +5,146 @@ jest.mock('../utils/observable');
 jest.mock('../utils/disposable');
 jest.mock('../utils/memoize');
 
-describe('view-model', () => {
-  it('returns observables', () => {
-    const initialState = {};
-    const mappedValue = {};
-    const selector = jest.fn().mockReturnValue(mappedValue);
-    const expected = {
-      subscribe: jest.fn(),
-      getValue: jest.fn(),
-    };
-    jest
-      .mocked(createObservableEmitter)
-      .mockReturnValueOnce({
-        ...expected,
-        emit: jest.fn(),
-      });
-
-    const viewModel = createViewModel(initialState, jest.fn(), { prop1: selector });
-
-    expect(viewModel).toHaveProperty('prop1');
-    expect(viewModel.prop1).toEqual(expected);
-  });
-
-  it('selects observables from initial state', () => {
-    const initialState = {};
-    const mappedValue = {};
-    const selector = jest.fn().mockReturnValue(mappedValue);
-    jest
-      .mocked(createObservableEmitter)
-      .mockReturnValue({
+describe('Core: ViewModel', () => {
+  describe('createViewModel', () => {
+    it('returns observable', () => {
+      const initialState = {};
+      const mappedValue = {};
+      const selector = jest.fn().mockReturnValue(mappedValue);
+      const expected = {
         subscribe: jest.fn(),
         getValue: jest.fn(),
-        emit: jest.fn(),
-      });
+      };
+      jest
+        .mocked(createObservableEmitter)
+        .mockReturnValueOnce({
+          ...expected,
+          emit: jest.fn(),
+        });
 
-    createViewModel(initialState, jest.fn(), { prop1: selector });
+      const viewModel = createViewModel(initialState, jest.fn(), selector);
 
-    expect(selector).toBeCalledTimes(1);
-    expect(selector).toBeCalledWith(initialState);
-    expect(createObservableEmitter).toBeCalledTimes(1);
-    expect(createObservableEmitter).toBeCalledWith(mappedValue);
-  });
+      expect(viewModel).toEqual(expected);
+    });
 
-  it('selects observables from updated state', () => {
-    const selector = jest.fn();
-    const subscribe = jest.fn();
-    const emit = jest.fn();
-    const mappedValue = {};
-    const value = {};
-    jest
-      .mocked(createObservableEmitter)
-      .mockReturnValue({
-        subscribe: jest.fn(),
-        getValue: jest.fn(),
-        emit,
-      });
+    it('selects observables from initial state', () => {
+      const initialState = {};
+      const mappedValue = {};
+      const selector = jest.fn().mockReturnValue(mappedValue);
+      jest
+        .mocked(createObservableEmitter)
+        .mockReturnValue({
+          subscribe: jest.fn(),
+          getValue: jest.fn(),
+          emit: jest.fn(),
+        });
 
-    createViewModel({}, subscribe, { prop1: selector });
+      createViewModel(initialState, jest.fn(), selector);
 
-    selector
-      .mockClear()
-      .mockReturnValue(mappedValue);
+      expect(selector).toBeCalledTimes(1);
+      expect(selector).toBeCalledWith(initialState);
+      expect(createObservableEmitter).toBeCalledTimes(1);
+      expect(createObservableEmitter).toBeCalledWith(mappedValue);
+    });
 
-    const [listener] = subscribe.mock.lastCall;
-    listener(value);
+    it('selects observables from updated state', () => {
+      const selector = jest.fn();
+      const subscribe = jest.fn();
+      const emit = jest.fn();
+      const mappedValue = {};
+      const value = {};
+      jest
+        .mocked(createObservableEmitter)
+        .mockReturnValue({
+          subscribe: jest.fn(),
+          getValue: jest.fn(),
+          emit,
+        });
 
-    expect(selector).toBeCalledTimes(1);
-    expect(selector).toBeCalledWith(value);
+      createViewModel({}, subscribe, selector);
 
-    expect(emit).toBeCalledTimes(1);
-    expect(emit).toBeCalledWith(mappedValue);
-  });
+      selector
+        .mockClear()
+        .mockReturnValue(mappedValue);
 
-  it('calls all unsubscribe functions on dispose', () => {
-    const unsubscribeFunctions: jest.Mock[] = [];
-    const viewModelMap = {
-      prop1: jest.fn(),
-      prop2: jest.fn(),
-    };
-    const subscribe = jest.fn()
-      .mockImplementation(() => {
-        const unsubscribe = jest.fn();
-        unsubscribeFunctions.push(unsubscribe);
-        return unsubscribe;
-      });
-    jest
-      .mocked(createObservableEmitter)
-      .mockReturnValue({
-        subscribe: jest.fn(),
-        getValue: jest.fn(),
-        emit: jest.fn(),
-      });
+      const [listener] = subscribe.mock.lastCall;
+      listener(value);
 
-    const viewModel = createViewModel({}, subscribe, viewModelMap);
+      expect(selector).toBeCalledTimes(1);
+      expect(selector).toBeCalledWith(value);
 
-    viewModel[DISPOSE]();
+      expect(emit).toBeCalledTimes(1);
+      expect(emit).toBeCalledWith(mappedValue);
+    });
 
-    expect(unsubscribeFunctions).toHaveLength(2);
-    unsubscribeFunctions.forEach((unsubscribe) => {
-      expect(unsubscribe).toBeCalledTimes(1);
+    it('calls unsubscribe function on dispose', () => {
+      const unsubscribe = jest.fn();
+      const subscribe = jest.fn().mockImplementation(() => unsubscribe);
+
+      jest
+        .mocked(createObservableEmitter)
+        .mockReturnValue({
+          subscribe: jest.fn(),
+          getValue: jest.fn(),
+          emit: jest.fn(),
+        });
+
+      const viewModel = createViewModel({}, subscribe, jest.fn());
+
+      expect(unsubscribe).not.toHaveBeenCalled();
+
+      viewModel[DISPOSE]();
+
+      expect(unsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
-  it('does not call unsubscribe functions before dispose', () => {
-    const unsubscribeFunctions: jest.Mock[] = [];
-    const viewModelMap = {
-      prop1: jest.fn(),
-      prop2: jest.fn(),
-    };
-    const subscribe = jest.fn()
-      .mockImplementation(() => {
-        const unsubscribe = jest.fn();
-        unsubscribeFunctions.push(unsubscribe);
-        return unsubscribe;
-      });
-    jest
-      .mocked(createObservableEmitter)
-      .mockReturnValue({
-        subscribe: jest.fn(),
-        getValue: jest.fn(),
-        emit: jest.fn(),
-      });
+  describe('selector', () => {
+    it('passes arguments to memoize', () => {
+      const func = jest.fn();
+      const comparer = jest.fn();
 
-    createViewModel({}, subscribe, viewModelMap);
+      createSelector(func, jest.fn(), comparer);
 
-    unsubscribeFunctions.forEach((unsubscribe) => {
-      expect(unsubscribe).not.toBeCalled();
+      expect(memoize).toBeCalledTimes(1);
+      expect(memoize).toBeCalledWith(func, comparer);
     });
-  });
-});
 
-describe('selector', () => {
-  it('passes arguments to memoize', () => {
-    const func = jest.fn();
-    const comparer = jest.fn();
+    it('returns memoized', () => {
+      const cachedValue = {};
+      const cached = jest.fn().mockReturnValue(cachedValue);
+      jest.mocked(memoize).mockReturnValue(cached);
 
-    createSelector(func, jest.fn(), comparer);
+      const selector = createSelector(jest.fn(), jest.fn(), jest.fn());
 
-    expect(memoize).toBeCalledTimes(1);
-    expect(memoize).toBeCalledWith(func, comparer);
-  });
+      expect(memoize).toBeCalledTimes(1);
+      expect(selector({})).toBe(cachedValue);
+    });
 
-  it('returns memoized', () => {
-    const cachedValue = {};
-    const cached = jest.fn().mockReturnValue(cachedValue);
-    jest.mocked(memoize).mockReturnValue(cached);
+    it('passes params to memoized', () => {
+      const param = {};
+      const getParams = jest.fn().mockReturnValue(param);
+      const cached = jest.fn();
+      jest.mocked(memoize).mockReturnValue(cached);
 
-    const selector = createSelector(jest.fn(), jest.fn(), jest.fn());
+      const selector = createSelector(jest.fn(), getParams, jest.fn());
+      selector({});
 
-    expect(memoize).toBeCalledTimes(1);
-    expect(selector({})).toBe(cachedValue);
-  });
+      expect(cached).toBeCalledTimes(1);
+      expect(cached).toBeCalledWith(param);
+    });
 
-  it('passes params to memoized', () => {
-    const param = {};
-    const getParams = jest.fn().mockReturnValue(param);
-    const cached = jest.fn();
-    jest.mocked(memoize).mockReturnValue(cached);
+    it('passes argument to params getter', () => {
+      const paramsArgument = {};
+      const getParams = jest.fn();
+      const cached = jest.fn();
+      jest.mocked(memoize).mockReturnValue(cached);
 
-    const selector = createSelector(jest.fn(), getParams, jest.fn());
-    selector({});
+      const selector = createSelector(jest.fn(), getParams, jest.fn());
+      selector(paramsArgument);
 
-    expect(cached).toBeCalledTimes(1);
-    expect(cached).toBeCalledWith(param);
-  });
-
-  it('passes argument to params getter', () => {
-    const paramsArgument = {};
-    const getParams = jest.fn();
-    const cached = jest.fn();
-    jest.mocked(memoize).mockReturnValue(cached);
-
-    const selector = createSelector(jest.fn(), getParams, jest.fn());
-    selector(paramsArgument);
-
-    expect(getParams).toBeCalledTimes(1);
-    expect(getParams).toBeCalledWith(paramsArgument);
+      expect(getParams).toBeCalledTimes(1);
+      expect(getParams).toBeCalledWith(paramsArgument);
+    });
   });
 });

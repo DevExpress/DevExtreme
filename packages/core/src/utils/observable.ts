@@ -11,8 +11,6 @@ export interface Observable<T> {
   getValue(): T;
 }
 
-export type ThinObservable<T> = Pick<Observable<T>, 'subscribe'>;
-
 export function createObservableEmitter<T>(initialValue: T): Emitter<T> & Observable<T> {
   const listeners = new Set<Listener<T>>();
   let lastValue: T = initialValue;

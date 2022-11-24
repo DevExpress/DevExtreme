@@ -4,7 +4,7 @@ describe('reducer', () => {
   it('calls event handler', () => {
     const expectedReturnValue = {};
     const actionValue = {};
-    const state = {};
+    const state = { model: {}, dictionary: {} };
     const handler = jest.fn().mockReturnValue(expectedReturnValue);
     const reducer = createReducer()({
       a: handler,
@@ -18,6 +18,7 @@ describe('reducer', () => {
   });
 
   it('does not call other events handlers', () => {
+    const state = { model: {}, dictionary: {} };
     const handlerB = jest.fn();
     const handlerC = jest.fn();
     const reducer = createReducer()({
@@ -26,7 +27,7 @@ describe('reducer', () => {
       c: handlerC,
     });
 
-    reducer({}, 'a', undefined);
+    reducer(state, 'a', undefined);
 
     expect(handlerB).not.toBeCalled();
     expect(handlerC).not.toBeCalled();
@@ -36,7 +37,7 @@ describe('reducer', () => {
     const action = Symbol('action');
     const handler = jest.fn();
     const value = {};
-    const state = {};
+    const state = { model: {}, dictionary: {} };
     const reducer = createReducer()({
       [action]: handler,
     });
@@ -48,12 +49,13 @@ describe('reducer', () => {
   });
 
   it('throws for unknown event', () => {
+    const state = { model: {}, dictionary: {} };
     const reducer = createReducer()({
       a: jest.fn(),
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(() => reducer({}, 'b' as any, {})).toThrow();
+    expect(() => reducer(state, 'b' as any, {})).toThrow();
   });
 
   it('throws for undefined handler', () => {

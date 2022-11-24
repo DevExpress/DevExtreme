@@ -1,48 +1,36 @@
 import {
   createObservableEmitter,
-  Emitter,
   ObjectType,
-  ThinObservable,
+  SubscribeFunc,
 } from './utils';
 
-export interface StateValue<TModel, TDictionary> {
-  model: TModel;
-  dictionary: TDictionary;
-}
-
-export interface State<TModel, TDictionary> extends
-  Emitter<StateValue<TModel, TDictionary>>,
-  ThinObservable<StateValue<TModel, TDictionary>> {
-  getCurrent: () => StateValue<TModel, TDictionary>;
-  addUpdateChunk: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
+export interface State<TState extends ObjectType> {
+  getCurrent: () => TState;
+  addUpdate: (statePart: Partial<TState>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
+  triggerRender: (state: TState) => void;
+  subscribeForRender: SubscribeFunc<TState>;
 }
 
-export function createState<TModel extends ObjectType, TDictionary extends ObjectType>(
-  initialState: StateValue<TModel, TDictionary>,
-): State<TModel, TDictionary> {
+export function createState<TState extends ObjectType>(
+  initialState: TState,
+): State<TState> {
   let current = initialState;
   let next = initialState;
 
-  const { emit, subscribe } = createObservableEmitter<StateValue<TModel, TDictionary>>(
+  const { emit, subscribe } = createObservableEmitter<TState>(
     initialState,
   );
 
   const getCurrent = () => current;
 
   const addUpdate = (
-    statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>,
+    statePart: Partial<TState>,
   ): void => {
     next = {
-      model: {
-        ...next.model,
-        ...statePart.model,
-      },
-      dictionary: {
-        ...next.dictionary,
-        ...statePart.dictionary,
-      },
+      ...next,
+      ...statePart,
     };
   };
 
@@ -55,11 +43,11 @@ export function createState<TModel extends ObjectType, TDictionary extends Objec
   };
 
   return {
-    emit,
-    subscribe,
     getCurrent,
-    addUpdateChunk: addUpdate,
+    addUpdate,
     commitUpdates,
     rollbackUpdates,
+    triggerRender: emit,
+    subscribeForRender: subscribe,
   };
 }

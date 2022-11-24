@@ -1,4 +1,4 @@
-import { getKeys } from '../getKeys';
+import { getKeys } from '../get-keys';
 
 describe('Core: Utils: getKeys', () => {
   it('Returns string key array of the passed object with string keys', () => {

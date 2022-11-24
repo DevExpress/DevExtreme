@@ -1,4 +1,4 @@
-export * from './callbacksMiddleware';
-export * from './controlledModeMiddleware';
+export * from './callbacks-middleware';
+export * from './controlled-mode-middleware';
 
 export * from './types';
