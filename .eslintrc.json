@@ -4,11 +4,7 @@
 		"node": true
 	},
 	"extends": [
-		"airbnb-base",
-		"plugin:import/errors",
-		"plugin:import/warnings",
-		"plugin:import/typescript",
-		"plugin:@typescript-eslint/recommended"
+        "devextreme/typescript"
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
@@ -20,6 +16,8 @@
 		"@typescript-eslint"
 	],
 	"rules": {
+        "@typescript-eslint/no-explicit-any": "error",
+        "import/exports-last": "error",
 		"@typescript-eslint/no-non-null-assertion": "off",
 //		"@typescript-eslint/naming-convention": [
 //			"error",
@@ -56,12 +54,16 @@
 	},
 	"overrides": [
 		{
-			"files": ["{packages,services,shared}/*/test/**/*.ts"],
+			"files": ["{packages,playgrounds}/*/test/**/*.ts"],
 			"env": {
 				"jest": true
 			}
-		}
-	],
+		},
+        {
+            "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+            "rules": {}
+        }
+    ],
     "settings": {
         "import/resolver": {
             "typescript": {}
