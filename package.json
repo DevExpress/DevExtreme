@@ -50,8 +50,8 @@
         "test:jest": "NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.json --no-cache",
         "pre-commit": "node build/pre-commit/index.cjs",
         "lint": "npm run lint:eslint",
-        "lint:eslint": "eslint --ignore-path .eslintignore packages/*/src/**/*.ts",
-        "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix {packages,playgrounds}/*/src/**/*.ts",
+        "lint:eslint": "eslint --ignore-path .eslintignore packages/*/src/**",
+        "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix packages/*/src/**",
         "tsc:build": "tsc --build ./tsconfig.project.json",
         "tsc:watch": "npm run tsc:build -- --watch",
         "update:tsconfig": "ts-node-esm scripts/update-package-tsconfig.ts"
