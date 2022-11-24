@@ -3,6 +3,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`Label`
   .page(url(__dirname, '../../container.html'));
@@ -30,7 +31,7 @@ themes.forEach((theme) => {
       test(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
         await t.click('#otherContainer');
 
-        await t.expect(await compareScreenshot(t, `label-dxTextArea-labelMode=${labelMode}-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+        await t.expect(await compareScreenshot(t, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
       }).before(async (t) => {
         await t.resizeWindow(300, 400);
         await changeTheme(theme);
