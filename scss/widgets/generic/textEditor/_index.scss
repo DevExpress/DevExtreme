@@ -383,11 +383,12 @@ $generic-texteditor-label-transition:
       height: 100%;
 
       .dx-label {
+        height: 100%;
         border-bottom: $border-width $borderStyle $borderColor;
         border-top: 0;
         border-left: $border-width $borderStyle transparent;
         margin-left: -1px;
-        height: 100%;
+        clip-path: inset(-$generic-texteditor-label-size -1px -1px 1px);
         padding: 0 2px;
 
         span {
@@ -448,7 +449,6 @@ $generic-texteditor-label-transition:
       .dx-label {
         border-bottom: $border-width $borderStyle $borderColor;
         border-top: $border-width $borderStyle $borderColor;
-        height: 100%;
 
         span {
           transition: $generic-texteditor-label-transition;
