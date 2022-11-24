@@ -16,7 +16,7 @@ export function createReducer<TState>() {
   ): Reducer<TState, THandlers> => {
     const invalidActions = Reflect.ownKeys(handlers).filter((k) => handlers[k] === undefined);
     if (invalidActions.length > 0) {
-      throw new Error(`Handlers for actions are not defined: ${invalidActions.join(', ')}`);
+      throw new Error(`Handlers for actions are not defined: ${invalidActions.join(", ")}`);
     }
 
     return (state, action, value) => {
