@@ -20,10 +20,8 @@ test('Validation Message position should be correct after change visibility of p
     .pressKey('tab');
 
   await t
-    .expect(await takeScreenshot('Textbox_validation_message.png'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+    .expect(await takeScreenshot('Textbox validation message.png'))
+    .ok();
 
   await ClientFunction(() => {
     (document.querySelector('#container') as HTMLElement).setAttribute('hidden', 'true');
@@ -34,7 +32,7 @@ test('Validation Message position should be correct after change visibility of p
   })();
 
   await t
-    .expect(await takeScreenshot('Textbox_validation_message.png'))
+    .expect(await takeScreenshot('Textbox validation message.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

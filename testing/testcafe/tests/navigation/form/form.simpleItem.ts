@@ -4,7 +4,6 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { getThemePostfix } from '../../../helpers/getPostfix';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
@@ -44,7 +43,7 @@ fixture`Form`
       await waitFont();
 
       await t
-        .expect(await takeScreenshot(`widget alignment (T1086611)_${labelLocation}_${theme}.png`, '#container'))
+        .expect(await takeScreenshot(`Form with labelLocation=${labelLocation}${getThemePostfix(theme)}.png`, '#container'))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -73,7 +72,7 @@ fixture`Form`
 [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
     const testName = `Form item padding with screenByWidth=${screenByWidth()}${getThemePostfix(theme)}`;
-    safeSizeTest(`${testName} (T1088451)`, async (t) => {
+    test(`${testName} (T1088451)`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
       await waitFont();

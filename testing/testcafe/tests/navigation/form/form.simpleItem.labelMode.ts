@@ -3,6 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
@@ -14,7 +15,7 @@ fixture`Form`
     ['outside', 'static', 'floating'].forEach((labelMode) => {
       [true, false].forEach((showOptionalMark) => {
         [true, false].forEach((showColonAfterLabel) => {
-          const testName = `SimpleItem,rtl_${rtlEnabled},optMark_${showOptionalMark},labelMode_${labelMode},colon_${showColonAfterLabel},${theme}`;
+          const testName = `SimpleItem,rtl_${rtlEnabled},optMark_${showOptionalMark},labelMode_${labelMode},colon_${showColonAfterLabel}${getThemePostfix(theme)}`;
           test(testName, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
             await changeTheme(theme);

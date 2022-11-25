@@ -2,6 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
@@ -19,7 +20,7 @@ themes.forEach((theme) => {
       test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
         await t.click('#otherContainer');
 
-        await t.expect(await compareScreenshot(t, `label-lookup-${theme}-labelMode=${labelMode}-styleMode=${stylingMode}.png`)).ok();
+        await t.expect(await compareScreenshot(t, `Lookup label with labelMode=${labelMode}-styleMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
       }).before(async (t) => {
         await t.resizeWindow(300, 800);
         await changeTheme(theme);
