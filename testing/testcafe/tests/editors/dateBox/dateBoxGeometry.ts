@@ -13,7 +13,7 @@ fixture`DateBox (datetime) geometry (T896846)`
 
 const themes = ['material.blue.light', 'generic.light'];
 themes.forEach((theme) => {
-  test(`Geometry is good (${name}, ${theme})`, async (t) => {
+  test(`Geometry is good (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dateBox = new DateBox('#container');
 
