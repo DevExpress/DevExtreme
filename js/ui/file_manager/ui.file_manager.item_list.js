@@ -176,9 +176,7 @@ class FileManagerItemListBase extends Widget {
         this._raiseFocusedItemChanged(args);
     }
 
-    _resetFocus() {
-
-    }
+    _resetFocus() { }
 
     _resetScrollTopPosition() {
         if(!hasWindow()) {
@@ -187,9 +185,7 @@ class FileManagerItemListBase extends Widget {
         setTimeout(() => this._getScrollable()?.scrollTo(0));
     }
 
-    _getScrollable() {
-
-    }
+    _getScrollable() { }
 
     _getItemThumbnail(fileInfo) {
         const itemThumbnailGetter = this.option('getItemThumbnail');
@@ -213,13 +209,9 @@ class FileManagerItemListBase extends Widget {
         return '';
     }
 
-    _getItemSelector() {
+    _getItemSelector() { }
 
-    }
-
-    _onItemDblClick(e) {
-
-    }
+    _onItemDblClick(e) { }
 
     _isDesktop() {
         return devices.real().deviceType === 'desktop';
@@ -294,13 +286,11 @@ class FileManagerItemListBase extends Widget {
         return this.option('selectionMode') === 'multiple';
     }
 
-    _deselectItem(item) {}
+    _deselectItem(item) { }
 
-    _setSelectedItemKeys(itemKeys) {
-    }
+    _setSelectedItemKeys(itemKeys) { }
 
-    _setFocusedItemKey(itemKey) {
-    }
+    _setFocusedItemKey(itemKey) { }
 
     _createDataSource() {
         return {
@@ -311,18 +301,13 @@ class FileManagerItemListBase extends Widget {
         };
     }
 
-    getSelectedItems() {
+    getSelectedItems() { }
 
-    }
+    clearSelection() { }
 
-    clearSelection() {
+    selectItem() { }
 
-    }
-
-    selectItem() {
-
-    }
-
+    refresh(options, operation) { }
 }
 
 export default FileManagerItemListBase;

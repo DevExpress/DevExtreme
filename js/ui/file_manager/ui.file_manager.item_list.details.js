@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { extendAttributes, getDisplayFileSize } from './ui.file_manager.common';
-import { isString, isFunction, isDefined } from '../../core/utils/type';
+import { isString, isFunction, isDefined, isEmptyObject } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
@@ -9,6 +9,7 @@ import DataGrid from '../data_grid/ui.data_grid';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
+import { OPERATIONS } from './file_items_controller';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';
@@ -57,6 +58,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._parentDirectoryItemKey = null;
         this._selectAllCheckBox = null;
         this._selectAllCheckBoxUpdating = false;
+        this._needResetScrollPosition = false;
+        this._counter = 0;
 
         this.$element().addClass(FILE_MANAGER_DETAILS_ITEM_LIST_CLASS);
 
@@ -102,7 +105,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
+            onContentReady: this._onFilesViewContentReady.bind(this)
         });
     }
 
@@ -355,6 +359,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _onFilesViewContentReady() {
+        if(this._needResetScrollPosition) {
+            this._resetScrollTopPosition();
+            this._needResetScrollPosition = false;
+        }
+    }
+
     _resetFocus() {
         this._setFocusedItemKey(undefined);
     }
@@ -444,24 +455,36 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    refresh(options) {
-        const actualOptions = {
-            dataSource: this._createDataSource()
-        };
+    refresh(options, operation) {
+        const actualOptions = {};
 
         if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
             if(isDefined(options.focusedItemKey)) {
                 actualOptions.focusedRowKey = options.focusedItemKey;
             } else {
                 actualOptions.focusedRowIndex = -1;
-                this._resetScrollTopPosition(); // TODO
             }
         }
 
-        this._filesView.option(actualOptions);
+        this._scrollSafeDataGridRefresh(actualOptions, operation);
 
         this._refreshDeferred = new Deferred();
         return this._refreshDeferred.promise();
+    }
+
+    _scrollSafeDataGridRefresh(options, operation) {
+        const hasNoScrollTarget = !isDefined(options.focusedRowKey) && options.focusedRowIndex === -1;
+        if(hasNoScrollTarget) {
+            this._filesView.option('autoNavigateToFocusedRow', false);
+        }
+        if(!isEmptyObject(options)) {
+            this._filesView.option(options);
+        }
+        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
+            this._needResetScrollPosition = true;
+        }
+        this._filesView.option('dataSource', this._createDataSource());
+        this._filesView.option('autoNavigateToFocusedRow', true);
     }
 
     _getScrollable() {
