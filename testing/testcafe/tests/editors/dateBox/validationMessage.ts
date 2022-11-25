@@ -4,6 +4,7 @@ import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
@@ -16,10 +17,10 @@ const themes = ['generic.light', 'generic.light.compact'];
 themes.forEach((theme) => {
   positions.forEach((position) => {
     test(`DateBox ValidationMessage position is correct (${position}, ${theme})`, async (t) => {
-      const dateBox1 = new DateBox('#container');
-      await dateBox1.option('value', new Date(2022, 6, 14));
+      const dateBox = new DateBox('#container');
+      await dateBox.option('value', new Date(2022, 6, 14));
 
-      await t.expect(await compareScreenshot(t, `datebox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+      await t.expect(await compareScreenshot(t, `Datebox validation message with position=${position}${getThemePostfix(theme)}.png`)).ok();
     }).before(async (t) => {
       await t.resizeWindow(300, 200);
       await changeTheme(theme);

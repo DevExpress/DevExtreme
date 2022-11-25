@@ -128,7 +128,7 @@ test('Placeholder is visible after items option change when value is not chosen 
   await tagBox.option('items', [1, 2, 3]);
 
   await t
-    .expect(await compareScreenshot(t, 'TagBox_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .expect(await compareScreenshot(t, 'TagBox placeholder if value is not choosen.png', '#container'))
     .ok();
 }).before(async () => createWidget('dxTagBox', {
   width: 300,
