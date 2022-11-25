@@ -19,26 +19,26 @@ themes.forEach((theme) => {
     const dateBox = new DateBox('#container');
 
     await t
-      .expect(await takeScreenshot(`Datebox with calendar${getThemePostfix(theme)}`, '#container'))
+      .expect(await takeScreenshot(`Datebox with calendar${getThemePostfix(theme)}`))
       .ok();
 
     await dateBox.option('type', 'datetime');
 
     await t
-      .expect(await takeScreenshot(`Datebox with datetime${getThemePostfix(theme)}`, '#container'))
+      .expect(await takeScreenshot(`Datebox with datetime${getThemePostfix(theme)}`))
       .ok();
 
     await dateBox.option('showAnalogClock', false);
 
     await t
-      .expect(await takeScreenshot(`Datebox with datetime without analog clock${getThemePostfix(theme)}`, '#container'))
+      .expect(await takeScreenshot(`Datebox with datetime without analog clock${getThemePostfix(theme)}`))
       .ok();
 
     await dateBox.option('displayFormat', 'HH:mm');
     await dateBox.option('calendarOptions', { visible: false });
 
     await t
-      .expect(await takeScreenshot(`Datebox with datetime without calendar${getThemePostfix(theme)}`, '#container'))
+      .expect(await takeScreenshot(`Datebox with datetime without calendar${getThemePostfix(theme)}`))
       .ok();
 
     await t
