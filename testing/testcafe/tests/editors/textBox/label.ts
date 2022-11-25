@@ -66,7 +66,7 @@ themes.forEach((theme) => {
         }
 
         await t
-          .expect(await takeScreenshot(`Textbox render rtl=${rtlEnabled}-rt${state.replaceAll('dx-', '').replaceAll('state-', '')}${getThemePostfix(theme)}.png`, '#container'))
+          .expect(await takeScreenshot(`Textbox render rtl=${rtlEnabled}-${state.replaceAll('dx-', '').replaceAll('state-', '')}${getThemePostfix(theme)}.png`, '#container'))
           .ok();
 
         for (const id of ids) {
