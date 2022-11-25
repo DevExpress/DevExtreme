@@ -4,6 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
@@ -21,7 +22,7 @@ themes.forEach((theme) => {
       await t.click('#otherContainer');
 
       await t
-        .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`))
+        .expect(await compareScreenshot(t, `TagBox label with stylingMode=${stylingMode}${getThemePostfix(theme)}.png`))
         .ok();
     }).before(async (t) => {
       await t.resizeWindow(300, 800);
@@ -51,7 +52,7 @@ themes.forEach((theme) => {
 
         await t.click(tagBox.element);
 
-        const screenshotName = `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`;
+        const screenshotName = `TagBox label with stylingMode=${stylingMode},labelMode=${labelMode}${getThemePostfix(theme)}.png`;
 
         await t
           .expect(await compareScreenshot(t, screenshotName))

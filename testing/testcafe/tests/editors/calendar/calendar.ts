@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`Calendar`
   .page(url(__dirname, '../../container.html'))
@@ -15,7 +16,7 @@ themes.forEach((theme) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`calendar-with-showWeekNumbers-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
+      .expect(await takeScreenshot(`Calendar with showWeekNumbers${getThemePostfix(theme)}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -33,7 +34,7 @@ test('Calendar with showWeekNumbers rendered correct for last week of year value
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('calendar-with-showWeekNumbers-last-week.png', '#container'))
+    .expect(await takeScreenshot('Calendar with showWeekNumbers last week.png', '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -49,7 +50,7 @@ test('Calendar with showWeekNumbers rendered correct with rtlEnabled', async (t)
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('calendar-with-showWeekNumbers-rtl-enabled.png', '#container'))
+    .expect(await takeScreenshot('Calendar with showWeekNumbers rtl=true.png', '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -65,7 +66,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('calendar-with-showWeekNumbers-and-cell-template.png', '#container'))
+    .expect(await takeScreenshot('Calendar with showWeekNumbers and cell template.png', '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

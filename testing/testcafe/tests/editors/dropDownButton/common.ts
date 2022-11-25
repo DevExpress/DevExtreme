@@ -6,6 +6,7 @@ import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 import asyncForEach from '../../../helpers/asyncForEach';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`Drop Down Button`
   .page(url(__dirname, '../../container.html'));
@@ -53,7 +54,7 @@ themes.forEach((theme) => {
       await asyncForEach([1, 2, 3, 4], async (index) => {
         await t.hover(Selector(`#drop-down-button${index} .dx-button:first-child`));
 
-        await t.expect(await compareScreenshot(t, `DropDownButton${index}-rtlEnabled=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`, '#container')).ok();
+        await t.expect(await compareScreenshot(t, `DropDownButton${index} rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container')).ok();
       });
     }).before(async (t) => {
       await t.resizeWindow(300, 400);

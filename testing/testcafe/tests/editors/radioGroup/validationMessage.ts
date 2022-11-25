@@ -4,8 +4,11 @@ import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
-fixture`Radio Group ValidationMessage`
+const RADIO_GROUP_CLASS = 'dx-radiogroup';
+
+fixture`Radio Group Validation Message`
   .page(url(__dirname, '../../container.html'));
 
 const themes = ['generic.light', 'material.blue.light'];
@@ -16,11 +19,11 @@ themes.forEach((theme) => {
 
     await form.validate();
 
-    const radioGroup = new RadioGroup('.dx-radiogroup');
+    const radioGroup = new RadioGroup(`.${RADIO_GROUP_CLASS}`);
 
     await radioGroup.focus();
 
-    await t.expect(await compareScreenshot(t, `radiogroup-horizontal-validation,theme=${theme.replace(/\./g, '-')}.png`, form.element)).ok();
+    await t.expect(await compareScreenshot(t, `RadioGroup horizontal validation${getThemePostfix(theme)}.png`, form.element)).ok();
   }).before(async () => {
     await changeTheme(theme);
 
