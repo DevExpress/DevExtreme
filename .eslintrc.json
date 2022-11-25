@@ -13,7 +13,8 @@
 	},
 	"plugins": [
 		"import",
-		"@typescript-eslint"
+		"@typescript-eslint",
+        "unicorn"
 	],
 	"rules": {
         "@typescript-eslint/no-explicit-any": "error",
@@ -27,6 +28,12 @@
 //				"prefix": ["I"]
 //			}
 //		],
+        "unicorn/filename-case": [
+            "error",
+            {
+                "case": "kebabCase"
+            }
+        ],
 		"@typescript-eslint/ban-ts-comment": ["error", {
 			"ts-ignore": false
 		}],
