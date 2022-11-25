@@ -45,7 +45,7 @@ themes.forEach((theme) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
-    await t.resizeWindow(600, 550);
+    await t.resizeWindow(600, 600);
     await changeTheme(theme);
     await waitFont();
 
