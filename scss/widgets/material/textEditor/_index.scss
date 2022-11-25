@@ -687,7 +687,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       height: 100%;
 
       .dx-label {
-        padding: 0;
+        padding: 0 2px;
         height: 100%;
         box-shadow:
           inset 0 -#{$shadowOffset}px $borderColor,
@@ -893,6 +893,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           inset 0 1px transparent,
           inset 1px 0 transparent,
           inset -1px 0 transparent;
+        margin-left: -2px;
+        margin-right: -2px;
+        border-radius: 1px;
+        clip-path: inset(-$material-texteditor-label-font-size 1px -1px 1px);
 
         span {
           transform: translate(0, -$label-offset-y);
@@ -910,6 +914,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           inset 0 1px $texteditor-border-color,
           inset -1px 0 transparent,
           inset 1px 0 $texteditor-border-color;
+        clip-path: inset(-1px 1px -1px -1px);
       }
 
       .dx-label-after {
@@ -918,6 +923,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           inset 0 1px $texteditor-border-color,
           inset -1px 0 $texteditor-border-color,
           inset 1px 0 transparent;
+        clip-path: inset(-1px -1px -1px 1px);
       }
     }
 
@@ -931,6 +937,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
             inset 0 1px $texteditor-border-color,
             inset -1px 0 $texteditor-border-color,
             inset 1px 0 transparent;
+          clip-path: inset(-1px -1px -1px 1px);
         }
 
         .dx-label-after {
@@ -940,6 +947,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
             inset 0 1px $texteditor-border-color,
             inset -1px 0 transparent,
             inset 1px 0  $texteditor-border-color;
+          clip-path: inset(-1px 1px -1px -1px);
         }
       }
     }
