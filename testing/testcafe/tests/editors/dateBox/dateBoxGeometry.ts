@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import DateBox from '../../../model/dateBox';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -43,7 +44,8 @@ themes.forEach((theme) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.resizeWindow(600, 550);
     await changeTheme(theme);
     await waitFont();
 
@@ -53,5 +55,7 @@ themes.forEach((theme) => {
       width: 200,
       value: new Date(1.5e12),
     });
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
   });
 });
