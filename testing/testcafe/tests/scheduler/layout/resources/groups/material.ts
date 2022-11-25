@@ -3,9 +3,10 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
+import { changeTheme } from '../../../../../helpers/changeTheme';
 
 fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
   await createWidget('dxScheduler', {
@@ -31,7 +32,11 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     safeSizeTest(`Base views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `material-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async () => {
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, groupOrientation);
+    });
   });
 });
 
@@ -40,6 +45,10 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     safeSizeTest(`Timeline views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `material-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async () => {
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, groupOrientation);
+    });
   });
 });
