@@ -23,19 +23,23 @@ themes.forEach((theme) => {
       .ok();
 
     await dateBox.option('type', 'datetime');
-
     await t
       .expect(await takeScreenshot(`Datebox with datetime${getThemePostfix(theme)}`))
       .ok();
 
+    await dateBox.option('opened', false);
     await dateBox.option('showAnalogClock', false);
+    await dateBox.option('opened', true);
 
     await t
       .expect(await takeScreenshot(`Datebox with datetime without analog clock${getThemePostfix(theme)}`))
       .ok();
 
+    await dateBox.option('opened', false);
     await dateBox.option('displayFormat', 'HH:mm');
     await dateBox.option('calendarOptions', { visible: false });
+    await dateBox.option('showAnalogClock', false);
+    await dateBox.option('opened', true);
 
     await t
       .expect(await takeScreenshot(`Datebox with datetime without calendar${getThemePostfix(theme)}`))
@@ -45,7 +49,7 @@ themes.forEach((theme) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
-    await t.resizeWindow(600, 600);
+    await t.resizeWindow(600, 550);
     await changeTheme(theme);
     await waitFont();
 

@@ -50,14 +50,14 @@ themes.forEach((theme) => {
       await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`, 0);
       await t.debug();
       await t
-        .expect(await takeScreenshot(`Textbox render with limited width,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
+        .expect(await takeScreenshot(`Textbox render with limited width rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
         .ok();
 
       await deleteStylesheetRule(0);
       await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 220px; margin: 5px; }`, 0);
 
       await t
-        .expect(await takeScreenshot(`Textbox render,rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
+        .expect(await takeScreenshot(`Textbox render rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
         .ok();
 
       for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
@@ -66,7 +66,7 @@ themes.forEach((theme) => {
         }
 
         await t
-          .expect(await takeScreenshot(`Textbox render,rtl=${rtlEnabled},${state.replaceAll('dx-', '')}${getThemePostfix(theme)}.png`, '#container'))
+          .expect(await takeScreenshot(`Textbox render rtl=${rtlEnabled}-rt${state.replaceAll('dx-', '').replaceAll('state-', '')}${getThemePostfix(theme)}.png`, '#container'))
           .ok();
 
         for (const id of ids) {
