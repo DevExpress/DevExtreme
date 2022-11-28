@@ -1533,6 +1533,21 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.strictEqual(instance.option('text'), '', 'widget has no text');
         assert.strictEqual($input.val(), '', 'input has no text');
     });
+
+    QUnit.test('no errors should be thown after changing dropDownOptions and option that triggers refresing (T1129836)', function(assert) {
+        const selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            opened: true,
+        }).dxSelectBox('instance');
+
+        try {
+            selectBox.option('dropDownOptions', { disabled: true });
+            selectBox.option('searchEnabled', false);
+            assert.ok(true);
+        } catch(error) {
+            assert.ok(false, 'error is trown');
+        }
+    });
 });
 
 QUnit.module('clearButton', moduleSetup, () => {
