@@ -34,7 +34,6 @@ import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
 
-
 export class ImageUploader {
     constructor(module, config) {
         this.module = module;
@@ -45,42 +44,51 @@ export class ImageUploader {
 
     render() {
         this.editorInstance.formDialogOption({
-            'toolbarItems[0].options.onClick': this.onAddPopupClick.bind(this),
+            'toolbarItems[0].options.onClick': this.onAddButtonClick.bind(this),
         });
 
         this.tabPanelIndex = 0;
         this.formData = this.getFormData();
         this.isUpdating = this.isImageUpdating();
-        this.actualTabs = this.config.tabs?.slice(); // TODO model
+
+        this.tabsModel = this.createTabsModel(this.config.tabs);
         this.tabs = this.createTabs(this.formData);
+
         const formConfig = this.getFormConfig();
 
-        this.modifyDialogPopupOptions();
+        this.updatePopupConfig();
 
         this.editorInstance.showFormDialog(formConfig)
             .done((formData, event) => {
                 this.tabs[this.getActiveTabIndex()].strategy.pasteImage(formData, event);
             })
             .always(() => {
-                this.resetDialogPopupOptions();
                 this.quill.focus();
             });
 
-        this.validate();
+        this.updateAddButtonState();
     }
 
-    onAddPopupClick(e) {
-        const dialog = this.editorInstance._formDialog;
-        dialog.hide(dialog._form.option('formData'), e.event);
-
-        this.tabs[this.tabPanelIndex].upload();
+    getCurrentTab() {
+        return this.tabs[this.tabPanelIndex];
     }
 
-    validate() {
-        const isValid = this.tabs[this.tabPanelIndex].isValid();
+    onAddButtonClick(e) {
+        if(this.getCurrentTab().upload()) {
+            const dialog = this.editorInstance._formDialog;
+            dialog.hide(dialog._form.option('formData'), e.event);
+        }
+    }
 
+    updateAddButtonState() {
+        const isDisabled = this.getCurrentTab().isDisableButton();
+
+        this.setAddButtonDisabled(isDisabled);
+    }
+
+    setAddButtonDisabled(value) {
         this.editorInstance.formDialogOption({
-            'toolbarItems[0].options.disabled': !isValid
+            'toolbarItems[0].options.disabled': value
         });
     }
 
@@ -100,31 +108,32 @@ export class ImageUploader {
         };
     }
 
-    createTabs(formData) {
-        if(!this.actualTabs || this.isUpdating) {
-            this.actualTabs = ['url'];
-        }
-
-        this.actualTabs = this.normalizeTabs(this.actualTabs);
-
-        return this.actualTabs.map((tabName) => {
-            const newTab = tabName === 'url'
-                ? new UrlTab(this.module, {
-                    config: this.config,
-                    formData,
-                    isUpdating: this.isUpdating
-                }, this.validate.bind(this))
-                : new FileTab(this.module, {
-                    config: this.config
-                }, this.validate.bind(this));
-
-            return newTab;
-        });
+    createUrlTab(formData) {
+        return new UrlTab(this.module, {
+            config: this.config,
+            formData,
+            isUpdating: this.isUpdating
+        }, this.updateAddButtonState.bind(this));
     }
 
-    normalizeTabs(tabsConfig) {
-        return tabsConfig.map((item) => {
-            return typeof item === 'object' ? item.name : item;
+    createFileTab() {
+        return new FileTab(this.module, {
+            config: this.config
+        }, this.updateAddButtonState.bind(this));
+    }
+
+    createTabsModel(model = []) {
+        if(!model || this.isUpdating) {
+            return ['url'];
+        }
+
+        return model.map(tab => typeof tab === 'object' ? tab.name : tab);
+    }
+
+    createTabs(formData) {
+        return this.tabsModel.map((tabName) => {
+            const isUrlTab = tabName === 'url';
+            return isUrlTab ? this.createUrlTab(formData) : this.createFileTab();
         });
     }
 
@@ -132,40 +141,24 @@ export class ImageUploader {
         return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
     }
 
-    modifyDialogPopupOptions() {
+    updatePopupConfig() {
         let wrapperClasses = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
         if(this.useTabbedItems()) {
             wrapperClasses += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
         }
 
+        const titleKey = this.isUpdating ? DIALOG_UPDATE_IMAGE_CAPTION : DIALOG_IMAGE_CAPTION;
+        const addButtonTextKey = this.isUpdating ? DIALOG_IMAGE_UPDATE_BUTTON : DIALOG_IMAGE_ADD_BUTTON;
+
         this.editorInstance.formDialogOption({
-            title: localizationMessage.format(
-                this.isUpdating
-                    ? DIALOG_UPDATE_IMAGE_CAPTION
-                    : DIALOG_IMAGE_CAPTION),
-            'toolbarItems[0].options.text': localizationMessage.format(
-                this.isUpdating
-                    ? DIALOG_IMAGE_UPDATE_BUTTON
-                    : DIALOG_IMAGE_ADD_BUTTON),
-            // 'toolbarItems[0].options.visible': !this.shouldHideAddButton(),
+            title: localizationMessage.format(titleKey),
+            'toolbarItems[0].options.text': localizationMessage.format(addButtonTextKey),
             'wrapperAttr': { class: wrapperClasses }
         });
     }
 
-    // shouldHideAddButton() { // TODO
-    //     return !this.isUpdating && this.actualTabs.length === 1 && this.actualTabs[0] !== 'url';
-    // }
-
-    resetDialogPopupOptions() { // TODO
-        this.editorInstance.formDialogOption({
-            'toolbarItems[0].options.text': localizationMessage.format('OK'),
-            'toolbarItems[0].options.visible': true,
-            wrapperAttr: { class: FORM_DIALOG_CLASS }
-        });
-    }
-
     useTabbedItems() {
-        return this.actualTabs.length > 1;
+        return this.tabsModel.length > 1;
     }
 
     getFormWidth() {
@@ -197,7 +190,7 @@ export class ImageUploader {
                 tabPanelOptions: {
                     onSelectionChanged: (e) => {
                         this.tabPanelIndex = e.component.option('selectedIndex');
-                        this.validate();
+                        this.updateAddButtonState();
                     }
                 },
                 tabs: tabsConfig
@@ -216,23 +209,22 @@ class BaseTab {
         this.isUpdating = isUpdating;
         this.onFileSelected = onFileSelected;
 
-        this.strategy = this.getStrategy(); // TODO rename
+        this.strategy = this.createStrategy();
     }
 
     getItemsConfig() {
         return this.strategy.getItemsConfig();
     }
 
-    isValid() {
-        return this.strategy.isValid();
+    createStrategy() {
     }
 
-    getStrategy() {
-
+    isDisableButton() {
+        return false;
     }
 
     upload() {
-        this.strategy.upload();
+        return this.strategy.upload();
     }
 }
 
@@ -241,9 +233,9 @@ class UrlTab extends BaseTab {
         return localizationMessage.format(DIALOG_IMAGE_SPECIFY_URL);
     }
 
-    getStrategy() { // TODO
+    createStrategy() {
         return this.isUpdating
-            ? new UpdateUrlStrategy(this.module, this.config, this.formData, this.onFileSelected)
+            ? new UpdateUrlStrategy(this.module, this.config, this.formData)
             : new AddUrlStrategy(this.module, this.config, this.onFileSelected);
     }
 }
@@ -253,19 +245,22 @@ class FileTab extends BaseTab {
         return localizationMessage.format(DIALOG_IMAGE_SELECT_FILE);
     }
 
-    getStrategy() {
+    createStrategy() {
         return new FileStrategy(this.module, this.config, this.onFileSelected);
+    }
+
+    isDisableButton() {
+        return !this.strategy.isValid();
     }
 }
 
 class BaseStrategy {
-    constructor(module, config, onFileSelected) {
+    constructor(module, config) {
         this.module = module;
         this.config = config;
         this.editorInstance = module.editorInstance;
         this.quill = module.quill;
         this.selection = this.getQuillSelection();
-        this.onFileSelected = onFileSelected;
     }
 
     getQuillSelection() {
@@ -274,14 +269,13 @@ class BaseStrategy {
         return selection ?? { index: this.quill.getLength(), length: 0 };
     }
 
-    pasteImage() {} // TODO
+    pasteImage() {}
 
     isValid() {
-        return false;
+        return true;
     }
 
-    upload() {
-    }
+    upload() {}
 }
 class AddUrlStrategy extends BaseStrategy {
     constructor(module, config, onFileSelected) {
@@ -320,19 +314,15 @@ class AddUrlStrategy extends BaseStrategy {
         }));
     }
 
-    isValid() {
-        const value = this.editorInstance._formDialog._form.getEditor('src').option('value');
-        return value !== '';
+    upload() {
+        const result = this.editorInstance._formDialog._form.validate();
+        return result.isValid;
     }
 
     getItemsConfig() {
         return [
             { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) },
                 validationRules: [{ type: 'required' }, { type: 'stringLength', min: 1 }],
-                editorOptions: {
-                    // valueChangeEvent: 'focusout focusin change', // TODO
-                    onValueChanged: () => this.onFileSelected()
-                }
             },
             { dataField: 'width', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
                 const $content = $('<div>').addClass(DIALOG_IMAGE_FIX_RATIO_CONTAINER);
@@ -422,13 +412,10 @@ class UpdateUrlStrategy extends AddUrlStrategy {
 class FileStrategy extends BaseStrategy {
     constructor(module, config, onFileSelected) {
         super(module, config, onFileSelected);
-
-        this.fileUploader = null;
-
         this.useBase64 = !isDefined(this.config.fileUploadMode) || this.config.fileUploadMode === 'base64';
 
         this.isValidInternal = false;
-
+        this.onFileSelected = onFileSelected;
         this.data = null;
     }
 
@@ -438,6 +425,8 @@ class FileStrategy extends BaseStrategy {
         } else if(this.data.value.length) {
             this.data.component.upload();
         }
+
+        return true;
     }
 
     isValid() {
@@ -472,32 +461,25 @@ class FileStrategy extends BaseStrategy {
         return this.config.fileUploadMode === 'both';
     }
 
+    validate(e) {
+        const fileUploader = e.component;
+
+        this.isValidInternal = !fileUploader._files.some(file => !file.isValid());
+        if(fileUploader._files.length === 0) {
+            this.isValidInternal = false;
+        }
+    }
+
     getFileUploaderOptions() {
         const fileUploaderOptions = {
             uploadUrl: this.config.uploadUrl,
             onValueChanged: (data) => {
-                this.isValidInternal = !this.fileUploader._files.some(file => !file.isValid()); // TODO
-
-                if(this.fileUploader._files.length === 0) {
-                    this.isValidInternal = false;
-                }
+                this.validate(data);
 
                 this.data = data;
-
-                // TODO
-                // if(this.isValid) {
-                //     if(this.useBase64) {
-                //         this.base64Upload(data);
-                //     } else if(data.value.length) {
-                //         data.component.upload();
-                //     }
-                // }
-
                 this.onFileSelected();
             },
-            onUploaded: (data) => {
-                this.serverUpload(data);
-            }
+            onUploaded: e => this.serverUpload(e)
         };
 
         return extend({}, getFileUploaderBaseOptions(), fileUploaderOptions, this.config.fileUploaderOptions);
@@ -512,7 +494,8 @@ class FileStrategy extends BaseStrategy {
                 label: { visible: false },
                 template: () => {
                     const $content = $('<div>');
-                    this.fileUploader = this.module.editorInstance._createComponent($content, FileUploader, this.getFileUploaderOptions());
+                    this.module.editorInstance._createComponent($content, FileUploader, this.getFileUploaderOptions());
+
                     return $content;
                 }
             }, {
