@@ -830,7 +830,8 @@ QUnit.module('Details View', moduleConfig, () => {
         fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
         this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 3512, 'scroll position changed to 3512');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
 
         fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(800);
@@ -875,7 +876,8 @@ QUnit.module('Details View', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 3512, 'scroll position changed to 3512');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
 
         fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(800);
