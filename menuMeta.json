@@ -2633,7 +2633,6 @@
           {
             "Title": "Resolved Axis Label Overlapping",
             "Name": "AxisLabelsOverlapping",
-            "DocUrl": "Guide/UI_Components/Chart/Axes/Axis_Labels/",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "overlappingBehavior"
