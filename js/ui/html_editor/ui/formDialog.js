@@ -95,11 +95,6 @@ class FormDialog {
                     widget: 'dxButton',
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
-                        text: localizationMessage.format('OK'),
-                        // TODO
-                        // onClick: (e) => {
-                        //     this.hide(this._form.option('formData'), e.event);
-                        // }
                     }
                 }, {
                     toolbar: 'bottom',
@@ -109,18 +104,13 @@ class FormDialog {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('Cancel'),
                         onClick: () => {
-                            this.onAddButtonClick();
-                            this._popup.hide(); // TODO
+                            this._popup.hide();
                         }
                     }
                 }
             ],
             _wrapperClassExternal: DIALOG_CLASS,
         }, this._popupUserConfig);
-    }
-
-    onAddButtonClick() {
-
     }
 
     _renderForm($container, options) {
