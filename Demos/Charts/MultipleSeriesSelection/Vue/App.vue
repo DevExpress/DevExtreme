@@ -21,7 +21,6 @@
     <DxValueAxis>
       <DxLabel>
         <DxFormat
-          :precision="2"
           type="percent"
         />
       </DxLabel>

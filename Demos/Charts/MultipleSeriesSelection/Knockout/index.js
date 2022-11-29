@@ -17,7 +17,6 @@ window.onload = function () {
         label: {
           format: {
             type: 'percent',
-            precision: 2,
           },
         },
       },

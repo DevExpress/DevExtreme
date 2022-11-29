@@ -28,7 +28,7 @@ class App extends React.Component {
           type="stock"
         />
         <Series
-          name="DELL"
+          name="E-Mart"
           openValueField="o"
           highValueField="h"
           lowValueField="l"

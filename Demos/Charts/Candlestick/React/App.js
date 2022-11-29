@@ -29,7 +29,7 @@ class App extends React.Component {
           type="candlestick"
         />
         <Series
-          name="DELL"
+          name="E-Mart"
           openValueField="o"
           highValueField="h"
           lowValueField="l"

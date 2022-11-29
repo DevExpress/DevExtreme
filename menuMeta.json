@@ -2560,7 +2560,6 @@
           {
             "Title": "Stock",
             "Name": "Stock",
-            "Credits": "bigcharts.marketwatch.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/SampleData/FinancialData.cs"
@@ -2571,7 +2570,6 @@
           {
             "Title": "Candlestick",
             "Name": "Candlestick",
-            "Credits": "bigcharts.marketwatch.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/SampleData/FinancialData.cs"
@@ -2652,7 +2650,6 @@
             "Title": "Crosshair",
             "Name": "Crosshair",
             "DocUrl": "Guide/UI_Components/Chart/Crosshair/",
-            "Credits": "www.geohive.com",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2818,7 +2815,6 @@
             "Title": "Wind Rose",
             "Name": "WindRose",
             "DocUrl": "ApiReference/UI_Components/dxPolarChart/Configuration/argumentAxis/#discreteAxisDivisionMode",
-            "Credits": "www.wrcc.dri.edu",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/WindRoseItem.cs",
@@ -2863,7 +2859,6 @@
           {
             "Title": "Range Bar",
             "Name": "RangeBar",
-            "Credits": "www.tax.state.ak.us",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "rangeBar",
@@ -3045,7 +3040,6 @@
             "Title": "Points Aggregation",
             "Name": "PointsAggregation",
             "DocUrl": "Guide/UI_Components/Chart/Data_Aggregation/",
-            "Credits": "www.worldweatheronline.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/WeatherIndicator.cs",
@@ -3088,8 +3082,7 @@
             "Title": "Discrete Aggregation",
             "Name": "DiscreteAggregation",
             "Widget": "Charts",
-            "DemoType": "Viz",
-            "Credits": "U.S. Energy Information Administration (Oct 2019)"
+            "DemoType": "Viz"
           },
           {
             "Title": "Axis Label Templates",
@@ -3150,7 +3143,6 @@
                 "Title": "Selection",
                 "Name": "Selection",
                 "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
-                "Credits": "www.geohive.com",
                 "Widget": "Charts",
                 "DemoType": "Viz"
               },
@@ -3158,7 +3150,6 @@
                 "Title": "Multiple Series Selection",
                 "Name": "MultipleSeriesSelection",
                 "DocUrl": "Guide/UI_Components/Chart/Series/Selection/",
-                "Credits": "www.w3schools.com",
                 "Widget": "Charts",
                 "DemoType": "Viz"
               },
@@ -3174,7 +3165,6 @@
                 "Title": "API - Select a Point",
                 "Name": "APISelectAPoint",
                 "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
-                "Credits": "http://www.statisticbrain.com",
                 "Widget": "Charts",
                 "DemoType": "Viz",
                 "Equivalents": "hatching, rotated"
@@ -3212,7 +3202,6 @@
                 "Name": "ZoomingOnAreaSelection",
                 "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
                 "Widget": "Charts",
-                "Credits": "The World Bank: World Development Indicators",
                 "DemoType": "Viz",
                 "Equivalents": "zoomAndPan, seriesTemplate, resetVisualRange",
                 "MvcAdditionalFiles": [
@@ -4669,7 +4658,6 @@
             "Title": "Chart on Background with Series Template",
             "Name": "ChartOnBackgroundWithSeriesTemplate",
             "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/chart/",
-            "Credits": "www.geohive.com",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
               "/Models/OilProduction.cs",

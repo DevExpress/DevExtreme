@@ -16,15 +16,6 @@
         opacity="0.5"
         fill="#6D39C3"
       />
-      <path
-        d="M 638 365 L 630 396 L 799 396 L 807 365"
-        fill="#6D39C3"
-      />
-      <path
-        d="M 609 376 L 601 407 L 770 407 L 778 376"
-        opacity="0.5"
-        fill="#6D39C3"
-      />
       <text
         transform="translate(30,89)"
         style="fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 36px; font-weight: bold;"
@@ -55,11 +46,6 @@
           y="19.2"
         >custom elements</tspan>
       </text>
-      <text
-        x="650"
-        y="385"
-        style="opacity: 0.8; fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 12px;"
-      >UNdata (www.data.un.org)</text>
       <path
         opacity="0.8"
         d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"

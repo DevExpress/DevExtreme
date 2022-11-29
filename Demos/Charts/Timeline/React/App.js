@@ -23,6 +23,7 @@ class App extends React.Component {
           rangeValue1Field="start"
           rangeValue2Field="end"
           barOverlapGroup="monarch"
+          minBarSize={4}
         >
         </CommonSeriesSettings>
         <Legend verticalAlignment="bottom" horizontalAlignment="center">

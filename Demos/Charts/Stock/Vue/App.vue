@@ -9,7 +9,7 @@
       type="stock"
     />
     <DxSeries
-      name="DELL"
+      name="E-Mart"
       open-value-field="o"
       high-value-field="h"
       low-value-field="l"

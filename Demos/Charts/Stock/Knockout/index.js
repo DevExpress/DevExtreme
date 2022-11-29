@@ -9,7 +9,7 @@ window.onload = function () {
       },
       series: [
         {
-          name: 'DELL',
+          name: 'E-Mart',
           openValueField: 'o',
           highValueField: 'h',
           lowValueField: 'l',

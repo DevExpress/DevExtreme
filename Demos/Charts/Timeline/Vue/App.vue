@@ -18,6 +18,7 @@
       range-value1-field="start"
       range-value2-field="end"
       bar-overlap-group="monarchs"
+      :min-bar-size="4"
     />
     <DxSeriesTemplate name-field="house"/>
     <DxAnimation :enabled="false"/>

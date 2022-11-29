@@ -36,10 +36,7 @@ class App extends React.Component {
         <ArgumentAxis type="discrete" />
         <ValueAxis>
           <Label>
-            <Format
-              precision={2}
-              type="percent"
-            />
+            <Format type="percent" />
           </Label>
         </ValueAxis>
         <Legend

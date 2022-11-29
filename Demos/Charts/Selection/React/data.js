@@ -1,25 +1,25 @@
 export const exportData = [{
   country: 'China',
-  year2007: 0.1732,
-  year2008: -0.1588,
+  year2007: 0.18265,
+  year2008: -0.16682,
 }, {
   country: 'Germany',
-  year2007: 0.0964,
-  year2008: -0.2231,
+  year2007: 0.10467,
+  year2008: -0.20165,
 }, {
   country: 'United States',
-  year2007: 0.1187,
-  year2008: -0.1878,
+  year2007: 0.1232,
+  year2008: -0.17994,
 }, {
   country: 'Japan',
-  year2007: 0.1081,
-  year2008: -0.2614,
+  year2007: 0.10868,
+  year2008: -0.25622,
 }, {
   country: 'France',
-  year2007: 0.1014,
-  year2008: -0.2222,
+  year2007: 0.09526,
+  year2008: -0.23631,
 }, {
   country: 'Netherlands',
-  year2007: 0.1355,
-  year2008: -0.2015,
+  year2007: 0.14402,
+  year2008: -0.21923,
 }];

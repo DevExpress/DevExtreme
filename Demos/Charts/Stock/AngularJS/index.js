@@ -10,7 +10,7 @@ DemoApp.controller('DemoController', ($scope) => {
     },
     series: [
       {
-        name: 'DELL',
+        name: 'E-Mart',
         openValueField: 'o',
         highValueField: 'h',
         lowValueField: 'l',

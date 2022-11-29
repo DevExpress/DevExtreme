@@ -75,6 +75,12 @@ const dataSource = [
     monarch: 'Elizabeth II',
     house: 'Windsor',
     start: new Date(1952, 1, 6),
+    end: new Date(2022, 8, 8),
+  },
+  {
+    monarch: 'Charles III',
+    house: 'Windsor',
+    start: new Date(2022, 8, 8),
     end: new Date(),
   },
   {

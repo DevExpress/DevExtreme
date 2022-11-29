@@ -22,6 +22,7 @@ DemoApp.controller('DemoController', ($scope) => {
       rangeValue2Field: 'end',
       ignoreEmptyPoints: true,
       barOverlapGroup: 'monarchs',
+      minBarSize: 4,
     },
     seriesTemplate: {
       nameField: 'house',
