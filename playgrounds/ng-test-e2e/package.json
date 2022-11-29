@@ -1,7 +1,0 @@
-{
-  "name": "ng-test-e2e",
-  "version": "1.0.0",
-  "scripts": {
-    "no-test": "echo \"Error: no test specified\" && exit 0"
-  }
-}
