@@ -21,7 +21,7 @@ export async function takeScreenshotInTheme(
     await changeTheme(`${themeName}.compact`);
 
     await t
-      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}.compact`)}.png`), element))
+      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), element))
       .ok();
 
     await changeTheme(themeName);

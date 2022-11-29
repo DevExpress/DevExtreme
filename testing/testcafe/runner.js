@@ -111,7 +111,7 @@ function setTestingPlatform(args) {
 }
 
 function setTestingTheme(args) {
-    process.env.theme = args.theme;
+    process.env.theme = args.theme || 'generic.light';
 }
 
 function expandBrowserAlias(browser) {
