@@ -43,9 +43,11 @@ export class ImageUploader {
     }
 
     render() {
-        this.editorInstance._formDialog.contentClick = () => {
-            return this.getCurrentTab().upload();
-        };
+        if(this.editorInstance._formDialog) {
+            this.editorInstance._formDialog.contentClick = () => {
+                return this.getCurrentTab().upload();
+            };
+        }
 
         this.tabPanelIndex = 0;
         this.formData = this.getFormData();
@@ -117,7 +119,7 @@ export class ImageUploader {
     }
 
     createTabsModel(model = []) {
-        if(!model || this.isUpdating) {
+        if(model.length === 0 || this.isUpdating) {
             return ['url'];
         }
 
