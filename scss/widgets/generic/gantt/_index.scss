@@ -29,6 +29,10 @@ $gantt-successor-background-color: white;
     min-height: $gantt-treelist-text-min-height;
   }
 
+  .dx-treelist-headers .dx-treelist-table {
+    min-height: 32px;
+  }
+
   .dx-treelist-icon-container {
     max-height: $gantt-treelist-text-min-height;
   }
