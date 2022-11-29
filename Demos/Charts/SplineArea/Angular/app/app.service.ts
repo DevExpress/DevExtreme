@@ -10,28 +10,28 @@ export class СorporationInfo {
 
 const corporationsInfo: СorporationInfo[] = [{
   company: 'ExxonMobil',
-  y2005: 362.53,
-  y2004: 277.02,
+  y2005: 377.28,
+  y2004: 270.25,
 }, {
   company: 'GeneralElectric',
-  y2005: 348.45,
-  y2004: 328.54,
+  y2005: 353.49,
+  y2004: 311.43,
 }, {
   company: 'Microsoft',
-  y2005: 279.02,
-  y2004: 297.02,
+  y2005: 269.86,
+  y2004: 273.32,
 }, {
   company: 'Citigroup',
-  y2005: 230.93,
-  y2004: 255.3,
+  y2005: 252.95,
+  y2004: 280.50,
 }, {
   company: 'Royal Dutch Shell plc',
-  y2005: 203.52,
-  y2004: 173.54,
+  y2005: 197.67,
+  y2004: 165.89,
 }, {
   company: 'Procted & Gamble',
-  y2005: 197.12,
-  y2004: 131.89,
+  y2005: 184.72,
+  y2004: 130.52,
 }];
 
 @Injectable()

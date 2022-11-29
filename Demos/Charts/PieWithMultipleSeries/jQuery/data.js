@@ -1,43 +1,41 @@
-const dataSource = [
-  {
-    Country: 'Brazil',
-    Export: 243,
-    Import: 233,
-  }, {
-    Country: 'Russia',
-    Export: 529,
-    Import: 335,
-  }, {
-    Country: 'India',
-    Export: 293,
-    Import: 489,
-  }, {
-    Country: 'China',
-    Export: 2049,
-    Import: 1818,
-  }, {
-    Country: 'Japan',
-    Export: 799,
-    Import: 886,
-  }, {
-    Country: 'USA',
-    Export: 1547,
-    Import: 2335,
-  }, {
-    Country: 'Canada',
-    Export: 455,
-    Import: 475,
-  }, {
-    Country: 'France',
-    Export: 569,
-    Import: 674,
-  }, {
-    Country: 'England',
-    Export: 468,
-    Import: 680,
-  }, {
-    Country: 'Germany',
-    Export: 1407,
-    Import: 1167,
-  },
-];
+const dataSource = [{
+  Country: 'Brazil',
+  Export: 241,
+  Import: 225,
+}, {
+  Country: 'Russia',
+  Export: 536,
+  Import: 284,
+}, {
+  Country: 'India',
+  Export: 317,
+  Import: 453,
+}, {
+  Country: 'China',
+  Export: 1702,
+  Import: 1717,
+}, {
+  Country: 'Japan',
+  Export: 699,
+  Import: 800,
+}, {
+  Country: 'USA',
+  Export: 1448,
+  Import: 2795,
+}, {
+  Country: 'Canada',
+  Export: 522,
+  Import: 440,
+}, {
+  Country: 'France',
+  Export: 626,
+  Import: 717,
+}, {
+  Country: 'England',
+  Export: 424,
+  Import: 568,
+}, {
+  Country: 'Germany',
+  Export: 1403,
+  Import: 1000,
+}];

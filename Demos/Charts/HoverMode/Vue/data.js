@@ -6,28 +6,28 @@ export const yearSources = [
 
 export const grossProductData = [{
   state: 'Illinois',
-  year1998: 423.721,
-  year2001: 476.851,
-  year2004: 528.904,
+  year1998: 374,
+  year2001: 427,
+  year2004: 479,
 }, {
   state: 'Indiana',
-  year1998: 178.719,
-  year2001: 195.769,
-  year2004: 227.271,
+  year1998: 129,
+  year2001: 146,
+  year2004: 177,
 }, {
   state: 'Michigan',
-  year1998: 308.845,
-  year2001: 335.793,
-  year2004: 372.576,
+  year1998: 259,
+  year2001: 286,
+  year2004: 323,
 }, {
   state: 'Ohio',
-  year1998: 348.555,
-  year2001: 374.771,
-  year2004: 418.258,
+  year1998: 299,
+  year2001: 325,
+  year2004: 368,
 }, {
   state: 'Wisconsin',
-  year1998: 160.274,
-  year2001: 182.373,
-  year2004: 211.727,
+  year1998: 110,
+  year2001: 132,
+  year2004: 162,
 }];
 
