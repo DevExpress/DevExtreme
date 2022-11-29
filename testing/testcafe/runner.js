@@ -7,6 +7,14 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
+const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
+    // eslint-disable-next-line no-undef
+    window.DevExpress.ui.themes.ready(resolve);
+    // eslint-disable-next-line no-undef
+    window.DevExpress.ui.themes.current(themeName);
+}),
+{ dependencies: { themeName } })();
+
 let testCafe;
 createTestCafe('localhost', 1437, 1438)
     .then(tc => {
@@ -21,6 +29,7 @@ createTestCafe('localhost', 1437, 1438)
         const file = args.file.trim();
 
         setTestingPlatform(args);
+        setTestingTheme(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
@@ -77,9 +86,20 @@ createTestCafe('localhost', 1437, 1438)
         if(args.cache) {
             runner.cache = args.cache;
         }
-        return runner.run({
-            quarantineMode: args.quarantineMode
-        });
+
+        const runOptions = { quarantineMode: args.quarantineMode };
+
+        if(args.theme) {
+            runOptions.hooks = {
+                test: {
+                    before: async() => {
+                        await changeTheme(args.theme);
+                    }
+                },
+            };
+        }
+
+        return runner.run(runOptions);
     })
     .then(failedCount => {
         testCafe.close();
@@ -88,6 +108,10 @@ createTestCafe('localhost', 1437, 1438)
 
 function setTestingPlatform(args) {
     process.env.platform = args.platform;
+}
+
+function setTestingTheme(args) {
+    process.env.theme = args.theme;
 }
 
 function expandBrowserAlias(browser) {
@@ -111,7 +135,8 @@ function getArgs() {
             cache: true,
             quarantineMode: false,
             indices: '',
-            platform: ''
+            platform: '',
+            theme: '',
         }
     });
 }
