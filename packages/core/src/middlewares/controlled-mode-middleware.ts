@@ -1,6 +1,6 @@
 import { ObjectType } from '../utils';
-import { StateConfigMap } from './types';
 import { getChangedKeys } from './get-changed-keys';
+import { StateConfigMap } from './types';
 
 type ModelChangesTuple<TState extends ObjectType> = [newModel: TState, hasChanges: boolean];
 

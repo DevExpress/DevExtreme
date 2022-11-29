@@ -45,6 +45,12 @@ module.exports = {
         }],
         'import/prefer-default-export': 'off',
         'import/no-default-export': ['error'],
+        'import/order': ['error', {
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true
+          }
+        }],
         'no-restricted-syntax': ['error', 'WithStatement'],
         'linebreak-style': ['error', 'unix'],
         'comma-dangle': ['error', 'only-multiline'],

@@ -1,7 +1,7 @@
-import { createState } from '../state';
-import { DISPOSE } from '../utils';
 import { createCore } from '../create-core';
+import { createState } from '../state';
 import { createStateManager } from '../state-manager';
+import { DISPOSE } from '../utils';
 import { createViewModelManager } from '../view-model-manager';
 
 jest.mock('../state');
