@@ -1,6 +1,23 @@
-::ng-deep img {
-  max-width: 200px;
+::ng-deep .selected {
+  margin-left: 20px;
+}
+
+::ng-deep .frame {
+  height: 64px;
+  width: 64px;
   float: left;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20px;
+}
+
+::ng-deep .frame > img {
+  max-width: 64px;
+}
+
+::ng-deep #selected-employee-notes {
+  overflow: hidden;
 }
 
 ::ng-deep .dx-theme-ios7 .selected {
@@ -14,4 +31,28 @@
 
 ::ng-deep .dx-field > .dx-lookup {
   flex: 1;
+}
+
+::ng-deep .dx-fieldset,
+.selected {
+  margin-right: 320px;
+}
+
+::ng-deep .options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+}
+
+::ng-deep .caption {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+::ng-deep .option {
+  margin-top: 10px;
 }

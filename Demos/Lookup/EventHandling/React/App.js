@@ -1,18 +1,23 @@
 import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
+import { SelectBox } from 'devextreme-react';
 import { employees } from './data.js';
+
+const applyValueModes = ['instantly', 'useButtons'];
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedValue: null,
+      applyValueMode: 'instantly',
     };
     this.onValueChanged = this.onValueChanged.bind(this);
+    this.changeApplyValueMode = this.changeApplyValueMode.bind(this);
   }
 
   render() {
-    const { selectedValue } = this.state;
+    const { selectedValue, applyValueMode } = this.state;
     return (
       <div>
         <div className="dx-fieldset">
@@ -23,6 +28,7 @@ class App extends React.Component {
               displayExpr={getDisplayExpr}
               placeholder="Select employee"
               onValueChanged={this.onValueChanged}
+              applyValueMode={applyValueMode}
             >
               <DropDownOptions showTitle={false} />
             </Lookup>
@@ -30,10 +36,23 @@ class App extends React.Component {
         </div>
         {selectedValue
           && <div className="selected">
-            <img src={selectedValue.Picture} />
-            <span>{selectedValue.Notes}</span>
+            <div className="frame">
+              <img src={selectedValue.Picture} />
+            </div>
+            <div id="selected-employee-notes">{selectedValue.Notes}</div>
           </div>
         }
+
+        <div className="options">
+          <div className="caption">Options</div>
+          <div className="option">
+            <div className="label">Apply Value Mode</div>
+            <SelectBox
+              items={applyValueModes}
+              value={applyValueMode}
+              onValueChanged={this.changeApplyValueMode} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -41,6 +60,12 @@ class App extends React.Component {
   onValueChanged(e) {
     this.setState({
       selectedValue: e.value,
+    });
+  }
+
+  changeApplyValueMode(e) {
+    this.setState({
+      applyValueMode: e.value,
     });
   }
 }

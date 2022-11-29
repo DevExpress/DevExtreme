@@ -2,6 +2,7 @@
   <dx-lookup
     [items]="employees"
     [displayExpr]="getDisplayExpr"
+    [applyValueMode]="applyValueMode"
     placeholder="Select employee"
     (onValueChanged)="valueChanged($event)"
   >
@@ -9,6 +10,18 @@
   </dx-lookup>
 </div>
 <div class="selected" *ngIf="selectedEmployee">
-  <img src="{{ selectedEmployee.Picture }}" alt="" />
-  <span>{{ selectedEmployee.Notes }}</span>
+  <div class="frame">
+    <img src="{{ selectedEmployee.Picture }}" alt="" />
+  </div>
+  <div id="selected-employee-notes">{{ selectedEmployee.Notes }}</div>
+</div>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <div class="label">Apply Value Mode</div>
+    <dx-select-box
+      [items]="applyValueModes"
+      [(value)]="applyValueMode"
+    ></dx-select-box>
+  </div>
 </div>

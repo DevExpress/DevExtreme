@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxLookupModule } from 'devextreme-angular';
+import { DxLookupModule, DxSelectBoxModule } from 'devextreme-angular';
 
 import { Service, Employee } from './app.service';
 
@@ -20,8 +20,14 @@ export class AppComponent {
 
   selectedEmployee: any;
 
+  applyValueMode: string;
+
+  applyValueModes: string[];
+
   constructor(service: Service) {
     this.employees = service.getEmployees();
+    this.applyValueMode = 'instantly';
+    this.applyValueModes = ['instantly', 'useButtons'];
   }
 
   valueChanged(data) {
@@ -41,6 +47,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxLookupModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

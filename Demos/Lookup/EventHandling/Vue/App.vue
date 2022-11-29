@@ -5,6 +5,7 @@
         <DxLookup
           :items="items"
           :display-expr="getDisplayExpr"
+          :apply-value-mode="applyValueMode"
           placeholder="Select employee"
           @value-changed="setSelectedValue"
         >
@@ -14,28 +15,44 @@
     </div>
     <div v-if="selectedValue">
       <div class="selected">
-        <img
-          id="selected-employee-img"
-          :src="selectedValue.Picture"
-        >
-        <span id="selected-employee-notes">{{ selectedValue.Notes }}</span>
+        <div class="frame">
+          <img
+            id="selected-employee-img"
+            :src="selectedValue.Picture"
+          >
+        </div>
+        <div id="selected-employee-notes">{{ selectedValue.Notes }}</div>
+      </div>
+    </div>
+    <div class="options">
+      <div class="caption">Options</div>
+      <div class="option">
+        <div class="label">Apply Value Mode</div>
+        <DxSelectBox
+          :items="applyValueModes"
+          v-model:value="applyValueMode"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
+import { DxSelectBox } from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
 export default {
   components: {
     DxLookup,
     DxDropDownOptions,
+    DxSelectBox,
   },
   data() {
     return {
       items: employees,
       selectedValue: null,
+      applyValueModes: ['instantly', 'useButtons'],
+      applyValueMode: 'instantly',
     };
   },
   methods: {
