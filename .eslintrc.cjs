@@ -51,6 +51,10 @@ module.exports = {
             caseInsensitive: true
           }
         }],
+        'sort-imports': ['error', {
+          ignoreCase: true,
+          ignoreDeclarationSort: true
+        }],
         'no-restricted-syntax': ['error', 'WithStatement'],
         'linebreak-style': ['error', 'unix'],
         'comma-dangle': ['error', 'only-multiline'],
