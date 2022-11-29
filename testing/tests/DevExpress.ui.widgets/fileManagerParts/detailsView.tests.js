@@ -802,12 +802,6 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is focused (T1129252, T1125089, T1125526)', function(assert) {
-        // https://wiki.devexpress.devx/en/devextreme/product/components/data-grid/modules/virtual-scrolling#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80
-        // default VirtualScrollController.viewportSize = 15 + default dxDataGrid.scrolling.prerenderedRowCount = 1
-        const initialItemsCount = 16;
-        // VirtualScrollController.viewportSize = 125 / 36 = ⌈3.47⌉ = 4 after height changed and dimensions adjusted
-        const updatedItemsCount = 4;
-
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             width: 500,
@@ -819,25 +813,28 @@ QUnit.module('Details View', moduleConfig, () => {
             currentPath: 'Folder 1'
         });
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, initialItemsCount, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 5, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
-        for(let i = 1; i < 16; i++) {
+        for(let i = 1; i < 5; i++) {
             assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
         }
 
         fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
 
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
         assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
 
         fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, updatedItemsCount, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 4, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
         for(let i = 1; i < 4; i++) {
             assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
@@ -845,12 +842,6 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is selected (T1129252, T1125089, T1125526)', function(assert) {
-        // https://wiki.devexpress.devx/en/devextreme/product/components/data-grid/modules/virtual-scrolling#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80
-        // default VirtualScrollController.viewportSize = 15 + default dxDataGrid.scrolling.prerenderedRowCount = 1
-        const initialItemsCount = 16;
-        // VirtualScrollController.viewportSize = 125 / 36 = ⌈3.47⌉ = 4 after height changed and dimensions adjusted
-        const updatedItemsCount = 4;
-
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             width: 500,
@@ -862,11 +853,12 @@ QUnit.module('Details View', moduleConfig, () => {
             currentPath: 'Folder 1'
         });
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, initialItemsCount, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 5, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
-        for(let i = 1; i < 16; i++) {
+        for(let i = 1; i < 5; i++) {
             assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
         }
 
@@ -875,15 +867,17 @@ QUnit.module('Details View', moduleConfig, () => {
             selectedItemKeys: ['Folder 1/File 99.txt']
         });
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
 
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
         assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
 
         fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, updatedItemsCount, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 4, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
         for(let i = 1; i < 4; i++) {
             assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);

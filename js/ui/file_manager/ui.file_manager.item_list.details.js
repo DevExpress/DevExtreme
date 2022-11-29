@@ -474,14 +474,14 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _scrollSafeDataGridRefresh(options, operation) {
         const hasNoScrollTarget = !isDefined(options.focusedRowKey) && options.focusedRowIndex === -1;
-        if(hasNoScrollTarget) {
+        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
             this._filesView.option('autoNavigateToFocusedRow', false);
-        }
-        if(!isEmptyObject(options)) {
-            this._filesView.option(options);
         }
         if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
             this._needResetScrollPosition = true;
+        }
+        if(!isEmptyObject(options)) {
+            this._filesView.option(options);
         }
         this._filesView.option('dataSource', this._createDataSource());
         this._filesView.option('autoNavigateToFocusedRow', true);
