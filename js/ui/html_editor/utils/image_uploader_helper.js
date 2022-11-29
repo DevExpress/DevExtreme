@@ -43,9 +43,9 @@ export class ImageUploader {
     }
 
     render() {
-        this.editorInstance.formDialogOption({
-            'toolbarItems[0].options.onClick': this.onAddButtonClick.bind(this),
-        });
+        this.editorInstance._formDialog.contentClick = () => {
+            return this.getCurrentTab().upload();
+        };
 
         this.tabPanelIndex = 0;
         this.formData = this.getFormData();
@@ -63,6 +63,7 @@ export class ImageUploader {
                 this.tabs[this.getActiveTabIndex()].strategy.pasteImage(formData, event);
             })
             .always(() => {
+                this.resetDialogPopupOptions();
                 this.quill.focus();
             });
 
@@ -71,13 +72,6 @@ export class ImageUploader {
 
     getCurrentTab() {
         return this.tabs[this.tabPanelIndex];
-    }
-
-    onAddButtonClick(e) {
-        if(this.getCurrentTab().upload()) {
-            const dialog = this.editorInstance._formDialog;
-            dialog.hide(dialog._form.option('formData'), e.event);
-        }
     }
 
     updateAddButtonState() {
@@ -154,6 +148,14 @@ export class ImageUploader {
             title: localizationMessage.format(titleKey),
             'toolbarItems[0].options.text': localizationMessage.format(addButtonTextKey),
             'wrapperAttr': { class: wrapperClasses }
+        });
+    }
+
+    resetDialogPopupOptions() {
+        this.editorInstance.formDialogOption({
+            'toolbarItems[0].options.text': localizationMessage.format('OK'),
+            'toolbarItems[0].options.visible': true,
+            wrapperAttr: { class: FORM_DIALOG_CLASS }
         });
     }
 
