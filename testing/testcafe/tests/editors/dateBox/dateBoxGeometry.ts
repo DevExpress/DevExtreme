@@ -28,7 +28,7 @@ themes.forEach((theme) => {
       .ok();
 
     await dateBox.option('opened', false);
-    await dateBox.option('showAnalogClock', false);
+    await dateBox.option({ showAnalogClock: false });
     await dateBox.option('opened', true);
 
     await t
@@ -36,9 +36,7 @@ themes.forEach((theme) => {
       .ok();
 
     await dateBox.option('opened', false);
-    await dateBox.option('displayFormat', 'HH:mm');
-    await dateBox.option('calendarOptions', { visible: false });
-    await dateBox.option('showAnalogClock', false);
+    await dateBox.option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
     await dateBox.option('opened', true);
 
     await t
