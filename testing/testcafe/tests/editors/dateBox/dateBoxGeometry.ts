@@ -24,15 +24,13 @@ themes.forEach((theme) => {
     await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime.png');
 
     await dateBox.option('opened', false);
-    await dateBox.option('showAnalogClock', false);
+    await dateBox.option({ showAnalogClock: false });
     await dateBox.option('opened', true);
 
     await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without analog clock.png');
 
     await dateBox.option('opened', false);
-    await dateBox.option('displayFormat', 'HH:mm');
-    await dateBox.option('calendarOptions', { visible: false });
-    await dateBox.option('showAnalogClock', false);
+    await dateBox.option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
     await dateBox.option('opened', true);
 
     await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without calendar.png');

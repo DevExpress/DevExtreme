@@ -45,7 +45,7 @@ const config: Partial<ScrollableProps>[] = [];
     platforms: ['jquery', 'react'],
   });
 
-  fixture('Render strategies');
+  fixture.skip('Render strategies');
 
   config.forEach((props) => {
     test(`Should render ${page}, ${JSON.stringify(props)}`,
