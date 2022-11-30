@@ -4,11 +4,17 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
-const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
 let testCafe;
-createTestCafe('localhost', 1437, 1438)
+let startDate;
+createTestCafe({
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    // eslint-disable-next-line spellcheck/spell-checker
+    experimentalProxyless: true,
+})
     .then(tc => {
         testCafe = tc;
 
@@ -77,12 +83,24 @@ createTestCafe('localhost', 1437, 1438)
         if(args.cache) {
             runner.cache = args.cache;
         }
+
+        startDate = Date.now();
+        // eslint-disable-next-line no-console
+        console.log('start test: ' + startDate);
+
         return runner.run({
             quarantineMode: args.quarantineMode
         });
     })
     .then(failedCount => {
         testCafe.close();
+
+        const endDate = Date.now();
+        // eslint-disable-next-line no-console
+        console.log('end test: ' + endDate);
+        // eslint-disable-next-line no-console
+        console.log('diff: ' + endDate - startDate);
+
         process.exit(failedCount);
     });
 
@@ -105,7 +123,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: ['minimal', dashboardReporter],
+            reporter: ['minimal'],
             componentFolder: '',
             file: '*',
             cache: true,
