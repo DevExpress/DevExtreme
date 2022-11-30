@@ -36,7 +36,7 @@ stylingMods.forEach((stylingMode) => {
 
       await t.click('#otherContainer');
 
-      await takeScreenshotInTheme(t, takeScreenshot, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`, '#container');
+      await takeScreenshotInTheme(t, takeScreenshot, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`);
 
       await t
         .expect(compareResults.isValid())

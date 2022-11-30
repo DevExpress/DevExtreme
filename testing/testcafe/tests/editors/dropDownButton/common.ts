@@ -1,11 +1,22 @@
+/* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
-import asyncForEach from '../../../helpers/asyncForEach';
+import {
+  appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
+  removeClassAttribute,
+} from '../../navigation/helpers/domUtils';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import Guid from '../../../../../js/core/guid';
+
+const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+const HOVER_STATE_CLASS = 'dx-state-hover';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+
+const stylingModes = ['text', 'outlined', 'contained'];
 
 fixture`Drop Down Button`
   .page(url(__dirname, '../../container.html'));
@@ -45,44 +56,55 @@ test('Item collection should be updated after direct option changing (T817436)',
   });
 });
 
-[false, true].forEach((rtlEnabled) => {
-  test(`DropDownButton renders correctly (${rtlEnabled ? 'rtl' : 'ltr'})`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+let ids = [] as string[];
 
-    await asyncForEach([1, 2, 3, 4], async (index) => {
-      await t.hover(Selector(`#drop-down-button${index} .dx-button:first-child`));
+test('DropDownButton renders correctly', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `DropDownButton${index} rtl=${rtlEnabled}.png`, '#container');
-    });
+  await insertStylesheetRule(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-block; width: 200px; margin: 5px; }`, 0);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-    await setAttribute('#container', 'style', 'width: 500px;');
+  await takeScreenshotInTheme(t, takeScreenshot, 'DropDownButton render.png', '#container');
 
-    const baseConfig = {
-      items: [{ text: 'text1' }, { text: 'text2' }],
-      displayExpr: 'text',
-      text: 'Button',
-      rtlEnabled,
-    };
+  for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
+    for (const id of ids) {
+      await setClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
+    }
 
-    await appendElementTo('#container', 'div', 'drop-down-button1', {});
-    await createWidget('dxDropDownButton', { ...baseConfig }, false, '#drop-down-button1');
+    await takeScreenshotInTheme(t, takeScreenshot, `DropDownButton render ${state.replaceAll('dx-state-', '')}.png`, '#container');
 
-    await appendElementTo('#container', 'div', 'drop-down-button2', {});
-    await createWidget('dxDropDownButton', { splitButton: true, ...baseConfig }, false, '#drop-down-button2');
+    for (const id of ids) {
+      await removeClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
+    }
+  }
 
-    await appendElementTo('#container', 'div', 'drop-down-button3', {});
-    await createWidget('dxDropDownButton', { stylingMode: 'text', ...baseConfig }, false, '#drop-down-button3');
+  await deleteStylesheetRule(0);
 
-    await appendElementTo('#container', 'div', 'drop-down-button4', {});
-    await createWidget('dxDropDownButton', {
-      stylingMode: 'text',
-      splitButton: true,
-      ...baseConfig,
-    }, false, '#drop-down-button4');
-  });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  ids = [];
+  await restoreBrowserSize(t);
+
+  for (const stylingMode of stylingModes) {
+    for (const splitButton of [true, false]) {
+      for (const rtlEnabled of [true, false]) {
+        for (const showArrowIcon of [true, false]) {
+          const id = `${`dx${new Guid()}`}`;
+
+          ids.push(id);
+          await appendElementTo('#container', 'div', id, { });
+          await createWidget('dxDropDownButton', {
+            rtlEnabled,
+            items: [{ text: 'text1' }, { text: 'text2' }],
+            displayExpr: 'text',
+            text: 'Button',
+            stylingMode,
+            showArrowIcon,
+            splitButton,
+          }, false, `#${id}`);
+        }
+      }
+    }
+  }
 });

@@ -1,5 +1,6 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
@@ -19,9 +20,7 @@ test('Validation Message position should be correct after change visibility of p
     .pressKey('enter')
     .pressKey('tab');
 
-  await t
-    .expect(await takeScreenshot('Textbox validation message.png'))
-    .ok();
+  await takeScreenshotInTheme(t, takeScreenshot, 'Textbox validation message.png');
 
   await ClientFunction(() => {
     (document.querySelector('#container') as HTMLElement).setAttribute('hidden', 'true');
@@ -31,9 +30,9 @@ test('Validation Message position should be correct after change visibility of p
     document.querySelector('#container')?.removeAttribute('hidden');
   })();
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'Textbox validation message.png');
+
   await t
-    .expect(await takeScreenshot('Textbox validation message.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {

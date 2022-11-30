@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Popup from '../../../model/popup';
@@ -27,9 +28,9 @@ fixture`Popup_toolbar`
           await bottomToolbar.option('overflowMenuVisible', true);
         }
 
+        await takeScreenshotInTheme(t, takeScreenshot, `${name.replace('dx', '')}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`);
+
         await t
-          .expect(await takeScreenshot(`${name}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`))
-          .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async (t) => {

@@ -20,7 +20,7 @@ test('message position is right (T1020449)', async (t) => {
 
   await radioGroup.focus();
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'RadioGroup horizontal validation.png');
+  await takeScreenshotInTheme(t, takeScreenshot, 'RadioGroup horizontal validation.png', '#container');
 
   await t
     .expect(compareResults.isValid())
