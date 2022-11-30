@@ -44,9 +44,7 @@ export class ImageUploader {
 
     render() {
         if(this.editorInstance._formDialog) {
-            this.editorInstance._formDialog.beforeAddButtonAction = () => {
-                return this.getCurrentTab().upload();
-            };
+            this.editorInstance._formDialog.beforeAddButtonAction = () => this.getCurrentTab().upload();
         }
 
         this.tabPanelIndex = 0;
@@ -59,6 +57,7 @@ export class ImageUploader {
         const formConfig = this.getFormConfig();
 
         this.updatePopupConfig();
+        this.updateAddButtonState();
 
         this.editorInstance.showFormDialog(formConfig)
             .done((formData, event) => {
@@ -68,8 +67,6 @@ export class ImageUploader {
                 this.resetDialogPopupOptions();
                 this.quill.focus();
             });
-
-        this.updateAddButtonState();
     }
 
     getCurrentTab() {
@@ -437,7 +434,7 @@ class FileStrategy extends BaseStrategy {
         return this.isValidInternal;
     }
 
-    closeDialogPopup(data) { // TODO
+    closeDialogPopup(data) {
         this.editorInstance._formDialog.hide({ file: data.value ? data.value[0] : data.file }, data.event);
     }
 
