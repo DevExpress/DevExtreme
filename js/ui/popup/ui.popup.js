@@ -317,8 +317,11 @@ const Popup = Overlay.inherit({
         const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
         this._shouldSkipContentResize = (entry) => {
-            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
-                || this._areContentDimensionsRendered(entry);
+            if(this._isShowingActionInProgress) {
+                return true;
+            }
+
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing || this._areContentDimensionsRendered(entry);
         };
     },
 

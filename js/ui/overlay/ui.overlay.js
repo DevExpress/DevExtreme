@@ -445,7 +445,7 @@ const Overlay = Widget.inherit({
     },
 
     _show: function() {
-        this._shouldSkipContentResize = () => true;
+        this._isShowingActionInProgress = true;
         this._showingDeferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
@@ -496,7 +496,7 @@ const Overlay = Widget.inherit({
                 };
 
                 this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
-                this._updateResizeCallbackSkipCondition();
+                this._isShowingActionInProgress = false;
             };
 
             if(this.option('templatesRenderAsynchronously')) {
