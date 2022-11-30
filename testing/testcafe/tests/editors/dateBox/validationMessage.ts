@@ -17,7 +17,7 @@ positions.forEach((position) => {
     const dateBox = new DateBox('#container');
     await dateBox.option('value', new Date(2022, 6, 14));
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Datebox validation message with position=${position}.png`, undefined, true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Datebox validation message with position=${position}.png`, undefined, true, async () => dateBox.option('value', new Date(2022, 6, 15)));
 
     await t
       .expect(compareResults.isValid())

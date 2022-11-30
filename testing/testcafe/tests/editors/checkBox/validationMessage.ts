@@ -54,7 +54,11 @@ positions.forEach((position) => {
       .click(checkBox1.element)
       .expect(true).ok();
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, undefined, true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, undefined, true, async () => {
+      await t
+        .click(checkBox1.element)
+        .click(checkBox1.element);
+    });
 
     await t
       .expect(compareResults.isValid())
