@@ -3,6 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
 import devices from 'core/devices';
 import { createBlobFile } from '../../../helpers/fileHelper.js';
+import fx from 'animation/fx';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -56,6 +57,8 @@ const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirec
 
 module('Image uploading integration', {
     beforeEach: function() {
+        fx.off = true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = $('#htmlEditor');
@@ -163,6 +166,8 @@ module('Image uploading integration', {
         };
     },
     afterEach: function() {
+        fx.off = false;
+
         this.instance && this.instance.dispose();
         this.clock.restore();
     }
@@ -414,7 +419,9 @@ module('Image uploading integration', {
                     },
                     value: markup
                 }).dxHtmlEditor('instance');
+
             this.clock.tick(TIME_TO_WAIT);
+
             const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
             const quillUploadSpy = sinon.spy(this.instance.getQuillInstance().getModule('uploader'), 'upload');
@@ -422,7 +429,8 @@ module('Image uploading integration', {
             const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
             fileUploader.option('value', [fakeFileBlob]);
-            this.clock.tick(TIME_TO_WAIT);
+
+            this.clickDialogOkButton();
 
             assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
         });
@@ -676,13 +684,10 @@ module('Image uploading integration', {
 
             $form.find(`.${FILEUPLOADER_INPUT_CLASS}`).trigger('change');
 
-            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
-
-            const request = this.xhrMock.getInstanceAt();
-
             this.clickDialogOkButton();
 
-            this.clock.tick(TIME_TO_WAIT);
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+            const request = this.xhrMock.getInstanceAt();
 
             assert.ok(request.uploaded, 'upload is done');
             assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
