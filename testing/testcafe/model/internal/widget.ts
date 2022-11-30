@@ -2,6 +2,7 @@ import { Selector, ClientFunction } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import type { PlatformType } from '../../helpers/multi-platform-test/platform-type';
 import { getComponentInstance } from '../../helpers/multi-platform-test';
+import { isObject } from '../../../../js/core/utils/type';
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -35,12 +36,13 @@ export default abstract class Widget {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
-  option(option: string, value?: unknown): Promise<any> {
+  option(option: string | { [key: string]: unknown }, value?: unknown): Promise<any> {
     const { getInstance } = this;
 
     const get = (): any => (getInstance() as any).option(option);
     const set = (): any => (getInstance() as any).option(option, value);
-    const isSetter = arguments.length === 2;
+
+    const isSetter = arguments.length === 2 || isObject(option);
 
     return ClientFunction(isSetter ? set : get, {
       dependencies: {
