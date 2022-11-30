@@ -1,14 +1,13 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 
 fixture`Lookup`
   .page(url(__dirname, '../../container.html'));
@@ -82,60 +81,66 @@ test('Popover should have correct vertical position (T1048128)', async (t) => {
   items: Array.from(Array(100).keys()),
 }));
 
-themes.forEach((theme) => {
-  test(`Check popup height with no found data option, theme=${theme}`, async (t) => {
-    await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+test('Check popup height with no found data option', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
-    await t
-      .expect(await compareScreenshot(t, `Lookup with no found data${getThemePostfix(theme)}.png`))
-      .ok();
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-    await changeTheme(theme);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup with no found data.png', '#container', true);
 
-    return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
-  });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.resizeWindow(300, 400);
 
-  test(`Check popup height in loading state, theme=${theme}`, async (t) => {
-    await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
+}).after(async (t) => {
+  await restoreBrowserSize(t);
+  await changeTheme('generic.light');
+});
 
-    await t
-      .expect(await compareScreenshot(t, `Lookup in loading${getThemePostfix(theme)}.png`))
-      .ok();
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-    await changeTheme(theme);
+test('Check popup height in loading state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    return createWidget('dxLookup', {
-      dataSource: {
-        load() {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve([1, 2, 3]);
-            }, 5000);
-          });
-        },
+  await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup in loading.png', '#container', true);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.resizeWindow(300, 400);
+
+  return createWidget('dxLookup', {
+    dataSource: {
+      load() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([1, 2, 3]);
+          }, 5000);
+        });
       },
-      valueExpr: 'id',
-      displayExpr: 'text',
-    });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
+    },
+    valueExpr: 'id',
+    displayExpr: 'text',
   });
+}).after(async (t) => {
+  await restoreBrowserSize(t);
+  await changeTheme('generic.light');
 });
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const lookup = new Lookup('#container');
 
   await lookup.option('items', [1, 2, 3]);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup placeholder if value is not choosen.png', '#container', true);
+
   await t
-    .expect(await compareScreenshot(t, 'Lookup placeholder if value is not choosen.png', '#container'))
-    .ok();
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxLookup', {
   width: 300,
   placeholder: 'Choose a value',

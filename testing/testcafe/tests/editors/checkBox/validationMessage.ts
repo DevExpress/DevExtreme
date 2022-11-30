@@ -1,10 +1,9 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -46,41 +45,39 @@ test('ValidationMessage integrated in editor should not raise any errors when it
 });
 
 fixture`CheckBox ValidationMessagePosition`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../container.html'));
 
 const positions = ['top', 'right', 'bottom', 'left'];
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
-themes.forEach((theme) => {
-  positions.forEach((position) => {
-    test(`CheckBox ValidationMessage position is correct (${position}, ${theme})`, async (t) => {
-      const checkBox1 = new CheckBox('#container');
-      await t
-        .click(checkBox1.element)
-        .click(checkBox1.element)
-        .expect(true).ok();
+positions.forEach((position) => {
+  test(`CheckBox ValidationMessage position is correct (${position})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const checkBox1 = new CheckBox('#container');
+    await t
+      .click(checkBox1.element)
+      .click(checkBox1.element)
+      .expect(true).ok();
 
-      await t.expect(await compareScreenshot(t, `Checkbox validation message with ${position} position${getThemePostfix(theme)}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(300, 200);
-      await changeTheme(theme);
+    await takeScreenshotInTheme(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, '#container', true);
 
-      await createWidget('dxCheckBox', {
-        text: 'Click me!',
-        elementAttr: { style: 'margin: 50px 0 0 100px;' },
-        validationMessagePosition: position,
-      });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await t.resizeWindow(300, 200);
 
-      return createWidget('dxValidator', {
-        validationRules: [{
-          type: 'required',
-          message: 'it is required',
-        }],
-      });
-    }).after(async (t) => {
-      await restoreBrowserSize(t);
+    await createWidget('dxCheckBox', {
+      text: 'Click me!',
+      elementAttr: { style: 'margin: 50px 0 0 100px;' },
+      validationMessagePosition: position,
     });
+
+    return createWidget('dxValidator', {
+      validationRules: [{
+        type: 'required',
+        message: 'it is required',
+      }],
+    });
+  }).after(async (t) => {
+    await restoreBrowserSize(t);
   });
 });
