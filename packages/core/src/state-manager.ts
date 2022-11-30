@@ -1,18 +1,15 @@
 import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from './middlewares';
 import { createReducer, Handlers } from './reducer';
 import { State } from './state';
-import {
-  ObjectType, pipe, PipeFunc,
-} from './utils';
+import { ObjectType, pipe, PipeFunc } from './utils';
 
 export interface StateManager<TState extends ObjectType> {
-  addUpdate: (statePart: Partial<TState>) => void;
-  commitUpdates: () => void;
-  rollbackUpdates: () => void;
+  addUpdate(updateFunc: (state: TState) => Partial<TState>): void;
+  commitUpdates(): void;
+  rollbackUpdates(): void;
 }
 
-export interface Dispatcher<
-  TState extends ObjectType,
+export interface Dispatcher<TState extends ObjectType,
   THandlers extends Handlers<TState>,
   > {
   dispatch: <TAction extends keyof THandlers>(
@@ -21,16 +18,14 @@ export interface Dispatcher<
   ) => void;
 }
 
-export type StateStoreTuple<
-  TState extends ObjectType,
+export type StateStoreTuple<TState extends ObjectType,
   THandlers extends Handlers<TState>,
   > = [
   stateManager: StateManager<TState>,
   dispatcher: Dispatcher<TState, THandlers>,
   ];
 
-export function createStateManager<
-  TState extends ObjectType,
+export function createStateManager<TState extends ObjectType,
   THandlers extends Handlers<TState>,
   >(
   state: State<TState>,
@@ -52,7 +47,7 @@ export function createStateManager<
     );
 
     if (hasChanges) {
-      state.addUpdate(newState);
+      state.addUpdate(() => newState);
       state.commitUpdates();
     }
 

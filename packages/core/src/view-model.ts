@@ -23,12 +23,12 @@ export type ViewModelMap<TViewModels extends ObjectType> = {
 
 export function createSelector<TState extends ObjectType, TParam extends ObjectType, TViewProp>(
   buildViewProp: (params: TParam) => TViewProp,
-  paramsGetter: (state: TState | undefined) => TParam,
+  paramsGetter: (state: TState) => TParam,
   paramsComparer: Comparer<[TParam]> = shadowComparer,
 ): Selector<TState, TViewProp> {
   const cached = memoize(buildViewProp, paramsComparer);
 
-  return (state: TState | undefined) => cached(paramsGetter(state));
+  return (state: TState) => cached(paramsGetter(state));
 }
 
 export function createViewModel<TState extends ObjectType, TViewProps>(

@@ -5,11 +5,11 @@ import {
 } from './utils';
 
 export interface State<TState extends ObjectType> {
-  getCurrent: () => TState;
-  addUpdate: (statePart: Partial<TState>) => void;
-  commitUpdates: () => void;
-  rollbackUpdates: () => void;
-  triggerRender: (state: TState) => void;
+  getCurrent(): TState;
+  addUpdate(updateFunc: (state: TState) => Partial<TState>): void;
+  commitUpdates(): void;
+  rollbackUpdates(): void;
+  triggerRender(state: TState): void;
   subscribeForRender: SubscribeFunc<TState>;
 }
 
@@ -26,11 +26,11 @@ export function createState<TState extends ObjectType>(
   const getCurrent = () => current;
 
   const addUpdate = (
-    statePart: Partial<TState>,
+    updateFunc: (state: TState) => Partial<TState>,
   ): void => {
     next = {
       ...next,
-      ...statePart,
+      ...updateFunc(next),
     };
   };
 

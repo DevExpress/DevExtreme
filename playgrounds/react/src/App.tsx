@@ -1,21 +1,21 @@
 import React from 'react';
-import {Routes, Route} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-import {PagerExample} from './examples/pager/pagerExample';
-import {SlideToggleExample} from './examples/slideToggle/slideToggleExample';
-import {Home} from './home';
+import { RadioGroupExample } from './examples/radio-group/radio-group-example';
+import { RadioButtonExample } from './examples/radio-button/radio-button-example';
+import { Home } from './home';
 
-import './App.css';
+import './app.css';
 
 function App() {
   return (
-    <React.Fragment>
+    <>
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/slideToggle" element={<SlideToggleExample/>}/>
-        <Route path="/pager" element={<PagerExample/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/radio-group" element={<RadioGroupExample />} />
+        <Route path="/radio-button" element={<RadioButtonExample />} />
       </Routes>
-    </React.Fragment>
+    </>
   );
 }
 
