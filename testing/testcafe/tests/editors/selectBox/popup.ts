@@ -35,7 +35,7 @@ test('SelectBox without data', async (t) => {
   });
 }).after(async (t) => restoreBrowserSize(t));
 
-test(`SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881), theme=${theme}`, async (t) => {
+test('SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -65,7 +65,7 @@ test(`SelectBox has a correct popup height for the first opening if the pageSize
   });
 }).after(async (t) => restoreBrowserSize(t));
 
-test(`SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count, theme=${theme}`, async (t) => {
+test('SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -95,7 +95,7 @@ test(`SelectBox has a correct popup height for the first opening if the pageSize
   });
 }).after(async (t) => restoreBrowserSize(t));
 
-test(`SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count, theme=${theme}`, async (t) => {
+test('SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');

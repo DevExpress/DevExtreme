@@ -1,11 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
@@ -44,8 +43,6 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
     .expect(popupContentTop)
     .lt(popupWrapperTop);
 }).before(async () => {
-  await changeTheme('material.blue.light');
-
   await ClientFunction(() => {
     const $element = $('#container');
     $element.css({ top: $(window).height() - $element.height() });
@@ -61,8 +58,6 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
       hideOnParentScroll: false,
     },
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('Popover should have correct vertical position (T1048128)', async (t) => {
@@ -96,7 +91,6 @@ test('Check popup height with no found data option', async (t) => {
   return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
 }).after(async (t) => {
   await restoreBrowserSize(t);
-  await changeTheme('generic.light');
 });
 
 test('Check popup height in loading state', async (t) => {
@@ -127,7 +121,6 @@ test('Check popup height in loading state', async (t) => {
   });
 }).after(async (t) => {
   await restoreBrowserSize(t);
-  await changeTheme('generic.light');
 });
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {

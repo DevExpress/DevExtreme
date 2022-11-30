@@ -1,42 +1,40 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
 
 fixture`Lookup_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../container.html'));
 
-themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    labelMods.forEach((labelMode) => {
-      test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
-        await t.click('#otherContainer');
+stylingMods.forEach((stylingMode) => {
+  labelMods.forEach((labelMode) => {
+    test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await t.expect(await compareScreenshot(t, `Lookup label with labelMode=${labelMode}-styleMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 800);
-        await changeTheme(theme);
+      await t.click('#otherContainer');
 
-        const componentOption = {
-          label: 'label text',
-          labelMode,
-          dropDownCentered: false,
-          items: [...Array(10)].map((_, i) => `item${i}`),
-          stylingMode,
-        };
+      await takeScreenshotInTheme(t, takeScreenshot, `Lookup label with labelMode=${labelMode}-styleMode=${stylingMode}.png`);
 
-        await createWidget('dxLookup', { ...componentOption });
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      await t.resizeWindow(300, 800);
 
-        return createWidget('dxLookup', { ...componentOption }, false, '#otherContainer');
-      });
+      const componentOption = {
+        label: 'label text',
+        labelMode,
+        dropDownCentered: false,
+        items: [...Array(10)].map((_, i) => `item${i}`),
+        stylingMode,
+      };
+
+      await createWidget('dxLookup', { ...componentOption });
+
+      return createWidget('dxLookup', { ...componentOption }, false, '#otherContainer');
     });
   });
 });

@@ -1,11 +1,10 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import DateBox from '../../../model/dateBox';
 import url from '../../../helpers/getPageUrl';
-import { changeTheme } from '../../../helpers/changeTheme';
 import createWidget from '../../../helpers/createWidget';
-import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400));
 
@@ -18,22 +17,17 @@ themes.forEach((theme) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dateBox = new DateBox('#container');
 
-    await t
-      .expect(await takeScreenshot(`Datebox with calendar${getThemePostfix(theme)}`))
-      .ok();
+    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with calendar.png');
 
     await dateBox.option('type', 'datetime');
-    await t
-      .expect(await takeScreenshot(`Datebox with datetime${getThemePostfix(theme)}`))
-      .ok();
+
+    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime.png');
 
     await dateBox.option('opened', false);
     await dateBox.option('showAnalogClock', false);
     await dateBox.option('opened', true);
 
-    await t
-      .expect(await takeScreenshot(`Datebox with datetime without analog clock${getThemePostfix(theme)}`))
-      .ok();
+    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without analog clock.png');
 
     await dateBox.option('opened', false);
     await dateBox.option('displayFormat', 'HH:mm');
@@ -41,16 +35,13 @@ themes.forEach((theme) => {
     await dateBox.option('showAnalogClock', false);
     await dateBox.option('opened', true);
 
-    await t
-      .expect(await takeScreenshot(`Datebox with datetime without calendar${getThemePostfix(theme)}`))
-      .ok();
+    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without calendar.png');
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await t.resizeWindow(600, 550);
-    await changeTheme(theme);
     await waitFont();
 
     return createWidget('dxDateBox', {

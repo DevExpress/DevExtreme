@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 
 fixture`Label`
   .page(url(__dirname, '../../container.html'));
