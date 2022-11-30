@@ -60,7 +60,9 @@ class FormDialog {
         return extend({
             onInitialized: (e) => {
                 this._popup = e.component;
-                this._popup.on('hiding', () => { this.deferred.reject(); });
+                this._popup.on('hiding', () => {
+                    this.deferred.reject();
+                });
                 this._popup.on('shown', () => { this._form.focus(); });
             },
             deferRendering: false,
@@ -94,9 +96,7 @@ class FormDialog {
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('OK'),
-                        onClick: ({ event }) => {
-                            this.hide(this._form.option('formData'), event);
-                        }
+                        onClick: this.onButtonClick.bind(this)
                     }
                 }, {
                     toolbar: 'bottom',
@@ -113,6 +113,17 @@ class FormDialog {
             ],
             _wrapperClassExternal: DIALOG_CLASS,
         }, this._popupUserConfig);
+    }
+
+    onButtonClick(e) {
+        if(this.contentClick) {
+            if(!this.contentClick()) {
+                return;
+            }
+        }
+
+        this.contentClick = undefined;
+        this.hide(this._form.option('formData'), e.event);
     }
 
     _renderForm($container, options) {
