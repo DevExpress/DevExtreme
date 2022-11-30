@@ -85,7 +85,7 @@ test('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup with no found data.png', '#container', true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup with no found data.png');
 
   await t
     .expect(compareResults.isValid())
@@ -104,7 +104,7 @@ test('Check popup height in loading state', async (t) => {
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup in loading.png', '#container', true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup in loading.png', undefined, true);
 
   await t
     .expect(compareResults.isValid())
@@ -136,7 +136,7 @@ test('Placeholder is visible after items option change when value is not chosen 
 
   await lookup.option('items', [1, 2, 3]);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup placeholder if value is not choosen.png', '#container', true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup placeholder if value is not choosen.png', '#container');
 
   await t
     .expect(compareResults.isValid())

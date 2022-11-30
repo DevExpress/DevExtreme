@@ -44,9 +44,6 @@ test('ValidationMessage integrated in editor should not raise any errors when it
   });
 });
 
-fixture`CheckBox ValidationMessagePosition`
-  .page(url(__dirname, '../../container.html'));
-
 const positions = ['top', 'right', 'bottom', 'left'];
 positions.forEach((position) => {
   test(`CheckBox ValidationMessage position is correct (${position})`, async (t) => {
@@ -57,7 +54,7 @@ positions.forEach((position) => {
       .click(checkBox1.element)
       .expect(true).ok();
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, '#container', true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, undefined, true);
 
     await t
       .expect(compareResults.isValid())

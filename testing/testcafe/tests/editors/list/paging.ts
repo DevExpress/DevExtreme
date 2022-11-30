@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
-import { changeTheme } from '../../../helpers/changeTheme';
 import createWidget from '../../../helpers/createWidget';
 
 fixture`List`
@@ -26,9 +26,9 @@ test('Should initiate load next pages if items on the first pages are invisible'
     .expect(list.getVisibleItems().count)
     .eql(4);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'List loading with first items invisible.png', '#container');
+
   await t
-    .expect(await takeScreenshot('List_first_items_invisible.png', list.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -63,9 +63,9 @@ test('Should initiate load next page if all items in the current load are invisi
     .expect(list.getVisibleItems().count)
     .eql(6);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'List loading with middle items invisible.png', '#container');
+
   await t
-    .expect(await takeScreenshot('List_middle_items_invisible.png', list.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -100,9 +100,9 @@ test('Should initiate load next page if some items in the current load are invis
     .expect(list.getVisibleItems().count)
     .eql(6);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'List loding with part items invisible on loaded page.png', '#container');
+
   await t
-    .expect(await takeScreenshot('List_part_items_invisible_on_loaded_page.png', list.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -137,9 +137,9 @@ test('Should initiate load next page if all items on next pages are invisible', 
     .expect(list.getVisibleItems().count)
     .eql(4);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'List loading with last items invisible.png', '#container');
+
   await t
-    .expect(await takeScreenshot('List_last_items_invisible.png', list.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -190,47 +190,41 @@ test('Should not initiate load next page if not reach the bottom when pullRefres
   });
 });
 
-['generic.light', 'material.blue.light'].forEach((theme) => {
-  test(`Should initiate load next page on select last item by keyboard,theme=${theme}`, async (t) => {
-    const list = new List('#container');
+test('Should initiate load next page on select last item by keyboard', async (t) => {
+  const list = new List('#container');
 
-    await list.focus();
+  await list.focus();
 
-    await t
-      .expect(list.getItems().count)
-      .eql(6);
+  await t
+    .expect(list.getItems().count)
+    .eql(6);
 
-    await t
-      .pressKey('down')
-      .pressKey('down')
-      .pressKey('down')
-      .pressKey('down')
-      .pressKey('down');
+  await t
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('down');
 
-    await t
-      .expect(list.getItems().count)
-      .eql(9);
-  }).before(async () => {
-    const sampleData = generateData(12).map((data) => ({
-      ...data,
-    }));
+  await t
+    .expect(list.getItems().count)
+    .eql(9);
+}).before(async () => {
+  const sampleData = generateData(12).map((data) => ({
+    ...data,
+  }));
 
-    await changeTheme(theme);
-
-    return createWidget('dxList', {
-      dataSource: {
-        store: sampleData,
-        paginate: true,
-        pageSize: 3,
-      },
-      pullRefreshEnabled: true,
-      height: 160,
-      width: 200,
-      pageLoadMode: 'scrollBottom',
-      valueExpr: 'id',
-      displayExpr: 'id',
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
+  return createWidget('dxList', {
+    dataSource: {
+      store: sampleData,
+      paginate: true,
+      pageSize: 3,
+    },
+    pullRefreshEnabled: true,
+    height: 160,
+    width: 200,
+    pageLoadMode: 'scrollBottom',
+    valueExpr: 'id',
+    displayExpr: 'id',
   });
 });
