@@ -9,6 +9,7 @@ import {
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
 import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -33,7 +34,7 @@ fixture`DateBox render`
         await setClassAttribute(Selector(`#${id}`), state);
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} rtl=${rtlEnabled}.png`, '#container', true);
+      await takeScreenshotInTheme(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} rtl=${rtlEnabled}.png`, undefined, true);
 
       for (const id of ids) {
         await removeClassAttribute(Selector(`#${id}`), state);
@@ -43,7 +44,9 @@ fixture`DateBox render`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await restoreBrowserSize(t);
+
     for (const stylingMode of stylingModes) {
       for (const type of types) {
         for (const pickerType of pickerTypes) {

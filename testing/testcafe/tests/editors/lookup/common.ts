@@ -98,7 +98,10 @@ test('Check popup height in loading state', async (t) => {
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup in loading.png', undefined, true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Lookup in loading.png', undefined, true, async () => {
+    await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+    await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  });
 
   await t
     .expect(compareResults.isValid())

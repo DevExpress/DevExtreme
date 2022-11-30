@@ -11,44 +11,41 @@ const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitW
 fixture`DateBox (datetime) geometry (T896846)`
   .page(url(__dirname, '../../container.html'));
 
-const themes = ['material.blue.light', 'generic.light'];
-themes.forEach((theme) => {
-  test(`Geometry is good (${theme})`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dateBox = new DateBox('#container');
+test('Geometry is good', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dateBox = new DateBox('#container');
 
-    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with calendar.png');
+  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with calendar.png');
 
-    await dateBox.option('type', 'datetime');
+  await dateBox.option('type', 'datetime');
 
-    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime.png');
+  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime.png');
 
-    await dateBox.option('opened', false);
-    await dateBox.option({ showAnalogClock: false });
-    await dateBox.option('opened', true);
+  await dateBox.option('opened', false);
+  await dateBox.option({ showAnalogClock: false });
+  await dateBox.option('opened', true);
 
-    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without analog clock.png');
+  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without analog clock.png');
 
-    await dateBox.option('opened', false);
-    await dateBox.option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
-    await dateBox.option('opened', true);
+  await dateBox.option('opened', false);
+  await dateBox.option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
+  await dateBox.option('opened', true);
 
-    await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without calendar.png');
+  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without calendar.png');
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(600, 550);
-    await waitFont();
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.resizeWindow(600, 550);
+  await waitFont();
 
-    return createWidget('dxDateBox', {
-      opened: true,
-      pickerType: 'calendar',
-      width: 200,
-      value: new Date(1.5e12),
-    });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
+  return createWidget('dxDateBox', {
+    opened: true,
+    pickerType: 'calendar',
+    width: 200,
+    value: new Date(1.5e12),
   });
+}).after(async (t) => {
+  await restoreBrowserSize(t);
 });
