@@ -11,6 +11,7 @@ export async function takeScreenshotInTheme(
   screenshotName: string,
   element?: string,
   shouldTestInCompact = false,
+  compactCallBack?: () => Promise<unknown>,
 ): Promise<void> {
   await t
     .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix()}.png`), element))
@@ -19,6 +20,8 @@ export async function takeScreenshotInTheme(
   if (shouldTestInCompact) {
     const themeName = process.env.theme ?? 'generic.light';
     await changeTheme(`${themeName}.compact`);
+
+    await compactCallBack?.();
 
     await t
       .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), element))
