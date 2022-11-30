@@ -71,9 +71,7 @@ class FormDialog {
                 const $formContainer = $('<div>').appendTo(contentElem);
 
                 this._renderForm($formContainer, {
-                    onEditorEnterKey: ({ component, dataField, event }) => {
-                        this.hide(component.option('formData'), event);
-                    },
+                    onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
                     customizeItem: (item) => {
                         if(item.itemType === 'simple') {
                             item.editorOptions = extend(
@@ -94,7 +92,7 @@ class FormDialog {
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('OK'),
-                        onClick: this.onButtonClick.bind(this)
+                        onClick: (e) => this.callAddButtonAction(e.event)
                     }
                 }, {
                     toolbar: 'bottom',
@@ -113,15 +111,13 @@ class FormDialog {
         }, this._popupUserConfig);
     }
 
-    onButtonClick(e) {
-        if(this.contentClick) {
-            if(!this.contentClick()) {
-                return;
-            }
+    callAddButtonAction(event) {
+        if(this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
+            return;
         }
 
-        this.contentClick = undefined;
-        this.hide(this._form.option('formData'), e.event);
+        this.beforeAddButtonAction = undefined;
+        this.hide(this._form.option('formData'), event);
     }
 
     _renderForm($container, options) {

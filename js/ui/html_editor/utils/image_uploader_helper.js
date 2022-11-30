@@ -44,7 +44,7 @@ export class ImageUploader {
 
     render() {
         if(this.editorInstance._formDialog) {
-            this.editorInstance._formDialog.contentClick = () => {
+            this.editorInstance._formDialog.beforeAddButtonAction = () => {
                 return this.getCurrentTab().upload();
             };
         }
