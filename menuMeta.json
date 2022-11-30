@@ -2685,7 +2685,6 @@
           {
             "Title": "Pies with Equal Sizes",
             "Name": "PiesWithEqualSize",
-            "DocUrl": "Guide/UI_Components/PieChart/Equally-Sized_Pies/",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "sizeGroup"
