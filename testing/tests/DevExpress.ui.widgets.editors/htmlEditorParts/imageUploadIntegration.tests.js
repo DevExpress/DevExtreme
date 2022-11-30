@@ -344,6 +344,11 @@ module('Image uploading integration', {
 
             this.clock.tick(TIME_TO_WAIT);
 
+            const $form = $(`.${FORM_CLASS}`);
+            const formInstance = $form.dxForm('instance');
+
+            formInstance.getEditor('src').option('value', 'temp');
+
             this.clickDialogOkButton();
             this.clock.tick(TIME_TO_WAIT);
 
@@ -353,9 +358,6 @@ module('Image uploading integration', {
                 .trigger('dxclick');
 
             this.clock.tick(TIME_TO_WAIT);
-
-            const $form = $(`.${FORM_CLASS}`);
-            const formInstance = $form.dxForm('instance');
 
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 0, 'has no add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
