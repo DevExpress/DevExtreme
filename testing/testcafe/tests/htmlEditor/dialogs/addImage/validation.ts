@@ -21,7 +21,7 @@ test('HtmlEdit11', async (t) => {
   await t.click(Selector('.dx-popup-bottom .dx-button-mode-contained'));
 
   await t.expect(
-    await takeScreenshot('test-screenshot', Selector('dx-quill-container')),
+    await takeScreenshot('test-screenshot.png', Selector('dx-quill-container')),
   ).ok();
 
   await t.expect(compareResults.isValid())
