@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/gantt';
 import { Consts, data, options } from '../../../helpers/ganttHelpers.js';
+import localization from 'localization';
 const { test } = QUnit;
 
 const moduleConfig = {
@@ -175,5 +176,35 @@ QUnit.module('Markup', moduleConfig, () => {
         selectedTaskIndex = selectedTask.eq(0).attr('task-index');
         assert.equal(selectedTaskIndex, 3, 'second new added task is selected');
 
+    });
+    test('24 format check (T1130809)', function(assert) {
+        localization.locale('fr');
+        const my_options = {
+            tasks: { dataSource: data.tasks },
+            scaleType: 'hours',
+            onScaleCellPrepared: (e) => {
+                const scaleElement = $(e.scaleElement);
+                if(e.scaleIndex === 0) {
+                    assert.equal(!!scaleElement.text().match(/am|pm/i), false, 'correct format');
+                }
+            }
+        };
+        this.createInstance(my_options);
+        this.clock.tick();
+    });
+    test('12 format check (T1130809)', function(assert) {
+        localization.locale('en-US');
+        const my_options = {
+            tasks: { dataSource: data.tasks },
+            scaleType: 'hours',
+            onScaleCellPrepared: (e) => {
+                const scaleElement = $(e.scaleElement);
+                if(e.scaleIndex === 0) {
+                    assert.equal(!!scaleElement.text().match(/am|pm/i), true, 'correct format');
+                }
+            }
+        };
+        this.createInstance(my_options);
+        this.clock.tick();
     });
 });
