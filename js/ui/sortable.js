@@ -506,7 +506,7 @@ const Sortable = Draggable.inherit({
         return this.option('itemOrientation') === 'vertical';
     },
 
-    _normalizeToIndex: function(toIndex, dropInsideItem) {
+    _normalizeToIndex: function(toIndex, skipOffsetting) {
         const isAnotherDraggable = this._getSourceDraggable() !== this._getTargetDraggable();
         const fromIndex = this.option('fromIndex');
 
@@ -514,7 +514,7 @@ const Sortable = Draggable.inherit({
             return fromIndex;
         }
 
-        return Math.max(isAnotherDraggable || fromIndex >= toIndex || dropInsideItem ? toIndex : toIndex - 1, 0);
+        return Math.max(isAnotherDraggable || fromIndex >= toIndex || skipOffsetting ? toIndex : toIndex - 1, 0);
     },
 
     _updatePlaceholderPosition: function(e, itemPoint) {
@@ -627,11 +627,13 @@ const Sortable = Draggable.inherit({
     _getEventArgs: function(e) {
         const sourceDraggable = this._getSourceDraggable();
         const targetDraggable = this._getTargetDraggable();
+        const isTargetInDom = targetDraggable?._$sourceElement?.parent()?.length ?? true;
         const dropInsideItem = targetDraggable.option('dropInsideItem');
+        const skipOffsetting = dropInsideItem || !isTargetInDom;
 
         return extend(this.callBase.apply(this, arguments), {
             fromIndex: sourceDraggable.option('fromIndex'),
-            toIndex: this._normalizeToIndex(targetDraggable.option('toIndex'), dropInsideItem),
+            toIndex: this._normalizeToIndex(targetDraggable.option('toIndex'), skipOffsetting),
             dropInsideItem: dropInsideItem
         });
     },
