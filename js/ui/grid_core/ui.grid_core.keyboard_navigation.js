@@ -149,10 +149,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const rowsViewFocusHandler = (event) => {
             const $element = $(event.target);
             const isRelatedTargetInRowsView = $(event.relatedTarget).closest(rowsView.element()).length;
-            if(event.relatedTarget
-                && this._isEventInCurrentGrid(event)
-                && !isRelatedTargetInRowsView
-            ) {
+            const isLink = $element.is('a');
+
+            if(event.relatedTarget && isLink && !isRelatedTargetInRowsView && this._isEventInCurrentGrid(event)) {
                 let $focusedCell = this._getFocusedCell();
 
                 $focusedCell = !isElementDefined($focusedCell) ? rowsView.getCellElements(0).filter('[tabindex]').eq(0) : $focusedCell;
