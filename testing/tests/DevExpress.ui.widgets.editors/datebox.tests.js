@@ -722,6 +722,35 @@ QUnit.module('focus policy', {}, () => {
         assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), 'dateBox on focus reset focus to element');
     });
 
+    QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            opened: true,
+            focusStateEnabled: true
+        });
+
+        const instance = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('tab');
+
+        const $inputHourBox = instance._strategy._timeView._hourBox._input();
+        const caretPosition = {
+            start: $inputHourBox[0].selectionStart,
+            end: $inputHourBox[0].selectionEnd
+        };
+
+        assert.strictEqual(caretPosition.start, 0, 'selectionStart is correct');
+        assert.strictEqual(caretPosition.end, 2, 'selectionEnd is correct');
+    });
+
     QUnit.test('mousewheel action should not work if dateBox is not focused', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
