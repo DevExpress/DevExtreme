@@ -53,7 +53,10 @@ const DropDownEditor = TextBox.inherit({
                     ? this._getLastPopupElement()
                     : this._getFirstPopupElement();
 
-                $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
+                if($focusableElement) {
+                    eventsEngine.trigger($focusableElement, 'focus');
+                    $focusableElement.select();
+                }
                 e.preventDefault();
             },
             escape: function(e) {

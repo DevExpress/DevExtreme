@@ -754,14 +754,34 @@ QUnit.module('keyboard navigation', {
         assert.ok(this.instance._colorView, 'colorView work fine when focusStateEnabled set to false');
     });
 
-    QUnit.testInActiveWindow('focus policy', function(assert) {
+    QUnit.testInActiveWindow('focusing colorView element should trigger focus on editor input', function(assert) {
         this.instance.option('opened', true);
-        this.keyboard.keyDown('tab');
-        const $inputR = $(this.instance._colorView._rgbInputs[0].$element());
-        assert.ok($inputR.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first input in overlay');
 
         $(this.instance._colorView.$element()).triggerHandler('focus');
         assert.ok(this.instance.$element().hasClass(STATE_FOCUSED_CLASS), 'colorView on focus reset focus to element');
+    });
+
+    QUnit.testInActiveWindow('pressing tab should set focus on first input in overlay', function(assert) {
+        this.instance.option('opened', true);
+        this.keyboard.keyDown('tab');
+
+        const $inputR = $(this.instance._colorView._rgbInputs[0].$element());
+
+        assert.ok($inputR.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first input in overlay');
+    });
+
+    QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
+        this.instance.option('opened', true);
+        this.keyboard.keyDown('tab');
+
+        const $firstInput = $(this.instance._colorView._rgbInputs[0].$element()).find('.dx-texteditor-container input');
+        const caretPosition = {
+            start: $firstInput[0].selectionStart,
+            end: $firstInput[0].selectionEnd
+        };
+
+        assert.strictEqual(caretPosition.start, 0, 'selectionStart is correct');
+        assert.strictEqual(caretPosition.end, 3, 'selectionEnd is correct');
     });
 
     QUnit.test('Pressing the \'Esc\' key should close the dropDown', function(assert) {
