@@ -9,18 +9,22 @@ const CLASS = {
   bottomToolbar: 'dx-popup-bottom',
 };
 export default class Popup extends Widget {
+  public static className = '.dx-popup-wrapper';
+
+  public static footerToolbarClassName = '.dx-popup-bottom';
+
   content: Selector;
 
   wrapper: Selector;
 
-  toolbar: Selector;
+  topToolbar: Selector;
 
   constructor(id: string | Selector) {
     super(id);
 
     this.content = this.element.find(`.${CLASS.content}`);
     this.wrapper = this.element.find(`.${CLASS.wrapper}`);
-    this.toolbar = this.element.find(`.${CLASS.topToolbar}`);
+    this.topToolbar = this.element.find(`.${CLASS.topToolbar}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
