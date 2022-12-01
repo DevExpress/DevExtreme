@@ -11,12 +11,12 @@
         "build": {
             "dependsOn": ["^build"],
             "outputs": [
-                "{projectRoot}/packages/{angular, core, react}/{lib, dist, tsc-out}"
+                "{projectRoot}/packages/{angular, components, core, react}/{lib, dist, tsc-out}"
             ]
         },
         "watch": {
             "outputs": [
-                "{projectRoot}/packages/{angular, core, react}/{lib, dist, tsc-out}"
+                "{projectRoot}/packages/{angular, components, core, react}/{lib, dist, tsc-out}"
             ]
         },
         "start": {

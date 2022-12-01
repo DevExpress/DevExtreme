@@ -5,20 +5,16 @@
 		"outDir": "./tsc-out",
 		"rootDir": "./src",
 		"composite": true
-	},
+    },
 	"include": [
 		"src"
 	],
 	"exclude": [
-		"test",
-		"lib"
+		"**/*.test.ts"
 	],
-	"references": [
-		{
-			"path": "..\\core\\tsconfig.package.json",
-    },
+  "references": [
     {
-      "path": "..\\components\\tsconfig.package.json"
+      "path": "..\\core\\tsconfig.package.json"
     }
-	]
+  ]
 }

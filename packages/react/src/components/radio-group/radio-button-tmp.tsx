@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import { ACTIONS, createRadioButtonSelector, RadioGroupContextData } from '@devexpress/components';
-import React, {
+import {
   memo, useCallback, useEffect, useMemo,
 } from 'react';
 import { useCoreContext, useSecondEffect } from '../../internal/hooks';

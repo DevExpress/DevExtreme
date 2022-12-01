@@ -14,6 +14,7 @@ export type {
 
 export type {
   Selector,
+  ViewModel,
 } from './view-model';
 
 export type {
@@ -26,7 +27,6 @@ export {
 
 export {
   createSelector,
-  type ViewModel,
 } from './view-model';
 
 export * from './utils';
