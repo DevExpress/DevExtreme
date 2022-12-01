@@ -365,7 +365,8 @@ export class GanttView extends Widget {
         let result = '';
         if(date) {
             const datePart = dateLocalization.format(date, 'shortDate');
-            const timePart = dateLocalization.format(date, 'hh:mm');
+            const timeFormat = this._hasAmPM() ? 'hh:mm a' : 'HH:mm';
+            const timePart = dateLocalization.format(date, timeFormat);
             result = datePart + ' ' + timePart;
         }
         return result;
