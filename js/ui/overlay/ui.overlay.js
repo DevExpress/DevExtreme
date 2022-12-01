@@ -445,7 +445,6 @@ const Overlay = Widget.inherit({
     },
 
     _show: function() {
-        this._isShowingActionInProgress = true;
         this._showingDeferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
