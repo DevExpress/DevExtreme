@@ -1,4 +1,4 @@
-import { ViewModel } from '@devexpress/core';
+import { type ViewModel } from '@devexpress/core';
 import { useEffect, useState } from 'react';
 
 const useViewModel = <TViewModel, TReactViewModel extends TViewModel = TViewModel>(

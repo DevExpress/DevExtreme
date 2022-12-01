@@ -33,6 +33,7 @@ function RadioGroupInternal<T>(
 
   useSecondEffect(() => {
     if (controlledMode) {
+      // @ts-ignore
       stateManager.addUpdate((stateValue: RadioGroupState<T>) => {
         const { value } = props;
         const existingOptionId = getKeys(stateValue.options)

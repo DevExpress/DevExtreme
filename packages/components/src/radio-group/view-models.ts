@@ -11,8 +11,9 @@ export type RadioButtonVM<T> = {
 export function createRadioButtonSelector<T>(
   optionId: symbol,
 ): Selector<RadioGroupState<T>, RadioButtonVM<T>> {
-  return createSelector(
+    return createSelector(
     (vm: RadioButtonVM<T>) => vm,
+    // @ts-ignore
     ({ selectedOption: { id }, options }: RadioGroupState<T>) => ({
       selected: id === optionId,
       value: options[optionId],

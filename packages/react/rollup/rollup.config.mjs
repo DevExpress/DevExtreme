@@ -1,9 +1,42 @@
-import {getRollupConfig} from './rollup.utils.mjs';
+import typescript from '@rollup/plugin-typescript';
 
-const OUTPUT_DIR = './lib';
-const COMPONENTS = [
-    'slideToggle',
-    'pager',
-];
+const OUTPUT_DIR = './lib'
+const FORMAT_EXTENSIONS = {
+    esm: 'mjs',
+    cjs: 'cjs',
+}
 
-export default getRollupConfig(COMPONENTS, OUTPUT_DIR);
+function checkExternalPackage(id) {
+    return ['@devexpress'].includes(id.split('/')[0]);
+}
+
+function getBundleConfig(outputDir, format) {
+    return {
+        input: 'src/index.ts',
+        output: {
+            dir: outputDir,
+            entryFileNames: `[name].${FORMAT_EXTENSIONS[format]}`,
+            format,
+            sourcemap: true
+        },
+        plugins: [
+            typescript({
+                tsconfig: './tsconfig.package.json',
+                compilerOptions: {
+                    outDir: outputDir,
+                },
+                outputToFilesystem: true
+            })
+        ],
+        external: checkExternalPackage,
+    };
+}
+
+function getRollupConfig(outputDir) {
+    return [
+        getBundleConfig(outputDir, 'esm'),
+        getBundleConfig(outputDir, 'cjs'),
+    ];
+}
+
+export default getRollupConfig(OUTPUT_DIR)

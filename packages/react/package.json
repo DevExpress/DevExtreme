@@ -40,28 +40,10 @@
         "typescript": "^4.7.4"
     },
     "exports": {
-        "./pager": {
-            "types": "./lib/components/pager/index.d.ts",
-            "import": "./lib/pager.mjs",
-            "require": "./lib/pager.cjs"
-        },
-        "./pager.css": {
-            "import": "./lib/pager.css",
-            "require": "./lib/pager.css"
-        },
-        "./slideToggle": {
-            "types": "./lib/components/slideToggle/index.d.ts",
-            "import": "./lib/slideToggle.mjs",
-            "require": "./lib/slideToggle.cjs"
-        },
-        "./slideToggle.css": {
-            "import": "./lib/slideToggle.css",
-            "require": "./lib/slideToggle.css"
-        },
-        "./internal": {
-            "types": "./lib/internal/index.d.ts",
-            "import": "./lib/internal.mjs",
-            "require": "./lib/internal.cjs"
+        ".": {
+            "types": "./lib/index.d.ts",
+            "import": "./lib/index.mjs",
+            "require": "./lib/index.cjs"
         }
     }
 }
