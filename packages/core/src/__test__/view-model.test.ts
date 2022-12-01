@@ -1,4 +1,4 @@
-import { createSelector, createViewModel } from '../view-model';
+import { createSelector, createViewModelValue } from '../view-model';
 import { createObservableEmitter, DISPOSE, memoize } from '../utils';
 
 jest.mock('../utils/observable');
@@ -22,7 +22,7 @@ describe('Core: ViewModel', () => {
           emit: jest.fn(),
         });
 
-      const viewModel = createViewModel(initialState, jest.fn(), selector);
+      const viewModel = createViewModelValue(initialState, jest.fn(), selector);
 
       expect(viewModel).toEqual(expected);
     });
@@ -39,7 +39,7 @@ describe('Core: ViewModel', () => {
           emit: jest.fn(),
         });
 
-      createViewModel(initialState, jest.fn(), selector);
+      createViewModelValue(initialState, jest.fn(), selector);
 
       expect(selector).toBeCalledTimes(1);
       expect(selector).toBeCalledWith(initialState);
@@ -61,7 +61,7 @@ describe('Core: ViewModel', () => {
           emit,
         });
 
-      createViewModel({}, subscribe, selector);
+      createViewModelValue({}, subscribe, selector);
 
       selector
         .mockClear()
@@ -89,7 +89,7 @@ describe('Core: ViewModel', () => {
           emit: jest.fn(),
         });
 
-      const viewModel = createViewModel({}, subscribe, jest.fn());
+      const viewModel = createViewModelValue({}, subscribe, jest.fn());
 
       expect(unsubscribe).not.toHaveBeenCalled();
 

@@ -1,7 +1,7 @@
-type OutputProp<P extends string> = `${P}Change`;
+type HandlerProp<P extends string> = `${P}Change`;
 type DefaultProp<P extends string> = `default${Capitalize<P>}`;
 
-type WithOutputProps<T> = { [P in keyof T & string as OutputProp<P>]?: (value: T[P]) => void };
+type WithHandlerProps<T> = { [P in keyof T & string as HandlerProp<P>]?: (value: T[P]) => void };
 type WithDefaultProps<T> = { [P in keyof T & string as DefaultProp<P>]?: T[P] };
 
 export type Props<
@@ -11,6 +11,6 @@ export type Props<
   > =
   Partial<TValues>
   & WithDefaultProps<TValues>
-  & WithOutputProps<TValues>
+  & WithHandlerProps<TValues>
   & Partial<TReadonly>
   & Partial<TTemplate>;

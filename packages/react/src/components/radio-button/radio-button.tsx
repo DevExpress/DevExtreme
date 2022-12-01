@@ -1,7 +1,7 @@
-import { forwardRef, useId } from 'react';
+import React, { useId, forwardRef } from 'react';
 import {
-  LabelTemplateProps,
   RadioButtonProps,
+  LabelTemplateProps,
   RadioTemplateProps,
 } from './types';
 

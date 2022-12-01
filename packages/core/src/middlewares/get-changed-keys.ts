@@ -1,6 +1,6 @@
-import { getKeys, ObjectType } from '../utils';
+import { getKeys, UnknownRecord } from '../utils';
 
-export function getChangedKeys<TState extends ObjectType>(
+export function getChangedKeys<TState extends UnknownRecord>(
   prev: TState,
   next: TState,
 ): (keyof TState)[] {

@@ -1,10 +1,10 @@
-import { ObjectType } from '../utils';
+import { UnknownRecord } from '../utils';
 
 export interface StatePropertyConfig<T> {
   controlledMode: boolean;
-  changeCallback: (value: T) => void;
+  changeCallback(value: T): void;
 }
 
-export type StateConfigMap<TState extends ObjectType> = {
+export type StateConfigMap<TState extends UnknownRecord> = {
   [P in keyof TState]?: StatePropertyConfig<TState[P]>
 };

@@ -1,32 +1,35 @@
 import { State } from './state';
 import {
-  Disposable, DISPOSE, getKeys, ObjectType,
+  Disposable, DISPOSE, getKeys, UnknownRecord,
 } from './utils';
 import {
-  createViewModel, SelectorMap, ViewModelMap,
+  createViewModelValue, SelectorMap, ViewModel,
 } from './view-model';
 
-export interface ViewModelManager<TState extends ObjectType, TViewModels extends ObjectType> {
-  add: (selectorMap: SelectorMap<TState, TViewModels>) => void;
-  remove: (...keys: (keyof TViewModels)[]) => void;
-  get: () => Readonly<ViewModelMap<TViewModels>>;
+export interface ViewModelManager<TState extends UnknownRecord, TViewModels extends UnknownRecord> {
+  add(selectorMap: SelectorMap<TState, TViewModels>): void;
+  remove(...keys: (keyof TViewModels)[]): void;
+  get(): Readonly<ViewModel<TViewModels>>;
 }
 
-export function createViewModelManager<TState extends ObjectType, TViewModels extends ObjectType>(
-  state: State<TState>,
+export function createViewModelManager<
+  TStateProps extends UnknownRecord,
+  TViewModelProps extends UnknownRecord,
+>(
+  state: State<TStateProps>,
 )
-  : Disposable<ViewModelManager<TState, TViewModels>> {
-  const viewModelMap: ViewModelMap<TViewModels> = {};
+  : Disposable<ViewModelManager<TStateProps, TViewModelProps>> {
+  const viewModel: ViewModel<TViewModelProps> = {};
 
-  const add = (selectorMap: SelectorMap<TState, TViewModels>) => {
+  const add = (selectorMap: SelectorMap<TStateProps, TViewModelProps>) => {
     getKeys(selectorMap).forEach((selectorKey) => {
-      if (viewModelMap[selectorKey]) {
+      if (viewModel[selectorKey]) {
         throw Error(`View model with ${selectorKey.toString()} already exist.`);
       }
 
       const selector = selectorMap[selectorKey];
       if (selector) {
-        viewModelMap[selectorKey] = createViewModel(
+        viewModel[selectorKey] = createViewModelValue(
           state.getCurrent(),
           state.subscribeForRender,
           selector,
@@ -36,21 +39,21 @@ export function createViewModelManager<TState extends ObjectType, TViewModels ex
   };
 
   const remove = (
-    ...keys: (keyof TViewModels)[]
+    ...keys: (keyof TViewModelProps)[]
   ): void => {
     keys.forEach((key) => {
-      viewModelMap[key]?.[DISPOSE]();
-      delete viewModelMap[key];
+      viewModel[key]?.[DISPOSE]();
+      delete viewModel[key];
     });
   };
 
-  const get = () => viewModelMap as Readonly<ViewModelMap<TViewModels>>;
+  const get = () => viewModel as Readonly<ViewModel<TViewModelProps>>;
 
   const dispose = () => {
-    Object.values(viewModelMap)
-      .filter((viewModel) => !!viewModel)
-      .forEach((viewModel) => {
-        viewModel[DISPOSE]();
+    Object.values(viewModel)
+      .filter((v) => !!v)
+      .forEach((disposable) => {
+        disposable[DISPOSE]();
       });
   };
 

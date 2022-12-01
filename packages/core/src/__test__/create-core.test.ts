@@ -20,6 +20,8 @@ describe('Core: Component', () => {
       addUpdate: jest.fn(),
       rollbackUpdates: jest.fn(),
       commitUpdates: jest.fn(),
+      getState: jest.fn(),
+      subscribe: jest.fn(),
     }, {
       dispatch: jest.fn(),
     }]);

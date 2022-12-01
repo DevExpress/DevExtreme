@@ -1,7 +1,7 @@
 export type Listener<T> = (value: T) => void;
 
 export interface Emitter<T> {
-  emit: (value: T) => void;
+  emit(value: T): void;
 }
 
 export type SubscribeFunc<T> = (listener: Listener<T>) => () => void;

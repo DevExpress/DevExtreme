@@ -9,24 +9,19 @@ export type {
 } from './state-manager';
 
 export type {
-  ViewModelManager,
-} from './view-model-manager';
+  Handlers,
+} from './reducer';
 
 export type {
   Selector,
-  ViewModel,
 } from './view-model';
 
 export type {
-  Handlers,
-} from './reducer';
+  ViewModelManager,
+} from './view-model-manager';
 
 export {
   createCore,
 } from './create-core';
-
-export {
-  createSelector,
-} from './view-model';
 
 export * from './utils';

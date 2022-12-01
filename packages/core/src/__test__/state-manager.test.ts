@@ -83,12 +83,11 @@ describe('StateManager', () => {
 
       expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
       expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
-      const [updateFunc] = stateMock.addUpdate.mock.calls[0];
-      expect(updateFunc()).toEqual(expectedStateValue);
+      expect(stateMock.addUpdate).toHaveBeenCalledWith(expectedStateValue);
     });
 
-    it('does not call states commitUpdates again and does not update states model'
-      + ' if model has not changes after middleware', () => {
+    it('doesn\'t call state\'s commitUpdates again and doesn\'t update state\'s model'
+      + ' if model hasn\'t changes after middleware', () => {
       controlledMiddlewareMock.mockImplementation(() => {
         stateMock.commitUpdates.mockReset();
         return [{}, false];
@@ -101,7 +100,7 @@ describe('StateManager', () => {
       expect(stateMock.addUpdate).not.toHaveBeenCalled();
     });
 
-    it('always call states triggerRender independent of the model changes', () => {
+    it('always call state\'s triggerRender independent of the model changes', () => {
       const expectedStateCurrent = {};
       const possibleHasChanges = [true, false];
       stateMock.getCurrent.mockReturnValue(expectedStateCurrent);
@@ -117,22 +116,28 @@ describe('StateManager', () => {
         stateMock.triggerRender.mockReset();
       });
     });
+
+    it('returns the actual state value', () => {
+      const [manager] = createStateManager(stateMock, {}, {});
+      manager.getState();
+
+      expect(stateMock.getCurrent).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('addUpdate', () => {
-    it('calls states base method', () => {
+    it('calls state\'s base method', () => {
       const expectedUpdate = {};
       const [manager] = createStateManager(stateMock, {}, {});
-      manager.addUpdate(() => expectedUpdate);
+      manager.addUpdate(expectedUpdate);
 
       expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
-      const [updateFunc] = stateMock.addUpdate.mock.calls[0];
-      expect(updateFunc()).toEqual(expectedUpdate);
+      expect(stateMock.addUpdate).toBeCalledWith(expectedUpdate);
     });
   });
 
   describe('rollbackUpdates', () => {
-    it('calls states base method', () => {
+    it('calls state\'s base method', () => {
       const [manager] = createStateManager(stateMock, {}, {});
       manager.rollbackUpdates();
 
@@ -248,7 +253,7 @@ describe('Dispatcher', () => {
     });
   });
 
-  it('calls states commitUpdates and updates states model if model has changes after middleware', () => {
+  it('calls state\'s commitUpdates and updates state\'s model if model has changes after middleware', () => {
     controlledMiddlewareMock.mockReturnValue([{}, true]);
 
     const [, dispatcher] = createStateManager(
@@ -262,7 +267,7 @@ describe('Dispatcher', () => {
     expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call states commitUpdates and does not update states model '
+  it('doesn\'t call state\'s commitUpdates and doesn\'t update state\'s model '
     + 'if model has changes after middleware', () => {
     controlledMiddlewareMock.mockReturnValue([{}, false]);
 
@@ -277,7 +282,7 @@ describe('Dispatcher', () => {
     expect(stateMock.addUpdate).not.toHaveBeenCalled();
   });
 
-  it('calls states triggerRender only if model has changes after middleware', () => {
+  it('calls state\'s triggerRender only if model has changes after middleware', () => {
     const [, dispatcher] = createStateManager(
       stateMock,
       {},

@@ -2,7 +2,7 @@ import { createState } from '../state';
 
 describe('Core: Component: state', () => {
   it('Returns state value', () => {
-    const initialValue = { propA: true };
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
     const result = state.getCurrent();
@@ -11,32 +11,33 @@ describe('Core: Component: state', () => {
   });
 
   it('Updates the state value', () => {
-    const initialValue = { propA: true, propB: true };
-    const expectedValue = { propA: false, propB: true };
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
+    const expectedValue = { model: { value: 'updated' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
-    state.addUpdate(() => ({ propA: false }));
+    state.addUpdate({ model: expectedValue.model });
     state.commitUpdates();
     const result = state.getCurrent();
 
     expect(result).toEqual(expectedValue);
   });
 
-  it('Does not update the state value without committing updates', () => {
-    const initialValue = { propA: 'value ' };
+  it('Doesn\'t update the state value without committing updates', () => {
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
-    state.addUpdate(() => ({ propA: 'updated' }));
+    state.addUpdate({ model: { value: 'updated' } });
     const result = state.getCurrent();
 
     expect(result).toEqual(initialValue);
   });
 
-  it('Does not update the state value if updates were rolled back', () => {
-    const initialValue = { propA: true };
+  it('Doesn\'t update the state value if updates were rolled back', () => {
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
+    const expectedValue = { model: { value: 'updated' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
-    state.addUpdate(() => ({ propA: false }));
+    state.addUpdate({ model: expectedValue.model });
     state.rollbackUpdates();
     const result = state.getCurrent();
 
@@ -44,21 +45,21 @@ describe('Core: Component: state', () => {
   });
 
   it('Updates state value only for committed updates', () => {
-    const initialValue = { propA: 'value', propB: 'value' };
-    const expectedValue = { propA: 'value', propB: 'updated' };
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
+    const expectedValue = { model: { value: 'test' }, dictionary: { value: 'updated' } };
     const state = createState(initialValue);
 
-    state.addUpdate(() => ({ propA: 'updated' }));
+    state.addUpdate({ model: { value: 'updated' } });
     state.rollbackUpdates();
-    state.addUpdate(() => ({ propB: 'updated' }));
+    state.addUpdate({ dictionary: { value: 'updated' } });
     state.commitUpdates();
     const result = state.getCurrent();
 
     expect(result).toEqual(expectedValue);
   });
 
-  it('Does not update the state if changes were not added', () => {
-    const initialValue = { propA: true };
+  it('Doesn\'t update the state if changes weren\'t added', () => {
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
     state.commitUpdates();

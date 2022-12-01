@@ -1,10 +1,10 @@
-import { ObjectType } from '../utils';
+import { UnknownRecord } from '../utils';
 import { StateConfigMap } from './types';
 import { getChangedKeys } from './get-changed-keys';
 
-type ModelChangesTuple<TState extends ObjectType> = [newModel: TState, hasChanges: boolean];
+type ModelChangesTuple<TState extends UnknownRecord> = [newModel: TState, hasChanges: boolean];
 
-export function controlledModeMiddleware<TState extends ObjectType>(
+export function controlledModeMiddleware<TState extends UnknownRecord>(
   prev: TState,
   next: TState,
   config: StateConfigMap<TState> = {},

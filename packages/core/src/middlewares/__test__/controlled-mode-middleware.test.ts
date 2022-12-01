@@ -35,11 +35,11 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     const config = {
       a: {
         controlledMode: false,
-        changeCallback: () => {},
+        changeCallback() {},
       },
       b: {
         controlledMode: false,
-        changeCallback: () => {},
+        changeCallback() {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
@@ -61,11 +61,11 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     const config = {
       a: {
         controlledMode: true,
-        changeCallback: () => {},
+        changeCallback() {},
       },
       b: {
         controlledMode: true,
-        changeCallback: () => {},
+        changeCallback() {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
@@ -91,11 +91,11 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     const config = {
       a: {
         controlledMode: true,
-        changeCallback: () => {},
+        changeCallback() {},
       },
       b: {
         controlledMode: false,
-        changeCallback: () => {},
+        changeCallback() {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
@@ -121,7 +121,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     const config = {
       a: {
         controlledMode: true,
-        changeCallback: () => {},
+        changeCallback() {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a']);

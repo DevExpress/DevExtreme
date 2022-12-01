@@ -1,10 +1,10 @@
 import { DISPOSE } from '../utils';
-import { createViewModel } from '../view-model';
+import { createViewModelValue } from '../view-model';
 import { createViewModelManager } from '../view-model-manager';
 
 jest.mock('../view-model');
 
-const createViewModelMock = jest.mocked(createViewModel);
+const createViewModelMock = jest.mocked(createViewModelValue);
 const viewModelMock = {
   subscribe: jest.fn(),
   getValue: jest.fn(),

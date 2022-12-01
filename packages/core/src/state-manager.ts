@@ -1,15 +1,20 @@
 import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from './middlewares';
 import { createReducer, Handlers } from './reducer';
 import { State } from './state';
-import { ObjectType, pipe, PipeFunc } from './utils';
+import {
+  pipe, PipeFunc, SubscribeFunc, UnknownRecord,
+} from './utils';
 
-export interface StateManager<TState extends ObjectType> {
-  addUpdate(updateFunc: (state: TState) => Partial<TState>): void;
+export interface StateManager<TState extends UnknownRecord> {
+  getState(): TState;
+  subscribe: SubscribeFunc<TState>;
+  addUpdate(statePart: Partial<TState>): void;
   commitUpdates(): void;
   rollbackUpdates(): void;
 }
 
-export interface Dispatcher<TState extends ObjectType,
+export interface Dispatcher<
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   > {
   dispatch: <TAction extends keyof THandlers>(
@@ -18,14 +23,16 @@ export interface Dispatcher<TState extends ObjectType,
   ) => void;
 }
 
-export type StateStoreTuple<TState extends ObjectType,
+export type StateStoreTuple<
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   > = [
   stateManager: StateManager<TState>,
   dispatcher: Dispatcher<TState, THandlers>,
   ];
 
-export function createStateManager<TState extends ObjectType,
+export function createStateManager<
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   >(
   state: State<TState>,
@@ -47,7 +54,7 @@ export function createStateManager<TState extends ObjectType,
     );
 
     if (hasChanges) {
-      state.addUpdate(() => newState);
+      state.addUpdate(newState);
       state.commitUpdates();
     }
 
@@ -66,6 +73,8 @@ export function createStateManager<TState extends ObjectType,
 
     pendingCallbacks.forEach((callback) => callback());
   };
+
+  const getState = () => state.getCurrent();
 
   const commitUpdates = () => {
     state.commitUpdates();
@@ -100,6 +109,8 @@ export function createStateManager<TState extends ObjectType,
   };
 
   return [{
+    getState,
+    subscribe: state.subscribeForRender,
     addUpdate: state.addUpdate,
     commitUpdates,
     rollbackUpdates: state.rollbackUpdates,
