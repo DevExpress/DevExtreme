@@ -445,7 +445,6 @@ const Overlay = Widget.inherit({
     },
 
     _show: function() {
-        this._isShowingActionInProgress = true;
         this._showingDeferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
@@ -496,18 +495,21 @@ const Overlay = Widget.inherit({
                 };
 
                 this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
-                this._isShowingActionInProgress = false;
             };
 
-            if(this.option('templatesRenderAsynchronously')) {
-                this._stopShowTimer();
-                this._asyncShowTimeout = setTimeout(show);
-            } else {
-                show();
-            }
+            this._runShowing(show);
         }
 
         return this._showingDeferred.promise();
+    },
+
+    _runShowing: function(show) {
+        if(this.option('templatesRenderAsynchronously')) {
+            this._stopShowTimer();
+            this._asyncShowTimeout = setTimeout(show);
+        } else {
+            show();
+        }
     },
 
     _normalizeAnimation: function(showHideConfig, direction) {
