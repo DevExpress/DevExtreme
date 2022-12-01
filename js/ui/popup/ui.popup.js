@@ -313,14 +313,14 @@ const Popup = Overlay.inherit({
         });
     },
 
-    _runShowing: function(show) {
-        show();
-    },
-
     _updateResizeCallbackSkipCondition() {
         const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
         this._shouldSkipContentResize = (entry) => {
+            if(this._isShowingActionInProgress) {
+                return true;
+            }
+
             return doesShowAnimationChangeDimensions && this._showAnimationProcessing
                 || this._areContentDimensionsRendered(entry);
         };
