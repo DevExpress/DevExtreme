@@ -31,6 +31,14 @@
     "target": "ES6",
     "types": ["jest", "node"],
     "useDefineForClassFields": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "paths": {
+      "@devexpress/*": [
+        "./packages/*/src"
+      ],
+      "@playgrounds/*": [
+        "./playgrounds/*/src"
+      ]
+    }
   }
 }
