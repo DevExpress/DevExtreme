@@ -93,9 +93,10 @@ class SchedulerAppointments extends CollectionWidget {
             }
         };
 
+        const currentAppointment = this._$currentAppointment?.dxResizable('instance');
+
         return extend(parent, {
             escape: (function(e) {
-                const currentAppointment = this._$currentAppointment.dxResizable('instance');
                 this._escPressed = true;
 
                 if(this.resizeOccur) {
