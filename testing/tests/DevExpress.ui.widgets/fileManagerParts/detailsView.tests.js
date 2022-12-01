@@ -812,17 +812,18 @@ QUnit.module('Details View', moduleConfig, () => {
             },
             currentPath: 'Folder 1'
         });
+        this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 16, 'rows are rendered');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
-        for(let i = 1; i < 5; i++) {
-            assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
-        }
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
 
         fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
+        this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
@@ -830,15 +831,15 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
 
         fileManager.option('currentPath', 'Folder 2');
-        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 4, 'rows are rendered');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
-        for(let i = 1; i < 4; i++) {
-            assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
-        }
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
     });
 
     test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is selected (T1129252, T1125089, T1125526)', function(assert) {
@@ -852,20 +853,21 @@ QUnit.module('Details View', moduleConfig, () => {
             },
             currentPath: 'Folder 1'
         });
+        this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 16, 'rows are rendered');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
-        for(let i = 1; i < 5; i++) {
-            assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
-        }
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
 
         fileManager.option({
             focusedItemKey: 'Folder 1/File 99.txt',
             selectedItemKeys: ['Folder 1/File 99.txt']
         });
+        this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
@@ -875,12 +877,12 @@ QUnit.module('Details View', moduleConfig, () => {
         fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(800);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
-        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 4, 'rows are rendered');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
-        for(let i = 1; i < 4; i++) {
-            assert.strictEqual(this.wrapper.getDetailsCellText('Name', i), `File ${i - 1}.txt`, `file 'File ${i - 1}.txt' is in place`);
-        }
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
     });
 });

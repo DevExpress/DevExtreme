@@ -118,6 +118,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         const detailsScrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
@@ -136,6 +137,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
@@ -152,12 +154,16 @@ QUnit.module('Scroll', moduleConfig, () => {
             }
         });
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         this.wrapper.getDetailsViewScrollable().dxScrollable('instance').scrollTo({ top: 500 });
         const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(10).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
@@ -215,18 +221,23 @@ QUnit.module('Scroll', moduleConfig, () => {
             currentPath: 'Folder 1'
         });
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
 
         this.fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
         this.clock.tick(400);
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
         assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
 
         this.fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
     });
