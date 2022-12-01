@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
+import devices from 'core/devices';
 import Color from 'color';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -771,6 +772,11 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
         this.instance.option('opened', true);
         this.keyboard.keyDown('tab');
 
