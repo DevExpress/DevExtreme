@@ -5,6 +5,7 @@
 $generic-button-text-line-height: null !default;
 $generic-button-horizontal-padding: null !default;
 $generic-button-icon-horizontal-padding: null !default;
+$generic-button-withtext-vertical-padding: null !default;
 $generic-button-box-shadow-size: null !default;
 $generic-editor-button-icononly-bottom-padding: null !default;
 $generic-editor-button-icononly-horizontal-padding: null !default;
@@ -19,15 +20,17 @@ $generic-editor-button-icononly-top-padding: $generic-editor-button-top-padding 
   $generic-button-horizontal-padding: 18px !default;
   $generic-button-icon-horizontal-padding: 8px !default;
   $generic-button-box-shadow-size: 0 1px 3px !default;
+  $generic-button-withtext-vertical-padding: $generic-base-inline-widget-top-padding !default;
   $generic-editor-button-icononly-bottom-padding: $generic-editor-button-bottom-padding !default;
   $generic-editor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;
 }
 
 @else if $size == "compact" {
-  $generic-button-text-line-height: 1.1667 !default;
+  $generic-button-text-line-height: 1.33334 !default;
   $generic-button-horizontal-padding: 10px !default;
   $generic-button-icon-horizontal-padding: 5px !default;
   $generic-button-box-shadow-size: 0 1px 2px !default;
+  $generic-button-withtext-vertical-padding: $generic-base-inline-widget-top-padding - 1px !default;
   $generic-editor-button-icononly-bottom-padding: $generic-editor-button-bottom-padding + 1px !default;
   $generic-editor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;
 }
