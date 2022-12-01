@@ -6,10 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture`popup height after load`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
-  });
+  .page(url(__dirname, '../../container.html'));
 
 test('SelectBox without data', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
