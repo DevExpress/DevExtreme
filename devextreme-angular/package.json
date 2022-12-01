@@ -10,6 +10,7 @@
     "gulp": "npx --node-arg=--max_old_space_size=8192 gulp",
     "build": "npm run gulp -- build",
     "test": "npm run gulp -- test",
+    "test:dev": "npm run gulp -- run.tests",
     "pack": "npm run gulp -- npm.pack",
     "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm/dist --artifacts ../../artifacts/internal-tools"
   },

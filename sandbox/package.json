@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open"
+    "start": "ng serve",
+    "start:dev": "ng serve --open -c dev"
   },
   "private": true,
   "dependencies": {

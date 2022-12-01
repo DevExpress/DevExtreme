@@ -48,6 +48,17 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "dev": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
             }
           }
         },
@@ -59,6 +70,9 @@
           "configurations": {
             "production": {
               "browserTarget": "sandbox:build:production"
+            },
+            "dev": {
+              "browserTarget": "sandbox:build:dev"
             }
           }
         }
