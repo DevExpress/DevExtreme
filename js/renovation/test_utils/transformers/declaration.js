@@ -33,7 +33,10 @@ module.exports = {
                 return jestTransformer.process(
                     // eslint-disable-next-line spellcheck/spell-checker
                     ts.transpileModule(
-                        `${result[0].code}
+                        // Vitik: jest.tsconfig set jsxFactory to h. Add import for support it.
+                        // In propduction jsx transpaled by babel-plugin-inferno
+                        `import { createElement as h } from "inferno-create-element"; 
+                        ${result[0].code}
                 ${result[1].code
         .replace('export default', 'export ')
         .replace(new RegExp(`\\b${componentName}\\b`, 'g'), `${componentName}Class`)
