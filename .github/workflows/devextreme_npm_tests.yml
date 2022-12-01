@@ -82,38 +82,39 @@ jobs:
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
       if: github.event_name == 'pull_request'
-      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular ../devextreme-angular-repo
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular ./devextreme-angular-repo
 
     - name: Clone devextreme-angular repo
       run: |
-        test -d ../devextreme-angular-repo || git clone -b 21.2 https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+        test -d ./devextreme-angular-repo || git clone -b 21.2 https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
-        path: ../devextreme-angular-repo/packages/devextreme-angular
+        path: ./devextreme-angular-repo/packages/devextreme-angular
 
     - name: Install devextreme package
-      working-directory: ../devextreme-angular-repo/packages/devextreme-angular
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
       run: npm install --save-dev $(ls *.tgz)
 
     - name: Install packages for devextreme-angular
-      working-directory: ../devextreme-angular-repo
+      working-directory: ./devextreme-angular-repo
       run: npm install --no-audit --no-fund
 
     - name: Update angular metadata
-      working-directory: ../devextreme-angular-repo
       run: |
-        npx dx-tools update-meta --output-path ./packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ../DevExtreme/js --exclude js/renovation/
+        npm run internal-tool -- update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js --exclude js/renovation/
 
     - name: Build with Angular 7
-      working-directory: ../devextreme-angular-repo
-      run: npm run build
+      run: |
+        cd ./devextreme-angular-repo
+        npm run build
 
     - name: Run tests with Angular 7
-      working-directory: ../devextreme-angular-repo
-      run: npx lerna run --scope devextreme-angular gulp -- run.tests
+      run: |
+        cd ./devextreme-angular-repo
+        npx lerna run --scope devextreme-angular gulp -- run.tests
 
   test_bundlers:
     name: Bundlers tests
