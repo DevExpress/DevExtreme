@@ -1,16 +1,18 @@
-import Path from "path";
-import copy from "rollup-plugin-copy";
+import typescript from '@rollup/plugin-typescript';
 
 const OUTPUT_DIR = './lib'
-const TSC_OUT_DIR = 'tsc-out';
 const FORMAT_EXTENSIONS = {
   esm: 'mjs',
   cjs: 'cjs',
 }
 
+function checkExternalPackage(id) {
+  return ['@devexpress'].includes(id.split('/')[0]);
+}
+
 function getBundleConfig(outputDir, format) {
     return {
-      input: Path.join(TSC_OUT_DIR, 'index.js'),
+      input: 'src/index.ts',
         output: {
             dir: outputDir,
             entryFileNames: `[name].${FORMAT_EXTENSIONS[format]}`,
@@ -18,15 +20,15 @@ function getBundleConfig(outputDir, format) {
             sourcemap: true
         },
         plugins: [
-            copy({
-              targets: [
-                { src: 'tsc-out/**/*.d.ts', dest: `${outputDir}` },
-                { src: 'tsc-out/**/*.d.ts.map', dest: `${outputDir}` }
-              ],
-              copyOnce: true,
-              flatten: false
-            })
-        ]
+          typescript({
+            tsconfig: './tsconfig.package.json',
+            compilerOptions: {
+              outDir: outputDir,
+            },
+            outputToFilesystem: true
+          })
+        ],
+        external: checkExternalPackage,
     };
 }
 
