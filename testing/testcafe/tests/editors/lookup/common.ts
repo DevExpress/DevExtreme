@@ -1,6 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { isMaterial, takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
@@ -60,21 +60,23 @@ test('Popup should be flipped if lookup is placed at the page bottom', async (t)
   });
 });
 
-test('Popover should have correct vertical position (T1048128)', async (t) => {
-  const lookup = new Lookup('#container');
-  await lookup.open();
+if (!isMaterial()) {
+  test('Popover should have correct vertical position (T1048128)', async (t) => {
+    const lookup = new Lookup('#container');
+    await lookup.open();
 
-  const popoverArrow = Selector('.dx-popover-arrow');
+    const popoverArrow = Selector('.dx-popover-arrow');
 
-  const lookupElementBottom = await lookup.element.getBoundingClientRectProperty('bottom');
-  const popoverArrowTop = await popoverArrow.getBoundingClientRectProperty('top');
+    const lookupElementBottom = await lookup.element.getBoundingClientRectProperty('bottom');
+    const popoverArrowTop = await popoverArrow.getBoundingClientRectProperty('top');
 
-  await t
-    .expect(lookupElementBottom)
-    .eql(popoverArrowTop);
-}).before(async () => createWidget('dxLookup', {
-  items: Array.from(Array(100).keys()),
-}));
+    await t
+      .expect(lookupElementBottom)
+      .eql(popoverArrowTop);
+  }).before(async () => createWidget('dxLookup', {
+    items: Array.from(Array(100).keys()),
+  }));
+}
 
 test('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

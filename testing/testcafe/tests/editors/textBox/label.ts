@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { isMaterial, takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -27,12 +27,14 @@ test('Label max-width changed with container size', async (t) => {
   const textBox = new TextBox('#container');
 
   await t
-    .expect(textBox.element.find('.dx-label').getStyleProperty('max-width')).eql('82px');
+    .expect(textBox.element.find('.dx-label').getStyleProperty('max-width'))
+    .eql(isMaterial() ? '68px' : '82px');
 
   await setAttribute(`#${await textBox.element.getAttribute('id')}`, 'style', 'width: 400px');
 
   await t
-    .expect(textBox.element.find('.dx-label').getStyleProperty('max-width')).eql('382px');
+    .expect(textBox.element.find('.dx-label').getStyleProperty('max-width'))
+    .eql(isMaterial() ? '382px' : '382px');
 }).before(async () => createWidget('dxTextBox', {
   width: 100,
   label: 'long label text long label text long label text long label text long label text',

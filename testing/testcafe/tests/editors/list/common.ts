@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { isMaterial } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
@@ -205,9 +206,9 @@ test('Grouped list can not reorder items (T727360)', async (t) => {
 
     .dragToElement(thirdGroup.getItem().reorderHandle, thirdGroup.getItem(1).element)
     .expect(thirdGroup.getItem().text)
-    .eql('32')
+    .eql(isMaterial() ? '31' : '32')
     .expect(thirdGroup.getItem(1).text)
-    .eql('31');
+    .eql(isMaterial() ? '30' : '31');
 }).before(async () => {
   const data = [
     { group: 'group1', value: '11' },

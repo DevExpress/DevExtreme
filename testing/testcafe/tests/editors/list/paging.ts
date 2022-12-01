@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme, isMaterial } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
@@ -22,7 +22,7 @@ test('Should initiate load next pages if items on the first pages are invisible'
 
   await t
     .expect(list.getItems().count)
-    .eql(12)
+    .eql(isMaterial() ? 10 : 12)
     .expect(list.getVisibleItems().count)
     .eql(4);
 
@@ -59,7 +59,7 @@ test('Should initiate load next page if all items in the current load are invisi
 
   await t
     .expect(list.getItems().count)
-    .eql(10)
+    .eql(isMaterial() ? 4 : 10)
     .expect(list.getVisibleItems().count)
     .eql(6);
 
@@ -96,7 +96,7 @@ test('Should initiate load next page if some items in the current load are invis
 
   await t
     .expect(list.getItems().count)
-    .eql(12)
+    .eql(isMaterial() ? 4 : 12)
     .expect(list.getVisibleItems().count)
     .eql(6);
 

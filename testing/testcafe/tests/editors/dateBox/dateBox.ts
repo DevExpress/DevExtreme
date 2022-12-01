@@ -2,6 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
+import { isMaterial } from '../../../helpers/getPostfix';
 
 fixture`DateBox`
   .page(url(__dirname, '../../container.html'));
@@ -39,7 +40,8 @@ const ITEM_HEIGHT = 40;
 
       await t
         .expect(scrollTop)
-        .eql(views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
+        // eslint-disable-next-line no-nested-ternary
+        .eql(isMaterial() ? year === 1925 ? 400 : 360 : views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
     });
   }).before(async () => createWidget('dxDateBox', {
     pickerType: 'rollers',

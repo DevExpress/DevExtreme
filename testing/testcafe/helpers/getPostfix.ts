@@ -5,6 +5,8 @@ export const getThemePostfix = (theme?: string): string => {
   return `-theme=${themeName.replace(/\./g, '-')}`;
 };
 
+export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
+
 export async function takeScreenshotInTheme(
   t: TestController,
   takeScreenshot: (screenshotName: string, element?: string) => Promise<boolean>,
