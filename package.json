@@ -44,7 +44,7 @@
         "build:core": "npm run build --prefix packages/core",
         "build:react": "npm run build --prefix packages/react",
         "build:packages": "npm run build:core && npm run build:react && npm run build:angular",
-        "build": "nx run-many --target=build --projects=@devexpress/core,@devexpress/components,@devexpress/react,@devexpress/angular --skip-nx-cache",
+        "build": "nx run-many --target=build --projects=@devexpress/core,@devexpress/components,@devexpress/react --skip-nx-cache",
         "watch": "nx run-many --target=watch",
         "clean": "rimraf ./{packages,playgrounds}/*/{lib,dist,tsc-out,*.tsbuildinfo}",
         "test": "nx run-many --target=test",
