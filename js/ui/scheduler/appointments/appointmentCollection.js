@@ -97,14 +97,12 @@ class SchedulerAppointments extends CollectionWidget {
 
         return extend(parent, {
             escape: (function(e) {
-                this._escPressed = true;
-
                 if(this.resizeOccur) {
                     this.moveAppointmentBack();
                     this.resizeOccur = false;
                     currentAppointment._detachEventHandlers();
                     currentAppointment._attachEventHandlers();
-                    currentAppointment._dragEndHandler(e);
+                    currentAppointment._toggleResizingClass(false);
                 }
             }).bind(this),
             del: (function(e) {
@@ -608,7 +606,6 @@ class SchedulerAppointments extends CollectionWidget {
             area: this._calculateResizableArea(itemSetting, appointmentData),
             onResizeStart: (function(e) {
                 this.resizeOccur = true;
-                this._escPressed = false;
                 this._$currentAppointment = $(e.element);
 
                 if(this.invoke('needRecalculateResizableArea')) {
@@ -624,13 +621,6 @@ class SchedulerAppointments extends CollectionWidget {
             }).bind(this),
             onResizeEnd: (function(e) {
                 this.resizeOccur = false;
-
-                if(this._escPressed) {
-                    e.event.cancel = true;
-                    this._escPressed = false;
-                    return;
-                }
-
                 this._resizeEndHandler(e);
             }).bind(this)
         };
