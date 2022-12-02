@@ -17,7 +17,7 @@ fixture`CheckBox`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setAttribute('#container', 'style', `width: 300px; height: 100px; ${isColumnCountStyle ? 'column-count: 2' : ''}`);
+    await setAttribute('#container', 'style', `padding: 5px; width: 300px; height: 200px; ${isColumnCountStyle ? 'column-count: 2' : ''}`);
 
     await appendElementTo('#container', 'div', 'checked', { display: 'block' });
     await createWidget('dxCheckBox', { value: true, text: 'checked' }, false, '#checked');
