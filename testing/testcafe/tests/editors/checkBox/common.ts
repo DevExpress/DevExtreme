@@ -7,8 +7,9 @@ import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 fixture`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
-[true, false].forEach((isColumnCountStyle) => {
+[false, true].forEach((isColumnCountStyle) => {
   test(`Render ${!isColumnCountStyle ? 'default' : 'with column-count style on container'}`, async (t) => {
+    await t.debug();
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, '#container', true);

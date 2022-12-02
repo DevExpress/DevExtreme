@@ -32,33 +32,33 @@ test('Popup should not be closed if lookup is placed at the page bottom in mater
   usePopover: false,
 }));
 
-test('Popup should be flipped if lookup is placed at the page bottom', async (t) => {
-  const popupWrapper = Selector('.dx-overlay-wrapper');
-  const popupContent = Selector('.dx-overlay-content');
+if (isMaterial()) {
+  test('Popup should be flipped if lookup is placed at the page bottom', async (t) => {
+    const popupWrapper = Selector('.dx-overlay-wrapper');
+    const popupContent = Selector('.dx-overlay-content');
 
-  const popupWrapperTop = await popupWrapper.getBoundingClientRectProperty('top');
-  const popupContentTop = await popupContent.getBoundingClientRectProperty('top');
+    const popupWrapperTop = await popupWrapper.getBoundingClientRectProperty('top');
+    const popupContentTop = await popupContent.getBoundingClientRectProperty('top');
 
-  await t
-    .expect(popupContentTop)
-    .lt(popupWrapperTop);
-}).before(async () => {
-  await ClientFunction(() => {
-    const $element = $('#container');
-    $element.css({ top: $(window).height() - $element.height() });
-  }, {
-    dependencies: { },
-  })();
+    await t
+      .expect(popupContentTop)
+      .lt(popupWrapperTop);
+  }).before(async () => {
+    await ClientFunction(() => {
+      const $element = $('#container');
+      $element.css({ top: $(window).height() - $element.height() });
+    })();
 
-  return createWidget('dxLookup', {
-    items: [1, 2, 3],
-    usePopover: false,
-    opened: true,
-    dropDownOptions: {
-      hideOnParentScroll: false,
-    },
+    return createWidget('dxLookup', {
+      items: [1, 2, 3],
+      usePopover: false,
+      opened: true,
+      dropDownOptions: {
+        hideOnParentScroll: false,
+      },
+    });
   });
-});
+}
 
 if (!isMaterial()) {
   test('Popover should have correct vertical position (T1048128)', async (t) => {

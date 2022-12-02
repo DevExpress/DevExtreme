@@ -3,6 +3,7 @@ import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
 import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import errors from 'ui/widget/ui.errors';
@@ -883,5 +884,55 @@ module('option changed', () => {
         const $radioButtons = instance.$element().find('.dx-radiobutton');
 
         assert.ok($radioButtons.eq(0).hasClass('dx-radiobutton-checked'), 'correct item is selected');
+    });
+
+    test('There is no error on updating async CustomStore (T9011779)', function(assert) {
+        const done = assert.async();
+
+        let items = [
+            { id: 1, value: 't1' },
+            { id: 2, value: 't2' },
+            { id: 3, value: 't3' }
+        ];
+        const storeOptions = {
+            key: 'id',
+            loadMode: 'processed',
+            load(loadOptions) {
+                return new Promise((resolve) => {
+                    resolve(items);
+                });
+            }
+        };
+
+        const options = {
+            dataSource: new DataSource({ store: new CustomStore(storeOptions) }),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            value: null
+        };
+
+        const radioGroup = $('#radioGroup')
+            .dxRadioGroup(options)
+            .dxRadioGroup('instance');
+
+        setTimeout(() => {
+            const newValue2 = 2;
+
+            options.value = newValue2;
+            radioGroup.option(options);
+
+            items = [
+                { id: 1, value: 't1' },
+                { id: 2, value: 't2' }
+            ];
+            options.dataSource = new DataSource({ store: new CustomStore(storeOptions) });
+            options.value = newValue2;
+            radioGroup.option(options);
+
+            setTimeout(() => {
+                assert.ok(true);
+                done();
+            });
+        });
     });
 });
