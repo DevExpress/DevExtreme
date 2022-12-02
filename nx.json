@@ -32,7 +32,7 @@
         }
     },
     "defaultBase": "22_2",
-    "defaultProject": "react-test",
+    "defaultProject": "@playgrounds/react",
     "workspaceLayout": {
         "appsDir": "playgrounds",
         "libsDir": "packages"
