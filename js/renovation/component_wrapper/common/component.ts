@@ -569,9 +569,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this._initMarkup();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getViewComponentDefaultProps(): any {
-    return this._viewComponent.defaultProps || {};
+  _getViewComponentDefaultProps(): Record<PropertyKey, unknown> {
+    return this._viewComponent.defaultProps as Record<PropertyKey, unknown> || {};
   }
 }
 
