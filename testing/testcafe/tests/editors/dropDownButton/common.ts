@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';

@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'));

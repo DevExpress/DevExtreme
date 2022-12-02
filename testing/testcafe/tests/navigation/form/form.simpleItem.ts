@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 

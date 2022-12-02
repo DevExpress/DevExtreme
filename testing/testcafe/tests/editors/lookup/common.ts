@@ -1,6 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { isMaterial, takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';

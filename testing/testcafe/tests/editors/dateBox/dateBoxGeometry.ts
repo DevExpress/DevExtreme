@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import DateBox from '../../../model/dateBox';
 import url from '../../../helpers/getPageUrl';

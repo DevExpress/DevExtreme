@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme, isMaterial } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';

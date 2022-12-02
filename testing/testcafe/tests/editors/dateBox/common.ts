@@ -8,7 +8,7 @@ import {
   appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';

@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture`Calendar`
   .page(url(__dirname, '../../container.html'));

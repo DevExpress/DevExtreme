@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { isMaterial, takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';

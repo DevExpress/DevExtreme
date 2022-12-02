@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRule, deleteStylesheetRule } from '../../navigation/helpers/domUtils';

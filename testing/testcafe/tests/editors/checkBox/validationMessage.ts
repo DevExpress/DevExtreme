@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));

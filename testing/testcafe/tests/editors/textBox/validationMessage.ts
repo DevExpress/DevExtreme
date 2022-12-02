@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
