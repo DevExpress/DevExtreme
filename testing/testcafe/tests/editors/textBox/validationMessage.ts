@@ -1,10 +1,10 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/getPostfix';
 import url from '../../../helpers/getPageUrl';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setAttribute, removeAttribute } from '../../navigation/helpers/domUtils';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -22,13 +22,8 @@ test('Validation Message position should be correct after change visibility of p
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Textbox validation message.png');
 
-  await ClientFunction(() => {
-    (document.querySelector('#container') as HTMLElement).setAttribute('hidden', 'true');
-  })();
-
-  await ClientFunction(() => {
-    document.querySelector('#container')?.removeAttribute('hidden');
-  })();
+  await setAttribute('#container', 'hidden', 'true');
+  await removeAttribute('#container', 'hidden');
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Textbox validation message.png');
 

@@ -19,6 +19,12 @@ export const setAttribute = ClientFunction((selector, attribute, value) => {
   element.setAttribute(attribute, value);
 });
 
+export const removeAttribute = ClientFunction((selector, attribute) => {
+  const element = document.querySelector(selector);
+
+  element.removeAttribute(attribute);
+});
+
 export const getStyleAttribute = ClientFunction((selector) => {
   const element = selector();
   return element.getAttribute('style');
