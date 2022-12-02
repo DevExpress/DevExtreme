@@ -627,7 +627,7 @@ const Sortable = Draggable.inherit({
     _getEventArgs: function(e) {
         const sourceDraggable = this._getSourceDraggable();
         const targetDraggable = this._getTargetDraggable();
-        const isTargetInDom = targetDraggable?._$sourceElement?.parent()?.length ?? true;
+        const isTargetInDom = this._getSourceElement()?.parent()?.length ?? true;
         const dropInsideItem = targetDraggable.option('dropInsideItem');
         const skipOffsetting = dropInsideItem || !isTargetInDom;
 
