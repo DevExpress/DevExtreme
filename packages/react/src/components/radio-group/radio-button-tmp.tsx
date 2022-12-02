@@ -3,7 +3,7 @@ import {
   Actions,
   RadioGroupCore,
 } from '@devexpress/components';
-import React, { memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useCoreState, useRequiredContext } from '../../internal/hooks';
 import { RadioGroupContext } from './radio-group-context';
 
