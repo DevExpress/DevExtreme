@@ -2,7 +2,7 @@
 {
 	"extends": "..\\..\\tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "./tsc-out",
+		"outDir": "./lib",
 		"rootDir": "./src",
 		"composite": true
 	},
