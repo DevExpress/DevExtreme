@@ -40,10 +40,10 @@
         "typescript": "^4.7.3"
     },
     "scripts": {
-        "build:angular": "npm run build --prefix packages/angular",
-        "build:core": "npm run build --prefix packages/core",
-        "build:react": "npm run build --prefix packages/react",
-        "build:packages": "npm run build:core && npm run build:react && npm run build:angular",
+        "build:angular": "nx build @devexpress/angular",
+        "build:core": "nx build @devexpress/core",
+        "build:react": "nx build @devexpress/react",
+        "build:packages": "npm run build:core && npm run build:react",
         "build": "nx run-many --target=build --projects=@devexpress/core,@devexpress/components,@devexpress/react --skip-nx-cache",
         "watch": "nx run-many --target=watch",
         "clean": "rimraf ./{packages,playgrounds}/*/{lib,dist,tsc-out,*.tsbuildinfo}",
