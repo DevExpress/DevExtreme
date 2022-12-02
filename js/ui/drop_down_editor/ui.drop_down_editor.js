@@ -551,7 +551,6 @@ const DropDownEditor = TextBox.inherit({
     _renderPopup: function() {
         const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
-        delete popupConfig.closeOnOutsideClick;
         if(popupConfig.elementAttr && !Object.keys(popupConfig.elementAttr).length) {
             delete popupConfig.elementAttr;
         }
