@@ -64,7 +64,7 @@ safeSizeTest('onAppointmentUpdating - newDate should be correct after cancel app
   },
 }));
 
-safeSizeTest('on escape - date should not changed when it\'s pressed after resize', async (t) => {
+safeSizeTest('on escape - date should not changed when it\'s pressed after resize (T1125615)', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Test Resize');
 
@@ -93,7 +93,7 @@ safeSizeTest('on escape - date should not changed when it\'s pressed after resiz
   cellDuration: 1440,
 }));
 
-safeSizeTest('on escape - date should not changed when it\'s pressed during resize', async (t) => {
+safeSizeTest('on escape - date should not changed when it\'s pressed during resize (T1125615)', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Test Resize');
   await disableMouseUpEvent();
