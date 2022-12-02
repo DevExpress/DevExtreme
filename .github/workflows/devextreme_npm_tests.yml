@@ -179,7 +179,7 @@ jobs:
 
     - name: Clone devextreme-angular repo
       run: |
-        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+        test -d ../devextreme-angular-repo || git clone -b 22.1 https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v2
@@ -205,14 +205,12 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build with Angular 7
-      run: |
-        cd ../devextreme-angular-repo
-        npm run build
+      working-directory: ../devextreme-angular-repo
+      run: npm run build
 
     - name: Run tests with Angular 7
-      run: |
-        cd ../devextreme-angular-repo
-        npx lerna run --scope devextreme-angular gulp -- run.tests
+      working-directory: ../devextreme-angular-repo
+      run: npx lerna run --scope devextreme-angular gulp -- run.tests
 
   test_bundlers:
     name: Bundlers tests
