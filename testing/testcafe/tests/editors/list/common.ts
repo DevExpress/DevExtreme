@@ -208,7 +208,7 @@ test('Grouped list can not reorder items (T727360)', async (t) => {
     .expect(thirdGroup.getItem().text)
     .eql(isMaterial() ? '31' : '32')
     .expect(thirdGroup.getItem(1).text)
-    .eql(isMaterial() ? '30' : '31');
+    .eql(isMaterial() ? '32' : '31');
 }).before(async () => {
   const data = [
     { group: 'group1', value: '11' },

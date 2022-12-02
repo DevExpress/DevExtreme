@@ -34,7 +34,7 @@ test('Label max-width changed with container size', async (t) => {
 
   await t
     .expect(textBox.element.find('.dx-label').getStyleProperty('max-width'))
-    .eql(isMaterial() ? '382px' : '382px');
+    .eql(isMaterial() ? '368px' : '382px');
 }).before(async () => createWidget('dxTextBox', {
   width: 100,
   label: 'long label text long label text long label text long label text long label text',

@@ -24,7 +24,7 @@ test('Should initiate load next pages if items on the first pages are invisible'
     .expect(list.getItems().count)
     .eql(isMaterial() ? 10 : 12)
     .expect(list.getVisibleItems().count)
-    .eql(4);
+    .eql(isMaterial() ? 2 : 4);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'List loading with first items invisible.png', '#container');
 
@@ -61,7 +61,7 @@ test('Should initiate load next page if all items in the current load are invisi
     .expect(list.getItems().count)
     .eql(isMaterial() ? 4 : 10)
     .expect(list.getVisibleItems().count)
-    .eql(6);
+    .eql(isMaterial() ? 4 : 6);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'List loading with middle items invisible.png', '#container');
 
@@ -98,7 +98,7 @@ test('Should initiate load next page if some items in the current load are invis
     .expect(list.getItems().count)
     .eql(isMaterial() ? 4 : 12)
     .expect(list.getVisibleItems().count)
-    .eql(6);
+    .eql(isMaterial() ? 4 : 6);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'List loding with part items invisible on loaded page.png', '#container');
 
@@ -133,7 +133,7 @@ test('Should initiate load next page if all items on next pages are invisible', 
 
   await t
     .expect(list.getItems().count)
-    .eql(12)
+    .eql(isMaterial() ? 4 : 12)
     .expect(list.getVisibleItems().count)
     .eql(4);
 

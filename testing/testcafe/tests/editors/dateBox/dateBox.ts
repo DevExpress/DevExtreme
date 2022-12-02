@@ -41,7 +41,7 @@ const ITEM_HEIGHT = 40;
       await t
         .expect(scrollTop)
         // eslint-disable-next-line no-nested-ternary
-        .eql(isMaterial() ? year === 1925 ? 400 : 360 : views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
+        .eql(isMaterial() ? 440 : views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
     });
   }).before(async () => createWidget('dxDateBox', {
     pickerType: 'rollers',
