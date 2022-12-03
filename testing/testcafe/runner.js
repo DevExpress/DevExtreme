@@ -43,7 +43,6 @@ createTestCafe('localhost', 1437, 1438)
         const runner = testCafe.createRunner()
             .browsers(browsers)
             .reporter(reporter)
-
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         runner.compilerOptions({
@@ -87,7 +86,9 @@ createTestCafe('localhost', 1437, 1438)
             runner.cache = args.cache;
         }
 
-        const runOptions = { quarantineMode: args.quarantineMode };
+        const runOptions = {
+            quarantineMode: args.quarantineMode,
+        };
 
         if(args.theme) {
             runOptions.hooks = {
