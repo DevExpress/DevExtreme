@@ -581,3 +581,54 @@ test('The placeholder should have correct position after dragging the row to the
     },
   });
 });
+
+// T1126013
+test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+  const fromIndex = 2;
+  const toIndex = 4;
+
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.scrollTo({ y: 3000 });
+  await dataGrid.moveRow(fromIndex, 0, 50, true);
+  await dataGrid.moveRow(fromIndex, 0, -20);
+  await t.wait(300);
+  await dataGrid.moveRow(toIndex, 0, 5);
+
+  await ClientFunction((grid) => {
+    const instance = grid.getInstance();
+    $(instance.element()).trigger($.Event('dxpointerup'));
+  })(dataGrid);
+  await t.wait(300);
+
+  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance().getVisibleRows().findIndex(({ key }) => key === '46-1'))(dataGrid);
+  await t.expect(draggedRowIndex)
+    .eql(toIndex - 1);
+}).before(async () => {
+  const items = generateData(50, 1);
+  return createWidget('dxDataGrid', {
+    height: 250,
+    keyExpr: 'field1',
+    scrolling: {
+      mode: 'virtual',
+    },
+    paging: {
+      pageSize: 4,
+    },
+    dataSource: items,
+    rowDragging: {
+      scrollSpeed: 300,
+      allowReordering: true,
+      onReorder: ClientFunction((e) => {
+        const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line max-len
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
+
+        e.component.refresh();
+      }, { dependencies: { items } }),
+    },
+    showBorders: true,
+  });
+});
