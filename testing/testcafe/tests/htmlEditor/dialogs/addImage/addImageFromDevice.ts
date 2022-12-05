@@ -95,8 +95,11 @@ test('Image should be validated and inserted from device', async (t) => {
     .expect(file.validationMessage)
     .eql('File is too large');
 
-  await t.click(fileUploader.getFile().cancelButton.element);
-  await t.expect(fileUploader.fileCount).eql(0);
+  await t
+    .click(fileUploader.getFile().cancelButton.element)
+    .expect(fileUploader.fileCount)
+    .eql(0);
+
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .eql(true);
@@ -113,18 +116,18 @@ test('Image should be validated and inserted from device', async (t) => {
     .expect(file.statusMessage)
     .eql('Ready to upload');
 
-  await t
-    .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-    .eql(false);
-
   await t.expect(
     await takeScreenshot('html-editor-before-click-add-button-and-validation.png'),
   ).ok();
 
+  await t
+    .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
+    .eql(false);
+
   await t.click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t.expect(
-    await takeScreenshot('add-validated-image-from-device.png', htmlEditor.content),
+    await takeScreenshot('html-editor-after-click-add-button-and-validation.png', htmlEditor.content),
   ).ok();
 
   await t.expect(compareResults.isValid())
