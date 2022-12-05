@@ -4,13 +4,14 @@ import { WidgetName } from '../helpers/createWidget';
 
 const CLASS = {
   input: 'dx-texteditor-input',
+  isInvalid: 'dx-invalid',
 };
 export default class TextBox extends Widget {
   input: Selector;
 
   value: Promise<string | undefined>;
 
-  constructor(id: string) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.input = this.getInput();
@@ -19,6 +20,10 @@ export default class TextBox extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxTextBox'; }
+
+  public get isInvalid(): Promise<boolean> {
+    return this.element.hasClass(CLASS.isInvalid);
+  }
 
   getInput(): Selector {
     return this.element.find(`.${CLASS.input}`);

@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import FileUploader, { CLASS_NAMES } from '../../../../model/fileUploader';
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 
-const TEST_IMAGE_PATH_1 = './test-image-1.png';
-const TEST_IMAGE_PATH_2 = './test-image-2.png';
+const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
+const TEST_IMAGE_PATH_2 = './images/test-image-2.png';
 
-fixture`HtmlEditor - validation`
+fixture`HtmlEditor - upload image from device`
   .page(url(__dirname, '../../../container.html'));
 
 test('Image from device should be inserted', async (t) => {
@@ -20,7 +19,8 @@ test('Image from device should be inserted', async (t) => {
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .eql(true, 'add button should be disabled, if file not selected');
 
-  const fileUploader = new FileUploader(CLASS_NAMES.ROOT_ELEMENT);
+  const { fileUploader } = htmlEditor.dialog.addImageFileForm;
+
   await t
     .setFilesToUpload(fileUploader.input, [TEST_IMAGE_PATH_1]);
 
@@ -73,7 +73,7 @@ test('Image from device should be inserted', async (t) => {
 }).before(async () => {
   await createWidget('dxHtmlEditor', {
     height: 600,
-    width: 600,
+    width: 800,
     imageUpload: {
       tabs: ['file'],
     },
@@ -87,7 +87,8 @@ test('Image should be validated and inserted from device', async (t) => {
 
   await t.click(htmlEditor.toolbar.getItem('image'));
 
-  const fileUploader = new FileUploader(CLASS_NAMES.ROOT_ELEMENT);
+  const { fileUploader } = htmlEditor.dialog.addImageFileForm;
+
   await t
     .setFilesToUpload(fileUploader.input, [TEST_IMAGE_PATH_2]);
 
@@ -107,7 +108,7 @@ test('Image should be validated and inserted from device', async (t) => {
   await t.expect(fileUploader.fileCount).eql(0);
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-    .eql(true, 'add button should be disabled, if file not selected');
+    .eql(true);
 
   await t
     .setFilesToUpload(fileUploader.input, [TEST_IMAGE_PATH_1]);
@@ -140,7 +141,7 @@ test('Image should be validated and inserted from device', async (t) => {
 }).before(async () => {
   await createWidget('dxHtmlEditor', {
     height: 600,
-    width: 600,
+    width: 800,
     imageUpload: {
       tabs: ['file'],
       fileUploaderOptions: {

@@ -4,11 +4,12 @@ import FileContent from './fileContent';
 
 export const CLASS_NAMES = {
   INPUT: '.dx-fileuploader-input',
-  ROOT_ELEMENT: '.dx-fileuploader',
   FILE_CONTAINER: '.dx-fileuploader-files-container',
 };
 
 export default class FileUploader extends Widget {
+  public static className = '.dx-fileuploader';
+
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName {
     return 'dxFileUploader';
