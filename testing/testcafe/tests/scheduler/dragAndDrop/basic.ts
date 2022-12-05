@@ -1,3 +1,5 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -21,7 +23,7 @@ fixture`Drag-and-drop appointments in the Scheduler basic views`
   dataSource,
 })));
 
-test('Drag-n-drop in the "month" view', async (t) => {
+safeSizeTest('Drag-n-drop in the "month" view', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -37,7 +39,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
   height: 834,
 }));
 
-test('Drag-n-drop when browser has horizontal scroll', async (t) => {
+safeSizeTest('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
@@ -56,7 +58,7 @@ test('Drag-n-drop when browser has horizontal scroll', async (t) => {
   width: 1800,
 }));
 
-test('Drag-n-drop when browser has vertical scroll', async (t) => {
+safeSizeTest('Drag-n-drop when browser has vertical scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
@@ -75,7 +77,7 @@ test('Drag-n-drop when browser has vertical scroll', async (t) => {
   height: 1800,
 }));
 
-test('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
+safeSizeTest('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Recurrence two');
   const collector = scheduler.collectors.find('2');
@@ -121,3 +123,36 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
   }],
   currentDate: new Date(2019, 2, 26),
 }));
+
+safeSizeTest('Drag-n-drop the appointment to the left column to the cell that has the same time', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const screenshotZone = scheduler.workSpace;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const draggableAppointment = scheduler.getAppointment('Test appointment');
+
+  await t
+    .dragToElement(
+      draggableAppointment.element,
+      scheduler.getDateTableCell(2, 2), { speed: 0.5 },
+    );
+
+  await takeScreenshot('drag-n-drop-appointment-to-left-column.png', screenshotZone);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createScheduler({
+    timeZone: 'Etc/GMT',
+    dataSource: [{
+      text: 'Test appointment',
+      startDate: new Date('2022-09-08T10:00:00.000Z'),
+      endDate: new Date('2022-09-08T10:30:00.000Z'),
+    }],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date('2022-09-09T10:00:00.000Z'),
+    startDayHour: 9,
+    width: 600,
+    height: 600,
+  });
+});

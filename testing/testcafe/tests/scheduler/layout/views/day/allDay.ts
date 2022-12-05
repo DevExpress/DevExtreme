@@ -1,9 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
+// TODO SKIPPED TEST: Why this test case skipped?
 fixture.skip`Layout:Views:Day:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
@@ -17,7 +19,7 @@ const enableNativeScroll = ClientFunction(() => {
       const testName = `Day view with interval and crossScrollingEnabled(groupOrientation='${groupOrientation}', showAllDayPanel='${showAllDayPanel}', intervalCount='${intervalCount}')
       layout test`;
 
-      test(testName, async (t) => {
+      safeSizeTest(testName, async (t) => {
         const scheduler = new Scheduler('#container');
         await enableNativeScroll();
 

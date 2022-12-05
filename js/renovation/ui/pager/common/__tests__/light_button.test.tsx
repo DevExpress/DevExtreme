@@ -13,7 +13,9 @@ describe('LightButton', () => {
       const widgetRef = createRef();
       const props = {
         widgetRef: widgetRef as any,
-        props: { children: 'text', className: 'class', label: 'label' },
+        props: {
+          children: 'text', className: 'class', label: 'label', tabIndex: 0,
+        },
       } as Partial<LightButton>;
       const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
@@ -30,6 +32,19 @@ describe('LightButton', () => {
       const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
       expect(tree.find('.child').exists()).toBe(true);
+    });
+
+    // T1109686
+    it('should have aria-current if is selected', () => {
+      const getButtonDiv = (selected: boolean) => {
+        const props = { props: { selected } } as Partial<LightButton>;
+        const tree = mount(<LightButtonComponent {...props as any} />);
+
+        return tree.find('div');
+      };
+
+      expect(getButtonDiv(true).prop('aria-current')).toStrictEqual('page');
+      expect(getButtonDiv(false).prop('aria-current')).toBeUndefined();
     });
   });
 

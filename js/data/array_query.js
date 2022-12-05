@@ -275,19 +275,24 @@ const compileCriteria = (function() {
 
         value = toComparable(value);
 
+        const compare = (obj, operatorFn) => {
+            obj = toComparable(getter(obj));
+            return (value == null || obj == null) && value !== obj ? false : operatorFn(obj, value);
+        };
+
         switch(op.toLowerCase()) {
             case '=':
                 return compileEquals(getter, value);
             case '<>':
                 return compileEquals(getter, value, true);
             case '>':
-                return function(obj) { return toComparable(getter(obj)) > value; };
+                return (obj) => compare(obj, (a, b) => a > b);
             case '<':
-                return function(obj) { return toComparable(getter(obj)) < value; };
+                return (obj) => compare(obj, (a, b) => a < b);
             case '>=':
-                return function(obj) { return toComparable(getter(obj)) >= value; };
+                return (obj) => compare(obj, (a, b) => a >= b);
             case '<=':
-                return function(obj) { return toComparable(getter(obj)) <= value; };
+                return (obj) => compare(obj, (a, b) => a <= b);
             case 'startswith':
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === 0; };
             case 'endswith':

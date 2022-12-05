@@ -1011,9 +1011,13 @@ class FileUploader extends Editor {
         }
     }
 
+    _areAllFilesLoaded() {
+        return this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
+    }
+
     _handleAllFilesUploaded() {
-        const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
-        if(areAllFilesLoaded) {
+        this._recalculateProgress();
+        if(this._areAllFilesLoaded()) {
             this._filesUploadedAction();
         }
     }
@@ -1129,7 +1133,14 @@ class FileUploader extends Editor {
         });
     }
     _updateTotalProgress(totalFilesSize, totalLoadedFilesSize) {
-        const progress = totalFilesSize ? this._getProgressValue(totalLoadedFilesSize / totalFilesSize) : 0;
+        let progress = 0;
+        if(isDefined(totalFilesSize)) {
+            if(this._files.length > 0 && this._areAllFilesLoaded() && totalFilesSize === 0 && totalLoadedFilesSize === 0) {
+                progress = this._getProgressValue(1);
+            } else if(totalFilesSize) {
+                progress = this._getProgressValue(totalLoadedFilesSize / totalFilesSize);
+            }
+        }
         this.option('progress', progress);
         this._setLoadedSize(totalLoadedFilesSize);
     }
@@ -1678,11 +1689,17 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
             blobReader: new FileBlobReader(realFile, this.chunkSize),
             guid: new Guid(),
             fileSize: realFile.size,
-            count: Math.ceil(realFile.size / this.chunkSize),
+            count: this._getFileChunksCount(realFile),
             customData: {}
         };
         file.chunksData = chunksData;
         this._sendChunk(file, chunksData);
+    }
+
+    _getFileChunksCount(jsFile) {
+        return jsFile.size === 0
+            ? 1
+            : Math.ceil(jsFile.size / this.chunkSize);
     }
 
     _sendChunk(file, chunksData) {

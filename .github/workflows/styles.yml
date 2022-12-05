@@ -1,7 +1,7 @@
 name: Styles tests
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   Tests:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -36,7 +36,7 @@ jobs:
       run: npm run test-styles
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [Tests]
     if: always() && contains(needs.*.result, 'failure')

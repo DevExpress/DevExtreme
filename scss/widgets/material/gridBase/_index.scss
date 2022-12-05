@@ -383,18 +383,6 @@ $grid-masterdetail-padding: 16px;
         padding-right: 0;
       }
     }
-
-    .dx-searchbox {
-      .dx-texteditor-input,
-      .dx-placeholder::before {
-        padding-left: $material-texteditor-icon-container-size;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          padding-right: $material-texteditor-icon-container-size;
-        }
-      }
-    }
   }
 
   .dx-editor-cell {

@@ -470,6 +470,49 @@ module('Table properties forms', {
             assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
         });
+
+        test('formDialog tableWidth should have value in table with fixed dimensions and enabled tableResizing (T1093235)', function(assert) {
+            this.createWidget({
+                tableResizing: { enabled: true },
+                value: tableWithFixedDimensionsMarkup
+            });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+
+            const formInstance = this.getFormInstance();
+            const width = formInstance.getEditor('width').option('value');
+
+            assert.notOk(isNaN(width), 'width is not NaN');
+        });
+
+        test('formDialog tableWidth should have value after cell width change in table with enabled tableResizing', function(assert) {
+            this.createWidget({
+                tableResizing: { enabled: true },
+                value: tableWithFixedDimensionsMarkup
+            });
+            const $tableElement = this.$element.find('table').eq(0);
+            const $cellElement = $tableElement.find('td').eq(0);
+
+            this.quillInstance.setSelection(5, 1);
+            showCellPropertiesForm(this.instance, $cellElement);
+            this.clock.tick();
+
+
+            const cellPropertiesFormInstance = this.getFormInstance();
+            cellPropertiesFormInstance.getEditor('width').option('value', 50);
+            this.applyFormChanges();
+
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+
+            const tablePropertiesFormInstance = this.getFormInstance();
+            const width = tablePropertiesFormInstance.getEditor('width').option('value');
+
+            assert.notOk(isNaN(width), 'width is not NaN');
+        });
     });
 
     module('Cell width calculations', {}, () => {

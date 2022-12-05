@@ -483,7 +483,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
 
         if(this.argumentAxisType !== DISCRETE && this.valueAxisType !== DISCRETE) {
             for(i = 1; i < points.length; i++) {
-                preparedPoints = preparedPoints.concat(this._getTangentPoints(points[i], points[i - 1], centerPoint));
+                preparedPoints = preparedPoints.concat(this._getTangentPoints(points[i], points[i - 1], centerPoint, i === points.length - 1));
             }
             if(!preparedPoints.length) { // T174220
                 preparedPoints = points;
@@ -528,7 +528,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
         return point;
     },
 
-    _getTangentPoints: function(point, prevPoint, centerPoint) {
+    _getTangentPoints: function(point, prevPoint, centerPoint, isLastSegment) {
         let tangentPoints = [];
         const betweenAngle = Math.round(prevPoint.angle - point.angle);
         const tan = (prevPoint.radius - point.radius) / betweenAngle;
@@ -537,15 +537,16 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
         if(betweenAngle === 0) {
             tangentPoints = [prevPoint, point];
         } else if(betweenAngle > 0) {
-            for(i = betweenAngle; i >= 0; i--) {
+            const angle = isLastSegment ? betweenAngle : betweenAngle - 1;
+            for(i = angle; i >= 0; i--) {
                 tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, i));
             }
         } else {
-            for(i = 0; i >= betweenAngle; i--) {
+            const angle = isLastSegment ? betweenAngle : betweenAngle + 1;
+            for(i = 0; i >= angle; i--) {
                 tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, (betweenAngle - i)));
             }
         }
-
         return tangentPoints;
     },
 

@@ -662,4 +662,13 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert(' ');
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
     });
+
+    test('popup should have correct position when mention is inserted on the new line (T1087787)', function(assert) {
+        this.previousChar = '\n';
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+
+        assert.strictEqual(mention.getPosition(), 2, 'position is correct (1 for new line and 1 for marker)');
+    });
 });

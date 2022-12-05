@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Scheduler: Current Time Indication: Shader`
@@ -40,7 +41,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -49,7 +50,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`shader-in-${view}-crossScrolling=${!!crossScrollingEnabled}.png`, scheduler.workSpace),
+        await takeScreenshot(`shader-in-${view}-crossScrolling=${crossScrollingEnabled}.png`, scheduler.workSpace),
       ).ok();
     }
 
@@ -62,7 +63,7 @@ const createScheduler = async (
     });
   });
 
-  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and horizontal grouping is used`, async (t) => {
+  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and horizontal grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -71,7 +72,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`shader-in-${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-grouping.png`, scheduler.workSpace),
+        await takeScreenshot(`shader-in-${view}-crossScrolling=${crossScrollingEnabled}-horizontal-grouping.png`, scheduler.workSpace),
       ).ok();
     }
 
@@ -100,7 +101,7 @@ const createScheduler = async (
     });
   });
 
-  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and vertical grouping is used`, async (t) => {
+  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and vertical grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -109,7 +110,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`shader-in-${view}-crossScrolling=${!!crossScrollingEnabled}-vertical-grouping.png`, scheduler.workSpace),
+        await takeScreenshot(`shader-in-${view}-crossScrolling=${crossScrollingEnabled}-vertical-grouping.png`, scheduler.workSpace),
       ).ok();
     }
 

@@ -3,6 +3,25 @@ import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
 
+function createOccurrenceMap(array) {
+    return array.reduce((map, value) => {
+        map[value] = (map[value] ?? 0) + 1;
+        return map;
+    }, {});
+}
+
+export const getIntersection = function(firstArray, secondArray) {
+    const secondArrayMap = createOccurrenceMap(secondArray);
+
+    return firstArray.filter(value => secondArrayMap[value]--);
+};
+
+export const removeDuplicates = function(from = [], toRemove = []) {
+    const toRemoveMap = createOccurrenceMap(toRemove);
+
+    return from.filter(value => !toRemoveMap[value]--);
+};
+
 export const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
 };
@@ -20,47 +39,8 @@ export const inArray = function(value, object) {
     return array.indexOf(value);
 };
 
-export const intersection = function(a, b) {
-    if(!Array.isArray(a) || a.length === 0 ||
-       !Array.isArray(b) || b.length === 0) {
-        return [];
-    }
-
-    const result = [];
-
-    each(a, function(_, value) {
-        const index = inArray(value, b);
-
-        if(index !== -1) {
-            result.push(value);
-        }
-    });
-
-    return result;
-};
-
 export const uniqueValues = function(data) {
     return [...new Set(data)];
-};
-
-export const removeDuplicates = function(from, what) {
-    if(!Array.isArray(from) || from.length === 0) {
-        return [];
-    }
-
-    const result = from.slice();
-
-    if(!Array.isArray(what) || what.length === 0) {
-        return result;
-    }
-
-    each(what, function(_, value) {
-        const index = inArray(value, result);
-
-        result.splice(index, 1);
-    });
-
-    return result;
 };
 
 export const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {

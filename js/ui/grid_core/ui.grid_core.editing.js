@@ -512,24 +512,27 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _handleChangesChange: function(args) {
             const dataController = this._dataController;
+            const changes = args.value;
 
             if(!args.value.length && !args.previousValue.length) {
                 return;
             }
 
-            this._processInsertChanges(args.value);
-
-            dataController.updateItems({
-                repaintChangesOnly: true,
-                isLiveUpdate: false
-            });
-        },
-
-        _processInsertChanges: function(changes) {
             changes.forEach(change => {
                 if(change.type === 'insert') {
                     this._addInsertInfo(change);
+                } else {
+                    const items = dataController.items();
+                    const rowIndex = dataController.getRowIndexByKey(change.key);
+
+                    this._addInternalData({ key: change.key, oldData: items[rowIndex]?.data });
                 }
+            });
+
+            dataController.updateItems({
+                repaintChangesOnly: true,
+                isLiveUpdate: false,
+                isOptionChanged: true
             });
         },
 
@@ -1825,6 +1828,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 const row = dataController.getVisibleRows()[rowIndex];
 
                 if(row) {
+                    options.row.values = row.values; // T1122209
                     options.values = row.values;
                 }
 
@@ -2147,18 +2151,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return buttonItems;
         },
 
-        highlightDataCell: function($cell, parameters) {
-            const cellModified = this.isCellModified(parameters);
-            const shouldHighlight =
-                cellModified &&
-                parameters.column.setCellValue &&
-                (
-                    this.getEditMode() !== EDIT_MODE_ROW ||
-                    !parameters.row.isEditing
-                );
-
-            shouldHighlight && $cell.addClass(CELL_MODIFIED);
-        },
+        highlightDataCell: function($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); },
 
         _afterInsertRow: noop,
 
@@ -2204,6 +2197,17 @@ const EditingController = modules.ViewController.inherit((function() {
             const rows = this._dataController.items();
 
             return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
+        },
+
+        shouldHighlightCell: function(parameters) {
+            const cellModified = this.isCellModified(parameters);
+            return cellModified &&
+                parameters.column.setCellValue &&
+                (
+                    this.getEditMode() !== EDIT_MODE_ROW ||
+                    !parameters.row.isEditing
+                );
+
         }
     };
 })());
@@ -2497,10 +2501,11 @@ export const editingModule = {
                         this._editCellPrepared($cell);
                     }
 
-                    if(parameters.column && !isCommandCell) {
+                    const hasTemplate = !!parameters.column?.cellTemplate;
+
+                    if(parameters.column && !isCommandCell && (!hasTemplate || editingController.shouldHighlightCell(parameters))) {
                         editingController.highlightDataCell($cell, parameters);
                     }
-
                     this.callBase.apply(this, arguments);
                 },
                 _editCellPrepared: noop,

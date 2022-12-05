@@ -432,6 +432,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _dispose: function() {
         const that = this;
+
+        if(this._disposed) {
+            return;
+        }
+
         that.callBase.apply(that, arguments);
         that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();

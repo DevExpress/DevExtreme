@@ -2242,5 +2242,62 @@ module('Fixed client time zone offset', {
 
         assert.equal(apptCount, 0, 'There are not appts');
     });
+});
 
+module('Simple appointment in local DST time (T1078292)', () => {
+    test('should correctly display appointment in Los Angeles DST summer time', function(assert) {
+        const appointmentText = 'Simple appointment';
+        const data = [
+            {
+                startDate: new Date('2020-03-08T09:00:00.000Z'),
+                endDate: new Date('2020-03-08T10:00:00.000Z'),
+                startDateTimeZone: 'America/Los_Angeles',
+                endDateTimeZone: 'America/Los_Angeles',
+                text: appointmentText,
+            },
+        ];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date('2020-03-08T20:00:00.000Z'),
+            timeZone: timeZones.UTC,
+            firstDayOfWeek: 4,
+            height: 600,
+        });
+
+        const appointmentDOMElement = scheduler.appointments.find(appointmentText)[0] || {};
+        const appointmentHeight = appointmentDOMElement.offsetHeight || 0;
+
+        assert.ok(!!appointmentHeight, 'appointment height greater than zero');
+    });
+
+    test('should correctly display appointment in Los Angeles DST winter time', function(assert) {
+        const appointmentText = 'Simple appointment';
+        const data = [
+            {
+                startDate: new Date('2020-11-01T08:00:00.000Z'),
+                endDate: new Date('2020-11-01T09:00:00.000Z'),
+                startDateTimeZone: 'America/Los_Angeles',
+                endDateTimeZone: 'America/Los_Angeles',
+                text: appointmentText,
+            },
+        ];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date('2020-11-01T20:00:00.000Z'),
+            timeZone: timeZones.UTC,
+            firstDayOfWeek: 4,
+            height: 600,
+        });
+
+        const appointmentDOMElement = scheduler.appointments.find(appointmentText)[0] || {};
+        const appointmentHeight = appointmentDOMElement.offsetHeight || 0;
+
+        assert.ok(!!appointmentHeight, 'appointment height greater than zero');
+    });
 });

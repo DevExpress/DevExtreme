@@ -133,6 +133,41 @@ QUnit.test('stop', function(assert) {
     assert.equal(resultDeferred.state(), 'resolved');
 });
 
+QUnit.test('works without jquery', function(assert) {
+    const animationStopLog = [];
+    const $toEnter = document.createElement('div');
+    const $toLeave = document.createElement('div');
+    const animationConfig = { duration: 555 };
+
+    fx.createAnimation = function(element, config) {
+        const fxAnimateDeferred = $.Deferred();
+        const result = new MockAnimation({
+            element: element,
+            config: config,
+            deferred: fxAnimateDeferred,
+            stop: function() {
+                animationStopLog.push(arguments);
+                fxAnimateDeferred.resolve();
+            }
+        });
+
+        return result;
+    };
+
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+
+    transitionExecutor.enter($toEnter, animationConfig);
+    transitionExecutor.leave($toLeave, animationConfig);
+    const resultDeferred = transitionExecutor.start();
+    assert.equal(animationStopLog.length, 0);
+    assert.equal(resultDeferred.state(), 'pending');
+
+    transitionExecutor.stop();
+
+    assert.equal(animationStopLog.length, 2);
+    assert.equal(resultDeferred.state(), 'resolved');
+});
+
 QUnit.test('enter/leave/start direction parameter', function(assert) {
     const createAnimationLog = [];
     const animationSetupLog = [];

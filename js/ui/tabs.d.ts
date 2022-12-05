@@ -64,11 +64,11 @@ export interface dxTabsBaseOptions<
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
      * @docid dxTabsOptions.dataSource
-     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid dxTabsOptions.focusStateEnabled
      * @default true &for(desktop)

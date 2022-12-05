@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../helpers/createWidget';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
@@ -21,11 +22,10 @@ const createScheduler = async (options = {}): Promise<void> => {
   }));
 };
 
-test('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {
+safeSizeTest('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
-    .resizeWindow(1200, 800)
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(3, 0))
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count).eql(4);
 }).before(async () => createScheduler({
@@ -34,12 +34,11 @@ test('Vertical selection between two workspace cells should focus cells between 
   currentView: 'day',
 }));
 
-test('Horizontal selection between two workspace cells should focus cells between them', async (t) => {
+safeSizeTest('Horizontal selection between two workspace cells should focus cells between them', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
     .setTestSpeed(0.5)
-    .resizeWindow(1200, 800)
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 3))
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
     .eql(4);
@@ -59,7 +58,7 @@ test('Horizontal selection between two workspace cells should focus cells betwee
   }],
 }));
 
-test('Vertical grouping should work correctly when there is one group', async (t) => {
+safeSizeTest('Vertical grouping should work correctly when there is one group', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -93,7 +92,7 @@ const resize = ClientFunction((container) => {
   instance._workSpace._dimensionChanged();
 });
 
-test('Hidden scheduler should not resize', async (t) => {
+safeSizeTest('Hidden scheduler should not resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await hideShow('#container');

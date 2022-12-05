@@ -11,6 +11,7 @@ import { PageSizeSelector } from '../page_size/selector';
 import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
+import messageLocalization from '../../../../localization/message';
 
 let mockInstance: Record<string, AbstractFunction> = {};
 
@@ -22,6 +23,7 @@ jest.mock('../../../../ui/shared/accessibility', () => ({
 jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: () => null }));
 jest.mock('../page_size/selector', () => ({ PageSizeSelector: forwardRef(() => null) }));
 jest.mock('../info', () => ({ InfoText: forwardRef(() => null) }));
+jest.mock('../../../../localization/message', () => ({ format: jest.fn() }));
 
 describe('PagerContent', () => {
   describe('View', () => {
@@ -48,6 +50,7 @@ describe('PagerContent', () => {
         infoVisible: true,
         pageIndexSelectorVisible: true,
         props: componentProps,
+        aria: { role: 'navigation', label: 'Page Navigation' },
         restAttributes: { 'rest-attribute': {}, className: 'className' },
       } as Partial<PagerContent> as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />);
@@ -55,6 +58,7 @@ describe('PagerContent', () => {
       expect(widget.props()).toMatchObject({
         rtlEnabled: true,
         className: 'className',
+        aria: props.aria,
         'rest-attribute': props.restAttributes['rest-attribute'],
       });
       expect(tree.find(Widget).instance()).toBe(widget.instance());
@@ -343,6 +347,14 @@ describe('PagerContent', () => {
       expect(component.pageIndexSelectorVisible).toBe(false);
       component.props.pageSize = 10;
       expect(component.pageIndexSelectorVisible).toBe(true);
+    });
+
+    it('aria', () => {
+      (messageLocalization.format as jest.Mock).mockReturnValue('Page Navigation');
+      const component = new PagerContent(new PagerContentProps());
+
+      expect(component.aria).toEqual({ role: 'navigation', label: 'Page Navigation' });
+      expect(messageLocalization.format).toBeCalledWith('dxPager-ariaLabel');
     });
 
     describe('className', () => {

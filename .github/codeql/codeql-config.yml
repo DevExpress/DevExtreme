@@ -1,0 +1,8 @@
+name: "DevExtreme CodeQL config"
+
+paths-ignore:
+  - "artifacts/**"
+  - "themebuilder-scss/dist/**"
+  - "/js/bundles/dx.custom.js"
+  - "/js/localization/default_messages.js"
+  - "/js/localization/cldr-data/**"

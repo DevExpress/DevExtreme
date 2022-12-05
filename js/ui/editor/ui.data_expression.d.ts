@@ -19,10 +19,10 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid
      * @default null
-     * @type Store|DataSource|DataSourceOptions|string|Array<CollectionWidgetItem | any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<CollectionWidgetItem | any>|null
      * @public
      */
-    dataSource?: DataSourceLike<CollectionWidgetItem | any>;
+    dataSource?: DataSourceLike<CollectionWidgetItem | any> | null;
     /**
      * @docid
      * @default undefined

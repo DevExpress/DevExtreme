@@ -135,6 +135,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       showNavigationButtons,
       totalCount,
       onKeyDown,
+      label,
     } = this.props.pagerProps;
     return {
       ...this.restAttributes,
@@ -160,6 +161,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       showNavigationButtons,
       totalCount,
       onKeyDown,
+      label,
     };
   }
 

@@ -155,6 +155,8 @@ const HOUR_MS = toMs('hour');
 const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
+const CELL_INDEX_CALCULATION_EPSILON = 0.05;
+
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
@@ -985,6 +987,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
         eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
         eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => {
+            if(!this.dragBehavior) {
+                return;
+            }
+
             if(!this.dragBehavior?.dragBetweenComponentsPromise) {
                 this.dragBehavior.removeDroppableClasses();
                 return;
@@ -1176,6 +1182,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             return this.$element().find('.' + cellClass);
         }
+    }
+
+    _getFirstAndLastDataTableCell() {
+        const selector = this.isVirtualScrolling()
+            ? `.${DATE_TABLE_CELL_CLASS}, .${VIRTUAL_CELL_CLASS}`
+            : `.${DATE_TABLE_CELL_CLASS}`;
+
+        const $cells = this.$element().find(selector);
+        return [$cells[0], $cells[$cells.length - 1]];
     }
 
     _getAllCells(allDay) {
@@ -1447,10 +1462,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     // NOTE: refactor leftIndex calculation
     getCellIndexByCoordinates(coordinates, allDay) {
         const cellCount = this._getTotalCellCount(this._getGroupCount());
-        const cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount);
+        const cellWidth = this.getCellWidth();
         const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
+
         const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
-        let leftIndex = Math.floor((coordinates.left + 5) / cellWidth);
+        let leftIndex = coordinates.left / cellWidth;
+        leftIndex = Math.floor(leftIndex + CELL_INDEX_CALCULATION_EPSILON);
 
         if(this._isRTL()) {
             leftIndex = cellCount - leftIndex - 1;
@@ -1495,22 +1512,38 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getGroupBounds(coordinates) {
+        const groupBounds = this._groupedStrategy instanceof VerticalGroupedStrategy
+            ? this.getGroupBoundsVertical(coordinates.groupIndex)
+            : this.getGroupBoundsHorizontal(coordinates);
+
+        return this._isRTL()
+            ? this.getGroupBoundsRtlCorrection(groupBounds)
+            : groupBounds;
+    }
+
+    getGroupBoundsVertical(groupIndex) {
+        const $firstAndLastCells = this._getFirstAndLastDataTableCell();
+        return this._groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
+    }
+
+    getGroupBoundsHorizontal(coordinates) {
         const cellCount = this._getCellCount();
         const $cells = this._getCells();
         const cellWidth = this.getCellWidth();
 
         const groupedDataMap = this.viewDataProvider.groupedDataMap;
-        const result = this._groupedStrategy
+        return this._groupedStrategy
             .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
+    }
 
-        if(this._isRTL()) {
-            const startOffset = result.left;
+    getGroupBoundsRtlCorrection(groupBounds) {
+        const cellWidth = this.getCellWidth();
 
-            result.left = result.right - cellWidth * 2;
-            result.right = startOffset + cellWidth * 2;
-        }
-
-        return result;
+        return {
+            ...groupBounds,
+            left: groupBounds.right - cellWidth * 2,
+            right: groupBounds.left + cellWidth * 2,
+        };
     }
 
     needRecalculateResizableArea() {
@@ -1704,7 +1737,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     removeDroppableCellClass($cellElement) {
-        ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        const $cell = ($cellElement || this._getDroppableCell());
+        $cell?.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
     }
 
     _getCoordinatesByCell($cell) {

@@ -211,6 +211,7 @@ const DropDownEditor = TextBox.inherit({
         this._initVisibilityActions();
         this._initPopupInitializedAction();
         this._updatePopupPosition(this.option('rtlEnabled'));
+
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
     },
 
@@ -510,8 +511,13 @@ const DropDownEditor = TextBox.inherit({
         }
     },
 
+    _getControlsAria() {
+        return this._popup && this._popupContentId;
+    },
+
     _renderOpenedState: function() {
         const opened = this.option('opened');
+
         if(opened) {
             this._createPopup();
         }
@@ -519,10 +525,12 @@ const DropDownEditor = TextBox.inherit({
         this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE, opened);
         this._setPopupOption('visible', opened);
 
-        this.setAria({
-            'expanded': opened
-        });
+        const arias = {
+            'expanded': opened,
+            'controls': this._getControlsAria(),
+        };
 
+        this.setAria(arias);
         this.setAria('owns', ((opened || undefined) && this._popupContentId), this.$element());
     },
 
@@ -579,7 +587,6 @@ const DropDownEditor = TextBox.inherit({
             width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
-            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
             hideOnParentScroll: true,
             closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {
@@ -593,7 +600,8 @@ const DropDownEditor = TextBox.inherit({
             toolbarItems: this._getPopupToolbarItems(),
             onPositioned: this._popupPositionedHandler.bind(this),
             fullScreen: false,
-            contentTemplate: null
+            contentTemplate: null,
+            _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY,
         };
     },
 
@@ -616,7 +624,23 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        const { labelMode, stylingMode } = this.option();
+
+        const $popupOverlayContent = this._popup.$overlayContent();
+        const isOverlayFlipped = e.position.v.flip;
+        const shouldIndentForLabel = labelMode !== 'hidden' && stylingMode === 'outlined';
+
+        if(e.position) {
+            $popupOverlayContent.toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, isOverlayFlipped);
+        }
+
+        if(isOverlayFlipped && shouldIndentForLabel && this._label.isVisible()) {
+            const $label = this._label.$element();
+
+            move($popupOverlayContent, {
+                top: locate($popupOverlayContent).top - parseInt($label.css('fontSize'))
+            });
+        }
     },
 
     _popupShowingHandler: noop,
@@ -627,17 +651,6 @@ const DropDownEditor = TextBox.inherit({
 
     _popupShownHandler: function() {
         this._openAction();
-
-        const $popupOverlayContent = this._popup.$overlayContent();
-        const position = locate($popupOverlayContent);
-
-        if(this._label.isVisible() && $popupOverlayContent.hasClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED)) {
-            const $label = this._label.$element();
-            move($popupOverlayContent, {
-                top: position.top - parseInt($label.css('fontSize'))
-            });
-        }
-
         this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 

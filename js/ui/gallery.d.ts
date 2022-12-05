@@ -69,11 +69,11 @@ export interface dxGalleryOptions<
     animationEnabled?: boolean;
     /**
      * @docid
-     * @type string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default true &for(desktop)

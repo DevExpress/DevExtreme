@@ -129,6 +129,11 @@ export default class FileManagerNotificationControl extends Widget {
         notificationManager.completeOperationItem(operationInfo, itemIndex, commonProgress);
     }
 
+    finishOperation(operationInfo, commonProgress) {
+        const notificationManager = this._getNotificationManager(operationInfo);
+        notificationManager.finishOperation(operationInfo, commonProgress);
+    }
+
     completeOperation(operationInfo, commonText, isError, statusText) {
         const notificationManager = this._getNotificationManager(operationInfo);
         if(!isError) {
@@ -290,7 +295,8 @@ export default class FileManagerNotificationControl extends Widget {
                     at: 'right top',
                     of: this.option('positionTarget'),
                     offset: '-10 -5'
-                }
+                },
+                _wrapperClassExternal: FILE_MANAGER_NOTIFICATION_POPUP_CLASS,
             });
         }
         return this._notificationPopup;

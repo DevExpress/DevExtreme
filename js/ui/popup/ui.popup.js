@@ -233,10 +233,15 @@ const Popup = Overlay.inherit({
     },
 
     _init: function() {
+        const popupWrapperClassExternal = this.option('_wrapperClassExternal');
+        const popupWrapperClasses = popupWrapperClassExternal
+            ? `${POPUP_WRAPPER_CLASS} ${popupWrapperClassExternal}`
+            : POPUP_WRAPPER_CLASS;
+
         this.callBase();
 
         this.$element().addClass(POPUP_CLASS);
-        this.$wrapper().addClass(POPUP_WRAPPER_CLASS);
+        this.$wrapper().addClass(popupWrapperClasses);
         this._$popupContent = this._$content
             .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
             .children().eq(0);
@@ -509,9 +514,11 @@ const Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function() {
-        // NOTE: for correct new position calculation
-        this._resetContentHeight();
+    _renderGeometryImpl: function(isDimensionChange = false) {
+        if(!isDimensionChange) { // NOTE: to save content scroll position T1113123
+            // NOTE: for correct new position calculation
+            this._resetContentHeight();
+        }
         this.callBase();
         this._setContentHeight();
     },

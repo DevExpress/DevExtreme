@@ -214,20 +214,22 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   get elementAttr(): HTMLAttributes<unknown> {
+    const element = this.$element()[0];
     if (!this._elementAttr) {
-      const { attributes } = this.$element()[0];
+      const { attributes } = element;
       const attrs = Array.from<{ name: string; value: unknown }>(attributes)
         .filter((attr) => !this._propsInfo.templates.includes(attr.name)
       && attributes[attr.name]?.specified)
         .reduce((result, { name, value }) => {
           const updatedAttributes = result;
-          updatedAttributes[name] = value === '' ? 'true' : value;
+          const isDomAttr = name in element;
+          updatedAttributes[name] = value === '' && isDomAttr ? element[name] : value;
           return updatedAttributes;
         }, {});
       this._elementAttr = attrs;
-      this._storedClasses = this.$element()[0].getAttribute('class') || '';
+      this._storedClasses = element.getAttribute('class') || '';
     }
-    const elemStyle: CSSStyleDeclaration = this.$element()[0].style;
+    const elemStyle: CSSStyleDeclaration = element.style;
 
     const style = {};
     // eslint-disable-next-line @typescript-eslint/prefer-for-of

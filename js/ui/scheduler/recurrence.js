@@ -11,8 +11,11 @@ const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymont
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
+const MS_IN_HOUR = 1000 * 60 * 60;
+const MS_IN_DAY = MS_IN_HOUR * 24;
 
 let recurrence = null;
+
 export function getRecurrenceProcessor() {
     if(!recurrence) {
         recurrence = new RecurrenceProcessor();
@@ -35,24 +38,75 @@ class RecurrenceProcessor {
             return [];
         }
 
+        const rruleIntervalParams = this._createRruleIntervalParams(options);
+
+        this._initializeRRule(options,
+            rruleIntervalParams.startIntervalDate,
+            rule.until);
+
+        return this.rRuleSet.between(
+            rruleIntervalParams.minViewDate,
+            rruleIntervalParams.maxViewDate,
+            true
+        )
+            .filter((date) => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime)
+            .map((date) => this._convertRruleResult(rruleIntervalParams, options, date));
+    }
+
+    _createRruleIntervalParams(options) {
+        const { start, min, max, appointmentTimezoneOffset } = options;
+        // NOTE: Get local timezone offset of each Rrule date params.
         const clientOffsets = {
-            startDate: timeZoneUtils.getClientTimezoneOffset(options.start),
-            minViewDate: timeZoneUtils.getClientTimezoneOffset(options.min),
-            maxViewDate: timeZoneUtils.getClientTimezoneOffset(options.max),
+            startDate: timeZoneUtils.getClientTimezoneOffset(start),
+            minViewDate: timeZoneUtils.getClientTimezoneOffset(min),
+            maxViewDate: timeZoneUtils.getClientTimezoneOffset(max),
         };
-
-        const appointmentOffset = options.appointmentTimezoneOffset;
         const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
-        const startDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentOffset]);
-        const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentOffset;
+
+        // NOTE: Remove local timezone offsets from Rrule date params.
+        const startIntervalDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentTimezoneOffset]);
+        const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
+        // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
         const minViewDate = new Date(minViewTime - duration);
-        const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentOffset]);
+        const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentTimezoneOffset]);
 
-        this._initializeRRule(options, startDate, rule.until);
+        // NOTE: Check DST after start date without local timezone offset conversion.
+        const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
+        const switchToSummerTime = startDateDSTDifferenceMs < 0;
 
-        return this.rRuleSet.between(minViewDate, maxViewDate, true)
-            .filter((date) => (date.getTime() + duration) >= minViewTime)
-            .map((date) => timeZoneUtils.setOffsetsToDate(date, [timeZoneUtils.getClientTimezoneOffset(date), -appointmentOffset]));
+        return {
+            startIntervalDate,
+            minViewTime,
+            minViewDate,
+            maxViewDate,
+            startIntervalDateDSTShift: switchToSummerTime ? 0 : startDateDSTDifferenceMs,
+            appointmentDuration: duration,
+        };
+    }
+
+    _convertRruleResult(rruleIntervalParams, options, rruleDate) {
+        const localTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
+        // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
+        // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
+        const additionalWorkaroundOffsetForRrule =
+            localTimezoneOffset / MS_IN_HOUR <= -13 ? -MS_IN_DAY : 0;
+        const convertedBackDate = timeZoneUtils.setOffsetsToDate(
+            rruleDate, [
+                localTimezoneOffset,
+                additionalWorkaroundOffsetForRrule,
+                -options.appointmentTimezoneOffset,
+                rruleIntervalParams.startIntervalDateDSTShift,
+            ]);
+        const convertedDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
+        const switchToSummerTime = convertedDateDSTShift < 0;
+        const resultDate = timeZoneUtils.setOffsetsToDate(convertedBackDate, [convertedDateDSTShift]);
+        const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
+
+        if(resultDateDSTShift && switchToSummerTime) {
+            return new Date(resultDate.getTime() + resultDateDSTShift);
+        }
+
+        return resultDate;
     }
 
     hasRecurrence(options) {
@@ -211,12 +265,6 @@ class RecurrenceProcessor {
 
                 const utcDate = timeZoneUtils.setOffsetsToDate(date,
                     [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
-                const originClientOffset = date.getTimezoneOffset();
-                const utcDateClientOffset = utcDate.getTimezoneOffset();
-
-                if(utcDateClientOffset !== originClientOffset) {
-                    utcDate.setMilliseconds(utcDate.getMilliseconds() - (utcDateClientOffset - originClientOffset) * 60000);
-                }
 
                 this.rRuleSet.exdate(utcDate);
             });

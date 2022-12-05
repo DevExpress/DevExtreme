@@ -184,12 +184,16 @@ class FileManagerProgressPanel extends Widget {
     }
 
     updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress) {
-        operationInfo.common.progressBar.option('value', commonProgress);
+        this.updateOperationCommonProgress(operationInfo, commonProgress);
 
         if(operationInfo.details) {
             const detailsItem = operationInfo.details[itemIndex];
             detailsItem.progressBar.option('value', itemProgress);
         }
+    }
+
+    updateOperationCommonProgress(operationInfo, commonProgress) {
+        operationInfo.common.progressBar?.option('value', commonProgress);
     }
 
     completeOperation(info, commonText, isError, statusText) {
@@ -198,7 +202,7 @@ class FileManagerProgressPanel extends Widget {
         if(isError) {
             this._removeProgressBar(info.common);
         } else if(info.allowProgressAutoUpdate) {
-            info.common.progressBar.option('value', 100);
+            this.updateOperationCommonProgress(info, 100);
         }
 
         if(statusText) {

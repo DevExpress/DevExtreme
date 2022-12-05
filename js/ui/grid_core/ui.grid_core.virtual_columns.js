@@ -44,7 +44,7 @@ const ColumnsControllerExtender = (function() {
     const members = {
         init: function() {
             const that = this;
-            that.callBase();
+            that.callBase.apply(this, arguments);
 
             that._beginPageIndex = null;
             that._endPageIndex = null;
@@ -159,8 +159,8 @@ const ColumnsControllerExtender = (function() {
 
             return fixedColumns;
         },
-        getVisibleColumns: function(rowIndex, isBase) {
-            if(isBase || !this.isVirtualMode()) {
+        _compileVisibleColumns: function(rowIndex, isBase) {
+            if(isBase || !this.isVirtualMode() || !this._shouldReturnVisibleColumns()) {
                 return this.callBase(rowIndex);
             }
 

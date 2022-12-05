@@ -4,6 +4,7 @@ import devices from 'core/devices';
 import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
+import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'generic_light.css!';
 
@@ -1004,7 +1005,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         const fileSize = 100023;
         const chunkSize = 20000;
         const files = [createBlobFile('fake1.png', fileSize)];
-        const chunkCount = Math.ceil(fileSize / chunkSize);
+        const chunkCount = getFileChunkCount(files[0], chunkSize);
 
         const progressSpy = sinon.spy();
 
@@ -1059,6 +1060,61 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         assert.ok(uploadErrorSpy.calledOnce, 'onUploadError raised');
         assert.strictEqual(uploadErrorSpy.args[0][0].error.status, 0, 'xhr passed as an argument');
+    });
+    test('an empty file needs one chunk to load - T1122867', function(assert) {
+        this.xhrMock.startSeries();
+
+        const fileSize = 0;
+        const chunkSize = 20000;
+        const files = [createBlobFile('fake1.png', fileSize)];
+        const chunkCount = 1;
+
+        const progressSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize,
+            onProgress: progressSpy
+        });
+
+        simulateFileChoose($fileUploader, files);
+        assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
+
+        this.clock.tick();
+        assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
+        assert.strictEqual($fileUploader.dxFileUploader('option', 'progress'), 100, 'progress is 100%');
+    });
+    test('uploading multiple empty files and regular file keeps total progress = 0 until all files are uploaded and completes with 100% of total progress - T1122867', function(assert) {
+        this.xhrMock.startSeries();
+
+        const fileSize = 0;
+        const chunkSize = 20000;
+        const files = [createBlobFile('fake1.png', fileSize), createBlobFile('fake2.png', fileSize)];
+        let chunkIndex = 0;
+        const defaultTimeout = 200;
+        const progressSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize,
+            onProgress: progressSpy
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        fileUploader._uploadStrategy._sendChunkCore = () => {
+            const deferred = new Deferred();
+            const timeout = chunkIndex++ < 1 ? defaultTimeout : defaultTimeout * 2;
+            setTimeout(() => deferred.resolve(this.xhrMock), timeout);
+            return deferred.promise();
+        };
+        simulateFileChoose($fileUploader, files);
+
+        this.clock.tick(defaultTimeout + 1);
+        assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
+        assert.strictEqual(fileUploader.option('progress'), 0, 'progress is 0%');
+
+        this.clock.tick(defaultTimeout + 1);
+        assert.strictEqual(progressSpy.callCount, 2, 'all chunks are sent');
+        assert.strictEqual(fileUploader.option('progress'), 100, 'progress is 100%');
     });
 });
 

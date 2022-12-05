@@ -17,12 +17,14 @@ import { isMaterial, current } from '../../ui/themes';
 import { click } from '../../events/short';
 import { combineClasses } from '../utils/combine_classes';
 import { getImageSourceType } from '../../core/utils/icon';
+import { camelize } from '../../core/utils/inflector';
 import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 // eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
+import messageLocalization from '../../localization/message';
 import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
@@ -248,7 +250,7 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = (text ?? '') || icon;
+    let label = (text ?? '') || messageLocalization.format(camelize(icon, true)) || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';

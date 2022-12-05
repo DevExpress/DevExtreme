@@ -120,9 +120,7 @@ namespace Runner
         {
             try
             {
-                var task = Dns.GetHostAddressesAsync("corp.devexpress.com");
-                task.Wait();
-                return task.Result.Length > 0;
+                return Dns.GetHostAddresses("corp.devexpress.com").Length > 0;
             }
             catch
             {

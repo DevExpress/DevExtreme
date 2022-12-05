@@ -1,7 +1,13 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Page, PageProps, viewFunction as PageComponent } from '../page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../common/consts';
+import messageLocalization from '../../../../../localization/message';
+import { LightButton } from '../../common/light_button';
+
+jest.mock('../../../../../localization/message', () => ({
+  getFormatter: jest.fn(),
+}));
 
 describe('Small pager pages', () => {
   it('view', () => {
@@ -13,6 +19,17 @@ describe('Small pager pages', () => {
     expect(tree.props()).toEqual({
       children: 1, className: 'className', label: 'label', onClick: click,
     });
+  });
+
+  // T1109686
+  it('pageIndexes: check aria-current attribute', () => {
+    const props = { props: { selected: true, onClick: () => {} } };
+    const tree = mount<typeof PageComponent>(<PageComponent {...props as any} />);
+
+    const pageButton = tree.find(LightButton);
+
+    // eslint-disable-next-line spellcheck/spell-checker
+    expect(pageButton.prop('selected')).toBeTruthy();
   });
 
   describe('Logic', () => {
@@ -44,6 +61,7 @@ describe('Small pager pages', () => {
     });
 
     it('label', () => {
+      (messageLocalization.getFormatter as jest.Mock).mockReturnValue((n) => `Page ${n}`);
       const component = new Page({ index: 0 });
       expect(component.label).toBe('Page 1');
     });

@@ -220,6 +220,41 @@ testModule('render', moduleConfig, () => {
         }
     });
 
+    test('overlay should be positioned correctly after async template is rendered (T1114344)', function(assert) {
+        // NOTE: React 18 renders templates asynchronously. It cannot be changed in our react wrappers.
+
+        const clock = sinon.useFakeTimers();
+        try {
+            const overlay = $('#overlay').dxOverlay({
+                templatesRenderAsynchronously: true,
+                visible: true,
+                width: 'auto',
+                container: 'body',
+                integrationOptions: {
+                    templates: {
+                        'content': {
+                            render: function(args) {
+                                setTimeout(() => {
+                                    args.container.append($('<div>').width(500));
+                                    args.onRendered();
+                                }, 100);
+                            }
+                        }
+                    }
+                }
+            }).dxOverlay('instance');
+
+            clock.tick(100);
+
+            const contentRect = overlay.$content().get(0).getBoundingClientRect();
+            const contentCenterX = (contentRect.left + contentRect.right) / 2;
+            const windowCenterX = window.innerWidth / 2;
+            assert.roughEqual(contentCenterX, windowCenterX, 1, 'content is centered');
+        } finally {
+            clock.restore();
+        }
+    });
+
     test('overlay created with templatesRenderAsynchronously option should not be shown after delay if it was hidden before', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
@@ -372,31 +407,31 @@ testModule('option', moduleConfig, () => {
         const instance = $('#overlay').dxOverlay({
             onShowing: function() {
                 assert.strictEqual(this.$content().css('display'), 'block');
-                assert.strictEqual(afterShowFired, 0);
+                assert.strictEqual(afterShowFired, 0, 'afterShowFired');
 
                 beforeShowFired++;
             },
             onPositioned: function({ position }) {
-                assert.strictEqual(beforeShowFired, 1);
+                assert.strictEqual(beforeShowFired, 1, 'beforeShowFired');
                 assert.strictEqual(this.$content().css('display'), 'block');
                 assert.ok(position);
 
                 positionedFired++;
             },
             onShown: function() {
-                assert.strictEqual(positionedFired, 1);
+                assert.strictEqual(positionedFired, 1, 'positionedFired');
                 assert.strictEqual(this.$content().css('display'), 'block');
 
                 afterShowFired++;
             },
             onHiding: function() {
                 assert.strictEqual(this.$content().css('display'), 'block');
-                assert.strictEqual(afterHideFired, 0);
+                assert.strictEqual(afterHideFired, 0, 'afterHideFired');
 
                 beforeHideFired++;
             },
             onHidden: function() {
-                assert.strictEqual(beforeHideFired, 1);
+                assert.strictEqual(beforeHideFired, 1, 'beforeHideFired');
                 assert.strictEqual(this.$content().css('display'), 'none');
 
                 afterHideFired++;
@@ -404,13 +439,13 @@ testModule('option', moduleConfig, () => {
         }).dxOverlay('instance');
 
         instance.show().done(() => {
-            assert.strictEqual(beforeShowFired, 1);
-            assert.strictEqual(positionedFired, 1);
-            assert.strictEqual(afterShowFired, 1);
+            assert.strictEqual(beforeShowFired, 1, 'beforeShowFired');
+            assert.strictEqual(positionedFired, 1, 'positionedFired');
+            assert.strictEqual(afterShowFired, 1, 'afterShowFired');
 
             instance.hide().done(() => {
-                assert.strictEqual(beforeHideFired, 1);
-                assert.strictEqual(afterHideFired, 1);
+                assert.strictEqual(beforeHideFired, 1), 'beforeHideFired';
+                assert.strictEqual(afterHideFired, 1, 'afterHideFired');
             });
         });
     });
@@ -865,6 +900,64 @@ testModule('visibility', moduleConfig, () => {
 
         assert.notOk($overlay.is(':hidden')), 'overlay is not hidden';
         assert.notOk(onHidden.called, 'onHidden should not be called');
+    });
+
+    test('overlays content should be hidden on onShowig event (T1107193)', function(assert) {
+        assert.expect(1);
+
+        const overlay = $('#overlay').dxOverlay({
+            onShowing: () => {
+                const isContentHidden = $(overlay.content()).css('visibility') === 'hidden';
+                assert.ok(isContentHidden, 'content is hidden');
+            }
+        }).dxOverlay('instance');
+
+        overlay.show();
+    });
+
+    test('overlay closing should not be cancelled if previous showing was cancelled (T1120608)', function(assert) {
+        let shouldCancelOpening = true;
+        const $overlay = $('#overlay').dxOverlay({
+            onShowing: (e) => {
+                e.cancel = shouldCancelOpening;
+            }
+        });
+        const overlay = $overlay.dxOverlay('instance');
+
+        const isVisible = () => !$overlay.is(':hidden');
+
+        overlay.show();
+        assert.strictEqual(isVisible(), false, 'showing is cancelled');
+
+        shouldCancelOpening = false;
+        overlay.show();
+        assert.strictEqual(isVisible(), true, 'showing is not cancelled');
+
+        overlay.hide();
+        assert.strictEqual(isVisible(), false, 'hiding is not cancelled');
+    });
+
+    test('overlay showing should not be cancelled if previous hiding was cancelled', function(assert) {
+        let shouldCancelHiding = true;
+        const $overlay = $('#overlay').dxOverlay({
+            onHiding: (e) => {
+                e.cancel = shouldCancelHiding;
+            },
+            visible: true
+        });
+        const overlay = $overlay.dxOverlay('instance');
+
+        const isVisible = () => !$overlay.is(':hidden');
+
+        overlay.hide();
+        assert.strictEqual(isVisible(), true, 'hiding is cancelled');
+
+        shouldCancelHiding = false;
+        overlay.hide();
+        assert.strictEqual(isVisible(), false, 'hiding is not cancelled');
+
+        overlay.show();
+        assert.strictEqual(isVisible(), true, 'showing is not cancelled');
     });
 });
 

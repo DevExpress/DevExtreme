@@ -64,11 +64,11 @@ export interface dxBoxOptions<
     crossAlign?: 'center' | 'end' | 'start' | 'stretch';
     /**
      * @docid
-     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @type Enums.BoxDirection

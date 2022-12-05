@@ -67,11 +67,11 @@ export interface dxActionSheetOptions<
     cancelText?: string;
     /**
      * @docid
-     * @type string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @type Array<string | dxActionSheetItem | any>

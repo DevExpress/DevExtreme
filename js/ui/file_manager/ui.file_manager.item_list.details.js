@@ -90,6 +90,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 mode: 'single',
                 showSortIndexes: false
             },
+            loadPanel: {
+                shading: true
+            },
             showColumnLines: false,
             showRowLines: false,
             columnHidingEnabled: false,

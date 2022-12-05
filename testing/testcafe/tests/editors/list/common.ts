@@ -29,6 +29,28 @@ test('Should focus first item after changing selection mode (T811770)', async (t
   selectionMode: 'all',
 }));
 
+test('There is hover class in hovered list item (T1110076)', async (t) => {
+  const list = new List('#container');
+
+  const firstItem = list.getItem(0);
+
+  await t.dispatchEvent(firstItem.element, 'mousedown');
+  await list.repaint();
+  await t.dispatchEvent(firstItem.element, 'mouseup');
+
+  const secondItem = list.getItem(1);
+
+  await t
+    .expect(secondItem.isHovered)
+    .notOk()
+    .hover(secondItem.element)
+    .expect(secondItem.isHovered)
+    .ok();
+}).before(async () => createWidget('dxList', {
+  items: ['item1', 'item2', 'item3'],
+  selectionMode: 'single',
+}));
+
 test('List selection should work with keyboard arrows (T718398)', async (t) => {
   const list = new List('#container');
   const firstItemCheckBox = list.getItem().checkBox;

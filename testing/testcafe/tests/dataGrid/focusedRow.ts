@@ -715,7 +715,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
 });
 
 ['virtual', 'infinite'].forEach((scrollingMode) => {
-  test.skip(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async (t) => {
+  test(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const reloadDataSource = ClientFunction(() => (window as any).widget.getDataSource().reload());
     const getVisibleRowCount = ClientFunction(() => (window as any).widget.getVisibleRows().length);
@@ -744,6 +744,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
       return result;
     })();
     return createWidget('dxDataGrid', {
+      height: 2000,
       dataSource: data,
       keyExpr: 'ID',
       focusedRowEnabled: true,

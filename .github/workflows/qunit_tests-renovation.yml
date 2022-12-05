@@ -1,7 +1,7 @@
 name: QUnit tests for renovation
 
 concurrency:
-  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
 on:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Build
     timeout-minutes: 60
 
@@ -54,7 +54,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
     strategy:
@@ -63,48 +63,30 @@ jobs:
         CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
 
     steps:
-    # Prepare fast re-run start
-    - name: Set default run status
-      run: echo "default" > last_run_status
-
-    - name: Restore last run status
-      uses: actions/cache@v2
-      with:
-        path: last_run_status
-        key: last-run-status-${{ github.job }}-${{ matrix.CONSTEL }}-${{ github.sha }}
-
-    - name: Set last run status
-      id: last_run_status
-      run: cat last_run_status
-
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
         name: devextreme-artifacts
-    # Prepare fast re-run end
 
     - name: Get sources
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
 
-    - name: Update apt
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        sudo apt-get update
+    - uses: ./.github/actions/pin-browsers
 
-    - name: Setup utils
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+#    - name: Update apt
+#      run: |
+#        sudo apt-get update
+
+#    - name: Setup utils
+#      run: |
+#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Use Node.js
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/setup-node@v2
       with:
         node-version: '15'
 
     - name: Restore npm cache
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./node_modules
@@ -117,15 +99,12 @@ jobs:
         name: devextreme-artifacts
 
     - name: Unpack artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: 7z x artifacts.zip
 
     - name: Build dotnet
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: dotnet build build/build-dotnet.sln
 
     - name: Run QUnit tests
-      if: steps.last_run_status.outputs.last_run_status != 'success'
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
         NORENOVATION: "false"
@@ -135,12 +114,8 @@ jobs:
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
 
-    - name: Save run status
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: echo "::set-output name=last_run_status::success" > last_run_status
-
   notify:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')

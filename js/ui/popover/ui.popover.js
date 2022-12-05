@@ -123,6 +123,7 @@ const Popover = Popup.inherit({
                 },
                 hide: {
                     type: 'fade',
+                    from: 1,
                     to: 0
                 }
             },
@@ -311,15 +312,15 @@ const Popover = Popup.inherit({
         this.callBase();
     },
 
-    _renderPosition: function() {
+    _renderPosition: function(shouldUpdateDimensions = true) {
         this.callBase();
-        this._renderOverlayPosition();
+        this._renderOverlayPosition(shouldUpdateDimensions);
         this._actions.onPositioned();
     },
 
-    _renderOverlayPosition: function() {
-        this._resetOverlayPosition();
-        this._updateContentSize();
+    _renderOverlayPosition: function(shouldUpdateDimensions) {
+        this._resetOverlayPosition(shouldUpdateDimensions);
+        this._updateContentSize(shouldUpdateDimensions);
 
         const contentPosition = this._getContainerPosition();
         const resultLocation = positionUtils.setup(this.$overlayContent(), contentPosition);
@@ -336,8 +337,8 @@ const Popover = Popup.inherit({
         }
     },
 
-    _resetOverlayPosition: function() {
-        this._setContentHeight(true);
+    _resetOverlayPosition: function(shouldUpdateDimensions) {
+        this._setContentHeight(shouldUpdateDimensions);
         this._togglePositionClass('dx-position-' + this._positionController._positionSide);
 
         move(this.$overlayContent(), { left: 0, top: 0 });
@@ -347,8 +348,8 @@ const Popover = Popup.inherit({
         });
     },
 
-    _updateContentSize: function() {
-        if(!this.$content()) {
+    _updateContentSize: function(shouldUpdateDimensions) {
+        if(!this.$content() || !shouldUpdateDimensions) {
             return;
         }
 

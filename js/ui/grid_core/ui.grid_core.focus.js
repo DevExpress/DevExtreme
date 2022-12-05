@@ -441,11 +441,11 @@ export const focusModule = {
                     this.setRowFocusType();
 
                     this._focusedCellPosition = {};
-                    if(isDefined(rowIndex)) {
-                        this._focusedCellPosition.rowIndex = this.option('focusedRowIndex');
+                    if(isDefined(rowIndex) && rowIndex >= 0) {
+                        this._focusedCellPosition.rowIndex = rowIndex;
                     }
-                    if(isDefined(columnIndex)) {
-                        this._focusedCellPosition.columnIndex = this.option('focusedColumnIndex');
+                    if(isDefined(columnIndex) && columnIndex >= 0) {
+                        this._focusedCellPosition.columnIndex = columnIndex;
                     }
                 },
 
@@ -707,9 +707,21 @@ export const focusModule = {
                                 }
                             } else {
                                 const filterOperation = sortInfo.desc ? '>' : '<';
-                                let sortFilter = [selector, filterOperation, value];
-                                if(!sortInfo.desc) {
-                                    sortFilter = [sortFilter, 'or', [selector, '=', null]];
+
+                                let sortFilter;
+                                if(sortInfo.compare) {
+                                    sortFilter = (data) => {
+                                        if(filterOperation === '<') {
+                                            return sortInfo.compare(value, getter(data)) >= 1;
+                                        } else {
+                                            return sortInfo.compare(value, getter(data)) <= -1;
+                                        }
+                                    };
+                                } else {
+                                    sortFilter = [selector, filterOperation, value];
+                                    if(!sortInfo.desc) {
+                                        sortFilter = [sortFilter, 'or', [selector, '=', null]];
+                                    }
                                 }
 
                                 filter = [sortFilter, 'or', filter];

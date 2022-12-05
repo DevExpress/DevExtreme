@@ -127,6 +127,7 @@ declare class DevicesObject {
  * @const devices
  * @namespace DevExpress
  * @hidden
+ * @public
  */
 
 declare const devices: DevicesObject;

@@ -5,6 +5,7 @@ import DateAdapter from './dateAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
+const MS_IN_MINUTE = 60000;
 
 const createUTCDateWithLocalOffset = date => {
     if(!date) {
@@ -118,7 +119,11 @@ const isSameAppointmentDates = (startDate, endDate) => {
 };
 
 const getClientTimezoneOffset = (date = new Date()) => {
-    return date.getTimezoneOffset() * 60000;
+    return date.getTimezoneOffset() * MS_IN_MINUTE;
+};
+
+const getDiffBetweenClientTimezoneOffsets = (firstDate = new Date(), secondDate = new Date()) => {
+    return getClientTimezoneOffset(firstDate) - getClientTimezoneOffset(secondDate);
 };
 
 const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
@@ -195,10 +200,8 @@ const getExtremeDates = () => {
 };
 
 const setOffsetsToDate = (targetDate, offsetsArray) => {
-    const dateCopy = new Date(targetDate);
-    const offsetToAdd = offsetsArray.reduce((result, offset) => result + offset, 0);
-    dateCopy.setMilliseconds(dateCopy.getMilliseconds() + offsetToAdd);
-    return dateCopy;
+    const newDateMs = offsetsArray.reduce((result, offset) => result + offset, targetDate.getTime());
+    return new Date(newDateMs);
 };
 
 const utils = {
@@ -211,6 +214,7 @@ const utils = {
     isSameAppointmentDates,
     correctRecurrenceExceptionByTimezone,
     getClientTimezoneOffset,
+    getDiffBetweenClientTimezoneOffsets,
 
     createUTCDateWithLocalOffset,
     createDateFromUTCWithLocalOffset,

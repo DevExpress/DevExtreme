@@ -72,7 +72,7 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
             });
         }
 
-        that.callBase($cell, options);
+        this.callBase.apply(this, arguments);
     },
 
     _columnOptionChanged(e) {

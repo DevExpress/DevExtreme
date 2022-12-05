@@ -197,6 +197,42 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($('#dataGrid').find('.dx-row.dx-selection').length, 2, 'isSelected rows');
     });
 
+    // T1109408
+    QUnit.test('Aria-selected should not present if selection.mode is none', function(assert) {
+        assert.expect(2);
+        // arrange
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ ID: 0 }, { ID: 1 }],
+            keyExpr: 'ID',
+            columns: ['ID'],
+            showBorders: true,
+            selection: { mode: 'none' },
+        });
+        // assert
+        $('.dx-data-row').each((ind, item) => assert.notOk(item.hasAttribute('aria-selected')));
+    });
+
+    // T1109728
+    QUnit.test('Row selection td-tags should not have aria-label attr, but its checkboxes should', function(assert) {
+        assert.expect(6);
+        // arrange
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ ID: 0 }, { ID: 1 }],
+            keyExpr: 'ID',
+            columns: ['ID'],
+            selection: { mode: 'multiple' },
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.notOk($('.dx-header-row .dx-command-select').get(0).hasAttribute('aria-label'));
+        assert.ok($('.dx-header-row .dx-select-checkbox').get(0).hasAttribute('aria-label'));
+
+        $('.dx-data-row .dx-command-select').each((ind, item) => assert.notOk(item.hasAttribute('aria-label')));
+        $('.dx-data-row .dx-select-checkbox').each((ind, item) => assert.ok(item.hasAttribute('aria-label')));
+    });
+
     // T489478
     QUnit.test('Console errors should not be occurs when stateStoring enabled with selectedRowKeys value', function(assert) {
         sinon.spy(errors, 'log');
@@ -431,6 +467,54 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible');
     });
 
+    QUnit.test('SelectAll checkbox should have correct value on page change when allowSelectAll is page and repaintChangesOnly is true (T1106649)', function(assert) {
+        const array = [];
+        let i = 100;
+        while(i--) {
+            array.push({ id: i });
+        }
+        const dataGrid = createDataGrid({
+            dataSource: array,
+            keyExpr: 'id',
+            repaintChangesOnly: true,
+            selection: {
+                mode: 'multiple',
+                selectAllMode: 'page',
+                showCheckboxesMode: 'always',
+            },
+            paging: {
+                pageSize: 10,
+            },
+        });
+
+        this.clock.tick();
+        const $dataGridElement = $(dataGrid.element());
+        const $selectAllElement = $dataGridElement.find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
+        const $checkboxElement = $(dataGrid.getCellElement(0, 0));
+
+        // act
+        $checkboxElement.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
+
+        // act
+        $dataGridElement.find('.dx-page').eq(1).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.notOk($selectAllElement.hasClass('dx-checkbox-indeterminate'));
+
+        // act
+        $dataGridElement.find('.dx-page').eq(0).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($selectAllElement.hasClass('dx-checkbox-indeterminate'));
+    });
+
+
     QUnit.test('Disabled item should be selected when single mode is enabled (T1015840)', function(assert) {
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1, disabled: false }, { id: 2, disabled: true }],
@@ -559,6 +643,41 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.deepEqual(selectedRowKeys, [1, 2], 'both rows are selected');
     });
+
+    QUnit.test('Selection should persist when triggering selection on an already selected row (T1105369)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{
+                'id': 1,
+            }, {
+                'id': 2,
+            }],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            onFocusedRowChanged: (e) => {
+                if(e.row) {
+                    e.component.selectRows([e.row.key], false);
+                }
+            },
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always'
+            },
+        });
+        this.clock.tick();
+
+        const $checkBox = $(dataGrid.getRowElement(0)).find('.dx-checkbox');
+        // act
+        $checkBox.trigger('dxclick');
+        this.clock.tick();
+        $checkBox.trigger('dxpointerdown');
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'row is selected');
+        assert.ok(dataGrid.isRowFocused(1), 'row is focused');
+    });
+
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {

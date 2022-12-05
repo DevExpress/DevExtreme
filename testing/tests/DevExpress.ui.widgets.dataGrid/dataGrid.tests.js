@@ -233,7 +233,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, assert
         const $buttons = pagerWrapper.getPagerButtonsElements();
         assert.equal($buttons.length, 2, 'buttons count');
-        $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), 0, `button ${index} tabindex`));
+        $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), -1, `button ${index} tabindex`));
     });
 
     // T892543
@@ -1340,6 +1340,27 @@ QUnit.module('Async render', baseModuleConfig, () => {
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
         assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
+    });
+
+    QUnit.test('Column auto width should be calculated after cell is rendered', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }],
+            columnAutoWidth: true,
+            width: 500,
+            columns: ['column1', {
+                dataField: 'id',
+                renderAsync: true,
+                cellTemplate: function(container) {
+                    $('<div>')
+                        .css('width', '300px')
+                        .text('text')
+                        .appendTo(container);
+                }
+            }, 'column2', 'column3']
+        });
+
+        this.clock.tick(100);
+        assert.ok($(dataGrid.getVisibleRows()[0].cells[1].cellElement).outerWidth() >= 300, 'cell content fits');
     });
 
     QUnit.test('showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false', function(assert) {

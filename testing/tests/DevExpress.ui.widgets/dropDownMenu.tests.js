@@ -170,8 +170,7 @@ const testRendering = function(usePopover) {
         });
 
         QUnit.test('correct wrapper classes should be set', function(assert) {
-            new DropDownMenu($('<div>').appendTo('#qunit-fixture'), {
-                opened: true,
+            const dropDownMenu = new DropDownMenu($('<div>').appendTo('#qunit-fixture'), {
                 usePopover: usePopover,
                 popupAnimation: {
                     show: {
@@ -182,6 +181,8 @@ const testRendering = function(usePopover) {
                     }
                 }
             });
+
+            dropDownMenu.option('opened', true);
         });
 
         QUnit.test('overlay should not overlap bottom button border', function(assert) {
@@ -351,9 +352,8 @@ QUnit.module('render', moduleConfig(), () => {
         const $dropDownMenu = $('#dropDownMenuSecond').dxDropDownMenu({
             opened: true
         });
-        const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
 
-        assert.ok(popoverInstance.option('visible'), 'popup is visible');
+        assert.strictEqual($dropDownMenu.find('.dx-popup').length, 1, 'popup is rendered');
     });
 
     QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {

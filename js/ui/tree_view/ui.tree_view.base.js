@@ -931,6 +931,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
 
             if(!items || !items.length) {
+                completionCallback.resolve();
                 return;
             }
 
@@ -1027,15 +1028,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _normalizeIconState: function($node, hasNewItems) {
         const $loadIndicator = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`);
-        $loadIndicator.length && LoadIndicator.getInstance($loadIndicator).option('visible', false);
+
+        if($loadIndicator.length) {
+            LoadIndicator.getInstance($loadIndicator)?.option('visible', false);
+        }
+
+        const $toggleItem = $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         if(hasNewItems) {
-            const $icon = $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
-            $icon.show();
+            $toggleItem.show();
             return;
         }
 
-        $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
+        $toggleItem.removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
         $node.addClass(IS_LEAF);
     },
 
@@ -1061,6 +1066,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const value = this._dataAdapter.isAllSelected();
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
+            tabIndex: 1,
             text: this.option('selectAllText'),
             onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
@@ -1361,11 +1367,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _focusInHandler: function(e) {
         this._updateFocusState(e, true);
 
-        if(this.option('focusedElement')) {
+        const isSelectAllItem = $(e.target).hasClass(SELECT_ALL_ITEM_CLASS);
+
+        if(isSelectAllItem || this.option('focusedElement')) {
             clearTimeout(this._setFocusedItemTimeout);
 
+            const element = isSelectAllItem ? getPublicElement(this._$selectAllItem) : $(this.option('focusedElement'));
+
             this._setFocusedItemTimeout = setTimeout(() => {
-                this._setFocusedItem($(this.option('focusedElement')));
+                this._setFocusedItem(element);
             });
 
             return;

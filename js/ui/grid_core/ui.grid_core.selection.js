@@ -660,7 +660,8 @@ export const selectionModule = {
                 },
                 _handleDataChanged: function(e) {
                     this.callBase(e);
-                    if(!e || e.changeType === 'refresh') {
+
+                    if(!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
                         this._updateSelectAllValue();
                     }
                 },
@@ -674,7 +675,7 @@ export const selectionModule = {
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 
-                    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), $container);
+                    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
 
                     that.getController('editorFactory').createEditor(groupElement, extend({}, column, {
                         parentType: 'headerRow',
@@ -723,7 +724,6 @@ export const selectionModule = {
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 
-                        this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), $container);
                         this._renderSelectCheckBox($container, options);
                     } else {
                         gridCoreUtils.setEmptyText($container);
@@ -734,6 +734,8 @@ export const selectionModule = {
                     const groupElement = $('<div>')
                         .addClass(SELECT_CHECKBOX_CLASS)
                         .appendTo(container);
+
+                    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), groupElement);
 
                     this.getController('editorFactory').createEditor(groupElement, extend({}, options.column, {
                         parentType: 'dataRow',
@@ -837,7 +839,11 @@ export const selectionModule = {
                         if(isSelected) {
                             $row.addClass(ROW_SELECTION_CLASS);
                         }
-                        this.setAria('selected', isSelected, $row);
+
+                        const selectionMode = this.option(SELECTION_MODE);
+                        if(selectionMode !== 'none') {
+                            this.setAria('selected', isSelected, $row);
+                        }
                     }
 
                     return $row;

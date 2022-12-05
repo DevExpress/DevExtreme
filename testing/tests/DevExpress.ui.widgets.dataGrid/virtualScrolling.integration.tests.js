@@ -9,6 +9,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'animation/translator';
+import dataUtils from 'core/element_data';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
@@ -35,6 +36,13 @@ const generateDataSource = function(count) {
 
 QUnit.testStart(function() {
     const markup = `
+        <style>\
+            .qunit-fixture-static {\
+                position: absolute !important;\
+                left: 0 !important;\
+                top: 0 !important;\
+            }\
+        </style>\
         <div id="dataGrid"></div>
     `;
 
@@ -2534,11 +2542,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 useNative: false
             }
         });
+        this.clock.tick(300);
+
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
 
         scrollable.scrollTo({ y: 1440 });
+        this.clock.tick(300);
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2551,12 +2562,12 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const resizeController = instance.getController('columnsResizer');
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 1 };
-        resizeController._setupResizingInfo(-9900);
+        resizeController._setupResizingInfo(-9800);
         resizeController._moveSeparator({
             event: {
                 data: resizeController,
                 type: 'mousemove',
-                pageX: -9600,
+                pageX: -9500,
                 preventDefault: commonUtils.noop
             }
         });
@@ -2565,13 +2576,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
+        this.clock.tick(300);
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
-        assert.strictEqual(instance.getTopVisibleRowData().name, 'name40', 'top visible row is changed');
+        assert.strictEqual(instance.pageIndex(), 19, 'current page index is changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name39', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
-        assert.strictEqual(instance.getVisibleRows().length, 6, 'row count');
+        assert.strictEqual(instance.getVisibleRows().length, 5, 'row count');
         // T835869
         assert.strictEqual(loadingSpy.callCount, 1, 'data is loaded once');
     });
@@ -4466,6 +4478,114 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows().length, 2, 'only first page items are visible');
     });
 
+    // T1100018
+    [true, false].forEach((useNative) => {
+        QUnit.test(`New mode with scrolling.useNative = ${useNative}. The detail row should not be re-rendered when switching the tab bar that is inside the detail row`, function(assert) {
+            // arrange
+            const items = generateDataSource(100);
+
+            const dataGrid = createDataGrid({
+                height: 600,
+                dataSource: items,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'virtual',
+                    useNative
+                },
+                masterDetail: {
+                    enabled: true,
+                    template: () => $('<div class=\'my-tabpanel\' />').dxTabPanel({
+                        items: [{
+                            title: 'Tab 1',
+                            template: () => $('<div/>').height(400),
+                        }, {
+                            title: 'Tab 2',
+                            template: () => $('<div/>').height(200),
+                        }],
+                    }),
+                }
+            });
+
+            this.clock.tick(300);
+
+            // act
+            dataGrid.getScrollable().scrollTo({ top: 5000 });
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            let visibleRows = dataGrid.getVisibleRows();
+            assert.strictEqual(visibleRows[visibleRows.length - 1].key, 100, 'last row with key = 100');
+
+            // act
+            dataGrid.expandRow(100);
+            this.clock.tick(300);
+
+            dataGrid.getScrollable().scrollTo({ top: 5000 });
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            visibleRows = dataGrid.getVisibleRows();
+            assert.strictEqual(visibleRows[visibleRows.length - 1].rowType, 'detail', 'last row - detail row');
+
+            const $detailRow = $(dataGrid.getRowElement(visibleRows.length - 1));
+            let tabPanel = dataUtils.data($detailRow.find('.my-tabpanel').get(0), 'dxTabPanel');
+            assert.ok(tabPanel, 'there is a tab panel inside a detail row');
+            assert.strictEqual(tabPanel.option('selectedIndex'), 0, 'tab panel - selected index');
+
+            // act
+            tabPanel.option('selectedIndex', 1);
+            $(dataGrid.getScrollable().container()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            tabPanel = dataUtils.data($(dataGrid.getRowElement(visibleRows.length - 1)).find('.my-tabpanel').get(0), 'dxTabPanel');
+            assert.strictEqual($detailRow.get(0), $(dataGrid.getRowElement(visibleRows.length - 1)).get(0), 'detail row is not re-rendered');
+            assert.strictEqual(tabPanel.option('selectedIndex'), 1, 'tab panel - selected index');
+        });
+    });
+
+    QUnit.test('New mode. The updateDimensions method should be called when expanding the nested grid', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            height: 600,
+            dataSource: items,
+            paging: {
+                pageSize: 15,
+            },
+            scrolling: {
+                mode: 'virtual'
+            },
+            masterDetail: {
+                enabled: true,
+                template: (container) => $('<div>').appendTo(container).dxDataGrid({
+                    columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+                    columnFixing: { enabled: true },
+                    columnAutoWidth: true,
+                    keyExpr: 'id',
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }).dxDataGrid('instance')
+            }
+        });
+
+        this.clock.tick(300);
+
+        sinon.spy(dataGrid, 'updateDimensions');
+
+        // assert
+        assert.strictEqual(dataGrid.updateDimensions.callCount, 0, 'number of the updateDimensions method calls');
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual(dataGrid.updateDimensions.callCount, 1, 'number of the updateDimensions method calls');
+    });
+
     // T996914
     QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
         // arrange
@@ -5661,9 +5781,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 7; i++) {
             dataGrid.getScrollable().scrollTo({ top: 16000000 });
-            this.clock.tick();
+            this.clock.tick(300);
         }
         const visibleRows = dataGrid.getVisibleRows();
         const $fixedTable = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-datagrid-content-fixed .dx-datagrid-table-fixed');
@@ -5826,6 +5946,402 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.ok(true, 'no errors');
+    });
+
+    // T1109722
+    [true, false].forEach((useNative) => {
+        QUnit.test(`Virtual scrolling should correctly scroll to the last page on initialization, useNative = ${useNative} (T1109722)`, function(assert) {
+            // arrange
+            const items = generateDataSource(183);
+
+            const dataGrid = createDataGrid({
+                height: 375,
+                dataSource: items,
+                keyExpr: 'id',
+                scrolling: {
+                    mode: 'virtual',
+                    useNative
+                },
+                paging: {
+                    pageSize: 10,
+                    pageIndex: 18
+                },
+                pager: { visible: true }
+
+            });
+
+            this.clock.tick(300);
+
+            $(dataGrid.getScrollable().content()).trigger('scroll');
+            this.clock.tick(300);
+
+            // assert
+            let visibleRows = dataGrid.getVisibleRows();
+
+            assert.strictEqual(visibleRows[visibleRows.length - 1].key, 183, 'last row is correct');
+
+            // act;
+            dataGrid.option('paging.pageIndex', 15);
+            $(dataGrid.getScrollable().content()).trigger('scroll');
+            this.clock.tick(300);
+            //
+            //
+            // assert
+            visibleRows = dataGrid.getVisibleRows();
+            assert.strictEqual(dataGrid.option('paging.pageIndex'), 15, 'pageIndex via options ');
+            assert.strictEqual(visibleRows[0].key, 150, 'first row is correct');
+        });
+    });
+
+    // T1115547
+    QUnit.test('Virtual columns in combination with fixed columns and stateStoring (T1115547)', function(assert) {
+        createDataGrid({
+            dataSource: generateDataSource(100),
+            columns: [
+                { dataField: 'firstName', dataType: 'string', width: 100 },
+                { dataField: 'lastName', dataType: 'string', width: 200 },
+                { name: 'fixedColumns', width: 70, fixed: true, fixedPosition: 'right' },
+            ],
+            stateStoring: {
+                enabled: true,
+                storageKey: 'datagridState',
+                type: 'localStorage'
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                mode: 'virtual'
+            }
+        });
+
+
+        this.clock.tick(1000);
+
+
+        assert.ok(true, 'no errors');
+    });
+
+    // T1119514
+    QUnit.test('DataGrid should not remove two rows on remove button click with virtual scrolling and many pages', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: generateDataSource(30),
+            keyExpr: 'id',
+            height: 200,
+            editing: {
+                allowDeleting: true,
+                confirmDelete: false,
+                refreshMode: 'repaint',
+            },
+            scrolling: {
+                mode: 'virtual'
+            }
+        });
+
+        this.clock.tick(1000);
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        const lastRowKey = 30;
+        dataGrid.navigateToRow(lastRowKey);
+        this.clock.tick();
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick();
+
+        dataGrid.deleteRow(dataGrid.getRowIndexByKey(lastRowKey));
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'before scroll');
+
+        // act
+        // scroll is triggered cause content's height is changed
+        // totalCount should be correct both before scroll (before data loading) and after
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.totalCount(), lastRowKey - 1, 'after scroll');
+    });
+
+    // T1111033
+    QUnit.test('DataGrid should load all rows if pageSize is less than window and repaint mode is turned on', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+            },
+            height: 500,
+            editing: {
+                refreshMode: 'repaint',
+            },
+            paging: {
+                pageSize: 5
+            },
+        });
+
+        this.clock.tick(300);
+
+        const visibleRows = dataGrid.getVisibleRows();
+
+        assert.strictEqual(visibleRows.length, 15);
+    });
+
+    // T1117552
+    QUnit.test('Virtual columns - update fixed table partially when there are fixed and grouped columns', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data[i] = { groupField: i % 2 === 0 ? 'group1' : 'group2' };
+
+            for(let j = 0; j < 100; j++) {
+                data[i][`field_${j}`] = `0-${j + 1}`;
+            }
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 600,
+            dataSource: data,
+            columnFixing: {
+                enabled: true
+            },
+            customizeColumns(columns) {
+                columns[0].groupIndex = 0;
+                columns[0].fixed = true;
+                columns[1].fixed = true;
+                columns[99].fixed = true;
+                columns[99].fixedPosition = 'right';
+            },
+            columnWidth: 100,
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+        const columnOffset = 93;
+        const fixedColumnCount = 3;
+
+        // act
+        dataGrid.getScrollable().scrollTo({ x: 10000 });
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
+
+        const $fixedGroupCells = $(dataGrid.getRowElement(0)).eq(1).children();
+        assert.equal($fixedGroupCells.eq(0).attr('aria-colindex'), columnOffset, 'first cell of the first row: aria-colindex');
+        assert.equal($fixedGroupCells.eq(1).attr('colspan'), dataGrid.getVisibleColumns().length - 1, 'second cell of the first row: colspan');
+
+        const $fixedCells = $(dataGrid.getRowElement(1)).eq(1).children();
+        assert.equal($fixedCells.eq(0).attr('aria-colindex'), columnOffset, 'first fixed cell of the second row: aria-colindex');
+        assert.equal($fixedCells.eq(2).attr('colspan'), dataGrid.getVisibleColumns().length - fixedColumnCount, 'third fixed cell of the second row: colspan');
+        assert.equal($fixedCells.eq(3).attr('aria-colindex'), columnOffset + dataGrid.getVisibleColumns().length - 1, 'fourth fixed cell of the second row: aria-colindex');
+    });
+
+    // T1117552
+    QUnit.test('Virtual columns - update fixed table partially when there are group summary, fixed and grouped columns', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data[i] = { groupField: i % 2 === 0 ? 'group1' : 'group2' };
+
+            for(let j = 0; j < 100; j++) {
+                data[i][`field_${j}`] = `0-${j + 1}`;
+            }
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 600,
+            dataSource: data,
+            columnFixing: {
+                enabled: true
+            },
+            customizeColumns(columns) {
+                columns[0].groupIndex = 0;
+                columns[0].fixed = true;
+                columns[1].fixed = true;
+                columns[99].fixed = true;
+                columns[99].fixedPosition = 'right';
+            },
+            columnWidth: 100,
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                useNative: false
+            },
+            summary: {
+                groupItems: [{
+                    column: 'field_0',
+                    summaryType: 'count',
+                    alignByColumn: true
+                }]
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+        const columnOffset = 93;
+        const fixedColumnCount = 3;
+
+        // act
+        dataGrid.getScrollable().scrollTo({ x: 10000 });
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
+
+        const $fixedGroupCells = $(dataGrid.getRowElement(0)).eq(1).children();
+        assert.equal($fixedGroupCells.eq(0).attr('aria-colindex'), columnOffset, 'first cell of the first row: aria-colindex');
+        assert.equal($fixedGroupCells.eq(1).attr('colspan'), dataGrid.getVisibleColumns().length - 2, 'second cell of the first row: colspan');
+        assert.equal($fixedGroupCells.eq(2).attr('aria-colindex'), columnOffset + dataGrid.getVisibleColumns().length - 1, 'third cell of the first row: aria-colindex');
+
+        const $fixedCells = $(dataGrid.getRowElement(1)).eq(1).children();
+        assert.equal($fixedCells.eq(0).attr('aria-colindex'), columnOffset, 'first fixed cell of the second row: aria-colindex');
+        assert.equal($fixedCells.eq(2).attr('colspan'), dataGrid.getVisibleColumns().length - fixedColumnCount, 'third fixed cell of the second row: colspan');
+        assert.equal($fixedCells.eq(3).attr('aria-colindex'), columnOffset + dataGrid.getVisibleColumns().length - 1, 'fourth fixed cell of the second row: aria-colindex');
+    });
+
+    // T1117552
+    QUnit.test('Virtual columns - update fixed table partially when there are master detail and fixed columns', function(assert) {
+        // arrange, act
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data[i] = { id: i };
+
+            for(let j = 0; j < 100; j++) {
+                data[i][`field_${j}`] = `0-${j + 1}`;
+            }
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 600,
+            dataSource: data,
+            keyExpr: 'id',
+            columnFixing: {
+                enabled: true
+            },
+            customizeColumns(columns) {
+                columns[0].fixed = true;
+                columns[1].fixed = true;
+                columns[99].fixed = true;
+                columns[99].fixedPosition = 'right';
+            },
+            columnWidth: 100,
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                useNative: false
+            },
+            masterDetail: {
+                enabled: true
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.expandRow(0);
+        this.clock.tick();
+
+        // assert
+        let $detailRow = $(dataGrid.getRowElement(1)).eq(1);
+        assert.ok($detailRow.hasClass('dx-master-detail-row'), 'master detail row');
+        assert.equal($detailRow.children().first().attr('colspan'), dataGrid.getVisibleColumns().length, 'master detail cell: colspan');
+
+        // arrange
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+
+        // act
+        dataGrid.getScrollable().scrollTo({ x: 10000 });
+        this.clock.tick();
+
+        // assert
+        $detailRow = $(dataGrid.getRowElement(1)).eq(1);
+        assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'fixed cell is not rerendered');
+        assert.ok($detailRow.hasClass('dx-master-detail-row'), 'master detail row');
+        assert.equal($detailRow.children().first().attr('colspan'), dataGrid.getVisibleColumns().length, 'master detail cell: colspan');
+    });
+
+    // T1124157
+    QUnit.test('Virtual rows should render correctly after horizontal scrolling when cellTemplate is set', function(assert) {
+        if(devices.real().ios || ('callPhantom' in window)) {
+            assert.ok(true);
+            return;
+        }
+        // arrange
+        $('#qunit-fixture').addClass('qunit-fixture-static');
+
+        try {
+            const data = [];
+
+            for(let i = 0; i < 100; i++) {
+                data[i] = { id: i };
+
+                for(let j = 0; j < 20; j++) {
+                    data[i][`field_${j}`] = `0-${j + 1}`;
+                }
+            }
+
+            const cellHeight = 100;
+            const dataGrid = createDataGrid({
+                loadingTimeout: null,
+                dataSource: data,
+                columnMinWidth: 100,
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                },
+                customizeColumns: (columns) => {
+                    columns[2].cellTemplate = (container, options) => {
+                        $(container).append(`<div style="height: ${cellHeight}px">${options.data.id}</div>`);
+                    };
+                }
+            });
+
+            // act
+            $(window).scrollTop(2000);
+            $(window).trigger('scroll');
+            this.clock.tick(500);
+
+            // assert
+            let $virtualRows = $(dataGrid.element()).find('.dx-virtual-row');
+            assert.strictEqual($virtualRows.length, 2, 'virtual row count');
+
+            const firstVirtualRowHeight = getHeight($virtualRows.first());
+            const lastVirtualRowHeight = getHeight($virtualRows.last());
+
+            // act
+            const scrollable = dataGrid.getScrollable();
+            scrollable.scrollTo({ x: 300 });
+            $(scrollable.container()).triggerHandler('scroll');
+            this.clock.tick(500);
+
+            // assert
+            $virtualRows = $(dataGrid.element()).find('.dx-virtual-row');
+            assert.strictEqual($virtualRows.length, 2, 'virtual row count');
+            assert.strictEqual(getHeight($virtualRows.first()), firstVirtualRowHeight, 'height of the first virtual row');
+            assert.strictEqual(getHeight($virtualRows.last()), lastVirtualRowHeight, 'height of the last virtual row');
+        } finally {
+            $('#qunit-fixture').removeClass('qunit-fixture-static');
+        }
     });
 });
 

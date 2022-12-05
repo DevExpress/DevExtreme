@@ -126,3 +126,47 @@ QUnit.module('percent', moduleConfig, () => {
         });
     });
 });
+
+QUnit.module('exponential format', moduleConfig, () => {
+    [
+        { value: 1, text: '1.0E+0' },
+        { value: 0, text: '0.0E+0' },
+        { value: 11, text: '1.1E+1' },
+        { value: 11111111111, text: '1.1E+10' },
+        { value: 10000000000, text: '1.0E+10' },
+        { value: -10000000000, text: '-1.0E+10' },
+        { value: 0.0000000001, text: '1.0E-10' },
+        { value: -0.0000000001, text: '-1.0E-10' },
+    ].forEach(({ text, value }) => {
+        QUnit.test(`should correctly handle value, value: ${value} (T1105915)`, function(assert) {
+            this.instance.option({
+                value,
+                format: 'exponential'
+            });
+
+            assert.strictEqual(this.$input.val(), text, 'text is correct');
+            assert.strictEqual(this.instance.option('value'), value, 'value is correct');
+        });
+    });
+
+    [
+        { value: 1, text: '1.00000E+0', precision: 5 },
+        { value: 12345000000, text: '1.23450E+10', precision: 5 },
+        { value: -12345000000, text: '-1.23E+10', precision: 2 },
+        { value: 0.00000000012345, text: '1.23450E-10', precision: 5 },
+        { value: -0.00000000012345, text: '-1E-10', precision: 0 },
+    ].forEach(({ text, value, precision }) => {
+        QUnit.test(`should correctly handle value if precision is specified, value: ${value}, precision: ${precision}`, function(assert) {
+            this.instance.option({
+                value,
+                format: {
+                    type: 'exponential',
+                    precision
+                }
+            });
+
+            assert.strictEqual(this.$input.val(), text, 'text is correct');
+            assert.strictEqual(this.instance.option('value'), value, 'value is correct');
+        });
+    });
+});

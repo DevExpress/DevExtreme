@@ -35,11 +35,11 @@ QUnit.testStart(() => {
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
-const LIST_CKECKBOX_CLASS = 'dx-list-select-checkbox';
+const LIST_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
-const TEXTBOX_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
@@ -309,7 +309,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('1');
@@ -466,8 +466,8 @@ QUnit.module('tags', moduleSetup, () => {
 
         const renderTagsStub = sinon.stub(tagBox, '_renderTags');
 
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusin');
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusout');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusin');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusout');
 
         assert.equal(renderTagsStub.callCount, 0, 'tags weren\'t rerendered');
     });
@@ -479,7 +479,7 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $($input).trigger('dxclick');
         $($input).trigger('blur');
 
@@ -959,7 +959,7 @@ QUnit.module('multi tag support', {
             showSelectionControls: true
         });
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal($tagBox.dxTagBox('option', 'value').length, 5, 'first page is selected');
@@ -1074,7 +1074,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.type('i');
@@ -1098,7 +1098,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('i');
@@ -1118,7 +1118,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('i');
@@ -1138,7 +1138,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -1300,7 +1300,7 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
             onValueChanged: spy
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).press('backspace');
         assert.notOk(spy.called, 'onValueChanged is not fired');
@@ -1554,7 +1554,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
-        const checkbox = $listItems.eq(0).find(`.${LIST_CKECKBOX_CLASS}`).dxCheckBox('instance');
+        const checkbox = $listItems.eq(0).find(`.${LIST_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
@@ -1881,7 +1881,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         $tagBox.dxTagBox('option', 'opened', true);
         this.clock.tick(TIME_TO_WAIT);
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), items, 'items is selected');
@@ -1918,7 +1918,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         assert.equal(fired, 0, 'event was not fired');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         assert.equal(fired, 1, 'event fired once');
     });
 
@@ -1932,7 +1932,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         assert.deepEqual(tagBox.option('value'), [], 'value is an empty array');
     });
 
@@ -1986,9 +1986,9 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             opened: true
         });
 
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusin');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusin');
         $('.dx-list-item').first().trigger('dxclick');
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusout');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusout');
 
         assert.equal($tagBox.find('.dx-tag').length, 1, 'tag is present');
     });
@@ -2014,7 +2014,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             opened: true
         });
 
-        const selectAllCheck = $('.dx-list-select-all-checkbox').dxCheckBox('instance');
+        const selectAllCheck = $(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
         assert.equal(selectAllCheck.option('value'), true, 'the \'select all\' checkbox is checked');
     });
 
@@ -2159,7 +2159,7 @@ QUnit.module('keyboard navigation', {
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find('.' + TEXTBOX_CLASS);
+            this.$input = this.$element.find('.' + TEXTEDITOR_INPUT_CLASS);
             this.keyboard = keyboardMock(this.$input);
         };
 
@@ -2591,7 +2591,7 @@ QUnit.module('keyboard navigation through tags', {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             this.keyboard = keyboardMock(this.$input, true);
 
             this.getTags = () => {
@@ -3169,7 +3169,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
             this.init = (options) => {
                 this.$element = $('#tagBox').dxTagBox(options);
-                this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
+                this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 this.keyboard = keyboardMock(this.$input);
                 this.instance = this.$element.dxTagBox('instance');
             };
@@ -3299,7 +3299,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('te');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3318,7 +3318,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         this.clock.tick();
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('Lon');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3338,7 +3338,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             width: 1000
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const inputLeft = $input.offset().left;
 
         $tagBox.dxTagBox('option', 'value', ['Moscow']);
@@ -3352,7 +3352,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const inputWidth = $input.width();
 
         keyboardMock($input).type('test text');
@@ -3368,7 +3368,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             });
 
             const text = 'wwwwwwwwwwwwwwwwwwww';
-            const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+            const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             $input.css('padding', '0 10px');
 
             keyboardMock($input).type(text);
@@ -3388,11 +3388,11 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             items: ['test1', 'test2']
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const initInputWidth = $input.width();
 
         $tagBox.dxTagBox('option', 'value', ['test1']);
-        assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
+        assert.roughEqual($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
     });
 
     QUnit.test('space entering should increase input element size (T923429)', function(assert) {
@@ -3401,7 +3401,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const text = '123456789          ';
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type(text);
@@ -3411,7 +3411,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             .appendTo('#qunit-fixture');
         const textWidth = getWidth($inputCopy);
 
-        const currentWidth = getWidth($tagBox.find(`.${TEXTBOX_CLASS}`));
+        const currentWidth = getWidth($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
         assert.ok(currentWidth > textWidth, `input width (${currentWidth}) should be grester then input text width (${textWidth})`);
         $inputCopy.remove();
     });
@@ -3422,7 +3422,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: false
         });
 
-        const input = $tagBox.find(`.${TEXTBOX_CLASS}`).get(0);
+        const input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0);
         const { width: inputWidth } = input.getBoundingClientRect();
 
         // NOTE: width should be 0.1 because of T393423
@@ -3435,7 +3435,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             placeholder: 'placeholder'
         });
 
-        keyboardMock($tagBox.find(`.${TEXTBOX_CLASS}`)).type('test');
+        keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).type('test');
 
         const $placeholder = $tagBox.find('.dx-placeholder');
 
@@ -3451,7 +3451,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -3472,7 +3472,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('3');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3519,7 +3519,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('3');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3541,7 +3541,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox('instance');
 
         const $removeTag = $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`);
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const pointer = pointerMock($removeTag).start().down();
         $($input).trigger('blur');
@@ -3593,7 +3593,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press('backspace');
@@ -3628,7 +3628,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal(loadedCount, 1, 'data source loaded data');
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press('backspace');
@@ -3647,7 +3647,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('It');
@@ -3667,7 +3667,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const searchValue = '123';
 
         $input.val(searchValue);
@@ -3684,7 +3684,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('one');
         $('.dx-list-item').eq(0).trigger('dxclick');
@@ -3701,7 +3701,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('one');
         $('.dx-list-item').eq(0).trigger('dxclick');
@@ -3718,7 +3718,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const searchValue = '123';
 
         $input.val(searchValue);
@@ -3737,7 +3737,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
 
         instance.focus();
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('123');
         instance.blur();
@@ -3753,7 +3753,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('1');
 
         $($input).trigger('change');
@@ -3773,7 +3773,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             deferRendering: true
         });
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
 
@@ -3799,7 +3799,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
         const handlerStub = sinon.stub(instance._popup, 'repaint');
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type('American Samo');
@@ -3838,7 +3838,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const { top: initialTop } = popupContent.offset();
 
         $element
-            .find(`.${TEXTBOX_CLASS}`)
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
             .val('testtesttesttest')
             .trigger('input');
 
@@ -3877,21 +3877,21 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             minSearchLength: 2
         });
         const instance = $element.dxTagBox('instance');
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         instance.open();
         const $popupWrapper = $(instance.content()).parents(`.${TAGBOX_POPUP_WRAPPER_CLASS}`);
 
         keyboard.type('aa');
-        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(0).trigger('dxclick');
+        $popupWrapper.find(`.${LIST_CHECKBOX_CLASS}`).eq(0).trigger('dxclick');
         $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         instance.close();
         instance.open();
 
         keyboard.type('aa');
-        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(1).trigger('dxclick');
+        $popupWrapper.find(`.${LIST_CHECKBOX_CLASS}`).eq(1).trigger('dxclick');
         $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(instance.option('selectedItems').length, 2);
@@ -3976,7 +3976,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             showDropDownButton: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $dropDownButton = $tagBox.find('.dx-dropdowneditor-button');
         $dropDownButton.click();
 
@@ -3997,7 +3997,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox('instance');
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('1');
         $('.dx-list-item').trigger('dxclick');
@@ -4174,7 +4174,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4208,7 +4208,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4247,7 +4247,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4280,7 +4280,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4316,7 +4316,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('search');
 
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4349,7 +4349,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
-        const $selectAllCheckbox = $(tagBox._list.$element().find('.dx-list-select-all-checkbox').eq(0));
+        const $selectAllCheckbox = $(tagBox._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).eq(0));
         $selectAllCheckbox.trigger('dxclick');
         $selectAllCheckbox.trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 4);
@@ -4379,7 +4379,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('item');
 
@@ -4496,7 +4496,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
         const height = getHeight(instance._popup._$popupContent);
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type('American Samo');
@@ -4539,7 +4539,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
             }
         });
 
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('dxclick');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         const $popup = $('.dx-popup-content');
@@ -4578,7 +4578,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
         });
         this.clock.tick(2000);
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type('Z');
@@ -4624,7 +4624,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type('test');
@@ -4646,7 +4646,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         keyboard.press('enter');
 
@@ -4658,7 +4658,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .type('custom')
@@ -4672,7 +4672,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true,
             items: [1, 2, 3]
         });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const tagBoxInstance = $tagBox.dxTagBox('instance');
 
         keyboardMock($input)
@@ -4781,12 +4781,12 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         tagBox.option('opened', true);
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-        $(`.${LIST_CKECKBOX_CLASS}`).first().trigger('dxclick');
+        $(`.${LIST_CHECKBOX_CLASS}`).first().trigger('dxclick');
         $('.dx-tag-remove-button').last().trigger('dxclick');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         assert.equal(selectedItems.length, 6, 'All items should be selected');
     });
@@ -5084,7 +5084,7 @@ QUnit.module('options changing', moduleSetup, () => {
             tagBox.option(optionName, true);
             tagBox.option(optionName, false);
 
-            keyboardMock($element.find(`.${TEXTBOX_CLASS}`))
+            keyboardMock($element.find(`.${TEXTEDITOR_INPUT_CLASS}`))
                 .focus()
                 .keyDown('backspace');
 
@@ -5298,14 +5298,14 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             opened: true
         });
 
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $doneButton = $('.dx-button.dx-popup-done');
 
         keyboardMock($input)
             .focus()
             .type('c');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         $($input).trigger($.Event('focusout', { relatedTarget: $doneButton.get(0) }));
         $doneButton.trigger('dxclick');
@@ -5323,7 +5323,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             opened: true
         });
 
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -5490,7 +5490,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('aaa');
@@ -5498,7 +5498,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         let $popupWrapper = $(tagBox.content()).parent().parent();
 
-        $popupWrapper.find('.dx-list-select-all-checkbox').trigger('dxclick');
+        $popupWrapper.find(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         $popupWrapper.find('.dx-popup-done.dx-button').trigger('dxclick');
 
         keyboard.type('bbb');
@@ -5506,7 +5506,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $popupWrapper = $(tagBox.content()).parent().parent();
 
-        $popupWrapper.find('.dx-list-select-all-checkbox').trigger('dxclick');
+        $popupWrapper.find(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         $popupWrapper.find('.dx-popup-done.dx-button').trigger('dxclick');
 
         assert.deepEqual($tagBox.dxTagBox('instance').option('value'), [0, 1], 'value of TagBox');
@@ -5547,7 +5547,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
     }
 }, () => {
     QUnit.test('the \'onSelectAllValueChanged\' option behavior', function(assert) {
-        const $selectAllCheckbox = this.instance._list.$element().find('.dx-list-select-all-checkbox');
+        const $selectAllCheckbox = this.instance._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
 
         $($selectAllCheckbox).trigger('dxclick');
         assert.ok(this.spy.args[this.spy.args.length - 1][0].value, 'all items are selected');
@@ -5558,7 +5558,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
 
     QUnit.test('the \'onSelectAllValueChanged\' action is fired only one time if all items are selected', function(assert) {
         const $list = this.instance._list.$element();
-        $($list.find('.dx-list-select-all-checkbox')).trigger('dxclick');
+        $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
@@ -5569,7 +5569,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
 
         const $list = this.instance._list.$element();
-        $($list.find('.dx-list-select-all-checkbox')).trigger('dxclick');
+        $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
@@ -5600,7 +5600,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
 
         const $list = this.instance._list.$element();
-        const $selectAllElement = $($list.find('.dx-list-select-all-checkbox'));
+        const $selectAllElement = $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`));
         $selectAllElement.trigger('dxclick');
         assert.equal(this.spy.callCount, 0, 'count is correct');
 
@@ -5641,7 +5641,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
             animation: null
         });
 
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('1').change();
 
         this.clock.tick(loadTimeout);
@@ -5691,10 +5691,10 @@ QUnit.module('single line mode', {
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
 
         this.instance.option('value', this.items);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should not be scrolled to the end on value change without focus (T865611)', function(assert) {
@@ -5774,7 +5774,7 @@ QUnit.module('single line mode', {
         }));
 
         this.$element
-            .find('.dx-tag-container')
+            .find(`.${TAGBOX_TAG_CONTAINER_CLASS}`)
             .scrollLeft(1000);
 
         $(this.$element).trigger($.Event('dxmousewheel', {
@@ -5837,7 +5837,7 @@ QUnit.module('single line mode', {
 
     QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout (T390041)', function(assert) {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($container.scrollLeft(), 0, 'scroll position is correct on rendering');
 
@@ -5852,7 +5852,7 @@ QUnit.module('single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('list should save it\'s scroll position after value changed', function(assert) {
@@ -5918,12 +5918,25 @@ QUnit.module('single line mode', {
             assert.ok(e.isDefaultPrevented(), 'mousedown was prevented and lead to focusout prevent');
         });
 
+        this.instance.focus();
         $inputWrapper.trigger('mousedown');
     });
 
     QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
         const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $inputWrapper.on('mousedown', e => {
+            assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
+        });
+
+        this.instance.focus();
+        $input.trigger('mousedown');
+    });
+
+    QUnit.test('mousedown should not be prevented on first focusin (T1102475)', function(assert) {
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $inputWrapper.on('mousedown', e => {
             assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
@@ -5954,7 +5967,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox('instance');
-            this.keyboard = keyboardMock(this.$element.find(`.${TEXTBOX_CLASS}`));
+            this.keyboard = keyboardMock(this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`));
             this.getFocusedTag = () => {
                 return this.$element.find('.' + TAGBOX_TAG_CLASS + '.' + FOCUSED_CLASS);
             };
@@ -6247,7 +6260,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             opened: true,
             searchEnabled: true
         });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('4');
@@ -6288,7 +6301,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const kb = keyboardMock($tagBox.find(`.${TEXTBOX_CLASS}`));
+        const kb = keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
 
         tagBox.open();
         assert.notOk(load.called, 'load has not been called');
@@ -6568,48 +6581,69 @@ QUnit.module('performance', () => {
         assert.deepEqual(filter, null, 'filter is correct');
     });
 
-    QUnit.test('Select All should use cache', function(assert) {
-        const items = [];
-        let keyGetterCounter = 0;
+    QUnit.module('item getter call count on selection change', {
+        // NOTE: If some of this tests is failed it can mean that selection performance worsens.
+        //       Don't consider these tests as a strict requirement.
+        beforeEach: function() {
+            this.items = [];
+            let keyGetterCallCount = 0;
 
-        const getter = () => {
-            keyGetterCounter++;
-            return this._id;
-        };
-        for(let i = 1; i <= 100; i++) {
-            const item = { _id: i, text: 'item ' + i };
-            Object.defineProperty(item, 'id', {
-                get: getter,
-                enumerable: true,
-                configurable: true
+            const getter = function() {
+                keyGetterCallCount++;
+                return this._id;
+            };
+            for(let i = 1; i <= 100; i++) {
+                const item = { _id: i, text: 'item ' + i };
+                Object.defineProperty(item, 'id', {
+                    get: getter,
+                    enumerable: true,
+                    configurable: true
+                });
+                this.items.push(item);
+            }
+
+            const arrayStore = new ArrayStore({
+                data: this.items,
+                key: 'id'
             });
-            items.push(item);
-        }
 
-        const arrayStore = new ArrayStore({
-            data: items,
-            key: 'id'
+            this.tagBox = $('#tagBox').dxTagBox({
+                dataSource: arrayStore,
+                valueExpr: 'id',
+                opened: true,
+                showSelectionControls: true,
+                selectionMode: 'all',
+                selectAllMode: 'allPages',
+                displayExpr: 'text'
+            }).dxTagBox('instance');
+
+            this.getValueGetterCallCount = () => {
+                return keyGetterCallCount;
+            };
+            this.resetGetterCallCount = () => {
+                keyGetterCallCount = 0;
+            };
+        }
+    }, () => {
+        QUnit.test('on select all', function(assert) {
+            const isValueEqualsSpy = sinon.spy(this.tagBox, '_isValueEquals');
+
+            this.resetGetterCallCount();
+            $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
+
+            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
+            assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
-        const tagBox = $('#tagBox').dxTagBox({
-            dataSource: arrayStore,
-            valueExpr: 'id',
-            opened: true,
-            showSelectionControls: true,
-            selectionMode: 'all',
-            selectAllMode: 'allPages',
-            displayExpr: 'text'
-        }).dxTagBox('instance');
+        QUnit.test('on one item deselect after select all', function(assert) {
+            this.tagBox.option('value', this.items.map(item => item._id));
 
-        const isValueEqualsSpy = sinon.spy(tagBox, '_isValueEquals');
+            this.resetGetterCallCount();
+            const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
+            checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-        // act
-        keyGetterCounter = 0;
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
-
-        // assert
-        assert.equal(keyGetterCounter, 512, 'key getter call count');
-        assert.equal(isValueEqualsSpy.callCount, 1, '_isValueEquals call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6052, 'key getter call count');
+        });
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {
@@ -7006,7 +7040,7 @@ QUnit.module('regression', {
 
         $(getList(tagBox).find('.dx-list-item').eq(0)).trigger('dxclick');
 
-        const $input = tagBox.$element().find(`.${TEXTBOX_CLASS}`);
+        const $input = tagBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type('4');
@@ -7101,7 +7135,7 @@ QUnit.module('regression', {
             grouped: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('3');
@@ -7157,7 +7191,7 @@ QUnit.module('regression', {
 
     QUnit.testInActiveWindow('focusout event should remove focus class from the widget', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({});
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
         assert.ok($tagBox.hasClass(FOCUSED_CLASS), 'focused class was applied');
@@ -7186,7 +7220,7 @@ QUnit.module('regression', {
             }
         });
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         const selectedItems = $('.dx-list').dxList('instance').option('selectedItems');
         assert.equal(selectedItems.length, 4, 'selected items');
@@ -7247,7 +7281,7 @@ QUnit.module('valueChanged should receive correct event parameter', {
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             this.keyboard = keyboardMock(this.$input);
             this.$listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
             this.$firstItem = this.$listItems.eq(0);
@@ -7378,7 +7412,7 @@ QUnit.module('valueChanged should receive correct event parameter', {
     QUnit.module('when showSelectionControls=true', {
         beforeEach: function() {
             this.reinit({ showSelectionControls: true });
-            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
+            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CHECKBOX_CLASS}`);
             this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
             this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
         }

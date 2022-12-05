@@ -3031,7 +3031,7 @@ function setDiscreteType(series) {
 
         assert.equal(this.renderer.stub('path').callCount, 2);
 
-        assert.equal(this.renderer.stub('path').getCall(1).args[0].length, 724);
+        assert.equal(this.renderer.stub('path').getCall(1).args[0].length, 722);
         assert.deepEqual(this.renderer.stub('path').getCall(1).args[1], 'area');
         $.each(this.renderer.stub('path').getCall(1).args[0], function(_, pt) {
             assert.equal(pt.x, pt.y);

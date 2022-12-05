@@ -431,20 +431,37 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             };
         },
 
-        _applyBatch: function(changes) {
-            let baseChanges = [];
+        _processChanges: function(changes) {
+            let processedChanges = [];
 
             changes.forEach(change => {
                 if(change.type === 'insert') {
-                    baseChanges = baseChanges.concat(this._applyInsert(change));
+                    processedChanges = processedChanges.concat(this._applyInsert(change));
                 } else if(change.type === 'remove') {
-                    baseChanges = baseChanges.concat(this._applyRemove(change));
+                    processedChanges = processedChanges.concat(this._applyRemove(change));
                 } else if(change.type === 'update') {
-                    baseChanges.push({ type: change.type, key: change.key, data: { data: change.data } });
+                    processedChanges.push({ type: change.type, key: change.key, data: { data: change.data } });
                 }
             });
 
-            this.callBase(baseChanges);
+            return processedChanges;
+        },
+
+        _handleChanging: function(e) {
+            this.callBase.apply(this, arguments);
+
+            const processChanges = (changes) => {
+                const changesToProcess = changes.filter(item => item.type === 'update');
+                return this._processChanges(changesToProcess);
+            };
+
+            e.postProcessChanges = processChanges;
+        },
+
+        _applyBatch: function(changes) {
+            const processedChanges = this._processChanges(changes);
+
+            this.callBase(processedChanges);
         },
 
         _setHasItems: function(node, value) {
@@ -485,6 +502,10 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
 
             return baseChanges;
+        },
+
+        _needToCopyDataObject: function() {
+            return false;
         },
 
         _applyRemove: function(change) {
@@ -636,7 +657,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             if(isNeedReshape) {
                 this._isReload = true;
             }
-
+            changes.forEach(change => change.index ??= -1);
             this.callBase.apply(this, arguments);
         },
 

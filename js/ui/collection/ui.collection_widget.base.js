@@ -126,6 +126,8 @@ const CollectionWidget = Widget.inherit({
 
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
+            encodeNoDataText: false,
+
             dataSource: null,
 
             _itemAttributes: {},
@@ -486,6 +488,7 @@ const CollectionWidget = Widget.inherit({
                 this._renderEmptyMessage();
                 break;
             case 'noDataText':
+            case 'encodeNoDataText':
                 this._renderEmptyMessage();
                 break;
             case 'itemTemplate':
@@ -591,6 +594,8 @@ const CollectionWidget = Widget.inherit({
     _clean: function() {
         this._cleanFocusState();
         this._cleanItemContainer();
+        this._inkRipple && delete this._inkRipple;
+        this._resetActiveState();
     },
 
     _cleanItemContainer: function() {
@@ -990,9 +995,14 @@ const CollectionWidget = Widget.inherit({
 
         if(!hideNoData) {
             this._$noData = this._$noData || $('<div>').addClass('dx-empty-message');
-            this._$noData
-                .appendTo(this._emptyMessageContainer())
-                .html(noDataText);
+            this._$noData.appendTo(this._emptyMessageContainer());
+
+            if(this.option('encodeNoDataText')) {
+                this._$noData.text(noDataText);
+            } else {
+                this._$noData.html(noDataText);
+            }
+
             this.setAria('label', noDataText);
         }
         this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);

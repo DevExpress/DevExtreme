@@ -53,9 +53,9 @@ export interface dxMenuBaseOptions<
      * @default null
      * @type string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>
+     * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>|null
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @public

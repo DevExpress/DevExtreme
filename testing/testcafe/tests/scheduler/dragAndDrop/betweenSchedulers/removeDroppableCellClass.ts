@@ -1,6 +1,10 @@
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
+
+fixture`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
+  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
@@ -38,11 +42,8 @@ const getSchedulerOptions = (dataSource, currentDate, cancelMethodName) => ({
   },
 });
 
-fixture`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
-  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
-
 METHODS_TO_CANCEL.forEach((methodName) => {
-  test(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
+  safeSizeTest(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
     const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
     const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
 

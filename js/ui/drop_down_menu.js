@@ -287,7 +287,6 @@ const DropDownMenu = Widget.inherit({
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
             },
-            visible: this.option('opened'),
             deferRendering: false,
             contentTemplate: (function(contentElement) {
                 this._renderList(contentElement);

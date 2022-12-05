@@ -472,4 +472,60 @@ QUnit.module('State storing', baseModuleConfig, () => {
         assert.equal(visibleColumns[2].name, 'buttons', 'column 2 name');
         assert.equal(visibleColumns[2].type, 'buttons', 'column 2 type');
     });
+
+    // T1101718
+    QUnit.test('the customizeColumns callback should only be called once on clear state', function(assert) {
+        // arrange
+        const customizeColumnsSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            columns: ['field1', 'field2', 'field3'],
+            dataSource: [{}, {}, {}],
+            customizeColumns: customizeColumnsSpy
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(customizeColumnsSpy.callCount, 1, 'customizeColumns - call count');
+
+        let columns = customizeColumnsSpy.getCall(0).args[0];
+        assert.strictEqual(columns[0].index, 0, 'first column index');
+        assert.strictEqual(columns[1].index, 1, 'second column index');
+        assert.strictEqual(columns[2].index, 2, 'third column index');
+
+        // act
+        customizeColumnsSpy.reset();
+        dataGrid.state(null);
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(customizeColumnsSpy.callCount, 1, 'customizeColumns - call count');
+
+        columns = customizeColumnsSpy.getCall(0).args[0];
+        assert.strictEqual(columns[0].index, 0, 'first column index');
+        assert.strictEqual(columns[1].index, 1, 'second column index');
+        assert.strictEqual(columns[2].index, 2, 'third column index');
+    });
+
+    // T1118077
+    QUnit.test('Filter row editor\'s value should be reset after resetting state', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            columns: ['field1'],
+            dataSource: [],
+            filterRow: {
+                visible: true,
+                applyFilter: 'onClick',
+            },
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $(dataGrid.element()).find('.dx-datagrid-filter-row .dx-texteditor-input').first().val('test').trigger('change');
+        dataGrid.state(null);
+
+        // assert
+        assert.strictEqual($(dataGrid.element()).find('.dx-datagrid-filter-row .dx-texteditor-input').first().val(), '', 'editor value is reset');
+    });
 });

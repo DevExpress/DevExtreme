@@ -1,4 +1,5 @@
 .idea
+.vs
 /artifacts
 /testing/testcafe/artifacts
 /testing/bundlers/dist
@@ -16,7 +17,6 @@
 bin
 node_modules
 obj
-project.lock.json
 yarn.lock
 RawLog.txt
 .DS_Store

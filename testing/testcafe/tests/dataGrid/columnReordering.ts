@@ -102,7 +102,7 @@ test('The separator should display correctly when dragging column', async (t) =>
       left: 805,
       top: 8,
     });
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   width: 800,
   dataSource: [
     {

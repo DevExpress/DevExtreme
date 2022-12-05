@@ -39,14 +39,13 @@ const EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocusCore: function() {
-        let $focus = this._$focusedElement;
         const $dataGridElement = this.component && this.component.$element();
         let $focusCell;
         let hideBorders;
 
         if($dataGridElement) {
             // this selector is specific to IE
-            $focus = this._getFocusedElement($dataGridElement);
+            let $focus = this._getFocusedElement($dataGridElement);
 
             if($focus && $focus.length) {
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {

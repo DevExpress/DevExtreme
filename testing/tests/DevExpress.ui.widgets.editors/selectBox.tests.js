@@ -16,6 +16,8 @@ import { normalizeKeyName } from 'events/utils/index';
 
 import 'generic_light.css!';
 
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
+
 QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture">\
@@ -762,8 +764,34 @@ QUnit.module('functionality', moduleSetup, () => {
             .change();
 
         $selectBox.dxSelectBox('instance').option('opened', true);
-        const noDataText = $('.dx-list .dx-empty-message').text();
+        const noDataText = $(`.dx-list .${EMPTY_MESSAGE_CLASS}`).text();
         assert.equal(noDataText, customersNoDataText, 'empty message is correct');
+    });
+
+    QUnit.test('No data text message after search, encodeNoDataText: true', function(assert) {
+        const simpleProducts = [];
+        const customersNoDataText = '<a href="javascript:alert(1)">link</a>';
+        const encodedNoDataText = '&lt;a href="javascript:alert(1)"&gt;link&lt;/a&gt;';
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: simpleProducts,
+            searchEnabled: true,
+            noDataText: customersNoDataText,
+            opened: true,
+            searchTimeout: 0,
+            encodeNoDataText: true,
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type('2')
+            .change();
+
+        $selectBox.dxSelectBox('instance').option('opened', true);
+        const noDataText = $(`.dx-list .${EMPTY_MESSAGE_CLASS}`).html();
+        assert.strictEqual(noDataText, encodedNoDataText, 'empty message is correct');
     });
 
     QUnit.test('dxList has not empty message', function(assert) {
@@ -3387,7 +3415,7 @@ QUnit.module('search', moduleSetup, () => {
         const loadSpy = sinon.spy(dataSource, 'load');
         $($input).trigger('dxclick');
 
-        const $emptyMessage = $('.dx-empty-message');
+        const $emptyMessage = $(`.${EMPTY_MESSAGE_CLASS}`);
         const $items = $(toSelector(LIST_ITEM_CLASS));
 
         assert.equal(loadSpy.callCount, 0, 'the was no load');
@@ -5488,6 +5516,36 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             .blur();
 
         assert.strictEqual(selectBox.option('text'), initialCustomValue, 'text was not restored');
+    });
+
+    QUnit.test('only one item added in data array after blur if acceptCustomValue=true (T1116923)', function(assert) {
+        const customValue = 'custom';
+        const initialItems = [];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: initialItems,
+            acceptCustomValue: true,
+            onCustomItemCreating(data) {
+                if(!data.text) {
+                    data.customItem = null;
+                    return;
+                }
+
+                initialItems.push(customValue);
+                data.customItem = customValue;
+            },
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .focus()
+            .type(customValue);
+
+        $input.blur();
+
+        assert.strictEqual(initialItems.length, 1, 'one item should be added in data array');
     });
 
     QUnit.test('custom value should be added on enter key when acceptCustomValue=true and dd is initially closed', function(assert) {

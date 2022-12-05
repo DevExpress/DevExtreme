@@ -1,5 +1,6 @@
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
 fixture`Delete appointments`
@@ -39,10 +40,9 @@ const createSimpleData = (): Record<string, unknown>[] => [{
   EndDate: new Date(2017, 4, 22, 13, 0, 0, 0),
 }];
 
-test('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
+safeSizeTest('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
   await t
     .setTestSpeed(0.1)
-    .resizeWindow(1200, 800)
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
 
@@ -64,7 +64,7 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+safeSizeTest('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   await t
     .setTestSpeed(0.1)
     .expect(scheduler.getAppointmentCount()).eql(6)
@@ -86,7 +86,7 @@ test('Recurrence appointments should be deleted by press \'delete\' key', async 
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
+safeSizeTest('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
   await t
     .expect(scheduler.getAppointmentCount()).eql(2)
     .click(scheduler.getAppointment('Text').element)

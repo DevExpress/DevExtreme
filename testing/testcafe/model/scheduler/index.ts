@@ -142,6 +142,10 @@ export default class Scheduler extends Widget {
     return this.element.find(`.${CLASS.appointment}`).count;
   }
 
+  getAppointmentResourceByIndex(index: number, label: string): Promise<string> {
+    return this.getAppointmentByIndex(index).getResource(label);
+  }
+
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
     const { getInstance } = this;
     const scrollTo = (): any => (getInstance() as any).scrollTo(date, group, allDay);

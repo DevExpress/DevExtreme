@@ -1,13 +1,14 @@
 import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domElement';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import { scrollTo } from './utils';
 
 fixture`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
-test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
+safeSizeTest('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('', 0);
 

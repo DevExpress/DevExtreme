@@ -329,10 +329,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const format = this.option('format');
         const isCustomParser = isFunction(format?.parser);
         const isLDMLPattern = isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
+        const isExponentialFormat = format === 'exponential' || format?.type === 'exponential';
+        const shouldUseFormatAsIs = isCustomParser || isLDMLPattern || isExponentialFormat;
 
-        this._currentFormat = isCustomParser || isLDMLPattern ?
-            format :
-            getLDMLFormat((value) => {
+        this._currentFormat = shouldUseFormatAsIs
+            ? format
+            : getLDMLFormat((value) => {
                 const text = this._format(value, format);
                 return number.convertDigits(text, true);
             });
@@ -634,7 +636,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _applyRevertedSign: function(e, caret, preserveSelectedText) {
         const newValue = -1 * ensureDefined(this._parsedValue, null);
 
-        if(this._isValueInRange(newValue)) {
+        if(this._isValueInRange(newValue) || newValue === 0) {
             this._parsedValue = newValue;
 
             if(preserveSelectedText) {

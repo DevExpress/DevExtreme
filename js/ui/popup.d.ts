@@ -79,7 +79,6 @@ export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
     /**
      * @docid
-     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} &for(iOS)
      * @public
      * @type object
      */

@@ -118,9 +118,9 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: DataSourceLike<any>;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @public

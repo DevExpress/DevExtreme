@@ -293,8 +293,11 @@ export class AppointmentPopup {
             }
 
             const adapter = this._createAppointmentAdapter(this.form.formData);
-            const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
+            const clonedAdapter = adapter.clone({ pathTimeZone: 'fromAppointment' }); // TODO:
 
+            this._addMissingDSTTime(adapter, clonedAdapter);
+
+            const appointment = clonedAdapter.source();
             delete appointment.repeat; // TODO
 
             switch(this.state.action) {
@@ -380,5 +383,34 @@ export class AppointmentPopup {
 
     _unlockSaveChanges() {
         this.state.saveChangesLocker = false;
+    }
+
+    // NOTE: Fix ticket T1100758
+    _addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
+        const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
+
+        clonedAppointmentAdapter.startDate = this._addMissingDSTShiftToDate(
+            timeZoneCalculator,
+            formAppointmentAdapter.startDate,
+            clonedAppointmentAdapter.startDate
+        );
+
+        if(clonedAppointmentAdapter.endDate) {
+            clonedAppointmentAdapter.endDate = this._addMissingDSTShiftToDate(
+                timeZoneCalculator,
+                formAppointmentAdapter.endDate,
+                clonedAppointmentAdapter.endDate,
+            );
+        }
+    }
+
+    _addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
+        const originTimezoneShift = timeZoneCalculator.getOffsets(originFormDate)?.common;
+        const clonedTimezoneShift = timeZoneCalculator.getOffsets(clonedDate)?.common;
+        const shiftDifference = originTimezoneShift - clonedTimezoneShift;
+
+        return shiftDifference
+            ? new Date(clonedDate.getTime() + shiftDifference * toMs('hour'))
+            : clonedDate;
     }
 }

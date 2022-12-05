@@ -3,6 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
 
+import messageLocalization from '../../../../localization/message';
+
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 @ComponentBindings()
@@ -40,6 +42,8 @@ export class BasePagerProps {
   @OneWay() showNavigationButtons = false;
 
   @OneWay() totalCount = 0;
+
+  @OneWay() label = messageLocalization.format('dxPager-ariaLabel');
 
   @Event() onKeyDown?: EventCallback<Event>;
 }

@@ -354,14 +354,15 @@ export default gridCore.Controller.inherit((function() {
         _getKeyInfo: function() {
             return this.store();
         },
-        _applyBatch: function(changes) {
+        _needToCopyDataObject() {
+            return true;
+        },
+        _applyBatch: function(changes, fromStore) {
             const keyInfo = this._getKeyInfo();
             const dataSource = this._dataSource;
             const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
-            const totalCount = this.totalCount();
             const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
             const isVirtualMode = this.option('scrolling.mode') === 'virtual';
-            const isLegacyMode = this.option('scrolling.legacyMode');
 
             changes = changes.filter(function(change) {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
@@ -370,27 +371,27 @@ export default gridCore.Controller.inherit((function() {
             const getItemCount = () => groupCount ? this.itemsCount() : this.items().length;
             const oldItemCount = getItemCount();
 
-
             applyBatch({
                 keyInfo,
                 data: this._items,
                 changes,
                 groupCount: groupCount,
-                useInsertIndex: true
+                useInsertIndex: true,
+                skipCopying: !this._needToCopyDataObject(),
             });
             applyBatch({
                 keyInfo,
                 data: dataSource.items(),
                 changes,
                 groupCount: groupCount,
-                useInsertIndex: true
+                useInsertIndex: true,
+                skipCopying: !this._needToCopyDataObject(),
             });
 
             const needUpdateTotalCountCorrection =
                 this._currentTotalCount > 0 || (
-                    !isReshapeMode &&
-                    isVirtualMode &&
-                    (!isLegacyMode || totalCount === oldItemCount)
+                    (fromStore || !isReshapeMode) &&
+                    isVirtualMode
                 );
 
             if(needUpdateTotalCountCorrection) {
@@ -404,7 +405,7 @@ export default gridCore.Controller.inherit((function() {
         },
         _handleChanging: function(e) {
             this.changing.fire(e);
-            this._applyBatch(e.changes);
+            this._applyBatch(e.changes, true);
         },
         _needCleanCacheByOperation: function(operationType, remoteOperations) {
             const operationTypesByOrder = ['filtering', 'sorting', 'paging'];
@@ -609,8 +610,13 @@ export default gridCore.Controller.inherit((function() {
                     options.extra.totalCount = options.data.length;
                 }
 
+
                 if(options.extra && options.extra.totalCount >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
                     options.extra.totalCount = -1;
+                }
+
+                if(!loadOptions.data && (storeLoadOptions.requireTotalCount || (options.extra?.totalCount ?? -1) >= 0)) {
+                    this._totalCountCorrection = 0;
                 }
 
                 this._handleDataLoadedCore(options);

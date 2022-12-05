@@ -35,7 +35,7 @@ function checkDefaultOptions(assert, options, newOptions, prefix = '') {
 }
 
 QUnit.module('DataGrid', () => {
-    QUnit.test('Check Default Options', function(assert) {
+    QUnit.skip('Check Default Options', function(assert) {
         const defaultOptions = new DataGrid($('<div>')).option();
         const renovatedDefaultOptions = new RenovatedDataGrid($('<div>')).option();
 

@@ -489,12 +489,17 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
     },
 
-    _wrapRowIfNeed: function($table, $row, isRefreshing) {
-        const hasDataRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
-        const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
-        const $tBodies = hasDataRowTemplate && this._getBodies($tableElement);
+    _needWrapRow: function($tableElement) {
+        const hasRowTemplate = !!this.option().rowTemplate;
 
-        if($tBodies && $tBodies.filter('.' + ROW_CLASS).length) {
+        return hasRowTemplate && !!this._getBodies($tableElement)?.filter('.' + ROW_CLASS).length;
+    },
+
+    _wrapRowIfNeed: function($table, $row, isRefreshing) {
+        const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
+        const needWrapRow = this._needWrapRow($tableElement);
+
+        if(needWrapRow) {
             const $tbody = $('<tbody>').addClass($row.attr('class'));
 
             this.setAria('role', 'presentation', $tbody);
@@ -637,17 +642,17 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         this._setCellAriaAttributes($cell, cellOptions);
 
-        this._renderCellContent($cell, cellOptions);
+        this._renderCellContent($cell, cellOptions, options);
 
         $row.get(0).appendChild($cell.get(0));
 
         return $cell;
     },
 
-    _renderCellContent: function($cell, options) {
+    _renderCellContent: function($cell, options, renderOptions) {
         const template = this._getCellTemplate(options);
 
-        when(!template || this.renderTemplate($cell, template, options)).done(() => {
+        when(!template || this.renderTemplate($cell, template, options, undefined, renderOptions.change)).done(() => {
             this._updateCell($cell, options);
         });
     },

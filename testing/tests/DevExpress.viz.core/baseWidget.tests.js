@@ -1563,3 +1563,17 @@ QUnit.test('Change disabled option if root has empty pointer-events attr', funct
 
     assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ 'pointer-events': '', filter: null }]);
 });
+
+/* T1072778  (it refers to the test "Changing props in..." in devextreme-vue/.../component.test  )*/
+QUnit.test('Repeat disposing', function(assert) {
+    this.createWidget();
+    this.widget._dispose();
+
+    try {
+        this.widget._dispose();
+        assert.ok(true, 'the error is not thrown');
+    } catch(e) {
+        assert.ok(false, 'the error is thrown');
+    }
+
+});

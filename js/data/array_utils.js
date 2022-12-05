@@ -1,7 +1,7 @@
-import { isPlainObject, isEmptyObject, isDefined, isObject } from '../core/utils/type';
+import { isDefined, isEmptyObject, isObject, isPlainObject } from '../core/utils/type';
 import config from '../core/config';
 import Guid from '../core/guid';
-import { extend, extendFromObject } from '../core/utils/extend';
+import { extend } from '../core/utils/extend';
 import { errors } from './errors';
 import { deepExtendArraySafe } from '../core/utils/object';
 import { compileGetter } from '../core/utils/data';
@@ -80,24 +80,26 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function cloneInstance(instance, clonedInstances) {
+function cloneInstanceWithChangedPaths(instance, changes, clonedInstances) {
     clonedInstances = clonedInstances || new WeakMap();
 
     const result = instance ? Object.create(Object.getPrototypeOf(instance)) : {};
     if(instance) {
         clonedInstances.set(instance, result);
     }
-    const instanceWithoutPrototype = extendFromObject({}, instance);
 
-    for(const name in instanceWithoutPrototype) {
-        const prop = instanceWithoutPrototype[name];
-
-        if(isObject(prop) && !isPlainObject(prop) && !clonedInstances.has(prop)) {
-            instanceWithoutPrototype[name] = cloneInstance(prop, clonedInstances);
-        }
-    }
-
+    const instanceWithoutPrototype = { ...instance };
     deepExtendArraySafe(result, instanceWithoutPrototype, true, true);
+    for(const name in instanceWithoutPrototype) {
+
+        const value = instanceWithoutPrototype[name];
+        const change = changes?.[name];
+
+        if(isObject(value) && !isPlainObject(value) && isObject(change) && !clonedInstances.has(value)) {
+            result[name] = cloneInstanceWithChangedPaths(value, change, clonedInstances);
+        }
+
+    }
 
     for(const name in result) {
         const prop = result[name];
@@ -111,12 +113,12 @@ function cloneInstance(instance, clonedInstances) {
 }
 
 function createObjectWithChanges(target, changes) {
-    const result = cloneInstance(target);
+    const result = cloneInstanceWithChangedPaths(target, changes);
 
     return deepExtendArraySafe(result, changes, true, true);
 }
 
-function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache, logError }) {
+function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache, logError, skipCopying }) {
     const resultItems = immutable === true ? [...data] : data;
 
     changes.forEach(item => {
@@ -126,7 +128,7 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
 
         switch(item.type) {
             case 'update': update(keyInfo, items, item.key, item.data, true, immutable, logError); break;
-            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true, logError); break;
+            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true, logError, skipCopying); break;
             case 'remove': remove(keyInfo, items, item.key, true, logError); break;
         }
     });
@@ -194,11 +196,11 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
     }
 }
 
-function insert(keyInfo, array, data, index, isBatch, logError) {
+function insert(keyInfo, array, data, index, isBatch, logError, skipCopying) {
     let keyValue;
     const keyExpr = keyInfo.key();
 
-    const obj = isPlainObject(data) ? extend({}, data) : data;
+    const obj = isPlainObject(data) && !skipCopying ? extend({}, data) : data;
 
     if(keyExpr) {
         keyValue = keyInfo.keyOf(obj);

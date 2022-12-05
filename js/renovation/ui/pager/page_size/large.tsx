@@ -11,6 +11,8 @@ import { LightButton } from '../common/light_button';
 import { FullPageSize } from '../common/types';
 import { InternalPagerProps } from '../common/pager_props';
 import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
+import messageLocalization from '../../../../localization/message';
+import { format } from '../../../../core/utils/string';
 
 export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
   <Fragment>
@@ -48,7 +50,7 @@ export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSiz
       return {
         className,
         click: this.onPageSizeChange(processedPageSize),
-        label: `Display ${processedPageSize} items on page`,
+        label: format(messageLocalization.getFormatter('dxPager-pageSize'), processedPageSize || messageLocalization.getFormatter('dxPager-pageSizesAllText')),
         text,
       };
     });

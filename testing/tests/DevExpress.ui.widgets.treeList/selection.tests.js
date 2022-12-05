@@ -37,8 +37,8 @@ const setupModule = function() {
         parentIdExpr: 'parentId'
     };
 
-    that.setupTreeList = function() {
-        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'editorFactory', 'columnHeaders', 'filterRow', 'sorting', 'search', 'focus'], {
+    that.setupTreeList = function(modules = []) {
+        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'editorFactory', 'columnHeaders', 'filterRow', 'sorting', 'search', 'focus'].concat(modules), {
             initViews: true
         });
     };
@@ -717,6 +717,32 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         // assert
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [], 'selected row keys');
         assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
+    });
+
+    // T1127554
+    QUnit.test('The selection should not work on pressing space when there is no data', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.dataSource = [];
+        this.options.selectedRowKeys = [];
+        this.options.selection = {
+            mode: 'single'
+        };
+        this.options.keyboardNavigation = {
+            enabled: true
+        };
+
+        this.setupTreeList(['keyboardNavigation']);
+        this.rowsView.render($testElement);
+
+        // act
+        const $rowsView = $(this.rowsView.element());
+        $rowsView.trigger($.Event('keydown', { key: ' ' }));
+
+        // assert
+        assert.deepEqual(this.getSelectedRowKeys(), []);
+        assert.deepEqual(this.option('selectedRowKeys'), []);
     });
 });
 

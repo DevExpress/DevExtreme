@@ -145,6 +145,27 @@ QUnit.test('load, array result', function(assert) {
     });
 });
 
+QUnit.test('load, promise result is class instance', function(assert) {
+    const done = assert.async();
+
+    class TestClass {
+        constructor(value) {
+            this.value = value;
+        }
+    }
+
+    const store = new CustomStore({
+        load: function(options) {
+            return $.Deferred().resolve(new TestClass('test'));
+        }
+    });
+
+    store.load().done(function(r) {
+        assert.deepEqual(r.value, 'test');
+        done();
+    });
+});
+
 QUnit.test('B250267 backward compat', function(assert) {
     const done = assert.async();
 

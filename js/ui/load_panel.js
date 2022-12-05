@@ -60,7 +60,9 @@ const LoadPanel = Overlay.inherit({
             */
             resizeEnabled: false,
 
-            focusStateEnabled: false
+            focusStateEnabled: false,
+
+            propagateOutsideClick: true
 
             /**
             * @name dxLoadPanelOptions.dragEnabled

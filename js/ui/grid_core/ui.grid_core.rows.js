@@ -431,6 +431,8 @@ export const rowsModule = {
                 },
 
                 _getRowsHeight: function($tableElement) {
+                    $tableElement = $tableElement || this._tableElement;
+
                     const $rowElements = $tableElement.children('tbody').children().not('.dx-virtual-row').not('.' + FREE_SPACE_CLASS);
 
                     return $rowElements.toArray().reduce(function(sum, row) {
@@ -510,6 +512,10 @@ export const rowsModule = {
                         columnIndex: columnIndex,
                         colspan: options.columns.length - columnIndex - 1
                     };
+                },
+
+                _needWrapRow: function() {
+                    return this.callBase.apply(this, arguments) || !!this.option('dataRowTemplate');
                 },
 
                 _renderCells: function($row, options) {
@@ -865,7 +871,9 @@ export const rowsModule = {
                         if(that._scrollLeft >= 0) {
                             that._handleScroll({
                                 component: that.getScrollable(),
-                                scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                                forceUpdateScrollPosition: true,
+                                scrollOffset: { top: that._scrollTop, left: that._scrollLeft }
+                            });
                         }
                     });
                 },

@@ -63,45 +63,58 @@ export class TimeZoneCalculator {
       : 1;
 
     const resultDate = new Date(date);
-
     resultDate.setMinutes(resultDate.getMinutes() - direction * (60 * clientOffset));
     resultDate.setMinutes(resultDate.getMinutes() + direction * (60 * targetOffset));
-
     return new Date(resultDate);
 
-    // TODO Previous date calculation engine. Engine was be changed after fix T1078292.
-    // TODO This code block commented and placed for history.
+    // V1
+    // NOTE: Previous date calculation engine.
+    // Engine was changed after fix T1078292.
     // eslint-disable-next-line max-len
     // const utcDate = date.getTime() - direction * clientOffset * dateUtils.dateToMilliseconds('hour');
     // return new Date(utcDate + direction * targetOffset * dateUtils.dateToMilliseconds('hour'));
   }
 
-  getOriginStartDateOffsetInMs(date: Date, timezone: string, isUTCDate: boolean): number {
-    if (!timezone) {
-      return 0;
+  getOriginStartDateOffsetInMs(
+    date: Date,
+    timezone: string | undefined,
+    isUTCDate: boolean,
+  ): number {
+    const offsetInHours = this.getOffsetInHours(date, timezone, isUTCDate);
+    return offsetInHours * MS_IN_HOUR;
+  }
+
+  protected getOffsetInHours(date: Date, timezone: string | undefined, isUTCDate: boolean): number {
+    const { client, appointment, common } = this.getOffsets(date, timezone);
+
+    if (!!timezone && isUTCDate) {
+      return appointment - client;
     }
 
-    const { client, appointment, common } = this.getOffsets(date, timezone);
-    const offsetInHours = isUTCDate
-      ? appointment - client
-      : appointment - common;
+    if (!!timezone && !isUTCDate) {
+      return appointment - common;
+    }
 
-    return offsetInHours * MS_IN_HOUR;
+    if (!timezone && isUTCDate) {
+      return common - client;
+    }
+
+    return 0;
   }
 
   protected getClientOffset(date: Date): number {
     return this.options.getClientOffset(date);
   }
 
-  protected getCommonOffset(date: Date): number {
-    return this.options.getCommonOffset(date);
+  protected getCommonOffset(date: Date): number | undefined {
+    return this.options.tryGetCommonOffset(date);
   }
 
   protected getAppointmentOffset(
     date: Date,
     appointmentTimezone: string | undefined,
-  ): number {
-    return this.options.getAppointmentOffset(date, appointmentTimezone);
+  ): number | undefined {
+    return this.options.tryGetAppointmentOffset(date, appointmentTimezone);
   }
 
   protected getConvertedDate(

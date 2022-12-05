@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -6,7 +7,7 @@ import Scheduler from '../../../model/scheduler';
 fixture`Drag-n-drop from another draggable area`
   .page(url(__dirname, './pages/containerWithDnD.html'));
 
-test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {
+safeSizeTest('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('cellDuration', 10);

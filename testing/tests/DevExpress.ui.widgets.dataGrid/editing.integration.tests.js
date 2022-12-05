@@ -565,7 +565,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: null,
-            columns: ['id', 'foo.text'],
+            columns: ['id', 'foo.bar.foo.text'],
             dataSource: [{ id: 1, foo: new Foo() }],
             editing: { allowUpdating: true, mode: 'batch' }
         }).dxDataGrid('instance');
@@ -3557,6 +3557,140 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    // T1122209
+    QUnit.test('The form edit mode - Validation should work if value of a column with custom setCellValue changed', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowAdding: true
+                },
+                columns: [
+                    {
+                        dataField: 'field1',
+                        setCellValue: function(newData, value) {
+                            this.defaultSetCellValue(newData, value);
+                        },
+                        validationRules: [{ type: 'required' }]
+                    },
+                    {
+                        dataField: 'field2',
+                        validationRules: [{
+                            type: 'custom',
+                            validationCallback: function(data) {
+                                return data.value !== 'incorrect';
+                            }
+                        }]
+                    },
+                    {
+                        dataField: 'field3',
+                        validationRules: [{ type: 'required' }]
+                    }
+                ],
+            });
+
+            this.clock.tick(100);
+
+            const isValidCell = (rowIndex, columnIndex) => {
+                return !$(dataGrid.getCellElement(rowIndex, columnIndex)).find('.dx-invalid').length;
+            };
+
+            const setCellValue = (rowIndex, columnIndex, value) => {
+                const $input = $(dataGrid.getCellElement(rowIndex, columnIndex)).find('input');
+
+                $input.val(value);
+                $input.trigger('change');
+            };
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+
+            // assert
+            assert.ok(isNewRowExists(dataGrid, editMode), 'there is a new row');
+
+            // act
+            setCellValue(0, 0, 'test');
+            this.clock.tick();
+
+            // assert
+            assert.ok(isValidCell(0, 0), 'first cell is valid');
+            assert.ok(isValidCell(0, 1), 'second cell is valid');
+            assert.ok(isValidCell(0, 2), 'third cell is valid');
+
+            // act
+            setCellValue(0, 1, 'incorrect');
+            this.clock.tick();
+
+            setCellValue(0, 2, 'test');
+            this.clock.tick();
+            setCellValue(0, 2, '');
+            this.clock.tick();
+
+            // assert
+            assert.notOk(isValidCell(0, 1), 'second cell is not valid');
+            assert.notOk(isValidCell(0, 2), 'third cell is not valid');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
+    // T1121812
+    QUnit.test('The form edit mode - Only one validation message should be shown', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowEditing: true
+                },
+                columns: [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        validationRules: [{ type: 'required' }]
+                    }
+                ],
+            });
+            const navigationController = dataGrid.getController('keyboardNavigation');
+            this.clock.tick(0);
+
+            const emulateEnterKeyPress = () => {
+                const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
+                navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
+            };
+
+            // act
+            dataGrid.editRow(0);
+
+            const $input = $(dataGrid.getCellElement(0, 1)).find('input');
+            $input.val('');
+            $input.trigger('change');
+            this.clock.tick();
+            $input.trigger('focus');
+            this.clock.tick();
+
+            emulateEnterKeyPress();
+            this.clock.tick();
+            emulateEnterKeyPress();
+            this.clock.tick();
+
+            const validationMessages = $('.dx-invalid-message.dx-widget');
+            assert.strictEqual(validationMessages.length, 1, 'only 1 validation message must be shown');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
     // T1089428
     QUnit.test('totalCount should be correct after removing/adding rows when refreshMode is reshape and scrolling.mode is virtual', function(assert) {
         // arrange
@@ -3596,6 +3730,29 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(dataGrid.totalCount(), 1, 'totalCount after removing rows');
+    });
+
+    // T1113974
+    QUnit.test('Show editing popup if editRowKey is specified in popup edit mode', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test11', field2: 'test12' },
+            ],
+            keyExpr: 'id',
+            columns: ['field1', 'field2'],
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+                editRowKey: 1,
+            },
+        });
+        this.clock.tick();
+
+        // assert
+        const $popupContent = dataGrid.getController('editing').getPopupContent() || [];
+
+        assert.equal($popupContent.length, 1, 'There is editing popup');
     });
 });
 
@@ -6768,6 +6925,42 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should not be called on option change');
             });
         });
+    });
+
+    // T1118387
+    QUnit.test('Focus should not be reset if field used in summary is changed and summary.recalculateWhileEditing is enabled', function(assert) {
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, value: 15, field: 'field' }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'popup'
+            },
+            repaintChangesOnly: true,
+            summary: {
+                recalculateWhileEditing: true,
+                totalItems: [
+                    { column: 'value', summaryType: 'sum' }
+                ]
+            },
+            columns: ['id', 'value', 'field']
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        const popup = $(dataGrid.getController('editing').getPopupContent());
+        const valueInput = popup.find('.dx-texteditor-input').eq(1);
+        const fieldInput = popup.find('.dx-texteditor-input').eq(2);
+
+        valueInput.trigger('focus').val('35').trigger('change');
+        this.clock.tick();
+
+        fieldInput.trigger('focus');
+        this.clock.tick();
+
+        assert.deepEqual(document.activeElement.id, fieldInput.attr('id'), 'focus is not reset after changing the field used for a summary');
     });
 
     QUnit.test('Pager should not be hidden after delete row using onSaving event handler', function(assert) {

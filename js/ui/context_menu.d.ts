@@ -92,11 +92,11 @@ export interface dxContextMenuOptions<
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
-     * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
+     * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey>;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
      * @docid
      * @type Array<dxContextMenuItem>

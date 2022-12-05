@@ -23,6 +23,7 @@ const FIXED_COLUMNS_CLASS = 'dx-fixed-columns';
 const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const COMMAND_TRANSPARENT = 'transparent';
 const GROUP_ROW_CLASS = 'dx-group-row';
+const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 
 const getTransparentColumnIndex = function(fixedColumns) {
     let transparentColumnIndex = -1;
@@ -92,26 +93,50 @@ const baseFixedColumns = {
 
     _partialUpdateFixedTable(fixedColumns) {
         const fixedTableElement = this._fixedTableElement;
-        const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
-        const transparentColumn = fixedColumns[transparentColumnIndex];
-        const columnIndexOffset = this._columnsController.getColumnIndexOffset();
         const $rows = this._getRowElementsCore(fixedTableElement);
         const $colgroup = fixedTableElement.children('colgroup');
 
         $colgroup.replaceWith(this._createColGroup(fixedColumns));
 
         for(let i = 0; i < $rows.length; i++) {
-            const cellElements = $rows[i].childNodes;
-            let colIndex = columnIndexOffset + 1;
-            for(let j = 0; j < cellElements.length; j++) {
-                cellElements[j].setAttribute('aria-colindex', colIndex);
+            this._partialUpdateFixedRow($($rows[i]), fixedColumns);
+        }
+    },
 
-                if(j === transparentColumnIndex) {
-                    cellElements[j].setAttribute('colspan', transparentColumn.colspan);
-                    colIndex += transparentColumn.colspan;
-                } else {
-                    colIndex++;
-                }
+    _partialUpdateFixedRow($row, fixedColumns) {
+        const cellElements = $row.get(0).childNodes;
+        const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
+        const transparentColumn = fixedColumns[transparentColumnIndex];
+        const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+        let groupCellOptions;
+        let colIndex = columnIndexOffset + 1;
+        let colspan = transparentColumn.colspan;
+
+        if($row.hasClass(DETAIL_ROW_CLASS)) {
+            cellElements[0].setAttribute('colspan', this._columnsController.getVisibleColumns()?.length);
+
+            return;
+        }
+
+        if($row.hasClass(GROUP_ROW_CLASS)) {
+            groupCellOptions = this._getGroupCellOptions({
+                row: $row.data('options'),
+                columns: this._columnsController.getVisibleColumns()
+            });
+
+            colspan = groupCellOptions.colspan - Math.max(0, cellElements.length - (groupCellOptions.columnIndex + 2));
+        }
+
+        for(let j = 0; j < cellElements.length; j++) {
+            const needUpdateColspan = groupCellOptions ? j === (groupCellOptions.columnIndex + 1) : j === transparentColumnIndex;
+
+            cellElements[j].setAttribute('aria-colindex', colIndex);
+
+            if(needUpdateColspan) {
+                cellElements[j].setAttribute('colspan', colspan);
+                colIndex += colspan;
+            } else {
+                colIndex++;
             }
         }
     },
@@ -270,7 +295,7 @@ const baseFixedColumns = {
         }
 
         if(column.command !== COMMAND_TRANSPARENT) {
-            this.callBase($cell, options);
+            this.callBase.apply(this, arguments);
         }
     },
 
@@ -851,7 +876,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if(e.scrollOffset.top < 0) {
             elasticScrollTop = -e.scrollOffset.top;
         } else if(e.reachedBottom) {
-            const $scrollableContent = $(this._findContentElement());
+            const $scrollableContent = $(e.component.content());
             const $scrollableContainer = $(e.component.container());
             const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;

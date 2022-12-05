@@ -32,7 +32,9 @@
   }
 
   .dx-filemanager-progress-box-image {
-    font-size: $material-base-icon-size;
+    width: $material-base-icon-size * 2;
+    height: $material-base-icon-size * 2;
+    font-size: $material-base-icon-size * 2;
   }
 
   .dx-filemanager-progress-box-error {
