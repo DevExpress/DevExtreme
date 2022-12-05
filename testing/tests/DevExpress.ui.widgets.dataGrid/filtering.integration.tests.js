@@ -1572,7 +1572,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('.dx-header-filter').trigger('dxclick');
         this.clock.tick();
         $('.dx-button').eq(1).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(600);
 
         // assert
         assert.ok($('.dx-header-filter').is(':focus'), 'header filter indicator has focus');
