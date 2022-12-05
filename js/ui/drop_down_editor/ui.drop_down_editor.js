@@ -551,6 +551,10 @@ const DropDownEditor = TextBox.inherit({
     _renderPopup: function() {
         const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
+        if(popupConfig.elementAttr && !Object.keys(popupConfig.elementAttr).length) {
+            delete popupConfig.elementAttr;
+        }
+
         this._popup = this._createComponent(this._$popup, Popup, popupConfig);
 
         this._popup.on({
@@ -625,6 +629,10 @@ const DropDownEditor = TextBox.inherit({
 
     _popupPositionedHandler: function(e) {
         const { labelMode, stylingMode } = this.option();
+
+        if(!this._popup) {
+            return;
+        }
 
         const $popupOverlayContent = this._popup.$overlayContent();
         const isOverlayFlipped = e.position.v.flip;
