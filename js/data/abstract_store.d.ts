@@ -108,8 +108,6 @@ export interface StoreOptions<
 type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
- * @docid
- * @hidden
  * @namespace DevExpress.data
  */
 export class Store<
@@ -216,7 +214,7 @@ export class Store<
 }
 
 /**
- * @docid
+ * @docid Store
  * @hidden
  * @namespace DevExpress.data
  */
