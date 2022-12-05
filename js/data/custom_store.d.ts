@@ -9,20 +9,25 @@ export type Options<
     TLoadResult = DefaultLoadResult<TItem>,
 > = CustomStoreOptions<TItem, TKey, TLoadResult>;
 
+type ItemsArray<TItem> = Array<TItem> | Array<GroupItem<TItem>>;
+
 /** @public */
 export type GroupItem<
     TItem = any,
-> = { key: any | string | number; items: Array<TItem> | Array<GroupItem> | null; count?: number; summary?: Array<any> };
+> = {
+    key: any | string | number;
+    items: ItemsArray<TItem> | null;
+    count?: number;
+    summary?: Array<any>;
+};
 
 /** @public */
 export type ResolvedData<
     TItem = any,
 > =
-  | Object
-  | Array<TItem>
-  | Array<GroupItem>
+  | ItemsArray<TItem>
   | {
-      data: Array<TItem> | Array<GroupItem>;
+      data: ItemsArray<TItem>;
       totalCount?: number;
       summary?: Array<any>;
       groupCount?: number;
@@ -30,8 +35,7 @@ export type ResolvedData<
 
 type DefaultLoadResult<TItem> = DxPromise<ResolvedData<TItem>>
 | PromiseLike<ResolvedData<TItem>>
-| Array<GroupItem>
-| Array<TItem>;
+| ResolvedData<TItem>;
 
 /**
  * @namespace DevExpress.data
