@@ -175,3 +175,31 @@ QUnit.test('deepExtendArraySafe utility does not pollute object prototype', func
     objectUtils.deepExtendArraySafe({ }, JSON.parse('{ "__proto__": { "pollution": true }}'), true);
     assert.ok(!('pollution' in { }), 'object prototype is not polluted');
 });
+
+QUnit.test('deepExtendArraySafe can copy circular references (one level)', function(assert) {
+    const oldValue = {};
+    const newValue = { someNumber: 1 };
+    newValue.selfRef = newValue;
+
+    const result = objectUtils.deepExtendArraySafe(oldValue, newValue);
+
+    assert.strictEqual(result.selfRef, result);
+    assert.strictEqual(result.someNumber, 1);
+
+    assert.notStrictEqual(result.selfRef, newValue);
+});
+
+QUnit.test('deepExtendArraySafe can copy circular references (two levels)', function(assert) {
+    const oldValue = {};
+    const newValue = { someNumber: 1, secondLevel: { someNumber: 2 } };
+    newValue.secondLevel.selfRef = newValue;
+
+    const result = objectUtils.deepExtendArraySafe(oldValue, newValue);
+
+    assert.strictEqual(result.secondLevel.selfRef, result);
+    assert.strictEqual(result.someNumber, 1);
+    assert.strictEqual(result.secondLevel.someNumber, 2);
+
+    assert.notStrictEqual(result.secondLevel.selfRef, newValue.secondLevel.selfRef);
+    assert.notStrictEqual(result.secondLevel, newValue.secondLevel);
+});
