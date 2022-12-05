@@ -236,8 +236,9 @@ const baseFixedColumns = {
         }
 
         const isRowAltStyle = that.option('rowAlternationEnabled') && options.isAltRow;
-        // T823783, T852898, T865179, T875201
-        if(browser.mozilla && options.column.fixed && options.rowType !== 'group' && !isRowAltStyle) {
+        const isSelectAllCell = that.option('selection.mode') === 'multiple' && options.columnIndex === 0 && options.rowType === 'header';
+        // T823783, T852898, T865179, T875201, T1120812
+        if(browser.mozilla && options.column.fixed && options.rowType !== 'group' && !isRowAltStyle && !isSelectAllCell) {
             $cell.addClass(FIXED_COL_CLASS);
         }
 
