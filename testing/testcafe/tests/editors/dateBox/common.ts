@@ -46,6 +46,7 @@ fixture`DateBox render`
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await restoreBrowserSize(t);
+    await insertStylesheetRule('.dx-datebox { display: inline-block }', 0);
 
     for (const stylingMode of stylingModes) {
       for (const type of types) {
@@ -69,8 +70,6 @@ fixture`DateBox render`
             };
 
             await createWidget('dxDateBox', options, false, `#${id}`);
-
-            await insertStylesheetRule('.dx-datebox { display: inline-block }', 0);
           }
         }
       }

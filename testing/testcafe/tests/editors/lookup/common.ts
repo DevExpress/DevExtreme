@@ -11,7 +11,7 @@ const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 fixture`Lookup`
   .page(url(__dirname, '../../container.html'));
 
-test('Popup should not be closed if lookup is placed at the page bottom in material theme (T1018037)', async (t) => {
+test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async (t) => {
   const lookup = new Lookup('#container');
 
   const { getInstance } = lookup;
