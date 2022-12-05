@@ -6,8 +6,8 @@ import { DxPromise } from '../core/utils/deferred';
 export type Options<
     TItem = any,
     TKey = any,
-    TLoadResult = LoadResult<TItem>,
-> = CustomStoreOptions<TItem, TKey, TLoadResult>;
+    TLoaded = ResolvedData<TItem>,
+> = CustomStoreOptions<TItem, TKey, TLoaded>;
 
 type ItemsArray<TItem> = Array<TItem> | Array<GroupItem<TItem>>;
 
