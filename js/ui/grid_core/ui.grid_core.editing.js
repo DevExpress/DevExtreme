@@ -482,7 +482,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(fullName === EDITING_EDITROWKEY_OPTION_NAME) {
                     this._handleEditRowKeyChange(args);
                 } else if(fullName === EDITING_CHANGES_OPTION_NAME) {
-                    this._handleChangesChange(args);
+                    // to prevent render on optionChanged called by two-way binding - T1128881
+                    if(args.previousValue !== args.value) {
+                        this._handleChangesChange(args);
+                    }
                 } else if(!args.handled) {
                     this._columnsController.reinit();
                     this.init();
