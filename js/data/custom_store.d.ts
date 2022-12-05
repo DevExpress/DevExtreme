@@ -1,12 +1,13 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
-import Store, { Options as StoreOptions } from './abstract_store';
+import { Options as StoreOptions, Store } from './abstract_store';
 import { DxPromise } from '../core/utils/deferred';
 
 /** @public */
 export type Options<
     TItem = any,
     TKey = any,
-> = CustomStoreOptions<TItem, TKey>;
+    TLoadResult = DefaultLoadResult<TItem>,
+> = CustomStoreOptions<TItem, TKey, TLoadResult>;
 
 /** @public */
 export type GroupItem<
@@ -27,6 +28,11 @@ export type ResolvedData<
       groupCount?: number;
     };
 
+type DefaultLoadResult<TItem> = DxPromise<ResolvedData<TItem>>
+| PromiseLike<ResolvedData<TItem>>
+| Array<GroupItem>
+| Array<TItem>;
+
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
@@ -34,6 +40,7 @@ export type ResolvedData<
 export interface CustomStoreOptions<
     TItem = any,
     TKey = any,
+    TLoadResult = DefaultLoadResult<TItem>,
 > extends StoreOptions<TItem, TKey> {
     /**
      * @docid
@@ -61,11 +68,7 @@ export interface CustomStoreOptions<
      * @type_function_return Promise<Array<any>|object>|Array<any>
      * @public
      */
-    load: ((options: LoadOptions<TItem>) =>
-      | DxPromise<ResolvedData<TItem>>
-      | PromiseLike<ResolvedData<TItem>>
-      | Array<GroupItem>
-      | Array<TItem>);
+    load: (options: LoadOptions<TItem>) => DxPromise<TLoadResult> | TLoadResult;
     /**
      * @docid
      * @default 'processed'
@@ -102,6 +105,7 @@ export interface CustomStoreOptions<
      */
     useDefaultSearch?: boolean;
 }
+
 /**
  * @docid
  * @inherits Store
@@ -110,12 +114,28 @@ export interface CustomStoreOptions<
 export default class CustomStore<
     TItem = any,
     TKey = any,
+    TLoadResult = DefaultLoadResult<TItem>,
 > extends Store<TItem, TKey> {
-    constructor(options?: Options<TItem, TKey>);
+    constructor(options?: Options<TItem, TKey, TLoadResult>);
     /**
      * @docid
      * @publicName clearRawDataCache()
      * @public
      */
     clearRawDataCache(): void;
+    /**
+     * @docid
+     * @publicName load()
+     * @return Promise<any>
+     * @public
+     */
+    load(): TLoadResult;
+    /**
+     * @docid
+     * @publicName load(options)
+     * @param1 options:LoadOptions
+     * @return Promise<any>
+     * @public
+     */
+    load(options: LoadOptions<TItem>): TLoadResult;
 }

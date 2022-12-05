@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
 import { DeepPartial } from '../core/index';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
@@ -111,7 +112,7 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
  * @hidden
  * @namespace DevExpress.data
  */
-export default class Store<
+export class Store<
     TItem = any,
     TKey = any,
 > {
@@ -147,21 +148,6 @@ export default class Store<
      * @public
      */
     keyOf(obj: TItem): TKey;
-    /**
-     * @docid
-     * @publicName load()
-     * @return Promise<any>
-     * @public
-     */
-    load(): DxExtendedPromise<Array<TItem>>;
-    /**
-     * @docid
-     * @publicName load(options)
-     * @param1 options:LoadOptions
-     * @return Promise<any>
-     * @public
-     */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -227,4 +213,31 @@ export default class Store<
      * @public
      */
     update(key: TKey, values: DeepPartial<TItem>): DxExtendedPromise<TItem>;
+}
+
+/**
+ * @docid
+ * @hidden
+ * @namespace DevExpress.data
+ */
+ export default class AbstractStore<
+ TItem = any,
+ TKey = any,
+> extends Store<TItem, TKey> {
+ constructor(options?: Options<TItem, TKey>);
+ /**
+  * @docid Store.load()
+  * @publicName load()
+  * @return Promise<any>
+  * @public
+  */
+ load(): DxExtendedPromise<Array<TItem>>;
+ /**
+  * @docid Store.load(options)
+  * @publicName load(options)
+  * @param1 options:LoadOptions
+  * @return Promise<any>
+  * @public
+  */
+ load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
 }
