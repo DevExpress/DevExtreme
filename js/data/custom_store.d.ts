@@ -6,7 +6,7 @@ import { DxPromise } from '../core/utils/deferred';
 export type Options<
     TItem = any,
     TKey = any,
-    TLoadResult = DefaultLoadResult<TItem>,
+    TLoadResult = LoadResult<TItem>,
 > = CustomStoreOptions<TItem, TKey, TLoadResult>;
 
 type ItemsArray<TItem> = Array<TItem> | Array<GroupItem<TItem>>;
@@ -33,7 +33,7 @@ export type ResolvedData<
       groupCount?: number;
     };
 
-type DefaultLoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
+type LoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
 
 /**
  * @namespace DevExpress.data
@@ -42,7 +42,7 @@ type DefaultLoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
 export interface CustomStoreOptions<
     TItem = any,
     TKey = any,
-    TLoadResult = DefaultLoadResult<ResolvedData<TItem>>,
+    TLoaded = ResolvedData<TItem>,
 > extends StoreOptions<TItem, TKey> {
     /**
      * @docid
@@ -70,7 +70,7 @@ export interface CustomStoreOptions<
      * @type_function_return Promise<Array<any>|object>|Array<any>
      * @public
      */
-    load: (options: LoadOptions<TItem>) => DxPromise<TLoadResult> | TLoadResult;
+    load: (options: LoadOptions<TItem>) => LoadResult<TLoaded>;
     /**
      * @docid
      * @default 'processed'
@@ -116,9 +116,9 @@ export interface CustomStoreOptions<
 export default class CustomStore<
     TItem = any,
     TKey = any,
-    TLoadResult = DefaultLoadResult<ResolvedData<TItem>>,
+    TLoaded = ResolvedData<TItem>,
 > extends Store<TItem, TKey> {
-    constructor(options?: Options<TItem, TKey, TLoadResult>);
+    constructor(options?: Options<TItem, TKey, TLoaded>);
     /**
      * @docid
      * @publicName clearRawDataCache()
@@ -131,7 +131,7 @@ export default class CustomStore<
      * @return Promise<any>
      * @public
      */
-    load(): TLoadResult;
+    load(): LoadResult<TLoaded>;
     /**
      * @docid
      * @publicName load(options)
@@ -139,5 +139,5 @@ export default class CustomStore<
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions<TItem>): TLoadResult;
+    load(options: LoadOptions<TItem>): LoadResult<TLoaded>;
 }
