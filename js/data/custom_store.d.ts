@@ -11,7 +11,6 @@ export type Options<
 
 type ItemsArray<TItem> = Array<TItem> | Array<GroupItem<TItem>>;
 
-/** @public */
 export type GroupItem<
     TItem = any,
 > = {
