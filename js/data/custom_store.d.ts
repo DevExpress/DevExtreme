@@ -33,9 +33,7 @@ export type ResolvedData<
       groupCount?: number;
     };
 
-type DefaultLoadResult<TItem> = DxPromise<ResolvedData<TItem>>
-| PromiseLike<ResolvedData<TItem>>
-| ResolvedData<TItem>;
+type DefaultLoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
 
 /**
  * @namespace DevExpress.data
@@ -44,7 +42,7 @@ type DefaultLoadResult<TItem> = DxPromise<ResolvedData<TItem>>
 export interface CustomStoreOptions<
     TItem = any,
     TKey = any,
-    TLoadResult = DefaultLoadResult<TItem>,
+    TLoadResult = DefaultLoadResult<ResolvedData<TItem>>,
 > extends StoreOptions<TItem, TKey> {
     /**
      * @docid
@@ -118,7 +116,7 @@ export interface CustomStoreOptions<
 export default class CustomStore<
     TItem = any,
     TKey = any,
-    TLoadResult = DefaultLoadResult<TItem>,
+    TLoadResult = DefaultLoadResult<ResolvedData<TItem>>,
 > extends Store<TItem, TKey> {
     constructor(options?: Options<TItem, TKey, TLoadResult>);
     /**
