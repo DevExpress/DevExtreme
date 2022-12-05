@@ -154,6 +154,7 @@ export class ImageUploader {
         this.editorInstance.formDialogOption({
             'toolbarItems[0].options.text': localizationMessage.format('OK'),
             'toolbarItems[0].options.visible': true,
+            'toolbarItems[0].options.disabled': false,
             wrapperAttr: { class: FORM_DIALOG_CLASS }
         });
     }

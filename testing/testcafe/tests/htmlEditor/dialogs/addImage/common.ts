@@ -41,23 +41,21 @@ test('Add button should be enabled after switch to url form', async (t) => {
 test('Add button should be disable after switch to image upload form', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
-  await t.debug();
-
   await t
     .click(htmlEditor.toolbar.getItem('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-    .eql(false)
+    .notOk()
 
     .click(htmlEditor.dialog.footerToolbar.addButton.element)
     .expect(htmlEditor.dialog.addImageUrlForm.url.isInvalid)
-    .eql(true);
+    .ok();
 
   await t.click(htmlEditor.dialog.tabs.getItem(1).element);
 
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-    .eql(true);
+    .ok();
 
   const { fileUploader } = htmlEditor.dialog.addImageFileForm;
 
@@ -65,7 +63,7 @@ test('Add button should be disable after switch to image upload form', async (t)
     .setFilesToUpload(fileUploader.input, [TEST_IMAGE_PATH_1])
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-    .eql(false)
+    .notOk()
 
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 }).before(async () => {
@@ -76,5 +74,51 @@ test('Add button should be disable after switch to image upload form', async (t)
       tabs: ['url', 'file'],
     },
     toolbar: { items: ['image'] },
+  }, true);
+});
+
+test('AddImage form shouldn\'t lead to side effects in other forms', async (t) => {
+  const htmlEditor = new HtmlEditor('#container');
+
+  await t
+    .click(htmlEditor.toolbar.getItem('image'))
+
+    .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
+    .ok()
+
+    .expect(htmlEditor.dialog.footerToolbar.cancelButton.isDisabled)
+    .notOk()
+
+    .click(htmlEditor.dialog.footerToolbar.cancelButton.element);
+
+  await t
+    .click(htmlEditor.toolbar.getItem('link'))
+
+    .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
+    .notOk()
+
+    .expect(htmlEditor.dialog.footerToolbar.cancelButton.isDisabled)
+    .notOk()
+
+    .click(htmlEditor.dialog.footerToolbar.addButton.element);
+
+  await t
+    .click(htmlEditor.toolbar.getItem('color'))
+
+    .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
+    .notOk()
+
+    .expect(htmlEditor.dialog.footerToolbar.cancelButton.isDisabled)
+    .notOk()
+
+    .click(htmlEditor.dialog.footerToolbar.cancelButton.element);
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 600,
+    width: 800,
+    imageUpload: {
+      tabs: ['file', 'url'],
+    },
+    toolbar: { items: ['image', 'link', 'color'] },
   }, true);
 });

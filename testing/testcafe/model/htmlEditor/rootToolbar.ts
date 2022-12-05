@@ -4,7 +4,7 @@ const CLASS = {
   ROOT: '.dx-htmleditor-toolbar',
 };
 
-type ToolbarItemName = 'image' | 'color';
+type ToolbarItemName = 'image' | 'color' | 'link';
 
 export default class RootToolbar extends Toolbar {
   constructor() {
