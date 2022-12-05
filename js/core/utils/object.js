@@ -48,7 +48,10 @@ const assignValueToProperty = function(target, property, value, assignByReferenc
 };
 
 // B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
+
+const _deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference, mp) {
+    mp.set(changes, target);
+
     let prevValue;
     let newValue;
 
@@ -60,9 +63,12 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             continue;
         }
 
-        if(isPlainObject(newValue)) {
+
+        if(mp.has(newValue)) {
+            newValue = mp.get(newValue);
+        } else if(isPlainObject(newValue)) {
             const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
-            newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
+            newValue = _deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, mp);
         }
 
         if(newValue !== undefined && prevValue !== newValue) {
@@ -71,6 +77,11 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
     }
 
     return target;
+};
+
+const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
+    const mp = new Map();
+    return _deepExtendArraySafe(target, changes, extendComplexObject, assignByReference, mp);
 };
 
 export {
