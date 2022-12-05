@@ -864,18 +864,6 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Advanced Document Customization",
-            "Hidden": true,
-            "Name": "ExcelJS",
-            "Widget": "DataGrid",
-            "Modules": "exceljs&file-saver",
-            "MvcAdditionalFiles": [
-              "/Models/Order.cs",
-              "/Models/SampleData/Orders.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Overview",
             "Name": "ExcelJSOverview",
             "Widget": "DataGrid",
