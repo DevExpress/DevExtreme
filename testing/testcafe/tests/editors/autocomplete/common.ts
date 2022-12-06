@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Autocomplete_placeholder`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

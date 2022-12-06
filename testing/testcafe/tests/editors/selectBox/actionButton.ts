@@ -1,10 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`SelectBox`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 const purePressKey = async (t, key): Promise<void> => {
   await t

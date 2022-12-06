@@ -2,10 +2,11 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`TagBox`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {
   const tagBox = new TagBox('#container');

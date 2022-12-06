@@ -1,10 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Calendar`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Calendar with showWeekNumbers rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

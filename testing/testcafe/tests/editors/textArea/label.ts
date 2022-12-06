@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
 
 fixture.disablePageReloads`Label`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];

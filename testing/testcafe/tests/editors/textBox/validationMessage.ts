@@ -3,13 +3,14 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute, removeAttribute } from '../../navigation/helpers/domUtils';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 fixture.disablePageReloads`ValidationMessage`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 test('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

@@ -1,10 +1,11 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import TextBox from '../../../model/textBox';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`TextBox_mask`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 // note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377
 test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabled (T814440)', async (t) => {

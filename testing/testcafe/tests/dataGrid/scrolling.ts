@@ -902,8 +902,7 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
 });
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../container.html'))
-  .clientScripts({ path: 'https://unpkg.com/devextreme-aspnet-data@2.8.2/js/dx.aspnet.data.js' });
+  .page(url(__dirname, '../container.html'));
 
 test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');

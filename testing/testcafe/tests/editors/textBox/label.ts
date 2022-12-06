@@ -4,7 +4,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { cleanContainer, disposeWidgets } from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
 import {
   setAttribute, appendElementTo, insertStylesheetRule, deleteStylesheetRule, setClassAttribute,
@@ -13,7 +13,8 @@ import {
 import Guid from '../../../../../js/core/guid';
 
 fixture.disablePageReloads`TextBox_Label`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -98,5 +99,5 @@ test('Label max-width changed with container size', async (t) => {
         }
       }
     }
-  });
+  }).after(async () => cleanContainer());
 });

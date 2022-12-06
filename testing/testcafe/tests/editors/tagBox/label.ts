@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
 
@@ -9,7 +9,8 @@ const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
 
 fixture.disablePageReloads`TagBox_Label`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 stylingModes.forEach((stylingMode) => {
   test(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {

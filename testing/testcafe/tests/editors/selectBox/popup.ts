@@ -2,11 +2,12 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture.disablePageReloads`popup height after load`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 test('SelectBox without data', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

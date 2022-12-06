@@ -2,10 +2,11 @@ import { ClientFunction } from 'testcafe';
 import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`List`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 test('Should focus first item after changing selection mode (T811770)', async (t) => {
   const list = new List('#container');
