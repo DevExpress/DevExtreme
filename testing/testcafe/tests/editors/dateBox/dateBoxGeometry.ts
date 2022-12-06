@@ -12,7 +12,7 @@ fixture.disablePageReloads`DateBox (datetime) geometry (T896846)`
   .page(url(__dirname, '../../container.html'))
   .afterEach(() => disposeWidgets());
 
-test.skip('Geometry is good', async (t) => {
+test('Geometry is good', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dateBox = new DateBox('#container');
 

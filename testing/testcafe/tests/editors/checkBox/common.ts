@@ -37,5 +37,7 @@ fixture.disablePageReloads`CheckBox`
 
     await appendElementTo('#container', 'div', 'indeterminateRTL', { display: 'block' });
     await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, false, '#indeterminateRTL');
-  }).after(async () => cleanContainer());
+  }).after(async () => {
+    await cleanContainer();
+  });
 });

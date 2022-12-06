@@ -12,7 +12,7 @@ fixture.disablePageReloads`DateBox ValidationMessagePosition`
 const positions = ['top', 'right', 'bottom', 'left'];
 
 positions.forEach((position) => {
-  test.skip(`DateBox ValidationMessage position is correct (${position})`, async (t) => {
+  test(`DateBox ValidationMessage position is correct (${position})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dateBox = new DateBox('#container');

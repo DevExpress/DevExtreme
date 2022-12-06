@@ -13,7 +13,7 @@ const ITEM_HEIGHT = 40;
 
 if (!isMaterial()) {
   [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
-    test.skip(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async (t) => {
+    test(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async (t) => {
       const dateBox = new DateBox('#container');
       const { dropDownEditorButton } = dateBox;
 
