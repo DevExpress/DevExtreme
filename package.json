@@ -46,6 +46,7 @@
         "build:packages": "npm run build:core && npm run build:react",
         "build": "nx run-many --target=build --projects=@devexpress/core,@devexpress/components,@devexpress/react --skip-nx-cache",
         "start:react": "nx start @playgrounds/react",
+        "start:angular": "nx start @playgrounds/angular",
         "watch": "nx run-many --target=watch",
         "clean": "rimraf ./{packages,playgrounds}/*/{lib,dist,tsc-out,*.tsbuildinfo} && nx reset",
         "test": "nx run-many --target=test",
@@ -63,7 +64,7 @@
     },
     "workspaces": [
         "packages/*",
-        "playgrounds/react"
+        "playgrounds/*"
     ],
     "pre-commit": [
         "pre-commit"
