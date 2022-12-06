@@ -23,7 +23,7 @@ fixture.disablePageReloads`DateBox render`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {
-  test('DateBox styles', async (t) => {
+  test.skip('DateBox styles', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Datebox rtl=${rtlEnabled}.png`, '#container', true);
