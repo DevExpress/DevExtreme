@@ -23,20 +23,19 @@ fixture.disablePageReloads`DateBox render`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {
-  const ids = [] as string[];
   test('DateBox styles', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Datebox rtl=${rtlEnabled}.png`, '#container', true);
 
     for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
-      for (const id of ids) {
+      for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }
 
       await takeScreenshotInTheme(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} rtl=${rtlEnabled}.png`, undefined, true);
 
-      for (const id of ids) {
+      for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);
       }
     }
@@ -45,6 +44,8 @@ fixture.disablePageReloads`DateBox render`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
+    t.ctx.ids = [];
+
     await restoreBrowserSize(t);
     await insertStylesheetRule('.dx-datebox { display: inline-block }', 0);
 
@@ -54,7 +55,7 @@ fixture.disablePageReloads`DateBox render`
           for (const labelMode of labelModes) {
             const id = `${`dx${new Guid()}`}`;
 
-            ids.push(id);
+            t.ctx.ids.push(id);
             await appendElementTo('#container', 'div', id, { });
 
             const options: any = {
@@ -75,7 +76,7 @@ fixture.disablePageReloads`DateBox render`
       }
     }
   }).after(async () => {
-    await deleteStylesheetRule(0);
     await cleanContainer();
+    await deleteStylesheetRule(0);
   });
 });
