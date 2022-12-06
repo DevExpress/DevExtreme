@@ -674,11 +674,11 @@ module('Keyboard navigation', setupModule, () => {
         this.keyboard.type('1');
 
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
-        assert.strictEqual(this.instance._searchValue, '1', 'there is searchValue');
 
         this.keyboard.press('enter');
+        this.keyboard.type('2');
 
-        assert.strictEqual(this.instance._searchValue, '', 'searchValue is cleared');
+        assert.strictEqual(this.instance.option('text'), 'February 10 2012', 'search value was cleared');
     });
 
     QUnit.test('enter should not prevent keypress event that triggers form validation (T1131035)', function(assert) {
