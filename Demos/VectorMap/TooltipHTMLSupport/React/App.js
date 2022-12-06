@@ -26,6 +26,7 @@ const { format } = new Intl.NumberFormat('en-US', {
 export default function App() {
   return (
     <VectorMap
+      id="vector-map"
       palette="Violet"
       bounds={mapBounds}>
       <Size height={700} />

@@ -2,7 +2,7 @@
   height: 440px;
 }
 
-::ng-deep #reset-button {
+::ng-deep #reset-zoom {
   position: absolute;
   right: 10px;
   top: 5px;
