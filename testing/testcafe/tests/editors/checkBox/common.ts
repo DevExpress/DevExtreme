@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`CheckBox`
+fixture.disablePageReloads`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((isColumnCountStyle) => {

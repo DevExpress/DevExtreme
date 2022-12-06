@@ -12,7 +12,7 @@ import {
 } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
 
-fixture`TextBox_Label`
+fixture.disablePageReloads`TextBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 const labelModes = ['floating', 'static', 'hidden'];

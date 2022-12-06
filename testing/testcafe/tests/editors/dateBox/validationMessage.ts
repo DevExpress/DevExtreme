@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`DateBox ValidationMessagePosition`
+fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'));
 
 const positions = ['top', 'right', 'bottom', 'left'];

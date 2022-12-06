@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
-fixture`Lookup_Label`
+fixture.disablePageReloads`Lookup_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingMods.forEach((stylingMode) => {

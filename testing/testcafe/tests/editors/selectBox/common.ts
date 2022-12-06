@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`SelectBox placeholder`
+fixture.disablePageReloads`SelectBox placeholder`
   .page(url(__dirname, '../../container.html'));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {

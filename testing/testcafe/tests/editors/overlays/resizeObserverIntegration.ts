@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { setStyleAttribute, appendElementTo } from '../../navigation/helpers/domUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
-fixture`Popup`
+fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if content dimension is changed during animation', async (t) => {

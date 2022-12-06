@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
 
-fixture`Label`
+fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'));
 
 const labelMods = ['floating', 'static'];

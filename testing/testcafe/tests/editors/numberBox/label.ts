@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
-fixture`NumberBox_Label`
+fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingMods.forEach((stylingMode) => {

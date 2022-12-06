@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import TextBox from '../../../model/textBox';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`TextBox_mask`
+fixture.disablePageReloads`TextBox_mask`
   .page(url(__dirname, '../../container.html'));
 
 // note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377

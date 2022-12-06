@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`Colorbox`
+fixture.disablePageReloads`Colorbox`
   .page(url(__dirname, '../../container.html'));
 
 test('Colorbox should display full placeholder', async (t) => {

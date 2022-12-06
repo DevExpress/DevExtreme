@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
-fixture`Label`
+fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingMods.forEach((stylingMode) => {

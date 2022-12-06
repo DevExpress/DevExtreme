@@ -5,7 +5,7 @@ import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
 import { setStyleAttribute } from '../../navigation/helpers/domUtils';
 
-fixture`Popup`
+fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));
 
 test('Popup can not be dragged outside of the container (window)', async (t) => {

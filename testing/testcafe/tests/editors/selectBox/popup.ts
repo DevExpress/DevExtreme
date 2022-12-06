@@ -5,7 +5,7 @@ import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
-fixture`popup height after load`
+fixture.disablePageReloads`popup height after load`
   .page(url(__dirname, '../../container.html'));
 
 test('SelectBox without data', async (t) => {
