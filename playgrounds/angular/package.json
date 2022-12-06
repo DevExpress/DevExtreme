@@ -1,5 +1,5 @@
 {
-  "name": "angular-playground",
+  "name": "@playgrounds/angular",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
@@ -18,8 +18,8 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
-    "@devexpress/angular": "file:../../packages/angular",
-    "@devexpress/core": "file:../../packages/core",
+    "@devexpress/angular": "1.0.0",
+    "@devexpress/core": "1.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
