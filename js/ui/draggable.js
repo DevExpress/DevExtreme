@@ -27,8 +27,10 @@ import { noop, splitPair } from '../core/utils/common';
 import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
+import { APPOINTMENT_DRAG_SOURCE_CLASS } from './scheduler/classes';
 
 const window = getWindow();
+const KEYDOWN_EVENT = 'keydown';
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
@@ -37,6 +39,7 @@ const DRAGEND_EVENT_NAME = addNamespace(dragEventEnd, DRAGGABLE);
 const DRAG_ENTER_EVENT_NAME = addNamespace(dragEventEnter, DRAGGABLE);
 const DRAGEND_LEAVE_EVENT_NAME = addNamespace(dragEventLeave, DRAGGABLE);
 const POINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, DRAGGABLE);
+const KEYDOWN_EVENT_NAME = addNamespace(KEYDOWN_EVENT, DRAGGABLE);
 
 const CLONE_CLASS = 'clone';
 
@@ -461,12 +464,12 @@ const Draggable = DOMComponent.inherit({
         if(itemsSelector[0] === '>') {
             itemsSelector = itemsSelector.slice(1);
         }
-
         eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
         eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
         eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
         eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
+        eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._dropHandler.bind(this));
     },
 
     _dragElementIsCloned: function() {
@@ -905,6 +908,32 @@ const Draggable = DOMComponent.inherit({
 
         const sourceDraggable = this._getSourceDraggable();
         sourceDraggable.dragLeave(e);
+    },
+
+    _dropHandler: function(e) {
+        const $sourceElement = this._getSourceElement();
+
+        if(e.key === 'Escape') {
+            this._detachEventHandlers();
+
+            this._revertItemToInitialPosition();
+            this.reset();
+            this._stopAnimator();
+
+            this._horizontalScrollHelper.reset();
+            this._verticalScrollHelper.reset();
+
+            sourceDraggable._toggleDraggingClass(false);
+            $sourceElement.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+
+            this._resetDragElement();
+            this._resetSourceElement();
+
+            this._resetTargetDraggable();
+            this._resetSourceDraggable();
+
+            this._attachEventHandlers();
+        }
     },
 
     _getAction: function(name) {
