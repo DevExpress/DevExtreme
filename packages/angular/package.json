@@ -17,7 +17,8 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
-    "@devexpress/core": "^1.0.0",
+    "@devexpress/core": "1.0.0",
+    "@devexpress/components": "1.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -38,39 +39,23 @@
     "typescript": "~4.7.2",
     "wait-on": "^6.0.1"
   },
-  "module": "./dist/angular/fesm2015/devexpress-angular.mjs",
-  "es2020": "./dist/angular/fesm2020/devexpress-angular.mjs",
-  "esm2020": "./dist/angular/esm2020/devexpress-angular.mjs",
-  "fesm2020": "./dist/angular/fesm2020/devexpress-angular.mjs",
-  "fesm2015": "./dist/angular/fesm2015/devexpress-angular.mjs",
-  "typings": "./dist/angular/index.d.ts",
+  "module": "./lib/fesm2015/devexpress-angular.mjs",
+  "es2020": "./lib/fesm2020/devexpress-angular.mjs",
+  "esm2020": "./lib/esm2020/devexpress-angular.mjs",
+  "fesm2020": "./lib/fesm2020/devexpress-angular.mjs",
+  "fesm2015": "./lib/fesm2015/devexpress-angular.mjs",
+  "typings": "./lib/index.d.ts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
-      "types": "./dist/angular/index.d.ts",
-      "esm2020": "./dist/angular/esm2020/devexpress-angular.mjs",
-      "es2020": "./dist/angular/fesm2020/devexpress-angular.mjs",
-      "es2015": "./dist/angular/fesm2015/devexpress-angular.mjs",
-      "node": "./dist/angular/fesm2015/devexpress-angular.mjs",
-      "default": "./dist/angular/fesm2020/devexpress-angular.mjs"
-    },
-    "./pager": {
-      "types": "./dist/angular/components/pager/index.d.ts",
-      "esm2020": "./dist/angular/esm2020/components/pager/devexpress-angular.mjs",
-      "es2020": "./dist/angular/fesm2020/components/pager/devexpress-angular.mjs",
-      "es2015": "./dist/angular/fesm2015/components/pager/devexpress-angular.mjs",
-      "node": "./dist/angular/fesm2015/components/pager/devexpress-angular.mjs",
-      "default": "./dist/angular/fesm2020/components/pager/devexpress-angular.mjs"
-    },
-    "./slideToggle": {
-      "types": "./dist/angular/components/slideToggle/index.d.ts",
-      "esm2020": "./dist/angular/esm2020/components/slideToggle/devexpress-angular.mjs",
-      "es2020": "./dist/angular/fesm2020/components/slideToggle/devexpress-angular.mjs",
-      "es2015": "./dist/angular/fesm2015/components/slideToggle/devexpress-angular.mjs",
-      "node": "./dist/angular/fesm2015/components/slideToggle/devexpress-angular.mjs",
-      "default": "./dist/angular/fesm2020/components/slideToggle/devexpress-angular.mjs"
+      "types": "./lib/index.d.ts",
+      "esm2020": "./lib/esm2020/devexpress-angular.mjs",
+      "es2020": "./lib/fesm2020/devexpress-angular.mjs",
+      "es2015": "./lib/fesm2015/devexpress-angular.mjs",
+      "node": "./lib/fesm2015/devexpress-angular.mjs",
+      "default": "./lib/fesm2020/devexpress-angular.mjs"
     }
   },
   "sideEffects": false
