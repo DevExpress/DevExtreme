@@ -72,6 +72,18 @@ export default async function createWidget(
   }
 }
 
+export async function cleanContainer(): Promise<void> {
+  await ClientFunction(() => {
+    const containerSelector = '#container';
+
+    const $container = $(containerSelector);
+
+    $container.empty();
+    $container.removeAttr('style');
+    $container.removeAttr('class');
+  })();
+}
+
 export async function disposeWidgets(): Promise<void> {
   await ClientFunction(() => {
     const widgetSelector = '.dx-widget';
@@ -88,14 +100,5 @@ export async function disposeWidgets(): Promise<void> {
       $widgetElement.empty();
     });
   })();
-}
-
-export async function cleanContainer(): Promise<void> {
-  await ClientFunction(() => {
-    const containerSelector = '#container';
-
-    const $container = $(containerSelector);
-
-    $container.empty();
-  })();
+  await cleanContainer();
 }
