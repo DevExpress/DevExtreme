@@ -20,6 +20,37 @@ import 'ui/radio_group';
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 QUnit.module('Fixed columns', baseModuleConfig, () => {
+    QUnit.test('The "Select All" cell should not have the "dx-col-fixed" class (T1120812)', function(assert) {
+        // arrange
+        const headersWrapper = dataGridWrapper.headers;
+
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                store: [
+                    { id: 1, value: 'value 1' },
+                    { id: 2, value: 'value 2' }
+                ]
+            },
+            columns: ['id', {
+                dataField: 'value',
+                fixed: true
+            }],
+            columnFixing: {
+                enabled: true
+            },
+            selection: {
+                mode: 'multiple'
+            }
+        });
+
+        const selectAllCell = headersWrapper.getHeaderItem(0, 0);
+
+        // assert
+        assert.ok(selectAllCell.hasClass('dx-command-select'), 'cell contains the Select All checkbox');
+        assert.notOk(selectAllCell.hasClass('dx-col-fixed'), 'not dx-col-fixed');
+    });
+
     QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T823783, T875201)', function(assert) {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
