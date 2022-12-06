@@ -7,7 +7,7 @@ import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { Props } from '../../internal/props';
 import { RadioGroupContext } from './radio-group-context';
 
-function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
+function RadioGroupInternal<T extends RadioGroupValue>(props: RadioGroupProps<T>) {
   const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 
@@ -36,6 +36,8 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
     </RadioGroupContext.Provider>
   );
 }
+
+export type RadioGroupValue = string | number;
 
 export type RadioGroupProps<T> =
   React.PropsWithChildren<Props<ValueProps<T>, ReadonlyProps, TemplateProps>>;

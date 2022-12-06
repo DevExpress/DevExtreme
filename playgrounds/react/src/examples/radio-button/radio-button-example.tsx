@@ -9,9 +9,7 @@ const CustomRadio: React.FC<RadioTemplateProps> = ({ checked }) => (
   <span>{checked ? '+' : '-'}</span>
 );
 
-const CustomLabel: React.FC<LabelTemplateProps> = ({ label }) => (
-  <b>{label}</b>
-);
+const CustomLabel: React.FC<LabelTemplateProps> = ({ label }) => <b>{label}</b>;
 
 export function RadioButtonExample() {
   const [checked1, setChecked1] = useState(false);
@@ -38,6 +36,20 @@ export function RadioButtonExample() {
             onClick={() => setChecked2((current) => !current)}
             radioTemplate={CustomRadio}
             labelTemplate={CustomLabel}
+          />
+        </div>
+        <div className="example__play-part">
+          <span>Uncontrolled mode: </span>
+          <RadioButton
+            value="uncontrolled 1"
+            label="uncontrolled 1"
+            name="uncontrolled"
+            defaultChecked
+          />
+          <RadioButton
+            value="uncontrolled 2"
+            label="uncontrolled 2"
+            name="uncontrolled"
           />
         </div>
       </div>

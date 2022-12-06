@@ -1,5 +1,5 @@
 import React from 'react';
-import { RadioGroup, RadioButtonTmp } from '@devexpress/react';
+import { RadioGroup, RadioButton } from '@devexpress/react';
 
 const OPTIONS = [1, 2, 3, 4, 5];
 
@@ -11,7 +11,7 @@ export function RadioGroupUncontrolledExample() {
       </div>
       <div className="example__control">
         <RadioGroup defaultValue={OPTIONS[2]}>
-          { OPTIONS.map((option) => <RadioButtonTmp key={option} value={option} />)}
+          { OPTIONS.map((option) => <RadioButton key={option} value={option} />)}
         </RadioGroup>
       </div>
     </div>

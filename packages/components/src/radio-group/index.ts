@@ -26,23 +26,20 @@ export type RadioGroupState<T> = ValueProps<T>;
 
 // === actions ===
 
-export enum Actions {
-  updateValue = 'updateValue',
-}
+type RadioGroupActions<T> = {
+  updateValue: { value: T }
+};
 
-function updateValueHandler<T>(
-  stateValue: RadioGroupState<T>,
-  { value } : { value: T },
-): Partial<RadioGroupState<T>> {
-  return {
-    ...stateValue,
-    value,
-  };
-}
+type RadioGroupHandlers<T> = Handlers<RadioGroupState<T>, RadioGroupActions<T>>;
 
-function createActionHandlers<T>(): Handlers<RadioGroupState<T>> {
+function createActionHandlers<T>(): RadioGroupHandlers<T> {
   return {
-    [Actions.updateValue]: updateValueHandler,
+    updateValue(stateValue, { value }) {
+      return {
+        ...stateValue,
+        value,
+      };
+    },
   };
 }
 
@@ -62,11 +59,14 @@ export function createRadioButtonVMSelector<T>(
 // === component ===
 export type RadioGroupStateManager<T> =
   StateManager<RadioGroupState<T>>;
+
 export type RadioGroupViewModelManager<T> =
   // eslint-disable-next-line @typescript-eslint/ban-types
   Disposable<ViewModelManager<RadioGroupState<T>, {}>>;
+
 export type RadioGroupDispatcher<T> =
-  Dispatcher<RadioGroupState<T>, Handlers<RadioGroupState<T>>>;
+  Dispatcher<RadioGroupState<T>, RadioGroupHandlers<T>>;
+
 export type RadioGroupCore<T> = {
   stateManager: RadioGroupStateManager<T>,
   viewModelManager: RadioGroupViewModelManager<T>,

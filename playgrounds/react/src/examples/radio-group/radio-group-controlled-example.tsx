@@ -1,19 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { RadioGroup, RadioButtonTmp } from '@devexpress/react';
+import { RadioGroup, RadioButton, RadioGroupValue } from '@devexpress/react';
 
-type OptionType = { prop: number };
-const OPTIONS = [
-  { prop: 0 },
-  { prop: 1 },
-  { prop: 2 },
-  { prop: 3 },
-  { prop: 4 },
-];
+const OPTIONS = [0, 1, 2, 3, 4];
 
 export function RadioGroupControlledExample() {
-  const [value, setValue] = useState<OptionType | undefined>(undefined);
+  const [value, setValue] = useState<RadioGroupValue | undefined>(undefined);
 
-  const handleChange = useCallback((newValue?: OptionType) => {
+  const handleChange = useCallback((newValue?: RadioGroupValue) => {
     setValue(newValue);
   }, []);
 
@@ -27,7 +20,7 @@ export function RadioGroupControlledExample() {
           value={value}
           valueChange={handleChange}
         >
-          { OPTIONS.map((option) => <RadioButtonTmp key={option.prop} value={option} />)}
+          { OPTIONS.map((option) => <RadioButton key={option} value={option} />)}
         </RadioGroup>
       </div>
       <div className="example__info">

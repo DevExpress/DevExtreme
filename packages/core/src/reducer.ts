@@ -1,8 +1,13 @@
-import { UnknownRecord } from './utils';
+import { AnyRecord, UnknownRecord } from './utils';
 
-export type Handlers<TState extends UnknownRecord> =
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Record<PropertyKey, (state: TState, value: any) => Partial<TState>>;
+type Handler<TState, TValue> = (state: TState, value: TValue) => Partial<TState>;
+
+export type Handlers<
+  TState extends UnknownRecord,
+  TActions extends UnknownRecord = AnyRecord,
+> = {
+  [K in keyof TActions]: Handler<TState, TActions[K]>
+};
 
 export type Reducer<
   TState extends UnknownRecord,
