@@ -17,7 +17,7 @@ test('Image from device should be inserted', async (t) => {
 
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-    .eql(true, 'add button should be disabled, if file not selected');
+    .eql(true);
 
   const { fileUploader } = htmlEditor.dialog.addImageFileForm;
 
@@ -46,7 +46,7 @@ test('Image from device should be inserted', async (t) => {
     .setFilesToUpload(fileUploader.input, [TEST_IMAGE_PATH_2]);
 
   await t.expect(
-    await takeScreenshot('html-editor-before-click-add-button.png'),
+    await takeScreenshot('editor-before-click-add-button-from-device.png'),
   ).ok();
 
   await t
@@ -56,7 +56,7 @@ test('Image from device should be inserted', async (t) => {
   await t.click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t.expect(
-    await takeScreenshot('add-image-from-device.png', htmlEditor.content),
+    await takeScreenshot('editor-after-add-image-from-device.png', htmlEditor.content),
   ).ok();
 
   await t.expect(compareResults.isValid())
@@ -117,7 +117,7 @@ test('Image should be validated and inserted from device', async (t) => {
     .eql('Ready to upload');
 
   await t.expect(
-    await takeScreenshot('html-editor-before-click-add-button-and-validation.png'),
+    await takeScreenshot('editor-before-click-add-button-and-validation.png'),
   ).ok();
 
   await t
@@ -127,7 +127,7 @@ test('Image should be validated and inserted from device', async (t) => {
   await t.click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t.expect(
-    await takeScreenshot('html-editor-after-click-add-button-and-validation.png', htmlEditor.content),
+    await takeScreenshot('editor-after-click-add-button-and-validation.png', htmlEditor.content),
   ).ok();
 
   await t.expect(compareResults.isValid())
