@@ -89,3 +89,13 @@ export async function disposeWidgets(): Promise<void> {
     });
   })();
 }
+
+export async function cleanContainer(): Promise<void> {
+  await ClientFunction(() => {
+    const containerSelector = '#container';
+
+    const $container = $(containerSelector);
+
+    $container.empty();
+  })();
+}
