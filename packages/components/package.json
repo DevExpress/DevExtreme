@@ -1,5 +1,5 @@
 {
-  "name": "@devexpress/components",
+  "name": "@devextreme/components",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@devexpress/core": "1.0.0"
+    "@devextreme/core": "1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^9.0.2",

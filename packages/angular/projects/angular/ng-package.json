@@ -3,8 +3,7 @@
   "dest": "../../lib",
   "deleteDestPath": true,
   "allowedNonPeerDependencies": [
-    "@devexpress/core",
-    "@devexpress/components"
+    "@devextreme/components"
   ],
   "lib": {
     "entryFile": "src/index.ts"

@@ -1,4 +1,4 @@
-import { RadioGroupCore } from '@devexpress/components';
+import { RadioGroupCore } from '@devextreme/components';
 import { ComponentType, ReactElement } from 'react';
 import { RadioGroupValue } from '../radio-group';
 

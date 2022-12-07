@@ -21,11 +21,7 @@
         "jsx": "react-jsx",
         "paths": {
             "@devexpress/react/*": ["./node_modules/@devexpress/react/*"],
-        },
-        "types": [
-            "@devexpress/core",
-            "@devexpress/react",
-        ]
+        }
     },
     "include": [
         "src"

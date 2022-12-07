@@ -33,7 +33,7 @@
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
     "paths": {
-      "@devexpress/*": [
+      "@devextreme/*": [
         "./packages/*/src"
       ],
       "@playgrounds/*": [

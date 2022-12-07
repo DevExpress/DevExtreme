@@ -40,11 +40,11 @@
         "typescript": "^4.7.3"
     },
     "scripts": {
-        "build:angular": "nx build @devexpress/angular",
-        "build:core": "nx build @devexpress/core",
-        "build:react": "nx build @devexpress/react",
+        "build:angular": "nx build @devextreme/angular",
+        "build:core": "nx build @devextreme/core",
+        "build:react": "nx build @devextreme/react",
         "build:packages": "npm run build:core && npm run build:react",
-        "build": "nx run-many --target=build --projects=@devexpress/core,@devexpress/components,@devexpress/react --skip-nx-cache",
+        "build": "nx run-many --target=build --projects=@devextreme/core,@devextreme/components,@devextreme/react --skip-nx-cache",
         "start:react": "nx start @playgrounds/react",
         "start:angular": "nx start @playgrounds/angular",
         "watch": "nx run-many --target=watch",

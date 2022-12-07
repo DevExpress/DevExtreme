@@ -3,7 +3,7 @@ import {
   RadioButton,
   RadioTemplateProps,
   LabelTemplateProps,
-} from '@devexpress/react';
+} from '@devextreme/react';
 
 const CustomRadio: React.FC<RadioTemplateProps> = ({ checked }) => (
   <span>{checked ? '+' : '-'}</span>
