@@ -17,6 +17,10 @@
     },
     "packageRules": [
         {
+            "matchPackagePrefixes": [ "cldr-" ],
+            "groupName": "CLDR"
+        },        
+        {
             "matchPackagePatterns": [
                 "^@devextreme-generator/"
             ],
