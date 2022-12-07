@@ -7,7 +7,7 @@ const stylingMods = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 stylingMods.forEach((stylingMode) => {
   test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {

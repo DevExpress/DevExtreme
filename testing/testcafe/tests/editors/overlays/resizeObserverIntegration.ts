@@ -3,12 +3,12 @@ import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { setStyleAttribute, appendElementTo } from '../../navigation/helpers/domUtils';
+import { setStyleAttribute } from '../../navigation/helpers/domUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Popup should be centered regarding the container even if content dimension is changed during animation', async (t) => {
   const popup = new Popup('#container');
@@ -208,30 +208,29 @@ test('Showing and shown events should be raised only once even after resize duri
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
 
-  const shownCallCount = Number(await Selector('#shown_call_count').innerText);
-  const showingCallCount = Number(await Selector('#showing_call_count').innerText);
-
   await t
-    .expect(shownCallCount)
+    .expect(t.ctx.shownCallCount)
     .eql(1);
   await t
-    .expect(showingCallCount)
+    .expect(t.ctx.showingCallCount)
     .eql(1);
-}).before(async () => {
-  await appendElementTo('body', 'div', 'shown_call_count', {});
-  await appendElementTo('body', 'div', 'showing_call_count', {});
+}).before(async (t) => {
+  t.ctx.shownCallCount = 0;
+  t.ctx.showingCallCount = 0;
 
   return createWidget('dxPopup', {
     width: 'auto',
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
     onShown: ClientFunction(() => {
-      const callCount = +$('#shown_call_count').text();
-      $('#shown_call_count').text(callCount + 1);
+      (t.ctx.shownCallCount as number) += 1;
+    }, {
+      dependencies: { t },
     }),
     onShowing: ClientFunction(() => {
-      const callCount = +$('#showing_call_count').text();
-      $('#showing_call_count').text(callCount + 1);
+      (t.ctx.showingCallCount as number) += 1;
+    }, {
+      dependencies: { t },
     }),
   });
 });

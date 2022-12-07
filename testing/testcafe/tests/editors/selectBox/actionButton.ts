@@ -5,7 +5,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`SelectBox`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const purePressKey = async (t, key): Promise<void> => {
   await t

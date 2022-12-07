@@ -7,7 +7,7 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const positions = ['top', 'right', 'bottom', 'left'];
 

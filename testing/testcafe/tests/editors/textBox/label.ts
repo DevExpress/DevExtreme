@@ -14,7 +14,7 @@ import Guid from '../../../../../js/core/guid';
 
 fixture.disablePageReloads`TextBox_Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];

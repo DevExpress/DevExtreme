@@ -8,9 +8,7 @@ import Toolbar from '../../../model/toolbar/toolbar';
 
 fixture.disablePageReloads`Popup_toolbar`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await disposeWidgets();
-  });
+  .afterEach(async () => disposeWidgets());
 
 [
   { name: 'dxPopup', Class: Popup },

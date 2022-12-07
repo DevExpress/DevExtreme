@@ -5,7 +5,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`TextBox_mask`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 // note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377
 test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabled (T814440)', async (t) => {

@@ -8,7 +8,7 @@ const stylingMods = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`Lookup_Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 stylingMods.forEach((stylingMode) => {
   labelMods.forEach((labelMode) => {

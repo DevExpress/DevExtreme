@@ -10,7 +10,7 @@ const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitW
 
 fixture.disablePageReloads`DateBox (datetime) geometry (T896846)`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Geometry is good', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

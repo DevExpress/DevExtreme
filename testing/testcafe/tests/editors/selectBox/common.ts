@@ -6,7 +6,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`SelectBox placeholder`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

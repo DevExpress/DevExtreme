@@ -20,7 +20,7 @@ const stylingModes = ['text', 'outlined', 'contained'];
 
 fixture.disablePageReloads`Drop Down Button`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Item collection should be updated after direct option changing (T817436)', async (t) => {
   const dropDownButton1 = new DropDownButton('#container');

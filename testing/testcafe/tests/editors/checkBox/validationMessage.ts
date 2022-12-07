@@ -7,7 +7,7 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('ValidationMessage integrated in editor should not raise any errors when it is placed inside of form and has name "style" (T941581)', async (t) => {
   const checkBox = new CheckBox('#container');

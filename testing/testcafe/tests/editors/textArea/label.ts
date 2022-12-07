@@ -6,7 +6,7 @@ import TextArea from '../../../model/textArea';
 
 fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];

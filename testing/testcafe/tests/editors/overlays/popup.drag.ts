@@ -7,7 +7,7 @@ import { setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Popup can not be dragged outside of the container (window)', async (t) => {
   const popup = new Popup('#container');

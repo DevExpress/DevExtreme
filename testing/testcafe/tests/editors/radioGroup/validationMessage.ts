@@ -9,7 +9,7 @@ const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
 fixture.disablePageReloads`Radio Group Validation Message`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('message position is right (T1020449)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

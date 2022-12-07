@@ -10,7 +10,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 fixture.disablePageReloads`ValidationMessage`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

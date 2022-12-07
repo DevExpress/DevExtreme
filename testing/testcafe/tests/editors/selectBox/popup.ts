@@ -7,7 +7,7 @@ import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture.disablePageReloads`popup height after load`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('SelectBox without data', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
