@@ -1576,9 +1576,23 @@ export interface GridBase<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid GridBaseOptions
+ * @namespace DevExpress.common.grids
+ * @export GridBaseOptions
+ * @inherits WidgetOptions
+ */
+interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
+    /**
+     * @hidden
+     * @docid GridBaseOptions.focusStateEnabled
+     */
+    focusStateEnabled?: any;
+}
+
+/**
  * @namespace DevExpress.common.grids
  */
-export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
+export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
   /**
    * @docid
    * @default false
@@ -2125,7 +2139,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
    * @public
    */
   syncLookupFilterValues?: boolean;
-}
+};
 
 /**
  * @public
