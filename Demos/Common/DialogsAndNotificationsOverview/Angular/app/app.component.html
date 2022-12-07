@@ -6,7 +6,7 @@
         <div>
           <div class="address">{{ house.Address }}</div>
           <div class="price large-text">{{
-            house.Price | currency: "USD":"symbol":"1.0-0"
+            house.Price | currency : "USD" : "symbol" : "1.0-0"
           }}</div>
           <div class="agent">
             <div id="house{{ house.ID }}">
@@ -50,7 +50,7 @@
     <div *dxTemplate="let data of 'content'">
       <div class="popup-property-details">
         <div class="large-text">{{
-          currentHouse.Price | currency: "USD":"symbol":"1.0-0"
+          currentHouse.Price | currency : "USD" : "symbol" : "1.0-0"
         }}</div>
         <div class="opacity"
           >{{ currentHouse.Address }}, {{ currentHouse.City }},

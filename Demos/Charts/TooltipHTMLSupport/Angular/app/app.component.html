@@ -16,13 +16,13 @@
     </div>
     <div class="population">
       <span class="caption">Population</span>:
-      {{ info.value | number: "3.0-0" }} people
+      {{ info.value | number : "3.0-0" }} people
     </div>
     <div>
       <span class="caption">Area</span>:
-      <span class="area-km">{{ info.point.data.area | number: "3.0-0" }}</span>
+      <span class="area-km">{{ info.point.data.area | number : "3.0-0" }}</span>
       km<sup>2</sup> (<span class="area-mi">{{
-        0.3861 * info.point.data.area | number: "3.0-0"
+        0.3861 * info.point.data.area | number : "3.0-0"
       }}</span>
       mi<sup>2</sup>)
     </div>

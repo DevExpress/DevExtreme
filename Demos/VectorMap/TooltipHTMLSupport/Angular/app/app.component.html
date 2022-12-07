@@ -22,7 +22,7 @@
   <div *dxTemplate="let info of 'tooltipContent'" class="state-tooltip">
     <h4>{{ info.attribute("name") }}</h4>
     <div *ngIf="gdpData[info.attribute('name')] as countryGDPData" id="nominal">
-      Nominal GDP: $<span>{{ countryGDPData.total | number: "1.0-0" }}</span
+      Nominal GDP: $<span>{{ countryGDPData.total | number : "1.0-0" }}</span
       >M
     </div>
     <div *ngIf="getPieData(info.attribute('name')) as data; else noData">

@@ -41,9 +41,10 @@
       </div>
       <div class="dropdown-appointment-dates">
         {{
-          (model.targetedAppointmentData.displayStartDate | date: "shortTime") +
+          (model.targetedAppointmentData.displayStartDate
+            | date : "shortTime") +
             " - " +
-            (model.targetedAppointmentData.displayEndDate | date: "shortTime")
+            (model.targetedAppointmentData.displayEndDate | date : "shortTime")
         }}
       </div>
     </div>

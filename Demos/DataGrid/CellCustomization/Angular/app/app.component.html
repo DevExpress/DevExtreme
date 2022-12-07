@@ -42,8 +42,10 @@
     [class]="(d | gridCellData).diff > 0 ? 'inc' : 'dec'"
   >
     <div class="current-value">{{
-      (d | gridCellData).value | currency: "USD":"symbol"
+      (d | gridCellData).value | currency : "USD" : "symbol"
     }}</div>
-    <div class="diff">{{ abs((d | gridCellData).diff) | number: "1.2-2" }}</div>
+    <div class="diff">{{
+      abs((d | gridCellData).diff) | number : "1.2-2"
+    }}</div>
   </div>
 </dx-data-grid>
