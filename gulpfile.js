@@ -56,7 +56,7 @@ function createMiscBatch() {
 
 function createMainBatch(dev) {
     const tasks = [];
-    if(!dev || env.TEST_CI) {
+    if(!dev) {
         tasks.push('js-bundles-debug');
     }
     if(!env.TEST_CI) {
