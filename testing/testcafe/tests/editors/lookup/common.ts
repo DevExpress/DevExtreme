@@ -8,7 +8,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
-fixture.disablePageReloads`Lookup`
+fixture`Lookup`
   .page(url(__dirname, '../../container.html'))
   .afterEach(() => disposeWidgets());
 

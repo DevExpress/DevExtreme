@@ -19,7 +19,7 @@ const pickerTypes = ['calendar', 'list', 'native', 'rollers'];
 const labelModes = ['static', 'floating', 'hidden'];
 const types = ['date', 'datetime', 'time'];
 
-fixture.disablePageReloads`DateBox render`
+fixture`DateBox render`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {
