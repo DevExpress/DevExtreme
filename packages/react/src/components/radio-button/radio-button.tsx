@@ -1,21 +1,21 @@
-import React, {
-  useId,
-  forwardRef,
-  useContext,
-  useState,
+import {
   ChangeEventHandler,
   ComponentType,
+  forwardRef,
+  useContext,
+  useId,
+  useState,
 } from 'react';
-import {
-  RadioButtonProps,
-  LabelTemplateProps,
-  RadioTemplateProps,
-  RadioButtonRenderProps,
-  CoreBoundRadioButtonProps,
-  RadioButtonRenderType,
-} from './types';
-import { RadioGroupContext } from '../radio-group/radio-group-context';
 import { useCoreState } from '../../internal/hooks';
+import { RadioGroupContext } from '../radio-group/radio-group-context';
+import {
+  CoreBoundRadioButtonProps,
+  LabelTemplateProps,
+  RadioButtonProps,
+  RadioButtonRenderProps,
+  RadioButtonRenderType,
+  RadioTemplateProps,
+} from './types';
 
 function DefaultRadioTemplate({ checked = false }: RadioTemplateProps) {
   return <span>{checked ? '◉' : '◎'}</span>;
