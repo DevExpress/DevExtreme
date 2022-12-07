@@ -600,7 +600,9 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   })(dataGrid);
   await t.wait(300);
 
-  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance().getVisibleRows().findIndex(({ key }) => key === '46-1'))(dataGrid);
+  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
+    .getVisibleRows()
+    .findIndex(({ key }, index: number, rows) => key > rows[index + 1].key))(dataGrid);
   await t.expect(draggedRowIndex)
     .eql(toIndex - 1);
 }).before(async () => {
