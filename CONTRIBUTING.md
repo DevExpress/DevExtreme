@@ -10,10 +10,6 @@ Our official bug tracker is the [Support Center](https://www.devexpress.com/sc).
 
 If you find a security bug, please report it by sending an email to info@devexpress.com.
 
-## Working with Code
-
-[This guide](README_DEVELOPERS.md) describes how to build DevExtreme and run tests.
-
 ## Contributing Code and Content
 
 Important: **Read Section 5 of the [LICENSE AGREEMENT](LICENSE.md#5-submission-of-contributions) before submitting any contribution.** 
