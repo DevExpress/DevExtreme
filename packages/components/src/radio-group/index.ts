@@ -1,13 +1,13 @@
 /* eslint-disable import/exports-last */
 import {
   createCore,
-  Selector,
-  StateConfigMap,
-  Handlers,
-  StateManager,
-  ViewModelManager,
   Dispatcher,
   Disposable,
+  Handlers,
+  Selector,
+  StateConfigMap,
+  StateManager,
+  ViewModelManager,
 } from '@devexpress/core';
 
 // === props ===
