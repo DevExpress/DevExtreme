@@ -47,6 +47,7 @@
         },
         {
             "matchPackagePatterns": [ "*" ],
+            "excludePackagePrefixes": [ "cldr-" ],
             "matchUpdateTypes": [ "major" ],
             "enabled": false
         }
