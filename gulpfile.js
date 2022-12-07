@@ -59,16 +59,18 @@ function createMainBatch(dev) {
     if(!dev) {
         tasks.push('js-bundles-debug');
     }
-    if(!env.TEST_CI) {
-        tasks.push('js-bundles-prod');
-    }
+    // if(!env.TEST_CI) {
+    tasks.push('js-bundles-prod');
+    // }
     tasks.push('style-compiler-batch', 'misc-batch');
     return (callback) => multiProcess(tasks, callback, true);
 }
 
 function createDefaultBatch(dev) {
     const tasks = dev ? [] : ['clean'];
-    tasks.push('localization');
+    if(!env.TEST_CI) {
+        tasks.push('localization');
+    }
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
     tasks.push('version-replace');

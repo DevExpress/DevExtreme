@@ -57,8 +57,6 @@ test('Item collection should be updated after direct option changing (T817436)',
   });
 });
 
-let ids = [] as string[];
-
 test('DropDownButton renders correctly', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -67,13 +65,13 @@ test('DropDownButton renders correctly', async (t) => {
   await takeScreenshotInTheme(t, takeScreenshot, 'DropDownButton render.png', '#container');
 
   for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
-    for (const id of ids) {
+    for (const id of t.ctx.ids) {
       await setClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
     }
 
     await takeScreenshotInTheme(t, takeScreenshot, `DropDownButton render ${state.replaceAll('dx-state-', '')}.png`, '#container');
 
-    for (const id of ids) {
+    for (const id of t.ctx.ids) {
       await removeClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
     }
   }
@@ -84,7 +82,7 @@ test('DropDownButton renders correctly', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
-  ids = [];
+  t.ctx.ids = [];
   await restoreBrowserSize(t);
 
   for (const stylingMode of stylingModes) {
@@ -93,7 +91,7 @@ test('DropDownButton renders correctly', async (t) => {
         for (const showArrowIcon of [true, false]) {
           const id = `${`dx${new Guid()}`}`;
 
-          ids.push(id);
+          t.ctx.ids.push(id);
           await appendElementTo('#container', 'div', id, { });
           await createWidget('dxDropDownButton', {
             rtlEnabled,

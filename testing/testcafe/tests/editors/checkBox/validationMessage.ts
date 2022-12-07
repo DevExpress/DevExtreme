@@ -5,7 +5,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`CheckBox_ValidationMessage`
+fixture.disablePageReloads`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'))
   .afterEach(() => disposeWidgets());
 
