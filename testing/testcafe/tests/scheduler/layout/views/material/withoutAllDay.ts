@@ -3,9 +3,10 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
+import { changeTheme } from '../../../../../helpers/changeTheme';
 
 fixture`Scheduler: Material theme without all-day panel`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 safeSizeTest('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -17,10 +18,14 @@ safeSizeTest('Week view without all-day panel should be rendered correctly', asy
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
-  dataSource: [],
-  currentDate: new Date(2020, 6, 15),
-  views: ['week'],
-  currentView: 'week',
-  height: 500,
-}, true));
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxScheduler', {
+    dataSource: [],
+    currentDate: new Date(2020, 6, 15),
+    views: ['week'],
+    currentView: 'week',
+    height: 500,
+  }, true);
+});

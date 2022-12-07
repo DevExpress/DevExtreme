@@ -642,10 +642,12 @@ QUnit.module('Pager', {
         const pagerView = this.pagerView;
 
         this.options.pager.showInfo = true;
+        // eslint-disable-next-line i18n/no-russian-character
         this.options.pager.infoText = '{0} Страница из {1}';
 
         // act
         pagerView.render(testElement);
+        // eslint-disable-next-line i18n/no-russian-character
         assert.equal($('.dx-info').text(), '2 Страница из 20');
     });
 

@@ -874,7 +874,9 @@ export const rowsModule = {
                         if(that._scrollLeft >= 0) {
                             that._handleScroll({
                                 component: that.getScrollable(),
-                                scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                                forceUpdateScrollPosition: true,
+                                scrollOffset: { top: that._scrollTop, left: that._scrollLeft }
+                            });
                         }
                     });
                 },

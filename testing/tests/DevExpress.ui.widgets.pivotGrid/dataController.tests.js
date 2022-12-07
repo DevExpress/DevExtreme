@@ -2498,7 +2498,7 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
         dataController.updateViewOptions({
             showColumnTotals: false,
             texts: {
-                grandTotal: 'Итого'
+                grandTotal: 'Total'
             }
         });
 
@@ -2508,7 +2508,7 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
                 [
                     { text: 'A', colspan: 2, expanded: true, path: ['A'], type: 'D' },
                     { text: 'C1', rowspan: 2, expanded: false, path: ['C1'], type: 'D', isLast: true },
-                    { text: 'Итого', rowspan: 2, type: 'GT', isLast: true }],
+                    { text: 'Total', rowspan: 2, type: 'GT', isLast: true }],
                 [
                     { text: 'P1', type: 'D', path: ['A', 'P1'], isLast: true, width: 100 },
                     { text: 'P2', type: 'D', path: ['A', 'P2'], isLast: true, width: 100 }

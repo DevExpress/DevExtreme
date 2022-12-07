@@ -4,9 +4,10 @@ import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
+import { changeTheme } from '../../../../../helpers/changeTheme';
 
 fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 safeSizeTest('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -17,6 +18,8 @@ safeSizeTest('Scheduler should have correct height in month view (T927862)', asy
     .expect(boundingClientRect.bottom)
     .eql((await scheduler.workspaceScrollable.boundingClientRect).bottom);
 }).before(async () => {
+  await changeTheme('material.blue.light');
+
   await createWidget('dxScheduler', {
     dataSource: [],
     views: ['month'],
@@ -45,7 +48,11 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async () => {
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, resourcesValue);
+    });
   });
 });
 
@@ -58,6 +65,10 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async () => {
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, resourcesValue);
+    });
   });
 });

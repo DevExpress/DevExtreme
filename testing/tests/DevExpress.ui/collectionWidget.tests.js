@@ -540,6 +540,37 @@ module('render', {
         assert.equal(component.$element().find('.' + EMPTY_MESSAGE_CLASS).text(), noDataText);
     });
 
+    test('No data text message - custom value with link, encodeNoDataText: false', function(assert) {
+        let noDataText = '<a href="javascript:alert(1)">link</a>';
+
+        const component = new TestComponent('#cmp', {
+            noDataText,
+            encodeNoDataText: false,
+        });
+
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), noDataText);
+
+        noDataText = noDataText + 'no data';
+        component.option({ noDataText });
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), noDataText);
+    });
+
+    test('No data text message - custom value with link, encodeNoDataText: true', function(assert) {
+        let noDataText = '<a href="javascript:alert(1)">link</a>';
+        const encodedNoDataText = '&lt;a href="javascript:alert(1)"&gt;link&lt;/a&gt;';
+
+        const component = new TestComponent('#cmp', {
+            noDataText,
+            encodeNoDataText: true,
+        });
+
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), encodedNoDataText);
+
+        noDataText = noDataText + 'no data';
+        component.option({ noDataText });
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), encodedNoDataText + 'no data');
+    });
+
     test('message element is not rendered if no data text is null, \'\', false', function(assert) {
         const component = new TestComponent('#cmp', {
             noDataText: null

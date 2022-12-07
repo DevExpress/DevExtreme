@@ -11,9 +11,10 @@ import {
   verticalViews,
   horizontalViews,
 } from '../../utils';
+import { changeTheme } from '../../../../../helpers/changeTheme';
 
 fixture`Scheduler: Adaptive Material theme layout in RTL`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -44,6 +45,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, ADAPTIVE_SIZE).before(async () => {
+    await changeTheme('material.blue.light');
+
     await createScheduler({
       views,
       currentView: 'day',
@@ -67,6 +70,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, ADAPTIVE_SIZE).before(async () => {
+    await changeTheme('material.blue.light');
+
     await createScheduler({
       views: horizontalViews,
       currentView: 'day',
@@ -95,6 +100,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, ADAPTIVE_SIZE).before(async () => {
+    await changeTheme('material.blue.light');
+
     await createScheduler({
       views: verticalViews,
       currentView: 'day',

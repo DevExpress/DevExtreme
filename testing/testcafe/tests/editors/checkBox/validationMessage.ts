@@ -4,6 +4,7 @@ import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -61,7 +62,7 @@ themes.forEach((theme) => {
         .click(checkBox1.element)
         .expect(true).ok();
 
-      await t.expect(await compareScreenshot(t, `checkbox-validation-message-position=${position},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+      await t.expect(await compareScreenshot(t, `Checkbox validation message with ${position} position${getThemePostfix(theme)}.png`)).ok();
     }).before(async (t) => {
       await t.resizeWindow(300, 200);
       await changeTheme(theme);

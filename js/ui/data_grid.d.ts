@@ -1751,8 +1751,8 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     buttons?: Array<DataGridPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_context GridBaseColumn
+     * @type_function_param1 rowData:object
      * @public
      */
     calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);

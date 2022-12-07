@@ -621,6 +621,7 @@ export default {
 
         const lookupDataSource = {
             ...lookupDataSourceOptions,
+            __dataGridSourceFilter: filter,
             load: (loadOptions) => {
                 const d = new Deferred();
                 loadUniqueRelevantItems(loadOptions).done((items) => {

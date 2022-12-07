@@ -17,16 +17,21 @@
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [ "^@devextreme-generator/" ],
+            "matchPackagePatterns": [
+                "^@devextreme-generator/"
+            ],
             "enabled": false
         },
         {
             "matchPackageNames": [
-              "eslint-config-devextreme",
-              "rrule",
-              "sass-embedded",
-              "sinon",
-              "systemjs"
+                "@devextreme/runtime",
+                "devexpress-gantt",
+                "devexpress-diagram",
+                "eslint-config-devextreme",
+                "rrule",
+                "sass-embedded",
+                "sinon",
+                "systemjs"
             ],
             "enabled": false
         },

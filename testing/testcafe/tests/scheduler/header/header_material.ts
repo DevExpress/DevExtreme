@@ -4,9 +4,10 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture`Scheduler header: material theme`
-  .page(url(__dirname, '../../containerMaterial.html'));
+  .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
@@ -20,11 +21,15 @@ safeSizeTest('dateNavigator buttons should have "text" styling mode with materia
 
     .expect(toolbar.navigator.nextButton.hasClass('dx-button-mode-text'))
     .ok();
-}).before(async () => createWidget('dxScheduler', {
-  currentView: 'day',
-  views: ['day'],
-  height: 580,
-}));
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxScheduler', {
+    currentView: 'day',
+    views: ['day'],
+    height: 580,
+  });
+});
 
 safeSizeTest('viewSwitcher dropdown button popup should have a specified class', async (t) => {
   const { toolbar } = new Scheduler('#container');
@@ -37,11 +42,15 @@ safeSizeTest('viewSwitcher dropdown button popup should have a specified class',
 
     .expect(Selector(viewSwitcherDropDownButtonContent).count)
     .eql(1);
-}).before(async () => createWidget('dxScheduler', {
-  currentView: 'day',
-  views: ['day', 'week'],
-  height: 580,
-}));
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxScheduler', {
+    currentView: 'day',
+    views: ['day', 'week'],
+    height: 580,
+  });
+});
 
 safeSizeTest('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -61,13 +70,17 @@ safeSizeTest('The toolbar should not display if the config is empty', async (t) 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
-  currentDate: new Date(2020, 2, 2),
-  currentView: 'day',
-  views: ['day'],
-  height: 580,
-  toolbar: [],
-}, true));
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxScheduler', {
+    currentDate: new Date(2020, 2, 2),
+    currentView: 'day',
+    views: ['day'],
+    height: 580,
+    toolbar: [],
+  }, true);
+});
 
 safeSizeTest('The viewSwitcher should not drop down if only one view', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -83,10 +96,14 @@ safeSizeTest('The viewSwitcher should not drop down if only one view', async (t)
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
-  currentDate: new Date(2020, 2, 2),
-  currentView: 'day',
-  views: ['day'],
-  useDropDownViewSwitcher: true,
-  height: 580,
-}, true));
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxScheduler', {
+    currentDate: new Date(2020, 2, 2),
+    currentView: 'day',
+    views: ['day'],
+    useDropDownViewSwitcher: true,
+    height: 580,
+  }, true);
+});

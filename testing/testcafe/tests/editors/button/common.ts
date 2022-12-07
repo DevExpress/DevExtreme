@@ -5,6 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { appendElementTo, insertStylesheetRule, deleteStylesheetRule } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';
@@ -26,25 +27,21 @@ themes.forEach((theme) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`buttons-render-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+      .expect(await takeScreenshot(`Button render${getThemePostfix(theme)}.png`, '#container'))
+      .ok();
 
     await insertStylesheetRule(`.${BUTTON_CLASS} { width: 70px }`, 0);
 
     await t
-      .expect(await takeScreenshot(`buttons-render-with-overflow-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+      .expect(await takeScreenshot(`Button render with overflow${getThemePostfix(theme)}.png`, '#container'))
+      .ok();
 
     await deleteStylesheetRule(0);
 
     await insertStylesheetRule(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px }`, 0);
 
     await t
-      .expect(await takeScreenshot(`buttons-stretch-of-large-text-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
+      .expect(await takeScreenshot(`Button stretch of large text${getThemePostfix(theme)}.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

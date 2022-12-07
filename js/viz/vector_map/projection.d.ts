@@ -37,13 +37,13 @@ export interface VectorMapProjectionConfig {
 export const projection: {
     /**
      * @docid viz.map.projection.add
-     * @publicName add(name, projection)
-     * @param2 projection:VectorMapProjectionConfig|object
+     * @publicName add(name, projectionConfig)
+     * @param2 projectionConfig:VectorMapProjectionConfig|object
      * @namespace DevExpress.viz.map.projection
      * @static
      * @public
      */
-    add(name: string, projection: VectorMapProjectionConfig | any): void;
+    add(name: string, projectionConfig: VectorMapProjectionConfig | any): void;
 
     /**
      * @docid viz.map.projection.get
