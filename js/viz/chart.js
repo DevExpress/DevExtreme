@@ -371,10 +371,38 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
+// function applyAutoHidePointMarkers(filteredSeries) {
+//     let overlapPoints = [];
+//     filteredSeries.forEach((s, index, arraySeries)=> {
+
+//         s.autoHidePointMarkers = false;
+
+//         if(s.autoHidePointMarkersEnabled()) {
+//             let checkOverlap = 0;
+//             s._points.forEach(point => {
+
+//                 overlapPoints.forEach(overlapPoint => {
+//                     if((overlapPoint.x - 5 <= point.x && overlapPoint.x + 5 >= point.x) && (overlapPoint.y - 5 <= point.y && overlapPoint.y + 5 > point.y)) {
+//                         checkOverlap++;
+//                     }
+//                 });
+//             });
+
+//             if(checkOverlap < s._points.length) {
+//                 overlapPoints = overlapPoints.concat(s._points);
+//             } if(checkOverlap === s._points.length) {
+//                 arraySeries[index - 1].autoHidePointMarkers = true;
+//             }
+//         }
+//     });
+// }
+
 function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, argAxis) {
     const argAxisType = argAxis.getOptions().type;
     filteredSeries.forEach(s => {
         const seriesIndex = allSeries.indexOf(s);
+
+
         s.autoHidePointMarkers = false;
         const tickCount = argAxis.getTicksValues().majorTicksValues.length;
         if(s.autoHidePointMarkersEnabled() && (argAxisType === DISCRETE || overloadedSeries[seriesIndex].pointsCount > tickCount)) {
@@ -394,6 +422,7 @@ function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, 
                 }
             }
         }
+
     });
 }
 
@@ -889,12 +918,17 @@ const dxChart = AdvancedChart.inherit({
             return;
         }
 
+        allSeries.forEach();
         that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
+            series.forEach(singleSeries => {
+                singleSeries._applyVisibleArea();
+                singleSeries._translatePoints();
+                singleSeries._isCoordsPoints = true;
+            });
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
             fastHidingPointMarkersByArea(borderCoords, markersInfo, series);
-
             if(markersInfo.series.length) {
                 const argVisualRange = argAxis.visualRange();
                 const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
@@ -905,8 +939,10 @@ const dxChart = AdvancedChart.inherit({
 
                 markersInfo.series.forEach(s => points = points.concat(s.points));
                 points.sort(sortingCallback);
-
                 updateMarkersInfo(points, markersInfo.overloadedSeries);
+                // applyAutoHidePointMarkers(series);
+
+
                 applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
             }
         });

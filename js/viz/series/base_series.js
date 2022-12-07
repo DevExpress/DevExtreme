@@ -526,6 +526,7 @@ Series.prototype = {
         that._graphics = that._graphics || [];
         that._segments = [];
 
+
         const segments = points.reduce(function(segments, p) {
             const segment = segments[segments.length - 1];
 
@@ -555,9 +556,7 @@ Series.prototype = {
     draw(animationEnabled, hideLayoutLabels, legendCallback) {
         const that = this;
         const firstDrawing = that._firstDrawing;
-        that._segments = [];
-        that._graphics = that._graphics || [];
-        that._points = that._points || [];
+
         that._legendCallback = legendCallback || that._legendCallback;
 
         if(!that._visible) {
@@ -566,9 +565,13 @@ Series.prototype = {
         }
 
         that._appendInGroup();
-        that._applyVisibleArea();
+
+        if(!that._isCoordsPoints) {
+            that._applyVisibleArea();
+            that._translatePoints();
+        }
+
         that._setGroupsSettings(animationEnabled, firstDrawing);
-        that._translatePoints();
         !firstDrawing && !that._resetApplyingAnimation && that._preparePositionSegments();
         that._drawElements(animationEnabled, firstDrawing);
         hideLayoutLabels && that.hideLabels();
@@ -580,6 +583,8 @@ Series.prototype = {
         } else {
             that._applyStyle(that._styles.normal);
         }
+
+        that._isCoordsPoints = false;
         that._resetApplyingAnimation = false;
     },
 
