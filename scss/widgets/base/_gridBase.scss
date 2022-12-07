@@ -369,6 +369,8 @@
     }
 
     .dx-#{$widget-name}-best-fit {
+      max-width: none !important; // stylelint-disable-line declaration-no-important
+
       .dx-column-indicators {
         float: none !important; // stylelint-disable-line declaration-no-important
 

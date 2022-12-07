@@ -3691,6 +3691,48 @@ QUnit.module('Editing', baseModuleConfig, () => {
         }
     });
 
+    // T1126699
+    QUnit.test('The cell edit mode - editCell method should be called only one time if clicking on cell with showEditorAlways = true', function(assert) {
+        // editing.editCell was called 2 times, when clicking on a cell with showEditorAlways='true'
+        // and editing.mode='cell'. First time on mousedown event, second time on click event
+        try {
+            const editMode = 'cell';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: {
+                    store: [{ selected: true, field2: 'test1' }, { selected: true, field2: 'test2' }],
+                    filter: ['selected', '=', true]
+                },
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowUpdating: true
+                },
+                columns: ['selected', 'field2'],
+            });
+            this.clock.tick(0);
+
+            // act
+            const clickWithMouseDownEvent = (element) => {
+                $(element).trigger('dxpointerdown');
+                this.clock.tick();
+                $(element).trigger('dxclick');
+                this.clock.tick();
+            };
+
+            const checkbox2 = $(dataGrid.getCellElement(0, 0)).find('.dx-checkbox');
+            const checkbox1 = $(dataGrid.getCellElement(1, 0)).find('.dx-checkbox');
+
+            clickWithMouseDownEvent(checkbox1);
+            clickWithMouseDownEvent(checkbox2);
+
+            assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no items should be in the grid');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
     // T1089428
     QUnit.test('totalCount should be correct after removing/adding rows when refreshMode is reshape and scrolling.mode is virtual', function(assert) {
         // arrange

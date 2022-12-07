@@ -209,7 +209,7 @@ declare module DevExpress.ui {
         export type ColumnLookup = DevExpress.common.grids.ColumnLookup;
 
         /** @deprecated Use DevExpress.common.grids.DataChange instead */
-        export type DataChange = DevExpress.common.grids.DataChange;
+        export type DataChange<TRowData = any, TKey = any> = DevExpress.common.grids.DataChange<TRowData, TKey>;
 
         /** @deprecated Use DevExpress.common.grids.FilterPanelTexts instead */
         export type FilterPanelTexts = DevExpress.common.grids.FilterPanelTexts;

@@ -2,6 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { getThemePostfix } from '../../../helpers/getPostfix';
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
@@ -19,7 +20,7 @@ themes.forEach((theme) => {
       test(`Label for dxSelectBox labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
         await t.click('#otherContainer');
 
-        await t.expect(await compareScreenshot(t, `label-dxSelectBox-labelMode=${labelMode}-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
+        await t.expect(await compareScreenshot(t, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
       }).before(async (t) => {
         await t.resizeWindow(300, 400);
         await changeTheme(theme);
