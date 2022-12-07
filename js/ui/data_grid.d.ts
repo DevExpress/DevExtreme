@@ -503,9 +503,23 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
 }
 
 /**
+ * @docid GridBaseOptions
+ * @namespace DevExpress.ui
+ * @export GridBaseOptions
+ * @inherits WidgetOptions
+ */
+interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
+    /**
+     * @hidden
+     * @docid GridBaseOptions.focusStateEnabled
+     */
+    focusStateEnabled?: any;
+}
+
+/**
  * @namespace DevExpress.ui
  */
-export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
+export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionsBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
     /**
      * @docid
      * @default false
@@ -1049,7 +1063,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      */
     syncLookupFilterValues?: boolean;
-}
+};
 
 /**
  * @public
