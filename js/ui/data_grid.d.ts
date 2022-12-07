@@ -3194,25 +3194,11 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
 };
 
 /**
- * @docid dxDataGridOptions
- * @namespace DevExpress.ui
- * @export dxDataGridOptions
- * @inherits GridBaseOptions
- */
-interface dxDataGridOptionsBlank<TRowData = any, TKey = any> extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
-    /**
-     * @hidden
-     * @docid dxDataGridOptions.focusStateEnabled
-     */
-     focusStateEnabled?: any;
-}
-
-/**
- * @public
- * @namespace DevExpress.ui
  * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
  */
-export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<dxDataGridOptionsBlank<TRowData, TKey>, 'focusStateEnabled'> & {
+export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
@@ -3246,6 +3232,11 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<dxDataGridOptio
      * @public
      */
     export?: Export<TRowData, TKey>;
+    /**
+     * @hidden
+     * @docid
+     */
+    focusStateEnabled?: boolean;
     /**
      * @docid
      * @type object
@@ -3583,7 +3574,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<dxDataGridOptio
      * @public
      */
     toolbar?: Toolbar;
-};
+}
 
 /** @public */
 export type ExcelCellInfo<TRowData = any, TKey = any> = {

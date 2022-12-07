@@ -444,25 +444,11 @@ export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
 export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataModel<TRowData>;
 
 /**
- * @docid dxTreeListOptions
- * @namespace DevExpress.ui
- * @export dxTreeListOptions
- * @inherits GridBaseOptions
- */
-interface dxTreeListOptionsBlank<TRowData = any, TKey = any> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
-    /**
-     * @hidden
-     * @docid dxTreeListOptions.focusStateEnabled
-     */
-    focusStateEnabled?: any;
-}
-
-/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
  */
-export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<dxTreeListOptionsBlank, 'focusStateEnabled'> & {
+export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**
      * @docid
      * @default false
@@ -513,6 +499,11 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<dxTreeListOptio
      * @public
      */
     filterMode?: TreeListFilterMode;
+    /**
+     * @hidden
+     * @docid
+     */
+    focusStateEnabled?: boolean;
     /**
      * @docid
      * @public
@@ -793,7 +784,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<dxTreeListOptio
      * @public
      */
     toolbar?: Toolbar;
-};
+}
 
 /**
  * @public
