@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import {
   createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
 } from '@devexpress/components';

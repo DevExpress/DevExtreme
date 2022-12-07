@@ -13,3 +13,4 @@ themebuilder-scss
 *-e2e
 lib
 *.scss
+packages/jquery/*
