@@ -2,7 +2,6 @@
   "name": "@devextreme/jquery",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
     "-build": "gulp build-inferno",
     "test": "echo \"Error: no test specified\" && exit 0"
@@ -11,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "devextreme": "22.1.5",
-    "rxjs": "^7.5.6"
+    "inferno": "^7.4.11",
+    "inferno-create-element": "^7.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
