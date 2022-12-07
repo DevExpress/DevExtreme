@@ -6,6 +6,7 @@ import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
+import errors from 'core/errors';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay/ui.overlay';
 import { isRenderer } from 'core/utils/type';
@@ -1683,6 +1684,16 @@ QUnit.module('popup integration', () => {
             assert.strictEqual(this.hasClass(dropDownEditor, DROP_DOWN_EDITOR_OVERLAY), true, 'drop down popup wrapper has overlay class');
             assert.strictEqual(this.hasClass(dropDownEditor, CUSTOM_CLASS), true, 'drop down popup wrapper has custom class');
         });
+    });
+
+    QUnit.test('popup rerender should not provoke deprecation logs (T1129836)', function(assert) {
+        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true }).dxDropDownEditor('instance');
+        const logStub = sinon.stub(errors, 'log');
+
+        dropDownEditor.option('dropDownOptions', { showTitle: true });
+        dropDownEditor._renderPopup();
+
+        assert.strictEqual(logStub.callCount, 0);
     });
 });
 

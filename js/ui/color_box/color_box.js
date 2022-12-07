@@ -64,10 +64,19 @@ const ColorBox = DropDownEditor.inherit({
 
         return extend(this.callBase(), {
             tab: function(e) {
-                if(this.option('opened')) {
-                    e.preventDefault();
-                    this._colorView._rgbInputs[0].focus();
+                if(!this.option('opened')) {
+                    return;
                 }
+
+                const $focusableElement = e.shiftKey
+                    ? this._getLastPopupElement()
+                    : this._getFirstPopupElement();
+
+                if($focusableElement) {
+                    eventsEngine.trigger($focusableElement, 'focus');
+                    $focusableElement.select();
+                }
+                e.preventDefault();
             },
             enter: this._enterKeyHandler,
             leftArrow: arrowHandler,
@@ -167,6 +176,10 @@ const ColorBox = DropDownEditor.inherit({
     _escapeHandler: function() {
         this.close();
         this.focus();
+    },
+
+    _getFirstPopupElement: function() {
+        return $(this._colorView._rgbInputs[0].element()).find('input');
     },
 
     _applyNewColor: function(value) {
