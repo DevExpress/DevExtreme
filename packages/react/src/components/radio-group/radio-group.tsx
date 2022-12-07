@@ -2,7 +2,7 @@
 import {
   createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
 } from '@devexpress/components';
-import React, { memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { Props } from '../../internal/props';
 import { RadioGroupContext } from './radio-group-context';
