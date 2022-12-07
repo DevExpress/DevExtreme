@@ -1,10 +1,10 @@
 import { StateConfigMap } from './middlewares';
 import { Handlers } from './reducer';
 import { createState } from './state';
+import { createStateManager, Dispatcher, StateManager } from './state-manager';
 import {
   AnyRecord, Disposable, PipeFunc, UnknownRecord,
 } from './utils';
-import { createStateManager, Dispatcher, StateManager } from './state-manager';
 import { createViewModelManager, ViewModelManager } from './view-model-manager';
 
 export type Core<

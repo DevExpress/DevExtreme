@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { ReportHandler } from 'web-vitals';
 
 const reportWebVitals = (onPerfEntry?: ReportHandler) => {

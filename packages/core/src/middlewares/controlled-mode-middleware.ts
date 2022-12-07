@@ -1,6 +1,6 @@
 import { UnknownRecord } from '../utils';
-import { StateConfigMap } from './types';
 import { getChangedKeys } from './get-changed-keys';
+import { StateConfigMap } from './types';
 
 type ModelChangesTuple<TState extends UnknownRecord> = [newModel: TState, hasChanges: boolean];
 

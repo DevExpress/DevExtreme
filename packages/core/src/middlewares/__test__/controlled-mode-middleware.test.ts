@@ -1,5 +1,5 @@
-import { getChangedKeys } from '../get-changed-keys';
 import { controlledModeMiddleware } from '../controlled-mode-middleware';
+import { getChangedKeys } from '../get-changed-keys';
 
 jest.mock('../get-changed-keys');
 const getChangedKeysMock = jest.mocked(getChangedKeys);

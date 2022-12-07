@@ -1,7 +1,7 @@
 import {
   createObservableEmitter,
-  UnknownRecord,
   SubscribeFunc,
+  UnknownRecord,
 } from './utils';
 
 export interface State<TState extends UnknownRecord> {

@@ -3,10 +3,10 @@ import {
   createObservableEmitter,
   Disposable,
   DISPOSE,
-  memoize, UnknownRecord,
-  Observable,
+  memoize, Observable,
   shadowComparer,
   SubscribeFunc,
+  UnknownRecord,
 } from './utils';
 
 export type Selector<TState extends UnknownRecord, TValue> = (state: TState) => TValue;
