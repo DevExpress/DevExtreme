@@ -3,14 +3,13 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
 fixture.disablePageReloads`Lookup`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async (t) => {
   const lookup = new Lookup('#container');
@@ -92,8 +91,6 @@ test('Check popup height with no found data option', async (t) => {
   await t.resizeWindow(300, 400);
 
   return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
 test('Check popup height in loading state', async (t) => {
@@ -122,8 +119,6 @@ test('Check popup height in loading state', async (t) => {
     valueExpr: 'id',
     displayExpr: 'text',
   });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {

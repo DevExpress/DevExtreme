@@ -1,14 +1,14 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import ScrollView from '../../../model/scrollView/scrollView';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
-fixture`ScrollView`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`ScrollView`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-// T817096
 [150, 300].forEach((scrollableContentSize) => {
   (['vertical', 'horizontal'] as ScrollableDirection[]).forEach((direction) => {
     ['onHover', 'always', 'onScroll', 'never'].forEach((showScrollbar) => {
@@ -16,12 +16,8 @@ fixture`ScrollView`
       const scrollBarVisibleAfterMouseEnter = (showScrollbar === 'always' || showScrollbar === 'onHover') && scrollableContentSize > scrollableContainerSize;
       const scrollBarVisibleAfterMouseLeave = showScrollbar === 'always' && scrollableContentSize > scrollableContainerSize;
 
-      test(`Scroll visibility on mouseEnter/mouseLeave, showScrollbar: '${showScrollbar}', direction: '${direction}', content ${scrollableContentSize < scrollableContainerSize ? 'less' : 'more'} than container`, async (t) => {
+      test(`Scroll visibility on mouseEnter/mouseLeave, showScrollbar: '${showScrollbar}', direction: '${direction}', content ${scrollableContentSize < scrollableContainerSize ? 'less' : 'more'} than container (T817096)`, async (t) => {
         const scrollView = new ScrollView('#scrollView', { direction });
-
-        await appendElementTo('body', 'button', 'mouseLeaveButton', {
-          width: '150px', height: '50px', backgroundColor: 'grey',
-        });
 
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
         await t.hover(scrollView.getContainer());
@@ -29,8 +25,12 @@ fixture`ScrollView`
         await t.click(Selector('#mouseLeaveButton'));
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
       }).before(async () => {
-        await appendElementTo('#container', 'div', 'innerScrollViewContent', {
+        await appendElementTo('#container', 'div', 'scrollView');
+        await appendElementTo('#scrollView', 'div', 'innerScrollViewContent', {
           width: `${scrollableContentSize}px`, height: `${scrollableContentSize}px`, backgroundColor: 'steelblue',
+        });
+        await appendElementTo('#scrollView', 'button', 'mouseLeaveButton', {
+          width: '150px', height: '50px', backgroundColor: 'grey',
         });
 
         return createWidget('dxScrollView', {
@@ -39,7 +39,7 @@ fixture`ScrollView`
           useNative: false,
           direction,
           showScrollbar,
-        });
+        }, true, '#scrollView');
       });
     });
   });

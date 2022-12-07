@@ -14,7 +14,7 @@ import Guid from '../../../../../js/core/guid';
 
 fixture.disablePageReloads`TextBox_Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -42,8 +42,6 @@ test('Label max-width changed with container size', async (t) => {
 }));
 
 [true, false].forEach((rtlEnabled) => {
-  let ids = [] as string[];
-
   test(`Textbox render, rtl=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -57,13 +55,13 @@ test('Label max-width changed with container size', async (t) => {
     await takeScreenshotInTheme(t, takeScreenshot, `Textbox render rtl=${rtlEnabled}.png`, '#container');
 
     for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
-      for (const id of ids) {
+      for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }
 
       await takeScreenshotInTheme(t, takeScreenshot, `Textbox render rtl=${rtlEnabled}-${state.replaceAll('dx-', '').replaceAll('state-', '')}.png`, '#container');
 
-      for (const id of ids) {
+      for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);
       }
     }
@@ -74,7 +72,7 @@ test('Label max-width changed with container size', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
-    ids = [];
+    t.ctx.ids = [];
     await restoreBrowserSize(t);
 
     for (const stylingMode of stylingModes) {
@@ -84,7 +82,7 @@ test('Label max-width changed with container size', async (t) => {
             for (const label of ['Label Text', '']) {
               const id = `${`dx${new Guid()}`}`;
 
-              ids.push(id);
+              t.ctx.ids.push(id);
               await appendElementTo('#container', 'div', id, { });
               await createWidget('dxTextBox', {
                 label,

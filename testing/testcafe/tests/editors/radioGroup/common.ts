@@ -4,7 +4,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Radio Group`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async (t) => {
   const parentGroup = new RadioGroup('#container');

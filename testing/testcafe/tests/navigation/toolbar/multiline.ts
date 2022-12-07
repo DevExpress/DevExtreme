@@ -1,31 +1,25 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
-import Toolbar from '../../../model/toolbar/toolbar';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Toolbar_multiline`
+fixture.disablePageReloads`Toolbar_multiline`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .afterEach(async () => disposeWidgets());
 
 const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['back', 'danger', 'default', 'normal', 'success'];
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
 
 [true, false].forEach((rtlEnabled) => {
-  test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
+  safeSizeTest(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const toolbar = new Toolbar('#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#container', true);
 
     await t
-      .expect(await takeScreenshot(`Default-nested-widgets-render-in-multiline,rtlEnabled=${rtlEnabled}.png`, toolbar.element))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
@@ -56,50 +50,44 @@ const themes = ['generic.light', 'generic.light.compact', 'material.blue.light',
       items: toolbarItems,
       rtlEnabled,
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-  });
+  }).after(async () => disposeWidgets());
 });
 
-themes.forEach((theme) => {
-  test(`Buttons render in toolbar (${theme})`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Buttons render in toolbar', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`buttons-render-in-toolbar-theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar buttons render.png', '#container', true);
 
-    const items = [] as any;
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const items = [] as any;
 
-    for (const stylingMode of stylingModes) {
-      for (const type of types) {
-        for (const text of ['Button Text', '']) {
-          for (const icon of ['home', undefined]) {
-            for (const rtlEnabled of [true, false]) {
-              items.push({
-                widget: 'dxButton',
-                options: {
-                  stylingMode,
-                  text,
-                  type,
-                  hint: `stylingMode=${stylingMode}, text=${text}, icon=${icon}, type=${type}, rtlEnabled=${rtlEnabled}`,
-                  rtlEnabled,
-                  icon,
-                },
-              });
-            }
+  for (const stylingMode of stylingModes) {
+    for (const type of types) {
+      for (const text of ['Button Text', '']) {
+        for (const icon of ['home', undefined]) {
+          for (const rtlEnabled of [true, false]) {
+            items.push({
+              widget: 'dxButton',
+              options: {
+                stylingMode,
+                text,
+                type,
+                hint: `stylingMode=${stylingMode}, text=${text}, icon=${icon}, type=${type}, rtlEnabled=${rtlEnabled}`,
+                rtlEnabled,
+                icon,
+              },
+            });
           }
         }
       }
     }
+  }
 
-    await createWidget('dxToolbar', {
-      multiline: true,
-      items,
-    });
+  await createWidget('dxToolbar', {
+    multiline: true,
+    items,
   });
 });

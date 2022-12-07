@@ -1,3 +1,4 @@
+import { isString } from '../../../js/core/utils/type';
 import { changeTheme } from './changeTheme';
 
 export const getThemePostfix = (theme?: string): string => {
@@ -9,26 +10,31 @@ export const isMaterial = (): boolean => process.env.theme === 'material.blue.li
 
 export async function takeScreenshotInTheme(
   t: TestController,
-  takeScreenshot: (screenshotName: string, element?: string) => Promise<boolean>,
+  takeScreenshot: (screenshotName: string, element?: Selector | string | null) => Promise<boolean>,
   screenshotName: string,
-  element?: string,
+  selector?: Selector | string | null,
   shouldTestInCompact = false,
   compactCallBack?: () => Promise<unknown>,
+  theme?: string,
 ): Promise<void> {
+  if (isString(theme)) {
+    await changeTheme(theme);
+  }
+
   await t
-    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix()}.png`), element))
+    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(theme)}.png`), selector))
     .ok();
 
   if (shouldTestInCompact) {
-    const themeName = process.env.theme ?? 'generic.light';
+    const themeName = (theme ?? process.env.theme) ?? 'generic.light';
     await changeTheme(`${themeName}.compact`);
 
     await compactCallBack?.();
 
     await t
-      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), element))
+      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), selector))
       .ok();
-
-    await changeTheme(themeName);
   }
+
+  await changeTheme(process.env.theme ?? 'generic.light');
 }

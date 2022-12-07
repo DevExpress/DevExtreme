@@ -1,19 +1,22 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`Form`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Form`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 [undefined, true, false].forEach((labelVisible) => {
   ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
     [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
-      const testName = `labelMode priorities, frmLblMode=${formLabelMode},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
+      const testName = `Priorities, lblMode=${formLabelMode},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
       test(testName, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+
         await t
-          .expect(await takeScreenshot(`${testName}.png`, '#container'))
-          .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => createWidget('dxForm', {
@@ -81,12 +84,13 @@ fixture`Form`
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
   [true, false].forEach((alignItemLabelsInAllGroups) => {
     [true, false].forEach((alignItemLabels) => {
-      const testName = `align items,frmLblMode=${formLabelMode},alignInAllGrp=${alignItemLabelsInAllGroups},alignInGrp=${alignItemLabels}`;
+      const testName = `align items,lblMode=${formLabelMode},alignInAllGrp=${alignItemLabelsInAllGroups},alignInGrp=${alignItemLabels}`;
       test(testName, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+
         await t
-          .expect(await takeScreenshot(`${testName}.png`, '#container'))
-          .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => {
@@ -145,12 +149,13 @@ fixture`Form`
 });
 
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-  const testName = `label properties, frmLblMode=${formLabelMode}`;
+  const testName = `label properties, lblMode=${formLabelMode}`;
   test(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+
     await t
-      .expect(await takeScreenshot(`${testName}.png`, '#container'))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -179,12 +184,13 @@ fixture`Form`
 
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
   [true, false].forEach((showColonAfterLabel) => {
-    const testName = `show semicolon, frmLblMode=${formLabelMode}, shwSmclnAfterlbl=${showColonAfterLabel}`;
+    const testName = `show semicolon, lblMode=${formLabelMode}, shwSmclnAfterlbl=${showColonAfterLabel}`;
     test(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+
       await t
-        .expect(await takeScreenshot(`${testName}.png`, '#container'))
-        .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {

@@ -2,7 +2,10 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { setAttribute } from '../../navigation/helpers/domUtils';
+import {
+  setAttribute,
+  appendElementTo,
+} from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -10,12 +13,13 @@ const labelModes = ['static', 'floating', 'hidden'];
 
 fixture.disablePageReloads`TagBox_Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 stylingModes.forEach((stylingMode) => {
   test(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    await t.click('#otherContainer');
+
+    await t.click('#tagBox2');
 
     await takeScreenshotInTheme(t, takeScreenshot, `TagBox label with stylingMode=${stylingMode}.png`);
 
@@ -32,15 +36,18 @@ stylingModes.forEach((stylingMode) => {
       stylingMode,
     };
 
+    await appendElementTo('#container', 'div', 'tagBox1', { });
+    await appendElementTo('#container', 'div', 'tagBox2', { });
+
     await createWidget('dxTagBox', {
       ...componentOption,
       multiline: false,
-    });
+    }, true, '#tagBox1');
 
-    return createWidget('dxTagBox', {
+    await createWidget('dxTagBox', {
       ...componentOption,
       multiline: true,
-    }, true, '#otherContainer');
+    }, true, '#tagBox2');
   });
 
   labelModes.forEach((labelMode) => {

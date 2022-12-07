@@ -3,12 +3,11 @@ import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { setStyleAttribute, appendElementTo } from '../../navigation/helpers/domUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Popup should be centered regarding the container even if content dimension is changed during animation', async (t) => {
   const popup = new Popup('#container');
@@ -167,8 +166,6 @@ test('popup should be repositioned after window resize', async (t) => {
     width: 100,
     height: 100,
   });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
 test('Popup dimensions should be correct after width or height animation', async (t) => {
@@ -205,33 +202,39 @@ test('Popup dimensions should be correct after width or height animation', async
 test('Showing and shown events should be raised only once even after resize during animation', async (t) => {
   const popup = new Popup('#container');
 
+  const initCounters = ClientFunction(() => {
+    (window as any).shownCallCount = 0;
+    (window as any).showingCallCount = 0;
+  });
+
+  await initCounters();
+
+  const incShown = ClientFunction(() => { ((window as any).shownCallCount as number) += 1; });
+  const incShowing = ClientFunction(() => { ((window as any).showingCallCount as number) += 1; });
+
+  const getShownCounter = ClientFunction(() => (window as any).shownCallCount);
+  const getShowingCounter = ClientFunction(() => (window as any).shownCallCount);
+
+  await popup.option({
+    onShown: incShown,
+    onShowing: incShowing,
+  });
+
   await popup.show();
-  await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
-
-  const shownCallCount = Number(await Selector('#shown_call_count').innerText);
-  const showingCallCount = Number(await Selector('#showing_call_count').innerText);
 
   await t
-    .expect(shownCallCount)
+    .expect(await getShownCounter())
     .eql(1);
   await t
-    .expect(showingCallCount)
+    .expect(await getShowingCounter())
     .eql(1);
-}).before(async () => {
-  await appendElementTo('body', 'div', 'shown_call_count', {});
-  await appendElementTo('body', 'div', 'showing_call_count', {});
+}).before(async (t) => {
+  t.ctx.shownCallCount = 0;
+  t.ctx.showingCallCount = 0;
 
   return createWidget('dxPopup', {
     width: 'auto',
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-    onShown: ClientFunction(() => {
-      const callCount = +$('#shown_call_count').text();
-      $('#shown_call_count').text(callCount + 1);
-    }),
-    onShowing: ClientFunction(() => {
-      const callCount = +$('#showing_call_count').text();
-      $('#showing_call_count').text(callCount + 1);
-    }),
   });
 });

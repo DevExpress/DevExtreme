@@ -5,7 +5,7 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Colorbox`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Colorbox should display full placeholder', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

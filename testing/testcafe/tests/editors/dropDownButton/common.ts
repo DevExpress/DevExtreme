@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
-import createWidget, { disposeWidgets, cleanContainer } from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import {
   appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
   removeClassAttribute,
@@ -20,11 +20,11 @@ const stylingModes = ['text', 'outlined', 'contained'];
 
 fixture.disablePageReloads`Drop Down Button`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Item collection should be updated after direct option changing (T817436)', async (t) => {
-  const dropDownButton1 = new DropDownButton('#container');
-  const dropDownButton2 = new DropDownButton('#otherContainer');
+  const dropDownButton1 = new DropDownButton('#dropDownButton1');
+  const dropDownButton2 = new DropDownButton('#dropDownButton2');
 
   await t.click(dropDownButton1.element);
   const list1 = await dropDownButton1.getList();
@@ -46,18 +46,19 @@ test('Item collection should be updated after direct option changing (T817436)',
     .expect(list2.getItem().isDisabled)
     .ok();
 }).before(async () => {
+  await appendElementTo('#container', 'div', 'dropDownButton1', { });
+  await appendElementTo('#container', 'div', 'dropDownButton2', { });
+
+  await createWidget('dxDropDownButton', {
+    items: [{ text: 'text1' }, { text: 'text2' }],
+    displayExpr: 'text',
+  }, true, '#dropDownButton1');
+
   await createWidget('dxDropDownButton', {
     dataSource: [{ text: 'text1' }, { text: 'text2' }],
     displayExpr: 'text',
-  }, false, '#otherContainer');
-
-  return createWidget('dxDropDownButton', {
-    items: [{ text: 'text1' }, { text: 'text2' }],
-    displayExpr: 'text',
-  });
+  }, false, '#dropDownButton2');
 });
-
-let ids = [] as string[];
 
 test('DropDownButton renders correctly', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -67,13 +68,13 @@ test('DropDownButton renders correctly', async (t) => {
   await takeScreenshotInTheme(t, takeScreenshot, 'DropDownButton render.png', '#container');
 
   for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
-    for (const id of ids) {
+    for (const id of t.ctx.ids) {
       await setClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
     }
 
     await takeScreenshotInTheme(t, takeScreenshot, `DropDownButton render ${state.replaceAll('dx-state-', '')}.png`, '#container');
 
-    for (const id of ids) {
+    for (const id of t.ctx.ids) {
       await removeClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
     }
   }
@@ -84,7 +85,7 @@ test('DropDownButton renders correctly', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
-  ids = [];
+  t.ctx.ids = [];
   await restoreBrowserSize(t);
 
   for (const stylingMode of stylingModes) {
@@ -93,7 +94,7 @@ test('DropDownButton renders correctly', async (t) => {
         for (const showArrowIcon of [true, false]) {
           const id = `${`dx${new Guid()}`}`;
 
-          ids.push(id);
+          t.ctx.ids.push(id);
           await appendElementTo('#container', 'div', id, { });
           await createWidget('dxDropDownButton', {
             rtlEnabled,
@@ -108,4 +109,4 @@ test('DropDownButton renders correctly', async (t) => {
       }
     }
   }
-}).after(async () => cleanContainer());
+});

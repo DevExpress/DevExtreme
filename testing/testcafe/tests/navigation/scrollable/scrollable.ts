@@ -2,20 +2,21 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
-fixture`Scrollable_ScrollToElement`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scrollable_ScrollToElement`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [true, false].forEach((useNative) => {
     test(`STE(el less cont),nat=${useNative},dir=${direction}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const scrollable = new Scrollable('#container', { useNative, direction });
+      const scrollable = new Scrollable('#scrollable', { useNative, direction });
       const positions = [
         { initialScrollOffset: { top: 80, left: 80 }, position: 'elementInsideContainer' },
         { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
@@ -46,20 +47,18 @@ fixture`Scrollable_ScrollToElement`
           await scrollable.apiScrollToElement('#element');
 
           await t
-            .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }
       }
     }).before(async () => {
-      await ClientFunction(() => {
-        $('#container').css({
-          border: '1px solid black',
-        });
-      })();
+      await appendElementTo('#container', 'div', 'scrollable', {
+        border: '1px solid black',
+      });
 
-      await appendElementTo('#container', 'div', 'scrollableContent', {
+      await appendElementTo('#scrollable', 'div', 'scrollableContent', {
         width: '250px',
         height: '250px',
         border: '1px solid #0b837a',
@@ -84,13 +83,13 @@ fixture`Scrollable_ScrollToElement`
         useNative,
         direction,
         showScrollbar: 'always',
-      });
+      }, false, '#scrollable');
     });
 
     test(`STE(el more cont),native=${useNative},dir=${direction}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const scrollable = new Scrollable('#container', { useNative, direction });
+      const scrollable = new Scrollable('#scrollable', { useNative, direction });
       const { getInstance } = scrollable;
 
       const positions = [
@@ -141,20 +140,18 @@ fixture`Scrollable_ScrollToElement`
           )();
 
           await t
-            .expect(await takeScreenshot(`STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }
       }
     }).before(async () => {
-      await ClientFunction(() => {
-        $('#container').css({
-          border: '1px solid black',
-        });
-      })();
+      await appendElementTo('#container', 'div', 'scrollable', {
+        border: '1px solid black',
+      });
 
-      await appendElementTo('#container', 'div', 'scrollableContent', {
+      await appendElementTo('#scrollable', 'div', 'scrollableContent', {
         width: '250px',
         height: '250px',
         border: '1px solid #0b837a',
@@ -179,7 +176,7 @@ fixture`Scrollable_ScrollToElement`
         useNative,
         direction,
         showScrollbar: 'always',
-      });
+      }, false, '#scrollable');
     });
 
     [
@@ -201,7 +198,7 @@ fixture`Scrollable_ScrollToElement`
       test(`STE(scale(1.5)),nat=${useNative},dir=${direction},${position}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        const scrollable = new Scrollable('#container', { useNative, direction });
+        const scrollable = new Scrollable('#scrollable', { useNative, direction });
         const { getInstance } = scrollable;
 
         await ClientFunction(
@@ -217,18 +214,16 @@ fixture`Scrollable_ScrollToElement`
         )();
 
         await t
-          .expect(await takeScreenshot(`STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#container')))
+          .expect(await takeScreenshot(`STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#scrollable')))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => {
-        await ClientFunction(() => {
-          $('#container').css({
-            border: '1px solid black',
-          });
-        })();
+        await appendElementTo('#container', 'div', 'scrollable', {
+          border: '1px solid black',
+        });
 
-        await appendElementTo('#container', 'div', 'scrollableContent', {
+        await appendElementTo('#scrollable', 'div', 'scrollableContent', {
           width: '250px',
           height: '250px',
           border: '1px solid #0b837a',
@@ -255,14 +250,11 @@ fixture`Scrollable_ScrollToElement`
           useNative,
           direction,
           showScrollbar: 'always',
-        });
+        }, false, '#scrollable');
       });
     });
   });
 });
-
-fixture`Scrollable_Resize`
-  .page(url(__dirname, '../../container.html'));
 
 (['horizontal'] as ScrollableDirection[]).forEach((direction) => {
   [false, true].forEach((useNative) => {

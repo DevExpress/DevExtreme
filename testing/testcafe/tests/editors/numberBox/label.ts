@@ -2,12 +2,15 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import {
+  appendElementTo,
+} from '../../navigation/helpers/domUtils';
 
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 stylingMods.forEach((stylingMode) => {
   test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
@@ -26,14 +29,17 @@ stylingMods.forEach((stylingMode) => {
       stylingMode,
     };
 
+    await appendElementTo('#container', 'div', 'numberBox1', { });
+    await appendElementTo('#container', 'div', 'numberBox2', { });
+
     await createWidget('dxNumberBox', {
       ...componentOption,
       value: 'text',
-    });
+    }, true, '#numberBox1');
 
-    return createWidget('dxNumberBox', {
+    await createWidget('dxNumberBox', {
       ...componentOption,
       value: 123,
-    }, true, '#otherContainer');
+    }, true, '#numberBox2');
   });
 });

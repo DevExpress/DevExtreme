@@ -3,11 +3,10 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture.disablePageReloads`popup height after load`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('SelectBox without data', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -17,6 +16,8 @@ test('SelectBox without data', async (t) => {
   await t.click(selectBox.element);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox no data.png');
+
+  await t.click(await selectBox.getPopup());
 
   await t
     .expect(compareResults.isValid())
@@ -31,7 +32,7 @@ test('SelectBox without data', async (t) => {
       pageSize: 3,
     },
   });
-}).after(async (t) => restoreBrowserSize(t));
+});
 
 test('SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -48,6 +49,8 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize equal datasource items count.png');
 
+  await t.click(await selectBox.getPopup());
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -61,7 +64,7 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
       pageSize: 3,
     },
   });
-}).after(async (t) => restoreBrowserSize(t));
+});
 
 test('SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -78,6 +81,8 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize less datasource items count.png');
 
+  await t.click(await selectBox.getPopup());
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -91,7 +96,7 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
       pageSize: 3,
     },
   });
-}).after(async (t) => restoreBrowserSize(t));
+});
 
 test('SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -108,6 +113,8 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize more datasource items count.png');
 
+  await t.click(await selectBox.getPopup());
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -121,7 +128,7 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
       pageSize: 3,
     },
   });
-}).after(async (t) => restoreBrowserSize(t));
+});
 
 test('SelectBox does not change a popup height after load the last page', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -140,6 +147,8 @@ test('SelectBox does not change a popup height after load the last page', async 
   await list.scrollTo(100);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox popup height after last page load.png');
+
+  await t.click(await selectBox.getPopup());
 
   await t
     .expect(compareResults.isValid())

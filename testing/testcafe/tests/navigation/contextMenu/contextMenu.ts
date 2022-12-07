@@ -1,14 +1,14 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
 import { appendElementTo } from '../helpers/domUtils';
 
-fixture`ContextMenu`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`ContextMenu`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-// T755681
-test('Context menu should be shown in the same position when item was added in runtime', async (t) => {
+test('Context menu should be shown in the same position when item was added in runtime (T755681)', async (t) => {
   const contextMenu = new ContextMenu('#container');
   const target = Selector('#menuTarget');
 
@@ -26,7 +26,7 @@ test('Context menu should be shown in the same position when item was added in r
     .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
 }).before(async () => {
   const menuTargetID = 'menuTarget';
-  await appendElementTo('body', 'button', menuTargetID, {
+  await appendElementTo('#container', 'button', menuTargetID, {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 

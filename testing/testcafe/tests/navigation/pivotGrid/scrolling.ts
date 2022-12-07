@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -8,7 +9,7 @@ import { dataOptions } from './virtualDataOptions.js';
 import PivotGrid from '../../../model/pivotGrid';
 import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
-fixture`PivotGrid_scrolling`
+fixture.disablePageReloads`PivotGrid_scrolling`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
@@ -24,9 +25,11 @@ fixture`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
 
+    await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sincronization dir=vertical,useNative=${useNative},mode=${mode}.png`, '#container');
+
+    await deleteStylesheetRule(0);
+
     await t
-      .expect(await takeScreenshot(`Rows_sinc_vert_scrollbar_useNative=${useNative}_mode=${mode}.png`, '#container'))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -70,8 +73,6 @@ fixture`PivotGrid_scrolling`
         useNative,
       },
     });
-  }).after(async () => {
-    await deleteStylesheetRule(0);
   });
 
   test(`Rows sincronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
@@ -82,9 +83,11 @@ fixture`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
 
+    await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sincronization dir=both,useNative=${useNative},mode=${mode}.png`, '#container');
+
+    await deleteStylesheetRule(0);
+
     await t
-      .expect(await takeScreenshot(`Rows_sinc_both_scrollbars_useNative=${useNative}_mode=${mode}.png`, '#container'))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -128,7 +131,5 @@ fixture`PivotGrid_scrolling`
         useNative,
       },
     });
-  }).after(async () => {
-    await deleteStylesheetRule(0);
   });
 });

@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.dark.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -35,17 +35,9 @@
     <div id="button"></div>
     <script>
         $(function() {
-            $("#button").dxToolbar({
-                items: [{
-                    location: 'before',
-                    widget: 'dxButton',
-                    locateInMenu: 'auto',
-                    options: {
-                        icon: 'exportxlsx',
-                        text: 'Apply Merge cells',
-                        stylingMode: 'text',
-                    }
-                }],
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>

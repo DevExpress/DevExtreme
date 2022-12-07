@@ -1,33 +1,28 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
 
-fixture`Tabs_common`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Tabs_common`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  test(`Tabs icon alignment,theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Tabs icon alignment', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`Tabs_items_alignment_,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Tabs items alignment.png', '#container', true);
 
-    const dataSource = [
-      { text: 'user' },
-      { text: 'comment', icon: 'comment' },
-      { icon: 'user' },
-      { icon: 'money' },
-    ] as Item[];
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    { text: 'user' },
+    { text: 'comment', icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
+  ] as Item[];
 
-    return createWidget('dxTabs', { dataSource });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
+  return createWidget('dxTabs', { dataSource });
 });

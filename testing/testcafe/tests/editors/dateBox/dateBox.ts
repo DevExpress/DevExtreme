@@ -6,7 +6,7 @@ import { isMaterial } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;

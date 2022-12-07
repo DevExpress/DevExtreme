@@ -1,17 +1,19 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`Form`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Form`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const testName = 'EmptyItem';
 test(testName, async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+
   await t
-    .expect(await takeScreenshot(`${testName}.png`, '#container'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxForm', {

@@ -5,7 +5,7 @@ import { isMaterial } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`SelectBox as Toolbar item`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('SelectBox should correctly render its buttons if editor is rendered as a Toolbar item with fieldTemplate (T949859)', async (t) => {
   const selectBox = new SelectBox('#container');

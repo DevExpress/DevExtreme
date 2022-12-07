@@ -1,19 +1,21 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`Form`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Form`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 ['left', 'right', 'top'].forEach((labelLocation) => {
   [1, 2, 3, 4].forEach((colCount) => {
-    const testItem1ColSpan2 = `SimpleItem_colSpan,item1_colSpan_2,labelLocation_${labelLocation},colCount_${colCount}`;
+    const testItem1ColSpan2 = `SimpleItem,item1_cSpan_2,location_${labelLocation},cCount_${colCount}`;
     test(testItem1ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1ColSpan2}.png`, '#container');
+
       await t
-        .expect(await takeScreenshot(`${testItem1ColSpan2}.png`, '#container'))
-        .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {
@@ -23,13 +25,13 @@ fixture`Form`
       items: [{ dataField: 'item_1', colSpan: 2 }],
     }));
 
-    const testItem1ColSpan2Item2 = `SimpleItem_colSpan,item1_colSpan_2,item2_colSpan_1,labelLocation_${labelLocation},colCount_${colCount}`;
+    const testItem1ColSpan2Item2 = `SimpleItem,item1_cSpan_2,item2_cSpan_1,location_${labelLocation},cCount_${colCount}`;
     test(testItem1ColSpan2Item2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1ColSpan2Item2}.png`, '#container');
+
       await t
-        .expect(await takeScreenshot(`${testItem1ColSpan2Item2}.png`, '#container'))
-        .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {
@@ -42,13 +44,13 @@ fixture`Form`
       ],
     }));
 
-    const testItem1Item2ColSpan2 = `SimpleItem_colSpan,item1_colSpan_1,item2_colSpan_2,labelLocation_${labelLocation},colCount_${colCount}`;
+    const testItem1Item2ColSpan2 = `SimpleItem,item1_cSpan_1,item2_cSpan_2,location_${labelLocation},cCount_${colCount}`;
     test(testItem1Item2ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1Item2ColSpan2}.png`, '#container');
+
       await t
-        .expect(await takeScreenshot(`${testItem1Item2ColSpan2}.png`, '#container'))
-        .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {
@@ -61,13 +63,13 @@ fixture`Form`
       ],
     }));
 
-    const testItem1ColSpan2Item2ColSpan2 = `SimpleItem_colSpan,item1_colSpan_2,item2_colSpan_2,labelLocation_${labelLocation},colCount_${colCount}`;
+    const testItem1ColSpan2Item2ColSpan2 = `SimpleItem,item1_cSpan_2,item2_cSpan_2,location_${labelLocation},cCount_${colCount}`;
     test(testItem1ColSpan2Item2ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1ColSpan2Item2ColSpan2}.png`, '#container');
+
       await t
-        .expect(await takeScreenshot(`${testItem1ColSpan2Item2ColSpan2}.png`, '#container'))
-        .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => createWidget('dxForm', {

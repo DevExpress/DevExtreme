@@ -6,7 +6,7 @@ import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/dom
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Popup should be centered regarding the container even if container is animated (T920408)', async () => {
   await t.wait(500);
