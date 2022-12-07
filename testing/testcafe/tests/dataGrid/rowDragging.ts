@@ -593,19 +593,21 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   await dataGrid.moveRow(fromIndex, 0, -20);
   await t.wait(300);
   await dataGrid.moveRow(toIndex, 0, 5);
+  await t.wait(300);
 
   await ClientFunction((grid) => {
     const instance = grid.getInstance();
     $(instance.element()).trigger($.Event('dxpointerup'));
   })(dataGrid);
-  await t.wait(300);
+  await t.wait(500);
 
   const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
     .getVisibleRows()
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1].key))(dataGrid);
   await t.expect(draggedRowIndex)
     .eql(toIndex - 1);
-}).before(async () => {
+}).before(async (t) => {
+  await t.maximizeWindow();
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
     height: 250,
