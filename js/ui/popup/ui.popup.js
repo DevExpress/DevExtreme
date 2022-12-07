@@ -313,10 +313,6 @@ const Popup = Overlay.inherit({
         });
     },
 
-    _runShowing: function(show) {
-        show();
-    },
-
     _updateResizeCallbackSkipCondition() {
         const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
