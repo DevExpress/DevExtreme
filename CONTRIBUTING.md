@@ -21,4 +21,4 @@ However, you are welcome to fork the repository, modify the source code in your 
 To submit a pull request, follow these guidelines:
 
 1. Describe all applied changes in detail 
-2. Make sure that all [automatic checks](README_DEVELOPERS.md#tests-and-ci) pass
+2. Make sure that all automatic checks pass
