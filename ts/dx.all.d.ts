@@ -9963,10 +9963,6 @@ declare module DevExpress.ui {
      */
     export?: DevExpress.ui.dxDataGrid.Export;
     /**
-     * [descr:dxDataGridOptions.focusStateEnabled]
-     */
-    focusStateEnabled?: boolean;
-    /**
      * [descr:dxDataGridOptions.groupPanel]
      */
     groupPanel?: DevExpress.ui.dxDataGrid.GroupPanel;
@@ -23526,10 +23522,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.filterMode]
      */
     filterMode?: DevExpress.ui.dxTreeList.TreeListFilterMode;
-    /**
-     * [descr:dxTreeListOptions.focusStateEnabled]
-     */
-    focusStateEnabled?: boolean;
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
