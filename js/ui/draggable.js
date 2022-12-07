@@ -913,7 +913,7 @@ const Draggable = DOMComponent.inherit({
     _dropHandler: function(e) {
         const $sourceElement = this._getSourceElement();
 
-        if(e.key === 'Escape') {
+        if($sourceElement && e.key === 'Escape') {
             this._detachEventHandlers();
 
             this._revertItemToInitialPosition();
@@ -923,8 +923,8 @@ const Draggable = DOMComponent.inherit({
             this._horizontalScrollHelper.reset();
             this._verticalScrollHelper.reset();
 
-            sourceDraggable._toggleDraggingClass(false);
-            $sourceElement.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+            sourceDraggable?._toggleDraggingClass(false);
+            $sourceElement?.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
 
             this._resetDragElement();
             this._resetSourceElement();
