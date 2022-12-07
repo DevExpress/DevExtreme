@@ -10,6 +10,7 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react-hooks/rules-of-hooks': 'error',
+    'react/destructuring-assignment': 'off',
   },
   overrides: [
     {
