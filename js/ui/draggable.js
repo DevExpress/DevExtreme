@@ -27,7 +27,6 @@ import { noop, splitPair } from '../core/utils/common';
 import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
-import { APPOINTMENT_DRAG_SOURCE_CLASS } from './scheduler/classes';
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
@@ -912,6 +911,7 @@ const Draggable = DOMComponent.inherit({
 
     _dropHandler: function(e) {
         const $sourceElement = this._getSourceElement();
+        const appointmentInstance = $sourceElement?.dxSchedulerAppointment('instance');
 
         if($sourceElement && e.key === 'Escape') {
             this._detachEventHandlers();
@@ -924,7 +924,7 @@ const Draggable = DOMComponent.inherit({
             this._verticalScrollHelper.reset();
 
             sourceDraggable?._toggleDraggingClass(false);
-            $sourceElement?.removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+            appointmentInstance?.option('isDragSource', false);
 
             this._resetDragElement();
             this._resetSourceElement();

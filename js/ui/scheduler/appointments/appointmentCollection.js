@@ -93,16 +93,16 @@ class SchedulerAppointments extends CollectionWidget {
             }
         };
 
-        const currentAppointment = this._$currentAppointment?.dxResizable('instance');
+        const currentAppointment = this._$currentAppointment;
 
         return extend(parent, {
-            escape: (function(e) {
+            escape: (function() {
                 if(this.resizeOccur) {
                     this.moveAppointmentBack();
                     this.resizeOccur = false;
-                    currentAppointment._detachEventHandlers();
-                    currentAppointment._attachEventHandlers();
-                    currentAppointment._toggleResizingClass(false);
+                    currentAppointment.dxResizable('instance')._detachEventHandlers();
+                    currentAppointment.dxResizable('instance')._attachEventHandlers();
+                    currentAppointment.dxResizable('instance')._toggleResizingClass(false);
                 }
             }).bind(this),
             del: (function(e) {
