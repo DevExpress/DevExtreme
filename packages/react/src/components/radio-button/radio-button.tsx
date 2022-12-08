@@ -46,7 +46,7 @@ function RadioButtonInternal({
     <span>
       <label
         htmlFor={inputId}
-        style={{ cursor: 'pointer', userSelect: 'none' }}
+        style={{ cursor: 'pointer', userSelect: 'none', margin: '2px' }}
       >
         <input
           ref={inputRef}
