@@ -503,10 +503,7 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
 }
 
 /**
- * @docid GridBaseOptions
  * @namespace DevExpress.ui
- * @export GridBaseOptions
- * @inherits WidgetOptions
  */
 interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
     /**
