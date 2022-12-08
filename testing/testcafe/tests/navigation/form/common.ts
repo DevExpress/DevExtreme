@@ -8,8 +8,7 @@ fixture`Form`
   .page(url(__dirname, '../../container.html'));
 
 ['generic.light', 'generic.dark', 'generic.contrast'].forEach((theme) => {
-  // T882067
-  test(`Color of the mark,theme=${theme}`, async (t) => {
+  test('Color of the mark (T882067)', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
