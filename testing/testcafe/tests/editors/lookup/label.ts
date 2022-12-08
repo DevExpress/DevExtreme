@@ -2,6 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import {
+  appendElementTo,
+} from '../../navigation/helpers/domUtils';
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
@@ -15,7 +18,7 @@ stylingMods.forEach((stylingMode) => {
     test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await t.click('#otherContainer');
+      await t.click('#lookup2');
 
       await takeScreenshotInTheme(t, takeScreenshot, `Lookup label with labelMode=${labelMode}-styleMode=${stylingMode}.png`);
 
@@ -33,9 +36,11 @@ stylingMods.forEach((stylingMode) => {
         stylingMode,
       };
 
-      await createWidget('dxLookup', { ...componentOption });
+      await appendElementTo('#container', 'div', 'lookup1', { });
+      await appendElementTo('#container', 'div', 'lookup2', { });
 
-      return createWidget('dxLookup', { ...componentOption }, false, '#otherContainer');
+      await createWidget('dxLookup', { ...componentOption }, true, '#lookup1');
+      await createWidget('dxLookup', { ...componentOption }, true, '#lookup2');
     });
   });
 });

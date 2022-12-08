@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { Item } from '../../../../../js/ui/accordion.d';
 
 fixture.disablePageReloads`Accordion_common`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(() => disposeWidgets());
 
 [true, false].forEach((rtlEnabled) => {
   test('Accordion items render (T865742)', async (t) => {
@@ -14,13 +15,15 @@ fixture.disablePageReloads`Accordion_common`
 
     await takeScreenshotInTheme(t, takeScreenshot, `Accordion items render rtl=${rtlEnabled}.png`, '#container', true);
 
-    await changeTheme('generic.dark');
+    if (!isMaterial()) {
+      await changeTheme('generic.dark');
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Accordion items render rtl=${rtlEnabled}.png`, '#container', true, undefined, 'generic.dark');
+      await takeScreenshotInTheme(t, takeScreenshot, `Accordion items render rtl=${rtlEnabled}.png`, '#container', false, undefined, 'generic.dark');
 
-    await changeTheme('generic.contrast');
+      await changeTheme('generic.contrast');
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Accordion items render rtl=${rtlEnabled}.png`, '#container', true, undefined, 'generic.contrast');
+      await takeScreenshotInTheme(t, takeScreenshot, `Accordion items render rtl=${rtlEnabled}.png`, '#container', false, undefined, 'generic.contrast');
+    }
 
     await t
       .expect(compareResults.isValid())

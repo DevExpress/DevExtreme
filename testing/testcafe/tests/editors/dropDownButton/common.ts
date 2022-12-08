@@ -23,8 +23,8 @@ fixture.disablePageReloads`Drop Down Button`
   .afterEach(async () => disposeWidgets());
 
 test('Item collection should be updated after direct option changing (T817436)', async (t) => {
-  const dropDownButton1 = new DropDownButton('#container');
-  const dropDownButton2 = new DropDownButton('#otherContainer');
+  const dropDownButton1 = new DropDownButton('#dropDownButton1');
+  const dropDownButton2 = new DropDownButton('#dropDownButton2');
 
   await t.click(dropDownButton1.element);
   const list1 = await dropDownButton1.getList();
@@ -46,15 +46,18 @@ test('Item collection should be updated after direct option changing (T817436)',
     .expect(list2.getItem().isDisabled)
     .ok();
 }).before(async () => {
+  await appendElementTo('#container', 'div', 'dropDownButton1', { });
+  await appendElementTo('#container', 'div', 'dropDownButton2', { });
+
+  await createWidget('dxDropDownButton', {
+    items: [{ text: 'text1' }, { text: 'text2' }],
+    displayExpr: 'text',
+  }, true, '#dropDownButton1');
+
   await createWidget('dxDropDownButton', {
     dataSource: [{ text: 'text1' }, { text: 'text2' }],
     displayExpr: 'text',
-  }, false, '#otherContainer');
-
-  return createWidget('dxDropDownButton', {
-    items: [{ text: 'text1' }, { text: 'text2' }],
-    displayExpr: 'text',
-  });
+  }, false, '#dropDownButton2');
 });
 
 test('DropDownButton renders correctly', async (t) => {
