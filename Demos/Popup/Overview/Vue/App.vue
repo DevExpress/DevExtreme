@@ -160,5 +160,9 @@ export default {
   margin-bottom: 10px;
   margin-top: 0;
 }
+
+.dx-theme-material .dx-toolbar {
+  padding-right: 24px;
+}
 </style>
 
