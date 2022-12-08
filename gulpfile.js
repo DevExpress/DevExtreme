@@ -56,10 +56,10 @@ function createMiscBatch() {
 
 function createMainBatch(dev) {
     const tasks = [];
-    if(!dev) {
+    if(!dev && !env.TESTCAFE_TESTING) {
         tasks.push('js-bundles-debug');
     }
-    if(!env.TEST_CI) {
+    if(!env.TEST_CI || env.TESTCAFE_TESTING) {
         tasks.push('js-bundles-prod');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
