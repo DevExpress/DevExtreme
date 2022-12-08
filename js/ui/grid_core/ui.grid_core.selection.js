@@ -162,7 +162,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item?.rowType === 'data' && !item.isNewRow;
                 },
                 getItemData: function(item) {
-                    return item?.oldData || item?.data || item;
+                    return item?.rowType === 'data' ? item?.oldData || item?.data : item;
                 },
                 filter: function() {
                     return dataController.getCombinedFilter(deferred);
