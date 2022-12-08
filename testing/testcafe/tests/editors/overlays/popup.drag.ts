@@ -90,11 +90,11 @@ test('Popup can not be dragged if content bigger than container', async (t) => {
     .expect(popupPosition.left)
     .eql(newPopupPosition.left);
 }).before(async () => {
-  await setStyleAttribute(Selector('#otherContainer'), 'width: 99px; height: 99px;');
+  await setStyleAttribute(Selector('#container'), 'width: 99px; height: 99px;');
 
   return createWidget('dxPopup', {
-    position: { of: '#otherContainer' },
-    container: '#otherContainer',
+    position: { of: '#container' },
+    container: '#contaner',
     visible: true,
     width: 100,
     height: 100,
