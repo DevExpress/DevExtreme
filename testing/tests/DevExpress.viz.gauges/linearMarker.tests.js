@@ -28,18 +28,18 @@ QUnit.module('TriangleMarker', {
 });
 
 QUnit.test('measure', function(assert) {
-    assert.deepEqual(this.marker.render({ length: 10, width: 4 }).measure({ y: 100 }), { min: 90, max: 100, indent: 2 }, 'horizontal, top');
-    assert.deepEqual(this.marker.render({ length: 10, width: 4, verticalOrientation: 'bottom' }).measure({ y: 100 }), { min: 100, max: 110, indent: 2 }, 'horizontal, bottom');
-    assert.deepEqual(this.marker.render({ length: 10, width: 4, vertical: true }).measure({ x: 200 }), { min: 190, max: 200, indent: 2 }, 'vertical, left');
-    assert.deepEqual(this.marker.render({ length: 10, width: 4, vertical: true, horizontalOrientation: 'right' }).measure({ x: 200 }), { min: 200, max: 210, indent: 2 }, 'vertical, right');
+    assert.deepEqual(this.marker.render({ length: 10, width: 4 }).measure({ y: 100 }), { min: 90, max: 100 }, 'horizontal, top');
+    assert.deepEqual(this.marker.render({ length: 10, width: 4, verticalOrientation: 'bottom' }).measure({ y: 100 }), { min: 100, max: 110 }, 'horizontal, bottom');
+    assert.deepEqual(this.marker.render({ length: 10, width: 4, vertical: true }).measure({ x: 200 }), { min: 190, max: 200 }, 'vertical, left');
+    assert.deepEqual(this.marker.render({ length: 10, width: 4, vertical: true, horizontalOrientation: 'right' }).measure({ x: 200 }), { min: 200, max: 210 }, 'vertical, right');
 });
 
 //  B254470
 QUnit.test('measure (string-like numbers)', function(assert) {
-    assert.deepEqual(this.marker.render({ length: '10', width: '4' }).measure({ y: 100 }), { min: 90, max: 100, indent: 2 }, 'horizontal, top');
-    assert.deepEqual(this.marker.render({ length: '10', width: '4', verticalOrientation: 'bottom' }).measure({ y: 100 }), { min: 100, max: 110, indent: 2 }, 'horizontal, bottom');
-    assert.deepEqual(this.marker.render({ length: '10', width: '4', vertical: true }).measure({ x: 200 }), { min: 190, max: 200, indent: 2 }, 'vertical, left');
-    assert.deepEqual(this.marker.render({ length: '10', width: '4', vertical: true, horizontalOrientation: 'right' }).measure({ x: 200 }), { min: 200, max: 210, indent: 2 }, 'vertical, right');
+    assert.deepEqual(this.marker.render({ length: '10', width: '4' }).measure({ y: 100 }), { min: 90, max: 100 }, 'horizontal, top');
+    assert.deepEqual(this.marker.render({ length: '10', width: '4', verticalOrientation: 'bottom' }).measure({ y: 100 }), { min: 100, max: 110 }, 'horizontal, bottom');
+    assert.deepEqual(this.marker.render({ length: '10', width: '4', vertical: true }).measure({ x: 200 }), { min: 190, max: 200 }, 'vertical, left');
+    assert.deepEqual(this.marker.render({ length: '10', width: '4', vertical: true, horizontalOrientation: 'right' }).measure({ x: 200 }), { min: 200, max: 210 }, 'vertical, right');
 });
 
 QUnit.test('render - horizontal, top', function(assert) {
