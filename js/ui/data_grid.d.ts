@@ -3212,7 +3212,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
  * @namespace DevExpress.ui
  * @public
  */
-export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
+export type dxDataGridOptions<TRowData = any, TKey = any> = GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> & {
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
@@ -3583,7 +3583,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @public
      */
     toolbar?: Toolbar;
-}
+};
 
 /** @public */
 export type ExcelCellInfo<TRowData = any, TKey = any> = {

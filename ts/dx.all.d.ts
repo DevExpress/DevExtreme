@@ -8946,8 +8946,11 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxDataGridOptions<TRowData = any, TKey = any>
-    extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
+  export type dxDataGridOptions<TRowData = any, TKey = any> = GridBaseOptions<
+    dxDataGrid<TRowData, TKey>,
+    TRowData,
+    TKey
+  > & {
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -9175,7 +9178,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
-  }
+  };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
    */
@@ -22957,8 +22960,11 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxTreeListOptions<TRowData = any, TKey = any>
-    extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
+  export type dxTreeListOptions<TRowData = any, TKey = any> = GridBaseOptions<
+    dxTreeList<TRowData, TKey>,
+    TRowData,
+    TKey
+  > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -23144,7 +23150,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
-  }
+  };
   /**
    * @deprecated 
    */
