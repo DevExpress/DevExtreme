@@ -7,7 +7,7 @@ const FORMAT_EXTENSIONS = {
 }
 
 function checkExternalPackage(id) {
-    return ['@devexpress'].includes(id.split('/')[0]);
+    return ['@devextreme'].includes(id.split('/')[0]);
 }
 
 function getBundleConfig(outputDir, format) {
