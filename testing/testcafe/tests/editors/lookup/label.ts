@@ -6,7 +6,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
-fixture.disablePageReloads`Lookup_Label`
+fixture`Lookup_Label`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 

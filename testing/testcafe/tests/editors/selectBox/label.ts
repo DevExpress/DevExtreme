@@ -6,7 +6,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
 
-fixture`Label`
+fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 

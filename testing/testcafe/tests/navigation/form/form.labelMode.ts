@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../../container.html'))
-  .clientScripts({ path: '../../../../artifacts/js/dx-quill.min.js' });
+  .clientScripts({ path: '../../../../../artifacts/js/dx-quill.min.js' });
 
 [undefined, true, false].forEach((labelVisible) => {
   ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
