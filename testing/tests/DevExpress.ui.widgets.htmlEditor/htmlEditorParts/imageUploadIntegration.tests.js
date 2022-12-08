@@ -3,6 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
 import devices from 'core/devices';
 import { createBlobFile } from '../../../helpers/fileHelper.js';
+import fx from 'animation/fx';
 
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -56,6 +57,8 @@ const serverUploadMarkup = '<p>test text</p><p><br></p><p><img src="/uploadDirec
 
 module('Image uploading integration', {
     beforeEach: function() {
+        fx.off = true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = $('#htmlEditor');
@@ -163,6 +166,8 @@ module('Image uploading integration', {
         };
     },
     afterEach: function() {
+        fx.off = false;
+
         this.instance && this.instance.dispose();
         this.clock.restore();
     }
@@ -209,17 +214,6 @@ module('Image uploading integration', {
             this.checkUrlTabConfigs(assert, { formItems, formInstance });
         });
 
-        test('the popup and form is correctly rendered for file tab', function(assert) {
-            this.createWidget({ imageUpload: { tabs: ['file'] } });
-            this.clock.tick(TIME_TO_WAIT);
-
-            const $form = this.getFormElement();
-            const formInstance = $form.dxForm('instance');
-            const formItems = formInstance.option('items');
-
-            this.checkFileTabConfigs(assert, { formItems, formInstance });
-        });
-
         test('the popup and form is correctly rendered for two reordered tab', function(assert) {
             this.createWidget({ imageUpload: { tabs: ['url', 'file'] } });
             this.clock.tick(TIME_TO_WAIT);
@@ -236,23 +230,6 @@ module('Image uploading integration', {
             assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
             assert.strictEqual($(`.${POPUP_TITLE_CLASS}`).text(), 'Add Image', 'dialog title is modified');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'Add', 'dialog add button text is modified');
-        });
-
-        test('the popup and form is correctly rendered for file tab if imageUpload option was changed', function(assert) {
-            this.createWidget({ imageUpload: { tabs: ['url'] } });
-            this.clock.tick(TIME_TO_WAIT);
-
-            this.getFormElement();
-
-            this.clickCancelDialogButton();
-
-            this.instance.option({ imageUpload: { tabs: ['file'] } });
-
-            const $form = this.getFormElement();
-            const formInstance = $form.dxForm('instance');
-            const formItems = formInstance.option('items');
-
-            this.checkFileTabConfigs(assert, { formItems, formInstance });
         });
 
         test('apply one tab config after second tab selection', function(assert) {
@@ -277,6 +254,8 @@ module('Image uploading integration', {
 
                 fileUploader.option('value', [fakeFileBlob]);
                 this.clock.tick(TIME_TO_WAIT);
+
+                this.clickDialogOkButton();
 
                 assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
             } catch(e) {
@@ -339,6 +318,11 @@ module('Image uploading integration', {
 
             this.clock.tick(TIME_TO_WAIT);
 
+            const $form = $(`.${FORM_CLASS}`);
+            const formInstance = $form.dxForm('instance');
+
+            formInstance.getEditor('src').option('value', 'temp');
+
             this.clickDialogOkButton();
             this.clock.tick(TIME_TO_WAIT);
 
@@ -348,9 +332,6 @@ module('Image uploading integration', {
                 .trigger('dxclick');
 
             this.clock.tick(TIME_TO_WAIT);
-
-            const $form = $(`.${FORM_CLASS}`);
-            const formInstance = $form.dxForm('instance');
 
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 0, 'has no add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
@@ -386,6 +367,7 @@ module('Image uploading integration', {
 
         test('check file uploading in base64 format', function(assert) {
             this.createWidget();
+
             this.clock.tick(TIME_TO_WAIT);
             const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
@@ -399,6 +381,8 @@ module('Image uploading integration', {
 
             fileUploader.option('value', [fakeFileBlob]);
             this.clock.tick(TIME_TO_WAIT);
+
+            this.clickDialogOkButton();
 
             assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
             assert.strictEqual(quillUploadSpy.getCall(0).args[0].index, 1, 'first upload arg index is correct');
@@ -414,7 +398,9 @@ module('Image uploading integration', {
                     },
                     value: markup
                 }).dxHtmlEditor('instance');
+
             this.clock.tick(TIME_TO_WAIT);
+
             const fakeFileBlob = createBlobFile(fakeFile.name, fakeFile.size, fakeFile.type);
 
             const quillUploadSpy = sinon.spy(this.instance.getQuillInstance().getModule('uploader'), 'upload');
@@ -422,7 +408,8 @@ module('Image uploading integration', {
             const fileUploader = $form.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
 
             fileUploader.option('value', [fakeFileBlob]);
-            this.clock.tick(TIME_TO_WAIT);
+
+            this.clickDialogOkButton();
 
             assert.strictEqual(quillUploadSpy.callCount, 1, 'file uploader upload method is called');
         });
@@ -676,13 +663,10 @@ module('Image uploading integration', {
 
             $form.find(`.${FILEUPLOADER_INPUT_CLASS}`).trigger('change');
 
-            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
-
-            const request = this.xhrMock.getInstanceAt();
-
             this.clickDialogOkButton();
 
-            this.clock.tick(TIME_TO_WAIT);
+            this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+            const request = this.xhrMock.getInstanceAt();
 
             assert.ok(request.uploaded, 'upload is done');
             assert.strictEqual(this.instance.option('value'), expectedValue, 'value is correct');
