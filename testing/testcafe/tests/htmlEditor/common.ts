@@ -4,8 +4,8 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
 fixture`HtmlEditor`
-  .page(url(__dirname, '../container.html'))
-  .clientScripts({ path: '../../../../artifacts/js/dx-quill.min.js' });
+  .clientScripts({ path: '../../../../../artifacts/js/dx-quill.min.js' })
+  .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';

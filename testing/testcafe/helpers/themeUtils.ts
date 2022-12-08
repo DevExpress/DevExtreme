@@ -1,3 +1,4 @@
+import { isString } from '../../../js/core/utils/type';
 import { changeTheme } from './changeTheme';
 
 export const getThemePostfix = (theme?: string): string => {
@@ -16,6 +17,10 @@ export async function takeScreenshotInTheme(
   compactCallBack?: () => Promise<unknown>,
   theme?: string,
 ): Promise<void> {
+  if (isString(theme)) {
+    await changeTheme(theme);
+  }
+
   await t
     .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(theme)}.png`), element))
     .ok();
