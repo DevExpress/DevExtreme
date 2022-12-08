@@ -15,4 +15,4 @@ lib
 *.scss
 
 packages/jquery/*
-packages/devexteme-core/src
+packages/devexteme-core/*
