@@ -64,8 +64,8 @@ const DateBoxMask = DateBoxBase.inherit({
                 });
             },
             enter: (e) => {
-                return applyHandler(e, (event) => {
-                    this._enterHandler(event);
+                return applyHandler(e, () => {
+                    this._enterHandler();
                 });
             },
             leftArrow: (e) => {
@@ -611,10 +611,9 @@ const DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _enterHandler(e) {
+    _enterHandler() {
         this._fireChangeEvent();
         this._selectNextPart(FORWARD);
-        e.preventDefault();
     },
 
     _focusOutHandler(e) {

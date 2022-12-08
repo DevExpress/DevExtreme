@@ -547,10 +547,6 @@ module('Keyboard navigation', setupModule, () => {
 
         this.keyboard.press('enter');
         assert.strictEqual(this.instance.option('value').getMonth(), 10, 'month was changed in the value');
-
-        this.keyboard.press('down');
-        assert.strictEqual(this.$input.val(), 'November 9 2012', 'text was changed');
-        assert.strictEqual(this.instance.option('value').getDate(), 10, 'day did not changed in the value after commit');
     });
 
     test('Mask should not catch arrows on opened dateBox', function(assert) {
@@ -676,12 +672,26 @@ module('Keyboard navigation', setupModule, () => {
 
     test('enter should clear search value', function(assert) {
         this.keyboard.type('1');
+
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
 
         this.keyboard.press('enter');
         this.keyboard.type('2');
+
         assert.strictEqual(this.instance.option('text'), 'January 2 2012', 'search value was cleared');
-        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, 'next group has been selected');
+    });
+
+    QUnit.test('enter should not prevent keypress event that triggers form validation (T1131035)', function(assert) {
+        assert.expect(1);
+
+        this.$element.on('keypress', e => {
+            if(e.key === 'Enter') {
+                assert.ok(true, 'keypress enter event is triggered');
+            }
+        });
+
+        this.keyboard.type('1');
+        this.keyboard.press('enter');
     });
 
     test('incorrect input should clear search value', function(assert) {
