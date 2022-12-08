@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import RadioGroup from '../../../model/radioGroup';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
-fixture`Radio Group`
+fixture.disablePageReloads`Radio Group`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 

@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
-import createWidget, { disposeWidgets, cleanContainer } from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import {
   appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
   removeClassAttribute,
@@ -106,4 +106,4 @@ test('DropDownButton renders correctly', async (t) => {
       }
     }
   }
-}).after(async () => cleanContainer());
+});

@@ -4,7 +4,6 @@ import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { setStyleAttribute } from '../../navigation/helpers/domUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'))
@@ -167,8 +166,6 @@ test('popup should be repositioned after window resize', async (t) => {
     width: 100,
     height: 100,
   });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
 test('Popup dimensions should be correct after width or height animation', async (t) => {

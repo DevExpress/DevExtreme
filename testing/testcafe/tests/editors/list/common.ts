@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
-fixture`List`
+fixture.disablePageReloads`List`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 

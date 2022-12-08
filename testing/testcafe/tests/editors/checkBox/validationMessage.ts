@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`CheckBox_ValidationMessage`
@@ -79,7 +78,5 @@ positions.forEach((position) => {
         message: 'it is required',
       }],
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 });

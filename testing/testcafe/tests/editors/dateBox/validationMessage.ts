@@ -7,7 +7,10 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async (t) => {
+    await disposeWidgets();
+    await restoreBrowserSize(t);
+  });
 
 const positions = ['top', 'right', 'bottom', 'left'];
 
@@ -41,7 +44,5 @@ positions.forEach((position) => {
         message: 'out of range',
       }],
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 });
