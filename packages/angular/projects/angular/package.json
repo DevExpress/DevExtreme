@@ -1,5 +1,5 @@
 {
-  "name": "@devexpress/angular",
+  "name": "@devextreme/angular",
   "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "14.x.x",
@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "@devexpress/core": "^1.0.0",
-    "@devexpress/components": "^1.0.0"
+    "@devextreme/components": "1.0.0"
   }
 }

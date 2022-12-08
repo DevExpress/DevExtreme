@@ -1,4 +1,4 @@
-import { StateManager, UnknownRecord } from '@devexpress/core';
+import { StateManager, UnknownRecord } from '@devextreme/core';
 import { useEffect, useState } from 'react';
 
 export function useCoreState<TState extends UnknownRecord>(

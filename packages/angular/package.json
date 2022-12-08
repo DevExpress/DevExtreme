@@ -1,10 +1,10 @@
 {
-  "name": "@devexpress/angular",
+  "name": "@devextreme/angular",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "build": "ng build @devexpress/angular",
-    "watch": "ng build @devexpress/angular --watch",
+    "build": "ng build @devextreme/angular",
+    "watch": "ng build @devextreme/angular --watch",
     "cache:clean": "ng cache clean"
   },
   "private": true,
@@ -17,8 +17,8 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
-    "@devexpress/core": "1.0.0",
-    "@devexpress/components": "1.0.0",
+    "@devextreme/core": "1.0.0",
+    "@devextreme/components": "1.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -39,23 +39,23 @@
     "typescript": "~4.7.2",
     "wait-on": "^6.0.1"
   },
-  "module": "./lib/fesm2015/devexpress-angular.mjs",
-  "es2020": "./lib/fesm2020/devexpress-angular.mjs",
-  "esm2020": "./lib/esm2020/devexpress-angular.mjs",
-  "fesm2020": "./lib/fesm2020/devexpress-angular.mjs",
-  "fesm2015": "./lib/fesm2015/devexpress-angular.mjs",
-  "typings": "./lib/index.d.ts",
+  "module": "lib/fesm2015/devextreme-angular.mjs",
+  "es2020": "lib/fesm2020/devextreme-angular.mjs",
+  "esm2020": "lib/esm2020/devextreme-angular.mjs",
+  "fesm2020": "lib/fesm2020/devextreme-angular.mjs",
+  "fesm2015": "lib/fesm2015/devextreme-angular.mjs",
+  "typings": "lib/index.d.ts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
       "types": "./lib/index.d.ts",
-      "esm2020": "./lib/esm2020/devexpress-angular.mjs",
-      "es2020": "./lib/fesm2020/devexpress-angular.mjs",
-      "es2015": "./lib/fesm2015/devexpress-angular.mjs",
-      "node": "./lib/fesm2015/devexpress-angular.mjs",
-      "default": "./lib/fesm2020/devexpress-angular.mjs"
+      "esm2020": "./lib/esm2020/devextreme-angular.mjs",
+      "es2020": "./lib/fesm2020/devextreme-angular.mjs",
+      "es2015": "./lib/fesm2015/devextreme-angular.mjs",
+      "node": "./lib/fesm2015/devextreme-angular.mjs",
+      "default": "./lib/fesm2020/devextreme-angular.mjs"
     }
   },
   "sideEffects": false

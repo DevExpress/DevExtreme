@@ -8,7 +8,7 @@ import {
   StateConfigMap,
   StateManager,
   ViewModelManager,
-} from '@devexpress/core';
+} from '@devextreme/core';
 
 // === props ===
 export type ValueProps<T> = {
