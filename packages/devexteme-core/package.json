@@ -1,0 +1,15 @@
+{
+    "name": "@devextreme/ui-core",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "build": "rollup -c rollup/rollup.config.mjs"
+    },
+    "exports": {
+        ".": {
+            "types": "./lib/index.d.ts",
+            "import": "./lib/index.mjs",
+            "require": "./lib/index.cjs"
+        }
+    }
+}
