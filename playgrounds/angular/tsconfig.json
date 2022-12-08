@@ -23,8 +23,7 @@
       "dom"
     ],
     "paths": {
-      "@devexpress/angular/*": ["./node_modules/@devexpress/angular/*"],
-      "@devexpress/core/*": [ "./node_modules/@devexpress/core/*"]
+      "@devextreme/angular/*": ["./node_modules/@devextreme/angular/*"],
     },
     "skipLibCheck": true,
   },

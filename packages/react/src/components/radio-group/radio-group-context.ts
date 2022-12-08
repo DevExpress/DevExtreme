@@ -1,4 +1,4 @@
-import { RadioGroupCore } from '@devexpress/components';
+import { RadioGroupCore } from '@devextreme/components';
 import { createContext } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

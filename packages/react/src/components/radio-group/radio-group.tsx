@@ -1,6 +1,6 @@
 import {
   createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
-} from '@devexpress/components';
+} from '@devextreme/components';
 import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { Props } from '../../internal/props';

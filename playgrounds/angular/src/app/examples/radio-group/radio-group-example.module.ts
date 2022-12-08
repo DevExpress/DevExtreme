@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { RadioGroupModule } from '@devexpress/angular';
+import { RadioGroupModule } from '@devextreme/angular';
 import { RadioGroupExampleComponent } from './radio-group-example.component';
 
 const routes = [{
