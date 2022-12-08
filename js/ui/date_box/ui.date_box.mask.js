@@ -613,6 +613,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _enterHandler() {
         this._fireChangeEvent();
+        this._selectNextPart(FORWARD);
     },
 
     _focusOutHandler(e) {
