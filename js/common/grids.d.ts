@@ -1576,10 +1576,7 @@ export interface GridBase<TRowData = any, TKey = any> {
 }
 
 /**
- * @docid GridBaseOptions
  * @namespace DevExpress.common.grids
- * @export GridBaseOptions
- * @inherits WidgetOptions
  */
 interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
     /**
