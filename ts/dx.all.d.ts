@@ -3149,7 +3149,7 @@ declare module DevExpress.common.grids {
     TRowData = any,
     TKey = any
   > = Omit<
-    GridBaseOptionBlank<TComponent, TRowData, TKey>,
+    GridBaseOptionsBlank<TComponent, TRowData, TKey>,
     'focusStateEnabled'
   > & {
     /**
