@@ -31,7 +31,8 @@ function getData(rowCount, colCount): Record<string, string>[] {
 }
 
 fixture`Scrolling`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .beforeEach((t) => t.maximizeWindow());
 
 test('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
