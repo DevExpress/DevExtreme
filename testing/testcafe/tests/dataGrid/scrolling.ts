@@ -903,7 +903,10 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
 });
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .beforeEach(async (t) => {
+    await t.maximizeWindow();
+  });
 
 test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
