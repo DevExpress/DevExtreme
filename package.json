@@ -56,8 +56,8 @@
         "pre-commit": "node build/pre-commit/index.cjs",
         "lint": "npm run lint:eslint",
         "lint:core": "eslint --ignore-path .eslintignore packages/core/src/**",
-        "lint:eslint": "eslint --ignore-path .eslintignore packages/*/src/**",
-        "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix packages/*/src/**",
+        "lint:eslint": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern packages/*/src/**",
+        "lint:eslint:fix": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern --fix packages/*/src/**",
         "tsc:build": "tsc --build ./tsconfig.project.json",
         "tsc:watch": "npm run tsc:build -- --watch",
         "update:tsconfig": "ts-node-esm scripts/update-package-tsconfig.ts"
