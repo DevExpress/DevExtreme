@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
@@ -20,7 +19,6 @@ stylingMods.forEach((stylingMode) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
-    await changeTheme('material.blue.light');
     await t.resizeWindow(300, 400);
 
     return createWidget('dxDateBox', {
