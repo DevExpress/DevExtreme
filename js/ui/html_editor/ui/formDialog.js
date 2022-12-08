@@ -60,7 +60,7 @@ class FormDialog {
         return extend({
             onInitialized: (e) => {
                 this._popup = e.component;
-                this._popup.on('hiding', this.onHiding.bind(this));
+                this._popup.on('hiding', () => this.onHiding());
                 this._popup.on('shown', () => { this._form.focus(); });
             },
             deferRendering: false,

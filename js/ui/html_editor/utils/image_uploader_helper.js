@@ -75,7 +75,6 @@ export class ImageUploader {
 
     updateAddButtonState() {
         const isDisabled = this.getCurrentTab().isDisableButton();
-
         this.setAddButtonDisabled(isDisabled);
     }
 
@@ -106,13 +105,13 @@ export class ImageUploader {
             config: this.config,
             formData,
             isUpdating: this.isUpdating
-        }, this.updateAddButtonState.bind(this));
+        }, () => this.updateAddButtonState());
     }
 
     createFileTab() {
         return new FileTab(this.module, {
             config: this.config
-        }, this.updateAddButtonState.bind(this));
+        }, () => this.updateAddButtonState());
     }
 
     createTabsModel(model = []) {
@@ -219,6 +218,9 @@ class BaseTab {
     }
 
     createStrategy() {
+        return this.isUpdating
+            ? new UpdateUrlStrategy(this.module, this.config, this.formData)
+            : new AddUrlStrategy(this.module, this.config, this.onFileSelected);
     }
 
     isDisableButton() {
@@ -233,12 +235,6 @@ class BaseTab {
 class UrlTab extends BaseTab {
     getTabName() {
         return localizationMessage.format(DIALOG_IMAGE_SPECIFY_URL);
-    }
-
-    createStrategy() {
-        return this.isUpdating
-            ? new UpdateUrlStrategy(this.module, this.config, this.formData)
-            : new AddUrlStrategy(this.module, this.config, this.onFileSelected);
     }
 }
 
