@@ -72,15 +72,17 @@ function createDefaultBatch(dev) {
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
     tasks.push('version-replace');
-    tasks.push(dev ? 'main-batch-dev' : 'main-batch');
-    if(!env.TEST_CI && !dev) {
+    tasks.push(dev && !env.TESTCAFE_TESTING ? 'main-batch-dev' : 'main-batch');
+    if(!env.TEST_CI && !dev && !env.TESTCAFE_TESTING) {
         tasks.push('npm');
         if(!env.SKIP_THEMEBUILDER) {
             tasks.push('themebuilder-npm');
         }
         tasks.push('check-license-notices');
     }
-    tasks.push('discover-declarations');
+    if(!env.TESTCAFE_TESTING) {
+        tasks.push('discover-declarations');
+    }
     return gulp.series(tasks);
 }
 

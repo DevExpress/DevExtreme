@@ -42,7 +42,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build
+      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:testcafe-testing
 
     - name: Zip artifacts
       run: |

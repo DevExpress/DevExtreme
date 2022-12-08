@@ -205,14 +205,31 @@ test('Popup dimensions should be correct after width or height animation', async
 test('Showing and shown events should be raised only once even after resize during animation', async (t) => {
   const popup = new Popup('#container');
 
+  const initCounters = ClientFunction(() => {
+    (window as any).shownCallCount = 0;
+    (window as any).showingCallCount = 0;
+  });
+
+  await initCounters();
+
+  const incShown = ClientFunction(() => { ((window as any).shownCallCount as number) += 1; });
+  const incShowing = ClientFunction(() => { ((window as any).showingCallCount as number) += 1; });
+
+  const getShownCounter = ClientFunction(() => (window as any).shownCallCount);
+  const getShowingCounter = ClientFunction(() => (window as any).shownCallCount);
+
+  await popup.option({
+    onShown: incShown,
+    onShowing: incShowing,
+  });
+
   await popup.show();
-  await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
 
   await t
-    .expect(t.ctx.shownCallCount)
+    .expect(await getShownCounter())
     .eql(1);
   await t
-    .expect(t.ctx.showingCallCount)
+    .expect(await getShowingCounter())
     .eql(1);
 }).before(async (t) => {
   t.ctx.shownCallCount = 0;
@@ -222,15 +239,5 @@ test('Showing and shown events should be raised only once even after resize duri
     width: 'auto',
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-    onShown: ClientFunction(() => {
-      (t.ctx.shownCallCount as number) += 1;
-    }, {
-      dependencies: { t },
-    }),
-    onShowing: ClientFunction(() => {
-      (t.ctx.showingCallCount as number) += 1;
-    }, {
-      dependencies: { t },
-    }),
   });
 });
