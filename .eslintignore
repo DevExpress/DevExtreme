@@ -13,4 +13,6 @@ themebuilder-scss
 *-e2e
 lib
 *.scss
+
 packages/jquery/*
+packages/devexteme-core/src

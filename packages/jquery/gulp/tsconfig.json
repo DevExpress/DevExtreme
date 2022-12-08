@@ -1,15 +1,23 @@
 {
+    "compileOnSave": false,
     "compilerOptions": {
-        "target": "ES2020",
-        "module": "ESNext",
-        "strict": false,
-        "esModuleInterop": false,
-        "typeRoots": ["node_modules/@types"],
-        "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
-        "declaration": true
+        "module":"ESNext",
+        "baseUrl": "./",
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "jsx": "preserve",
+        "importHelpers": true,
+        "target": "ES2019",
+        "lib": [
+            "es2018",
+            "dom"
+        ]
     },
-    "exclude": [
-        "node_modules"
-    ]
+    "exclude": ["node_modules"],
+    "include": ["**/*"],
 }
