@@ -39,14 +39,14 @@ interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
 
 const valuePropNameDefault = 'text';
 
-export function RadioGroupCompatible({
+export function RadioGroupCompatible<TValue extends RadioGroupValue>({
   items,
   itemRender,
   itemComponent: ItemComponent,
   defaultValue,
   valueExpr,
   displayExpr,
-}: CompatibleRadioGroupProps<RadioGroupValue>) {
+}: CompatibleRadioGroupProps<TValue>) {
   const getItemLabel = createItemPropGetter(displayExpr || valuePropNameDefault);
   const getItemValue = createItemPropGetter(valueExpr || valuePropNameDefault);
 
