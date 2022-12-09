@@ -10,9 +10,9 @@ export const isMaterial = (): boolean => process.env.theme === 'material.blue.li
 
 export async function takeScreenshotInTheme(
   t: TestController,
-  takeScreenshot: (screenshotName: string, element?: string) => Promise<boolean>,
+  takeScreenshot: (screenshotName: string, element?: Selector | string | null) => Promise<boolean>,
   screenshotName: string,
-  element?: string,
+  selector?: Selector | string | null,
   shouldTestInCompact = false,
   compactCallBack?: () => Promise<unknown>,
   theme?: string,
@@ -22,7 +22,7 @@ export async function takeScreenshotInTheme(
   }
 
   await t
-    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(theme)}.png`), element))
+    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(theme)}.png`), selector))
     .ok();
 
   if (shouldTestInCompact) {
@@ -32,7 +32,7 @@ export async function takeScreenshotInTheme(
     await compactCallBack?.();
 
     await t
-      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), element))
+      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), selector))
       .ok();
   }
 

@@ -7,7 +7,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
-fixture`Menu_common`
+fixture.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 

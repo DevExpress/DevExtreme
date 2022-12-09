@@ -1,13 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { setAttribute } from '../helpers/domUtils';
 
-fixture`Toolbar_OverflowMenu_Popup`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Toolbar_OverflowMenu_Popup`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const generateItems = (count) => {
   const items: { text: string; locateInMenu: string }[] = [];
@@ -28,17 +29,13 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
   await t
     .click(overflowMenu.element);
 
-  await t
-    .expect(await takeScreenshot('Popup_before_window_resize.png'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup before window resize.png');
 
   await t.resizeWindow(300, 300);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup after window resize.png');
+
   await t
-    .expect(await takeScreenshot('Popup_after_window_resize.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
@@ -58,9 +55,9 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   await t
     .click(overflowMenu.element);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup collision with window border.png');
+
   await t
-    .expect(await takeScreenshot('Popup_collision_with_window_border.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
@@ -73,59 +70,51 @@ safeSizeTest('Popup should be position correctly with the window border collisio
 });
 
 [true, false].forEach((rtlEnabled) => {
-  ['generic.light', 'material.blue.light'].forEach((theme) => {
-    safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled},theme=${theme}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const toolbar = new Toolbar('#container');
-      const overflowMenu = toolbar.getOverflowMenu();
+    const toolbar = new Toolbar('#container');
+    const overflowMenu = toolbar.getOverflowMenu();
 
-      await t
-        .click(overflowMenu.element);
+    await t
+      .click(overflowMenu.element);
 
-      await t
-        .expect(await takeScreenshot(`Popup_under_container,rtlEnabled=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`))
-        .ok()
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      await changeTheme(theme);
-      await t.resizeWindow(400, 400);
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup under container rtlEnabled=${rtlEnabled}.png`);
 
-      return createWidget('dxToolbar', {
-        items: generateItems(40),
-        rtlEnabled,
-      });
-    }).after(async () => {
-      await changeTheme('generic.light');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await t.resizeWindow(400, 400);
+
+    return createWidget('dxToolbar', {
+      items: generateItems(40),
+      rtlEnabled,
     });
+  });
 
-    test(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled},theme=${theme}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  test(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const toolbar = new Toolbar('#container');
-      const overflowMenu = toolbar.getOverflowMenu();
+    const toolbar = new Toolbar('#container');
+    const overflowMenu = toolbar.getOverflowMenu();
 
-      await t
-        .click(overflowMenu.element);
+    await t
+      .click(overflowMenu.element);
 
-      await t
-        .expect(await takeScreenshot(`Popup_above_container,rtlEnabled=${rtlEnabled},theme=${theme.replace(/\./g, '-')}.png`))
-        .ok()
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      await changeTheme(theme);
-      await t.resizeWindow(400, 400);
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup above container rtlEnabled=${rtlEnabled}.png`);
 
-      await setAttribute('#container', 'style', 'margin-top: 200px');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await t.resizeWindow(400, 400);
 
-      return createWidget('dxToolbar', {
-        items: generateItems(40),
-        rtlEnabled,
-      });
-    }).after(async () => {
-      await changeTheme('generic.light');
+    await setAttribute('#container', 'style', 'margin-top: 200px');
+
+    return createWidget('dxToolbar', {
+      items: generateItems(40),
+      rtlEnabled,
     });
   });
 });
