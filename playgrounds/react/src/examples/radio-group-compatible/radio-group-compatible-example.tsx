@@ -2,19 +2,19 @@ import { AnyRecord } from '@devextreme/core';
 import { RadioGroupCompatible, RadioGroupValue } from '@devextreme/react';
 import { useState } from 'react';
 
-const nonStringOptions = [
+const objectItems = [
     { text: 'first' },
     { text: 'second' },
     { text: 'third' },
 ];
 
-const nonStringOptions2 = [
+const objectItems2 = [
     { value: 1, label: 'one' },
     { value: 2, label: 'two' },
     { value: 3, label: 'three' },
 ];
 
-const nonStringOptions3 = [
+const objectItems3 = [
     { text: 'indigo' },
     { text: 'tomato' },
     { text: 'olive' },
@@ -64,8 +64,8 @@ export function RadioGroupCompatibleExample() {
                 </div>
                 <div className="example__control">
                     <RadioGroupCompatible
-                        defaultValue={nonStringOptions[1].text}
-                        items={nonStringOptions}
+                        defaultValue={objectItems[1].text}
+                        items={objectItems}
                     />
                 </div>
             </div>
@@ -76,7 +76,7 @@ export function RadioGroupCompatibleExample() {
                 <div className="example__control">
                     <RadioGroupCompatible
                         defaultValue={1}
-                        items={nonStringOptions2}
+                        items={objectItems2}
                         valueExpr="value"
                         displayExpr="label"
                     />
@@ -88,8 +88,8 @@ export function RadioGroupCompatibleExample() {
                 </div>
                 <div className="example__control">
                     <RadioGroupCompatible
-                        defaultValue={nonStringOptions3[2].text}
-                        items={nonStringOptions3}
+                        defaultValue={objectItems3[2].text}
+                        items={objectItems3}
                         itemRender={(item, index) => (
                             <strong style={{ color: item.text }}>
                                 Color {index}
@@ -104,8 +104,8 @@ export function RadioGroupCompatibleExample() {
                 </div>
                 <div className="example__control">
                     <RadioGroupCompatible
-                        defaultValue={nonStringOptions3[2].text}
-                        items={nonStringOptions3}
+                        defaultValue={objectItems3[2].text}
+                        items={objectItems3}
                         itemComponent={CustomItemComponent}
                     />
                 </div>
