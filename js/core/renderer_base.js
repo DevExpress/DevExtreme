@@ -584,6 +584,14 @@ initRender.prototype.last = function() {
     return this.eq(-1);
 };
 
+initRender.prototype.select = function() {
+    for(let i = 0; i < this.length; i += 1) {
+        this[i].select && this[i].select();
+    }
+
+    return this;
+};
+
 initRender.prototype.parent = function(selector) {
     if(!this[0]) return renderer();
     const result = renderer(this[0].parentNode);

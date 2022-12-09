@@ -93,10 +93,17 @@ class SchedulerAppointments extends CollectionWidget {
             }
         };
 
+        const currentAppointment = this._$currentAppointment?.dxResizable('instance');
+
         return extend(parent, {
-            escape: (function() {
-                this.moveAppointmentBack();
-                this._escPressed = true;
+            escape: (function(e) {
+                if(this.resizeOccur) {
+                    this.moveAppointmentBack();
+                    this.resizeOccur = false;
+                    currentAppointment._detachEventHandlers();
+                    currentAppointment._attachEventHandlers();
+                    currentAppointment._toggleResizingClass(false);
+                }
             }).bind(this),
             del: (function(e) {
                 if(this.option('allowDelete')) {
@@ -598,6 +605,7 @@ class SchedulerAppointments extends CollectionWidget {
         return {
             area: this._calculateResizableArea(itemSetting, appointmentData),
             onResizeStart: (function(e) {
+                this.resizeOccur = true;
                 this._$currentAppointment = $(e.element);
 
                 if(this.invoke('needRecalculateResizableArea')) {
@@ -609,13 +617,10 @@ class SchedulerAppointments extends CollectionWidget {
 
                 this._initialSize = { width: e.width, height: e.height };
                 this._initialCoordinates = locate(this._$currentAppointment);
+
             }).bind(this),
             onResizeEnd: (function(e) {
-                if(this._escPressed) {
-                    e.event.cancel = true;
-                    return;
-                }
-
+                this.resizeOccur = false;
                 this._resizeEndHandler(e);
             }).bind(this)
         };
