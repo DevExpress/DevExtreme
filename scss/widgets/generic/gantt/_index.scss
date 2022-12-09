@@ -6,6 +6,7 @@
 @use "../../base/gantt";
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
+@use "../toolbar/sizes" as *;
 
 // adduse
 @use "../splitter";
@@ -23,6 +24,10 @@ $gantt-successor-background-color: white;
     .dx-gantt-toolbar-separator {
       border-left-color: $base-border-color;
     }
+  }
+
+  .dx-toolbar .dx-toolbar-items-container {
+    min-height: $generic-toolbar-height;
   }
 
   .dx-treelist-text-content {
