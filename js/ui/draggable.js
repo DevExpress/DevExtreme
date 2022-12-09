@@ -261,6 +261,8 @@ const Draggable = DOMComponent.inherit({
             onDragEnd: null,
             onDragEnter: null,
             onDragLeave: null,
+            onDragCancel: null,
+            onCancelByEsc: false,
 
             /**
              * @section Utils
@@ -468,7 +470,10 @@ const Draggable = DOMComponent.inherit({
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
         eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
         eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
-        eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._dropHandler.bind(this));
+
+        if(this.option('onCancelByEsc')) {
+            eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._escapeHandler.bind(this));
+        }
     },
 
     _dragElementIsCloned: function() {
@@ -599,6 +604,7 @@ const Draggable = DOMComponent.inherit({
 
     _dragStartHandler: function(e) {
         const $element = this._getDraggableElement(e);
+        this.dragOccur = true;
 
         if(!this._isValidElement(e, $element)) {
             e.cancel = true;
@@ -841,17 +847,7 @@ const Draggable = DOMComponent.inherit({
                     this._revertItemToInitialPosition();
                 }
 
-                this.reset();
-                targetDraggable.reset();
-                this._stopAnimator();
-                this._horizontalScrollHelper.reset();
-                this._verticalScrollHelper.reset();
-
-                this._resetDragElement();
-                this._resetSourceElement();
-
-                this._resetTargetDraggable();
-                this._resetSourceDraggable();
+                this._resetDragOptions(targetDraggable);
             });
         }
     },
@@ -909,28 +905,20 @@ const Draggable = DOMComponent.inherit({
         sourceDraggable.dragLeave(e);
     },
 
-    _dropHandler: function(e) {
+    _escapeHandler: function(e) {
         const $sourceElement = this._getSourceElement();
-        const appointmentInstance = $sourceElement?.dxSchedulerAppointment('instance');
+        const targetDraggable = this._getTargetDraggable();
 
-        if($sourceElement && e.key === 'Escape') {
+        if($sourceElement && e.key === 'Escape' && this.dragOccur) {
+            const eventArgs = this._getEventArgs(e);
+            this._getAction('onDragCancel')(eventArgs);
+            sourceDraggable?._toggleDraggingClass(false);
+            this.dragOccur = false;
+
             this._detachEventHandlers();
 
             this._revertItemToInitialPosition();
-            this.reset();
-            this._stopAnimator();
-
-            this._horizontalScrollHelper.reset();
-            this._verticalScrollHelper.reset();
-
-            sourceDraggable?._toggleDraggingClass(false);
-            appointmentInstance?.option('isDragSource', false);
-
-            this._resetDragElement();
-            this._resetSourceElement();
-
-            this._resetTargetDraggable();
-            this._resetSourceDraggable();
+            this._resetDragOptions(targetDraggable);
 
             this._attachEventHandlers();
         }
@@ -978,6 +966,7 @@ const Draggable = DOMComponent.inherit({
             case 'onDrop':
             case 'onDragEnter':
             case 'onDragLeave':
+            case 'onDragCancel':
             case 'onDraggableElementShown':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
@@ -995,6 +984,9 @@ const Draggable = DOMComponent.inherit({
                 this._resetDragElement();
                 this._detachEventHandlers();
                 this._attachEventHandlers();
+                break;
+            case 'onCancelByEsc':
+                this._escapeHandler();
                 break;
             case 'autoScroll':
                 this._verticalScrollHelper.reset();
@@ -1040,6 +1032,20 @@ const Draggable = DOMComponent.inherit({
 
     _resetTargetDraggable: function() {
         targetDraggable = null;
+    },
+
+    _resetDragOptions: function(targetDraggable) {
+        this.reset();
+        targetDraggable.reset();
+        this._stopAnimator();
+        this._horizontalScrollHelper.reset();
+        this._verticalScrollHelper.reset();
+
+        this._resetDragElement();
+        this._resetSourceElement();
+
+        this._resetTargetDraggable();
+        this._resetSourceDraggable();
     },
 
     _dispose: function() {
