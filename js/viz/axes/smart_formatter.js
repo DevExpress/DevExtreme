@@ -174,10 +174,10 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
 
 function getFormatExponential(tick, tickInterval) {
     const stringTick = abs(tick).toString();
-    if(!isExponential(tick)) {
-        return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
-    } else {
+    if(isExponential(tick)) {
         return Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
+    } else {
+        return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
     }
 }
 
