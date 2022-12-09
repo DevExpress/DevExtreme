@@ -1,7 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../helpers/domUtils';
@@ -279,8 +278,6 @@ test('Toolbar with buttonGroup', async (t) => {
 
   await appendElementTo('#container', 'div', 'toolbar5', {});
   await createWidget('dxToolbar', { items: [{ locateInMenu: 'always', text: 'text' }] }, false, '#toolbar5');
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
 test('Default nested widgets render,items[].locateInMenu=auto', async (t) => {

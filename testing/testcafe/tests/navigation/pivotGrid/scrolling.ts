@@ -29,6 +29,8 @@ fixture`PivotGrid_scrolling`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
+
+    await deleteStylesheetRule(0);
   }).before(async () => {
     await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
 
@@ -70,8 +72,6 @@ fixture`PivotGrid_scrolling`
         useNative,
       },
     });
-  }).after(async () => {
-    await deleteStylesheetRule(0);
   });
 
   test(`Rows sincronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
@@ -87,6 +87,8 @@ fixture`PivotGrid_scrolling`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
+
+    await deleteStylesheetRule(0);
   }).before(async () => {
     await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
 
@@ -128,7 +130,5 @@ fixture`PivotGrid_scrolling`
         useNative,
       },
     });
-  }).after(async () => {
-    await deleteStylesheetRule(0);
   });
 });

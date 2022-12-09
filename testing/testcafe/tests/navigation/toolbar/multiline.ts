@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
@@ -50,8 +49,6 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
       items: toolbarItems,
       rtlEnabled,
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 });
 
