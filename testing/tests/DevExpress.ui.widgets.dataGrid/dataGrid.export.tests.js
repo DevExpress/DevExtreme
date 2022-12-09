@@ -3332,5 +3332,59 @@ QUnit.module('DataGrid export tests', {
             { styles, worksheet, sharedStrings }
         );
     });
-});
 
+    QUnit.test('Group summary when a column with type "buttons" is present', function(assert) {
+        const styles = helper.STYLESHEET_HEADER_XML +
+            helper.BASE_STYLE_XML +
+            '<cellXfs count="5">' +
+            helper.STYLESHEET_STANDARDSTYLES +
+            '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+            '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+            '</cellXfs>' +
+            helper.STYLESHEET_FOOTER_XML;
+        const worksheet = helper.WORKSHEET_HEADER_XML +
+            '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+            '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+            '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+            '<cols><col width="13.57" min="1" max="1" customWidth="1" /></cols>' +
+            '<sheetData>' +
+            '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+            '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+            '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n"><v>1</v></c></row>' +
+            '</sheetData>' +
+            '</worksheet>';
+        const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+            '<si><t>Field 2</t></si>' +
+            '<si><t>Field 1: str1 (Sum of Field 2 is $1)</t></si>' +
+            '</sst>';
+
+        helper.runGeneralTest(
+            assert,
+            {
+                columns: [
+                    { dataField: 'field1', dataType: 'string', groupIndex: 0 },
+                    { dataField: 'field2', dataType: 'number' },
+                    {
+                        type: 'buttons',
+                        fixed: true,
+                        fixedPosition: 'left',
+                        name: 'edit2',
+                        allowFixing: false,
+                        buttons: [
+                            {
+                                name: 'edit',
+                                icon: 'edit'
+                            }
+                        ]
+
+                    }
+                ],
+                dataSource: [{ field1: 'str1', field2: 1 }],
+                summary: {
+                    groupItems: [{ column: 'field2', summaryType: 'sum', valueFormat: 'currency' }]
+                }
+            },
+            { styles, worksheet, sharedStrings }
+        );
+    });
+});
