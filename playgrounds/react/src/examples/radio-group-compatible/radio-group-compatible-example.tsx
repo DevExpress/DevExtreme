@@ -1,3 +1,4 @@
+import { AnyRecord } from '@devextreme/core';
 import { RadioGroupCompatible, RadioGroupValue } from '@devextreme/react';
 import { useState } from 'react';
 
@@ -19,10 +20,16 @@ const nonStringOptions3 = [
     { text: 'olive' },
 ];
 
+function CustomItemComponent({ data }: {data: AnyRecord}) {
+    return (
+        <strong style={{ color: data.text }}>
+            {data.text}
+        </strong>
+    );
+}
+
 export function RadioGroupCompatibleExample() {
-    const [selectedValue, setSelectedValue] = useState<
-        RadioGroupValue | undefined
-    >(1);
+    const [selectedValue, setSelectedValue] = useState<RadioGroupValue | undefined>(1);
     const handleChange = (value?: RadioGroupValue) => setSelectedValue(value);
 
     return (
@@ -88,6 +95,18 @@ export function RadioGroupCompatibleExample() {
                                 Color {index}
                             </strong>
                         )}
+                    />
+                </div>
+            </div>
+            <div className="example">
+                <div className="example__title">
+                    Compat radio group example with itemComponent:
+                </div>
+                <div className="example__control">
+                    <RadioGroupCompatible
+                        defaultValue={nonStringOptions3[2].text}
+                        items={nonStringOptions3}
+                        itemComponent={CustomItemComponent}
                     />
                 </div>
             </div>
