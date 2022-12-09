@@ -22,9 +22,6 @@
       "es2020",
       "dom"
     ],
-    "paths": {
-      "@devextreme/angular/*": ["./node_modules/@devextreme/angular/*"],
-    },
     "skipLibCheck": true,
   },
   "include": ["./src/**/*.ts"],

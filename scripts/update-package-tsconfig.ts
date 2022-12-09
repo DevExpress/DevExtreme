@@ -18,6 +18,7 @@ enum ConfigFilename {
 }
 
 const TSCONFIG_HEADER = '// File generated automatically, use npm run update:tsconfig for update\n';
+const EXCLUDED_PACKAGES = ['@devextreme/angular', '@playgrounds/angular', '@devextreme/styles'];
 
 interface IPackageJSON {
     name: string;
@@ -104,6 +105,10 @@ const resolveInternalDependencies = (dependencies: string[]): string[] => (
 );
 
 for (const [packageName, packagePath] of packagePathMap.entries()) {
+    if (EXCLUDED_PACKAGES.find((name) => name === packageName)) {
+        continue;
+    }
+
     const tsconfigPath = pathJoin(packagePath, ConfigFilename.PACKAGE_TSCONFIG);
 
     const internalDependencies = resolveInternalDependencies(
@@ -121,7 +126,7 @@ for (const [packageName, packagePath] of packagePathMap.entries()) {
             composite: true
         },
         include: ['src'],
-        exclude: ['test', 'lib'],
+        exclude: ['test', '__test__', 'lib', '**/*.test.ts'],
         references: internalDependencies.map(dependencyName => {
             const dependencyPath = packagePathMap.get(dependencyName)!;
 

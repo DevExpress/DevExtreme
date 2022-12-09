@@ -1,8 +1,7 @@
 // File generated automatically, use npm run update:tsconfig for update
 {
-	"extends": "..\\..\\tsconfig.base.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-        "baseUrl": "./",
 		"outDir": "./lib",
 		"rootDir": "./src",
 		"composite": true
@@ -12,14 +11,19 @@
 	],
 	"exclude": [
 		"test",
-		"lib"
+		"__test__",
+		"lib",
+		"**/*.test.ts"
 	],
 	"references": [
 		{
-			"path": "..\\..\\packages\\core\\tsconfig.package.json"
+			"path": "../../packages/core/tsconfig.package.json"
 		},
 		{
-			"path": "..\\..\\packages\\react\\tsconfig.package.json"
+			"path": "../../packages/components/tsconfig.package.json"
+		},
+		{
+			"path": "../../packages/react/tsconfig.package.json"
 		}
 	]
 }

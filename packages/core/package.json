@@ -22,11 +22,7 @@
     "dependencies": {
         "tslib": "^2.3.0"
     },
-    "exports": {
-        ".": {
-            "types": "./lib/index.d.ts",
-            "import": "./lib/index.mjs",
-            "require": "./lib/index.cjs"
-        }
-    }
+    "types": "./lib/index.d.ts",
+    "module": "./lib/index.mjs",
+    "main": "./lib/index.cjs"
 }
