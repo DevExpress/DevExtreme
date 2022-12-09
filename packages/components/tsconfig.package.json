@@ -1,20 +1,23 @@
 // File generated automatically, use npm run update:tsconfig for update
 {
-	"extends": "..\\..\\tsconfig.base.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
 		"composite": true
-  },
+	},
 	"include": [
 		"src"
 	],
 	"exclude": [
+		"test",
+		"__test__",
+		"lib",
 		"**/*.test.ts"
 	],
-  "references": [
-    {
-      "path": "..\\core\\tsconfig.package.json"
-    }
-  ]
+	"references": [
+		{
+			"path": "../core/tsconfig.package.json"
+		}
+	]
 }
