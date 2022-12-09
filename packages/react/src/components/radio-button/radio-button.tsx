@@ -14,7 +14,7 @@ import {
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (props, inputRef) => {
     const radioGroupCore = useContext(RadioGroupContext);
-    const inputId = useId();
+    const inputId = useId('radio-button');
 
     const RadioButtonComponent = props.checked === undefined
       ? UncontrolledRadioButton
