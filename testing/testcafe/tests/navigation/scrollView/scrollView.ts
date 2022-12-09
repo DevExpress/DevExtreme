@@ -25,7 +25,7 @@ fixture.disablePageReloads`ScrollView`
         await t.click(Selector('#mouseLeaveButton'));
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
       }).before(async () => {
-        await appendElementTo('#container', 'div', 'scrollView', { });
+        await appendElementTo('#container', 'div', 'scrollView');
         await appendElementTo('#scrollView', 'div', 'innerScrollViewContent', {
           width: `${scrollableContentSize}px`, height: `${scrollableContentSize}px`, backgroundColor: 'steelblue',
         });

@@ -74,19 +74,6 @@ export const appendElementTo = ClientFunction((
   containerElement?.appendChild(element);
 }, { dependencies: { createElement } });
 
-export const insertElementBefore = ClientFunction((
-  containerSelector: string,
-  referenceSelector: string,
-  tagName: string,
-  id: string,
-  style: Partial<CSSStyleDeclaration>,
-) => {
-  const containerElement = document.querySelector(containerSelector);
-  const element = createElement(tagName, id, style);
-
-  containerElement?.insertBefore(element, document.querySelector(referenceSelector));
-}, { dependencies: { createElement } });
-
 export const insertStylesheetRule = ClientFunction((
   rule: string,
   index: number,

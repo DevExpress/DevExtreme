@@ -1,19 +1,21 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { Item } from '../../../../../js/ui/tabs.d';
 
-fixture`Tabs_common`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Tabs_common`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
   test(`Tabs icon alignment,theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await takeScreenshotInTheme(t, takeScreenshot, 'Tabs items alignment.png', '#container', true);
+
     await t
-      .expect(await takeScreenshot(`Tabs_items_alignment_,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -27,7 +29,5 @@ fixture`Tabs_common`
     ] as Item[];
 
     return createWidget('dxTabs', { dataSource });
-  }).after(async () => {
-    await changeTheme('generic.light');
   });
 });

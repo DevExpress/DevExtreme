@@ -1,12 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { sales } from './data.js';
 import PivotGrid from '../../../model/pivotGrid';
 
-fixture`PivotGrid_fieldChooser`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`PivotGrid_fieldChooser`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Change dataFiels order with one invisible field (T1079461)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -23,9 +25,9 @@ test('Change dataFiels order with one invisible field (T1079461)', async (t) => 
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'PivotGrid fieldChooser change dataField order with invisible fields.png', '.dx-overlay-content.dx-popup-draggable');
+
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxPivotGrid', {
@@ -129,9 +131,9 @@ test('Change dataFiels order with two invisible fields', async (t) => {
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'PivotGrid fieldChooser change dataField order with invisible fields.png', '.dx-overlay-content.dx-popup-draggable');
+
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxPivotGrid', {
@@ -243,9 +245,9 @@ test('Change dataFiels order with three invisible fields (T1079461)', async (t) 
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'PivotGrid fieldChooser change dataField order with three invisible fields.png', '.dx-overlay-content.dx-popup-draggable');
+
   await t
-    .expect(await takeScreenshot('Change_dataField_order_with_three_invisible_fields.png', '.dx-overlay-content.dx-popup-draggable'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxPivotGrid', {

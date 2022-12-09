@@ -17,7 +17,7 @@ fixture.disablePageReloads`Toolbar_integration_with_DataGrid`
     await t
       .click(toolbar.getOverflowMenu().element);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `toolbar-menu${rtlEnabled ? '-rtl' : ''}.png`, toolbar.getOverflowMenu().getPopup().getContent());
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu${rtlEnabled ? 'in rtl' : ''}.png`, toolbar.getOverflowMenu().getPopup().getContent());
 
     await t
       .expect(compareResults.isValid())

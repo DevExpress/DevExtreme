@@ -70,7 +70,7 @@ test('Drop down button should lost hover and active state', async (t) => {
     .expect(dropDownMenu.isActive)
     .notOk();
 }).before(async () => {
-  await appendElementTo('#container', 'div', 'toolbar', { });
+  await appendElementTo('#container', 'div', 'toolbar');
   await appendElementTo('#container', 'button', 'button', {
     width: '50px', height: '50px', backgroundColor: 'steelblue', paddingTop: '400px',
   });
