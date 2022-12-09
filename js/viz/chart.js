@@ -371,60 +371,76 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
-// function applyAutoHidePointMarkers(filteredSeries) {
-//     let overlapPoints = [];
-//     filteredSeries.forEach((s, index, arraySeries)=> {
-
-//         s.autoHidePointMarkers = false;
-
-//         if(s.autoHidePointMarkersEnabled()) {
-//             let checkOverlap = 0;
-//             s._points.forEach(point => {
-
-//                 overlapPoints.forEach(overlapPoint => {
-//                     if((overlapPoint.x - 5 <= point.x && overlapPoint.x + 5 >= point.x) && (overlapPoint.y - 5 <= point.y && overlapPoint.y + 5 > point.y)) {
-//                         checkOverlap++;
-//                     }
-//                 });
-//             });
-
-//             if(checkOverlap < s._points.length) {
-//                 overlapPoints = overlapPoints.concat(s._points);
-//             } if(checkOverlap === s._points.length) {
-//                 arraySeries[index - 1].autoHidePointMarkers = true;
-//             }
-//         }
-//     });
-// }
-
-function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, argAxis) {
-    const argAxisType = argAxis.getOptions().type;
-    filteredSeries.forEach(s => {
-        const seriesIndex = allSeries.indexOf(s);
-
+function applyAutoHidePointMarkers(filteredSeries) {
+    let overlapPoints = [];
+    filteredSeries.forEach((s, index, arraySeries)=> {
 
         s.autoHidePointMarkers = false;
-        const tickCount = argAxis.getTicksValues().majorTicksValues.length;
-        if(s.autoHidePointMarkersEnabled() && (argAxisType === DISCRETE || overloadedSeries[seriesIndex].pointsCount > tickCount)) {
-            for(const index in overloadedSeries[seriesIndex]) {
-                const i = parseInt(index);
-                if(isNaN(i) || overloadedSeries[seriesIndex].total / overloadedSeries[seriesIndex].continuousSeries < 3) {
-                    continue;
-                }
-                if(i === seriesIndex) {
-                    if(overloadedSeries[i][i] * 2 >= overloadedSeries[i].pointsCount) {
-                        s.autoHidePointMarkers = true;
+
+        if(s.autoHidePointMarkersEnabled()) {
+            let checkOverlap = 0;
+            // debugger;
+            s._points.forEach(point => {
+
+                for(let i = 0; i < overlapPoints.length; i++) {
+                    if((overlapPoints[i].x - 5 <= point.x && overlapPoints[i].x + 5 >= point.x) && (overlapPoints[i].y - 5 <= point.y && overlapPoints[i].y + 5 > point.y)) {
+                        checkOverlap++;
+                    }
+                    if(checkOverlap === s._points.length) {
+                        // console.log('скрытие');
+                        arraySeries[index - 1].autoHidePointMarkers = true;
                         break;
                     }
-                } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount) {
-                    s.autoHidePointMarkers = true;
-                    break;
                 }
-            }
-        }
+                // overlapPoints.forEach(overlapPoint => {
+                //     if((overlapPoint.x - 5 <= point.x && overlapPoint.x + 5 >= point.x) && (overlapPoint.y - 5 <= point.y && overlapPoint.y + 5 > point.y)) {
+                //         checkOverlap++;
+                //     }
+                // });
+            });
 
+
+            if(checkOverlap < s._points.length) {
+                overlapPoints = overlapPoints.concat(s._points);
+            }
+
+            // if(checkOverlap === s._points.length) {
+            //     console.log('скрытие');
+            //     arraySeries[index - 1].autoHidePointMarkers = true;
+            // }
+
+        }
     });
 }
+
+// function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, argAxis) {
+//     const argAxisType = argAxis.getOptions().type;
+//     filteredSeries.forEach(s => {
+//         const seriesIndex = allSeries.indexOf(s);
+
+
+//         s.autoHidePointMarkers = false;
+//         const tickCount = argAxis.getTicksValues().majorTicksValues.length;
+//         if(s.autoHidePointMarkersEnabled() && (argAxisType === DISCRETE || overloadedSeries[seriesIndex].pointsCount > tickCount)) {
+//             for(const index in overloadedSeries[seriesIndex]) {
+//                 const i = parseInt(index);
+//                 if(isNaN(i) || overloadedSeries[seriesIndex].total / overloadedSeries[seriesIndex].continuousSeries < 3) {
+//                     continue;
+//                 }
+//                 if(i === seriesIndex) {
+//                     if(overloadedSeries[i][i] * 2 >= overloadedSeries[i].pointsCount) {
+//                         s.autoHidePointMarkers = true;
+//                         break;
+//                     }
+//                 } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount) {
+//                     s.autoHidePointMarkers = true;
+//                     break;
+//                 }
+//             }
+//         }
+
+//     });
+// }
 
 function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
     const area = canvas.width * canvas.height;
@@ -918,7 +934,6 @@ const dxChart = AdvancedChart.inherit({
             return;
         }
 
-        allSeries.forEach();
         that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
             series.forEach(singleSeries => {
@@ -940,10 +955,9 @@ const dxChart = AdvancedChart.inherit({
                 markersInfo.series.forEach(s => points = points.concat(s.points));
                 points.sort(sortingCallback);
                 updateMarkersInfo(points, markersInfo.overloadedSeries);
-                // applyAutoHidePointMarkers(series);
+                applyAutoHidePointMarkers(series);
+                // applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
 
-
-                applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
             }
         });
     },

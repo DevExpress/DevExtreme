@@ -731,6 +731,7 @@ export const BaseChart = BaseWidget.inherit({
         // that.series.forEach(singleSeries => {
         //     singleSeries._applyVisibleArea();
         //     singleSeries._translatePoints();
+        //     singleSeries._isCoordsPoints = true;
         // });
         that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
