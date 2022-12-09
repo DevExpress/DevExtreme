@@ -29,7 +29,7 @@ fixture`Toolbar_OverflowMenu`
   });
 
 test('Drop down button should lost hover and active state', async (t) => {
-  const toolbar = new Toolbar('#container');
+  const toolbar = new Toolbar('#toolbar');
   const dropDownMenu = toolbar.getOverflowMenu();
 
   await t
@@ -75,7 +75,8 @@ test('Drop down button should lost hover and active state', async (t) => {
     .expect(dropDownMenu.isActive)
     .notOk();
 }).before(async () => {
-  await appendElementTo('body', 'button', 'button', {
+  await appendElementTo('#container', 'div', 'toolbar', { });
+  await appendElementTo('#container', 'button', 'button', {
     width: '50px', height: '50px', backgroundColor: 'steelblue', paddingTop: '400px',
   });
 
@@ -84,7 +85,7 @@ test('Drop down button should lost hover and active state', async (t) => {
       { text: 'item1', locateInMenu: 'always' },
       { text: 'item2', locateInMenu: 'always' },
       { text: 'item3', locateInMenu: 'always' }],
-  });
+  }, true, '#toolbar');
 });
 
 test('ButtonGroup item should not have hover and active state', async (t) => {

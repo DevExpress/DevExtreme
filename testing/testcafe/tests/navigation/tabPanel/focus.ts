@@ -1,11 +1,12 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { appendElementTo, insertElementBefore } from '../helpers/domUtils';
 
-fixture`TabPanel`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`TabPanel`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 // T821726
 test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async (t) => {

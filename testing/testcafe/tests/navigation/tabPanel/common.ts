@@ -1,151 +1,141 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tab_panel.d';
 
-fixture`TabPanel_common`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`TabPanel_common`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-['generic.light', 'material.blue.light'].forEach((theme) => {
-  test(`TabPanel borders with scrolling,theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('TabPanel borders with scrolling', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`TabPanel_borders_with_scrolling,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(910, 800);
-    await changeTheme(theme);
+  await takeScreenshotInTheme(t, takeScreenshot, 'TabPanel borders with scrolling.png', '#container');
 
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.resizeWindow(910, 800);
 
-    const tabPanelOptions = {
-      dataSource,
-      itemTemplate: (itemData, itemIndex, itemElement) => {
-        ($('<div>').css('marginTop', 10) as any)
-          .dxTabs({
-            items: [
-              {
-                title: 'John Heart',
-                text: 'John Heart',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              }, {
-                title: 'Robert Reagan',
-                text: 'Robert Reagan',
-              }, {
-                title: 'Greta Sims',
-                text: 'Greta Sims',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              },
-            ],
-            width: 300,
-            showNavButtons: true,
-          })
-          .appendTo(itemElement);
-      },
-      height: 120,
-      width: 300,
-      showNavButtons: true,
-    };
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ] as Item[];
 
-    return createWidget('dxTabPanel', tabPanelOptions);
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
-  });
+  const tabPanelOptions = {
+    dataSource,
+    itemTemplate: (itemData, itemIndex, itemElement) => {
+      ($('<div>').css('marginTop', 10) as any)
+        .dxTabs({
+          items: [
+            {
+              title: 'John Heart',
+              text: 'John Heart',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            }, {
+              title: 'Robert Reagan',
+              text: 'Robert Reagan',
+            }, {
+              title: 'Greta Sims',
+              text: 'Greta Sims',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            },
+          ],
+          width: 300,
+          showNavButtons: true,
+        })
+        .appendTo(itemElement);
+    },
+    height: 120,
+    width: 300,
+    showNavButtons: true,
+  };
 
-  test(`TabPanel borders without scrolling,theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  return createWidget('dxTabPanel', tabPanelOptions);
+});
 
-    await t
-      .expect(await takeScreenshot(`TabPanel_borders_without_scrolling,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(910, 800);
-    await changeTheme(theme);
+test('TabPanel borders without scrolling', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
+  await takeScreenshotInTheme(t, takeScreenshot, 'TabPanel borders without scrolling.png', '#container');
 
-    const tabPanelOptions = {
-      dataSource,
-      itemTemplate: (itemData, itemIndex, itemElement) => {
-        ($('<div>').css('marginTop', 10) as any)
-          .dxTabs({
-            items: [
-              {
-                title: 'John Heart',
-                text: 'John Heart',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              }, {
-                title: 'Robert Reagan',
-                text: 'Robert Reagan',
-              }, {
-                title: 'Greta Sims',
-                text: 'Greta Sims',
-              }, {
-                title: 'Olivia Peyton',
-                text: 'Olivia Peyton',
-              },
-            ],
-            width: 300,
-            showNavButtons: true,
-          })
-          .appendTo(itemElement);
-      },
-      height: 120,
-      width: 900,
-      showNavButtons: true,
-    };
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.resizeWindow(910, 800);
 
-    return createWidget('dxTabPanel', tabPanelOptions);
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
-  });
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    itemTemplate: (itemData, itemIndex, itemElement) => {
+      ($('<div>').css('marginTop', 10) as any)
+        .dxTabs({
+          items: [
+            {
+              title: 'John Heart',
+              text: 'John Heart',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            }, {
+              title: 'Robert Reagan',
+              text: 'Robert Reagan',
+            }, {
+              title: 'Greta Sims',
+              text: 'Greta Sims',
+            }, {
+              title: 'Olivia Peyton',
+              text: 'Olivia Peyton',
+            },
+          ],
+          width: 300,
+          showNavButtons: true,
+        })
+        .appendTo(itemElement);
+    },
+    height: 120,
+    width: 900,
+    showNavButtons: true,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
 });

@@ -1,11 +1,10 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import ContextMenu from '../../../model/contextMenu';
-// import { Item } from '../../../../../js/ui/context_menu.d';
+import { Item } from '../../../../../js/ui/context_menu.d';
 import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu_common`
@@ -18,16 +17,21 @@ safeSizeTest('ContextMenu items render', async (t) => {
 
   await contextMenu.apiShow();
 
-  await t.click(Selector('.dx-icon-remove'));
+  await t.click(contextMenu.items.nth(0));
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'ContextMenu items render.png', undefined, true, async () => {
-    await t.click(Selector('.dx-icon-remove'));
-    await t.click(Selector('.dx-icon-remove'));
+  const screenshotName = 'ContextMenu items render.png';
+
+  await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, true, async () => {
+    await contextMenu.repaint();
+    await t.click(contextMenu.items.nth(0));
   });
 
+  await contextMenu.repaint();
+  await t.click(contextMenu.items.nth(0));
+
   if (!isMaterial()) {
-    await takeScreenshotInTheme(t, takeScreenshot, 'ContextMenu items render.png', undefined, false, undefined, 'generic.dark');
-    await takeScreenshotInTheme(t, takeScreenshot, 'ContextMenu items render.png', undefined, false, undefined, 'generic.contrast');
+    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, false, undefined, 'generic.dark');
+    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, false, undefined, 'generic.contrast');
   }
 
   await deleteStylesheetRule(0);
@@ -43,7 +47,7 @@ safeSizeTest('ContextMenu items render', async (t) => {
     { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
     { text: 'user', icon: 'user' },
     { text: 'coffee', icon: 'coffee' },
-  ] as any[];
+  ] as Item[];
 
   return createWidget('dxContextMenu', {
     cssClass: 'custom-class',

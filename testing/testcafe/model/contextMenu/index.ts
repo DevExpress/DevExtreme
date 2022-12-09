@@ -44,4 +44,13 @@ export default class ContextMenu extends Widget {
       { dependencies: { getInstance } },
     )();
   }
+
+  repaint(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => { (getInstance() as any).repaint(); },
+      { dependencies: { getInstance } },
+    )();
+  }
 }

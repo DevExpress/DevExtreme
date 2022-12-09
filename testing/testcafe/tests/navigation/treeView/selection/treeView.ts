@@ -17,11 +17,11 @@ fixture.disablePageReloads`TreeView_selectAll`
 
       const screenshotName = `TreeView selectAll cbm=${showCheckBoxesMode},selMode='multiple',rtl=${rtlEnabled}.png`;
 
-      await takeScreenshotInTheme(t, takeScreenshot, screenshotName);
+      await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container');
 
       if (!isMaterial()) {
-        await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, false, undefined, 'generic.dark');
-        await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, false, undefined, 'generic.contrast');
+        await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
+        await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
       }
 
       await t
