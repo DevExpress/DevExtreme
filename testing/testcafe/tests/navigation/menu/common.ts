@@ -50,7 +50,7 @@ test('Menu items render', async (t) => {
 
   await appendElementTo('#container', 'div', 'menu');
 
-  await setAttribute('#container', 'style', 'width: 300px; height: 400px; margin: 8px;');
+  await setAttribute('#container', 'style', 'width: 300px; height: 400px; padding: 8px;');
 
   await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
 

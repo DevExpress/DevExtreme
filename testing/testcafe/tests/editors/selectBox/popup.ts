@@ -17,6 +17,8 @@ test('SelectBox without data', async (t) => {
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox no data.png');
 
+  await t.click(await selectBox.getPopup());
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -37,9 +39,7 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
 
   const selectBox = new SelectBox('#container');
 
-  await t
-    .click(selectBox.element)
-    .hover(selectBox.element);
+  await t.click(selectBox.element);
 
   await selectBox.option('dataSource', {
     store: [1, 2, 3],
@@ -48,6 +48,8 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
   });
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize equal datasource items count.png');
+
+  await t.click(await selectBox.getPopup());
 
   await t
     .expect(compareResults.isValid())
@@ -79,6 +81,8 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize less datasource items count.png');
 
+  await t.click(await selectBox.getPopup());
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -108,6 +112,8 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
   });
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize more datasource items count.png');
+
+  await t.click(await selectBox.getPopup());
 
   await t
     .expect(compareResults.isValid())
@@ -141,6 +147,8 @@ test('SelectBox does not change a popup height after load the last page', async 
   await list.scrollTo(100);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox popup height after last page load.png');
+
+  await t.click(await selectBox.getPopup());
 
   await t
     .expect(compareResults.isValid())

@@ -63,7 +63,7 @@ test('Popup should be position correctly with the window border collision', asyn
 }).before(async () => {
   await appendElementTo('#container', 'div', 'toolbar');
 
-  await setAttribute('#container', 'style', 'width: 400px; height: 400px; margin: 8px;');
+  await setAttribute('#container', 'style', 'width: 400px; height: 400px; padding: 8px;');
 
   return createWidget('dxToolbar', {
     items: generateItems(40),
@@ -89,7 +89,7 @@ test('Popup should be position correctly with the window border collision', asyn
   }).before(async () => {
     await appendElementTo('#container', 'div', 'toolbar');
 
-    await setAttribute('#container', 'style', 'width: 400px; height: 400px; margin: 8px;');
+    await setAttribute('#container', 'style', 'width: 400px; height: 400px; padding: 8px;');
 
     return createWidget('dxToolbar', {
       items: generateItems(40),
@@ -114,7 +114,7 @@ test('Popup should be position correctly with the window border collision', asyn
   }).before(async () => {
     await appendElementTo('#container', 'div', 'toolbar');
 
-    await setAttribute('#container', 'style', 'width: 400px; height: 400px; margin: 8px;');
+    await setAttribute('#container', 'style', 'width: 400px; height: 400px; padding: 8px;');
     await setAttribute('#toolbar', 'style', 'margin-top: 200px');
 
     return createWidget('dxToolbar', {
