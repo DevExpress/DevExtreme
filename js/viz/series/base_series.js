@@ -570,6 +570,7 @@ Series.prototype = {
             that._applyVisibleArea();
             that._translatePoints();
         }
+        that._isCoordsPoints = false;
 
         that._setGroupsSettings(animationEnabled, firstDrawing);
         !firstDrawing && !that._resetApplyingAnimation && that._preparePositionSegments();
@@ -584,7 +585,6 @@ Series.prototype = {
             that._applyStyle(that._styles.normal);
         }
 
-        that._isCoordsPoints = false;
         that._resetApplyingAnimation = false;
     },
 
