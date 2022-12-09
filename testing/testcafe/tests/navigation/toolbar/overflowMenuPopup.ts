@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { setAttribute } from '../helpers/domUtils';
 
@@ -19,7 +19,7 @@ const generateItems = (count) => {
   return items;
 };
 
-test('Popup automatically update its height on window resize', async (t) => {
+safeSizeTest('Popup automatically update its height on window resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const toolbar = new Toolbar('#container');
@@ -47,11 +47,9 @@ test('Popup automatically update its height on window resize', async (t) => {
   return createWidget('dxToolbar', {
     items: generateItems(40),
   });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
-test('Popup should be position correctly with the window border collision', async (t) => {
+safeSizeTest('Popup should be position correctly with the window border collision', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const toolbar = new Toolbar('#container');
@@ -72,13 +70,11 @@ test('Popup should be position correctly with the window border collision', asyn
     items: generateItems(40),
     width: 50,
   });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
 });
 
 [true, false].forEach((rtlEnabled) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    test(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled},theme=${theme}`, async (t) => {
+    safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled},theme=${theme}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const toolbar = new Toolbar('#container');
@@ -100,8 +96,7 @@ test('Popup should be position correctly with the window border collision', asyn
         items: generateItems(40),
         rtlEnabled,
       });
-    }).after(async (t) => {
-      await restoreBrowserSize(t);
+    }).after(async () => {
       await changeTheme('generic.light');
     });
 
@@ -129,8 +124,7 @@ test('Popup should be position correctly with the window border collision', asyn
         items: generateItems(40),
         rtlEnabled,
       });
-    }).after(async (t) => {
-      await restoreBrowserSize(t);
+    }).after(async () => {
       await changeTheme('generic.light');
     });
   });

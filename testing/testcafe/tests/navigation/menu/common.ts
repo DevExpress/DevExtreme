@@ -1,6 +1,7 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
@@ -11,7 +12,7 @@ fixture`Menu_common`
   .afterEach(async () => disposeWidgets());
 
 ['generic.light', 'generic.dark', 'generic.contrast', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  test(`Menu_items,theme=${theme}`, async (t) => {
+  safeSizeTest(`Menu_items,theme=${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click(Selector('.dx-icon-remove'));

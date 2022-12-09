@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import ContextMenu from '../../../model/contextMenu';
 // import { Item } from '../../../../../js/ui/context_menu.d';
 import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
@@ -11,7 +12,7 @@ fixture.disablePageReloads`ContextMenu_common`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-test('ContextMenu items render', async (t) => {
+safeSizeTest('ContextMenu items render', async (t) => {
   const contextMenu = new ContextMenu('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -19,7 +20,10 @@ test('ContextMenu items render', async (t) => {
 
   await t.click(Selector('.dx-icon-remove'));
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'ContextMenu items render.png', undefined, true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'ContextMenu items render.png', undefined, true, async () => {
+    await t.click(Selector('.dx-icon-remove'));
+    await t.click(Selector('.dx-icon-remove'));
+  });
 
   if (!isMaterial()) {
     await takeScreenshotInTheme(t, takeScreenshot, 'ContextMenu items render.png', undefined, false, undefined, 'generic.dark');

@@ -5,8 +5,8 @@ import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 fixture.disablePageReloads`Form`
   .beforeEach(async (t) => restoreBrowserSize(t))
-  .clientScripts({ path: '../../../../../artifacts/js/dx-quill.min.js' })
   .page(url(__dirname, '../../container.html'))
+  .clientScripts({ path: '../../../../../artifacts/js/dx-quill.min.js' })
   .afterEach(async () => disposeWidgets());
 
 [undefined, true, false].forEach((labelVisible) => {
