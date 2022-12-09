@@ -1,9 +1,8 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { takeScreenshotInTheme, getThemePostfix } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
@@ -19,12 +18,12 @@ fixture.disablePageReloads`Form`
           const testName = `SimpleItem,rtl_${rtlEnabled},optMark_${showOptionalMark},labelMode_${labelMode},colon_${showColonAfterLabel}${getThemePostfix(theme)}`;
           test(testName, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-            await changeTheme(theme);
+
             await waitFont();
 
+            await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+
             await t
-              .expect(await takeScreenshot(`${testName}.png`, '#container'))
-              .ok()
               .expect(compareResults.isValid())
               .ok(compareResults.errorMessages());
           }).before(async () => createWidget('dxForm', {

@@ -1,18 +1,20 @@
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import ContextMenu from '../../../model/contextMenu';
 import { Item } from '../../../../../js/ui/context_menu.d';
-import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
+import {
+  appendElementTo, deleteStylesheetRule, insertStylesheetRule, setAttribute,
+} from '../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu_common`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-safeSizeTest('ContextMenu items render', async (t) => {
-  const contextMenu = new ContextMenu('#container');
+test('ContextMenu items render', async (t) => {
+  const contextMenu = new ContextMenu('#contextMenu');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await contextMenu.apiShow();
@@ -21,26 +23,29 @@ safeSizeTest('ContextMenu items render', async (t) => {
 
   const screenshotName = 'ContextMenu items render.png';
 
-  await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, true, async () => {
+  if (!isMaterial()) {
+    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
+    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
+  }
+
+  await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', true, async () => {
     await contextMenu.repaint();
     await t.click(contextMenu.items.nth(0));
   });
-
-  await contextMenu.repaint();
-  await t.click(contextMenu.items.nth(0));
-
-  if (!isMaterial()) {
-    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, false, undefined, 'generic.dark');
-    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, undefined, false, undefined, 'generic.contrast');
-  }
 
   await deleteStylesheetRule(0);
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}).before(async () => {
+  await ClientFunction(() => {
+    $('#container').addClass('dx-theme-generic-typography');
+  })();
+
+  await appendElementTo('#container', 'div', 'contextMenu');
+  await setAttribute('#container', 'style', 'width: 300px; height: 400px; margin: 8px;');
+
   await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
 
   const menuItems = [
@@ -53,5 +58,5 @@ safeSizeTest('ContextMenu items render', async (t) => {
     cssClass: 'custom-class',
     items: menuItems,
     target: 'body',
-  });
+  }, true, 'contextMenu');
 });

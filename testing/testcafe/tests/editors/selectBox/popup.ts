@@ -37,7 +37,9 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
 
   const selectBox = new SelectBox('#container');
 
-  await t.click(selectBox.element);
+  await t
+    .click(selectBox.element)
+    .hover(selectBox.element);
 
   await selectBox.option('dataSource', {
     store: [1, 2, 3],

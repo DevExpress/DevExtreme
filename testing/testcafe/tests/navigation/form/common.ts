@@ -1,10 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
-fixture`Form`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Form`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 test('Color of the mark (T882067)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
