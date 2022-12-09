@@ -3,25 +3,31 @@
 	"files": [],
 	"references": [
 		{
-			"path": "packages\\core\\tsconfig.package.json"
+			"path": "packages/core/tsconfig.package.json"
 		},
 		{
-			"path": "packages\\angular\\tsconfig.package.json"
+			"path": "packages/components/tsconfig.package.json"
 		},
 		{
-			"path": "packages\\react\\tsconfig.package.json"
+			"path": "packages/angular/tsconfig.package.json"
 		},
 		{
-			"path": "packages\\jquery\\tsconfig.package.json"
+			"path": "packages/react/tsconfig.package.json"
 		},
 		{
-			"path": "packages\\styles\\tsconfig.package.json"
+			"path": "packages/devextreme-core/tsconfig.package.json"
 		},
 		{
-			"path": "playgrounds\\angular\\tsconfig.package.json"
+			"path": "packages/jquery/tsconfig.package.json"
 		},
 		{
-			"path": "playgrounds\\react\\tsconfig.package.json"
+			"path": "packages/styles/tsconfig.package.json"
+		},
+		{
+			"path": "playgrounds/angular/tsconfig.package.json"
+		},
+		{
+			"path": "playgrounds/react/tsconfig.package.json"
 		}
 	]
 }

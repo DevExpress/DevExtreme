@@ -22,10 +22,6 @@
       "es2020",
       "dom"
     ],
-    "paths": {
-      "@devextreme/components/*": [ "./node_modules/@devextreme/components/*"]
-    },
-    "types": [ "@devextreme/components" ],
     "skipLibCheck": true
   },
   "angularCompilerOptions": {
