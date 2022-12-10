@@ -4,6 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
+import { appendElementTo } from '../../navigation/helpers/domUtils';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
@@ -13,7 +14,7 @@ fixture.disablePageReloads`Radio Group Validation Message`
 
 test('message position is right (T1020449)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const form = new Form('#container');
+  const form = new Form('#form');
 
   await form.validate();
 
@@ -21,33 +22,37 @@ test('message position is right (T1020449)', async (t) => {
 
   await radioGroup.focus();
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'RadioGroup horizontal validation.png', '#container');
+  await takeScreenshotInTheme(t, takeScreenshot, 'RadioGroup horizontal validation.png', '#form');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxForm', {
-  width: 300,
-  height: 400,
-  items: [{
-    itemType: 'simple',
-    dataField: 'PropertyNameId',
-    editorOptions: {
-      dataSource: ['HR Manager', 'IT Manager'],
-      layout: 'horizontal',
-    },
-    editorType: 'dxRadioGroup',
-    validationRules: [{
-      type: 'required',
-      message: 'The PropertyNameId field is required.',
+}).before(async () => {
+  await appendElementTo('#container', 'div', '#form');
+
+  return createWidget('dxForm', {
+    width: 300,
+    height: 400,
+    items: [{
+      itemType: 'simple',
+      dataField: 'PropertyNameId',
+      editorOptions: {
+        dataSource: ['HR Manager', 'IT Manager'],
+        layout: 'horizontal',
+      },
+      editorType: 'dxRadioGroup',
+      validationRules: [{
+        type: 'required',
+        message: 'The PropertyNameId field is required.',
+      }],
+    }, {
+      itemType: 'button',
+      horizontalAlignment: 'left',
+      buttonOptions: {
+        text: 'Register',
+        type: 'success',
+        useSubmitBehavior: true,
+      },
     }],
-  }, {
-    itemType: 'button',
-    horizontalAlignment: 'left',
-    buttonOptions: {
-      text: 'Register',
-      type: 'success',
-      useSubmitBehavior: true,
-    },
-  }],
-}));
+  }, false, '#form');
+});

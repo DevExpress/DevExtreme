@@ -17,17 +17,15 @@ fixture.disablePageReloads`Scrollable_visibility_integration`
         test(`Scroll should save position on dxhiding when scroll is hidden, dir: ${direction}, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, rtlEnabled: ${rtlEnabled}`, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-          const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
+          const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
           await scrollable.apiScrollTo({ left: 10, top: 20 });
 
           const expectedScrollOffsetValue = { left: 10, top: 20 };
           await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
-
+          await t.debug();
           await t
-            .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
-            .ok()
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
+            .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#scrollable')))
+            .ok();
 
           await scrollable.apiTriggerHidingEvent();
           await scrollable.hide();
@@ -37,12 +35,16 @@ fixture.disablePageReloads`Scrollable_visibility_integration`
 
           await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
           await t
-            .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#container')))
-            .ok()
+            .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#scrollable')))
+            .ok();
+
+          await t
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }).before(async () => {
-          await appendElementTo('#container', 'div', 'content', {
+          await appendElementTo('#container', 'div', 'scrollable');
+
+          await appendElementTo('#scrollable', 'div', 'content', {
             width: '200px', height: '200px', backgroundColor: 'skyblue',
           });
 
@@ -54,7 +56,10 @@ fixture.disablePageReloads`Scrollable_visibility_integration`
             useSimulatedScrollbar,
             direction,
             showScrollbar: 'always',
-          });
+          }, false, '#scrollable');
+        }).after(async (t) => {
+          await disposeWidgets();
+          await t.debug();
         });
       });
     });

@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 
 fixture`HtmlEditor - formats`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {
   const selectBox = new SelectBox('.dx-font-format');

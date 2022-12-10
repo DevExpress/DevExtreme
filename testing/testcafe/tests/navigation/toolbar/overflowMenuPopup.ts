@@ -55,7 +55,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   await t
     .click(overflowMenu.element);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup collision with window border.png', '#container');
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup collision with window border.png');
 
   await t
     .expect(compareResults.isValid())
@@ -79,7 +79,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .click(overflowMenu.element);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup under container rtlEnabled=${rtlEnabled}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup under container rtlEnabled=${rtlEnabled}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -102,7 +102,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .click(overflowMenu.element);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup above container rtlEnabled=${rtlEnabled}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup above container rtl=${rtlEnabled}.png`);
 
     await t
       .expect(compareResults.isValid())

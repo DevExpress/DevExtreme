@@ -329,7 +329,7 @@ test('Toolbar with dropDownButton,items[].locateInMenu=auto', async (t) => {
 
   const targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar-with-dropDownButton,items[]locateInMenu=always.png', targetContainer, true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar with dropDownButton,items[]locateInMenu=always.png', targetContainer, true);
 
   await t
     .expect(compareResults.isValid())
