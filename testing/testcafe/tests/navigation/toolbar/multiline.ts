@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Toolbar_multiline`
   .page(url(__dirname, '../../container.html'))
@@ -13,10 +14,10 @@ const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['back', 'danger', 'default', 'normal', 'success'];
 
 [true, false].forEach((rtlEnabled) => {
-  test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
+  safeSizeTest(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar buttons render.png', '#container', true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#container', true);
 
     await t
       .expect(compareResults.isValid())
@@ -49,7 +50,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
       items: toolbarItems,
       rtlEnabled,
     });
-  });
+  }).after(async () => disposeWidgets());
 });
 
 test('Buttons render in toolbar', async (t) => {

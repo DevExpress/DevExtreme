@@ -5,6 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../helpers/domUtils';
 import Toolbar from '../../../model/toolbar/toolbar';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'))
@@ -202,7 +203,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
   });
 });
 
-test('Toolbar with buttonGroup', async (t) => {
+safeSizeTest('Toolbar with buttonGroup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar buttonGroup appearence.png', undefined, true);
@@ -278,7 +279,7 @@ test('Toolbar with buttonGroup', async (t) => {
 
   await appendElementTo('#container', 'div', 'toolbar5', {});
   await createWidget('dxToolbar', { items: [{ locateInMenu: 'always', text: 'text' }] }, false, '#toolbar5');
-});
+}).after(async () => disposeWidgets());
 
 test('Default nested widgets render,items[].locateInMenu=auto', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -291,7 +292,7 @@ test('Default nested widgets render,items[].locateInMenu=auto', async (t) => {
 
   await setStyleAttribute(targetContainer, 'background-color: gold;');
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Default-nested-widgets-render,items[]locateInMenu=auto.png', targetContainer, true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Default nested widgets render,items[]locateInMenu=auto.png', targetContainer, true);
 
   await t
     .expect(compareResults.isValid())

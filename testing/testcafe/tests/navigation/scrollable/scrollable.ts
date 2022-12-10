@@ -16,7 +16,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
     test(`STE(el less cont),nat=${useNative},dir=${direction}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const scrollable = new Scrollable('#container', { useNative, direction });
+      const scrollable = new Scrollable('#scrollable', { useNative, direction });
       const positions = [
         { initialScrollOffset: { top: 80, left: 80 }, position: 'elementInsideContainer' },
         { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
@@ -47,20 +47,18 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
           await scrollable.apiScrollToElement('#element');
 
           await t
-            .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }
       }
     }).before(async () => {
-      await ClientFunction(() => {
-        $('#container').css({
-          border: '1px solid black',
-        });
-      })();
+      await appendElementTo('#container', 'div', 'scrollable', {
+        border: '1px solid black',
+      });
 
-      await appendElementTo('#container', 'div', 'scrollableContent', {
+      await appendElementTo('#scrollable', 'div', 'scrollableContent', {
         width: '250px',
         height: '250px',
         border: '1px solid #0b837a',
@@ -85,13 +83,13 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
         useNative,
         direction,
         showScrollbar: 'always',
-      });
+      }, false, '#scrollable');
     });
 
     test(`STE(el more cont),native=${useNative},dir=${direction}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const scrollable = new Scrollable('#container', { useNative, direction });
+      const scrollable = new Scrollable('#scrollable', { useNative, direction });
       const { getInstance } = scrollable;
 
       const positions = [
@@ -142,20 +140,18 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
           )();
 
           await t
-            .expect(await takeScreenshot(`STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#container')))
+            .expect(await takeScreenshot(`STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable')))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }
       }
     }).before(async () => {
-      await ClientFunction(() => {
-        $('#container').css({
-          border: '1px solid black',
-        });
-      })();
+      await appendElementTo('#container', 'div', 'scrollable', {
+        border: '1px solid black',
+      });
 
-      await appendElementTo('#container', 'div', 'scrollableContent', {
+      await appendElementTo('#scrollable', 'div', 'scrollableContent', {
         width: '250px',
         height: '250px',
         border: '1px solid #0b837a',
@@ -180,7 +176,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
         useNative,
         direction,
         showScrollbar: 'always',
-      });
+      }, false, '#scrollable');
     });
 
     [
@@ -202,7 +198,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
       test(`STE(scale(1.5)),nat=${useNative},dir=${direction},${position}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        const scrollable = new Scrollable('#container', { useNative, direction });
+        const scrollable = new Scrollable('#scrollable', { useNative, direction });
         const { getInstance } = scrollable;
 
         await ClientFunction(
@@ -218,18 +214,16 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
         )();
 
         await t
-          .expect(await takeScreenshot(`STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#container')))
+          .expect(await takeScreenshot(`STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#scrollable')))
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => {
-        await ClientFunction(() => {
-          $('#container').css({
-            border: '1px solid black',
-          });
-        })();
+        await appendElementTo('#container', 'div', 'scrollable', {
+          border: '1px solid black',
+        });
 
-        await appendElementTo('#container', 'div', 'scrollableContent', {
+        await appendElementTo('#scrollable', 'div', 'scrollableContent', {
           width: '250px',
           height: '250px',
           border: '1px solid #0b837a',
@@ -256,7 +250,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
           useNative,
           direction,
           showScrollbar: 'always',
-        });
+        }, false, '#scrollable');
       });
     });
   });

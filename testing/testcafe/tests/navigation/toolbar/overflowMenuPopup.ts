@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { appendElementTo, setAttribute } from '../helpers/domUtils';
+import { setAttribute } from '../helpers/domUtils';
 
 fixture.disablePageReloads`Toolbar_OverflowMenu_Popup`
   .page(url(__dirname, '../../container.html'))
@@ -43,13 +43,13 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
 
   return createWidget('dxToolbar', {
     items: generateItems(40),
-  });
+  }, true);
 }).after(async () => disposeWidgets());
 
-test('Popup should be position correctly with the window border collision', async (t) => {
+safeSizeTest('Popup should be position correctly with the window border collision', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const toolbar = new Toolbar('#toolbar');
+  const toolbar = new Toolbar('#container');
   const overflowMenu = toolbar.getOverflowMenu();
 
   await t
@@ -60,22 +60,20 @@ test('Popup should be position correctly with the window border collision', asyn
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'toolbar');
-
-  await setAttribute('#container', 'style', 'width: 400px; height: 400px; padding: 8px;');
+}).before(async (t) => {
+  await t.resizeWindow(400, 400);
 
   return createWidget('dxToolbar', {
     items: generateItems(40),
     width: 50,
-  }, true, '#toolbar');
+  }, true);
 }).after(async () => disposeWidgets());
 
 [true, false].forEach((rtlEnabled) => {
-  test(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
+  safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const toolbar = new Toolbar('#toolbar');
+    const toolbar = new Toolbar('#container');
     const overflowMenu = toolbar.getOverflowMenu();
 
     await t
@@ -86,21 +84,19 @@ test('Popup should be position correctly with the window border collision', asyn
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await appendElementTo('#container', 'div', 'toolbar');
-
-    await setAttribute('#container', 'style', 'width: 400px; height: 400px; padding: 8px;');
+  }).before(async (t) => {
+    await t.resizeWindow(400, 400);
 
     return createWidget('dxToolbar', {
       items: generateItems(40),
       rtlEnabled,
-    }, true, '#toolbar');
+    }, true);
   }).after(async () => disposeWidgets());
 
-  test(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
+  safeSizeTest(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const toolbar = new Toolbar('#toolbar');
+    const toolbar = new Toolbar('#container');
     const overflowMenu = toolbar.getOverflowMenu();
 
     await t
@@ -111,15 +107,14 @@ test('Popup should be position correctly with the window border collision', asyn
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await appendElementTo('#container', 'div', 'toolbar');
+  }).before(async (t) => {
+    await t.resizeWindow(400, 400);
 
-    await setAttribute('#container', 'style', 'width: 400px; height: 400px; padding: 8px;');
-    await setAttribute('#toolbar', 'style', 'margin-top: 200px');
+    await setAttribute('#container', 'style', 'margin-top: 200px');
 
     return createWidget('dxToolbar', {
       items: generateItems(40),
       rtlEnabled,
-    }, true, '#toolbar');
+    }, true);
   });
 });

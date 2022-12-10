@@ -3,12 +3,13 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tab_panel.d';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-test('TabPanel borders with scrolling', async (t) => {
+safeSizeTest('TabPanel borders with scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'TabPanel borders with scrolling.png', '#container');
@@ -72,9 +73,9 @@ test('TabPanel borders with scrolling', async (t) => {
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
-});
+}).after(async () => disposeWidgets());
 
-test('TabPanel borders without scrolling', async (t) => {
+safeSizeTest('TabPanel borders without scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'TabPanel borders without scrolling.png', '#container');
@@ -138,4 +139,4 @@ test('TabPanel borders without scrolling', async (t) => {
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
-});
+}).after(async () => disposeWidgets());
