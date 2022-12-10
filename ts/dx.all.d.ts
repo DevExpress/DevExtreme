@@ -3144,11 +3144,14 @@ declare module DevExpress.common.grids {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface GridBaseOptions<
+  export type GridBaseOptions<
     TComponent extends GridBase<TRowData, TKey>,
     TRowData = any,
     TKey = any
-  > extends DevExpress.ui.WidgetOptions<TComponent> {
+  > = Omit<
+    GridBaseOptionsBlank<TComponent, TRowData, TKey>,
+    'focusStateEnabled'
+  > & {
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -3499,6 +3502,19 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.syncLookupFilterValues]
      */
     syncLookupFilterValues?: boolean;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface GridBaseOptionsBlank<
+    TComponent extends GridBase<TRowData, TKey>,
+    TRowData = any,
+    TKey = any
+  > extends DevExpress.ui.WidgetOptions<TComponent> {
+    /**
+     * [descr:GridBaseOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: any;
   }
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
@@ -9938,12 +9954,14 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxDataGridOptions<TRowData = any, TKey = any>
-    extends DevExpress.common.grids.GridBaseOptions<
-      dxDataGrid<TRowData, TKey>,
-      TRowData,
-      TKey
-    > {
+  export type dxDataGridOptions<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.common.grids.GridBaseOptions<
+    dxDataGrid<TRowData, TKey>,
+    TRowData,
+    TKey
+  > & {
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -10149,7 +10167,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
-  }
+  };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
    */
@@ -23482,12 +23500,14 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxTreeListOptions<TRowData = any, TKey = any>
-    extends DevExpress.common.grids.GridBaseOptions<
-      dxTreeList<TRowData, TKey>,
-      TRowData,
-      TKey
-    > {
+  export type dxTreeListOptions<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.common.grids.GridBaseOptions<
+    dxTreeList<TRowData, TKey>,
+    TRowData,
+    TKey
+  > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -23673,7 +23693,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
-  }
+  };
   /**
    * @deprecated 
    */
