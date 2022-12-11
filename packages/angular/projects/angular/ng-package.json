@@ -3,6 +3,7 @@
   "dest": "../../lib",
   "deleteDestPath": true,
   "allowedNonPeerDependencies": [
+    "@devextreme/core",
     "@devextreme/components"
   ],
   "lib": {

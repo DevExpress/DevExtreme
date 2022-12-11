@@ -4,10 +4,12 @@
   "peerDependencies": {
     "@angular/common": "14.x.x",
     "@angular/core": "14.x.x",
-    "@angular/forms": "14.x.x"
+    "@angular/forms": "14.x.x",
+    "rxjs": "^7.5.0"
   },
   "dependencies": {
     "tslib": "^2.3.0",
+    "@devextreme/core": "1.0.0",
     "@devextreme/components": "1.0.0"
   }
 }
