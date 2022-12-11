@@ -3,6 +3,7 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { cleanContainer } from '../../../helpers/createWidget';
 import { appendElementTo } from '../helpers/domUtils';
+import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Integration_DataGrid`
   .page(url(__dirname, '../../container.html'))
@@ -11,9 +12,9 @@ fixture.disablePageReloads`Integration_DataGrid`
 test('The rows in the fixed column are not aligned when the grid is encapsulated inside a <td> element, useNative: false (T1071725)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await takeScreenshotInTheme(t, takeScreenshot, 'Grid with scrollable encapsulated inside td element, useNative=false.png', Selector('#grid'));
+
   await t
-    .expect(await takeScreenshot('Grid with scrollable encapsulated inside td element, useNative=false.png', Selector('#grid')))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

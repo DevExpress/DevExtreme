@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector, t } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
@@ -9,7 +9,7 @@ fixture.disablePageReloads`TabPanel`
   .afterEach(async () => disposeWidgets());
 
 // T821726
-test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async (t) => {
+test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async () => {
   const tabPanel = new TabPanel('#tabPanel');
 
   await t
@@ -40,17 +40,18 @@ test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', asy
     .expect(tabPanel.multiView.getItem(0).isFocused)
     .notOk();
 }).before(async () => {
-  await appendElementTo('container', 'button', 'tabPanel');
-  await appendElementTo('container', 'button', 'focusoutButton', {
+  await appendElementTo('#container', 'div', 'tabPanel');
+  await appendElementTo('#container', 'button', 'focusoutButton', {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
+  await t.debug();
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2'],
   }, true, '#tabPanel');
 });
 
-test('[{0: selected}] -> click to multiView -> click to external button', async (t) => {
+test('[{0: selected}] -> click to multiView -> click to external button', async () => {
   const tabPanel = new TabPanel('#tabPanel');
 
   await t
@@ -73,8 +74,8 @@ test('[{0: selected}] -> click to multiView -> click to external button', async 
     .expect(tabPanel.multiView.getItem(0).isFocused)
     .notOk();
 }).before(async () => {
-  await appendElementTo('container', 'button', 'tabPanel');
-  await appendElementTo('container', 'button', 'focusoutButton', {
+  await appendElementTo('#container', 'div', 'tabPanel');
+  await appendElementTo('#container', 'button', 'focusoutButton', {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
@@ -83,7 +84,7 @@ test('[{0: selected}] -> click to multiView -> click to external button', async 
   }, true, '#tabPanel');
 });
 
-test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> click to external button', async (t) => {
+test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> click to external button', async () => {
   const tabPanel = new TabPanel('#tabPanel');
 
   await t
@@ -140,8 +141,8 @@ test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
     .expect(tabPanel.multiView.getItem(2).isFocused)
     .notOk();
 }).before(async () => {
-  await appendElementTo('container', 'button', 'tabPanel');
-  await appendElementTo('container', 'button', 'focusoutButton', {
+  await appendElementTo('#container', 'div', 'tabPanel');
+  await appendElementTo('#container', 'button', 'focusoutButton', {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
@@ -150,7 +151,7 @@ test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
   }, true, '#tabPanel');
 });
 
-test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click to external button', async (t) => {
+test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click to external button', async () => {
   const tabPanel = new TabPanel('#tabPanel');
 
   await t
@@ -195,8 +196,8 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
     .expect(tabPanel.multiView.getItem(1).isFocused)
     .notOk();
 }).before(async () => {
-  await appendElementTo('container', 'button', 'tabPanel');
-  await appendElementTo('container', 'button', 'focusoutButton', {
+  await appendElementTo('#container', 'div', 'tabPanel');
+  await appendElementTo('#container', 'button', 'focusoutButton', {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
@@ -205,7 +206,7 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
   }, true, '#tabPanel');
 });
 
-test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', async (t) => {
+test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', async () => {
   const tabPanel = new TabPanel('#container');
 
   await t
@@ -241,8 +242,8 @@ test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', asyn
   items: ['Item 1'],
 }));
 
-test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async (t) => {
-  const tabPanel = new TabPanel('#container');
+test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
+  const tabPanel = new TabPanel('#tabPanel');
 
   await t
     .click(Selector('#firstButton'))
@@ -265,10 +266,10 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async (t) => {
     .expect(tabPanel.multiView.getItem(0).isFocused)
     .notOk();
 }).before(async () => {
-  await appendElementTo('container', 'button', 'firstButton', {
+  await appendElementTo('#container', 'button', 'firstButton', {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
-  await appendElementTo('container', 'button', 'tabPanel');
+  await appendElementTo('#container', 'div', 'tabPanel');
 
   return createWidget('dxTabPanel', {
     items: ['Item 1'],
@@ -278,7 +279,7 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async (t) => {
 fixture`Knockout T827626`
   .page(url(__dirname, '../pages/t827626.html'));
 
-test.skip('TabPanel should not switch the active tab after content click the if it contains another TabPanel', async (t) => {
+test.skip('TabPanel should not switch the active tab after content click the if it contains another TabPanel', async () => {
   const tabPanel = new TabPanel('#tabPanel');
 
   await appendElementTo('body', 'button', 'focusoutButton', {

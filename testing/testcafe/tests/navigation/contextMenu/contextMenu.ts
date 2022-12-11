@@ -9,7 +9,7 @@ fixture.disablePageReloads`ContextMenu`
   .afterEach(async () => disposeWidgets());
 
 test('Context menu should be shown in the same position when item was added in runtime (T755681)', async (t) => {
-  const contextMenu = new ContextMenu('#container');
+  const contextMenu = new ContextMenu('#contextMenu');
   const target = Selector('#menuTarget');
 
   await t
@@ -26,6 +26,7 @@ test('Context menu should be shown in the same position when item was added in r
     .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
 }).before(async () => {
   const menuTargetID = 'menuTarget';
+  await appendElementTo('#container', 'div', 'contextMenu');
   await appendElementTo('#container', 'button', menuTargetID, {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
@@ -44,5 +45,5 @@ test('Context menu should be shown in the same position when item was added in r
         }, 1000);
       }
     },
-  });
+  }, true, '#contextMenu');
 });

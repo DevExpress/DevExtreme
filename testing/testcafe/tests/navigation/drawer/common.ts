@@ -4,8 +4,16 @@ import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { isMaterial } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Drawer`
+const testFixture = () => {
+  if (isMaterial()) {
+    return fixture.skip;
+  }
+  return fixture.disablePageReloads;
+};
+
+testFixture()`Drawer`
   .page(url(__dirname, '../../container.html'))
   .beforeEach(async (t) => {
     await t.resizeWindow(700, 700);

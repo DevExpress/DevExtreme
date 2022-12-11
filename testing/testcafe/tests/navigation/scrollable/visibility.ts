@@ -1,12 +1,20 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { cleanContainer } from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
-fixture.disablePageReloads`Scrollable_visibility_integration`
+const testFixture = () => {
+  if (isMaterial()) {
+    return fixture.skip;
+  }
+  return fixture.disablePageReloads;
+};
+
+testFixture()`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => cleanContainer());
 

@@ -1,13 +1,21 @@
 /* eslint-disable max-len */
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { cleanContainer } from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
-fixture.disablePageReloads`Scrollable_ScrollToElement`
+const testFixture = () => {
+  if (isMaterial()) {
+    return fixture.skip;
+  }
+  return fixture.disablePageReloads;
+};
+
+testFixture()`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => cleanContainer());
 

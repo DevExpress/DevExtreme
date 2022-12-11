@@ -31,7 +31,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
 
       await setStyleAttribute(targetContainer, 'background-color: gold;');
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render${rtlEnabled ? ' rtl=true,' : ''},items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, targetContainer, true, async () => {
+      await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, targetContainer, true, async () => {
         if (locateInMenu === 'always') {
           await toolbar.repaint();
           await t
@@ -75,9 +75,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
       });
     });
   });
-});
 
-['always', 'never', 'auto'].forEach((locateInMenu) => {
   test(`Toolbar with dropDownButton,items[].locateInMenu=${locateInMenu}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -147,7 +145,9 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
       width: locateInMenu === 'auto' ? 50 : '100%',
     });
   });
+});
 
+['always', 'never'].forEach((locateInMenu) => {
   ['text', 'outlined', 'contained'].forEach((stylingMode) => {
     test(`Toolbar with different types of buttons,items[{locateInMenu=${locateInMenu},stylingMode:${stylingMode}}]`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
