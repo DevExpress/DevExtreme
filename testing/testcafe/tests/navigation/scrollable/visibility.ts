@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget, { cleanContainer } from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
 fixture.disablePageReloads`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => cleanContainer());
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [false, true].forEach((useNative) => {
@@ -22,7 +22,7 @@ fixture.disablePageReloads`Scrollable_visibility_integration`
 
           const expectedScrollOffsetValue = { left: 10, top: 20 };
           await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
-          await t.debug();
+
           await t
             .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#scrollable')))
             .ok();
@@ -57,9 +57,6 @@ fixture.disablePageReloads`Scrollable_visibility_integration`
             direction,
             showScrollbar: 'always',
           }, false, '#scrollable');
-        }).after(async (t) => {
-          await disposeWidgets();
-          await t.debug();
         });
       });
     });

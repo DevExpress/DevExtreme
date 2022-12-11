@@ -28,7 +28,7 @@ test('message position is right (T1020449)', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await appendElementTo('#container', 'div', '#form');
+  await appendElementTo('#container', 'div', 'form');
 
   return createWidget('dxForm', {
     width: 300,

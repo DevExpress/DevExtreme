@@ -79,7 +79,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .click(overflowMenu.element);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup under container rtlEnabled=${rtlEnabled}.png`);
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup under container rtl=${rtlEnabled}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -116,5 +116,5 @@ safeSizeTest('Popup should be position correctly with the window border collisio
       items: generateItems(40),
       rtlEnabled,
     }, true);
-  });
+  }).after(async () => disposeWidgets());
 });

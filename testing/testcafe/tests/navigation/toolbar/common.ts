@@ -20,16 +20,26 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
     const toolbar = new Toolbar('#container');
     let targetContainer = Selector('#container');
 
+    const overflowMenu = toolbar.getOverflowMenu();
+
     if (locateInMenu === 'always') {
       await t
-        .click(toolbar.getOverflowMenu().element);
+        .click(overflowMenu.element);
 
-      targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+      targetContainer = overflowMenu.getPopup().getContent();
     }
 
     await setStyleAttribute(targetContainer, 'background-color: gold;');
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
+      if (locateInMenu === 'always') {
+        await toolbar.repaint();
+        await t
+          .click(overflowMenu.element);
+
+        await setStyleAttribute(targetContainer, 'background-color: gold;');
+      }
+    });
 
     await t
       .expect(compareResults.isValid())
@@ -60,16 +70,23 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const toolbar = new Toolbar('#container');
+    const overflowMenu = toolbar.getOverflowMenu();
     let targetContainer = Selector('#container');
 
     if (locateInMenu === 'always') {
       await t
-        .click(toolbar.getOverflowMenu().element);
+        .click(overflowMenu.element);
 
-      targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+      targetContainer = overflowMenu.getPopup().getContent();
     }
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar with dropDownButton,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar with dropDownButton,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
+      if (locateInMenu === 'always') {
+        await toolbar.repaint();
+        await t
+          .click(overflowMenu.element);
+      }
+    });
 
     await t
       .expect(compareResults.isValid())
@@ -123,16 +140,24 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const toolbar = new Toolbar('#container');
+      const overflowMenu = toolbar.getOverflowMenu();
+
       let targetContainer = Selector('#container');
 
       if (locateInMenu === 'always') {
         await t
-          .click(toolbar.getOverflowMenu().element);
+          .click(overflowMenu.element);
 
-        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+        targetContainer = overflowMenu.getPopup().getContent();
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Toolbar with ${stylingMode} buttons,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true);
+      await takeScreenshotInTheme(t, takeScreenshot, `Toolbar with ${stylingMode} buttons,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
+        if (locateInMenu === 'always') {
+          await toolbar.repaint();
+          await t
+            .click(overflowMenu.element);
+        }
+      });
 
       await t
         .expect(compareResults.isValid())
@@ -324,12 +349,18 @@ test('Toolbar with dropDownButton,items[].locateInMenu=auto', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const toolbar = new Toolbar('#container');
+  const overflowMenu = toolbar.getOverflowMenu();
+
   await t
-    .click(toolbar.getOverflowMenu().element);
+    .click(overflowMenu.element);
 
-  const targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+  const targetContainer = overflowMenu.getPopup().getContent();
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar with dropDownButton,items[]locateInMenu=always.png', targetContainer, true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar with dropDownButton,items[]locateInMenu=always.png', targetContainer, true, async () => {
+    await toolbar.repaint();
+    await t
+      .click(overflowMenu.element);
+  });
 
   await t
     .expect(compareResults.isValid())

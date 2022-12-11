@@ -2,14 +2,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget, { cleanContainer } from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
 fixture.disablePageReloads`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => cleanContainer());
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [true, false].forEach((useNative) => {
