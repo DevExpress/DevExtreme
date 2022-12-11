@@ -1,7 +1,7 @@
 module.exports = {
   parserOptions: {
     createDefaultProgram: true,
-    project: './tsconfig.package.json',
+    project: './tsconfig.json',
     tsconfigRootDir: __dirname,
   },
 };
