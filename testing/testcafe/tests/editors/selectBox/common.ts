@@ -3,6 +3,7 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 
 fixture.disablePageReloads`SelectBox placeholder`
   .page(url(__dirname, '../../container.html'))
@@ -10,20 +11,21 @@ fixture.disablePageReloads`SelectBox placeholder`
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const selectBox = new SelectBox('#container');
+  const selectBox = new SelectBox('#selectBox');
 
   await selectBox.option('items', [1, 2, 3]);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png');
+  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png', '#container');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 100);
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'selectBox');
+  await setAttribute('#container', 'style', { width: '300px', height: '100px', padding: '8px' });
 
   return createWidget('dxSelectBox', {
     width: '100%',
     placeholder: 'Choose a value',
-  });
+  }, false, '#selectBox');
 });
