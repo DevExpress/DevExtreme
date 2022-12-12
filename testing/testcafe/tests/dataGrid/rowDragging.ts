@@ -599,7 +599,7 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
     const instance = grid.getInstance();
     $(instance.element()).trigger($.Event('dxpointerup'));
   })(dataGrid);
-  await t.wait(100);
+  await t.wait(200);
 
   const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
     .getVisibleRows()
