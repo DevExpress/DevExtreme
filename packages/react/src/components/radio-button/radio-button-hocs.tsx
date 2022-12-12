@@ -46,6 +46,7 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
       event.preventDefault();
       event.stopPropagation();
+      props.onChange?.(event);
       dispatcher.dispatch('updateValue', {
         value,
       });

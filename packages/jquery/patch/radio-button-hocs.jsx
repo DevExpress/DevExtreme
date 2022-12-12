@@ -26,6 +26,7 @@ function withRadioGroup(RadioButton) {
         const handleChange = (event) => {
             event.preventDefault();
             event.stopPropagation();
+            props.onChange?.(event);
             dispatcher.dispatch('updateValue', { value });
         };
         return (<RadioButton {...props} value={value} checked={checked} onChange={handleChange}/>);
