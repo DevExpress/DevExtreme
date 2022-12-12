@@ -1,4 +1,3 @@
-import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
@@ -39,12 +38,9 @@ test('ContextMenu items render', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await ClientFunction(() => {
-    $('#container').addClass('dx-theme-generic-typography');
-  })();
-
   await appendElementTo('#container', 'div', 'contextMenu');
-  await setAttribute('#container', 'style', 'width: 284px; height: 384px; padding: 8px;');
+  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
+  await setAttribute('#container', 'style', 'width: 300px; height: 200px;');
 
   await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
 

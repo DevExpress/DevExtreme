@@ -14,7 +14,6 @@ test('Placeholder is visible after items option change when value is not chosen 
   const selectBox = new SelectBox('#selectBox');
 
   await selectBox.option('items', [1, 2, 3]);
-
   await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png', '#container');
 
   await t
@@ -22,7 +21,7 @@ test('Placeholder is visible after items option change when value is not chosen 
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'selectBox');
-  await setAttribute('#container', 'style', 'width: 300px; height: 100px, padding: 8px');
+  await setAttribute('#container', 'style', 'width: 300px; height: 100px; padding: 8px;');
 
   return createWidget('dxSelectBox', {
     width: '100%',

@@ -17,7 +17,7 @@ fixture.disablePageReloads`PivotGrid_scrolling`
   { useNative: true, mode: 'standart' },
   { useNative: false, mode: 'standart' },
 ].forEach(({ useNative, mode }) => {
-  test(`Rows sincronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
+  test(`Rows syncronization with vertical scrollbar when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
@@ -25,7 +25,7 @@ fixture.disablePageReloads`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
 
-    await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sincronization dir=vertical,useNative=${useNative},mode=${mode}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sync dir=vertical,useNative=${useNative},mode=${mode}.png`, '#container');
 
     await deleteStylesheetRule(0);
 
@@ -75,7 +75,7 @@ fixture.disablePageReloads`PivotGrid_scrolling`
     });
   });
 
-  test(`Rows sincronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
+  test(`Rows syncronization with both scrollbars when scrolling{useNative=${useNative},mode=${mode}} and white-space cell is normal (T1081956)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
@@ -83,7 +83,7 @@ fixture.disablePageReloads`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
 
-    await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sincronization dir=both,useNative=${useNative},mode=${mode}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sync dir=both,useNative=${useNative},mode=${mode}.png`, '#container');
 
     await deleteStylesheetRule(0);
 

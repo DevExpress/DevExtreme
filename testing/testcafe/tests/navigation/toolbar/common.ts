@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { setStyleAttribute } from '../helpers/domUtils';
+import { appendElementTo, setAttribute, setStyleAttribute } from '../helpers/domUtils';
 import Toolbar from '../../../model/toolbar/toolbar';
 
 fixture.disablePageReloads`Toolbar_common`
@@ -91,7 +91,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
     }
 
     await takeScreenshotInTheme(t, takeScreenshot, `Toolbar with dropDownButton,items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, targetContainer, true, async () => {
-      if (locateInMenu === 'always') {
+      if (locateInMenu !== 'never') {
         await toolbar.repaint();
         await t
           .click(overflowMenu.element);
@@ -152,10 +152,10 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
     test(`Toolbar with different types of buttons,items[{locateInMenu=${locateInMenu},stylingMode:${stylingMode}}]`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const toolbar = new Toolbar('#container');
+      const toolbar = new Toolbar('#toolbar');
       const overflowMenu = toolbar.getOverflowMenu();
 
-      let targetContainer = Selector('#container');
+      let targetContainer = Selector('#toolbar');
 
       if (locateInMenu === 'always') {
         await t
@@ -176,6 +176,9 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await appendElementTo('#container', 'div', '#toolbar');
+      await setAttribute('#container', 'style', 'width: 600px;');
+
       const toolbarItems = [
         {
           location: 'before',
@@ -236,7 +239,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
 
       return createWidget('dxToolbar', {
         items: toolbarItems,
-      });
+      }, true, '#toolbar');
     });
   });
 });

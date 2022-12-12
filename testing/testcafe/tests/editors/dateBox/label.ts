@@ -20,7 +20,7 @@ stylingMods.forEach((stylingMode) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await appendElementTo('#container', 'div', '#dateBox');
+    await appendElementTo('#container', 'div', 'dateBox');
     await setAttribute('#container', 'style', 'width: 300px; height: 400px; padding: 8px;');
 
     return createWidget('dxDateBox', {

@@ -4,6 +4,9 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
+const CONTEXT_MENU_CLASS = 'dx-context-menu';
+const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';
+
 fixture.disablePageReloads`PivotGrid_contextMenu`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
@@ -11,9 +14,9 @@ fixture.disablePageReloads`PivotGrid_contextMenu`
 test('ContextMenu width should be adjusted to the width of the item text (T1106236)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.rightClick(Selector('.dx-area-fields').nth(1));
+  await t.rightClick(Selector(`.${FIELD_CHOOSER_AREA_FIELDS_CLASS}`).nth(1));
 
-  await t.hover(Selector('.dx-context-menu'));
+  await t.hover(Selector(`.${CONTEXT_MENU_CLASS}`));
 
   await takeScreenshotInTheme(t, takeScreenshot, 'PivotGrid contextmenu width.png', '#container');
 
@@ -21,6 +24,7 @@ test('ContextMenu width should be adjusted to the width of the item text (T11062
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxPivotGrid', {
+  width: 1000,
   allowSortingBySummary: true,
   allowSorting: true,
   allowExpandAll: true,

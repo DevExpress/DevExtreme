@@ -22,7 +22,7 @@ test('Placeholder is visible after items option change when value is not chosen 
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'autocomplete');
-  await setAttribute('#container', 'style', 'width: 300px; height: 100px, padding: 8px');
+  await setAttribute('#container', 'style', 'width: 300px; height: 100px; padding: 8px;');
 
   return createWidget('dxAutocomplete', {
     width: '100%',
