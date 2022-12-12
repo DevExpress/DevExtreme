@@ -910,8 +910,7 @@ const Draggable = DOMComponent.inherit({
         const targetDraggable = this._getTargetDraggable();
 
         if($sourceElement && e.key === 'Escape' && this.dragOccur) {
-            const eventArgs = this._getEventArgs(e);
-            this._getAction('onDragCancel')(eventArgs);
+            this._getAction('onDragCancel')();
             sourceDraggable?._toggleDraggingClass(false);
             this.dragOccur = false;
 
