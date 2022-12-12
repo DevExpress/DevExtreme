@@ -16,16 +16,14 @@ fixture.disablePageReloads`Accordion_common`
 
     const screenshotName = `Accordion items render rtl=${rtlEnabled}.png`;
 
-    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', true, async () => {
-      await accordion.repaint();
-    });
-
-    await accordion.repaint();
-
     if (!isMaterial()) {
       await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
       await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
     }
+
+    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', true, async () => {
+      await accordion.repaint();
+    });
 
     await t
       .expect(compareResults.isValid())

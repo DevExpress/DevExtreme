@@ -244,7 +244,7 @@ testFixture()`Scrollable_ScrollToElement`
   [false, true].forEach((useNative) => {
     [false, true].forEach((useSimulatedScrollbar) => {
       test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, container.width = 75 -> 50 -> 75 -> 100 -> 75`, async (t) => {
-        const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
+        const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
 
         await scrollable.setContainerCssWidth(75);
 
@@ -291,7 +291,8 @@ testFixture()`Scrollable_ScrollToElement`
           await t.expect(left).within(18, 20);
         }
       }).before(async () => {
-        await appendElementTo('#container', 'div', 'content', {
+        await appendElementTo('#container', 'div', 'scrollable');
+        await appendElementTo('#scrollable', 'div', 'content', {
           width: '100px', height: '100px', backgroundColor: 'skyblue',
         });
 
@@ -303,12 +304,12 @@ testFixture()`Scrollable_ScrollToElement`
           useSimulatedScrollbar,
           direction: 'horizontal',
           showScrollbar: 'always',
-        });
+        }, false, '#scrollable');
       });
 
       [1, 10, 20].forEach((scrollOffset) => {
         test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, scrollTo(Right - ${scrollOffset}), container.width = 75 -> 50 -> 100 -> 75 -> 50`, async (t) => {
-          const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
+          const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
 
           await scrollable.scrollTo({ left: 50 - scrollOffset });
           await scrollable.update();
@@ -369,7 +370,8 @@ testFixture()`Scrollable_ScrollToElement`
             await t.expect(left).within(24, 26);
           }
         }).before(async () => {
-          await appendElementTo('#container', 'div', 'content', {
+          await appendElementTo('#container', 'div', 'scrollable');
+          await appendElementTo('#scrollable', 'div', 'content', {
             width: '100px', height: '100px', backgroundColor: 'skyblue',
           });
 
@@ -381,13 +383,13 @@ testFixture()`Scrollable_ScrollToElement`
             useSimulatedScrollbar,
             direction: 'horizontal',
             showScrollbar: 'always',
-          });
+          }, false, '#scrollable');
         });
       });
 
       [30, 40, 50].forEach((scrollOffset) => {
         test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, scrollTo(${scrollOffset}), container.width = 75 -> 50 -> 100 -> 75 -> 50`, async (t) => {
-          const scrollable = new Scrollable('#container', { direction, useNative, useSimulatedScrollbar });
+          const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
 
           await scrollable.scrollTo({ left: scrollOffset });
           await scrollable.update();
@@ -443,7 +445,8 @@ testFixture()`Scrollable_ScrollToElement`
             await t.expect(left).within(24, 26);
           }
         }).before(async () => {
-          await appendElementTo('#container', 'div', 'content', {
+          await appendElementTo('#container', 'div', 'scrollable');
+          await appendElementTo('#scrollable', 'div', 'content', {
             width: '100px', height: '100px', backgroundColor: 'skyblue',
           });
 
@@ -455,7 +458,7 @@ testFixture()`Scrollable_ScrollToElement`
             useSimulatedScrollbar,
             direction: 'horizontal',
             showScrollbar: 'always',
-          });
+          }, false, '#scrollable');
         });
       });
     });

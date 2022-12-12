@@ -57,7 +57,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 test('Buttons render in toolbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar buttons render.png', '#container', true);
+  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar buttons render.png', '#toolbar', true);
 
   await t
     .expect(compareResults.isValid())
