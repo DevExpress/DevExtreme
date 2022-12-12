@@ -6,13 +6,13 @@ import {
   appendElementTo,
 } from '../../navigation/helpers/domUtils';
 
-const stylingMods = ['outlined', 'underlined', 'filled'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-stylingMods.forEach((stylingMode) => {
+stylingModes.forEach((stylingMode) => {
   test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

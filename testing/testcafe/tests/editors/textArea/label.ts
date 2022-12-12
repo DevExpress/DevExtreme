@@ -10,7 +10,7 @@ fixture.disablePageReloads`Label`
   .afterEach(async () => disposeWidgets());
 
 const labelMods = ['floating', 'static'];
-const stylingMods = ['outlined', 'underlined', 'filled'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
 test('Label scroll input dxTextArea', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -31,7 +31,7 @@ test('Label scroll input dxTextArea', async (t) => {
   label: 'label text',
 }));
 
-stylingMods.forEach((stylingMode) => {
+stylingModes.forEach((stylingMode) => {
   labelMods.forEach((labelMode) => {
     test(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

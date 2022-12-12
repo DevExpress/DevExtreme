@@ -7,13 +7,13 @@ import {
 } from '../../navigation/helpers/domUtils';
 
 const labelMods = ['floating', 'static'];
-const stylingMods = ['outlined', 'underlined', 'filled'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`Lookup_Label`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-stylingMods.forEach((stylingMode) => {
+stylingModes.forEach((stylingMode) => {
   labelMods.forEach((labelMode) => {
     test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

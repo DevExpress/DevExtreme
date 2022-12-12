@@ -31,7 +31,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
 
       await setStyleAttribute(targetContainer, 'background-color: gold;');
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
+      await takeScreenshotInTheme(t, takeScreenshot, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
         await toolbar.repaint();
         if (locateInMenu !== 'never') {
           await t
