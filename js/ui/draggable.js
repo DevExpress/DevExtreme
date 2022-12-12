@@ -824,6 +824,7 @@ const Draggable = DOMComponent.inherit({
 
         try {
             this._getAction('onDragEnd')(dragEndEventArgs);
+            this.dragInProgress = false;
         } finally {
             when(fromPromise(dragEndEventArgs.cancel))
                 .done((cancel) => {
