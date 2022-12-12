@@ -5,6 +5,9 @@
     "scripts": {
         "build": "rollup -c rollup/rollup.config.mjs"
     },
+    "dependencies": {
+        "@devextreme/runtime": "^4.0.0"
+    },
     "exports": {
         ".": {
             "types": "./lib/index.d.ts",
