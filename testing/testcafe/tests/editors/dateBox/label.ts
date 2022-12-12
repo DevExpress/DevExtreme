@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { t } from 'testcafe';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
@@ -11,7 +12,7 @@ fixture.disablePageReloads`DateBox_Label`
   .afterEach(async () => disposeWidgets());
 
 stylingMods.forEach((stylingMode) => {
-  test(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async (t) => {
+  test(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async () => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Datebox label symbols with stylingMode=${stylingMode}.png`, '#container');
@@ -21,8 +22,9 @@ stylingMods.forEach((stylingMode) => {
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await appendElementTo('#container', 'div', 'dateBox');
-    await setAttribute('#container', 'style', 'width: 300px; height: 400px; padding: 8px;');
+    await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
 
+    await t.debug();
     return createWidget('dxDateBox', {
       label: 'qwerty QWERTY 1234567890',
       stylingMode,

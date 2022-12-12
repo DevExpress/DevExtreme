@@ -1,13 +1,13 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme, isMaterial } from '../../../../helpers/themeUtils';
-import url from '../../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
+import url from '../../../helpers/getPageUrl';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
 
 fixture.disablePageReloads`TreeView_selectAll`
-  .page(url(__dirname, '../../../container.html'))
+  .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
 [true, false].forEach((rtlEnabled) => {

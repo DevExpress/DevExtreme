@@ -1,16 +1,15 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
 });
 
-fixture.disablePageReloads`Virtual Columns`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture`Virtual Columns`
+  .page(url(__dirname, '../container.html'));
 
 const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   const items: Record<string, unknown>[] = [];
@@ -54,7 +53,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   },
 }));
 
-test.skip('DataGrid should not scroll back to the focused cell after horizontal scrolling to the left when columnRenderingMode is virtual', async (t) => {
+test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the left when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollTo({ x: 1500 });
@@ -92,7 +91,7 @@ test.skip('DataGrid should not scroll back to the focused cell after horizontal 
 }));
 
 // T1090735
-test.skip('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
+test('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

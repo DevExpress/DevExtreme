@@ -31,7 +31,7 @@ stylingMods.forEach((stylingMode) => {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await setAttribute('#container', 'style', 'width: 300px; height: 400px; padding: 8px;');
+      await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
 
       await appendElementTo('#container', 'div', 'selectBox1');
       await appendElementTo('#container', 'div', 'selectBox2');
