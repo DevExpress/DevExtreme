@@ -35,7 +35,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Build playgrounds apps
-        run: npx nx build @playgrounds/react
+        run: npm run build:playgrounds
 
   Test:
     name: Test Monorepo
