@@ -75,7 +75,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
       return createWidget('dxToolbar', {
         items: toolbarItems,
         rtlEnabled,
-        width: locateInMenu === 'auto' ? 50 : '100%',
+        width: locateInMenu === 'auto' ? 50 : 1184,
       });
     });
   });

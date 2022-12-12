@@ -18,6 +18,7 @@ test(testName, async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxForm', {
   width: 500,
+  height: 200,
   items: [
     {
       itemType: 'group',

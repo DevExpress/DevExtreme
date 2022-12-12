@@ -17,7 +17,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
   test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#container', true);
+    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#toolbar', true);
 
     await t
       .expect(compareResults.isValid())
@@ -63,6 +63,9 @@ test('Buttons render in toolbar', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 1200px; height: 800px; padding: 8px;');
+  await appendElementTo('#container', 'div', 'toolbar');
+
   const items = [] as any;
 
   for (const stylingMode of stylingModes) {
@@ -90,5 +93,5 @@ test('Buttons render in toolbar', async (t) => {
   await createWidget('dxToolbar', {
     multiline: true,
     items,
-  });
+  }, false, '#toolbar');
 });
