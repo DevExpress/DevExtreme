@@ -15,7 +15,7 @@ fixture.disablePageReloads`TreeView_selectAll`
     test(`TreeView-selectAll,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const screenshotName = `TreeView selAll cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
+      const screenshotName = `TreeView selection cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
 
       await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container');
 

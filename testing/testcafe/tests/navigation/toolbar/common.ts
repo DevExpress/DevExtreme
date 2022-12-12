@@ -10,9 +10,9 @@ fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', /* 'dxTabs', */ 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
-['always', 'never', 'auto'].forEach((locateInMenu) => {
+['never', 'always', 'auto'].forEach((locateInMenu) => {
   [true, false].forEach((rtlEnabled) => {
     test(`Default nested widgets render,items[].locateInMenu=${locateInMenu},rtl=${rtlEnabled}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -31,14 +31,13 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
 
       await setStyleAttribute(targetContainer, 'background-color: gold;');
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, targetContainer, true, async () => {
-        if (locateInMenu === 'always') {
-          await toolbar.repaint();
+      await takeScreenshotInTheme(t, takeScreenshot, `Default nested widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
+        await toolbar.repaint();
+        if (locateInMenu !== 'never') {
           await t
             .click(overflowMenu.element);
-
-          await setStyleAttribute(targetContainer, 'background-color: gold;');
         }
+        await setStyleAttribute(targetContainer, 'background-color: gold;');
       });
 
       await t
@@ -47,30 +46,35 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
     }).before(async () => {
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
-        toolbarItems.push({
+        const itemConfig = {
           location: 'before',
           locateInMenu,
           widget: widgetName,
           options: {
             value: new Date(2021, 9, 17),
             stylingMode: 'contained',
-            text: 'Text',
-            icon: 'Refresh',
-            items: [{ text: 'Text', icon: 'Refresh' }, { text: 'Text', icon: 'exportxslx' }],
-            showClearButton: true,
+            text: `${widgetName}`,
+            icon: 'refresh',
+            items: [{ text: `${widgetName}`, icon: 'export' }],
           },
-        });
+        };
+
+        if (locateInMenu === 'never') {
+          (itemConfig.options as any).width = 115;
+        }
+
+        toolbarItems.push(itemConfig);
       });
 
       toolbarItems.push({
-        location: 'center',
+        location: 'before',
         locateInMenu,
         text: 'Some text',
       });
 
       return createWidget('dxToolbar', {
         items: toolbarItems,
-        rtlEnabled: true,
+        rtlEnabled,
         width: locateInMenu === 'auto' ? 50 : '100%',
       });
     });

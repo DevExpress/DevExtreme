@@ -45,7 +45,6 @@ test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', asy
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
-  await t.debug();
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2'],
   }, true, '#tabPanel');

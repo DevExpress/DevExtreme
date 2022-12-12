@@ -24,7 +24,6 @@ stylingMods.forEach((stylingMode) => {
     await appendElementTo('#container', 'div', 'dateBox');
     await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
 
-    await t.debug();
     return createWidget('dxDateBox', {
       label: 'qwerty QWERTY 1234567890',
       stylingMode,

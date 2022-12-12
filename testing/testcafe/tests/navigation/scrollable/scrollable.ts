@@ -10,7 +10,7 @@ import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view
 
 const testFixture = () => {
   if (isMaterial()) {
-    return fixture.skip;
+    return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;
 };

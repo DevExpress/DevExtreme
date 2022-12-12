@@ -185,46 +185,48 @@ fixture.disablePageReloads`Form`
 });
 
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-  [true, false].forEach((showColonAfterLabel) => {
-    const testName = `show semicolon, lblMode=${formLabelMode}, shwSmclnAfterlbl=${showColonAfterLabel}`;
-    test(testName, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  if (!isMaterial()) {
+    [true, false].forEach((showColonAfterLabel) => {
+      const testName = `show semicolon, lblMode=${formLabelMode}, shwSmclnAfterlbl=${showColonAfterLabel}`;
+      test(testName, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+        await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      const options = {
-        labelMode: formLabelMode,
-        showColonAfterLabel,
-        width: 500,
-        items: [
-          { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
-          { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
-          { dataField: 'field3', editorType: 'dxCheckBox' },
-          { dataField: 'field4', editorType: 'dxColorBox' },
-          { dataField: 'field5', editorType: 'dxDateBox' },
-          { dataField: 'field6', editorType: 'dxDropDownBox' },
-          { dataField: 'field7', editorType: 'dxHtmlEditor', editorOptions: { height: 100, toolbar: { items: ['undo', 'redo'] } } },
-          { dataField: 'field8', editorType: 'dxLookup' },
-          { dataField: 'field9', editorType: 'dxNumberBox' },
-          { dataField: 'field10', editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'] } },
-          { dataField: 'field11', editorType: 'dxRangeSlider' },
-          { dataField: 'field12', editorType: 'dxSelectBox' },
-          { dataField: 'field13', editorType: 'dxSlider' },
-          { dataField: 'field14', editorType: 'dxSwitch' },
-          { dataField: 'field15', editorType: 'dxTagBox' },
-          { dataField: 'field16', editorType: 'dxTextArea' },
-          { dataField: 'field17', editorType: 'dxTextBox' },
-        ],
-      } as any;
+        await t
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        const options = {
+          labelMode: formLabelMode,
+          showColonAfterLabel,
+          width: 500,
+          items: [
+            { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
+            { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
+            { dataField: 'field3', editorType: 'dxCheckBox' },
+            { dataField: 'field4', editorType: 'dxColorBox' },
+            { dataField: 'field5', editorType: 'dxDateBox' },
+            { dataField: 'field6', editorType: 'dxDropDownBox' },
+            { dataField: 'field7', editorType: 'dxHtmlEditor', editorOptions: { height: 100, toolbar: { items: ['undo', 'redo'] } } },
+            { dataField: 'field8', editorType: 'dxLookup' },
+            { dataField: 'field9', editorType: 'dxNumberBox' },
+            { dataField: 'field10', editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'] } },
+            { dataField: 'field11', editorType: 'dxRangeSlider' },
+            { dataField: 'field12', editorType: 'dxSelectBox' },
+            { dataField: 'field13', editorType: 'dxSlider' },
+            { dataField: 'field14', editorType: 'dxSwitch' },
+            { dataField: 'field15', editorType: 'dxTagBox' },
+            { dataField: 'field16', editorType: 'dxTextArea' },
+            { dataField: 'field17', editorType: 'dxTextBox' },
+          ],
+        } as any;
 
-      if (formLabelMode !== undefined) {
-        options.labelMode = formLabelMode;
-      }
-      return createWidget('dxForm', options);
+        if (formLabelMode !== undefined) {
+          options.labelMode = formLabelMode;
+        }
+        return createWidget('dxForm', options);
+      });
     });
-  });
+  }
 });

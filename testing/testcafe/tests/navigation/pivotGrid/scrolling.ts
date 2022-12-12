@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -9,7 +9,14 @@ import { dataOptions } from './virtualDataOptions.js';
 import PivotGrid from '../../../model/pivotGrid';
 import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
-fixture.disablePageReloads`PivotGrid_scrolling`
+const testFixture = () => {
+  if (isMaterial()) {
+    return fixture.disablePageReloads.skip;
+  }
+  return fixture.skip;
+};
+
+testFixture()`PivotGrid_scrolling`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
@@ -21,7 +28,6 @@ fixture.disablePageReloads`PivotGrid_scrolling`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
-    await t.debug();
     await pivotGrid.scrollBy({ top: 300000 });
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });

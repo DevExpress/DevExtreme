@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { cleanContainer } from '../../../helpers/createWidget';
-import { appendElementTo } from '../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../helpers/domUtils';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Integration_DataGrid`
@@ -19,6 +19,8 @@ fixture.disablePageReloads`Integration_DataGrid`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await setAttribute('#container', 'style', 'width: 300px');
+
     await appendElementTo('#container', 'table', 'outerTable', {});
     await appendElementTo('#outerTable', 'tr', 'outerTableTR', {});
     await appendElementTo('#outerTableTR', 'td', 'outerTableTD', {});

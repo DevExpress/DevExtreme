@@ -84,9 +84,8 @@ fixture.disablePageReloads`ButtonGroup_Styles`
   }).before(async () => {
     await ClientFunction(() => {
       $('#container').css({
-        width: '500px',
-        height: '500px',
-        border: '1px solid black',
+        width: '600px',
+        height: '400px',
       });
 
       $('#container').addClass('dx-theme-generic-typography');

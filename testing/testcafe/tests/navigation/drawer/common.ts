@@ -8,7 +8,7 @@ import { isMaterial } from '../../../helpers/themeUtils';
 
 const testFixture = () => {
   if (isMaterial()) {
-    return fixture.skip;
+    return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;
 };
