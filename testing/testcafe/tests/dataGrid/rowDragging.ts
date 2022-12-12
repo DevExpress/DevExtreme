@@ -591,9 +591,9 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   await dataGrid.scrollTo({ y: 3000 });
   await dataGrid.moveRow(fromIndex, 0, 50, true);
   await dataGrid.moveRow(fromIndex, 0, -20);
-  await t.wait(300);
-  await dataGrid.moveRow(toIndex, 0, 5);
   await t.wait(500);
+  await dataGrid.moveRow(toIndex, 0, 5);
+  await t.wait(200);
 
   await ClientFunction((grid) => {
     const instance = grid.getInstance();
