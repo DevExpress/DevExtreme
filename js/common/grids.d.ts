@@ -180,7 +180,7 @@ export interface ColumnBase<TRowData = any> {
    * @type_function_return Filter expression
    * @public
    */
-  calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+  calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function);
   /**
    * @public
    */
