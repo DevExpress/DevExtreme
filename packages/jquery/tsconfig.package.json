@@ -15,5 +15,9 @@
 		"lib",
 		"**/*.test.ts"
 	],
-	"references": []
+	"references": [
+		{
+			"path": "../devextreme-core/tsconfig.package.json"
+		}
+	]
 }
