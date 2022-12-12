@@ -43,7 +43,7 @@
         "build:angular": "nx build @devextreme/angular",
         "build:core": "nx build @devextreme/core",
         "build:react": "nx build @devextreme/react",
-        "build:playgrounds": "npm run build -w ./packages/core && npm run build -w ./packages/components && npm run build -w ./packages/react && npm run build -w ./playgrounds/react",
+        "build:playgrounds": "nx run-many --target=build --projects=@playgrounds/angular,@playgrounds/react",
         "build:packages": "npm run build:core && npm run build:react",
         "build": "nx run-many --target=build --projects=@devextreme/core,@devextreme/components,@devextreme/react,@devextreme/ui-core --skip-nx-cache",
         "start:react": "nx start @playgrounds/react",
