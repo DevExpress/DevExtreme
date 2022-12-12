@@ -821,10 +821,10 @@ const Draggable = DOMComponent.inherit({
         const dropEventArgs = this._getEventArgs(e);
         const targetDraggable = this._getTargetDraggable();
         let needRevertPosition = true;
+        this.dragInProgress = false;
 
         try {
             this._getAction('onDragEnd')(dragEndEventArgs);
-            this.dragInProgress = false;
         } finally {
             when(fromPromise(dragEndEventArgs.cancel))
                 .done((cancel) => {
