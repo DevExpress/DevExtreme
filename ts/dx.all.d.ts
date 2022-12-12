@@ -7027,7 +7027,7 @@ declare module DevExpress.ui {
       calculateFilterExpression?: (
         this: ColumnBase,
         filterValue: any,
-        selectedFilterOperation: string,
+        selectedFilterOperation: string | null,
         target: string
       ) => string | Array<any> | Function;
       defaultCalculateFilterExpression?: this['calculateFilterExpression'];
