@@ -7,9 +7,11 @@ import {
   Optional,
   Output,
 } from '@angular/core';
+import { RadioGroupService } from '../radio-group/radio-group.service';
+
+// TODO: Move this code to separate directory radio-common in the future.
+import type { RadioGroupValue } from '../radio-group/types';
 import { createRadioButtonStrategy } from './radio-button.strategies';
-import { RadioGroupService } from './radio-group.service';
-import type { RadioGroupValue } from './types';
 
 // Increasing integer for generating unique ids for radio components.
 let nextUniqueId = 0;
@@ -74,10 +76,7 @@ implements OnDestroy {
   }
 
   handleChange(event: Event): void {
-    const shouldEmit = this.strategy.handleChange(event);
-
-    if (shouldEmit) {
-      this.onChange.emit(event);
-    }
+    this.strategy.handleChange();
+    this.onChange.emit(event);
   }
 }

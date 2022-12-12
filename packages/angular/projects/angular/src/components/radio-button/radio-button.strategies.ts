@@ -1,14 +1,15 @@
 import { RadioGroupCore } from '@devextreme/components';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { doIfContextExist, waitContextAndDo } from '../../internal';
-import { RadioGroupValue } from './types';
+// TODO: Move this code to separate directory radio-common in the future.
+import { RadioGroupValue } from '../radio-group/types';
 
 const DEFAULT_CHECKED_VALUE = false;
 
 function createStandaloneStrategy(): RadioButtonStrategy {
   const checkedSubject = new BehaviorSubject<boolean>(DEFAULT_CHECKED_VALUE);
 
-  const handleChange = () => true;
+  const handleChange = () => {};
 
   const setChecked = (value: boolean) => { checkedSubject.next(value); };
 
@@ -39,17 +40,12 @@ function createRadioGroupStrategy(
       checkedSubject.next(getRadioButtonValue() === value);
     });
 
-  const handleChange = (event: Event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
+  const handleChange = () => {
     radioGroupCore$.pipe(
       doIfContextExist(),
     ).subscribe(({ dispatcher }) => {
       dispatcher.dispatch('updateValue', { value: getRadioButtonValue() });
     });
-
-    return false;
   };
 
   const setChecked = () => {};
@@ -66,9 +62,9 @@ function createRadioGroupStrategy(
 
 export interface RadioButtonStrategy {
   checked$: Observable<boolean>;
-  handleChange(event: Event): boolean;
+  handleChange(): void;
   setChecked(value: boolean): void;
-  onDestroy: () => void;
+  onDestroy(): void;
 }
 
 export function createRadioButtonStrategy(

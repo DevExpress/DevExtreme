@@ -22,7 +22,7 @@ import { BehaviorSubject } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioGroupExampleComponent {
-  private valueSubject = new BehaviorSubject<string | undefined>('2');
+  private valueSubject = new BehaviorSubject<string | undefined>('1');
 
   value$ = this.valueSubject.asObservable();
 
