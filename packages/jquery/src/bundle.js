@@ -1,4 +1,4 @@
-import RadioButon from './radio-button.j';
+import RadioButon from './radio-button';
 
 
 window.DevExpress = window.DevExpress || {
