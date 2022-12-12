@@ -1,10 +1,10 @@
-import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
+import { setAttribute } from '../helpers/domUtils';
 
 fixture.disablePageReloads`TreeView_selectAll`
   .page(url(__dirname, '../../container.html'))
@@ -28,9 +28,7 @@ fixture.disablePageReloads`TreeView_selectAll`
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await ClientFunction(() => {
-        $('#container').addClass('dx-theme-generic-typography');
-      })();
+      await setAttribute('#container', 'class', 'dx-theme-generic-typography');
 
       return createWidget('dxTreeView', {
         items: employees,

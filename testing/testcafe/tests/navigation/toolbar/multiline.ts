@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { appendElementTo, setAttribute } from '../helpers/domUtils';
 
 fixture.disablePageReloads`Toolbar_multiline`
   .page(url(__dirname, '../../container.html'))
@@ -14,7 +14,7 @@ const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['back', 'danger', 'default', 'normal', 'success'];
 
 [true, false].forEach((rtlEnabled) => {
-  safeSizeTest(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
+  test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#container', true);
@@ -22,8 +22,9 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(400, 400);
+  }).before(async () => {
+    await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
+    await appendElementTo('#container', 'div', 'toolbar');
 
     const toolbarItems = [] as any[];
     (supportedWidgets as any[]).forEach((widgetName) => {
@@ -49,8 +50,8 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
       multiline: true,
       items: toolbarItems,
       rtlEnabled,
-    });
-  }).after(async () => disposeWidgets());
+    }, false, '#toolbar');
+  });
 });
 
 test('Buttons render in toolbar', async (t) => {

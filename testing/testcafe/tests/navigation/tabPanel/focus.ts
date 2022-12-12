@@ -27,7 +27,7 @@ test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', asy
     .ok();
 
   await t
-    .click(Selector('#focusoutButton'))
+    .click(Selector('body'), { offsetY: 400 })
     .expect(tabPanel.isFocused).notOk()
     .expect(tabPanel.tabs.isFocused)
     .notOk()
@@ -41,9 +41,6 @@ test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', asy
     .notOk();
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabPanel');
-  await appendElementTo('#container', 'button', 'focusoutButton', {
-    width: '150px', height: '50px', backgroundColor: 'steelblue',
-  });
 
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2'],
@@ -64,7 +61,7 @@ test('[{0: selected}] -> click to multiView -> click to external button', async 
     .ok();
 
   await t
-    .click(Selector('#focusoutButton'))
+    .click(Selector('body'), { offsetY: 400 })
     .expect(tabPanel.isFocused).notOk()
     .expect(tabPanel.tabs.isFocused)
     .notOk()
@@ -74,9 +71,6 @@ test('[{0: selected}] -> click to multiView -> click to external button', async 
     .notOk();
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabPanel');
-  await appendElementTo('#container', 'button', 'focusoutButton', {
-    width: '150px', height: '50px', backgroundColor: 'steelblue',
-  });
 
   return createWidget('dxTabPanel', {
     items: ['Item 1'],
@@ -123,7 +117,7 @@ test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
     .ok();
 
   await t
-    .click(Selector('#focusoutButton'))
+    .click(Selector('body'), { offsetY: 400 })
     .expect(tabPanel.isFocused).notOk()
     .expect(tabPanel.tabs.isFocused)
     .notOk()
@@ -141,9 +135,6 @@ test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
     .notOk();
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabPanel');
-  await appendElementTo('#container', 'button', 'focusoutButton', {
-    width: '150px', height: '50px', backgroundColor: 'steelblue',
-  });
 
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2', 'Item 3'],
@@ -182,7 +173,7 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
     .ok();
 
   await t
-    .click(Selector('#focusoutButton'))
+    .click(Selector('body'), { offsetY: 400 })
     .expect(tabPanel.isFocused).notOk()
     .expect(tabPanel.tabs.isFocused)
     .notOk()
@@ -196,9 +187,6 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
     .notOk();
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabPanel');
-  await appendElementTo('#container', 'button', 'focusoutButton', {
-    width: '150px', height: '50px', backgroundColor: 'steelblue',
-  });
 
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2'],
@@ -245,7 +233,7 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
   const tabPanel = new TabPanel('#tabPanel');
 
   await t
-    .click(Selector('#firstButton'))
+    .click(Selector('body'), { offsetY: 400 })
     .pressKey('tab')
     .expect(tabPanel.isFocused).ok()
     .expect(tabPanel.tabs.isFocused)
@@ -265,9 +253,6 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
     .expect(tabPanel.multiView.getItem(0).isFocused)
     .notOk();
 }).before(async () => {
-  await appendElementTo('#container', 'button', 'firstButton', {
-    width: '150px', height: '50px', backgroundColor: 'steelblue',
-  });
   await appendElementTo('#container', 'div', 'tabPanel');
 
   return createWidget('dxTabPanel', {
@@ -280,10 +265,6 @@ fixture`Knockout T827626`
 
 test.skip('TabPanel should not switch the active tab after content click the if it contains another TabPanel', async () => {
   const tabPanel = new TabPanel('#tabPanel');
-
-  await appendElementTo('body', 'button', 'focusoutButton', {
-    width: '150px', height: '50px', backgroundColor: 'steelblue',
-  });
 
   await t
     .click(tabPanel.tabs.getItem(1).element)
@@ -314,7 +295,7 @@ test.skip('TabPanel should not switch the active tab after content click the if 
     .ok();
 
   await t
-    .click(Selector('#focusoutButton'))
+    .click(Selector('body'), { offsetY: 400 })
     .expect(tabPanel.isFocused).notOk()
     .expect(tabPanel.tabs.isFocused)
     .notOk()

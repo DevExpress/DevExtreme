@@ -22,15 +22,12 @@ fixture.disablePageReloads`ScrollView`
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
         await t.hover(scrollView.getContainer());
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseEnter);
-        await t.click(Selector('#mouseLeaveButton'));
+        await t.click(Selector('body'));
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
       }).before(async () => {
         await appendElementTo('#container', 'div', 'scrollView');
         await appendElementTo('#scrollView', 'div', 'innerScrollViewContent', {
           width: `${scrollableContentSize}px`, height: `${scrollableContentSize}px`, backgroundColor: 'steelblue',
-        });
-        await appendElementTo('#scrollView', 'button', 'mouseLeaveButton', {
-          width: '150px', height: '50px', backgroundColor: 'grey',
         });
 
         return createWidget('dxScrollView', {
@@ -39,7 +36,7 @@ fixture.disablePageReloads`ScrollView`
           useNative: false,
           direction,
           showScrollbar,
-        }, true, '#scrollView');
+        }, false, '#scrollView');
       });
     });
   });

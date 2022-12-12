@@ -3,13 +3,12 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tab_panel.d';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-safeSizeTest('TabPanel borders with scrolling', async (t) => {
+test('TabPanel borders with scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'TabPanel borders with scrolling.png', '#container');
@@ -17,9 +16,7 @@ safeSizeTest('TabPanel borders with scrolling', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(910, 800);
-
+}).before(async () => {
   const dataSource = [
     {
       title: 'John Heart',
@@ -73,9 +70,9 @@ safeSizeTest('TabPanel borders with scrolling', async (t) => {
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
-}).after(async () => disposeWidgets());
+});
 
-safeSizeTest('TabPanel borders without scrolling', async (t) => {
+test('TabPanel borders without scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'TabPanel borders without scrolling.png', '#container');
@@ -83,9 +80,7 @@ safeSizeTest('TabPanel borders without scrolling', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(910, 800);
-
+}).before(async () => {
   const dataSource = [
     {
       title: 'John Heart',
@@ -139,4 +134,4 @@ safeSizeTest('TabPanel borders without scrolling', async (t) => {
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
-}).after(async () => disposeWidgets());
+});

@@ -180,7 +180,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await appendElementTo('#container', 'div', '#toolbar');
+      await appendElementTo('#container', 'div', 'toolbar');
       await setAttribute('#container', 'style', 'width: 600px;');
 
       const toolbarItems = [
@@ -243,7 +243,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
 
       return createWidget('dxToolbar', {
         items: toolbarItems,
-      }, true, '#toolbar');
+      }, false, '#toolbar');
     });
   });
 });
