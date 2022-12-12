@@ -7,6 +7,7 @@ function Home() {
   return (
     <div className="link-list">
       <Link to="/radio-group">Radio Group</Link>
+      <Link to="/radio-group-compatible">Radio Group Compatible</Link>
       <Link to="/radio-button">Radio Button</Link>
     </div>
   );
