@@ -5,7 +5,6 @@ import lazyPipe from 'lazypipe';
 import named from 'vinyl-named';
 import path from 'path';
 import webpack from 'webpack';
-import { fileURLToPath } from 'url';
 import webpackStream from 'webpack-stream';
 import transpileConfig from './transpile-config.mjs';
 
@@ -14,18 +13,6 @@ const webpackConfig = {
     stats: 'verbose',
     module: {
         rules: [
-            {
-                test: /\.ts$/,
-                use: [
-                    {
-                        loader: 'ts-loader',
-                        options: {
-                            configFile: fileURLToPath(new URL('./tsconfig.json', import.meta.url)) // path.resolve(dirname, './tsconfig.json'),
-                        },
-                    }
-                ],
-                exclude: /node_modules/,
-            },
             {
                 test: /\.jsx$/,
                 use: [

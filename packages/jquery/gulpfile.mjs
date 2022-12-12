@@ -7,7 +7,7 @@ gulp.task('build-dev', gulp.series(
    function generateInfernoComponents() {
       return generateInfernoFromReactComponents('./src/generated');
    },
-   function patchGeneratedSourcies(done) {
+   function patchGeneratedSources(done) {
       fs.copyFileSync('./patch/radio-button-hocs.jsx', './src/generated/components/radio-button/radio-button-hocs.jsx');
       done()
    },

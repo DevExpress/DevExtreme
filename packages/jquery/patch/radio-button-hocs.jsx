@@ -11,8 +11,8 @@ function withUncontrolledBehavior(RadioButton) {
             event.stopPropagation();
             props.onChange?.(event);
         };
-        const renderRadioComponent = (RadioComponent) => (<RadioComponent checked={internalChecked} />);
-        return (<RadioButton {...props} onChange={handleChange} renderRadioComponent={renderRadioComponent} />);
+        const renderRadioComponent = (RadioComponent) => (<RadioComponent checked={internalChecked}/>);
+        return (<RadioButton {...props} onChange={handleChange} renderRadioComponent={renderRadioComponent}/>);
     };
     return (props, ref) => (
         <HookContainer renderFn={component} renderProps={props} renderRef={ref} />
@@ -28,7 +28,7 @@ function withRadioGroup(RadioButton) {
             event.stopPropagation();
             dispatcher.dispatch('updateValue', { value });
         };
-        return (<RadioButton {...props} value={value} checked={checked} onChange={handleChange} />);
+        return (<RadioButton {...props} value={value} checked={checked} onChange={handleChange}/>);
     };
     return (props, ref) => (
         <HookContainer renderFn={component} renderProps={props} renderRef={ref} />

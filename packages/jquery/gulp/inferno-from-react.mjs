@@ -15,8 +15,8 @@ export const ReactSrc = [
     reactComponentsRoot + path);
 
 export function generateInfernoFromReactComponents(distPath, dev = true) {
-    const tsReactProject = ts.default.createProject('gulp/typescript-configs/inferno-from-react.json');
-    const tsProject = ts.default.createProject('gulp/typescript-configs/inferno-from-react.json');
+    const tsReactProject = ts.default.createProject('gulp/typescript-configs/tsconfig.json');
+    const tsProject = ts.default.createProject('gulp/typescript-configs/tsconfig.json');
     const generator = new InfernoFromReactGenerator();
 
     return gulp.src(ReactSrc)

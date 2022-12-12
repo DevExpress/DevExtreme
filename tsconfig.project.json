@@ -9,13 +9,13 @@
 			"path": "packages/components/tsconfig.package.json"
 		},
 		{
+			"path": "packages/devextreme-core/tsconfig.package.json"
+		},
+		{
 			"path": "packages/angular/tsconfig.package.json"
 		},
 		{
 			"path": "packages/react/tsconfig.package.json"
-		},
-		{
-			"path": "packages/devextreme-core/tsconfig.package.json"
 		},
 		{
 			"path": "packages/jquery/tsconfig.package.json"
