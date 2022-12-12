@@ -21,6 +21,7 @@ fixture.disablePageReloads`PivotGrid_scrolling`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const pivotGrid = new PivotGrid('#container');
 
+    await t.debug();
     await pivotGrid.scrollBy({ top: 300000 });
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
