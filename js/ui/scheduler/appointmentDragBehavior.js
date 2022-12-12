@@ -149,10 +149,6 @@ export default class AppointmentDragBehavior {
         };
     }
 
-    createCancelByEscHandler() {
-        return true;
-    }
-
     addTo(container, config) {
         const appointmentDragging = this.scheduler.option('appointmentDragging') || {};
         const options = extend({
@@ -171,7 +167,7 @@ export default class AppointmentDragBehavior {
             onDragMove: this.createDragMoveHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
-            onCancelByEsc: this.createCancelByEscHandler()
+            onCancelByEsc: true
         }));
     }
 
