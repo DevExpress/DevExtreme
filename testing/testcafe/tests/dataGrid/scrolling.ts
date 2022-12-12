@@ -921,11 +921,13 @@ test('Scroll to the bottom after expand several group', async (t) => {
   await scrollToBottom();
   await scrollToBottom();
   await scrollToBottom();
+  await t.wait(100);
   await dataGrid.apiExpandRow(['Contoso York Store']);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
   await scrollToBottom();
   await scrollToBottom();
   await dataGrid.scrollBy({ y: -1 });
+  await t.wait(100);
   await t.expect(dataGrid.isReady()).ok();
 
   // assert
