@@ -5,18 +5,7 @@ import {
   RadioGroupProps,
   RadioGroupValue,
 } from '../../components/radio-group';
-
-// Types temporary taken from devextreme ------
-interface CollectionWidgetItem {
-  disabled?: boolean;
-  html?: string;
-  // template?: ....
-  text?: string;
-  visible?: boolean;
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ItemLike = string | CollectionWidgetItem | any;
-//------------------------------
+import { ItemLike } from './compatible-types';
 
 const createItemPropGetter = (propName: string) => (item: ItemLike) => (
   Object.prototype.hasOwnProperty.call(item, propName) ? item[propName] : item
@@ -25,6 +14,7 @@ const createItemPropGetter = (propName: string) => (item: ItemLike) => (
 interface ItemComponentProps {
   data: ItemLike
 }
+
 interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
   items: Array<ItemLike>;
   // eslint-disable-next-line react/require-default-props
