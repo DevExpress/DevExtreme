@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: View with cross-scrolling`
+fixture.skip`Scheduler: View with cross-scrolling`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Scrollable synchronization should work after changing current date (T1027231)', async (t) => {

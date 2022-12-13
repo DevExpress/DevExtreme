@@ -12,7 +12,7 @@ import {
   horizontalViews,
 } from '../../utils';
 
-fixture`Scheduler: Adaptive Generic theme layout`
+fixture.skip`Scheduler: Adaptive Generic theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (

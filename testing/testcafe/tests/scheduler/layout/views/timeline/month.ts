@@ -4,7 +4,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Scheduler: Layout Views: Timeline Month`
+fixture.skip`Scheduler: Layout Views: Timeline Month`
   .page(url(__dirname, '../../../../container.html'));
 
 safeSizeTest('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t) => {

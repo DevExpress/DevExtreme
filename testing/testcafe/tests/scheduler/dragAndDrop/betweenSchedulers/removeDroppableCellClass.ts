@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 
-fixture`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
+fixture.skip`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
   .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';

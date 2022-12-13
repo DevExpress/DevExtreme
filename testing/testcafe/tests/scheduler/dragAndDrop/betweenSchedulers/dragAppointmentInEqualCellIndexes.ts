@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 
-fixture`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
+fixture.skip`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
   .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';

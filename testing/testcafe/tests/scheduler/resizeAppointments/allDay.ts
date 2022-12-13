@@ -4,7 +4,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Resize appointments in All Day Panel`
+fixture.skip`Resize appointments in All Day Panel`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Resize in the workWeek view between weeks', async (t) => {

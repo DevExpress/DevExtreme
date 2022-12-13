@@ -4,7 +4,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-and-drop appointments in the Scheduler timeline views`
+fixture.skip`Drag-and-drop appointments in the Scheduler timeline views`
   .page(url(__dirname, '../../container.html'));
 
 ['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => safeSizeTest(`Drag-n-drop in the "${view}" view`, async (t) => {

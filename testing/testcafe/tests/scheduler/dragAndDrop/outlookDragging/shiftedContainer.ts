@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Outlook dragging base tests in shifted container`
+fixture.skip`Outlook dragging base tests in shifted container`
   .page(url(__dirname, 'shiftedContainer.html'));
 
 safeSizeTest('Basic drag-n-drop movements in shifted container', async (t) => {

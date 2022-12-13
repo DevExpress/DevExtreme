@@ -4,7 +4,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:view switching`
+fixture.skip`Agenda:view switching`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('View switching should work for empty agenda', async (t) => {

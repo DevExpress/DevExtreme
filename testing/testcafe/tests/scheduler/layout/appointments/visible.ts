@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Appointments:visible`
+fixture.skip`Layout:Appointments:visible`
   .page(url(__dirname, '../../../container.html'));
 
 [1, 0].forEach((maxAppointmentsPerCell) => {

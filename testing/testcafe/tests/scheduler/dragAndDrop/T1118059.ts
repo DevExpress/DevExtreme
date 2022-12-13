@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 const SCHEDULER_SELECTOR = '#container';
 const EVENT_BOX_SELECTOR = '#event-text-box';
 
-fixture`T1118059`
+fixture.skip`T1118059`
   .page(url(__dirname, './pages/T1118059.html'));
 
 test('After drag to draggable component, should be called onAppointmentDeleting event only', async (t) => {

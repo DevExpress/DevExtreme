@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment popup form:date editors`
+fixture.skip`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Form date editors should be pass numeric chars according by date mask', async (t) => {

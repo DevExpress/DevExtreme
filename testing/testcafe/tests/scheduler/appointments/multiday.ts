@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - Multiday appointments`
+fixture.skip`Scheduler - Multiday appointments`
   .page(url(__dirname, '../../container.html'));
 
 const checkAllDayAppointment = async (

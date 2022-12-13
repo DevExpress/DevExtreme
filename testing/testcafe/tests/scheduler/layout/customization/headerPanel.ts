@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: Layout Customization: Header Panel`
+fixture.skip`Scheduler: Layout Customization: Header Panel`
   .page(url(__dirname, './headerPanelCustomizationContainer.html'));
 
 const createScheduler = async (

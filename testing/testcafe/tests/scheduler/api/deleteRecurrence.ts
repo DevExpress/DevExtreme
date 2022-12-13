@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Scheduler API - deleteRecurrence`
+fixture.skip`Scheduler API - deleteRecurrence`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('should delete recurrent appointment if mode is "series"', async (t) => {

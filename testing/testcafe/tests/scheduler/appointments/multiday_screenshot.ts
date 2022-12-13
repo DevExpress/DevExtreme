@@ -4,7 +4,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - Multiday appointments (screenshot)`
+fixture.skip`Scheduler - Multiday appointments (screenshot)`
   .page(url(__dirname, '../../container.html'));
 
 [

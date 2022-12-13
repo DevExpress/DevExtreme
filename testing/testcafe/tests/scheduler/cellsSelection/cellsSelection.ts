@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Scheduler: Cells Selection in Virtual Scrolling`
+fixture.skip`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Selection should work correctly with all-day panel appointments', async (t) => {

@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: Layout Customization: Cell Sizes`
+fixture.skip`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, './cellSizesCustomizationContainer.html'));
 
 const createScheduler = async (

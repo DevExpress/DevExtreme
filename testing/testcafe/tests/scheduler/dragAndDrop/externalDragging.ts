@@ -4,7 +4,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-n-drop from another draggable area`
+fixture.skip`Drag-n-drop from another draggable area`
   .page(url(__dirname, './pages/containerWithDnD.html'));
 
 safeSizeTest('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {

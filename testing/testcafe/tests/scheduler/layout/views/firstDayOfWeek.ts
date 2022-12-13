@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: View with first day of week`
+fixture.skip`Scheduler: View with first day of week`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('WorkWeek should generate correct start view date', async (t) => {

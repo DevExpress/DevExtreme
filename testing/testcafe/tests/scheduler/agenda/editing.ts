@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:Editing`
+fixture.skip`Agenda:Editing`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('It should be possible to delete an appointment', async (t) => {

@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-and-drop behaviour for the appointment tooltip`
+fixture.skip`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {

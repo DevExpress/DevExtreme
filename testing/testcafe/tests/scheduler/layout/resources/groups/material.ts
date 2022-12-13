@@ -5,7 +5,7 @@ import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture`Scheduler: Material theme layout`
+fixture.skip`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {

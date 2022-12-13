@@ -5,7 +5,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Outlook dragging, for case scheduler in container`
+fixture.skip`Outlook dragging, for case scheduler in container`
   .page(url(__dirname, '../../../../container.html'));
 
 safeSizeTest('Dragging should be work right in case dxScheduler placed in dxTabPanel', async (t) => {

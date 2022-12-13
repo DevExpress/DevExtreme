@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Cancel drag-n-drop when dragging an appointment inside the scheduler`
+fixture.skip`Cancel drag-n-drop when dragging an appointment inside the scheduler`
   .page(url(__dirname, '../../../container.html'));
 
 const METHODS_TO_CANCEL = [

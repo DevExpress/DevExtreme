@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Timeline Appointments`
+fixture.skip`Timeline Appointments`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t) => {

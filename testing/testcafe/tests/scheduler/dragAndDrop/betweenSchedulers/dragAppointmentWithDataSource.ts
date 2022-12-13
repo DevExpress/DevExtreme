@@ -4,7 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 
-fixture`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
+fixture.skip`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
   .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
 
 interface TestAppointment {

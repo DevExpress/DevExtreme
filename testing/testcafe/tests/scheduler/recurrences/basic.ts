@@ -5,7 +5,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Rendering of the recurrence appointments in  Scheduler `
+fixture.skip`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {

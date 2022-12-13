@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Resize appointments - Zooming`
+fixture.skip`Resize appointments - Zooming`
   .page(url(__dirname, './pages/zooming.html'));
 
 safeSizeTest('Vertical resize with zooming', async (t) => {

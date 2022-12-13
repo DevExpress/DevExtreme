@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-n-drop to fake cell`
+fixture.skip`Drag-n-drop to fake cell`
   .page(url(__dirname, './pages/containerWithFakeCell.html'));
 
 safeSizeTest('Should not select cells outside the scheduler(T1040795)', async (t) => {

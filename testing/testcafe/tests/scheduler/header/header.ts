@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler header`
+fixture.skip`Scheduler header`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('dateNavigator buttons should not be selected after clicking', async (t) => {

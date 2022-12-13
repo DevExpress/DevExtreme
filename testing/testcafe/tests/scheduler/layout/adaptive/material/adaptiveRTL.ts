@@ -13,7 +13,7 @@ import {
 } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture`Scheduler: Adaptive Material theme layout in RTL`
+fixture.skip`Scheduler: Adaptive Material theme layout in RTL`
   .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (

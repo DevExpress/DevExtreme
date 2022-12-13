@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:API`
+fixture.skip`Agenda:API`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Html elements should be absent in Agenda view', async (t) => {

@@ -4,7 +4,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment (T1080232)`
+fixture.skip`Appointment (T1080232)`
   .page(url(__dirname, './pages/T1080232.html'));
 
 safeSizeTest('it should correctly drag external item to the appointment after drag appointment', async (t) => {

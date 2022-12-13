@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
-fixture`Scheduler - All day appointments`
+fixture.skip`Scheduler - All day appointments`
   .page(url(__dirname, './containers/containerAllDay.html'));
 
 const data = [{

@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`T1046067`
+fixture.skip`T1046067`
   .page(url(__dirname, './pages/T1046067.html'));
 
 safeSizeTest('Drag-n-Drop appointment where disabled property is set as a function (T1046067)', async (t) => {

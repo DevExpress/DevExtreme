@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`DataSource`
+fixture.skip`DataSource`
   .page(url(__dirname, './pages/containerWithArrayStore.html'));
 
 // TODO SKIPPED TEST: Why this test is skipped?

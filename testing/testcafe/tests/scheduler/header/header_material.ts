@@ -6,7 +6,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import { changeTheme } from '../../../helpers/changeTheme';
 
-fixture`Scheduler header: material theme`
+fixture.skip`Scheduler header: material theme`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {

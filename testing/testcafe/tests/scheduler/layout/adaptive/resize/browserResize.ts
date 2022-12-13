@@ -4,7 +4,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Layout:BrowserResize`
+fixture.skip`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'));
 
 const data = [{

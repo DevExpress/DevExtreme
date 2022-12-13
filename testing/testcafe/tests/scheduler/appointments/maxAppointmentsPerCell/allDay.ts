@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: max appointments per cell: All day`
+fixture.skip`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'));
 
 ['auto', 'unlimited', 1, 3, 10].forEach((maxAppointmentsPerCellValue) => {

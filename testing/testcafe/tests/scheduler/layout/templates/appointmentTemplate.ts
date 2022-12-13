@@ -5,7 +5,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Templates:appointmentTemplate`
+fixture.skip`Layout:Templates:appointmentTemplate`
   .page(url(__dirname, '../../../container.html'));
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {

@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Date navigator`
+fixture.skip`Date navigator`
   .page(url(__dirname, '../../container.html'));
 
 [{

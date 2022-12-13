@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Appointments:disable`
+fixture.skip`Layout:Appointments:disable`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Appointment popup should be readOnly if appointment is disabled', async (t) => {

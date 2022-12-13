@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Appointments in TimelineMonth`
+fixture.skip`Appointments in TimelineMonth`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Appointments should have correct order', async (t) => {

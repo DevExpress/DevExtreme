@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:AppointmentForm:IntegerFormatNumberBox`
+fixture.skip`Layout:AppointmentForm:IntegerFormatNumberBox`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {

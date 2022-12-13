@@ -3,7 +3,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Scheduler Timeline: Cross-Scrolling`
+fixture.skip`Scheduler Timeline: Cross-Scrolling`
   .page(url(__dirname, '../../../../container.html'));
 
 safeSizeTest('Timeline should have Cross-Scrolling enabled', async (t) => {

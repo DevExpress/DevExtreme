@@ -6,7 +6,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture`Scheduler: Material theme layout`
+fixture.skip`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
 safeSizeTest('Scheduler should have correct height in month view (T927862)', async (t) => {

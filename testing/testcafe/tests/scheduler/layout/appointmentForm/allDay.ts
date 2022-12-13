@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:AppointmentForm:AllDay`
+fixture.skip`Layout:AppointmentForm:AllDay`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {

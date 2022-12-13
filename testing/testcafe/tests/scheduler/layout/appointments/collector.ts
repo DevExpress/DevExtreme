@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Appointments collector`
+fixture.skip`Appointments collector`
   .page(url(__dirname, '../../../container.html'));
 
 safeSizeTest('Appointment collector has correct offset when adaptivityEnabled=true', async (t) => {

@@ -13,7 +13,7 @@ import {
 } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture`Scheduler: Adaptive material theme layout`
+fixture.skip`Scheduler: Adaptive material theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (

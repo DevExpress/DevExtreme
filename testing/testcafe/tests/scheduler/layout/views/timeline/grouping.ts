@@ -3,7 +3,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Scheduler Timeline: Grouping`
+fixture.skip`Scheduler Timeline: Grouping`
   .page(url(__dirname, '../../../../container.html'));
 
 [

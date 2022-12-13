@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Layout:AppointmentForm:TimezoneEditors(T1080932)`
+fixture.skip`Layout:AppointmentForm:TimezoneEditors(T1080932)`
   .page(url(__dirname, '../../container.html'));
 
 const dataSource = [{
