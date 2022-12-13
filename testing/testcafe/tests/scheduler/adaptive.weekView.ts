@@ -1,10 +1,11 @@
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
-fixture`Week view in adaptive mode`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Week view in adaptive mode`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const scheduler = new Scheduler('#container');
 
@@ -94,7 +95,9 @@ const roughEqual = (actual: number, expected: number): boolean => {
       .ok()
       .expect(roughEqual(width, testCase.width))
       .ok();
-  }, [testCase.windowWidth, 700]).before(async () => createScheduler(sampleData, '80%'));
+  }, [testCase.windowWidth, 700])
+    .before(async () => createScheduler(sampleData, '80%'))
+    .after(async () => disposeWidgets());
 });
 
 safeSizeTest('Compact appointment should be center by vertical alignment', async (t) => {
@@ -115,7 +118,9 @@ safeSizeTest('Compact appointment should be center by vertical alignment', async
     .ok()
     .expect(roughEqual(await scheduler.collectors.get(2).element.getBoundingClientRectProperty('left'), 177))
     .ok();
-}, [350, 600]).before(async () => createScheduler(sampleDataNotRoundedMinutes));
+}, [350, 600])
+  .before(async () => createScheduler(sampleDataNotRoundedMinutes))
+  .after(async () => disposeWidgets());
 
 safeSizeTest('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
   await t
@@ -147,4 +152,6 @@ safeSizeTest('With a large browser width, should be visible common appointment i
     .ok()
     .expect(roughEqual(await scheduler.collectors.get(1).element.getBoundingClientRectProperty('left'), 236.5))
     .ok();
-}, [350, 600]).before(async () => createScheduler(sampleData));
+}, [350, 600])
+  .before(async () => createScheduler(sampleData))
+  .after(async () => disposeWidgets());

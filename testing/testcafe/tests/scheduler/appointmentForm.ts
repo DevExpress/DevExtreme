@@ -1,13 +1,13 @@
 import { Selector } from 'testcafe';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
-fixture`Appointment popup form`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Appointment popup form`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Subject and description fields should be empty after showing popup on empty cell', async (t) => {
+test('Subject and description fields should be empty after showing popup on empty cell', async (t) => {
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';
 
   const scheduler = new Scheduler('#container');
@@ -42,7 +42,7 @@ safeSizeTest('Subject and description fields should be empty after showing popup
   ],
 }, true));
 
-safeSizeTest('Custom form shouldn\'t throw exception, after second show appointment form(T812654)', async (t) => {
+test('Custom form shouldn\'t throw exception, after second show appointment form(T812654)', async (t) => {
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';
   const TEXT_EDITOR_CLASS = '.dx-texteditor-input';
   const CHECKBOX_CLASS = '.dx-checkbox.dx-widget';
@@ -99,7 +99,7 @@ safeSizeTest('Custom form shouldn\'t throw exception, after second show appointm
   ],
 }, true));
 
-safeSizeTest('Appointment should have correct form data on consecutive shows (T832711)', async (t) => {
+test('Appointment should have correct form data on consecutive shows (T832711)', async (t) => {
   const APPOINTMENT_TEXT = 'Google AdWords Strategy';
 
   const scheduler = new Scheduler('#container');
@@ -139,7 +139,7 @@ safeSizeTest('Appointment should have correct form data on consecutive shows (T8
   height: 580,
 }, true));
 
-safeSizeTest('From elements for disabled appointments should be read only (T835731)', async (t) => {
+test('From elements for disabled appointments should be read only (T835731)', async (t) => {
   const APPOINTMENT_TEXT = 'Install New Router in Dev Room';
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
@@ -176,7 +176,7 @@ safeSizeTest('From elements for disabled appointments should be read only (T8357
   height: 600,
 }));
 
-safeSizeTest('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
+test('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
