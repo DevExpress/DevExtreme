@@ -19,7 +19,7 @@ fixture.disablePageReloads`Integration_DataGrid`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setAttribute('#container', 'style', 'width: 300px');
+    await setAttribute('#container', 'style', 'width: 300px; height: 200px;');
 
     await appendElementTo('#container', 'table', 'outerTable', {});
     await appendElementTo('#outerTable', 'tr', 'outerTableTR', {});

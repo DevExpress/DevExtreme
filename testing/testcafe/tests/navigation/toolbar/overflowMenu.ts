@@ -19,7 +19,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 // eslint-disable-next-line max-len
 const states = [false] as any[]; // FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`
 
-fixture.disablePageReloads`Toolbar_OverflowMenu`
+fixture`Toolbar_OverflowMenu`
   .page(url(__dirname, '../../container.html'))
   .afterEach(() => disposeWidgets());
 
@@ -80,7 +80,7 @@ test('Drop down button should lost hover and active state', async (t) => {
       { text: 'item1', locateInMenu: 'always' },
       { text: 'item2', locateInMenu: 'always' },
       { text: 'item3', locateInMenu: 'always' }],
-  }, true, '#toolbar');
+  }, false, '#toolbar');
 });
 
 test('ButtonGroup item should not have hover and active state', async (t) => {
