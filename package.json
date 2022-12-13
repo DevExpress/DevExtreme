@@ -60,8 +60,7 @@
         "lint:eslint": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern packages/*/src/**",
         "lint:eslint:fix": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern --fix packages/*/src/**",
         "tsc:build": "tsc --build ./tsconfig.project.json",
-        "tsc:watch": "npm run tsc:build -- --watch",
-        "update:tsconfig": "ts-node-esm scripts/update-package-tsconfig.ts"
+        "tsc:watch": "npm run tsc:build -- --watch"
     },
     "workspaces": [
         "packages/*",
