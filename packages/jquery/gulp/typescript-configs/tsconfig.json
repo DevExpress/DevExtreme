@@ -1,13 +1,16 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
+        "target": "ESNext",
         "module": "ESNext",
         "strict": false,
+        "moduleResolution": "node",
         "esModuleInterop": false,
         "typeRoots": ["node_modules/@types"],
         "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
-        "declaration": true
+        "jsx": "preserve",
+        "declaration": true,
+        "isolatedModules": true,
+        "allowSyntheticDefaultImports": true  
     },
     "exclude": [
         "node_modules"

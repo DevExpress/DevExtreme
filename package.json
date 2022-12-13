@@ -43,8 +43,9 @@
         "build:angular": "nx build @devextreme/angular",
         "build:core": "nx build @devextreme/core",
         "build:react": "nx build @devextreme/react",
+        "build:playgrounds": "nx run-many --target=build --projects=@playgrounds/angular,@playgrounds/react --skip-nx-cache",
         "build:packages": "npm run build:core && npm run build:react",
-        "build": "nx run-many --target=build --projects=@devextreme/core,@devextreme/components,@devextreme/react,@devextreme/ui-core --skip-nx-cache",
+        "build": "nx run-many --target=build --projects=@devextreme/core,@devextreme/components,@devextreme/react,@devextreme/ui-core,@devextreme/jquery --skip-nx-cache",
         "start:react": "nx start @playgrounds/react",
         "start:angular": "nx start @playgrounds/angular",
         "watch": "nx run-many --target=watch",
@@ -61,8 +62,7 @@
         "lint:packages": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern packages/*/src/**",
         "lint:packages:fix": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern --fix packages/*/src/**",
         "tsc:build": "tsc --build ./tsconfig.project.json",
-        "tsc:watch": "npm run tsc:build -- --watch",
-        "update:tsconfig": "ts-node-esm scripts/update-package-tsconfig.ts"
+        "tsc:watch": "npm run tsc:build -- --watch"
     },
     "workspaces": [
         "packages/*",
