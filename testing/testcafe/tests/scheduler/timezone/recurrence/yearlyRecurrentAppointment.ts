@@ -1,14 +1,14 @@
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import url from '../../../../helpers/getPageUrl';
 import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 
 const SCREENSHOT_BASE_NAME = 'timezone-yearly-recurrent';
 
-fixture`Yearly recurrent appointments with timezones`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Yearly recurrent appointments with timezones`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Should correctly display the recurrent yearly appointment with the same timezone', async (t) => {
+test('Should correctly display the recurrent yearly appointment with the same timezone', async (t) => {
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__same-timezone');
 }).before(async () => {
@@ -35,7 +35,7 @@ safeSizeTest('Should correctly display the recurrent yearly appointment with the
   });
 });
 
-safeSizeTest('Should correctly display the recurrent yearly appointment with a greater time timezone', async (t) => {
+test('Should correctly display the recurrent yearly appointment with a greater time timezone', async (t) => {
   // expected date: 4/29/2021 2:00 AM - 4:00 AM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__greater-timezone');
 }).before(async () => {
@@ -62,7 +62,7 @@ safeSizeTest('Should correctly display the recurrent yearly appointment with a g
   });
 });
 
-safeSizeTest('Should correctly display the recurrent yearly appointment with a lower time timezone', async (t) => {
+test('Should correctly display the recurrent yearly appointment with a lower time timezone', async (t) => {
   // expected date: 4/27/2021 2:00 PM - 4:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__lower-timezone');
 }).before(async () => {
@@ -89,7 +89,7 @@ safeSizeTest('Should correctly display the recurrent yearly appointment with a l
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment if start date
+test(`Should correctly display the recurrent yearly appointment if start date
 lower than recurrent date with the same timezone`, async (t) => {
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'lower-date__same-timezone');
@@ -117,7 +117,7 @@ lower than recurrent date with the same timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment if start date
+test(`Should correctly display the recurrent yearly appointment if start date
 lower than recurrent date with a greater time timezone`, async (t) => {
   // expected date: 4/29/2021 2:00 AM - 4:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'lower-date__greater-timezone');
@@ -145,7 +145,7 @@ lower than recurrent date with a greater time timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment if start date
+test(`Should correctly display the recurrent yearly appointment if start date
 lower than recurrent date with a lower time timezone`, async (t) => {
   // expected date: 4/27/2021 4:00 PM - 6:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'lower-date__lower-timezone');
@@ -173,7 +173,7 @@ lower than recurrent date with a lower time timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment at first date if start date
+test(`Should correctly display the recurrent yearly appointment at first date if start date
 greater than recurrent date with the same timezone`, async (t) => {
   // expected no visible date
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__same-timezone__same-view-date');
@@ -201,7 +201,7 @@ greater than recurrent date with the same timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment at next date if start date
+test(`Should correctly display the recurrent yearly appointment at next date if start date
 greater than recurrent date with the same timezone`, async (t) => {
   // expected date: 4/28/2022 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__same-timezone__next-view-date');
@@ -229,7 +229,7 @@ greater than recurrent date with the same timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment at first date if start date
+test(`Should correctly display the recurrent yearly appointment at first date if start date
 greater than recurrent date with a greater time timezone`, async (t) => {
   // expected no visible date
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__greater-timezone__same-view-date');
@@ -257,7 +257,7 @@ greater than recurrent date with a greater time timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment at next date if start date
+test(`Should correctly display the recurrent yearly appointment at next date if start date
 greater than recurrent date with a greater time timezone`, async (t) => {
   // expected date: 4/29/2022 2:00 AM - 4:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__greater-timezone__next-view-date');
@@ -285,7 +285,7 @@ greater than recurrent date with a greater time timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment at first date if start date
+test(`Should correctly display the recurrent yearly appointment at first date if start date
 greater than recurrent date with a lower time timezone`, async (t) => {
   // expected no visible date
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__lower-timezone__same-view-date');
@@ -313,7 +313,7 @@ greater than recurrent date with a lower time timezone`, async (t) => {
   });
 });
 
-safeSizeTest(`Should correctly display the recurrent yearly appointment at next date if start date
+test(`Should correctly display the recurrent yearly appointment at next date if start date
 greater than recurrent date with a lower time timezone`, async (t) => {
   // expected date: 4/27/2022 4:00 PM - 6:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'greater-date__lower-timezone__next-view-date');
