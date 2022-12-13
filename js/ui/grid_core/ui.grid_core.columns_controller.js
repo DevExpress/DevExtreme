@@ -603,6 +603,7 @@ export const columnsControllerModule = {
             };
 
             function assignColumns(that, columns) {
+                that._previousColumns = that._columns;
                 that._columns = columns;
                 resetColumnsCache(that);
                 that.updateColumnDataTypes();
@@ -653,7 +654,9 @@ export const columnsControllerModule = {
                     }
                     that._columnChanges = undefined;
                     if(needReinit(columnChanges.optionNames)) {
+                        that._reinitAfterLookupChanges = columnChanges?.optionNames['lookup'];
                         that.reinit();
+                        that._reinitAfterLookupChanges = undefined;
                     } else {
                         that.columnsChanged.fire(columnChanges);
                     }
@@ -1818,6 +1821,13 @@ export const columnsControllerModule = {
                 },
                 _updateColumnOptions: function(column, columnIndex) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
+                    if(this._reinitAfterLookupChanges && this._previousColumns) {
+                        column.selector.columnIndex = columnIndex;
+                        column.selector.originalCallback = this._previousColumns[columnIndex].selector.originalCallback;
+                    } else {
+                        column.selector.columnIndex = columnIndex;
+                        column.selector.originalCallback = column.selector;
+                    }
 
                     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         const calculateCallback = column[calculateCallbackName];
