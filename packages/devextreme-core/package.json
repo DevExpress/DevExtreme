@@ -5,6 +5,10 @@
     "scripts": {
         "build": "rollup -c rollup/rollup.config.mjs"
     },
+    "dependencies": {
+        "inferno": "^7.4.11",
+        "@devextreme/runtime": "^4.0.0"
+    },
     "exports": {
         ".": {
             "types": "./lib/index.d.ts",
