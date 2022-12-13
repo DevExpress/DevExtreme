@@ -31,13 +31,6 @@ function CustomItemComponent({ data }: { data: AnyRecord }) {
 export function RadioGroupCompatibleExample() {
   const [selectedValue, setSelectedValue] = useState<RadioGroupValue | undefined>(1);
   const handleChange = (value?: RadioGroupValue) => setSelectedValue(value);
-  const renderCustomItem = ({ text }: { text: string }, index: number) => (
-    <strong style={{ color: text }}>
-      Color
-      {' '}
-      {index}
-    </strong>
-  );
 
   return (
     <>
@@ -97,7 +90,13 @@ export function RadioGroupCompatibleExample() {
           <RadioGroupCompatible
             defaultValue={objectItems3[2].text}
             items={objectItems3}
-            itemRender={renderCustomItem}
+            itemRender={(item, index) => (
+              <strong style={{ color: item.text }}>
+                Color
+                {' '}
+                {index}
+              </strong>
+            )}
           />
         </div>
       </div>
