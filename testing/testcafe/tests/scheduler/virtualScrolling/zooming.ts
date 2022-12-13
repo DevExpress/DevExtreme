@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import {
   resources,
@@ -12,8 +11,9 @@ import {
   scrollConfig,
 } from './utils';
 
-fixture`Scheduler: Virtual Scrolling with Zooming`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler: Virtual Scrolling with Zooming`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -31,7 +31,7 @@ const createScheduler = async (
   }, true);
 };
 
-safeSizeTest('Virtual scrolling layout in scheduler views when horizontal grouping is enabled and zooming is used', async (t) => {
+test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled and zooming is used', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -58,6 +58,8 @@ safeSizeTest('Virtual scrolling layout in scheduler views when horizontal groupi
     ).ok();
   }
 
+  await setZoomLevel(0);
+
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -66,6 +68,4 @@ safeSizeTest('Virtual scrolling layout in scheduler views when horizontal groupi
     views: horizontalViews,
     groups: ['resourceId'],
   });
-}).after(async () => {
-  await setZoomLevel(0);
 });

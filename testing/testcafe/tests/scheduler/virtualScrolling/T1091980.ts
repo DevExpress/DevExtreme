@@ -1,12 +1,12 @@
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler: Virtual scrolling`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler: Virtual scrolling`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('it should correctly render virtual table if scheduler sizes are set in % (T1091980)', async (t) => {
+test('it should correctly render virtual table if scheduler sizes are set in % (T1091980)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
