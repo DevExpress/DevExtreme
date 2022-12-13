@@ -100,9 +100,9 @@ class SchedulerAppointments extends CollectionWidget {
                 if(this.resizeOccur) {
                     this.moveAppointmentBack();
                     this.resizeOccur = false;
-                    currentAppointment.dxResizable('instance')._detachEventHandlers();
-                    currentAppointment.dxResizable('instance')._attachEventHandlers();
-                    currentAppointment.dxResizable('instance')._toggleResizingClass(false);
+                    currentAppointment.dxResizable('instance')?._detachEventHandlers();
+                    currentAppointment.dxResizable('instance')?._attachEventHandlers();
+                    currentAppointment.dxResizable('instance')?._toggleResizingClass(false);
                 }
             }).bind(this),
             del: (function(e) {
