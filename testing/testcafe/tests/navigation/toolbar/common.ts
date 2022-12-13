@@ -86,7 +86,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
   test(`Toolbar with dropDownButton,items[].locateInMenu=${locateInMenu}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const toolbar = new Toolbar('#container');
+    const toolbar = new Toolbar('#toolbar');
     const overflowMenu = toolbar.getOverflowMenu();
     let targetContainer = Selector('#container');
 
