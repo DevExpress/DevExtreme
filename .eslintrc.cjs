@@ -79,6 +79,12 @@ module.exports = {
             'files': ['*.ts', '*.tsx', '*.js', '*.jsx'],
             'rules': {},
         },
+        {
+            'files': ['jest.config.ts'],
+            'rules': {
+                'import/no-default-export': 'off'
+            },
+        },
     ],
     'settings': {
         'import/resolver': {
