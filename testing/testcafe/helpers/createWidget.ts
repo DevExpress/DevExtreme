@@ -82,7 +82,7 @@ export async function disposeWidgets(): Promise<void> {
     $('#otherContainer').remove();
 
     const containerElement = document.createElement('div');
-    containerElement.setAttribute('id', 'container2');
+    containerElement.setAttribute('id', 'container');
 
     const otherContainerElement = document.createElement('div');
     otherContainerElement.setAttribute('id', 'otherContainer');
