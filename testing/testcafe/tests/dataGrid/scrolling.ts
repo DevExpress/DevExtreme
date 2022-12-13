@@ -508,7 +508,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
   });
 });
 
-test('New virtual mode. Virtual rows should not be in view port', async (t) => {
+test.skip('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
@@ -909,7 +909,6 @@ test('Scroll to the bottom after expand several group', async (t) => {
 
   const scrollToBottom = async () => {
     await dataGrid.scrollTo({ y: 100000 });
-    await t.wait(500);
     await t.expect(dataGrid.isReady()).ok();
   };
 
@@ -1049,7 +1048,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
   });
 });
 
-test('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test.skip('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
