@@ -1,11 +1,11 @@
-import createWidget from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
-fixture`Scheduler: Navigator`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Scheduler: Navigator`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', extend(options, {
@@ -17,7 +17,7 @@ const createScheduler = async (options = {}): Promise<void> => {
   }), true);
 };
 
-safeSizeTest('Navigator can change week when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
+test('Navigator can change week when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   // Navigation `next` must be enabled at default
@@ -35,7 +35,7 @@ safeSizeTest('Navigator can change week when current date interval is more than 
   currentView: 'week',
 }));
 
-safeSizeTest('Navigator can change week when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
+test('Navigator can change week when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   // Navigation `prev` must be enabled at default
@@ -53,7 +53,7 @@ safeSizeTest('Navigator can change week when current date interval is more than 
   currentView: 'week',
 }));
 
-safeSizeTest('Navigator can change month when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
+test('Navigator can change month when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   // Navigation `next` must be enabled at default
@@ -71,7 +71,7 @@ safeSizeTest('Navigator can change month when current date interval is more than
   currentView: 'month',
 }));
 
-safeSizeTest('Navigator can change month when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
+test('Navigator can change month when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   // Navigation `prev` must be enabled at default
