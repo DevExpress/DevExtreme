@@ -32,7 +32,7 @@ function getData(rowCount, colCount): Record<string, string>[] {
 
 fixture`Scrolling`
   .page(url(__dirname, '../container.html'))
-  .beforeEach((t) => t.maximizeWindow());
+  .beforeEach(async (t) => { await t.maximizeWindow(); });
 
 test('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -917,6 +917,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
   };
 
   // act
+  await t.wait(200);
   await t.expect(dataGrid.hasScrollable()).ok();
   await scrollToBottom();
   await scrollToBottom();
