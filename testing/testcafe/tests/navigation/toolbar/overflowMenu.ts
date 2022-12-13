@@ -47,8 +47,6 @@ test('Drop down button should lost hover and active state', async (t) => {
     .click(dropDownMenu.element)
     .expect(dropDownMenu.isActive)
     .notOk()
-    .expect(dropDownMenu.isFocused)
-    .ok()
     .expect(dropDownMenu.isHovered)
     .ok();
 
