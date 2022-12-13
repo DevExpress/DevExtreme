@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
 import {
+  LabelTemplateProps,
   RadioButton,
   RadioTemplateProps,
-  LabelTemplateProps,
 } from '@devextreme/react';
+import { useState } from 'react';
 
-const CustomRadio: React.FC<RadioTemplateProps> = ({ checked }) => (
-  <span>{checked ? '+' : '-'}</span>
-);
+function CustomRadio({ checked }: RadioTemplateProps) {
+  return <span>{checked ? '+' : '-'}</span>;
+}
 
-const CustomLabel: React.FC<LabelTemplateProps> = ({ label }) => <b>{label}</b>;
+function CustomLabel({ label }: LabelTemplateProps) {
+  return <b>{label}</b>;
+}
 
 export function RadioButtonExample() {
   const [checked1, setChecked1] = useState(false);
