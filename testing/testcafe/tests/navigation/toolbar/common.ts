@@ -17,7 +17,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
     test(`Default nested widgets render,items[].locateInMenu=${locateInMenu},rtl=${rtlEnabled}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const toolbar = new Toolbar('#container');
+      const toolbar = new Toolbar('#toolbar');
       let targetContainer = Selector('#container');
 
       const overflowMenu = toolbar.getOverflowMenu();
@@ -44,6 +44,9 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await appendElementTo('#container', 'div', 'toolbar');
+      await setAttribute('#container', 'style', 'width: 1184px;');
+
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
         const itemConfig = {
@@ -75,8 +78,8 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
       return createWidget('dxToolbar', {
         items: toolbarItems,
         rtlEnabled,
-        width: locateInMenu === 'auto' ? 50 : 1184,
-      });
+        width: locateInMenu === 'auto' ? 50 : '100%',
+      }, false, '#toolbar');
     });
   });
 
@@ -106,6 +109,9 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await appendElementTo('#container', 'div', 'toolbar');
+    await setAttribute('#container', 'style', 'width: 1184px;');
+
     const toolbarItems = [
       {
         location: 'before',
@@ -146,8 +152,8 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
 
     return createWidget('dxToolbar', {
       items: toolbarItems,
-      width: locateInMenu === 'auto' ? 50 : 1184,
-    });
+      width: locateInMenu === 'auto' ? 50 : '100%',
+    }, false, '#toolbar');
   });
 });
 
