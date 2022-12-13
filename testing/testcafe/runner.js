@@ -130,7 +130,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: ['json', dashboardReporter],
+            reporter: ['minimal', dashboardReporter],
             componentFolder: '',
             file: '*',
             cache: true,

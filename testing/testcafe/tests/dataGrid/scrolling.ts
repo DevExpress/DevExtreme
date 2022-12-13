@@ -1089,11 +1089,6 @@ test.skip('New virtual mode. Navigation to the last row if new row is added (T10
 }));
 
 [false, true].forEach((useNative) => {
-  if (!useNative) {
-    // TODO: this scenario works incorrect for renovated scrollable
-    return;
-  }
-
   test(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
