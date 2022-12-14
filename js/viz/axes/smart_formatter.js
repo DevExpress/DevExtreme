@@ -9,6 +9,12 @@ const { abs, floor } = Math;
 const EXPONENTIAL = 'exponential';
 const formats = ['fixedPoint', 'thousands', 'millions', 'billions', 'trillions', EXPONENTIAL];
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
+const INTERVALS_MAP = {
+    'week': 'day',
+    'quarter': 'month',
+    'shorttime': 'hour',
+    'longtime': 'second'
+};
 
 function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
     let prevDifferences;
@@ -18,15 +24,7 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
     let i;
     let j;
 
-    if(tickIntervalFormat === 'week') {
-        tickIntervalFormat = 'day';
-    } else if(tickIntervalFormat === 'quarter') {
-        tickIntervalFormat = 'month';
-    } else if(tickIntervalFormat === 'shorttime') {
-        tickIntervalFormat = 'hour';
-    } else if(tickIntervalFormat === 'longtime') {
-        tickIntervalFormat = 'second';
-    }
+    tickIntervalFormat = INTERVALS_MAP[tickIntervalFormat] || tickIntervalFormat;
 
     const tickFormatIndex = dateUnitIntervals.indexOf(tickIntervalFormat);
 
