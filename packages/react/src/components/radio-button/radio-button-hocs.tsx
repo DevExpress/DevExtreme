@@ -13,7 +13,7 @@ import {
 } from './types';
 
 function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
-  return ({ defaultChecked, ...props }: RadioButtonRenderProps) => {
+  function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps) {
     const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
       setInternalChecked(event.target.checked);
@@ -32,14 +32,15 @@ function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
         renderRadioComponent={renderRadioComponent}
       />
     );
-  };
+  }
+  return UncontrolledRadioButton;
 }
 function withRadioGroup(RadioButton: RadioButtonRenderType) {
-  return ({
+  function CoreBoundRadioButton({
     radioGroupCore: { dispatcher, stateManager },
     value,
     ...props
-  }: CoreBoundRadioButtonProps) => {
+  }: CoreBoundRadioButtonProps) {
     const coreState = useCoreState(stateManager);
 
     const checked = coreState.value === value;
@@ -59,7 +60,9 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
         onChange={handleChange}
       />
     );
-  };
+  }
+
+  return CoreBoundRadioButton;
 }
 
 export const CoreBoundRadioButton = withRadioGroup(RadioButtonInternal);

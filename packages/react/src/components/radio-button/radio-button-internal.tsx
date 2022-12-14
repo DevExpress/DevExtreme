@@ -42,7 +42,7 @@ export function RadioButtonInternal({
         ) : (
           <RadioComponent checked={checked || false} />
         )}
-        {label && <LabelComponent label={label} />}
+        {label ? <LabelComponent label={label} /> : null}
       </label>
     </span>
   );

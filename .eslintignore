@@ -16,3 +16,7 @@ lib
 
 packages/jquery/*
 packages/interim/*
+
+/.off.eslintrc.js
+/gulpfile.js
+/webpack.config.js

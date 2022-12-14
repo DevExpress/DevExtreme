@@ -16,8 +16,7 @@ module.exports = {
     'react/jsx-no-literals': 'off',
     'comma-dangle': ['error', 'only-multiline'],
     'react/function-component-definition': [
-      'error',
-      {
+      'error', {
         namedComponents: 'function-declaration',
         unnamedComponents: 'arrow-function',
       },
@@ -25,7 +24,9 @@ module.exports = {
     'react/no-multi-comp': 'off',
     'react/jsx-sort-props': 'off',
     'react/jsx-newline': 'off',
+    'react/jsx-no-constructed-context-values': 'off',
     'react/jsx-max-depth': 'off',
+    'react/no-unstable-nested-components': 'off',
   },
   overrides: [
     {

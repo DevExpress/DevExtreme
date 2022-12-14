@@ -11,7 +11,7 @@ import {
 } from './types';
 
 //* Component={"name":"RadioButton", "jQueryRegistered":true, "hasApiMethod":true}
-export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
+const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (props, inputRef) => {
     const radioGroupCore = useContext(RadioGroupContext);
     const inputId = useId('radio-button');
@@ -40,3 +40,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     );
   },
 );
+
+RadioButton.displayName = 'RadioButton';
+
+export { RadioButton };
