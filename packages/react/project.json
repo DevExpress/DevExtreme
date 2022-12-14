@@ -8,7 +8,6 @@
             "executor": "nx:run-commands",
             "options": {
                 "commands": [
-                    "tsc -b -w ./tsconfig.package.json",
                     "rollup -c rollup/rollup.config.mjs --watch"
                 ],
                 "cwd": "packages/react",
