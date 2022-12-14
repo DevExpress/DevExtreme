@@ -1,13 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import { setAttribute } from '../../../navigation/helpers/domUtils';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Outlook dragging base tests in shifted container`
-  .page(url(__dirname, 'shiftedContainer.html'));
+fixture.disablePageReloads`Outlook dragging base tests in shifted container`
+  .page(url(__dirname, '../../../container.html'))
+  .after(async () => disposeWidgets());
 
-safeSizeTest('Basic drag-n-drop movements in shifted container', async (t) => {
+test('Basic drag-n-drop movements in shifted container', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -32,16 +33,20 @@ safeSizeTest('Basic drag-n-drop movements in shifted container', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
-  dataSource: [{
-    text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 2, 22, 10),
-    endDate: new Date(2021, 2, 22, 12, 30),
-  }],
-  views: ['week'],
-  currentView: 'week',
-  currentDate: new Date(2021, 2, 22),
-  startDayHour: 9,
-  height: 600,
-  width: 950,
-}));
+}).before(async () => {
+  await setAttribute('#container', 'style', ' margin-left: 50px; margin-top: 70px;');
+
+  return createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'Website Re-Design Plan',
+      startDate: new Date(2021, 2, 22, 10),
+      endDate: new Date(2021, 2, 22, 12, 30),
+    }],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 22),
+    startDayHour: 9,
+    height: 600,
+    width: 950,
+  });
+});

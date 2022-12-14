@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.skip`Layout:Appointments:disable`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Layout:Appointments:disable`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Appointment popup should be readOnly if appointment is disabled', async (t) => {
+test('Appointment popup should be readOnly if appointment is disabled', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

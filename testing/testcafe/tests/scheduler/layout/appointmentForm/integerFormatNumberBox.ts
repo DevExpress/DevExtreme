@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.skip`Layout:AppointmentForm:IntegerFormatNumberBox`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Layout:AppointmentForm:IntegerFormatNumberBox`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {
+test('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 

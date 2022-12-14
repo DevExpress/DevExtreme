@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.skip`Layout:BrowserResize`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Layout:BrowserResize`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const data = [{
   text: 'Website Re-Design Plan',
@@ -114,7 +114,7 @@ const resourceDataSource = [{
   currentView: 'timelineDay',
   currentDate: new Date(2017, 4, 26),
 }].forEach(({ currentView, currentDate }) => {
-  safeSizeTest(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
+  test(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

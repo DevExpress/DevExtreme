@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
@@ -12,8 +12,9 @@ import {
   horizontalViews,
 } from '../../utils';
 
-fixture.skip`Scheduler: Adaptive Generic theme layout`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Scheduler: Adaptive Generic theme layout`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -48,7 +49,7 @@ const createScheduler = async (
       currentView: 'day',
       crossScrollingEnabled,
     });
-  });
+  }).after(async () => disposeWidgets());
 
   safeSizeTest(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
@@ -73,7 +74,7 @@ const createScheduler = async (
       groups: ['priorityId'],
       resources: resourceDataSource,
     });
-  });
+  }).after(async () => disposeWidgets());
 
   safeSizeTest(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
@@ -98,5 +99,5 @@ const createScheduler = async (
       groups: ['priorityId'],
       resources: resourceDataSource,
     });
-  });
+  }).after(async () => disposeWidgets());
 });

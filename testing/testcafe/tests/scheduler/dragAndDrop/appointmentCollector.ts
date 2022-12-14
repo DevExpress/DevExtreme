@@ -1,15 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { appointmentCollectorData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.skip`Drag-and-drop behaviour for the appointment tooltip`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
+  .page(url(__dirname, '../../container.html'))
+  .after(async () => disposeWidgets());
 
-safeSizeTest('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
+test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Approve Personal Computer Upgrade Plan');
   const collector = scheduler.collectors.find('2');
@@ -42,7 +42,7 @@ safeSizeTest('Drag-n-drop between a scheduler table cell and the appointment too
   width: 1000,
 }));
 
-safeSizeTest('Drag-n-drop in same table cell', async (t) => {
+test('Drag-n-drop in same table cell', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('2');
   const { appointmentTooltip } = scheduler;
@@ -63,7 +63,7 @@ safeSizeTest('Drag-n-drop in same table cell', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Drag-n-drop to the cell below should work in month view (T1005115)', async (t) => {
+test('Drag-n-drop to the cell below should work in month view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1 more');
   const { appointmentTooltip } = scheduler;
@@ -105,7 +105,7 @@ safeSizeTest('Drag-n-drop to the cell below should work in month view (T1005115)
   height: 800,
 }));
 
-safeSizeTest('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
+test('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1');
   const { appointmentTooltip } = scheduler;

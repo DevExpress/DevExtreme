@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Appointments collector`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Appointments collector`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Appointment collector has correct offset when adaptivityEnabled=true', async (t) => {
+test('Appointment collector has correct offset when adaptivityEnabled=true', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

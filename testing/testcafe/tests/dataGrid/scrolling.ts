@@ -927,7 +927,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
   // assert
   const visibleRows = await dataGrid.apiGetVisibleRows();
   await t
-    .expect(visibleRows[0].key)
+    .expect(visibleRows[0])
     .eql(932043);
 })
   .before(async () => createWidget('dxDataGrid', () => ({

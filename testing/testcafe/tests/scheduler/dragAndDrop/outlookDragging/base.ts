@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Outlook dragging base tests`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Outlook dragging base tests`
+  .page(url(__dirname, '../../../container.html'))
+  .after(async () => disposeWidgets());
 
 test('Basic drag-n-drop movements in groups', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -54,7 +54,7 @@ test('Basic drag-n-drop movements in groups', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop movements from tooltip in week view', async (t) => {
+test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -101,7 +101,7 @@ safeSizeTest('Basic drag-n-drop movements from tooltip in week view', async (t) 
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop movements from tooltip in month view', async (t) => {
+test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -163,7 +163,7 @@ safeSizeTest('Basic drag-n-drop movements from tooltip in month view', async (t)
     endDate: new Date(2021, 2, 3, 11, 0),
   }],
 }].forEach(({ currentView, dataSource }) => {
-  safeSizeTest(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
+  test(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
     const scheduler = new Scheduler('#container');
     const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -191,7 +191,7 @@ safeSizeTest('Basic drag-n-drop movements from tooltip in month view', async (t)
   }));
 });
 
-safeSizeTest('Basic drag-n-drop movements', async (t) => {
+test('Basic drag-n-drop movements', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -230,7 +230,7 @@ safeSizeTest('Basic drag-n-drop movements', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop movements with mouse offset', async (t) => {
+test('Basic drag-n-drop movements with mouse offset', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -269,7 +269,7 @@ safeSizeTest('Basic drag-n-drop movements with mouse offset', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop all day appointment movements', async (t) => {
+test('Basic drag-n-drop all day appointment movements', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -308,7 +308,7 @@ safeSizeTest('Basic drag-n-drop all day appointment movements', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop movements within the cell', async (t) => {
+test('Basic drag-n-drop movements within the cell', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -343,7 +343,7 @@ safeSizeTest('Basic drag-n-drop movements within the cell', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop small appointments', async (t) => {
+test('Basic drag-n-drop small appointments', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -382,7 +382,7 @@ safeSizeTest('Basic drag-n-drop small appointments', async (t) => {
   width: 1000,
 }));
 
-safeSizeTest('Basic drag-n-drop long appointments', async (t) => {
+test('Basic drag-n-drop long appointments', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 

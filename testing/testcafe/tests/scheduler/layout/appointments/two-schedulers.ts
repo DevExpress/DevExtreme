@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.skip`Layout:Appointments:two-schedulers`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Layout:Appointments:two-schedulers`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Appointment\'s dragging should be work properly, if on page placed two dxSchedulers(T1020820)', async (t) => {
+test('Appointment\'s dragging should be work properly, if on page placed two dxSchedulers(T1020820)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
