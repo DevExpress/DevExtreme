@@ -16,11 +16,18 @@ describe('Themes', () => {
       genericColors.forEach((color) => knownThemes.push(generateThemeName('generic', size, color)));
     });
     const builderThemes: string[] = themes.map((t) => `${t.name}.${t.colorScheme}`);
+
     const nonListedBuilderThemes: string[] = knownThemes.filter((t) => !builderThemes.includes(t));
-    if (nonListedBuilderThemes.length > 0) console.log(nonListedBuilderThemes);
-    expect(nonListedBuilderThemes.length).toBe(0);
     const ownBuilderThemes: string[] = builderThemes.filter((t) => !knownThemes.includes(t));
-    if (ownBuilderThemes.length > 0) console.log(ownBuilderThemes);
+
+    if (nonListedBuilderThemes.length > 0) {
+      console.log(nonListedBuilderThemes);
+    }
+    if (ownBuilderThemes.length > 0) {
+      console.log(ownBuilderThemes);
+    }
+
+    expect(nonListedBuilderThemes.length).toBe(0);
     expect(ownBuilderThemes.length).toBe(0);
   });
 });
