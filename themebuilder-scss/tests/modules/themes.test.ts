@@ -7,17 +7,20 @@ import themes from '../../src/modules/themes';
 const generateThemeName = (theme: string, size: string, color: string, mode: string = null): string => `${theme}.${color}${mode ? `-${mode}` : ''}${size === 'default' ? '' : '-compact'}`;
 
 describe('Themes', () => {
-  test('check if all possible themes are available', () => {
-    const allThemes: string[] = [];
+  test('check components and theme builder themes', () => {
+    const knownThemes: string[] = [];
     sizes.forEach((size) => {
       materialModes.forEach((mode) => {
-        materialColors.forEach((color) => allThemes.push(generateThemeName('material', size, color, mode)));
+        materialColors.forEach((color) => knownThemes.push(generateThemeName('material', size, color, mode)));
       });
-      genericColors.forEach((color) => allThemes.push(generateThemeName('generic', size, color)));
+      genericColors.forEach((color) => knownThemes.push(generateThemeName('generic', size, color)));
     });
-    const builderConfigThemes: string[] = themes.map((t) => `${t.name}.${t.colorScheme}`);
-    const nonListedThemes = allThemes.filter((t) => !builderConfigThemes.includes(t));
-    if (nonListedThemes.length > 0) console.log(nonListedThemes);
-    expect(nonListedThemes.length).toBe(0);
+    const builderThemes: string[] = themes.map((t) => `${t.name}.${t.colorScheme}`);
+    const nonListedBuilderThemes: string[] = knownThemes.filter((t) => !builderThemes.includes(t));
+    if (nonListedBuilderThemes.length > 0) console.log(nonListedBuilderThemes);
+    expect(nonListedBuilderThemes.length).toBe(0);
+    const ownBuilderThemes: string[] = builderThemes.filter((t) => !knownThemes.includes(t));
+    if (ownBuilderThemes.length > 0) console.log(ownBuilderThemes);
+    expect(ownBuilderThemes.length).toBe(0);
   });
 });
