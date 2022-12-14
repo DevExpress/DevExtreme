@@ -1,14 +1,14 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.skip`Layout:Templates:appointmentTooltipTemplate`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Layout:Templates:appointmentTooltipTemplate`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('appointmentTooltipTemplate layout should be rendered right', async (t) => {
+test('appointmentTooltipTemplate layout should be rendered right', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

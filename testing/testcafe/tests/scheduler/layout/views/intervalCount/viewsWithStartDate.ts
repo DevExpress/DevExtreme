@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
-fixture.skip`Layout: Views: IntervalCount with StartDate`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 [{
   view: 'timelineDay',
@@ -45,7 +45,7 @@ fixture.skip`Layout: Views: IntervalCount with StartDate`
 }].forEach(({
   view, currentDate, startDate, intervalCount,
 }) => {
-  safeSizeTest(`startDate should work in ${view} view`, async (t) => {
+  test(`startDate should work in ${view} view`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -97,7 +97,7 @@ fixture.skip`Layout: Views: IntervalCount with StartDate`
 }].forEach(({
   view, currentDate, startDate, intervalCount,
 }) => {
-  safeSizeTest(`startDate should work in ${view} view when it indicates the same week as the start as currentDate`, async (t) => {
+  test(`startDate should work in ${view} view when it indicates the same week as the start as currentDate`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t

@@ -21,7 +21,7 @@ test('Vertical resize with zooming', async (t) => {
     .expect(height)
     .eql(515);
 }).before(async () => {
-  await setZoomLevel(125);
+  await setZoomLevel(110);
   await insertStylesheetRule('.dx-scheduler-cell-sizes-vertical { height: 43px }', 0);
 
   return createWidget(

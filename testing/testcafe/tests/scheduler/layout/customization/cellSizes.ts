@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { deleteStylesheetRule, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Scheduler: Layout Customization: Cell Sizes`
-  .page(url(__dirname, './cellSizesCustomizationContainer.html'));
+fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -66,7 +67,7 @@ const views = [{
   groupOrientation: 'vertical',
 }];
 
-safeSizeTest('Cell sizes customization should work', async (t) => {
+test('Cell sizes customization should work', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -79,25 +80,33 @@ safeSizeTest('Cell sizes customization should work', async (t) => {
     ).ok();
   }
 
+  await deleteStylesheetRule(0);
+
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical, #container .dx-scheduler-cell-sizes-horizontal { height: 150px }', 0);
+
   await createScheduler({
     views,
   });
 });
 
-safeSizeTest('Cell sizes customization should work when all-day panel is enabled', async (t) => {
+test('Cell sizes customization should work when all-day panel is enabled', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.expect(
-    await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-\'week.png', scheduler.workSpace),
+    await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-week.png', scheduler.workSpace),
   ).ok();
+
+  await deleteStylesheetRule(0);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical, #container .dx-scheduler-cell-sizes-horizontal { height: 150px }', 0);
+
   await createScheduler({
     views,
     showAllDayPanel: true,

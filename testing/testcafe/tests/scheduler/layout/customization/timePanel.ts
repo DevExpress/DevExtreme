@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import { deleteStylesheetRule, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Scheduler: Layout Customization: Time Panel`
-  .page(url(__dirname, './timePanelCustomizationContainer.html'));
+fixture.disablePageReloads`Scheduler: Layout Customization: Time Panel`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -62,7 +63,7 @@ const createScheduler = async (
 
 [false, true].forEach((crossScrollingEnabled) => {
   ['week', 'agenda'].forEach((view) => {
-    safeSizeTest(`Time panel customization should work in ${view} view`, async (t) => {
+    test(`Time panel customization should work in ${view} view`, async (t) => {
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -70,9 +71,13 @@ const createScheduler = async (
         await takeScreenshot(`custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
       ).ok();
 
+      await deleteStylesheetRule(0);
+
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await insertStylesheetRule('#container .dx-scheduler-time-panel { width: 150px; }', 0);
+
       await createScheduler({
         views: [view],
         currentView: view,

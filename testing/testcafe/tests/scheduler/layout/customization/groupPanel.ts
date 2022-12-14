@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { deleteStylesheetRule, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Scheduler: Layout Customization: Group Panel`
-  .page(url(__dirname, './groupPanelCustomizationContainer.html'));
+fixture.disablePageReloads`Scheduler: Layout Customization: Group Panel`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -62,7 +63,7 @@ const views = [{
 }];
 
 [false, true].forEach((crossScrollingEnabled) => {
-  safeSizeTest('Group panel customization should work', async (t) => {
+  test('Group panel customization should work', async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -75,9 +76,13 @@ const views = [{
       ).ok();
     }
 
+    await deleteStylesheetRule(0);
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRule('#container .dx-scheduler-group-header { height: 200px }', 0);
+
     await createScheduler({
       views,
       crossScrollingEnabled,

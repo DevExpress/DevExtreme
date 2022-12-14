@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Scheduler: Current Time Indication: Shader`
-  .page(url(__dirname, './container.html'));
+fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
+  .page(url(__dirname, './container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];
 
@@ -41,7 +41,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -63,7 +63,7 @@ const createScheduler = async (
     });
   });
 
-  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and horizontal grouping is used`, async (t) => {
+  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and horizontal grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -101,7 +101,7 @@ const createScheduler = async (
     });
   });
 
-  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and vertical grouping is used`, async (t) => {
+  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and vertical grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

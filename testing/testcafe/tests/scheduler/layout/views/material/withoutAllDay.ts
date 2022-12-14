@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture.skip`Scheduler: Material theme without all-day panel`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Scheduler: Material theme without all-day panel`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Week view without all-day panel should be rendered correctly', async (t) => {
+test('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -28,4 +28,7 @@ safeSizeTest('Week view without all-day panel should be rendered correctly', asy
     currentView: 'week',
     height: 500,
   }, true);
+}).after(async () => {
+  await disposeWidgets();
+  await changeTheme('generic.light');
 });

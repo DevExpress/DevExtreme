@@ -1,17 +1,17 @@
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.skip`Scheduler Timeline: Grouping`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Scheduler Timeline: Grouping`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 [
   'timelineDay',
   'timelineWeek',
   'timelineWorkWeek',
 ].forEach((view) => {
-  safeSizeTest(`${view} view - header panel should contain group rows if horizontal grouping`, async (t) => {
+  test(`${view} view - header panel should contain group rows if horizontal grouping`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     await t

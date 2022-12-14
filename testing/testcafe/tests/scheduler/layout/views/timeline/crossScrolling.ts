@@ -1,12 +1,12 @@
-import createWidget from '../../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.skip`Scheduler Timeline: Cross-Scrolling`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Scheduler Timeline: Cross-Scrolling`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Timeline should have Cross-Scrolling enabled', async (t) => {
+test('Timeline should have Cross-Scrolling enabled', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
