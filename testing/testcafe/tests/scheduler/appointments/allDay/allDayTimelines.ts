@@ -1,16 +1,16 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
 const CLICK_OPTIONS = { speed: 0.1 };
 const SCHEDULER_SELECTOR = '#container';
 
-fixture.skip`Scheduler - All day appointments`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Scheduler - All day appointments`
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('it should display the all-day appointment in two dates if the end date equals midnight',
+test('it should display the all-day appointment in two dates if the end date equals midnight',
   async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
