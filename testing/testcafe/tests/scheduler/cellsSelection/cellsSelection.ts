@@ -1,12 +1,12 @@
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
-fixture.skip`Scheduler: Cells Selection in Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Selection should work correctly with all-day panel appointments', async (t) => {
+test('Selection should work correctly with all-day panel appointments', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

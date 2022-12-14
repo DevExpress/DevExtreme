@@ -1,15 +1,18 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
+import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import Scheduler from '../../../../../model/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture.skip`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Scheduler: Material theme layout`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => {
+    await disposeWidgets();
+    await changeTheme('generic.light');
+  });
 
-safeSizeTest('Scheduler should have correct height in month view (T927862)', async (t) => {
+test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const boundingClientRect = await scheduler.dateTable.boundingClientRect;
@@ -41,7 +44,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
-    safeSizeTest(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
@@ -58,7 +61,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    safeSizeTest(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
