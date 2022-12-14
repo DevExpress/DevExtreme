@@ -56,6 +56,6 @@ test('Should not lose drag-n-dropped appointment in the second scheduler', async
   await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
   await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
 
-  await createWidget('dxScheduler', getSchedulerOptions([TEST_APPOINTMENT]), false, FIRST_SCHEDULER_SELECTOR);
-  await createWidget('dxScheduler', getSchedulerOptions([]), false, SECOND_SCHEDULER_SELECTOR);
+  await createWidget('dxScheduler', getSchedulerOptions([TEST_APPOINTMENT]), false, `#${FIRST_SCHEDULER_SELECTOR}`);
+  await createWidget('dxScheduler', getSchedulerOptions([]), false, `#${SECOND_SCHEDULER_SELECTOR}`);
 });

@@ -87,8 +87,8 @@ const createSchedulerWithRemoteDataSource = async (
 };
 
 test('Should set correct start and end dates in drag&dropped appointment', async (t) => {
-  const firstScheduler = new Scheduler(`${FIRST_SCHEDULER_SELECTOR}`);
-  const secondScheduler = new Scheduler(`${SECOND_SCHEDULER_SELECTOR}`);
+  const firstScheduler = new Scheduler(`#${FIRST_SCHEDULER_SELECTOR}`);
+  const secondScheduler = new Scheduler(`#${SECOND_SCHEDULER_SELECTOR}`);
 
   const appointmentToMoveElement = firstScheduler
     .getAppointment(TEST_APPOINTMENT.text)
@@ -111,7 +111,7 @@ test('Should set correct start and end dates in drag&dropped appointment', async
 
   await createSchedulerWithRemoteDataSource(
     getBaseSchedulerOptions(new Date(2021, 3, 26)),
-    FIRST_SCHEDULER_SELECTOR,
+    `#${FIRST_SCHEDULER_SELECTOR}`,
     [TEST_APPOINTMENT],
   );
 
@@ -122,6 +122,6 @@ test('Should set correct start and end dates in drag&dropped appointment', async
       dataSource: [],
     },
     false,
-    SECOND_SCHEDULER_SELECTOR,
+    `#${SECOND_SCHEDULER_SELECTOR}`,
   );
 });
