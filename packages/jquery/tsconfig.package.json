@@ -17,7 +17,7 @@
 	],
 	"references": [
 		{
-			"path": "../devextreme-core/tsconfig.package.json"
+			"path": "../interim/tsconfig.package.json"
 		}
 	]
 }
