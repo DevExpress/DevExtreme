@@ -33,6 +33,7 @@ export type WidgetName =
 'dxPopup' |
 'dxPopover' |
 'dxSelectBox' |
+'dxSortable' |
 'dxButton' |
 'dxTextBox' |
 'dxTextArea' |

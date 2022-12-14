@@ -68,6 +68,18 @@ export const appendElementTo = ClientFunction((
   containerElement?.appendChild(element);
 }, { dependencies: { createElement } });
 
+export const prependElementTo = ClientFunction((
+  containerSelector: string,
+  tagName: string,
+  id,
+  style?: Partial<CSSStyleDeclaration>,
+) => {
+  const containerElement = document.querySelector(containerSelector);
+  const element = createElement(tagName, id, style ?? {});
+
+  containerElement?.prepend(element);
+}, { dependencies: { createElement } });
+
 export const insertElementBefore = ClientFunction((
   containerSelector: string,
   referenceSelector: string,
