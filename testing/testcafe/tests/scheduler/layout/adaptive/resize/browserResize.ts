@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
@@ -114,7 +115,7 @@ const resourceDataSource = [{
   currentView: 'timelineDay',
   currentDate: new Date(2017, 4, 26),
 }].forEach(({ currentView, currentDate }) => {
-  test(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
+  safeSizeTest(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

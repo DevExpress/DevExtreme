@@ -18,7 +18,7 @@ test('it should correctly drag external item to the appointment after drag appoi
   await t
     .dragToElement(appt01.element, cell01, { speed: 0.3 })
     .expect((await appt01.element.boundingClientRect).top)
-    .eql(208.5)
+    .eql(208)
     .dragToElement(dragItem, appt02.element, { speed: 0.3 })
     .expect(appt02.element.innerText)
     .eql('Added');

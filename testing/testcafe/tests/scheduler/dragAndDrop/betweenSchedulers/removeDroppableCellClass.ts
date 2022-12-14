@@ -45,8 +45,8 @@ const getSchedulerOptions = (dataSource, currentDate, cancelMethodName) => ({
 
 METHODS_TO_CANCEL.forEach((methodName) => {
   test(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
-    const firstScheduler = new Scheduler(`${FIRST_SCHEDULER_SELECTOR}`);
-    const secondScheduler = new Scheduler(`${SECOND_SCHEDULER_SELECTOR}`);
+    const firstScheduler = new Scheduler(`#${FIRST_SCHEDULER_SELECTOR}`);
+    const secondScheduler = new Scheduler(`#${SECOND_SCHEDULER_SELECTOR}`);
 
     const appointmentToMoveElement = firstScheduler
       .getAppointment(TEST_APPOINTMENT.text)
@@ -70,14 +70,14 @@ METHODS_TO_CANCEL.forEach((methodName) => {
       'dxScheduler',
       getSchedulerOptions([TEST_APPOINTMENT], new Date(2021, 3, 26), methodName),
       false,
-      FIRST_SCHEDULER_SELECTOR,
+      `#${FIRST_SCHEDULER_SELECTOR}`,
     );
 
     await createWidget(
       'dxScheduler',
       getSchedulerOptions([], new Date(2021, 4, 26), methodName),
       false,
-      SECOND_SCHEDULER_SELECTOR,
+      `#${SECOND_SCHEDULER_SELECTOR}`,
     );
   });
 });
