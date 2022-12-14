@@ -1,12 +1,13 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.skip`Resize appointments in the Scheduler with vertical groupping`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Resize appointments in the Scheduler with vertical groupping`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Should correctly calculate group resizing area (T1025952)', async (t) => {
+test('Should correctly calculate group resizing area (T1025952)', async (t) => {
   const scheduler = new Scheduler('#container');
   const firstAppointment = scheduler.getAppointment('first');
   const secondAppointment = scheduler.getAppointment('second');
@@ -66,7 +67,7 @@ safeSizeTest('Should correctly calculate group resizing area (T1025952)', async 
   ],
 }));
 
-safeSizeTest('Should correctly calculate group resizing area after scroll (T1041672)', async (t) => {
+test('Should correctly calculate group resizing area after scroll (T1041672)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.scrollTo(new Date(2021, 3, 21, 9, 30), { priorityId: 2 });

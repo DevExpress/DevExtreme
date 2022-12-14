@@ -1,13 +1,14 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.skip`Resize appointments in the Scheduler basic views`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-['day', 'week', 'workWeek'].forEach((view) => safeSizeTest(`Resize in the "${view}" view`, async (t) => {
+['day', 'week', 'workWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -40,7 +41,7 @@ fixture.skip`Resize appointments in the Scheduler basic views`
   dataSource,
 })));
 
-safeSizeTest('Resize in the "month" view', async (t) => {
+test('Resize in the "month" view', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -73,7 +74,7 @@ safeSizeTest('Resize in the "month" view', async (t) => {
   dataSource,
 }));
 
-safeSizeTest('Resize should work correctly with startDateExpr (T944693)', async (t) => {
+test('Resize should work correctly with startDateExpr (T944693)', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
