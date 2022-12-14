@@ -1,9 +1,9 @@
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
+import { RadioGroupValue } from '../../components/radio-common';
 import {
   RadioGroup,
   RadioGroupProps,
-  RadioGroupValue,
 } from '../../components/radio-group';
 import { ItemLike } from './compatible-types';
 
