@@ -23,7 +23,6 @@ module.exports = {
     ],
     'react/no-multi-comp': 'off',
     'react/jsx-sort-props': 'off',
-    'react/display-name': 'off',
     'react/jsx-newline': 'off',
     'react/jsx-no-constructed-context-values': 'off',
     'react/jsx-max-depth': 'off',
