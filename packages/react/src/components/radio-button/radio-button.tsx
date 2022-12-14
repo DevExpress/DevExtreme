@@ -3,7 +3,7 @@ import {
   useContext,
 } from 'react';
 import { useId } from '../../internal/hooks';
-import { RadioGroupContext } from '../radio-group/radio-group-context';
+import { RadioGroupContext } from '../radio-common/radio-group-context';
 import { CoreBoundRadioButton, UncontrolledRadioButton } from './radio-button-hocs';
 import { RadioButtonInternal } from './radio-button-internal';
 import {
