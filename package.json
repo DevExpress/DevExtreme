@@ -57,10 +57,6 @@
         "pre-commit": "node build/pre-commit/index.cjs",
         "lint": "eslint --ignore-path .eslintignore .",
         "lint:fix": "eslint --ignore-path .eslintignore --fix .",
-        "lint:core": "eslint --ignore-path .eslintignore packages/core/src/**",
-        "lint:playgrounds": "eslint --ignore-path .eslintignore playgrounds/**",
-        "lint:packages": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern packages/*/src/**",
-        "lint:packages:fix": "eslint --ignore-path .eslintignore --no-error-on-unmatched-pattern --fix packages/*/src/**",
         "tsc:build": "tsc --build ./tsconfig.project.json",
         "tsc:watch": "npm run tsc:build -- --watch"
     },
