@@ -70,6 +70,10 @@ export default class AppointmentDragBehavior {
         });
     }
 
+    onDragCancel() {
+        this.removeDroppableClasses();
+    }
+
     getItemData(appointmentElement) {
         const dataFromTooltip = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
         const itemDataFromTooltip = dataFromTooltip?.appointment;
@@ -154,7 +158,8 @@ export default class AppointmentDragBehavior {
             immediate: false,
             onDragStart: this.onDragStart.bind(this),
             onDragMove: this.onDragMove.bind(this),
-            onDragEnd: this.onDragEnd.bind(this)
+            onDragEnd: this.onDragEnd.bind(this),
+            onDragCancel: this.onDragCancel.bind(this)
         }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
@@ -162,6 +167,7 @@ export default class AppointmentDragBehavior {
             onDragMove: this.createDragMoveHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
+            onCancelByEsc: true
         }));
     }
 

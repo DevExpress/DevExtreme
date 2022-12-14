@@ -6,7 +6,7 @@ import GestureEmitter from 'events/gesture/emitter.gesture.js';
 import animationFrame from 'animation/frame';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
-
+import keyboardMock from '../../helpers/keyboardMock.js';
 import 'generic_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';
@@ -122,6 +122,49 @@ QUnit.module('Events', moduleConfig, () => {
         assert.strictEqual(options.onDragEnd.getCall(0).args[0].fromComponent, myComponent, 'onDragEnd fromComponent');
         assert.strictEqual(options.onDragEnd.getCall(0).args[0].toComponent, myComponent, 'onDragEnd toComponent');
         assert.strictEqual(options.onDragEnd.getCall(0).args[0].element, myComponent.element(), 'onDragEnd element');
+    });
+
+    QUnit.test('onCancelByEsc option changing', function(assert) {
+        // arrange
+        this.$element.prop('tabindex', 0);
+        const keyboard = keyboardMock(this.$element);
+        const initialPosition = translator.locate(this.$element);
+
+        this.createDraggable({
+            onCancelByEsc: true
+        });
+
+        // act
+        this.pointer.down().move(0, 40);
+        keyboard.keyDown('esc');
+        this.pointer.move(0, 80).up();
+
+        // assert
+        assert.deepEqual(translator.locate(this.$element), initialPosition, 'element position');
+
+        this.$element.prop('tabindex', undefined);
+    });
+
+    QUnit.test('onDragCancel option called if drag canceled', function(assert) {
+        // arrange
+        const onDragCancelSpy = sinon.spy();
+        this.$element.prop('tabindex', 0);
+        const keyboard = keyboardMock(this.$element);
+
+        this.createDraggable({
+            onCancelByEsc: true,
+            onDragCancel: onDragCancelSpy
+        });
+
+        // act
+        this.pointer.down().move(0, 40);
+        keyboard.keyDown('esc');
+        this.pointer.move(0, 80).up();
+
+        // assert
+        assert.ok(onDragCancelSpy.calledOnce, 'event fired');
+
+        this.$element.prop('tabindex', undefined);
     });
 
     QUnit.test('onDragStart - check args', function(assert) {
