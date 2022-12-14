@@ -1,5 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { appendElementTo, deleteStylesheetRule, insertStylesheetRule } from '../../../../navigation/helpers/domUtils';
+import {
+  appendElementTo, setStyleAttribute,
+} from '../../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
@@ -34,8 +36,8 @@ test('Dragging should be work right in case dxScheduler placed in container with
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await setStyleAttribute('#container', 'margin-top: 100px; margin-left: 100px; transform: translate(0px, 0px);');
   await appendElementTo('#container', 'div', 'scheduler');
-  await insertStylesheetRule('#container { margin-top: 100px; margin-left: 100px; transform: translate(0px, 0px); }', 0);
 
   return createWidget('dxScheduler', {
     dataSource: [{
@@ -50,7 +52,4 @@ test('Dragging should be work right in case dxScheduler placed in container with
     height: 600,
     width: 800,
   }, false, '#scheduler');
-}).after(async () => {
-  await disposeWidgets();
-  await deleteStylesheetRule(0);
 });

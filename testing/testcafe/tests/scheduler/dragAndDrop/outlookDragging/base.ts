@@ -3,7 +3,7 @@ import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Outlook dragging base tests`
+fixture.skip`Outlook dragging base tests`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 

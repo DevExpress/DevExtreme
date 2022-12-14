@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { setAttribute } from '../../../navigation/helpers/domUtils';
+import { setStyleAttribute } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
@@ -34,7 +34,7 @@ test('Basic drag-n-drop movements in shifted container', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setAttribute('#container', 'style', 'margin-left: 50px; margin-top: 70px;');
+  await setStyleAttribute('#container', 'margin-left: 50px; margin-top: 70px;');
 
   return createWidget('dxScheduler', {
     dataSource: [{

@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { deleteStylesheetRule, appendElementTo, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'))
@@ -39,8 +40,6 @@ test('it should skip weekend days in workWeek', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#timeline-workweek .dx-scheduler-cell-sizes-horizontal { width: 4px; }', 0);
-
   await appendElementTo('#container', 'div', 'workweek');
 
   return createWidget(
@@ -60,12 +59,9 @@ test('it should skip weekend days in workWeek', async (t) => {
     true,
     '#workweek',
   );
-}).after(async () => {
-  await disposeWidgets();
-  await deleteStylesheetRule(0);
 });
 
-test('it should skip weekend days in timelineWorkWeek', async (t) => {
+safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
   const {
     takeScreenshot,
     compareResults,
@@ -79,7 +75,7 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#timeline-workweek .dx-scheduler-cell-sizes-horizontal { width: 4px; }', 0);
+  await insertStylesheetRule('.dx-scheduler-cell-sizes-horizontal { width: 4px; }', 0);
 
   await appendElementTo('#container', 'div', 'timeline-workweek');
 

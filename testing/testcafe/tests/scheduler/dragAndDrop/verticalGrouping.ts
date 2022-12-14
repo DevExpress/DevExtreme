@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { disposeWidgets } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -9,7 +8,7 @@ fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler with vert
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Should drag appoinment to the previous day`s cell (T1025952)', async (t) => {
+test('Should drag appoinment to the previous day`s cell (T1025952)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('appointment');
 

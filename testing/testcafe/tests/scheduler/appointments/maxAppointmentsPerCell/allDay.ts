@@ -19,9 +19,7 @@ fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.click('html');
-
+  }).before(async () => {
     await createWidget(
       'dxScheduler', {
         dataSource: [{

@@ -144,5 +144,5 @@ const resourceDataSource = [{
       startDayHour: 9,
       height: 600,
     });
-  });
+  }).after(async () => disposeWidgets());
 });
