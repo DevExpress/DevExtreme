@@ -907,10 +907,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _keydownHandler: function(e) {
-        if(!this.dragInProgress) {
-            return;
-        }
-        if(e.key === 'Escape') {
+        if(this.dragInProgress && e.key === 'Escape') {
             this._keydownEscapeHandler(e);
         }
     },
