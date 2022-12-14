@@ -4,8 +4,15 @@
 import $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
+import type { ResolvedData } from '../../../js/data/custom_store';
 import { Store, StoreOptions } from '../../../js/data';
-import { ANY, notAny } from '../consts';
+import {
+  ANY,
+  assertType,
+  notAny,
+  notNever,
+  toAssertion,
+} from '../consts';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
@@ -20,6 +27,29 @@ export async function infersTItemFromComplexLoadResult() {
   const value: { a: number } = result;
 }
 
+export async function loadReturnTypeInferTypeDefinedInOptions() {
+  const dataItem = { id: 1, value: true };
+  const store = new CustomStore({
+    // eslint-disable-next-line @typescript-eslint/require-await
+    load: async () => ({
+      data: [dataItem],
+      totalCount: 1,
+    }),
+  });
+
+  const loadResult = await store.load();
+  const actualItem: (typeof loadResult) extends ResolvedData<infer Item> ? Item : never = ANY;
+
+  notAny(actualItem);
+  notNever(actualItem);
+  assertType<typeof dataItem>(toAssertion(actualItem));
+
+  const byKeyItem = await store.byKey(ANY);
+  notAny(byKeyItem);
+  notNever(byKeyItem);
+  assertType<typeof dataItem>(toAssertion(byKeyItem));
+}
+
 export function loadAcceptsAjaxResult() {
   const options: StoreOptions = {
     load: () => $.ajax(ANY),
@@ -29,6 +59,7 @@ export function loadAcceptsAjaxResult() {
 export function loadAcceptsAngularHttpClient() {
   const http: HttpClient = ANY;
   const options: StoreOptions = {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     load: () => http.get(ANY).toPromise(),
   };
 }

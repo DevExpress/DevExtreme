@@ -4267,6 +4267,49 @@ declare module DevExpress.core.utils {
 }
 declare module DevExpress.data {
   /**
+   * [descr:Store]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export class AbstractStore<TItem = any, TKey = any> extends Store<
+    TItem,
+    TKey
+  > {
+    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
+
+    /**
+     * [descr:Store.load()]
+     */
+    load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+
+    /**
+     * [descr:Store.load(options)]
+     */
+    load(
+      options: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+  }
+  module AbstractStore {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type EventName =
+      | 'loaded'
+      | 'loading'
+      | 'inserted'
+      | 'inserting'
+      | 'updated'
+      | 'updating'
+      | 'push'
+      | 'removed'
+      | 'removing'
+      | 'modified'
+      | 'modifying';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
+  }
+  /**
    * [descr:Utils.applyChanges(data, changes, options)]
    */
   export function applyChanges(
@@ -4277,7 +4320,10 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+  export class ArrayStore<TItem = any, TKey = any> extends AbstractStore<
+    TItem,
+    TKey
+  > {
     constructor(options?: DevExpress.data.ArrayStore.Options<TItem, TKey>);
     /**
      * [descr:ArrayStore.clear()]
@@ -4299,7 +4345,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ArrayStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
@@ -4324,22 +4370,46 @@ declare module DevExpress.data {
      * [descr:CustomStore.clearRawDataCache()]
      */
     clearRawDataCache(): void;
+    /**
+     * [descr:CustomStore.load()]
+     */
+    load(): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
+    /**
+     * [descr:CustomStore.load(options)]
+     */
+    load(
+      options: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
   }
   module CustomStore {
     export type GroupItem<TItem = any> = {
       key: any | string | number;
-      items: Array<TItem> | Array<GroupItem> | null;
+      items: Array<TItem> | Array<GroupItem<TItem>> | null;
       count?: number;
       summary?: Array<any>;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type LoadResult<T> =
+      | T
+      | DevExpress.core.utils.DxPromise<T>
+      | PromiseLike<T>;
     export type Options<TItem = any, TKey = any> = CustomStoreOptions<
       TItem,
       TKey
     >;
     export type ResolvedData<TItem = any> =
       | Object
-      | Array<TItem>
-      | Array<GroupItem>
+      | ItemsArray<TItem>
       | {
           data: Array<TItem> | Array<GroupItem>;
           totalCount?: number;
@@ -4352,7 +4422,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -4370,13 +4440,9 @@ declare module DevExpress.data {
      */
     load: (
       options: LoadOptions<TItem>
-    ) =>
-      | DevExpress.core.utils.DxPromise<
-          DevExpress.data.CustomStore.ResolvedData<TItem>
-        >
-      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
-      | Array<DevExpress.data.CustomStore.GroupItem>
-      | Array<TItem>;
+    ) => DevExpress.data.CustomStore.LoadResult<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -4994,7 +5060,10 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+  export class ODataStore<TItem = any, TKey = any> extends AbstractStore<
+    TItem,
+    TKey
+  > {
     constructor(options?: DevExpress.data.ODataStore.Options<TItem, TKey>);
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
     /**
@@ -5027,7 +5096,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ODataStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
@@ -5616,11 +5685,10 @@ declare module DevExpress.data {
    */
   export type SortDescriptor<T> = GroupDescriptor<T>;
   /**
-   * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
-    constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
+    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
     /**
      * [descr:Store.byKey(key)]
      */
@@ -5641,37 +5709,29 @@ declare module DevExpress.data {
      */
     keyOf(obj: TItem): TKey;
     /**
-     * [descr:Store.load()]
-     */
-    load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
-    /**
-     * [descr:Store.load(options)]
-     */
-    load(
-      options: LoadOptions<TItem>
-    ): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
-    /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: DevExpress.data.Store.EventName): this;
+    off(eventName: DevExpress.data.AbstractStore.EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
     off(
-      eventName: DevExpress.data.Store.EventName,
+      eventName: DevExpress.data.AbstractStore.EventName,
       eventHandler: Function
     ): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
     on(
-      eventName: DevExpress.data.Store.EventName,
+      eventName: DevExpress.data.AbstractStore.EventName,
       eventHandler: Function
     ): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(events: { [key in DevExpress.data.Store.EventName]?: Function }): this;
+    on(
+      events: { [key in DevExpress.data.AbstractStore.EventName]?: Function }
+    ): this;
     /**
      * [descr:Store.push(changes)]
      */
@@ -5701,27 +5761,6 @@ declare module DevExpress.data {
       key: TKey,
       values: DevExpress.core.DeepPartial<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
-  }
-  module Store {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type EventName =
-      | 'loaded'
-      | 'loading'
-      | 'inserted'
-      | 'inserting'
-      | 'updated'
-      | 'updating'
-      | 'push'
-      | 'removed'
-      | 'removing'
-      | 'modified'
-      | 'modifying';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
   }
   /**
    * @deprecated Use Options instead
