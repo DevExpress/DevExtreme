@@ -1,3 +1,4 @@
+import type { ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
 import {
@@ -5,7 +6,6 @@ import {
   RadioGroupProps,
   RadioGroupValue,
 } from '../../components/radio-group';
-import { ItemLike } from './compatible-types';
 
 const createItemPropGetter = (propName: string) => (item: ItemLike) => (
   Object.prototype.hasOwnProperty.call(item, propName) ? item[propName] : item
