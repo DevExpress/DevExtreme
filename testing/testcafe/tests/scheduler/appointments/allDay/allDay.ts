@@ -1,10 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { deleteStylesheetRule, appendElementTo, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
-  .page(url(__dirname, './containers/containerAllDay.html'));
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const data = [{
   text: '0',
