@@ -65,7 +65,6 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
-      await t.debug();
       await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 

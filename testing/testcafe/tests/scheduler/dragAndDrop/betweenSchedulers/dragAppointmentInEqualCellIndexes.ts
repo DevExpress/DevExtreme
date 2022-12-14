@@ -1,13 +1,14 @@
+import { setAttribute, appendElementTo } from 'testing/testcafe/tests/navigation/helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 
-fixture.skip`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
-  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
+fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
+  .page(url(__dirname, '../../../container.html'))
+  .after(async () => disposeWidgets());
 
-const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
-const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
+const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
+const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';
 const EXPECTED_APPOINTMENT_TIME = '1:00 AM - 2:00 AM';
 
 const TEST_APPOINTMENT = {
@@ -32,9 +33,9 @@ const getSchedulerOptions = (dataSource) => ({
   },
 });
 
-safeSizeTest('Should not lose drag-n-dropped appointment in the second scheduler', async (t) => {
-  const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
-  const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
+test('Should not lose drag-n-dropped appointment in the second scheduler', async (t) => {
+  const firstScheduler = new Scheduler(`${FIRST_SCHEDULER_SELECTOR}`);
+  const secondScheduler = new Scheduler(`${SECOND_SCHEDULER_SELECTOR}`);
 
   const appointmentToMoveElement = firstScheduler
     .getAppointment(TEST_APPOINTMENT.text)
@@ -51,6 +52,10 @@ safeSizeTest('Should not lose drag-n-dropped appointment in the second scheduler
 
   await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
 }).before(async () => {
+  await setAttribute('#container', 'style', 'display: flex;');
+  await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
+  await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
+
   await createWidget('dxScheduler', getSchedulerOptions([TEST_APPOINTMENT]), false, FIRST_SCHEDULER_SELECTOR);
   await createWidget('dxScheduler', getSchedulerOptions([]), false, SECOND_SCHEDULER_SELECTOR);
 });

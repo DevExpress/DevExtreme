@@ -1,13 +1,14 @@
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
-import createWidget from '../../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import { setAttribute, appendElementTo } from '../../../navigation/helpers/domUtils';
 
-fixture.skip`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
-  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
+fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
+  .page(url(__dirname, '../../../container.html'))
+  .after(async () => disposeWidgets());
 
-const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
-const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
+const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
+const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';
 const METHODS_TO_CANCEL = [
   'onDragStart',
   'onDragMove',
@@ -43,9 +44,9 @@ const getSchedulerOptions = (dataSource, currentDate, cancelMethodName) => ({
 });
 
 METHODS_TO_CANCEL.forEach((methodName) => {
-  safeSizeTest(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
-    const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
-    const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
+  test(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
+    const firstScheduler = new Scheduler(`${FIRST_SCHEDULER_SELECTOR}`);
+    const secondScheduler = new Scheduler(`${SECOND_SCHEDULER_SELECTOR}`);
 
     const appointmentToMoveElement = firstScheduler
       .getAppointment(TEST_APPOINTMENT.text)
@@ -61,6 +62,10 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     await t.expect(droppableCellExistsInFirstScheduler).notOk('Droppable cell class was not removed from the first scheduler.');
     await t.expect(droppableCellExistsInSecondScheduler).notOk('Droppable cell class was not removed from the second scheduler.');
   }).before(async () => {
+    await setAttribute('#container', 'style', 'display: flex;');
+    await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
+    await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
+
     await createWidget(
       'dxScheduler',
       getSchedulerOptions([TEST_APPOINTMENT], new Date(2021, 3, 26), methodName),
