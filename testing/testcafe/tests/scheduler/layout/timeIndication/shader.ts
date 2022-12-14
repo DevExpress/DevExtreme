@@ -1,13 +1,20 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { deleteStylesheetRule, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
-  .page(url(__dirname, './container.html'))
+  .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];
+const style = `.dx-scheduler-date-time-shader-top::before,
+.dx-scheduler-date-time-shader-bottom::before,
+.dx-scheduler-timeline .dx-scheduler-date-time-shader::before,
+.dx-scheduler-date-time-shader-all-day {
+  background-color: red !important;
+}`;
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -54,9 +61,13 @@ const createScheduler = async (
       ).ok();
     }
 
+    await deleteStylesheetRule(0);
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRule(style, 0);
+
     await createScheduler({
       views,
       crossScrollingEnabled,
@@ -76,9 +87,13 @@ const createScheduler = async (
       ).ok();
     }
 
+    await deleteStylesheetRule(0);
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRule(style, 0);
+
     await createScheduler({
       views: [{
         type: 'day',
@@ -114,9 +129,13 @@ const createScheduler = async (
       ).ok();
     }
 
+    await deleteStylesheetRule(0);
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRule(style, 0);
+
     await createScheduler({
       views: [{
         type: 'day',
