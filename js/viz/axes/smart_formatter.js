@@ -10,7 +10,7 @@ const EXPONENTIAL = 'exponential';
 const formats = ['fixedPoint', 'thousands', 'millions', 'billions', 'trillions', EXPONENTIAL];
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
 
-function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
+function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
     let prevDifferences;
     let nextDifferences;
     let dateUnitInterval;
@@ -18,27 +18,28 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
     let i;
     let j;
 
-    if(tickFormat === 'week') {
-        tickFormat = 'day';
-    } else if(tickFormat === 'quarter') {
-        tickFormat = 'month';
-    } else if(tickFormat === 'shorttime') {
-        tickFormat = 'hour';
-    } else if(tickFormat === 'longtime') {
-        tickFormat = 'second';
+    if(tickIntervalFormat === 'week') {
+        tickIntervalFormat = 'day';
+    } else if(tickIntervalFormat === 'quarter') {
+        tickIntervalFormat = 'month';
+    } else if(tickIntervalFormat === 'shorttime') {
+        tickIntervalFormat = 'hour';
+    } else if(tickIntervalFormat === 'longtime') {
+        tickIntervalFormat = 'second';
     }
 
-    const tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
+    const tickFormatIndex = dateUnitIntervals.indexOf(tickIntervalFormat);
 
     if(nextDate) {
         nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
         prevDifferences = dateUtils.getDatesDifferences(curDate, prevDate);
-        if(nextDifferences[tickFormat]) {
-            for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
+        if(nextDifferences[tickIntervalFormat]) {
+            for(i = tickFormatIndex; i < dateUnitsLength - 1; i++) {
                 dateUnitInterval = dateUnitIntervals[i];
                 if(i === tickFormatIndex) {
                     setDateUnitInterval(nextDifferences, tickFormatIndex + (nextDifferences['millisecond'] ? 2 : 1));
-                } else if(nextDifferences[dateUnitInterval]) {
+                    break;
+                } else if(nextDifferences[dateUnitInterval] && nextDifferences.count > 1) {
                     resetDateUnitInterval(nextDifferences, i);
                     break;
                 }
@@ -46,36 +47,24 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
         }
     } else {
         prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
+        let modified = false;
         for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
             dateUnitInterval = dateUnitIntervals[i];
             if(prevDifferences[dateUnitInterval]) {
                 if(i - tickFormatIndex > 1) {
-                    for(j = tickFormatIndex + 1; j >= 0; j--) {
+                    for(j = 0; j <= tickFormatIndex; j++) {
                         resetDateUnitInterval(prevDifferences, j);
-                    }
-                    break;
-                } else if(isDateTimeStart(curDate, dateUnitInterval)) {
-                    for(j = i - 1; j > 0; j--) {
-                        resetDateUnitInterval(prevDifferences, j);
+                        modified = true;
                     }
                     break;
                 }
             }
         }
-    }
-    return nextDate ? nextDifferences : prevDifferences;
-}
-
-function isDateTimeStart(date, dateUnitInterval) {
-    const unitNumbers = [date.getMilliseconds(), date.getSeconds(), date.getMinutes(), date.getHours(), date.getDate(), date.getMonth()];
-    const unitIndex = dateUnitIntervals.indexOf(dateUnitInterval);
-    let i;
-    for(i = 0; i < unitIndex; i++) {
-        if((i === 4 && unitNumbers[i] !== 1) || (i !== 4 && unitNumbers[i] !== 0)) {
-            return false;
+        if(!modified && prevDifferences.count === 1) {
+            setDateUnitInterval(prevDifferences, tickFormatIndex);
         }
     }
-    return true;
+    return nextDate ? nextDifferences : prevDifferences;
 }
 
 function resetDateUnitInterval(differences, intervalIndex) {
