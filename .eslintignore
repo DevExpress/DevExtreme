@@ -15,7 +15,7 @@ lib
 *.scss
 
 packages/jquery/*
-packages/devextreme-core/*
+packages/interim/*
 
 /.off.eslintrc.js
 /gulpfile.js

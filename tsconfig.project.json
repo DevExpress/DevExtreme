@@ -9,7 +9,7 @@
 			"path": "packages/components/tsconfig.package.json"
 		},
 		{
-			"path": "packages/devextreme-core/tsconfig.package.json"
+			"path": "packages/interim/tsconfig.package.json"
 		},
 		{
 			"path": "packages/angular/tsconfig.package.json"
