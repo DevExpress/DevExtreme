@@ -11,7 +11,7 @@
   "dependencies": {
     "inferno": "^7.4.11",
     "@devextreme/runtime": "^4.0.0",
-    "@devextreme/ui-core": "1.0.0"
+    "@devextreme/interim": "1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

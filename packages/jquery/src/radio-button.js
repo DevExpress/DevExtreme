@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { ComponentWrapper, registerComponent } from '@devextreme/ui-core';
+import { ComponentWrapper, registerComponent } from '@devextreme/interim';
 import { RadioButton as RadioButtonInferno } from './generated/components/radio-button';
 
 export default class RadioButton extends ComponentWrapper {
