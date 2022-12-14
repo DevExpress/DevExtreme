@@ -171,7 +171,6 @@ function getFormatExponential(tick, tickInterval) {
 function getFormatWithModifier(tick, tickInterval) {
     const tickIntervalIndex = floor(log10(tickInterval));
     let tickIndex;
-    let typeFormat;
     let precision = 0;
     let actualIndex = tickIndex = floor(log10(abs(tick)));
 
@@ -180,16 +179,11 @@ function getFormatWithModifier(tick, tickInterval) {
     }
 
     let indexOfFormat = floor(actualIndex / 3);
-    let offset = indexOfFormat * 3;
-    if(indexOfFormat < 5) {
-        if(tickIntervalIndex - offset === 2 && tickIndex >= 3) {
-            indexOfFormat++;
-            offset = indexOfFormat * 3;
-        }
-        typeFormat = formats[indexOfFormat];
-    } else {
-        typeFormat = formats[formats.length - 1];
+    const offset = indexOfFormat * 3;
+    if(indexOfFormat < 0) {
+        indexOfFormat = 0;
     }
+    const typeFormat = formats[indexOfFormat] || formats[formats.length - 1];
 
     if(offset > 0) {
         const separatedTickInterval = splitDecimalNumber(tickInterval / Math.pow(10, offset));

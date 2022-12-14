@@ -159,7 +159,7 @@ QUnit.test('format numbers with non zero precision', function(assert) {
 });
 
 QUnit.test('formatting numbers wtih multiplier of tickInterval === 2.5', function(assert) {
-    this.testTickLabelFormat(assert, [1250, 8000, 160000, 165250], 250, ['1.25K', '8.00K', '160.00K', '165.25K']);
+    this.testTickLabelFormat(assert, [1250, 8000, 160000, 165250], 250, ['1.25K', '8.00K', '160,000', '165,250']);
     this.testTickLabelFormat(assert, [2500, 30000], 2500, ['2.5K', '30.0K']);
 });
 
@@ -193,7 +193,7 @@ QUnit.test('format float number. tickInterval = 2.5', function(assert) {
 });
 
 QUnit.test('Misc', function(assert) {
-    this.testTickLabelFormat(assert, [10100], 100, ['10.1K']);
+    this.testTickLabelFormat(assert, [10100], 100, ['10,100']);
     this.testTickLabelFormat(assert, [10000000000000000000], 1000000000000000000, ['1E+19']);
     this.testTickLabelFormat(assert, [0], 0.5, ['0']);
 });
