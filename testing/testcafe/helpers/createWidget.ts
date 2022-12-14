@@ -9,6 +9,7 @@ export type WidgetName =
 'dxCheckBox' |
 'dxColorBox' |
 'dxDropDownButton' |
+'dxDraggable' |
 'dxTabPanel' |
 'dxForm' |
 'dxFilterBuilder' |

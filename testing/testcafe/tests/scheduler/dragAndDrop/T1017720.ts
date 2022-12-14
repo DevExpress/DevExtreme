@@ -1,15 +1,15 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { extend } from '../../../../../js/core/utils/extend';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture.skip`T1017720`
-  .page(url(__dirname, './pages/containerWithDnD.html'));
+fixture.disablePageReloads`T1017720`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
+test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
   const scheduler = new Scheduler('#scheduler');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('text');
