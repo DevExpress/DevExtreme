@@ -13,7 +13,7 @@ import { extend } from '../../core/utils/extend';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import dateLocalization from '../../localization/date';
 import { Deferred } from '../../core/utils/deferred';
-import { restoreFocus } from '../shared/accessibility';
+import { restoreFocus, saveFocusedElementInfo } from '../shared/accessibility';
 import dataQuery from '../../data/query';
 import storeHelper from '../../data/store_helper';
 
@@ -374,12 +374,11 @@ const ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
     },
 
     _subscribeToIndicatorEvent: function($indicator, column, indicatorName) {
-        const that = this;
-
         if(indicatorName === 'headerFilter') {
-            eventsEngine.on($indicator, clickEventName, that.createAction(function(e) {
+            eventsEngine.on($indicator, clickEventName, this.createAction((e) => {
                 e.event.stopPropagation();
-                that.getController('headerFilter').showHeaderFilterMenu(column.index, false);
+                saveFocusedElementInfo($indicator, this);
+                this.getController('headerFilter').showHeaderFilterMenu(column.index, false);
             }));
         }
     },
