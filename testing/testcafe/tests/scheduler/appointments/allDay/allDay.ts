@@ -35,8 +35,6 @@ test('it should skip weekend days in workWeek', async (t) => {
     .expect(await takeScreenshot('workweek_all-day_appointments_skip_weekend.png'))
     .ok();
 
-  await deleteStylesheetRule(0);
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -62,6 +60,9 @@ test('it should skip weekend days in workWeek', async (t) => {
     true,
     '#workweek',
   );
+}).after(async () => {
+  await disposeWidgets();
+  await deleteStylesheetRule(0);
 });
 
 test('it should skip weekend days in timelineWorkWeek', async (t) => {
@@ -73,8 +74,6 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
   await t
     .expect(await takeScreenshot('timeline-work-week_all-day_appointments_skip_weekend.png'))
     .ok();
-
-  await deleteStylesheetRule(0);
 
   await t
     .expect(compareResults.isValid())
@@ -102,4 +101,7 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
     true,
     '#timeline-workweek',
   );
+}).after(async () => {
+  await disposeWidgets();
+  await deleteStylesheetRule(0);
 });

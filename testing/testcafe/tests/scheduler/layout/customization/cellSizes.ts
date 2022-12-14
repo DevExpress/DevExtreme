@@ -1,7 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { deleteStylesheetRule, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
+import {
+  deleteStylesheetRule, insertStylesheetRule,
+} from '../../../navigation/helpers/domUtils';
 import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
@@ -80,16 +82,19 @@ test('Cell sizes customization should work', async (t) => {
     ).ok();
   }
 
-  await deleteStylesheetRule(0);
-
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical, #container .dx-scheduler-cell-sizes-horizontal { height: 150px; }', 0);
+  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }', 0);
+  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-horizontal { width: 150px; }', 1);
 
   await createScheduler({
     views,
   });
+}).after(async () => {
+  await disposeWidgets();
+  await deleteStylesheetRule(0);
+  await deleteStylesheetRule(1);
 });
 
 test('Cell sizes customization should work when all-day panel is enabled', async (t) => {
@@ -100,16 +105,19 @@ test('Cell sizes customization should work when all-day panel is enabled', async
     await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-week.png', scheduler.workSpace),
   ).ok();
 
-  await deleteStylesheetRule(0);
-
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical, #container .dx-scheduler-cell-sizes-horizontal { height: 150px; }', 0);
+  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }', 0);
+  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-horizontal { width: 150px; }', 1);
 
   await createScheduler({
     views,
     showAllDayPanel: true,
     currentView: 'week',
   });
+}).after(async () => {
+  await disposeWidgets();
+  await deleteStylesheetRule(0);
+  await deleteStylesheetRule(1);
 });

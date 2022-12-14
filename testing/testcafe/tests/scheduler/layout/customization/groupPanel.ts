@@ -76,8 +76,6 @@ const views = [{
       ).ok();
     }
 
-    await deleteStylesheetRule(0);
-
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -87,5 +85,8 @@ const views = [{
       views,
       crossScrollingEnabled,
     });
+  }).after(async () => {
+    await disposeWidgets();
+    await deleteStylesheetRule(0);
   });
 });

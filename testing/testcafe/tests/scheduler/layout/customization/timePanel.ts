@@ -71,8 +71,6 @@ const createScheduler = async (
         await takeScreenshot(`custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
       ).ok();
 
-      await deleteStylesheetRule(0);
-
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
@@ -83,6 +81,9 @@ const createScheduler = async (
         currentView: view,
         crossScrollingEnabled,
       });
+    }).after(async () => {
+      await disposeWidgets();
+      await deleteStylesheetRule(0);
     });
   });
 });
