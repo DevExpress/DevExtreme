@@ -6,7 +6,7 @@ import { appendElementTo, setAttribute } from '../../../navigation/helpers/domUt
 
 fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
   .page(url(__dirname, '../../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 interface TestAppointment {
   id: number;

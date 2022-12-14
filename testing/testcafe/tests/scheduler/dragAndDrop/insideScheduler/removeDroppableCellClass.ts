@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment inside the scheduler`
   .page(url(__dirname, '../../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const METHODS_TO_CANCEL = [
   'onDragStart',

@@ -5,7 +5,7 @@ import Scheduler from '../../../../../model/scheduler';
 
 fixture.disablePageReloads`Outlook dragging, for case scheduler in container with transform style`
   .page(url(__dirname, './containerWithTransform.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
   const scheduler = new Scheduler('.dx-scheduler');

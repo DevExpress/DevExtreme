@@ -1,11 +1,11 @@
-import { setAttribute, appendElementTo } from 'testing/testcafe/tests/navigation/helpers/domUtils';
+import { setAttribute, appendElementTo } from '../../../navigation/helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
   .page(url(__dirname, '../../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';

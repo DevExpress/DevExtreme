@@ -7,7 +7,7 @@ import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
   const scheduler = new Scheduler('#container');

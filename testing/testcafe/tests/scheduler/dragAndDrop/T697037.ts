@@ -5,7 +5,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`T697037`
   .page(url(__dirname, '../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Recurrence exception date should equal date of appointment, which excluded from recurrence(T697037)', async (t) => {
   const scheduler = new Scheduler('#container');

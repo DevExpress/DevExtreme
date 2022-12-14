@@ -5,7 +5,7 @@ import { setAttribute, appendElementTo } from '../../../navigation/helpers/domUt
 
 fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
   .page(url(__dirname, '../../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';

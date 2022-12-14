@@ -5,7 +5,7 @@ import { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Drag-n-drop appointment after resize (T835545)`
   .page(url(__dirname, '../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => test(
   `After drag-n-drop appointment, size of appointment shouldn't change in the '${view}' view`, async (t) => {

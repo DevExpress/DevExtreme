@@ -5,7 +5,7 @@ import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Outlook dragging base tests`
   .page(url(__dirname, '../../../container.html'))
-  .after(async () => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Basic drag-n-drop movements in groups', async (t) => {
   const scheduler = new Scheduler('#container');
