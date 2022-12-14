@@ -1,12 +1,12 @@
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture.skip`Scheduler header - View switcher`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler header - View switcher`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('it should correctly switch a differently typed views (T1080992)', async (t) => {
+test('it should correctly switch a differently typed views (T1080992)', async (t) => {
   const scheduler = new Scheduler('#container');
   const {
     toolbar: {

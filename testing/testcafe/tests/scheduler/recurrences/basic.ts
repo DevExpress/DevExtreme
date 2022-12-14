@@ -1,14 +1,15 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.skip`Rendering of the recurrence appointments in  Scheduler `
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Rendering of the recurrence appointments in  Scheduler `
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
+test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Simple recurrence appointment');
 
@@ -31,7 +32,7 @@ safeSizeTest('Drag-n-drop recurrence appointment between dateTable and allDay pa
   recurrenceEditMode: 'series',
 }));
 
-safeSizeTest('Appointments in DST should not have offset when '
+test('Appointments in DST should not have offset when '
   + 'recurring appointment timezoine not equal to scheduler timezone', async (t) => {
   const scheduler = new Scheduler('#container');
 
@@ -68,7 +69,7 @@ safeSizeTest('Appointments in DST should not have offset when '
   firstDayOfWeek: 1,
 }));
 
-safeSizeTest('Appointments in end of DST should have correct offset', async (t) => {
+test('Appointments in end of DST should have correct offset', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -95,7 +96,7 @@ safeSizeTest('Appointments in end of DST should have correct offset', async (t) 
   firstDayOfWeek: 1,
 }));
 
-safeSizeTest('Appointment displayed without errors if it was only one DST in year(T1037853)', async (t) => {
+test('Appointment displayed without errors if it was only one DST in year(T1037853)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

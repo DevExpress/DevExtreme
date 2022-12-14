@@ -1,11 +1,12 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';
 
-fixture.skip`Agenda:adaptive`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Agenda:adaptive`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
 Promise<void> => {
@@ -63,6 +64,8 @@ Promise<void> => {
   }].forEach((testCase) => {
     safeSizeTest(testCase.text, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
-    }, ADAPTIVE_SIZE).before(async () => createScheduler(testCase.groups, rtlEnabled));
+    }, ADAPTIVE_SIZE)
+      .before(async () => createScheduler(testCase.groups, rtlEnabled))
+      .after(async () => disposeWidgets());
   });
 });

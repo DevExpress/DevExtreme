@@ -1,18 +1,18 @@
 import { ClientFunction } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.skip`Appointment Form`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment Form`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const showAppointmentPopup = ClientFunction(() => {
   const instance = ($('#container') as any).dxScheduler('instance');
   instance.showAppointmentPopup();
 });
 
-safeSizeTest('Invoke showAppointmentPopup method shouldn\'t raise error if value of currentDate property as a string', async (t) => {
+test('Invoke showAppointmentPopup method shouldn\'t raise error if value of currentDate property as a string', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await showAppointmentPopup();
@@ -30,7 +30,7 @@ safeSizeTest('Invoke showAppointmentPopup method shouldn\'t raise error if value
   height: 600,
 }, true));
 
-safeSizeTest('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
+test('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointmentByIndex(0);
 

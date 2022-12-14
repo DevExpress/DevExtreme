@@ -1,11 +1,11 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture.skip`Agenda:layout`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Agenda:layout`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const data = [{
   text: 'Website Re-Design Plan',
@@ -139,19 +139,19 @@ const createScheduler = async (
 
 [false, true].forEach((rtlEnabled) => {
   [undefined, resourcesData].forEach((resources) => {
-    safeSizeTest(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
+    test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`)).ok();
     }).before(async () => createScheduler(rtlEnabled, resources, undefined));
   });
 });
 
 [false, true].forEach((rtlEnabled) => {
-  safeSizeTest(`Agenda test layout with groups(rtl=${rtlEnabled}`, async (t) => {
+  test(`Agenda test layout with groups(rtl=${rtlEnabled}`, async (t) => {
     await t.expect(await compareScreenshot(t, `agenda-layout-groups-rtl=${rtlEnabled}.png`)).ok();
   }).before(async () => createScheduler(rtlEnabled, resourcesData, ['roomId']));
 });
 
-safeSizeTest('Agenda test appointment state', async (t) => {
+test('Agenda test appointment state', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.hover(scheduler.getAppointment('Final Budget Review', 0).element);

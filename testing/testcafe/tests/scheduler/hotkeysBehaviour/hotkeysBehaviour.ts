@@ -1,15 +1,16 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { disposeWidgets } from '../../../helpers/createWidget';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import FocusableElement from '../../../model/internal/focusable';
 
-fixture.skip`Hotkeys for appointments update and navigation`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Hotkeys for appointments update and navigation`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 ['week', 'month'].forEach((view) => {
-  safeSizeTest(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {
+  test(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const firstAppointment = scheduler.getAppointment('Website Re-Design Plan');
     const secondAppointment = scheduler.getAppointment('Book Flights to San Fran for Sales Trip');
@@ -33,7 +34,7 @@ fixture.skip`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 
-  safeSizeTest(`Remove appointment in the "${view}" view (Del)`, async (t) => {
+  test(`Remove appointment in the "${view}" view (Del)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -49,7 +50,7 @@ fixture.skip`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 
-  safeSizeTest(`Show appointment popup in the "${view}" view (Enter)`, async (t) => {
+  test(`Show appointment popup in the "${view}" view (Enter)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Website Re-Design Plan');
     const { appointmentPopup } = scheduler;
@@ -66,7 +67,7 @@ fixture.skip`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 
-  safeSizeTest(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
+  test(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const collector = scheduler.collectors.find('3');
     const { appointmentPopup } = scheduler;
@@ -93,7 +94,7 @@ fixture.skip`Hotkeys for appointments update and navigation`
   }));
 });
 
-safeSizeTest('Navigate between toolbar items', async (t) => {
+test('Navigate between toolbar items', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const { navigator, viewSwitcher } = toolbar;
 
@@ -127,7 +128,7 @@ safeSizeTest('Navigate between toolbar items', async (t) => {
   currentView: 'day',
 }));
 
-safeSizeTest('Navigate between custom toolbar items', async (t) => {
+test('Navigate between custom toolbar items', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const { navigator, viewSwitcher } = toolbar;
 
