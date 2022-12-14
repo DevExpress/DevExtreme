@@ -9,7 +9,7 @@
     "cross-env": "7.0.3",
     "devextreme-cldr-data": "1.0.3",
     "globalize": "1.7.0",
-    "jquery": "3.6.1",
+    "jquery": "3.6.2",
     "minimist": "1.2.7",
     "parcel": "2.8.1",
     "rimraf": "3.0.2",
