@@ -14,7 +14,6 @@
   </div>
 </template>
 <script>
-import 'devextreme/localization/globalize/date';
 
 import Query from 'devextreme/data/query';
 

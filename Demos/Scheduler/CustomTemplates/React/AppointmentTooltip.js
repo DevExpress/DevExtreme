@@ -1,6 +1,5 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import 'devextreme/localization/globalize/date';
 
 import { moviesData } from './data.js';
 
