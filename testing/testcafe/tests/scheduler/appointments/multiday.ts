@@ -1,10 +1,10 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.skip`Scheduler - Multiday appointments`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Scheduler - Multiday appointments`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const checkAllDayAppointment = async (
   t: TestController,
@@ -56,7 +56,7 @@ const checkRegularAppointment = async (
     .within(height - 1, height + 1);
 };
 
-safeSizeTest('it should render multi-day and multi-view appointments correctly if allDayPanelMode is "hidden"', async (t) => {
+test('it should render multi-day and multi-view appointments correctly if allDayPanelMode is "hidden"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   let appointmentCount = await scheduler.getAppointmentCount();
@@ -116,7 +116,7 @@ safeSizeTest('it should render multi-day and multi-view appointments correctly i
   },
 ));
 
-safeSizeTest('it should render all-day appointments if allDayPanelMode is "all"', async (t) => {
+test('it should render all-day appointments if allDayPanelMode is "all"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   let appointmentCount = await scheduler.getAppointmentCount();
@@ -166,7 +166,7 @@ safeSizeTest('it should render all-day appointments if allDayPanelMode is "all"'
   },
 ));
 
-safeSizeTest('it should render all-day and multi-day appointments if allDayPanelMode is "allDay"', async (t) => {
+test('it should render all-day and multi-day appointments if allDayPanelMode is "allDay"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -201,7 +201,7 @@ safeSizeTest('it should render all-day and multi-day appointments if allDayPanel
   },
 ));
 
-safeSizeTest('it should correctly change allDayPanelOption at runtime', async (t) => {
+test('it should correctly change allDayPanelOption at runtime', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -273,7 +273,7 @@ safeSizeTest('it should correctly change allDayPanelOption at runtime', async (t
   },
 ));
 
-safeSizeTest('it should correctly handle allDayPanelMode for the wokrspace', async (t) => {
+test('it should correctly handle allDayPanelMode for the wokrspace', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

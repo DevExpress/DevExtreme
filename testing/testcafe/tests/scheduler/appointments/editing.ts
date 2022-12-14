@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
@@ -10,10 +10,11 @@ const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
 const UPDATED_APPOINTMENT_TITLE = `${INITIAL_APPOINTMENT_TITLE}${ADDITIONAL_TITLE_TEXT}`;
 
-fixture.skip`Appointment Editing`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment Editing`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('Should correctly update appointment if dataSource is a simple array', async (t) => {
+test('Should correctly update appointment if dataSource is a simple array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);

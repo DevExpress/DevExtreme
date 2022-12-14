@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.skip`Timeline Appointments`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Timeline Appointments`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
-safeSizeTest('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t) => {
+test('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t

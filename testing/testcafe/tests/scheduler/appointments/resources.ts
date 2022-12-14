@@ -1,11 +1,11 @@
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import TagBox from '../../../model/tagBox';
 
-fixture.skip`Appointment resources`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Appointment resources`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => disposeWidgets());
 
 const dataSource = [{
   text: 'test-appt-1',
@@ -31,7 +31,7 @@ const priorityData = [{
   color: 'rgb(225, 142, 146)',
 }];
 
-safeSizeTest('Resource color should be correct if group is set in "views"', async (t) => {
+test('Resource color should be correct if group is set in "views"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment1 = scheduler.getAppointment('test-appt-1');
   const appointment2 = scheduler.getAppointment('test-appt-2');
@@ -68,7 +68,7 @@ safeSizeTest('Resource color should be correct if group is set in "views"', asyn
   }],
 }));
 
-safeSizeTest('Scheduler should renders correctly if resource dataSource is not set', async (t) => {
+test('Scheduler should renders correctly if resource dataSource is not set', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment1 = scheduler.getAppointment('Appt-1');
   const appointment2 = scheduler.getAppointment('Appt-2');
@@ -102,7 +102,7 @@ safeSizeTest('Scheduler should renders correctly if resource dataSource is not s
     }],
   }));
 
-safeSizeTest('Resource with allowMultiple should be set correctly for new the appointment (T1075028)', async (t) => {
+test('Resource with allowMultiple should be set correctly for new the appointment (T1075028)', async (t) => {
   const scheduler = new Scheduler('#container');
   const cell = scheduler.getDateTableCell(2, 0);
   const popup = scheduler.appointmentPopup;
@@ -148,7 +148,7 @@ safeSizeTest('Resource with allowMultiple should be set correctly for new the ap
   }],
 }));
 
-safeSizeTest('Resource color should be correct for the complex resource id without grouping', async (t) => {
+test('Resource color should be correct for the complex resource id without grouping', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointmentA = scheduler.getAppointment('a');
   const appointmentB = scheduler.getAppointment('b');
