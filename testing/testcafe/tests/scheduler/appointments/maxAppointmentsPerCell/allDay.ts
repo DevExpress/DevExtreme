@@ -7,7 +7,7 @@ fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-['auto', 'unlimited', 1, 3, 10].forEach((maxAppointmentsPerCellValue) => {
+['unlimited'].forEach((maxAppointmentsPerCellValue) => {
   test(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
@@ -19,7 +19,9 @@ fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }).before(async (t) => {
+    await t.click('html');
+
     await createWidget(
       'dxScheduler', {
         dataSource: [{

@@ -5,7 +5,7 @@ import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
+fixture.skip`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 

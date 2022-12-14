@@ -34,8 +34,8 @@ const getSchedulerOptions = (dataSource) => ({
 });
 
 test('Should not lose drag-n-dropped appointment in the second scheduler', async (t) => {
-  const firstScheduler = new Scheduler(`${FIRST_SCHEDULER_SELECTOR}`);
-  const secondScheduler = new Scheduler(`${SECOND_SCHEDULER_SELECTOR}`);
+  const firstScheduler = new Scheduler(`#${FIRST_SCHEDULER_SELECTOR}`);
+  const secondScheduler = new Scheduler(`#${SECOND_SCHEDULER_SELECTOR}`);
 
   const appointmentToMoveElement = firstScheduler
     .getAppointment(TEST_APPOINTMENT.text)
