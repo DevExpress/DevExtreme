@@ -19,7 +19,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noEmitOnError": false,
+    "noEmitOnError": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
