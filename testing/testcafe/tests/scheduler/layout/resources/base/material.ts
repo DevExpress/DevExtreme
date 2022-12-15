@@ -47,7 +47,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
     test(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
-      await t.click(scheduler.getAppointment('1 appointment', 0).element);
+      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
@@ -65,7 +65,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
-      await t.click(scheduler.getAppointment('1 appointment', 0).element);
+      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();

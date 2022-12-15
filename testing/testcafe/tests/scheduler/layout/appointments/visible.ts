@@ -16,7 +16,6 @@ fixture.disablePageReloads`Layout:Appointments:visible`
       await t
         .expect(await takeScreenshot(`filtering-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`, scheduler.workSpace))
         .ok()
-
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {

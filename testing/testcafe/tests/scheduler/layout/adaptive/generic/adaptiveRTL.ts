@@ -12,7 +12,7 @@ import {
   horizontalViews,
 } from '../../utils';
 
-fixture.disablePageReloads`Scheduler: Adaptive Generic theme layout in RTL`
+fixture.skip`Scheduler: Adaptive Generic theme layout in RTL`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => disposeWidgets());
 

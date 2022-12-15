@@ -4,7 +4,7 @@ import createWidget, { disposeWidgets } from '../../../../../helpers/createWidge
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.disablePageReloads`Layout:BrowserResize`
+fixture.skip`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
