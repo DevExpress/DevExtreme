@@ -16,53 +16,55 @@ const INTERVALS_MAP = {
     'longtime': 'second'
 };
 
-function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
-    let prevDifferences;
-    let nextDifferences;
-    let dateUnitInterval;
-    const dateUnitsLength = dateUnitIntervals.length;
-    let i;
-    let j;
+function patchFirstTickDiff(differences, tickFormatIndex) {
+    for(let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i++) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        if(i === tickFormatIndex) {
+            setDateUnitInterval(differences, tickFormatIndex + (differences['millisecond'] ? 2 : 1));
+            break;
+        } else if(differences[dateUnitInterval] && differences.count > 1) {
+            resetDateUnitInterval(differences, i);
+            break;
+        }
+    }
+}
 
+function patchTickDiff(differences, tickFormatIndex) {
+    let patched = false;
+    for(let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i--) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        if(differences[dateUnitInterval]) {
+            if(i - tickFormatIndex > 1) {
+                for(let j = 0; j <= tickFormatIndex; j++) {
+                    resetDateUnitInterval(differences, j);
+                    patched = true;
+                }
+                break;
+            }
+        }
+    }
+    return patched;
+}
+
+function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
     tickIntervalFormat = INTERVALS_MAP[tickIntervalFormat] || tickIntervalFormat;
 
     const tickFormatIndex = dateUnitIntervals.indexOf(tickIntervalFormat);
 
     if(nextDate) {
-        nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
-        prevDifferences = dateUtils.getDatesDifferences(curDate, prevDate);
+        const nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
         if(nextDifferences[tickIntervalFormat]) {
-            for(i = tickFormatIndex; i < dateUnitsLength - 1; i++) {
-                dateUnitInterval = dateUnitIntervals[i];
-                if(i === tickFormatIndex) {
-                    setDateUnitInterval(nextDifferences, tickFormatIndex + (nextDifferences['millisecond'] ? 2 : 1));
-                    break;
-                } else if(nextDifferences[dateUnitInterval] && nextDifferences.count > 1) {
-                    resetDateUnitInterval(nextDifferences, i);
-                    break;
-                }
-            }
+            patchFirstTickDiff(nextDifferences, tickFormatIndex);
         }
+        return nextDifferences;
     } else {
-        prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
-        let modified = false;
-        for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
-            dateUnitInterval = dateUnitIntervals[i];
-            if(prevDifferences[dateUnitInterval]) {
-                if(i - tickFormatIndex > 1) {
-                    for(j = 0; j <= tickFormatIndex; j++) {
-                        resetDateUnitInterval(prevDifferences, j);
-                        modified = true;
-                    }
-                    break;
-                }
-            }
-        }
-        if(!modified && prevDifferences.count === 1) {
+        const prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
+        const patched = patchTickDiff(prevDifferences, tickFormatIndex);
+        if(!patched && prevDifferences.count === 1) {
             setDateUnitInterval(prevDifferences, tickFormatIndex);
         }
+        return prevDifferences;
     }
-    return nextDate ? nextDifferences : prevDifferences;
 }
 
 function resetDateUnitInterval(differences, intervalIndex) {
