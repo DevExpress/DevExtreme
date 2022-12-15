@@ -34,7 +34,6 @@ import ButtonGroup from '../../button_group';
 import FileUploader from '../../file_uploader';
 import TextBox from '../../text_box';
 
-
 export class ImageUploader {
     constructor(module, config) {
         this.module = module;
@@ -44,14 +43,21 @@ export class ImageUploader {
     }
 
     render() {
+        if(this.editorInstance._formDialog) {
+            this.editorInstance._formDialog.beforeAddButtonAction = () => this.getCurrentTab().upload();
+        }
+
         this.tabPanelIndex = 0;
         this.formData = this.getFormData();
         this.isUpdating = this.isImageUpdating();
-        this.actualTabs = this.config.tabs?.slice();
+
+        this.tabsModel = this.createTabsModel(this.config.tabs);
         this.tabs = this.createTabs(this.formData);
+
         const formConfig = this.getFormConfig();
 
-        this.modifyDialogPopupOptions();
+        this.updatePopupConfig();
+        this.updateAddButtonState();
 
         this.editorInstance.showFormDialog(formConfig)
             .done((formData, event) => {
@@ -61,6 +67,21 @@ export class ImageUploader {
                 this.resetDialogPopupOptions();
                 this.quill.focus();
             });
+    }
+
+    getCurrentTab() {
+        return this.tabs[this.tabPanelIndex];
+    }
+
+    updateAddButtonState() {
+        const isDisabled = this.getCurrentTab().isDisableButton();
+        this.setAddButtonDisabled(isDisabled);
+    }
+
+    setAddButtonDisabled(value) {
+        this.editorInstance.formDialogOption({
+            'toolbarItems[0].options.disabled': value
+        });
     }
 
     getActiveTabIndex() {
@@ -79,35 +100,32 @@ export class ImageUploader {
         };
     }
 
-    createTabs(formData) {
-        const result = [];
-
-        if(!this.actualTabs || this.isUpdating) {
-            this.actualTabs = ['url'];
-        }
-
-        this.actualTabs = this.normalizeTabs(this.actualTabs);
-
-        this.actualTabs.forEach((tabName) => {
-            const newTab = tabName === 'url'
-                ? new UrlTab(this.module, {
-                    config: this.config,
-                    formData,
-                    isUpdating: this.isUpdating
-                })
-                : new FileTab(this.module, {
-                    config: this.config
-                });
-
-            result.push(newTab);
-        });
-
-        return result;
+    createUrlTab(formData) {
+        return new UrlTab(this.module, {
+            config: this.config,
+            formData,
+            isUpdating: this.isUpdating
+        }, () => this.updateAddButtonState());
     }
 
-    normalizeTabs(tabsConfig) {
-        return tabsConfig.map((item) => {
-            return typeof item === 'object' ? item.name : item;
+    createFileTab() {
+        return new FileTab(this.module, {
+            config: this.config
+        }, () => this.updateAddButtonState());
+    }
+
+    createTabsModel(model = []) {
+        if(model.length === 0 || this.isUpdating) {
+            return ['url'];
+        }
+
+        return model.map(tab => typeof tab === 'object' ? tab.name : tab);
+    }
+
+    createTabs(formData) {
+        return this.tabsModel.map((tabName) => {
+            const isUrlTab = tabName === 'url';
+            return isUrlTab ? this.createUrlTab(formData) : this.createFileTab();
         });
     }
 
@@ -115,40 +133,33 @@ export class ImageUploader {
         return Object.prototype.hasOwnProperty.call(this.module.quill.getFormat() ?? {}, 'imageSrc');
     }
 
-    modifyDialogPopupOptions() {
+    updatePopupConfig() {
         let wrapperClasses = `${DIALOG_IMAGE_POPUP_CLASS} ${FORM_DIALOG_CLASS}`;
         if(this.useTabbedItems()) {
             wrapperClasses += ` ${DIALOG_IMAGE_POPUP_WITH_TABS_CLASS}`;
         }
 
+        const titleKey = this.isUpdating ? DIALOG_UPDATE_IMAGE_CAPTION : DIALOG_IMAGE_CAPTION;
+        const addButtonTextKey = this.isUpdating ? DIALOG_IMAGE_UPDATE_BUTTON : DIALOG_IMAGE_ADD_BUTTON;
+
         this.editorInstance.formDialogOption({
-            title: localizationMessage.format(
-                this.isUpdating
-                    ? DIALOG_UPDATE_IMAGE_CAPTION
-                    : DIALOG_IMAGE_CAPTION),
-            'toolbarItems[0].options.text': localizationMessage.format(
-                this.isUpdating
-                    ? DIALOG_IMAGE_UPDATE_BUTTON
-                    : DIALOG_IMAGE_ADD_BUTTON),
-            'toolbarItems[0].options.visible': !this.shouldHideAddButton(),
+            title: localizationMessage.format(titleKey),
+            'toolbarItems[0].options.text': localizationMessage.format(addButtonTextKey),
             'wrapperAttr': { class: wrapperClasses }
         });
-    }
-
-    shouldHideAddButton() {
-        return !this.isUpdating && this.actualTabs.length === 1 && this.actualTabs[0] !== 'url';
     }
 
     resetDialogPopupOptions() {
         this.editorInstance.formDialogOption({
             'toolbarItems[0].options.text': localizationMessage.format('OK'),
             'toolbarItems[0].options.visible': true,
+            'toolbarItems[0].options.disabled': false,
             wrapperAttr: { class: FORM_DIALOG_CLASS }
         });
     }
 
     useTabbedItems() {
-        return this.actualTabs.length > 1;
+        return this.tabsModel.length > 1;
     }
 
     getFormWidth() {
@@ -166,8 +177,6 @@ export class ImageUploader {
     }
 
     getItemsConfig() {
-        let config = {};
-
         if(this.useTabbedItems()) {
             const tabsConfig = map(this.tabs, (tabController) => {
                 return {
@@ -177,46 +186,55 @@ export class ImageUploader {
                 };
             });
 
-            config = [{
+            return [{
                 itemType: 'tabbed',
                 tabPanelOptions: {
                     onSelectionChanged: (e) => {
                         this.tabPanelIndex = e.component.option('selectedIndex');
+                        this.updateAddButtonState();
                     }
                 },
                 tabs: tabsConfig
             }];
-        } else {
-            config = this.tabs[0].getItemsConfig();
         }
 
-        return config;
+        return this.tabs[0].getItemsConfig();
     }
 }
 
 class BaseTab {
-    constructor(module, { config, formData, isUpdating }) {
+    constructor(module, { config, formData, isUpdating }, onFileSelected) {
         this.module = module;
         this.config = config;
         this.formData = formData;
         this.isUpdating = isUpdating;
-        this.strategy = this.getStrategy();
+        this.onFileSelected = onFileSelected;
+
+        this.strategy = this.createStrategy();
     }
 
     getItemsConfig() {
         return this.strategy.getItemsConfig();
+    }
+
+    createStrategy() {
+        return this.isUpdating
+            ? new UpdateUrlStrategy(this.module, this.config, this.formData)
+            : new AddUrlStrategy(this.module, this.config, this.onFileSelected);
+    }
+
+    isDisableButton() {
+        return false;
+    }
+
+    upload() {
+        return this.strategy.upload();
     }
 }
 
 class UrlTab extends BaseTab {
     getTabName() {
         return localizationMessage.format(DIALOG_IMAGE_SPECIFY_URL);
-    }
-
-    getStrategy() {
-        return this.isUpdating
-            ? new UpdateUrlStrategy(this.module, this.config, this.formData)
-            : new AddUrlStrategy(this.module, this.config);
     }
 }
 
@@ -225,8 +243,12 @@ class FileTab extends BaseTab {
         return localizationMessage.format(DIALOG_IMAGE_SELECT_FILE);
     }
 
-    getStrategy() {
-        return new FileStrategy(this.module, this.config);
+    createStrategy() {
+        return new FileStrategy(this.module, this.config, this.onFileSelected);
+    }
+
+    isDisableButton() {
+        return !this.strategy.isValid();
     }
 }
 
@@ -246,10 +268,16 @@ class BaseStrategy {
     }
 
     pasteImage() {}
+
+    isValid() {
+        return true;
+    }
+
+    upload() {}
 }
 class AddUrlStrategy extends BaseStrategy {
-    constructor(module, config) {
-        super(module, config);
+    constructor(module, config, onFileSelected) {
+        super(module, config, onFileSelected);
 
         this.shouldKeepAspectRatio = true;
     }
@@ -284,9 +312,16 @@ class AddUrlStrategy extends BaseStrategy {
         }));
     }
 
+    upload() {
+        const result = this.editorInstance._formDialog._form.validate();
+        return result.isValid;
+    }
+
     getItemsConfig() {
         return [
-            { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
+            { dataField: 'src', colSpan: 11, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) },
+                validationRules: [{ type: 'required' }, { type: 'stringLength', min: 1 }],
+            },
             { dataField: 'width', colSpan: 6, label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) }, template: (data) => {
                 const $content = $('<div>').addClass(DIALOG_IMAGE_FIX_RATIO_CONTAINER);
                 const $widthEditor = $('<div>').appendTo($content);
@@ -327,8 +362,8 @@ class AddUrlStrategy extends BaseStrategy {
 }
 
 class UpdateUrlStrategy extends AddUrlStrategy {
-    constructor(module, config, formData) {
-        super(module, config);
+    constructor(module, config, formData, onFileSelected) {
+        super(module, config, onFileSelected);
         this.formData = formData;
         this.modifyFormData();
     }
@@ -373,10 +408,27 @@ class UpdateUrlStrategy extends AddUrlStrategy {
 }
 
 class FileStrategy extends BaseStrategy {
-    constructor(module, config) {
-        super(module, config);
-
+    constructor(module, config, onFileSelected) {
+        super(module, config, onFileSelected);
         this.useBase64 = !isDefined(this.config.fileUploadMode) || this.config.fileUploadMode === 'base64';
+
+        this.isValidInternal = false;
+        this.onFileSelected = onFileSelected;
+        this.data = null;
+    }
+
+    upload() {
+        if(this.useBase64) {
+            this.base64Upload(this.data);
+        } else if(this.data.value.length) {
+            this.data.component.upload();
+        }
+
+        return true;
+    }
+
+    isValid() {
+        return this.isValidInternal;
     }
 
     closeDialogPopup(data) {
@@ -407,21 +459,25 @@ class FileStrategy extends BaseStrategy {
         return this.config.fileUploadMode === 'both';
     }
 
+    validate(e) {
+        const fileUploader = e.component;
+
+        this.isValidInternal = !fileUploader._files.some(file => !file.isValid());
+        if(fileUploader._files.length === 0) {
+            this.isValidInternal = false;
+        }
+    }
+
     getFileUploaderOptions() {
         const fileUploaderOptions = {
             uploadUrl: this.config.uploadUrl,
             onValueChanged: (data) => {
-                if(this.useBase64) {
-                    this.base64Upload(data);
-                } else {
-                    if(data.value.length) {
-                        data.component.upload();
-                    }
-                }
+                this.validate(data);
+
+                this.data = data;
+                this.onFileSelected();
             },
-            onUploaded: (data) => {
-                this.serverUpload(data);
-            }
+            onUploaded: e => this.serverUpload(e)
         };
 
         return extend({}, getFileUploaderBaseOptions(), fileUploaderOptions, this.config.fileUploaderOptions);
@@ -437,6 +493,7 @@ class FileStrategy extends BaseStrategy {
                 template: () => {
                     const $content = $('<div>');
                     this.module.editorInstance._createComponent($content, FileUploader, this.getFileUploaderOptions());
+
                     return $content;
                 }
             }, {
