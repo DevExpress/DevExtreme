@@ -1,4 +1,4 @@
-import type { ItemLike } from '@devextreme/interim';
+import { ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
 import {
