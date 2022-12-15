@@ -531,6 +531,7 @@ const ColorView = Editor.inherit({
 
     _renderAlphaChannelElements: function() {
         if(this.option('editAlphaChannel')) {
+            this._currentColor.a = 1;
             this._$colorPickerContainer
                 .find('.' + COLOR_VIEW_ROW_CLASS)
                 .eq(1)
