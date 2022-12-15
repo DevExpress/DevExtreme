@@ -2,16 +2,18 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
-fixture`Scheduler: max appointments per cell: All day`
+fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
 ['auto', 'unlimited', 1, 3, 10].forEach((maxAppointmentsPerCellValue) => {
-  test(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
+  safeSizeTest(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 
+    await t.debug();
     await t
       .expect(await takeScreenshot(`all-day-appointment-maxAppointmentsPerCell=${maxAppointmentsPerCellValue}.png`, scheduler.allDayRow))
       .ok();
@@ -106,5 +108,5 @@ fixture`Scheduler: max appointments per cell: All day`
         allDayPanelMode: 'allDay',
       },
     );
-  });
+  }).after(async () => disposeWidgets());
 });

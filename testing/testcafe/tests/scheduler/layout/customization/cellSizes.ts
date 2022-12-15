@@ -6,7 +6,7 @@ import {
 } from '../../../navigation/helpers/domUtils';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Scheduler: Layout Customization: Cell Sizes`
+fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 

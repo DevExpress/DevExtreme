@@ -3,7 +3,7 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-const CLICK_OPTIONS = { speed: 0.1 };
+const CLICK_OPTIONS = { speed: 0.2 };
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
