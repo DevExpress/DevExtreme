@@ -1,5 +1,5 @@
 import {
-  createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
+  createRadioGroupCore, RadioGroupValue, ReadonlyProps, TemplateProps, ValueProps,
 } from '@devextreme/components';
 import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
@@ -35,8 +35,6 @@ function RadioGroupInternal<T extends RadioGroupValue>(props: RadioGroupProps<T>
     </RadioGroupContext.Provider>
   );
 }
-
-export type RadioGroupValue = string | number;
 
 export type RadioGroupProps<T> =
   React.PropsWithChildren<Props<ValueProps<T>, ReadonlyProps, TemplateProps>>;

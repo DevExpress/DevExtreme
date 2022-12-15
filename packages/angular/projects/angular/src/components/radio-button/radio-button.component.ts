@@ -7,10 +7,9 @@ import {
   Optional,
   Output,
 } from '@angular/core';
+import { RadioGroupValue } from '@devextreme/components';
 import { RadioGroupService } from '../radio-group/radio-group.service';
 
-// TODO: Move this code to separate directory radio-common in the future.
-import type { RadioGroupValue } from '../radio-group/types';
 import { createRadioButtonStrategy } from './radio-button.strategies';
 
 // Increasing integer for generating unique ids for radio components.
