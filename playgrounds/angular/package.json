@@ -4,7 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "nx serve @playgrounds/angular",
-    "serve": "npm start",
     "watch": "npm start",
     "build": "nx build @playgrounds/angular",
     "cache:clean": "ng cache clean"
