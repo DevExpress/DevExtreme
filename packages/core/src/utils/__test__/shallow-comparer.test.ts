@@ -1,11 +1,11 @@
-import { shadowComparer } from '../shadow-comparer';
+import { shallowComparer } from '../shallow-comparer';
 
-describe('Core: Utils: shadowComparer', () => {
+describe('Core: Utils: shallowComparer', () => {
   it('Returns false for arguments of different type', () => {
     const prev = { a: 1 } as unknown;
     const next = (() => {}) as unknown;
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeFalsy();
   });
@@ -14,7 +14,7 @@ describe('Core: Utils: shadowComparer', () => {
     const prev = 2;
     const next = 2;
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeTruthy();
   });
@@ -23,7 +23,7 @@ describe('Core: Utils: shadowComparer', () => {
     const prev = true;
     const next = false;
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeFalsy();
   });
@@ -31,7 +31,7 @@ describe('Core: Utils: shadowComparer', () => {
   it('Returns true if compared values are functions and equal', () => {
     const firstFunc = () => {};
 
-    const result = shadowComparer(firstFunc, firstFunc);
+    const result = shallowComparer(firstFunc, firstFunc);
 
     expect(result).toBeTruthy();
   });
@@ -40,7 +40,7 @@ describe('Core: Utils: shadowComparer', () => {
     const firstFunc = () => {};
     const secondFunc = () => {};
 
-    const result = shadowComparer(firstFunc, secondFunc);
+    const result = shallowComparer(firstFunc, secondFunc);
 
     expect(result).toBeFalsy();
   });
@@ -49,7 +49,7 @@ describe('Core: Utils: shadowComparer', () => {
     const firstDate = new Date('2022-10-10T00:00:00Z');
     const secondDate = new Date('2022-10-10T00:00:00Z');
 
-    const result = shadowComparer(firstDate, secondDate);
+    const result = shallowComparer(firstDate, secondDate);
 
     expect(result).toBeTruthy();
   });
@@ -58,7 +58,7 @@ describe('Core: Utils: shadowComparer', () => {
     const firstDate = new Date('2022-10-10T00:00:00Z');
     const secondDate = new Date('2021-10-10T00:00:00Z');
 
-    const result = shadowComparer(firstDate, secondDate);
+    const result = shallowComparer(firstDate, secondDate);
 
     expect(result).toBeFalsy();
   });
@@ -67,7 +67,7 @@ describe('Core: Utils: shadowComparer', () => {
     const prev = { a: 1 };
     const next = { a: 1, b: 2 };
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeFalsy();
   });
@@ -89,7 +89,7 @@ describe('Core: Utils: shadowComparer', () => {
       array: testArray,
     };
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeTruthy();
   });
@@ -106,7 +106,7 @@ describe('Core: Utils: shadowComparer', () => {
       },
     };
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeFalsy();
   });
@@ -121,7 +121,7 @@ describe('Core: Utils: shadowComparer', () => {
     const next = testRef;
     next.a.b = false;
 
-    const result = shadowComparer(prev, next);
+    const result = shallowComparer(prev, next);
 
     expect(result).toBeTruthy();
   });

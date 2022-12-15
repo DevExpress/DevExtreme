@@ -4,6 +4,6 @@ export * from './get-keys';
 export * from './memoize';
 export * from './observable';
 export * from './pipe';
-export * from './shadow-comparer';
+export * from './shallow-comparer';
 
 export * from './types';
