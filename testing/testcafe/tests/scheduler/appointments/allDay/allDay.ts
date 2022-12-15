@@ -75,7 +75,7 @@ safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('.dx-scheduler-cell-sizes-horizontal { width: 4px; }', 0);
+  await insertStylesheetRule('#timeline-workweek .dx-scheduler-cell-sizes-horizontal { width: 4px; }', 0);
 
   await appendElementTo('#container', 'div', 'timeline-workweek');
 
