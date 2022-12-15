@@ -3,7 +3,7 @@ import url from '../../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
+fixture`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 

@@ -51,7 +51,9 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => {
+    }).before(async (t) => {
+      await t.click('html', { offsetX: 0, offsetY: 0 });
+
       await changeTheme('material.blue.light');
 
       return createScheduler(view, resourcesValue);
@@ -67,7 +69,8 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => {
+    }).before(async (t) => {
+      await t.click('html', { offsetX: 0, offsetY: 0 });
       await changeTheme('material.blue.light');
 
       return createScheduler(view, resourcesValue);
