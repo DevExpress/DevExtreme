@@ -347,6 +347,11 @@ const Popup = Overlay.inherit({
                 && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
+    _renderContent() {
+        this.callBase();
+        this._observeContentResize(this.option('visible'));
+    },
+
     _renderContentImpl: function() {
         this._renderTitle();
         this.callBase();
@@ -419,8 +424,6 @@ const Popup = Overlay.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
-        this._observeContentResize(visible);
-
         return this.callBase(visible);
     },
 
