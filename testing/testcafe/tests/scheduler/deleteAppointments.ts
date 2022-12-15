@@ -6,8 +6,6 @@ fixture.disablePageReloads`Delete appointments`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 
-const scheduler = new Scheduler('#container');
-
 const createRecurrenceData = (): Record<string, unknown>[] => [{
   Text: 'Text',
   StartDate: new Date(2017, 4, 22, 1, 30, 0, 0),
@@ -41,6 +39,8 @@ const createSimpleData = (): Record<string, unknown>[] => [{
 }];
 
 test('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .setTestSpeed(0.1)
     .expect(scheduler.getAppointmentCount()).eql(6)
@@ -65,6 +65,8 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
 }).before(async () => createScheduler(createRecurrenceData()));
 
 test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .setTestSpeed(0.1)
     .expect(scheduler.getAppointmentCount()).eql(6)
@@ -87,6 +89,8 @@ test('Recurrence appointments should be deleted by press \'delete\' key', async 
 }).before(async () => createScheduler(createRecurrenceData()));
 
 test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .expect(scheduler.getAppointmentCount()).eql(2)
     .click(scheduler.getAppointment('Text').element)

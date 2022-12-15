@@ -14,8 +14,6 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => disposeWidgets());
 
-const scheduler = new Scheduler('#container');
-
 const baseConfig = {
   scrolling: { mode: 'virtual', orientation: 'both' },
   views: [{
@@ -26,6 +24,8 @@ const baseConfig = {
 };
 
 test('Selected cells shouldn\'t disapppear on scroll', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -41,6 +41,8 @@ test('Selected cells shouldn\'t disapppear on scroll', async (t) => {
 }));
 
 test('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -61,6 +63,8 @@ test('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is
 }));
 
 test('Selected cells shouldn\'t disapppear on scroll when appointments are grouped by date', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 2));
 
@@ -82,6 +86,8 @@ test('Selected cells shouldn\'t disapppear on scroll when appointments are group
 }));
 
 test('Selected cells shouldn\'t disapppear on scroll when appointments are grouped vertically', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -103,6 +109,8 @@ test('Selected cells shouldn\'t disapppear on scroll when appointments are group
 }));
 
 test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getAllDayTableCell(0), scheduler.getAllDayTableCell(1));
 
@@ -119,6 +127,8 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horiz
 }));
 
 test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when vertical grouping is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getAllDayTableCell(0), scheduler.getAllDayTableCell(1));
 
@@ -140,6 +150,8 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when verti
 }));
 
 test('Selection should work in month view', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -169,6 +181,8 @@ test('Selection should work in month view', async (t) => {
 }));
 
 test('Selection should work in timeline views', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   const checkSelection = async (): Promise<void> => {
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
