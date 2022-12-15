@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import {
   appendElementTo, setStyleAttribute,
 } from '../../../../navigation/helpers/domUtils';
@@ -36,7 +37,7 @@ test('Dragging should be work right in case dxScheduler placed in container with
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setStyleAttribute('#container', 'margin-top: 100px; margin-left: 100px; transform: translate(0px, 0px);');
+  await setStyleAttribute(Selector('#container'), 'margin-top: 100px; margin-left: 100px; transform: translate(0px, 0px);');
   await appendElementTo('#container', 'div', 'scheduler');
 
   return createWidget('dxScheduler', {
