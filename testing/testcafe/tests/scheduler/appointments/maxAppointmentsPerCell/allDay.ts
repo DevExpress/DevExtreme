@@ -13,7 +13,6 @@ fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 
-    await t.debug();
     await t
       .expect(await takeScreenshot(`all-day-appointment-maxAppointmentsPerCell=${maxAppointmentsPerCellValue}.png`, scheduler.allDayRow))
       .ok();

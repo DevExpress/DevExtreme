@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { deleteStylesheetRule, appendElementTo, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
+import { ClientFunction } from 'testcafe';
+import { appendElementTo } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
@@ -75,11 +76,9 @@ safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#timeline-workweek .dx-scheduler-cell-sizes-horizontal { width: 4px; }', 0);
-
   await appendElementTo('#container', 'div', 'timeline-workweek');
 
-  return createWidget(
+  await createWidget(
     'dxScheduler',
     {
       width: 970,
@@ -97,7 +96,8 @@ safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
     true,
     '#timeline-workweek',
   );
-}).after(async () => {
-  await disposeWidgets();
-  await deleteStylesheetRule(0);
+
+  await ClientFunction(() => {
+    $('.dx-scheduler-cell-sizes-horizontal').css('width', '4px');
+  })();
 });

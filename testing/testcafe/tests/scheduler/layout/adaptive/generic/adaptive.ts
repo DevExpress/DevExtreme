@@ -12,7 +12,7 @@ import {
   horizontalViews,
 } from '../../utils';
 
-fixture.skip`Scheduler: Adaptive Generic theme layout`
+fixture.disablePageReloads`Scheduler: Adaptive Generic theme layout`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
