@@ -6,6 +6,7 @@ import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
+import errors from 'core/errors';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay/ui.overlay';
 import { isRenderer } from 'core/utils/type';
@@ -1769,6 +1770,16 @@ QUnit.module('popup integration', () => {
             assert.strictEqual(this.hasClass(dropDownEditor, CUSTOM_CLASS), true, 'drop down popup wrapper has custom class');
         });
     });
+
+    QUnit.test('popup rerender should not provoke deprecation logs (T1129836)', function(assert) {
+        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true }).dxDropDownEditor('instance');
+        const logStub = sinon.stub(errors, 'log');
+
+        dropDownEditor.option('dropDownOptions', { showTitle: true });
+        dropDownEditor._renderPopup();
+
+        assert.strictEqual(logStub.callCount, 0);
+    });
 });
 
 QUnit.module('popup buttons', {
@@ -2004,5 +2015,30 @@ QUnit.module('aria accessibility', () => {
         instance.close();
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
+    });
+
+    QUnit.module('aria-controls', {}, () => {
+        const attrName = 'aria-controls';
+        const deferRenderings = [true, false];
+
+        deferRenderings.forEach(deferRendering => {
+            QUnit.test(`'aria-controls' should be set if deferRendering="${deferRendering}"`, function(assert) {
+                const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ deferRendering }).dxDropDownEditor('instance');
+                const $input = $(dropDownEditor.field());
+                const hasAttr = () => $input[0].hasAttribute(attrName);
+
+                assert.strictEqual(hasAttr(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
+
+                dropDownEditor.open();
+                const popupId = $(dropDownEditor.content()).attr('id');
+
+                assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
+                assert.ok(hasAttr(), `${attrName} attribute has been set`);
+
+                dropDownEditor.close();
+                assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
+                assert.ok(hasAttr(), `${attrName} attribute has been set`);
+            });
+        });
     });
 });

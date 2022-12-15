@@ -582,6 +582,10 @@ export default {
     },
 
     getWrappedLookupDataSource(column, dataSource, filter) {
+        if(!dataSource) {
+            return [];
+        }
+
         const lookupDataSourceOptions = this.normalizeLookupDataSource(column.lookup);
 
         if(column.calculateCellValue !== column.defaultCalculateCellValue) {
@@ -617,6 +621,7 @@ export default {
 
         const lookupDataSource = {
             ...lookupDataSourceOptions,
+            __dataGridSourceFilter: filter,
             load: (loadOptions) => {
                 const d = new Deferred();
                 loadUniqueRelevantItems(loadOptions).done((items) => {

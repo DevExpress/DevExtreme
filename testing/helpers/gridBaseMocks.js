@@ -1156,5 +1156,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         return items;
     };
 
+    exports.generateNestedData = function(itemCount, depth) {
+        const items = [];
+        let i = 0;
+        const generateParentId = (i) => (i % depth === 0 ? 0 : i - 1);
+        while(i++ < itemCount) {
+            items.push({ id: i, parentId: generateParentId(i), field1: 'test', field2: 'test2' });
+        }
+        return items;
+    };
+
     return exports;
 };

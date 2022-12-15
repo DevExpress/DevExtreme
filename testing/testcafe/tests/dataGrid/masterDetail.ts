@@ -81,7 +81,7 @@ fixture.disablePageReloads`Master detail`
 });
 
 // T1113525
-test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
+test.skip('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');

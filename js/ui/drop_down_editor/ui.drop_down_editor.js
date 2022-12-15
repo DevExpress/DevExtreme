@@ -53,7 +53,10 @@ const DropDownEditor = TextBox.inherit({
                     ? this._getLastPopupElement()
                     : this._getFirstPopupElement();
 
-                $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
+                if($focusableElement) {
+                    eventsEngine.trigger($focusableElement, 'focus');
+                    $focusableElement.select();
+                }
                 e.preventDefault();
             },
             escape: function(e) {
@@ -511,8 +514,13 @@ const DropDownEditor = TextBox.inherit({
         }
     },
 
+    _getControlsAria() {
+        return this._popup && this._popupContentId;
+    },
+
     _renderOpenedState: function() {
         const opened = this.option('opened');
+
         if(opened) {
             this._createPopup();
         }
@@ -520,10 +528,12 @@ const DropDownEditor = TextBox.inherit({
         this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE, opened);
         this._setPopupOption('visible', opened);
 
-        this.setAria({
-            'expanded': opened
-        });
+        const arias = {
+            'expanded': opened,
+            'controls': this._getControlsAria(),
+        };
 
+        this.setAria(arias);
         this.setAria('owns', ((opened || undefined) && this._popupContentId), this.$element());
     },
 
@@ -543,6 +553,11 @@ const DropDownEditor = TextBox.inherit({
 
     _renderPopup: function() {
         const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
+
+        delete popupConfig.closeOnOutsideClick;
+        if(popupConfig.elementAttr && !Object.keys(popupConfig.elementAttr).length) {
+            delete popupConfig.elementAttr;
+        }
 
         this._popup = this._createComponent(this._$popup, Popup, popupConfig);
 
@@ -618,6 +633,10 @@ const DropDownEditor = TextBox.inherit({
 
     _popupPositionedHandler: function(e) {
         const { labelMode, stylingMode } = this.option();
+
+        if(!this._popup) {
+            return;
+        }
 
         const $popupOverlayContent = this._popup.$overlayContent();
         const isOverlayFlipped = e.position?.v?.flip;

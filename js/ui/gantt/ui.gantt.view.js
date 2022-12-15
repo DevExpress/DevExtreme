@@ -6,6 +6,7 @@ import dateLocalization from '../../localization/date';
 import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { format } from '../../core/utils/string';
+import coreLocalization from '../../localization/core';
 
 
 export class GanttView extends Widget {
@@ -95,12 +96,23 @@ export class GanttView extends Widget {
             abbrMonthNames: dateLocalization.getMonthNames('abbreviated'),
             abbrDayNames: dateLocalization.getDayNames('abbreviated'),
             quarterNames: this._getQuarterNames(),
-            amText: dateLocalization.getPeriodNames()[0],
-            pmText: dateLocalization.getPeriodNames()[1],
+            amText: this._getAmText(),
+            pmText: this._getPmText(),
             start: messageLocalization.format('dxGantt-dialogStartTitle'),
             end: messageLocalization.format('dxGantt-dialogEndTitle'),
             progress: messageLocalization.format('dxGantt-dialogProgressTitle')
         };
+    }
+    _getAmText() {
+        return this._hasAmPM() ? dateLocalization.getPeriodNames()[0] : '';
+    }
+    _getPmText() {
+        return this._hasAmPM() ? dateLocalization.getPeriodNames()[1] : '';
+    }
+    _hasAmPM() {
+        const date = new Date(Date.UTC(2012, 11, 12, 3, 0, 0));
+        const dateString = date.toLocaleTimeString(coreLocalization.locale());
+        return dateString.match(/am|pm/i) || date.toString().match(/am|pm/i);
     }
     _getQuarterNames() {
         const quarterFormat = messageLocalization.format('dxGantt-quarter');
@@ -353,7 +365,8 @@ export class GanttView extends Widget {
         let result = '';
         if(date) {
             const datePart = dateLocalization.format(date, 'shortDate');
-            const timePart = dateLocalization.format(date, 'hh:mm');
+            const timeFormat = this._hasAmPM() ? 'hh:mm a' : 'HH:mm';
+            const timePart = dateLocalization.format(date, timeFormat);
             result = datePart + ' ' + timePart;
         }
         return result;
