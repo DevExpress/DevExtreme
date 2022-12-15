@@ -1,9 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import {
-  deleteStylesheetRule, insertStylesheetRule,
-} from '../../../navigation/helpers/domUtils';
 import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
@@ -77,6 +75,11 @@ test('Cell sizes customization should work', async (t) => {
   for (const view of views) {
     await scheduler.option('currentView', view.type);
 
+    await ClientFunction(() => {
+      $('#container .dx-scheduler-cell-sizes-vertical').css('height', '150px');
+      $('#container .dx-scheduler-cell-sizes-horizontal').css('width', '150px');
+    })();
+
     await t.expect(
       await takeScreenshot(`custom-cell-sizes-in-${view.type}.png`, scheduler.workSpace),
     ).ok();
@@ -85,16 +88,9 @@ test('Cell sizes customization should work', async (t) => {
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }', 0);
-  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-horizontal { width: 150px; }', 1);
-
   await createScheduler({
     views,
   });
-}).after(async () => {
-  await disposeWidgets();
-  await deleteStylesheetRule(0);
-  await deleteStylesheetRule(1);
 });
 
 test('Cell sizes customization should work when all-day panel is enabled', async (t) => {
@@ -108,16 +104,14 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }', 0);
-  await insertStylesheetRule('#container .dx-scheduler-cell-sizes-horizontal { width: 150px; }', 1);
-
   await createScheduler({
     views,
     showAllDayPanel: true,
     currentView: 'week',
   });
-}).after(async () => {
-  await disposeWidgets();
-  await deleteStylesheetRule(0);
-  await deleteStylesheetRule(1);
+
+  await ClientFunction(() => {
+    $('#container .dx-scheduler-cell-sizes-vertical').css('height', '150px');
+    $('#container .dx-scheduler-cell-sizes-horizontal').css('width', '150px');
+  })();
 });

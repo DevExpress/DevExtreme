@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { deleteStylesheetRule, insertStylesheetRule } from '../../../navigation/helpers/domUtils';
 import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Group Panel`
@@ -71,6 +71,10 @@ const views = [{
     for (const view of views) {
       await scheduler.option('currentView', view.type);
 
+      await ClientFunction(() => {
+        $('#container .dx-scheduler-group-header').css('height', '200px');
+      })();
+
       await t.expect(
         await takeScreenshot(`custom-group-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
       ).ok();
@@ -79,14 +83,9 @@ const views = [{
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStylesheetRule('#container .dx-scheduler-group-header { height: 200px }', 0);
-
     await createScheduler({
       views,
       crossScrollingEnabled,
     });
-  }).after(async () => {
-    await disposeWidgets();
-    await deleteStylesheetRule(0);
   });
 });
