@@ -19,7 +19,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   await t
     .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 5), { speed: 0.1 })
+    .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 5), { speed: 0.2 })
     .expect(appointmentTooltipItem.element.exists)
     .notOk()
     .expect(appointment.element.exists)
@@ -28,7 +28,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
     .eql('100px')
     .expect(appointment.date.time)
     .eql('9:30 AM - 10:30 AM')
-    .dragToElement(appointment.element, scheduler.getDateTableCell(3, 2), { speed: 0.1 })
+    .dragToElement(appointment.element, scheduler.getDateTableCell(3, 2), { speed: 0.2 })
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok()
@@ -55,7 +55,7 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
     .dragToElement(
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(2, 2),
-      { speed: 0.1 },
+      { speed: 0.2 },
     )
     .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-left-cell-in-week.png', scheduler.workSpace))
     .ok()
@@ -92,7 +92,7 @@ test('Drag-n-drop in same table cell', async (t) => {
   await t
     .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .drag(appointmentTooltipItem.element, 0, 20, { speed: 0.1 })
+    .drag(appointmentTooltipItem.element, 0, 20, { speed: 0.2 })
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok();
@@ -117,7 +117,7 @@ test('Drag-n-drop to the cell below should work in month view (T1005115)', async
     .dragToElement(
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(1, 3),
-      { speed: 0.1 },
+      { speed: 0.2 },
     )
 
     .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-cell-below-in-month.png', scheduler.workSpace))

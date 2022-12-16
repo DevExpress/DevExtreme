@@ -13,7 +13,7 @@ test('Recurrence exception date should equal date of appointment, which excluded
   const appointment = scheduler.getAppointment('Test', 2);
 
   await t
-    .dragToElement(appointment.element, targetCell, { speed: 0.1 });
+    .dragToElement(appointment.element, targetCell, { speed: 0.2 });
 
   await t
     .expect(ClientFunction(() => (window as any).recurrenceException)())

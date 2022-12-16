@@ -3,7 +3,7 @@ import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-const CLICK_OPTIONS = { speed: 0.1 };
+const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 
 fixture.disablePageReloads`Scheduler - All day appointments`

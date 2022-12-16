@@ -14,7 +14,7 @@ const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';
 const SCREENSHOT_BASE_NAME = 'without-timezone-recurrent';
 const TEST_TIMEZONES = ['Etc/GMT-10', 'Etc/GMT+1', 'Etc/GMT+10'];
-const TEST_CURSOR_OPTIONS = { speed: 0.1 };
+const TEST_CURSOR_OPTIONS = { speed: 0.5 };
 
 const createTimezoneSelect = async (
   selector: string,

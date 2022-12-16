@@ -106,7 +106,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
   const { appointmentPopup } = scheduler;
 
   await t
-    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.1 })
+    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.5 })
     .expect(appointmentPopup.element.exists)
     .ok()
     .expect(appointmentPopup.isVisible())
@@ -114,12 +114,12 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
     .expect(appointmentPopup.subjectElement.value)
     .eql(APPOINTMENT_TEXT)
 
-    .click(appointmentPopup.allDayElement, { speed: 0.1 })
-    .click(appointmentPopup.cancelButton, { speed: 0.1 })
+    .click(appointmentPopup.allDayElement, { speed: 0.5 })
+    .click(appointmentPopup.cancelButton, { speed: 0.5 })
     .expect(appointmentPopup.isVisible())
     .notOk()
 
-    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.1 })
+    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.5 })
     .expect(appointmentPopup.isVisible())
     .ok()
 

@@ -12,18 +12,18 @@ fixture.disablePageReloads`Display* arguments in appointment templates and event
     const scheduler = new Scheduler('#container');
     const etalon = '09:30:00 10:00:00';
 
-    await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.1 });
+    await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.5 });
 
     await t
       .typeText(scheduler.appointmentPopup.subjectElement, 'text')
-      .click(scheduler.appointmentPopup.doneButton, { speed: 0.1 });
+      .click(scheduler.appointmentPopup.doneButton, { speed: 0.5 });
 
     await t
       .expect(scheduler.getAppointmentByIndex(0).element.innerText)
       .eql(etalon);
 
     await t
-      .click(scheduler.getAppointmentByIndex(0).element, { speed: 0.1 })
+      .click(scheduler.getAppointmentByIndex(0).element, { speed: 0.5 })
       .expect(scheduler.appointmentTooltip.getListItem(undefined, 0).element.innerText)
       .eql(etalon);
 

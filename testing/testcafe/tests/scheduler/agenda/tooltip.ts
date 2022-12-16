@@ -12,7 +12,7 @@ test('Tooltip\'s date should be equal to date of current appointment(T1037028)',
   for (let index = 0; index < 5; index += 1) {
     await scheduler.hideAppointmentTooltip();
 
-    await t.click(scheduler.getAppointment(appointmentName, index).element, { speed: 0.1 });
+    await t.click(scheduler.getAppointment(appointmentName, index).element, { speed: 0.5 });
 
     const tooltipDate = await scheduler.appointmentTooltip
       .getListItem(appointmentName, 0).date.innerText;

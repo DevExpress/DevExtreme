@@ -43,7 +43,7 @@ test('Should not lose drag-n-dropped appointment in the second scheduler', async
   const cellToMoveElement = secondScheduler
     .getDateTableCell(2, 0);
 
-  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.1 });
+  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.2 });
 
   const movedAppointmentTime = await secondScheduler
     .getAppointment(TEST_APPOINTMENT.text)

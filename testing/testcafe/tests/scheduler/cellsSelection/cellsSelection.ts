@@ -10,8 +10,8 @@ test('Selection should work correctly with all-day panel appointments', async (t
   const scheduler = new Scheduler('#container');
 
   await t
-    .click(scheduler.getAppointment('Appointment').element, { speed: 0.1 })
-    .click(scheduler.getDateTableCell(0, 0), { speed: 0.1 })
+    .click(scheduler.getAppointment('Appointment').element, { speed: 0.5 })
+    .click(scheduler.getDateTableCell(0, 0), { speed: 0.5 })
 
     .expect(scheduler.getSelectedCells().count)
     .eql(1);
