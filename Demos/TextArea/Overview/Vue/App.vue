@@ -9,12 +9,20 @@
           @value-changed="onCheckboxValueChanged"
         />
       </div>
+      <div class="dx-field">
+        <DxCheckBox
+          v-model:value="autoResizeEnabled"
+          text="Enable auto resize"
+          @value-changed="onAutoResizeChanged"
+        />
+      </div>
     </div>
     <div class="left-content">
       <DxTextArea
-        :height="90"
+        v-model:height="height"
         :max-length="maxLength"
         v-model:value="value"
+        v-model:auto-resize-enabled="autoResizeEnabled"
       />
     </div>
     <div class="full-width-content">
@@ -65,17 +73,18 @@ export default {
       value: service.getContent(),
       valueForEditableTextArea: service.getContent(),
       valueChangeEvents: service.valueChangeEvents,
+      autoResizeEnabled: false,
+      height: 90,
     };
   },
   methods: {
     onCheckboxValueChanged(e) {
-      if (e.value) {
-        this.value = service.getContent().substring(0, 100);
-        this.maxLength = 100;
-      } else {
-        this.value = service.getContent();
-        this.maxLength = null;
-      }
+      const str = service.getContent();
+      this.value = e.value ? str.substring(0, 100) : str;
+      this.maxLength = e.value ? 100 : null;
+    },
+    onAutoResizeChanged(e) {
+      this.height = e.value ? undefined : 90;
     },
   },
 };

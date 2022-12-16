@@ -8,9 +8,21 @@
     >
     </dx-check-box>
   </div>
+  <div class="dx-field">
+    <dx-check-box
+      [(value)]="autoResizeEnabled"
+      (onValueChanged)="onAutoResizeChanged($event)"
+      text="Enable auto resize"
+    ></dx-check-box>
+  </div>
 </div>
 <div class="left-content">
-  <dx-text-area [height]="90" [maxLength]="maxLength" [(value)]="value">
+  <dx-text-area
+    [(height)]="height"
+    [maxLength]="maxLength"
+    [(value)]="value"
+    [(autoResizeEnabled)]="autoResizeEnabled"
+  >
   </dx-text-area>
 </div>
 <div class="full-width-content">
