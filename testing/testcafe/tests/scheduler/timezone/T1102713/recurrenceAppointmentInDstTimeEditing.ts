@@ -111,7 +111,7 @@ async function configureScheduler(t: TestController, { start, end }: { start: Da
     cellDuration: 30,
     width: 1000,
     height: 585,
-  });
+  }, true);
 }
 
 // === EDITING POPUP ===
