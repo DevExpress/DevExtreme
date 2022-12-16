@@ -22,7 +22,7 @@ interface ITestDragNDropOptions {
 const SCREENSHOT_BASE_NAME = 'recurrent-appointment-timezone-dst__editing';
 const SCHEDULER_SELECTOR = '#container';
 const TEST_APPOINTMENT_TEXT = 'Watercolor Landscape';
-const TEST_CURSOR_OPTIONS = { speed: 0.2 };
+const TEST_CURSOR_OPTIONS = { speed: 0.5 };
 const APPOINTMENT_DATETIME = {
   winter: {
     start: new Date('2020-11-01T17:30:00.000Z'),

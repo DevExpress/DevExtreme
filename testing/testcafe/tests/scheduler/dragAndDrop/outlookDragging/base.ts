@@ -238,19 +238,19 @@ test('Basic drag-n-drop movements with mouse offset', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 100, 0, { offsetX: 10, offsetY: 200, speed: 0.2 })
+    .drag(draggableAppointment.element, 100, 0, { offsetX: 10, offsetY: 200, speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-right.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -100, 0, { offsetX: 10, offsetY: 200, speed: 0.2 })
+    .drag(draggableAppointment.element, -100, 0, { offsetX: 10, offsetY: 200, speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-left.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, 100, { offsetX: 10, offsetY: 200, speed: 0.2 })
+    .drag(draggableAppointment.element, 0, 100, { offsetX: 10, offsetY: 200, speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-bottom.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -100, { offsetX: 10, offsetY: 200, speed: 0.2 })
+    .drag(draggableAppointment.element, 0, -100, { offsetX: 10, offsetY: 200, speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-top.png', scheduler.workSpace))
     .ok()
 

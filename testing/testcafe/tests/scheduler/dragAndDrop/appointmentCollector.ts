@@ -56,7 +56,7 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
     .dragToElement(
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(2, 2),
-      { speed: 0.2 },
+      { speed: 0.5 },
     )
     .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-left-cell-in-week.png', scheduler.workSpace))
     .ok()
@@ -118,7 +118,7 @@ test('Drag-n-drop to the cell below should work in month view (T1005115)', async
     .dragToElement(
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(1, 3),
-      { speed: 0.2 },
+      { speed: 0.5 },
     )
 
     .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-cell-below-in-month.png', scheduler.workSpace))

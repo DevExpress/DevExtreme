@@ -41,7 +41,7 @@ const resources = [{
     test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
-      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
@@ -54,7 +54,7 @@ const resources = [{
     test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
-      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();

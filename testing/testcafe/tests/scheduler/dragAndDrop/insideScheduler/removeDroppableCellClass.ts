@@ -38,7 +38,7 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     const cellToMoveElement = scheduler
       .getDateTableCell(1, 0);
 
-    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.1 });
+    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.2 });
 
     const droppableCellExists = await scheduler
       .getDroppableCell()
