@@ -15,7 +15,7 @@ import {
 } from '@devextreme/components';
 import { filter, map } from 'rxjs';
 import { doIfContextExist, Inputs } from '../../internal';
-import { RadioGroupService } from './radio-group.service';
+import { RadioGroupService } from '../radio-common';
 
 export type RadioGroupInputs<T extends RadioGroupValue> =
   Inputs<ValueProps<T>, ReadonlyProps, TemplateProps>;

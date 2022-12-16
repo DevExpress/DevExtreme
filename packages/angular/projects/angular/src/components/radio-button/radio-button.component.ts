@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { RadioGroupValue } from '@devextreme/components';
-import { RadioGroupService } from '../radio-group/radio-group.service';
+import { RadioGroupService } from '../radio-common';
 
 import { createRadioButtonStrategy } from './radio-button.strategies';
 
