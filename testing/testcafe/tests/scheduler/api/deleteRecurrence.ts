@@ -4,7 +4,10 @@ import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler API - deleteRecurrence`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async (t) => {
+    await disposeWidgets();
+    await t.debug();
+  });
 
 test('should delete recurrent appointment if mode is "series"', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -47,7 +50,7 @@ test('should delete recurrent appointment if mode is "series"', async (t) => {
       apptColor: 1,
       recurrenceRule: 'FREQ=DAILY;COUNT=4',
     }],
-  },
+  }, true,
 ));
 
 test('should exclude from recurrence if mode is "occurrence"', async (t) => {
@@ -106,10 +109,10 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
       apptColor: 1,
       recurrenceRule: 'FREQ=DAILY;COUNT=4',
     }],
-  },
+  }, true,
 ));
 
-test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
+test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('test-appt');
   const { appointmentTooltip } = scheduler;
@@ -156,5 +159,5 @@ test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
       apptColor: 1,
       recurrenceRule: 'FREQ=DAILY;COUNT=4',
     }],
-  },
+  }, true,
 ));
