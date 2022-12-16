@@ -91,6 +91,8 @@ export async function disposeWidgets(): Promise<void> {
 
     body?.prepend(otherContainerElement);
     body?.prepend(containerElement);
+
+    $('#globalStyles').remove();
   })();
 
   // await ClientFunction(() => {

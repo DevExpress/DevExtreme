@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStyles } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
@@ -66,23 +67,24 @@ const views = [{
   groupOrientation: 'vertical',
 }];
 
-views.forEach(({ type }) => {
-  test('Cell sizes customization should work', async (t) => {
-    const scheduler = new Scheduler('#container');
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Cell sizes customization should work', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  // eslint-disable-next-line no-restricted-syntax
+  for (const { type } of views) {
+    await scheduler.option('currentView', type);
     await t.expect(
       await takeScreenshot(`custom-cell-sizes-in-${type}.png`, scheduler.workSpace),
     ).ok();
+  }
 
-    await t.debug();
-    await t.expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await createScheduler({
-      views,
-      currentView: type,
-    });
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }, #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await createScheduler({
+    views,
   });
 });
 
@@ -97,6 +99,8 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }, #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+
   await createScheduler({
     views,
     showAllDayPanel: true,
