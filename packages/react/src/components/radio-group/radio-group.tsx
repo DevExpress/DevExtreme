@@ -1,5 +1,5 @@
 import {
-  createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
+  createRadioGroupCore, RadioGroupValue, ReadonlyProps, TemplateProps, ValueProps,
 } from '@devextreme/components';
 import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';

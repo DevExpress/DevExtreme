@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import {
   createRadioGroupCore,
+  RadioGroupValue,
   ReadonlyProps,
   TemplateProps,
   ValueProps,
@@ -15,7 +16,6 @@ import {
 import { filter, map } from 'rxjs';
 import { doIfContextExist, Inputs } from '../../internal';
 import { RadioGroupService } from './radio-group.service';
-import type { RadioGroupValue } from './types';
 
 export type RadioGroupInputs<T extends RadioGroupValue> =
   Inputs<ValueProps<T>, ReadonlyProps, TemplateProps>;

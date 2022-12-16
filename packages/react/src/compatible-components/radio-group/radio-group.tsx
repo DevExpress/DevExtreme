@@ -1,3 +1,4 @@
+import { RadioGroupValue } from '@devextreme/components';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
 import { RadioGroupValue } from '../../components/radio-common';

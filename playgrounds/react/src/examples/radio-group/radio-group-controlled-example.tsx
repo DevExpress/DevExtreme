@@ -1,4 +1,5 @@
-import { RadioButton, RadioGroup, RadioGroupValue } from '@devextreme/react';
+import { RadioGroupValue } from '@devextreme/components';
+import { RadioButton, RadioGroup } from '@devextreme/react';
 import { useCallback, useState } from 'react';
 
 const OPTIONS = [0, 1, 2, 3, 4];

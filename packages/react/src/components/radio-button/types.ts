@@ -1,6 +1,5 @@
-import { RadioGroupCore } from '@devextreme/components';
+import { RadioGroupCore, RadioGroupValue } from '@devextreme/components';
 import { ComponentType, ReactElement } from 'react';
-import { RadioGroupValue } from '../radio-common';
 
 export type LabelType = string | ReactElement;
 
