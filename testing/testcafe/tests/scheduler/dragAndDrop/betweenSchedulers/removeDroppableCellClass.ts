@@ -54,7 +54,7 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     const cellToMoveElement = secondScheduler
       .getDateTableCell(0, 0);
 
-    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.2 });
+    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
 
     const droppableCellExistsInFirstScheduler = await firstScheduler.getDroppableCell().exists;
     const droppableCellExistsInSecondScheduler = await secondScheduler.getDroppableCell().exists;

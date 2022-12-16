@@ -19,7 +19,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   await t
     .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 5), { speed: 0.2 })
+    .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 5), { speed: 0.5 })
     .expect(appointmentTooltipItem.element.exists)
     .notOk()
     .expect(appointment.element.exists)
@@ -28,7 +28,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
     .eql('100px')
     .expect(appointment.date.time)
     .eql('9:30 AM - 10:30 AM')
-    .dragToElement(appointment.element, scheduler.getDateTableCell(3, 2), { speed: 0.2 })
+    .dragToElement(appointment.element, scheduler.getDateTableCell(3, 2), { speed: 0.5 })
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok()
@@ -92,7 +92,7 @@ test('Drag-n-drop in same table cell', async (t) => {
   await t
     .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .drag(appointmentTooltipItem.element, 0, 20, { speed: 0.2 })
+    .drag(appointmentTooltipItem.element, 0, 20, { speed: 0.5 })
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok();

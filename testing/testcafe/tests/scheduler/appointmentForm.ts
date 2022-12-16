@@ -51,7 +51,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
 
   await t
     .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, {
-      speed: 0.1,
+      speed: 0.5,
     })
     .click(CHECKBOX_CLASS)
 

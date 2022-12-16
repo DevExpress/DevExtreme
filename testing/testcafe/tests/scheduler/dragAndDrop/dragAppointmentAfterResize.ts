@@ -41,18 +41,24 @@ fixture.disablePageReloads`Drag-n-drop appointment after resize (T835545)`
         offsetY: 0,
       });
 
+    const elementClientWidth = await element.clientWidth;
+    const elementClientHeight = await element.clientHeight;
+
+    const elementClientLeft = await element.clientLeft;
+    const elementClientTop = await element.clientTop;
+
     await t
       .expect(sizeBeforeDrag.width)
-      .eql(await element.clientWidth)
+      .eql(elementClientWidth)
 
       .expect(sizeBeforeDrag.height)
-      .eql(await element.clientHeight)
+      .eql(elementClientHeight)
 
       .expect(positionBeforeDrag.left)
-      .eql(await element.clientLeft)
+      .eql(elementClientLeft)
 
       .expect(positionBeforeDrag.top)
-      .eql(await element.clientTop);
+      .eql(elementClientTop);
   },
 ).before(async () => createScheduler({
   views: [view],
