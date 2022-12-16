@@ -4,7 +4,7 @@ import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
+fixture`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 

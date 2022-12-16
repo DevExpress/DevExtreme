@@ -71,8 +71,6 @@ const views = [{
     for (const view of views) {
       await scheduler.option('currentView', view.type);
 
-      await t.debug();
-
       await t.expect(
         await takeScreenshot(`custom-header-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
       ).ok();
