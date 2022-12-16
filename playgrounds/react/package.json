@@ -19,6 +19,7 @@
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4",
     "@devextreme/core": "1.0.0",
+    "@devextreme/interim": "1.0.0",
     "@devextreme/react": "1.0.0"
   },
   "devDependencies": {
