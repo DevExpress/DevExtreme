@@ -16,15 +16,15 @@ test('Dragging should be work right in case dxScheduler placed in dxTabPanel', a
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
   await t
-    .drag(draggableAppointment.element, 0, 120, { speed: 0.5 })
+    .drag(draggableAppointment.element, 0, 120)
     .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-bottom.png'))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -170, { speed: 0.5 })
+    .drag(draggableAppointment.element, 0, -170)
     .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-top.png'))
     .ok()
 
-    .drag(draggableAppointment.element, 100, 0, { speed: 0.5 })
+    .drag(draggableAppointment.element, 100, 0)
     .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-right.png'))
     .ok()
 

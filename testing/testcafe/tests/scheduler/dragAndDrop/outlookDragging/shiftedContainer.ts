@@ -17,19 +17,19 @@ test('Basic drag-n-drop movements in shifted container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 100, 0, { speed: 0.5 })
+    .drag(draggableAppointment.element, 100, 0)
     .expect(await takeScreenshot('drag-n-drop-to-right-in-shifted-container.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -100, 0, { speed: 0.5 })
+    .drag(draggableAppointment.element, -100, 0)
     .expect(await takeScreenshot('drag-n-drop-to-left-in-shifted-container.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, 100, { speed: 0.5 })
+    .drag(draggableAppointment.element, 0, 100)
     .expect(await takeScreenshot('drag-n-drop-to-bottom-in-shifted-container.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -100, { speed: 0.5 })
+    .drag(draggableAppointment.element, 0, -100)
     .expect(await takeScreenshot('drag-n-drop-to-top-in-shifted-container.png', scheduler.workSpace))
     .ok()
 

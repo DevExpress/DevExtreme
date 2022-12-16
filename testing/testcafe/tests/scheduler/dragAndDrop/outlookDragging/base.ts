@@ -289,7 +289,7 @@ test('Basic drag-n-drop all day appointment movements', async (t) => {
     .expect(await takeScreenshot('drag-n-drop-all-day-to-bottom.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -260)
+    .drag(draggableAppointment.element, 0, -260, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-all-day-to-top.png', scheduler.workSpace))
     .ok()
 
