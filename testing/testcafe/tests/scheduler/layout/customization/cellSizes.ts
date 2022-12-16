@@ -1,10 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.skip`Scheduler: Layout Customization: Cell Sizes`
+fixture`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
@@ -67,29 +66,23 @@ const views = [{
   groupOrientation: 'vertical',
 }];
 
-test('Cell sizes customization should work', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const view of views) {
-    await scheduler.option('currentView', view.type);
-
-    await ClientFunction(() => {
-      $('#container .dx-scheduler-cell-sizes-vertical').css('height', '150px');
-      $('#container .dx-scheduler-cell-sizes-horizontal').css('width', '150px');
-    })();
+views.forEach(({ type }) => {
+  test('Cell sizes customization should work', async (t) => {
+    const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.expect(
-      await takeScreenshot(`custom-cell-sizes-in-${view.type}.png`, scheduler.workSpace),
+      await takeScreenshot(`custom-cell-sizes-in-${type}.png`, scheduler.workSpace),
     ).ok();
-  }
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createScheduler({
-    views,
+    await t.debug();
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createScheduler({
+      views,
+      currentView: type,
+    });
   });
 });
 
@@ -109,9 +102,4 @@ test('Cell sizes customization should work when all-day panel is enabled', async
     showAllDayPanel: true,
     currentView: 'week',
   });
-
-  await ClientFunction(() => {
-    $('#container .dx-scheduler-cell-sizes-vertical').css('height', '150px');
-    $('#container .dx-scheduler-cell-sizes-horizontal').css('width', '150px');
-  })();
 });

@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
+import { insertStyles } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -72,15 +72,13 @@ const createScheduler = async (
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await insertStyles('#container .dx-scheduler-time-panel { width: 150px;}');
+
       await createScheduler({
         views: [view],
         currentView: view,
         crossScrollingEnabled,
       });
-
-      await ClientFunction(() => {
-        $('#container .dx-scheduler-time-panel').css('width', '150px');
-      })();
     });
   });
 });

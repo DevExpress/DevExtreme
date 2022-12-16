@@ -1,7 +1,7 @@
-import { ClientFunction } from 'testcafe';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { insertStyles } from '../../navigation/helpers/domUtils';
 import { setZoomLevel } from '../virtualScrolling/utils';
 
 fixture.disablePageReloads`Resize appointments - Zooming`
@@ -22,6 +22,7 @@ test('Vertical resize with zooming', async (t) => {
     .eql(515);
 }).before(async () => {
   await setZoomLevel(110);
+  await insertStyles('.dx-scheduler-cell-sizes-vertical { height: 43px;}');
 
   await createWidget(
     'dxScheduler',
@@ -37,10 +38,6 @@ test('Vertical resize with zooming', async (t) => {
       currentDate: new Date(2021, 2, 28),
     },
   );
-
-  await ClientFunction(() => {
-    $('.dx-scheduler-cell-sizes-vertical').css('height', '43px');
-  })();
 }).after(async () => {
   await setZoomLevel(0);
   await disposeWidgets();

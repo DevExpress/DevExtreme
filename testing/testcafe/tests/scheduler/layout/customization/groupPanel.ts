@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
+import { insertStyles } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
@@ -71,10 +71,6 @@ const views = [{
     for (const view of views) {
       await scheduler.option('currentView', view.type);
 
-      await ClientFunction(() => {
-        $('#container .dx-scheduler-group-header').css('height', '200px');
-      })();
-
       await t.expect(
         await takeScreenshot(`custom-group-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
       ).ok();
@@ -83,6 +79,8 @@ const views = [{
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStyles('#container .dx-scheduler-group-header { width: 200px;}');
+
     await createScheduler({
       views,
       crossScrollingEnabled,
