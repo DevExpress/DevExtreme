@@ -16,11 +16,11 @@ test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
   const draggableAppointment = scheduler.getAppointment('text');
 
   await t
-    .drag(draggableAppointment.element, 330, 0, { speed: 0.5 })
+    .drag(draggableAppointment.element, 330, 0)
     .expect(await takeScreenshot('drag-n-drop-to-right(T1017720).png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -330, 70, { speed: 0.5 })
+    .drag(draggableAppointment.element, -330, 70)
     .expect(await takeScreenshot('drag-n-drop-to-left(T1017720).png', scheduler.workSpace))
     .ok()
 

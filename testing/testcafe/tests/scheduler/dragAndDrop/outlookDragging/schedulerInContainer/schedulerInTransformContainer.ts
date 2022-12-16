@@ -20,19 +20,19 @@ test('Dragging should be work right in case dxScheduler placed in container with
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
   await t
-    .drag(draggableAppointment.element, 0, 120, { speed: 0.5 })
+    .drag(draggableAppointment.element, 0, 120)
     .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-bottom.png'))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -170, { speed: 0.5 })
+    .drag(draggableAppointment.element, 0, -170)
     .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-top.png'))
     .ok()
 
-    .drag(draggableAppointment.element, 100, 0, { speed: 0.5 })
+    .drag(draggableAppointment.element, 100, 0)
     .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-right.png'))
     .ok()
 
-    .drag(draggableAppointment.element, -230, 0, { speed: 0.5 })
+    .drag(draggableAppointment.element, -230, 0)
     .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-left.png'))
     .ok()
 

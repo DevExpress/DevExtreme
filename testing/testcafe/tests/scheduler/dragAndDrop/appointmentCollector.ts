@@ -93,7 +93,7 @@ test('Drag-n-drop in same table cell', async (t) => {
   await t
     .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .drag(appointmentTooltipItem.element, 0, 20, { speed: 0.5 })
+    .drag(appointmentTooltipItem.element, 0, 20)
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok();
