@@ -13,9 +13,7 @@ test('Drag-n-drop between dateTable and allDay panel, groupByDate=true', async (
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(1), {
-      speed: 0.3,
-    })
+    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(1), { speed: 0.5 })
     .expect(draggableAppointment.element.exists).ok()
     .expect(draggableAppointment.isAllDay)
     .ok();

@@ -4,7 +4,6 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 import { clearTestPage } from '../../../../helpers/clearPage';
 
-const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
@@ -20,7 +19,7 @@ test('it should display the all-day appointment in two dates if the end date equ
 
     await takeScreenshot('timeline-month_all-day-midnight-first-day.png', scheduler.workSpace);
 
-    await t.click(await scheduler.toolbar.navigator.nextButton(), CLICK_OPTIONS);
+    await t.click(await scheduler.toolbar.navigator.nextButton());
     await scheduler.scrollTo(new Date('2021-05-01T00:00:00Z'));
 
     await takeScreenshot('timeline-month_all-day-midnight-second-day.png', scheduler.workSpace);

@@ -22,11 +22,11 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.subjectElement, CLICK_OPTIONS)
+    .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .expect(appointmentPopup.subjectElement.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.doneButton, CLICK_OPTIONS)
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => createWidget('dxScheduler', {
@@ -52,11 +52,11 @@ test('Should correctly update appointment if dataSource is a Store with key arra
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.subjectElement, CLICK_OPTIONS)
+    .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .expect(appointmentPopup.subjectElement.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.doneButton, CLICK_OPTIONS)
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => {

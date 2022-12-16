@@ -17,14 +17,14 @@ fixture.disablePageReloads`Display* arguments in appointment templates and event
 
     await t
       .typeText(scheduler.appointmentPopup.subjectElement, 'text')
-      .click(scheduler.appointmentPopup.doneButton, { speed: 0.5 });
+      .click(scheduler.appointmentPopup.doneButton);
 
     await t
       .expect(scheduler.getAppointmentByIndex(0).element.innerText)
       .eql(etalon);
 
     await t
-      .click(scheduler.getAppointmentByIndex(0).element, { speed: 0.5 })
+      .click(scheduler.getAppointmentByIndex(0).element)
       .expect(scheduler.appointmentTooltip.getListItem(undefined, 0).element.innerText)
       .eql(etalon);
 

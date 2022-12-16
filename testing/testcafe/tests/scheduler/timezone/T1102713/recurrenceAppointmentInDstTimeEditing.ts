@@ -43,10 +43,10 @@ async function editingPopupTestFunction(t: TestController, screenshotName: strin
   await t.doubleClick(appointmentToEdit.element, TEST_CURSOR_OPTIONS);
 
   const appointmentDialog = new AppointmentDialog();
-  await t.click(appointmentDialog.series, TEST_CURSOR_OPTIONS);
+  await t.click(appointmentDialog.series);
 
   const { appointmentPopup } = scheduler;
-  await t.click(appointmentPopup.doneButton, TEST_CURSOR_OPTIONS);
+  await t.click(appointmentPopup.doneButton);
 
   await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
 
@@ -67,7 +67,7 @@ async function dragAndDropTestFunction(t: TestController,
   await t.dragToElement(appointmentToEdit.element, cellToMoveElement, TEST_CURSOR_OPTIONS);
 
   const appointmentDialog = new AppointmentDialog();
-  await t.click(appointmentDialog.series, TEST_CURSOR_OPTIONS);
+  await t.click(appointmentDialog.series);
 
   await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
   await t.expect(compareResults.isValid())
@@ -89,7 +89,7 @@ async function resizeTestFunction(t: TestController,
     TEST_CURSOR_OPTIONS);
 
   const appointmentDialog = new AppointmentDialog();
-  await t.click(appointmentDialog.series, TEST_CURSOR_OPTIONS);
+  await t.click(appointmentDialog.series);
 
   await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
   await t.expect(compareResults.isValid())

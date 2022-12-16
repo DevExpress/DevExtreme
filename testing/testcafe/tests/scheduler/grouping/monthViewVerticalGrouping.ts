@@ -4,7 +4,6 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 
 fixture.disablePageReloads`Month view vertical grouping `
@@ -16,9 +15,9 @@ test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appo
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshot('month-view_vertical-grouping_fist-app-part_T1122185.png', scheduler.workSpace);
-  await t.click(await scheduler.toolbar.navigator.nextButton(), CLICK_OPTIONS);
+  await t.click(await scheduler.toolbar.navigator.nextButton());
   await takeScreenshot('month-view_vertical-grouping_middle-app-part_T1122185.png', scheduler.workSpace);
-  await t.click(await scheduler.toolbar.navigator.nextButton(), CLICK_OPTIONS);
+  await t.click(await scheduler.toolbar.navigator.nextButton());
   await takeScreenshot('month-view_vertical-grouping_last-app-part_T1122185.png', scheduler.workSpace);
 
   await t.expect(compareResults.isValid())

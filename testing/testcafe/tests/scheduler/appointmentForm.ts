@@ -115,8 +115,8 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
     .expect(appointmentPopup.subjectElement.value)
     .eql(APPOINTMENT_TEXT)
 
-    .click(appointmentPopup.allDayElement, { speed: 0.5 })
-    .click(appointmentPopup.cancelButton, { speed: 0.5 })
+    .click(appointmentPopup.allDayElement)
+    .click(appointmentPopup.cancelButton)
     .expect(appointmentPopup.isVisible())
     .notOk()
 
