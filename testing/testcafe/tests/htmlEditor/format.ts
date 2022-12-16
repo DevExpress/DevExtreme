@@ -4,7 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import { clearTestPage } from '../../helpers/clearPage';
 
 fixture.disablePageReloads`HtmlEditor - formats`
-  .page(url(__dirname, '../container.html'))
+  .page(url(__dirname, '../containerQuill.html'))
   .afterEach(async () => clearTestPage());
 
 test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {

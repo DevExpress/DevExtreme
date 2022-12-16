@@ -5,7 +5,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
 fixture.disablePageReloads`HtmlEditor`
-  .page(url(__dirname, '../container.html'))
+  .page(url(__dirname, '../containerQuill.html'))
   .afterEach(async () => clearTestPage());
 
 [false, true].forEach((toolbar) => {
