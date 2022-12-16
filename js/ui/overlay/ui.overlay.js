@@ -466,43 +466,34 @@ const Overlay = Widget.inherit({
             delete this._isHidingActionCanceled;
             this._showingDeferred.reject();
         } else {
-            const show = () => {
-                this._stopAnimation();
-                this._toggleVisibility(true);
-                this._$content.css('visibility', 'hidden');
-                this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
-                this._updateZIndexStackPosition(true);
-                this._positionController.openingHandled();
-                this._renderContent();
+            this._stopAnimation();
+            this._toggleVisibility(true);
+            this._$content.css('visibility', 'hidden');
+            this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
+            this._updateZIndexStackPosition(true);
+            this._positionController.openingHandled();
+            this._renderContent();
 
-                const showingArgs = { cancel: false };
-                this._actions.onShowing(showingArgs);
+            const showingArgs = { cancel: false };
+            this._actions.onShowing(showingArgs);
 
-                const cancelShow = () => {
-                    this._toggleVisibility(false);
-                    this._$content.css('visibility', '');
-                    this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
-                    this._isShowingActionCanceled = true;
-                    this._moveFromContainer();
-                    this.option('visible', false);
-                    this._showingDeferred.resolve();
-                };
-
-                const applyShow = () => {
-                    this._$content.css('visibility', '');
-                    this._renderVisibility(true);
-                    this._animateShowing();
-                };
-
-                this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
+            const cancelShow = () => {
+                this._toggleVisibility(false);
+                this._$content.css('visibility', '');
+                this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
+                this._isShowingActionCanceled = true;
+                this._moveFromContainer();
+                this.option('visible', false);
+                this._showingDeferred.resolve();
             };
 
-            if(this.option('templatesRenderAsynchronously')) {
-                this._stopShowTimer();
-                this._asyncShowTimeout = setTimeout(show);
-            } else {
-                show();
-            }
+            const applyShow = () => {
+                this._$content.css('visibility', '');
+                this._renderVisibility(true);
+                this._animateShowing();
+            };
+
+            this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
         }
 
         return this._showingDeferred.promise();
@@ -578,9 +569,6 @@ const Overlay = Widget.inherit({
                 this._forceFocusLost();
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
-
-                this._stopShowTimer();
-
                 this._animateHiding();
             };
 
@@ -1085,18 +1073,7 @@ const Overlay = Widget.inherit({
         }
 
         this._renderVisibility(false);
-
-        this._stopShowTimer();
-
         this._cleanFocusState();
-    },
-
-    _stopShowTimer() {
-        if(this._asyncShowTimeout) {
-            clearTimeout(this._asyncShowTimeout);
-        }
-
-        this._asyncShowTimeout = null;
     },
 
     _dispose: function() {
