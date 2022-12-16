@@ -1,14 +1,11 @@
 import typescript from '@rollup/plugin-typescript';
+import {
+  checkExternalPackage,
+  checkWatchMode,
+  FORMAT_EXTENSIONS,
+} from '../../../build/rollup/utils.js';
 
 const OUTPUT_DIR = './lib'
-const FORMAT_EXTENSIONS = {
-    esm: 'mjs',
-    cjs: 'cjs',
-}
-
-function checkExternalPackage(id) {
-    return ['@devexpress'].includes(id.split('/')[0]);
-}
 
 function getBundleConfig(outputDir, format) {
     return {
@@ -23,6 +20,7 @@ function getBundleConfig(outputDir, format) {
             typescript({
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
+                    noEmitOnError: checkWatchMode(),
                     outDir: outputDir,
                 },
                 outputToFilesystem: true

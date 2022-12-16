@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "serve": "npm start",
-    "build": "ng build",
+    "start": "nx serve @playgrounds/angular",
+    "watch": "npm start",
+    "build": "nx build @playgrounds/angular",
     "cache:clean": "ng cache clean"
   },
   "private": true,
