@@ -10,8 +10,8 @@ test('It should be possible to delete an appointment', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
-    .click(scheduler.getAppointment('App 1').element, { speed: 0.1 })
-    .click(scheduler.appointmentTooltip.deleteButton, { speed: 0.1 })
+    .click(scheduler.getAppointment('App 1').element, { speed: 0.5 })
+    .click(scheduler.appointmentTooltip.deleteButton, { speed: 0.5 })
     .expect(scheduler.getAppointmentCount())
     .eql(3);
 }).before(async () => {

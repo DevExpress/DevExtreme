@@ -82,7 +82,7 @@ test('Cell sizes customization should work', async (t) => {
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }, #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
   await createScheduler({
     views,
   });
@@ -99,7 +99,7 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; }, #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
 
   await createScheduler({
     views,
