@@ -75,7 +75,7 @@ createTestCafe('localhost', 1437, 1438)
             });
         }
         if(args.cache) {
-            runner.cache = false; // args.cache;
+            runner.cache = args.cache;
         }
         return runner.run({
             quarantineMode: args.quarantineMode
