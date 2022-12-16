@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "rollup -c rollup/rollup.config.mjs"
+    "build": "rollup -c rollup/rollup.config.mjs",
+    "watch": "rollup -c rollup/rollup.config.mjs --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@devextreme/core": "1.0.0",
     "@devextreme/components": "1.0.0",
     "@devextreme/interim": "1.0.0",
+    "@devextreme/core": "1.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "rxjs": "^7.5.6",
     "ts-essentials": "^9.3.0",
@@ -32,7 +33,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "postcss": "^8.4.14",
-    "rollup": "^3.2.5",
+    "rollup": "^3.7.4",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",

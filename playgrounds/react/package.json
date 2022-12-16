@@ -29,7 +29,7 @@
   "scripts": {
     "build": "react-scripts build",
     "start": "react-scripts start",
-    "serve": "npm start",
+    "watch": "npm start",
     "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "browserslist": {

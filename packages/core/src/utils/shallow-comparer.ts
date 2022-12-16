@@ -1,5 +1,5 @@
-// shadow equality
-export function shadowComparer<T>(
+// shallow equality
+export function shallowComparer<T>(
   firstValue: T,
   secondValue: T,
 ): boolean {

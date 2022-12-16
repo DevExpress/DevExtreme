@@ -4,7 +4,7 @@ import {
   Disposable,
   DISPOSE,
   memoize, Observable,
-  shadowComparer,
+  shallowComparer,
   SubscribeFunc,
   UnknownRecord,
 } from './utils';
@@ -31,7 +31,7 @@ export function createSelector<
 >(
   buildViewProp: (params: TParam) => TValue,
   paramsGetter: (state: TStateProps | undefined) => TParam,
-  paramsComparer: Comparer<[TParam]> = shadowComparer,
+  paramsComparer: Comparer<[TParam]> = shallowComparer,
 ): Selector<TStateProps, TValue> {
   const cached = memoize(buildViewProp, paramsComparer);
 
