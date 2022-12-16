@@ -152,19 +152,19 @@ export const stateStoringModule = {
                     }
                 },
                 applyState: function(state) {
-                    const that = this;
                     const allowedPageSizes = state.allowedPageSizes;
                     const searchText = state.searchText;
                     const selectedRowKeys = state.selectedRowKeys;
                     const selectionFilter = state.selectionFilter;
-                    const exportController = that.getController('export');
-                    const columnsController = that.getController('columns');
-                    const dataController = that.getController('data');
-                    const scrollingMode = that.option('scrolling.mode');
+                    const exportController = this.getController('export');
+                    const columnsController = this.getController('columns');
+                    const dataController = this.getController('data');
+                    const scrollingMode = this.option('scrolling.mode');
                     const isVirtualScrollingMode = scrollingMode === 'virtual' || scrollingMode === 'infinite';
-                    const showPageSizeSelector = that.option('pager.visible') === true && that.option('pager.showPageSizeSelector');
+                    const showPageSizeSelector = this.option('pager.visible') === true && this.option('pager.showPageSizeSelector');
+                    const hasHeight = this.getView('rowsView')?.hasHeight();
 
-                    that.component.beginUpdate();
+                    this.component.beginUpdate();
 
                     if(columnsController) {
                         columnsController.setUserState(state.columns);
@@ -174,31 +174,31 @@ export const stateStoringModule = {
                         exportController.selectionOnly(state.exportSelectionOnly);
                     }
 
-                    if(!that.option('selection.deferred')) {
-                        that.option('selectedRowKeys', selectedRowKeys || []);
+                    if(!this.option('selection.deferred')) {
+                        this.option('selectedRowKeys', selectedRowKeys || []);
                     }
 
-                    that.option('selectionFilter', selectionFilter);
+                    this.option('selectionFilter', selectionFilter);
 
-                    if(allowedPageSizes && that.option('pager.allowedPageSizes') === 'auto') {
-                        that.option('pager').allowedPageSizes = allowedPageSizes;
+                    if(allowedPageSizes && this.option('pager.allowedPageSizes') === 'auto') {
+                        this.option('pager').allowedPageSizes = allowedPageSizes;
                     }
 
-                    if(that.option('focusedRowEnabled')) {
-                        that.option('focusedRowIndex', -1);
-                        that.option('focusedRowKey', state.focusedRowKey || null);
+                    if(this.option('focusedRowEnabled')) {
+                        this.option('focusedRowIndex', -1);
+                        this.option('focusedRowKey', state.focusedRowKey || null);
                     }
 
-                    that.component.endUpdate();
+                    this.component.endUpdate();
 
-                    that.option('searchPanel.text', searchText || '');
+                    this.option('searchPanel.text', searchText || '');
 
-                    that.option('filterValue', getFilterValue(that, state));
+                    this.option('filterValue', getFilterValue(this, state));
 
-                    that.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
+                    this.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
 
-                    that.option('paging.pageIndex', state.pageIndex || 0);
-                    that.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
+                    this.option('paging.pageIndex', (!isVirtualScrollingMode || hasHeight) && state.pageIndex || 0);
+                    this.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : this._initialPageSize);
 
                     dataController && dataController.reset();
                 }
