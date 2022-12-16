@@ -199,16 +199,21 @@ testModule('render', moduleConfig, () => {
             }).remove();
     });
 
-    test('overlay created with templatesRenderAsynchronously option should be shown without delay', function(assert) {
-        const onShowingSpy = sinon.spy();
-
-        $('#overlay').dxOverlay({
-            templatesRenderAsynchronously: true,
-            visible: true,
-            onShowing: onShowingSpy
-        });
-
-        assert.strictEqual(onShowingSpy.called, true);
+    test('overlay created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
+        const clock = sinon.useFakeTimers();
+        try {
+            const onShowingSpy = sinon.spy();
+            $('#overlay').dxOverlay({
+                templatesRenderAsynchronously: true,
+                visible: true,
+                onShowing: onShowingSpy
+            });
+            assert.strictEqual(onShowingSpy.called, false);
+            clock.tick();
+            assert.strictEqual(onShowingSpy.called, true);
+        } finally {
+            clock.restore();
+        }
     });
 
     test('overlay should be positioned correctly after async template is rendered (T1114344)', function(assert) {

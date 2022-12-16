@@ -45,17 +45,22 @@ QUnit.module('init', {
         assert.equal($content.find(MESSAGE_SELECTOR).text(), 'Test Loading Message');
     });
 
-    QUnit.test('load panel created with templatesRenderAsynchronously option should be shown without delay', function(assert) {
-        const onShowingSpy = sinon.spy();
-
-        const instance = $('#loadPanel').dxLoadPanel({
-            templatesRenderAsynchronously: true,
-            visible: true,
-            onShowing: onShowingSpy
-        }).dxLoadPanel('instance');
-
-        assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
-        assert.strictEqual(onShowingSpy.called, true);
+    QUnit.test('load panel created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
+        const clock = sinon.useFakeTimers();
+        try {
+            const onShowingSpy = sinon.spy();
+            const instance = $('#loadPanel').dxLoadPanel({
+                templatesRenderAsynchronously: true,
+                visible: true,
+                onShowing: onShowingSpy
+            }).dxLoadPanel('instance');
+            assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
+            assert.strictEqual(onShowingSpy.called, false);
+            clock.tick();
+            assert.strictEqual(onShowingSpy.called, true);
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('shows on init if loading option is true', function(assert) {

@@ -420,6 +420,7 @@ const Popup = Overlay.inherit({
 
     _renderVisibilityAnimate: function(visible) {
         this._observeContentResize(visible);
+
         return this.callBase(visible);
     },
 
