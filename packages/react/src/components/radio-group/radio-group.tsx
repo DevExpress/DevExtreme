@@ -4,7 +4,7 @@ import {
 import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { Props } from '../../internal/props';
-import { RadioGroupContext, RadioGroupValue } from '../radio-common';
+import { RadioGroupContext } from '../radio-common';
 
 function RadioGroupInternal<T extends RadioGroupValue>(props: RadioGroupProps<T>) {
   const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
