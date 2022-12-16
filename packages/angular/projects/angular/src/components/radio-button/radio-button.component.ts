@@ -7,7 +7,8 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import { RadioGroupService, RadioGroupValue } from '../radio-common';
+import { RadioGroupService } from '../radio-common';
+import { RadioGroupValue } from '@devextreme/components';
 
 import { createRadioButtonStrategy } from './radio-button.strategies';
 

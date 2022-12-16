@@ -1,5 +1,6 @@
+import { RadioGroupValue } from '@devextreme/components';
 import { AnyRecord } from '@devextreme/core';
-import { RadioGroupCompatible, RadioGroupValue } from '@devextreme/react';
+import { RadioGroupCompatible } from '@devextreme/react';
 import { useState } from 'react';
 
 const objectItems = [

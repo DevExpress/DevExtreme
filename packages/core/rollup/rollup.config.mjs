@@ -1,4 +1,8 @@
 import typescript from '@rollup/plugin-typescript';
+import {
+  checkWatchMode,
+  FORMAT_EXTENSIONS,
+} from '../../../build/rollup/utils.js';
 
 const OUTPUT_DIR = './lib'
 
@@ -7,7 +11,7 @@ function getBundleConfig(outputDir, format) {
         input: './src/index.ts',
         output: {
             dir: outputDir,
-            entryFileNames: `[name].${format === 'cjs' ? 'cjs' : 'mjs'}`,
+            entryFileNames: `[name].${FORMAT_EXTENSIONS[format]}`,
             format,
             sourcemap: true
         },
@@ -15,6 +19,7 @@ function getBundleConfig(outputDir, format) {
             typescript({
                 tsconfig: './tsconfig.package.json',
                 compilerOptions: {
+                    noEmitOnError: checkWatchMode(),
                     outDir: outputDir,
                 },
                 outputToFilesystem: true

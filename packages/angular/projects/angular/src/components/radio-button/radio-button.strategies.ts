@@ -1,7 +1,7 @@
-import { RadioGroupCore } from '@devextreme/components';
+import { RadioGroupCore, RadioGroupValue } from '@devextreme/components';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { doIfContextExist, waitContextAndDo } from '../../internal';
-import { RadioGroupValue } from '../radio-common';
+// TODO: Move this code to separate directory radio-common in the future.
 
 const DEFAULT_CHECKED_VALUE = false;
 

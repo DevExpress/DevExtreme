@@ -1,0 +1,83 @@
+{
+  "name": "@playgrounds/angular",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "playgrounds/angular/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/playgrounds/angular",
+        "index": "playgrounds/angular/src/index.html",
+        "main": "playgrounds/angular/src/main.ts",
+        "polyfills": "playgrounds/angular/src/polyfills.ts",
+        "tsConfig": "playgrounds/angular/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "playgrounds/angular/src/favicon.ico",
+          "playgrounds/angular/src/assets"
+        ],
+        "styles": ["playgrounds/angular/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "playgrounds/angular/src/environments/environment.ts",
+              "with": "playgrounds/angular/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "@playgrounds/angular:build:production",
+          "port": 4300
+        },
+        "development": {
+          "browserTarget": "@playgrounds/angular:build:development",
+          "port": 4300
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "playgrounds/angular/**/*.ts",
+          "playgrounds/angular/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
