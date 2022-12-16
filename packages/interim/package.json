@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "build": "rollup -c rollup/rollup.config.mjs"
+        "build": "rollup -c rollup/rollup.config.mjs",
+        "watch": "rollup -c rollup/rollup.config.mjs --watch"
     },
     "dependencies": {
         "inferno": "^7.4.11",
