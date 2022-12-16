@@ -40,6 +40,7 @@ let nextUniqueId = 0;
         [data]="templateData">
       </dx-dynamic-template>
       <dx-dynamic-template
+        *ngIf="labelTemplate"
         [template]="labelTemplate"
         [data]="{ label: label }">
       </dx-dynamic-template>
