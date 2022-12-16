@@ -1,0 +1,126 @@
+{
+  "name": "devextreme-quill",
+  "version": "1.15.20",
+  "description": "Core of the DevExtreme HtmlEditor",
+  "author": "Developer Express Inc.",
+  "main": "dist/dx-quill.js",
+  "homepage": "https://js.devexpress.com/",
+  "files": [
+    "dist/dx-quill.js",
+    "dist/dx-quill.core.js",
+    "dist/dx-quill.min.js.map",
+    "dist/dx-quill.min.js",
+    "dist/dx-quill.core.css"
+  ],
+  "config": {
+    "ports": {
+      "karma": "9876"
+    }
+  },
+  "dependencies": {
+    "core-js": "^3.19.1",
+    "eventemitter3": "^4.0.0",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.merge": "^4.5.0",
+    "parchment": "2.0.0-dev.2",
+    "quill-delta": "4.2.2"
+  },
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/devextreme-quill.git"
+  },
+  "bugs": {
+    "url": "https://www.devexpress.com/support/"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb",
+      "prettier"
+    ],
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "plugins": [
+      "@babel",
+      "prettier"
+    ],
+    "settings": {
+      "import/resolver": {
+        "webpack": {
+          "config": "_develop/webpack.config.js"
+        }
+      }
+    },
+    "rules": {
+      "arrow-body-style": [
+        "off"
+      ],
+      "class-methods-use-this": [
+        "off"
+      ],
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": [
+            "_develop/*.js",
+            "test/**/*.js"
+          ]
+        }
+      ],
+      "no-param-reassign": [
+        "off"
+      ],
+      "no-use-before-define": [
+        "error",
+        {
+          "functions": false
+        }
+      ],
+      "import/named": [
+        "error"
+      ],
+      "max-classes-per-file": [
+        "off"
+      ],
+      "prettier/prettier": "error"
+    }
+  },
+  "eslintIgnore": [
+    "dist/",
+    "docs/",
+    "node_modules/"
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "scripts": {
+    "install:legacy": "npm install --legacy-peer-deps",
+    "clean": "rimraf dist/* && rimraf test/functional/example/src",
+    "copy-dist": "ncp dist test/functional/example/src",
+    "build": "npm run clean && npm run build:webpack",
+    "build:prod": "npm run clean && npm run build:webpack-prod",
+    "build:webpack": "webpack --config _develop/webpack.config.js && rimraf dist/dx-quill.core dist/dx-quill.bubble dist/dx-quill.snow",
+    "build:webpack-prod": "webpack --config _develop/webpack.config.js --env.production && rimraf dist/dx-quill.core dist/dx-quill.bubble dist/dx-quill.snow",
+    "lint": "eslint blots core formats modules test utils",
+    "start": "npm run build && npm run copy-dist && http-server ./test/functional/example",
+    "dev:test:unit": "npm run build && npm run test:unit",
+    "ci:test:functional": "http-server ./test/functional/example > .http-log & HTTP_PID=$! && npm run test:functional && kill $HTTP_PID && cat .http-log",
+    "test:functional": "wait-on http://127.0.0.1:8080/index.html -i 1000 -t 10000 && jasmine test/functional/epic.js",
+    "test:unit": "karma start _develop/karma.config.js",
+    "test:coverage": "webpack --env.coverage --config _develop/webpack.config.js && karma start _develop/karma.config.js --reporters coverage",
+    "version": "npm version --no-git-tag-version"
+  },
+  "keywords": [
+    "editor",
+    "rich text",
+    "wysiwyg"
+  ]
+}

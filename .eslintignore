@@ -13,3 +13,4 @@ testing/jest/utils/transformers/*
 ts/
 js/localization/cldr-data/*
 js/localization/default_messages.js
+quill-local/
