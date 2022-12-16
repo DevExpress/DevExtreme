@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { appendElementTo, insertStyles } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'))
@@ -61,7 +60,7 @@ test('it should skip weekend days in workWeek', async (t) => {
   );
 });
 
-safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
+test('it should skip weekend days in timelineWorkWeek', async (t) => {
   const {
     takeScreenshot,
     compareResults,
