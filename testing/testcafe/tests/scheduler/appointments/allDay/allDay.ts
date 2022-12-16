@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from 'testing/testcafe/helpers/safeSizeTest';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { appendElementTo, insertStyles } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';

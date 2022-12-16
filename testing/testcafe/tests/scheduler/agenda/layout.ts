@@ -1,5 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from 'testing/testcafe/helpers/safeSizeTest';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
