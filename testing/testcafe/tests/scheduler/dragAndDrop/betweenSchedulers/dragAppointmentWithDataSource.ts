@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
@@ -106,7 +106,7 @@ test('Should set correct start and end dates in drag&dropped appointment', async
 
   await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
 }).before(async () => {
-  await setStyleAttribute('#container', 'display: flex;');
+  await setStyleAttribute(Selector('#container'), 'display: flex;');
   await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
   await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
 

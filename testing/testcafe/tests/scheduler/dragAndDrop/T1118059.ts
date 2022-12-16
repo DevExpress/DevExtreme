@@ -31,14 +31,14 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
   await t
-    .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#drag-container'));
+    .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#drag-container'), { speed: 0.5 });
 
   await t
     .expect(ClientFunction(() => (window as any).eventName)())
     .eql('onAppointmentDeleting');
 }).before(async () => {
   safeEvent('');
-  await setStyleAttribute('#container', 'display: flex; flex-direction: column;');
+  await setStyleAttribute(Selector('#container'), 'display: flex; flex-direction: column;');
 
   await ClientFunction(() => {
     $('#container').append(markup);
@@ -104,7 +104,7 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     .eql('10:30 AM - 11:00 AM');
 }).before(async () => {
   await safeEvent('')();
-  await setStyleAttribute('#container', 'display: flex; flex-direction: column;');
+  await setStyleAttribute(Selector('#container'), 'display: flex; flex-direction: column;');
 
   await ClientFunction(() => {
     $('#container').append(markup);

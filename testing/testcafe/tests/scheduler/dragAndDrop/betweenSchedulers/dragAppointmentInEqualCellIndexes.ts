@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
@@ -53,7 +54,7 @@ test('Should not lose drag-n-dropped appointment in the second scheduler', async
 
   await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
 }).before(async () => {
-  await setStyleAttribute('#container', 'display: flex;');
+  await setStyleAttribute(Selector('#container'), 'display: flex;');
   await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
   await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
 

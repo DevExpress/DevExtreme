@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
@@ -55,7 +56,7 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     const cellToMoveElement = secondScheduler
       .getDateTableCell(0, 0);
 
-    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.2 });
+    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
 
     const droppableCellExistsInFirstScheduler = await firstScheduler.getDroppableCell().exists;
     const droppableCellExistsInSecondScheduler = await secondScheduler.getDroppableCell().exists;
@@ -63,7 +64,7 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     await t.expect(droppableCellExistsInFirstScheduler).notOk('Droppable cell class was not removed from the first scheduler.');
     await t.expect(droppableCellExistsInSecondScheduler).notOk('Droppable cell class was not removed from the second scheduler.');
   }).before(async () => {
-    await setStyleAttribute('#container', 'display: flex;');
+    await setStyleAttribute(Selector('#container'), 'display: flex;');
     await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
     await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
 
