@@ -1071,7 +1071,7 @@ const TablePositionViewController = modules.ViewController.inherit({
 
         params.height = columnsHeadersHeight;
 
-        const isDraggingOrResizing = columnsResizerController.isResizing() !== false || draggingHeaderView.isDragging();
+        const isDraggingOrResizing = columnsResizerController.isResizing() || draggingHeaderView.isDragging();
 
         if(isDraggingOrResizing) {
             params.height += rowsHeight - diffOffsetTop;
