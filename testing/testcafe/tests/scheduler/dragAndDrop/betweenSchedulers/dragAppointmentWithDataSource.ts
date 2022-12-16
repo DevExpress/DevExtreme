@@ -97,7 +97,7 @@ test('Should set correct start and end dates in drag&dropped appointment', async
   const cellToMoveElement = secondScheduler
     .getDateTableCell(0, 0);
 
-  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
+  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.2 });
 
   const movedAppointmentTime = await secondScheduler
     .getAppointment(TEST_APPOINTMENT.text)
