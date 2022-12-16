@@ -3558,7 +3558,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
     });
 
     // T1128881
-    QUnit.test('Form should not be rerendered while editing with enabled two-way binding on editing.changes', function(assert) {
+    QUnit.test('editing.changes two-way binding - Form should not be rendered when edit a row', function(assert) {
         try {
             const editMode = 'form';
 
@@ -3608,7 +3608,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
     });
 
     // T1128881
-    QUnit.test('Form should not be rerendered while adding with enabled two-way binding on editing.changes and hidden columns', function(assert) {
+    QUnit.test('editing.changes two-way binding - Form should not be rendered when add a row', function(assert) {
         try {
             const editMode = 'form';
 
@@ -3655,6 +3655,55 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // assert
             assert.notOk(renderCalled, 'rerender should not be called');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
+    // T1128881
+    QUnit.test('editing.changes two-way binding - form must be rerendered after \'editing.changes\' options has been changed by variable', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowEditing: true,
+                },
+                columns: [{
+                    dataField: 'field1',
+                    visible: false
+                }, 'field2', 'field3'],
+            });
+            this.clock.tick(100);
+
+            const setCellValue = (rowIndex, columnIndex, value) => {
+                const $input = $(dataGrid.getCellElement(rowIndex, columnIndex)).find('input');
+
+                $input.val(value);
+                $input.trigger('change');
+            };
+
+            const twoWayBindingChanges = (x) => {
+                dataGrid.option('editing.changes', dataGrid.option('editing.changes'));
+            };
+
+            // act
+            dataGrid.addRow();
+            setCellValue(0, 0, 'helllo');
+
+            const insertRowChanges = dataGrid.option('editing.changes');
+
+            insertRowChanges[0].data.field1 = 'test_text';
+            dataGrid.option('editing.changes', insertRowChanges);
+            twoWayBindingChanges(insertRowChanges);
+
+            // assert
+            const value = dataGrid.cellValue(0, 'field1');
+            assert.strictEqual(value, 'test_text', 'render should not called');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
         }
