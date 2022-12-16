@@ -16,11 +16,12 @@ fixture.disablePageReloads`Scheduler: Material theme layout`
 test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  const boundingClientRect = await scheduler.dateTable.boundingClientRect;
+  const dataTableBoundingClientRect = await scheduler.dateTable.boundingClientRect;
+  const workspaceBoundingClientRect = await scheduler.workspaceScrollable.boundingClientRect;
 
   await t
-    .expect(boundingClientRect.bottom)
-    .eql((await scheduler.workspaceScrollable.boundingClientRect).bottom);
+    .expect(dataTableBoundingClientRect.bottom)
+    .eql(workspaceBoundingClientRect.bottom);
 }).before(async () => {
   await changeTheme('material.blue.light');
 
