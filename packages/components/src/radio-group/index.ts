@@ -79,3 +79,5 @@ export function createRadioGroupCore<T>(
 ): RadioGroupCore<T> {
   return createCore()(initialState, config, createActionHandlers<T>());
 }
+
+export type RadioGroupValue = string | number;
