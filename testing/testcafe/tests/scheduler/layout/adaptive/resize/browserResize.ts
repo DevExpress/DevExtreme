@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
-import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
+import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
+import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const data = [{
   text: 'Website Re-Design Plan',
@@ -144,5 +145,5 @@ const resourceDataSource = [{
       startDayHour: 9,
       height: 600,
     });
-  }).after(async () => disposeWidgets());
+  }).after(async () => clearTestPage());
 });

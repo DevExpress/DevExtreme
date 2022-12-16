@@ -1,11 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`T697037`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Recurrence exception date should equal date of appointment, which excluded from recurrence(T697037)', async (t) => {
   const scheduler = new Scheduler('#container');

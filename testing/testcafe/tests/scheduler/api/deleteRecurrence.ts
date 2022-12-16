@@ -1,13 +1,11 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler API - deleteRecurrence`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await disposeWidgets();
-    await t.debug();
-  });
+  .afterEach(async () => clearTestPage());
 
 test('should delete recurrent appointment if mode is "series"', async (t) => {
   const scheduler = new Scheduler('#container');

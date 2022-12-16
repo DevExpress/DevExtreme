@@ -1,13 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 import AppointmentDialog from '../../../../model/scheduler/appointment/dialog';
 import Appointment from '../../../../model/scheduler/appointment';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Editing recurrent appointment in DST time`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(() => clearTestPage());
 
 interface ITestResizeOptions {
   direction: keyof Appointment['resizableHandle'];

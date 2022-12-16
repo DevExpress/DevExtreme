@@ -1,4 +1,4 @@
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import {
@@ -14,7 +14,7 @@ import {
 
 fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 [true, false].forEach((showAllDayPanel) => {
   test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel}`, async (t) => {

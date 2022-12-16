@@ -1,10 +1,11 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Should correctly render view if virtual scrolling and groupByDate', async (t) => {
   const scheduler = new Scheduler('#container');

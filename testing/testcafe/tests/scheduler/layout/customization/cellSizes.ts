@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { insertStyles } from '../../../navigation/helpers/domUtils';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -82,7 +83,7 @@ test('Cell sizes customization should work', async (t) => {
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
   await createScheduler({
     views,
   });
@@ -99,7 +100,7 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStyles('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
 
   await createScheduler({
     views,

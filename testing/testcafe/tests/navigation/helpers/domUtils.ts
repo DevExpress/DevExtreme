@@ -104,17 +104,6 @@ export const insertStylesheetRule = ClientFunction((
   styleEl.sheet!.insertRule(rule, index);
 }, { dependencies: { } });
 
-export const insertStyles = ClientFunction((
-  rule: string,
-): void => {
-  const styleEl = document.createElement('style');
-  styleEl.setAttribute('id', 'globalStyles');
-
-  styleEl.innerHTML = rule;
-
-  document.head.appendChild(styleEl);
-}, { dependencies: { } });
-
 export const deleteStylesheetRule = ClientFunction((
   index: number,
 ): void => {

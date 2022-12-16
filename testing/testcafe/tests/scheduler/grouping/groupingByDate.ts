@@ -2,11 +2,11 @@ import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Drag-and-drop appointments into allDay panel in the grouped Scheduler `
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Drag-n-drop between dateTable and allDay panel, groupByDate=true', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,10 +1,11 @@
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler - Multiday appointments`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const checkAllDayAppointment = async (
   t: TestController,

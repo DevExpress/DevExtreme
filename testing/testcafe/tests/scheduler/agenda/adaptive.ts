@@ -1,12 +1,13 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Agenda:adaptive`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
 Promise<void> => {
@@ -66,6 +67,6 @@ Promise<void> => {
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
     }, ADAPTIVE_SIZE)
       .before(async () => createScheduler(testCase.groups, rtlEnabled))
-      .after(async () => disposeWidgets());
+      .after(async () => clearTestPage());
   });
 });

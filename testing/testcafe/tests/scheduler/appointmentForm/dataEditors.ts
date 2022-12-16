@@ -1,10 +1,11 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Form date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,10 +1,11 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Agenda:Editing`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('It should be possible to delete an appointment', async (t) => {
   const scheduler = new Scheduler('#container');

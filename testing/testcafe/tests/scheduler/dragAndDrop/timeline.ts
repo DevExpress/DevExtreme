@@ -1,4 +1,4 @@
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -6,7 +6,7 @@ import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler timeline views`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 ['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => test(`Drag-n-drop in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');

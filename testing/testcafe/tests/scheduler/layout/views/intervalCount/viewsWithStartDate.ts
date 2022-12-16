@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
+import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
   .page(url(__dirname, '../../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 [{
   view: 'timelineDay',

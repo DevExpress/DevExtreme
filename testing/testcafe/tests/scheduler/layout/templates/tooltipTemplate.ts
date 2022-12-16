@@ -1,12 +1,13 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:Templates:appointmentTooltipTemplate`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('appointmentTooltipTemplate layout should be rendered right', async (t) => {
   const scheduler = new Scheduler('#container');

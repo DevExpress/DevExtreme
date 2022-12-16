@@ -1,4 +1,4 @@
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import { simpleData, allDayData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -6,7 +6,7 @@ import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Appointment overlapping in Scheduler`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Multi-day appointment should not overlap other appointments when specific width is set, \'auto\' mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');

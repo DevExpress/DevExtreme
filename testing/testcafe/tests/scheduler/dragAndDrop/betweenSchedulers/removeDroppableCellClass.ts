@@ -1,11 +1,12 @@
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
-import { setAttribute, appendElementTo } from '../../../navigation/helpers/domUtils';
+import createWidget from '../../../../helpers/createWidget';
+import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';
@@ -62,7 +63,7 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     await t.expect(droppableCellExistsInFirstScheduler).notOk('Droppable cell class was not removed from the first scheduler.');
     await t.expect(droppableCellExistsInSecondScheduler).notOk('Droppable cell class was not removed from the second scheduler.');
   }).before(async () => {
-    await setAttribute('#container', 'style', 'display: flex;');
+    await setStyleAttribute('#container', 'display: flex;');
     await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
     await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
 

@@ -1,12 +1,13 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:Templates:CellTemplate`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'timelineMonth'].forEach((currentView) => {
   test(`dataCellTemplate and dateCellTemplate layout should be rendered right in '${currentView}'`, async (t) => {

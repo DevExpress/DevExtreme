@@ -1,12 +1,13 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Agenda:layout`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const data = [{
   text: 'Website Re-Design Plan',
@@ -144,7 +145,7 @@ const createScheduler = async (
       await t.expect(await compareScreenshot(t, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`)).ok();
     })
       .before(async () => createScheduler(rtlEnabled, resources, undefined))
-      .after(async () => disposeWidgets());
+      .after(async () => clearTestPage());
   });
 });
 

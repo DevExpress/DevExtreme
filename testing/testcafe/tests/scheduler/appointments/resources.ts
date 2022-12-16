@@ -1,11 +1,12 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import TagBox from '../../../model/tagBox';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Appointment resources`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const dataSource = [{
   text: 'test-appt-1',

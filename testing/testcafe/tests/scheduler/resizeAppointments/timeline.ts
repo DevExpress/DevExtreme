@@ -1,4 +1,4 @@
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -7,7 +7,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 ['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');
@@ -96,7 +96,7 @@ safeSizeTest('Resize appointment on timelineWeek view with custom startDayHour &
     startDate: new Date(2019, 8, 1, 14),
     endDate: new Date(2019, 8, 2, 11),
   }],
-})).after(async () => disposeWidgets());
+})).after(async () => clearTestPage());
 
 // T948164
 test('Resize should work correctly when cell\'s width is not an integer', async (t) => {

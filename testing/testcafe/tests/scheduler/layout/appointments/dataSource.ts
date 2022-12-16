@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import { disposeWidgets } from '../../../../helpers/createWidget';
+import { clearTestPage } from '../../../../helpers/clearPage';
 import Scheduler from '../../../../model/scheduler';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`DataSource`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Appointment key should be deleted when removing an appointment from series (T1024213)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

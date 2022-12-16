@@ -1,4 +1,4 @@
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -7,7 +7,7 @@ import FocusableElement from '../../../model/internal/focusable';
 
 fixture.disablePageReloads`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 ['week', 'month'].forEach((view) => {
   test(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {

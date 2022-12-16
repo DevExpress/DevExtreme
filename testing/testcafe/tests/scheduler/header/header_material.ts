@@ -1,15 +1,16 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler header: material theme`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => {
     await changeTheme('generic.light');
-    return disposeWidgets();
+    return clearTestPage();
   });
 
 test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {

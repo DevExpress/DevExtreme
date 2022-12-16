@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import url from '../../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
-fixture`Scheduler: max appointments per cell: All day`
+fixture.disablePageReloads`Scheduler: max appointments per cell: All day`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 ['auto', 'unlimited', 1, 3, 10].forEach((maxAppointmentsPerCellValue) => {
   safeSizeTest(`All day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
@@ -107,5 +108,5 @@ fixture`Scheduler: max appointments per cell: All day`
         allDayPanelMode: 'allDay',
       },
     );
-  }).after(async () => disposeWidgets());
+  }).after(async () => clearTestPage());
 });

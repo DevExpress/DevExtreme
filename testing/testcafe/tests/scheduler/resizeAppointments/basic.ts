@@ -1,4 +1,4 @@
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -6,7 +6,7 @@ import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 ['day', 'week', 'workWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,13 +1,14 @@
 import { ClientFunction, Selector } from 'testcafe';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Drag-n-drop from another draggable area`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {
   const scheduler = new Scheduler('#scheduler');

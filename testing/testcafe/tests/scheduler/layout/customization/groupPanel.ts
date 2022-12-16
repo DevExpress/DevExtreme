@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { insertStyles } from '../../../navigation/helpers/domUtils';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Group Panel`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -79,7 +80,7 @@ const views = [{
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStyles('#container .dx-scheduler-group-header { width: 200px;}');
+    await insertStylesheetRulesToPage('#container .dx-scheduler-group-header { width: 200px;}');
 
     await createScheduler({
       views,

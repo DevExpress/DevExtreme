@@ -1,11 +1,12 @@
-import { setAttribute, appendElementTo } from '../../../navigation/helpers/domUtils';
+import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import createWidget from '../../../../helpers/createWidget';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with equal cell indexes (T1094035)`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';
@@ -52,7 +53,7 @@ test('Should not lose drag-n-dropped appointment in the second scheduler', async
 
   await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
 }).before(async () => {
-  await setAttribute('#container', 'style', 'display: flex;');
+  await setStyleAttribute('#container', 'display: flex;');
   await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
   await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
 

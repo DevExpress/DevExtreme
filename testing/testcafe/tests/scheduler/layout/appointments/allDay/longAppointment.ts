@@ -1,11 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
+import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:Appointments:AllDay`
   .page(url(__dirname, '../../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
   const { workSpace, toolbar } = new Scheduler('#container');

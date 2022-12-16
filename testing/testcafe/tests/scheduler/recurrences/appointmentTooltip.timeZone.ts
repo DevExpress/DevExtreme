@@ -1,10 +1,11 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Appointment tooltip with recurrence appointment and custom time zone`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async (t) => {
   const scheduler = new Scheduler('#container');

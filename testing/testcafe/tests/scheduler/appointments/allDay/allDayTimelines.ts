@@ -1,14 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('it should display the all-day appointment in two dates if the end date equals midnight',
   async (t) => {

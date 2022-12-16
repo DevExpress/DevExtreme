@@ -1,5 +1,5 @@
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { disposeWidgets } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -7,7 +7,7 @@ import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 safeSizeTest('The tooltip of collector should not scroll page and immediately hide', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -54,7 +54,7 @@ safeSizeTest('The tooltip of collector should not scroll page and immediately hi
     startDate: new Date(2017, 4, 22, 9, 30),
     endDate: new Date(2017, 4, 22, 11, 30),
   }],
-})).after(async () => disposeWidgets());
+})).after(async () => clearTestPage());
 
 safeSizeTest('The tooltip should not hide after automatic scrolling during an appointment click', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -68,7 +68,7 @@ safeSizeTest('The tooltip should not hide after automatic scrolling during an ap
   views: ['week'],
   currentView: 'week',
   dataSource,
-})).after(async () => disposeWidgets());
+})).after(async () => clearTestPage());
 
 safeSizeTest('The tooltip should hide after manually scrolling in the browser', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -86,4 +86,4 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   views: ['week'],
   currentView: 'week',
   dataSource,
-})).after(async () => disposeWidgets());
+})).after(async () => clearTestPage());

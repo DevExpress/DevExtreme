@@ -1,10 +1,11 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Agenda:API`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Html elements should be absent in Agenda view', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { insertStyles } from '../../../navigation/helpers/domUtils';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
   .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];
 const style = `
@@ -65,7 +66,7 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStyles(style);
+    await insertStylesheetRulesToPage(style);
 
     await createScheduler({
       views,
@@ -89,7 +90,7 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStyles(style);
+    await insertStylesheetRulesToPage(style);
 
     await createScheduler({
       views: [{
@@ -129,7 +130,7 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStyles(style);
+    await insertStylesheetRulesToPage(style);
 
     await createScheduler({
       views: [{

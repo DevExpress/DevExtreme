@@ -1,11 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler - DataSource loading`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('it should correctly load items with post processing', async (t) => {
   const scheduler = new Scheduler('#container');

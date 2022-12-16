@@ -1,12 +1,13 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import { insertStyles } from '../../navigation/helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { setZoomLevel } from '../virtualScrolling/utils';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Resize appointments - Zooming`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Vertical resize with zooming', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -22,7 +23,7 @@ test('Vertical resize with zooming', async (t) => {
     .eql(515);
 }).before(async () => {
   await setZoomLevel(110);
-  await insertStyles('.dx-scheduler-cell-sizes-vertical { height: 43px;}');
+  await insertStylesheetRulesToPage('.dx-scheduler-cell-sizes-vertical { height: 43px;}');
 
   await createWidget(
     'dxScheduler',
@@ -40,5 +41,5 @@ test('Vertical resize with zooming', async (t) => {
   );
 }).after(async () => {
   await setZoomLevel(0);
-  await disposeWidgets();
+  await clearTestPage();
 });

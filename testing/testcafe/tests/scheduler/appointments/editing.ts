@@ -1,7 +1,8 @@
 import { ClientFunction } from 'testcafe';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
@@ -11,7 +12,7 @@ const UPDATED_APPOINTMENT_TITLE = `${INITIAL_APPOINTMENT_TITLE}${ADDITIONAL_TITL
 
 fixture.disablePageReloads`Appointment Editing`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Should correctly update appointment if dataSource is a simple array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);

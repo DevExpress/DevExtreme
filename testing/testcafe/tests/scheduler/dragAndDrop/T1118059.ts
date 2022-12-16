@@ -1,10 +1,11 @@
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import {
-  setAttribute,
-} from '../../navigation/helpers/domUtils';
+  setStyleAttribute,
+} from '../../../helpers/domUtils';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 const SCHEDULER_SELECTOR = '#scheduler';
 
@@ -20,7 +21,7 @@ const markup = '<div style="display: flex;">\
 
 fixture.disablePageReloads`T1118059`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 const safeEvent = (value) => ClientFunction(() => {
   (window as any).eventName = value;
@@ -37,7 +38,7 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
     .eql('onAppointmentDeleting');
 }).before(async () => {
   safeEvent('');
-  await setAttribute('#container', 'style', 'display: flex; flex-direction: column;');
+  await setStyleAttribute('#container', 'display: flex; flex-direction: column;');
 
   await ClientFunction(() => {
     $('#container').append(markup);
@@ -103,7 +104,7 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     .eql('10:30 AM - 11:00 AM');
 }).before(async () => {
   await safeEvent('')();
-  await setAttribute('#container', 'style', 'display: flex; flex-direction: column;');
+  await setStyleAttribute('#container', 'display: flex; flex-direction: column;');
 
   await ClientFunction(() => {
     $('#container').append(markup);

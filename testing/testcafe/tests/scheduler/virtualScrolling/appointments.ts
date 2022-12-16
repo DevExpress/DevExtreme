@@ -1,23 +1,24 @@
-import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domElement';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { scrollTo } from './utils';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .afterEach(async () => clearTestPage());
 
 test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('', 0);
 
-  await setStyleAttribute(element, 'backgroundColor', 'red');
-  await t.expect(getStyleAttribute(element, 'backgroundColor')).eql('red');
+  await setStyleAttribute(element, 'background-color: red;');
+  await t.expect((await getStyleAttribute(element)).backgroundColor).eql('red');
 
   await scrollTo(new Date(2020, 8, 17, 4));
 
-  await t.expect(getStyleAttribute(element, 'backgroundColor')).eql('red');
+  await t.expect((await getStyleAttribute(element)).backgroundColor).eql('red');
 }).before(async () => {
   await createWidget('dxScheduler', {
     height: 600,

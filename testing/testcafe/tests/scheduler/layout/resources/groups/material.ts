@@ -1,13 +1,14 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget, { disposeWidgets } from '../../../../../helpers/createWidget';
+import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
+import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => {
-    await disposeWidgets();
+    await clearTestPage();
     await changeTheme('generic.light');
   });
 
