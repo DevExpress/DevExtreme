@@ -49,11 +49,13 @@ QUnit.module('init', {
         const clock = sinon.useFakeTimers();
         try {
             const onShowingSpy = sinon.spy();
+
             const instance = $('#loadPanel').dxLoadPanel({
                 templatesRenderAsynchronously: true,
                 visible: true,
                 onShowing: onShowingSpy
             }).dxLoadPanel('instance');
+
             assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
             assert.strictEqual(onShowingSpy.called, false);
             clock.tick();

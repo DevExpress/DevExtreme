@@ -203,11 +203,13 @@ testModule('render', moduleConfig, () => {
         const clock = sinon.useFakeTimers();
         try {
             const onShowingSpy = sinon.spy();
+
             $('#overlay').dxOverlay({
                 templatesRenderAsynchronously: true,
                 visible: true,
                 onShowing: onShowingSpy
             });
+
             assert.strictEqual(onShowingSpy.called, false);
             clock.tick();
             assert.strictEqual(onShowingSpy.called, true);
