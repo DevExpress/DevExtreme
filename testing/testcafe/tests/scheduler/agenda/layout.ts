@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from 'testing/testcafe/helpers/safeSizeTest';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
@@ -139,7 +140,7 @@ const createScheduler = async (
 
 [false, true].forEach((rtlEnabled) => {
   [undefined, resourcesData].forEach((resources) => {
-    test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
+    safeSizeTest(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`)).ok();
     })
       .before(async () => createScheduler(rtlEnabled, resources, undefined))

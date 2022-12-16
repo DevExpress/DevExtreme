@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from 'testing/testcafe/helpers/safeSizeTest';
 import { appendElementTo, insertStyles } from '../../../navigation/helpers/domUtils';
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -60,7 +61,7 @@ test('it should skip weekend days in workWeek', async (t) => {
   );
 });
 
-test('it should skip weekend days in timelineWorkWeek', async (t) => {
+safeSizeTest('it should skip weekend days in timelineWorkWeek', async (t) => {
   const {
     takeScreenshot,
     compareResults,
@@ -95,4 +96,4 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
     true,
     '#timeline-workweek',
   );
-});
+}).after(async () => disposeWidgets());
