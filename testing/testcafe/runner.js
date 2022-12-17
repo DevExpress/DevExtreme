@@ -7,7 +7,7 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
-const TESTS_IN_JOB = 115;
+const TESTS_IN_JOB = 140;
 
 let testCafe;
 createTestCafe('localhost', 1437, 1438)

@@ -38,7 +38,7 @@ fixture`Form`
 
 ['left', 'right', 'top'].forEach((labelLocation) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    test('widget alignment (T1086611)', async (t) => {
+    safeSizeTest('widget alignment (T1086611)', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
       await waitFont();
