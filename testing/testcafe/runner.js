@@ -51,7 +51,7 @@ createTestCafe('localhost', 1437, 1438)
             const [current] = indices.split(/_|of|\\|\//ig).map(x => +x);
             let testIndex = 0;
             filters.push(() => {
-                const result = (testIndex % 100) === (current - 1);
+                const result = Math.trunc(testIndex % 100) === (current - 1);
                 testIndex += 1;
                 return result;
             });
