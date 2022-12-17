@@ -48,10 +48,12 @@ createTestCafe('localhost', 1437, 1438)
         }
         const filters = [];
         if(indices) {
-            const [current] = indices.split(/_|of|\\|\//ig).map(x => +x);
+            const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
             let testIndex = 0;
             filters.push(() => {
-                const result = Math.trunc(testIndex / 100) === (current - 1);
+                const jobIndex = Math.trunc(testIndex / 120);
+
+                const result = jobIndex === (current - 1) || jobIndex > total - 1;
                 testIndex += 1;
                 return result;
             });
