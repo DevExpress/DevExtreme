@@ -102,12 +102,12 @@ jobs:
       with:
         node-version: '15'
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: ./node_modules
-    #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-    #     restore-keys: ${{ runner.os }}-node-modules
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm install --no-audit --no-fund
@@ -117,8 +117,9 @@ jobs:
       with:
         name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
 
-    # - name: Prepare localization
-    #   run: npx gulp localization
+    - name: Prepare localization
+      if: matrix.ARGS.componentFolder == 'renovation'
+      run: npx gulp localization
 
     - name: Unpack artifacts
       run: 7z x artifacts.zip -aoa
