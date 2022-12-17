@@ -7,6 +7,8 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
+const TESTS_IN_JOB = 115;
+
 let testCafe;
 createTestCafe('localhost', 1437, 1438)
     .then(tc => {
@@ -51,9 +53,9 @@ createTestCafe('localhost', 1437, 1438)
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
             let testIndex = 0;
             filters.push(() => {
-                const jobIndex = Math.trunc(testIndex / 120);
+                const jobIndex = Math.trunc(testIndex / TESTS_IN_JOB);
 
-                const result = jobIndex === (current - 1) || jobIndex > total - 1;
+                const result = jobIndex === (current - 1) || jobIndex >= total - 1;
                 testIndex += 1;
                 return result;
             });
@@ -95,7 +97,7 @@ function setTestingPlatform(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu';
+            return 'chrome:headless --disable-gpu --window-size=1200,800';
     }
     return browser;
 }
