@@ -5,6 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { clearTestPage } from '../../../helpers/clearPage';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'))
@@ -43,7 +44,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   width: 1000,
 }));
 
-test('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
+safeSizeTest('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1');
   const { appointmentTooltip } = scheduler;
@@ -82,7 +83,7 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
   maxAppointmentsPerCell: 2,
   height: 800,
   startDayHour: 9,
-}));
+})).after(async () => clearTestPage());
 
 test('Drag-n-drop in same table cell', async (t) => {
   const scheduler = new Scheduler('#container');

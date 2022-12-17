@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
@@ -38,9 +39,11 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
 
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
+    safeSizeTest(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    })
+      .before(async () => createScheduler(view, groupOrientation))
+      .after(async () => clearTestPage());
   });
 });
