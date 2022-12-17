@@ -199,19 +199,19 @@ test('Basic drag-n-drop movements', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 100, 0)
+    .drag(draggableAppointment.element, 100, 0, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-to-right.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -100, 0)
+    .drag(draggableAppointment.element, -100, 0, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-to-left.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, 100)
+    .drag(draggableAppointment.element, 0, 100, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-to-bottom.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -100)
+    .drag(draggableAppointment.element, 0, -100, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-to-top.png', scheduler.workSpace))
     .ok()
 
@@ -277,15 +277,15 @@ test('Basic drag-n-drop all day appointment movements', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 200, 0)
+    .drag(draggableAppointment.element, 200, 0, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-all-day-to-right.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -200, 0)
+    .drag(draggableAppointment.element, -200, 0, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-all-day-to-left.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, 260, 270)
+    .drag(draggableAppointment.element, 260, 270, { speed: 0.5 })
     .expect(await takeScreenshot('drag-n-drop-all-day-to-bottom.png', scheduler.workSpace))
     .ok()
 
