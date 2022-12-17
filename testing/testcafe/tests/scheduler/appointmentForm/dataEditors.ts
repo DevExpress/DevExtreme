@@ -7,13 +7,15 @@ fixture.disablePageReloads`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-test('Form date editors should be pass numeric chars according by date mask', async (t) => {
+test.skip('Form date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
 
+  // TODO: TestCafe cannot interact with the <input autocomplete="off"
+  // id="dx_dx-1750ec2f-346b-e28d-a7dc-16dfa55b292a_endDate" class="dx-texteditor-input"
   await t
     .click(appointmentPopup.startDateElement, { offsetX: 0, offsetY: 0 })
     .typeText(appointmentPopup.startDateElement, '111111111111')
@@ -46,7 +48,7 @@ test('Form date editors should be pass numeric chars according by date mask', as
   height: 600,
 }, true));
 
-test('Form date editors should not be pass chars according by date mask', async (t) => {
+test.skip('Form date editors should not be pass chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
