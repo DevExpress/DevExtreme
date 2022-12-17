@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from 'testing/testcafe/helpers/safeSizeTest';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';

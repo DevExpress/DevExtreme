@@ -14,6 +14,8 @@ fixture.disablePageReloads`Keyboard Navigation`
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.setTestSpeed(0.8);
+
   await t
     .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
     .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()

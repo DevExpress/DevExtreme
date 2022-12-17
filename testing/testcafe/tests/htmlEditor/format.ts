@@ -37,5 +37,5 @@ test('HtmlEditor should keep actual format after "enter" key pressed (T922236)',
         },
       ],
     },
-  });
+  }, true);
 });
