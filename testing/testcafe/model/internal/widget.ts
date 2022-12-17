@@ -50,7 +50,7 @@ export default abstract class Widget {
 
     const get = (): any => (getInstance() as any).option(option);
     const set = (): any => (getInstance() as any).option(option, value);
-    const isSetter = arguments.length === 2;
+    const isSetter = arguments.length === 2 || typeof option === 'object';
 
     return ClientFunction(isSetter ? set : get, {
       dependencies: {
