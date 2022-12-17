@@ -1,6 +1,5 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -57,7 +56,7 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
   });
 });
 
-safeSizeTest('The toolbar should not display if the config is empty', async (t) => {
+test('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');
@@ -85,7 +84,7 @@ safeSizeTest('The toolbar should not display if the config is empty', async (t) 
     height: 580,
     toolbar: [],
   }, true);
-}).after(async () => clearTestPage());
+});
 
 test('The viewSwitcher should not drop down if only one view', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
