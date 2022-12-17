@@ -30,7 +30,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${componentFolder === 'scheduler' ? ' --window-size=1200,800' : ''}`);
+            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -95,7 +95,7 @@ function setTestingPlatform(args) {
     process.env.platform = args.platform;
 }
 
-function expandBrowserAlias(browser, componentFolder) {
+function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
             return 'chrome:headless --disable-gpu';
