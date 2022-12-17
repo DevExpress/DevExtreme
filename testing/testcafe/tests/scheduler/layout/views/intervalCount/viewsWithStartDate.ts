@@ -51,8 +51,6 @@ fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.setTestSpeed(0.8);
-
     await t
       .expect(await takeScreenshot(`start-date-in-${view}.png`))
       .ok()

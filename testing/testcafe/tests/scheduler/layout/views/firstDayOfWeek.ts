@@ -9,8 +9,6 @@ fixture.disablePageReloads`Scheduler: View with first day of week`
   .afterEach(async () => clearTestPage());
 
 test('WorkWeek should generate correct start view date', async (t) => {
-  await t.setTestSpeed(0.8);
-
   const scheduler = new Scheduler('#container');
 
   await t.expect(
