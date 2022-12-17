@@ -56,7 +56,7 @@ createTestCafe('localhost', 1437, 1438)
             filters.push(() => {
                 const jobIndex = Math.trunc(testIndex / TESTS_IN_JOB);
 
-                const result = jobIndex === (current - 1) || jobIndex >= total - 1;
+                const result = jobIndex === (current - 1) || (current === total && jobIndex > total - 1);
                 testIndex += 1;
                 return result;
             });
