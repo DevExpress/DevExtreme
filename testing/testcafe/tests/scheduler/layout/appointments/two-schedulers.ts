@@ -17,7 +17,7 @@ test('Appointment\'s dragging should be work properly, if on page placed two dxS
     .ok();
 
   await t
-    .drag(scheduler.getAppointment('Install New Database').element, -100, -100)
+    .drag(scheduler.getAppointment('Install New Database').element, -100, -100, { speed: 0.5 })
     .expect(await takeScreenshot('after-dragging(T1020820).png'))
     .ok();
 
