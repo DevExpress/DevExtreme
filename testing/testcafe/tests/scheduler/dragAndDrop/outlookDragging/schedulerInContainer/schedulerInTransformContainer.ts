@@ -17,7 +17,7 @@ test('Dragging should be work right in case dxScheduler placed in container with
   const scheduler = new Scheduler('#scheduler');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
+  const draggableAppointment = scheduler.getAppointmentByIndex(0);
 
   await t
     .drag(draggableAppointment.element, 0, 120)

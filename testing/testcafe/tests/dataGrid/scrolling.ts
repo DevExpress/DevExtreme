@@ -981,6 +981,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
       caption: 'Product',
       dataField: 'ProductName',
     }],
+    loadingTimeout: 0,
   })));
 
 test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
