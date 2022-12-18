@@ -27,7 +27,7 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [800, 800]).before(async () => {
   await changeTheme('material.blue.light');
 
   return createWidget('dxDataGrid', {
