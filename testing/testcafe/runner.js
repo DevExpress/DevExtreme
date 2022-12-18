@@ -27,7 +27,8 @@ createTestCafe('localhost', 1437, 1438)
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
+        const browsers = args.browsers.split(' ')
+            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
