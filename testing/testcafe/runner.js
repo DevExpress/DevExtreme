@@ -24,7 +24,7 @@ createTestCafe('localhost', 1437, 1438)
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
-            fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
+            fs.rmSync('./testing/testcafe/screenshots', { recursive: true });
         }
 
         const browsers = args.browsers.split(' ')
@@ -50,11 +50,20 @@ createTestCafe('localhost', 1437, 1438)
         const filters = [];
         if(indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
-            let testIndex = 0;
-            filters.push(() => {
-                const result = (testIndex % total) === (current - 1);
-                testIndex += 1;
-                return result;
+            let fixtureIndex = 0;
+            let currentFixture = '';
+            filters.push((testName, fixtureName, fixturePath, testMeta, fixtureMeta) => {
+                if(!currentFixture) {
+                    currentFixture = fixtureName;
+                }
+
+                if(fixtureName !== currentFixture) {
+                    currentFixture = fixtureName;
+                    fixtureIndex += 1;
+                }
+
+
+                return (fixtureIndex % total) === (current - 1);
             });
         }
         if(testName) {
