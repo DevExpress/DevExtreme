@@ -7,8 +7,6 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
-const TESTS_IN_JOB = 140;
-
 let testCafe;
 createTestCafe('localhost', 1437, 1438)
     .then(tc => {
@@ -29,8 +27,7 @@ createTestCafe('localhost', 1437, 1438)
             fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' ? ' --window-size=1200,800' : ''}`);
+        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -54,9 +51,7 @@ createTestCafe('localhost', 1437, 1438)
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
             let testIndex = 0;
             filters.push(() => {
-                const jobIndex = Math.trunc(testIndex / TESTS_IN_JOB);
-
-                const result = jobIndex === (current - 1) || (current === total && jobIndex > total - 1);
+                const result = (testIndex % total) === (current - 1);
                 testIndex += 1;
                 return result;
             });
