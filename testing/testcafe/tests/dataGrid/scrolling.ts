@@ -31,7 +31,8 @@ function getData(rowCount, colCount): Record<string, string>[] {
 }
 
 fixture`Scrolling`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .beforeEach(async (t) => { await t.maximizeWindow(); });
 
 test('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -941,7 +942,10 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../containerAspNetData.html'));
+  .page(url(__dirname, '../containerAspNetData.html'))
+  .beforeEach(async (t) => {
+    await t.maximizeWindow();
+  });
 
 test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -952,12 +956,15 @@ test('Scroll to the bottom after expand several group', async (t) => {
   };
 
   // act
+  await t.wait(200);
   await t.expect(dataGrid.hasScrollable()).ok();
   await scrollToBottom();
   await scrollToBottom();
   await scrollToBottom();
   await dataGrid.apiExpandRow(['Contoso York Store']);
+  await t.wait(200);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
+  await t.wait(200);
   await scrollToBottom();
   await scrollToBottom();
   await dataGrid.scrollBy({ y: -1 });
@@ -966,6 +973,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
   // assert
   const visibleRows = await dataGrid.apiGetVisibleRows();
   await t
+    .wait(200)
     .expect(visibleRows[0].key)
     .eql(932043);
 })
