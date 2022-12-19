@@ -1,0 +1,80 @@
+{
+  "name": "@playgrounds/react",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "playgrounds/react/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/playgrounds/react",
+        "index": "playgrounds/react/src/index.html",
+        "baseHref": "/",
+        "main": "playgrounds/react/src/index.tsx",
+        "polyfills": "playgrounds/react/src/polyfills.ts",
+        "tsConfig": "playgrounds/react/tsconfig.json",
+        "assets": ["playgrounds/react/src/favicon.ico", "playgrounds/react/src/assets"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "playgrounds/react/src/environments/environment.ts",
+              "with": "playgrounds/react/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@playgrounds/react:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@playgrounds/react:build:development"
+        },
+        "production": {
+          "buildTarget": "@playgrounds/react:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["playgrounds/react/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "playgrounds/react/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
