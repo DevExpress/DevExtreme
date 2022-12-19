@@ -3796,6 +3796,45 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         assert.equal($popupContent.length, 1, 'There is editing popup');
     });
+
+    // T1131810
+    QUnit.test('Lookup cell must be able to be unfocused after value changed on iPad', function(assert) {
+        try {
+            $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+            // arrange
+            this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
+
+            const lookupDataSource = [{ value: 'first' }, { value: 'second' }];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true,
+                    allowAdding: true,
+                    allowDeleting: true,
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    lookup: {
+                        dataSource: lookupDataSource,
+                        valueExpr: 'value',
+                    },
+                }, {
+                    dataField: 'BirthDate',
+                    dataType: 'date',
+                }]
+            });
+            this.clock.tick();
+
+            // act
+
+        } finally {
+            this.realDeviceMock.restore();
+        }
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
