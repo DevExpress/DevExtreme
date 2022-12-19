@@ -387,13 +387,14 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
     const startTableWidth = parseInt(formats.tableWidth) || getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
+    const backgroundColor = tableStyles.backgroundColor === 'rgba(0, 0, 0, 0)' ? 'rgba(255, 255, 255, 1)' : tableStyles.backgroundColor;
 
     const formOptions = {
         colCount: 2,
         formData: {
             width: startTableWidth,
             height: isDefined(formats.tableHeight) ? parseInt(formats.tableHeight) : getOuterHeight($table),
-            backgroundColor: formats.tableBackgroundColor || tableStyles.backgroundColor,
+            backgroundColor: formats.tableBackgroundColor || backgroundColor,
             borderStyle: formats.tableBorderStyle || tableStyles.borderTopStyle,
             borderColor: formats.tableBorderColor || tableStyles.borderTopColor,
             borderWidth: parseInt(isDefined(formats.tableBorderWidth) ? formats.tableBorderWidth : tableStyles.borderTopWidth),
@@ -543,13 +544,14 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
+    const backgroundColor = cellStyles.backgroundColor === 'rgba(0, 0, 0, 0)' ? 'rgba(255, 255, 255, 1)' : cellStyles.backgroundColor;
 
     const formOptions = {
         colCount: 2,
         formData: {
             width: startCellWidth,
             height: isDefined(formats.cellHeight) ? parseInt(formats.cellHeight) : getOuterHeight($cell),
-            backgroundColor: formats.cellBackgroundColor || cellStyles.backgroundColor,
+            backgroundColor: formats.cellBackgroundColor || backgroundColor,
             borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
             borderColor: formats.cellBorderColor || cellStyles.borderTopColor,
             borderWidth: parseInt(isDefined(formats.cellBorderWidth) ? formats.cellBorderWidth : cellStyles.borderTopWidth),
