@@ -134,7 +134,7 @@ function getArgs() {
 }
 
 function clearTestPage() {
-    return createTestCafe.ClientFunction(() => new Promise(() => {
+    return createTestCafe.ClientFunction(() => {
         const body = document.querySelector('body');
 
         $('#container').remove();
@@ -150,6 +150,6 @@ function clearTestPage() {
         body?.prepend(containerElement);
 
         $('#customStylesheetRules').remove();
-    }));
+    })();
 }
 
