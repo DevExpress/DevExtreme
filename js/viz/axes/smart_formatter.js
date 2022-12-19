@@ -9,73 +9,62 @@ const { abs, floor } = Math;
 const EXPONENTIAL = 'exponential';
 const formats = ['fixedPoint', 'thousands', 'millions', 'billions', 'trillions', EXPONENTIAL];
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
+const INTERVALS_MAP = {
+    'week': 'day',
+    'quarter': 'month',
+    'shorttime': 'hour',
+    'longtime': 'second'
+};
 
-function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
-    let prevDifferences;
-    let nextDifferences;
-    let dateUnitInterval;
-    const dateUnitsLength = dateUnitIntervals.length;
-    let i;
-    let j;
-
-    if(tickFormat === 'week') {
-        tickFormat = 'day';
-    } else if(tickFormat === 'quarter') {
-        tickFormat = 'month';
-    } else if(tickFormat === 'shorttime') {
-        tickFormat = 'hour';
-    } else if(tickFormat === 'longtime') {
-        tickFormat = 'second';
-    }
-
-    const tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
-
-    if(nextDate) {
-        nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
-        prevDifferences = dateUtils.getDatesDifferences(curDate, prevDate);
-        if(nextDifferences[tickFormat]) {
-            for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
-                dateUnitInterval = dateUnitIntervals[i];
-                if(i === tickFormatIndex) {
-                    setDateUnitInterval(nextDifferences, tickFormatIndex + (nextDifferences['millisecond'] ? 2 : 1));
-                } else if(nextDifferences[dateUnitInterval]) {
-                    resetDateUnitInterval(nextDifferences, i);
-                    break;
-                }
-            }
-        }
-    } else {
-        prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
-        for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
-            dateUnitInterval = dateUnitIntervals[i];
-            if(prevDifferences[dateUnitInterval]) {
-                if(i - tickFormatIndex > 1) {
-                    for(j = tickFormatIndex + 1; j >= 0; j--) {
-                        resetDateUnitInterval(prevDifferences, j);
-                    }
-                    break;
-                } else if(isDateTimeStart(curDate, dateUnitInterval)) {
-                    for(j = i - 1; j > 0; j--) {
-                        resetDateUnitInterval(prevDifferences, j);
-                    }
-                    break;
-                }
-            }
+function patchFirstTickDiff(differences, tickFormatIndex) {
+    for(let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i++) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        if(i === tickFormatIndex) {
+            setDateUnitInterval(differences, tickFormatIndex + (differences['millisecond'] ? 2 : 1));
+            break;
+        } else if(differences[dateUnitInterval] && differences.count > 1) {
+            resetDateUnitInterval(differences, i);
+            break;
         }
     }
-    return nextDate ? nextDifferences : prevDifferences;
 }
 
-function isDateTimeStart(date, dateUnitInterval) {
-    const unitNumbers = [date.getMilliseconds(), date.getSeconds(), date.getMinutes(), date.getHours(), date.getDate(), date.getMonth()];
-    const unitIndex = dateUnitIntervals.indexOf(dateUnitInterval);
-    let i;
-    for(i = 0; i < unitIndex; i++) {
-        if((i === 4 && unitNumbers[i] !== 1) || (i !== 4 && unitNumbers[i] !== 0)) {
-            return false;
+function patchTickDiff(differences, tickFormatIndex) {
+    let patched = false;
+    for(let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i--) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        if(differences[dateUnitInterval]) {
+            if(i - tickFormatIndex > 1) {
+                for(let j = 0; j <= tickFormatIndex; j++) {
+                    resetDateUnitInterval(differences, j);
+                    patched = true;
+                }
+                break;
+            }
         }
     }
-    return true;
+    return patched;
+}
+
+function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
+    tickIntervalFormat = INTERVALS_MAP[tickIntervalFormat] || tickIntervalFormat;
+
+    const tickFormatIndex = dateUnitIntervals.indexOf(tickIntervalFormat);
+
+    if(nextDate) {
+        const nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
+        if(nextDifferences[tickIntervalFormat]) {
+            patchFirstTickDiff(nextDifferences, tickFormatIndex);
+        }
+        return nextDifferences;
+    } else {
+        const prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
+        const patched = patchTickDiff(prevDifferences, tickFormatIndex);
+        if(!patched && prevDifferences.count === 1) {
+            setDateUnitInterval(prevDifferences, tickFormatIndex);
+        }
+        return prevDifferences;
+    }
 }
 
 function resetDateUnitInterval(differences, intervalIndex) {
@@ -174,17 +163,16 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
 
 function getFormatExponential(tick, tickInterval) {
     const stringTick = abs(tick).toString();
-    if(!isExponential(tick)) {
-        return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
-    } else {
+    if(isExponential(tick)) {
         return Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
+    } else {
+        return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
     }
 }
 
 function getFormatWithModifier(tick, tickInterval) {
     const tickIntervalIndex = floor(log10(tickInterval));
     let tickIndex;
-    let typeFormat;
     let precision = 0;
     let actualIndex = tickIndex = floor(log10(abs(tick)));
 
@@ -193,16 +181,11 @@ function getFormatWithModifier(tick, tickInterval) {
     }
 
     let indexOfFormat = floor(actualIndex / 3);
-    let offset = indexOfFormat * 3;
-    if(indexOfFormat < 5) {
-        if(tickIntervalIndex - offset === 2 && tickIndex >= 3) {
-            indexOfFormat++;
-            offset = indexOfFormat * 3;
-        }
-        typeFormat = formats[indexOfFormat];
-    } else {
-        typeFormat = formats[formats.length - 1];
+    const offset = indexOfFormat * 3;
+    if(indexOfFormat < 0) {
+        indexOfFormat = 0;
     }
+    const typeFormat = formats[indexOfFormat] || formats[formats.length - 1];
 
     if(offset > 0) {
         const separatedTickInterval = splitDecimalNumber(tickInterval / Math.pow(10, offset));
