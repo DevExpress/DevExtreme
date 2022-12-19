@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { clearTestPage } from '../../../helpers/clearPage';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -7,8 +6,7 @@ import Scheduler from '../../../model/scheduler';
 const SCHEDULER_SELECTOR = '#container';
 
 fixture.disablePageReloads`Month view vertical grouping `
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);

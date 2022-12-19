@@ -3,11 +3,9 @@ import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
-import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:BrowserResize`
-  .page(url(__dirname, '../../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../../container.html'));
 
 const data = [{
   text: 'Website Re-Design Plan',
@@ -145,5 +143,5 @@ const resourceDataSource = [{
       startDayHour: 9,
       height: 600,
     });
-  }).after(async () => clearTestPage());
+  });
 });

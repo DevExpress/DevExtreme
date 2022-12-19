@@ -3,11 +3,9 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment from one scheduler to another`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
 const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';

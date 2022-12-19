@@ -1,13 +1,11 @@
 import url from '../../../../helpers/getPageUrl';
 import { getAppointmentTime, screenshotTestFunc } from '../timezoneTestingUtils';
 import createWidget from '../../../../helpers/createWidget';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 const SCREENSHOT_BASE_NAME = 'timezone-monthly-recurrent';
 
 fixture.disablePageReloads`Monthly recurrent appointments with timezones`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 test('Should correctly display the recurrent monthly appointment with the same timezone', async (t) => {
   // expected date: 4/28/2021 10:00 AM - 12:00 PM

@@ -1,12 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { clearTestPage } from '../../../helpers/clearPage';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler with vertical grouping`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Should drag appoinment to the previous day`s cell (T1025952)', async (t) => {
   const scheduler = new Scheduler('#container');

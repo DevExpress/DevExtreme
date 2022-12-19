@@ -3,11 +3,9 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { scrollTo } from './utils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');

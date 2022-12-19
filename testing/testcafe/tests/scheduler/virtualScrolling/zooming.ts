@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { clearTestPage } from '../../../helpers/clearPage';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -13,8 +12,7 @@ import {
 } from './utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling with Zooming`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,

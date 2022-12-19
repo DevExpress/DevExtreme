@@ -3,11 +3,9 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { setZoomLevel } from '../virtualScrolling/utils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Resize appointments - Zooming`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Vertical resize with zooming', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -41,5 +39,4 @@ test('Vertical resize with zooming', async (t) => {
   );
 }).after(async () => {
   await setZoomLevel(0);
-  await clearTestPage();
 });

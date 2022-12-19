@@ -2,11 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');

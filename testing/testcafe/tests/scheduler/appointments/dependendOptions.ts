@@ -1,11 +1,9 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Appointment dependend options`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('cellDuration (T1076138)', async (t) => {
   const scheduler = new Scheduler('#container');

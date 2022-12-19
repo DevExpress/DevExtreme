@@ -2,11 +2,9 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
-import { clearTestPage } from '../../helpers/clearPage';
 
 fixture.disablePageReloads`Week view in adaptive mode`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (data, width = '100%'): Promise<void> => {
   await createWidget('dxScheduler', {
@@ -97,8 +95,7 @@ const roughEqual = (actual: number, expected: number): boolean => {
       .expect(roughEqual(width, testCase.width))
       .ok();
   }, [testCase.windowWidth, 700])
-    .before(async () => createScheduler(sampleData, '80%'))
-    .after(async () => clearTestPage());
+    .before(async () => createScheduler(sampleData, '80%'));
 });
 
 safeSizeTest('Compact appointment should be center by vertical alignment', async (t) => {
@@ -131,8 +128,7 @@ safeSizeTest('Compact appointment should be center by vertical alignment', async
     .expect(roughEqual(thirdAppointmentLeft, 177))
     .ok();
 }, [350, 600])
-  .before(async () => createScheduler(sampleDataNotRoundedMinutes))
-  .after(async () => clearTestPage());
+  .before(async () => createScheduler(sampleDataNotRoundedMinutes));
 
 safeSizeTest('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -179,5 +175,4 @@ safeSizeTest('With a large browser width, should be visible common appointment i
     .expect(roughEqual(secondAppointmentLeftAfterResize, 236.5))
     .ok();
 }, [350, 600])
-  .before(async () => createScheduler(sampleData))
-  .after(async () => clearTestPage());
+  .before(async () => createScheduler(sampleData));

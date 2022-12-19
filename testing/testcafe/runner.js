@@ -5,6 +5,7 @@ const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
+const { clearTestPage } = require('./helpers/clearPage');
 require('nconf').argv();
 
 let testCafe;
@@ -79,9 +80,22 @@ createTestCafe('localhost', 1437, 1438)
         if(args.cache) {
             runner.cache = args.cache;
         }
-        return runner.run({
-            quarantineMode: args.quarantineMode
-        });
+
+        const runOptions = {
+            quarantineMode: args.quarantineMode,
+        };
+
+        if(args.componentFolder.trim() === 'scheduler') {
+            runOptions.hooks = {
+                test: {
+                    after: async() => {
+                        await clearTestPage();
+                    }
+                },
+            };
+        }
+
+        return runner.run(runOptions);
     })
     .then(failedCount => {
         testCafe.close();

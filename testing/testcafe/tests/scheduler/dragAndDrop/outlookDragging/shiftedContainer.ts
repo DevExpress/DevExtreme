@@ -4,11 +4,9 @@ import { setStyleAttribute } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Outlook dragging base tests in shifted container`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 test('Basic drag-n-drop movements in shifted container', async (t) => {
   const scheduler = new Scheduler('#container');

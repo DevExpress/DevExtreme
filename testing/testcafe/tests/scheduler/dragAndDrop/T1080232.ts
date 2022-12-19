@@ -3,11 +3,9 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Appointment (T1080232)`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('it should correctly drag external item to the appointment after drag appointment', async (t) => {
   const scheduler = new Scheduler('#scheduler');

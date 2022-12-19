@@ -2,11 +2,9 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Agenda:layout`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 const data = [{
   text: 'Website Re-Design Plan',

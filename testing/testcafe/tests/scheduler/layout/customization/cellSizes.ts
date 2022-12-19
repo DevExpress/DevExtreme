@@ -3,11 +3,9 @@ import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,

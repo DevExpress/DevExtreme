@@ -3,11 +3,9 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Agenda:adaptive`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
 Promise<void> => {
@@ -66,7 +64,6 @@ Promise<void> => {
     safeSizeTest(testCase.text, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
     }, ADAPTIVE_SIZE)
-      .before(async () => createScheduler(testCase.groups, rtlEnabled))
-      .after(async () => clearTestPage());
+      .before(async () => createScheduler(testCase.groups, rtlEnabled));
   });
 });

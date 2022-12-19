@@ -3,11 +3,9 @@ import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];
 const style = `

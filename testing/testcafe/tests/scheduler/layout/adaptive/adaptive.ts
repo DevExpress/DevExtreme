@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { clearTestPage } from '../../../../helpers/clearPage';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
@@ -15,8 +14,7 @@ import {
 } from '../utils';
 
 fixture.disablePageReloads`Scheduler: Adaptive layout in themes`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -59,7 +57,6 @@ const createScheduler = async (
           rtlEnabled,
         });
       }).after(async () => {
-        await clearTestPage();
         await changeTheme('generic.light');
       });
 
@@ -90,7 +87,6 @@ const createScheduler = async (
           resources: resourceDataSource,
         });
       }).after(async () => {
-        await clearTestPage();
         await changeTheme('generic.light');
       });
 
@@ -121,7 +117,6 @@ const createScheduler = async (
           resources: resourceDataSource,
         });
       }).after(async () => {
-        await clearTestPage();
         await changeTheme('generic.light');
       });
     });

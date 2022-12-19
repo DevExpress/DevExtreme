@@ -5,11 +5,9 @@ import { getScreenshotName } from '../timezoneTestingUtils';
 import createWidget from '../../../../helpers/createWidget';
 import SelectBox from '../../../../model/selectBox';
 import Scheduler from '../../../../model/scheduler';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';

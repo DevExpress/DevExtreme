@@ -5,7 +5,6 @@ import createWidget from '../../../helpers/createWidget';
 import {
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 const SCHEDULER_SELECTOR = '#scheduler';
 
@@ -20,8 +19,7 @@ const markup = '<div style="display: flex;">\
 </div>';
 
 fixture.disablePageReloads`T1118059`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 const safeEvent = (value) => ClientFunction(() => {
   (window as any).eventName = value;

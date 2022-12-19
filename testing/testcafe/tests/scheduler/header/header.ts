@@ -1,11 +1,9 @@
-import { clearTestPage } from '../../../helpers/clearPage';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler header`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('dateNavigator buttons should not be selected after clicking', async (t) => {
   const { toolbar } = new Scheduler('#container');

@@ -2,11 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:Appointments:two-schedulers`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 test('Appointment\'s dragging should be work properly, if on page placed two dxSchedulers(T1020820)', async (t) => {
   const scheduler = new Scheduler('#container');

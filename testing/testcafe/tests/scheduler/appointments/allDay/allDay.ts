@@ -1,12 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { appendElementTo, insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 const data = [{
   text: '0',
@@ -39,27 +37,22 @@ test('it should skip weekend days in workWeek', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'workweek');
-
-  return createWidget(
-    'dxScheduler',
-    {
-      dataSource: data,
-      views: [{
-        type: 'workWeek',
-        intervalCount: 2,
-        startDate: new Date(2021, 2, 4),
-      }],
-      maxAppointmentsPerCell: 'unlimited',
-      currentView: 'workWeek',
-      currentDate: new Date(2021, 3, 5),
-      height: 300,
-    },
-    true,
-    '#workweek',
-  );
-});
+}).before(async () => createWidget(
+  'dxScheduler',
+  {
+    dataSource: data,
+    views: [{
+      type: 'workWeek',
+      intervalCount: 2,
+      startDate: new Date(2021, 2, 4),
+    }],
+    maxAppointmentsPerCell: 'unlimited',
+    currentView: 'workWeek',
+    currentDate: new Date(2021, 3, 5),
+    height: 300,
+  },
+  true,
+));
 
 test('it should skip weekend days in timelineWorkWeek', async (t) => {
   const {
@@ -75,8 +68,7 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await appendElementTo('#container', 'div', 'timeline-workweek');
-  await insertStylesheetRulesToPage('#timeline-workweek .dx-scheduler-cell-sizes-horizontal { width: 4px; }');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-horizontal { width: 4px; }');
 
   await createWidget(
     'dxScheduler',
@@ -94,6 +86,5 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
       currentDate: new Date(2021, 3, 2),
     },
     true,
-    '#timeline-workweek',
   );
 });

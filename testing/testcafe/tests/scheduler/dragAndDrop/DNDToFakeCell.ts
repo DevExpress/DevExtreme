@@ -3,11 +3,9 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Drag-n-drop to fake cell`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Should not select cells outside the scheduler(T1040795)', async () => {
   const scheduler = new Scheduler('#container');

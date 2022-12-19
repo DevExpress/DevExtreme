@@ -1,12 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { clearTestPage } from '../../../../helpers/clearPage';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Appointments collector`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 test('Appointment collector has correct offset when adaptivityEnabled=true', async (t) => {
   const scheduler = new Scheduler('#container');

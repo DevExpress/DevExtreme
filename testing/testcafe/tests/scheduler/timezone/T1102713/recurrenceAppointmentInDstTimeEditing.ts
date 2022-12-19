@@ -4,11 +4,9 @@ import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 import AppointmentDialog from '../../../../model/scheduler/appointment/dialog';
 import Appointment from '../../../../model/scheduler/appointment';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Editing recurrent appointment in DST time`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(() => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 interface ITestResizeOptions {
   direction: keyof Appointment['resizableHandle'];

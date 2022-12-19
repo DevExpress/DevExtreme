@@ -2,11 +2,9 @@ import { Selector } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
-import { clearTestPage } from '../../helpers/clearPage';
 
 fixture.disablePageReloads`Appointment popup form`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 test('Subject and description fields should be empty after showing popup on empty cell', async (t) => {
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';

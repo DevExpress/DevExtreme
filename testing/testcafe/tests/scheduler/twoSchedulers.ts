@@ -1,11 +1,9 @@
 import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
 
 fixture.disablePageReloads`Interaction of two schedulers`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (container): Promise<void> => {
   await createWidget('dxScheduler', {

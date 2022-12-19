@@ -1,11 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Timeline Appointments`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

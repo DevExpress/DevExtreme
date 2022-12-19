@@ -3,11 +3,9 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 import { changeTheme } from '../../../../../helpers/changeTheme';
-import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Material theme without all-day panel`
-  .page(url(__dirname, '../../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -30,6 +28,5 @@ test('Week view without all-day panel should be rendered correctly', async (t) =
     height: 500,
   }, true);
 }).after(async () => {
-  await clearTestPage();
   await changeTheme('generic.light');
 });

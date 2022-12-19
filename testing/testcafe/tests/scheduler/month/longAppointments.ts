@@ -2,11 +2,9 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: long appointments in month view`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
   [

@@ -2,11 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:Appointments:visible`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 [1, 0].forEach((maxAppointmentsPerCell) => {
   [true, false, undefined].forEach((visible) => {

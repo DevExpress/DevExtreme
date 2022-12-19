@@ -4,12 +4,10 @@ import Scheduler from '../../../../../model/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';
-import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Material theme layout`
   .page(url(__dirname, '../../../../container.html'))
   .afterEach(async () => {
-    await clearTestPage();
     await changeTheme('generic.light');
   });
 

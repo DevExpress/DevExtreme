@@ -3,11 +3,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:Views:Day:AllDay`
-  .page(url(__dirname, '../../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../../container.html'));
 
 const enableNativeScroll = ClientFunction(() => {
   ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().option('useNative', true);

@@ -1,12 +1,10 @@
-import { clearTestPage } from '../../../helpers/clearPage';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 ['day', 'week', 'workWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');

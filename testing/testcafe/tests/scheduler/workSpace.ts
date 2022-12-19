@@ -4,11 +4,9 @@ import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
 
 fixture.disablePageReloads`Scheduler: Workspace`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', extend(options, {

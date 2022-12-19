@@ -1,12 +1,10 @@
 import { ClientFunction } from 'testcafe';
-import { clearTestPage } from '../../../helpers/clearPage';
 import createScheduler from '../dragAndDrop/init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Cancel appointment Resizing`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 const disableMouseUpEvent = ClientFunction(() => {
   const proto = (window as any)['%testCafeAutomation%'].DragToOffset.prototype.constructor.prototype;

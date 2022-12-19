@@ -1,11 +1,9 @@
-import { clearTestPage } from '../../../helpers/clearPage';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler with vertical groupping`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Should correctly calculate group resizing area (T1025952)', async (t) => {
   const scheduler = new Scheduler('#container');

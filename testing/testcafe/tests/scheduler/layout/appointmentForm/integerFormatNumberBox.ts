@@ -2,11 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Layout:AppointmentForm:IntegerFormatNumberBox`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../../container.html'));
 
 test('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
