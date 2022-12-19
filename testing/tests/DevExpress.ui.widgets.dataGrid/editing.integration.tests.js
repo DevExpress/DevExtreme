@@ -3991,7 +3991,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
     });
 
-    // T1131757
+    // T1131810
     QUnit.test('document.activeElement must be reseted on iPad, when unfocusing lookup cell after its value has been changed', function(assert) {
         try {
             // arrange
