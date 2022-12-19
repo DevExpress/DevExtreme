@@ -5,12 +5,12 @@ function createElement(
   id: string,
   style: Partial<CSSStyleDeclaration>,
 ): HTMLElement {
-  const el = document.createElement(tagName);
+  const element = document.createElement(tagName);
 
-  el.setAttribute('id', id);
-  Object.keys(style).forEach((key) => { el.style[key] = style[key]; });
+  element.setAttribute('id', id);
+  Object.keys(style).forEach((key) => { element.style[key] = style[key]; });
 
-  return el;
+  return element;
 }
 
 export const getStyleAttribute = ClientFunction((selector) => {
