@@ -26,8 +26,6 @@ interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
 type ValueGetter = (item: ItemLike) => RadioGroupValue;
 type LabelGetter = (item: ItemLike) => string;
 
-const valuePropNameDefault = 'text';
-
 export function RadioGroupCompatible<TValue extends RadioGroupValue>({
   items,
   itemRender,
@@ -36,8 +34,8 @@ export function RadioGroupCompatible<TValue extends RadioGroupValue>({
   valueExpr,
   displayExpr,
 }: CompatibleRadioGroupProps<TValue>) {
-  const getItemLabel = compileGetter(displayExpr || valuePropNameDefault) as LabelGetter;
-  const getItemValue = compileGetter(valueExpr || valuePropNameDefault) as ValueGetter;
+  const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
+  const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
 
   const renderLabel = (item: ItemLike, index: number) => {
     if (ItemComponent) {
