@@ -35,9 +35,6 @@
     "paths": {
       "@devextreme/*": [
         "./packages/*/src"
-      ],
-      "@playgrounds/*": [
-        "./playgrounds/*/src"
       ]
     }
   }

@@ -67,6 +67,8 @@ export function RadioGroupCompatibleExample() {
           <RadioGroupCompatible
             defaultValue={objectItems[1].text}
             items={objectItems}
+            displayExpr="text"
+            valueExpr="text"
           />
         </div>
       </div>

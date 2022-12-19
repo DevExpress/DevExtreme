@@ -15,15 +15,16 @@
             ]
         },
         "watch": {
-            "outputs": [
-                "{projectRoot}/packages/{angular, components, core, react}/{lib, dist, tsc-out}"
-            ]
+            "dependsOn": ["build"]
+        },
+        "serve": {
+            "dependsOn": ["build"]
         },
         "start": {
-            "dependsOn": ["^build"]
+            "dependsOn": ["build"]
         },
         "test": {
-            "dependsOn": ["^build"],
+            "dependsOn": ["build"],
             "inputs": [
                 "default",
                 "^default",

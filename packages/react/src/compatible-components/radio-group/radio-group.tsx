@@ -1,18 +1,14 @@
 import { RadioGroupValue } from '@devextreme/components';
+import { compileGetter, ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
 import {
   RadioGroup,
   RadioGroupProps,
 } from '../../components/radio-group';
-import { ItemLike } from './compatible-types';
-
-const createItemPropGetter = (propName: string) => (item: ItemLike) => (
-  Object.prototype.hasOwnProperty.call(item, propName) ? item[propName] : item
-);
 
 interface ItemComponentProps {
-  data: ItemLike
+  data: ItemLike;
 }
 
 interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
@@ -27,7 +23,8 @@ interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
   displayExpr?: string;
 }
 
-const valuePropNameDefault = 'text';
+type ValueGetter = (item: ItemLike) => RadioGroupValue;
+type LabelGetter = (item: ItemLike) => string;
 
 export function RadioGroupCompatible<TValue extends RadioGroupValue>({
   items,
@@ -37,12 +34,12 @@ export function RadioGroupCompatible<TValue extends RadioGroupValue>({
   valueExpr,
   displayExpr,
 }: CompatibleRadioGroupProps<TValue>) {
-  const getItemLabel = createItemPropGetter(displayExpr || valuePropNameDefault);
-  const getItemValue = createItemPropGetter(valueExpr || valuePropNameDefault);
+  const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
+  const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
 
   const renderLabel = (item: ItemLike, index: number) => {
     if (ItemComponent) {
-      return (<ItemComponent data={item} />);
+      return <ItemComponent data={item} />;
     }
     if (itemRender) {
       return itemRender(item, index);

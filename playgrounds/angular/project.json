@@ -60,11 +60,11 @@
       "configurations": {
         "production": {
           "browserTarget": "@playgrounds/angular:build:production",
-          "port": 4300
+          "port": 4200
         },
         "development": {
           "browserTarget": "@playgrounds/angular:build:development",
-          "port": 4300
+          "port": 4200
         }
       },
       "defaultConfiguration": "development"

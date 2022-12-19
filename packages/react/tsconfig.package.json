@@ -21,6 +21,9 @@
 		},
 		{
 			"path": "../components/tsconfig.package.json"
+		},
+		{
+			"path": "../interim/tsconfig.package.json"
 		}
 	]
 }
