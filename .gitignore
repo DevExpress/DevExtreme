@@ -27,3 +27,4 @@ testing/CompletedSuites.txt
 tsconfig.package.tsbuildinfo
 
 .angular
+/dist
