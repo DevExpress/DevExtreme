@@ -3695,15 +3695,25 @@ QUnit.module('Editing', baseModuleConfig, () => {
             dataGrid.addRow();
             setCellValue(0, 0, 'helllo');
 
+            // arrange
+            let renderCounter = 0;
+            const contentReadyHandler = () => {
+                renderCounter++;
+            };
+            dataGrid.on('contentReady', contentReadyHandler);
+
             const insertRowChanges = dataGrid.option('editing.changes');
 
             insertRowChanges[0].data.field1 = 'test_text';
+
+            // act
             dataGrid.option('editing.changes', insertRowChanges);
             twoWayBindingChanges(insertRowChanges);
 
             // assert
             const value = dataGrid.cellValue(0, 'field1');
-            assert.strictEqual(value, 'test_text', 'render should not called');
+            assert.strictEqual(value, 'test_text', 'value must be changed');
+            assert.strictEqual(renderCounter, 1, 'render must be called 1 time');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
         }
