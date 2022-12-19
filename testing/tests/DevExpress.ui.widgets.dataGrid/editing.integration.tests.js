@@ -3797,7 +3797,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.equal($popupContent.length, 1, 'There is editing popup');
     });
 
-    // T1131757
+    // T1131810
     QUnit.test('document.activeElement must be reseted on iPad, when unfocusing lookup cell after its value has been changed', function(assert) {
         try {
             // arrange
