@@ -902,6 +902,45 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
   });
 });
 
+// T1129252
+test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const scrollToBottom = async () => {
+    await dataGrid.scrollTo({ y: 100000 });
+    await t.expect(dataGrid.isReady()).ok();
+  };
+
+  await scrollToBottom();
+
+  // act
+  await dataGrid.option({
+    focusedRowIndex: -1,
+    dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  } as any);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(await takeScreenshot('grid-virtual-scrolling-T1129252.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 250,
+  keyExpr: 'id',
+  dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  columnWidth: 100,
+  focusedRowEnabled: true,
+  focusedRowIndex: 99,
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'))
   .beforeEach(async (t) => {
