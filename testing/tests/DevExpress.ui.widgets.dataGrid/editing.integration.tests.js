@@ -3992,17 +3992,16 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
     });
 
-    // T1131810
-    QUnit.test('Lookup cell must be able to be unfocused after value changed on iPad', function(assert) {
+    // T1131757
+    QUnit.test('document.activeElement must be reseted on iPad, when unfocusing lookup cell after its value has been changed', function(assert) {
         try {
-            $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
             // arrange
-            this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
+            this.realDeviceMock = sinon.stub(devices, 'real').returns({ mac: true });
 
             const lookupDataSource = [{ value: 'first' }, { value: 'second' }];
             const dataGrid = createDataGrid({
                 dataSource: [
-                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 1, field1: 'test11', field2: 'first' },
                 ],
                 keyExpr: 'id',
                 editing: {
@@ -4015,17 +4014,24 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     dataField: 'field2',
                     lookup: {
                         dataSource: lookupDataSource,
+                        displayExpr: 'value',
                         valueExpr: 'value',
                     },
-                }, {
-                    dataField: 'BirthDate',
-                    dataType: 'date',
                 }]
             });
             this.clock.tick();
 
             // act
+            $(dataGrid.getCellElement(0, 1)).trigger('dxclick');
+            $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').trigger('dxclick');
+            this.clock.tick();
+            $('.dx-scrollable-wrapper .dx-scrollview-content .dx-item-content').eq(1).trigger('dxclick');
 
+            $(dataGrid.getCellElement(0, 0)).trigger('dxpointerdown');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(document.activeElement.tagName, document.body.tagName, 'document.activeElement must be reseted to body');
         } finally {
             this.realDeviceMock.restore();
         }
