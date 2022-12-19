@@ -51,7 +51,7 @@ test('The vertical scroll bar of the container\'s parent should not be displayed
   await t
     .expect(treeList.isReady())
     .ok()
-    .expect(await takeScreenshot('T1129106-treelist-virtual-scrolling-1', '#wrapperContainer'))
+    .expect(await takeScreenshot('T1129106-treelist-virtual-scrolling-1'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -61,8 +61,9 @@ test('The vertical scroll bar of the container\'s parent should not be displayed
 
   // assert
   await t
-    .wait(2000)
-    .expect(await takeScreenshot('T1129106-treelist-virtual-scrolling-2', '#wrapperContainer'))
+    .expect(treeList.isReady())
+    .ok()
+    .expect(await takeScreenshot('T1129106-treelist-virtual-scrolling-2'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -72,8 +73,9 @@ test('The vertical scroll bar of the container\'s parent should not be displayed
 
   // assert
   await t
-    .wait(2000)
-    .expect(await takeScreenshot('T1129106-treelist-virtual-scrolling-3', '#wrapperContainer'))
+    .expect(treeList.isReady())
+    .ok()
+    .expect(await takeScreenshot('T1129106-treelist-virtual-scrolling-3'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
