@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-env node */
 
 const createTestCafe = require('testcafe');
@@ -5,7 +6,6 @@ const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
-const { clearTestPage } = require('./helpers/clearPage');
 require('nconf').argv();
 
 let testCafe;
@@ -132,3 +132,24 @@ function getArgs() {
         }
     });
 }
+
+function clearTestPage() {
+    return createTestCafe.ClientFunction(() => new Promise(() => {
+        const body = document.querySelector('body');
+
+        $('#container').remove();
+        $('#otherContainer').remove();
+
+        const containerElement = document.createElement('div');
+        containerElement.setAttribute('id', 'container');
+
+        const otherContainerElement = document.createElement('div');
+        otherContainerElement.setAttribute('id', 'otherContainer');
+
+        body?.prepend(otherContainerElement);
+        body?.prepend(containerElement);
+
+        $('#customStylesheetRules').remove();
+    }));
+}
+
