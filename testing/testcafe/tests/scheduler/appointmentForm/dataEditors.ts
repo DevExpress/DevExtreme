@@ -7,7 +7,7 @@ fixture.disablePageReloads`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-test.skip('Form date editors should be pass numeric chars according by date mask', async (t) => {
+test('Form date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -48,7 +48,7 @@ test.skip('Form date editors should be pass numeric chars according by date mask
   height: 600,
 }, true));
 
-test.skip('Form date editors should not be pass chars according by date mask', async (t) => {
+test('Form date editors should not be pass chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
