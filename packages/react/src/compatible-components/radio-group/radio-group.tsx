@@ -1,10 +1,10 @@
 import { compileGetter, ItemLike } from '@devextreme/interim';
+import { RadioGroupValue } from '@devextreme/components';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
 import {
   RadioGroup,
   RadioGroupProps,
-  RadioGroupValue,
 } from '../../components/radio-group';
 
 interface ItemComponentProps {

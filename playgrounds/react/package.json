@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@devextreme/components": "1.0.0",
     "@devextreme/core": "1.0.0",
     "@devextreme/interim": "1.0.0",
     "@devextreme/react": "1.0.0",
