@@ -1,5 +1,5 @@
-import { compileGetter, ItemLike } from '@devextreme/interim';
 import { RadioGroupValue } from '@devextreme/components';
+import { compileGetter, ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
 import {
