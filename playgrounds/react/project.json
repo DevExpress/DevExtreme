@@ -14,7 +14,6 @@
         "index": "playgrounds/react/src/index.html",
         "baseHref": "/",
         "main": "playgrounds/react/src/index.tsx",
-        "polyfills": "playgrounds/react/src/polyfills.ts",
         "tsConfig": "playgrounds/react/tsconfig.json",
         "assets": ["playgrounds/react/src/favicon.ico", "playgrounds/react/src/assets"],
         "scripts": [],
@@ -48,7 +47,8 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "@playgrounds/react:build",
-        "hmr": true
+        "hmr": true,
+        "port": 3000
       },
       "configurations": {
         "development": {
@@ -65,14 +65,6 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["playgrounds/react/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "playgrounds/react/jest.config.ts",
-        "passWithNoTests": true
       }
     }
   },
