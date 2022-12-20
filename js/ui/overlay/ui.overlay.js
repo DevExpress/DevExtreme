@@ -499,6 +499,7 @@ const Overlay = Widget.inherit({
 
             if(this.option('templatesRenderAsynchronously')) {
                 this._stopShowTimer();
+                // NOTE: T390360, T386038
                 this._asyncShowTimeout = setTimeout(show);
             } else {
                 show();
@@ -859,7 +860,7 @@ const Overlay = Widget.inherit({
             onRendered: () => {
                 whenContentRendered.resolve();
 
-                // NOTE: T1114344, T1130045, T390360, T386038
+                // NOTE: T1114344
                 if(this.option('templatesRenderAsynchronously')) {
                     this._dimensionChanged();
                 }
