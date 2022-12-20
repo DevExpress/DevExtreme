@@ -4,6 +4,7 @@ import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
 import createWidget from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
@@ -77,7 +78,7 @@ if (!isMaterial()) {
   }));
 }
 
-test('Check popup height with no found data option', async (t) => {
+safeSizeTest('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
@@ -86,13 +87,9 @@ test('Check popup height with no found data option', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}, [300, 400]).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
-  return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
-});
-
-test('Check popup height in loading state', async (t) => {
+safeSizeTest('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
@@ -102,23 +99,19 @@ test('Check popup height in loading state', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
-
-  return createWidget('dxLookup', {
-    dataSource: {
-      load() {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([1, 2, 3]);
-          }, 5000);
-        });
-      },
+}, [300, 400]).before(async () => createWidget('dxLookup', {
+  dataSource: {
+    load() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([1, 2, 3]);
+        }, 5000);
+      });
     },
-    valueExpr: 'id',
-    displayExpr: 'text',
-  });
-});
+  },
+  valueExpr: 'id',
+  displayExpr: 'text',
+}));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

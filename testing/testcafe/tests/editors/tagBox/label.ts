@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
-  setAttribute,
   appendElementTo,
 } from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
@@ -15,7 +16,7 @@ fixture.disablePageReloads`TagBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  test(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
+  safeSizeTest(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click('#tagBox2');
@@ -25,9 +26,7 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 800);
-
+  }, [300, 800]).before(async () => {
     const componentOption = {
       label: 'label text',
       items: [...Array(10)].map((_, i) => `item${i}`),
@@ -50,7 +49,7 @@ stylingModes.forEach((stylingMode) => {
   });
 
   labelModes.forEach((labelMode) => {
-    test(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
+    safeSizeTest(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const tagBox = new TagBox('#container');
@@ -73,10 +72,8 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      await t.resizeWindow(300, 400);
-
-      await setAttribute('#container', 'style', 'top: 250px');
+    }, [300, 400]).before(async () => {
+      await setStyleAttribute('#container', 'top: 250px;');
 
       return createWidget('dxTagBox', {
         width: 200,

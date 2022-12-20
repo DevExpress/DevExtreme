@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
+import { takeScreenshotInTheme } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
-const testName = 'TabbedItem';
+const testName = 'EmptyItem';
 test(testName, async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -19,14 +19,7 @@ test(testName, async (t) => {
   width: 500,
   items: [
     {
-      itemType: 'tabbed',
-      tabPanelOptions: { deferRendering: false },
-      tabs: [
-        {
-          title: 'tab1',
-          items: ['item1'],
-        },
-      ],
+      itemType: 'empty',
     },
   ],
 }));

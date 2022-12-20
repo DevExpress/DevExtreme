@@ -1,16 +1,17 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Guid from '../../../../../js/core/guid';
 import {
-  appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
+  appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
+const DATEBOX_CLASS = 'dx-datebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
@@ -46,8 +47,7 @@ fixture.disablePageReloads`DateBox render`
   }).before(async (t) => {
     t.ctx.ids = [];
 
-    await restoreBrowserSize(t);
-    await insertStylesheetRule('.dx-datebox { display: inline-block }', 0);
+    await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block }`);
 
     for (const stylingMode of stylingModes) {
       for (const type of types) {
@@ -75,7 +75,5 @@ fixture.disablePageReloads`DateBox render`
         }
       }
     }
-  }).after(async () => {
-    await deleteStylesheetRule(0);
   });
 });

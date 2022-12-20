@@ -4,13 +4,14 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute, removeAttribute } from '../../navigation/helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 fixture.disablePageReloads`ValidationMessage`
   .page(url(__dirname, '../../container.html'));
 
-test('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
+safeSizeTest('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
@@ -29,9 +30,7 @@ test('Validation Message position should be correct after change visibility of p
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 200);
-
+}, [300, 200]).before(async () => {
   await appendElementTo('#container', 'div', 'textbox', {});
 
   await createWidget('dxTextBox', {

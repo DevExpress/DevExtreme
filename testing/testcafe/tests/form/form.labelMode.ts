@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
+import { isMaterial, takeScreenshotInTheme } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../../containerQuill.html'));
+  .page(url(__dirname, '../containerQuill.html'));
 
 [undefined, true, false].forEach((labelVisible) => {
   if (!isMaterial()) {

@@ -1,4 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
@@ -126,7 +127,7 @@ test('Popup should be centered regarding the container even if content dimension
   animation: null,
 }));
 
-test('popup should be repositioned after window resize', async (t) => {
+safeSizeTest('popup should be repositioned after window resize', async (t) => {
   const popup = new Popup('#container');
 
   const wrapper = popup.getWrapper();
@@ -156,16 +157,12 @@ test('popup should be repositioned after window resize', async (t) => {
   await t
     .expect(wrapperHorizontalCenter)
     .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
-}).before(async (t) => {
-  await t.resizeWindow(200, 200);
-
-  return createWidget('dxPopup', {
-    animation: null,
-    visible: true,
-    width: 100,
-    height: 100,
-  });
-});
+}, [200, 200]).before(async () => createWidget('dxPopup', {
+  animation: null,
+  visible: true,
+  width: 100,
+  height: 100,
+}));
 
 test('Popup dimensions should be correct after width or height animation', async (t) => {
   const popup = new Popup('#container');

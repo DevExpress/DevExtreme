@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 fixture.disablePageReloads`Drop Down Button's Popup`
   .page(url(__dirname, '../../container.html'));
 
-test('Popup should have correct postion when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
+test('Popup should have correct position when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
   const dropDownButton = new DropDownButton('#container');
   const dropDownButtonRect = {
     top: await dropDownButton.element.getBoundingClientRectProperty('top'),

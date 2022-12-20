@@ -1,10 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo, deleteStylesheetRule, insertStylesheetRule, setAttribute,
+  appendElementTo,
 } from '../../navigation/helpers/domUtils';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
+
+const CHECKBOX_CLASS = 'dx-checkbox';
 
 fixture.disablePageReloads`CheckBox`
   .page(url(__dirname, '../../container.html'));
@@ -15,15 +19,13 @@ fixture.disablePageReloads`CheckBox`
 
     await takeScreenshotInTheme(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, '#container', true);
 
-    await deleteStylesheetRule(0);
-
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setAttribute('#container', 'style', `padding: 5px; width: 300px; height: 200px; ${isColumnCountStyle ? 'column-count: 2' : ''}`);
+    await setStyleAttribute(Selector('#container'), `padding: 5px; width: 300px; height: 200px; ${isColumnCountStyle ? 'column-count: 2' : ''}`);
 
-    await insertStylesheetRule('.dx-checkbox { display: block; }', 0);
+    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
     await appendElementTo('#container', 'div', 'checked');
     await createWidget('dxCheckBox', { value: true, text: 'checked' }, false, '#checked');

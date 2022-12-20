@@ -3,8 +3,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, insertStylesheetRule, deleteStylesheetRule } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';
@@ -21,17 +22,15 @@ test('Buttons render', async (t) => {
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Button render.png', '#container', true);
 
-  await insertStylesheetRule(`.${BUTTON_CLASS} { width: 70px }`, 0);
+  await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { width: 70px; }`);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Button render with overflow.png', '#container', true);
 
-  await deleteStylesheetRule(0);
+  await removeStylesheetRulesFromPage();
 
-  await insertStylesheetRule(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px }`, 0);
+  await insertStylesheetRulesToPage(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px; }`);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Button stretch of large text.png', '#container', true);
-
-  await deleteStylesheetRule(0);
 
   await t
     .expect(compareResults.isValid())

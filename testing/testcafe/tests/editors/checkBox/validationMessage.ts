@@ -3,6 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -45,7 +46,7 @@ test('ValidationMessage integrated in editor should not raise any errors when it
 
 const positions = ['top', 'right', 'bottom', 'left'];
 positions.forEach((position) => {
-  test(`CheckBox ValidationMessage position is correct (${position})`, async (t) => {
+  safeSizeTest(`CheckBox ValidationMessage position is correct (${position})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const checkBox1 = new CheckBox('#container');
     await t
@@ -62,9 +63,7 @@ positions.forEach((position) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 200);
-
+  }, [300, 200]).before(async () => {
     await createWidget('dxCheckBox', {
       text: 'Click me!',
       elementAttr: { style: 'margin: 50px 0 0 100px;' },

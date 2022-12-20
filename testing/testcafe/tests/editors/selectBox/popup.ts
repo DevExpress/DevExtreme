@@ -3,11 +3,12 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`popup height after load`
   .page(url(__dirname, '../../container.html'));
 
-test('SelectBox without data', async (t) => {
+safeSizeTest('SelectBox without data', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -21,19 +22,15 @@ test('SelectBox without data', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}, [300, 400]).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-  return createWidget('dxSelectBox', {
-    dataSource: {
-      store: [],
-      paginate: true,
-      pageSize: 3,
-    },
-  });
-});
-
-test('SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', async (t) => {
+safeSizeTest('SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -53,19 +50,15 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}, [300, 400]).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-  return createWidget('dxSelectBox', {
-    dataSource: {
-      store: [],
-      paginate: true,
-      pageSize: 3,
-    },
-  });
-});
-
-test('SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count', async (t) => {
+safeSizeTest('SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -85,19 +78,15 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}, [300, 400]).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-  return createWidget('dxSelectBox', {
-    dataSource: {
-      store: [],
-      paginate: true,
-      pageSize: 3,
-    },
-  });
-});
-
-test('SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count', async (t) => {
+safeSizeTest('SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -117,19 +106,15 @@ test('SelectBox has a correct popup height for the first opening if the pageSize
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}, [300, 400]).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));
 
-  return createWidget('dxSelectBox', {
-    dataSource: {
-      store: [],
-      paginate: true,
-      pageSize: 3,
-    },
-  });
-});
-
-test('SelectBox does not change a popup height after load the last page', async (t) => {
+safeSizeTest('SelectBox does not change a popup height after load the last page', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const selectBox = new SelectBox('#container');
@@ -152,14 +137,10 @@ test('SelectBox does not change a popup height after load the last page', async 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
-
-  return createWidget('dxSelectBox', {
-    dataSource: {
-      store: [],
-      paginate: true,
-      pageSize: 3,
-    },
-  });
-});
+}, [300, 400]).before(async () => createWidget('dxSelectBox', {
+  dataSource: {
+    store: [],
+    paginate: true,
+    pageSize: 3,
+  },
+}));

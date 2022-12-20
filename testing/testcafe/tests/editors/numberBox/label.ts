@@ -5,6 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
 } from '../../navigation/helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
@@ -12,7 +13,7 @@ fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
+  safeSizeTest(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await takeScreenshotInTheme(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`);
@@ -20,9 +21,7 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-
+  }, [300, 400]).before(async () => {
     const componentOption = {
       label: 'label text',
       stylingMode,

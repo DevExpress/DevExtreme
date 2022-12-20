@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
+import { takeScreenshotInTheme } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
-const testName = 'ButtonItem';
+const testName = 'GroupItem';
 test(testName, async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -17,12 +17,12 @@ test(testName, async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxForm', {
   width: 500,
+  height: 200,
   items: [
     {
-      itemType: 'button',
-      buttonOptions: {
-        text: 'button1',
-      },
+      itemType: 'group',
+      caption: 'Group1',
+      items: ['item1'],
     },
   ],
 }));

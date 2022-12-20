@@ -6,11 +6,11 @@ import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
+  appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import Guid from '../../../../../js/core/guid';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -62,7 +62,7 @@ test('Item collection should be updated after direct option changing (T817436)',
 test('DropDownButton renders correctly', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRule(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-block; width: 200px; margin: 5px; }`, 0);
+  await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-block; width: 200px; margin: 5px; }`);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'DropDownButton render.png', '#container');
 
@@ -78,14 +78,11 @@ test('DropDownButton renders correctly', async (t) => {
     }
   }
 
-  await deleteStylesheetRule(0);
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
   t.ctx.ids = [];
-  await restoreBrowserSize(t);
 
   for (const stylingMode of stylingModes) {
     for (const splitButton of [true, false]) {

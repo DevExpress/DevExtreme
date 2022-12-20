@@ -5,6 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
 } from '../../navigation/helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const labelMods = ['floating', 'static'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -14,7 +15,7 @@ fixture.disablePageReloads`Lookup_Label`
 
 stylingModes.forEach((stylingMode) => {
   labelMods.forEach((labelMode) => {
-    test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+    safeSizeTest(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.click('#lookup2');
@@ -24,9 +25,7 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      await t.resizeWindow(300, 800);
-
+    }, [300, 800]).before(async () => {
       const componentOption = {
         label: 'label text',
         labelMode,

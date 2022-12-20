@@ -1,13 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
 import {
-  setAttribute, appendElementTo, insertStylesheetRule, deleteStylesheetRule, setClassAttribute,
+  setAttribute, appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
@@ -19,6 +19,7 @@ const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
+const LABEL_CLASS = 'dx-label';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
@@ -27,13 +28,13 @@ test('Label max-width changed with container size', async (t) => {
   const textBox = new TextBox('#container');
 
   await t
-    .expect(textBox.element.find('.dx-label').getStyleProperty('max-width'))
+    .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
     .eql(isMaterial() ? '68px' : '82px');
 
   await setAttribute(`#${await textBox.element.getAttribute('id')}`, 'style', 'width: 400px');
 
   await t
-    .expect(textBox.element.find('.dx-label').getStyleProperty('max-width'))
+    .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
     .eql(isMaterial() ? '368px' : '382px');
 }).before(async () => createWidget('dxTextBox', {
   width: 100,
@@ -44,12 +45,13 @@ test('Label max-width changed with container size', async (t) => {
   test(`Textbox render, rtl=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`, 0);
+    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Textbox render with limited width rtl=${rtlEnabled}.png`, '#container');
 
-    await deleteStylesheetRule(0);
-    await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 220px; margin: 5px; }`, 0);
+    await removeStylesheetRulesFromPage();
+
+    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 220px; margin: 5px; }`);
 
     await takeScreenshotInTheme(t, takeScreenshot, `Textbox render rtl=${rtlEnabled}.png`, '#container');
 
@@ -65,14 +67,11 @@ test('Label max-width changed with container size', async (t) => {
       }
     }
 
-    await deleteStylesheetRule(0);
-
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
     t.ctx.ids = [];
-    await restoreBrowserSize(t);
 
     for (const stylingMode of stylingModes) {
       for (const labelMode of labelModes) {

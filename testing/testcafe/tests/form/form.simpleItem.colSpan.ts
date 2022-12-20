@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
+import { takeScreenshotInTheme } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 ['left', 'right', 'top'].forEach((labelLocation) => {
   [1, 2, 3, 4].forEach((colCount) => {

@@ -1,20 +1,17 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox ValidationMessagePosition`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
-  });
+  .page(url(__dirname, '../../container.html'));
 
 const positions = ['top', 'right', 'bottom', 'left'];
 
 positions.forEach((position) => {
-  test(`DateBox ValidationMessage position is correct (${position})`, async (t) => {
+  safeSizeTest(`DateBox ValidationMessage position is correct (${position})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dateBox = new DateBox('#container');
@@ -25,9 +22,7 @@ positions.forEach((position) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 200);
-
+  }, [300, 200]).before(async () => {
     await createWidget('dxDateBox', {
       elementAttr: { style: 'margin: 50px 0 0 100px;' },
       width: 100,
