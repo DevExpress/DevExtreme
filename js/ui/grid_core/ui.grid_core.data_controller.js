@@ -514,14 +514,19 @@ export const dataControllerModule = {
                 getRowIndexDelta: function() {
                     return 0;
                 },
+                getDataIndex: function(change) {
+                    const visibleItems = this._items;
+                    const lastVisibleItem = change.changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null;
+
+                    return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
+                },
                 _processItems: function(items, change) {
                     const that = this;
                     const rowIndexDelta = that.getRowIndexDelta();
                     const changeType = change.changeType;
                     const visibleColumns = that._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
-                    const visibleItems = that._items;
-                    const lastVisibleItem = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null;
-                    const dataIndex = isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
+                    const dataIndex = this.getDataIndex(change);
+
                     const options = {
                         visibleColumns: visibleColumns,
                         dataIndex: dataIndex
@@ -535,6 +540,7 @@ export const dataControllerModule = {
                             result.push(item);
                         }
                     });
+
                     return result;
                 },
                 _processItem: function(item, options) {
