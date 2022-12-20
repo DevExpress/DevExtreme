@@ -68,6 +68,18 @@ export const appendElementTo = ClientFunction((
   containerElement?.appendChild(element);
 }, { dependencies: { createElement } });
 
+export const prependElementTo = ClientFunction((
+  containerSelector: string,
+  tagName: string,
+  id,
+  style?: Partial<CSSStyleDeclaration>,
+) => {
+  const containerElement = document.querySelector(containerSelector);
+  const element = createElement(tagName, id, style ?? {});
+
+  containerElement?.prepend(element);
+}, { dependencies: { createElement } });
+
 export const insertElementBefore = ClientFunction((
   containerSelector: string,
   referenceSelector: string,
@@ -86,7 +98,7 @@ export const insertStylesheetRule = ClientFunction((
   index: number,
 ): void => {
   const styleEl = document.createElement('style');
-  styleEl.setAttribute('id', 'styleElement');
+  styleEl.setAttribute('id', `styleElement_${index}`);
   document.head.appendChild(styleEl);
 
   styleEl.sheet!.insertRule(rule, index);
@@ -95,7 +107,7 @@ export const insertStylesheetRule = ClientFunction((
 export const deleteStylesheetRule = ClientFunction((
   index: number,
 ): void => {
-  const styleElement = document.getElementById('styleElement');
+  const styleElement = document.getElementById(`styleElement_${index}`);
   (styleElement as HTMLStyleElement).sheet!.deleteRule(index);
 
   styleElement?.remove();

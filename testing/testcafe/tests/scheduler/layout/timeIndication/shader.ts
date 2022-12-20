@@ -1,13 +1,20 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: Current Time Indication: Shader`
-  .page(url(__dirname, './container.html'));
+fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
+  .page(url(__dirname, '../../../container.html'));
 
 const views = ['day', 'week', 'timelineDay', 'timelineWeek', 'timelineMonth'];
+const style = `
+.dx-scheduler-date-time-shader-top::before,
+.dx-scheduler-date-time-shader-bottom::before,
+.dx-scheduler-timeline .dx-scheduler-date-time-shader::before,
+.dx-scheduler-date-time-shader-all-day {
+  background-color: red !important;
+}`;
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -41,7 +48,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -57,13 +64,15 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRulesToPage(style);
+
     await createScheduler({
       views,
       crossScrollingEnabled,
     });
   });
 
-  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and horizontal grouping is used`, async (t) => {
+  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and horizontal grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -79,6 +88,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRulesToPage(style);
+
     await createScheduler({
       views: [{
         type: 'day',
@@ -101,7 +112,7 @@ const createScheduler = async (
     });
   });
 
-  safeSizeTest(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and vertical grouping is used`, async (t) => {
+  test(`Shader should be displayed correctly when crossScrollingEnabled=${crossScrollingEnabled} and vertical grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -117,6 +128,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRulesToPage(style);
+
     await createScheduler({
       views: [{
         type: 'day',

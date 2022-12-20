@@ -1,12 +1,9 @@
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
-fixture`Delete appointments`
+fixture.disablePageReloads`Delete appointments`
   .page(url(__dirname, '../container.html'));
-
-const scheduler = new Scheduler('#container');
 
 const createRecurrenceData = (): Record<string, unknown>[] => [{
   Text: 'Text',
@@ -40,9 +37,10 @@ const createSimpleData = (): Record<string, unknown>[] => [{
   EndDate: new Date(2017, 4, 22, 13, 0, 0, 0),
 }];
 
-safeSizeTest('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
+test('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
-    .setTestSpeed(0.1)
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
 
@@ -64,9 +62,12 @@ safeSizeTest('Recurrence appointments should be deleted by click on \'delete\' b
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-safeSizeTest('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t.setTestSpeed(0.8);
+
   await t
-    .setTestSpeed(0.1)
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
 
@@ -86,7 +87,9 @@ safeSizeTest('Recurrence appointments should be deleted by press \'delete\' key'
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-safeSizeTest('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
+test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .expect(scheduler.getAppointmentCount()).eql(2)
     .click(scheduler.getAppointment('Text').element)

@@ -1,13 +1,12 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Scheduler: Layout Views: Timeline Month`
+fixture.disablePageReloads`Scheduler: Layout Views: Timeline Month`
   .page(url(__dirname, '../../../../container.html'));
 
-safeSizeTest('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t) => {
+test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('currentDate', new Date(2020, 11, 1));

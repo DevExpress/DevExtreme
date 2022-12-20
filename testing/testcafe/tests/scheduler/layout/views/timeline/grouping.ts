@@ -1,9 +1,8 @@
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Scheduler Timeline: Grouping`
+fixture.disablePageReloads`Scheduler Timeline: Grouping`
   .page(url(__dirname, '../../../../container.html'));
 
 [
@@ -11,7 +10,7 @@ fixture`Scheduler Timeline: Grouping`
   'timelineWeek',
   'timelineWorkWeek',
 ].forEach((view) => {
-  safeSizeTest(`${view} view - header panel should contain group rows if horizontal grouping`, async (t) => {
+  test(`${view} view - header panel should contain group rows if horizontal grouping`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     await t

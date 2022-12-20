@@ -1,21 +1,25 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
+import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+fixture.disablePageReloads`Scheduler: Material theme layout`
+  .page(url(__dirname, '../../../../container.html'))
+  .afterEach(async () => {
+    await changeTheme('generic.light');
+  });
 
-safeSizeTest('Scheduler should have correct height in month view (T927862)', async (t) => {
+test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  const boundingClientRect = await scheduler.dateTable.boundingClientRect;
+  const dataTableBoundingClientRect = await scheduler.dateTable.boundingClientRect;
+  const workspaceBoundingClientRect = await scheduler.workspaceScrollable.boundingClientRect;
 
   await t
-    .expect(boundingClientRect.bottom)
-    .eql((await scheduler.workspaceScrollable.boundingClientRect).bottom);
+    .expect(dataTableBoundingClientRect.bottom)
+    .eql(workspaceBoundingClientRect.bottom);
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],
@@ -38,26 +42,36 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
-    safeSizeTest(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
-      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async (t) => {
+      await t.click('html', { offsetX: 0, offsetY: 0 });
+
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, resourcesValue);
+    });
   });
 });
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    safeSizeTest(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
-
-      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(async () => createScheduler(view, resourcesValue));
+    }).before(async (t) => {
+      await t.click('html', { offsetX: 0, offsetY: 0 });
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, resourcesValue);
+    });
   });
 });

@@ -2,13 +2,16 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
+import { changeTheme } from '../../../helpers/changeTheme';
 
-fixture`Scheduler header: material theme`
-  .page(url(__dirname, '../../containerMaterial.html'));
+fixture.disablePageReloads`Scheduler header: material theme`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {
+    await changeTheme('generic.light');
+  });
 
-safeSizeTest('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
+test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   await t
@@ -26,7 +29,7 @@ safeSizeTest('dateNavigator buttons should have "text" styling mode with materia
   height: 580,
 }));
 
-safeSizeTest('viewSwitcher dropdown button popup should have a specified class', async (t) => {
+test('viewSwitcher dropdown button popup should have a specified class', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const dropDownButton = toolbar.viewSwitcher.getDropDownButton();
 
@@ -43,7 +46,7 @@ safeSizeTest('viewSwitcher dropdown button popup should have a specified class',
   height: 580,
 }));
 
-safeSizeTest('The toolbar should not display if the config is empty', async (t) => {
+test('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');
@@ -69,7 +72,7 @@ safeSizeTest('The toolbar should not display if the config is empty', async (t) 
   toolbar: [],
 }, true));
 
-safeSizeTest('The viewSwitcher should not drop down if only one view', async (t) => {
+test('The viewSwitcher should not drop down if only one view', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const { toolbar } = new Scheduler('#container');

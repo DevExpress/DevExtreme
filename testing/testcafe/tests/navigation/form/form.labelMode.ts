@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 
 fixture`Form`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../containerQuill.html'));
 
 [undefined, true, false].forEach((labelVisible) => {
   ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {

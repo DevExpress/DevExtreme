@@ -3,6 +3,8 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/getPostfix';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
@@ -36,7 +38,7 @@ fixture`Form`
 
 ['left', 'right', 'top'].forEach((labelLocation) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    test('widget alignment (T1086611)', async (t) => {
+    safeSizeTest('widget alignment (T1086611)', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
       await waitFont();
@@ -70,9 +72,8 @@ fixture`Form`
 
 [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
   ['generic.light', 'material.blue.light'].forEach((theme) => {
-    const getFunctionBody = (func) => func.toString().split('=>')[1];
-    const testName = `item padding (T1088451)_${getFunctionBody(screenByWidth)}_${theme}`;
-    test(testName, async (t) => {
+    const testName = `Form item padding with screenByWidth=${screenByWidth()}${getThemePostfix(theme)}`;
+    safeSizeTest(`${testName} (T1088451)`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
       await waitFont();
