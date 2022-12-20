@@ -86,12 +86,13 @@ export class DynamicTemplateComponent<
 
   private setDataToComponent(): void {
     const { instance } = this.componentRef!;
+    const instanceAsRecord = instance as UnknownRecord;
 
     (Object.keys(this.dataValue!) as (keyof TData)[])
-      // TODO: Think about optimization here.
+      // TODO (Vinogradov): Think about optimization here.
       // .filter((key) => Object.prototype.hasOwnProperty.call(instance, key))
       .forEach((key) => {
-        (instance as UnknownRecord)[key] = this.dataValue![key];
+        instanceAsRecord[key] = this.dataValue![key];
       });
 
     instance.markForCheck();
