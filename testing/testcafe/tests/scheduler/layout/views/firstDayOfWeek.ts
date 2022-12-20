@@ -1,13 +1,12 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: View with first day of week`
+fixture.disablePageReloads`Scheduler: View with first day of week`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('WorkWeek should generate correct start view date', async (t) => {
+test('WorkWeek should generate correct start view date', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.expect(

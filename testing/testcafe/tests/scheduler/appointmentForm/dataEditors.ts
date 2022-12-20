@@ -1,12 +1,11 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment popup form:date editors`
+fixture.disablePageReloads`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Form date editors should be pass numeric chars according by date mask', async (t) => {
+test('Form date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -45,7 +44,7 @@ safeSizeTest('Form date editors should be pass numeric chars according by date m
   height: 600,
 }, true));
 
-safeSizeTest('Form date editors should not be pass chars according by date mask', async (t) => {
+test('Form date editors should not be pass chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -84,7 +83,7 @@ safeSizeTest('Form date editors should not be pass chars according by date mask'
   height: 600,
 }, true));
 
-safeSizeTest('Form date editors should not be pass chars after remove all characters according by date mask', async (t) => {
+test('Form date editors should not be pass chars after remove all characters according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 

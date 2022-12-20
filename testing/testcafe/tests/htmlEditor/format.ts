@@ -1,12 +1,16 @@
 import SelectBox from '../../model/selectBox';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
+import { clearTestPage } from '../../helpers/clearPage';
 
-fixture`HtmlEditor - formats`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`HtmlEditor - formats`
+  .page(url(__dirname, '../containerQuill.html'))
+  .afterEach(async () => clearTestPage());
 
 test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {
   const selectBox = new SelectBox('.dx-font-format');
+
+  await t.setTestSpeed(0.5);
 
   await t
     .click(selectBox.element);
@@ -35,5 +39,5 @@ test('HtmlEditor should keep actual format after "enter" key pressed (T922236)',
         },
       ],
     },
-  });
+  }, true);
 });

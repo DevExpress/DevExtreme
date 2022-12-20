@@ -1,23 +1,21 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-const CLICK_OPTIONS = { speed: 0.1 };
 const SCHEDULER_SELECTOR = '#container';
 
-fixture`Month view vertical grouping `
+fixture.disablePageReloads`Month view vertical grouping `
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
+test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await takeScreenshot('month-view_vertical-grouping_fist-app-part_T1122185.png', scheduler.workSpace);
-  await t.click(await scheduler.toolbar.navigator.nextButton(), CLICK_OPTIONS);
+  await t.click(await scheduler.toolbar.navigator.nextButton());
   await takeScreenshot('month-view_vertical-grouping_middle-app-part_T1122185.png', scheduler.workSpace);
-  await t.click(await scheduler.toolbar.navigator.nextButton(), CLICK_OPTIONS);
+  await t.click(await scheduler.toolbar.navigator.nextButton());
   await takeScreenshot('month-view_vertical-grouping_last-app-part_T1122185.png', scheduler.workSpace);
 
   await t.expect(compareResults.isValid())

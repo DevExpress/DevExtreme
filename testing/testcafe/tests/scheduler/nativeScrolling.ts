@@ -1,10 +1,9 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
-fixture`Scheduler: NativeScrolling`
+fixture.disablePageReloads`Scheduler: NativeScrolling`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (options): Promise<void> => createWidget('dxScheduler', options, true);
@@ -16,7 +15,7 @@ const scrollToTime = ClientFunction(() => {
   instance.scrollToTime(date.getHours() - 1, 30, date);
 });
 
-safeSizeTest('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async (t) => {
+test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const views = [{

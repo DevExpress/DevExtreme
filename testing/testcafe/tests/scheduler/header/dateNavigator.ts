@@ -1,9 +1,8 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Date navigator`
+fixture.disablePageReloads`Date navigator`
   .page(url(__dirname, '../../container.html'));
 
 [{
@@ -13,7 +12,7 @@ fixture`Date navigator`
   agendaDuration: 40,
   result: '11 May-19 Jun 2021',
 }].forEach(({ agendaDuration, result }) => {
-  safeSizeTest(`Caption of date navigator should be valid after change view to Agenda with agendaDuration=${agendaDuration}`, async (t) => {
+  test(`Caption of date navigator should be valid after change view to Agenda with agendaDuration=${agendaDuration}`, async (t) => {
     const { toolbar } = new Scheduler('#container');
 
     await t

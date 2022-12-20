@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:view switching`
+fixture.disablePageReloads`Agenda:view switching`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('View switching should work for empty agenda', async (t) => {
+test('View switching should work for empty agenda', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

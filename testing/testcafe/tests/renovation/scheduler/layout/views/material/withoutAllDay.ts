@@ -21,13 +21,17 @@ fixture('Scheduler: Material theme and all-day panel');
 
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (_, { platform }) => createWidget(platform, 'dxScheduler', {
-    dataSource: [],
-    currentDate: new Date(2020, 6, 15),
-    showAllDayPanel,
-    views: ['week'],
-    currentView: 'week',
-    height: 500,
-  }, true))
+  }).before(async (t, { platform }) => {
+    await restoreBrowserSize(t);
+
+    return createWidget(platform, 'dxScheduler', {
+      dataSource: [],
+      currentDate: new Date(2020, 6, 15),
+      showAllDayPanel,
+      views: ['week'],
+      currentView: 'week',
+      height: 500,
+    }, true);
+  })
     .after(async (t) => restoreBrowserSize(t));
 });

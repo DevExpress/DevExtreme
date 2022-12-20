@@ -1,13 +1,12 @@
 import { ClientFunction } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - DataSource loading`
+fixture.disablePageReloads`Scheduler - DataSource loading`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('it should correctly load items with post processing', async (t) => {
+test('it should correctly load items with post processing', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment0 = scheduler.getAppointment('appt-0');
 
@@ -60,7 +59,7 @@ declare global {
 const getWindow = ClientFunction(() => window.testOptions);
 
 [true, false].forEach((groupByDate) => {
-  safeSizeTest(`it should have start and end date in load options groupByDate=${groupByDate}`, async (t) => {
+  test(`it should have start and end date in load options groupByDate=${groupByDate}`, async (t) => {
     const win = await getWindow();
     await t
       .expect(win.startDate)
@@ -93,7 +92,7 @@ const getWindow = ClientFunction(() => window.testOptions);
     true,
   ));
 
-  safeSizeTest(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async (t) => {
+  test(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async (t) => {
     const { toolbar } = new Scheduler('#container');
 
     await t

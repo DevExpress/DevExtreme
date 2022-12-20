@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';
 
-fixture`Agenda:adaptive`
+fixture.disablePageReloads`Agenda:adaptive`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
@@ -63,6 +63,7 @@ Promise<void> => {
   }].forEach((testCase) => {
     safeSizeTest(testCase.text, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
-    }, ADAPTIVE_SIZE).before(async () => createScheduler(testCase.groups, rtlEnabled));
+    }, ADAPTIVE_SIZE)
+      .before(async () => createScheduler(testCase.groups, rtlEnabled));
   });
 });

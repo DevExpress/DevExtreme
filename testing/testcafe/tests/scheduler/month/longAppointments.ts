@@ -1,10 +1,9 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler: long appointments in month view`
+fixture.disablePageReloads`Scheduler: long appointments in month view`
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
@@ -23,7 +22,7 @@ fixture`Scheduler: long appointments in month view`
       endDate: new Date(2020, 0, 20),
     },
   ].forEach((appointment) => {
-    safeSizeTest(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async (t) => {
+    test(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async (t) => {
       const scheduler = new Scheduler('#container');
       await t.expect(await compareScreenshot(t, `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`, scheduler.workSpace)).ok();
     })
@@ -39,7 +38,7 @@ fixture`Scheduler: long appointments in month view`
 });
 
 [false, true].forEach((rtlEnabled) => {
-  safeSizeTest(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async (t) => {
+  test(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async (t) => {
     const { toolbar, workSpace } = new Scheduler('#container');
 
     await t
@@ -65,7 +64,7 @@ fixture`Scheduler: long appointments in month view`
   }));
 });
 
-safeSizeTest('Long recurrence appointment should display valid on month view', async (t) => {
+test('Long recurrence appointment should display valid on month view', async (t) => {
   const { toolbar, workSpace } = new Scheduler('#container');
 
   await t
