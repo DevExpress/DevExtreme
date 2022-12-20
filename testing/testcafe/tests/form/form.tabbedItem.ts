@@ -4,7 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import { takeScreenshotInTheme } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../containerQuill.html'));
 
 const testName = 'TabbedItem';
 test(testName, async (t) => {

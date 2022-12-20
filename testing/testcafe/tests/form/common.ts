@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../containerQuill.html'));
 
 test('Color of the mark (T882067)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

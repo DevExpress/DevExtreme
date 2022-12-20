@@ -163,8 +163,8 @@ function clearTestPage() {
     return createTestCafe.ClientFunction(() => {
         const body = document.querySelector('body');
 
-        $('#container').remove();
-        $('#otherContainer').remove();
+        document.querySelector('#container').remove();
+        document.querySelector('#otherContainer').remove();
 
         const containerElement = document.createElement('div');
         containerElement.setAttribute('id', 'container');
@@ -172,10 +172,11 @@ function clearTestPage() {
         const otherContainerElement = document.createElement('div');
         otherContainerElement.setAttribute('id', 'otherContainer');
 
-        body?.prepend(otherContainerElement);
-        body?.prepend(containerElement);
+        body.prepend(otherContainerElement);
+        body.prepend(containerElement);
 
-        $('#customStylesheetRules').remove();
+        const stylesheetRulesEl = document.querySelector('#stylesheetRules');
+        stylesheetRulesEl?.remove();
     })();
 }
 
