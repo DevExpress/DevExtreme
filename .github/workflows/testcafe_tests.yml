@@ -71,6 +71,8 @@ jobs:
           { componentFolder: "scheduler", name: "scheduler (3/5)", quarantineMode: true, indices: "3/5" },
           { componentFolder: "scheduler", name: "scheduler (4/5)", quarantineMode: true, indices: "4/5" },
           { componentFolder: "scheduler", name: "scheduler (5/5)", quarantineMode: true, indices: "5/5" },
+          { componentFolder: "form", name: "form", quarantineMode: false},
+          { componentFolder: "form", name: "form - material", quarantineMode: false, theme: 'material.blue.light' },
           { componentFolder: "editors", name: "editors", quarantineMode: false},
           { componentFolder: "editors", name: "editors - material", quarantineMode: false, theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation (1/2)", quarantineMode: false, indices: "1/2" },
