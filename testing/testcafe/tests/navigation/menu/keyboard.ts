@@ -1,11 +1,10 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Menu from '../../../model/menu';
 
 fixture.disablePageReloads`Menu_keyboard`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('keyboard navigation should work after click on a root item if showFirstSubmenuMode is "onClick"', async (t) => {
   const menu = new Menu();

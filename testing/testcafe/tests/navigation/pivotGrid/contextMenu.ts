@@ -2,14 +2,13 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 
 const CONTEXT_MENU_CLASS = 'dx-context-menu';
 const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';
 
 fixture.disablePageReloads`PivotGrid_contextMenu`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('ContextMenu width should be adjusted to the width of the item text (T1106236)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

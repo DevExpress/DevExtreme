@@ -1,4 +1,4 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Gallery from '../../../model/gallery';
 
@@ -7,8 +7,7 @@ const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAA
 const RED_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/i5aQsABQcCYPaWuk8AAAAASUVORK5CYII=';
 
 fixture.disablePageReloads`Click on indicator`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('click on indicator item should change selected item', async (t) => {
   const gallery = new Gallery('#container');

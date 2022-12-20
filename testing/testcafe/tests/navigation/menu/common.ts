@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import {
   appendElementTo, deleteStylesheetRule, insertStylesheetRule, setAttribute,
@@ -9,8 +9,7 @@ import {
 import Menu from '../../../model/menu';
 
 fixture.disablePageReloads`Menu_common`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Menu items render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

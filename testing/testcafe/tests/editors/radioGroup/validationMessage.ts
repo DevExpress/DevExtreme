@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
 import { appendElementTo } from '../../navigation/helpers/domUtils';
@@ -9,8 +9,7 @@ import { appendElementTo } from '../../navigation/helpers/domUtils';
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
 fixture.disablePageReloads`Radio Group Validation Message`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('message position is right (T1020449)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

@@ -2,7 +2,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { cleanContainer } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRule, deleteStylesheetRule } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
 
@@ -57,4 +57,4 @@ test('Buttons render', async (t) => {
       }
     }
   }
-}).after(async () => cleanContainer());
+});

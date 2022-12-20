@@ -3,7 +3,7 @@ import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import Guid from '../../../../../js/core/guid';
 import { appendElementTo, setClassAttribute } from '../helpers/domUtils';
@@ -20,8 +20,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 const states = [false] as any[]; // FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`
 
 fixture`Toolbar_OverflowMenu`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Drop down button should lost hover and active state', async (t) => {
   const toolbar = new Toolbar('#toolbar');

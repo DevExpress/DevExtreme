@@ -1,12 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 
 fixture.disablePageReloads`Toolbar_integration_with_DataGrid`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {
   test(`Toolbar button should have the same styles as menu items,rtlEnabled=${rtlEnabled}`, async (t) => {

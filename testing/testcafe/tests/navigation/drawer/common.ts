@@ -1,6 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
@@ -19,7 +18,6 @@ testFixture()`Drawer`
     await t.resizeWindow(700, 700);
   })
   .afterEach(async (t) => {
-    await disposeWidgets();
     await restoreBrowserSize(t);
   });
 

@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { virtualData } from './virtualData.js';
 // eslint-disable-next-line import/extensions
@@ -17,8 +17,7 @@ const testFixture = () => {
 };
 
 testFixture()`PivotGrid_scrolling`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 [
   { useNative: true, mode: 'standart' },

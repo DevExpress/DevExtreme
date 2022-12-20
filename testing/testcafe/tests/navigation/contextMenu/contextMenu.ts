@@ -1,12 +1,11 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
 import { appendElementTo } from '../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Context menu should be shown in the same position when item was added in runtime (T755681)', async (t) => {
   const contextMenu = new ContextMenu('#contextMenu');

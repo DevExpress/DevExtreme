@@ -2,7 +2,7 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { cleanContainer } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Guid from '../../../../../js/core/guid';
 import {
   appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
@@ -76,7 +76,6 @@ fixture.disablePageReloads`DateBox render`
       }
     }
   }).after(async () => {
-    await cleanContainer();
     await deleteStylesheetRule(0);
   });
 });

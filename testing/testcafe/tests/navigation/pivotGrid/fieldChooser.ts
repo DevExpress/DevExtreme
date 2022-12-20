@@ -1,14 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { sales } from './data.js';
 import PivotGrid from '../../../model/pivotGrid';
 
 fixture.disablePageReloads`PivotGrid_fieldChooser`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Change dataFiels order with one invisible field (T1079461)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

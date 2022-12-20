@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { appendElementTo } from '../helpers/domUtils';
 import { Item } from '../../../../../js/ui/button_group.d';
 
@@ -11,8 +11,7 @@ interface ButtonGroupItem extends Item {
 }
 
 fixture.disablePageReloads`ButtonGroup_Styles`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 ['text', 'outlined', 'contained'].forEach((stylingMode) => {
   test(`ButtonGroup-styling,stylingMode=${stylingMode}`, async (t) => {

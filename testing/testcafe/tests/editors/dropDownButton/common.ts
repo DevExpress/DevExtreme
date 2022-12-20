@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
   removeClassAttribute,
@@ -19,8 +19,7 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const stylingModes = ['text', 'outlined', 'contained'];
 
 fixture.disablePageReloads`Drop Down Button`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Item collection should be updated after direct option changing (T817436)', async (t) => {
   const dropDownButton1 = new DropDownButton('#dropDownButton1');

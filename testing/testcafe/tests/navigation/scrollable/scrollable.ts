@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { cleanContainer } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
@@ -15,8 +15,7 @@ const testFixture = () => {
 };
 
 testFixture()`Scrollable_ScrollToElement`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => cleanContainer());
+  .page(url(__dirname, '../../container.html'));
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [true, false].forEach((useNative) => {

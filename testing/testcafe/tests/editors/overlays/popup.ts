@@ -1,12 +1,11 @@
 import { Selector, t } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 fixture.disablePageReloads`Popup`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if container is animated (T920408)', async () => {
   await t.wait(500);

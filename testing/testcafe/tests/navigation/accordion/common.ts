@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/accordion.d';
 import Accordion from '../../../model/accordion';
 
 fixture.disablePageReloads`Accordion_common`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(() => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {
   test('Accordion items render (T865742)', async (t) => {

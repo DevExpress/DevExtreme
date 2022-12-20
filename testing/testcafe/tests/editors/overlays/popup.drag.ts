@@ -1,12 +1,11 @@
 import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { appendElementTo } from '../../navigation/helpers/domUtils';
 
 fixture.disablePageReloads`Popup`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup can not be dragged outside of the container (window)', async (t) => {
   const popup = new Popup('#container');

@@ -93,7 +93,7 @@ createTestCafe('localhost', 1437, 1438)
             quarantineMode: args.quarantineMode,
         };
 
-        if(args.componentFolder.trim() === 'scheduler') {
+        if(args.componentFolder.trim() === 'scheduler' || args.componentFolder.trim() === 'navigation' || args.componentFolder.trim() === 'editors') {
             runOptions.hooks = {
                 test: {
                     after: async() => {
@@ -101,16 +101,12 @@ createTestCafe('localhost', 1437, 1438)
                     }
                 },
             };
-        }
 
-        if(args.theme) {
-            runOptions.hooks = {
-                test: {
-                    before: async() => {
-                        await changeTheme(args.theme);
-                    }
-                }
-            };
+            if(args.theme) {
+                runOptions.hooks.test.before = async() => {
+                    await changeTheme(args.theme);
+                };
+            }
         }
 
         return runner.run(runOptions);

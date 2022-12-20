@@ -53,7 +53,7 @@ export type WidgetName =
 export default async function createWidget(
   widgetName: WidgetName,
   options: unknown,
-  disableAnimation = true,
+  disableAnimation = false,
   selector = '#container',
 ): Promise<void> {
   await ClientFunction(() => {

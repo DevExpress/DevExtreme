@@ -3,13 +3,12 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import Lookup from '../../../model/lookup';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
 fixture.disablePageReloads`Lookup`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async (t) => {
   const lookup = new Lookup('#container');

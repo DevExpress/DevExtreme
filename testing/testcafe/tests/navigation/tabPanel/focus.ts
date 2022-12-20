@@ -1,12 +1,11 @@
 import { Selector, t } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { appendElementTo } from '../helpers/domUtils';
 
 fixture.disablePageReloads`TabPanel`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 // T821726
 test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async () => {
@@ -258,53 +257,4 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
   return createWidget('dxTabPanel', {
     items: ['Item 1'],
   }, true, '#tabPanel');
-});
-
-fixture`Knockout T827626`
-  .page(url(__dirname, '../pages/t827626.html'));
-
-test.skip('TabPanel should not switch the active tab after content click the if it contains another TabPanel', async () => {
-  const tabPanel = new TabPanel('#tabPanel');
-
-  await t
-    .click(tabPanel.tabs.getItem(1).element)
-    .expect(tabPanel.isFocused).ok()
-    .expect(tabPanel.tabs.isFocused)
-    .ok()
-    .expect(tabPanel.tabs.getItem(1).isFocused)
-    .ok()
-    .expect(tabPanel.tabs.getItem(0).isFocused)
-    .notOk()
-    .expect(tabPanel.multiView.getItem(0).isFocused)
-    .notOk()
-    .expect(tabPanel.multiView.getItem(3).isFocused)
-    .ok();
-
-  await t
-    .click(tabPanel.multiView.getItem(3).element)
-    .expect(tabPanel.isFocused).ok()
-    .expect(tabPanel.tabs.isFocused)
-    .notOk()
-    .expect(tabPanel.tabs.getItem(1).isFocused)
-    .notOk()
-    .expect(tabPanel.tabs.getItem(0).isFocused)
-    .notOk()
-    .expect(tabPanel.multiView.getItem(0).isFocused)
-    .notOk()
-    .expect(tabPanel.multiView.getItem(3).isFocused)
-    .ok();
-
-  await t
-    .click(Selector('body'), { offsetY: 400 })
-    .expect(tabPanel.isFocused).notOk()
-    .expect(tabPanel.tabs.isFocused)
-    .notOk()
-    .expect(tabPanel.tabs.getItem(0).isFocused)
-    .notOk()
-    .expect(tabPanel.tabs.getItem(1).isFocused)
-    .notOk()
-    .expect(tabPanel.multiView.getItem(0).isFocused)
-    .notOk()
-    .expect(tabPanel.multiView.getItem(3).isFocused)
-    .notOk();
 });

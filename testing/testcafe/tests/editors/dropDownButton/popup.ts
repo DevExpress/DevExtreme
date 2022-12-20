@@ -1,11 +1,10 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Drop Down Button's Popup`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should have correct postion when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
   const dropDownButton = new DropDownButton('#container');

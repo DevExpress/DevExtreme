@@ -1,11 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture`Form`
-  .page(url(__dirname, '../../containerQuill.html'))
-  .afterEach(async () => disposeWidgets());
+fixture.disablePageReloads`Form`
+  .page(url(__dirname, '../../containerQuill.html'));
 
 [undefined, true, false].forEach((labelVisible) => {
   if (!isMaterial()) {

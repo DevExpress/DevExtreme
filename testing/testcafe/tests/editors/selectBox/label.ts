@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo, setAttribute,
 } from '../../navigation/helpers/domUtils';
@@ -11,8 +11,7 @@ const labelMods = ['floating', 'static'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
   labelMods.forEach((labelMode) => {

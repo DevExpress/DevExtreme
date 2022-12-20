@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { cleanContainer } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../helpers/domUtils';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Integration_DataGrid`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => cleanContainer());
+  .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((useNative) => {
   test(`The rows in the fixed column are not aligned when the grid is encapsulated inside a <td> element, useNative: ${useNative} (T1071725)`, async (t) => {

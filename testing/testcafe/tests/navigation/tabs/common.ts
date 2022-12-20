@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../helpers/domUtils';
 
 fixture.disablePageReloads`Tabs_common`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Tabs icon alignment', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

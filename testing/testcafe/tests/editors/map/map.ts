@@ -1,10 +1,9 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Map`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../../container.html'));
 
 test('Map should not raise errors when it is disposed immediately after creating (T914315)', async (t) => {
   const $editButton = Selector('.dx-command-edit').child();

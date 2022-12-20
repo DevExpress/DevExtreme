@@ -1,14 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async (t) => {
-    await disposeWidgets();
     await restoreBrowserSize(t);
   });
 

@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { cleanContainer } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo, deleteStylesheetRule, insertStylesheetRule, setAttribute,
 } from '../../navigation/helpers/domUtils';
@@ -43,7 +43,5 @@ fixture.disablePageReloads`CheckBox`
 
     await appendElementTo('#container', 'div', 'indeterminateRTL');
     await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, false, '#indeterminateRTL');
-  }).after(async () => {
-    await cleanContainer();
   });
 });

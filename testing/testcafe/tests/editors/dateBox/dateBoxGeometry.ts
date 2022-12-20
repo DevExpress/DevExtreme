@@ -4,14 +4,13 @@ import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import DateBox from '../../../model/dateBox';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400));
 
 fixture.disablePageReloads`DateBox (datetime) geometry (T896846)`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async (t) => {
-    await disposeWidgets();
     await restoreBrowserSize(t);
   });
 

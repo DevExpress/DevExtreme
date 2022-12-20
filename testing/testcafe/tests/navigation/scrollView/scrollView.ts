@@ -1,13 +1,12 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget, { cleanContainer } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import ScrollView from '../../../model/scrollView/scrollView';
 import { appendElementTo } from '../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
 fixture.disablePageReloads`ScrollView`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => cleanContainer());
+  .page(url(__dirname, '../../container.html'));
 
 [150, 300].forEach((scrollableContentSize) => {
   (['vertical', 'horizontal'] as ScrollableDirection[]).forEach((direction) => {
