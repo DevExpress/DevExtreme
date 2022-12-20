@@ -1,9 +1,11 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`SelectBox placeholder`
   .page(url(__dirname, '../../container.html'));
@@ -20,7 +22,7 @@ test('Placeholder is visible after items option change when value is not chosen 
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'selectBox');
-  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
+  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
 
   return createWidget('dxSelectBox', {
     width: '100%',

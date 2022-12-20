@@ -1,13 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
 import {
-  setAttribute, appendElementTo, setClassAttribute,
+  appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
@@ -31,7 +31,7 @@ test('Label max-width changed with container size', async (t) => {
     .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
     .eql(isMaterial() ? '68px' : '82px');
 
-  await setAttribute(`#${await textBox.element.getAttribute('id')}`, 'style', 'width: 400px');
+  await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), 'width: 400px;');
 
   await t
     .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))

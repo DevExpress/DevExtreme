@@ -1,8 +1,9 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
@@ -20,7 +21,7 @@ stylingModes.forEach((stylingMode) => {
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await appendElementTo('#container', 'div', 'dateBox');
-    await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
+    await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
 
     return createWidget('dxDateBox', {
       label: 'qwerty QWERTY 1234567890',

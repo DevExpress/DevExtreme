@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
@@ -73,7 +74,7 @@ stylingModes.forEach((stylingMode) => {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }, [300, 400]).before(async () => {
-      await setStyleAttribute('#container', 'top: 250px;');
+      await setStyleAttribute(Selector('#container'), 'top: 250px;');
 
       return createWidget('dxTagBox', {
         width: 200,

@@ -3,7 +3,8 @@ import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
 import createWidget from '../../../helpers/createWidget';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
-import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Autocomplete_placeholder`
   .page(url(__dirname, '../../container.html'));
@@ -21,7 +22,7 @@ test('Placeholder is visible after items option change when value is not chosen 
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'autocomplete');
-  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
+  await setStyleAttribute('#container', 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
 
   return createWidget('dxAutocomplete', {
     width: '100%',

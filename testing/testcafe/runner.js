@@ -93,7 +93,10 @@ createTestCafe('localhost', 1437, 1438)
             quarantineMode: args.quarantineMode,
         };
 
-        if(args.componentFolder.trim() === 'scheduler' || args.componentFolder.trim() === 'navigation' || args.componentFolder.trim() === 'editors') {
+        if(args.componentFolder.trim() === 'scheduler'
+            || args.componentFolder.trim() === 'navigation'
+            || args.componentFolder.trim() === 'editors'
+            || args.componentFolder.trim() === 'form') {
             runOptions.hooks = {
                 test: {
                     after: async() => {

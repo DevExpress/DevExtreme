@@ -1,11 +1,13 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo, setAttribute,
+  appendElementTo,
 } from '../../navigation/helpers/domUtils';
 import SelectBox from '../../../model/selectBox';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
 const labelMods = ['floating', 'static'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -30,7 +32,7 @@ stylingModes.forEach((stylingMode) => {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await setAttribute('#container', 'style', 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
+      await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
 
       await appendElementTo('#container', 'div', 'selectBox1');
       await appendElementTo('#container', 'div', 'selectBox2');
