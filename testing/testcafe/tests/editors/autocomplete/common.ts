@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
@@ -22,7 +23,7 @@ test('Placeholder is visible after items option change when value is not chosen 
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'autocomplete');
-  await setStyleAttribute('#container', 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
+  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
 
   return createWidget('dxAutocomplete', {
     width: '100%',
