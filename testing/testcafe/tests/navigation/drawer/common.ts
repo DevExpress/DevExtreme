@@ -466,5 +466,5 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
-}, [700, 700]);
+  }, [700, 700]);
+});
