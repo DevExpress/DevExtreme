@@ -1,4 +1,3 @@
-import { ClientFunction } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 import DropDownMenu from './dropDownMenu';
@@ -13,14 +12,5 @@ export default class Toolbar extends Widget {
 
   getOverflowMenu(): DropDownMenu {
     return new DropDownMenu(this.element.find(`.${CLASS.overflowMenu}`));
-  }
-
-  repaint(): Promise<{ top: number; left: number }> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).repaint(),
-      { dependencies: { getInstance } },
-    )();
   }
 }

@@ -1,4 +1,4 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import { WidgetName } from '../../helpers/createWidget';
 
@@ -18,13 +18,4 @@ export default class Accordion extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxAccordion'; }
-
-  repaint(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => { (getInstance() as any).repaint(); },
-      { dependencies: { getInstance } },
-    )();
-  }
 }

@@ -1,4 +1,4 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import { WidgetName } from '../../helpers/createWidget';
 import ContextMenu from '../contextMenu';
@@ -33,14 +33,5 @@ export default class Menu extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getSubMenuInstance(rootElement: Selector): ContextMenu {
     return new ContextMenu(rootElement.find(`.${CLASS.contextMenu}`));
-  }
-
-  repaint(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => { (getInstance() as any).repaint(); },
-      { dependencies: { getInstance } },
-    )();
   }
 }
