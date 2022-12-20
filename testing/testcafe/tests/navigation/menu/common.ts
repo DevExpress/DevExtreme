@@ -1,10 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import {
-  appendElementTo, deleteStylesheetRule, insertStylesheetRule, setAttribute,
+  appendElementTo, setAttribute,
 } from '../helpers/domUtils';
 import Menu from '../../../model/menu';
 
@@ -36,8 +37,6 @@ test('Menu items render', async (t) => {
     await actionFn();
   });
 
-  await deleteStylesheetRule(0);
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -47,7 +46,7 @@ test('Menu items render', async (t) => {
   await setAttribute('#container', 'class', 'dx-theme-generic-typography');
   await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
 
-  await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important }');
 
   const menuItems = [
     {

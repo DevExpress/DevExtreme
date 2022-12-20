@@ -1,9 +1,10 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo } from '../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../helpers/domUtils';
 import { Item } from '../../../../../js/ui/button_group.d';
 
 interface ButtonGroupItem extends Item {
@@ -81,13 +82,7 @@ fixture.disablePageReloads`ButtonGroup_Styles`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await ClientFunction(() => {
-      $('#container').css({
-        width: '600px',
-        height: '400px',
-      });
-
-      $('#container').addClass('dx-theme-generic-typography');
-    })();
+    await setStyleAttribute(Selector('#container'), 'width: 600px; height: 400px;');
+    await setAttribute('#container', 'class', 'dx-theme-generic-typography');
   });
 });

@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -7,7 +8,6 @@ import { virtualData } from './virtualData.js';
 // eslint-disable-next-line import/extensions
 import { dataOptions } from './virtualDataOptions.js';
 import PivotGrid from '../../../model/pivotGrid';
-import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
 
 const testFixture = () => {
   if (isMaterial()) {
@@ -33,13 +33,11 @@ testFixture()`PivotGrid_scrolling`
 
     await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sync dir=vertical,useNative=${useNative},mode=${mode}.png`, '#container');
 
-    await deleteStylesheetRule(0);
-
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
+    await insertStylesheetRulesToPage('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important; }', 0);
 
     return createWidget('dxPivotGrid', {
       dataSource: {
@@ -91,13 +89,11 @@ testFixture()`PivotGrid_scrolling`
 
     await takeScreenshotInTheme(t, takeScreenshot, `PivotGrid rows sync dir=both,useNative=${useNative},mode=${mode}.png`, '#container');
 
-    await deleteStylesheetRule(0);
-
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStylesheetRule('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important }', 0);
+    await insertStylesheetRulesToPage('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important; }');
 
     return createWidget('dxPivotGrid', {
       dataSource: {

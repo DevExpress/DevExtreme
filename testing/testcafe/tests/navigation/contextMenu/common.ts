@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
@@ -5,8 +6,9 @@ import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
 import { Item } from '../../../../../js/ui/context_menu.d';
 import {
-  appendElementTo, deleteStylesheetRule, insertStylesheetRule, setAttribute,
+  appendElementTo, setAttribute,
 } from '../helpers/domUtils';
+import { insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu_common`
   .page(url(__dirname, '../../container.html'));
@@ -31,17 +33,15 @@ test('ContextMenu items render', async (t) => {
     await t.click(contextMenu.items.nth(0));
   });
 
-  await deleteStylesheetRule(0);
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'contextMenu');
   await setAttribute('#container', 'class', 'dx-theme-generic-typography');
-  await setAttribute('#container', 'style', 'width: 300px; height: 200px;');
+  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 200px;');
 
-  await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
 
   const menuItems = [
     { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },
