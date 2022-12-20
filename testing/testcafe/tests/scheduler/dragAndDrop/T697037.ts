@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`T697037`
+fixture.disablePageReloads`T697037`
   .page(url(__dirname, '../../container.html'));
 
 test('Recurrence exception date should equal date of appointment, which excluded from recurrence(T697037)', async (t) => {
@@ -12,7 +12,7 @@ test('Recurrence exception date should equal date of appointment, which excluded
   const appointment = scheduler.getAppointment('Test', 2);
 
   await t
-    .dragToElement(appointment.element, targetCell, { speed: 0.1 });
+    .dragToElement(appointment.element, targetCell, { speed: 0.5 });
 
   await t
     .expect(ClientFunction(() => (window as any).recurrenceException)())

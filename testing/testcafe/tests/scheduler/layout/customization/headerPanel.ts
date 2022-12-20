@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: Layout Customization: Header Panel`
-  .page(url(__dirname, './headerPanelCustomizationContainer.html'));
+fixture.disablePageReloads`Scheduler: Layout Customization: Header Panel`
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -62,7 +62,7 @@ const views = [{
 }];
 
 [false, true].forEach((crossScrollingEnabled) => {
-  safeSizeTest('Header panel customization should work', async (t) => {
+  test('Header panel customization should work', async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -78,6 +78,8 @@ const views = [{
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await insertStylesheetRulesToPage('#container .dx-scheduler-group-header, #container .dx-scheduler-header-panel-cell { height: 100px; }');
+
     await createScheduler({
       views,
       crossScrollingEnabled,

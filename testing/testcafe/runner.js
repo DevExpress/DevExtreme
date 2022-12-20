@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-env node */
 
 const createTestCafe = require('testcafe');
@@ -33,10 +34,11 @@ createTestCafe('localhost', 1437, 1438)
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
-            fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
+            fs.rmSync('./testing/testcafe/screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
+        const browsers = args.browsers.split(' ')
+            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -62,6 +64,7 @@ createTestCafe('localhost', 1437, 1438)
                 const result = (testIndex % total) === (current - 1);
                 testIndex += 1;
                 return result;
+
             });
         }
         if(testName) {
@@ -90,13 +93,23 @@ createTestCafe('localhost', 1437, 1438)
             quarantineMode: args.quarantineMode,
         };
 
+        if(args.componentFolder.trim() === 'scheduler') {
+            runOptions.hooks = {
+                test: {
+                    after: async() => {
+                        await clearTestPage();
+                    }
+                },
+            };
+        }
+
         if(args.theme) {
             runOptions.hooks = {
                 test: {
                     before: async() => {
                         await changeTheme(args.theme);
                     }
-                },
+                }
             };
         }
 
@@ -120,6 +133,7 @@ function expandBrowserAlias(browser) {
         case 'chrome:devextreme-shr2':
             return 'chrome:headless --disable-gpu';
     }
+
     return browser;
 }
 
@@ -141,3 +155,24 @@ function getArgs() {
         }
     });
 }
+
+function clearTestPage() {
+    return createTestCafe.ClientFunction(() => {
+        const body = document.querySelector('body');
+
+        $('#container').remove();
+        $('#otherContainer').remove();
+
+        const containerElement = document.createElement('div');
+        containerElement.setAttribute('id', 'container');
+
+        const otherContainerElement = document.createElement('div');
+        otherContainerElement.setAttribute('id', 'otherContainer');
+
+        body?.prepend(otherContainerElement);
+        body?.prepend(containerElement);
+
+        $('#customStylesheetRules').remove();
+    })();
+}
+

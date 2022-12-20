@@ -2,28 +2,27 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Outlook dragging, for case scheduler in container`
+fixture.disablePageReloads`Outlook dragging, for case scheduler in container`
   .page(url(__dirname, '../../../../container.html'));
 
-safeSizeTest('Dragging should be work right in case dxScheduler placed in dxTabPanel', async (t) => {
+test('Dragging should be work right in case dxScheduler placed in dxTabPanel', async (t) => {
   const scheduler = new Scheduler('.dx-scheduler');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
   await t
-    .drag(draggableAppointment.element, 0, 120, { speed: 0.1 })
+    .drag(draggableAppointment.element, 0, 120)
     .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-bottom.png'))
     .ok()
 
-    .drag(draggableAppointment.element, 0, -170, { speed: 0.1 })
+    .drag(draggableAppointment.element, 0, -170)
     .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-top.png'))
     .ok()
 
-    .drag(draggableAppointment.element, 100, 0, { speed: 0.1 })
+    .drag(draggableAppointment.element, 100, 0)
     .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-right.png'))
     .ok()
 

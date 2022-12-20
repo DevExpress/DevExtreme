@@ -3,8 +3,8 @@ import url from '../../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
 import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../../container.html'))
+fixture`Form`
+  .page(url(__dirname, '../../containerQuill.html'))
   .afterEach(async () => disposeWidgets());
 
 [undefined, true, false].forEach((labelVisible) => {
