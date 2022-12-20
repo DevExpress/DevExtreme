@@ -424,6 +424,11 @@ const Popup = Overlay.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
+        // NOTE: T1130045
+        if(!visible) {
+            this._observeContentResize(visible);
+        }
+
         return this.callBase(visible);
     },
 
