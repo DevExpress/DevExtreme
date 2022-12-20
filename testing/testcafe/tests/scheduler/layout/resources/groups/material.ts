@@ -34,7 +34,11 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Base views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `material-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async () => {
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, groupOrientation);
+    });
   });
 });
 
@@ -43,6 +47,10 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Timeline views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `material-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(async () => createScheduler(view, groupOrientation));
+    }).before(async () => {
+      await changeTheme('material.blue.light');
+
+      return createScheduler(view, groupOrientation);
+    });
   });
 });
