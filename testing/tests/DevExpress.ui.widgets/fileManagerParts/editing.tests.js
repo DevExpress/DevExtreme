@@ -2261,4 +2261,45 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
         assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
     });
+
+    test('currentPath must not be changed when remaning a file after its moving - T1132584', function(assert) {
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+
+        // moving file
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that it moved
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), 'Folder 3', 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), ['Folder 3'], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file moved to another folder');
+
+        assert.strictEqual(this.wrapper.getColumnCellsInDetailsView(2).length, 1, 'file count is correct');
+
+        // renaming moved file
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val('File 1 renamed.txt').trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that file is renamed and we are still in the folder 'Folder 3'
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), 'Folder 3', 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), ['Folder 3'], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1 renamed.txt', 'file renamed to another folder');
+
+        assert.strictEqual(this.wrapper.getColumnCellsInDetailsView(2).length, 1, 'file count is correct');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1 renamed.txt', 'first file is the target file');
+    });
 });
