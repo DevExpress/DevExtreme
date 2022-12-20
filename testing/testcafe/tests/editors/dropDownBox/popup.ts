@@ -13,7 +13,7 @@ safeSizeTest('Popup should have correct height when DropDownBox is opened first 
 
   await t
     .click(`.${BUTTON_CLASS}`)
-    .expect(await takeScreenshot('popup_has_correct_height.png', '#container'))
+    .expect(await takeScreenshot('popup_has_correct_height.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
