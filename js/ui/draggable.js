@@ -29,6 +29,7 @@ import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
 
 const window = getWindow();
+const KEYDOWN_EVENT = 'keydown';
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
@@ -37,6 +38,7 @@ const DRAGEND_EVENT_NAME = addNamespace(dragEventEnd, DRAGGABLE);
 const DRAG_ENTER_EVENT_NAME = addNamespace(dragEventEnter, DRAGGABLE);
 const DRAGEND_LEAVE_EVENT_NAME = addNamespace(dragEventLeave, DRAGGABLE);
 const POINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, DRAGGABLE);
+const KEYDOWN_EVENT_NAME = addNamespace(KEYDOWN_EVENT, DRAGGABLE);
 
 const CLONE_CLASS = 'clone';
 
@@ -259,6 +261,8 @@ const Draggable = DOMComponent.inherit({
             onDragEnd: null,
             onDragEnter: null,
             onDragLeave: null,
+            onDragCancel: null,
+            onCancelByEsc: false,
 
             /**
              * @section Utils
@@ -461,12 +465,15 @@ const Draggable = DOMComponent.inherit({
         if(itemsSelector[0] === '>') {
             itemsSelector = itemsSelector.slice(1);
         }
-
         eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
         eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
         eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
         eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
+
+        if(this.option('onCancelByEsc')) {
+            eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
+        }
     },
 
     _dragElementIsCloned: function() {
@@ -597,6 +604,7 @@ const Draggable = DOMComponent.inherit({
 
     _dragStartHandler: function(e) {
         const $element = this._getDraggableElement(e);
+        this.dragInProgress = true;
 
         if(!this._isValidElement(e, $element)) {
             e.cancel = true;
@@ -813,6 +821,7 @@ const Draggable = DOMComponent.inherit({
         const dropEventArgs = this._getEventArgs(e);
         const targetDraggable = this._getTargetDraggable();
         let needRevertPosition = true;
+        this.dragInProgress = false;
 
         try {
             this._getAction('onDragEnd')(dragEndEventArgs);
@@ -839,17 +848,7 @@ const Draggable = DOMComponent.inherit({
                     this._revertItemToInitialPosition();
                 }
 
-                this.reset();
-                targetDraggable.reset();
-                this._stopAnimator();
-                this._horizontalScrollHelper.reset();
-                this._verticalScrollHelper.reset();
-
-                this._resetDragElement();
-                this._resetSourceElement();
-
-                this._resetTargetDraggable();
-                this._resetSourceDraggable();
+                this._resetDragOptions(targetDraggable);
             });
         }
     },
@@ -907,6 +906,34 @@ const Draggable = DOMComponent.inherit({
         sourceDraggable.dragLeave(e);
     },
 
+    _keydownHandler: function(e) {
+        if(this.dragInProgress && e.key === 'Escape') {
+            this._keydownEscapeHandler(e);
+        }
+    },
+
+    _keydownEscapeHandler: function(e) {
+        const $sourceElement = this._getSourceElement();
+        if(!$sourceElement) {
+            return;
+        }
+
+        const dragCancelEventArgs = this._getEventArgs(e);
+        this._getAction('onDragCancel')(dragCancelEventArgs);
+
+        if(dragCancelEventArgs.cancel) {
+            return;
+        }
+
+        this.dragInProgress = false;
+        sourceDraggable?._toggleDraggingClass(false);
+        this._detachEventHandlers();
+        this._revertItemToInitialPosition();
+        const targetDraggable = this._getTargetDraggable();
+        this._resetDragOptions(targetDraggable);
+        this._attachEventHandlers();
+    },
+
     _getAction: function(name) {
         return this['_' + name + 'Action'] || this._createActionByOption(name);
     },
@@ -949,6 +976,7 @@ const Draggable = DOMComponent.inherit({
             case 'onDrop':
             case 'onDragEnter':
             case 'onDragLeave':
+            case 'onDragCancel':
             case 'onDraggableElementShown':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
@@ -966,6 +994,9 @@ const Draggable = DOMComponent.inherit({
                 this._resetDragElement();
                 this._detachEventHandlers();
                 this._attachEventHandlers();
+                break;
+            case 'onCancelByEsc':
+                this._keydownHandler();
                 break;
             case 'autoScroll':
                 this._verticalScrollHelper.reset();
@@ -1011,6 +1042,20 @@ const Draggable = DOMComponent.inherit({
 
     _resetTargetDraggable: function() {
         targetDraggable = null;
+    },
+
+    _resetDragOptions: function(targetDraggable) {
+        this.reset();
+        targetDraggable.reset();
+        this._stopAnimator();
+        this._horizontalScrollHelper.reset();
+        this._verticalScrollHelper.reset();
+
+        this._resetDragElement();
+        this._resetSourceElement();
+
+        this._resetTargetDraggable();
+        this._resetSourceDraggable();
     },
 
     _dispose: function() {

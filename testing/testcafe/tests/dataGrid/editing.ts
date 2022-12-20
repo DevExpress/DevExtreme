@@ -2042,3 +2042,26 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     delete (window as any).myStore;
   })();
 });
+
+// T1130497
+test('The first cell of the last row should be focused when newRowPosition = last and editing.mode = cell', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const headerPanel = dataGrid.getHeaderPanel();
+
+  await t
+    .click(headerPanel.getAddRowButton())
+    .expect(dataGrid.getDataRow(3).isInserted).ok('row is inserted')
+    .expect(await takeScreenshot('grid-cell-edit-mode-and-new-row-position-last.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ name: 'AaAaA', value: 1 }, { name: 'aAaAa', value: 2 }, { name: 'BbBb', value: 3 }],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+    newRowPosition: 'last',
+  },
+}));

@@ -3557,6 +3557,168 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    // T1128881
+    QUnit.test('editing.changes two-way binding - Form should not be rendered when edit a row', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowEditing: true,
+                },
+                columns: ['field1', 'field2', 'field3'],
+            });
+            this.clock.tick(100);
+
+            const setCellValue = (rowIndex, columnIndex, value) => {
+                const $input = $(dataGrid.getCellElement(rowIndex, columnIndex)).find('input');
+
+                $input.val(value);
+                $input.trigger('change');
+            };
+
+            // act
+            dataGrid.editRow(0);
+
+            // arrange
+            const twoWayBindingChanges = () => {
+                dataGrid.option('editing.changes', dataGrid.option('editing.changes'));
+            };
+
+            let renderCalled = false;
+            const contentReadyHandler = () => {
+                renderCalled = true;
+            };
+
+            dataGrid.on('contentReady', contentReadyHandler);
+
+            // act
+            setCellValue(0, 0, 'hey');
+            twoWayBindingChanges();
+
+            // assert
+            assert.notOk(renderCalled, 'rerender should not be called');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
+    // T1128881
+    QUnit.test('editing.changes two-way binding - Form should not be rendered when add a row', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowEditing: true,
+                },
+                columns: [{
+                    dataField: 'field1',
+                    visible: false
+                }, 'field2', 'field3'],
+            });
+            this.clock.tick(100);
+
+            const setCellValue = (rowIndex, columnIndex, value) => {
+                const $input = $(dataGrid.getCellElement(rowIndex, columnIndex)).find('input');
+
+                $input.val(value);
+                $input.trigger('change');
+            };
+
+            // act
+            dataGrid.addRow();
+
+            // arrange
+            const twoWayBindingChanges = () => {
+                dataGrid.option('editing.changes', dataGrid.option('editing.changes'));
+            };
+
+            let renderCalled = false;
+            const contentReadyHandler = () => {
+                renderCalled = true;
+            };
+
+            dataGrid.on('contentReady', contentReadyHandler);
+
+            // act
+            setCellValue(0, 0, 'hey');
+            twoWayBindingChanges();
+
+            // assert
+            assert.notOk(renderCalled, 'rerender should not be called');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
+    // T1128881
+    QUnit.test('editing.changes two-way binding - form must be rerendered after \'editing.changes\' options has been changed by variable', function(assert) {
+        try {
+            const editMode = 'form';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowEditing: true,
+                },
+                columns: [{
+                    dataField: 'field1',
+                    visible: false
+                }, 'field2', 'field3'],
+            });
+            this.clock.tick(100);
+
+            const setCellValue = (rowIndex, columnIndex, value) => {
+                const $input = $(dataGrid.getCellElement(rowIndex, columnIndex)).find('input');
+
+                $input.val(value);
+                $input.trigger('change');
+            };
+
+            const twoWayBindingChanges = (x) => {
+                dataGrid.option('editing.changes', dataGrid.option('editing.changes'));
+            };
+
+            // act
+            dataGrid.addRow();
+            setCellValue(0, 0, 'helllo');
+
+            // arrange
+            let renderCounter = 0;
+            const contentReadyHandler = () => {
+                renderCounter++;
+            };
+            dataGrid.on('contentReady', contentReadyHandler);
+
+            const insertRowChanges = dataGrid.option('editing.changes');
+
+            insertRowChanges[0].data.field1 = 'test_text';
+
+            // act
+            dataGrid.option('editing.changes', insertRowChanges);
+            twoWayBindingChanges(insertRowChanges);
+
+            // assert
+            const value = dataGrid.cellValue(0, 'field1');
+            assert.strictEqual(value, 'test_text', 'value must be changed');
+            assert.strictEqual(renderCounter, 1, 'render must be called 1 time');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
     // T1122209
     QUnit.test('The form edit mode - Validation should work if value of a column with custom setCellValue changed', function(assert) {
         try {
@@ -3687,6 +3849,48 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             const validationMessages = $('.dx-invalid-message.dx-widget');
             assert.strictEqual(validationMessages.length, 1, 'only 1 validation message must be shown');
+        } catch(e) {
+            assert.ok(false, 'exception is thrown');
+        }
+    });
+
+    // T1126699
+    QUnit.test('The cell edit mode - editCell method should be called only one time if clicking on cell with showEditorAlways = true', function(assert) {
+        // editing.editCell was called 2 times, when clicking on a cell with showEditorAlways='true'
+        // and editing.mode='cell'. First time on mousedown event, second time on click event
+        try {
+            const editMode = 'cell';
+
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: {
+                    store: [{ selected: true, field2: 'test1' }, { selected: true, field2: 'test2' }],
+                    filter: ['selected', '=', true]
+                },
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode,
+                    allowUpdating: true
+                },
+                columns: ['selected', 'field2'],
+            });
+            this.clock.tick(0);
+
+            // act
+            const clickWithMouseDownEvent = (element) => {
+                $(element).trigger('dxpointerdown');
+                this.clock.tick();
+                $(element).trigger('dxclick');
+                this.clock.tick();
+            };
+
+            const checkbox2 = $(dataGrid.getCellElement(0, 0)).find('.dx-checkbox');
+            const checkbox1 = $(dataGrid.getCellElement(1, 0)).find('.dx-checkbox');
+
+            clickWithMouseDownEvent(checkbox1);
+            clickWithMouseDownEvent(checkbox2);
+
+            assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no items should be in the grid');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
         }

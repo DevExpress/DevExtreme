@@ -338,7 +338,7 @@ jobs:
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
-        ENABLE_DEMO_TEST_SETTINGS: true
+        CI_ENV: true
       run: npm run test-testcafe
 
     - name: Copy screenshots artifacts

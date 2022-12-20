@@ -8,24 +8,34 @@ const CLASS = {
   focused: 'dx-state-focused',
   hovered: 'dx-state-hover',
   active: 'dx-state-active',
+  disabled: 'dx-state-disabled',
 };
 
 export default abstract class Widget {
+  public static className = '';
+
   getInstance: () => unknown;
 
   public element: Selector;
 
-  public isFocused: Promise<boolean>;
+  public get isFocused(): Promise<boolean> {
+    return this.element.hasClass(CLASS.focused);
+  }
 
-  public isHovered: Promise<boolean>;
+  public get isHovered(): Promise<boolean> {
+    return this.element.hasClass(CLASS.hovered);
+  }
 
-  public isActive: Promise<boolean>;
+  public get isActive(): Promise<boolean> {
+    return this.element.hasClass(CLASS.active);
+  }
+
+  public get isDisabled(): Promise<boolean> {
+    return this.element.hasClass(CLASS.disabled);
+  }
 
   constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
-    this.isFocused = this.element.hasClass(CLASS.focused);
-    this.isHovered = this.element.hasClass(CLASS.hovered);
-    this.isActive = this.element.hasClass(CLASS.active);
 
     this.getInstance = getComponentInstance(
       this.getTestingPlatform(), this.element, this.getName(),
