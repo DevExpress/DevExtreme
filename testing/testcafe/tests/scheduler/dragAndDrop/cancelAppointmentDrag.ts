@@ -1,10 +1,9 @@
 import { ClientFunction } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Cancel appointment Drag-and-Drop`
+fixture.disablePageReloads`Cancel appointment Drag-and-Drop`
   .page(url(__dirname, '../../container.html'));
 
 const APPOINTMENT_DRAG_SOURCE_CLASS = '.dx-scheduler-appointment-drag-source';
@@ -16,9 +15,7 @@ const disableMouseUpEvent = ClientFunction(() => {
   (window as any)._originalMouseup = proto._mouseup;
 
   // eslint-disable-next-line spellcheck/spell-checker,no-underscore-dangle
-  proto._mouseup = function () {
-    return new Promise((r) => setTimeout(r, 1));
-  };
+  proto._mouseup = () => new Promise((r) => setTimeout(r, 1));
 });
 
 const enableMouseUpEvent = ClientFunction(() => {
@@ -26,7 +23,7 @@ const enableMouseUpEvent = ClientFunction(() => {
   (window as any)['%testCafeAutomation%'].DragToElement.prototype.constructor.prototype._mouseup = (window as any)._originalMouseup;
 });
 
-safeSizeTest('on escape - date should not changed when it\'s pressed during dragging (T832754)', async (t) => {
+test('on escape - date should not changed when it\'s pressed during dragging (T832754)', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Appointment');
   await disableMouseUpEvent();

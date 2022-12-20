@@ -1,13 +1,13 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Resize appointments in the Scheduler basic views`
+fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../container.html'));
 
-['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => safeSizeTest(`Resize in the "${view}" view`, async (t) => {
+['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -40,7 +40,7 @@ fixture`Resize appointments in the Scheduler basic views`
   dataSource,
 })));
 
-safeSizeTest('Resize in the "timelineMonth" view', async (t) => {
+test('Resize in the "timelineMonth" view', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -97,7 +97,7 @@ safeSizeTest('Resize appointment on timelineWeek view with custom startDayHour &
 }));
 
 // T948164
-safeSizeTest('Resize should work correctly when cell\'s width is not an integer', async (t) => {
+test('Resize should work correctly when cell\'s width is not an integer', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Appointment');
 

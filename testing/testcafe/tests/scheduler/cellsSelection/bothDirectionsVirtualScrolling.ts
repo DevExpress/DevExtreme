@@ -1,5 +1,4 @@
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import {
   createScheduler,
@@ -10,10 +9,8 @@ import {
   checkAllDayCellsWhenNotInViewport,
 } from './init/widget.setup';
 
-fixture`Scheduler: Cells Selection in Virtual Scrolling`
+fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
-
-const scheduler = new Scheduler('#container');
 
 const baseConfig = {
   scrolling: { mode: 'virtual', orientation: 'both' },
@@ -24,7 +21,9 @@ const baseConfig = {
   currentView: 'week',
 };
 
-safeSizeTest('Selected cells shouldn\'t disapppear on scroll', async (t) => {
+test('Selected cells shouldn\'t disapppear on scroll', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -39,7 +38,9 @@ safeSizeTest('Selected cells shouldn\'t disapppear on scroll', async (t) => {
   ...baseConfig,
 }));
 
-safeSizeTest('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async (t) => {
+test('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -59,7 +60,9 @@ safeSizeTest('Selected cells shouldn\'t disapppear on scroll when horizontal gro
   ...baseConfig,
 }));
 
-safeSizeTest('Selected cells shouldn\'t disapppear on scroll when appointments are grouped by date', async (t) => {
+test('Selected cells shouldn\'t disapppear on scroll when appointments are grouped by date', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 2));
 
@@ -80,7 +83,9 @@ safeSizeTest('Selected cells shouldn\'t disapppear on scroll when appointments a
   }],
 }));
 
-safeSizeTest('Selected cells shouldn\'t disapppear on scroll when appointments are grouped vertically', async (t) => {
+test('Selected cells shouldn\'t disapppear on scroll when appointments are grouped vertically', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -101,7 +106,9 @@ safeSizeTest('Selected cells shouldn\'t disapppear on scroll when appointments a
   }],
 }));
 
-safeSizeTest('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async (t) => {
+test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getAllDayTableCell(0), scheduler.getAllDayTableCell(1));
 
@@ -117,7 +124,9 @@ safeSizeTest('All-day panel\'s selected cells shouldn\'t disapppear on scroll wh
   showAllDayPanel: true,
 }));
 
-safeSizeTest('All-day panel\'s selected cells shouldn\'t disapppear on scroll when vertical grouping is used', async (t) => {
+test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when vertical grouping is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getAllDayTableCell(0), scheduler.getAllDayTableCell(1));
 
@@ -138,7 +147,9 @@ safeSizeTest('All-day panel\'s selected cells shouldn\'t disapppear on scroll wh
   }],
 }));
 
-safeSizeTest('Selection should work in month view', async (t) => {
+test('Selection should work in month view', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
@@ -167,7 +178,9 @@ safeSizeTest('Selection should work in month view', async (t) => {
   }],
 }));
 
-safeSizeTest('Selection should work in timeline views', async (t) => {
+test('Selection should work in timeline views', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   const checkSelection = async (): Promise<void> => {
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));

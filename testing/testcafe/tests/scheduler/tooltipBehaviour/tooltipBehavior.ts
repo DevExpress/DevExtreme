@@ -4,14 +4,14 @@ import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
+fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('The tooltip of collector should not scroll page and immediately hide', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
-    .click(scheduler.collectors.find('7').element, { speed: 0.2 })
+    .click(scheduler.collectors.find('7').element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
 }, [600, 450]).before(async () => createScheduler({
@@ -59,7 +59,7 @@ safeSizeTest('The tooltip should not hide after automatic scrolling during an ap
   const appointment = scheduler.getAppointment('Brochure Design Review');
 
   await t
-    .click(appointment.element, { speed: 0.2 })
+    .click(appointment.element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
 }, [600, 400]).before(async () => createScheduler({
@@ -73,7 +73,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   const appointment = scheduler.getAppointment('Brochure Design Review');
 
   await t
-    .click(appointment.element, { speed: 0.2 })
+    .click(appointment.element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
   await scroll(0, 100);

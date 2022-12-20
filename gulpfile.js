@@ -56,10 +56,10 @@ function createMiscBatch() {
 
 function createMainBatch(dev) {
     const tasks = [];
-    if(!dev) {
+    if(!dev && !env.BUILD_TESTCAFE) {
         tasks.push('js-bundles-debug');
     }
-    if(!env.TEST_CI) {
+    if(!env.TEST_CI || env.BUILD_TESTCAFE) {
         tasks.push('js-bundles-prod');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
@@ -72,15 +72,17 @@ function createDefaultBatch(dev) {
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
     tasks.push('version-replace');
-    tasks.push(dev ? 'main-batch-dev' : 'main-batch');
-    if(!env.TEST_CI && !dev) {
+    tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
+    if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
         if(!env.SKIP_THEMEBUILDER) {
             tasks.push('themebuilder-npm');
         }
         tasks.push('check-license-notices');
     }
-    tasks.push('discover-declarations');
+    if(!env.BUILD_TESTCAFE) {
+        tasks.push('discover-declarations');
+    }
     return gulp.series(tasks);
 }
 

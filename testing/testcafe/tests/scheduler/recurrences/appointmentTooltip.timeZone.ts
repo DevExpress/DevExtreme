@@ -1,12 +1,11 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment tooltip with recurrence appointment and custom time zone`
+fixture.disablePageReloads`Appointment tooltip with recurrence appointment and custom time zone`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async (t) => {
+test('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointmentCount = await scheduler.getAppointmentCount();
 
@@ -33,7 +32,7 @@ safeSizeTest('Time in appointment tooltip should has valid value in case with re
   height: 600,
 }));
 
-safeSizeTest('The only one displayed part of recurrence appointment '
+test('The only one displayed part of recurrence appointment '
   + 'must have correct offset after DST(T1034216)', async (t) => {
   const scheduler = new Scheduler('#container');
 

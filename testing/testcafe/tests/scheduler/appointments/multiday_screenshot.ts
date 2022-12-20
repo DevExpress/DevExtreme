@@ -1,10 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - Multiday appointments (screenshot)`
+fixture.disablePageReloads`Scheduler - Multiday appointments (screenshot)`
   .page(url(__dirname, '../../container.html'));
 
 [
@@ -12,7 +11,7 @@ fixture`Scheduler - Multiday appointments (screenshot)`
   'month',
   'timelineMonth',
 ].forEach((currentView) => {
-  safeSizeTest(`it should not cut multiday appointment in ${currentView} view`, async (t) => {
+  test(`it should not cut multiday appointment in ${currentView} view`, async (t) => {
     const {
       takeScreenshot,
       compareResults,
