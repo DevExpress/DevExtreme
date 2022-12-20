@@ -4,7 +4,8 @@
   "deleteDestPath": true,
   "allowedNonPeerDependencies": [
     "@devextreme/core",
-    "@devextreme/components"
+    "@devextreme/components",
+    "@devextreme/interim"
   ],
   "lib": {
     "entryFile": "src/index.ts"

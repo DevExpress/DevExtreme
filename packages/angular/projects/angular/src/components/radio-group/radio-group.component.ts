@@ -1,10 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
 } from '@angular/core';
 import {
   createRadioGroupCore,
@@ -15,7 +13,7 @@ import {
 } from '@devextreme/components';
 import { filter, map } from 'rxjs';
 import { doIfContextExist, Inputs } from '../../internal';
-import { RadioGroupService } from '../radio-common';
+import { RadioGroupBaseComponent, RadioGroupService } from '../radio-common';
 
 export type RadioGroupInputs<T extends RadioGroupValue> =
   Inputs<ValueProps<T>, ReadonlyProps, TemplateProps>;
@@ -31,16 +29,16 @@ export type RadioGroupInputs<T extends RadioGroupValue> =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioGroupComponent<T extends RadioGroupValue>
-implements OnInit, RadioGroupInputs<T> {
+  extends RadioGroupBaseComponent<T>
+  implements OnInit, RadioGroupInputs<T> {
   private inputValue?: T;
 
-  @Input() set value(value: T) {
+  @Input() set value(value: T | undefined) {
     this.setValue(value);
   }
 
-  @Output() valueChange = new EventEmitter<T | undefined>();
-
   constructor(private radioGroupService: RadioGroupService) {
+    super();
   }
 
   ngOnInit(): void {
@@ -56,7 +54,7 @@ implements OnInit, RadioGroupInputs<T> {
     );
   }
 
-  private setValue(value: T): void {
+  private setValue(value?: T): void {
     this.inputValue = value;
 
     this.radioGroupService.context$.pipe(

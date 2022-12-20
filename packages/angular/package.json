@@ -19,6 +19,7 @@
     "@angular/router": "^14.1.0",
     "@devextreme/core": "1.0.0",
     "@devextreme/components": "1.0.0",
+    "@devextreme/interim": "1.0.0",
     "rxjs": "^7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
