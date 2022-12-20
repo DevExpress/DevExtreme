@@ -6,7 +6,7 @@ import { changeTheme } from '../../helpers/changeTheme';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture`Search Panel`
-  .page(url(__dirname, '../containerMaterial.html'))
+  .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 
 // T1046688
