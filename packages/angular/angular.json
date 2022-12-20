@@ -5,6 +5,12 @@
   "projects": {
     "@devextreme/angular": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "changeDetection": "OnPush"
+        }
+      },
       "root": "./projects/angular",
       "sourceRoot": "./projects/angular/src",
       "prefix": "",

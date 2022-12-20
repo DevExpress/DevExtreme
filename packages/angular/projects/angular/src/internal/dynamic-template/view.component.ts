@@ -1,6 +1,9 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 
-@Component({ template: '' })
+@Component({
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export abstract class ViewComponent {
   constructor(protected cdRef: ChangeDetectorRef) {
   }
