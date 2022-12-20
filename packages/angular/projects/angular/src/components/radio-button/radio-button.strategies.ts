@@ -12,12 +12,15 @@ function createStandaloneStrategy(): RadioButtonStrategy {
 
   const setChecked = (value: boolean) => { checkedSubject.next(value); };
 
+  const onInit = () => {};
+
   const onDestroy = () => {};
 
   return {
     checked$: checkedSubject.asObservable(),
     handleChange,
     setChecked,
+    onInit,
     onDestroy,
   };
 }
@@ -29,16 +32,6 @@ function createRadioGroupStrategy(
   let unsubscribe: () => void | undefined;
   const checkedSubject = new BehaviorSubject<boolean>(DEFAULT_CHECKED_VALUE);
 
-  radioGroupCore$.pipe(waitContextAndDo())
-    .subscribe(({ stateManager }) => {
-      unsubscribe = stateManager.subscribe(({ value }) => {
-        checkedSubject.next(getRadioButtonValue() === value);
-      });
-
-      const { value } = stateManager.getState();
-      checkedSubject.next(getRadioButtonValue() === value);
-    });
-
   const handleChange = () => {
     radioGroupCore$.pipe(
       doIfContextExist(),
@@ -49,12 +42,25 @@ function createRadioGroupStrategy(
 
   const setChecked = () => {};
 
+  const onInit = () => {
+    radioGroupCore$.pipe(waitContextAndDo())
+      .subscribe(({ stateManager }) => {
+        unsubscribe = stateManager.subscribe(({ value }) => {
+          checkedSubject.next(getRadioButtonValue() === value);
+        });
+
+        const { value } = stateManager.getState();
+        checkedSubject.next(getRadioButtonValue() === value);
+      });
+  };
+
   const onDestroy = () => { unsubscribe?.(); };
 
   return {
     checked$: checkedSubject.asObservable(),
     handleChange,
     setChecked,
+    onInit,
     onDestroy,
   };
 }
@@ -63,6 +69,7 @@ export interface RadioButtonStrategy {
   checked$: Observable<boolean>;
   handleChange(): void;
   setChecked(value: boolean): void;
+  onInit(): void;
   onDestroy(): void;
 }
 

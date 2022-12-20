@@ -4,13 +4,18 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Optional,
   Output,
 } from '@angular/core';
 import { RadioGroupValue } from '@devextreme/components';
+import { map } from 'rxjs';
+import { AngularTemplate } from '../../internal';
 import { RadioGroupService } from '../radio-common';
 
 import { createRadioButtonStrategy } from './radio-button.strategies';
+import { LabelViewComponent } from './views/label-view.component';
+import { RadioViewComponent } from './views/radio-view.component';
 
 // Increasing integer for generating unique ids for radio components.
 let nextUniqueId = 0;
@@ -29,8 +34,16 @@ let nextUniqueId = 0;
         (click)="onClick.emit($event)"
         (change)="handleChange($event)"
       />
-      <span>{{ (checked$ | async) ? '◉' : '◎' }}</span>
-      <span>{{ this.label }}</span>
+      <dx-dynamic-template
+        *ngIf="radioTemplateData$ | async as templateData"
+        [template]="radioTemplate"
+        [data]="templateData">
+      </dx-dynamic-template>
+      <dx-dynamic-template
+        *ngIf="labelTemplate"
+        [template]="labelTemplate"
+        [data]="{ label: label }">
+      </dx-dynamic-template>
     </label>
   `,
   styles: [`
@@ -40,7 +53,7 @@ let nextUniqueId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioButtonComponent<T extends RadioGroupValue>
-implements OnDestroy {
+implements OnInit, OnDestroy {
   private strategy = createRadioButtonStrategy(
     this.radioGroupService?.context$,
     () => this.value,
@@ -61,13 +74,26 @@ implements OnDestroy {
 
   @Input() label?: string;
 
+  // TODO: Add this template to core prop types.
+  @Input() labelTemplate: AngularTemplate<LabelViewComponent> = LabelViewComponent;
+
+  // TODO: Add this template to core prop types.
+  @Input() radioTemplate: AngularTemplate<RadioViewComponent> = RadioViewComponent;
+
   @Output() onChange = new EventEmitter<Event>();
 
   @Output() onClick = new EventEmitter<MouseEvent>();
 
   checked$ = this.strategy.checked$;
 
+  radioTemplateData$ = this.strategy.checked$
+    .pipe(map((checked) => ({ checked })));
+
   constructor(@Optional() private radioGroupService: RadioGroupService) {
+  }
+
+  ngOnInit(): void {
+    this.strategy.onInit();
   }
 
   ngOnDestroy(): void {
