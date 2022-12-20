@@ -61,7 +61,7 @@
           </div>
           <DxButton
             :text="favoriteText"
-            :width="210"
+            :width="260"
             :height="44"
             class="favorites"
             icon="favorites"

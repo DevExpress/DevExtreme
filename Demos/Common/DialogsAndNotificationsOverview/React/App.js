@@ -69,7 +69,7 @@ class App extends React.Component {
         <Button
           icon="favorites"
           text={currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES}
-          width={210}
+          width={260}
           height={44}
           elementAttr={favButtonAttrs}
           onClick={this.changeFavoriteState}
