@@ -80,8 +80,10 @@ implements OnInit, OnDestroy {
   // TODO: Add this template to core prop types.
   @Input() radioTemplate: AngularTemplate<RadioViewComponent> = RadioViewComponent;
 
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onChange = new EventEmitter<Event>();
 
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onClick = new EventEmitter<MouseEvent>();
 
   checked$ = this.strategy.checked$;
