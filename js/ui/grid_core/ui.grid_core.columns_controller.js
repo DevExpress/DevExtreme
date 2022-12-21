@@ -299,7 +299,9 @@ export const columnsControllerModule = {
             };
 
             const getValueDataType = function(value) {
-                /** @type {string | undefined} */
+                /**
+                 * @type {string | undefined}
+                 */
                 let dataType = type(value);
                 if(dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
                     dataType = undefined;
@@ -998,7 +1000,10 @@ export const columnsControllerModule = {
                 }
             };
 
-            return /** @type {Partial<import('./ui.grid_core.columns_controller').ColumnsController>} */ ({
+            /**
+             * @type {Partial<import('./ui.grid_core.columns_controller').ColumnsController>}
+             */
+            const members = {
                 _getExpandColumnOptions: function() {
                     return {
                         type: 'expand',
@@ -2284,7 +2289,9 @@ export const columnsControllerModule = {
                 setUserState: function(state) {
                     const that = this;
                     const dataSource = that._dataSource;
-                    /** @type {any[]} */
+                    /**
+                     * @type {any[]}
+                     */
                     let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
 
                     state?.forEach(this.setName);
@@ -2446,13 +2453,19 @@ export const columnsControllerModule = {
                                 }
                                 return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
                             },
-                            /** @this {any} */
+                            /**
+                             * @this {any}
+                             */
                             updateValueMap: function() {
                                 this.valueMap = {};
                                 if(this.items) {
-                                    /** @type {any} */
+                                    /**
+                                     * @type {any}
+                                     */
                                     const calculateValue = compileGetter(this.valueExpr);
-                                    /** @type {any} */
+                                    /**
+                                     * @type {any}
+                                     */
                                     const calculateDisplayValue = compileGetter(this.displayExpr);
                                     for(let i = 0; i < this.items.length; i++) {
                                         const item = this.items[i];
@@ -2580,7 +2593,9 @@ export const columnsControllerModule = {
 
                     return columnAlignment;
                 }
-            });
+            };
+
+            return members;
         })())
     }
 };
