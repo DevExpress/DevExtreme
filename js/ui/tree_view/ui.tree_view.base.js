@@ -1638,7 +1638,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._skipContentReadyAndItemExpanded = true;
 
         // NOTE: This is needed to support animation on expandAll, but stop triggering multiple contentReady/itemExpanded events.
-
         nodes.forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
 
         Promise.allSettled(expandingPromises).then(() => this._allItemsExpanded?.());
