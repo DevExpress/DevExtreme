@@ -349,7 +349,7 @@ const Popup = Overlay.inherit({
 
     _renderContent() {
         this.callBase();
-        // NOTE: T1130045
+        // NOTE: This observe should not be called before async showing is called. See T1130045.
         this._observeContentResize(true);
     },
 
