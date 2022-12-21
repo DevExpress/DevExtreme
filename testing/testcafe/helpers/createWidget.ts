@@ -8,6 +8,7 @@ export type WidgetName =
 'dxCheckBox' |
 'dxColorBox' |
 'dxDropDownButton' |
+'dxDraggable' |
 'dxTabPanel' |
 'dxForm' |
 'dxFilterBuilder' |
@@ -31,6 +32,7 @@ export type WidgetName =
 'dxMenu' |
 'dxPopup' |
 'dxSelectBox' |
+'dxSortable' |
 'dxButton' |
 'dxTextBox' |
 'dxTextArea' |

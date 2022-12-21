@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Layout:BrowserResize`
+fixture.disablePageReloads`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'));
 
 const data = [{

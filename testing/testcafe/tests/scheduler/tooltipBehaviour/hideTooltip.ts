@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Hide tooltip`
+fixture.disablePageReloads`Hide tooltip`
   .page(url(__dirname, '../../container.html'));
 
 test('Appointment tooltip should be hidden when drag is started', async (t) => {
@@ -10,7 +10,7 @@ test('Appointment tooltip should be hidden when drag is started', async (t) => {
   const appointment = scheduler.getAppointment('Test');
 
   await t
-    .click(appointment.element, { speed: 0.1 })
+    .click(appointment.element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
 

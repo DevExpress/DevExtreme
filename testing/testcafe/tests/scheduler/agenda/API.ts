@@ -1,12 +1,11 @@
 import createWidget from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:API`
+fixture.disablePageReloads`Agenda:API`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Html elements should be absent in Agenda view', async (t) => {
+test('Html elements should be absent in Agenda view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

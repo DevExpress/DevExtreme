@@ -1,12 +1,11 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler header`
+fixture.disablePageReloads`Scheduler header`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('dateNavigator buttons should not be selected after clicking', async (t) => {
+test('dateNavigator buttons should not be selected after clicking', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   await t
@@ -26,7 +25,7 @@ safeSizeTest('dateNavigator buttons should not be selected after clicking', asyn
   height: 580,
 }));
 
-safeSizeTest('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
+test('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   await t

@@ -1,12 +1,11 @@
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Appointment dependend options`
+fixture.disablePageReloads`Appointment dependend options`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('cellDuration (T1076138)', async (t) => {
+test('cellDuration (T1076138)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('test-appt');
 

@@ -1,29 +1,28 @@
 import { ClientFunction } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Display* arguments in appointment templates and events`
+fixture.disablePageReloads`Display* arguments in appointment templates and events`
   .page(url(__dirname, '../../container.html'));
 
 [undefined, 'America/Los_Angeles'].forEach((timeZone) => {
-  safeSizeTest(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {
+  test(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const etalon = '09:30:00 10:00:00';
 
-    await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.1 });
+    await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.5 });
 
     await t
       .typeText(scheduler.appointmentPopup.subjectElement, 'text')
-      .click(scheduler.appointmentPopup.doneButton, { speed: 0.1 });
+      .click(scheduler.appointmentPopup.doneButton);
 
     await t
       .expect(scheduler.getAppointmentByIndex(0).element.innerText)
       .eql(etalon);
 
     await t
-      .click(scheduler.getAppointmentByIndex(0).element, { speed: 0.1 })
+      .click(scheduler.getAppointmentByIndex(0).element)
       .expect(scheduler.appointmentTooltip.getListItem(undefined, 0).element.innerText)
       .eql(etalon);
 
