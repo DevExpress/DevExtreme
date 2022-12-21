@@ -2,18 +2,21 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
 import { shallowEquals } from '../../utils/shallow_equals';
-import { replaceWith } from '../../../core/utils/dom';
-import $ from '../../../core/renderer';
+// eslint-disable-next-line import/named
+import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
-import { getPublicElement } from '../../../core/element';
-import { removeDifferentElements } from '../utils/utils';
+// eslint-disable-next-line import/named
+import { DxElement, getPublicElement } from '../../../core/element';
 import { FunctionTemplate } from '../../../core/templates/function_template';
-import { EffectReturn } from '../../utils/effect_return';
 import { isDefined } from '../../../core/utils/type';
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type UnknownRecord = Record<PropertyKey, unknown>;
+
 export interface TemplateModel {
-  data: Record<string, unknown>;
+  data: UnknownRecord;
   index: number;
+  isEqual?: (a?: UnknownRecord, b?: UnknownRecord) => boolean;
 }
 
 interface TemplateWrapperProps {
@@ -23,65 +26,142 @@ interface TemplateWrapperProps {
   renovated?: boolean;
 }
 
+function isDxElementWrapper(
+  element: dxElementWrapper | HTMLElement & Partial<Pick<dxElementWrapper, 'toArray'>>,
+): element is dxElementWrapper {
+  return !!element.toArray;
+}
+
+function defaultComparer(
+  { template, model }: TemplateWrapperProps,
+  { template: nextTemplate, model: nextModel }: TemplateWrapperProps,
+): boolean {
+  const sameTemplate = template === nextTemplate;
+  if (!sameTemplate) {
+    return true;
+  }
+
+  if (isDefined(model) && isDefined(nextModel)) {
+    const { data, index } = model;
+    const { data: nextData, index: nextIndex } = nextModel;
+    return index !== nextIndex || !shallowEquals(data, nextData);
+  }
+
+  const sameModel = model === nextModel;
+  return !sameModel;
+}
+
+function revertMutation({ target, type, addedNodes }: MutationRecord): void {
+  switch (type) {
+    case 'childList':
+      addedNodes.forEach((n) => target.removeChild(n));
+      break;
+    default:
+      break;
+  }
+}
+
+function recordMutations<TReturn>(target: Node, func: () => TReturn): [
+  TReturn,
+  MutationRecord[],
+] {
+  const observer = new MutationObserver(() => {});
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  observer.observe(target, { childList: true, attributes: true, subtree: true });
+  const result: [TReturn, MutationRecord[]] = [func(), observer.takeRecords()];
+  observer.disconnect();
+
+  return result;
+}
+
+function buildTemplateContent(props: TemplateWrapperProps, container: Element): ChildNode[] {
+  const {
+    data, index,
+  } = props.model ?? { data: {} };
+
+  if (data) {
+    Object.keys(data).forEach((name) => {
+      if (data[name] && domAdapter.isNode(data[name])) {
+        data[name] = getPublicElement($(data[name]));
+      }
+    });
+  }
+
+  const rendered = props.template.render({
+    container,
+    transclude: props.transclude,
+    ...{ renovated: props.renovated },
+    ...!props.transclude ? { model: data } : {},
+    ...!props.transclude && Number.isFinite(index) ? { index } : {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }) as any as (dxElementWrapper | DxElement | undefined);
+
+  if (rendered === undefined) {
+    return [];
+  }
+
+  return isDxElementWrapper(rendered)
+    ? rendered.toArray()
+    : [getPublicElement($(rendered))];
+}
+
+function noop(): void {}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function detectTemplateBehavior(container: Node, content: Node[]) {
+  return content.length === 0 || (content.length === 1 && content[0] === container)
+    ? 'mutates-container'
+    : 'returns-content';
+}
+
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
+  __templateCleaner: (() => void) = noop;
+
   constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
   }
 
-  renderTemplate(): EffectReturn {
+  renderTemplate(): void {
     // eslint-disable-next-line spellcheck/spell-checker
-    const node = findDOMfromVNode(this.$LI, true) as Element;
-    const parentNode = node.parentNode as Element;
-    const $parent = $(parentNode);
-    const $children = $parent.contents();
-
-    const {
-      data, index,
-    } = this.props.model ?? { data: {} };
-
-    if (data) {
-      Object.keys(data).forEach((name) => {
-        if (data[name] && domAdapter.isNode(data[name])) {
-          data[name] = getPublicElement($(data[name] as Element));
-        }
-      });
+    const node = findDOMfromVNode(this.$LI, true);
+    if (node?.parentElement == null) {
+      throw new Error('Template must have parent element');
     }
 
-    const $result = $(this.props.template.render({
-      container: getPublicElement($parent),
-      transclude: this.props.transclude,
-      ...{ renovated: this.props.renovated },
-      ...!this.props.transclude ? { model: data } : {},
-      ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
-    }));
+    const container = getPublicElement($(node.parentElement));
 
-    replaceWith($(node), $result);
+    const [content, mutations] = recordMutations(
+      container,
+      () => buildTemplateContent(this.props, container),
+    );
 
-    return (): void => {
-      // NOTE: order is important
-      removeDifferentElements($children, $parent.contents());
-      parentNode.appendChild(node);
-    };
+    this.__templateCleaner();
+
+    switch (detectTemplateBehavior(container, content)) {
+      case 'mutates-container':
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        this.__templateCleaner = () => mutations.forEach(revertMutation);
+        break;
+
+      case 'returns-content':
+        node.after(...content);
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        this.__templateCleaner = () => content.forEach((el) => el?.remove());
+        break;
+
+      default:
+        this.__templateCleaner = noop;
+    }
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
-    const { template, model } = this.props;
-    const { template: nextTemplate, model: nextModel } = nextProps;
+    const { model } = this.props;
 
-    const sameTemplate = template === nextTemplate;
-    if (!sameTemplate) {
-      return true;
-    }
-
-    if (isDefined(model) && isDefined(nextModel)) {
-      const { data, index } = model;
-      const { data: nextData, index: nextIndex } = nextModel;
-      return index !== nextIndex || !shallowEquals(data, nextData);
-    }
-
-    const sameModel = model === nextModel;
-    return !sameModel;
+    return model?.isEqual
+      ? !model.isEqual(model.data, nextProps.model?.data)
+      : defaultComparer(this.props, nextProps);
   }
 
   createEffects(): InfernoEffect[] {
@@ -94,7 +174,9 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
 
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
-  componentWillUnmount(): void { }
+  componentWillUnmount(): void {
+    this.__templateCleaner();
+  }
 
   render(): JSX.Element | null {
     return null;

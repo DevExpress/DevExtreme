@@ -861,9 +861,9 @@ describe('templates and slots', () => {
       });
 
       const templateRoot = $('#component').children('.templates-root')[0];
-      expect(getPublicElement).toBeCalledTimes(2);
-      expect(getPublicElement).toHaveBeenNthCalledWith(1, $(param1));
-      expect(getPublicElement).toHaveBeenNthCalledWith(2, $(templateRoot));
+
+      expect(getPublicElement).toHaveBeenNthCalledWith(2, $(param1));
+      expect(getPublicElement).toHaveBeenNthCalledWith(1, $(templateRoot));
     });
 
     it('Tempate\'s data can have null/undefined values', () => {
@@ -945,7 +945,7 @@ describe('templates and slots', () => {
     });
     const root = $('#component').children('.templates-root')[0];
 
-    expect($(root.firstChild)[0]).toBe(template[0]);
+    expect($(root.lastChild)[0]).toBe(template[0]);
   });
 
   it('should render content in right order if children placed between other nodes', () => {
@@ -956,10 +956,9 @@ describe('templates and slots', () => {
     $('#component').dxChildrenTestWidget({});
 
     const children = $('#component')[0].childNodes;
-    expect(children.length).toBe(5);
-    expect(children[1]).toBe(slotBefore[0]);
-    expect(children[2]).toBe(slotContent[0]);
-    expect(children[3]).toBe(slotAfter[0]);
+    expect(children[2]).toBe(slotBefore[0]);
+    expect(children[3]).toBe(slotContent[0]);
+    expect(children[4]).toBe(slotAfter[0]);
   });
 
   it('should not fail if template returned parent node', () => {
