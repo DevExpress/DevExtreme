@@ -1007,7 +1007,7 @@ export const adaptivityModule = {
                 },
 
                 init: function() {
-                    this.callBase();
+                    this.callBase.apply(this, arguments);
                     this._adaptiveController = this.getController('adaptiveColumns');
                 }
             },

@@ -144,7 +144,7 @@ const EditingController = modules.ViewController.inherit((function() {
     }
 
     return {
-        init: function() {
+        init: function(resetColumn) {
             this._columnsController = this.getController('columns');
             this._dataController = this.getController('data');
             this._rowsView = this.getView('rowsView');
@@ -174,7 +174,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this.createAction('onEditCanceling', { excludeValidators: ['disabled', 'readOnly'] });
                 this.createAction('onEditCanceled', { excludeValidators: ['disabled', 'readOnly'] });
             }
-            this._updateEditColumn();
+            this._updateEditColumn(resetColumn);
             this._updateEditButtons();
 
             if(!this._internalState) {
@@ -485,7 +485,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     this._handleChangesChange(args);
                 } else if(!args.handled) {
                     this._columnsController.reinit();
-                    this.init();
+                    this.init(true);
                     this.resetChanges();
                     this._resetEditColumnName();
                     this._resetEditRowKey();
@@ -1670,8 +1670,8 @@ const EditingController = modules.ViewController.inherit((function() {
             return this._saving;
         },
 
-        _updateEditColumn: function() {
-            const isEditColumnVisible = this._isEditColumnVisible();
+        _updateEditColumn: function(resetColumn) {
+            let isEditColumnVisible = this._isEditColumnVisible();
             const useIcons = this.option('editing.useIcons');
             const cssClass = COMMAND_EDIT_CLASS + (useIcons ? ' ' + COMMAND_EDIT_WITH_ICONS_CLASS : '');
 
@@ -1686,6 +1686,9 @@ const EditingController = modules.ViewController.inherit((function() {
                 fixedPosition: 'right'
             });
 
+            if(!resetColumn) {
+                isEditColumnVisible &&= (this._columnsController.columnOption('command:edit')?.['visible'] ?? true);
+            }
             this._columnsController.columnOption('command:edit', {
                 visible: isEditColumnVisible,
                 cssClass: cssClass

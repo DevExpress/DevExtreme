@@ -2158,7 +2158,7 @@ export const keyboardNavigationModule = {
                     });
                 },
                 init: function() {
-                    this.callBase();
+                    this.callBase.apply(this, arguments);
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {

@@ -7647,4 +7647,43 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
         });
     });
+
+    // T1134927
+    QUnit.test('edit column\'s visibility should be preserved when changing pages', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }],
+            editing: {
+                allowUpdating: true,
+            },
+            paging: {
+                pageSize: 2,
+            },
+            pager: {
+                visible: true
+            }
+
+        });
+        this.clock.tick();
+
+        // assert
+        let $editButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($editButton.length, 2, 'edit button is visible');
+
+        // act
+        dataGrid.columnOption('type:buttons', 'visible', false);
+        this.clock.tick();
+
+        // assert
+        $editButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($editButton.length, 0, 'edit button is not visible');
+
+        // act
+        dataGrid.pageIndex(2);
+        this.clock.tick();
+
+        // assert
+        $editButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($editButton.length, 0, 'edit button is not visible');
+    });
 });
