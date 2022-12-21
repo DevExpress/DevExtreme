@@ -1238,6 +1238,13 @@ export const virtualScrollingModule = {
 
                         return offset;
                     },
+                    getDataIndex: function(change) {
+                        if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                            return this.getRowIndexOffset(true);
+                        }
+
+                        return this.callBase.apply(this, arguments);
+                    },
                     viewportSize: function() {
                         const rowsScrollController = this._rowsScrollController;
                         const dataSource = this._dataSource;

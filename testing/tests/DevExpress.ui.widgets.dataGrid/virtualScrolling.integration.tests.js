@@ -1125,6 +1125,47 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(alternatedRowIndexes, [2, 4], 'row indexes with dx-row-alt class');
     });
 
+    // T1131109
+    QUnit.test('row alternation should be correct if virtual scrolling is enabled and pageSize = 1', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 300,
+            dataSource: generateDataSource(100),
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageSize: 1
+            },
+            rowAlternationEnabled: true
+        });
+        this.clock.tick(200);
+
+        // assert
+        let dataIndexes = dataGrid.getVisibleRows().map((row) => row.dataIndex);
+        let alternatedRowIndexes = dataIndexes.filter((_, index) => $(dataGrid.getRowElement(index)).hasClass('dx-row-alt'));
+        assert.deepEqual(dataIndexes, [0, 1, 2, 3, 4, 5, 6, 7, 8], 'dataIndex values in rows');
+        assert.deepEqual(alternatedRowIndexes, [1, 3, 5, 7], 'row indexes with dx-row-alt class');
+
+        // arrange
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        scrollable.scrollTo({ y: 200 });
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick(200);
+        scrollable.scrollTo({ y: 300 });
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick(200);
+
+        // assert
+        dataIndexes = dataGrid.getVisibleRows().map((row) => row.dataIndex);
+        alternatedRowIndexes = dataIndexes.filter((_, index) => $(dataGrid.getRowElement(index)).hasClass('dx-row-alt'));
+        assert.deepEqual(dataIndexes, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'dataIndex values in rows');
+        assert.deepEqual(alternatedRowIndexes, [9, 11, 13, 15, 17], 'row indexes with dx-row-alt class');
+    });
+
     // T583229
     QUnit.test('The same page should not load when scrolling in virtual mode', function(assert) {
         const pageIndexesForLoad = [];
