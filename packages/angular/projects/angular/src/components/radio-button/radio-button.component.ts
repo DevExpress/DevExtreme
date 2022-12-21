@@ -36,12 +36,12 @@ let nextUniqueId = 0;
       />
       <dx-dynamic-template
         *ngIf="radioTemplateData$ | async as templateData"
-        [template]="radioTemplate"
+        [template]="radioTemplateValue"
         [data]="templateData">
       </dx-dynamic-template>
       <dx-dynamic-template
-        *ngIf="labelTemplate"
-        [template]="labelTemplate"
+        *ngIf="labelTemplateValue"
+        [template]="labelTemplateValue"
         [data]="{ label: label }">
       </dx-dynamic-template>
     </label>
@@ -75,10 +75,14 @@ implements OnInit, OnDestroy {
   @Input() label?: string;
 
   // TODO: Add this template to core prop types.
-  @Input() labelTemplate: AngularTemplate<LabelViewComponent> = LabelViewComponent;
+  @Input() set labelTemplate(value: AngularTemplate<LabelViewComponent> | undefined) {
+    this.labelTemplateValue = value || LabelViewComponent;
+  }
 
   // TODO: Add this template to core prop types.
-  @Input() radioTemplate: AngularTemplate<RadioViewComponent> = RadioViewComponent;
+  @Input() set radioTemplate(value: AngularTemplate<RadioViewComponent> | undefined) {
+    this.radioTemplateValue = value || RadioViewComponent;
+  }
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onChange = new EventEmitter<Event>();
@@ -90,6 +94,10 @@ implements OnInit, OnDestroy {
 
   radioTemplateData$ = this.strategy.checked$
     .pipe(map((checked) => ({ checked })));
+
+  labelTemplateValue: AngularTemplate<LabelViewComponent> = LabelViewComponent;
+
+  radioTemplateValue: AngularTemplate<RadioViewComponent> = RadioViewComponent;
 
   constructor(@Optional() private radioGroupService: RadioGroupService) {
   }

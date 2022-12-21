@@ -5,6 +5,7 @@ import { AppRoutes } from './routing/app.routes';
   selector: 'app-home',
   template: `
     <a [routerLink]="'/' + appRoutes.radioGroup">RadioGroup examples</a>
+    <a [routerLink]="'/' + appRoutes.radioGroupCompat">RadioGroup compatible examples</a>
   `,
   styles: [`
     :host {
