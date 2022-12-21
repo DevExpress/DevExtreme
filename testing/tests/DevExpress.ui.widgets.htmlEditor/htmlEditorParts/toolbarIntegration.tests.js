@@ -10,7 +10,6 @@ const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS = 'dx-format-active';
-const DROPDOWNEDITOR_CLASS = 'dx-dropdowneditor';
 const DROPDOWNMENU_CLASS = 'dx-dropdownmenu-button';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -171,9 +170,6 @@ export default function() {
 
             $('#htmlEditor')
                 .find(`.${DROPDOWNMENU_CLASS}`)
-                .trigger('dxclick');
-
-            $(`.${DROPDOWNEDITOR_CLASS} .${INPUT_CLASS}`)
                 .trigger('dxclick');
 
             $(`.${LIST_ITEM_CLASS}`)

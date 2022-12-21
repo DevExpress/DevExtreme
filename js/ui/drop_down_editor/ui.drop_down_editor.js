@@ -632,6 +632,10 @@ const DropDownEditor = TextBox.inherit({
             return;
         }
 
+        this._updatePopupWidth();
+    },
+
+    _updatePopupWidth: function() {
         const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
 
         if(popupWidth === undefined) {

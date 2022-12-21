@@ -579,7 +579,9 @@ const DropDownList = DropDownEditor.inherit({
             this._refreshSelected();
         }
 
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._popup && this._updatePopupDimensions();
+
         this._contentReadyAction();
     },
 
@@ -761,7 +763,8 @@ const DropDownList = DropDownEditor.inherit({
         this.option('opened', shouldOpenPopup);
 
         if(shouldOpenPopup) {
-            this._dimensionChanged();
+            this._updatePopupWidth();
+            this._popup && this._updatePopupDimensions();
         }
     },
 
@@ -788,11 +791,12 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._popup && this._updatePopupDimensions();
     },
 
     _dimensionChanged: function() {
-        this.callBase(arguments);
+        this.callBase();
 
         this._popup && this._updatePopupDimensions();
     },

@@ -464,7 +464,9 @@ const SelectBox = DropDownList.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this._dimensionChanged();
+
+        this._updatePopupWidth();
+        this._popup && this._updatePopupDimensions();
     },
 
     _isValueEqualInputText: function() {
