@@ -1,13 +1,12 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Resize appointments in All Day Panel`
+fixture.disablePageReloads`Resize appointments in All Day Panel`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Resize in the workWeek view between weeks', async (t) => {
+test('Resize in the workWeek view between weeks', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment1 = scheduler.getAppointment('1st');
   const appointment2 = scheduler.getAppointment('2nd');

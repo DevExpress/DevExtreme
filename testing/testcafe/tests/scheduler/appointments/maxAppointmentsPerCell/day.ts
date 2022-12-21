@@ -1,14 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Scheduler: max appointments per cell: Day`
+fixture.disablePageReloads`Scheduler: max appointments per cell: Day`
   .page(url(__dirname, '../../../container.html'));
 
 ['auto', 'unlimited', 3, 10].forEach((maxAppointmentsPerCellValue) => {
-  safeSizeTest(`Day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
+  test(`Day appointments should have correct height in maxAppointmentsPerCell=${maxAppointmentsPerCellValue}`, async (t) => {
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 

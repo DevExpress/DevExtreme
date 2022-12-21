@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
@@ -44,7 +44,7 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
 
 test('Click should work if a column button set using svg icon (T863635)', async (t) => {
   await t
-    .click('#svg-icon')
+    .click(Selector('.dx-command-edit-with-icons').nth(0))
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],

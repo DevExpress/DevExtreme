@@ -40,6 +40,7 @@ import {
     VIEWPORT_BOTTOM_NEW_ROW_POSITION,
     VIEWPORT_TOP_NEW_ROW_POSITION
 } from './ui.grid_core.editing_constants';
+import { deepExtendArraySafe } from '../../core/utils/object';
 
 const READONLY_CLASS = 'readonly';
 const LINK_CLASS = 'dx-link';
@@ -149,6 +150,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this._dataController = this.getController('data');
             this._rowsView = this.getView('rowsView');
             this._lastOperation = null;
+            // this contains the value of 'editing.changes' option, to check if it has changed in onOptionChanged
+            this._changes = [];
 
             if(this._deferreds) {
                 this._deferreds.forEach(d => d.reject('cancel'));
@@ -475,6 +478,14 @@ const EditingController = modules.ViewController.inherit((function() {
             eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
         },
 
+        _silentOption: function(name, value) {
+            if(name === 'editing.changes') {
+                this._changes = deepExtendArraySafe([], value);
+            }
+
+            this.callBase.apply(this, arguments);
+        },
+
         optionChanged: function(args) {
             if(args.name === 'editing') {
                 const fullName = args.fullName;
@@ -482,7 +493,13 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(fullName === EDITING_EDITROWKEY_OPTION_NAME) {
                     this._handleEditRowKeyChange(args);
                 } else if(fullName === EDITING_CHANGES_OPTION_NAME) {
-                    this._handleChangesChange(args);
+                    // to prevent render on optionChanged called by two-way binding - T1128881
+                    const isEqual = equalByValue(args.value, this._changes, -1);
+
+                    if(!isEqual) {
+                        this._changes = deepExtendArraySafe([], args.value);
+                        this._handleChangesChange(args);
+                    }
                 } else if(!args.handled) {
                     this._columnsController.reinit();
                     this.init(true);
