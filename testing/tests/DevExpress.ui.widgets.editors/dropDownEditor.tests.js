@@ -1648,7 +1648,7 @@ QUnit.module('popup integration', () => {
         assert.roughEqual(overlayContentRect.left, editorRect.left, 1.01, 'left position is correct');
     });
 
-    QUnit.test('popup should be closed on resize if the editor is hidden', function(assert) {
+    QUnit.test('popup should be closed on resize if the editor is hidden (T1133813)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             opened: true
         });
