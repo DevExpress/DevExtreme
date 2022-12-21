@@ -1626,7 +1626,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _allItemsExpanded: function() {
+    _allItemsExpandedHandler: function() {
         this._skipContentReadyAndItemExpanded = false;
         this._fireContentReadyAction();
     },
@@ -1637,8 +1637,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._skipContentReadyAndItemExpanded = true;
 
-        // NOTE: This is needed to support animation on expandAll, but stop triggering lot od contentReady/itemExpanded events.
-        // Deleting _allItemsExpanded() used to avoid error when component is disposed before promises fullfilles.
+        // NOTE: This is needed to support animation on expandAll, but stop triggering multiple contentReady/itemExpanded events.
 
         nodes.forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
 
@@ -1718,7 +1717,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _dispose: function() {
         this.callBase();
         clearTimeout(this._setFocusedItemTimeout);
-        this._allItemsExpanded = null;
+        this._allItemsExpandedHandler = null;
     }
 });
 
