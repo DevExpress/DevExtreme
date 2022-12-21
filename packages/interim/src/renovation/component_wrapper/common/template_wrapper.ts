@@ -1,19 +1,17 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
-import { findDOMfromVNode } from 'inferno';
-import { shallowEquals } from '../../utils/shallow_equals';
-import { replaceWith } from '../../../core/utils/dom';
+import { createTextVNode, findDOMfromVNode } from 'inferno';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import { getPublicElement } from '../../../core/element';
-import { removeDifferentElements } from '../utils/utils';
 import { FunctionTemplate } from '../../../core/templates/function_template';
-import { EffectReturn } from '../../utils/effect_return';
-import { isDefined } from '../../../core/utils/type';
+
+type UnknownRecord = Record<PropertyKey, unknown>;
 
 export interface TemplateModel {
   data: Record<string, unknown>;
   index: number;
+  isEqual?: (a?: UnknownRecord, b?: UnknownRecord) => boolean;
 }
 
 interface TemplateWrapperProps {
@@ -23,65 +21,58 @@ interface TemplateWrapperProps {
   renovated?: boolean;
 }
 
+function replaceChild(parentDOM, newDom, lastDom) {
+  parentDOM.replaceChild(newDom, lastDom);
+}
+
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
+  __templateContent: Element | undefined;
+  __parent!: Element;
+
   constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
   }
 
-  renderTemplate(): EffectReturn {
-    // eslint-disable-next-line spellcheck/spell-checker
-    const node = findDOMfromVNode(this.$LI, true) as Element;
-    const parentNode = node.parentNode as Element;
-    const $parent = $(parentNode);
-    const $children = $parent.contents();
+  renderTemplate(): void {
+  // eslint-disable-next-line spellcheck/spell-checker
+    const node = findDOMfromVNode(this.$LI, true);
+    this.__parent = node?.parentNode as Element;
+    this.__templateContent = this.getTemplateContent(this.props);
 
+    node?.after(this.__templateContent!);
+  }
+
+  getTemplateContent(props) {
     const {
       data, index,
-    } = this.props.model ?? { data: {} };
-
-    if (data) {
+    } = props.model ?? { data: {} };
+  
+    if(data) {
       Object.keys(data).forEach((name) => {
-        if (data[name] && domAdapter.isNode(data[name])) {
-          data[name] = getPublicElement($(data[name] as Element));
+        if(data[name] && domAdapter.isNode(data[name])) {
+          data[name] = getPublicElement($(data[name]));
         }
       });
     }
-
-    const $result = $(this.props.template.render({
-      container: getPublicElement($parent),
+  
+    return this.props.template.render({
+      container: getPublicElement($(this.__parent)),
       transclude: this.props.transclude,
       ...{ renovated: this.props.renovated },
       ...!this.props.transclude ? { model: data } : {},
       ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
-    }));
-
-    replaceWith($(node), $result);
-
-    return (): void => {
-      // NOTE: order is important
-      removeDifferentElements($children, $parent.contents());
-      parentNode.appendChild(node);
-    };
+    })[0];
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
-    const { template, model } = this.props;
-    const { template: nextTemplate, model: nextModel } = nextProps;
-
-    const sameTemplate = template === nextTemplate;
-    if (!sameTemplate) {
-      return true;
+    if(this.__templateContent &&
+      (!this.props.model?.isEqual || !this.props.model.isEqual(this.props.model.data, nextProps.model?.data))) {
+      const result = this.getTemplateContent(nextProps);
+      replaceChild(this.__parent, result, this.__templateContent);
+      this.__templateContent = result;
     }
-
-    if (isDefined(model) && isDefined(nextModel)) {
-      const { data, index } = model;
-      const { data: nextData, index: nextIndex } = nextModel;
-      return index !== nextIndex || !shallowEquals(data, nextData);
-    }
-
-    const sameModel = model === nextModel;
-    return !sameModel;
+    return false;
   }
 
   createEffects(): InfernoEffect[] {
@@ -94,9 +85,11 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
 
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
-  componentWillUnmount(): void { }
+  componentWillUnmount(): void {
+    this.__templateContent?.remove();
+  }
 
   render(): JSX.Element | null {
-    return null;
+    return createTextVNode("");
   }
 }
