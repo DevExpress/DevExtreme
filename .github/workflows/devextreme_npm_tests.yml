@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [22_2]
+    branches: [23_1]
 
 jobs:
   build:
@@ -309,7 +309,7 @@ jobs:
 
     - name: Delete DX packages
       working-directory: ./devextreme-demos
-      run:  sed -i '/22.2-next/d' ./package.json
+      run:  sed -i '/23.1-next/d' ./package.json
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
@@ -362,4 +362,4 @@ jobs:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 22_2
+          specific_branch: 23_1
