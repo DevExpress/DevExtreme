@@ -206,7 +206,7 @@ export const dataControllerModule = {
                                 if(changedPagingOptions) {
                                     const pageIndex = dataSource.pageIndex();
 
-                                    this._isPaging = changedPagingOptions.isPageIndexChanged;
+                                    this._isPaging = 123;
 
                                     dataSource.load().done(() => {
                                         this._isPaging = false;
