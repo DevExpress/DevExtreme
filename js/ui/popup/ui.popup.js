@@ -350,7 +350,7 @@ const Popup = Overlay.inherit({
     _renderContent() {
         this.callBase();
         // NOTE: T1130045
-        this._observeContentResize(this.option('visible'));
+        this._observeContentResize(true);
     },
 
     _renderContentImpl: function() {
@@ -425,12 +425,14 @@ const Popup = Overlay.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
-        // NOTE: T1130045
-        if(!visible) {
-            this._observeContentResize(visible);
-        }
-
         return this.callBase(visible);
+    },
+
+    _hide() {
+        // NOTE: T1130045
+        this._observeContentResize(false);
+
+        return this.callBase();
     },
 
     _executeTitleRenderAction: function($titleElement) {

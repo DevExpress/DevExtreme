@@ -5,7 +5,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const BUTTON_CLASS = 'dx-dropdowneditor-button';
 
-fixture`Drop Down Button's Popup`
+fixture`Drop Down Box's Popup`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Popup should have correct height when DropDownBox is opened first time (T1130045)', async (t) => {
