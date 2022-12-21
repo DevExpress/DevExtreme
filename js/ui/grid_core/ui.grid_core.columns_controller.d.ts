@@ -164,4 +164,6 @@ export interface ColumnsController extends Controller, State {
   getColumnId: (this: this, ...args: any[]) => any;
 
   getHeaderContentAlignment: (this: this, ...args: any[]) => any;
+
+  getCustomizeTextByDataType: (this: this, ...args: any[]) => any;
 }

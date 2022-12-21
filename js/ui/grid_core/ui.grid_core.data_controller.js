@@ -64,7 +64,9 @@ export const dataControllerModule = {
                 return 0;
             };
 
-            /** @type {Partial<import('./ui.grid_core.data_controller').DataController>} */
+            /**
+             * @type {Partial<import('./ui.grid_core.data_controller').DataController>}
+             */
             const members = {
                 init: function() {
                     const that = this;
