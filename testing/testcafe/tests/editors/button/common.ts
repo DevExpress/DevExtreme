@@ -20,17 +20,23 @@ fixture.disablePageReloads`Button`
 test('Buttons render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { margin: 5px; }`);
+
   await takeScreenshotInTheme(t, takeScreenshot, 'Button render.png', '#container', true);
 
-  await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { width: 70px; }`);
+  await removeStylesheetRulesFromPage();
+
+  await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { width: 70px; margin: 5px; }`);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Button render with overflow.png', '#container', true);
 
   await removeStylesheetRulesFromPage();
 
-  await insertStylesheetRulesToPage(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px; }`);
+  await insertStylesheetRulesToPage(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px; } .${BUTTON_CLASS} { margin: 5px; }`);
 
   await takeScreenshotInTheme(t, takeScreenshot, 'Button stretch of large text.png', '#container', true);
+
+  await removeStylesheetRulesFromPage();
 
   await t
     .expect(compareResults.isValid())

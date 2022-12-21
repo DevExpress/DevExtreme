@@ -42,40 +42,40 @@ test('Label max-width changed with container size', async (t) => {
 }));
 
 stylingModes.forEach((stylingMode) => {
-  [true, false].forEach((rtlEnabled) => {
-    test(`Textbox render, rtl=${rtlEnabled}, stylingMode=${stylingMode}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  test(`Textbox render with stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`);
+    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Textbox render with limited width rtl=${rtlEnabled},stylingMode=${stylingMode}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `Textbox render with limited width stylingMode=${stylingMode}.png`, '#container');
 
-      await removeStylesheetRulesFromPage();
+    await removeStylesheetRulesFromPage();
 
-      await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 260px; margin: 5px; }`);
+    await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 260px; margin: 5px; }`);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Textbox render rtl=${rtlEnabled},stylingMode=${stylingMode}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`, '#container');
 
-      for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
-        for (const id of t.ctx.ids) {
-          await setClassAttribute(Selector(`#${id}`), state);
-        }
-
-        await takeScreenshotInTheme(t, takeScreenshot, `Textbox render rtl=${rtlEnabled}-${state.replaceAll('dx-', '').replaceAll('state-', '')},stylingMode=${stylingMode}.png`, '#container');
-
-        for (const id of t.ctx.ids) {
-          await removeClassAttribute(Selector(`#${id}`), state);
-        }
+    for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
+      for (const id of t.ctx.ids) {
+        await setClassAttribute(Selector(`#${id}`), state);
       }
 
-      await removeStylesheetRulesFromPage();
+      await takeScreenshotInTheme(t, takeScreenshot, `Textbox render ${state.replaceAll('dx-', '').replaceAll('state-', '')},stylingMode=${stylingMode}.png`, '#container');
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      t.ctx.ids = [];
+      for (const id of t.ctx.ids) {
+        await removeClassAttribute(Selector(`#${id}`), state);
+      }
+    }
 
+    await removeStylesheetRulesFromPage();
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    t.ctx.ids = [];
+
+    for (const rtlEnabled of [true, false]) {
       for (const labelMode of labelModes) {
         for (const placeholder of ['Placeholder', '']) {
           for (const text of ['Text value', '']) {
@@ -96,6 +96,6 @@ stylingModes.forEach((stylingMode) => {
           }
         }
       }
-    });
+    }
   });
 });
