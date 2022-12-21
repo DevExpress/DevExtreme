@@ -35,7 +35,7 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
     - name: Build  
-      run: npm run build
+      run: npm run build:react
     - name: Lint
       run: npm run lint
 
