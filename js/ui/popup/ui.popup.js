@@ -347,6 +347,12 @@ const Popup = Overlay.inherit({
                 && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
+    _renderContent() {
+        this.callBase();
+        // NOTE: This observe should not be called before async showing is called. See T1130045.
+        this._observeContentResize(true);
+    },
+
     _renderContentImpl: function() {
         this._renderTitle();
         this.callBase();
@@ -415,9 +421,13 @@ const Popup = Overlay.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
-        this._observeContentResize(visible);
-
         return this.callBase(visible);
+    },
+
+    _hide() {
+        this._observeContentResize(false);
+
+        return this.callBase();
     },
 
     _executeTitleRenderAction: function($titleElement) {
