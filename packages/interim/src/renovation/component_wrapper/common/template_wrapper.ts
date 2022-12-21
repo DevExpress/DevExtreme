@@ -2,12 +2,15 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
 import { shallowEquals } from '../../utils/shallow_equals';
+// eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
+// eslint-disable-next-line import/named
 import { DxElement, getPublicElement } from '../../../core/element';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { isDefined } from '../../../core/utils/type';
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type UnknownRecord = Record<PropertyKey, unknown>;
 
 export interface TemplateModel {
@@ -26,7 +29,7 @@ interface TemplateWrapperProps {
 function isDxElementWrapper(
   element: dxElementWrapper | HTMLElement & Partial<Pick<dxElementWrapper, 'toArray'>>,
 ): element is dxElementWrapper {
-  return element.toArray ? true : false;
+  return !!element.toArray;
 }
 
 function defaultComparer(
@@ -51,17 +54,20 @@ function defaultComparer(
 function revertMutation({ target, type, addedNodes }: MutationRecord): void {
   switch (type) {
     case 'childList':
-      addedNodes.forEach(n => target.removeChild(n))
+      addedNodes.forEach((n) => target.removeChild(n));
+      break;
+    default:
       break;
   }
 }
 
 function recordMutations<TReturn>(target: Node, func: () => TReturn): [
   TReturn,
-  MutationRecord[]
+  MutationRecord[],
 ] {
   const observer = new MutationObserver(() => {});
 
+  // eslint-disable-next-line spellcheck/spell-checker
   observer.observe(target, { childList: true, attributes: true, subtree: true });
   const result: [TReturn, MutationRecord[]] = [func(), observer.takeRecords()];
   observer.disconnect();
@@ -74,9 +80,9 @@ function buildTemplateContent(props: TemplateWrapperProps, container: Element): 
     data, index,
   } = props.model ?? { data: {} };
 
-  if(data) {
+  if (data) {
     Object.keys(data).forEach((name) => {
-      if(data[name] && domAdapter.isNode(data[name])) {
+      if (data[name] && domAdapter.isNode(data[name])) {
         data[name] = getPublicElement($(data[name]));
       }
     });
@@ -88,19 +94,21 @@ function buildTemplateContent(props: TemplateWrapperProps, container: Element): 
     ...{ renovated: props.renovated },
     ...!props.transclude ? { model: data } : {},
     ...!props.transclude && Number.isFinite(index) ? { index } : {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any as (dxElementWrapper | DxElement | undefined);
 
-  if(rendered === undefined) {
+  if (rendered === undefined) {
     return [];
   }
 
   return isDxElementWrapper(rendered)
     ? rendered.toArray()
-    : [getPublicElement($(rendered))]
+    : [getPublicElement($(rendered))];
 }
 
 function noop(): void {}
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function detectTemplateBehavior(container: Node, content: Node[]) {
   return content.length === 0 || (content.length === 1 && content[0] === container)
     ? 'mutates-container'
@@ -116,29 +124,31 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   renderTemplate(): void {
+    // eslint-disable-next-line spellcheck/spell-checker
     const node = findDOMfromVNode(this.$LI, true);
-    if(node?.parentElement == null) {
+    if (node?.parentElement == null) {
       throw new Error('Template must have parent element');
     }
 
     const container = getPublicElement($(node.parentElement));
 
-    const [ content, mutations ] = recordMutations(
+    const [content, mutations] = recordMutations(
       container,
       () => buildTemplateContent(this.props, container),
     );
 
     this.__templateCleaner();
 
-    switch(detectTemplateBehavior(container, content)) {
-
+    switch (detectTemplateBehavior(container, content)) {
       case 'mutates-container':
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         this.__templateCleaner = () => mutations.forEach(revertMutation);
         break;
 
       case 'returns-content':
         node.after(...content);
-        this.__templateCleaner = () => content.forEach(el => el?.remove());
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        this.__templateCleaner = () => content.forEach((el) => el?.remove());
         break;
 
       default:
