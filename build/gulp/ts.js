@@ -17,7 +17,7 @@ const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-const src = ['./js/**/*.d.ts', '!./js/renovation/**/*'];
+const src = ['./js/**/*.d.ts', './js/ui/grid_core/*.js', '!./js/renovation/**/*'];
 
 const TS_TESTS_PATH = './testing/typescript';
 
@@ -26,6 +26,8 @@ function compileTS(settings) {
         typescript: require('typescript-min'),
         types: ['jquery'],
         noEmitOnError: true,
+        allowJs: true,
+        lib: [ "es6", "es7", "es2017.object", "dom" ],
         ...settings
     })(ts.reporter.fullReporter());
 }
