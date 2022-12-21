@@ -1,13 +1,12 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-and-drop appointments in the Scheduler timeline views`
+fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler timeline views`
   .page(url(__dirname, '../../container.html'));
 
-['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => safeSizeTest(`Drag-n-drop in the "${view}" view`, async (t) => {
+['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => test(`Drag-n-drop in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -22,7 +21,7 @@ fixture`Drag-and-drop appointments in the Scheduler timeline views`
   dataSource,
 })));
 
-safeSizeTest('Drag-n-drop in the "timelineMonth" view', async (t) => {
+test('Drag-n-drop in the "timelineMonth" view', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Brochure Design Review');
 

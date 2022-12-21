@@ -3,23 +3,22 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { extend } from '../../../../../js/core/utils/extend';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`T1017720`
-  .page(url(__dirname, './pages/containerWithDnD.html'));
+fixture.disablePageReloads`T1017720`
+  .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
+test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
   const scheduler = new Scheduler('#scheduler');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('text');
 
   await t
-    .drag(draggableAppointment.element, 330, 0, { speed: 0.1 })
+    .drag(draggableAppointment.element, 330, 0)
     .expect(await takeScreenshot('drag-n-drop-to-right(T1017720).png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -330, 70, { speed: 0.1 })
+    .drag(draggableAppointment.element, -330, 70)
     .expect(await takeScreenshot('drag-n-drop-to-left(T1017720).png', scheduler.workSpace))
     .ok()
 

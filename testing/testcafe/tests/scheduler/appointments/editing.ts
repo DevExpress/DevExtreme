@@ -1,19 +1,18 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-const CLICK_OPTIONS = { speed: 0.1 };
+const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
 const ADDITIONAL_TITLE_TEXT = '-updated';
 const UPDATED_APPOINTMENT_TITLE = `${INITIAL_APPOINTMENT_TITLE}${ADDITIONAL_TITLE_TEXT}`;
 
-fixture`Appointment Editing`
+fixture.disablePageReloads`Appointment Editing`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Should correctly update appointment if dataSource is a simple array', async (t) => {
+test('Should correctly update appointment if dataSource is a simple array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
@@ -21,11 +20,11 @@ safeSizeTest('Should correctly update appointment if dataSource is a simple arra
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.subjectElement, CLICK_OPTIONS)
+    .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .expect(appointmentPopup.subjectElement.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.doneButton, CLICK_OPTIONS)
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => createWidget('dxScheduler', {
@@ -43,7 +42,7 @@ safeSizeTest('Should correctly update appointment if dataSource is a simple arra
   height: 600,
 }, true));
 
-safeSizeTest('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
+test('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
@@ -51,11 +50,11 @@ safeSizeTest('Should correctly update appointment if dataSource is a Store with 
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.subjectElement, CLICK_OPTIONS)
+    .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
     .expect(appointmentPopup.subjectElement.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.doneButton, CLICK_OPTIONS)
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => {

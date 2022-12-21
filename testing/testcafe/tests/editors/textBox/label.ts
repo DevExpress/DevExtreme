@@ -48,7 +48,7 @@ themes.forEach((theme) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await insertStylesheetRule(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`, 0);
-      await t.debug();
+
       await t
         .expect(await takeScreenshot(`Textbox render with limited width rtl=${rtlEnabled}${getThemePostfix(theme)}.png`, '#container'))
         .ok();

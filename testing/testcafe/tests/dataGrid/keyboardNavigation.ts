@@ -54,6 +54,7 @@ test('Cell should not highlighted after editing another cell when startEditActio
     allowUpdating: true,
     startEditAction: 'dblClick',
   },
+  loadingTimeout: null,
 }));
 
 test('Cell should highlighted after editing another cell when startEditAction is "dblClick" and editing mode is "cell"', async (t) => {

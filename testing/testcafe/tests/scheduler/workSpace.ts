@@ -1,28 +1,22 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
-fixture`Scheduler: Workspace`
+fixture.disablePageReloads`Scheduler: Workspace`
   .page(url(__dirname, '../container.html'));
 
-const disableAnimation = ClientFunction(() => {
-  (window as any).DevExpress.fx.off = true;
-});
-
 const createScheduler = async (options = {}): Promise<void> => {
-  await disableAnimation();
   await createWidget('dxScheduler', extend(options, {
     dataSource: [],
     startDayHour: 9,
     height: 600,
-  }));
+  }, true));
 };
 
-safeSizeTest('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {
+test('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -34,11 +28,10 @@ safeSizeTest('Vertical selection between two workspace cells should focus cells 
   currentView: 'day',
 }));
 
-safeSizeTest('Horizontal selection between two workspace cells should focus cells between them', async (t) => {
+test('Horizontal selection between two workspace cells should focus cells between them', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
-    .setTestSpeed(0.5)
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 3))
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
     .eql(4);
@@ -58,7 +51,7 @@ safeSizeTest('Horizontal selection between two workspace cells should focus cell
   }],
 }));
 
-safeSizeTest('Vertical grouping should work correctly when there is one group', async (t) => {
+test('Vertical grouping should work correctly when there is one group', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -92,7 +85,7 @@ const resize = ClientFunction((container) => {
   instance._workSpace._dimensionChanged();
 });
 
-safeSizeTest('Hidden scheduler should not resize', async (t) => {
+test('Hidden scheduler should not resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await hideShow('#container');
@@ -141,7 +134,7 @@ safeSizeTest('Hidden scheduler should not resize', async (t) => {
   height: 400,
 }));
 
-safeSizeTest('All day panel should be hidden when allDayPanelMode=hidden by initializing scheduler', async (t) => {
+test('All day panel should be hidden when allDayPanelMode=hidden by initializing scheduler', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
