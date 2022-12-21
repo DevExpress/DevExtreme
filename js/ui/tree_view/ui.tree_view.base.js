@@ -587,7 +587,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _fireContentReadyAction: function() {
         const dataSource = this.getDataSource();
-        const skipContentReadyAction = dataSource && !dataSource.isLoaded();
+        const skipContentReadyAction = dataSource && !dataSource.isLoaded() || this._skipContentReadyAndItemExpanded;
 
         const scrollable = this.getScrollable();
 
@@ -1013,7 +1013,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireExpandedStateUpdatedEvent: function(isExpanded, node, e) {
-        if(!this._hasChildren(node)) {
+        if(!this._hasChildren(node) || this._skipContentReadyAndItemExpanded) {
             return;
         }
 
@@ -1635,8 +1635,20 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     expandAll: function() {
         const dataAdapter = this._dataAdapter;
-        each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
-        this.repaint();
+        const expandingPromises = [];
+        this._skipContentReadyAndItemExpanded = true;
+
+        dataAdapter.getData().forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
+
+        if(expandingPromises.length) {
+            Promise.allSettled(expandingPromises).then(() => {
+                this._skipContentReadyAndItemExpanded = false;
+                this._fireContentReadyAction();
+            });
+        } else {
+            this._skipContentReadyAndItemExpanded = false;
+            this._fireContentReadyAction();
+        }
     },
 
     collapseAll: function() {
