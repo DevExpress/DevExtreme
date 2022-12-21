@@ -1626,22 +1626,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    _allItemsExpanded: function() {
+        this._skipContentReadyAndItemExpanded = false;
+        this._fireContentReadyAction();
+    },
+
     expandAll: function() {
-        const dataAdapter = this._dataAdapter;
+        const nodes = this._dataAdapter.getData();
         const expandingPromises = [];
+
         this._skipContentReadyAndItemExpanded = true;
 
-        dataAdapter.getData().forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
+        // NOTE: This is needed to support animation on expandAll, but stop triggering lot od contentReady/itemExpanded events.
+        nodes.forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
 
-        if(expandingPromises.length) {
-            Promise.allSettled(expandingPromises).then(() => {
-                this._skipContentReadyAndItemExpanded = false;
-                this._fireContentReadyAction();
-            });
-        } else {
-            this._skipContentReadyAndItemExpanded = false;
-            this._fireContentReadyAction();
-        }
+        Promise.allSettled(expandingPromises).then(() => this._allItemsExpanded?.());
     },
 
     collapseAll: function() {
@@ -1717,6 +1716,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _dispose: function() {
         this.callBase();
         clearTimeout(this._setFocusedItemTimeout);
+        this._allItemsExpanded = null;
     }
 });
 
