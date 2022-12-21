@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/react-in-jsx-scope */
 import { HookContainer, useState } from '@devextreme/runtime/inferno-hooks';
 import { useCoreState } from '../../internal/hooks';
 import { RadioButtonInternal } from './radio-button-internal';
