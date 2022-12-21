@@ -429,7 +429,6 @@ const Popup = Overlay.inherit({
     },
 
     _hide() {
-        // NOTE: T1130045
         this._observeContentResize(false);
 
         return this.callBase();
