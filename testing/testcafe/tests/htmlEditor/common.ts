@@ -1,12 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { clearTestPage } from '../../helpers/clearPage';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
-fixture.disablePageReloads`HtmlEditor`
-  .page(url(__dirname, '../containerQuill.html'))
-  .afterEach(async () => clearTestPage());
+fixture`HtmlEditor`
+  .page(url(__dirname, '../containerQuill.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';
