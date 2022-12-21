@@ -23,33 +23,33 @@ const types = ['date', 'datetime', 'time'];
 fixture.disablePageReloads`DateBox render`
   .page(url(__dirname, '../../container.html'));
 
-[true, false].forEach((rtlEnabled) => {
-  test('DateBox styles', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+stylingModes.forEach((stylingMode) => {
+  [true, false].forEach((rtlEnabled) => {
+    test(`DateBox styles, rtl=${rtlEnabled}, stylingMode=${stylingMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Datebox rtl=${rtlEnabled}.png`, '#container', true);
+      await takeScreenshotInTheme(t, takeScreenshot, `Datebox rtl=${rtlEnabled},stylingMode=${stylingMode}.png`, undefined, true);
 
-    for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
-      for (const id of t.ctx.ids) {
-        await setClassAttribute(Selector(`#${id}`), state);
+      for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
+        for (const id of t.ctx.ids) {
+          await setClassAttribute(Selector(`#${id}`), state);
+        }
+
+        await takeScreenshotInTheme(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} rtl=${rtlEnabled},stylingMode=${stylingMode}.png`, undefined, true);
+
+        for (const id of t.ctx.ids) {
+          await removeClassAttribute(Selector(`#${id}`), state);
+        }
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} rtl=${rtlEnabled}.png`, undefined, true);
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async (t) => {
+      t.ctx.ids = [];
 
-      for (const id of t.ctx.ids) {
-        await removeClassAttribute(Selector(`#${id}`), state);
-      }
-    }
+      await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block; margin: 5px; }`);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    t.ctx.ids = [];
-
-    await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block }`);
-
-    for (const stylingMode of stylingModes) {
       for (const type of types) {
         for (const pickerType of pickerTypes) {
           for (const labelMode of labelModes) {
@@ -59,7 +59,7 @@ fixture.disablePageReloads`DateBox render`
             await appendElementTo('#container', 'div', id, { });
 
             const options: any = {
-              width: 160,
+              width: 240,
               label: 'label text',
               labelMode,
               stylingMode,
@@ -74,6 +74,6 @@ fixture.disablePageReloads`DateBox render`
           }
         }
       }
-    }
+    });
   });
 });

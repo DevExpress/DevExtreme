@@ -37,7 +37,7 @@ testFixture()`PivotGrid_scrolling`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStylesheetRulesToPage('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important; }', 0);
+    await insertStylesheetRulesToPage('.dx-pivotgrid .dx-pivotgrid-area-data tbody td { white-space: normal !important; }');
 
     return createWidget('dxPivotGrid', {
       dataSource: {
