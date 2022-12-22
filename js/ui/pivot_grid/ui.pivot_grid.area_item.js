@@ -205,7 +205,7 @@ export const AreaItem = Class.inherit({
                 td.appendChild(span);
 
                 if(cell.sorted) {
-                    const span = domAdapter.createAttribute('span');
+                    const span = domAdapter.createElement('span');
                     span.classList.add('dx-icon-sorted');
                     td.appendChild(span);
                 }
@@ -366,6 +366,7 @@ export const AreaItem = Class.inherit({
     setColumnsWidth: function(values) {
         let i;
         const tableElement = this._tableElement[0];
+        this._colgroupElement.html('');
         const columnsCount = this.getColumnsCount();
         const columnWidth = [];
 

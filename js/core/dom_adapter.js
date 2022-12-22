@@ -1,7 +1,6 @@
 /* global document */
 import injector from './utils/dependency_injector';
 import { noop } from './utils/common';
-import { setStyle } from './utils/style';
 import { getShadowElementsFromPoint } from './utils/shadow_dom';
 
 const ELEMENT_NODE = 1;
@@ -94,7 +93,7 @@ const nativeDOMAdapterStrategy = {
 
     setAttribute(element, name, value) {
         if(name === 'style') {
-            setStyle(element, value);
+            element.style.cssText = value;
         } else {
             element.setAttribute(name, value);
         }
