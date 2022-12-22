@@ -194,14 +194,15 @@ export class GanttTreeList {
         }
     }
     saveExpandedKeys() {
+        const hasData = this._treeList?.getVisibleRows().length > 0;
         const keys = this.getOption('expandedRowKeys');
-        if(keys?.length > 0) {
+        if(hasData && keys) {
             this._savedExpandedKeys = keys;
         }
     }
     _onNodesInitialized(e) {
         const expandedKeys = this._savedExpandedKeys?.filter(k => !!this._treeList.getNodeByKey(k));
-        if(expandedKeys?.length > 0) {
+        if(expandedKeys) {
             this.setOption('expandedRowKeys', this._savedExpandedKeys);
         }
         delete this._savedExpandedKeys;
