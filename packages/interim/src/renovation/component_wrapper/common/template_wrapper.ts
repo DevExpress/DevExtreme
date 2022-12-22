@@ -26,6 +26,10 @@ interface TemplateWrapperProps {
   renovated?: boolean;
 }
 
+function isChildNode(node: Node): node is ChildNode {
+  return typeof (node as Partial<ChildNode>).remove === 'function';
+}
+
 function isDxElementWrapper(
   element: dxElementWrapper | HTMLElement & Partial<Pick<dxElementWrapper, 'toArray'>>,
 ): element is dxElementWrapper {
@@ -51,10 +55,10 @@ function defaultComparer(
   return !sameModel;
 }
 
-function revertMutation({ target, type, addedNodes }: MutationRecord): void {
+function revertMutation({ type, addedNodes }: MutationRecord): void {
   switch (type) {
     case 'childList':
-      addedNodes.forEach((n) => target.removeChild(n));
+      addedNodes.forEach((n) => isChildNode(n) && n.remove());
       break;
     default:
       break;
@@ -68,7 +72,7 @@ function recordMutations<TReturn>(target: Node, func: () => TReturn): [
   const observer = new MutationObserver(() => {});
 
   // eslint-disable-next-line spellcheck/spell-checker
-  observer.observe(target, { childList: true, attributes: true, subtree: true });
+  observer.observe(target, { childList: true, attributes: true, subtree: false });
   const result: [TReturn, MutationRecord[]] = [func(), observer.takeRecords()];
   observer.disconnect();
 
