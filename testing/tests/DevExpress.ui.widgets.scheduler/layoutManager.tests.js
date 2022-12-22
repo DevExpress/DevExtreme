@@ -1789,8 +1789,8 @@ QUnit.test('Full-size appointment should have correct height, "auto" mode', func
 
     let $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
 
-    assert.roughEqual(getOuterHeight($appointment.eq(0)), 23.5, 1.1, 'appointment height is ok');
-    assert.roughEqual(getOuterHeight($appointment.eq(1)), 23.5, 1.1, 'appointment height is ok');
+    assert.roughEqual(getOuterHeight($appointment.eq(0)), 24.6, 1.1, 'appointment height is ok');
+    assert.roughEqual(getOuterHeight($appointment.eq(1)), 24.6, 1.1, 'appointment height is ok');
 
     this.instance.option('height', 900);
     $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
