@@ -20,7 +20,6 @@ export interface RadioButtonProps<T> {
   label?: LabelType;
   radioTemplate?: ComponentType<RadioTemplateProps>;
   labelTemplate?: ComponentType<LabelTemplateProps>;
-  onChange?: React.ChangeEventHandler;
   onSelected?: SelectedEventHandler<T>;
   onClick?: React.MouseEventHandler;
 }

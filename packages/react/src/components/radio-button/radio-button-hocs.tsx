@@ -1,5 +1,4 @@
 import {
-  ChangeEventHandler,
   ComponentType,
   useState,
 } from 'react';
@@ -10,6 +9,7 @@ import {
   RadioButtonRenderProps,
   RadioButtonRenderType,
   RadioTemplateProps,
+  SelectedEventHandler,
 } from './types';
 
 function withUncontrolledBehavior<T>(
@@ -17,11 +17,9 @@ function withUncontrolledBehavior<T>(
 ) {
   function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps<T>) {
     const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-      setInternalChecked(event.target.checked);
-      event.preventDefault();
-      event.stopPropagation();
-      props.onChange?.(event);
+    const handleSelected: SelectedEventHandler<T> = (value) => {
+      setInternalChecked(true);
+      props.onSelected?.(value);
     };
     const renderRadioComponent = (
       RadioComponent: ComponentType<RadioTemplateProps>,
@@ -30,7 +28,7 @@ function withUncontrolledBehavior<T>(
       <RadioButton
           // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
-        onChange={handleChange}
+        onSelected={handleSelected}
         renderRadioComponent={renderRadioComponent}
       />
     );

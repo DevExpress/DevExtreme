@@ -42,14 +42,14 @@ export function RadioButtonExample() {
             value={exampleValues[0]}
             checked={selectedValue === exampleValues[0]}
             label={exampleValues[0].text}
-            onClick={() => setSelectedValue(exampleValues[0])}
+            onSelected={() => setSelectedValue(exampleValues[0])}
           />
           <RadioButton
             name="example-values"
             value={exampleValues[1]}
             checked={selectedValue === exampleValues[1]}
             label={exampleValues[1].text}
-            onClick={() => setSelectedValue(exampleValues[1])}
+            onSelected={() => setSelectedValue(exampleValues[1])}
           />
         </div>
         <div className="example__play-part">

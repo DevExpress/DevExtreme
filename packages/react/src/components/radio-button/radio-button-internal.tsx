@@ -14,14 +14,13 @@ export function DefaultLabelTemplate({ label }: LabelTemplateProps) {
 }
 
 export function RadioButtonInternal<T>({
-  name, value, checked, defaultChecked, onSelected, onChange, onClick, label, radioTemplate,
+  name, value, checked, defaultChecked, onSelected, onClick, label, radioTemplate,
   labelTemplate, inputId, inputRef, renderRadioComponent,
 }: RadioButtonRenderProps<T>): JSX.Element {
   const RadioComponent = radioTemplate || DefaultRadioTemplate;
   const LabelComponent = labelTemplate || DefaultLabelTemplate;
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = () => {
     onSelected?.(value);
-    onChange?.(event);
   };
 
   return (
