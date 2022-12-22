@@ -1,0 +1,10 @@
+{
+    "name": "@packages/jquery",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/jquery/src",
+    "projectType": "library",
+    "implicitDependencies": [
+        "@devextreme/react"
+    ],
+    "tags": []
+}

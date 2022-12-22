@@ -35,7 +35,7 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
     - name: Build  
-      run: npm run build:react
+      run: npx nx build @devextreme/jquery
     - name: Lint
       run: npm run lint
 
