@@ -48,7 +48,8 @@ export type WidgetName =
 'dxNumberBox' |
 'dxValidator' |
 'dxHtmlEditor' |
-'dxFileUploader';
+'dxFileUploader' |
+'dxDropDownBox';
 
 export default async function createWidget(
   widgetName: WidgetName,

@@ -48,7 +48,7 @@ QUnit.module('Expand state T1105252', moduleConfig, () => {
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
         assert.equal(this.instance._treeList.getVisibleRows().length, 1);
     });
-    test('check state after datasource updte (T1125635)', function(assert) {
+    test('check state after datasource update (T1125635)', function(assert) {
         const options = {
             tasks: { dataSource: tasks.slice() },
             editing: { enabled: true }
@@ -63,6 +63,32 @@ QUnit.module('Expand state T1105252', moduleConfig, () => {
         assert.equal(this.instance._treeList.getVisibleRows().length, 1);
         this.clock.tick();
         this.instance.option('tasks', { dataSource: tasks.slice() });
+        this.clock.tick(1000);
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+    });
+    test('check state after datasource update with 1 parent level (T1125635)', function(assert) {
+        const my_tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 1, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 1, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 }
+        ];
+        const options = {
+            tasks: { dataSource: my_tasks },
+            editing: { enabled: true }
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+        const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+        this.clock.tick();
+        this.instance.option('tasks', { dataSource: my_tasks.slice(0, my_tasks.length - 1) });
         this.clock.tick(1000);
 
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);

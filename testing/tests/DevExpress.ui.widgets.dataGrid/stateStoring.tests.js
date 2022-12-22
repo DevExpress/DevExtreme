@@ -1310,15 +1310,18 @@ QUnit.module('State Storing with real controllers', {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             },
-            height: 100,
-            loadingTimeout: null,
+            height: 130,
+            loadingTimeout: 0,
             dataSource: {
                 store: generateDataSource(10)
             }
-        });
+        }, true);
+        this.gridView.render(this.$element().height(130));
+        this.gridView.update();
 
-        this.gridView.render(this.$element().height(60));
+        this.clock.tick(200);
 
+        this.gridView.render(this.$element());
         this.gridView.update();
         this.clock.tick(200);
 

@@ -1015,6 +1015,10 @@ export const rowsModule = {
                     }
                 },
 
+                hasHeight: function() {
+                    return !!this._hasHeight;
+                },
+
                 setLoading: function(isLoading, messageText) {
                     const that = this;
                     let loadPanel = that._loadPanel;

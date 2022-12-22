@@ -240,12 +240,18 @@ const DateBox = DropDownEditor.inherit({
     _renderDimensions: function() {
         this.callBase();
         this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option('width'));
-        this._dimensionChanged();
+
+        this._updatePopupWidth();
+        this._updatePopupHeight();
     },
 
     _dimensionChanged: function() {
-        this.callBase(arguments);
+        this.callBase();
 
+        this._updatePopupHeight();
+    },
+
+    _updatePopupHeight: function() {
         if(this._popup) {
             this._strategy._updatePopupHeight?.();
         }
