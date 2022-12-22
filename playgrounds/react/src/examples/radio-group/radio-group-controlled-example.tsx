@@ -1,13 +1,12 @@
-import { RadioGroupValue } from '@devextreme/components';
 import { RadioButton, RadioGroup } from '@devextreme/react';
 import { useCallback, useState } from 'react';
 
 const OPTIONS = [0, 1, 2, 3, 4];
 
 export function RadioGroupControlledExample() {
-  const [value, setValue] = useState<RadioGroupValue | undefined>(undefined);
+  const [value, setValue] = useState<number | undefined>(undefined);
 
-  const handleChange = useCallback((newValue?: RadioGroupValue) => {
+  const handleChange = useCallback((newValue?: number) => {
     setValue(newValue);
   }, []);
 
