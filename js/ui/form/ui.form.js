@@ -20,6 +20,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import { isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
+import resizeObserverSingleton from '../../core/resize_observer';
 import './ui.form.layout_manager';
 import {
     concatPaths,
@@ -267,6 +268,15 @@ const Form = Widget.inherit({
         this._renderValidationSummary();
 
         this._lastMarkupScreenFactor = this._targetScreenFactor || this._getCurrentScreenFactor();
+
+        const formRootElement = this.$element().get(0);
+
+        resizeObserverSingleton.unobserve(formRootElement);
+        resizeObserverSingleton.observe(formRootElement, (entry) => { this._resizeHandler(entry); });
+    },
+
+    _resizeHandler: function() {
+        this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode(), false);
     },
 
     _getCurrentScreenFactor: function() {
@@ -278,11 +288,11 @@ const Form = Widget.inherit({
         this._cachedLayoutManagers = [];
     },
 
-    _alignLabels: function(layoutManager, inOneColumn) {
+    _alignLabels: function(layoutManager, inOneColumn, excludeTabbed = true) {
         this._alignLabelsInColumn({
             $container: this.$element(),
             layoutManager,
-            excludeTabbed: true,
+            excludeTabbed,
             items: this.option('items'),
             inOneColumn
         });
@@ -298,6 +308,8 @@ const Form = Widget.inherit({
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
+
+        resizeObserverSingleton.unobserve(this.$element().get(0));
     },
 
     _renderScrollable: function() {
@@ -1146,10 +1158,6 @@ const Form = Widget.inherit({
 
     _focusTarget: function() {
         return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
-    },
-
-    _visibilityChanged: function() {
-        this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
     },
 
     _clearAutoColCountChangedTimeout: function() {

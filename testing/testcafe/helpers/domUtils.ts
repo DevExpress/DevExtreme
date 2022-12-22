@@ -1,5 +1,7 @@
 import { ClientFunction } from 'testcafe';
 
+const STYLESHEET_RULES_ID = 'stylesheetRules';
+
 function createElement(
   tagName: string,
   id: string,
@@ -31,12 +33,17 @@ export const insertStylesheetRulesToPage = ClientFunction((
   rule: string,
 ): void => {
   const styleEl = document.createElement('style');
-  styleEl.setAttribute('id', 'customStylesheetRules');
+  styleEl.setAttribute('id', STYLESHEET_RULES_ID);
 
   styleEl.innerHTML = rule;
 
   document.head.appendChild(styleEl);
-});
+}, { dependencies: { STYLESHEET_RULES_ID } });
+
+export const removeStylesheetRulesFromPage = ClientFunction((): void => {
+  const stylesheetRulesEl = document.querySelector(`#${STYLESHEET_RULES_ID}`);
+  stylesheetRulesEl?.remove();
+}, { dependencies: { STYLESHEET_RULES_ID } });
 
 export const appendElementTo = ClientFunction((
   targetContainerSelector: string,
