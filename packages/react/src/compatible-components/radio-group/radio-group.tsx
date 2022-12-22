@@ -1,4 +1,3 @@
-import { RadioGroupValue } from '@devextreme/components';
 import { compileGetter, ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
@@ -23,17 +22,17 @@ interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
   displayExpr?: string;
 }
 
-type ValueGetter = (item: ItemLike) => RadioGroupValue;
+type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
 
-export function RadioGroupCompatible<TValue extends RadioGroupValue>({
+export function RadioGroupCompatible<T>({
   items,
   itemRender,
   itemComponent: ItemComponent,
   defaultValue,
   valueExpr,
   displayExpr,
-}: CompatibleRadioGroupProps<TValue>) {
+}: CompatibleRadioGroupProps<T>) {
   const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
   const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
 
@@ -48,12 +47,13 @@ export function RadioGroupCompatible<TValue extends RadioGroupValue>({
   };
 
   return (
-    <RadioGroup defaultValue={defaultValue}>
+    <RadioGroup<T> defaultValue={defaultValue}>
       {items.map((item, index) => {
         const value = getItemValue(item);
+        const key = `${value}-${index}`;
         return (
           <RadioButton
-            key={value}
+            key={key}
             value={value}
             label={renderLabel(item, index)}
           />

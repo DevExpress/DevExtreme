@@ -12,8 +12,10 @@ import {
   RadioTemplateProps,
 } from './types';
 
-function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
-  function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps) {
+function withUncontrolledBehavior<T>(
+  RadioButton: RadioButtonRenderType<T>,
+) {
+  function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps<T>) {
     const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
       setInternalChecked(event.target.checked);
@@ -35,12 +37,12 @@ function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
   }
   return UncontrolledRadioButton;
 }
-function withRadioGroup(RadioButton: RadioButtonRenderType) {
+function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
   function CoreBoundRadioButton({
     radioGroupCore: { dispatcher, stateManager },
     value,
     ...props
-  }: CoreBoundRadioButtonProps) {
+  }: CoreBoundRadioButtonProps<T>) {
     const coreState = useCoreState(stateManager);
 
     const checked = coreState.value === value;

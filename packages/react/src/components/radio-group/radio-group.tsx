@@ -1,12 +1,12 @@
 import {
-  createRadioGroupCore, RadioGroupValue, ReadonlyProps, TemplateProps, ValueProps,
+  createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
 } from '@devextreme/components';
 import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { Props } from '../../internal/props';
 import { RadioGroupContext } from '../radio-common';
 
-function RadioGroupInternal<T extends RadioGroupValue>(props: RadioGroupProps<T>) {
+function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 

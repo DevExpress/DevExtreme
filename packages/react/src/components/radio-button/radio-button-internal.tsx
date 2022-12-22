@@ -12,10 +12,10 @@ export function DefaultLabelTemplate({ label }: LabelTemplateProps) {
   return <span>{label}</span>;
 }
 
-export function RadioButtonInternal({
+export function RadioButtonInternal<T>({
   name, value, checked, defaultChecked, onClick, onChange, label, radioTemplate,
   labelTemplate, inputId, inputRef, renderRadioComponent,
-}: RadioButtonRenderProps): JSX.Element {
+}: RadioButtonRenderProps<T>): JSX.Element {
   const RadioComponent = radioTemplate || DefaultRadioTemplate;
   const LabelComponent = labelTemplate || DefaultLabelTemplate;
 
@@ -31,7 +31,7 @@ export function RadioButtonInternal({
           name={name}
           style={{ display: 'none' }}
           type="radio"
-          value={value}
+          value={value as string}
           checked={checked}
           defaultChecked={defaultChecked}
           onClick={onClick}
