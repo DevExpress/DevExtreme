@@ -335,7 +335,7 @@ module('Work Space Week', () => {
             const bounds = this.instance.getVisibleBounds();
 
             assert.deepEqual(bounds.top, { hours: 3, minutes: 30 }, 'Top bound is OK');
-            assert.deepEqual(bounds.bottom, { hours: 8, minutes: 30 }, 'Bottom bound is OK');
+            assert.deepEqual(bounds.bottom, { hours: 9, minutes: 0 }, 'Bottom bound is OK');
         });
 
         test('Get visible bounds if hoursInterval is set', function(assert) {
