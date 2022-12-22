@@ -1,5 +1,5 @@
 {
-    "name": "@packages/jquery",
+    "name": "@devextreme/jquery",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "packages/jquery/src",
     "projectType": "library",
