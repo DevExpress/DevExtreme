@@ -154,7 +154,7 @@ export default function() {
                         name: 'header',
                         acceptedValues: [false, 1, 2, 3, 4, 5],
                         options: {
-                            opened: true,
+                            opened: true
                         },
                         locateInMenu: 'always'
                     }],

@@ -625,8 +625,8 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _dimensionChanged: function() {
-        // This part hides the popup on window resize if an editor was hidden (T1133813)
-        // Use the resize observer to close the popup after hiding the editor instead
+        // TODO: Use ResizeObserver to hide popup after editor visibility change
+        // instead of window's dimension change,
         if(hasWindow() && !this.$element().is(':visible')) {
             this.close();
             return;
