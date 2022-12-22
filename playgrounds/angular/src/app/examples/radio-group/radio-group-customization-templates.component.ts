@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: `
     <div class="example">
       <div class="example__title">
-        RadioGroup customization via components example
+        RadioGroup customization via templates example
       </div>
       <div class="example__control">
         <dx-radio-group [value]="'1'">

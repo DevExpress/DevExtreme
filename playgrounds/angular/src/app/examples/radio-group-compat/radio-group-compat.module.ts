@@ -7,6 +7,7 @@ import {
 } from '@devextreme/angular';
 import { RadioGroupCompatExampleComponent } from './radio-group-compat-example.component';
 import { RadioGroupCompatExprExampleComponent } from './radio-group-compat-expr.component';
+import { RadioGroupCompatGenericComponent } from './radio-group-compat-generic.component';
 import { RadioGroupCompatSimpleExampleComponent } from './radio-group-compat-simple.component';
 import { RadioGroupCompatTemplateExampleComponent } from './radio-group-compat-template.component';
 
@@ -21,6 +22,7 @@ const routes = [{
     RadioGroupCompatSimpleExampleComponent,
     RadioGroupCompatExprExampleComponent,
     RadioGroupCompatTemplateExampleComponent,
+    RadioGroupCompatGenericComponent,
   ],
   imports: [
     CommonModule,

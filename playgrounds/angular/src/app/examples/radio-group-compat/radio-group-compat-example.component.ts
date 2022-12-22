@@ -5,6 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: `
     <dx-radio-group-compat-simple></dx-radio-group-compat-simple>
     <dx-radio-group-compat-expr></dx-radio-group-compat-expr>
+    <dx-radio-group-compat-generic></dx-radio-group-compat-generic>
     <dx-radio-group-compat-template></dx-radio-group-compat-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

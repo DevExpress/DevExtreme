@@ -7,6 +7,7 @@ import { CustomRadioViewComponent } from './custom-components/custom-radio-view.
 import { RadioGroupCustomizationComponentsComponent } from './radio-group-customization-components.component';
 import { RadioGroupCustomizationTemplatesComponent } from './radio-group-customization-templates.component';
 import { RadioGroupExampleComponent } from './radio-group-example.component';
+import { RadioGroupGenericComponent } from './radio-group-generic.component';
 import { RadioGroupSimpleComponent } from './radio-group-simple.component';
 
 const routes = [{
@@ -20,6 +21,7 @@ const routes = [{
     RadioGroupSimpleComponent,
     RadioGroupCustomizationComponentsComponent,
     RadioGroupCustomizationTemplatesComponent,
+    RadioGroupGenericComponent,
     // custom components
     CustomLabelViewComponent,
     CustomRadioViewComponent,

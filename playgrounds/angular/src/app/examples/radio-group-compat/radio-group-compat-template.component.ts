@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
   template: `
     <div class="example">
       <div class="example__title">
-        RadioGroup simple example
+        RadioGroupCompat templates example
       </div>
       <div class="example__control">
         <dx-radio-group-compat

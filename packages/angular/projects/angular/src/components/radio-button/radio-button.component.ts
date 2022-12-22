@@ -8,8 +8,12 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import { RadioGroupValue } from '@devextreme/components';
-import { map } from 'rxjs';
+import {
+  filter,
+  map,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { AngularTemplate } from '../../internal';
 import { RadioGroupService } from '../radio-common';
 
@@ -52,7 +56,7 @@ let nextUniqueId = 0;
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioButtonComponent<T extends RadioGroupValue>
+export class RadioButtonComponent<T>
 implements OnInit, OnDestroy {
   private strategy = createRadioButtonStrategy(
     this.radioGroupService?.context$,
@@ -61,6 +65,8 @@ implements OnInit, OnDestroy {
 
   // eslint-disable-next-line no-plusplus
   private uniqueId = `dx-radio-button-${++nextUniqueId}`;
+
+  private destroy$ = new Subject<void>();
 
   @Input() id = this.uniqueId;
 
@@ -90,6 +96,9 @@ implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onClick = new EventEmitter<MouseEvent>();
 
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() onSelected = new EventEmitter<T>();
+
   checked$ = this.strategy.checked$;
 
   radioTemplateData$ = this.strategy.checked$
@@ -104,10 +113,16 @@ implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.strategy.onInit();
+    this.strategy.checked$.pipe(
+      filter((checked) => checked),
+      takeUntil(this.destroy$),
+    ).subscribe(() => { this.onSelected.emit(this.value); });
   }
 
   ngOnDestroy(): void {
     this.strategy.onDestroy();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   handleChange(event: Event): void {
