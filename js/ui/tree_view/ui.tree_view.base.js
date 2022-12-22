@@ -586,7 +586,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _fireContentReadyAction: function() {
         const dataSource = this.getDataSource();
-        const skipContentReadyAction = dataSource && !dataSource.isLoaded();
+        const skipContentReadyAction = dataSource && !dataSource.isLoaded() || this._skipContentReadyAndItemExpanded;
 
         const scrollable = this.getScrollable();
 
@@ -1012,7 +1012,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireExpandedStateUpdatedEvent: function(isExpanded, node, e) {
-        if(!this._hasChildren(node)) {
+        if(!this._hasChildren(node) || this._skipContentReadyAndItemExpanded) {
             return;
         }
 
@@ -1626,10 +1626,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    _allItemsExpandedHandler: function() {
+        this._skipContentReadyAndItemExpanded = false;
+        this._fireContentReadyAction();
+    },
+
     expandAll: function() {
-        const dataAdapter = this._dataAdapter;
-        each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
-        this.repaint();
+        const nodes = this._dataAdapter.getData();
+        const expandingPromises = [];
+
+        this._skipContentReadyAndItemExpanded = true;
+
+        // NOTE: This is needed to support animation on expandAll, but stop triggering multiple contentReady/itemExpanded events.
+        nodes.forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
+
+        Promise.allSettled(expandingPromises).then(() => this._allItemsExpanded?.());
     },
 
     collapseAll: function() {
@@ -1705,6 +1716,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _dispose: function() {
         this.callBase();
         clearTimeout(this._setFocusedItemTimeout);
+        this._allItemsExpandedHandler = null;
     }
 });
 
