@@ -12,7 +12,7 @@
       "options": {
         "script": "build",
         "outputs": [
-          "{projectRoot}/src/generated"
+          "{projectRoot}/packages/jquery/src/generated"
         ]
       }
     }
