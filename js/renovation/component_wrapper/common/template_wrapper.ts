@@ -86,7 +86,7 @@ function buildTemplateContent(
   if (data) {
     Object.keys(data).forEach((name) => {
       if (data[name] && domAdapter.isNode(data[name])) {
-        data[name] = getPublicElement($(data[name]));
+        data[name] = getPublicElement($(data[name] as Element));
       }
     });
   }
