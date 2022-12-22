@@ -576,7 +576,9 @@ const DropDownList = DropDownEditor.inherit({
             this._refreshSelected();
         }
 
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._updateListDimensions();
+
         this._contentReadyAction();
     },
 
@@ -759,7 +761,8 @@ const DropDownList = DropDownEditor.inherit({
         this.option('opened', shouldOpenPopup);
 
         if(shouldOpenPopup) {
-            this._dimensionChanged();
+            this._updatePopupWidth();
+            this._updateListDimensions();
         }
     },
 
@@ -785,13 +788,14 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._updateListDimensions();
     },
 
     _dimensionChanged: function() {
-        this.callBase(arguments);
+        this.callBase();
 
-        this._popup && this._updatePopupDimensions();
+        this._updateListDimensions();
     },
 
     _needPopupRepaint: function() {
@@ -807,7 +811,11 @@ const DropDownList = DropDownEditor.inherit({
         return needRepaint;
     },
 
-    _updatePopupDimensions: function() {
+    _updateListDimensions: function() {
+        if(!this._popup) {
+            return;
+        }
+
         if(this._needPopupRepaint()) {
             this._popup.repaint();
         }
