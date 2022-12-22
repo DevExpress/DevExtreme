@@ -28,7 +28,7 @@ test('Simple appointment should not overlap allDay appointment when specific wid
 
   await t
     .expect(scheduler.collectors.count).eql(0)
-    .expect(await element.getBoundingClientRectProperty('top')).eql(114);
+    .expect(await element.getBoundingClientRectProperty('top')).eql(104);
 }).before(async () => createScheduler({
   dataSource: allDayData,
 }));

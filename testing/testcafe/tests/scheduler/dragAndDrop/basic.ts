@@ -28,7 +28,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-    .expect(draggableAppointment.size.height).eql('23.75px')
+    .expect(draggableAppointment.size.height).eql('24.15px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
 }).before(async () => createScheduler({
