@@ -75,7 +75,10 @@ function recordMutations<TReturn>(target: Node, func: () => TReturn): [
   return result;
 }
 
-function buildTemplateContent(props: TemplateWrapperProps, container: Element): ChildNode[] {
+function buildTemplateContent(
+  props: TemplateWrapperProps,
+  container: DxElement<Element>,
+): ChildNode[] {
   const {
     data, index,
   } = props.model ?? { data: {} };
@@ -83,7 +86,7 @@ function buildTemplateContent(props: TemplateWrapperProps, container: Element): 
   if (data) {
     Object.keys(data).forEach((name) => {
       if (data[name] && domAdapter.isNode(data[name])) {
-        data[name] = getPublicElement($(data[name]));
+        data[name] = getPublicElement($(data[name] as Element));
       }
     });
   }
@@ -130,11 +133,10 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
       throw new Error('Template must have parent element');
     }
 
-    const container = getPublicElement($(node.parentElement));
-
+    const container = node.parentElement;
     const [content, mutations] = recordMutations(
-      container,
-      () => buildTemplateContent(this.props, container),
+      node.parentElement,
+      () => buildTemplateContent(this.props, getPublicElement($(container))),
     );
 
     this.__templateCleaner();
