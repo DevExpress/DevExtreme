@@ -371,76 +371,48 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
+const checkOverlay = (overlayPoint, currentPoint, radiusPoint) => {
+    return (overlayPoint.x - radiusPoint <= currentPoint.x && overlayPoint.x + radiusPoint >= currentPoint.x) &&
+        (overlayPoint.y - radiusPoint <= currentPoint.y && overlayPoint.y + radiusPoint >= currentPoint.y);
+
+};
+
+const cycleComparison = (startCounter, points, currentPoint) => {
+    const radiusPoint = currentPoint._options.size / 2;
+
+    for(let j = startCounter; j < points.length; j++) {
+        if(checkOverlay(points[j], currentPoint, radiusPoint)) {
+            return true;
+        }
+    }
+    return false;
+};
+
 function applyAutoHidePointMarkers(filteredSeries) {
     let overlapPoints = [];
-    filteredSeries.forEach((s, index, arraySeries)=> {
-
+    filteredSeries.reduceRight((_, s) => {
         s.autoHidePointMarkers = false;
 
         if(s.autoHidePointMarkersEnabled()) {
             let checkOverlap = 0;
-            // debugger;
+            checkOverlap = 0;
             s._points.forEach(point => {
 
-                for(let i = 0; i < overlapPoints.length; i++) {
-                    if((overlapPoints[i].x - 5 <= point.x && overlapPoints[i].x + 5 >= point.x) && (overlapPoints[i].y - 5 <= point.y && overlapPoints[i].y + 5 > point.y)) {
-                        checkOverlap++;
-                    }
-                    if(checkOverlap === s._points.length) {
-                        // console.log('скрытие');
-                        arraySeries[index - 1].autoHidePointMarkers = true;
-                        break;
-                    }
+                if(cycleComparison(0, overlapPoints, point)) {
+                    checkOverlap++;
                 }
-                // overlapPoints.forEach(overlapPoint => {
-                //     if((overlapPoint.x - 5 <= point.x && overlapPoint.x + 5 >= point.x) && (overlapPoint.y - 5 <= point.y && overlapPoint.y + 5 > point.y)) {
-                //         checkOverlap++;
-                //     }
-                // });
             });
-
 
             if(checkOverlap < s._points.length) {
                 overlapPoints = overlapPoints.concat(s._points);
             }
 
-            // if(checkOverlap === s._points.length) {
-            //     console.log('скрытие');
-            //     arraySeries[index - 1].autoHidePointMarkers = true;
-            // }
-
+            if(checkOverlap >= s._points.length) {
+                s.autoHidePointMarkers = true;
+            }
         }
-    });
+    }, null);
 }
-
-// function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, argAxis) {
-//     const argAxisType = argAxis.getOptions().type;
-//     filteredSeries.forEach(s => {
-//         const seriesIndex = allSeries.indexOf(s);
-
-
-//         s.autoHidePointMarkers = false;
-//         const tickCount = argAxis.getTicksValues().majorTicksValues.length;
-//         if(s.autoHidePointMarkersEnabled() && (argAxisType === DISCRETE || overloadedSeries[seriesIndex].pointsCount > tickCount)) {
-//             for(const index in overloadedSeries[seriesIndex]) {
-//                 const i = parseInt(index);
-//                 if(isNaN(i) || overloadedSeries[seriesIndex].total / overloadedSeries[seriesIndex].continuousSeries < 3) {
-//                     continue;
-//                 }
-//                 if(i === seriesIndex) {
-//                     if(overloadedSeries[i][i] * 2 >= overloadedSeries[i].pointsCount) {
-//                         s.autoHidePointMarkers = true;
-//                         break;
-//                     }
-//                 } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount) {
-//                     s.autoHidePointMarkers = true;
-//                     break;
-//                 }
-//             }
-//         }
-
-//     });
-// }
 
 function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
     const area = canvas.width * canvas.height;
@@ -956,8 +928,6 @@ const dxChart = AdvancedChart.inherit({
                 points.sort(sortingCallback);
                 updateMarkersInfo(points, markersInfo.overloadedSeries);
                 applyAutoHidePointMarkers(series);
-                // applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
-
             }
         });
     },
