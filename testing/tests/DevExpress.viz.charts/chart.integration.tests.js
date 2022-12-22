@@ -2282,7 +2282,75 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
     });
 
     assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
-    assert.notOk(chart.getAllSeries()[1].getVisiblePoints()[0].graphic); // intersection algorithm
+});
+
+QUnit.test('check for automatic hiding of points', function(assert) {
+    const dataSource = [ {
+        country: 'USA',
+        hydro: 10,
+        oil: 11,
+        gas: 10.5,
+        coal: 40,
+        nuclear: 50
+    },
+    {
+        country: 'China',
+        hydro: 10,
+        oil: 20,
+        gas: 10,
+        coal: 20.2,
+        nuclear: 50
+    },
+    {
+        country: 'Russia',
+        hydro: 10,
+        oil: 20,
+        gas: 20.3,
+        coal: 10.5,
+        nuclear: 50
+    },
+    {
+        country: 'Japan',
+        hydro: 10,
+        oil: 20,
+        gas: 30,
+        coal: 19.8,
+        nuclear: 10
+    },
+    {
+        country: 'India',
+        hydro: 10,
+        oil: 20,
+        gas: 19.3,
+        coal: 40,
+        nuclear: 11
+    },
+    {
+        country: 'Germany',
+        hydro: 10,
+        oil: 20,
+        gas: 21,
+        coal: 10.2,
+        nuclear: 50
+    }, ];
+
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource,
+        commonSeriesSettings: {
+            argumentField: 'country',
+        },
+        series: [
+            { valueField: 'hydro', name: 'Hydro-electric', point: { size: 14 } },
+            { valueField: 'oil', name: 'Oil', point: { size: 14 } },
+            { valueField: 'gas', name: 'Natural gas', point: { size: 14 } },
+            { valueField: 'coal', name: 'Coal', point: { size: 14 } },
+            { valueField: 'nuclear', name: 'Nuclear', point: { size: 14 } }
+        ],
+    });
+
+    assert.ok(chart.getAllSeries()[2].getVisiblePoints()[0].graphic);
+    assert.ok(chart.getAllSeries()[3].getVisiblePoints()[0].graphic);
+    assert.ok(chart.getAllSeries()[4].getVisiblePoints()[0].graphic);
 });
 
 QUnit.test('don\'t hide scatter points (T929480)', function(assert) {
