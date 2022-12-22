@@ -91,7 +91,7 @@ export function RadioGroupCompatibleExample() {
         </div>
         <div className="example__control">
           <RadioGroupCompatible
-            defaultValue={objectItems3[2].text}
+            defaultValue={objectItems3[2]}
             items={objectItems3}
             itemRender={(item, index) => (
               <strong style={{ color: item.text }}>
@@ -109,7 +109,7 @@ export function RadioGroupCompatibleExample() {
         </div>
         <div className="example__control">
           <RadioGroupCompatible
-            defaultValue={objectItems3[2].text}
+            defaultValue={objectItems3[1]}
             items={objectItems3}
             itemComponent={CustomItemComponent}
           />

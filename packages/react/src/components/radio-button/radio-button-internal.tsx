@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import {
   LabelTemplateProps,
   RadioButtonRenderProps,
@@ -13,11 +14,15 @@ export function DefaultLabelTemplate({ label }: LabelTemplateProps) {
 }
 
 export function RadioButtonInternal<T>({
-  name, value, checked, defaultChecked, onClick, onChange, label, radioTemplate,
+  name, value, checked, defaultChecked, onSelected, onChange, onClick, label, radioTemplate,
   labelTemplate, inputId, inputRef, renderRadioComponent,
 }: RadioButtonRenderProps<T>): JSX.Element {
   const RadioComponent = radioTemplate || DefaultRadioTemplate;
   const LabelComponent = labelTemplate || DefaultLabelTemplate;
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    onSelected?.(value);
+    onChange?.(event);
+  };
 
   return (
     <span>
@@ -34,8 +39,8 @@ export function RadioButtonInternal<T>({
           value={value as string}
           checked={checked}
           defaultChecked={defaultChecked}
+          onChange={handleChange}
           onClick={onClick}
-          onChange={onChange}
         />
         {renderRadioComponent ? (
           renderRadioComponent(RadioComponent)

@@ -46,8 +46,8 @@ function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
     const coreState = useCoreState(stateManager);
 
     const checked = coreState.value === value;
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-      props.onChange?.(event);
+    const handleSelected = () => {
+      props.onSelected?.(value);
       dispatcher.dispatch('updateValue', {
         value,
       });
@@ -59,7 +59,7 @@ function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
         {...props}
         value={value}
         checked={checked}
-        onChange={handleChange}
+        onSelected={handleSelected}
       />
     );
   }

@@ -11,7 +11,7 @@ export interface LabelTemplateProps {
   label: LabelType;
 }
 
-export type ChangedEventHandler<T> = (value: T) => void;
+export type SelectedEventHandler<T> = (value: T) => void;
 export interface RadioButtonProps<T> {
   value: T;
   name?: string;
@@ -21,12 +21,11 @@ export interface RadioButtonProps<T> {
   radioTemplate?: ComponentType<RadioTemplateProps>;
   labelTemplate?: ComponentType<LabelTemplateProps>;
   onChange?: React.ChangeEventHandler;
-  onChanged?: ChangedEventHandler<T>;
+  onSelected?: SelectedEventHandler<T>;
   onClick?: React.MouseEventHandler;
 }
 
-export interface RadioButtonRenderProps<T>
-  extends RadioButtonProps<T> {
+export interface RadioButtonRenderProps<T> extends RadioButtonProps<T> {
   inputId: string;
   inputRef: React.ForwardedRef<HTMLInputElement>;
   renderRadioComponent?: (
