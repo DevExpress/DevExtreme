@@ -3993,7 +3993,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
     });
 
     // T1131810
-    QUnit.test('document.activeElement must be reseted on iPad, when unfocusing lookup cell after its value has been changed', function(assert) {
+    QUnit.skip('document.activeElement must be reseted on iPad, when unfocusing lookup cell after its value has been changed', function(assert) {
         try {
             // arrange
             this.realDeviceMock = sinon.stub(devices, 'real').returns({ mac: true });
