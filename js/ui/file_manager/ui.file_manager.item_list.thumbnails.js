@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
+import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
@@ -161,6 +162,13 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _resetScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
+        setTimeout(() => this._itemList.getScrollable()?.scrollTo(0));
+    }
+
     _setSelectedItemKeys(itemKeys) {
         this._itemList.option('selectedItemKeys', itemKeys);
     }
@@ -188,10 +196,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         this._refreshDeferred = new Deferred();
         return this._refreshDeferred.promise();
-    }
-
-    _getScrollable() {
-        return this._itemList.getScrollable();
     }
 
     _deselectItem(item) {

@@ -5,7 +5,6 @@ import { addNamespace } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
 import devices from '../../core/devices';
-import { hasWindow } from '../../core/utils/window';
 
 import CustomStore from '../../data/custom_store';
 import Widget from '../widget/ui.widget';
@@ -177,15 +176,6 @@ class FileManagerItemListBase extends Widget {
     }
 
     _resetFocus() { }
-
-    _resetScrollTopPosition() {
-        if(!hasWindow()) {
-            return;
-        }
-        setTimeout(() => this._getScrollable()?.scrollTo(0));
-    }
-
-    _getScrollable() { }
 
     _getItemThumbnail(fileInfo) {
         const itemThumbnailGetter = this.option('getItemThumbnail');

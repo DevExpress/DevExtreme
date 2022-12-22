@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { extendAttributes, getDisplayFileSize } from './ui.file_manager.common';
-import { isString, isFunction, isDefined, isEmptyObject } from '../../core/utils/type';
+import { isString, isFunction, isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
@@ -456,7 +456,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     refresh(options, operation) {
-        const actualOptions = {};
+        const actualOptions = {
+            dataSource: this._createDataSource()
+        };
 
         if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
             if(isDefined(options.focusedItemKey)) {
@@ -466,29 +468,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             }
         }
 
-        this._scrollSafeDataGridRefresh(actualOptions, operation);
+        const hasNoScrollTarget = !isDefined(actualOptions.focusedRowKey) && actualOptions.focusedRowIndex === -1;
+        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
+            actualOptions.paging = {
+                pageIndex: 0
+            };
+        }
+        this._filesView.option(actualOptions);
 
         this._refreshDeferred = new Deferred();
         return this._refreshDeferred.promise();
-    }
-
-    _scrollSafeDataGridRefresh(options, operation) {
-        const hasNoScrollTarget = !isDefined(options.focusedRowKey) && options.focusedRowIndex === -1;
-        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
-            this._filesView.option('autoNavigateToFocusedRow', false);
-        }
-        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
-            this._needResetScrollPosition = true;
-        }
-        if(!isEmptyObject(options)) {
-            this._filesView.option(options);
-        }
-        this._filesView.option('dataSource', this._createDataSource());
-        this._filesView.option('autoNavigateToFocusedRow', true);
-    }
-
-    _getScrollable() {
-        return this._filesView.getScrollable();
     }
 
     getSelectedItems() {
