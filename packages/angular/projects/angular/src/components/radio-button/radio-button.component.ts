@@ -8,12 +8,7 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import {
-  filter,
-  map,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { map } from 'rxjs';
 import { AngularTemplate } from '../../internal';
 import { RadioGroupService } from '../radio-common';
 
@@ -36,7 +31,7 @@ let nextUniqueId = 0;
         [value]="value"
         [attr.checked]="(checked$ | async) ? 'true' : null"
         (click)="onClick.emit($event)"
-        (change)="handleChange($event)"
+        (change)="handleChange()"
       />
       <dx-dynamic-template
         *ngIf="radioTemplateData$ | async as templateData"
@@ -66,8 +61,6 @@ implements OnInit, OnDestroy {
   // eslint-disable-next-line no-plusplus
   private uniqueId = `dx-radio-button-${++nextUniqueId}`;
 
-  private destroy$ = new Subject<void>();
-
   @Input() id = this.uniqueId;
 
   @Input() value!: T;
@@ -91,9 +84,6 @@ implements OnInit, OnDestroy {
   }
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
-  @Output() onChange = new EventEmitter<Event>();
-
-  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onClick = new EventEmitter<MouseEvent>();
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
@@ -113,20 +103,14 @@ implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.strategy.onInit();
-    this.strategy.checked$.pipe(
-      filter((checked) => checked),
-      takeUntil(this.destroy$),
-    ).subscribe(() => { this.onSelected.emit(this.value); });
   }
 
   ngOnDestroy(): void {
     this.strategy.onDestroy();
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
-  handleChange(event: Event): void {
+  handleChange(): void {
     this.strategy.handleChange();
-    this.onChange.emit(event);
+    this.onSelected.emit(this.value);
   }
 }
