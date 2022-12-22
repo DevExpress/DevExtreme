@@ -31,7 +31,8 @@ function getData(rowCount, colCount): Record<string, string>[] {
 }
 
 fixture`Scrolling`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .beforeEach(async (t) => { await t.maximizeWindow(); });
 
 test('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -901,8 +902,50 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
   });
 });
 
+// T1129252
+test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const scrollToBottom = async () => {
+    await dataGrid.scrollTo({ y: 100000 });
+    await t.expect(dataGrid.isReady()).ok();
+  };
+
+  await scrollToBottom();
+
+  // act
+  await dataGrid.option({
+    focusedRowIndex: -1,
+    dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  } as any);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(await takeScreenshot('grid-virtual-scrolling-T1129252.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 250,
+  keyExpr: 'id',
+  dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  columnWidth: 100,
+  focusedRowEnabled: true,
+  focusedRowIndex: 99,
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../containerAspNetData.html'));
+  .page(url(__dirname, '../containerAspNet.html'))
+  .beforeEach(async (t) => {
+    await t.maximizeWindow();
+  });
 
 test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -913,12 +956,15 @@ test('Scroll to the bottom after expand several group', async (t) => {
   };
 
   // act
+  await t.wait(200);
   await t.expect(dataGrid.hasScrollable()).ok();
   await scrollToBottom();
   await scrollToBottom();
   await scrollToBottom();
   await dataGrid.apiExpandRow(['Contoso York Store']);
+  await t.wait(200);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
+  await t.wait(200);
   await scrollToBottom();
   await scrollToBottom();
   await dataGrid.scrollBy({ y: -1 });
@@ -926,9 +972,12 @@ test('Scroll to the bottom after expand several group', async (t) => {
 
   // assert
   const visibleRows = await dataGrid.apiGetVisibleRows();
-  await t
-    .expect(visibleRows[0].key)
-    .eql(932043);
+
+  if (!visibleRows.length) {
+    await t
+      .expect(visibleRows[0].key)
+      .within(897075, 932043);
+  }
 })
   .before(async () => createWidget('dxDataGrid', () => ({
     width: 1000,
@@ -971,6 +1020,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
       caption: 'Product',
       dataField: 'ProductName',
     }],
+    loadingTimeout: 0,
   })));
 
 test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {

@@ -2,13 +2,15 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+import { changeTheme } from '../../helpers/changeTheme';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture`Search Panel`
-  .page(url(__dirname, '../containerMaterial.html'))
+  .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 
 // T1046688
-test.skip('searchPanel has correct view inside masterDetail', async (t) => {
+safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -25,8 +27,10 @@ test.skip('searchPanel has correct view inside masterDetail', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-})
-  .before(() => createWidget('dxDataGrid', {
+}, [800, 800]).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxDataGrid', {
     dataSource: [{ column1: 'first' }],
     columns: ['column1'],
     masterDetail: {
@@ -45,4 +49,5 @@ test.skip('searchPanel has correct view inside masterDetail', async (t) => {
           .appendTo(container);
       },
     },
-  }));
+  }, true);
+});

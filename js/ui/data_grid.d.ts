@@ -505,7 +505,18 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any,
 /**
  * @namespace DevExpress.ui
  */
-export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
+interface GridBaseOptionsBlank<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
+    /**
+     * @hidden
+     * @docid GridBaseOptions.focusStateEnabled
+     */
+    focusStateEnabled?: any;
+}
+
+/**
+ * @namespace DevExpress.ui
+ */
+export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = Omit<GridBaseOptionsBlank<TComponent, TRowData, TKey>, 'focusStateEnabled'> & {
     /**
      * @docid
      * @default false
@@ -1049,7 +1060,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      */
     syncLookupFilterValues?: boolean;
-}
+};
 
 /**
  * @public
@@ -2412,7 +2423,7 @@ export interface ColumnBase<TRowData = any> {
      * @type_function_return Filter expression
      * @public
      */
-    calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+    calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function);
     /**
      * @public
      */
@@ -3198,7 +3209,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
  * @namespace DevExpress.ui
  * @public
  */
-export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
+export type dxDataGridOptions<TRowData = any, TKey = any> = GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> & {
     /**
      * @docid
      * @type Array<dxDataGridColumn|string>
@@ -3569,7 +3580,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @public
      */
     toolbar?: Toolbar;
-}
+};
 
 /** @public */
 export type ExcelCellInfo<TRowData = any, TKey = any> = {

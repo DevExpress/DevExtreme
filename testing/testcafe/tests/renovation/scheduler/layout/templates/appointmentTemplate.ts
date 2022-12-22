@@ -28,7 +28,8 @@ fixture('Layout:Templates:appointmentTemplate');
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     },
-  ).before(async (_, { platform }) => {
+  ).before(async (t, { platform }) => {
+    await restoreBrowserSize(t);
     // WA for Inferno generator.
     const appointmentTemplate = platform === 'jquery'
       ? ClientFunction((appointment) => {

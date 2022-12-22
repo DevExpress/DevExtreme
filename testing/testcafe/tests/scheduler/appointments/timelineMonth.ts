@@ -1,12 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Appointments in TimelineMonth`
+fixture.disablePageReloads`Appointments in TimelineMonth`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Appointments should have correct order', async (t) => {
+test('Appointments should have correct order', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t

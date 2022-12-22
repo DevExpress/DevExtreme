@@ -12,7 +12,7 @@ import 'ui/data_grid';
 import 'data/odata/store';
 
 import $ from 'jquery';
-import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
@@ -4424,6 +4424,71 @@ QUnit.module('Deferred selection', {
 
         // assert
         assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter is empty');
+    });
+});
+
+QUnit.module('Selection with virtual scrolling', {
+    beforeEach: function() {
+        this.setupDataGrid = function(options) {
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'virtualScrolling'], { initDefaultOptions: true, options: options });
+        };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        teardownModule.apply(this);
+    }
+}, () => {
+    // T1130614
+    QUnit.test('Select rows with shift when data of complex structure', function(assert) {
+        // arrange
+        const data = generateItems(100).map((item) => ({
+            id: item.id,
+            data: {
+                field1: item.field1,
+                field2: item.field2
+            }
+        }));
+
+        this.setupDataGrid({
+            dataSource: createDataSource(data, { key: 'id' }),
+            selection: {
+                mode: 'multiple'
+            },
+            scrolling: {
+                mode: 'virtual'
+            },
+            paging: {
+                pageSize: 2
+            },
+            columns: ['field1', 'fiedl2']
+        });
+
+        this.clock.tick(100);
+
+        // act
+        this.selectionController.changeItemSelection(1);
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2], 'selectedRowKeys');
+
+        // act
+        // scroll simulation
+        this.dataController._repaintChangesOnly = true;
+        this.pageIndex(2);
+        this.clock.tick(100);
+        this.dataController._repaintChangesOnly = undefined;
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2], 'selectedRowKeys');
+        assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
+
+        // act
+        this.selectionController.changeItemSelection(1, { shift: true });
+        this.clock.tick(100);
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2, 6, 5, 4, 3], 'selectedRowKeys');
     });
 });
 

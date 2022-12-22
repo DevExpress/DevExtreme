@@ -1,12 +1,11 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - DataSource loading`
+fixture.disablePageReloads`Scheduler - DataSource loading`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('it should correctly load items with post processing', async (t) => {
+test('it should correctly load items with post processing', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment0 = scheduler.getAppointment('appt-0');
 

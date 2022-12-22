@@ -1,20 +1,19 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { getScreenshotName } from '../timezoneTestingUtils';
 import createWidget from '../../../../helpers/createWidget';
 import SelectBox from '../../../../model/selectBox';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Recurrent appointments without timezone in scheduler with timezone`
+fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
   .page(url(__dirname, '../../../container.html'));
 
 const SELECT_SELECTOR = '#container';
 const SCHEDULER_SELECTOR = '#otherContainer';
 const SCREENSHOT_BASE_NAME = 'without-timezone-recurrent';
 const TEST_TIMEZONES = ['Etc/GMT-10', 'Etc/GMT+1', 'Etc/GMT+10'];
-const TEST_CURSOR_OPTIONS = { speed: 0.1 };
+const TEST_CURSOR_OPTIONS = { speed: 0.5 };
 
 const createTimezoneSelect = async (
   selector: string,
@@ -43,7 +42,7 @@ const selectTimezoneInUI = async (t: TestController, selectBox: SelectBox, timez
   await t.click(timezonesList.getItem(timezoneIdx).element, TEST_CURSOR_OPTIONS);
 };
 
-safeSizeTest('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
+test('Should correctly display the recurrent weekly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -83,7 +82,7 @@ safeSizeTest('Should correctly display the recurrent weekly appointment without 
   }, false, SCHEDULER_SELECTOR);
 });
 
-safeSizeTest('Should correctly display the recurrent monthly appointment without timezone', async (t) => {
+test('Should correctly display the recurrent monthly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -123,7 +122,7 @@ safeSizeTest('Should correctly display the recurrent monthly appointment without
   }, false, SCHEDULER_SELECTOR);
 });
 
-safeSizeTest('Should correctly display the recurrent yearly appointment without timezone', async (t) => {
+test('Should correctly display the recurrent yearly appointment without timezone', async (t) => {
   const selectBox = new SelectBox(SELECT_SELECTOR);
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -163,7 +162,7 @@ safeSizeTest('Should correctly display the recurrent yearly appointment without 
   }, false, SCHEDULER_SELECTOR);
 });
 
-safeSizeTest('Should correctly display morning weekly recurrent appointment in a greater timezone.', async (t) => {
+test('Should correctly display morning weekly recurrent appointment in a greater timezone.', async (t) => {
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -192,7 +191,7 @@ safeSizeTest('Should correctly display morning weekly recurrent appointment in a
   }, false, SCHEDULER_SELECTOR);
 });
 
-safeSizeTest('Should correctly display \'corner\' weekly recurrent appointments in a greater timezone.', async (t) => {
+test('Should correctly display \'corner\' weekly recurrent appointments in a greater timezone.', async (t) => {
   const schedulerWorkspace = new Scheduler(SCHEDULER_SELECTOR).workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

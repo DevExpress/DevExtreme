@@ -488,6 +488,7 @@ const Overlay = Widget.inherit({
 
             if(this.option('templatesRenderAsynchronously')) {
                 this._stopShowTimer();
+                // NOTE: T390360, T386038
                 this._asyncShowTimeout = setTimeout(show);
             } else {
                 show();
@@ -568,7 +569,6 @@ const Overlay = Widget.inherit({
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
-
                 this._animateHiding();
             };
 
@@ -852,6 +852,8 @@ const Overlay = Widget.inherit({
             transclude,
             onRendered: () => {
                 whenContentRendered.resolve();
+
+                // NOTE: T1114344
                 if(this.option('templatesRenderAsynchronously')) {
                     this._dimensionChanged();
                 }
@@ -1076,7 +1078,6 @@ const Overlay = Widget.inherit({
 
         this._renderVisibility(false);
         this._stopShowTimer();
-
         this._cleanFocusState();
     },
 

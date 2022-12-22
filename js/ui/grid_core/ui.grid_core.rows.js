@@ -870,12 +870,12 @@ export const rowsModule = {
                         that.setLoading(isLoading, messageText);
                     });
 
-                    dataController.dataSourceChanged.add(function() {
-                        if(that._scrollLeft >= 0) {
-                            that._handleScroll({
-                                component: that.getScrollable(),
+                    dataController.dataSourceChanged.add(() => {
+                        if(this._scrollLeft >= 0 && !this._dataController.isLoading()) {
+                            this._handleScroll({
+                                component: this.getScrollable(),
                                 forceUpdateScrollPosition: true,
-                                scrollOffset: { top: that._scrollTop, left: that._scrollLeft }
+                                scrollOffset: { top: this._scrollTop, left: this._scrollLeft }
                             });
                         }
                     });
@@ -1010,6 +1010,10 @@ export const rowsModule = {
                     if(isDefined(height) && $element) {
                         setHeight($element, height);
                     }
+                },
+
+                hasHeight: function() {
+                    return !!this._hasHeight;
                 },
 
                 setLoading: function(isLoading, messageText) {

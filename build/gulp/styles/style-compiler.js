@@ -13,6 +13,7 @@ const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
 
 const cleanCssOptions = require('../../../themebuilder-scss/src/data/clean-css-options.json');
+const { sizes, materialColors, materialModes, genericColors } = require('./theme-options');
 const functions = require('../gulp-data-uri').sassFunctions;
 const starLicense = require('../header-pipes').starLicense;
 
@@ -68,11 +69,6 @@ function generateScssBundleName(theme, size, color, mode) {
 }
 
 function generateScssBundles(bundlesFolder, getBundleContent) {
-    const sizes = ['default', 'compact'];
-    const materialColors = ['blue', 'lime', 'orange', 'purple', 'teal'];
-    const materialModes = ['light', 'dark'];
-    const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
-
     const saveBundle = (theme, size, color, mode) => {
         const bundleName = generateScssBundleName(theme, size, color, mode);
         const content = getBundleContent(theme, size, color, mode);

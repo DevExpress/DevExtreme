@@ -8,6 +8,7 @@ export type WidgetName =
 'dxCheckBox' |
 'dxColorBox' |
 'dxDropDownButton' |
+'dxDraggable' |
 'dxTabPanel' |
 'dxForm' |
 'dxFilterBuilder' |
@@ -31,6 +32,7 @@ export type WidgetName =
 'dxMenu' |
 'dxPopup' |
 'dxSelectBox' |
+'dxSortable' |
 'dxButton' |
 'dxTextBox' |
 'dxTextArea' |
@@ -44,7 +46,8 @@ export type WidgetName =
 'dxNumberBox' |
 'dxValidator' |
 'dxHtmlEditor' |
-'dxFileUploader';
+'dxFileUploader' |
+'dxDropDownBox';
 
 export default async function createWidget(
   widgetName: WidgetName,

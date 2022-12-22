@@ -1,17 +1,16 @@
 import createWidget from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:Editing`
+fixture.disablePageReloads`Agenda:Editing`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('It should be possible to delete an appointment', async (t) => {
+test('It should be possible to delete an appointment', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
-    .click(scheduler.getAppointment('App 1').element, { speed: 0.1 })
-    .click(scheduler.appointmentTooltip.deleteButton, { speed: 0.1 })
+    .click(scheduler.getAppointment('App 1').element)
+    .click(scheduler.appointmentTooltip.deleteButton)
     .expect(scheduler.getAppointmentCount())
     .eql(3);
 }).before(async () => {
@@ -40,7 +39,7 @@ safeSizeTest('It should be possible to delete an appointment', async (t) => {
   }, true);
 });
 
-safeSizeTest('It should be possible to change the data source of agenda resources', async (t) => {
+test('It should be possible to change the data source of agenda resources', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
