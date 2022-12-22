@@ -11,6 +11,7 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay/ui.overlay';
 import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 
 import 'generic_light.css!';
@@ -1645,6 +1646,21 @@ QUnit.module('popup integration', () => {
 
         assert.roughEqual(overlayContentRect.top, editorRect.bottom, 1.01, 'top position is correct');
         assert.roughEqual(overlayContentRect.left, editorRect.left, 1.01, 'left position is correct');
+    });
+
+    QUnit.test('popup should be closed on resize if the editor is hidden (T1133813)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            opened: true
+        });
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+        $dropDownEditor.css('display', 'none');
+
+        assert.strictEqual(instance.option('opened'), true, 'popup is opened');
+
+        resizeCallbacks.fire();
+
+        assert.strictEqual(instance.option('opened'), false, 'popup is closed');
     });
 
     QUnit.test('onPopupInitialized', function(assert) {
