@@ -4,7 +4,6 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
-import pointerEvents from '../../events/pointer';
 import positionUtils from '../../animation/position';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 import browser from '../../core/utils/browser';
@@ -20,7 +19,7 @@ const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
 const ROW_CLASS = 'dx-row';
 const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
-const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
+const UPDATE_FOCUS_EVENTS = addNamespace(['focusin', clickEventName].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
 
 const EditorFactory = modules.ViewController.inherit({
@@ -69,7 +68,6 @@ const EditorFactory = modules.ViewController.inherit({
         const isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
         that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
-
         clearTimeout(that._updateFocusTimeoutID);
 
         that._updateFocusTimeoutID = setTimeout(function() {
