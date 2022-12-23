@@ -1,3 +1,3 @@
-export * from './dynamic-template.component';
-export * from './dynamic-template.module';
-export * from './view.component';
+export { DynamicTemplateComponent } from './dynamic-template.component';
+export { DynamicTemplateModule } from './dynamic-template.module';
+export { ViewComponent } from './view.component';
