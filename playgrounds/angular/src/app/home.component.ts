@@ -4,8 +4,9 @@ import { AppRoutes } from './routing/app.routes';
 @Component({
   selector: 'app-home',
   template: `
+    <a [routerLink]="'/' + appRoutes.radioButton">RadioButton examples</a>
     <a [routerLink]="'/' + appRoutes.radioGroup">RadioGroup examples</a>
-    <a [routerLink]="'/' + appRoutes.radioGroupCompat">RadioGroup compatible examples</a>
+    <a [routerLink]="'/' + appRoutes.radioGroupCompat">RadioGroupCompat examples</a>
   `,
   styles: [`
     :host {

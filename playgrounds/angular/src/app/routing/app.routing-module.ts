@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RadioButtonExampleModule } from '../examples/radio-button';
 import { RadioGroupExampleModule } from '../examples/radio-group';
 import { RadioGroupCompatExampleModule } from '../examples/radio-group-compat';
 import { HomeComponent } from '../home.component';
@@ -9,6 +10,10 @@ const routes: Routes = [
   {
     path: AppRoutes.home,
     component: HomeComponent,
+  },
+  {
+    path: AppRoutes.radioButton,
+    loadChildren: () => RadioButtonExampleModule,
   },
   {
     path: AppRoutes.radioGroup,

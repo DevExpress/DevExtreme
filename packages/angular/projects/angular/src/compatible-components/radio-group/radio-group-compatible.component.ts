@@ -1,14 +1,13 @@
 import {
   ChangeDetectionStrategy, Component, ContentChild, Input,
 } from '@angular/core';
-import { RadioGroupValue } from '@devextreme/components/src';
 import { compileGetter, ItemLike } from '@devextreme/interim';
 import { TemplateCompatibleDirective } from '../../compatible-directives/template';
 import { RadioGroupBaseComponent } from '../../components/radio-common';
 
 // TODO: Move these to components package
 //  because these types equal to similar types in React RG compatible component.
-type ValueGetter = <T extends RadioGroupValue>(item: ItemLike) => T;
+type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
 
 @Component({
@@ -28,7 +27,7 @@ type LabelGetter = (item: ItemLike) => string;
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioGroupCompatibleComponent<T extends RadioGroupValue>
+export class RadioGroupCompatibleComponent<T>
   extends RadioGroupBaseComponent<T> {
   @Input() value?: T;
 

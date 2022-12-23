@@ -8,7 +8,6 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import { RadioGroupValue } from '@devextreme/components';
 import { map } from 'rxjs';
 import { AngularTemplate } from '../../internal';
 import { RadioGroupService } from '../radio-common';
@@ -32,7 +31,7 @@ let nextUniqueId = 0;
         [value]="value"
         [attr.checked]="(checked$ | async) ? 'true' : null"
         (click)="onClick.emit($event)"
-        (change)="handleChange($event)"
+        (change)="handleChange()"
       />
       <dx-dynamic-template
         *ngIf="radioTemplateData$ | async as templateData"
@@ -52,7 +51,7 @@ let nextUniqueId = 0;
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioButtonComponent<T extends RadioGroupValue>
+export class RadioButtonComponent<T>
 implements OnInit, OnDestroy {
   private strategy = createRadioButtonStrategy(
     this.radioGroupService?.context$,
@@ -85,10 +84,10 @@ implements OnInit, OnDestroy {
   }
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
-  @Output() onChange = new EventEmitter<Event>();
+  @Output() onClick = new EventEmitter<MouseEvent>();
 
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
-  @Output() onClick = new EventEmitter<MouseEvent>();
+  @Output() onSelected = new EventEmitter<T>();
 
   checked$ = this.strategy.checked$;
 
@@ -110,8 +109,8 @@ implements OnInit, OnDestroy {
     this.strategy.onDestroy();
   }
 
-  handleChange(event: Event): void {
+  handleChange(): void {
     this.strategy.handleChange();
-    this.onChange.emit(event);
+    this.onSelected.emit(this.value);
   }
 }

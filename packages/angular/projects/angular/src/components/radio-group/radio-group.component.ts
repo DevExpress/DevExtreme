@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import {
   createRadioGroupCore,
-  RadioGroupValue,
   ReadonlyProps,
   TemplateProps,
   ValueProps,
@@ -15,7 +14,7 @@ import { filter, map } from 'rxjs';
 import { doIfContextExist, Inputs } from '../../internal';
 import { RadioGroupBaseComponent, RadioGroupService } from '../radio-common';
 
-export type RadioGroupInputs<T extends RadioGroupValue> =
+export type RadioGroupInputs<T> =
   Inputs<ValueProps<T>, ReadonlyProps, TemplateProps>;
 
 @Component({
@@ -28,7 +27,7 @@ export type RadioGroupInputs<T extends RadioGroupValue> =
   providers: [RadioGroupService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioGroupComponent<T extends RadioGroupValue>
+export class RadioGroupComponent<T>
   extends RadioGroupBaseComponent<T>
   implements OnInit, RadioGroupInputs<T> {
   private inputValue?: T;
