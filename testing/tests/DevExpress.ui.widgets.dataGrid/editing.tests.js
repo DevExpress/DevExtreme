@@ -15700,6 +15700,46 @@ QUnit.module('Editing with validation', {
             }
         });
     });
+
+    // T1135692
+    QUnit.test('Cells should not be repaint on editing a column with given setCellValue when repaintChangedOnly is true', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.rowsView.render($testElement);
+        this.applyOptions({
+            repaintChangesOnly: true,
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        'type': 'required',
+                        'message': 'The Name field is required.'
+                    }]
+                }, {
+                    dataField: 'age',
+                    setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); }
+                }]
+        });
+
+        // act
+        this.editRow(0);
+
+        // assert
+        assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
+
+        const $cellElement = $(this.getCellElement(0, 'name'));
+
+        // act
+        this.cellValue(0, 'age', 123);
+
+        // assert
+        assert.deepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell isn\'t repainted');
+    });
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
