@@ -90,6 +90,7 @@ const GalleryNavButton = Widget.inherit({
 const Gallery = CollectionWidget.inherit({
 
     _activeStateUnit: GALLERY_ITEM_SELECTOR,
+    _resizeCalled: false,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -335,6 +336,20 @@ const Gallery = CollectionWidget.inherit({
         this.callBase(items);
 
         this._loadNextPageIfNeeded();
+    },
+
+    _createItemByTemplate(itemTemplate, renderArgs) {
+        return itemTemplate.render({
+            model: renderArgs.itemData,
+            container: renderArgs.container,
+            index: renderArgs.index,
+            onRendered: () => {
+                if(!this._resizeCalled) {
+                    this._resizeCalled = true;
+                    this._dimensionChanged();
+                }
+            }
+        });
     },
 
     _renderItemsContainer: function() {
