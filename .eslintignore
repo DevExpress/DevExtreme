@@ -15,7 +15,8 @@ themebuilder-scss
 lib
 *.scss
 
-packages/jquery/*
+packages/jquery/patch/*
+packages/jquery/src/generated/*
 packages/interim/*
 
 /.off.eslintrc.js

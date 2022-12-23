@@ -1,12 +1,14 @@
-/* eslint-disable no-underscore-dangle */
 import { ComponentWrapper, registerComponent } from '@devextreme/interim';
 import { RadioButton as RadioButtonInferno } from './generated/components/radio-button';
 
-export default class RadioButton extends ComponentWrapper {
+export class RadioButton extends ComponentWrapper {
   _initializeComponent() {
     super._initializeComponent();
     this._propsInfo.templates.forEach((template) => {
-      this._componentTemplates[template] = this._createTemplateComponent(this._props[template], template);
+      this._componentTemplates[template] = this._createTemplateComponent(
+        this._props[template],
+        template,
+      );
     });
   }
 
