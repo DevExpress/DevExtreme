@@ -1,0 +1,49 @@
+name: Send dependabot new vulnerability alerts
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: devextreme-shr2
+    name: Fetch analysis
+
+    steps:
+      - name: Get Latest Analysis info
+        run: |
+          RESPONSE=$(curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/dependabot/alerts?state=open)
+          echo 'ALERTS<<EOF' >> $GITHUB_ENV
+          echo $RESPONSE >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [ fetch ]
+
+    steps:
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%s")"
+        shell: bash
+
+      - uses: actions/cache@v3
+        id: notify-cache
+        with:
+          path: dependabot_alerts.json
+          key: ${{ runner.os }}-security-${{ steps.get-date.outputs.date }}
+          restore-keys: ${{ runner.os }}-security
+
+      - name: Teams Notification
+        uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{ secrets.TEAMS_SECURITY_ALERTS }}
+          alerts: ${{ env.ALERTS }}
+          alert_type: Dependabot
+          alerts_cache_file: dependabot_alerts.json
