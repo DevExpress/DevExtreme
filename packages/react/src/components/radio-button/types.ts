@@ -1,4 +1,4 @@
-import { RadioGroupCore, RadioGroupValue } from '@devextreme/components';
+import { RadioGroupCore } from '@devextreme/components';
 import { ComponentType, ReactElement } from 'react';
 
 export type LabelType = string | ReactElement;
@@ -11,26 +11,32 @@ export interface LabelTemplateProps {
   label: LabelType;
 }
 
-export interface RadioButtonProps {
-  value: RadioGroupValue;
+export type SelectedEventHandler<T> = (value: T) => void;
+export interface RadioButtonProps<T> {
+  value: T;
   name?: string;
   checked?: boolean;
   defaultChecked?: boolean;
   label?: LabelType;
   radioTemplate?: ComponentType<RadioTemplateProps>;
   labelTemplate?: ComponentType<LabelTemplateProps>;
-  onChange?: React.ChangeEventHandler;
+  onSelected?: SelectedEventHandler<T>;
   onClick?: React.MouseEventHandler;
 }
 
-export interface RadioButtonRenderProps extends RadioButtonProps {
+export interface RadioButtonRenderProps<T> extends RadioButtonProps<T> {
   inputId: string;
   inputRef: React.ForwardedRef<HTMLInputElement>;
-  renderRadioComponent?: (radioComponent: ComponentType<RadioTemplateProps>) => JSX.Element
+  renderRadioComponent?: (
+    radioComponent: ComponentType<RadioTemplateProps>
+  ) => JSX.Element;
 }
 
-export interface CoreBoundRadioButtonProps extends RadioButtonRenderProps {
-  radioGroupCore: RadioGroupCore<RadioGroupValue>;
+export interface CoreBoundRadioButtonProps<T>
+  extends RadioButtonRenderProps<T> {
+  radioGroupCore: RadioGroupCore<T>;
 }
 
-export type RadioButtonRenderType = (props: RadioButtonRenderProps) => JSX.Element;
+export type RadioButtonRenderType<T> = (
+  props: RadioButtonRenderProps<T>
+) => JSX.Element;

@@ -1,5 +1,4 @@
 import {
-  ChangeEventHandler,
   ComponentType,
   useState,
 } from 'react';
@@ -10,16 +9,17 @@ import {
   RadioButtonRenderProps,
   RadioButtonRenderType,
   RadioTemplateProps,
+  SelectedEventHandler,
 } from './types';
 
-function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
-  function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps) {
+function withUncontrolledBehavior<T>(
+  RadioButton: RadioButtonRenderType<T>,
+) {
+  function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps<T>) {
     const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-      setInternalChecked(event.target.checked);
-      event.preventDefault();
-      event.stopPropagation();
-      props.onChange?.(event);
+    const handleSelected: SelectedEventHandler<T> = (value) => {
+      setInternalChecked(true);
+      props.onSelected?.(value);
     };
     const renderRadioComponent = (
       RadioComponent: ComponentType<RadioTemplateProps>,
@@ -28,24 +28,24 @@ function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
       <RadioButton
           // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
-        onChange={handleChange}
+        onSelected={handleSelected}
         renderRadioComponent={renderRadioComponent}
       />
     );
   }
   return UncontrolledRadioButton;
 }
-function withRadioGroup(RadioButton: RadioButtonRenderType) {
+function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
   function CoreBoundRadioButton({
     radioGroupCore: { dispatcher, stateManager },
     value,
     ...props
-  }: CoreBoundRadioButtonProps) {
+  }: CoreBoundRadioButtonProps<T>) {
     const coreState = useCoreState(stateManager);
 
     const checked = coreState.value === value;
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-      props.onChange?.(event);
+    const handleSelected = () => {
+      props.onSelected?.(value);
       dispatcher.dispatch('updateValue', {
         value,
       });
@@ -57,7 +57,7 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
         {...props}
         value={value}
         checked={checked}
-        onChange={handleChange}
+        onSelected={handleSelected}
       />
     );
   }
