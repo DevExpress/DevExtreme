@@ -705,6 +705,19 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.equal(displayValue, 'zero', 'value is rendered correctly');
     });
 
+    // T1135997
+    QUnit.test('Show selectBox in fullScreen mode', function(assert) {
+        $('#selectBox').dxSelectBox({
+            items: ['one'],
+            opened: true,
+            dropDownOptions: {
+                fullScreen: true
+            }
+        });
+
+        assert.strictEqual($(toSelector(LIST_ITEM_CLASS)).length, 1, 'selectBox shown in fullScreen mode');
+    });
+
     QUnit.test('selectBox should display value when item is 0 or boolean false', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: [null, 0, true, false],
