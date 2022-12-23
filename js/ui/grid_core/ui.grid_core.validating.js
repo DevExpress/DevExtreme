@@ -1336,7 +1336,7 @@ export const validatingModule = {
                     const hasValidationRules = cell?.column.validationRules?.length;
 
                     if((editingChanged && hasValidationRules) ||
-                        (oldValidationStatus !== newValidationStatus && rowIsModified) ||
+                        (isDefined(oldValidationStatus) && oldValidationStatus !== newValidationStatus && rowIsModified) ||
                         (validationData.isValid && cellIsMarkedAsInvalid)) {
                         return true;
                     }
