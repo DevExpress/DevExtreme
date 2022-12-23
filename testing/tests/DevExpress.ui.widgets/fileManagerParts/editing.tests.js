@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import pointerEvents from 'events/pointer';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileSystemError from 'file_management/error.js';
@@ -1195,7 +1196,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let itemNames = this.wrapper.getDetailsItemNamesTexts();
         let uploadedFileIndex = itemNames.indexOf(file0.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
 
@@ -1218,7 +1219,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         itemNames = this.wrapper.getDetailsItemNamesTexts();
         uploadedFileIndex = itemNames.indexOf(file1.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '488.3 KB', 'file size is correct');
 
@@ -2260,5 +2261,96 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal($cells.length, 1, 'file count is correct');
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
         assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
+    });
+
+    test('currentPath must not be changed when remaning a file after its moving (T1132584)', function(assert) {
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+
+        // moving file
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that it moved
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), 'Folder 3', 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), ['Folder 3'], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file moved to another folder');
+
+        assert.strictEqual(this.wrapper.getColumnCellsInDetailsView(2).length, 1, 'file count is correct');
+
+        // renaming moved file
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val('File 1 renamed.txt').trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that file is renamed and we are still in the folder 'Folder 3'
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), 'Folder 3', 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), ['Folder 3'], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1 renamed.txt', 'file renamed to another folder');
+
+        assert.strictEqual(this.wrapper.getColumnCellsInDetailsView(2).length, 1, 'file count is correct');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1 renamed.txt', 'first file is the target file');
+    });
+
+    test('current directory must not be changed when all items not moved - events - try rename after operation (T1080473, T1132584)', function(assert) {
+        const initialDirName = 'Folder 1';
+        const fileName1 = 'File 1-1.txt';
+        const fileName2 = 'File 1-2.jpg';
+        const fileKey1 = `${initialDirName}/${fileName1}`;
+        const fileKey2 = `${initialDirName}/${fileName2}`;
+        const newFileName = 'File 1 renamed.txt';
+
+        this.fileManager.option({
+            currentPath: initialDirName,
+            selectionMode: 'multiple',
+            selectedItemKeys: [ fileKey1, fileKey2 ],
+            onItemMoving: e => {
+                e.cancel = true;
+            }
+        });
+        this.clock.tick(400);
+
+        // try moving selected files to the 'Folder 2'
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(4).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        // clear selection
+        this.wrapper.getSelectAllCheckBox().trigger('dxclick');
+        this.clock.tick(400);
+
+        // renaming file 'File 1-1.txt'
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(newFileName).trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that no files have been moved and we are still in 'Folder 1'
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), initialDirName, 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), [initialDirName], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, initialDirName, 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), newFileName, '1st file is still in the initial dir');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
     });
 });
