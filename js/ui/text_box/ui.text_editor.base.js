@@ -141,11 +141,11 @@ const TextEditorBase = Editor.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = current();
 
         return this.callBase().concat([
             {
                 device: function() {
+                    const themeName = current();
                     return isMaterial(themeName);
                 },
                 options: {
