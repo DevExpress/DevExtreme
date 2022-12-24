@@ -78,12 +78,6 @@ const Form = Widget.inherit({
         this._groupsColCount = [];
 
         this._attachSyncSubscriptions();
-
-
-        const formRootElement = this.$element().get(0);
-
-        resizeObserverSingleton.unobserve(formRootElement);
-        resizeObserverSingleton.observe(formRootElement, (entry) => { this._resizeHandler(entry); });
     },
 
     _getDefaultOptions: function() {
@@ -91,11 +85,8 @@ const Form = Widget.inherit({
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
-
             screenByWidth: defaultScreenFactorFunc,
-
             colCountByScreen: undefined,
-
             labelLocation: 'left',
             readOnly: false,
             onFieldDataChanged: null,
@@ -274,11 +265,22 @@ const Form = Widget.inherit({
         this._renderValidationSummary();
 
         this._lastMarkupScreenFactor = this._targetScreenFactor || this._getCurrentScreenFactor();
+
+        this._attachResizeObserverSubscription();
+    },
+
+    _attachResizeObserverSubscription: function() {
+        if(hasWindow()) {
+            const formRootElement = this.$element().get(0);
+
+            resizeObserverSingleton.unobserve(formRootElement);
+            resizeObserverSingleton.observe(formRootElement, () => { this._resizeHandler(); });
+        }
     },
 
     _resizeHandler: function() {
         if(this._cachedLayoutManagers.length) {
-            each(this._cachedLayoutManagers, (index, layoutManager) => {
+            each(this._cachedLayoutManagers, (_, layoutManager) => {
                 layoutManager.option('onLayoutChanged')?.();
             });
         }
