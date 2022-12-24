@@ -706,7 +706,7 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     // T1135997
-    QUnit.test('Show selectBox in fullScreen mode', function(assert) {
+    QUnit.test('can be rendered with a dropDown in fullScreen mode (T1135997)', function(assert) {
         $('#selectBox').dxSelectBox({
             items: ['one'],
             opened: true,
