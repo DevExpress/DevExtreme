@@ -78,6 +78,12 @@ const Form = Widget.inherit({
         this._groupsColCount = [];
 
         this._attachSyncSubscriptions();
+
+
+        const formRootElement = this.$element().get(0);
+
+        resizeObserverSingleton.unobserve(formRootElement);
+        resizeObserverSingleton.observe(formRootElement, (entry) => { this._resizeHandler(entry); });
     },
 
     _getDefaultOptions: function() {
@@ -268,15 +274,14 @@ const Form = Widget.inherit({
         this._renderValidationSummary();
 
         this._lastMarkupScreenFactor = this._targetScreenFactor || this._getCurrentScreenFactor();
-
-        const formRootElement = this.$element().get(0);
-
-        resizeObserverSingleton.unobserve(formRootElement);
-        resizeObserverSingleton.observe(formRootElement, (entry) => { this._resizeHandler(entry); });
     },
 
     _resizeHandler: function() {
-        this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode(), false);
+        if(this._cachedLayoutManagers.length) {
+            each(this._cachedLayoutManagers, (index, layoutManager) => {
+                layoutManager.option('onLayoutChanged')?.();
+            });
+        }
     },
 
     _getCurrentScreenFactor: function() {
