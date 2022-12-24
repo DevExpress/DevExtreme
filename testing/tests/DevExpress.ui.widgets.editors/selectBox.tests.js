@@ -703,7 +703,6 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.equal(displayValue, 'zero', 'value is rendered correctly');
     });
 
-    // T1135997
     QUnit.test('can be rendered with a dropDown in fullScreen mode (T1135997)', function(assert) {
         $('#selectBox').dxSelectBox({
             items: ['one'],
