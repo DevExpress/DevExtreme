@@ -715,7 +715,7 @@ QUnit.module('functionality', moduleSetup, () => {
             }
         });
 
-        assert.strictEqual($(toSelector(LIST_ITEM_CLASS)).length, 1, 'selectBox shown in fullScreen mode');
+        assert.strictEqual($(toSelector(LIST_ITEM_CLASS)).length, 1, 'dropDown is shown in fullScreen mode');
     });
 
     QUnit.test('selectBox should display value when item is 0 or boolean false', function(assert) {
