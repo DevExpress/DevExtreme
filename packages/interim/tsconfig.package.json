@@ -17,13 +17,7 @@
       "es2017.object",
       "dom"
     ],
-    "baseUrl": "./",
     "stripInternal": true,
-    "paths": {
-      "*": [
-        "node_modules"
-      ]
-    }
   },
 
   "include": [
