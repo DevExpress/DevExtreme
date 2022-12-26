@@ -33,9 +33,9 @@
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
     "paths": {
-      "@devextreme/*": [
-        "./packages/*/src"
-      ]
+      // "@devextreme/*": [
+      //   "./packages/*/src"
+      // ]
     }
   }
 }

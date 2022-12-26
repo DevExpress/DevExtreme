@@ -11,7 +11,7 @@
         "build": {
             "dependsOn": ["^build"],
             "outputs": [
-                "{projectRoot}/packages/{angular, components, core, jquery, react}/{lib, dist, tsc-out}"
+                "{projectRoot}/packages/{angular, components, core, interim, jquery, react}/{lib, dist, tsc-out}"
             ]
         },
         "watch": {

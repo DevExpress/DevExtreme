@@ -14,10 +14,5 @@
 		"__test__",
 		"lib",
 		"**/*.test.ts"
-	],
-	"references": [
-		{
-			"path": "../core/tsconfig.package.json"
-		}
 	]
 }

@@ -1,18 +1,32 @@
-// File generated automatically, use npm run update:tsconfig for update
 {
-	"extends": "./tsconfig.json",
-	"compilerOptions": {
-		"outDir": "./lib",
-		"rootDir": "./src",
-		"composite": true,
-	},
-	"include": [
-		"src"
-	],
-	"exclude": [
-		"test",
-		"__test__",
-		"lib",
-		"**/*.test.ts"
-	]
+  "extends": "../../tsconfig.base.json",
+
+  "outDir": "./lib",
+  "rootDir": "./src",
+  "composite": true,
+
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
+    // TODO Remove
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitOverride": false,
+    "lib": [
+      "es6",
+      "es7",
+      "es2017.object",
+      "dom"
+    ],
+    "stripInternal": true,
+  },
+
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "test",
+    "__test__",
+    "lib",
+    "**/*.test.ts"
+  ]
 }
