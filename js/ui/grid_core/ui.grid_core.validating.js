@@ -1336,13 +1336,14 @@ export const validatingModule = {
                     });
                     const validationData = validatingController._getValidationData(oldRow.key);
                     const newValidationStatus = this._getValidationStatus(validationResult);
-                    const isChangedValidationStatus = oldValidationStatus !== newValidationStatus;
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
+                    const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
                     const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-                    const editingChanged = oldRow.isEditing !== newRow.isEditing;
+                    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
                     const hasValidationRules = cell?.column.validationRules?.length;
+                    const cellValidationStateChanged = validationStatusChanged || validationData.isValid && cellIsMarkedAsInvalid;
 
-                    if((editingChanged && hasValidationRules) || isChangedValidationStatus && rowIsModified || (validationData.isValid && cellIsMarkedAsInvalid)) {
+                    if(rowEditStateChanged || cellValidationStateChanged) {
                         return true;
                     }
 
