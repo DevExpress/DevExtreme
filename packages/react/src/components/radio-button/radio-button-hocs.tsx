@@ -12,6 +12,7 @@ import {
   SelectedEventHandler,
 } from './types';
 
+//* Component={"name":"UncontrolledRadioButton"}
 function withUncontrolledBehavior<T>(
   RadioButton: RadioButtonRenderType<T>,
 ) {
@@ -35,6 +36,8 @@ function withUncontrolledBehavior<T>(
   }
   return UncontrolledRadioButton;
 }
+
+//* Component={"name":"CoreBoundRadioButton"}
 function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
   function CoreBoundRadioButton({
     radioGroupCore: { dispatcher, stateManager },
