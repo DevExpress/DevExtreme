@@ -358,13 +358,12 @@ export default class FileItemsController {
                 this._editingEvents.onItemMoved(args);
             },
             needChangeCurrentDirectory => {
+                itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
                 if(needChangeCurrentDirectory) {
-                    destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
                     this._resetDirectoryState(destinationDirectory);
-                    this.setCurrentDirectory(destinationDirectory);
+                    this.setCurrentPathByKeys(destinationDirectory.fileItem.pathKeys);
                     destinationDirectory.expanded = true;
                 }
-                itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
             });
     }
 
