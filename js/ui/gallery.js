@@ -346,7 +346,7 @@ const Gallery = CollectionWidget.inherit({
             onRendered: () => {
                 if(!this._resizeCalled) {
                     this._resizeCalled = true;
-                    this._dimensionChanged();
+                    this._dimensionChanged(); // NOTE: T1132935
                 }
             }
         });
