@@ -9,14 +9,15 @@ import {
 } from '../../utils';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
+import { changeTheme } from '../../../../../../helpers/changeTheme';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
 const testJQuery = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery'],
 });
 
@@ -57,11 +58,15 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (_, { platform }) => {
+    await changeTheme('material.blue.light');
+
     await createScheduler(platform, {
       views,
       currentView: 'day',
       crossScrollingEnabled,
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
@@ -84,6 +89,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (_, { platform }) => {
+    await changeTheme('material.blue.light');
+
     await createScheduler(platform, {
       views: horizontalViews,
       currentView: 'day',
@@ -91,6 +98,8 @@ const createScheduler = async (
       groups: ['priorityId'],
       resources: resourceDataSource,
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   testJQuery(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
@@ -116,6 +125,8 @@ const createScheduler = async (
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (_, { platform }) => {
+    await changeTheme('material.blue.light');
+
     await createScheduler(platform, {
       views: verticalViews,
       currentView: 'day',
@@ -123,5 +134,7 @@ const createScheduler = async (
       groups: ['priorityId'],
       resources: resourceDataSource,
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });

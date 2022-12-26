@@ -10,9 +10,10 @@ import {
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
+import { changeTheme } from '../../../../../../helpers/changeTheme';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
@@ -53,6 +54,7 @@ const createScheduler = async (
       .ok(compareResults.errorMessages());
   }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
+    await changeTheme('material.blue.light');
 
     await createScheduler(platform, {
       views,
@@ -61,6 +63,7 @@ const createScheduler = async (
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    await changeTheme('generic.light');
   });
 
   test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t, { platform, screenshotComparerOptions }) => {
@@ -84,6 +87,7 @@ const createScheduler = async (
       .ok(compareResults.errorMessages());
   }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
+    await changeTheme('material.blue.light');
 
     await createScheduler(platform, {
       views: horizontalViews,
@@ -94,6 +98,7 @@ const createScheduler = async (
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    await changeTheme('generic.light');
   });
 
   test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t, { platform, screenshotComparerOptions }) => {
@@ -117,6 +122,7 @@ const createScheduler = async (
       .ok(compareResults.errorMessages());
   }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
+    await changeTheme('material.blue.light');
 
     await createScheduler(platform, {
       views: verticalViews,
@@ -127,5 +133,6 @@ const createScheduler = async (
     });
   }).after(async (t) => {
     await restoreBrowserSize(t);
+    await changeTheme('generic.light');
   });
 });

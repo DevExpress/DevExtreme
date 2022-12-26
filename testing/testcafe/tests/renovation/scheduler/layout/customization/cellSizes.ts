@@ -1,10 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
 import Scheduler from '../../../../../model/scheduler';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../helpers/multi-platform-test/platform-type';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerCellSizesCustomizationContainer',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
@@ -84,9 +85,13 @@ test('Cell sizes customization should work', async (t, { platform, screenshotCom
     ).ok();
   }
 
+  await removeStylesheetRulesFromPage();
+
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (_, { platform }) => {
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+
   await createScheduler(platform, {
     views,
   });
@@ -100,9 +105,13 @@ test('Cell sizes customization should work when all-day panel is enabled', async
     await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-\'week.png', scheduler.workSpace, screenshotComparerOptions),
   ).ok();
 
+  await removeStylesheetRulesFromPage();
+
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (_, { platform }) => {
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+
   await createScheduler(platform, {
     views,
     showAllDayPanel: true,

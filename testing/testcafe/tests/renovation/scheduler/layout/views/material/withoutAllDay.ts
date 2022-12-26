@@ -1,10 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { changeTheme } from '../../../../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
@@ -18,11 +19,11 @@ fixture('Scheduler: Material theme and all-day panel');
     await t
       .expect(await takeScreenshot(`material-week-all-day-panel-${showAllDayPanel}.png`, scheduler.workSpace, screenshotComparerOptions))
       .ok()
-
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t, { platform }) => {
     await restoreBrowserSize(t);
+    await changeTheme('material.blue.light');
 
     return createWidget(platform, 'dxScheduler', {
       dataSource: [],
@@ -33,5 +34,8 @@ fixture('Scheduler: Material theme and all-day panel');
       height: 500,
     }, true);
   })
-    .after(async (t) => restoreBrowserSize(t));
+    .after(async (t) => {
+      await changeTheme('generic.light');
+      await restoreBrowserSize(t);
+    });
 });

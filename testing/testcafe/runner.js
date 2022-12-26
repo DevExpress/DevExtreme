@@ -149,7 +149,7 @@ function clearTestPage() {
         body?.prepend(otherContainerElement);
         body?.prepend(containerElement);
 
-        $('#customStylesheetRules').remove();
+        $('#stylesheetRules').remove();
     })();
 }
 
