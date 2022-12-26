@@ -16,8 +16,10 @@ import { DataSource } from 'data/data_source/data_source';
 import themes from 'ui/themes';
 import Lookup from 'ui/lookup';
 import Popup from 'ui/popup/ui.popup';
+import PopupFull from 'ui/popup/ui.popup.full';
 import List from 'ui/list';
 import Popover from 'ui/popover/ui.popover';
+import PopoverFull from 'ui/popover/ui.popover.full';
 import { getWidth, getOuterWidth, getOuterHeight } from 'core/utils/size';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -2386,6 +2388,41 @@ QUnit.module('popup options', {
 
         assert.roughEqual(getOuterWidth($overlayContent), getOuterWidth($container) / 2, 0.1, 'popup width is correct');
         assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
+    });
+
+    [
+        {
+            component: PopupFull,
+            componentName: 'PopupFull',
+            usePopover: false
+        }, {
+            component: PopoverFull,
+            componentName: 'PopoverFull',
+            usePopover: true
+        }
+    ].forEach(({ component, componentName, usePopover }) => {
+        QUnit.test(`${componentName} defaultOptions should affect dropDownEditor popup(T1133910)`, function(assert) {
+            let defaultHandlerCalled = false;
+
+            component.defaultOptions({
+                options: {
+                    onShowing: () => defaultHandlerCalled = true
+                }
+            });
+
+            $('#lookup').dxLookup({
+                usePopover,
+                opened: true
+            });
+
+            assert.strictEqual(defaultHandlerCalled, true);
+
+            component.defaultOptions({
+                options: {
+                    onShowing: () => {}
+                }
+            });
+        });
     });
 });
 
