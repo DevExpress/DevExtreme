@@ -281,7 +281,7 @@ const Form = Widget.inherit({
     _resizeHandler: function() {
         if(this._cachedLayoutManagers.length) {
             each(this._cachedLayoutManagers, (_, layoutManager) => {
-                layoutManager.option('onLayoutChanged')?.();
+                layoutManager.option('onLayoutChanged')?.(layoutManager.isSingleColumnMode());
             });
         }
     },
@@ -295,11 +295,11 @@ const Form = Widget.inherit({
         this._cachedLayoutManagers = [];
     },
 
-    _alignLabels: function(layoutManager, inOneColumn, excludeTabbed = true) {
+    _alignLabels: function(layoutManager, inOneColumn) {
         this._alignLabelsInColumn({
             $container: this.$element(),
             layoutManager,
-            excludeTabbed,
+            excludeTabbed: true,
             items: this.option('items'),
             inOneColumn
         });

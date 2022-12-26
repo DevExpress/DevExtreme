@@ -41,69 +41,74 @@ fixture`Form`
   });
 });
 
-test('Form labels should have correct width after render in invisible container', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+['generic.light', 'material.blue.light'].forEach((theme) => {
+  test('Form labels should have correct width after render in invisible container', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('Form labels width after render in invisible container.png', '#container'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'form');
-  await insertStylesheetRulesToPage('#container { display: none; }');
+    await t
+      .expect(await takeScreenshot(`Form labels width after render in invisible container${getThemePostfix(theme)}.png`, '#container'))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+    await appendElementTo('#container', 'div', 'form');
+    await insertStylesheetRulesToPage('#container { display: none; }');
 
-  await createWidget('dxForm', {
-    formData: {
-      ID: 1,
-      FirstName: 'John',
-      LastName: 'Heart',
-      Position: 'CEO',
-      OfficeNo: '901',
-      BirthDate: new Date(1964, 2, 16),
-      HireDate: new Date(1995, 0, 15),
-      Address: '351 S Hill St.',
-      City: 'Los Angeles',
-      State: 'CA',
-      ZipCode: '90013',
-      Phone: '+1(213) 555-9392',
-      Email: 'jheart@dx-email.com',
-      Skype: 'jheart_DX_skype',
-    },
-    colCount: 2,
-    items: [{
-      itemType: 'group',
-      caption: 'System Information',
-      items: ['ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'],
-    }, {
-      itemType: 'group',
-      caption: 'Personal Data',
-      items: ['BirthDate', {
-        itemType: 'group',
-        caption: 'Home Address',
-        items: ['Address', 'City', 'State', 'ZipCode'],
-      }],
-    }, {
-      itemType: 'group',
-      caption: 'Contact Information',
+    await createWidget('dxForm', {
+      formData: {
+        ID: 1,
+        FirstName: 'John',
+        LastName: 'Heart',
+        Position: 'CEO',
+        OfficeNo: '901',
+        BirthDate: new Date(1964, 2, 16),
+        HireDate: new Date(1995, 0, 15),
+        Address: '351 S Hill St.',
+        City: 'Los Angeles',
+        State: 'CA',
+        ZipCode: '90013',
+        Phone: '+1(213) 555-9392',
+        Email: 'jheart@dx-email.com',
+        Skype: 'jheart_DX_skype',
+      },
+      colCount: 2,
       items: [{
-        itemType: 'tabbed',
-        tabPanelOptions: {
-          deferRendering: true,
-        },
-        tabs: [{
-          title: 'Phone',
-          items: ['Phone'],
-        }, {
-          title: 'Skype',
-          items: ['Skype'],
-        }, {
-          title: 'Email',
-          items: ['Email'],
+        itemType: 'group',
+        caption: 'System Information',
+        items: ['ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'],
+      }, {
+        itemType: 'group',
+        caption: 'Personal Data',
+        items: ['BirthDate', {
+          itemType: 'group',
+          caption: 'Home Address',
+          items: ['Address', 'City', 'State', 'ZipCode'],
+        }],
+      }, {
+        itemType: 'group',
+        caption: 'Contact Information',
+        items: [{
+          itemType: 'tabbed',
+          tabPanelOptions: {
+            deferRendering: true,
+          },
+          tabs: [{
+            title: 'Phone',
+            items: ['Phone'],
+          }, {
+            title: 'Skype',
+            items: ['Skype'],
+          }, {
+            title: 'Email',
+            items: ['Email'],
+          }],
         }],
       }],
-    }],
-  }, true, '#form');
+    }, true, '#form');
 
-  await removeStylesheetRulesFromPage();
+    await removeStylesheetRulesFromPage();
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
