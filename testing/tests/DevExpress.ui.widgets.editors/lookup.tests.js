@@ -2406,22 +2406,24 @@ QUnit.module('popup options', {
 
             component.defaultOptions({
                 options: {
-                    onShowing: () => defaultHandlerCalled = true
+                    onShowing: () => { defaultHandlerCalled = true; }
                 }
             });
 
-            $('#lookup').dxLookup({
-                usePopover,
-                opened: true
-            });
+            try {
+                $('#lookup').dxLookup({
+                    usePopover,
+                    opened: true
+                });
 
-            assert.strictEqual(defaultHandlerCalled, true);
-
-            component.defaultOptions({
-                options: {
-                    onShowing: () => {}
-                }
-            });
+                assert.strictEqual(defaultHandlerCalled, true);
+            } finally {
+                component.defaultOptions({
+                    options: {
+                        onShowing: () => {}
+                    }
+                });
+            }
         });
     });
 });
