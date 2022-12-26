@@ -15702,7 +15702,7 @@ QUnit.module('Editing with validation', {
     });
 
     // T1135692
-    QUnit.test('Cells should not be repaint on editing a column with given setCellValue when repaintChangedOnly is true', function(assert) {
+    QUnit.test('repaintChangedOnly is true - cell should not be repaint on editing an another cell with given setCellValue when validation passed', function(assert) {
         // arrange
         const $testElement = $('#container');
 
@@ -15717,8 +15717,11 @@ QUnit.module('Editing with validation', {
                 {
                     dataField: 'name',
                     validationRules: [{
-                        'type': 'required',
-                        'message': 'The Name field is required.'
+                        type: 'custom',
+                        message: 'Test',
+                        validationCallback: function(e) {
+                            return !!e.data.age;
+                        }
                     }]
                 }, {
                     dataField: 'age',
@@ -15739,6 +15742,50 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.deepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell isn\'t repainted');
+    });
+
+    // T1135692
+    QUnit.test('repaintChangedOnly is true - cell should be repaint on editing an another cell with given setCellValue when validation fails', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.rowsView.render($testElement);
+        this.applyOptions({
+            repaintChangesOnly: true,
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        message: 'Test',
+                        validationCallback: function(e) {
+                            return !!e.data.age;
+                        }
+                    }]
+                }, {
+                    dataField: 'age',
+                    setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); }
+                }]
+        });
+
+        // act
+        this.editRow(0);
+
+        // assert
+        assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
+
+        const $cellElement = $(this.getCellElement(0, 'name'));
+
+        // act
+        this.cellValue(0, 'age', '');
+
+        // assert
+        assert.notDeepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell is repainted');
+        assert.ok($(this.getCellElement(0, 'name')).hasClass('dx-datagrid-invalid'), 'first cell is repainted as invalid');
     });
 });
 
