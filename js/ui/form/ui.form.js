@@ -20,6 +20,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import { isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
+import resizeObserverSingleton from '../../core/resize_observer';
 import './ui.form.layout_manager';
 import {
     concatPaths,
@@ -84,11 +85,8 @@ const Form = Widget.inherit({
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
-
             screenByWidth: defaultScreenFactorFunc,
-
             colCountByScreen: undefined,
-
             labelLocation: 'left',
             readOnly: false,
             onFieldDataChanged: null,
@@ -267,6 +265,25 @@ const Form = Widget.inherit({
         this._renderValidationSummary();
 
         this._lastMarkupScreenFactor = this._targetScreenFactor || this._getCurrentScreenFactor();
+
+        this._attachResizeObserverSubscription();
+    },
+
+    _attachResizeObserverSubscription: function() {
+        if(hasWindow()) {
+            const formRootElement = this.$element().get(0);
+
+            resizeObserverSingleton.unobserve(formRootElement);
+            resizeObserverSingleton.observe(formRootElement, () => { this._resizeHandler(); });
+        }
+    },
+
+    _resizeHandler: function() {
+        if(this._cachedLayoutManagers.length) {
+            each(this._cachedLayoutManagers, (_, layoutManager) => {
+                layoutManager.option('onLayoutChanged')?.(layoutManager.isSingleColumnMode());
+            });
+        }
     },
 
     _getCurrentScreenFactor: function() {
@@ -298,6 +315,8 @@ const Form = Widget.inherit({
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
+
+        resizeObserverSingleton.unobserve(this.$element().get(0));
     },
 
     _renderScrollable: function() {
