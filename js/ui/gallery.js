@@ -998,7 +998,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _dispose: function() {
-        this._wasAnyItemTemplateRendered = undefined;
+        this._wasAnyItemTemplateRendered = null;
         clearTimeout(this._slideshowTimer);
         this.callBase();
     },
