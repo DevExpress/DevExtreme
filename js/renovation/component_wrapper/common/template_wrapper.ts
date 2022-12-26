@@ -110,7 +110,7 @@ function buildTemplateContent(
 
   return isDxElementWrapper(rendered)
     ? rendered.toArray()
-    : [getPublicElement($(rendered))];
+    : [$(rendered).get(0)];
 }
 
 function noop(): void {}
