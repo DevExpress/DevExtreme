@@ -9,9 +9,10 @@ import {
 } from '../../utils';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../../helpers/domUtils';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerAdaptiveRTL',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
@@ -49,9 +50,13 @@ const createScheduler = async (
       ).ok();
     }
 
+    await removeStylesheetRulesFromPage();
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (_, { platform }) => {
+    await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-horizontal { width: 60px; }');
+
     await createScheduler(platform, {
       views,
       currentView: 'day',
@@ -76,9 +81,13 @@ const createScheduler = async (
       ).ok();
     }
 
+    await removeStylesheetRulesFromPage();
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (_, { platform }) => {
+    await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-horizontal { width: 60px; }');
+
     await createScheduler(platform, {
       views: horizontalViews,
       currentView: 'day',
@@ -106,9 +115,13 @@ const createScheduler = async (
       ).ok();
     }
 
+    await removeStylesheetRulesFromPage();
+
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (_, { platform }) => {
+    await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-horizontal { width: 60px; }');
+
     await createScheduler(platform, {
       views: verticalViews,
       currentView: 'day',
