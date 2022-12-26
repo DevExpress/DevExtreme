@@ -90,7 +90,7 @@ const GalleryNavButton = Widget.inherit({
 const Gallery = CollectionWidget.inherit({
 
     _activeStateUnit: GALLERY_ITEM_SELECTOR,
-    _wasAnyItemTemplateRendered: false,
+    _wasAnyItemTemplateRendered: undefined,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -338,18 +338,13 @@ const Gallery = CollectionWidget.inherit({
         this._loadNextPageIfNeeded();
     },
 
-    _createItemByTemplate(itemTemplate, renderArgs) {
-        return itemTemplate.render({
-            model: renderArgs.itemData,
-            container: renderArgs.container,
-            index: renderArgs.index,
-            onRendered: () => {
-                if(!this._resizeCalled) {
-                    this._resizeCalled = true;
-                    this._dimensionChanged(); // NOTE: T1132935
-                }
+    _onItemTemplateRendered() {
+        return () => {
+            if(!this._wasAnyItemTemplateRendered) {
+                this._wasAnyItemTemplateRendered = true;
+                this._dimensionChanged(); // NOTE: T1132935
             }
-        });
+        };
     },
 
     _renderItemsContainer: function() {
@@ -1003,6 +998,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _dispose: function() {
+        this._wasAnyItemTemplateRendered = undefined;
         clearTimeout(this._slideshowTimer);
         this.callBase();
     },
