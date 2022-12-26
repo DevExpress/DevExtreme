@@ -744,9 +744,8 @@ QUnit.module('behavior', {
     QUnit.test('resizeCallback is called after item is rendered (T1132935)', function(assert) {
         const gallery = this.$element.dxGallery({
             items: [0, 1, 2, 3],
-        });
-        const galleryInstance = gallery.dxGallery('instance');
-        assert.equal(galleryInstance._wasAnyTemplateItemRendered, true);
+        }).dxGallery('instance');
+        assert.equal(gallery._wasAnyItemTemplateRendered, true);
     });
 });
 
