@@ -1,6 +1,6 @@
 {
   "name": "devextreme-angular",
-  "version": "22.2.3",
+  "version": "23.1.0",
   "description": "Angular UI and visualization components based on DevExtreme widgets",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "22.2-next",
+    "devextreme": "23.1-next",
     "@angular/core": ">12.0.0",
     "@angular/common": ">12.0.0",
     "@angular/forms": ">12.0.0"
@@ -37,7 +37,7 @@
     "codelyzer": "6.0.2",
     "core-js": "^2.6.12",
     "del": "^2.2.2",
-    "devextreme": "22.2-next",
+    "devextreme": "23.1-next",
     "devextreme-angular-generator": "^1.0.0",
     "devextreme-internal-tools": "^9.3.0",
     "gulp": "^4.0.2",
