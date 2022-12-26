@@ -39,10 +39,6 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
     @include dx-toolbar-sizing($material-popup-toolbar-height, $material-popup-toolbartop-padding, $material-popup-toolbar-label-font-size, $material-popup-toolbar-item-spacing );
 
     box-shadow: none;
-
-    .dx-button.dx-closebutton {
-      display: block;
-    }
   }
 }
 
