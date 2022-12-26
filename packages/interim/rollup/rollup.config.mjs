@@ -1,40 +1,15 @@
-import typescript from '@rollup/plugin-typescript';
 import {
-  checkExternalPackage,
-  checkWatchMode,
-  FORMAT_EXTENSIONS,
+  getBundleConfig, getDtsConfig,
 } from '../../../build/rollup/utils.js';
 
-const OUTPUT_DIR = './lib'
-
-function getBundleConfig(outputDir, format) {
-    return {
-        input: 'src/index.ts',
-        output: {
-            dir: outputDir,
-            entryFileNames: `[name].${FORMAT_EXTENSIONS[format]}`,
-            format,
-            sourcemap: true
-        },
-        plugins: [
-            typescript({
-                tsconfig: './tsconfig.package.json',
-                compilerOptions: {
-                    noEmitOnError: checkWatchMode(),
-                    outDir: outputDir,
-                },
-                outputToFilesystem: true
-            })
-        ],
-        external: checkExternalPackage,
-    };
-}
+const OUTPUT_DIR = './lib';
 
 function getRollupConfig(outputDir) {
-    return [
-        getBundleConfig(outputDir, 'esm'),
-        getBundleConfig(outputDir, 'cjs'),
-    ];
+  return [
+    getBundleConfig(outputDir, 'esm'),
+    getBundleConfig(outputDir, 'cjs'),
+    getDtsConfig(outputDir, true),
+  ];
 }
 
-export default getRollupConfig(OUTPUT_DIR)
+export default getRollupConfig(OUTPUT_DIR);
