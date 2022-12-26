@@ -2,9 +2,10 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../helpers/multi-platform-test/platform-type';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerTimePanelCustomizationContainer',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
@@ -83,9 +84,13 @@ const createScheduler = async (
         )
         .ok();
 
+      await removeStylesheetRulesFromPage();
+
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async (_, { platform }) => {
+      await insertStylesheetRulesToPage('#container .dx-scheduler-time-panel { width: 150px;}');
+
       await createScheduler(platform, {
         views: [view],
         currentView: view,
