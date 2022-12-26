@@ -46,6 +46,16 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
       $generic-popup-toolbar-label-font-size,
       $generic-popup-toolbar-item-spacing
     );
+
+    .dx-closebutton {
+      position: relative;
+      left: $generic-popup-closebutton-offset;
+
+      .dx-rtl & {
+        left: 0;
+        right: $generic-popup-closebutton-offset;
+      }
+    }
   }
 }
 
