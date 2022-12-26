@@ -4,11 +4,12 @@ import Scheduler from '../../../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Material theme and all-day panel');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Material theme and all-day panel');
 
 [true, false].forEach((showAllDayPanel) => {
   test(`Week view should be rendered correctly if showAllDayPanel=${showAllDayPanel}`, async (t, { screenshotComparerOptions }) => {
@@ -18,7 +19,6 @@ fixture('Scheduler: Material theme and all-day panel');
     await t
       .expect(await takeScreenshot(`material-week-all-day-panel-${showAllDayPanel}.png`, scheduler.workSpace, screenshotComparerOptions))
       .ok()
-
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async (t, { platform }) => {
@@ -33,5 +33,7 @@ fixture('Scheduler: Material theme and all-day panel');
       height: 500,
     }, true);
   })
-    .after(async (t) => restoreBrowserSize(t));
+    .after(async (t) => {
+      await restoreBrowserSize(t);
+    });
 });
