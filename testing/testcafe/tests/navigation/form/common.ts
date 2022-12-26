@@ -56,6 +56,7 @@ fixture`Form`
     await insertStylesheetRulesToPage('#container { display: none; }');
 
     await createWidget('dxForm', {
+      width: 1000,
       labelLocation: 'left',
       formData: {
         ID: 1,
