@@ -90,7 +90,7 @@ const GalleryNavButton = Widget.inherit({
 const Gallery = CollectionWidget.inherit({
 
     _activeStateUnit: GALLERY_ITEM_SELECTOR,
-    _wasAnyItemTemplateRendered: undefined,
+    _wasAnyItemTemplateRendered: false,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
