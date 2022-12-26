@@ -3,7 +3,6 @@ import Scheduler from '../../../../../../model/scheduler';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
-import { changeTheme } from '../../../../../../helpers/changeTheme';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
@@ -47,13 +46,7 @@ const createScheduler = async (
 
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (_, { platform }) => {
-      await changeTheme('material.blue.light');
-
-      return createScheduler(platform, view, groupOrientation);
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
+    }).before(async (_, { platform }) => createScheduler(platform, view, groupOrientation));
   });
 });
 
@@ -68,12 +61,6 @@ const createScheduler = async (
 
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (_, { platform }) => {
-      await changeTheme('material.blue.light');
-
-      return createScheduler(platform, view, groupOrientation);
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
+    }).before(async (_, { platform }) => createScheduler(platform, view, groupOrientation));
   });
 });

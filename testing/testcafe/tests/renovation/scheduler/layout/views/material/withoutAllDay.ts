@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
 import Scheduler from '../../../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
@@ -9,7 +8,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Material theme and all-day panel');
+// NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
+fixture.skip('Scheduler: Material theme and all-day panel');
 
 [true, false].forEach((showAllDayPanel) => {
   test(`Week view should be rendered correctly if showAllDayPanel=${showAllDayPanel}`, async (t, { screenshotComparerOptions }) => {
@@ -23,7 +23,6 @@ fixture('Scheduler: Material theme and all-day panel');
       .ok(compareResults.errorMessages());
   }).before(async (t, { platform }) => {
     await restoreBrowserSize(t);
-    await changeTheme('material.blue.light');
 
     return createWidget(platform, 'dxScheduler', {
       dataSource: [],
@@ -35,7 +34,6 @@ fixture('Scheduler: Material theme and all-day panel');
     }, true);
   })
     .after(async (t) => {
-      await changeTheme('generic.light');
       await restoreBrowserSize(t);
     });
 });

@@ -2,7 +2,6 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../helpers/multi-platform-test';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
@@ -24,21 +23,15 @@ test('dateNavigator buttons should have "text" styling mode with material theme'
 
     .expect(toolbar.navigator.nextButton.hasClass('dx-button-mode-text'))
     .ok();
-}).before(async (_, { platform }) => {
-  await changeTheme('material.blue.light');
-
-  return createWidget(
-    platform,
-    'dxScheduler',
-    {
-      currentView: 'day',
-      views: ['day'],
-      height: 580,
-    },
-  );
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async (_, { platform }) => createWidget(
+  platform,
+  'dxScheduler',
+  {
+    currentView: 'day',
+    views: ['day'],
+    height: 580,
+  },
+));
 
 test('viewSwitcher dropdown button popup should have a specified class', async (t) => {
   const { toolbar } = new Scheduler('#container');
@@ -51,21 +44,15 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
 
     .expect(Selector(viewSwitcherDropDownButtonContent).count)
     .eql(1);
-}).before(async (_, { platform }) => {
-  await changeTheme('material.blue.light');
-
-  return createWidget(
-    platform,
-    'dxScheduler',
-    {
-      currentView: 'day',
-      views: ['day'],
-      height: 580,
-    },
-  );
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async (_, { platform }) => createWidget(
+  platform,
+  'dxScheduler',
+  {
+    currentView: 'day',
+    views: ['day'],
+    height: 580,
+  },
+));
 
 test('The toolbar should not display if the config is empty', async (t, { platform, screenshotComparerOptions }) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -83,21 +70,15 @@ test('The toolbar should not display if the config is empty', async (t, { platfo
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (_, { platform }) => {
-  await changeTheme('material.blue.light');
-
-  return createWidget(
-    platform,
-    'dxScheduler',
-    {
-      currentDate: new Date(2020, 2, 2),
-      currentView: 'day',
-      views: ['day'],
-      height: 580,
-      toolbar: [],
-    },
-    true,
-  );
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async (_, { platform }) => createWidget(
+  platform,
+  'dxScheduler',
+  {
+    currentDate: new Date(2020, 2, 2),
+    currentView: 'day',
+    views: ['day'],
+    height: 580,
+    toolbar: [],
+  },
+  true,
+));
