@@ -2366,6 +2366,34 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
     });
 });
 
+QUnit.test('data has base64 format if useBase64 used(T1136337)', function(assert) {
+    const done = assert.async();
+    const _getBlob = imageCreator._getBlob;
+    const _getBase64 = imageCreator._getBase64;
+    const testingMarkup = '<svg></svg>';
+
+    imageCreator._getBlob = function() {
+        return 'blobData';
+    };
+
+    imageCreator._getBase64 = function() {
+        return 'base64Data';
+    };
+
+    const deferred = imageCreator.getData(testingMarkup, { useBase64: true });
+
+    assert.expect(1);
+    $.when(deferred).done(function(data) {
+        try {
+            assert.equal(data, 'base64Data', 'data has base64 format');
+        } finally {
+            imageCreator._getBlob = _getBlob;
+            imageCreator._getBase64 = _getBase64;
+            done();
+        }
+    });
+});
+
 QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
     if(typeUtils.isFunction(window.Blob)) {
         assert.ok(true, 'Skip if there isn\'t Blob');
