@@ -2560,63 +2560,65 @@ QUnit.test('Some items is async', function(assert) {
 
 QUnit.module('Tests with private API usage', {
     beforeEach() {
-        this.orig_getBlob = imageCreator._getBlob;
-        this.orig_getBase64 = imageCreator._getBase64;
+        this.originalGetBlob = imageCreator._getBlob;
+        this.originalGetBase64 = imageCreator._getBase64;
 
         imageCreator._getBlob = () => 'blobData';
         imageCreator._getBase64 = () => 'base64Data';
     },
     afterEach() {
-        imageCreator._getBlob = this.orig_getBlob;
-        imageCreator._getBase64 = this.orig_getBase64;
+        imageCreator._getBlob = this.originalGetBlob;
+        imageCreator._getBase64 = this.originalGetBase64;
     }
-});
+}, () => {
 
-QUnit.test('getData returns Blob when it supported by Browser', function(assert) {
-    if(!typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t blob');
-        return;
-    }
+    QUnit.test('getData returns Blob when it supported by Browser', function(assert) {
+        if(!typeUtils.isFunction(window.Blob)) {
+            assert.ok(true, 'Skip if there isn\'t blob');
+            return;
+        }
 
-    const done = assert.async();
-    const markup = '<svg></svg>';
+        const done = assert.async();
+        const markup = '<svg></svg>';
 
-    const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
+        const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
 
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        assert.equal(data, 'blobData', '_getBlob was called');
-        done();
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'blobData', '_getBlob was called');
+            done();
+        });
     });
-});
 
-QUnit.test('data has base64 format if useBase64 is true(T1136337)', function(assert) {
-    const done = assert.async();
-    const markup = '<svg></svg>';
+    QUnit.test('data has base64 format if useBase64 is true(T1136337)', function(assert) {
+        const done = assert.async();
+        const markup = '<svg></svg>';
 
-    const deferred = imageCreator.getData(markup, { useBase64: true });
+        const deferred = imageCreator.getData(markup, { useBase64: true });
 
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        assert.equal(data, 'base64Data', 'data has base64 format');
-        done();
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'base64Data', 'data has base64 format');
+            done();
+        });
     });
-});
 
-QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
-    if(typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t Blob');
-        return;
-    }
+    QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
+        if(typeUtils.isFunction(window.Blob)) {
+            assert.ok(true, 'Skip if there isn\'t Blob');
+            return;
+        }
 
-    const done = assert.async();
-    const markup = '<svg></svg>';
+        const done = assert.async();
+        const markup = '<svg></svg>';
 
-    const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
+        const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
 
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        assert.equal(data, 'base64Data', '_getBase64 was called');
-        done();
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'base64Data', '_getBase64 was called');
+            done();
+        });
     });
+
 });
