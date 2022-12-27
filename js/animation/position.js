@@ -297,10 +297,9 @@ const calculatePosition = function(what, options) {
 
         if(boundary) {
             const $boundary = $(boundary);
-            const boundaryPosition = $boundary.offset();
 
-            left = boundaryPosition.left;
-            top = boundaryPosition.top;
+            left = $boundary.scrollLeft();
+            top = $boundary.scrollTop();
 
             boundaryWidth = getWidth($boundary);
             boundaryHeight = getHeight($boundary);
