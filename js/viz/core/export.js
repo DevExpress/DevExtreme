@@ -679,6 +679,7 @@ export const plugin = {
             options.exportedAction = null;
             options.margin = 0;
             options.format = 'PNG';
+            options.useBase64 = true;
             options.fileSavingAction = eventArgs => {
                 print(`data:image/png;base64,${eventArgs.data}`, { width: options.width, __test: options.__test });
                 eventArgs.cancel = true;
