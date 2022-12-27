@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 

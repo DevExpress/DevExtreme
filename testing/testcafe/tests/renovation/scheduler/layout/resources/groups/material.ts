@@ -5,7 +5,7 @@ import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
 
 const test = multiPlatformTest({
-  page: 'declaration/schedulerMaterial',
+  page: 'declaration/scheduler',
   platforms: ['jquery', 'react'],
 });
 
