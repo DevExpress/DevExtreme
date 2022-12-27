@@ -3,17 +3,19 @@ const ARC_COORD_PREC = 5;
 import { normalizeAngle, normalizeArcParams } from '../../core/utils';
 
 export function dividePoints(bars) {
-    return bars.reduce(function(r, bar) {
+    return bars.reduce(function(stackBars, bar) {
         const angle = normalizeAngle(bar._angle);
+        const isRightSide = angle <= 90 || angle >= 270;
         bar._text._lastCoords = { x: 0, y: 0 };
-        (angle <= 90 || angle >= 270 ? r.right : r.left)
+
+        (isRightSide ? stackBars.right : stackBars.left)
             .push({
                 series: {
-                    isStackedSeries: ()=> false,
-                    isFullStackedSeries: ()=> false
+                    isStackedSeries: () => false,
+                    isFullStackedSeries: () => false
                 },
-                getLabels: ()=> [{
-                    isVisible: ()=> true,
+                getLabels: () => [{
+                    isVisible: () => true,
                     getBoundingRect: () => {
                         const { height, width, x, y } = bar._text.getBBox();
                         const lastCoords = bar._text._lastCoords;
@@ -21,11 +23,11 @@ export function dividePoints(bars) {
                         return {
                             x: x + lastCoords.x,
                             y: y + lastCoords.y,
-                            width: width,
-                            height: height,
+                            width,
+                            height,
                         };
                     },
-                    shift: (x, y)=> {
+                    shift: (x, y) => {
                         const box = bar._text.getBBox();
 
                         bar._text._lastCoords = { x: x - box.x, y: y - box.y };
@@ -37,7 +39,7 @@ export function dividePoints(bars) {
                 }]
             }
             );
-        return r;
+        return stackBars;
     }, { left: [], right: [] });
 }
 
@@ -45,15 +47,18 @@ export const clearLabelsCrossTitle = (bars, minY)=> {
     bars.forEach(bar => {
         const box = bar._text.getBBox();
         const lastCoords = bar._text._lastCoords;
-        if(minY > box.y + lastCoords.y) {
 
+        if(minY > box.y + lastCoords.y) {
             bar.hideLabel();
         }
     });
 };
 
-const getStartCoordsArc = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
-    return { x: (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), y: (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC) };
+const getStartCoordsArc = function(x, y, innerR, outerR, startAngleCos, startAngleSin) {
+    return {
+        x: (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC),
+        y: (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC)
+    };
 };
 
 export const drawConnector = (bars, connectorWidth) => {
@@ -73,11 +78,17 @@ export const drawConnector = (bars, connectorWidth) => {
 
         if(bar._angle > 90) {
             bar._line.attr({ points: [
-                xStart + shiftConnector, yStart + shiftConnector, box.x + box.width + lastCoords.x, box.y + box.height / 2 + lastCoords.y
+                xStart + shiftConnector,
+                yStart + shiftConnector,
+                box.x + box.width + lastCoords.x,
+                box.y + box.height / 2 + lastCoords.y
             ] });
         } else if(bar._angle <= 90) {
             bar._line.attr({ points: [
-                xStart - shiftConnector, yStart + shiftConnector, box.x + lastCoords.x, box.y + box.height / 2 + lastCoords.y
+                xStart - shiftConnector,
+                yStart + shiftConnector,
+                box.x + lastCoords.x,
+                box.y + box.height / 2 + lastCoords.y
             ] });
         }
         bar._line.rotate(0);
