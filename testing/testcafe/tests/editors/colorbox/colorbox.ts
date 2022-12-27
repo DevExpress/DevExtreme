@@ -22,7 +22,7 @@ test('Colorbox should display full placeholder', async (t) => {
   await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
 
   return createWidget('dxColorBox', {
-    width: 300,
+    width: '100%',
     placeholder: 'I am a very long placeholder',
   }, true, '#colorBox');
 });
