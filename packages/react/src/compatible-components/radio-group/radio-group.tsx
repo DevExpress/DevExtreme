@@ -25,6 +25,7 @@ interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
 type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
 
+//* Component={"name":"RadioGroupCompatible", "jQueryRegistered":true}
 export function RadioGroupCompatible<T>({
   items,
   itemRender,

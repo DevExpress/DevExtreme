@@ -6,13 +6,22 @@
 </head>
 
 <body>
-    <div id="cmp">
+    <div id="examples">
         <script src="../../packages/jquery/lib/bundle.debug.js" charset="utf-8"></script>
-        <script>
-            (function() {
-                new window.DevExpress.ui.dxRadioButton(document.getElementById('cmp'), { value: false, label: 'Check me' })
-            })()
-        </script>
+        <div id="cmp">
+            <script>
+                (function() {
+                    new window.DevExpress.ui.dxRadioButton(document.getElementById('cmp'), { value: false, label: 'Check me' })
+                })()
+            </script>
+        </div>
+        <div id="cmp2">
+            <script>
+                (function() {
+                    new window.DevExpress.ui.dxRadioGroup(document.getElementById('cmp2'), { defaultValue: 'first', items: ['first', 'second', 'third'] })
+                })()
+            </script>
+        </div>
     </div>
 </body>
 

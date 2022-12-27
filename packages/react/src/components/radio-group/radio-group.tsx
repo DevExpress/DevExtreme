@@ -39,4 +39,5 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
 export type RadioGroupProps<T> =
   React.PropsWithChildren<Props<ValueProps<T>, ReadonlyProps, TemplateProps>>;
 
+//* Component={"name":"RadioGroup"}
 export const RadioGroup = memo(RadioGroupInternal) as typeof RadioGroupInternal;
