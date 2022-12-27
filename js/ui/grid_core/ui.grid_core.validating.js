@@ -1339,8 +1339,8 @@ export const validatingModule = {
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
                     const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
                     const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-                    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
                     const hasValidationRules = cell?.column.validationRules?.length;
+                    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
                     const cellValidationStateChanged = validationStatusChanged || validationData.isValid && cellIsMarkedAsInvalid;
 
                     if(rowEditStateChanged || cellValidationStateChanged) {
