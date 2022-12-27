@@ -176,9 +176,6 @@ function clearTestPage() {
         body.prepend(containerElement);
 
         $('#stylesheetRules').remove();
-
-        // const stylesheetRulesEl = document.querySelector('#stylesheetRules');
-        // stylesheetRulesEl?.remove();
     })();
 }
 
