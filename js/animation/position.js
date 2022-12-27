@@ -295,11 +295,12 @@ const calculatePosition = function(what, options) {
         let boundaryWidth = windowWidth;
         let boundaryHeight = windowHeight;
 
-        if(boundary) {
+        if(boundary && !isWindow(boundary)) {
             const $boundary = $(boundary);
+            const boundaryPosition = $boundary.offset();
 
-            left = $boundary.scrollLeft();
-            top = $boundary.scrollTop();
+            left = boundaryPosition.left;
+            top = boundaryPosition.top;
 
             boundaryWidth = getWidth($boundary);
             boundaryHeight = getHeight($boundary);
