@@ -73,6 +73,13 @@ function adaptiveCellTemplate(container, options) {
     }
 }
 
+function focusCellHandler(e) {
+    const $nextCell = e.data?.$nextCell;
+
+    eventsEngine.off($nextCell, 'focus', focusCellHandler);
+    eventsEngine.trigger($nextCell, 'dxclick');
+}
+
 const AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
         const editMode = this._getEditMode();
@@ -1183,18 +1190,17 @@ export const adaptivityModule = {
                         && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
                 },
 
-                _processNextCellInMasterDetail: function($nextCell) {
+                _processNextCellInMasterDetail: function($nextCell, $cell) {
                     this.callBase($nextCell);
 
                     const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
                     const isEditing = this._editingController.isEditing();
 
                     if(isEditing && $nextCell && isCellOrBatchMode && !this._isInsideEditForm($nextCell)) {
-                        const focusHandler = function() {
-                            eventsEngine.off($nextCell, 'focus', focusHandler);
-                            eventsEngine.trigger($nextCell, 'dxclick');
-                        };
-                        eventsEngine.on($nextCell, 'focus', focusHandler);
+                        eventsEngine.off($nextCell, 'focus', focusCellHandler);
+                        eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
+
+                        eventsEngine.trigger($cell, 'focus');
                     }
                 },
 
