@@ -17,6 +17,7 @@ import CollectionWidget from './collection/ui.collection_widget.edit';
 import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
+import { triggerResizeEvent } from '../events/visibility_change';
 
 // STYLE gallery
 
@@ -342,7 +343,7 @@ const Gallery = CollectionWidget.inherit({
         return () => {
             if(!this._wasAnyItemTemplateRendered) {
                 this._wasAnyItemTemplateRendered = true;
-                this._dimensionChanged(); // NOTE: T1132935
+                triggerResizeEvent(this.$element()); // NOTE: T1132935
             }
         };
     },
