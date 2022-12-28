@@ -15719,6 +15719,7 @@ QUnit.module('Editing with validation', {
                     validationRules: [{
                         type: 'custom',
                         message: 'Test',
+                        reevaluate: true,
                         validationCallback: function(e) {
                             return !!e.data.age;
                         }
@@ -15731,6 +15732,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
+        this.clock.tick();
 
         // assert
         assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
@@ -15739,6 +15741,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.cellValue(0, 'age', 123);
+        this.clock.tick();
 
         // assert
         assert.deepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell isn\'t repainted');
@@ -15762,6 +15765,7 @@ QUnit.module('Editing with validation', {
                     validationRules: [{
                         type: 'custom',
                         message: 'Test',
+                        reevaluate: true,
                         validationCallback: function(e) {
                             return !!e.data.age;
                         }
@@ -15774,6 +15778,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editRow(0);
+        this.clock.tick();
 
         // assert
         assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
@@ -15782,6 +15787,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.cellValue(0, 'age', '');
+        this.clock.tick();
 
         // assert
         assert.notDeepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell is repainted');
