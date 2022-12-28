@@ -1055,9 +1055,9 @@ export const validatingModule = {
                                     onContentReady: (e) => {
                                         // iOS, T1131810
                                         // this will trigger 'focusin' event on updateFocus in editor_factory
-                                        e.element.on('touchstart', () => setTimeout(() => {
-                                            e.element.get(0).focus();
-                                        }));
+                                        eventsEngine.on(e.element, 'touchstart', () => {
+                                            setTimeout(() => e.element.focus());
+                                        });
                                     }
                                 };
                                 return (new Button($buttonElement, buttonOptions)).$element();
