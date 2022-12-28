@@ -18,7 +18,7 @@ export class RadioGroupCompatible extends ComponentWrapper {
 
   get _propsInfo() {
     return {
-      twoWay: [['valueChange', 'value', 'defaultValue']],
+      twoWay: [['value', 'defaultValue', 'valueChange']],
       allowNull: [],
       elements: [],
       templates: [],
