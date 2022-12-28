@@ -72,10 +72,6 @@ function isNotFocusedRow($row) {
     return !$row || ($row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS));
 }
 
-function isCellElement($element) {
-    return $element.length && $element[0].tagName === 'TD';
-}
-
 function isEditorCell(that, $cell) {
     return !that._isRowEditMode() && $cell && !$cell.hasClass(COMMAND_SELECT_CLASS) && $cell.hasClass(EDITOR_CELL_CLASS);
 }
@@ -993,7 +989,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     focus: function(element) {
         let activeElementSelector;
         const focusedRowEnabled = this.option('focusedRowEnabled');
-        const isHighlighted = isCellElement($(element));
+        const isHighlighted = this._isCellElement($(element));
 
         if(!element) {
             activeElementSelector = '.dx-datagrid-rowsview .dx-row[tabindex]';
@@ -1022,7 +1018,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const isRowFocusType = this.isRowFocusType();
         let args = {};
 
-        if(!$focusedView.length || isCellElement($element) && !this._isCellValid($element)) {
+        if(!$focusedView.length || this._isCellElement($element) && !this._isCellValid($element)) {
             return;
         }
 
@@ -1030,7 +1026,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        if(isCellElement($element) || isGroupRow($element)) {
+        if(this._isCellElement($element) || isGroupRow($element)) {
             this.setCellFocusType();
             args = this._fireFocusChangingEvents(null, $element, false, isHighlighted);
             $element = args.$newCellElement;
@@ -1093,7 +1089,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             if(focusedView) {
                 this.setFocusedRowIndex(this._getRowIndex($row));
             }
-        } else if(isCellElement($cell)) {
+        } else if(this._isCellElement($cell)) {
             $focusElement = $cell;
             this._updateFocusedCellPosition($cell);
         }
@@ -1892,6 +1888,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         return includeCommandCells ? columnIndex >= 0 && columnIndex <= visibleColumnsCount - 1 : columnIndex > 0 && columnIndex < visibleColumnsCount - 1;
     },
+    _isCellElement: function($element) {
+        return $element.length && $element[0].tagName === 'TD';
+    },
     _getCellElementFromTarget: function(target) {
         const elementType = this._getElementType(target);
         const $targetElement = $(target);
@@ -2025,7 +2024,7 @@ export const keyboardNavigationModule = {
                     const updateCellTabIndex = function($cell) {
                         const isMasterDetailCell = keyboardController._isMasterDetailCell($cell);
                         const isValidCell = keyboardController._isCellValid($cell);
-                        if(!isMasterDetailCell && isValidCell && isCellElement($cell)) {
+                        if(!isMasterDetailCell && isValidCell && keyboardController._isCellElement($cell)) {
                             keyboardController._applyTabIndexToElement($cell);
                             keyboardController.setCellFocusType();
                             return true;
