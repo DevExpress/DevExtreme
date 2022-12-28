@@ -1,15 +1,19 @@
 # General d.ts files
 
-*.d.ts @IlyaKhD @DevExpress/devextreme-techwriters
-/ts/** @IlyaKhD
+*.d.ts                   @DevExpress/devextreme-api-reviewers @DevExpress/devextreme-techwriters
+/ts/**                   @DevExpress/devextreme-api-reviewers
 
 # Grids
 
-/js/ui/data_grid.d.ts    @DevExpress/devextreme-grids @IlyaKhD @DevExpress/devextreme-techwriters
+/js/ui/data_grid.d.ts    @DevExpress/devextreme-grids @DevExpress/devextreme-api-reviewers @DevExpress/devextreme-techwriters
 /js/ui/data_grid.js      @DevExpress/devextreme-grids
 /js/ui/data_grid/**      @DevExpress/devextreme-grids
 /js/ui/grid_core/**      @DevExpress/devextreme-grids
 
-/js/ui/tree_list.d.ts    @DevExpress/devextreme-grids @IlyaKhD @DevExpress/devextreme-techwriters
+/js/ui/tree_list.d.ts    @DevExpress/devextreme-grids @DevExpress/devextreme-api-reviewers @DevExpress/devextreme-techwriters
 /js/ui/tree_list.js      @DevExpress/devextreme-grids
 /js/ui/tree_list/**      @DevExpress/devextreme-grids
+
+# DevOps
+
+ /.github/**             @DevExpress/devextreme-devops
