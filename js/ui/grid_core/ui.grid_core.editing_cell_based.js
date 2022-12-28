@@ -86,7 +86,7 @@ export default {
 
                         // iOS, T1131810
                         // on iphones and ipads if on 'touchstart' DOM content was updated, mouse events (click, mousedown, ...) listeners are not called
-                        // to make elements possible to hover
+                        // to make elements possible to hover.
                         // This listener triggers 'dxclick' event if it wasn't triggered
                         this._iosClickEmitter = (e) => {
                             let clickCalled = false;
@@ -95,7 +95,7 @@ export default {
 
                             setTimeout(() => {
                                 if(!clickCalled) {
-                                    $(e.target).trigger('dxclick');
+                                    eventsEngine.trigger(e.target, 'dxclick');
                                 }
                             }, 300);
                         };
