@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import DateBox from '../../../model/dateBox';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
@@ -14,7 +14,7 @@ fixture`DateBox (datetime) geometry (T896846)`
 
 const themes = ['material.blue.light', 'generic.light'];
 themes.forEach((theme) => {
-  test(`Geometry is good (${theme})`, async (t) => {
+  safeSizeTest(`Geometry is good (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dateBox = new DateBox('#container');
 
@@ -46,8 +46,7 @@ themes.forEach((theme) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(600, 550);
+  }, [600, 550]).before(async () => {
     await changeTheme(theme);
     await waitFont();
 
@@ -57,7 +56,5 @@ themes.forEach((theme) => {
       width: 200,
       value: new Date(1.5e12),
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 });
