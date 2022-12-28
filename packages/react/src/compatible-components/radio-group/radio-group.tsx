@@ -30,9 +30,9 @@ export function RadioGroupCompatible<T>({
   items,
   itemRender,
   itemComponent: ItemComponent,
-  defaultValue,
   valueExpr,
   displayExpr,
+  ...radioGroupProps
 }: CompatibleRadioGroupProps<T>) {
   const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
   const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
@@ -46,9 +46,9 @@ export function RadioGroupCompatible<T>({
     }
     return getItemLabel(item);
   };
-
   return (
-    <RadioGroup<T> defaultValue={defaultValue}>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <RadioGroup<T> {...radioGroupProps}>
       {items.map((item, index) => {
         const value = getItemValue(item);
         const key = `${value}-${index}`;
