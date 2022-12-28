@@ -13,6 +13,7 @@ import { WidgetName } from '../../helpers/createWidget';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
+import AdaptiveDetailRow from './adaptiveDetailRow';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -28,6 +29,7 @@ export const CLASS = {
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
+  adaptiveDetailRow: 'dx-adaptive-detail-row',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
@@ -125,6 +127,10 @@ export default class DataGrid extends Widget {
 
   getGroupRow(index: number): GroupRow {
     return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index), this.getName());
+  }
+
+  getAdaptiveRow(index: number): AdaptiveDetailRow {
+    return new AdaptiveDetailRow(this.element.find(`.${CLASS.adaptiveDetailRow}`).nth(index));
   }
 
   getFocusedRow(): Selector {
@@ -294,6 +300,15 @@ export default class DataGrid extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).expandRow(key),
+      { dependencies: { getInstance, key } },
+    )();
+  }
+
+  apiExpandAdaptiveDetailRow(key: unknown): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).expandAdaptiveDetailRow(key),
       { dependencies: { getInstance, key } },
     )();
   }
