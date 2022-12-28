@@ -9,6 +9,7 @@ import domAdapter from '../../../core/dom_adapter';
 import { DxElement, getPublicElement } from '../../../core/element';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { isDefined } from '../../../core/utils/type';
+import { recordMutations } from './mutations_recording';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 type UnknownRecord = Record<PropertyKey, unknown>;
@@ -24,10 +25,6 @@ interface TemplateWrapperProps {
   model?: TemplateModel;
   transclude?: boolean;
   renovated?: boolean;
-}
-
-function isChildNode(node: Node): node is ChildNode {
-  return typeof (node as Partial<ChildNode>).remove === 'function';
 }
 
 function isDxElementWrapper(
@@ -53,30 +50,6 @@ function defaultComparer(
 
   const sameModel = model === nextModel;
   return !sameModel;
-}
-
-function revertMutation({ type, addedNodes }: MutationRecord): void {
-  switch (type) {
-    case 'childList':
-      addedNodes.forEach((n) => isChildNode(n) && n.remove());
-      break;
-    default:
-      break;
-  }
-}
-
-function recordMutations<TReturn>(target: Node, func: () => TReturn): [
-  TReturn,
-  MutationRecord[],
-] {
-  const observer = new MutationObserver(() => {});
-
-  // eslint-disable-next-line spellcheck/spell-checker
-  observer.observe(target, { childList: true, attributes: true, subtree: false });
-  const result: [TReturn, MutationRecord[]] = [func(), observer.takeRecords()];
-  observer.disconnect();
-
-  return result;
 }
 
 function buildTemplateContent(
@@ -115,15 +88,8 @@ function buildTemplateContent(
 
 function noop(): void {}
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function detectTemplateBehavior(container: Node, content: Node[]) {
-  return content.length === 0 || (content.length === 1 && content[0] === container)
-    ? 'mutates-container'
-    : 'returns-content';
-}
-
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
-  __templateCleaner: (() => void) = noop;
+  __cleanParent: () => void = noop;
 
   constructor(props: TemplateWrapperProps) {
     super(props);
@@ -138,28 +104,18 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     }
 
     const container = node.parentElement;
-    const [content, mutations] = recordMutations(
+
+    this.__cleanParent();
+    this.__cleanParent = recordMutations(
       node.parentElement,
-      () => buildTemplateContent(this.props, getPublicElement($(container))),
+      () => {
+        const content = buildTemplateContent(this.props, getPublicElement($(container)));
+
+        if (content.length !== 0 && !(content.length === 1 && content[0] === container)) {
+          node.after(...content);
+        }
+      },
     );
-
-    this.__templateCleaner();
-
-    switch (detectTemplateBehavior(container, content)) {
-      case 'mutates-container':
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        this.__templateCleaner = () => mutations.forEach(revertMutation);
-        break;
-
-      case 'returns-content':
-        node.after(...content);
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        this.__templateCleaner = () => content.forEach((el) => el?.remove());
-        break;
-
-      default:
-        this.__templateCleaner = noop;
-    }
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
@@ -181,7 +137,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
   componentWillUnmount(): void {
-    this.__templateCleaner();
+    this.__cleanParent();
   }
 
   render(): JSX.Element | null {
