@@ -22,7 +22,7 @@ export class RadioGroupCompatible extends ComponentWrapper {
       allowNull: [],
       elements: [],
       templates: [],
-      props: ['items', 'displayExpr', 'valueExpr', 'itemRender', 'defaultValue', 'value'],
+      props: ['items', 'displayExpr', 'valueExpr', 'itemRender', 'defaultValue', 'value', 'valueChange'],
     };
   }
 
