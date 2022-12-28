@@ -3292,7 +3292,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
-    // T1131810, T1023809
+    // T1131810
     QUnit.test('Cell - lookup cell should be able to be unfocused after its value was changed on iOS', function(assert) {
         try {
             // arrange
@@ -3371,8 +3371,8 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 this.clock.tick();
             };
 
-            // Check revert button
             // act
+            // Check revert button
             selectLookupValue(1);
 
             touchStart($('.dx-revert-button').get(0));
