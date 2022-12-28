@@ -106,7 +106,7 @@ export default {
                 },
 
                 dispose: function() {
-                    this.callBase();
+                    this.callBase.apply(this, arguments);
 
                     eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
                     eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
