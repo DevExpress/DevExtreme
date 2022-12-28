@@ -168,19 +168,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _setTableSizes() {
+        super._setTableSizes();
         const minHeight = this._getWorkSpaceMinHeight();
 
         setHeight(this._$sidebarTable, minHeight);
         setHeight(this._$dateTable, minHeight);
-
-        super._setTableSizes();
 
         this.virtualScrollingDispatcher.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
         let minHeight = this._getWorkSpaceHeight();
-        const workspaceContainerHeight = getOuterHeight(this.$element(), true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
+        const workspaceContainerHeight = getOuterHeight(this.$element(), true) - this.getHeaderPanelHeight() + 9 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
