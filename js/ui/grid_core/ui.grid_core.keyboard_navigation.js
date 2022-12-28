@@ -1868,7 +1868,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($(target), direction);
 
             const $nextCell = this._getNextCell(direction, 'row');
-            this._processNextCellInMasterDetail($nextCell);
+            this._processNextCellInMasterDetail($nextCell, $(target));
             return true;
         }
 
