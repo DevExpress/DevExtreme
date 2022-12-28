@@ -419,7 +419,7 @@ QUnit.test('Depends on theme', function(assert) {
 });
 
 QUnit.test('Print method - use export to prepare image, create hidden iFrame with image, delete iFrame after printing', function(assert) {
-    assert.expect(30);
+    assert.expect(31);
     const done = assert.async();
     const deferred = new Deferred();
     const exportFunc = clientExporter.export;
@@ -490,6 +490,7 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
         assert.equal(firstExportCall.args[1].backgroundColor, '#ff0000', 'backgroundColor');
         assert.equal(firstExportCall.args[1].fileName, 'file', 'fileName');
         assert.equal(firstExportCall.args[1].format, 'PNG', 'format');
+        assert.equal(firstExportCall.args[1].useBase64, true, 'image data should be base64');
         assert.equal(firstExportCall.args[1].margin, 0, 'margin');
         assert.ok(firstExportCall.args[1].fileSavingAction);
         assert.equal(firstExportCall.args[1].exportingAction, null);
