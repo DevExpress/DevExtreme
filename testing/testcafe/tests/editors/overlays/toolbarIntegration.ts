@@ -28,6 +28,8 @@ fixture.disablePageReloads`Popup_toolbar`
           await bottomToolbar.option('overflowMenuVisible', true);
         }
 
+        await t.hover(instance.getCloseButton().element);
+
         await takeScreenshotInTheme(t, takeScreenshot, `${name.replace('dx', '')}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`);
 
         await t

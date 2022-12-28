@@ -29,20 +29,20 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
 
 .dx-popup-title {
   position: relative;
-  padding: $material-popup-toolbartop-padding;
   min-height: 28px;
   border-bottom: 1px solid $popup-title-border-color;
   background: $popup-title-bg;
   color: $popup-title-color;
 
   &.dx-toolbar {
-    @include dx-toolbar-sizing($material-popup-toolbar-height, $material-popup-toolbartop-padding, $material-popup-toolbar-label-font-size, $material-popup-toolbar-item-spacing );
+    @include dx-toolbar-sizing(
+      $material-popup-toolbar-height,
+      0 $material-popup-toolbar-horizontal-padding,
+      $material-popup-toolbar-label-font-size,
+      $material-popup-toolbar-item-spacing
+    );
 
     box-shadow: none;
-
-    .dx-button.dx-closebutton {
-      display: block;
-    }
   }
 }
 
@@ -61,7 +61,7 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
   &.dx-toolbar {
     @include dx-toolbar-sizing(
       $material-popup-bottom-toolbar-height,
-      $material-popup-toolbarbottom-padding,
+      0 $material-popup-content-withtitle-top-padding,
       $material-popup-toolbar-label-font-size,
       $material-popup-toolbar-item-spacing
     );
@@ -75,27 +75,4 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
 
 .dx-dialog-message {
   padding: 0;
-}
-
-.dx-rtl {
-  .dx-popup-title {
-    &.dx-toolbar {
-      @include dx-toolbar-sizing(
-        $material-toolbar-height,
-        $material-popup-toolbartop-padding-rtl,
-        $material-popup-toolbar-label-font-size,
-        $material-popup-toolbar-item-spacing );
-    }
-  }
-
-  .dx-popup-bottom {
-    &.dx-toolbar {
-      @include dx-toolbar-sizing(
-        $material-popup-bottom-toolbar-height,
-        $material-popup-toolbarbottom-padding-rtl,
-        $material-popup-toolbar-label-font-size,
-        $material-popup-toolbar-item-spacing
-      );
-    }
-  }
 }

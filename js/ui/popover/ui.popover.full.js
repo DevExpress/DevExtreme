@@ -7,4 +7,8 @@ export default class PopoverFull extends Popover {
     }
 }
 
+PopoverFull.defaultOptions = function(rule) {
+    Popover.defaultOptions(rule);
+};
+
 registerComponent('dxPopover', PopoverFull);
