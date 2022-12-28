@@ -1284,6 +1284,10 @@ declare module DevExpress {
      */
     static resetGroup(group: string | any): void;
     /**
+     * [descr:validationEngine.shouldFocusFirstInvalidComponent(value)]
+     */
+    static shouldFocusFirstInvalidComponent(value: boolean): void;
+    /**
      * [descr:validationEngine.unregisterModelForValidation(model)]
      */
     static unregisterModelForValidation(model: any): void;

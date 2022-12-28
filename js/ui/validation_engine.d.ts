@@ -56,6 +56,15 @@ export default class validationEngine {
     static resetGroup(group: string | any): void;
     /**
      * @docid
+     * @section Core
+     * @publicName shouldFocusFirstInvalidComponent(value)
+     * @param1 value:boolean
+     * @static
+     * @public
+     */
+    static shouldFocusFirstInvalidComponent(value: boolean): void;
+    /**
+     * @docid
      * @publicName unregisterModelForValidation(model)
      * @param1 model:object
      * @static

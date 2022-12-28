@@ -1751,43 +1751,94 @@ QUnit.module('Groups', {
         assert.equal(groupConfig.validators.length, 0, 'Validator was unregistered');
     });
 
+    QUnit.module('ValidateGroup() method', {
+        beforeEach: function() {
+            this.validator = sinon.createStubInstance(Validator);
+            this.focusSpy = sinon.spy();
+            this.validator.on = sinon.stub();
+            this.validator.off = sinon.stub();
+            this.validator.validate.returns({
+                isValid: false,
+                brokenRule: { type: 'required', isValid: false },
+                brokenRules: [{
+                    type: 'required',
+                    isValid: false,
+                    validator: { focus: this.focusSpy }
+                }]
+            });
+        }
+    }, () => {
+        [
+            {
+                group: 'newGroup',
+                groupType: 'specific group'
+            },
+            {
+                group: undefined,
+                groupType: 'undefined group'
+            }
+        ].forEach(({ group, groupType }) => {
+            QUnit.module(`with ${groupType}`, {
+                beforeEach: function() {
+                    ValidationEngine.registerValidatorInGroup(group, this.validator);
 
-    QUnit.test('Simple group - call validateGroup method', function(assert) {
-        const group = 'newGroup';
-        const validator = sinon.createStubInstance(Validator);
+                    this.result = ValidationEngine.validateGroup(group);
+                }
+            }, () => {
+                QUnit.test('should return group results', function(assert) {
+                    assert.ok(this.result, 'Group Result is defined');
+                });
 
-        validator.on = sinon.stub();
-        validator.off = sinon.stub();
+                QUnit.test('should call validate function', function(assert) {
+                    assert.ok(this.validator.validate.calledOnce, 'Validation Engine calls validator validate');
+                });
 
-        validator.validate.returns({ isValid: false, brokenRule: { type: 'required', isValid: false }, brokenRules: [{ type: 'required', isValid: false }] });
+                QUnit.test('returning object should include isValid property', function(assert) {
+                    assert.strictEqual(this.result.isValid, false);
+                });
 
-        ValidationEngine.registerValidatorInGroup(group, validator);
-        // act
-        const result = ValidationEngine.validateGroup(group);
+                QUnit.test('returning object should include brokenRules array', function(assert) {
+                    assert.ok(this.result.brokenRules);
+                    assert.equal(this.result.brokenRules.length, 1);
 
-        // assert
-        assert.ok(result, 'Group Result is defined');
-        assert.ok(validator.validate.calledOnce, 'Validation Engine calls validator validate');
-        assert.strictEqual(result.isValid, false, 'IsValid');
-        assert.ok(result.brokenRules, 'Failed Rules should be passed from validators to group result');
-        assert.equal(result.brokenRules.length, 1, 'Widget\'s validation results should be passed to caller');
+                });
 
-    });
+                QUnit.test('should focus first invalid validator', function(assert) {
+                    assert.ok(this.focusSpy.calledOnce);
+                });
+            });
 
-    QUnit.test('Simple group - call validateGroup method for undefined group', function(assert) {
-        const validator = sinon.createStubInstance(Validator);
-        validator.on = sinon.stub();
-        validator.off = sinon.stub();
-        validator.validate.returns({ isValid: false, brokenRule: { type: 'required', isValid: false }, brokenRules: [{ type: 'required', isValid: false }] });
+            [true, false].forEach((shouldFocus) => {
+                QUnit.test(`should ${shouldFocus ? '' : 'not'} focus first invalid validator when focusFirstInvalidComponent is defined to ${shouldFocus}`, function(assert) {
+                    ValidationEngine.shouldFocusFirstInvalidComponent(shouldFocus);
 
-        ValidationEngine.registerValidatorInGroup(undefined, validator);
-        // act
-        const result = ValidationEngine.validateGroup();
+                    try {
+                        ValidationEngine.registerValidatorInGroup(group, this.validator);
+                        ValidationEngine.validateGroup(group);
 
-        // assert
-        assert.ok(result, 'Group Result is defined');
-        assert.ok(validator.validate.calledOnce, 'Validation Engine calls validator validate');
-        assert.equal(result.brokenRules.length, 1, 'Widget\'s validation results should be passed to caller');
+                        assert.strictEqual(this.focusSpy.calledOnce, shouldFocus);
+                    } finally {
+                        ValidationEngine.shouldFocusFirstInvalidComponent(true);
+                    }
+                });
+            });
+
+            QUnit.test('should trigger validated event', function(assert) {
+                const validatedSpy = sinon.spy();
+
+                ValidationEngine.registerValidatorInGroup(group, this.validator);
+                ValidationEngine.getGroupConfig(group).on('validated', validatedSpy);
+
+                ValidationEngine.validateGroup(group);
+
+                const params = validatedSpy.getCall(0).args[0];
+
+                assert.ok(validatedSpy.calledOnce, 'Handler should be called');
+                assert.ok(validatedSpy.calledOn(ValidationEngine.getGroupConfig(group)), 'Group config should be passed');
+                assert.strictEqual(params.isValid, false, 'IsValid should be passed');
+                assert.strictEqual(params.brokenRules.length, 1, 'Broken validation rules should be passed');
+            });
+        });
     });
 
     QUnit.test('Unknown group - meaningful exception should be created', function(assert) {
@@ -1800,30 +1851,6 @@ QUnit.module('Groups', {
             },
             'Exception messages should be readable'
         );
-    });
-
-    QUnit.test('Event Validated should be triggered', function(assert) {
-        const group = {};
-        const validator = sinon.createStubInstance(Validator);
-        const rule = { type: 'required', isValid: false };
-        const handler = sinon.spy();
-        validator.on = sinon.stub();
-        validator.off = sinon.stub();
-        validator.validate.returns({ isValid: false, brokenRule: rule, brokenRules: [rule] });
-
-        ValidationEngine.registerValidatorInGroup(group, validator);
-        ValidationEngine.getGroupConfig(group).on('validated', handler);
-
-        // act
-        ValidationEngine.validateGroup(group);
-
-        // assert
-        assert.ok(handler.calledOnce, 'Handler should be called');
-        assert.ok(handler.calledOn(ValidationEngine.getGroupConfig(group)), 'Group config should be passed as \'this\'');
-
-        const params = handler.getCall(0).args[0];
-        assert.strictEqual(params.isValid, false, 'IsValid should be passed');
-        assert.deepEqual(params.brokenRules, [rule], 'Broken validation rules should be passed');
     });
 
     QUnit.test('Undefined group is defined by default', function(assert) {
