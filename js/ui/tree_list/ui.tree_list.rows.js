@@ -70,7 +70,7 @@ export const RowsView = rowsModule.views.rowsView.inherit((function() {
 
             const firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
 
-            if(renderingTemplate && options.column.index === firstDataColumnIndex) {
+            if(renderingTemplate && options.column?.index === firstDataColumnIndex) {
                 resultTemplate = {
                     render: function(options) {
                         const $container = options.container;
