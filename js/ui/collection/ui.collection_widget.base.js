@@ -972,8 +972,13 @@ const CollectionWidget = Widget.inherit({
         return itemTemplate.render({
             model: renderArgs.itemData,
             container: renderArgs.container,
-            index: renderArgs.index
+            index: renderArgs.index,
+            onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs)
         });
+    },
+
+    _onItemTemplateRendered: function() {
+        return noop;
     },
 
     _emptyMessageContainer: function() {
