@@ -18,11 +18,11 @@ export class RadioGroupCompatible extends ComponentWrapper {
 
   get _propsInfo() {
     return {
-      twoWay: [['defaultValue', 'valueChange']],
+      twoWay: [['valueChange']],
       allowNull: [],
       elements: [],
       templates: [],
-      props: ['items', 'displayExpr', 'valueExpr', 'itemRender'],
+      props: ['items', 'displayExpr', 'valueExpr', 'itemRender', 'defaultValue'],
     };
   }
 

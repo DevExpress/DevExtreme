@@ -22,6 +22,14 @@
                 })()
             </script>
         </div>
+        <div id="cmp3">
+            <script>
+                var items = [{ label: 'one', value: { prop: 1 }}, { label: 'two', value: { prop: 2 }}, { label: 'three', value: { prop: 3 }}];
+                (function() {
+                    new window.DevExpress.ui.dxRadioGroup(document.getElementById('cmp3'), { defaultValue: items[1].value.prop, items: items, valueExpr: 'value.prop', displayExpr: 'label' })
+                })()
+            </script>
+        </div>
     </div>
 </body>
 
