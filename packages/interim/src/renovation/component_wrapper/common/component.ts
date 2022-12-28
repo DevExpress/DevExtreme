@@ -483,6 +483,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     }
     return null;
   }
+  
+  _buildTemplateArgs(data: TemplateModel): Record<PropertyKey, unknown> {
+    return { model: data };
+  }
 
   _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
     if (!templateOption) {
@@ -495,9 +499,11 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       return undefined;
     }
 
+    const buildTemplateArgs = this._buildTemplateArgs;
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
-      TemplateWrapper, { template, model },
+      TemplateWrapper, { template, ...buildTemplateArgs(model) },
     );
 
     return templateWrapper;
