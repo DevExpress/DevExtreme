@@ -3293,6 +3293,8 @@ QUnit.module('Editing', baseModuleConfig, () => {
     });
 
     // T1131810
+    // on iOS devices if on touch events element content was changed, click events are not fired.
+    // So this test checks if lookup cell works properly only when revert button is shown if only touch events are fired
     QUnit.test('Cell - lookup cell should be able to be unfocused after its value was changed on iOS', function(assert) {
         try {
             // arrange
@@ -3360,6 +3362,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 this.clock.tick();
             };
 
+            const touch = (getElement) => {
+                touchStart(getElement());
+                touchEnd(getElement());
+            };
+
             const getLookupCell = () => dataGrid.getCellElement(0, 1);
 
             const selectLookupValue = (lookupValueIndex) => {
@@ -3375,8 +3382,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // Check revert button
             selectLookupValue(1);
 
-            touchStart($('.dx-revert-button').get(0));
-            touchEnd($('.dx-revert-button').get(0));
+            touch(() => $('.dx-revert-button').get(0));
             this.clock.tick(500);
 
             // assert
@@ -3385,8 +3391,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             // check unfocus on document touch
             selectLookupValue(2);
-            touchStart(document.body);
-            touchEnd(document.body);
+            touch(() => document.body);
             this.clock.tick(500);
 
             // assert
@@ -3396,8 +3401,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             // act
             // open dropdown after value changed
             selectLookupValue(3);
-            touchStart($(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').get(0));
-            touchEnd($(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').get(0));
+            touch(() => $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').get(0));
             this.clock.tick(500);
 
             // assert
