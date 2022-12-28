@@ -89,12 +89,13 @@ export default {
                         // on iphones and ipads if on 'touchstart' DOM content was updated, mouse events (click, mousedown, ...) listeners are not called
                         // to make elements possible to hover.
                         // This listener triggers 'dxclick' event if it wasn't triggered
+                        this._iosClickTimeout;
                         this._iosClickEmitter = (e) => {
                             let clickCalled = false;
 
                             eventsEngine.one(domAdapter.getDocument(), 'dxclick', () => clickCalled = true);
 
-                            setTimeout(() => {
+                            this._iosClickTimeout = setTimeout(() => {
                                 if(!clickCalled) {
                                     eventsEngine.trigger(e.target, 'dxclick');
                                 }
@@ -111,6 +112,8 @@ export default {
                     eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
                     eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
                     eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
+
+                    clearTimeout(this._iosClickTimeout);
                     eventsEngine.off(domAdapter.getDocument(), TOUCH_END, this._iosClickEmitter);
                 },
 
