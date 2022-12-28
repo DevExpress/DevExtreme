@@ -4648,9 +4648,10 @@ QUnit.module('Keyboard navigation', {
         e.key = 'Tab';
         e.shiftKey = true;
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
-        assert.equal(this.getActiveInputElement().val(), 'Super');
+        assert.equal(this.getActiveInputElement().val(), 'Full Name');
     });
 
     QUnit.testInActiveWindow('Skip editing via \'tab\' key before entry to adaptive detail form', function(assert) {
@@ -4670,6 +4671,6 @@ QUnit.module('Keyboard navigation', {
         this.getActiveInputElement().trigger(e);
 
         // assert
-        assert.equal(this.getActiveInputElement().val(), 'Blablablablablablablablablabla');
+        assert.equal(this.getActiveInputElement().val(), 'Psy');
     });
 });

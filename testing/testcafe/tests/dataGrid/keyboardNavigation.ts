@@ -3570,6 +3570,18 @@ test('Adaptive - Adaptive cells should be focused by tab key press', async (t) =
     .ok()
     .expect(secondDataRow.getDataCell(0).element.focused)
     .ok()
+    // second cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(3).element.focused)
+    .ok()
+    // first cell
+    .pressKey('shift+tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).element.focused)
+    .ok()
 
     // adaptive detail row
     // second item
@@ -3717,6 +3729,18 @@ test('Adaptive with batch edit mode - Adaptive cells should not go into edit sta
     .ok()
     .expect(secondDataRow.getDataCell(0).element.focused)
     .ok()
+    // second cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(3).element.focused)
+    .ok()
+    // first cell
+    .pressKey('shift+tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).element.focused)
+    .ok()
 
     // adaptive detail row
     // second item
@@ -3860,6 +3884,18 @@ test('Adaptive with batch edit mode - Adaptive cells should be focused by tab ke
     // second data row
     // first cell
     .pressKey('tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).isEditCell)
+    .ok()
+    // second cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(3).isEditCell)
+    .ok()
+    // first cell
+    .pressKey('shift+tab')
     .expect(secondDataRow.getDataCell(0).isFocused)
     .ok()
     .expect(secondDataRow.getDataCell(0).isEditCell)
