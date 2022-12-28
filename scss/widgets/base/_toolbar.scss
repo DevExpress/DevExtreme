@@ -38,7 +38,6 @@
 
 @mixin dx-toolbar-item() {
   display: table-cell;
-  padding: 0 5px;
   vertical-align: middle;
   box-sizing: content-box;
 
@@ -52,6 +51,8 @@
 }
 
 .dx-toolbar-item {
+  padding: 0 5px;
+
   @include dx-toolbar-item();
 }
 
