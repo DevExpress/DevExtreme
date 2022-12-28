@@ -3292,6 +3292,121 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    // T1131810, T1023809
+    QUnit.test('Cell - lookup cell should be able to be unfocused after its value was changed on iOS', function(assert) {
+        try {
+            // arrange
+            if(!devices.real().ios) {
+                assert.ok(true, 'test only for iOS devices');
+                return;
+            }
+
+            const lookupDataSource = [{ value: 'first' }, { value: 'second' }, { value: 'third' }, { value: 'fourh' }, { value: 'fifth' }];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'first' },
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true,
+                    allowAdding: true,
+                    allowDeleting: true,
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    lookup: {
+                        dataSource: lookupDataSource,
+                        displayExpr: 'value',
+                        valueExpr: 'value',
+                    },
+                }]
+            });
+            this.clock.tick();
+
+            const touchStart = (element) => {
+                const event = {
+                    target: element,
+                    type: 'touchstart',
+                    originalEvent: {
+                        type: 'touchstart',
+                        target: element,
+                        touches: [{ identifier: 1 }],
+                        changedTouches: [{ identifier: 1 }]
+                    }
+                };
+
+                const $element = $(element);
+                $element.trigger('dxpointerdown');
+                $element.trigger(event);
+                this.clock.tick();
+            };
+
+            const touchEnd = (element) => {
+                const event = {
+                    target: element,
+                    type: 'touchend',
+                    originalEvent: {
+                        type: 'touchend',
+                        target: element,
+                        touches: [{ identifier: 1 }],
+                        changedTouches: [{ identifier: 1 }]
+                    }
+                };
+
+                const $element = $(element);
+                $element.trigger('dxpointerup');
+                $element.trigger(event);
+                this.clock.tick();
+            };
+
+            const getLookupCell = () => dataGrid.getCellElement(0, 1);
+
+            const selectLookupValue = (lookupValueIndex) => {
+                $(getLookupCell()).trigger('dxclick');
+                this.clock.tick();
+                $(getLookupCell()).find('.dx-dropdowneditor-button').trigger('dxclick');
+                this.clock.tick();
+                $('.dx-scrollable-wrapper .dx-scrollview-content .dx-item-content').eq(lookupValueIndex).trigger('dxclick');
+                this.clock.tick();
+            };
+
+            // Check revert button
+            // act
+            selectLookupValue(1);
+
+            touchStart($('.dx-revert-button').get(0));
+            touchEnd($('.dx-revert-button').get(0));
+            this.clock.tick(500);
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 1), lookupDataSource[0].value, 'lookup value must be reseted after touch on revert button');
+
+            // act
+            // check unfocus on document touch
+            selectLookupValue(2);
+            touchStart(document.body);
+            touchEnd(document.body);
+            this.clock.tick(500);
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 1), lookupDataSource[2].value, 'lookup value must not be reseted');
+            assert.strictEqual(document.activeElement, document.body, 'Focus must reseted from cell to body');
+
+            // act
+            // open dropdown after value changed
+            selectLookupValue(3);
+            touchStart($(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').get(0));
+            touchEnd($(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').get(0));
+            this.clock.tick(500);
+
+            // assert
+            assert.ok($('.dx-dropdowneditor-overlay').length, 'dropdown list must be opened');
+        } catch(e) {
+            assert.ok(false, 'error occured');
+        }
+    });
+
     ['Cell', 'Batch'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - cell value should be validated when a value in a neighboring cell is modified (repaintChangesOnly enabled) (T1026857)`, function(assert) {
             const data = [
@@ -3989,51 +4104,6 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         const $cell = $(dataGrid.getCellElement(0, 0));
         assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
-    });
-
-    // T1131810
-    QUnit.skip('document.activeElement must be reseted on iPad, when unfocusing lookup cell after its value has been changed', function(assert) {
-        try {
-            // arrange
-            this.realDeviceMock = sinon.stub(devices, 'real').returns({ mac: true });
-
-            const lookupDataSource = [{ value: 'first' }, { value: 'second' }];
-            const dataGrid = createDataGrid({
-                dataSource: [
-                    { id: 1, field1: 'test11', field2: 'first' },
-                ],
-                keyExpr: 'id',
-                editing: {
-                    mode: 'cell',
-                    allowUpdating: true,
-                    allowAdding: true,
-                    allowDeleting: true,
-                },
-                columns: ['field1', {
-                    dataField: 'field2',
-                    lookup: {
-                        dataSource: lookupDataSource,
-                        displayExpr: 'value',
-                        valueExpr: 'value',
-                    },
-                }]
-            });
-            this.clock.tick();
-
-            // act
-            $(dataGrid.getCellElement(0, 1)).trigger('dxclick');
-            $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').trigger('dxclick');
-            this.clock.tick();
-            $('.dx-scrollable-wrapper .dx-scrollview-content .dx-item-content').eq(1).trigger('dxclick');
-
-            $(dataGrid.getCellElement(0, 0)).trigger('dxpointerdown');
-            this.clock.tick();
-
-            // assert
-            assert.strictEqual(document.activeElement.tagName, document.body.tagName, 'document.activeElement must be reseted to body');
-        } finally {
-            this.realDeviceMock.restore();
-        }
     });
 });
 
