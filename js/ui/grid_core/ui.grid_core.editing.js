@@ -7,8 +7,6 @@ import { isDefined, isObject, isFunction, isEmptyObject } from '../../core/utils
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import modules from './ui.grid_core.modules';
-import { name as clickEventName } from '../../events/click';
-import pointerEvents from '../../events/pointer';
 import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
 import { addNamespace } from '../../events/utils/index';
@@ -470,9 +468,6 @@ const EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
-            eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
-            eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
@@ -2448,8 +2443,8 @@ export const editingModule = {
 
                     if(eventName === 'down') {
                         // T1023809
-                        // check for mac also, because ipads' user-agent is Mac
-                        if(devices.real().ios || devices.real().android) {
+                        // check for mac also, because iPads' have same user agent as Mac
+                        if(devices.real().ios || devices.real().android || devices.real().mac) {
                             resetActiveElement();
                         }
 

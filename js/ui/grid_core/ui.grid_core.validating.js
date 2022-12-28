@@ -1052,6 +1052,13 @@ export const validatingModule = {
                                     hint: this.option('editing.texts.validationCancelChanges'),
                                     onClick: () => {
                                         this._editingController.cancelEditData();
+                                    },
+                                    onContentReady: (e) => {
+                                        // iOS, T1131810
+                                        // this will trigger 'focusin' event on updateFocus in editor_factory
+                                        e.element.on('touchstart', () => setTimeout(() => {
+                                            e.element.get(0).focus();
+                                        }));
                                     }
                                 };
                                 return (new Button($buttonElement, buttonOptions)).$element();
