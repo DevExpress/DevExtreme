@@ -20,6 +20,7 @@ import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
+import { resetActiveElement } from '../../core/utils/dom';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
@@ -1054,9 +1055,9 @@ export const validatingModule = {
                                     },
                                     onContentReady: (e) => {
                                         // iOS, T1131810
-                                        // this will trigger 'focusin' event on updateFocus in editor_factory
+                                        // without this revertButton is unclickable on ios
                                         eventsEngine.on(e.element, 'touchstart', () => {
-                                            setTimeout(() => e.element.focus());
+                                            setTimeout(() => resetActiveElement());
                                         });
                                     }
                                 };
