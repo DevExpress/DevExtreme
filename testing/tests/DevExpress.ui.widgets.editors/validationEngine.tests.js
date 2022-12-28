@@ -1809,17 +1809,11 @@ QUnit.module('Groups', {
             });
 
             [true, false].forEach((shouldFocus) => {
-                QUnit.test(`should ${shouldFocus ? '' : 'not'} focus first invalid validator when focusFirstInvalidComponent is defined to ${shouldFocus}`, function(assert) {
-                    ValidationEngine.shouldFocusFirstInvalidComponent(shouldFocus);
+                QUnit.test(`should ${shouldFocus ? '' : 'not'} focus first invalid validator when second argument is defined to ${shouldFocus}`, function(assert) {
+                    ValidationEngine.registerValidatorInGroup(group, this.validator);
+                    ValidationEngine.validateGroup(group, shouldFocus);
 
-                    try {
-                        ValidationEngine.registerValidatorInGroup(group, this.validator);
-                        ValidationEngine.validateGroup(group);
-
-                        assert.strictEqual(this.focusSpy.calledOnce, shouldFocus);
-                    } finally {
-                        ValidationEngine.shouldFocusFirstInvalidComponent(true);
-                    }
+                    assert.strictEqual(this.focusSpy.calledOnce, shouldFocus);
                 });
             });
 

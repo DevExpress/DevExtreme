@@ -476,7 +476,7 @@ QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949285)', {
             }]
         }).dxForm('instance');
 
-        formInstance.validate();
+        formInstance.validate(false);
 
         const editorInstance = formInstance.getEditor('field1');
         const wrapper = $(editorInstance.element()).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
@@ -511,7 +511,7 @@ QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949285)', {
             ]
         })
             .dxForm('instance')
-            .validate();
+            .validate(false);
 
         const wrapper = $(editorElement).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
 

@@ -511,7 +511,6 @@ const GroupConfig = Class.inherit({
 
 const ValidationEngine = {
     groups: [],
-    focusFirstInvalidComponent: true,
 
     getGroupConfig(group) {
         const result = grep(this.groups, function(config) {
@@ -836,7 +835,7 @@ const ValidationEngine = {
         return {};
     },
 
-    validateGroup(group) {
+    validateGroup(group, focusFirstInvalidComponent = true) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
             throw errors.Error('E0110');
@@ -844,15 +843,11 @@ const ValidationEngine = {
 
         const validationResult = groupConfig.validate();
 
-        if(this.focusFirstInvalidComponent && !validationResult.isValid) {
+        if(focusFirstInvalidComponent && !validationResult.isValid) {
             validationResult.brokenRules[0].validator.focus();
         }
 
         return validationResult;
-    },
-
-    shouldFocusFirstInvalidComponent(value) {
-        this.focusFirstInvalidComponent = value;
     },
 
     resetGroup(group) {

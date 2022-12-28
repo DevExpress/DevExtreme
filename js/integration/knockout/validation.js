@@ -79,6 +79,10 @@ if(ko) {
             return result;
         },
 
+        // focus() {
+        //     debugger;
+        // },
+
         _applyValidationResult(result) {
             result.validator = this;
             this._updateValidationResult(result);

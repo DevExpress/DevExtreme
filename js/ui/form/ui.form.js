@@ -1255,8 +1255,8 @@ const Form = Widget.inherit({
         }
     },
 
-    validate: function() {
-        return ValidationEngine.validateGroup(this._getValidationGroup());
+    validate: function(focusFirstInvalidComponent = true) {
+        return ValidationEngine.validateGroup(this._getValidationGroup(), focusFirstInvalidComponent);
     },
 
     getItemID: function(name) {

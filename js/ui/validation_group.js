@@ -52,8 +52,8 @@ class ValidationGroup extends DOMComponent {
         super._initMarkup();
     }
 
-    validate() {
-        return ValidationEngine.validateGroup(this);
+    validate(focusFirstInvalidComponent = true) {
+        return ValidationEngine.validateGroup(this, focusFirstInvalidComponent);
     }
 
     reset() {
