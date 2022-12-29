@@ -1051,12 +1051,12 @@ describe('templates and slots', () => {
     expect(template).toBeCalledTimes(1);
 
     isEqual.mockReturnValue(true);
-    instance.option('elementTemplatePayload', { value: 'test' });
+    instance.option('elementTemplatePayload', { value: 'test', isEqual });
     expect(isEqual).toBeCalledTimes(1);
     expect(template).toBeCalledTimes(1);
 
     isEqual.mockReturnValue(false);
-    instance.option('elementTemplatePayload', { value: 'newValue' });
+    instance.option('elementTemplatePayload', { value: 'newValue', isEqual });
     expect(isEqual).toBeCalledTimes(2);
     expect(template).toBeCalledTimes(2);
   });

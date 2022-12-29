@@ -482,9 +482,21 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return null;
   }
 
-  _buildTemplateArgs(model: TemplateModel): Record<PropertyKey, unknown> {
-    const { data: { isEqual, ...data } = {} } = model;
-    return isEqual ? { model: { data }, isEqual } : { model };
+  _buildTemplateArgs(rawModel: TemplateModel, index: number | undefined): Record<PropertyKey, unknown> {
+    const model = { ...rawModel };
+    const isEqual = model.data?.isEqual;
+    const args = { model };
+
+    if (isEqual) {
+      delete model.data.isEqual;
+      args['isEqual'] = isEqual;
+    }
+
+    if (index !== undefined) {
+      model['index'] = index;
+    }
+
+    return args;
   }
 
   _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
@@ -501,8 +513,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const buildTemplateArgs = this._buildTemplateArgs;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
-      TemplateWrapper, { template, ...buildTemplateArgs(model) },
+    const templateWrapper = (model: TemplateModel, index?: number): VNode => renderer.createElement(
+      TemplateWrapper, { template, ...buildTemplateArgs(model, index) },
     );
 
     return templateWrapper;
