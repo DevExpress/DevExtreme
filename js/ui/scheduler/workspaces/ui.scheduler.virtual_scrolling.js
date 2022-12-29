@@ -316,11 +316,7 @@ export class VirtualScrollingDispatcher {
             this.horizontalVirtualScrolling.reinitState(cellWidth, isForce);
         }
 
-        const needUpdate = needUpdateVertical || needUpdateHorizontal;
-        if(needUpdate) {
-            this.updateTriggered = true;
-        } else if(this.updateTriggered) {
-            this.updateTriggered = false;
+        if(needUpdateVertical || needUpdateHorizontal) {
             this.options.updateGrid?.();
         }
     }
