@@ -22,7 +22,7 @@ export class RadioButton extends ComponentWrapper {
       twoWay: [['checked', 'defaultChecked', 'onChange']],
       allowNull: [],
       elements: [],
-      templates: [],
+      templates: ['radioTemplate', 'labelTemplate'],
       props: ['label', 'value', 'checked', 'defaultChecked', 'onChange'],
     };
   }
