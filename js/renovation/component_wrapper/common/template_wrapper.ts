@@ -17,12 +17,12 @@ type UnknownRecord = Record<PropertyKey, unknown>;
 export interface TemplateModel {
   data: UnknownRecord;
   index: number;
-  isEqual?: (a?: UnknownRecord, b?: UnknownRecord) => boolean;
 }
 
 interface TemplateWrapperProps {
   template: FunctionTemplate;
   model?: TemplateModel;
+  isEqual?: (a?: UnknownRecord, b?: UnknownRecord) => boolean;
   transclude?: boolean;
   renovated?: boolean;
 }
@@ -97,17 +97,14 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   renderTemplate(): void {
-    // eslint-disable-next-line spellcheck/spell-checker
-    const node = findDOMfromVNode(this.$LI, true);
-    if (node?.parentElement == null) {
-      throw new Error('Template must have parent element');
-    }
-
-    const container = node.parentElement;
+    // eslint-disable-next-line spellcheck/spell-checker, rulesdir/no-non-null-assertion
+    const node = findDOMfromVNode(this.$LI, true)!;
+    // eslint-disable-next-line rulesdir/no-non-null-assertion
+    const container = node.parentElement!;
 
     this.__cleanParent();
     this.__cleanParent = recordMutations(
-      node.parentElement,
+      container,
       () => {
         const content = buildTemplateContent(this.props, getPublicElement($(container)));
 
@@ -119,10 +116,11 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
-    const { model } = this.props;
+    const { model, isEqual } = this.props;
 
-    return model?.isEqual
-      ? !model.isEqual(model.data, nextProps.model?.data)
+    return isEqual && model
+      // eslint-disable-next-line rulesdir/no-non-null-assertion
+      ? !isEqual(model.data, nextProps.model!.data)
       : defaultComparer(this.props, nextProps);
   }
 
