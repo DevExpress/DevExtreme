@@ -14,15 +14,19 @@ import { recordMutations } from './mutations_recording';
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 type UnknownRecord = Record<PropertyKey, unknown>;
 
+type EqualityComparer = (a?: UnknownRecord, b?: UnknownRecord) => boolean;
+
 export interface TemplateModel {
-  data: UnknownRecord;
+  data: UnknownRecord & {
+    isEqual?: EqualityComparer;
+  };
   index: number;
 }
 
-interface TemplateWrapperProps {
+export interface TemplateWrapperProps {
   template: FunctionTemplate;
   model?: TemplateModel;
-  isEqual?: (a?: UnknownRecord, b?: UnknownRecord) => boolean;
+  isEqual?: EqualityComparer;
   transclude?: boolean;
   renovated?: boolean;
 }
