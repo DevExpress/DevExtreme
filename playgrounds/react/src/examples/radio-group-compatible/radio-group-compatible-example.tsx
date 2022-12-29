@@ -55,6 +55,10 @@ export function RadioGroupCompatibleExample() {
             items={[1, 2, 3, 4, 5]}
             valueChange={handleChange}
           />
+          <div>
+            Selected value:
+            {selectedValue}
+          </div>
         </div>
       </div>
 
