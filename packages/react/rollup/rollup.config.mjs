@@ -1,4 +1,5 @@
 import typescript from '@rollup/plugin-typescript';
+import postcss from 'rollup-plugin-postcss';
 import {
   checkExternalPackage,
   checkWatchMode,
@@ -25,6 +26,7 @@ function getBundleConfig(outputDir, format) {
         },
         outputToFilesystem: true,
       }),
+      postcss(),
     ],
     external: checkExternalPackage,
   };

@@ -2,10 +2,16 @@
   "name": "@devextreme/styles",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "no-test": "echo \"Error: no test specified\" && exit 0"
+    "build": "npx node-sass ./src/themes -o ./lib/themes",
+    "watch": "npx node-sass -w ./src/themes -o ./lib/themes"
   },
+  "files": ["lib/*.css"],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^3.2.5",
+    "rollup-plugin-scss": "^4.0.0",
+    "node-sass":"^8.0.0"
+  }
 }
