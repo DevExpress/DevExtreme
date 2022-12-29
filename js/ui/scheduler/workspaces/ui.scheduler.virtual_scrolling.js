@@ -298,12 +298,6 @@ export class VirtualScrollingDispatcher {
     }
 
     updateDimensions(isForce) {
-        if(!this.cache) {
-            this.cache = new Map();
-        }
-        if(this.cache.has(isForce)) {
-            return this.cache.get(isForce);
-        }
         const cellHeight = this.getCellHeight();
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
         if((needUpdateVertical || isForce) && this.verticalVirtualScrolling) {
@@ -322,13 +316,13 @@ export class VirtualScrollingDispatcher {
             this.horizontalVirtualScrolling.reinitState(cellWidth, isForce);
         }
 
-        const result = needUpdateVertical || needUpdateHorizontal;
-        if(result) {
+        const needUpdate = needUpdateVertical || needUpdateHorizontal;
+        if(needUpdate) {
+            this.updateTriggered = true;
+        } else if(this.updateTriggered) {
+            this.updateTriggered = false;
             this.options.updateGrid?.();
-            this.cache.clear();
         }
-
-        this.cache.set(isForce, result);
     }
 }
 
