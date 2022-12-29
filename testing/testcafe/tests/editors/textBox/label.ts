@@ -53,14 +53,14 @@ stylingModes.forEach((stylingMode) => {
 
     await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 260px; margin: 5px; }`);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`, '#container');
+    await takeScreenshotInTheme(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`);
 
     for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Textbox render ${state.replaceAll('dx-', '').replaceAll('state-', '')},stylingMode=${stylingMode}.png`, '#container');
+      await takeScreenshotInTheme(t, takeScreenshot, `Textbox render ${state.replaceAll('dx-', '').replaceAll('state-', '')},stylingMode=${stylingMode}.png`);
 
       for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);
