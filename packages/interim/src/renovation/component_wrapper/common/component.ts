@@ -483,9 +483,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     }
     return null;
   }
-  
-  _buildTemplateArgs(data: TemplateModel): Record<PropertyKey, unknown> {
-    return { model: data };
+
+  _buildTemplateArgs(model: TemplateModel): Record<PropertyKey, unknown> {
+    const { data: { isEqual, ...data } = {} } = model;
+    return isEqual ? { model: { data }, isEqual } : { model };
   }
 
   _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
