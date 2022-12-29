@@ -2790,6 +2790,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.isRenovatedRender()) {
             this.renderRWorkSpace();
+
+            this.virtualScrollingDispatcher.updateDimensions();
         } else {
             this._renderDateHeader();
             this._renderTimePanel();
