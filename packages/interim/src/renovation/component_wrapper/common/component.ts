@@ -16,7 +16,7 @@ import type { UserDefinedElement } from '../../../core/element';
 import {
   isDefined, isRenderer, isString,
 } from '../../../core/utils/type';
-import { TemplateModel, TemplateWrapper } from './template_wrapper';
+import { TemplateModel, TemplateWrapper, TemplateWrapperProps } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
 
@@ -33,6 +33,12 @@ const setDefaultOptionValue = (
 interface ElementAttributes extends Record<string, unknown> {
   class: string;
 }
+
+type TemplateModelArgs =
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  Required<Pick<TemplateWrapperProps, 'model'>>
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  & Omit<TemplateWrapperProps, 'model'>;
 
 export interface ComponentWrapperProps extends Record<string, unknown> {
   onContentReady?: (e: Record<string, unknown>) => void;
@@ -482,20 +488,26 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return null;
   }
 
-  _buildTemplateArgs(rawModel: TemplateModel, index: number | undefined): Record<PropertyKey, unknown> {
-    const model = { ...rawModel };
+  _buildTemplateArgs(
+    model: TemplateModel,
+    index: number | undefined,
+    template: TemplateWrapperProps['template'],
+  ): TemplateModelArgs {
     const isEqual = model.data?.isEqual;
-    const args = { model };
-
+    const args: TemplateModelArgs = {
+      template,
+      model: { ...model },
+    };
+  
     if (isEqual) {
-      delete model.data.isEqual;
-      args['isEqual'] = isEqual;
+      delete args.model.data.isEqual;
+      args.isEqual = isEqual;
     }
-
+  
     if (index !== undefined) {
-      model['index'] = index;
+      args.model.index = index;
     }
-
+  
     return args;
   }
 
@@ -514,7 +526,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel, index?: number): VNode => renderer.createElement(
-      TemplateWrapper, { template, ...buildTemplateArgs(model, index) },
+      TemplateWrapper,
+      buildTemplateArgs(model, index, template),
     );
 
     return templateWrapper;
