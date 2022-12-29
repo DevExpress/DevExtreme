@@ -69,6 +69,7 @@ const EditorFactory = modules.ViewController.inherit({
         const isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
         that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
+
         clearTimeout(that._updateFocusTimeoutID);
 
         that._updateFocusTimeoutID = setTimeout(function() {
