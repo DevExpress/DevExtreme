@@ -21,7 +21,7 @@ export class RadioGroupCompatible extends ComponentWrapper {
       twoWay: [['value', 'defaultValue', 'valueChange']],
       allowNull: ['value'],
       elements: [],
-      templates: ['itemRender', 'itemComponent'],
+      templates: ['itemRender'],
       props: ['items', 'displayExpr', 'valueExpr', 'itemRender', 'value', 'defaultValue', 'valueChange'],
     };
   }
