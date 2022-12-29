@@ -43,36 +43,36 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   static IS_RENOVATED_WIDGET = false;
 
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
-  _actionsMap!: {
+  declare _actionsMap: {
     [name: string]: Function;
   };
 
-  _aria!: Record<string, string>;
+  declare _aria: Record<string, string>;
 
-  customKeyHandlers!: Record<string, Function>;
+  declare customKeyHandlers: Record<string, Function>;
 
-  defaultKeyHandlers!: Record<string, Function>;
+  declare defaultKeyHandlers: Record<string, Function>;
 
-  _documentFragment!: DocumentFragment;
+  declare _documentFragment: DocumentFragment;
 
-  _elementAttr!: {
+  declare _elementAttr: {
     [name: string]: unknown;
     class?: string;
   };
 
-  _isNodeReplaced!: boolean;
+  declare _isNodeReplaced: boolean;
 
-  _props!: Record<string, unknown>;
+  declare _props: Record<string, unknown>;
 
-  _storedClasses?: string;
+  declare _storedClasses?: string;
 
-  _viewRef!: RefObject<unknown>;
+  declare _viewRef: RefObject<unknown>;
 
-  _viewComponent!: typeof Component;
+  declare _viewComponent: typeof Component;
 
   _shouldRaiseContentReady = false;
 
-  _componentTemplates!: Record<string, TemplateComponent | undefined>;
+  declare _componentTemplates: Record<string, TemplateComponent | undefined>;
 
   get _propsInfo(): {
     allowNull: string[];
