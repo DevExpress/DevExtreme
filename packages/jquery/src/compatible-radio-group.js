@@ -1,4 +1,5 @@
-import { ComponentWrapper, registerComponent } from '@devextreme/interim';
+import { registerComponent } from '@devextreme/interim';
+import { ComponentWrapper } from './component-wrapper';
 import { RadioGroupCompatible as RadioButtonCompatibleInferno } from './generated/compatible-components/radio-group';
 
 export class RadioGroupCompatible extends ComponentWrapper {

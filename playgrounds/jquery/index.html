@@ -53,6 +53,46 @@
                 })()
             </script>
         </div>
+
+        <div id="radio-group-item-template">
+            <script>
+                (function() {
+                    var items = ['first', 'second', 'third'];
+                    new window.DevExpress.ui.dxRadioGroup(document.getElementById('radio-group-item-template'), {
+                        defaultValue: items[1],
+                        items,
+                        itemRender(item, container) {
+                            const result = document.createElement('span');
+                            result.innerHTML = item.toUpperCase();
+                            container.append(result);
+                        }
+                    });
+                })()
+            </script>
+        </div>
+
+        <div id="radio-group-item-template-complex-item">
+            <script>
+                (function() {
+                    var items = [
+                        { label: 'one', value: { prop: 1 }},
+                        { label: 'two', value: { prop: 2 }},
+                        { label: 'three', value: { prop: 3 }},
+                    ];
+                    new window.DevExpress.ui.dxRadioGroup(document.getElementById('radio-group-item-template-complex-item'), {
+                        defaultValue: items[1].value.prop,
+                        items,
+                        valueExpr: 'value.prop',
+                        displayExpr: 'label',
+                        itemRender({ label, value: { prop }}, container) {
+                            const result = document.createElement('span');
+                            result.innerHTML = `${label}: ${prop}`;
+                            return result;
+                        }
+                    });
+                })()
+            </script>
+        </div>
     </div>
 </body>
 
