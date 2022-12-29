@@ -8,6 +8,7 @@
 <body>
     <div id="examples">
         <script src="../../packages/jquery/lib/bundle.debug.js" charset="utf-8"></script>
+
         <div id="cmp">
             <script>
                 (function() {
@@ -15,6 +16,7 @@
                 })()
             </script>
         </div>
+
         <div id="radio-button-custom-templates">
             <script>
                 (function() {
@@ -38,6 +40,7 @@
                 })()
             </script>
         </div>
+
         <div id="cmp2">
             <script>
                 (function() {
@@ -45,6 +48,7 @@
                 })()
             </script>
         </div>
+
         <div id="cmp3">
             <script>
                 (function() {
@@ -61,9 +65,10 @@
                     new window.DevExpress.ui.dxRadioGroup(document.getElementById('radio-group-item-template'), {
                         defaultValue: items[1],
                         items,
-                        itemRender(item, container) {
+                        itemRender(item, index, container) {
+                            debugger;
                             const result = document.createElement('span');
-                            result.innerHTML = item.toUpperCase();
+                            result.innerHTML = `[${index}] ${item.toUpperCase()}`;
                             container.append(result);
                         }
                     });
@@ -75,18 +80,18 @@
             <script>
                 (function() {
                     var items = [
-                        { label: 'one', value: { prop: 1 }},
-                        { label: 'two', value: { prop: 2 }},
-                        { label: 'three', value: { prop: 3 }},
+                        { label: 'one', value: { prop: 10 }},
+                        { label: 'two', value: { prop: 20 }},
+                        { label: 'three', value: { prop: 30 }},
                     ];
                     new window.DevExpress.ui.dxRadioGroup(document.getElementById('radio-group-item-template-complex-item'), {
                         defaultValue: items[1].value.prop,
                         items,
                         valueExpr: 'value.prop',
                         displayExpr: 'label',
-                        itemRender({ label, value: { prop }}, container) {
+                        itemRender({ label, value: { prop }}, index, container) {
                             const result = document.createElement('span');
-                            result.innerHTML = `${label}: ${prop}`;
+                            result.innerHTML = `[${index}] ${label.toUpperCase()}-${prop}`;
                             return result;
                         }
                     });
