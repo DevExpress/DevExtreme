@@ -53,10 +53,12 @@ testFixture()`Scrollable_ScrollToElement`
 
           await t
             .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable')))
-            .ok()
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
+            .ok();
         }
+
+        await t
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
       }).before(async () => {
         await appendElementTo('#container', 'div', 'scrollable', {
           border: '1px solid black',
@@ -172,69 +174,71 @@ testFixture()`Scrollable_ScrollToElement`
       });
     });
 
-    [
-      { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
-      { initialScrollOffset: { top: 0, left: 290 }, position: 'fromTRCorner' },
-      { initialScrollOffset: { top: 290, left: 290 }, position: 'fromBRCorner' },
-      { initialScrollOffset: { top: 290, left: 0 }, position: 'fromBLCorner' },
+    test(`STE(scale(1.5)),nat=${useNative},dir=${direction}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      { initialScrollOffset: { top: 0, left: 160 }, position: 'fromT' },
-      { initialScrollOffset: { top: 160, left: 290 }, position: 'fromR' },
-      { initialScrollOffset: { top: 290, left: 160 }, position: 'fromB' },
-      { initialScrollOffset: { top: 160, left: 0 }, position: 'fromL' },
+      const scrollable = new Scrollable('#scrollable', { useNative, direction });
 
-      // from inside
+      const positions = [
+        { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
+        { initialScrollOffset: { top: 0, left: 290 }, position: 'fromTRCorner' },
+        { initialScrollOffset: { top: 290, left: 290 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 290, left: 0 }, position: 'fromBLCorner' },
 
-      { initialScrollOffset: { top: 165, left: 175 }, position: 'fromInsideTLPart' },
-      { initialScrollOffset: { top: 140, left: 140 }, position: 'fromInsideRBPart' },
-    ].forEach(({ initialScrollOffset, position }) => {
-      test(`STE(scale(1.5)),nat=${useNative},dir=${direction},${position}`, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+        { initialScrollOffset: { top: 0, left: 160 }, position: 'fromT' },
+        { initialScrollOffset: { top: 160, left: 290 }, position: 'fromR' },
+        { initialScrollOffset: { top: 290, left: 160 }, position: 'fromB' },
+        { initialScrollOffset: { top: 160, left: 0 }, position: 'fromL' },
 
-        const scrollable = new Scrollable('#scrollable', { useNative, direction });
+        // from inside
 
+        { initialScrollOffset: { top: 165, left: 175 }, position: 'fromInsideTLPart' },
+        { initialScrollOffset: { top: 140, left: 140 }, position: 'fromInsideRBPart' },
+      ];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { initialScrollOffset, position } of positions) {
         await scrollable.scrollTo(initialScrollOffset);
         await scrollable.scrollToElement('#element');
 
         await takeScreenshotInTheme(t, takeScreenshot, `STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#scrollable'));
-
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async () => {
-        await appendElementTo('#container', 'div', 'scrollable', {
-          border: '1px solid black',
-        });
-
-        await appendElementTo('#scrollable', 'div', 'scrollableContent', {
-          width: '250px',
-          height: '250px',
-          border: '1px solid #0b837a',
-          backgroundColor: 'lightskyblue',
-          transform: 'scale(1.5)',
-          transformOrigin: '0 0',
-        });
-
-        await appendElementTo('#scrollableContent', 'div', 'element', {
-          position: 'absolute',
-          boxSizing: 'border-box',
-          left: '20px',
-          top: '20px',
-          height: '200px',
-          width: '200px',
-          backgroundColor: '#2bb97f',
-          border: '5px solid red',
-          margin: '5px',
-        });
-
-        return createWidget('dxScrollable', {
-          width: 100,
-          height: 100,
-          useNative,
-          direction,
-          showScrollbar: 'always',
-        }, false, '#scrollable');
+      }
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await appendElementTo('#container', 'div', 'scrollable', {
+        border: '1px solid black',
       });
+
+      await appendElementTo('#scrollable', 'div', 'scrollableContent', {
+        width: '250px',
+        height: '250px',
+        border: '1px solid #0b837a',
+        backgroundColor: 'lightskyblue',
+        transform: 'scale(1.5)',
+        transformOrigin: '0 0',
+      });
+
+      await appendElementTo('#scrollableContent', 'div', 'element', {
+        position: 'absolute',
+        boxSizing: 'border-box',
+        left: '20px',
+        top: '20px',
+        height: '200px',
+        width: '200px',
+        backgroundColor: '#2bb97f',
+        border: '5px solid red',
+        margin: '5px',
+      });
+
+      return createWidget('dxScrollable', {
+        width: 100,
+        height: 100,
+        useNative,
+        direction,
+        showScrollbar: 'always',
+      }, false, '#scrollable');
     });
   });
 });

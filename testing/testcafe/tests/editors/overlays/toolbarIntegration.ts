@@ -36,6 +36,7 @@ fixture.disablePageReloads`Popup_toolbar`
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }, [600, 400]).before(async () => createWidget(name as 'dxPopup' | 'dxPopover', {
+        showCloseButton: true,
         // eslint-disable-next-line no-multi-str
         contentTemplate: () => $('<div>').text('\
             Lorem Ipsum is simply dummy text of the printing and typesetting industry.\
@@ -117,7 +118,7 @@ fixture.disablePageReloads`Popup_toolbar`
             text: 'Close',
           },
         }],
-      }, false));
+      }, true));
     });
   });
 });
