@@ -1,5 +1,5 @@
 import { getWindow } from '@devextreme/interim';
-import { RadioGroupCompatible } from './compatible-radio-group';
+import { RadioGroupCompatible } from './radio-group';
 import { RadioButton } from './radio-button';
 
 const window = getWindow();
