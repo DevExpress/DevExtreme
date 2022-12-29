@@ -45,29 +45,6 @@ export interface ComponentWrapperProps extends Record<string, unknown> {
   elementAttr?: ElementAttributes;
 }
 
-function buildTemplateArgs(
-  model: TemplateModel,
-  index: number | undefined,
-  template: TemplateWrapperProps['template'],
-): TemplateModelArgs {
-  const isEqual = model.data?.isEqual;
-  const args: TemplateModelArgs = {
-    template,
-    model: { ...model },
-  };
-
-  if (isEqual) {
-    delete args.model.data.isEqual;
-    args.isEqual = isEqual;
-  }
-
-  if (index !== undefined) {
-    args.model.index = index;
-  }
-
-  return args;
-}
-
 export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
   static IS_RENOVATED_WIDGET = false;
 
@@ -511,6 +488,29 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return null;
   }
 
+  _buildTemplateArgs(
+    model: TemplateModel,
+    index: number | undefined,
+    template: TemplateWrapperProps['template'],
+  ): TemplateModelArgs {
+    const isEqual = model.data?.isEqual;
+    const args: TemplateModelArgs = {
+      template,
+      model: { ...model },
+    };
+
+    if (isEqual) {
+      delete args.model.data.isEqual;
+      args.isEqual = isEqual;
+    }
+
+    if (index !== undefined) {
+      args.model.index = index;
+    }
+
+    return args;
+  }
+
   _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
     if (!templateOption) {
       return undefined;
@@ -521,6 +521,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
+
+    const buildTemplateArgs = this._buildTemplateArgs;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel, index?: number): VNode => renderer.createElement(
