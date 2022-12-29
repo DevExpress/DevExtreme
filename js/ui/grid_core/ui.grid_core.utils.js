@@ -632,12 +632,10 @@ export default {
                     let newDataSource;
 
                     if(hasLookupOptimization) {
-                        const lookupItems = items
-                            .filter((item) => isDefined(item.key))
-                            .map(item => ({
-                                [column.lookup.valueExpr]: item.key,
-                                [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
-                            }));
+                        const lookupItems = items.map(item => ({
+                            [column.lookup.valueExpr]: item.key,
+                            [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
+                        }));
 
                         newDataSource = new DataSource({
                             ...lookupDataSourceOptions,
