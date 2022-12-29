@@ -89,14 +89,14 @@ export default {
                         // to make elements possible to hover.
                         // This listener triggers 'dxclick' event if it wasn't triggered
                         this._iosClickTimeout;
-                        this._iosClickEmitter = (e) => {
-                            let clickCalled = false;
 
-                            eventsEngine.one(domAdapter.getDocument(), 'dxclick', () => clickCalled = true);
+                        this._iosClickEmitter = (e) => {
+                            let clickFired = false;
+                            eventsEngine.one(domAdapter.getDocument(), clickEventName, () => clickFired = true);
 
                             this._iosClickTimeout = setTimeout(() => {
-                                if(!clickCalled) {
-                                    eventsEngine.trigger(e.target, 'dxclick');
+                                if(!clickFired) {
+                                    eventsEngine.trigger(e.target, clickEventName);
                                 }
                             }, 300);
                         };
@@ -107,10 +107,6 @@ export default {
 
                 dispose: function() {
                     this.callBase.apply(this, arguments);
-
-                    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
-                    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
-                    eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
 
                     clearTimeout(this._iosClickTimeout);
                     eventsEngine.off(domAdapter.getDocument(), TOUCH_END, this._iosClickEmitter);
