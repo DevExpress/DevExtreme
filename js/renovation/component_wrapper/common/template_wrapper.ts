@@ -33,25 +33,6 @@ function isDxElementWrapper(
   return !!element.toArray;
 }
 
-function defaultComparer(
-  { template, model }: TemplateWrapperProps,
-  { template: nextTemplate, model: nextModel }: TemplateWrapperProps,
-): boolean {
-  const sameTemplate = template === nextTemplate;
-  if (!sameTemplate) {
-    return true;
-  }
-
-  if (isDefined(model) && isDefined(nextModel)) {
-    const { data, index } = model;
-    const { data: nextData, index: nextIndex } = nextModel;
-    return index !== nextIndex || !shallowEquals(data, nextData);
-  }
-
-  const sameModel = model === nextModel;
-  return !sameModel;
-}
-
 function buildTemplateContent(
   props: TemplateWrapperProps,
   container: DxElement<Element>,
@@ -116,12 +97,26 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
-    const { model, isEqual } = this.props;
+    const { template, model, isEqual } = this.props;
+    const { template: nextTemplate, model: nextModel } = nextProps;
+    const equalityComparer = isEqual ?? shallowEquals;
 
-    return isEqual && model
-      // eslint-disable-next-line rulesdir/no-non-null-assertion
-      ? !isEqual(model.data, nextProps.model!.data)
-      : defaultComparer(this.props, nextProps);
+    if (template !== nextTemplate) {
+      return true;
+    }
+
+    if (!isDefined(model) || !isDefined(nextModel)) {
+      return model !== nextModel;
+    }
+
+    const { data, index } = model;
+    const { data: nextData, index: nextIndex } = nextModel;
+
+    if (index !== nextIndex) {
+      return true;
+    }
+
+    return !equalityComparer(data, nextData);
   }
 
   createEffects(): InfernoEffect[] {

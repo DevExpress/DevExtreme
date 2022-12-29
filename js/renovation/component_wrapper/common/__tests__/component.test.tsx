@@ -831,15 +831,18 @@ describe('templates and slots', () => {
 
     it('template with index', () => {
       const template = jest.fn();
+      const indexedTemplatePayload = { value: 'test' };
 
       $('#component').dxTemplatedTestWidget({
         indexedTemplate: template,
+        indexedTemplatePayload,
+        index: 1,
       });
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
       expect(template).toBeCalledTimes(1);
-      expect(template.mock.calls[0]).toEqual([{ indexedTemplate: 'data' }, 2, templateRoot]);
+      expect(template.mock.calls[0]).toEqual([indexedTemplatePayload, 1, templateRoot]);
     });
 
     it('wraps DOM nodes in "data" param with jQuery and gets public element', () => {
@@ -1070,6 +1073,27 @@ describe('templates and slots', () => {
 
     instance.option('text', { value: 'test' });
     expect(template).toBeCalledTimes(1);
+  });
+
+  it('should rerender if index changed', () => {
+    const template = jest.fn();
+    const indexedTemplatePayload = { value: 'test' };
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      indexedTemplate: template,
+      indexedTemplatePayload,
+      index: 123,
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+    expect(template.mock.calls[0][1]).toEqual(123);
+
+    instance.option({
+      indexedTemplatePayload,
+      index: 456,
+    });
+    expect(template).toBeCalledTimes(2);
+    expect(template.mock.calls[1][1]).toEqual(456);
   });
 });
 
