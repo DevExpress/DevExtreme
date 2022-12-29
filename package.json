@@ -34,6 +34,7 @@
         "eslint-plugin-unicorn": "^45.0.0",
         "jest": "^29.3.1",
         "jest-environment-jsdom": "^29.3.1",
+        "ngx-deploy-npm": "^4.3.10",
         "nx": "15.3.3",
         "pre-commit": "^1.2.2",
         "react-test-renderer": "18.2.0",

@@ -1,0 +1,8 @@
+lib/*.map
+node_modules
+rollup
+src
+.eslintrc.js
+jest.config.ts
+project.json
+tsconfig.package.json
