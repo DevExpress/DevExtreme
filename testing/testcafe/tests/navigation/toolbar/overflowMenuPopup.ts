@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
@@ -28,11 +28,11 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
   await t
     .click(overflowMenu.element);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup before window resize.png');
+  await screenshotTestFn(t, takeScreenshot, 'Toolbar menu popup before window resize.png');
 
   await t.resizeWindow(300, 300);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup after window resize.png');
+  await screenshotTestFn(t, takeScreenshot, 'Toolbar menu popup after window resize.png');
 
   await t
     .expect(compareResults.isValid())
@@ -54,7 +54,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   await t
     .click(overflowMenu.element);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar menu popup collision with window border.png');
+  await screenshotTestFn(t, takeScreenshot, 'Toolbar menu popup collision with window border.png');
 
   await t
     .expect(compareResults.isValid())
@@ -78,7 +78,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .click(overflowMenu.element);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup under container rtl=${rtlEnabled}.png`);
+    await screenshotTestFn(t, takeScreenshot, `Toolbar menu popup under container rtl=${rtlEnabled}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -101,7 +101,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .click(overflowMenu.element);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar menu popup above container rtl=${rtlEnabled}.png`);
+    await screenshotTestFn(t, takeScreenshot, `Toolbar menu popup above container rtl=${rtlEnabled}.png`);
 
     await t
       .expect(compareResults.isValid())

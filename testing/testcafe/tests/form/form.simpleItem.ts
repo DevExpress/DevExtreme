@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../helpers/themeUtils';
+import { screenshotTestFn } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 
@@ -17,7 +17,7 @@ fixture.disablePageReloads`Form`
         test(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-          await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+          await screenshotTestFn(t, takeScreenshot, `${testName}.png`, '#container');
 
           await t
             .expect(compareResults.isValid())
@@ -40,7 +40,7 @@ fixture.disablePageReloads`Form`
 
     await waitFont();
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Form with labelLocation=${labelLocation}.png`, '#container');
+    await screenshotTestFn(t, takeScreenshot, `Form with labelLocation=${labelLocation}.png`, '#container');
 
     await t
       .expect(compareResults.isValid())
@@ -72,7 +72,7 @@ fixture.disablePageReloads`Form`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     await waitFont();
 
-    await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+    await screenshotTestFn(t, takeScreenshot, `${testName}.png`, '#container');
 
     await t
       .expect(compareResults.isValid())

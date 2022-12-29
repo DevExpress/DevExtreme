@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
 import createWidget from '../../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import { appendElementTo } from '../../navigation/helpers/domUtils';
 import { setStyleAttribute } from '../../../helpers/domUtils';
 
@@ -16,7 +16,7 @@ test('Placeholder is visible after items option change when value is not chosen 
 
   await autocomplete.option('items', [1, 2, 3]);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Autocomplete placeholder if value is not choosen.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'Autocomplete placeholder if value is not choosen.png', '#container');
 
   await t
     .expect(compareResults.isValid())

@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
@@ -19,7 +19,7 @@ test('Label scroll input dxTextArea', async (t) => {
 
   await t.scroll(textArea.getInput(), 0, 20);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'TextArea label after scroll.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'TextArea label after scroll.png', '#container');
 
   await t
     .expect(compareResults.isValid())
@@ -38,7 +38,7 @@ stylingModes.forEach((stylingMode) => {
 
       await t.click('#textArea2');
 
-      await takeScreenshotInTheme(t, takeScreenshot, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`);
+      await screenshotTestFn(t, takeScreenshot, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`);
 
       await t
         .expect(compareResults.isValid())

@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../helpers/themeUtils';
+import { screenshotTestFn } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
@@ -12,7 +12,7 @@ fixture.disablePageReloads`Form`
     test(testItem1ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1ColSpan2}.png`, '#container');
+      await screenshotTestFn(t, takeScreenshot, `${testItem1ColSpan2}.png`, '#container');
 
       await t
         .expect(compareResults.isValid())
@@ -28,7 +28,7 @@ fixture.disablePageReloads`Form`
     test(testItem1ColSpan2Item2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1ColSpan2Item2}.png`, '#container');
+      await screenshotTestFn(t, takeScreenshot, `${testItem1ColSpan2Item2}.png`, '#container');
 
       await t
         .expect(compareResults.isValid())
@@ -47,7 +47,7 @@ fixture.disablePageReloads`Form`
     test(testItem1Item2ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1Item2ColSpan2}.png`, '#container');
+      await screenshotTestFn(t, takeScreenshot, `${testItem1Item2ColSpan2}.png`, '#container');
 
       await t
         .expect(compareResults.isValid())
@@ -66,7 +66,7 @@ fixture.disablePageReloads`Form`
     test(testItem1ColSpan2Item2ColSpan2, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshotInTheme(t, takeScreenshot, `${testItem1ColSpan2Item2ColSpan2}.png`, '#container');
+      await screenshotTestFn(t, takeScreenshot, `${testItem1ColSpan2Item2ColSpan2}.png`, '#container');
 
       await t
         .expect(compareResults.isValid())

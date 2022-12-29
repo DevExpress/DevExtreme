@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../helpers/domUtils';
@@ -16,7 +16,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
   test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#toolbar', true);
+    await screenshotTestFn(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#toolbar', true);
 
     await t
       .expect(compareResults.isValid())
@@ -56,7 +56,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 test('Buttons render in toolbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar buttons render.png', '#toolbar', true);
+  await screenshotTestFn(t, takeScreenshot, 'Toolbar buttons render.png', '#toolbar', true);
 
   await t
     .expect(compareResults.isValid())

@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import DateBox from '../../../model/dateBox';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -15,23 +15,23 @@ safeSizeTest('Geometry is good', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dateBox = new DateBox('#container');
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with calendar.png');
+  await screenshotTestFn(t, takeScreenshot, 'Datebox with calendar.png');
 
   await dateBox.option('type', 'datetime');
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime.png');
+  await screenshotTestFn(t, takeScreenshot, 'Datebox with datetime.png');
 
   await dateBox.option('opened', false);
   await dateBox.option({ showAnalogClock: false });
   await dateBox.option('opened', true);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without analog clock.png');
+  await screenshotTestFn(t, takeScreenshot, 'Datebox with datetime without analog clock.png');
 
   await dateBox.option('opened', false);
   await dateBox.option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
   await dateBox.option('opened', true);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Datebox with datetime without calendar.png');
+  await screenshotTestFn(t, takeScreenshot, 'Datebox with datetime without calendar.png');
 
   await t
     .expect(compareResults.isValid())

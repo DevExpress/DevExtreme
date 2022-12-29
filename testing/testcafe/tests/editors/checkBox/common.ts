@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
 } from '../../navigation/helpers/domUtils';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
 
 const CHECKBOX_CLASS = 'dx-checkbox';
@@ -17,7 +17,7 @@ fixture.disablePageReloads`CheckBox`
   test(`Render ${!isColumnCountStyle ? 'default' : 'with column-count style on container'}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, '#container', true);
+    await screenshotTestFn(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, '#container', true);
 
     await t
       .expect(compareResults.isValid())

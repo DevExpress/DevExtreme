@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 
 const BUTTON_CLASS = 'dx-dropdowneditor-button';
 
@@ -15,7 +15,7 @@ safeSizeTest('Popup should have correct height when DropDownBox is opened first 
   await t
     .click(`.${BUTTON_CLASS}`);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Popup has correct height on the first opening.png');
+  await screenshotTestFn(t, takeScreenshot, 'Popup has correct height on the first opening.png');
 
   await t
     .expect(compareResults.isValid())

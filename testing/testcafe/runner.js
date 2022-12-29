@@ -38,7 +38,8 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' || args.componentFolder.trim() === 'navigation'
+            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler'
+            || args.componentFolder.trim() === 'navigation'
             || args.componentFolder.trim() === 'editors'
             || args.componentFolder.trim() === 'form'
             || args.componentFolder.trim() === 'htmlEditor' ? ' --window-size=1200,800' : ''}`);

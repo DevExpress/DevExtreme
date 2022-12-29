@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
@@ -15,7 +15,7 @@ safeSizeTest('SelectBox without data', async (t) => {
 
   await t.click(selectBox.element);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox no data.png');
+  await screenshotTestFn(t, takeScreenshot, 'SelectBox no data.png');
 
   await t.click(await selectBox.getPopup());
 
@@ -43,7 +43,7 @@ safeSizeTest('SelectBox has a correct popup height for the first opening if the 
     pageSize: 3,
   });
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize equal datasource items count.png');
+  await screenshotTestFn(t, takeScreenshot, 'SelectBox pagesize equal datasource items count.png');
 
   await t.click(await selectBox.getPopup());
 
@@ -71,7 +71,7 @@ safeSizeTest('SelectBox has a correct popup height for the first opening if the 
     pageSize: 2,
   });
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize less datasource items count.png');
+  await screenshotTestFn(t, takeScreenshot, 'SelectBox pagesize less datasource items count.png');
 
   await t.click(await selectBox.getPopup());
 
@@ -99,7 +99,7 @@ safeSizeTest('SelectBox has a correct popup height for the first opening if the 
     pageSize: 5,
   });
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox pagesize more datasource items count.png');
+  await screenshotTestFn(t, takeScreenshot, 'SelectBox pagesize more datasource items count.png');
 
   await t.click(await selectBox.getPopup());
 
@@ -130,7 +130,7 @@ safeSizeTest('SelectBox does not change a popup height after load the last page'
   const list = await selectBox.getList();
   await list.scrollTo(100);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox popup height after last page load.png');
+  await screenshotTestFn(t, takeScreenshot, 'SelectBox popup height after last page load.png');
 
   await t.click(await selectBox.getPopup());
 

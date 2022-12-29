@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
 import createWidget from '../../../helpers/createWidget';
@@ -129,7 +129,7 @@ test('Placeholder is visible after items option change when value is not chosen 
 
   await tagBox.option('items', [1, 2, 3]);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'TagBox placeholder if value is not choosen.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'TagBox placeholder if value is not choosen.png', '#container');
 
   await t
     .expect(compareResults.isValid())

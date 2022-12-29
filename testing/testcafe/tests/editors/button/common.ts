@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo } from '../../navigation/helpers/domUtils';
@@ -22,19 +22,19 @@ test('Buttons render', async (t) => {
 
   await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { margin: 5px; }`);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Button render.png', '#container', true);
+  await screenshotTestFn(t, takeScreenshot, 'Button render.png', '#container', true);
 
   await removeStylesheetRulesFromPage();
 
   await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { width: 70px; margin: 5px; }`);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Button render with overflow.png', '#container', true);
+  await screenshotTestFn(t, takeScreenshot, 'Button render with overflow.png', '#container', true);
 
   await removeStylesheetRulesFromPage();
 
   await insertStylesheetRulesToPage(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px; } .${BUTTON_CLASS} { margin: 5px; }`);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Button stretch of large text.png', '#container', true);
+  await screenshotTestFn(t, takeScreenshot, 'Button stretch of large text.png', '#container', true);
 
   await removeStylesheetRulesFromPage();
 

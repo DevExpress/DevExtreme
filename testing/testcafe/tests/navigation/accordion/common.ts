@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
+import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/accordion.d';
@@ -16,11 +16,11 @@ fixture.disablePageReloads`Accordion_common`
     const screenshotName = `Accordion items render rtl=${rtlEnabled}.png`;
 
     if (!isMaterial()) {
-      await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
-      await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
+      await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
+      await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
     }
 
-    await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', true, async () => {
+    await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', true, async () => {
       await accordion.repaint();
     });
 

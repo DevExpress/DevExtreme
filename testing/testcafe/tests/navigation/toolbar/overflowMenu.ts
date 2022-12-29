@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
@@ -196,7 +196,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         }
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+      await screenshotTestFn(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
 
       await t
         .expect(compareResults.isValid())
@@ -253,7 +253,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await takeScreenshotInTheme(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await screenshotTestFn(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
 
         await t
           .expect(compareResults.isValid())
@@ -312,7 +312,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await takeScreenshotInTheme(t, takeScreenshot, `Toolbar-buttons-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await screenshotTestFn(t, takeScreenshot, `Toolbar-buttons-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
 
         await t
           .expect(compareResults.isValid())
@@ -371,7 +371,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         }
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+      await screenshotTestFn(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
 
       await t
         .expect(compareResults.isValid())
@@ -432,7 +432,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await takeScreenshotInTheme(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await screenshotTestFn(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
 
         await t
           .expect(compareResults.isValid())
@@ -494,7 +494,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await takeScreenshotInTheme(t, takeScreenshot, `Toolbar-buttonGroup-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await screenshotTestFn(t, takeScreenshot, `Toolbar-buttonGroup-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
 
         await t
           .expect(compareResults.isValid())
@@ -551,7 +551,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 
     targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-    await takeScreenshotInTheme(t, takeScreenshot, 'Toolbar all widgets appearance.png', targetContainer);
+    await screenshotTestFn(t, takeScreenshot, 'Toolbar all widgets appearance.png', targetContainer);
 
     await t
       .expect(compareResults.isValid())
@@ -590,7 +590,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 
       targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Toolbar all widgets as ${templateName} appearance.png`, targetContainer);
+      await screenshotTestFn(t, takeScreenshot, `Toolbar all widgets as ${templateName} appearance.png`, targetContainer);
 
       await t
         .expect(compareResults.isValid())

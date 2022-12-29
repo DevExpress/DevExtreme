@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
@@ -15,7 +15,7 @@ test('Placeholder is visible after items option change when value is not chosen 
   const selectBox = new SelectBox('#selectBox');
 
   await selectBox.option('items', [1, 2, 3]);
-  await takeScreenshotInTheme(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png', '#container');
 
   await t
     .expect(compareResults.isValid())

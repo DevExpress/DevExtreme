@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
-import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
+import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
@@ -28,11 +28,11 @@ test('Menu items render', async (t) => {
   await actionFn();
 
   if (!isMaterial()) {
-    await takeScreenshotInTheme(t, takeScreenshot, 'Menu render items.png', '#container', false, undefined, 'generic.dark');
-    await takeScreenshotInTheme(t, takeScreenshot, 'Menu render items.png', '#container', false, undefined, 'generic.contrast');
+    await screenshotTestFn(t, takeScreenshot, 'Menu render items.png', '#container', false, undefined, 'generic.dark');
+    await screenshotTestFn(t, takeScreenshot, 'Menu render items.png', '#container', false, undefined, 'generic.contrast');
   }
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Menu render items.png', '#container', true, async () => {
+  await screenshotTestFn(t, takeScreenshot, 'Menu render items.png', '#container', true, async () => {
     await menu.repaint();
     await actionFn();
   });

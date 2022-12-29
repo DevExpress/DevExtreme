@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
@@ -22,7 +22,7 @@ stylingModes.forEach((stylingMode) => {
 
     await t.click('#tagBox2');
 
-    await takeScreenshotInTheme(t, takeScreenshot, `TagBox label with stylingMode=${stylingMode}.png`);
+    await screenshotTestFn(t, takeScreenshot, `TagBox label with stylingMode=${stylingMode}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -59,7 +59,7 @@ stylingModes.forEach((stylingMode) => {
 
       const screenshotName = `TagBox label with stylingMode=${stylingMode},labelMode=${labelMode}.png`;
 
-      await takeScreenshotInTheme(t, takeScreenshot, screenshotName);
+      await screenshotTestFn(t, takeScreenshot, screenshotName);
 
       await t
         .expect(compareResults.isValid())
@@ -68,7 +68,7 @@ stylingModes.forEach((stylingMode) => {
       await t.click(tagBox.element);
       await t.click(tagBox.element);
 
-      await takeScreenshotInTheme(t, takeScreenshot, screenshotName);
+      await screenshotTestFn(t, takeScreenshot, screenshotName);
 
       await t
         .expect(compareResults.isValid())

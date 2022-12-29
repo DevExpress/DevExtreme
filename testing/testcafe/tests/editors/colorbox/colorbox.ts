@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import { appendElementTo } from '../../navigation/helpers/domUtils';
 import { setStyleAttribute } from '../../../helpers/domUtils';
 
@@ -12,7 +12,7 @@ fixture.disablePageReloads`Colorbox`
 test('Colorbox should display full placeholder', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Colorbox with placeholder.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'Colorbox with placeholder.png', '#container');
 
   await t
     .expect(compareResults.isValid())

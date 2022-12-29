@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
+import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -16,11 +16,11 @@ fixture.disablePageReloads`TreeView_selectAll`
 
       const screenshotName = `TreeView selection cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
 
-      await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container');
+      await screenshotTestFn(t, takeScreenshot, screenshotName, '#container');
 
       if (!isMaterial()) {
-        await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
-        await takeScreenshotInTheme(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
+        await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
+        await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
       }
 
       await t

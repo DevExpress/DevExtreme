@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
@@ -21,7 +21,7 @@ test('message position is right (T1020449)', async (t) => {
 
   await radioGroup.focus();
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'RadioGroup horizontal validation.png', '#form');
+  await screenshotTestFn(t, takeScreenshot, 'RadioGroup horizontal validation.png', '#form');
 
   await t
     .expect(compareResults.isValid())

@@ -9,7 +9,7 @@ import {
   appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
@@ -27,14 +27,14 @@ stylingModes.forEach((stylingMode) => {
   test(`DateBox styles, stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await takeScreenshotInTheme(t, takeScreenshot, `Datebox stylingMode=${stylingMode}.png`, '#container', true);
+    await screenshotTestFn(t, takeScreenshot, `Datebox stylingMode=${stylingMode}.png`, '#container', true);
 
     for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }
 
-      await takeScreenshotInTheme(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, '#container', true);
+      await screenshotTestFn(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode}.png`, '#container', true);
 
       for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);

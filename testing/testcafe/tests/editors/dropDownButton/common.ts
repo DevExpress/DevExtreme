@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
@@ -64,14 +64,14 @@ test('DropDownButton renders correctly', async (t) => {
 
   await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-block; width: 200px; margin: 5px; }`);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'DropDownButton render.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'DropDownButton render.png', '#container');
 
   for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
     for (const id of t.ctx.ids) {
       await setClassAttribute(Selector(`#${id} .dx-button:first-child`), state);
     }
 
-    await takeScreenshotInTheme(t, takeScreenshot, `DropDownButton render ${state.replaceAll('dx-state-', '')}.png`, '#container');
+    await screenshotTestFn(t, takeScreenshot, `DropDownButton render ${state.replaceAll('dx-state-', '')}.png`, '#container');
 
     for (const id of t.ctx.ids) {
       await removeClassAttribute(Selector(`#${id} .dx-button:first-child`), state);

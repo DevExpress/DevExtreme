@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme, isMaterial } from '../../../helpers/themeUtils';
+import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
@@ -26,7 +26,7 @@ test('Should initiate load next pages if items on the first pages are invisible'
     .expect(list.getVisibleItems().count)
     .eql(isMaterial() ? 2 : 4);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'List loading with first items invisible.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'List loading with first items invisible.png', '#container');
 
   await t
     .expect(compareResults.isValid())
@@ -63,7 +63,7 @@ test('Should initiate load next page if all items in the current load are invisi
     .expect(list.getVisibleItems().count)
     .eql(isMaterial() ? 4 : 6);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'List loading with middle items invisible.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'List loading with middle items invisible.png', '#container');
 
   await t
     .expect(compareResults.isValid())
@@ -100,7 +100,7 @@ test('Should initiate load next page if some items in the current load are invis
     .expect(list.getVisibleItems().count)
     .eql(isMaterial() ? 4 : 6);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'List loding with part items invisible on loaded page.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'List loding with part items invisible on loaded page.png', '#container');
 
   await t
     .expect(compareResults.isValid())
@@ -137,7 +137,7 @@ test('Should initiate load next page if all items on next pages are invisible', 
     .expect(list.getVisibleItems().count)
     .eql(4);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'List loading with last items invisible.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'List loading with last items invisible.png', '#container');
 
   await t
     .expect(compareResults.isValid())

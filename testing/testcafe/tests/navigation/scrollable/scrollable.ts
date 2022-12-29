@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { isMaterial, takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { isMaterial, screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
@@ -133,7 +133,7 @@ testFixture()`Scrollable_ScrollToElement`
           await scrollable.scrollTo(initialScrollOffset);
           await scrollable.scrollToElement('#element');
 
-          await takeScreenshotInTheme(t, takeScreenshot, `STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable'));
+          await screenshotTestFn(t, takeScreenshot, `STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable'));
         }
 
         await t
@@ -201,7 +201,7 @@ testFixture()`Scrollable_ScrollToElement`
         await scrollable.scrollTo(initialScrollOffset);
         await scrollable.scrollToElement('#element');
 
-        await takeScreenshotInTheme(t, takeScreenshot, `STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#scrollable'));
+        await screenshotTestFn(t, takeScreenshot, `STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#scrollable'));
       }
       await t
         .expect(compareResults.isValid())

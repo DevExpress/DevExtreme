@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { takeScreenshotInTheme } from '../../helpers/themeUtils';
+import { screenshotTestFn } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
@@ -10,7 +10,7 @@ const testName = 'ButtonItem';
 test(testName, async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshotInTheme(t, takeScreenshot, `${testName}.png`, '#container');
+  await screenshotTestFn(t, takeScreenshot, `${testName}.png`, '#container');
 
   await t
     .expect(compareResults.isValid())

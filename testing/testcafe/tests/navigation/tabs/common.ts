@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { takeScreenshotInTheme } from '../../../helpers/themeUtils';
+import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
@@ -11,7 +11,7 @@ fixture.disablePageReloads`Tabs_common`
 test('Tabs icon alignment', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshotInTheme(t, takeScreenshot, 'Tabs items alignment.png', '#tabs', true);
+  await screenshotTestFn(t, takeScreenshot, 'Tabs items alignment.png', '#tabs', true);
 
   await t
     .expect(compareResults.isValid())
