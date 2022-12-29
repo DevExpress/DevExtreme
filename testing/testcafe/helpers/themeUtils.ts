@@ -8,7 +8,7 @@ export const getThemePostfix = (theme?: string): string => {
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
 
-export async function takeScreenshotInTheme(
+export async function screenshotTestFn(
   t: TestController,
   takeScreenshot: (screenshotName: string, element?: Selector | string | null) => Promise<boolean>,
   screenshotName: string,
