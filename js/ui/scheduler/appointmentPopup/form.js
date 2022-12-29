@@ -374,7 +374,7 @@ export class AppointmentForm {
         const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
         const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${startDateExpr}`;
-        const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Recurrence}.${endDateExpr}`;
+        const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${endDateExpr}`;
 
         const startDateFormItem = this.form.itemOption(startDateItemPath);
         const endDateFormItem = this.form.itemOption(endDateItemPath);
