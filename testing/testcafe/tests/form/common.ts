@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { screenshotTestFn, isMaterial } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { appendElementTo, insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
@@ -103,4 +103,6 @@ test('Form labels should have correct width after render in invisible container'
       }],
     }],
   }, true, '#form');
+
+  await removeStylesheetRulesFromPage();
 });
