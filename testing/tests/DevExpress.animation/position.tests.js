@@ -5,6 +5,7 @@ import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
 import devices from 'core/devices.js';
 import { implementationsMap } from 'core/utils/size';
+import { getWindow } from 'core/utils/window.js';
 
 const setupPosition = positionUtils.setup;
 const calculatePosition = positionUtils.calculate;
@@ -697,6 +698,20 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('bounds should be correct if boundary is equal to window', function(assert) {
+        fixtures.customBoundary.create();
+        try {
+            const window = getWindow();
+            const position = calculatePosition('#what', { collision: 'fit', boundary: window, of: '#where' });
+
+            assert.strictEqual(position.v.oversize, 0, 'vertical bounds are correct ');
+            assert.strictEqual(position.h.oversize, 0, 'horizontal bounds are correc');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            fixtures.customBoundary.drop();
+        }
+    });
 })();
 
 (function preciseModule() {
