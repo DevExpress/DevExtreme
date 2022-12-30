@@ -492,24 +492,19 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _buildTemplateArgs(
     model: TemplateModel,
-    index: number | undefined,
     template: TemplateWrapperProps['template'],
   ): TemplateModelArgs {
-    const isEqual = model.data?.isEqual;
     const args: TemplateModelArgs = {
       template,
       model: { ...model },
     };
-  
+
+    const isEqual = model.data?.isEqual;
     if (isEqual) {
       delete args.model.data.isEqual;
       args.isEqual = isEqual;
     }
-  
-    if (index !== undefined) {
-      args.model.index = index;
-    }
-  
+
     return args;
   }
 
@@ -527,9 +522,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const buildTemplateArgs = this._buildTemplateArgs;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    const templateWrapper = (model: TemplateModel, index?: number): VNode => renderer.createElement(
+    const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
       TemplateWrapper,
-      buildTemplateArgs(model, index, template),
+      buildTemplateArgs(model, template),
     );
 
     return templateWrapper;
