@@ -97,7 +97,7 @@ function buildTemplateContent(
 }
 
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
-  __cleanParent: () => void = noop;
+  private cleanParent: () => void = noop;
 
   constructor(props: TemplateWrapperProps) {
     super(props);
@@ -110,8 +110,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     // eslint-disable-next-line rulesdir/no-non-null-assertion
     const container = node.parentElement!;
 
-    this.__cleanParent();
-    this.__cleanParent = recordMutations(
+    this.cleanParent();
+    this.cleanParent = recordMutations(
       container,
       () => {
         const content = buildTemplateContent(this.props, getPublicElement($(container)));
@@ -157,7 +157,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
   componentWillUnmount(): void {
-    this.__cleanParent();
+    this.cleanParent();
   }
 
   render(): JSX.Element | null {
