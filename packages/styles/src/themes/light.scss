@@ -1,3 +1,5 @@
-:root, .dx-theme-light {
-    --dx-background-color: orange;
+@import "light-scoped.scss";
+
+:root {
+@extend .dx-theme-light
 }
