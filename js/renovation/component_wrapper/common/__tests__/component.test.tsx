@@ -1040,24 +1040,24 @@ describe('templates and slots', () => {
 
   it('should not re-render template with custom equal is used', () => {
     const template = jest.fn();
-    const isEqual = jest.fn();
+    const isEqual1 = jest.fn().mockReturnValue(true);
+    const isEqual2 = jest.fn().mockReturnValue(false);
 
     const instance = $('#component').dxTemplatedTestWidget({
       elementTemplate: template,
-      elementTemplatePayload: { value: 'test', isEqual },
+      elementTemplatePayload: { value: 'test' },
     }).dxTemplatedTestWidget('instance');
 
-    expect(isEqual).toBeCalledTimes(0);
     expect(template).toBeCalledTimes(1);
 
-    isEqual.mockReturnValue(true);
-    instance.option('elementTemplatePayload', { value: 'test', isEqual });
-    expect(isEqual).toBeCalledTimes(1);
+    instance.option('elementTemplatePayload', { value: 'test', isEqual: isEqual1 });
+    expect(isEqual1).toBeCalledTimes(1);
     expect(template).toBeCalledTimes(1);
 
-    isEqual.mockReturnValue(false);
-    instance.option('elementTemplatePayload', { value: 'newValue', isEqual });
-    expect(isEqual).toBeCalledTimes(2);
+    isEqual1.mockReset();
+    instance.option('elementTemplatePayload', { value: 'newValue', isEqual: isEqual2 });
+    expect(isEqual1).not.toBeCalled();
+    expect(isEqual2).toBeCalledTimes(1);
     expect(template).toBeCalledTimes(2);
   });
 

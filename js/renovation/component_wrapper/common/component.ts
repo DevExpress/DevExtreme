@@ -497,9 +497,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       model: { ...model },
     };
 
-    const isEqual = model.data?.isEqual;
+    const { isEqual, ...data } = model.data ?? {};
     if (isEqual) {
-      delete args.model.data.isEqual;
+      args.model.data = data;
       args.isEqual = isEqual;
     }
 
