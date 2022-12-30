@@ -16,6 +16,6 @@ export async function clearTestPage(): Promise<void> {
     body?.prepend(otherContainerElement);
     body?.prepend(containerElement);
 
-    $('#customStylesheetRules').remove();
+    $('#stylesheetRules').remove();
   })();
 }

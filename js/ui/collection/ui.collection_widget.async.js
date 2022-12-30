@@ -23,15 +23,10 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
         return renderContentDeferred.promise();
     },
 
-    _createItemByTemplate(itemTemplate, renderArgs) {
-        return itemTemplate.render({
-            model: renderArgs.itemData,
-            container: renderArgs.container,
-            index: renderArgs.index,
-            onRendered: () => {
-                this._deferredItems[renderArgs.index].resolve();
-            }
-        });
+    _onItemTemplateRendered: function(itemTemplate, renderArgs) {
+        return () => {
+            this._deferredItems[renderArgs.index].resolve();
+        };
     },
 
     _postProcessRenderItems: noop,
