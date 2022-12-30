@@ -5,10 +5,11 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    permissions: read-all
     name: Fetch analysis
     outputs:
       alerts: ${{ steps.fetch.outputs.ALERTS }}
