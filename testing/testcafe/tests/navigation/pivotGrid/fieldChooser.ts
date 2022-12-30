@@ -130,7 +130,7 @@ test('Change dataFiels order with two invisible fields', async (t) => {
 
   await t.drag(fieldChooser.getDataFields().nth(0), 0, 170);
 
-  await screenshotTestFn(t, takeScreenshot, 'FieldChooser change dataField order with invisible fields.png', '.dx-overlay-content.dx-popup-draggable');
+  await screenshotTestFn(t, takeScreenshot, 'FieldChooser change dataField order with two invisible fields.png', '.dx-overlay-content.dx-popup-draggable');
 
   await t
     .expect(compareResults.isValid())
