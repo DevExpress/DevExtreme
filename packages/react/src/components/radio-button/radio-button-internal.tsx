@@ -1,4 +1,5 @@
 import { ChangeEventHandler } from 'react';
+import '@devextreme/styles/src/radio-button/radio-button.scss';
 import {
   LabelTemplateProps,
   RadioButtonRenderProps,
@@ -22,9 +23,8 @@ export function RadioButtonInternal<T>({
   const handleChange: ChangeEventHandler<HTMLInputElement> = () => {
     onSelected?.(value);
   };
-
   return (
-    <span>
+    <span className="dxr-radio-button">
       <label
         htmlFor={inputId}
         style={{ cursor: 'pointer', userSelect: 'none', margin: '2px' }}
