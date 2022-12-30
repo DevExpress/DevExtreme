@@ -17,6 +17,7 @@ import CollectionWidget from './collection/ui.collection_widget.edit';
 import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
+import { triggerResizeEvent } from '../events/visibility_change';
 
 // STYLE gallery
 
@@ -90,6 +91,7 @@ const GalleryNavButton = Widget.inherit({
 const Gallery = CollectionWidget.inherit({
 
     _activeStateUnit: GALLERY_ITEM_SELECTOR,
+    _wasAnyItemTemplateRendered: false,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -335,6 +337,15 @@ const Gallery = CollectionWidget.inherit({
         this.callBase(items);
 
         this._loadNextPageIfNeeded();
+    },
+
+    _onItemTemplateRendered() {
+        return () => {
+            if(!this._wasAnyItemTemplateRendered) {
+                this._wasAnyItemTemplateRendered = true;
+                triggerResizeEvent(this.$element()); // NOTE: T1132935
+            }
+        };
     },
 
     _renderItemsContainer: function() {
@@ -988,6 +999,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _dispose: function() {
+        this._wasAnyItemTemplateRendered = null;
         clearTimeout(this._slideshowTimer);
         this.callBase();
     },
