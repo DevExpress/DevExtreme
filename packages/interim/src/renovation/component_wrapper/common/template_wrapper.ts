@@ -37,6 +37,30 @@ function isDxElementWrapper(
   return !!element.toArray;
 }
 
+type TemplateModelArgs =
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  Required<Pick<TemplateWrapperProps, 'model'>>
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  & Omit<TemplateWrapperProps, 'model'>;
+
+export function buildTemplateArgs(
+  model: TemplateModel,
+  template: TemplateWrapperProps['template'],
+): TemplateModelArgs {
+  const args: TemplateModelArgs = {
+    template,
+    model: { ...model },
+  };
+
+  const { isEqual, ...data } = model.data ?? {};
+  if (isEqual) {
+    args.model.data = data;
+    args.isEqual = isEqual;
+  }
+
+  return args;
+}
+
 function buildTemplateContent(
   props: TemplateWrapperProps,
   container: DxElement<Element>,
