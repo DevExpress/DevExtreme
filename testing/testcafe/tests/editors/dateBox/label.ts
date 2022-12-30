@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 

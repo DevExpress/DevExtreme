@@ -4,8 +4,7 @@ import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
-import { setStyleAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`SelectBox placeholder`
   .page(url(__dirname, '../../container.html'));

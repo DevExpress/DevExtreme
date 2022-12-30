@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 

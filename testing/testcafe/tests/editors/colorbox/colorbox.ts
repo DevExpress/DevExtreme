@@ -3,8 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
-import { setStyleAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Colorbox`
   .page(url(__dirname, '../../container.html'));

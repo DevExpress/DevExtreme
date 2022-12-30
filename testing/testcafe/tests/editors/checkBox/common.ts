@@ -4,9 +4,9 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
-} from '../../navigation/helpers/domUtils';
+  insertStylesheetRulesToPage, setStyleAttribute,
+} from '../../../helpers/domUtils';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
-import { insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
 
 const CHECKBOX_CLASS = 'dx-checkbox';
 

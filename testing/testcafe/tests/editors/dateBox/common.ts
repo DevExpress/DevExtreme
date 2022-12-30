@@ -1,14 +1,14 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import {
+  insertStylesheetRulesToPage,
+  appendElementTo, setClassAttribute,
+  removeClassAttribute,
+} from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Guid from '../../../../../js/core/guid';
-import {
-  appendElementTo, setClassAttribute,
-  removeClassAttribute,
-} from '../../navigation/helpers/domUtils';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';

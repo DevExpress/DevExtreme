@@ -6,9 +6,9 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
-} from '../../navigation/helpers/domUtils';
+  setStyleAttribute,
+} from '../../../helpers/domUtils';
 import TagBox from '../../../model/tagBox';
-import { setStyleAttribute } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];

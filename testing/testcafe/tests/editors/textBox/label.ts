@@ -1,15 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
+import {
+  removeStylesheetRulesFromPage, insertStylesheetRulesToPage, setStyleAttribute,
+  appendElementTo, setClassAttribute,
+  removeClassAttribute,
+} from '../../../helpers/domUtils';
 import { isMaterial, screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
-import {
-  appendElementTo, setClassAttribute,
-  removeClassAttribute,
-} from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
 
 fixture.disablePageReloads`TextBox_Label`

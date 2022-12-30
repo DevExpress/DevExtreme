@@ -2,7 +2,7 @@ import { Selector, t } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setStyleAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));

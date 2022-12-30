@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Popup`

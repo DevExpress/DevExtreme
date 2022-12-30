@@ -4,8 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
 import createWidget from '../../../helpers/createWidget';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
-import { setStyleAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Autocomplete_placeholder`
   .page(url(__dirname, '../../container.html'));

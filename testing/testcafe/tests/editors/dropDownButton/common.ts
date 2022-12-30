@@ -8,9 +8,9 @@ import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo, setClassAttribute,
   removeClassAttribute,
-} from '../../navigation/helpers/domUtils';
+  insertStylesheetRulesToPage,
+} from '../../../helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const HOVER_STATE_CLASS = 'dx-state-hover';

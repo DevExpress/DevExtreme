@@ -3,9 +3,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';

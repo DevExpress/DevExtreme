@@ -4,7 +4,7 @@ import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
-import { appendElementTo } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'));

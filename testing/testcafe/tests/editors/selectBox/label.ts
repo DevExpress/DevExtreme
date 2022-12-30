@@ -5,9 +5,9 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
-} from '../../navigation/helpers/domUtils';
+  setStyleAttribute,
+} from '../../../helpers/domUtils';
 import SelectBox from '../../../model/selectBox';
-import { setStyleAttribute } from '../../../helpers/domUtils';
 
 const labelMods = ['floating', 'static'];
 const stylingModes = ['outlined', 'underlined', 'filled'];

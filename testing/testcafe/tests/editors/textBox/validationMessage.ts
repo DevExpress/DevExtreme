@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute, removeAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo, setAttribute, removeAttribute } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';

@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
   appendElementTo,
-} from '../../navigation/helpers/domUtils';
+} from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const labelMods = ['floating', 'static'];
