@@ -9,6 +9,7 @@ import domAdapter from '../../../core/dom_adapter';
 import { DxElement, getPublicElement } from '../../../core/element';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { isDefined } from '../../../core/utils/type';
+import { noop } from '../../../core/utils/common';
 import { recordMutations } from './mutations_recording';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
@@ -94,8 +95,6 @@ function buildTemplateContent(
     ? rendered.toArray()
     : [$(rendered).get(0)];
 }
-
-function noop(): void {}
 
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   __cleanParent: () => void = noop;
