@@ -8,6 +8,7 @@ on:
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    permissions: read-all
     name: Fetch analysis
     outputs:
       alerts: ${{ steps.fetch.outputs.ALERTS }}
