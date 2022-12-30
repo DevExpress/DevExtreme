@@ -8,21 +8,27 @@ Use one of the following properties to supply data to the component:
 Accepts a local data array.
 
 * [dataSource](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#dataSource)            
-Accepts a local data array, [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object, or DevExtreme data store. In this demo, every Autocomplete component is bound to a local array, except the "Custom Item Template and Data Source Usage" component that uses an [ODataStore](/Documentation/ApiReference/Data_Layer/ODataStore/).
+Accepts a local data array, [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object, or DevExtreme data store. In this demo, every Autocomplete component is bound to a local array, except the following components:
+
+    - "Custom Item Template and Data Source Usage"    
+    Uses an [ODataStore](/Documentation/ApiReference/Data_Layer/ODataStore/).
+    
+    - "Custom Store and Search Options"    
+    Uses a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/).
 
 The [value](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#value) property stores the selected item. You can use the same property to select an item programmatically, as shown in the "Disabled" Autocomplete component.
 
-If the data source contains objects, you should specify the [valueExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#valueExpr) property. It accepts a data field name that uniquely identifies each data object. In this demo, **valueExpr** is set only for the "Custom Item Template and Data Source Usage" Autocomplete because others are bound to arrays of primitive values.
+If the data source contains objects, you should specify the [valueExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#valueExpr) property. It accepts a data field name that uniquely identifies each data object. In this demo, [valueExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#valueExpr) is specified only for the "Custom Item Template and Data Source Usage" and "Custom Store and Search Options" components because other components are bound to arrays of primitive values.
 
 ## Configure Search Parameters
 
-When a user types the first character, Autocomplete displays suggestions. To increase the number of characters that triggers suggestions, use the [minSearchLength](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#minSearchLength) property. You can also specify the time interval Autocomplete should wait before it displays suggestions. Assign this time interval in milliseconds to the [searchTimeout](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#searchTimeout) property. See the "With Custom Search Options" Autocomplete component for an example.
+When a user types the first character, Autocomplete displays suggestions. To increase the number of characters that triggers suggestions, use the [minSearchLength](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#minSearchLength) property. You can also specify the time interval Autocomplete should wait before it displays suggestions. Assign this time interval in milliseconds to the [searchTimeout](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#searchTimeout) property. See the "Custom Store and Search Options" Autocomplete component for an example.
 
-Usually, the data field that supplies Autocomplete with suggestions (**valueExpr**) is the same data field that is searched for the typed text. If you use two different fields, assign the field that supplies Autocomplete with suggestions to the **valueExpr** property and the field to be searched to the [searchExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#searchExpr) property. Note that **searchExpr** also accepts arrays if you want to search multiple fields.
+In most cases, the data field that supplies Autocomplete with suggestions is the same data field that is used to search for the entered text. If you use two different fields, assign the field that supplies Autocomplete with suggestions to the [valueExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#valueExpr) property and the field used to search to the [searchExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#searchExpr) property. Note that [searchExpr](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#searchExpr) also accepts arrays if you want to search multiple fields.
 
 ## Handle Value Change
 
-To handle value changes, implement the [onValueChanged](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#onValueChanged) function. In this demo, we use **onValueChanged** to display the values of all Autocomplete components.
+To handle value changes, implement the [onValueChanged](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#onValueChanged) function. In this demo, we use [onValueChanged](/Documentation/ApiReference/UI_Components/dxAutocomplete/Configuration/#onValueChanged) to display the values of all Autocomplete components.
 
 ## Appearance Customization
 

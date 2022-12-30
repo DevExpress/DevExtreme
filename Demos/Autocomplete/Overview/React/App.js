@@ -133,7 +133,7 @@ class App extends React.Component {
         </div>
 
         <div className="dx-fieldset">
-          <div className="dx-fieldset-header">With Custom Store and Search Options</div>
+          <div className="dx-fieldset-header">Custom Store and Search Options</div>
           <div className="dx-field">
             <div className="dx-field-label">Current Client</div>
             <div className="dx-field-value">
