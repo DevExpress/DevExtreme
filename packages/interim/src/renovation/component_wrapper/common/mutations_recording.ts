@@ -15,7 +15,7 @@ function isChildNode(node: Node): node is ChildNode {
   export function recordMutations<TReturn>(target: Node, func: () => TReturn): () => void {
     const observer = new MutationObserver(() => {});
     // eslint-disable-next-line spellcheck/spell-checker
-    observer.observe(target, { childList: true, attributes: true, subtree: false });
+    observer.observe(target, { childList: true, subtree: false });
   
     func();
   
