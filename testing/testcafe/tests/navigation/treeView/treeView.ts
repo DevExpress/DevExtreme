@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
-import { setAttribute } from '../helpers/domUtils';
+import { setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`TreeView_selectAll`
   .page(url(__dirname, '../../container.html'));

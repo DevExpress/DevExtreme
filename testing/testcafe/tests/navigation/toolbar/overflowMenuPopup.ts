@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { setAttribute } from '../helpers/domUtils';
+import { setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toolbar_OverflowMenu_Popup`
   .page(url(__dirname, '../../container.html'));

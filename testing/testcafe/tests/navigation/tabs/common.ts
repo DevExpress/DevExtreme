@@ -3,7 +3,7 @@ import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
-import { appendElementTo, setAttribute } from '../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Tabs_common`
   .page(url(__dirname, '../../container.html'));

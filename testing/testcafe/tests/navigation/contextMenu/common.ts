@@ -7,8 +7,8 @@ import ContextMenu from '../../../model/contextMenu';
 import { Item } from '../../../../../js/ui/context_menu.d';
 import {
   appendElementTo, setAttribute,
-} from '../helpers/domUtils';
-import { insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
+  insertStylesheetRulesToPage, setStyleAttribute,
+} from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu_common`
   .page(url(__dirname, '../../container.html'));

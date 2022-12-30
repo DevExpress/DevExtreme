@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
-import { appendElementTo } from '../helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu`
   .page(url(__dirname, '../../container.html'));

@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import {
+  insertStylesheetRulesToPage,
+  appendElementTo, setAttribute,
+} from '../../../helpers/domUtils';
 import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
-import {
-  appendElementTo, setAttribute,
-} from '../helpers/domUtils';
 import Menu from '../../../model/menu';
 
 fixture.disablePageReloads`Menu_common`

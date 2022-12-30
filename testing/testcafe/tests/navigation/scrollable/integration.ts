@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Integration_DataGrid`

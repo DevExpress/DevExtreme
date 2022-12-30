@@ -6,7 +6,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import Guid from '../../../../../js/core/guid';
-import { appendElementTo, setClassAttribute } from '../helpers/domUtils';
+import { appendElementTo, setClassAttribute } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const ACTIVE_STATE_CLASS = 'dx-state-active';

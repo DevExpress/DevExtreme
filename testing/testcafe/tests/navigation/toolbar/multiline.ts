@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toolbar_multiline`
   .page(url(__dirname, '../../container.html'));
