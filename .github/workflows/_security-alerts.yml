@@ -21,10 +21,9 @@ jobs:
       - id: fetch
         name: Get Latest Analysis info
         run: |
-          RESPONSE=$(curl \
+          RESPONSE=$(gh api \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/dependabot/alerts?state=open)
+          /repos/${{ github.repository }}/dependabot/alerts?state=open)
           echo 'ALERTS<<EOF' >> $GITHUB_OUTPUT
           echo $RESPONSE >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
