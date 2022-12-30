@@ -49,6 +49,7 @@
         "build:angular": "nx build @devextreme/angular",
         "build:core": "nx build @devextreme/core",
         "build:react": "nx build @devextreme/react",
+        "build:jquery": "nx build @devextreme/jquery",
         "build:playgrounds": "nx run-many --target=build --projects=@playgrounds/angular,@playgrounds/react --skip-nx-cache",
         "build": "nx run-many --target=build --projects=@devextreme/core,@devextreme/components,@devextreme/react,@devextreme/interim,@devextreme/jquery,@devextreme/angular --skip-nx-cache",
         "start:react": "nx start @playgrounds/react",
