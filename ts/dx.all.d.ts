@@ -8985,11 +8985,8 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxDataGridOptions<TRowData = any, TKey = any> = GridBaseOptions<
-    dxDataGrid<TRowData, TKey>,
-    TRowData,
-    TKey
-  > & {
+  export interface dxDataGridOptions<TRowData = any, TKey = any>
+    extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -9217,7 +9214,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
-  };
+  }
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
    */
@@ -22999,11 +22996,8 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxTreeListOptions<TRowData = any, TKey = any> = GridBaseOptions<
-    dxTreeList<TRowData, TKey>,
-    TRowData,
-    TKey
-  > & {
+  export interface dxTreeListOptions<TRowData = any, TKey = any>
+    extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -23189,7 +23183,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
-  };
+  }
   /**
    * @deprecated 
    */
@@ -24329,14 +24323,11 @@ declare module DevExpress.ui {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type GridBaseOptions<
+  export interface GridBaseOptions<
     TComponent extends GridBase<TRowData, TKey>,
     TRowData = any,
     TKey = any
-  > = Omit<
-    GridBaseOptionsBlank<TComponent, TRowData, TKey>,
-    'focusStateEnabled'
-  > & {
+  > extends WidgetOptions<TComponent> {
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -24452,6 +24443,10 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.focusedRowKey]
      */
     focusedRowKey?: TKey;
+    /**
+     * [descr:GridBaseOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: any;
     /**
      * [descr:GridBaseOptions.headerFilter]
      */
@@ -24702,19 +24697,6 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.syncLookupFilterValues]
      */
     syncLookupFilterValues?: boolean;
-  };
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  interface GridBaseOptionsBlank<
-    TComponent extends GridBase<TRowData, TKey>,
-    TRowData = any,
-    TKey = any
-  > extends WidgetOptions<TComponent> {
-    /**
-     * [descr:GridBaseOptions.focusStateEnabled]
-     */
-    focusStateEnabled?: any;
   }
   /**
    * @deprecated 
