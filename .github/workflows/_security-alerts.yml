@@ -20,6 +20,8 @@ jobs:
     steps:
       - id: fetch
         name: Get Latest Analysis info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           RESPONSE=$(gh api \
           -H "Accept: application/vnd.github+json" \
