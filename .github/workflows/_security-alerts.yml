@@ -43,6 +43,9 @@ jobs:
           key: ${{ runner.os }}-security-${{ steps.get-date.outputs.date }}
           restore-keys: ${{ runner.os }}-security
 
+      - name: echo
+        run: echo 000000000 ${{ needs.fetch.outputs.alerts }}
+
       - name: Teams Notification
         uses: DevExpress/github-actions/send-teams-notification@main
         with:
