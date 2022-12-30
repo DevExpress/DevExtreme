@@ -101,8 +101,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
-    const { template, model, isEqual } = this.props;
-    const { template: nextTemplate, model: nextModel } = nextProps;
+    const { template, model } = this.props;
+    const { template: nextTemplate, model: nextModel, isEqual } = nextProps;
     const equalityComparer = isEqual ?? shallowEquals;
 
     if (template !== nextTemplate) {
