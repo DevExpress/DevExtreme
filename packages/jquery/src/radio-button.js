@@ -1,4 +1,5 @@
-import { ComponentWrapper, registerComponent } from '@devextreme/interim';
+import { registerComponent } from '@devextreme/interim';
+import { ComponentWrapper } from './component-wrapper';
 import { RadioButton as RadioButtonInferno } from './generated/components/radio-button';
 
 export class RadioButton extends ComponentWrapper {
@@ -21,7 +22,7 @@ export class RadioButton extends ComponentWrapper {
       twoWay: [['checked', 'defaultChecked', 'onChange']],
       allowNull: [],
       elements: [],
-      templates: [],
+      templates: ['radioTemplate', 'labelTemplate'],
       props: ['label', 'value', 'checked', 'defaultChecked', 'onChange'],
     };
   }

@@ -2,86 +2,148 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
 import { shallowEquals } from '../../utils/shallow_equals';
-import { replaceWith } from '../../../core/utils/dom';
-import $ from '../../../core/renderer';
+// eslint-disable-next-line import/named
+import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
-import { getPublicElement } from '../../../core/element';
-import { removeDifferentElements } from '../utils/utils';
+// eslint-disable-next-line import/named
+import { DxElement, getPublicElement } from '../../../core/element';
 import { FunctionTemplate } from '../../../core/templates/function_template';
-import { EffectReturn } from '../../utils/effect_return';
 import { isDefined } from '../../../core/utils/type';
+import { noop } from '../../../core/utils/common';
+import { recordMutations } from './mutations_recording';
+
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type UnknownRecord = Record<PropertyKey, unknown>;
+
+type EqualityComparer = (a?: UnknownRecord, b?: UnknownRecord) => boolean;
 
 export interface TemplateModel {
-  data: Record<string, unknown>;
+  data: UnknownRecord & {
+    isEqual?: EqualityComparer;
+  };
   index: number;
 }
 
-interface TemplateWrapperProps {
+export interface TemplateWrapperProps {
   template: FunctionTemplate;
   model?: TemplateModel;
+  isEqual?: EqualityComparer;
   transclude?: boolean;
   renovated?: boolean;
 }
 
+function isDxElementWrapper(
+  element: dxElementWrapper | HTMLElement & Partial<Pick<dxElementWrapper, 'toArray'>>,
+): element is dxElementWrapper {
+  return !!element.toArray;
+}
+
+type TemplateModelArgs =
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  Required<Pick<TemplateWrapperProps, 'model'>>
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  & Omit<TemplateWrapperProps, 'model'>;
+
+export function buildTemplateArgs(
+  model: TemplateModel,
+  template: TemplateWrapperProps['template'],
+): TemplateModelArgs {
+  const args: TemplateModelArgs = {
+    template,
+    model: { ...model },
+  };
+
+  const { isEqual, ...data } = model.data ?? {};
+  if (isEqual) {
+    args.model.data = data;
+    args.isEqual = isEqual;
+  }
+
+  return args;
+}
+
+function buildTemplateContent(
+  props: TemplateWrapperProps,
+  container: DxElement<Element>,
+): ChildNode[] {
+  const {
+    data, index,
+  } = props.model ?? { data: {} };
+
+  if (data) {
+    Object.keys(data).forEach((name) => {
+      if (data[name] && domAdapter.isNode(data[name])) {
+        data[name] = getPublicElement($(data[name] as Element));
+      }
+    });
+  }
+
+  const rendered = props.template.render({
+    container,
+    transclude: props.transclude,
+    ...{ renovated: props.renovated },
+    ...!props.transclude ? { model: data } : {},
+    ...!props.transclude && Number.isFinite(index) ? { index } : {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }) as any as (dxElementWrapper | DxElement | undefined);
+
+  if (rendered === undefined) {
+    return [];
+  }
+
+  return isDxElementWrapper(rendered)
+    ? rendered.toArray()
+    : [$(rendered).get(0)];
+}
+
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
+  private cleanParent: () => void = noop;
+
   constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
   }
 
-  renderTemplate(): EffectReturn {
-    // eslint-disable-next-line spellcheck/spell-checker
-    const node = findDOMfromVNode(this.$LI, true) as Element;
-    const parentNode = node.parentNode as Element;
-    const $parent = $(parentNode);
-    const $children = $parent.contents();
+  renderTemplate(): void {
+    // eslint-disable-next-line spellcheck/spell-checker, rulesdir/no-non-null-assertion
+    const node = findDOMfromVNode(this.$LI, true)!;
+    // eslint-disable-next-line rulesdir/no-non-null-assertion
+    const container = node.parentElement!;
 
-    const {
-      data, index,
-    } = this.props.model ?? { data: {} };
+    this.cleanParent();
+    this.cleanParent = recordMutations(
+      container,
+      () => {
+        const content = buildTemplateContent(this.props, getPublicElement($(container)));
 
-    if (data) {
-      Object.keys(data).forEach((name) => {
-        if (data[name] && domAdapter.isNode(data[name])) {
-          data[name] = getPublicElement($(data[name] as Element));
+        if (content.length !== 0 && !(content.length === 1 && content[0] === container)) {
+          node.after(...content);
         }
-      });
-    }
-
-    const $result = $(this.props.template.render({
-      container: getPublicElement($parent),
-      transclude: this.props.transclude,
-      ...{ renovated: this.props.renovated },
-      ...!this.props.transclude ? { model: data } : {},
-      ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
-    }));
-
-    replaceWith($(node), $result);
-
-    return (): void => {
-      // NOTE: order is important
-      removeDifferentElements($children, $parent.contents());
-      parentNode.appendChild(node);
-    };
+      },
+    );
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
     const { template, model } = this.props;
-    const { template: nextTemplate, model: nextModel } = nextProps;
+    const { template: nextTemplate, model: nextModel, isEqual } = nextProps;
+    const equalityComparer = isEqual ?? shallowEquals;
 
-    const sameTemplate = template === nextTemplate;
-    if (!sameTemplate) {
+    if (template !== nextTemplate) {
       return true;
     }
 
-    if (isDefined(model) && isDefined(nextModel)) {
-      const { data, index } = model;
-      const { data: nextData, index: nextIndex } = nextModel;
-      return index !== nextIndex || !shallowEquals(data, nextData);
+    if (!isDefined(model) || !isDefined(nextModel)) {
+      return model !== nextModel;
     }
 
-    const sameModel = model === nextModel;
-    return !sameModel;
+    const { data, index } = model;
+    const { data: nextData, index: nextIndex } = nextModel;
+
+    if (index !== nextIndex) {
+      return true;
+    }
+
+    return !equalityComparer(data, nextData);
   }
 
   createEffects(): InfernoEffect[] {
@@ -94,7 +156,9 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
 
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
-  componentWillUnmount(): void { }
+  componentWillUnmount(): void {
+    this.cleanParent();
+  }
 
   render(): JSX.Element | null {
     return null;

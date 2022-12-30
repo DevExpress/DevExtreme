@@ -16,7 +16,7 @@ import type { UserDefinedElement } from '../../../core/element';
 import {
   isDefined, isRenderer, isString,
 } from '../../../core/utils/type';
-import { TemplateModel, TemplateWrapper } from './template_wrapper';
+import { TemplateModel, TemplateWrapper, buildTemplateArgs } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
 
@@ -497,7 +497,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
-      TemplateWrapper, { template, model },
+      TemplateWrapper,
+      buildTemplateArgs(model, template),
     );
 
     return templateWrapper;
