@@ -5,7 +5,10 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
-permissions: read-all
+permissions:
+  actions: read
+  contents: read
+  security-events: write
 
 jobs:
   fetch:
