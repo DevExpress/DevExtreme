@@ -66,7 +66,6 @@
                         defaultValue: items[1],
                         items,
                         itemRender(item, index, container) {
-                            debugger;
                             const result = document.createElement('span');
                             result.innerHTML = `[${index}] ${item.toUpperCase()}`;
                             container.append(result);
@@ -79,16 +78,20 @@
         <div id="radio-group-item-template-complex-item">
             <script>
                 (function() {
+                    var isEqual = () => {
+                        console.log('isEqual called');
+                    };
                     var items = [
-                        { label: 'one', value: { prop: 10 }},
-                        { label: 'two', value: { prop: 20 }},
-                        { label: 'three', value: { prop: 30 }},
+                        { label: 'one', value: { prop: 10 }, isEqual},
+                        { label: 'two', value: { prop: 20 }, isEqual},
+                        { label: 'three', value: { prop: 30 }, isEqual},
                     ];
                     new window.DevExpress.ui.dxRadioGroup(document.getElementById('radio-group-item-template-complex-item'), {
                         defaultValue: items[1].value.prop,
                         items,
                         valueExpr: 'value.prop',
                         displayExpr: 'label',
+
                         itemRender({ label, value: { prop }}, index, container) {
                             const result = document.createElement('span');
                             result.innerHTML = `[${index}] ${label.toUpperCase()}-${prop}`;
