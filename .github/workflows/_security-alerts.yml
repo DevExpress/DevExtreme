@@ -9,17 +9,20 @@ jobs:
   fetch:
     runs-on: devextreme-shr2
     name: Fetch analysis
+    outputs:
+      alerts: ${{ steps.fetch.outputs.ALERTS }}
 
     steps:
-      - name: Get Latest Analysis info
+      - id: fetch
+        name: Get Latest Analysis info
         run: |
           RESPONSE=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/dependabot/alerts?state=open)
-          echo 'ALERTS<<EOF' >> $GITHUB_ENV
-          echo $RESPONSE >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo 'ALERTS<<EOF' >> $GITHUB_OUTPUT
+          echo $RESPONSE >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
   notify:
     runs-on: devextreme-shr2
@@ -44,6 +47,6 @@ jobs:
         uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{ secrets.TEAMS_SECURITY_ALERTS }}
-          alerts: ${{ env.ALERTS }}
+          alerts: ${{ needs.fetch.outputs.alerts }}
           alert_type: Dependabot
           alerts_cache_file: dependabot_alerts.json
