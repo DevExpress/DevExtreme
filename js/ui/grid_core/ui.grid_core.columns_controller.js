@@ -1879,7 +1879,7 @@ export const columnsControllerModule = {
                         updateSerializers(lookup, lookup.dataType);
                     }
 
-                    const dataType = (lookup && lookup.dataType) || column.dataType;
+                    const dataType = lookup ? lookup.dataType : column.dataType;
                     if(dataType) {
                         column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
                         column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
@@ -2409,6 +2409,8 @@ export const columnsControllerModule = {
                     calculatedColumnOptions.calculateFilterExpression = function() {
                         return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
+
+                    calculatedColumnOptions.defaultFilterOperation = '=';
 
                     calculatedColumnOptions.createFilterExpression = function(filterValue) {
                         let result;
