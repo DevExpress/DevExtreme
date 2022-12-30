@@ -19,7 +19,6 @@ const bundleConfig = {
       'devextreme/viz/vector_map/*',
       'devextreme-angular',
       'devextreme-angular/*',
-      'devextreme-quill',
       'devexpress-gantt',
       'devexpress-diagram',
       'rxjs/*',
@@ -45,7 +44,6 @@ if (window.config) {
   [
     'devextreme',
     'devextreme-angular',
-    'devextreme-quill',
     'devexpress-gantt',
     'devexpress-diagram',
     'rxjs',
