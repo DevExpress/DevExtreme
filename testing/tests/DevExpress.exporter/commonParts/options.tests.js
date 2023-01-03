@@ -58,16 +58,4 @@ export function runCommonOptionTests(_getFullOptions, getComponent, document) {
         assert.deepEqual(_getFullOptions(extend(initialConfig, { keepColumnWidths: false })).keepColumnWidths, false, 'false');
         assert.deepEqual(_getFullOptions(extend(initialConfig, { keepColumnWidths: true })).keepColumnWidths, true, 'true');
     });
-
-    QUnit.test('encodeExecutableContent', function(assert) {
-        const initialConfig = { component: getComponent() };
-        initialConfig[document] = this[document];
-
-        assert.deepEqual(_getFullOptions(initialConfig).encodeExecutableContent, false, 'no member');
-        assert.deepEqual(_getFullOptions(extend(initialConfig, { encodeExecutableContent: undefined })).encodeExecutableContent, false, 'undefined');
-        assert.deepEqual(_getFullOptions(extend(initialConfig, { encodeExecutableContent: null })).encodeExecutableContent, false, 'null');
-
-        assert.deepEqual(_getFullOptions(extend(initialConfig, { encodeExecutableContent: false })).encodeExecutableContent, false, 'false');
-        assert.deepEqual(_getFullOptions(extend(initialConfig, { encodeExecutableContent: true })).encodeExecutableContent, true, 'true');
-    });
 }
