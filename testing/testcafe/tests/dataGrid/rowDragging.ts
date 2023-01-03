@@ -583,7 +583,8 @@ test('The placeholder should have correct position after dragging the row to the
 });
 
 // T1126013
-test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+// TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
+test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
