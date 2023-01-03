@@ -33,7 +33,7 @@
   font-size: 15px;
 }
 
-::ng-deep .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
+::ng-deep .dx-viewport .dx-fieldset {
   width: 40%;
   float: left;
 }

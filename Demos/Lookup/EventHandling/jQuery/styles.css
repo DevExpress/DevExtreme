@@ -21,15 +21,6 @@
   overflow: hidden;
 }
 
-.dx-theme-ios7 .selected {
-  padding: 10px;
-}
-
-.dx-theme-ios7 img {
-  max-width: 100%;
-  margin-bottom: 10px;
-}
-
 .dx-field > .dx-lookup {
   flex: 1;
 }

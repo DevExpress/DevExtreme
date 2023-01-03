@@ -131,10 +131,6 @@ export default {
   vertical-align: middle;
 }
 
-.dx-theme-android5 .custom-item img {
-  padding: 4px 22px 0 0;
-}
-
 .custom-item img {
   float: right;
 }

@@ -73,7 +73,7 @@ export default {
     padding: 0 5px;
   }
 
-  .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
+  .dx-viewport .dx-fieldset {
     width: 40%;
     float: left;
   }
