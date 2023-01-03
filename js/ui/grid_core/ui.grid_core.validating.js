@@ -1320,24 +1320,30 @@ export const validatingModule = {
                 };
             })(),
             data: {
+                _getValidationStatus: function(validationResult) {
+                    const validationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
+
+                    return validationStatus || VALIDATION_STATUS.valid;
+                },
+
                 _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
                     const cell = oldRow.cells?.[columnIndex];
-                    const oldValidationStatus = cell && cell.validationStatus;
+                    const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });
                     const validatingController = this.getController('validating');
                     const validationResult = validatingController.getCellValidationResult({
                         rowKey: oldRow.key,
                         columnIndex
                     });
                     const validationData = validatingController._getValidationData(oldRow.key);
-                    const newValidationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
+                    const newValidationStatus = this._getValidationStatus(validationResult);
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
+                    const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
                     const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-                    const editingChanged = oldRow.isEditing !== newRow.isEditing;
                     const hasValidationRules = cell?.column.validationRules?.length;
+                    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
+                    const cellValidationStateChanged = validationStatusChanged || validationData.isValid && cellIsMarkedAsInvalid;
 
-                    if((editingChanged && hasValidationRules) ||
-                        (oldValidationStatus !== newValidationStatus && rowIsModified) ||
-                        (validationData.isValid && cellIsMarkedAsInvalid)) {
+                    if(rowEditStateChanged || cellValidationStateChanged) {
                         return true;
                     }
 
