@@ -135,7 +135,7 @@ function setTestingTheme(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu';
+            return 'chrome:headless --disable-gpu --experimental-proxyless';
     }
 
     return browser;
