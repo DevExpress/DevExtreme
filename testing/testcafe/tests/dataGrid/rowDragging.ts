@@ -584,8 +584,6 @@ test('The placeholder should have correct position after dragging the row to the
 
 // T1126013
 test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
-  await t.setTestSpeed(0.8);
-
   const fromIndex = 2;
   const toIndex = 4;
 
