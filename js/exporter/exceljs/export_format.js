@@ -133,7 +133,7 @@ function _hasCSVQuotedInjection(value, textQualifier) {
 
 function _includesCSVExpression(value) {
     const injectionPrefix = /^[@=\t\r]/;
-    const injectionPrefixSigns = /^[+-]/;
+    const possibleInjectionPrefix = /^[+-]/;
 
     if(!value) {
         return false;
@@ -143,7 +143,7 @@ function _includesCSVExpression(value) {
         return true;
     }
 
-    if(!injectionPrefixSigns.test(value)) {
+    if(!possibleInjectionPrefix.test(value)) {
         return false;
     }
 
