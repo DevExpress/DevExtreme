@@ -5,7 +5,7 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
-const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
+// const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
@@ -17,7 +17,13 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 { dependencies: { themeName } })();
 
 let testCafe;
-createTestCafe('localhost', 1437, 1438)
+createTestCafe({
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    // eslint-disable-next-line spellcheck/spell-checker
+    // experimentalProxyless: true,
+})
     .then(tc => {
         testCafe = tc;
 
@@ -135,7 +141,7 @@ function setTestingTheme(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu --experimental-proxyless';
+            return 'chrome:headless --disable-gpu';
     }
 
     return browser;
@@ -148,7 +154,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: ['minimal', dashboardReporter],
+            reporter: ['minimal'/* , dashboardReporter*/],
             componentFolder: '',
             file: '*',
             cache: true,

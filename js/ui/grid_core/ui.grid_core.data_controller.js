@@ -1,3 +1,4 @@
+// @ts-check
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
@@ -9,6 +10,7 @@ import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import DataHelperMixin from '../../data_helper';
+// @ts-ignore
 import { when, Deferred } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 
@@ -62,6 +64,9 @@ export const dataControllerModule = {
                 return 0;
             };
 
+            /**
+             * @type {Partial<import('./ui.grid_core.data_controller').DataController>}
+             */
             const members = {
                 init: function() {
                     const that = this;
@@ -147,6 +152,7 @@ export const dataControllerModule = {
                         if(isValueChanged) {
                             const store = this.store();
                             if(store) {
+                                // @ts-ignore
                                 store._array = args.value;
                             }
                         }
@@ -256,7 +262,9 @@ export const dataControllerModule = {
                     return filter;
                 },
                 waitReady: function() {
+                    // @ts-ignore
                     if(this._updateLockCount) {
+                        // @ts-ignore
                         this._readyDeferred = new Deferred();
                         return this._readyDeferred;
                     }
@@ -484,6 +492,7 @@ export const dataControllerModule = {
                     if(dataSource) {
                         const changedPagingOptions = that._setPagingOptions(dataSource);
 
+                        // @ts-ignore
                         this._isPaging = changedPagingOptions?.isPageIndexChanged;
                         that.setDataSource(dataSource);
                     } else if(oldDataSource) {
@@ -493,6 +502,7 @@ export const dataControllerModule = {
                 _loadDataSource: function() {
                     const that = this;
                     const dataSource = that._dataSource;
+                    // @ts-ignore
                     const result = new Deferred();
 
                     when(this._columnsController.refresh(true)).always(function() {
@@ -725,6 +735,7 @@ export const dataControllerModule = {
                     let changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
 
                     if(changedColumnIndices?.length && this.option('dataRowTemplate')) {
+                        // @ts-ignore
                         changedColumnIndices = undefined;
                     }
 
@@ -957,6 +968,7 @@ export const dataControllerModule = {
                         }
                     }
 
+                    // @ts-ignore
                     if(that._updateLockCount && !change.cancel) {
                         that._changes.push(change);
                         return;
@@ -1097,6 +1109,7 @@ export const dataControllerModule = {
                     const store = dataSource.store();
                     const enabledRemoteOperations = { filtering: true, sorting: true, paging: true, grouping: true, summary: true };
 
+                    // @ts-ignore
                     if(remoteOperations && remoteOperations.groupPaging) {
                         remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
                     }
@@ -1136,11 +1149,17 @@ export const dataControllerModule = {
                         that._isLoading = !dataSource.isLoaded();
                         that._needApplyFilter = true;
                         that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
+                        // @ts-ignore
                         dataSource.changed.add(that._dataChangedHandler);
+                        // @ts-ignore
                         dataSource.loadingChanged.add(that._loadingChangedHandler);
+                        // @ts-ignore
                         dataSource.loadError.add(that._loadErrorHandler);
+                        // @ts-ignore
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
+                        // @ts-ignore
                         dataSource.changing.add(that._changingHandler);
+                        // @ts-ignore
                         dataSource.pushed.add(that._dataPushedHandler);
                     }
                 },
@@ -1162,6 +1181,7 @@ export const dataControllerModule = {
                 },
                 loadAll: function(data) {
                     const that = this;
+                    // @ts-ignore
                     const d = new Deferred();
                     const dataSource = that._dataSource;
 
@@ -1222,6 +1242,7 @@ export const dataControllerModule = {
                     if(!store) return;
 
                     if(rowIndex >= 0) {
+                        // @ts-ignore
                         result = new Deferred().resolve(this.items()[rowIndex].data);
                     }
 
@@ -1239,6 +1260,7 @@ export const dataControllerModule = {
                 },
                 getDataByKeys: function(rowKeys) {
                     const that = this;
+                    // @ts-ignore
                     const result = new Deferred();
                     const deferreds = [];
                     const data = [];
@@ -1281,6 +1303,7 @@ export const dataControllerModule = {
                     const that = this;
                     const dataSource = that.getDataSource();
                     const changesOnly = options.changesOnly;
+                    // @ts-ignore
                     const d = new Deferred();
 
 
@@ -1290,9 +1313,11 @@ export const dataControllerModule = {
 
                     when(!options.lookup || that._columnsController.refresh()).always(function() {
                         if(options.load || options.reload) {
+                            // @ts-ignore
                             dataSource && dataSource.on('customizeLoadResult', customizeLoadResult);
 
                             when(that.reload(options.reload, changesOnly)).always(function() {
+                                // @ts-ignore
                                 dataSource && dataSource.off('customizeLoadResult', customizeLoadResult);
                                 that._repaintChangesOnly = undefined;
                             }).done(d.resolve).fail(d.reject);
