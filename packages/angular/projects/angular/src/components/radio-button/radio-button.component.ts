@@ -34,14 +34,12 @@ let nextUniqueId = 0;
         (change)="handleChange()"
       />
       <dx-dynamic-template
-        *ngIf="radioTemplateData$ | async as templateData"
         [template]="radioTemplateValue"
-        [data]="templateData">
+        [data]="radioTemplateData$ | async">
       </dx-dynamic-template>
       <dx-dynamic-template
-        *ngIf="labelTemplateValue"
         [template]="labelTemplateValue"
-        [data]="{ label: label }">
+        [data]="{label: label}">
       </dx-dynamic-template>
     </label>
   `,

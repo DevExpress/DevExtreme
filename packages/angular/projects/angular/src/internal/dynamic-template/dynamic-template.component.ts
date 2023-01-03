@@ -16,7 +16,7 @@ interface AngularTemplateContext<T> {
 }
 
 @Component({
-  selector: 'dx-dynamic-template',
+  selector: 'dx-dynamic-template[template]',
   template: '',
   styles: [':host {display: none; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,25 +25,17 @@ export class DynamicTemplateComponent<
   TComponent extends ViewComponent,
   TData extends UnknownRecord,
   > {
-  @Input() set template(template: AngularTemplate<TComponent>) {
-    if (template === this.templateValue) {
-      return;
-    }
-
+  @Input() set template(template: AngularTemplate<TComponent> | null) {
     this.setTemplate(template);
   }
 
-  @Input() set data(data: TData) {
-    if (data === this.dataValue) {
-      return;
-    }
-
+  @Input() set data(data: TData | null) {
     this.setTemplateData(data);
   }
 
-  private templateValue?: AngularTemplate<TComponent>;
+  private templateValue: AngularTemplate<TComponent> | null = null;
 
-  private dataValue?: TData;
+  private dataValue: TData | null = null;
 
   private componentRef?: ComponentRef<TComponent>;
 
@@ -54,12 +46,17 @@ export class DynamicTemplateComponent<
   ) {
   }
 
-  private setTemplate(template: AngularTemplate<TComponent>): void {
-    if (!template) {
+  private setTemplate(template: AngularTemplate<TComponent> | null): void {
+    if (template === this.templateValue) {
       return;
     }
 
     this.templateValue = template;
+
+    if (!template) {
+      this.clearTemplate();
+      return;
+    }
 
     if (template instanceof TemplateRef) {
       this.templateRef = this.viewContainerRef.createEmbeddedView(template);
@@ -70,12 +67,22 @@ export class DynamicTemplateComponent<
     this.setTemplateData(this.dataValue);
   }
 
-  private setTemplateData(data?: TData): void {
-    if (!data) {
+  private clearTemplate(): void {
+    this.viewContainerRef.clear();
+    this.templateRef = undefined;
+    this.componentRef = undefined;
+  }
+
+  private setTemplateData(data: TData | null): void {
+    if (data === this.dataValue) {
       return;
     }
 
     this.dataValue = data;
+
+    if (!data) {
+      return;
+    }
 
     if (this.componentRef) {
       this.setDataToComponent();
@@ -90,7 +97,6 @@ export class DynamicTemplateComponent<
 
     (Object.keys(this.dataValue!) as (keyof TData)[])
       // TODO (Vinogradov): Think about optimization here.
-      // .filter((key) => Object.prototype.hasOwnProperty.call(instance, key))
       .forEach((key) => {
         instanceAsRecord[key] = this.dataValue![key];
       });
