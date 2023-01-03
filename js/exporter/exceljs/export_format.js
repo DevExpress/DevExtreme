@@ -120,7 +120,7 @@ function _convertNumberFormat(format, precision, currency) {
 function _hasCSVInjection(value) {
     if(!value || value.length < 2) { return false; }
 
-    return _hasCSVExpression(value);
+    return _includesCSVExpression(value);
 }
 
 function _hasCSVQuotedInjection(value, textQualifier) {
@@ -128,22 +128,22 @@ function _hasCSVQuotedInjection(value, textQualifier) {
         return false;
     }
 
-    return _hasCSVExpression(value.substring(1, value.length - 1));
+    return _includesCSVExpression(value.substring(1, value.length - 1));
 }
 
-function _hasCSVExpression(value) {
-    const possibleInjection = /^[@=\t\r]/;
-    const possibleInjectionSigns = /^[+-]/;
+function _includesCSVExpression(value) {
+    const injectionPrefix = /^[@=\t\r]/;
+    const injectionPrefixSigns = /^[+-]/;
 
     if(!value) {
         return false;
     }
 
-    if(possibleInjection.test(value)) {
+    if(injectionPrefix.test(value)) {
         return true;
     }
 
-    if(!possibleInjectionSigns.test(value)) {
+    if(!injectionPrefixSigns.test(value)) {
         return false;
     }
 
