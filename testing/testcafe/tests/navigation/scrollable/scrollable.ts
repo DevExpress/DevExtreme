@@ -1,66 +1,50 @@
 /* eslint-disable no-restricted-syntax */
-import { Selector } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { isMaterial, screenshotTestFn } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 
-const testFixture = () => {
-  if (isMaterial()) {
-    return fixture.disablePageReloads.skip;
-  }
-  return fixture.disablePageReloads;
-};
-
-testFixture()`Scrollable_ScrollToElement`
+fixture.disablePageReloads`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [true, false].forEach((useNative) => {
     test(`STE(el less cont),nat=${useNative},dir=${direction}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
       const scrollable = new Scrollable('#scrollable', { useNative, direction });
       const positions = [
-        { initialScrollOffset: { top: 80, left: 80 }, position: 'elementInsideContainer' },
-        { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
-        { initialScrollOffset: { top: 0, left: 80 }, position: 'fromTop' },
-        { initialScrollOffset: { top: 0, left: 160 }, position: 'fromTopRCorner' },
-        { initialScrollOffset: { top: 80, left: 160 }, position: 'fromR' },
-        { initialScrollOffset: { top: 160, left: 160 }, position: 'fromBRCorner' },
-        { initialScrollOffset: { top: 160, left: 80 }, position: 'fromB' },
-        { initialScrollOffset: { top: 160, left: 0 }, position: 'fromBLCorner' },
-        { initialScrollOffset: { top: 80, left: 0 }, position: 'fromL' },
+        { initialScrollOffset: { top: 80, left: 80 }, expected: { top: 80, left: 80 }, position: 'elementInsideContainer' },
+        { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 55, left: 55 }, position: 'fromTopLCorner' },
+        { initialScrollOffset: { top: 0, left: 80 }, expected: { top: 55, left: 80 }, position: 'fromTop' },
+        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 55, left: 105 }, position: 'fromTopRCorner' },
+        { initialScrollOffset: { top: 80, left: 160 }, expected: { top: 80, left: 105 }, position: 'fromR' },
+        { initialScrollOffset: { top: 160, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 160, left: 80 }, expected: { top: 105, left: 80 }, position: 'fromB' },
+        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 105, left: 55 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 80, left: 0 }, expected: { top: 80, left: 55 }, position: 'fromL' },
         // part
-        { initialScrollOffset: { top: 125, left: 125 }, position: 'part-fromTopLCorner' },
-        { initialScrollOffset: { top: 125, left: 80 }, position: 'part-fromTop' },
-        { initialScrollOffset: { top: 125, left: 45 }, position: 'part-fromTopRCorner' },
-        { initialScrollOffset: { top: 80, left: 45 }, position: 'part-fromR' },
-        { initialScrollOffset: { top: 45, left: 45 }, position: 'part-fromBRCorner' },
-        { initialScrollOffset: { top: 45, left: 80 }, position: 'part-fromB' },
-        { initialScrollOffset: { top: 45, left: 125 }, position: 'part-fromBLCorner' },
-        { initialScrollOffset: { top: 80, left: 125 }, position: 'part-fromL' },
+        { initialScrollOffset: { top: 125, left: 125 }, expected: { top: 105, left: 105 }, position: 'part-fromTopLCorner' },
+        { initialScrollOffset: { top: 125, left: 80 }, expected: { top: 105, left: 80 }, position: 'part-fromTop' },
+        { initialScrollOffset: { top: 125, left: 45 }, expected: { top: 105, left: 55 }, position: 'part-fromTopRCorner' },
+        { initialScrollOffset: { top: 80, left: 45 }, expected: { top: 80, left: 55 }, position: 'part-fromR' },
+        { initialScrollOffset: { top: 45, left: 45 }, expected: { top: 55, left: 55 }, position: 'part-fromBRCorner' },
+        { initialScrollOffset: { top: 45, left: 80 }, expected: { top: 55, left: 80 }, position: 'part-fromB' },
+        { initialScrollOffset: { top: 45, left: 125 }, expected: { top: 55, left: 105 }, position: 'part-fromBLCorner' },
+        { initialScrollOffset: { top: 80, left: 125 }, expected: { top: 80, left: 105 }, position: 'part-fromL' },
       ];
 
       for (const rtlEnabled of [false, true]) {
         await scrollable.option('rtlEnabled', rtlEnabled);
 
-        for (const { initialScrollOffset, position } of positions) {
+        for (const { initialScrollOffset, expected } of positions) {
           await scrollable.scrollTo(initialScrollOffset);
           await scrollable.scrollToElement('#element');
 
           await t
-            .expect(await takeScreenshot(`STE(el less cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable')))
-            .ok();
+            .expect(await scrollable.scrollOffset())
+            .eql(expected);
         }
       }
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
     }).before(async () => {
       await appendElementTo('#container', 'div', 'scrollable', {
         border: '1px solid black',
@@ -95,53 +79,49 @@ testFixture()`Scrollable_ScrollToElement`
     });
 
     test(`STE(el more cont),native=${useNative},dir=${direction}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
       const scrollable = new Scrollable('#scrollable', { useNative, direction });
 
       const positions = [
-        { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
-        { initialScrollOffset: { top: 0, left: 40 }, position: 'fromTLPart' },
-        { initialScrollOffset: { top: 0, left: 120 }, position: 'fromTRPart' },
-        { initialScrollOffset: { top: 0, left: 160 }, position: 'fromTRCorner' },
+        { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 55, left: 55 }, position: 'fromTLCorner' },
+        { initialScrollOffset: { top: 0, left: 40 }, expected: { top: 55, left: 55 }, position: 'fromTLPart' },
+        { initialScrollOffset: { top: 0, left: 120 }, expected: { top: 55, left: 105 }, position: 'fromTRPart' },
+        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 55, left: 105 }, position: 'fromTRCorner' },
 
-        { initialScrollOffset: { top: 40, left: 160 }, position: 'fromRTPart' },
-        { initialScrollOffset: { top: 120, left: 160 }, position: 'fromRBPart' },
+        { initialScrollOffset: { top: 40, left: 160 }, expected: { top: 55, left: 105 }, position: 'fromRTPart' },
+        { initialScrollOffset: { top: 120, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromRBPart' },
 
-        { initialScrollOffset: { top: 160, left: 160 }, position: 'fromBRCorner' },
-        { initialScrollOffset: { top: 160, left: 120 }, position: 'fromBRPart' },
-        { initialScrollOffset: { top: 160, left: 40 }, position: 'fromBLPart' },
-        { initialScrollOffset: { top: 160, left: 0 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 160, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 160, left: 120 }, expected: { top: 105, left: 105 }, position: 'fromBRPart' },
+        { initialScrollOffset: { top: 160, left: 40 }, expected: { top: 105, left: 55 }, position: 'fromBLPart' },
+        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 105, left: 55 }, position: 'fromBLCorner' },
 
-        { initialScrollOffset: { top: 120, left: 0 }, position: 'fromLBPart' },
-        { initialScrollOffset: { top: 40, left: 0 }, position: 'fromLTPart' },
+        { initialScrollOffset: { top: 120, left: 0 }, expected: { top: 105, left: 55 }, position: 'fromLBPart' },
+        { initialScrollOffset: { top: 40, left: 0 }, expected: { top: 55, left: 55 }, position: 'fromLTPart' },
 
         // from inside
 
-        { initialScrollOffset: { top: 40, left: 60 }, position: 'fromInsideTL' },
-        { initialScrollOffset: { top: 40, left: 100 }, position: 'fromInsideTR' },
-        { initialScrollOffset: { top: 60, left: 120 }, position: 'fromInsideRT' },
-        { initialScrollOffset: { top: 100, left: 120 }, position: 'fromInsideRB' },
-        { initialScrollOffset: { top: 120, left: 100 }, position: 'fromInsideBR' },
-        { initialScrollOffset: { top: 120, left: 60 }, position: 'fromInsideBL' },
-        { initialScrollOffset: { top: 100, left: 40 }, position: 'fromInsideLB' },
-        { initialScrollOffset: { top: 60, left: 40 }, position: 'fromInsideLT' },
+        { initialScrollOffset: { top: 40, left: 60 }, expected: { top: 55, left: 60 }, position: 'fromInsideTL' },
+        { initialScrollOffset: { top: 40, left: 100 }, expected: { top: 55, left: 100 }, position: 'fromInsideTR' },
+        { initialScrollOffset: { top: 60, left: 120 }, expected: { top: 60, left: 105 }, position: 'fromInsideRT' },
+        { initialScrollOffset: { top: 100, left: 120 }, expected: { top: 100, left: 105 }, position: 'fromInsideRB' },
+        { initialScrollOffset: { top: 120, left: 100 }, expected: { top: 105, left: 100 }, position: 'fromInsideBR' },
+        { initialScrollOffset: { top: 120, left: 60 }, expected: { top: 105, left: 60 }, position: 'fromInsideBL' },
+        { initialScrollOffset: { top: 100, left: 40 }, expected: { top: 100, left: 55 }, position: 'fromInsideLB' },
+        { initialScrollOffset: { top: 60, left: 40 }, expected: { top: 60, left: 55 }, position: 'fromInsideLT' },
       ];
 
       for (const rtlEnabled of [false, true]) {
         await scrollable.option('rtlEnabled', rtlEnabled);
 
-        for (const { initialScrollOffset, position } of positions) {
+        for (const { initialScrollOffset, expected } of positions) {
           await scrollable.scrollTo(initialScrollOffset);
           await scrollable.scrollToElement('#element');
 
-          await screenshotTestFn(t, takeScreenshot, `STE(elem more cont),nat=${useNative}-dir=${direction}-rtl=${rtlEnabled}-${position}.png`, Selector('#scrollable'));
+          await t
+            .expect(await scrollable.scrollOffset())
+            .eql(expected);
         }
       }
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
     }).before(async () => {
       await appendElementTo('#container', 'div', 'scrollable', {
         border: '1px solid black',
@@ -176,37 +156,34 @@ testFixture()`Scrollable_ScrollToElement`
     });
 
     test(`STE(scale(1.5)),nat=${useNative},dir=${direction}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
       const scrollable = new Scrollable('#scrollable', { useNative, direction });
 
       const positions = [
-        { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },
-        { initialScrollOffset: { top: 0, left: 290 }, position: 'fromTRCorner' },
-        { initialScrollOffset: { top: 290, left: 290 }, position: 'fromBRCorner' },
-        { initialScrollOffset: { top: 290, left: 0 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 55, left: 55 }, position: 'fromTLCorner' },
+        { initialScrollOffset: { top: 0, left: 290 }, expected: { top: 55, left: 105 }, position: 'fromTRCorner' },
+        { initialScrollOffset: { top: 290, left: 290 }, expected: { top: 105, left: 105 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 290, left: 0 }, expected: { top: 105, left: 55 }, position: 'fromBLCorner' },
 
-        { initialScrollOffset: { top: 0, left: 160 }, position: 'fromT' },
-        { initialScrollOffset: { top: 160, left: 290 }, position: 'fromR' },
-        { initialScrollOffset: { top: 290, left: 160 }, position: 'fromB' },
-        { initialScrollOffset: { top: 160, left: 0 }, position: 'fromL' },
+        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 55, left: 105 }, position: 'fromT' },
+        { initialScrollOffset: { top: 160, left: 290 }, expected: { top: 105, left: 105 }, position: 'fromR' },
+        { initialScrollOffset: { top: 290, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromB' },
+        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 105, left: 55 }, position: 'fromL' },
 
         // from inside
 
-        { initialScrollOffset: { top: 165, left: 175 }, position: 'fromInsideTLPart' },
-        { initialScrollOffset: { top: 140, left: 140 }, position: 'fromInsideRBPart' },
+        { initialScrollOffset: { top: 165, left: 175 }, expected: { top: 105, left: 105 }, position: 'fromInsideTLPart' },
+        { initialScrollOffset: { top: 140, left: 140 }, expected: { top: 105, left: 105 }, position: 'fromInsideRBPart' },
       ];
 
       // eslint-disable-next-line no-restricted-syntax
-      for (const { initialScrollOffset, position } of positions) {
+      for (const { initialScrollOffset, expected } of positions) {
         await scrollable.scrollTo(initialScrollOffset);
         await scrollable.scrollToElement('#element');
 
-        await screenshotTestFn(t, takeScreenshot, `STE(),scale(1.5),nat=${useNative}-dir=${direction}-${position}.png`, Selector('#scrollable'));
+        await t
+          .expect(await scrollable.scrollOffset())
+          .eql(expected);
       }
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
     }).before(async () => {
       await appendElementTo('#container', 'div', 'scrollable', {
         border: '1px solid black',
