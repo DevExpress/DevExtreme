@@ -14,23 +14,23 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
       const scrollable = new Scrollable('#scrollable', { useNative, direction });
       const positions = [
         { initialScrollOffset: { top: 80, left: 80 }, expected: { top: 80, left: 80 }, position: 'elementInsideContainer' },
-        { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 70, left: 70 }, position: 'fromTopLCorner' },
-        { initialScrollOffset: { top: 0, left: 80 }, expected: { top: 70, left: 80 }, position: 'fromTop' },
-        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 70, left: 105 }, position: 'fromTopRCorner' },
-        { initialScrollOffset: { top: 80, left: 160 }, expected: { top: 80, left: 105 }, position: 'fromR' },
-        { initialScrollOffset: { top: 160, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromBRCorner' },
-        { initialScrollOffset: { top: 160, left: 80 }, expected: { top: 105, left: 80 }, position: 'fromB' },
-        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 105, left: 70 }, position: 'fromBLCorner' },
-        { initialScrollOffset: { top: 80, left: 0 }, expected: { top: 80, left: 70 }, position: 'fromL' },
+        { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 55, left: 55 }, position: 'fromTopLCorner' },
+        { initialScrollOffset: { top: 0, left: 80 }, expected: { top: 55, left: 80 }, position: 'fromTop' },
+        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 55, left: 125 }, position: 'fromTopRCorner' },
+        { initialScrollOffset: { top: 80, left: 160 }, expected: { top: 80, left: 125 }, position: 'fromR' },
+        { initialScrollOffset: { top: 160, left: 160 }, expected: { top: 125, left: 125 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 160, left: 80 }, expected: { top: 125, left: 80 }, position: 'fromB' },
+        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 125, left: 55 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 80, left: 0 }, expected: { top: 80, left: 55 }, position: 'fromL' },
         // part
-        { initialScrollOffset: { top: 125, left: 125 }, expected: { top: 105, left: 105 }, position: 'part-fromTopLCorner' },
-        { initialScrollOffset: { top: 125, left: 80 }, expected: { top: 105, left: 80 }, position: 'part-fromTop' },
-        { initialScrollOffset: { top: 125, left: 45 }, expected: { top: 105, left: 70 }, position: 'part-fromTopRCorner' },
-        { initialScrollOffset: { top: 80, left: 45 }, expected: { top: 80, left: 70 }, position: 'part-fromR' },
-        { initialScrollOffset: { top: 45, left: 45 }, expected: { top: 70, left: 70 }, position: 'part-fromBRCorner' },
-        { initialScrollOffset: { top: 45, left: 80 }, expected: { top: 70, left: 80 }, position: 'part-fromB' },
-        { initialScrollOffset: { top: 45, left: 125 }, expected: { top: 70, left: 105 }, position: 'part-fromBLCorner' },
-        { initialScrollOffset: { top: 80, left: 125 }, expected: { top: 80, left: 105 }, position: 'part-fromL' },
+        { initialScrollOffset: { top: 125, left: 125 }, expected: { top: 125, left: 125 }, position: 'part-fromTopLCorner' },
+        { initialScrollOffset: { top: 125, left: 80 }, expected: { top: 125, left: 80 }, position: 'part-fromTop' },
+        { initialScrollOffset: { top: 125, left: 45 }, expected: { top: 125, left: 55 }, position: 'part-fromTopRCorner' },
+        { initialScrollOffset: { top: 80, left: 45 }, expected: { top: 80, left: 55 }, position: 'part-fromR' },
+        { initialScrollOffset: { top: 45, left: 45 }, expected: { top: 55, left: 55 }, position: 'part-fromBRCorner' },
+        { initialScrollOffset: { top: 45, left: 80 }, expected: { top: 55, left: 80 }, position: 'part-fromB' },
+        { initialScrollOffset: { top: 45, left: 125 }, expected: { top: 55, left: 125 }, position: 'part-fromBLCorner' },
+        { initialScrollOffset: { top: 80, left: 125 }, expected: { top: 80, left: 125 }, position: 'part-fromL' },
       ];
 
       for (const rtlEnabled of [false, true]) {
@@ -84,28 +84,28 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
       const positions = [
         { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 25, left: 25 }, position: 'fromTLCorner' },
         { initialScrollOffset: { top: 0, left: 40 }, expected: { top: 25, left: 25 }, position: 'fromTLPart' },
-        { initialScrollOffset: { top: 0, left: 120 }, expected: { top: 25, left: 105 }, position: 'fromTRPart' },
-        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 25, left: 105 }, position: 'fromTRCorner' },
+        { initialScrollOffset: { top: 0, left: 120 }, expected: { top: 25, left: 140 }, position: 'fromTRPart' },
+        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 25, left: 140 }, position: 'fromTRCorner' },
 
-        { initialScrollOffset: { top: 40, left: 160 }, expected: { top: 25, left: 105 }, position: 'fromRTPart' },
-        { initialScrollOffset: { top: 120, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromRBPart' },
+        { initialScrollOffset: { top: 40, left: 160 }, expected: { top: 25, left: 140 }, position: 'fromRTPart' },
+        { initialScrollOffset: { top: 120, left: 160 }, expected: { top: 140, left: 140 }, position: 'fromRBPart' },
 
-        { initialScrollOffset: { top: 160, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromBRCorner' },
-        { initialScrollOffset: { top: 160, left: 120 }, expected: { top: 105, left: 105 }, position: 'fromBRPart' },
-        { initialScrollOffset: { top: 160, left: 40 }, expected: { top: 105, left: 25 }, position: 'fromBLPart' },
-        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 105, left: 25 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 160, left: 160 }, expected: { top: 140, left: 140 }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 160, left: 120 }, expected: { top: 140, left: 140 }, position: 'fromBRPart' },
+        { initialScrollOffset: { top: 160, left: 40 }, expected: { top: 140, left: 25 }, position: 'fromBLPart' },
+        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 140, left: 25 }, position: 'fromBLCorner' },
 
-        { initialScrollOffset: { top: 120, left: 0 }, expected: { top: 105, left: 25 }, position: 'fromLBPart' },
+        { initialScrollOffset: { top: 120, left: 0 }, expected: { top: 140, left: 25 }, position: 'fromLBPart' },
         { initialScrollOffset: { top: 40, left: 0 }, expected: { top: 25, left: 25 }, position: 'fromLTPart' },
 
         // from inside
 
         { initialScrollOffset: { top: 40, left: 60 }, expected: { top: 25, left: 60 }, position: 'fromInsideTL' },
         { initialScrollOffset: { top: 40, left: 100 }, expected: { top: 25, left: 100 }, position: 'fromInsideTR' },
-        { initialScrollOffset: { top: 60, left: 120 }, expected: { top: 60, left: 105 }, position: 'fromInsideRT' },
-        { initialScrollOffset: { top: 100, left: 120 }, expected: { top: 100, left: 105 }, position: 'fromInsideRB' },
-        { initialScrollOffset: { top: 120, left: 100 }, expected: { top: 105, left: 100 }, position: 'fromInsideBR' },
-        { initialScrollOffset: { top: 120, left: 60 }, expected: { top: 105, left: 60 }, position: 'fromInsideBL' },
+        { initialScrollOffset: { top: 60, left: 120 }, expected: { top: 60, left: 140 }, position: 'fromInsideRT' },
+        { initialScrollOffset: { top: 100, left: 120 }, expected: { top: 100, left: 140 }, position: 'fromInsideRB' },
+        { initialScrollOffset: { top: 120, left: 100 }, expected: { top: 140, left: 100 }, position: 'fromInsideBR' },
+        { initialScrollOffset: { top: 120, left: 60 }, expected: { top: 140, left: 60 }, position: 'fromInsideBL' },
         { initialScrollOffset: { top: 100, left: 40 }, expected: { top: 100, left: 25 }, position: 'fromInsideLB' },
         { initialScrollOffset: { top: 60, left: 40 }, expected: { top: 60, left: 25 }, position: 'fromInsideLT' },
       ];
@@ -158,21 +158,23 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
     test(`STE(scale(1.5)),nat=${useNative},dir=${direction}`, async (t) => {
       const scrollable = new Scrollable('#scrollable', { useNative, direction });
 
+      const expectedScrollOffset = useNative ? 254 : 239;
+
       const positions = [
         { initialScrollOffset: { top: 0, left: 0 }, expected: { top: 39, left: 39 }, position: 'fromTLCorner' },
-        { initialScrollOffset: { top: 0, left: 290 }, expected: { top: 39, left: 105 }, position: 'fromTRCorner' },
-        { initialScrollOffset: { top: 290, left: 290 }, expected: { top: 105, left: 105 }, position: 'fromBRCorner' },
-        { initialScrollOffset: { top: 290, left: 0 }, expected: { top: 105, left: 39 }, position: 'fromBLCorner' },
+        { initialScrollOffset: { top: 0, left: 290 }, expected: { top: 39, left: expectedScrollOffset }, position: 'fromTRCorner' },
+        { initialScrollOffset: { top: 290, left: 290 }, expected: { top: expectedScrollOffset, left: expectedScrollOffset }, position: 'fromBRCorner' },
+        { initialScrollOffset: { top: 290, left: 0 }, expected: { top: expectedScrollOffset, left: 39 }, position: 'fromBLCorner' },
 
-        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 39, left: 105 }, position: 'fromT' },
-        { initialScrollOffset: { top: 160, left: 290 }, expected: { top: 105, left: 105 }, position: 'fromR' },
-        { initialScrollOffset: { top: 290, left: 160 }, expected: { top: 105, left: 105 }, position: 'fromB' },
-        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: 105, left: 39 }, position: 'fromL' },
+        { initialScrollOffset: { top: 0, left: 160 }, expected: { top: 39, left: expectedScrollOffset }, position: 'fromT' },
+        { initialScrollOffset: { top: 160, left: 290 }, expected: { top: expectedScrollOffset, left: expectedScrollOffset }, position: 'fromR' },
+        { initialScrollOffset: { top: 290, left: 160 }, expected: { top: expectedScrollOffset, left: expectedScrollOffset }, position: 'fromB' },
+        { initialScrollOffset: { top: 160, left: 0 }, expected: { top: expectedScrollOffset, left: 39 }, position: 'fromL' },
 
         // from inside
 
-        { initialScrollOffset: { top: 165, left: 175 }, expected: { top: 105, left: 105 }, position: 'fromInsideTLPart' },
-        { initialScrollOffset: { top: 140, left: 140 }, expected: { top: 105, left: 105 }, position: 'fromInsideRBPart' },
+        { initialScrollOffset: { top: 165, left: 175 }, expected: { top: expectedScrollOffset, left: expectedScrollOffset }, position: 'fromInsideTLPart' },
+        { initialScrollOffset: { top: 140, left: 140 }, expected: { top: expectedScrollOffset, left: expectedScrollOffset }, position: 'fromInsideRBPart' },
       ];
 
       // eslint-disable-next-line no-restricted-syntax
