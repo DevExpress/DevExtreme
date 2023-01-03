@@ -798,10 +798,10 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
   };
   const getWindowScrollPosition = ClientFunction(() => (window as any).scrollY);
 
-  let visibleRows = await dataGrid.apiGetVisibleRows();
-
   await t
     .resizeWindow(800, 800);
+
+  let visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
   await t
@@ -1021,7 +1021,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
       dataField: 'ProductName',
     }],
     loadingTimeout: 0,
-  })));
+  }), false));
 
 test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
   const dataGrid = new DataGrid('#container');

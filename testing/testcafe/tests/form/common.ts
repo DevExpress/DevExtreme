@@ -41,7 +41,7 @@ test('Color of the mark (T882067)', async (t) => {
 test('Form labels should have correct width after render in invisible container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await screenshotTestFn(t, takeScreenshot, 'Form labels width after render in invisible container.png', '#container');
+  await screenshotTestFn(t, takeScreenshot, 'Form labels width after render in invisible container.png');
 
   await t
     .expect(compareResults.isValid())

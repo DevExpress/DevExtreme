@@ -30,6 +30,7 @@ test('ContextMenu items render', async (t) => {
 
   await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', true, async () => {
     await contextMenu.repaint();
+    await contextMenu.apiShow();
     await t.click(contextMenu.items.nth(0));
   });
 

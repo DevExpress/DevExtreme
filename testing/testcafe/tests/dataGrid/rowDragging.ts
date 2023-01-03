@@ -251,7 +251,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
-  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 500, 0);
+  await t.drag(dataGrid.getDataRow(2).element.find('.dx-datagrid-drag-icon'), 500, 0);
 
   const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
     $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(0)`).css('pointer-events'),
@@ -308,7 +308,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
       rowDragging: {
         group: 'shared',
       },
-    }),
+    }, true),
     createWidget('dxDataGrid', {
       width: 400,
       dataSource: [
@@ -341,7 +341,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
       rowDragging: {
         group: 'shared',
       },
-    }, false, '#otherContainer'),
+    }, true, '#otherContainer'),
   ]);
 });
 
