@@ -18,7 +18,7 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
     .expect(scheduler.getAppointmentCount()).eql(7);
 
   await t
-    .wait(200)
+    .wait(500)
     .expect((await scheduler.getAppointment('Simple recurrence appointment').element.boundingClientRect).width)
     .eql(114)
     .expect(draggableAppointment.isAllDay)

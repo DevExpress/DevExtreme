@@ -90,7 +90,7 @@ test('Cell sizes customization should work', async (t, { platform, screenshotCom
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (_, { platform }) => {
-  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }');
 
   await createScheduler(platform, {
     views,
@@ -110,7 +110,7 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (_, { platform }) => {
-  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }');
 
   await createScheduler(platform, {
     views,

@@ -1098,7 +1098,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
   });
 });
 
-test.skip('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
