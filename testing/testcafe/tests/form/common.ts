@@ -23,6 +23,8 @@ test('Color of the mark (T882067)', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxForm', {
+  height: 400,
+  width: 1000,
   formData: {
     firstName: 'John',
     lastName: 'Heart',
