@@ -9,7 +9,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Appointment overlapping in Scheduler');
+fixture.disablePageReloads.skip('Appointment overlapping in Scheduler');
 
 test('Multi-day appointment should not overlap other appointments when specific width is set, \'auto\' mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');
