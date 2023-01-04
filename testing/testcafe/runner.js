@@ -48,7 +48,10 @@ createTestCafe({
             || args.componentFolder.trim() === 'navigation'
             || args.componentFolder.trim() === 'editors'
             || args.componentFolder.trim() === 'form'
-            || args.componentFolder.trim() === 'htmlEditor' ? ' --window-size=1200,800' : ''}`);
+            || args.componentFolder.trim() === 'htmlEditor'
+            || args.componentFolder.trim() === 'treeList'
+            || args.componentFolder.trim() === 'dataGrid'
+            || args.componentFolder.trim() === 'renovation' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
