@@ -7,7 +7,7 @@ import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`DateBox_Label`
+fixture.disablePageReloads`DateBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {

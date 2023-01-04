@@ -5,7 +5,7 @@ import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 
-fixture`DateBox ValidationMessagePosition`
+fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'));
 
 const positions = ['top', 'right', 'bottom', 'left'];

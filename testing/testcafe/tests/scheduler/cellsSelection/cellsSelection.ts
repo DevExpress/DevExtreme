@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Scheduler: Cells Selection in Virtual Scrolling`
+fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 test('Selection should work correctly with all-day panel appointments', async (t) => {

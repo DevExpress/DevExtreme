@@ -13,7 +13,7 @@ import {
   horizontalViews,
 } from '../utils';
 
-fixture`Scheduler: Adaptive layout in themes`
+fixture.disablePageReloads`Scheduler: Adaptive layout in themes`
   .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (

@@ -5,7 +5,7 @@ import createWidget from '../../helpers/createWidget';
 import { screenshotTestFn } from '../../helpers/themeUtils';
 import Form from '../../model/form/form';
 
-fixture`Form`
+fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
 const labelLocations = ['left', 'right', 'top'];

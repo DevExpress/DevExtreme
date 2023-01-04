@@ -9,7 +9,7 @@ import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 
-fixture`Editing`
+fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 

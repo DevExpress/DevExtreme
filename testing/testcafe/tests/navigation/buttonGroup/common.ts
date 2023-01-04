@@ -10,7 +10,7 @@ interface ButtonGroupItem extends Item {
   id: string;
 }
 
-fixture`ButtonGroup_Styles`
+fixture.disablePageReloads`ButtonGroup_Styles`
   .page(url(__dirname, '../../container.html'));
 
 ['text', 'outlined', 'contained'].forEach((stylingMode) => {

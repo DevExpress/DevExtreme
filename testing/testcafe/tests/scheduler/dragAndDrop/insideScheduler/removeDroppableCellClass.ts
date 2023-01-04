@@ -2,7 +2,7 @@ import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Cancel drag-n-drop when dragging an appointment inside the scheduler`
+fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment inside the scheduler`
   .page(url(__dirname, '../../../container.html'));
 
 const METHODS_TO_CANCEL = [

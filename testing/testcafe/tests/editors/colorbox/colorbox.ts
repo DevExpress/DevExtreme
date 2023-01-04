@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
-fixture`Colorbox`
+fixture.disablePageReloads`Colorbox`
   .page(url(__dirname, '../../container.html'));
 
 test('Colorbox should display full placeholder', async (t) => {

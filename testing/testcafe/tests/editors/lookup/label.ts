@@ -10,7 +10,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 const labelMods = ['floating', 'static'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`Lookup_Label`
+fixture.disablePageReloads`Lookup_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {

@@ -8,7 +8,7 @@ import { appendElementTo } from '../../../helpers/domUtils';
 import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
 import Guid from '../../../../../js/core/guid';
 
-fixture`Scrollable_ScrollToElement`
+fixture.disablePageReloads`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {

@@ -5,7 +5,7 @@ import Scheduler from '../../../../model/scheduler';
 
 const SCHEDULER_SELECTOR = '#container';
 
-fixture`Scheduler - All day appointments`
+fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'));
 
 test('it should display the all-day appointment in two dates if the end date equals midnight',

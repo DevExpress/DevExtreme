@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
 
-fixture`TreeView_selectAll`
+fixture.disablePageReloads`TreeView_selectAll`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {

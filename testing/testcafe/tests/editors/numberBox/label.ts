@@ -9,7 +9,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`NumberBox_Label`
+fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {

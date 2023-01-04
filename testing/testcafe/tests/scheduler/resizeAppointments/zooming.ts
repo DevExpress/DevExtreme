@@ -4,7 +4,7 @@ import Scheduler from '../../../model/scheduler';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { setZoomLevel } from '../virtualScrolling/utils';
 
-fixture`Resize appointments - Zooming`
+fixture.disablePageReloads`Resize appointments - Zooming`
   .page(url(__dirname, '../../container.html'));
 
 test('Vertical resize with zooming', async (t) => {

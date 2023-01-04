@@ -4,7 +4,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture`Layout:BrowserResize`
+fixture.disablePageReloads`Layout:BrowserResize`
   .page(url(__dirname, '../../../../container.html'));
 
 const data = [{

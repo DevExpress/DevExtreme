@@ -9,7 +9,7 @@ import {
   checkAllDayCellsWhenNotInViewport,
 } from './init/widget.setup';
 
-fixture`Scheduler: Cells Selection in Virtual Scrolling`
+fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 const baseConfig = {

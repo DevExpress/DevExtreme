@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - DataSource loading`
+fixture.disablePageReloads`Scheduler - DataSource loading`
   .page(url(__dirname, '../../container.html'));
 
 test('it should correctly load items with post processing', async (t) => {

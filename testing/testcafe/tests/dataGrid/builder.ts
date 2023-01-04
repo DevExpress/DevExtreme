@@ -9,7 +9,7 @@ const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-fixture`Filter Builder`
+fixture.disablePageReloads`Filter Builder`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 

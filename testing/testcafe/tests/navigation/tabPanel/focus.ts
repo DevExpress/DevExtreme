@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture`TabPanel`
+fixture.disablePageReloads`TabPanel`
   .page(url(__dirname, '../../container.html'));
 
 // T821726

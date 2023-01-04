@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { screenshotTestFn } from '../../../helpers/themeUtils';
 
-fixture`Integration_DataGrid`
+fixture.disablePageReloads`Integration_DataGrid`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((useNative) => {

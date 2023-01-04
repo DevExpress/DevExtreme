@@ -3,7 +3,7 @@ import Scheduler from '../../../../../model/scheduler';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
-fixture`Layout: Views: IntervalCount with StartDate`
+fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
   .page(url(__dirname, '../../../../container.html'));
 
 [{

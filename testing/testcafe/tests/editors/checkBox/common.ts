@@ -10,7 +10,7 @@ import { screenshotTestFn } from '../../../helpers/themeUtils';
 
 const CHECKBOX_CLASS = 'dx-checkbox';
 
-fixture`CheckBox`
+fixture.disablePageReloads`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((isColumnCountStyle) => {

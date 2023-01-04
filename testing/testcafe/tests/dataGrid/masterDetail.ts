@@ -4,7 +4,7 @@ import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 
-fixture`Master detail`
+fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 

@@ -3,7 +3,7 @@ import { Selector } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
-fixture`HtmlEditor`
+fixture.disablePageReloads`HtmlEditor`
   .page(url(__dirname, '../containerQuill.html'));
 
 [false, true].forEach((toolbar) => {

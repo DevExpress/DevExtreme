@@ -12,7 +12,7 @@ import {
   groupedByDateViews,
 } from './utils';
 
-fixture`Scheduler: Virtual Scrolling`
+fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (

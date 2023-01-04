@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Agenda:view switching`
+fixture.disablePageReloads`Agenda:view switching`
   .page(url(__dirname, '../../container.html'));
 
 test('View switching should work for empty agenda', async (t) => {

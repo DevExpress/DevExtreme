@@ -3,7 +3,7 @@ import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
-fixture`Scheduler: Navigator`
+fixture.disablePageReloads`Scheduler: Navigator`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (options = {}): Promise<void> => {

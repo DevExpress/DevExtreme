@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { isMaterial, screenshotTestFn } from '../../helpers/themeUtils';
 
-fixture`Form`
+fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
 [undefined, true, false].forEach((labelVisible) => {
