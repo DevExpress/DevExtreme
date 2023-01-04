@@ -486,7 +486,7 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
     mode: 'batch',
     allowUpdating: true,
   },
-}, true));
+}));
 
 ['Cell', 'Batch'].forEach((mode) => {
   test(`${mode} - Focused row should not be reset after editing a cell by API (T879627)`, async (t) => {

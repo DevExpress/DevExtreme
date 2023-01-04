@@ -652,7 +652,7 @@ test('Select - The first command cell should be focused using Tab (T884646)', as
       mode: 'multiple',
       showCheckBoxesMode: 'always',
     },
-  }, true);
+  });
 });
 
 test('Edit - The first command cell should be focused using Tab (T884646)', async (t) => {
