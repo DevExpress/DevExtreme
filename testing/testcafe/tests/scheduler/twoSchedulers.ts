@@ -2,7 +2,7 @@ import createWidget from '../../helpers/createWidget';
 import Scheduler from '../../model/scheduler';
 import url from '../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Interaction of two schedulers`
+fixture`Interaction of two schedulers`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (container): Promise<void> => {

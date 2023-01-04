@@ -4,7 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`ContextMenu`
+fixture`ContextMenu`
   .page(url(__dirname, '../../container.html'));
 
 test('Context menu should be shown in the same position when item was added in runtime (T755681)', async (t) => {

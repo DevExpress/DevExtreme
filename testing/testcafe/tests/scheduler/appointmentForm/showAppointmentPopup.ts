@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Appointment Form`
+fixture`Appointment Form`
   .page(url(__dirname, '../../container.html'));
 
 const showAppointmentPopup = ClientFunction(() => {

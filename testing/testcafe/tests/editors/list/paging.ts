@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`List`
+fixture`List`
   .page(url(__dirname, '../../container.html'));
 
 function generateData(count) {

@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Popup`
+fixture`Popup`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Popup can not be dragged outside of the container (window)', async (t) => {

@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Date navigator`
+fixture`Date navigator`
   .page(url(__dirname, '../../container.html'));
 
 [{

@@ -3,7 +3,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Drag-and-drop appointments into allDay panel in the grouped Scheduler `
+fixture`Drag-and-drop appointments into allDay panel in the grouped Scheduler `
   .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop between dateTable and allDay panel, groupByDate=true', async (t) => {

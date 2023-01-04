@@ -7,7 +7,7 @@ import { ClassNames } from '../../model/dataGrid/classNames';
 
 const CLASS = ClassNames;
 
-fixture.disablePageReloads`Keyboard Navigation`
+fixture`Keyboard Navigation`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 

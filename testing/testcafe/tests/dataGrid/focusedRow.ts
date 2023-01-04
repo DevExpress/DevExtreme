@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-fixture.disablePageReloads`Focused row`
+fixture`Focused row`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 

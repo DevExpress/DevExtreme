@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Drag-n-drop to fake cell`
+fixture`Drag-n-drop to fake cell`
   .page(url(__dirname, '../../container.html'));
 
 test('Should not select cells outside the scheduler(T1040795)', async () => {

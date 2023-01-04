@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Appointment popup form:date editors`
+fixture`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'));
 
 test('Form date editors should be pass numeric chars according by date mask', async (t) => {

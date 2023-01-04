@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Appointments collector`
+fixture`Appointments collector`
   .page(url(__dirname, '../../../container.html'));
 
 test('Appointment collector has correct offset when adaptivityEnabled=true', async (t) => {

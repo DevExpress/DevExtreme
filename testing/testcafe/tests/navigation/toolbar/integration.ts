@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 
-fixture.disablePageReloads`Toolbar_integration_with_DataGrid`
+fixture`Toolbar_integration_with_DataGrid`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((rtlEnabled) => {

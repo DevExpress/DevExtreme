@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:Templates:CellTemplate`
+fixture`Layout:Templates:CellTemplate`
   .page(url(__dirname, '../../../container.html'));
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'timelineMonth'].forEach((currentView) => {

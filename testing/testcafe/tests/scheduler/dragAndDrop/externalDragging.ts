@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Drag-n-drop from another draggable area`
+fixture`Drag-n-drop from another draggable area`
   .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {

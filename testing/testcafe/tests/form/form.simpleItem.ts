@@ -6,7 +6,7 @@ import createWidget from '../../helpers/createWidget';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
-fixture.disablePageReloads`Form`
+fixture`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
 [false, true].forEach((rtlEnabled) => {

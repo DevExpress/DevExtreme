@@ -6,7 +6,7 @@ import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute, setStyleAttribute } from '../../../helpers/domUtils';
 import Toolbar from '../../../model/toolbar/toolbar';
 
-fixture.disablePageReloads`Toolbar_common`
+fixture`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
 const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];

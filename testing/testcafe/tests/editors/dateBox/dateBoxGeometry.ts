@@ -8,7 +8,7 @@ import createWidget from '../../../helpers/createWidget';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400));
 
-fixture.disablePageReloads`DateBox (datetime) geometry (T896846)`
+fixture`DateBox (datetime) geometry (T896846)`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Geometry is good', async (t) => {

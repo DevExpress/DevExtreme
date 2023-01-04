@@ -3,7 +3,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture.disablePageReloads`Appointment popup form`
+fixture`Appointment popup form`
   .page(url(__dirname, '../container.html'));
 
 test('Subject and description fields should be empty after showing popup on empty cell', async (t) => {

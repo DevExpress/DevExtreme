@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`SelectBox`
+fixture`SelectBox`
   .page(url(__dirname, '../../container.html'));
 
 const purePressKey = async (t, key): Promise<void> => {

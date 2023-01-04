@@ -3,7 +3,7 @@ import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 import { isMaterial } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`SelectBox as Toolbar item`
+fixture`SelectBox as Toolbar item`
   .page(url(__dirname, '../../container.html'));
 
 test('SelectBox should correctly render its buttons if editor is rendered as a Toolbar item with fieldTemplate (T949859)', async (t) => {

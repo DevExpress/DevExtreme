@@ -5,7 +5,7 @@ import Scheduler from '../../model/scheduler';
 import { extend } from '../../../../js/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Scheduler: Workspace`
+fixture`Scheduler: Workspace`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (options = {}): Promise<void> => {

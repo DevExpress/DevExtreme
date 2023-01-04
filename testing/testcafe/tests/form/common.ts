@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 
-fixture.disablePageReloads`Form`
+fixture`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
 test('Color of the mark (T882067)', async (t) => {

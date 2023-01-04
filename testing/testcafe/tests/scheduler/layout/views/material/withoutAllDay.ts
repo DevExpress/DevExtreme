@@ -4,7 +4,7 @@ import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 
-fixture.disablePageReloads`Scheduler: Material theme without all-day panel`
+fixture`Scheduler: Material theme without all-day panel`
   .page(url(__dirname, '../../../../container.html'));
 
 test('Week view without all-day panel should be rendered correctly', async (t) => {

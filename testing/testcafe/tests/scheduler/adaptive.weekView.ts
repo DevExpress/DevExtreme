@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 
-fixture.disablePageReloads`Week view in adaptive mode`
+fixture`Week view in adaptive mode`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (data, width = '100%'): Promise<void> => {

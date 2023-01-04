@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:Templates:appointmentTooltipTemplate`
+fixture`Layout:Templates:appointmentTooltipTemplate`
   .page(url(__dirname, '../../../container.html'));
 
 test('appointmentTooltipTemplate layout should be rendered right', async (t) => {

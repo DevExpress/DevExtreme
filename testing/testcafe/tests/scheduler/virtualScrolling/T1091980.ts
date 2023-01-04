@@ -2,7 +2,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: Virtual scrolling`
+fixture`Scheduler: Virtual scrolling`
   .page(url(__dirname, '../../container.html'));
 
 test('it should correctly render virtual table if scheduler sizes are set in % (T1091980)', async (t) => {

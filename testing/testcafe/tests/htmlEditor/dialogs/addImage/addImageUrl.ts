@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
 
-fixture.disablePageReloads`HtmlEditor - add image url`
+fixture`HtmlEditor - add image url`
   .page(url(__dirname, '../../../containerQuill.html'));
 
 test('Image url should be validate before wil be inserted by add button click', async (t) => {

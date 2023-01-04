@@ -6,7 +6,7 @@ import Toolbar from '../../../model/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { setAttribute } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`Toolbar_OverflowMenu_Popup`
+fixture`Toolbar_OverflowMenu_Popup`
   .page(url(__dirname, '../../container.html'));
 
 const generateItems = (count) => {

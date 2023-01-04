@@ -9,7 +9,7 @@ import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import Menu from '../../../model/menu';
 
-fixture.disablePageReloads`Menu_common`
+fixture`Menu_common`
   .page(url(__dirname, '../../container.html'));
 
 test('Menu items render', async (t) => {

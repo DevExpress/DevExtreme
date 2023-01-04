@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`TagBox`
+fixture`TagBox`
   .page(url(__dirname, '../../container.html'));
 
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {

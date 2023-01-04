@@ -2,7 +2,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Scheduler - Multiday appointments`
+fixture`Scheduler - Multiday appointments`
   .page(url(__dirname, '../../container.html'));
 
 const checkAllDayAppointment = async (

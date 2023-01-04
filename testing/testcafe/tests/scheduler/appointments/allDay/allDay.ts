@@ -3,7 +3,7 @@ import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Scheduler - All day appointments`
+fixture`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'));
 
 const data = [{

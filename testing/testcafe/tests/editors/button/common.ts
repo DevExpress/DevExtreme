@@ -13,7 +13,7 @@ const ICON_CLASS = 'dx-icon';
 const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['back', 'danger', 'default', 'normal', 'success'];
 
-fixture.disablePageReloads`Button`
+fixture`Button`
   .page(url(__dirname, '../../container.html'));
 
 test('Buttons render', async (t) => {

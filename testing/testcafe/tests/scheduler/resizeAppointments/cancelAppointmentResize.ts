@@ -3,7 +3,7 @@ import createScheduler from '../dragAndDrop/init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture.disablePageReloads`Cancel appointment Resizing`
+fixture`Cancel appointment Resizing`
   .page(url(__dirname, '../../container.html'));
 
 const disableMouseUpEvent = ClientFunction(() => {

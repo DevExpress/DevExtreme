@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`Appointment dependend options`
+fixture`Appointment dependend options`
   .page(url(__dirname, '../../container.html'));
 
 test('cellDuration (T1076138)', async (t) => {

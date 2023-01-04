@@ -3,7 +3,7 @@ import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler: max appointments per cell: Timeline`
+fixture`Scheduler: max appointments per cell: Timeline`
   .page(url(__dirname, '../../../container.html'));
 
 ['auto', 'unlimited', 1, 3, 10, 20].forEach((maxAppointmentsPerCellValue) => {

@@ -2,7 +2,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
-fixture.disablePageReloads`Scheduler Timeline: Grouping`
+fixture`Scheduler Timeline: Grouping`
   .page(url(__dirname, '../../../../container.html'));
 
 [
