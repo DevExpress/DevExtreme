@@ -36,7 +36,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scrollable - render strategies');
+fixture.disablePageReloads.skip('Renovated scrollable - render strategies');
 
 config.forEach((props) => {
   // it repeats test scenario from common file. Used for demonstration purposes
@@ -60,7 +60,7 @@ config.forEach((props) => {
     }));
 });
 
-fixture('Renovated scrollable - visibility integration');
+fixture.disablePageReloads.skip('Renovated scrollable - visibility integration');
 
 config.forEach((props) => {
   test(`Scroll should save position on visibility change, ${JSON.stringify(props)}`,

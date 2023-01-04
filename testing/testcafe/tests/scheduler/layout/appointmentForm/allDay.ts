@@ -100,7 +100,7 @@ test('Start and end dates should be reflect the current day(create new appointme
   }, true);
 });
 
-test.skip('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
+test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 

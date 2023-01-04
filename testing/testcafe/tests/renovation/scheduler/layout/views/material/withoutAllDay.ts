@@ -9,7 +9,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler: Material theme and all-day panel');
+fixture.disablePageReloads.skip('Scheduler: Material theme and all-day panel');
 
 [true, false].forEach((showAllDayPanel) => {
   test(`Week view should be rendered correctly if showAllDayPanel=${showAllDayPanel}`, async (t, { screenshotComparerOptions }) => {

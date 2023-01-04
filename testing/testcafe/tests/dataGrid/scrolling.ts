@@ -798,10 +798,10 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
   };
   const getWindowScrollPosition = ClientFunction(() => (window as any).scrollY);
 
-  let visibleRows = await dataGrid.apiGetVisibleRows();
-
   await t
     .resizeWindow(800, 800);
+
+  let visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
   await t

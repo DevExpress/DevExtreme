@@ -17,7 +17,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler: Adaptive Generic theme layout in RTL');
+fixture.disablePageReloads.skip('Scheduler: Adaptive Generic theme layout in RTL');
 
 const createScheduler = async (
   platform: PlatformType,

@@ -8,4 +8,4 @@ export default async (options = {}): Promise<void> => createWidget('dxScheduler'
   groupByDate: true,
   dataSource: [],
   width: 900,
-}, options));
+}, options), true);

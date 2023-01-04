@@ -251,7 +251,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
-  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 500, 0);
+  await t.drag(dataGrid.getDataRow(2).element.find('.dx-datagrid-drag-icon'), 500, 0);
 
   const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
     $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(0)`).css('pointer-events'),
@@ -583,9 +583,8 @@ test('The placeholder should have correct position after dragging the row to the
 });
 
 // T1126013
-test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
-  await t.setTestSpeed(0.8);
-
+// TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
+test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 

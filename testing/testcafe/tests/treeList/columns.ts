@@ -8,7 +8,7 @@ fixture`Columns`
   .page(url(__dirname, '../container.html'));
 
 // T1054312
-test('CheckBox postion with double rows columns', async (t) => {
+test('CheckBox position with double rows columns', async (t) => {
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
