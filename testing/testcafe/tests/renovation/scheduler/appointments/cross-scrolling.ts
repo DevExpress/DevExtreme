@@ -154,7 +154,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Renovated scheduler - Cross-scrolling');
+fixture.disablePageReloads.skip('Renovated scheduler - Cross-scrolling');
 
 ['day', 'week', 'workWeek', 'month'].forEach((currentView) => {
   test(`it should render appointments correctly if currentView is ${currentView} and cross-scrolling is enabled`, async (t, { screenshotComparerOptions }) => {

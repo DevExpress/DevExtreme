@@ -13,19 +13,28 @@ test('Form date editors should be pass numeric chars according by date mask', as
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
 
   await t
-    .click(appointmentPopup.startDateElement, { offsetX: 0, offsetY: 0 })
+    .click(appointmentPopup.subjectElement);
+
+  await t
+    .pressKey('tab')
     .typeText(appointmentPopup.startDateElement, '111111111111')
     .expect(appointmentPopup.startDateElement.value)
     .eql('11/11/1111, 11:11 AM');
 
   await t
-    .click(appointmentPopup.endDateElement, { offsetX: 0, offsetY: 0 })
+    .pressKey('tab')
     .typeText(appointmentPopup.endDateElement, '111111111111')
     .expect(appointmentPopup.endDateElement.value)
     .eql('11/11/1111, 11:11 PM');
 
   await t
-    .click(appointmentPopup.endRepeatDateElement, { offsetX: 0, offsetY: 0 })
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
     .typeText(appointmentPopup.endRepeatDateElement, '11111111')
     .expect(appointmentPopup.endRepeatDateElement.value)
     .eql('11/11/1111');
