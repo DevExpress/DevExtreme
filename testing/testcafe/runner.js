@@ -43,15 +43,7 @@ createTestCafe({
             fs.rmSync('./testing/testcafe/screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler'
-            || args.componentFolder.trim() === 'navigation'
-            || args.componentFolder.trim() === 'editors'
-            || args.componentFolder.trim() === 'form'
-            || args.componentFolder.trim() === 'htmlEditor'
-            || args.componentFolder.trim() === 'treeList'
-            || args.componentFolder.trim() === 'dataGrid'
-            || args.componentFolder.trim() === 'renovation' ? ' --window-size=1200,800' : ''}`);
+        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 

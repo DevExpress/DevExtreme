@@ -4,7 +4,6 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
 import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import errors from 'ui/widget/ui.errors';
