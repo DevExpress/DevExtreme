@@ -17,7 +17,7 @@ const test = multiPlatformTest({
 });
 
 // TODO unskip after scrollTo implementation
-fixture.skip('Scheduler: Virtual Scrolling with Zooming');
+fixture.disablePageReloads.skip('Scheduler: Virtual Scrolling with Zooming');
 
 const createScheduler = async (
   platform: PlatformType,
