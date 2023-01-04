@@ -13,7 +13,7 @@ const testFixture = () => {
   if (isMaterial()) {
     return fixture.disablePageReloads.skip;
   }
-  return fixture.skip;
+  return fixture.disablePageReloads;
 };
 
 testFixture()`PivotGrid_scrolling`
