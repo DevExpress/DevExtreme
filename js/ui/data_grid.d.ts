@@ -1730,7 +1730,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @default true
      * @public
      */
-    allowExporting?: boolean;
+    allowExporting: boolean;
     /**
      * @docid dxDataGridColumn.allowGrouping
      * @default true
