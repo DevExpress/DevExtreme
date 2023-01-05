@@ -47,7 +47,8 @@ createTestCafe({
         const browsers = args.browsers.split(' ')
             .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler'
             || args.componentFolder.trim() === 'form'
-            || args.componentFolder.trim() === 'htmlEditor' ? ' --window-size=1200,800' : ''}`);
+            || args.componentFolder.trim() === 'htmlEditor'
+            || args.componentFolder.trim() === 'editors' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
