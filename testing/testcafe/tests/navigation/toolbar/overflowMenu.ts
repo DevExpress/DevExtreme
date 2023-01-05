@@ -84,7 +84,7 @@ test('Drop down button should lost hover and active state', async (t) => {
       { text: 'item1', locateInMenu: 'always' },
       { text: 'item2', locateInMenu: 'always' },
       { text: 'item3', locateInMenu: 'always' }],
-  });
+  }, true);
 });
 
 test('ButtonGroup item should not have hover and active state', async (t) => {
