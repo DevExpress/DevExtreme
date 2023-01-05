@@ -123,7 +123,7 @@ fixture`Popup_toolbar`
                 text: 'Close',
               },
             }],
-          });
+          }, true);
         }).after(async () => {
           await changeTheme('generic.light');
         });
