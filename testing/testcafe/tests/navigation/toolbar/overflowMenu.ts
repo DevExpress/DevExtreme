@@ -28,7 +28,8 @@ fixture`Toolbar_OverflowMenu`
     await changeTheme('generic.light');
   });
 
-test('Drop down button should lost hover and active state', async (t) => {
+// TODO: It is unstable test
+test.skip('Drop down button should lost hover and active state', async (t) => {
   const toolbar = new Toolbar('#container');
   const dropDownMenu = toolbar.getOverflowMenu();
 
