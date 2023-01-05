@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'));
@@ -17,7 +17,7 @@ positions.forEach((position) => {
     const dateBox = new DateBox('#container');
     await dateBox.option('value', new Date(2022, 6, 14));
 
-    await screenshotTestFn(t, takeScreenshot, `Datebox validation message with position=${position}.png`, undefined, true, async () => dateBox.option('value', new Date(2022, 6, 15)));
+    await testScreenshot(t, takeScreenshot, `Datebox validation message with position=${position}.png`, undefined, true, async () => dateBox.option('value', new Date(2022, 6, 15)));
 
     await t
       .expect(compareResults.isValid())

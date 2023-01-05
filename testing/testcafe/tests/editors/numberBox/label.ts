@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
@@ -16,7 +16,7 @@ stylingModes.forEach((stylingMode) => {
   safeSizeTest(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await screenshotTestFn(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`);
+    await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`);
 
     await t
       .expect(compareResults.isValid())

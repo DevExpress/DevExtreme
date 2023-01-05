@@ -3,7 +3,7 @@ import {
   insertStylesheetRulesToPage,
   appendElementTo, setAttribute,
 } from '../../../helpers/domUtils';
-import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
@@ -28,13 +28,17 @@ test('Menu items render', async (t) => {
   await actionFn();
 
   if (!isMaterial()) {
-    await screenshotTestFn(t, takeScreenshot, 'Menu render items.png', '#container', false, undefined, 'generic.dark');
-    await screenshotTestFn(t, takeScreenshot, 'Menu render items.png', '#container', false, undefined, 'generic.contrast');
+    await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.dark' });
+    await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.contrast' });
   }
 
-  await screenshotTestFn(t, takeScreenshot, 'Menu render items.png', '#container', true, async () => {
-    await menu.repaint();
-    await actionFn();
+  await testScreenshot(t, takeScreenshot, 'Menu render items.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+    compactCallBack: async () => {
+      await menu.repaint();
+      await actionFn();
+    },
   });
 
   await t

@@ -1,10 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
-import { appendElementTo } from '../../../helpers/domUtils';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
@@ -13,7 +12,7 @@ fixture.disablePageReloads`Radio Group Validation Message`
 
 test('message position is right (T1020449)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const form = new Form('#form');
+  const form = new Form('#container');
 
   await form.validate();
 
@@ -21,37 +20,33 @@ test('message position is right (T1020449)', async (t) => {
 
   await radioGroup.focus();
 
-  await screenshotTestFn(t, takeScreenshot, 'RadioGroup horizontal validation.png', '#form');
+  await testScreenshot(t, takeScreenshot, 'RadioGroup horizontal validation.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'form');
-
-  return createWidget('dxForm', {
-    width: 300,
-    height: 400,
-    items: [{
-      itemType: 'simple',
-      dataField: 'PropertyNameId',
-      editorOptions: {
-        dataSource: ['HR Manager', 'IT Manager'],
-        layout: 'horizontal',
-      },
-      editorType: 'dxRadioGroup',
-      validationRules: [{
-        type: 'required',
-        message: 'The PropertyNameId field is required.',
-      }],
-    }, {
-      itemType: 'button',
-      horizontalAlignment: 'left',
-      buttonOptions: {
-        text: 'Register',
-        type: 'success',
-        useSubmitBehavior: true,
-      },
+}).before(async () => createWidget('dxForm', {
+  width: 300,
+  height: 400,
+  items: [{
+    itemType: 'simple',
+    dataField: 'PropertyNameId',
+    editorOptions: {
+      dataSource: ['HR Manager', 'IT Manager'],
+      layout: 'horizontal',
+    },
+    editorType: 'dxRadioGroup',
+    validationRules: [{
+      type: 'required',
+      message: 'The PropertyNameId field is required.',
     }],
-  }, true, '#form');
-});
+  }, {
+    itemType: 'button',
+    horizontalAlignment: 'left',
+    buttonOptions: {
+      text: 'Register',
+      type: 'success',
+      useSubmitBehavior: true,
+    },
+  }],
+}, true));

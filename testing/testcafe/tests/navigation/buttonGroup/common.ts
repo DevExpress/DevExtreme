@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { setStyleAttribute, appendElementTo, setAttribute } from '../../../helpers/domUtils';
-import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/button_group.d';
@@ -70,11 +70,11 @@ fixture.disablePageReloads`ButtonGroup_Styles`
           }, false, `#buttongroup${stylingMode}${state}`);
     }
 
-    await screenshotTestFn(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, '#container');
+    await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container' });
 
     if (!isMaterial()) {
-      await screenshotTestFn(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, '#container', false, undefined, 'generic.dark');
-      await screenshotTestFn(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, '#container', false, undefined, 'generic.contrast');
+      await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container', theme: 'generic.dark' });
+      await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container', theme: 'generic.contrast' });
     }
 
     await t

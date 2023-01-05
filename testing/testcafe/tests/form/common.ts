@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn, isMaterial } from '../../helpers/themeUtils';
+import { testScreenshot, isMaterial } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
@@ -12,11 +12,11 @@ test('Color of the mark (T882067)', async (t) => {
 
   const screenshotName = 'Form color of the mark.png';
 
-  await screenshotTestFn(t, takeScreenshot, screenshotName, '#container');
+  await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
   if (!isMaterial()) {
-    await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
-    await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
   }
 
   await t
@@ -43,7 +43,7 @@ test('Color of the mark (T882067)', async (t) => {
 test('Form labels should have correct width after render in invisible container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await screenshotTestFn(t, takeScreenshot, 'Form labels width after render in invisible container.png');
+  await testScreenshot(t, takeScreenshot, 'Form labels width after render in invisible container.png');
 
   await t
     .expect(compareResults.isValid())

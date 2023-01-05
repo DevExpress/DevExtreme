@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
@@ -15,7 +15,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
   test(`ScrollToElement, element less container,direction=${direction}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await screenshotTestFn(t, takeScreenshot, `ScrollToElement, element less container direction=${direction}.png`);
+    await testScreenshot(t, takeScreenshot, `ScrollToElement, element less container direction=${direction}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -92,7 +92,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
   test(`ScrollToElement, element more container,direction=${direction}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await screenshotTestFn(t, takeScreenshot, `ScrollToElement, element more container direction=${direction}.png`);
+    await testScreenshot(t, takeScreenshot, `ScrollToElement, element more container direction=${direction}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -177,7 +177,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
   test(`ScrollToElement with scaling scale(1.5),direction=${direction}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await screenshotTestFn(t, takeScreenshot, `ScrollToElement with scaling scale(1.5),direction=${direction}.png`);
+    await testScreenshot(t, takeScreenshot, `ScrollToElement with scaling scale(1.5),direction=${direction}.png`);
 
     await t
       .expect(compareResults.isValid())

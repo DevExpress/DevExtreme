@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../helpers/themeUtils';
+import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 
@@ -19,7 +19,7 @@ fixture.disablePageReloads`Form`
 
           await waitFont();
 
-          await screenshotTestFn(t, takeScreenshot, `${testName}.png`, '#container');
+          await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
           await t
             .expect(compareResults.isValid())

@@ -6,7 +6,7 @@ import {
   appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../../helpers/domUtils';
-import { isMaterial, screenshotTestFn } from '../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
@@ -47,20 +47,20 @@ stylingModes.forEach((stylingMode) => {
 
     await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 60px; margin: 5px; }`);
 
-    await screenshotTestFn(t, takeScreenshot, `Textbox render with limited width stylingMode=${stylingMode}.png`, '#container');
+    await testScreenshot(t, takeScreenshot, `Textbox render with limited width stylingMode=${stylingMode}.png`, { element: '#container' });
 
     await removeStylesheetRulesFromPage();
 
     await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; width: 260px; margin: 5px; }`);
 
-    await screenshotTestFn(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`);
+    await testScreenshot(t, takeScreenshot, `Textbox render stylingMode=${stylingMode}.png`);
 
     for (const state of [HOVER_STATE_CLASS, FOCUSED_STATE_CLASS, INVALID_STATE_CLASS, `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`] as any[]) {
       for (const id of t.ctx.ids) {
         await setClassAttribute(Selector(`#${id}`), state);
       }
 
-      await screenshotTestFn(t, takeScreenshot, `Textbox render ${state.replaceAll('dx-', '').replaceAll('state-', '')},stylingMode=${stylingMode}.png`);
+      await testScreenshot(t, takeScreenshot, `Textbox render ${state.replaceAll('dx-', '').replaceAll('state-', '')},stylingMode=${stylingMode}.png`);
 
       for (const id of t.ctx.ids) {
         await removeClassAttribute(Selector(`#${id}`), state);

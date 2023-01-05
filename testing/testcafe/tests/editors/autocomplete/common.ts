@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
 import createWidget from '../../../helpers/createWidget';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Autocomplete_placeholder`
@@ -15,7 +15,7 @@ test('Placeholder is visible after items option change when value is not chosen 
 
   await autocomplete.option('items', [1, 2, 3]);
 
-  await screenshotTestFn(t, takeScreenshot, 'Autocomplete placeholder if value is not choosen.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'Autocomplete placeholder if value is not choosen.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Calendar`
   .page(url(__dirname, '../../container.html'));
@@ -9,7 +9,7 @@ fixture.disablePageReloads`Calendar`
 test('Calendar with showWeekNumbers rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await screenshotTestFn(t, takeScreenshot, 'Calendar with showWeekNumbers.png', '#container', true);
+  await testScreenshot(t, takeScreenshot, 'Calendar with showWeekNumbers.png', { element: '#container', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())
@@ -22,7 +22,7 @@ test('Calendar with showWeekNumbers rendered correct', async (t) => {
 test('Calendar with showWeekNumbers rendered correct for last week of year value', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await screenshotTestFn(t, takeScreenshot, 'Calendar with showWeekNumbers last week.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'Calendar with showWeekNumbers last week.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -36,7 +36,7 @@ test('Calendar with showWeekNumbers rendered correct for last week of year value
 test('Calendar with showWeekNumbers rendered correct with rtlEnabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await screenshotTestFn(t, takeScreenshot, 'Calendar with showWeekNumbers rtl=true.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'Calendar with showWeekNumbers rtl=true.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -50,7 +50,7 @@ test('Calendar with showWeekNumbers rendered correct with rtlEnabled', async (t)
 test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await screenshotTestFn(t, takeScreenshot, 'Calendar with showWeekNumbers and cell template.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'Calendar with showWeekNumbers and cell template.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

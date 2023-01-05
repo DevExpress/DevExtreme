@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
@@ -16,7 +16,7 @@ fixture.disablePageReloads`Toolbar_integration_with_DataGrid`
     await t
       .click(toolbar.getOverflowMenu().element);
 
-    await screenshotTestFn(t, takeScreenshot, `Toolbar menu${rtlEnabled ? ' in rtl' : ''}.png`, toolbar.getOverflowMenu().getPopup().getContent());
+    await testScreenshot(t, takeScreenshot, `Toolbar menu${rtlEnabled ? ' in rtl' : ''}.png`, toolbar.getOverflowMenu().getPopup().getContent());
 
     await t
       .expect(compareResults.isValid())

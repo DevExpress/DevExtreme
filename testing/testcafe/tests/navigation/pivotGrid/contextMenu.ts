@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 
@@ -17,7 +17,7 @@ test('ContextMenu width should be adjusted to the width of the item text (T11062
 
   await t.hover(Selector(`.${CONTEXT_MENU_CLASS}`));
 
-  await screenshotTestFn(t, takeScreenshot, 'PivotGrid contextmenu width.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'PivotGrid contextmenu width.png', '#container');
 
   await t
     .expect(compareResults.isValid())

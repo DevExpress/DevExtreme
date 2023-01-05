@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn, isMaterial } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
@@ -24,14 +24,18 @@ test('ContextMenu items render', async (t) => {
   const screenshotName = 'ContextMenu items render.png';
 
   if (!isMaterial()) {
-    await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.dark');
-    await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', false, undefined, 'generic.contrast');
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
   }
 
-  await screenshotTestFn(t, takeScreenshot, screenshotName, '#container', true, async () => {
-    await contextMenu.repaint();
-    await contextMenu.apiShow();
-    await t.click(contextMenu.items.nth(0));
+  await testScreenshot(t, takeScreenshot, screenshotName, {
+    element: '#container',
+    shouldTestInCompact: true,
+    compactCallBack: async () => {
+      await contextMenu.repaint();
+      await contextMenu.apiShow();
+      await t.click(contextMenu.items.nth(0));
+    },
   });
 
   await t

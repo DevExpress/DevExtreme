@@ -1,5 +1,5 @@
-import url from '../../helpers/getPageUrl';
-import FilterBuilder from '../../model/filterBuilder';
+import url from '../../../helpers/getPageUrl';
+import FilterBuilder from '../../../model/filterBuilder';
 
 fixture`XSS`
   .page('about:blank')
@@ -10,7 +10,7 @@ fixture`XSS`
           throw Error('XSS alert was invoked!');
         }
       })
-      .navigateTo(url(__dirname, './pages/XSS.html'));
+      .navigateTo(url(__dirname, '../security/pages/XSS.html'));
   });
 
 test('The XSS script does not run when the markup has been replaced with text', async (t) => {

@@ -6,6 +6,7 @@ const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
+const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
@@ -98,15 +99,11 @@ createTestCafe({
             quarantineMode: args.quarantineMode,
         };
 
-        if(args.componentFolder.trim() === 'scheduler'
-            || args.componentFolder.trim() === 'navigation'
-            || args.componentFolder.trim() === 'editors'
-            || args.componentFolder.trim() === 'form'
-            || args.componentFolder.trim() === 'htmlEditor') {
+        if(['scheduler', 'navigation', 'editors', 'form', 'htmlEditor'].includes(args.componentFolder.trim())) {
             runOptions.hooks = {
                 test: {
                     after: async() => {
-                        await clearTestPage();
+                        await testPageUtils.clearTestPage();
                     }
                 },
             };
@@ -160,24 +157,3 @@ function getArgs() {
         }
     });
 }
-
-function clearTestPage() {
-    return createTestCafe.ClientFunction(() => {
-        const body = document.querySelector('body');
-
-        $('#container').remove();
-        $('#otherContainer').remove();
-
-        const containerElement = document.createElement('div');
-        containerElement.setAttribute('id', 'container');
-
-        const otherContainerElement = document.createElement('div');
-        otherContainerElement.setAttribute('id', 'otherContainer');
-
-        body.prepend(otherContainerElement);
-        body.prepend(containerElement);
-
-        $('#stylesheetRules').remove();
-    })();
-}
-

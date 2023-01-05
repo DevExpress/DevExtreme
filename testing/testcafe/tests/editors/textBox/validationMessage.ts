@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute, removeAttribute } from '../../../helpers/domUtils';
@@ -20,12 +20,12 @@ safeSizeTest('Validation Message position should be correct after change visibil
     .pressKey('enter')
     .pressKey('tab');
 
-  await screenshotTestFn(t, takeScreenshot, 'Textbox validation message.png');
+  await testScreenshot(t, takeScreenshot, 'Textbox validation message.png');
 
   await setAttribute('#container', 'hidden', 'true');
   await removeAttribute('#container', 'hidden');
 
-  await screenshotTestFn(t, takeScreenshot, 'Textbox validation message.png');
+  await testScreenshot(t, takeScreenshot, 'Textbox validation message.png');
 
   await t
     .expect(compareResults.isValid())

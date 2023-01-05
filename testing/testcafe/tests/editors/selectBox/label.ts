@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
@@ -24,7 +24,7 @@ stylingModes.forEach((stylingMode) => {
 
       await t.click('#selectBox2');
 
-      await screenshotTestFn(t, takeScreenshot, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`, '#container');
+      await testScreenshot(t, takeScreenshot, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`, { element: '#container' });
 
       await t.click(await selectBox2.getPopup());
 

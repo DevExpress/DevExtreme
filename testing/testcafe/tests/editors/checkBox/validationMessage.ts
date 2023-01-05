@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
-import { screenshotTestFn } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CheckBox_ValidationMessage`
@@ -54,10 +54,14 @@ positions.forEach((position) => {
       .click(checkBox1.element)
       .expect(true).ok();
 
-    await screenshotTestFn(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, undefined, true, async () => {
-      await t
-        .click(checkBox1.element)
-        .click(checkBox1.element);
+    await testScreenshot(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, {
+      element: '#container',
+      shouldTestInCompact: true,
+      compactCallBack: async () => {
+        await t
+          .click(checkBox1.element)
+          .click(checkBox1.element);
+      },
     });
 
     await t

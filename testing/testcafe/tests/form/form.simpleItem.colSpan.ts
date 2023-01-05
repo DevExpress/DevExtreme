@@ -2,7 +2,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { screenshotTestFn } from '../../helpers/themeUtils';
+import { testScreenshot } from '../../helpers/themeUtils';
 import Form from '../../model/form/form';
 
 fixture.disablePageReloads`Form`
@@ -21,7 +21,7 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
         labelLocation,
       });
 
-      await screenshotTestFn(t, takeScreenshot, `SimpleItem,item1_cSpan_2,location_${labelLocation},cCount_${colCount}.png`, '#container');
+      await testScreenshot(t, takeScreenshot, `SimpleItem,item1_cSpan_2,location_${labelLocation},cCount_${colCount}.png`, { element: '#container' });
     }
   }
 
@@ -47,7 +47,7 @@ test('SimpleItem: item1_cSpan_2,item2_cSpan_1', async (t) => {
         labelLocation,
       });
 
-      await screenshotTestFn(t, takeScreenshot, `SimpleItem,item1_cSpan_2,item2_cSpan_1,location_${labelLocation},cCount_${colCount}.png`, '#container');
+      await testScreenshot(t, takeScreenshot, `SimpleItem,item1_cSpan_2,item2_cSpan_1,location_${labelLocation},cCount_${colCount}.png`, { element: '#container' });
     }
   }
 
@@ -76,7 +76,7 @@ test('SimpleItem: item1_cSpan_1,item2_cSpan_2', async (t) => {
         labelLocation,
       });
 
-      await screenshotTestFn(t, takeScreenshot, `SimpleItem,item1_cSpan_1,item2_cSpan_2,location_${labelLocation},cCount_${colCount}.png`, '#container');
+      await testScreenshot(t, takeScreenshot, `SimpleItem,item1_cSpan_1,item2_cSpan_2,location_${labelLocation},cCount_${colCount}.png`, { element: '#container' });
     }
   }
 
@@ -105,7 +105,7 @@ test('SimpleItem: item1_cSpan_1,item2_cSpan_2', async (t) => {
         labelLocation,
       });
 
-      await screenshotTestFn(t, takeScreenshot, `SimpleItem,item1_cSpan_2,item2_cSpan_2,location_${labelLocation},cCount_${colCount}.png`, '#container');
+      await testScreenshot(t, takeScreenshot, `SimpleItem,item1_cSpan_2,item2_cSpan_2,location_${labelLocation},cCount_${colCount}.png`, { element: '#container' });
     }
   }
 
