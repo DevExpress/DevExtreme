@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const stylingMods = ['outlined', 'underlined', 'filled'];
 const themes = ['generic.light', 'material.blue.light'];
