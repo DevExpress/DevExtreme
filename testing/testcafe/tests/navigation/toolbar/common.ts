@@ -30,14 +30,18 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
 
       await setStyleAttribute(targetContainer, 'background-color: gold;');
 
-      await testScreenshot(t, takeScreenshot, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
-        await toolbar.repaint();
+      await testScreenshot(t, takeScreenshot, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, {
+        element: targetContainer,
+        shouldTestInCompact: true,
+        compactCallBack: async () => {
+          await toolbar.repaint();
 
-        if (locateInMenu !== 'never') {
-          await t
-            .click(overflowMenu.element);
-        }
-        await setStyleAttribute(targetContainer, 'background-color: gold;');
+          if (locateInMenu !== 'never') {
+            await t
+              .click(overflowMenu.element);
+          }
+          await setStyleAttribute(targetContainer, 'background-color: gold;');
+        },
       });
 
       await t
@@ -97,13 +101,17 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
       targetContainer = overflowMenu.getPopup().getContent();
     }
 
-    await testScreenshot(t, takeScreenshot, `Toolbar with dropDownButton,items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, targetContainer, true, async () => {
-      await toolbar.repaint();
+    await testScreenshot(t, takeScreenshot, `Toolbar with dropDownButton,items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, {
+      element: targetContainer,
+      shouldTestInCompact: true,
+      compactCallBack: async () => {
+        await toolbar.repaint();
 
-      if (locateInMenu !== 'never') {
-        await t
-          .click(overflowMenu.element);
-      }
+        if (locateInMenu !== 'never') {
+          await t
+            .click(overflowMenu.element);
+        }
+      },
     });
 
     await t
@@ -175,13 +183,17 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
         targetContainer = overflowMenu.getPopup().getContent();
       }
 
-      await testScreenshot(t, takeScreenshot, `Toolbar with ${stylingMode} buttons,items[]locateInMenu=${locateInMenu}.png`, targetContainer, true, async () => {
-        await toolbar.repaint();
+      await testScreenshot(t, takeScreenshot, `Toolbar with ${stylingMode} buttons,items[]locateInMenu=${locateInMenu}.png`, {
+        element: targetContainer,
+        shouldTestInCompact: true,
+        compactCallBack: async () => {
+          await toolbar.repaint();
 
-        if (locateInMenu === 'always') {
-          await t
-            .click(overflowMenu.element);
-        }
+          if (locateInMenu === 'always') {
+            await t
+              .click(overflowMenu.element);
+          }
+        },
       });
 
       await t

@@ -196,7 +196,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         }
       }
 
-      await testScreenshot(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+      await testScreenshot(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
 
       await t
         .expect(compareResults.isValid())
@@ -253,7 +253,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await testScreenshot(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
 
         await t
           .expect(compareResults.isValid())
@@ -312,7 +312,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttons-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await testScreenshot(t, takeScreenshot, `Toolbar-buttons-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
 
         await t
           .expect(compareResults.isValid())
@@ -371,7 +371,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
         }
       }
 
-      await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+      await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
 
       await t
         .expect(compareResults.isValid())
@@ -432,7 +432,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
 
         await t
           .expect(compareResults.isValid())
@@ -494,7 +494,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           }
         }
 
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, targetContainer);
+        await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
 
         await t
           .expect(compareResults.isValid())
@@ -551,7 +551,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 
     targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-    await testScreenshot(t, takeScreenshot, 'Toolbar all widgets appearance.png', targetContainer);
+    await testScreenshot(t, takeScreenshot, 'Toolbar all widgets appearance.png', { element: targetContainer });
 
     await t
       .expect(compareResults.isValid())
@@ -590,7 +590,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 
       targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-      await testScreenshot(t, takeScreenshot, `Toolbar all widgets as ${templateName} appearance.png`, targetContainer);
+      await testScreenshot(t, takeScreenshot, `Toolbar all widgets as ${templateName} appearance.png`, { element: targetContainer });
 
       await t
         .expect(compareResults.isValid())

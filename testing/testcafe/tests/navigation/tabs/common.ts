@@ -11,7 +11,7 @@ fixture.disablePageReloads`Tabs_common`
 test('Tabs icon alignment', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs items alignment.png', '#tabs', true);
+  await testScreenshot(t, takeScreenshot, 'Tabs items alignment.png', { element: '#tabs', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())

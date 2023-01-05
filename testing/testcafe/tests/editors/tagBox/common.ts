@@ -129,7 +129,7 @@ test('Placeholder is visible after items option change when value is not chosen 
 
   await tagBox.option('items', [1, 2, 3]);
 
-  await testScreenshot(t, takeScreenshot, 'TagBox placeholder if value is not choosen.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'TagBox placeholder if value is not choosen.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

@@ -11,7 +11,7 @@ fixture.disablePageReloads`Colorbox`
 test('Colorbox should display full placeholder', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Colorbox with placeholder.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'Colorbox with placeholder.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

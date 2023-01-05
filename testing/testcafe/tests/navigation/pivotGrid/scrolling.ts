@@ -31,7 +31,7 @@ testFixture()`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
 
-    await testScreenshot(t, takeScreenshot, `PivotGrid rows sync dir=vertical,useNative=${useNative},mode=${mode}.png`, '#container');
+    await testScreenshot(t, takeScreenshot, `PivotGrid rows sync dir=vertical,useNative=${useNative},mode=${mode}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -87,7 +87,7 @@ testFixture()`PivotGrid_scrolling`
     await pivotGrid.scrollBy({ top: 100000 });
     await pivotGrid.scrollBy({ top: -150 });
 
-    await testScreenshot(t, takeScreenshot, `PivotGrid rows sync dir=both,useNative=${useNative},mode=${mode}.png`, '#container');
+    await testScreenshot(t, takeScreenshot, `PivotGrid rows sync dir=both,useNative=${useNative},mode=${mode}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())

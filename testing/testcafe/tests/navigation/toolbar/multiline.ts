@@ -16,7 +16,10 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
   test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, '#toolbar', true);
+    await testScreenshot(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, {
+      element: '#toolbar',
+      shouldTestInCompact: true,
+    });
 
     await t
       .expect(compareResults.isValid())
@@ -56,7 +59,10 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
 test('Buttons render in toolbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Toolbar buttons render.png', '#toolbar', true);
+  await testScreenshot(t, takeScreenshot, 'Toolbar buttons render.png', {
+    element: '#toolbar',
+    shouldTestInCompact: true,
+  });
 
   await t
     .expect(compareResults.isValid())

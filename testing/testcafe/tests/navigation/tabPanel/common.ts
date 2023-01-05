@@ -10,7 +10,7 @@ fixture.disablePageReloads`TabPanel_common`
 test('TabPanel borders with scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TabPanel borders with scrolling.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'TabPanel borders with scrolling.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -74,7 +74,7 @@ test('TabPanel borders with scrolling', async (t) => {
 test('TabPanel borders without scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TabPanel borders without scrolling.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'TabPanel borders without scrolling.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

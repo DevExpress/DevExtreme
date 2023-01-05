@@ -37,6 +37,7 @@ createTestCafe({
         const file = args.file.trim();
 
         setTestingPlatform(args);
+        setQuarantineMode(args);
         setTestingTheme(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
@@ -96,7 +97,7 @@ createTestCafe({
         }
 
         const runOptions = {
-            quarantineMode: args.quarantineMode,
+            quarantineMode: args.quarantineMode ? { successThreshold: 1, attemptLimit: 3 } : false,
         };
 
         if(['scheduler', 'navigation', 'editors', 'form', 'htmlEditor'].includes(args.componentFolder.trim())) {

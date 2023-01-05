@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
@@ -12,7 +11,7 @@ fixture.disablePageReloads`Integration_DataGrid`
   test(`The rows in the fixed column are not aligned when the grid is encapsulated inside a <td> element, useNative: ${useNative} (T1071725)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Grid with scrollable wrapped in td el, useNative=${useNative}.png`, Selector('#container'));
+    await testScreenshot(t, takeScreenshot, `Grid with scrollable wrapped in td el, useNative=${useNative}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())

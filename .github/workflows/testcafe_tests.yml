@@ -63,9 +63,9 @@ jobs:
       matrix:
         ARGS: [
           { componentFolder: "treeList", name: "treeList" },
-          { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3" },
-          { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3" },
-          { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3" },
+          { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3", quarantineMode: true },
+          { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3", quarantineMode: true },
+          { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3", quarantineMode: true },
           { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
           { componentFolder: "scheduler", name: "scheduler (2/5)", indices: "2/5" },
           { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },

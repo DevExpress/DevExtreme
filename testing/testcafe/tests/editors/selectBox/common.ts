@@ -14,7 +14,7 @@ test('Placeholder is visible after items option change when value is not chosen 
   const selectBox = new SelectBox('#selectBox');
 
   await selectBox.option('items', [1, 2, 3]);
-  await testScreenshot(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png', '#container');
+  await testScreenshot(t, takeScreenshot, 'SelectBox placeholder after items change if value is not choosen.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
