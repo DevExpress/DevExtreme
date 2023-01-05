@@ -9,7 +9,7 @@ import {
   appendElementTo, setClassAttribute, insertStylesheetRule, deleteStylesheetRule,
   removeClassAttribute,
 } from '../../navigation/helpers/domUtils';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
