@@ -8,8 +8,22 @@ const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 require('nconf').argv();
 
+const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
+    // eslint-disable-next-line no-undef
+    window.DevExpress.ui.themes.ready(resolve);
+    // eslint-disable-next-line no-undef
+    window.DevExpress.ui.themes.current(themeName);
+}),
+{ dependencies: { themeName } })();
+
 let testCafe;
-createTestCafe('localhost', 1437, 1438)
+createTestCafe({
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    // eslint-disable-next-line spellcheck/spell-checker
+    experimentalProxyless: true,
+})
     .then(tc => {
         testCafe = tc;
 
@@ -22,6 +36,7 @@ createTestCafe('localhost', 1437, 1438)
         const file = args.file.trim();
 
         setTestingPlatform(args);
+        setTestingTheme(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
@@ -29,7 +44,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' ? ' --window-size=1200,800' : ''}`);
+            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' || args.componentFolder.trim() === 'form' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -85,7 +100,7 @@ createTestCafe('localhost', 1437, 1438)
             quarantineMode: args.quarantineMode,
         };
 
-        if(args.componentFolder.trim() === 'scheduler') {
+        if(['scheduler', 'form'].includes(args.componentFolder.trim())) {
             runOptions.hooks = {
                 test: {
                     after: async() => {
@@ -93,6 +108,12 @@ createTestCafe('localhost', 1437, 1438)
                     }
                 },
             };
+
+            if(args.theme) {
+                runOptions.hooks.test.before = async() => {
+                    await changeTheme(args.theme);
+                };
+            }
         }
 
         return runner.run(runOptions);
@@ -104,6 +125,10 @@ createTestCafe('localhost', 1437, 1438)
 
 function setTestingPlatform(args) {
     process.env.platform = args.platform;
+}
+
+function setTestingTheme(args) {
+    process.env.theme = args.theme || 'generic.light';
 }
 
 function expandBrowserAlias(browser) {
@@ -128,7 +153,8 @@ function getArgs() {
             cache: true,
             quarantineMode: false,
             indices: '',
-            platform: ''
+            platform: '',
+            theme: '',
         }
     });
 }
@@ -146,8 +172,8 @@ function clearTestPage() {
         const otherContainerElement = document.createElement('div');
         otherContainerElement.setAttribute('id', 'otherContainer');
 
-        body?.prepend(otherContainerElement);
-        body?.prepend(containerElement);
+        body.prepend(otherContainerElement);
+        body.prepend(containerElement);
 
         $('#stylesheetRules').remove();
     })();

@@ -1,7 +1,8 @@
 import { ClientFunction } from 'testcafe';
+import { removeStylesheetRulesFromPage } from './domUtils';
 
 export async function clearTestPage(): Promise<void> {
-  await ClientFunction(() => {
+  await ClientFunction(async () => {
     const body = document.querySelector('body');
 
     $('#container').remove();
@@ -16,6 +17,6 @@ export async function clearTestPage(): Promise<void> {
     body?.prepend(otherContainerElement);
     body?.prepend(containerElement);
 
-    $('#stylesheetRules').remove();
+    await removeStylesheetRulesFromPage();
   })();
 }
