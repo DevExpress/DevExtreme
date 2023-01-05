@@ -1,5 +1,5 @@
-import url from '../../helpers/getPageUrl';
-import FilterBuilder from '../../model/filterBuilder';
+import url from '../../../helpers/getPageUrl';
+import FilterBuilder from '../../../model/filterBuilder';
 
 fixture`XSS`
   .page('about:blank')

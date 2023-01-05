@@ -6,7 +6,7 @@ const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
-const clearTestPage = require('./helpers/clearPage');
+const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
@@ -107,7 +107,7 @@ createTestCafe({
             runOptions.hooks = {
                 test: {
                     after: async() => {
-                        await clearTestPage();
+                        await testPageUtils.clearTestPage();
                     }
                 },
             };
