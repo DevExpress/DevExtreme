@@ -5,7 +5,7 @@ import Form from '../../../model/form/form';
 import RadioGroup from '../../../model/radioGroup';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 

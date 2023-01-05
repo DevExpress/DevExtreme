@@ -6,7 +6,7 @@ import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 import asyncForEach from '../../../helpers/asyncForEach';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`Drop Down Button`
   .page(url(__dirname, '../../container.html'));

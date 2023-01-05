@@ -3,7 +3,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`Label`
   .page(url(__dirname, '../../container.html'));

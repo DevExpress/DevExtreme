@@ -73,5 +73,14 @@ export default abstract class Widget {
     )();
   }
 
+  repaint(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => { (getInstance() as any).repaint(); },
+      { dependencies: { getInstance } },
+    )();
+  }
+
   abstract getName(): WidgetName;
 }
