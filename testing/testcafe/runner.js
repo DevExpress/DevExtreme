@@ -37,7 +37,6 @@ createTestCafe({
         const file = args.file.trim();
 
         setTestingPlatform(args);
-        setQuarantineMode(args);
         setTestingTheme(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
