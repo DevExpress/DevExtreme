@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -15,10 +16,9 @@ fixture`NumberBox_Label`
 
 themes.forEach((theme) => {
   stylingMods.forEach((stylingMode) => {
-    test(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {
+    safeSizeTest(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {
       await t.expect(await compareScreenshot(t, `NumberBox label with stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(300, 400);
+    }, [300, 400]).before(async () => {
       await changeTheme(theme);
 
       const componentOption = {

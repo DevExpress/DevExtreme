@@ -1,4 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -47,7 +48,7 @@ themes.forEach((theme) => {
     });
 
     labelModes.forEach((labelMode) => {
-      test(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
+      safeSizeTest(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
         const tagBox = new TagBox('#container');
 
         await t.click(tagBox.element);
@@ -64,8 +65,7 @@ themes.forEach((theme) => {
         await t
           .expect(await compareScreenshot(t, screenshotName))
           .ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
+      }, [300, 400]).before(async () => {
         await changeTheme(theme);
 
         await setAttribute('#container', 'style', 'top: 250px');
