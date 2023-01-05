@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`CheckBox`
   .page(url(__dirname, '../../container.html'));

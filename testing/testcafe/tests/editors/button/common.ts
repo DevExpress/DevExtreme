@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { appendElementTo, insertStylesheetRule, deleteStylesheetRule } from '../../navigation/helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';
