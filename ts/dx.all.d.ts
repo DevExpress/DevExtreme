@@ -666,11 +666,11 @@ declare module DevExpress {
   /**
    * [descr:config()]
    */
-  export function config(): globalConfig;
+  export function config(): GlobalConfig;
   /**
    * [descr:config(config)]
    */
-  export function config(config: globalConfig): void;
+  export function config(config: GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -998,90 +998,89 @@ declare module DevExpress {
     stop(element: Element, jumpToEnd: boolean): void;
   };
   /**
-   * [descr:globalConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:GlobalConfig]
    */
-  export interface globalConfig {
+  export interface GlobalConfig {
     /**
-     * [descr:globalConfig.decimalSeparator]
-     * @deprecated [depNote:globalConfig.decimalSeparator]
+     * [descr:GlobalConfig.decimalSeparator]
+     * @deprecated [depNote:GlobalConfig.decimalSeparator]
      */
     decimalSeparator?: string;
     /**
-     * [descr:globalConfig.defaultCurrency]
+     * [descr:GlobalConfig.defaultCurrency]
      */
     defaultCurrency?: string;
     /**
-     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
+     * [descr:GlobalConfig.defaultUseCurrencyAccountingStyle]
      */
     defaultUseCurrencyAccountingStyle?: boolean;
     /**
-     * [descr:globalConfig.editorStylingMode]
+     * [descr:GlobalConfig.editorStylingMode]
      */
     editorStylingMode?: DevExpress.common.EditorStyle;
     /**
-     * [descr:globalConfig.floatingActionButtonConfig]
+     * [descr:GlobalConfig.floatingActionButtonConfig]
      */
     floatingActionButtonConfig?: {
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.closeIcon]
+       * [descr:GlobalConfig.floatingActionButtonConfig.closeIcon]
        */
       closeIcon?: string;
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.direction]
+       * [descr:GlobalConfig.floatingActionButtonConfig.direction]
        */
       direction?: DevExpress.core.FloatingActionButtonDirection;
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.icon]
+       * [descr:GlobalConfig.floatingActionButtonConfig.icon]
        */
       icon?: string;
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.label]
+       * [descr:GlobalConfig.floatingActionButtonConfig.label]
        */
       label?: string;
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
+       * [descr:GlobalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
        */
       maxSpeedDialActionCount?: number;
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.position]
+       * [descr:GlobalConfig.floatingActionButtonConfig.position]
        */
       position?:
         | DevExpress.common.PositionAlignment
         | PositionConfig
         | Function;
       /**
-       * [descr:globalConfig.floatingActionButtonConfig.shading]
+       * [descr:GlobalConfig.floatingActionButtonConfig.shading]
        */
       shading?: boolean;
     };
     /**
-     * [descr:globalConfig.forceIsoDateParsing]
+     * [descr:GlobalConfig.forceIsoDateParsing]
      */
     forceIsoDateParsing?: boolean;
     /**
-     * [descr:globalConfig.oDataFilterToLower]
+     * [descr:GlobalConfig.oDataFilterToLower]
      */
     oDataFilterToLower?: boolean;
     /**
-     * [descr:globalConfig.rtlEnabled]
+     * [descr:GlobalConfig.rtlEnabled]
      */
     rtlEnabled?: boolean;
     /**
-     * [descr:globalConfig.serverDecimalSeparator]
+     * [descr:GlobalConfig.serverDecimalSeparator]
      */
     serverDecimalSeparator?: string;
     /**
-     * [descr:globalConfig.thousandsSeparator]
-     * @deprecated [depNote:globalConfig.thousandsSeparator]
+     * [descr:GlobalConfig.thousandsSeparator]
+     * @deprecated [depNote:GlobalConfig.thousandsSeparator]
      */
     thousandsSeparator?: string;
     /**
-     * [descr:globalConfig.useLegacyStoreResult]
+     * [descr:GlobalConfig.useLegacyStoreResult]
      */
     useLegacyStoreResult?: boolean;
     /**
-     * [descr:globalConfig.useLegacyVisibleIndex]
+     * [descr:GlobalConfig.useLegacyVisibleIndex]
      */
     useLegacyVisibleIndex?: boolean;
   }

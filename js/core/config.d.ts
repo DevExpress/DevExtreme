@@ -16,7 +16,7 @@ export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
  * @namespace DevExpress
  * @public
  */
-declare function config(): globalConfig;
+declare function config(): GlobalConfig;
 
 /**
  * @docid
@@ -25,15 +25,16 @@ declare function config(): globalConfig;
  * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-shadow
-declare function config(config: globalConfig): void;
+declare function config(config: GlobalConfig): void;
 
 /**
  * @docid
  * @section commonObjectStructures
  * @namespace DevExpress
+ * @public
  * @type object
  */
-export interface globalConfig {
+export interface GlobalConfig {
     /**
      * @docid
      * @default "."
