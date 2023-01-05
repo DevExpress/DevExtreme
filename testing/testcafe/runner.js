@@ -6,6 +6,7 @@ const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
+const clearTestPage = require('./helpers/clearPage');
 require('nconf').argv();
 
 const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
@@ -44,7 +45,9 @@ createTestCafe({
         }
 
         const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler' || args.componentFolder.trim() === 'form' ? ' --window-size=1200,800' : ''}`);
+            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler'
+            || args.componentFolder.trim() === 'form'
+            || args.componentFolder.trim() === 'htmlEditor' ? ' --window-size=1200,800' : ''}`);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -100,7 +103,7 @@ createTestCafe({
             quarantineMode: args.quarantineMode,
         };
 
-        if(['scheduler', 'form'].includes(args.componentFolder.trim())) {
+        if(['scheduler', 'form', 'htmlEditor'].includes(args.componentFolder.trim())) {
             runOptions.hooks = {
                 test: {
                     after: async() => {
@@ -158,24 +161,3 @@ function getArgs() {
         }
     });
 }
-
-function clearTestPage() {
-    return createTestCafe.ClientFunction(() => {
-        const body = document.querySelector('body');
-
-        $('#container').remove();
-        $('#otherContainer').remove();
-
-        const containerElement = document.createElement('div');
-        containerElement.setAttribute('id', 'container');
-
-        const otherContainerElement = document.createElement('div');
-        otherContainerElement.setAttribute('id', 'otherContainer');
-
-        body.prepend(otherContainerElement);
-        body.prepend(containerElement);
-
-        $('#stylesheetRules').remove();
-    })();
-}
-
