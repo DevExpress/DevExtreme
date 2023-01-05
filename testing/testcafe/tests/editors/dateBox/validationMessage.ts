@@ -4,7 +4,7 @@ import DateBox from '../../../model/dateBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'))

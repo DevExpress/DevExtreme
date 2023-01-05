@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Popup from '../../../model/popup';
@@ -123,7 +123,7 @@ fixture`Popup_toolbar`
                 text: 'Close',
               },
             }],
-          });
+          }, true);
         }).after(async () => {
           await changeTheme('generic.light');
         });
