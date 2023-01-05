@@ -6,6 +6,7 @@ import RadioGroup from '../../../model/radioGroup';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { getThemePostfix } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
@@ -15,7 +16,7 @@ fixture`Radio Group Validation Message`
 const themes = ['generic.light', 'material.blue.light'];
 
 themes.forEach((theme) => {
-  test(`message position is right in ${theme} (T1020449)`, async (t) => {
+  safeSizeTest(`message position is right in ${theme} (T1020449)`, async (t) => {
     const form = new Form('#container');
 
     await form.validate();
@@ -25,7 +26,7 @@ themes.forEach((theme) => {
     await radioGroup.focus();
 
     await t.expect(await compareScreenshot(t, `RadioGroup horizontal validation${getThemePostfix(theme)}.png`, form.element)).ok();
-  }).before(async () => {
+  }, [300, 400]).before(async () => {
     await changeTheme(theme);
 
     return createWidget('dxForm', {
