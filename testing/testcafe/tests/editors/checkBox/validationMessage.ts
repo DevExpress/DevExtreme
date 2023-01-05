@@ -4,7 +4,7 @@ import CheckBox from '../../../model/checkBox';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));

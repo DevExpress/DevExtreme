@@ -5,7 +5,7 @@ import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
