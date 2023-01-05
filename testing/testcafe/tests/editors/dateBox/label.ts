@@ -15,7 +15,7 @@ fixture`DateBox_Label`
 
 themes.forEach((theme) => {
   stylingMods.forEach((stylingMode) => {
-    test(`Symbol parts in label should not be cropped in ${theme} with stylingMode=${stylingMode}`, async (t) => {
+    test(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async (t) => {
       await t.expect(await compareScreenshot(t, `Datebox label symbols with stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
     }).before(async (t) => {
       await t.resizeWindow(300, 400);
