@@ -1,5 +1,5 @@
 import type {
-    OmitInternal,
+  OmitInternal,
 } from './core';
 
 import type dxDraggable from './ui/draggable';
@@ -13,6 +13,52 @@ import type dxSortable from './ui/sortable';
 export type ApplyValueMode = 'instantly' | 'useButtons';
 
 /**
+ * @docid
+ * @public
+ * @namespace DevExpress.common
+ * @type object
+ */
+export type AsyncRule = {
+  /**
+  * @docid
+  * @default false
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @default 'Value is invalid'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  reevaluate?: boolean;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'async';
+  /**
+  * @docid
+  * @type_function_return Promise<any>
+  * @type_function_param1 options:object
+  * @type_function_param1_field value:string|number
+  * @type_function_param1_field rule:object
+  * @type_function_param1_field validator:object
+  * @type_function_param1_field data:object
+  * @type_function_param1_field column:object
+  * @type_function_param1_field formItem:object
+  * @public
+  */
+  validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
+};
+
+/**
  * @public
  * @namespace DevExpress.common
  */
@@ -23,6 +69,96 @@ export type ButtonStyle = 'text' | 'outlined' | 'contained';
  * @namespace DevExpress.common
  */
 export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common
+ * @type object
+ */
+export type CompareRule = {
+  /**
+  * @docid
+  * @type_function_return object
+  * @public
+  */
+  comparisonTarget?: (() => any);
+  /**
+  * @docid
+  * @default '=='
+  * @public
+  */
+  comparisonType?: ComparisonOperator;
+  /**
+  * @docid
+  * @default false
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @default 'Values do not match'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'compare';
+};
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type CustomRule = {
+  /**
+  * @docid
+  * @default false
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @default 'Value is invalid'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @default false
+  * @public
+  */
+  reevaluate?: boolean;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'custom';
+  /**
+  * @docid
+  * @type_function_param1 options:object
+  * @type_function_param1_field value:string|number
+  * @type_function_param1_field rule:object
+  * @type_function_param1_field validator:object
+  * @type_function_param1_field data:object
+  * @type_function_param1_field column:object
+  * @type_function_param1_field formItem:object
+  * @public
+  */
+  validationCallback?: ((options: ValidationCallbackData) => boolean);
+};
 
 /**
  * @public
@@ -65,6 +201,33 @@ export type DragHighlight = 'push' | 'indicate';
  * @namespace DevExpress.common
  */
 export type EditorStyle = 'outlined' | 'underlined' | 'filled';
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type EmailRule = {
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @default 'Email is invalid'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'email';
+};
 
 /**
  * @public
@@ -121,6 +284,33 @@ export type MaskMode = 'always' | 'onFocus';
 export type Mode = 'auto'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type NumericRule = {
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @default 'Value should be a number'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'numeric';
+};
+
+/**
  * @public
  * @namespace DevExpress.common
  */
@@ -139,6 +329,38 @@ export type PageLoadMode = 'nextButton' | 'scrollBottom';
 export type PageOrientation = 'portrait' | 'landscape';
 
 /**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type PatternRule = {
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @default 'Value does not match pattern'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @public
+  */
+  pattern?: RegExp | string;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'pattern';
+};
+
+/**
  * @public
  * @namespace DevExpress.common
  */
@@ -149,6 +371,76 @@ export type Position = 'bottom' | 'left' | 'right' | 'top';
  * @namespace DevExpress.common
  */
 export type PositionAlignment = 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top';
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type RangeRule = {
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @public
+  */
+  max?: Date | number;
+  /**
+  * @docid
+  * @default 'Value is out of range'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @public
+  */
+  min?: Date | number;
+  /**
+  * @docid
+  * @default false
+  * @public
+  */
+  reevaluate?: boolean;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'range';
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type RequiredRule = {
+  /**
+  * @docid
+  * @default 'Required'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  trim?: boolean;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'required';
+};
 
 /**
  * @public
@@ -235,6 +527,49 @@ export type SortOrder = 'asc' | 'desc';
 export type StoreType = 'array' | 'local' | 'odata';
 
 /**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type StringLengthRule = {
+  /**
+  * @docid
+  * @default false
+  * @public
+  */
+  ignoreEmptyValue?: boolean;
+  /**
+  * @docid
+  * @public
+  */
+  max?: number;
+  /**
+  * @docid
+  * @default 'The length of the value is not correct'
+  * @public
+  */
+  message?: string;
+  /**
+  * @docid
+  * @public
+  */
+  min?: number;
+  /**
+  * @docid
+  * @default true
+  * @public
+  */
+  trim?: boolean;
+  /**
+  * @docid
+  * @type Enums.ValidationRuleType
+  * @public
+  */
+  type: 'stringLength';
+};
+
+/**
  * @public
  * @namespace DevExpress.common
  */
@@ -256,7 +591,7 @@ export type TextEditorButtonLocation = 'after' | 'before';
  * @public
  * @namespace DevExpress.common
  */
- export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 
 /**
  * @public
@@ -274,7 +609,32 @@ export type TooltipShowMode = 'always' | 'onHover';
  * @public
  * @namespace DevExpress.common
  */
+export type ValidationCallbackData = {
+  value?: any;
+  rule: any;
+  validator: any;
+  data?: any;
+  column?: any;
+  formItem?: any;
+};
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type ValidationMessageMode = 'always' | 'auto';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ValidationRule = AsyncRule | CompareRule | CustomRule | EmailRule | NumericRule | PatternRule | RangeRule | RequiredRule | StringLengthRule;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type ValidationRuleType = 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 
 /**
  * @public
