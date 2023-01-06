@@ -3,7 +3,7 @@ import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor - add image url`
   .page(url(__dirname, '../../../containerQuill.html'));
@@ -82,7 +82,7 @@ test('Image url should be updated', async (t) => {
     .click(htmlEditor.toolbar.getItem('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.text)
-    .eql('Add');
+    .eql(isMaterial() ? 'ADD' : 'Add');
 
   await t
     .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
@@ -96,7 +96,7 @@ test('Image url should be updated', async (t) => {
     .click(htmlEditor.toolbar.getItem('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.text)
-    .eql('Update');
+    .eql(isMaterial() ? 'UPDATE' : 'Update');
 
   await t
     .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_2, {
