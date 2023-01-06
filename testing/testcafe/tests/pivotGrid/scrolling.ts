@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
-import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
-import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import createWidget from '../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { virtualData } from './virtualData.js';
 // eslint-disable-next-line import/extensions
 import { dataOptions } from './virtualDataOptions.js';
-import PivotGrid from '../../../model/pivotGrid';
+import PivotGrid from '../../model/pivotGrid';
 
 const testFixture = () => {
   if (isMaterial()) {
@@ -17,7 +17,7 @@ const testFixture = () => {
 };
 
 testFixture()`PivotGrid_scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 [
   { useNative: true, mode: 'standart' },
