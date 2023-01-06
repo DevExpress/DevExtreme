@@ -99,7 +99,7 @@ createTestCafe({
             quarantineMode: args.quarantineMode ? { successThreshold: 1, attemptLimit: 3 } : false,
         };
 
-        if(['scheduler', 'navigation', 'editors', 'form', 'htmlEditor'].includes(args.componentFolder.trim())) {
+        if(['scheduler', 'navigation', 'editors', 'form', 'htmlEditor', 'pivotGrid'].includes(args.componentFolder.trim())) {
             runOptions.hooks = {
                 test: {
                     after: async() => {
