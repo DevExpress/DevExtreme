@@ -17,7 +17,7 @@ test('Menu items render', async (t) => {
 
   const menu = new Menu();
 
-  const actionFn = async () => {
+  const expandMenuItems = async () => {
     await t
       .click(menu.getItem(0))
       .pressKey('down')
@@ -25,7 +25,7 @@ test('Menu items render', async (t) => {
       .pressKey('right');
   };
 
-  await actionFn();
+  await expandMenuItems();
 
   if (!isMaterial()) {
     await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.dark' });
@@ -37,7 +37,7 @@ test('Menu items render', async (t) => {
     shouldTestInCompact: true,
     compactCallBack: async () => {
       await menu.repaint();
-      await actionFn();
+      await expandMenuItems();
     },
   });
 

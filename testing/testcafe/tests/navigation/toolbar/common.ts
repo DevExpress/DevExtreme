@@ -175,7 +175,6 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
       const overflowMenu = toolbar.getOverflowMenu();
 
       let targetContainer = Selector('#toolbar');
-
       if (locateInMenu === 'always') {
         await t
           .click(overflowMenu.element);
@@ -188,7 +187,6 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
         shouldTestInCompact: true,
         compactCallBack: async () => {
           await toolbar.repaint();
-
           if (locateInMenu === 'always') {
             await t
               .click(overflowMenu.element);
