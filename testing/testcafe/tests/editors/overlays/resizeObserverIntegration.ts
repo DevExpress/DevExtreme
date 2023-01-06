@@ -198,12 +198,10 @@ test('Popup dimensions should be correct after width or height animation', async
 test('Showing and shown events should be raised only once even after resize during animation', async (t) => {
   const popup = new Popup('#container');
 
-  const initCounters = ClientFunction(() => {
+  await ClientFunction(() => {
     (window as any).shownCallCount = 0;
     (window as any).showingCallCount = 0;
-  });
-
-  await initCounters();
+  })();
 
   const incShown = ClientFunction(() => { ((window as any).shownCallCount as number) += 1; });
   const incShowing = ClientFunction(() => { ((window as any).showingCallCount as number) += 1; });
@@ -224,13 +222,13 @@ test('Showing and shown events should be raised only once even after resize duri
   await t
     .expect(await getShowingCounter())
     .eql(1);
-}).before(async (t) => {
-  t.ctx.shownCallCount = 0;
-  t.ctx.showingCallCount = 0;
-
-  return createWidget('dxPopup', {
-    width: 'auto',
-    height: 'auto',
-    contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-  });
+}).before(async () => createWidget('dxPopup', {
+  width: 'auto',
+  height: 'auto',
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+})).after(async () => {
+  await ClientFunction(() => {
+    (window as any).shownCallCount = 0;
+    (window as any).showingCallCount = 0;
+  })();
 });

@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
@@ -45,4 +45,8 @@ test('Context menu should be shown in the same position when item was added in r
       }
     },
   }, true, '#contextMenu');
+}).after(async () => {
+  await ClientFunction(() => {
+    (window as any).isItemAdded = 0;
+  })();
 });

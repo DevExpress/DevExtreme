@@ -37,13 +37,9 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(400, 400);
-
-  return createWidget('dxToolbar', {
-    items: generateItems(40),
-  }, true);
-});
+}, [400, 400]).before(async () => createWidget('dxToolbar', {
+  items: generateItems(40),
+}, true));
 
 safeSizeTest('Popup should be position correctly with the window border collision', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -59,14 +55,10 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(400, 400);
-
-  return createWidget('dxToolbar', {
-    items: generateItems(40),
-    width: 50,
-  }, true);
-});
+}, [400, 400]).before(async () => createWidget('dxToolbar', {
+  items: generateItems(40),
+  width: 50,
+}, true));
 
 [true, false].forEach((rtlEnabled) => {
   safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
@@ -83,14 +75,10 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(400, 400);
-
-    return createWidget('dxToolbar', {
-      items: generateItems(40),
-      rtlEnabled,
-    }, true);
-  });
+  }, [400, 400]).before(async () => createWidget('dxToolbar', {
+    items: generateItems(40),
+    rtlEnabled,
+  }, true));
 
   safeSizeTest(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -106,9 +94,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(400, 400);
-
+  }, [400, 400]).before(async () => {
     await setAttribute('#container', 'style', 'margin-top: 200px');
 
     return createWidget('dxToolbar', {
