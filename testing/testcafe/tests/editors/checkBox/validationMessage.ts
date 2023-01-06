@@ -55,7 +55,6 @@ positions.forEach((position) => {
       .expect(true).ok();
 
     await testScreenshot(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, {
-      element: '#container',
       shouldTestInCompact: true,
       compactCallBack: async () => {
         await t
