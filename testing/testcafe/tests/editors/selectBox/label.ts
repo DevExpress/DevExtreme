@@ -2,7 +2,8 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const labelMods = ['floating', 'static'];
 const stylingMods = ['outlined', 'underlined', 'filled'];
@@ -17,12 +18,11 @@ fixture`Label`
 themes.forEach((theme) => {
   stylingMods.forEach((stylingMode) => {
     labelMods.forEach((labelMode) => {
-      test(`Label for dxSelectBox labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
+      safeSizeTest(`Label for dxSelectBox labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
         await t.click('#otherContainer');
 
         await t.expect(await compareScreenshot(t, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
+      }, [300, 400]).before(async () => {
         await changeTheme(theme);
 
         await createWidget('dxSelectBox', {

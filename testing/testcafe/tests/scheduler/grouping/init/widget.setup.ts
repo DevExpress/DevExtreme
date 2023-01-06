@@ -34,4 +34,4 @@ export default async (options = {}): Promise<void> => createWidget('dxScheduler'
   maxAppointmentsPerCell: 5,
   currentView: 'week',
   currentDate: new Date(2018, 4, 21),
-}, options));
+}, options), true);

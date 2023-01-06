@@ -1,9 +1,11 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { setAttribute } from '../../navigation/helpers/domUtils';
 import TagBox from '../../../model/tagBox';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden'];
@@ -21,7 +23,7 @@ themes.forEach((theme) => {
       await t.click('#otherContainer');
 
       await t
-        .expect(await compareScreenshot(t, `label-tag-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`))
+        .expect(await compareScreenshot(t, `TagBox label with stylingMode=${stylingMode}${getThemePostfix(theme)}.png`))
         .ok();
     }).before(async (t) => {
       await t.resizeWindow(300, 800);
@@ -46,12 +48,12 @@ themes.forEach((theme) => {
     });
 
     labelModes.forEach((labelMode) => {
-      test(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
+      safeSizeTest(`Label shouldn't be cutted for dxTagBox ${theme} in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
         const tagBox = new TagBox('#container');
 
         await t.click(tagBox.element);
 
-        const screenshotName = `label-tag-box-styleMode=${stylingMode},labelMode=${labelMode},theme=${theme.replace(/\./g, '-')}.png`;
+        const screenshotName = `TagBox label with stylingMode=${stylingMode},labelMode=${labelMode}${getThemePostfix(theme)}.png`;
 
         await t
           .expect(await compareScreenshot(t, screenshotName))
@@ -63,8 +65,7 @@ themes.forEach((theme) => {
         await t
           .expect(await compareScreenshot(t, screenshotName))
           .ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
+      }, [300, 400]).before(async () => {
         await changeTheme(theme);
 
         await setAttribute('#container', 'style', 'top: 250px');

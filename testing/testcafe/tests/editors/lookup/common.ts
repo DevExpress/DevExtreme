@@ -5,6 +5,7 @@ import Lookup from '../../../model/lookup';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
@@ -86,7 +87,7 @@ themes.forEach((theme) => {
     await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
     await t
-      .expect(await compareScreenshot(t, `Lookup_with_no_found_data,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await compareScreenshot(t, `Lookup with no found data${getThemePostfix(theme)}.png`))
       .ok();
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
@@ -102,7 +103,7 @@ themes.forEach((theme) => {
     await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
 
     await t
-      .expect(await compareScreenshot(t, `Lookup_in_loading,theme=${theme.replace(/\./g, '-')}.png`))
+      .expect(await compareScreenshot(t, `Lookup in loading${getThemePostfix(theme)}.png`))
       .ok();
   }).before(async (t) => {
     await t.resizeWindow(300, 400);
@@ -133,7 +134,7 @@ test('Placeholder is visible after items option change when value is not chosen 
   await lookup.option('items', [1, 2, 3]);
 
   await t
-    .expect(await compareScreenshot(t, 'Lookup_placeholder_after_items_change_if_value_is_not_choosen.png', '#container'))
+    .expect(await compareScreenshot(t, 'Lookup placeholder if value is not choosen.png', '#container'))
     .ok();
 }).before(async () => createWidget('dxLookup', {
   width: 300,

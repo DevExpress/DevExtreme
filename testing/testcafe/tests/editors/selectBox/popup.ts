@@ -4,7 +4,7 @@ import SelectBox from '../../../model/selectBox';
 import createWidget from '../../../helpers/createWidget';
 import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 import { changeTheme } from '../../../helpers/changeTheme';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`popup height on first load`
   .page(url(__dirname, '../../container.html'))

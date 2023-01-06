@@ -289,7 +289,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '15'
+        node-version: '16'
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true

@@ -1,9 +1,10 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
-import { getThemePostfix } from '../../../helpers/getPostfix';
+import { getThemePostfix } from '../../../helpers/themeUtils';
 
 fixture`Label`
   .page(url(__dirname, '../../container.html'));
@@ -28,12 +29,11 @@ test('Label scroll input dxTextArea', async (t) => {
 themes.forEach((theme) => {
   stylingMods.forEach((stylingMode) => {
     labelMods.forEach((labelMode) => {
-      test(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
+      safeSizeTest(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
         await t.click('#otherContainer');
 
         await t.expect(await compareScreenshot(t, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
+      }, [300, 400]).before(async () => {
         await changeTheme(theme);
 
         await createWidget('dxTextArea', {
