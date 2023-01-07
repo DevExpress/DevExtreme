@@ -62,12 +62,12 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
-          { componentFolder: "treeList", name: "treeList", concurrency: 1 },
+          { componentFolder: "treeList", name: "treeList" },
           { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3", quarantineMode: true },
           { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3", quarantineMode: true },
           { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3", quarantineMode: true },
-          { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
-          { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "pivotGrid", name: "pivotGrid" },
+          { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light' },
           { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
           { componentFolder: "scheduler", name: "scheduler (2/5)", indices: "2/5" },
           { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
@@ -76,15 +76,15 @@ jobs:
           { componentFolder: "form", name: "form" },
           { componentFolder: "editors", name: "editors" },
           { componentFolder: "navigation", name: "navigation" },
-          { componentFolder: "htmlEditor", name: "htmlEditor", concurrency: 1 },
+          { componentFolder: "htmlEditor", name: "htmlEditor" },
           { componentFolder: "form", name: "form - material", theme: 'material.blue.light' },
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
-          { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2", concurrency: 2 },
-          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2", concurrency: 2 },
-          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2", concurrency: 2 },
-          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2", concurrency: 2 },
+          { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light' },
+          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2" },
+          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2" },
+          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2" },
+          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -136,10 +136,9 @@ jobs:
         [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
-        [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         [ "${{ matrix.ARGS.quarantineMode }}" == "true" ] && QUARANTINE_MODE="--quarantineMode ${{ matrix.ARGS.quarantineMode }}"
-        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $QUARANTINE_MODE $META_RENOVATION $INDICES $PLATFORM $THEME"
+        all_args="--concurrency 3 --browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $QUARANTINE_MODE $META_RENOVATION $INDICES $PLATFORM $THEME"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
