@@ -1677,7 +1677,12 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
   // act
+
+  await t
+    .click(Selector('body'), { offsetY: dataGridOffsetBottom + 10 });
+
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
 
