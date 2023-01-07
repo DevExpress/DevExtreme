@@ -59,9 +59,8 @@ createTestCafe({
             }
         });
 
-        if(args.concurrency > 0) {
-            runner.concurrency(args.concurrency);
-        }
+        runner.concurrency(args.concurrency || 3);
+
         const filters = [];
         if(indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
@@ -96,7 +95,7 @@ createTestCafe({
         }
 
         const runOptions = {
-            quarantineMode: args.quarantineMode ? { successThreshold: 1, attemptLimit: 3 } : false,
+            quarantineMode: { successThreshold: 1, attemptLimit: 3 },
         };
 
         if(['scheduler', 'navigation', 'editors', 'form', 'htmlEditor', 'pivotGrid', 'dataGrid'].includes(args.componentFolder.trim())) {
