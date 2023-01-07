@@ -5,7 +5,7 @@ const createTestCafe = require('testcafe');
 const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
-// const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
+const dashboardReporter = require('testcafe-reporter-dashboard-devextreme');
 const testPageUtils = require('./helpers/clearPage');
 require('nconf').argv();
 
@@ -98,7 +98,7 @@ createTestCafe({
             quarantineMode: { successThreshold: 1, attemptLimit: 3 },
         };
 
-        if(['scheduler', 'navigation', 'editors', 'form', 'htmlEditor', 'pivotGrid', 'dataGrid'].includes(args.componentFolder.trim())) {
+        if(args.componentFolder.trim() !== 'renovation') {
             runOptions.hooks = {
                 test: {
                     after: async() => {
@@ -145,7 +145,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             meta: '',
-            reporter: ['minimal' /* , dashboardReporter */],
+            reporter: ['minimal', dashboardReporter],
             componentFolder: '',
             file: '*',
             cache: true,

@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-fixture`Export button`
+fixture.disablePageReloads`Export button`
   .page(url(__dirname, '../container.html'));
 
 test('allowExportSelectedData: false, menu: false', async (t) => {

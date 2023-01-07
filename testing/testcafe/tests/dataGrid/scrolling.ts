@@ -30,7 +30,7 @@ function getData(rowCount, colCount): Record<string, string>[] {
   return items;
 }
 
-fixture`Scrolling`
+fixture.disablePageReloads`Scrolling`
   .page(url(__dirname, '../container.html'))
   .beforeEach(async (t) => { await t.maximizeWindow(); });
 

@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 
@@ -51,9 +51,8 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   return items;
 };
 
-fixture`Row dragging`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture.disablePageReloads`Row dragging`
+  .page(url(__dirname, '../container.html'));
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
