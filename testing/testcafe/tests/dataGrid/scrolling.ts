@@ -30,7 +30,7 @@ function getData(rowCount, colCount): Record<string, string>[] {
   return items;
 }
 
-fixture.disablePageReloads`Scrolling`
+fixture`Scrolling`
   .page(url(__dirname, '../container.html'))
   .beforeEach(async (t) => { await t.maximizeWindow(); });
 
@@ -931,6 +931,7 @@ test('The data should display correctly after changing the dataSource and focuse
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   height: 250,
+  width: 200,
   keyExpr: 'id',
   dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
   columnWidth: 100,

@@ -31,4 +31,6 @@ test('Filter row\'s height should be adjusted by content (T1072609)', async (t) 
     wordWrapEnabled: true,
     showBorders: true,
   });
+}).after(async () => {
+  await changeTheme('generic.light');
 });
