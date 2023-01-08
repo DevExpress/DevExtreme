@@ -63,7 +63,8 @@ jobs:
       matrix:
         ARGS: [
           { componentFolder: "treeList", name: "treeList", concurrency: 1 },
-          { componentFolder: "dataGrid", name: "dataGrid" },
+          { componentFolder: "dataGrid", name: "dataGrid (1/2)", indices: "1/2" },
+          { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
           { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
           { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
           { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
