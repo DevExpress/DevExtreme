@@ -339,6 +339,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
+        super._renderView();
+
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
