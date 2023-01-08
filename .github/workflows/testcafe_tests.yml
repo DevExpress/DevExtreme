@@ -10,11 +10,15 @@ on:
     branches: [22_2]
 
 jobs:
-  build-wip-renovation:
-    name: build-wip-renovation
+  build:
+    name: build-${{ matrix.ARGS.name }}
     strategy:
       fail-fast: false
-      
+      matrix:
+        ARGS: [
+          { name: "wip-renovation", inProgressRenovation: true },
+          { name: "default" },
+        ]
     runs-on: devextreme-shr2
     timeout-minutes: 15
 
@@ -38,7 +42,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: BUILD_INPROGRESS_RENOVATION="true" npm run build:testcafe
+      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:testcafe
 
     - name: Zip artifacts
       run: |
@@ -47,54 +51,13 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: devextreme-artifacts-renovation-true
+        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
         path: artifacts.zip
         retention-days: 1
 
-  build-default:
-    name: build-default
-    strategy:
-      fail-fast: false
-
-    runs-on: devextreme-shr2
-    timeout-minutes: 15
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Build
-      run: BUILD_INPROGRESS_RENOVATION="false" npm run build:testcafe
-
-    - name: Zip artifacts
-      run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: devextreme-artifacts-renovation-false
-        path: artifacts.zip
-        retention-days: 1
-
-  testcafe-default:
-    name: testcafe-default
-    needs: [build-default]
+  testcafe:
+    name: ${{ matrix.ARGS.name }}
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
@@ -116,93 +79,10 @@ jobs:
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-        ]
-    runs-on: devextreme-shr2
-    timeout-minutes: 90
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - uses: ./.github/actions/pin-browsers
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
-
-    - name: Prepare localization
-      if: matrix.ARGS.componentFolder == 'renovation'
-      run: npx gulp localization
-
-    - name: Unpack artifacts
-      run: 7z x artifacts.zip -aoa
-
-    - name: Prepare renovation playground
-      if: matrix.ARGS.componentFolder == 'renovation'
-      run: |
-        pushd testing/renovation
-        npm install --no-audit --no-fund --legacy-peer-deps
-        popd
-        npm run build:react
-        npx gulp build-renovation-testing
-
-    - name: Run TestCafe tests
-      run: |
-        [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
-        [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
-        [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
-        [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
-        [ "${{ matrix.ARGS.quarantineMode }}" == "true" ] && QUARANTINE_MODE="--quarantineMode ${{ matrix.ARGS.quarantineMode }}"
-        export TESTCAFE_DASHBOARD_LAYOUT_TESTING_ENABLED=true
-        export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI3MDEyMTgyZC1iMzliLTQyYWMtYjRlZC02YWY2MWMyZmQyNzgiLCJ0b2tlblNlY3JldCI6ImtUODN0QjU1dFdyeWJva2VsdlpDb051R3pzOFZOYzVuaDI4dXNFb3pFd2hPOUZDZlRVaXh5OXBvVC8wS3hDZFAwd05SKzlmVkk0WWh3dXl2ZkhtZDFudTE0MHJqdEUxVnByTlI4Z1RTRHJwZlRPN1dZZXNEUnovUDRTOFF1L3NPTWNjSXpzWno1Y0ZIY2xVSFZKTVVTRVIxVGtaRlgwZTlhUU5tRTBaY1FPTmVkenovREFseGQ4YVoxZnNkN2dSd2VFNjBhSjNueG1vOHNGbGJwazVsYmlvN2JoVy9VTnBvWSs1Q0tFcVFvQ0JSTHJFSlUybUNxNkdGbmhtbmxUTW9SRXpjWDBjUlMwMk41NWlTakNMMXRxdlpMajc4MnB6ZnFrRWo1d29UT0dLY3V1bThRaXE2L1FnaWR2MFV0VWFTaGZvVW9sazhTWFlXNGtxWVNSalR1QT09In0=
-        export TESTCAFE_DASHBOARD_DEVEXTREME_URL=https://devextreme.resolve.sh
-        export TESTCAFE_DASHBOARD_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
-        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $QUARANTINE_MODE $INDICES $PLATFORM $THEME"
-        echo "$all_args"
-        npm run test-testcafe -- $all_args
-
-    - name: Copy compared screenshot artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: compared-screenshots
-        path: ${{ github.workspace }}/testing/testcafe/artifacts/compared-screenshots/**/*
-        if-no-files-found: ignore
-    - name: Copy failed test artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: failed-tests
-        path: ${{ github.workspace }}/testing/testcafe/artifacts/failedtests/**/*
-        if-no-files-found: ignore
-
-  testcafe-wip-renovation:
-    name: testcafe-wip-renovation
-    needs: [build-default]
-    strategy:
-      fail-fast: false
-      matrix:
-        ARGS: [
-          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2" },
-          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2" },
+          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2", concurrency: 2 },
+          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2", concurrency: 2 },
+          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2", concurrency: 2 },
+          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2", concurrency: 2 },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -283,7 +163,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [build-default, build-wip-renovation, testcafe-default, testcafe-wip-renovation]
+    needs: [build, testcafe]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
