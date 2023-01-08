@@ -63,8 +63,7 @@ jobs:
       matrix:
         ARGS: [
           { componentFolder: "treeList", name: "treeList", concurrency: 1 },
-          { componentFolder: "dataGrid", name: "dataGrid (1/2)", indices: "1/2" },
-          { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
+          { componentFolder: "dataGrid", name: "dataGrid" },
           { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
           { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
           { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
@@ -80,10 +79,10 @@ jobs:
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2" },
-          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2" },
+          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2", concurrency: 2 },
+          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2", concurrency: 2 },
+          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2", concurrency: 2 },
+          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2", concurrency: 2 },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
