@@ -339,14 +339,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
-        super._renderView();
-
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
         }
 
         this.renderWorkSpace();
+        if(this.isRenovatedRender()) {
+            this.virtualScrollingDispatcher.updateDimensions();
+        }
 
         this._shader = new HorizontalShader(this);
 
