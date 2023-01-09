@@ -512,6 +512,12 @@ export type SingleOrNone = 'single' | 'none';
  * @public
  * @namespace DevExpress.common
  */
+export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Sortable = OmitInternal<dxSortable>;
 
 /**

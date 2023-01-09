@@ -1658,6 +1658,7 @@ declare module DevExpress.common {
   export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
   export type SingleOrMultiple = 'single' | 'multiple';
   export type SingleOrNone = 'single' | 'none';
+  export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
@@ -20805,7 +20806,6 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
-    export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   }
   /**
    * [descr:dxSliderBase]
@@ -20882,7 +20882,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSliderBaseOptions.valueChangeMode]
      */
-    valueChangeMode?: DevExpress.ui.dxSlider.ValueChangeMode;
+    valueChangeMode?: DevExpress.common.SliderValueChangeMode;
   }
   /**
    * @deprecated use Properties instead
@@ -33645,6 +33645,7 @@ declare module DevExpress.viz {
       animationEnabled?: boolean;
       /**
        * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
+       * @deprecated [depNote:dxRangeSelectorOptions.behavior.callValueChanged]
        */
       callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
       /**
@@ -33659,6 +33660,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.behavior.snapToTicks]
        */
       snapToTicks?: boolean;
+      /**
+       * [descr:dxRangeSelectorOptions.behavior.valueChangeMode]
+       */
+      valueChangeMode?: DevExpress.common.SliderValueChangeMode;
     };
     /**
      * [descr:dxRangeSelectorOptions.chart]

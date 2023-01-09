@@ -1,11 +1,12 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const axisModule = require('viz/axes/base_axis');
-const translator2DModule = require('viz/translators/translator2d');
-const StubAxis = vizMocks.stubClass(axisModule.Axis);
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import axisModule from 'viz/axes/base_axis';
+import translator2DModule from 'viz/translators/translator2d';
+import errors from 'core/errors.js';
+import 'viz/range_selector/range_selector';
 
-require('viz/range_selector/range_selector');
+const StubAxis = vizMocks.stubClass(axisModule.Axis);
 
 QUnit.testStart(function() {
     const markup =
@@ -90,4 +91,25 @@ QUnit.test('There is no error when \'dataSource\' is an empty array and scale is
 
     assert.deepEqual(this.$container.dxRangeSelector('instance').getValue(), [undefined, undefined]);
     assert.strictEqual(this.axis.setBusinessRange.lastCall.args[0].isEmpty(), true);
+});
+
+QUnit.test('Should show warning if deprecated "behavior.callValueChanged" option is used', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        this.$container.dxRangeSelector({
+            behavior: {
+                callValueChanged: 'onMoving'
+            }
+        });
+        assert.deepEqual(errors.log.lastCall.args, [
+            'W0001',
+            'dxRangeSelector',
+            'callValueChanged',
+            '23.1',
+            'Use the "valueChangeMode" option instead'
+        ]);
+    } finally {
+        errors.log.restore();
+    }
 });

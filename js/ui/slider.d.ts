@@ -18,6 +18,7 @@ import {
 } from '../localization';
 
 import {
+    SliderValueChangeMode,
     TooltipShowMode,
     VerticalEdge,
 } from '../common';
@@ -41,9 +42,6 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
-
-/** @public */
-export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
 
 /**
  * @deprecated use Properties instead
@@ -167,7 +165,7 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
      * @default 'onHandleMove'
      * @public
      */
-     valueChangeMode?: ValueChangeMode;
+     valueChangeMode?: SliderValueChangeMode;
 }
 
 /** @public */
