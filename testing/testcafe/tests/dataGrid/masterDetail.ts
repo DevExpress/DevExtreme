@@ -1,12 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 
 fixture.disablePageReloads`Master detail`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 ['material.blue.light', 'generic.light'].forEach((theme) => {
   test.skip(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {
@@ -75,7 +74,6 @@ fixture.disablePageReloads`Master detail`
       },
     });
   }).after(async () => {
-    await disposeWidgets();
     await changeTheme('generic.light');
   });
 });
@@ -118,7 +116,4 @@ test.skip('pageSizeSelector has correct layout inside masterDetail', async (t) =
           .appendTo(container);
       },
     },
-  }))
-  .after(async () => {
-    await disposeWidgets();
-  });
+  }));

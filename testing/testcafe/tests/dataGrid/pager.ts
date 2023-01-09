@@ -1,7 +1,7 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import { changeTheme } from '../../helpers/changeTheme';
@@ -23,10 +23,9 @@ async function createDataGridWithPager(): Promise<any> {
     },
   });
 }
-fixture`Pager`
+fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'))
-  .beforeEach(createDataGridWithPager)
-  .afterEach(async () => disposeWidgets());
+  .beforeEach(createDataGridWithPager);
 
 test('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -166,7 +165,6 @@ test('Resize without navigation buttons', async (t) => {
       },
     });
   }).after(async () => {
-    await disposeWidgets();
     await changeTheme('generic.light');
   });
 });
@@ -207,7 +205,4 @@ test("Changing pageSize to 'all' with rowRenderingMode='virtual' should work (T1
       displayMode: 'compact',
     },
     height: 400,
-  }))
-  .after(async () => {
-    await disposeWidgets();
-  });
+  }));

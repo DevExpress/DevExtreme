@@ -68,7 +68,7 @@ config.forEach((props) => {
       const scrollable = new ScrollableFactory[platform](SCROLLABLE_SELECTOR, props);
       const { direction, useNative, rtlEnabled } = props;
 
-      await scrollable.apiScrollTo({ top: 20, left: 10 });
+      await scrollable.scrollTo({ top: 20, left: 10 });
       const expectedScrollOffsetValue = {
         // eslint-disable-next-line no-nested-ternary
         left: direction !== DIRECTION_VERTICAL ? 10 : rtlEnabled
@@ -79,7 +79,7 @@ config.forEach((props) => {
           : 0,
         top: direction !== DIRECTION_HORIZONTAL ? 20 : 0,
       };
-      await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
+      await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
 
       await t
         .expect(await compareScreenshot(
@@ -91,10 +91,10 @@ config.forEach((props) => {
         .ok();
 
       await scrollable.hide();
-      await scrollable.apiScrollTo({ left: 0, top: 0 });
+      await scrollable.scrollTo({ left: 0, top: 0 });
       await scrollable.show();
 
-      await t.expect(await scrollable.apiScrollOffset()).eql(expectedScrollOffsetValue);
+      await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
       await t
         .expect(await compareScreenshot(
           t,

@@ -72,7 +72,7 @@ const config: Partial<ScrollableProps>[] = [];
         const component = new Component[platform](COMPONENT_SELECTOR, props, widgetName);
         const { direction, useNative, rtlEnabled } = props;
 
-        await component.apiScrollTo({ top: 50, left: 50 });
+        await component.scrollTo({ top: 50, left: 50 });
 
         await t
           .expect(await compareScreenshot(

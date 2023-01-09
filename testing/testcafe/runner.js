@@ -44,18 +44,13 @@ createTestCafe({
             fs.rmSync('./testing/testcafe/screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ')
-            .map((browser) => `${expandBrowserAlias(browser)}${args.componentFolder.trim() === 'scheduler'
-            || args.componentFolder.trim() === 'form'
-            || args.componentFolder.trim() === 'htmlEditor'
-            || args.componentFolder.trim() === 'editors' ? ' --window-size=1200,800' : ''}`);
+        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
         const runner = testCafe.createRunner()
             .browsers(browsers)
             .reporter(reporter)
-
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         runner.compilerOptions({
@@ -64,9 +59,8 @@ createTestCafe({
             }
         });
 
-        if(args.concurrency > 0) {
-            runner.concurrency(args.concurrency);
-        }
+        runner.concurrency(args.concurrency || 3);
+
         const filters = [];
         if(indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
@@ -101,10 +95,10 @@ createTestCafe({
         }
 
         const runOptions = {
-            quarantineMode: args.quarantineMode,
+            quarantineMode: { successThreshold: 1, attemptLimit: 3 },
         };
 
-        if(['scheduler', 'form', 'htmlEditor'].includes(args.componentFolder.trim())) {
+        if(args.componentFolder.trim() !== 'renovation') {
             runOptions.hooks = {
                 test: {
                     after: async() => {
@@ -138,7 +132,7 @@ function setTestingTheme(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu';
+            return 'chrome:headless --disable-gpu --window-size=1200,800';
     }
 
     return browser;

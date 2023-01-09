@@ -1,9 +1,10 @@
 import { ClientFunction } from 'testcafe';
+import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`List`
+fixture.disablePageReloads`List`
   .page(url(__dirname, '../../container.html'));
 
 test('Should focus first item after changing selection mode (T811770)', async (t) => {
@@ -205,9 +206,9 @@ test('Grouped list can not reorder items (T727360)', async (t) => {
 
     .dragToElement(thirdGroup.getItem().reorderHandle, thirdGroup.getItem(1).element)
     .expect(thirdGroup.getItem().text)
-    .eql('32')
+    .eql(isMaterial() ? '31' : '32')
     .expect(thirdGroup.getItem(1).text)
-    .eql('31');
+    .eql(isMaterial() ? '32' : '31');
 }).before(async () => {
   const data = [
     { group: 'group1', value: '11' },
