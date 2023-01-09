@@ -1,46 +1,57 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { getThemePostfix } from '../../../helpers/themeUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import {
+  appendElementTo,
+  setStyleAttribute,
+} from '../../../helpers/domUtils';
+import SelectBox from '../../../model/selectBox';
 
 const labelMods = ['floating', 'static'];
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+fixture.disablePageReloads`Label`
+  .page(url(__dirname, '../../container.html'));
 
-themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    labelMods.forEach((labelMode) => {
-      safeSizeTest(`Label for dxSelectBox labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
-        await t.click('#otherContainer');
+stylingModes.forEach((stylingMode) => {
+  labelMods.forEach((labelMode) => {
+    test(`Label for dxSelectBox labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await t.expect(await compareScreenshot(t, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
-      }, [300, 400]).before(async () => {
-        await changeTheme(theme);
+      const selectBox2 = new SelectBox('#selectBox2');
 
-        await createWidget('dxSelectBox', {
-          width: 100,
-          label: 'label',
-          text: '',
-          labelMode,
-          stylingMode,
-        });
+      await t.click('#selectBox2');
 
-        return createWidget('dxSelectBox', {
-          label: `this label is ${'very '.repeat(10)}long`,
-          text: `this content is ${'very '.repeat(10)}long`,
-          items: ['item1', 'item2'],
-          labelMode,
-          stylingMode,
-        }, false, '#otherContainer');
-      });
+      await testScreenshot(t, takeScreenshot, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`, { element: '#container' });
+
+      await t.click(await selectBox2.getPopup());
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
+
+      await appendElementTo('#container', 'div', 'selectBox1');
+      await appendElementTo('#container', 'div', 'selectBox2');
+
+      await createWidget('dxSelectBox', {
+        width: 100,
+        label: 'label',
+        text: '',
+        labelMode,
+        stylingMode,
+      }, false, '#selectBox1');
+
+      await createWidget('dxSelectBox', {
+        label: `this label is ${'very '.repeat(10)}long`,
+        text: `this content is ${'very '.repeat(10)}long`,
+        items: ['item1', 'item2'],
+        labelMode,
+        stylingMode,
+      }, false, '#selectBox2');
     });
   });
 });

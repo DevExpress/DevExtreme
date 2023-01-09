@@ -65,8 +65,6 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
 test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await t.setTestSpeed(0.8);
-
   await t
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)

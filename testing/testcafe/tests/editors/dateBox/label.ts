@@ -1,31 +1,32 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { getThemePostfix } from '../../../helpers/themeUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`DateBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+fixture.disablePageReloads`DateBox_Label`
+  .page(url(__dirname, '../../container.html'));
 
-themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    safeSizeTest(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `Datebox label symbols with stylingMode=${stylingMode}${getThemePostfix(theme)}.png`)).ok();
-    }, [300, 400]).before(async () => {
-      await changeTheme(theme);
+stylingModes.forEach((stylingMode) => {
+  test(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      return createWidget('dxDateBox', {
-        label: 'qwerty QWERTY 1234567890',
-        stylingMode,
-        value: new Date(1900, 0, 1),
-      });
-    });
+    await testScreenshot(t, takeScreenshot, `Datebox label symbols with stylingMode=${stylingMode}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await appendElementTo('#container', 'div', 'dateBox');
+    await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
+
+    return createWidget('dxDateBox', {
+      label: 'qwerty QWERTY 1234567890',
+      stylingMode,
+      value: new Date(1900, 0, 1),
+    }, true, '#dateBox');
   });
 });

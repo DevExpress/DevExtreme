@@ -1,6 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import CommandCell from '../../model/dataGrid/commandCell';
 import { ClassNames } from '../../model/dataGrid/classNames';
@@ -8,8 +8,7 @@ import { ClassNames } from '../../model/dataGrid/classNames';
 const CLASS = ClassNames;
 
 fixture.disablePageReloads`Keyboard Navigation`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1876,7 +1875,6 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       await ClientFunction(() => {
         $('#myinput').remove();
       })();
-      await disposeWidgets();
     });
   });
 });
@@ -1967,7 +1965,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     $('#myinput1').remove();
     $('#myinput2').remove();
   })();
-  await disposeWidgets();
 });
 
 [false, true].forEach((isCommandColumnFixed) => {
@@ -2449,7 +2446,6 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
     focusedRowEnabled: true,
   });
 }).after(async () => {
-  await disposeWidgets();
   await ClientFunction(() => {
     $('#mycontainer').remove();
   })();
