@@ -720,11 +720,10 @@ const dxRangeSelector = baseWidgetModule.inherit({
     },
 
     _validateRange: function(start, end) {
-        const that = this;
-        const translator = that._axis.getTranslator();
-        if(_isDefined(start) && !translator.isValid(start) ||
-            _isDefined(end) && !translator.isValid(end)) {
-            that._incidentOccurred('E2203');
+        const valueDefinedAndNotValid = value => _isDefined(value) && !this._axis.getTranslator().isValid(value);
+
+        if(this._dataIsReady() && (valueDefinedAndNotValid(start) || valueDefinedAndNotValid(end))) {
+            this._incidentOccurred('E2203');
         }
     },
 
