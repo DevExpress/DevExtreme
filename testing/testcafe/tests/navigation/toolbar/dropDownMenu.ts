@@ -1,7 +1,7 @@
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import DropDownMenu from '../../model/dropDownMenu';
-import { appendElementTo } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import DropDownMenu from '../../../model/dropDownMenu';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture`DropDownMenu`
   .page(url(__dirname, '../container.html'));
