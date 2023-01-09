@@ -354,7 +354,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
       });
     });
 
-    test(`Toolbar button group appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
+    test(`Toolbar button group appearence ${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const toolbar = new Toolbar('#container');

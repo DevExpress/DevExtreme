@@ -228,7 +228,7 @@ test('Showing and shown events should be raised only once even after resize duri
   contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
 })).after(async () => {
   await ClientFunction(() => {
-    (window as any).shownCallCount = 0;
-    (window as any).showingCallCount = 0;
+    delete (window as any).shownCallCount;
+    delete (window as any).showingCallCount;
   })();
 });

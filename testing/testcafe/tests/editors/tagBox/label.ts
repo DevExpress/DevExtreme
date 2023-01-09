@@ -28,7 +28,7 @@ stylingModes.forEach((stylingMode) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, [300, 800]).before(async () => {
-    const componentOption = {
+    const componentOptions = {
       label: 'label text',
       items: [...Array(10)].map((_, i) => `item${i}`),
       value: [...Array(5)].map((_, i) => `item${i}`),
@@ -39,12 +39,12 @@ stylingModes.forEach((stylingMode) => {
     await appendElementTo('#container', 'div', 'tagBox2', { });
 
     await createWidget('dxTagBox', {
-      ...componentOption,
+      ...componentOptions,
       multiline: false,
     }, true, '#tagBox1');
 
     await createWidget('dxTagBox', {
-      ...componentOption,
+      ...componentOptions,
       multiline: true,
     }, true, '#tagBox2');
   });
