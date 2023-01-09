@@ -1862,7 +1862,7 @@ QUnit.module('ExportController', {
         });
         sinon.stub(this.exportController.component, 'getDataProvider');
 
-        this.exportController.exportToExcel();
+        this.exportController.exportTo();
 
         assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
         assert.deepEqual(clientExporter.export.getCall(0).args[0], this.exportController.component.getDataProvider.getCall(0).returnValue, 'First arg is data');
