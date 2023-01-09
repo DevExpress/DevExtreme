@@ -1000,7 +1000,7 @@ declare module DevExpress {
   /**
    * [descr:GlobalConfig]
    */
-  export interface GlobalConfig {
+  export type GlobalConfig = {
     /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]
@@ -1083,7 +1083,7 @@ declare module DevExpress {
      * [descr:GlobalConfig.useLegacyVisibleIndex]
      */
     useLegacyVisibleIndex?: boolean;
-  }
+  };
   /**
    * [descr:hideTopOverlay()]
    */
