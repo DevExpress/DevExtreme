@@ -118,7 +118,7 @@ fixture.disablePageReloads`Popup_toolbar`
             text: 'Close',
           },
         }],
-      }, true));
+      }));
     });
   });
 });

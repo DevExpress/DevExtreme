@@ -142,7 +142,7 @@ test('The placeholder should appear when a cross-component dragging rows after s
       rowDragging: {
         group: 'shared',
       },
-    }, false, '#otherContainer'),
+    }, '#otherContainer'),
   ]);
 });
 
@@ -242,7 +242,7 @@ test('The cross-component drag and drop rows should work when there are fixed co
       rowDragging: {
         group: 'shared',
       },
-    }, false, '#otherContainer'),
+    }, '#otherContainer'),
   ]);
 });
 
@@ -307,7 +307,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
       rowDragging: {
         group: 'shared',
       },
-    }, true),
+    }),
     createWidget('dxDataGrid', {
       width: 400,
       dataSource: [
@@ -340,7 +340,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
       rowDragging: {
         group: 'shared',
       },
-    }, true, '#otherContainer'),
+    }, '#otherContainer'),
   ]);
 });
 

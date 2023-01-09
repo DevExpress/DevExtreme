@@ -28,4 +28,4 @@ test('Appointment tooltip should be hidden when drag is started', async (t) => {
     startDate: new Date(2021, 3, 26, 9),
     endDate: new Date(2021, 3, 26, 9, 30),
   }],
-}, true));
+}));

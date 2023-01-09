@@ -52,7 +52,7 @@ const types = ['back', 'danger', 'default', 'normal', 'success'];
       multiline: true,
       items: toolbarItems,
       rtlEnabled,
-    }, false, '#toolbar');
+    }, '#toolbar');
   });
 });
 
@@ -98,5 +98,5 @@ test('Buttons render in toolbar', async (t) => {
   await createWidget('dxToolbar', {
     multiline: true,
     items,
-  }, false, '#toolbar');
+  }, '#toolbar');
 });

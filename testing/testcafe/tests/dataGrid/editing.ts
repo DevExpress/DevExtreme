@@ -85,7 +85,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
       startEditAction: 'click',
     },
   }),
-  createWidget('dxSelectBox', {}, false, '#otherContainer'),
+  createWidget('dxSelectBox', {}, '#otherContainer'),
 ]));
 
 test('Async Validation(Row) - Only valid data is saved in a new row', async (t) => {

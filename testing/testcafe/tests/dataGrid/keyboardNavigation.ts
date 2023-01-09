@@ -2439,7 +2439,7 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
     onClick() {
       ($('#container') as any).dxDataGrid('instance').focus();
     },
-  }, false, '#mycontainer');
+  }, '#mycontainer');
   await createWidget('dxDataGrid', {
     dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
     keyExpr: 'id',

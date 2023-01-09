@@ -39,7 +39,7 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
     .ok(compareResults.errorMessages());
 }, [400, 400]).before(async () => createWidget('dxToolbar', {
   items: generateItems(40),
-}, true));
+}));
 
 safeSizeTest('Popup should be position correctly with the window border collision', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -58,7 +58,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
 }, [400, 400]).before(async () => createWidget('dxToolbar', {
   items: generateItems(40),
   width: 50,
-}, true));
+}));
 
 [true, false].forEach((rtlEnabled) => {
   safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
@@ -78,7 +78,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   }, [400, 400]).before(async () => createWidget('dxToolbar', {
     items: generateItems(40),
     rtlEnabled,
-  }, true));
+  }));
 
   safeSizeTest(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

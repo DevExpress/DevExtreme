@@ -314,7 +314,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
           useSimulatedScrollbar,
           direction: 'horizontal',
           showScrollbar: 'always',
-        }, false, '#scrollable');
+        }, '#scrollable');
       });
 
       [1, 10, 20].forEach((scrollOffset) => {
@@ -393,7 +393,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             useSimulatedScrollbar,
             direction: 'horizontal',
             showScrollbar: 'always',
-          }, false, '#scrollable');
+          }, '#scrollable');
         });
       });
 
@@ -468,7 +468,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             useSimulatedScrollbar,
             direction: 'horizontal',
             showScrollbar: 'always',
-          }, false, '#scrollable');
+          }, '#scrollable');
         });
       });
     });

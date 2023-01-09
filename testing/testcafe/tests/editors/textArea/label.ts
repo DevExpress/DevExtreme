@@ -53,7 +53,7 @@ stylingModes.forEach((stylingMode) => {
         text: '',
         labelMode,
         stylingMode,
-      }, true, '#textArea1');
+      }, '#textArea1');
 
       return createWidget('dxTextArea', {
         label: `this label is ${'very '.repeat(10)}long`,
@@ -61,7 +61,7 @@ stylingModes.forEach((stylingMode) => {
         items: ['item1', 'item2'],
         labelMode,
         stylingMode,
-      }, true, '#textArea2');
+      }, '#textArea2');
     });
   });
 });

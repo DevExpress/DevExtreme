@@ -51,7 +51,7 @@ test('Form date editors should be pass numeric chars according by date mask', as
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
-}, true));
+}));
 
 test('Form date editors should not be pass chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -99,7 +99,7 @@ test('Form date editors should not be pass chars according by date mask', async 
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
-}, true));
+}));
 
 test('Form date editors should not be pass chars after remove all characters according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -159,4 +159,4 @@ test('Form date editors should not be pass chars after remove all characters acc
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
-}, true));
+}));

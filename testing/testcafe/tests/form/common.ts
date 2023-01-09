@@ -104,7 +104,7 @@ test('Form labels should have correct width after render in invisible container'
         }],
       }],
     }],
-  }, true, '#form');
+  }, '#form');
 
   await removeStylesheetRulesFromPage();
 });

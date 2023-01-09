@@ -27,5 +27,5 @@ test('Tabs icon alignment', async (t) => {
     { icon: 'money' },
   ] as Item[];
 
-  return createWidget('dxTabs', { dataSource }, true, '#tabs');
+  return createWidget('dxTabs', { dataSource }, '#tabs');
 });
