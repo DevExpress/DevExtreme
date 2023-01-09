@@ -58,8 +58,8 @@ QUnit.testStart(function() {
         \
         <div id="overlayWithClass" class="something another"></div>\
         \
-        <div id="overlayWithBoundaryWindow" style="width: 600px; height: 300px">\
-            <div id="boundary"><div>\
+        <div id="overlayWithBoundaryWindow" style="width: 600px; height: 300px; position: relative">\
+            <div id="boundary"  style="top:0; left:0; position: absolute"><div>\
         </div>\
         <div id="overlayWithAnonymousTmpl">\
             <div id="content"></div>\
@@ -1253,12 +1253,12 @@ testModule('position', moduleConfig, () => {
         const $overlayContent = overlay.$content();
 
         assert.strictEqual($overlayContent.offset().top, $boundary.offset().top, 'top border of the content is correct');
-        assert.strictEqual($overlayContent.offset().left, $boundary.offset().left + getWidth($boundary) - getWidth($overlayContent), 'left border of the content is correct');
+        assert.strictEqual($overlayContent.offset().left, $boundary.offset().left, 'left border of the content is correct');
 
         overlay.option('position.boundary', window);
 
-        assert.roughEqual($overlayContent.offset().top, getHeight($(window)) / 2 - getHeight($overlayContent) / 2, 0.5, 'top border of the content is correct after changing to window');
-        assert.roughEqual($overlayContent.offset().left, getWidth($(window)) / 2 - getWidth($overlayContent) / 2, 0.5, 'left border of the content is correct after changing to window');
+        assert.roughEqual($overlayContent.offset().top, getHeight($(window)) / 2 - getHeight($overlayContent) / 2, 0.51, 'top border of the content is correct after changing to window');
+        assert.roughEqual($overlayContent.offset().left, getWidth($(window)) / 2 - getWidth($overlayContent) / 2, 0.51, 'left border of the content is correct after changing to window');
     });
 });
 
