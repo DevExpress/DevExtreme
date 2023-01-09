@@ -145,7 +145,7 @@ export type GlobalConfig = {
      * @public
      */
     useLegacyVisibleIndex?: boolean;
-}
+};
 
 /**
  * @deprecated Use GlobalConfig instead

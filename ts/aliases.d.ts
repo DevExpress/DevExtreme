@@ -426,7 +426,7 @@ declare module DevExpress.common.charts {
 // v22.2
 
 declare module DevExpress {
-    /** @deprecated Use GlobalConfig instead */
+    /** @deprecated Use DevExpress.GlobalConfig instead */
     export type globalConfig = DevExpress.GlobalConfig;
 }
 
