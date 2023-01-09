@@ -148,9 +148,8 @@ export interface GlobalConfig {
 }
 
 /**
- * @docid
  * @deprecated Use GlobalConfig instead
  */
-export interface globalConfig extends GlobalConfig {}
+export type globalConfig = GlobalConfig;
 
 export default config;
