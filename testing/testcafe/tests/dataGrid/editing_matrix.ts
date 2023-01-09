@@ -2,15 +2,14 @@
 import { Selector } from 'testcafe';
 import { CellEditor } from '../../model/dataGrid/data/cellEditor';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import DataCell from '../../model/dataGrid/data/cell';
 import EditForm from '../../model/dataGrid/editForm';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 
 fixture.disablePageReloads`Editing`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 const editingModes = [
   'cell',

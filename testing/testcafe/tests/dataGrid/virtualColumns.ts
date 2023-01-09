@@ -1,16 +1,15 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
 });
 
-fixture`Virtual  Columns`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture.disablePageReloads`Virtual  Columns`
+  .page(url(__dirname, '../container.html'));
 
 const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   const items: Record<string, unknown>[] = [];

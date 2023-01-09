@@ -1,11 +1,10 @@
 import DataGrid from '../../model/dataGrid';
 import CheckBox from '../../model/checkBox';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 
-fixture`Selection`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture.disablePageReloads`Selection`
+  .page(url(__dirname, '../container.html'));
 
 test('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async (t) => {
   const dataGrid = new DataGrid('#container');
