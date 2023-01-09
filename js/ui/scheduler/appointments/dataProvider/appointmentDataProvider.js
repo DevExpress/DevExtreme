@@ -123,4 +123,8 @@ export class AppointmentDataProvider {
     remove(rawAppointment) {
         return this.appointmentDataSource.remove(rawAppointment);
     }
+
+    destroy() {
+        this.appointmentDataSource.destroy();
+    }
 }
