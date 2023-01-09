@@ -30,6 +30,7 @@ createTestCafe({
 
         const args = getArgs();
         const testName = args.test.trim();
+        const meta = args.meta.trim();
         const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
         const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
@@ -73,6 +74,11 @@ createTestCafe({
         }
         if(testName) {
             filters.push(name => name === testName);
+        }
+        if(meta) {
+            filters.push((testName, fixtureName, fixturePath, testMeta, fixtureMeta) => {
+                return testMeta[meta] || fixtureMeta[meta];
+            });
         }
         if(filters.length) {
             runner.filter((...args) => {
@@ -138,6 +144,7 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
+            meta: '',
             reporter: ['minimal', dashboardReporter],
             componentFolder: '',
             file: '*',
