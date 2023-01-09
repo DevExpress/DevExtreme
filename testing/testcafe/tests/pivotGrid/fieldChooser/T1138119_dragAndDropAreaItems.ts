@@ -1,8 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
-import PivotGrid from '../../../../model/pivotGrid';
+import { changeTheme } from '../../../helpers/changeTheme';
+import url from '../../../helpers/getPageUrl';
+import createWidget from '../../../helpers/createWidget';
+import PivotGrid from '../../../model/pivotGrid';
 
 const disableMouseUpEvent = ClientFunction(() => {
   const proto = (window as any)['%testCafeAutomation%'].DragToOffset.prototype.constructor.prototype;
@@ -56,6 +57,7 @@ test('Drag-n-drop the tree view item in all directions', async (t) => {
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await changeTheme('generic.light');
   await createWidget('dxPivotGrid', {
     dataSource: {
       store: [{
@@ -112,6 +114,7 @@ test('Drag-n-drop the row area item in all directions', async (t) => {
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await changeTheme('generic.light');
   await createWidget('dxPivotGrid', {
     dataSource: {
       fields: [{
