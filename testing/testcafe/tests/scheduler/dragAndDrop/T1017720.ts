@@ -32,7 +32,7 @@ test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
       type: 'bar',
       color: '#ffaa66',
     },
-  }), true);
+  }));
 
   await createWidget('dxPopup', extend({
     width: '90%',
@@ -58,5 +58,5 @@ test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
 
       return scheduler;
     }),
-  }), true);
+  }));
 });

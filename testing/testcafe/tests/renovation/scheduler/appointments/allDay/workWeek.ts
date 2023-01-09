@@ -26,5 +26,5 @@ test('It should not cut appointment if end date is concides with the begining of
     views: ['workWeek'],
     currentView: 'workWeek',
     currentDate: new Date(2021, 2, 28),
-  }, true);
+  });
 }).after(async (t) => restoreBrowserSize(t));

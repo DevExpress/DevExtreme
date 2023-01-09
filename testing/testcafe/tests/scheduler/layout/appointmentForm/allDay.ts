@@ -53,7 +53,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
     currentDate: new Date(2021, 3, 29),
     startDayHour: 9,
     height: 600,
-  }, true);
+  });
 });
 
 test('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
@@ -97,7 +97,7 @@ test('Start and end dates should be reflect the current day(create new appointme
     currentDate: new Date(2021, 3, 29),
     startDayHour: 9,
     height: 600,
-  }, true);
+  });
 });
 
 test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {

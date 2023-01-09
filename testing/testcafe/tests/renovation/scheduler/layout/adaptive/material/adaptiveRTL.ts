@@ -33,7 +33,7 @@ const createScheduler = async (
     height: 600,
     rtlEnabled: true,
     ...additionalProps,
-  }, true);
+  });
 };
 
 [false, true].forEach((crossScrollingEnabled) => {

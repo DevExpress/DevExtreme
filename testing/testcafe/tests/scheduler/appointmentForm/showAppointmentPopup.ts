@@ -58,5 +58,5 @@ test('Show appointment popup if deffereRendering is false (T1069753)', async (t)
     startDayHour: 9,
     endDayHour: 12,
     width: 400,
-  }, true);
+  });
 });

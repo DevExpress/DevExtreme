@@ -100,6 +100,6 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     return createWidget('dxToolbar', {
       items: generateItems(40),
       rtlEnabled,
-    }, true);
+    });
   });
 });
