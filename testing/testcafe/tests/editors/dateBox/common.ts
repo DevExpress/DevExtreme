@@ -70,7 +70,7 @@ stylingModes.forEach((stylingMode) => {
               value: new Date(2021, 9, 17, 16, 34),
             };
 
-            await createWidget('dxDateBox', options, false, `#${id}`);
+            await createWidget('dxDateBox', options, `#${id}`);
           }
         }
       }

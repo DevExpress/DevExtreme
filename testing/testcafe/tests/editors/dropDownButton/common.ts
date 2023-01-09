@@ -100,7 +100,7 @@ test('DropDownButton renders correctly', async (t) => {
             stylingMode,
             showArrowIcon,
             splitButton,
-          }, false, `#${id}`);
+          }, `#${id}`);
         }
       }
     }

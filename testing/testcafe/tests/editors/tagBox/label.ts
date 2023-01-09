@@ -95,7 +95,7 @@ stylingModes.forEach((stylingMode) => {
           paginate: true,
           pageSize: 20,
         },
-      }, true);
+      });
     });
   });
 });
