@@ -62,25 +62,24 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
-          { componentFolder: "treeList", name: "treeList" },
-          { componentFolder: "dataGrid", name: "dataGrid (1/3)", quarantineMode: true, indices: "1/3" },
-          { componentFolder: "dataGrid", name: "dataGrid (2/3)", quarantineMode: true, indices: "2/3" },
-          { componentFolder: "dataGrid", name: "dataGrid (3/3)", quarantineMode: true, indices: "3/3" },
-          { componentFolder: "scheduler", name: "scheduler (1/5)", quarantineMode: true, indices: "1/5" },
-          { componentFolder: "scheduler", name: "scheduler (2/5)", quarantineMode: true, indices: "2/5" },
-          { componentFolder: "scheduler", name: "scheduler (3/5)", quarantineMode: true, indices: "3/5" },
-          { componentFolder: "scheduler", name: "scheduler (4/5)", quarantineMode: true, indices: "4/5" },
-          { componentFolder: "scheduler", name: "scheduler (5/5)", quarantineMode: true, indices: "5/5" },
-          { componentFolder: "editors", name: "editors (1/3)", indices: "1/3" },
-          { componentFolder: "editors", name: "editors (2/3)", indices: "2/3" },
-          { componentFolder: "editors", name: "editors (3/3)", indices: "3/3" },
+          { componentFolder: "treeList", name: "treeList", concurrency: 1 },
+          { componentFolder: "dataGrid", name: "dataGrid (1/2)", indices: "1/2" },
+          { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
+          { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
+          { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
+          { componentFolder: "scheduler", name: "scheduler (2/5)", indices: "2/5" },
+          { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
+          { componentFolder: "scheduler", name: "scheduler (4/5)", indices: "4/5" },
+          { componentFolder: "scheduler", name: "scheduler (5/5)", indices: "5/5" },
           { componentFolder: "form", name: "form" },
+          { componentFolder: "editors", name: "editors" },
+          { componentFolder: "navigation", name: "navigation" },
+          { componentFolder: "htmlEditor", name: "htmlEditor", concurrency: 1 },
           { componentFolder: "form", name: "form - material", theme: 'material.blue.light' },
-          { componentFolder: "htmlEditor", name: "htmlEditor"},
-          { componentFolder: "navigation", name: "navigation (1/4)", indices: "1/4" },
-          { componentFolder: "navigation", name: "navigation (2/4)", indices: "2/4" },
-          { componentFolder: "navigation", name: "navigation (3/4)", indices: "3/4" },
-          { componentFolder: "navigation", name: "navigation (4/4)", indices: "4/4" },
+          { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
+          { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
+          { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
           { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2" },
           { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2" },
           { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2" },
@@ -136,13 +135,13 @@ jobs:
         [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
+        [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
-        [ "${{ matrix.ARGS.quarantineMode }}" == "true" ] && QUARANTINE_MODE="--quarantineMode ${{ matrix.ARGS.quarantineMode }}"
         export TESTCAFE_DASHBOARD_LAYOUT_TESTING_ENABLED=true
         export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI1Zjc4MTc1Ny01NGU0LTQ5ODAtYjhkNi1iMDY1OTM1NGIwYjMiLCJ0b2tlblNlY3JldCI6Ik9wSEhzZG1OVFdxUkdoWWJjY3Z0NWl0ZHd4aDZ2VURUSUVyRjNFUk92Z2FCb2RvQkZLMlNGQlY2L21NM3JIVnQvNHY4UnlqOXoxOW1YR0s4UzhVSzdueWhXb3kxdXZGZ1RWUk9HUkt5MDVUNkw2cTlIcnQrT1pFcjFZcnR3RU1ZTzErWDduQzNxcWI2cGFlL1pmSCtKZHlqZ2NSTG4rMGlOYjROSDdMcjhOTE5UeFQ0Q2tSaWI3dy82cXl0b04yTHBhcFhialJkbG1JejhMTlpEcjFVVXVtUVNuOFVSL2JjQ2NuRnBFcFc0R3BPaWRsa3l3WklCTHN5NHVNZDUxaHNrb1ZGQjJuK1IwZTBiMDVEdTdmZnJKcVByTEdTZHlLVXR1YzRaTFlLZlJlaGkrQmpOTzAyUDlzamdEQ040U0pvbS96SzhUVjRaeEdneVFaQW0yQ2YyZz09In0=
         export TESTCAFE_DASHBOARD_DEVEXTREME_URL=https://devextreme.resolve.sh
         export TESTCAFE_DASHBOARD_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
-        all_args="--concurrency 3 --browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $QUARANTINE_MODE $META_RENOVATION $INDICES $PLATFORM $THEME"
+        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $META_RENOVATION $INDICES $PLATFORM $THEME"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 

@@ -76,21 +76,3 @@ export default async function createWidget(
     })();
   }
 }
-
-export async function disposeWidgets(): Promise<void> {
-  await ClientFunction(() => {
-    const widgetSelector = '.dx-widget';
-    const $elements = $(widgetSelector)
-      .filter((_, element) => $(element).parents(widgetSelector).length === 0);
-    $elements.each((_, element) => {
-      const $widgetElement = $(element);
-      const widgetNames = $widgetElement.data().dxComponents;
-      widgetNames?.forEach((name) => {
-        if ($widgetElement.hasClass('dx-widget')) {
-          ($widgetElement as any)[name]('dispose');
-        }
-      });
-      $widgetElement.empty();
-    });
-  })();
-}

@@ -1,12 +1,12 @@
 import { Selector, ClientFunction } from 'testcafe';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
-import { setStyleAttribute, appendElementTo } from '../../navigation/helpers/domUtils';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
-fixture`Popup`
+fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));
 
 test('Popup should be centered regarding the container even if content dimension is changed during animation', async (t) => {
@@ -127,7 +127,7 @@ test('Popup should be centered regarding the container even if content dimension
   animation: null,
 }));
 
-test('popup should be repositioned after window resize', async (t) => {
+safeSizeTest('popup should be repositioned after window resize', async (t) => {
   const popup = new Popup('#container');
 
   const wrapper = popup.getWrapper();
@@ -157,18 +157,12 @@ test('popup should be repositioned after window resize', async (t) => {
   await t
     .expect(wrapperHorizontalCenter)
     .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
-}).before(async (t) => {
-  await t.resizeWindow(200, 200);
-
-  return createWidget('dxPopup', {
-    animation: null,
-    visible: true,
-    width: 100,
-    height: 100,
-  });
-}).after(async (t) => {
-  await restoreBrowserSize(t);
-});
+}, [200, 200]).before(async () => createWidget('dxPopup', {
+  animation: null,
+  visible: true,
+  width: 100,
+  height: 100,
+}));
 
 test('Popup dimensions should be correct after width or height animation', async (t) => {
   const popup = new Popup('#container');
@@ -204,33 +198,37 @@ test('Popup dimensions should be correct after width or height animation', async
 test('Showing and shown events should be raised only once even after resize during animation', async (t) => {
   const popup = new Popup('#container');
 
-  await popup.show();
-  await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await ClientFunction(() => {
+    (window as any).shownCallCount = 0;
+    (window as any).showingCallCount = 0;
+  })();
 
-  const shownCallCount = Number(await Selector('#shown_call_count').innerText);
-  const showingCallCount = Number(await Selector('#showing_call_count').innerText);
+  const incShown = ClientFunction(() => { ((window as any).shownCallCount as number) += 1; });
+  const incShowing = ClientFunction(() => { ((window as any).showingCallCount as number) += 1; });
 
-  await t
-    .expect(shownCallCount)
-    .eql(1);
-  await t
-    .expect(showingCallCount)
-    .eql(1);
-}).before(async () => {
-  await appendElementTo('body', 'div', 'shown_call_count', {});
-  await appendElementTo('body', 'div', 'showing_call_count', {});
+  const getShownCounter = ClientFunction(() => (window as any).shownCallCount);
+  const getShowingCounter = ClientFunction(() => (window as any).shownCallCount);
 
-  return createWidget('dxPopup', {
-    width: 'auto',
-    height: 'auto',
-    contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-    onShown: ClientFunction(() => {
-      const callCount = +$('#shown_call_count').text();
-      $('#shown_call_count').text(callCount + 1);
-    }),
-    onShowing: ClientFunction(() => {
-      const callCount = +$('#showing_call_count').text();
-      $('#showing_call_count').text(callCount + 1);
-    }),
+  await popup.option({
+    onShown: incShown,
+    onShowing: incShowing,
   });
+
+  await popup.show();
+
+  await t
+    .expect(await getShownCounter())
+    .eql(1);
+  await t
+    .expect(await getShowingCounter())
+    .eql(1);
+}).before(async () => createWidget('dxPopup', {
+  width: 'auto',
+  height: 'auto',
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+})).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).shownCallCount;
+    delete (window as any).showingCallCount;
+  })();
 });

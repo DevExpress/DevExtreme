@@ -1,33 +1,31 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { Item } from '../../../../../js/ui/tabs.d';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
-fixture`Tabs_common`
+fixture.disablePageReloads`Tabs_common`
   .page(url(__dirname, '../../container.html'));
 
-['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  test(`Tabs icon alignment,theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Tabs icon alignment', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`Tabs_items_alignment_,theme=${theme.replace(/\./g, '-')}.png`, '#container'))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+  await testScreenshot(t, takeScreenshot, 'Tabs items alignment.png', { element: '#tabs', shouldTestInCompact: true });
 
-    const dataSource = [
-      { text: 'user' },
-      { text: 'comment', icon: 'comment' },
-      { icon: 'user' },
-      { icon: 'money' },
-    ] as Item[];
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
 
-    return createWidget('dxTabs', { dataSource });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
+  const dataSource = [
+    { text: 'user' },
+    { text: 'comment', icon: 'comment' },
+    { icon: 'user' },
+    { icon: 'money' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource }, true, '#tabs');
 });
