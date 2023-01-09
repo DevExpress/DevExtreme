@@ -9,6 +9,7 @@ function Home() {
       <Link to="/radio-group">Radio Group</Link>
       <Link to="/radio-group-compatible">Radio Group Compatible</Link>
       <Link to="/radio-button">Radio Button</Link>
+      <Link to="/form">Form</Link>
     </div>
   );
 }
