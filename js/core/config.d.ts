@@ -147,4 +147,10 @@ export interface GlobalConfig {
     useLegacyVisibleIndex?: boolean;
 }
 
+/**
+ * @docid
+ * @deprecated Use GlobalConfig instead
+ */
+export interface globalConfig extends GlobalConfig {}
+
 export default config;
