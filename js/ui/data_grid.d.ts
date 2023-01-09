@@ -2321,7 +2321,7 @@ export interface GridBase<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface ColumnCustomizeTextArg {
-  value?: string | number | Date;
+  value?: any;
   valueText?: string;
   target?: string;
   groupInterval?: string | number;
