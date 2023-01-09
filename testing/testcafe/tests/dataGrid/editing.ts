@@ -3,15 +3,14 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 
 fixture.disablePageReloads`Editing`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
@@ -1669,7 +1668,6 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     columns: ['LastName'],
   });
 }).after(async () => {
-  await disposeWidgets();
   await changeTheme('generic.light');
 });
 
@@ -1677,7 +1675,12 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
   // act
+
+  await t
+    .click(Selector('body'), { offsetY: dataGridOffsetBottom + 10 });
+
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
 
@@ -1698,6 +1701,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await changeTheme('material.blue.light');
+
   return createWidget('dxDataGrid', {
     dataSource: [{
       ID: 1,
@@ -1729,7 +1733,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     },
   });
 }).after(async () => {
-  await disposeWidgets();
   await changeTheme('generic.light');
 });
 
@@ -1797,7 +1800,6 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     }],
   });
 }).after(async () => {
-  await disposeWidgets();
   await changeTheme('generic.light');
 });
 
@@ -2037,7 +2039,6 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     }],
   });
 }).after(async () => {
-  await disposeWidgets();
   await ClientFunction(() => {
     delete (window as any).myStore;
   })();

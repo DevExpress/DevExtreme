@@ -1,17 +1,19 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { isMaterial } from '../../../helpers/themeUtils';
 
-fixture`Drawer`
-  .page(url(__dirname, '../../container.html'))
-  .beforeEach(async (t) => {
-    await t.resizeWindow(700, 700);
-  })
-  .afterEach(async (t) => {
-    await restoreBrowserSize(t);
-  });
+const testFixture = () => {
+  if (isMaterial()) {
+    return fixture.disablePageReloads.skip;
+  }
+  return fixture.disablePageReloads;
+};
+
+testFixture()`Drawer`
+  .page(url(__dirname, '../../container.html'));
 
 const openedStateModeConfigs = [] as any[];
 ['overlap', 'shrink', 'push'].forEach((openedStateMode) => {
@@ -21,7 +23,7 @@ const openedStateModeConfigs = [] as any[];
 openedStateModeConfigs.forEach((config) => {
   const getScreenshotName = (testName, selector) => `drawer_${config.openedStateMode}_${config.shading ? 'shading' : 'noShading'}_${testName}_${selector}`;
 
-  test(`Empty, openedStateMode:${config.openedStateMode}, shading:true -> hide()`, async (t) => {
+  safeSizeTest(`Empty, openedStateMode:${config.openedStateMode}, shading:true -> hide()`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     // eslint-disable-next-line @typescript-eslint/no-shadow
     await ClientFunction(({ createDrawer, config }) => {
@@ -50,9 +52,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`ColorBox_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`ColorBox_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     // eslint-disable-next-line @typescript-eslint/no-shadow
     await ClientFunction(({ createDrawer, config }) => {
@@ -77,9 +79,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`DataGrid_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`DataGrid_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -105,9 +107,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`FileManager_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`FileManager_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     // eslint-disable-next-line @typescript-eslint/no-shadow
     await ClientFunction(({ createDrawer, config }) => {
@@ -155,9 +157,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`Menu_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`Menu_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -186,9 +188,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`Menu_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`Menu_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -214,9 +216,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`Menu_outer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`Menu_outer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -245,9 +247,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`SelectBox_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`SelectBox_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -276,9 +278,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`SelectBox_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`SelectBox_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -304,9 +306,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`SelectBox_outer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`SelectBox_outer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -335,9 +337,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`TabPanel_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`TabPanel_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -364,9 +366,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`TextBox_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`TextBox_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -395,9 +397,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`TextBox_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`TextBox_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -423,9 +425,9 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 
-  test(`TreeView_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+  safeSizeTest(`TreeView_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -464,5 +466,5 @@ openedStateModeConfigs.forEach((config) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  });
+  }, [700, 700]);
 });
