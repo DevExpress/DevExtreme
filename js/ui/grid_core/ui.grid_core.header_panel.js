@@ -1,3 +1,5 @@
+// @ts-check
+
 import $ from '../../core/renderer';
 import Toolbar from '../toolbar';
 import { ColumnsView } from './ui.grid_core.columns_view';
@@ -13,7 +15,10 @@ const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
 
 const DEFAULT_TOOLBAR_ITEM_NAMES = ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel'];
 
-const HeaderPanel = ColumnsView.inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.header_panel').HeaderPanel>}
+ */
+const members = {
     _getToolbarItems: function() {
         return [];
     },
@@ -42,7 +47,7 @@ const HeaderPanel = ColumnsView.inherit({
                     if(itemRenderedCallback) {
                         itemRenderedCallback(e);
                     }
-                }
+                },
             }
         };
 
@@ -59,8 +64,9 @@ const HeaderPanel = ColumnsView.inherit({
         return options.toolbarOptions;
     },
 
-    _normalizeToolbarItems(defaultItems, userItems) {
+    _normalizeToolbarItems: function(defaultItems, userItems) {
         defaultItems.forEach(button => {
+            // @ts-expect-error
             if(!DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
                 throw new Error(`Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`);
             }
@@ -77,6 +83,7 @@ const HeaderPanel = ColumnsView.inherit({
         }
 
         if(!isArray) {
+            // @ts-expect-error
             userItems = [userItems];
         }
 
@@ -85,6 +92,7 @@ const HeaderPanel = ColumnsView.inherit({
             defaultButtonsByNames[button.name] = button;
         });
 
+        // @ts-expect-error
         const normalizedItems = userItems.map(button => {
             if(isString(button)) {
                 button = { name: button };
@@ -155,6 +163,7 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     updateToolbarDimensions: function() {
+        // @ts-expect-error
         this._toolbar?.updateDimensions();
     },
 
@@ -205,12 +214,17 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     isVisible: function() {
-        return this._toolbarOptions && this._toolbarOptions.visible;
+        return !!(this._toolbarOptions && this._toolbarOptions.visible);
     },
 
     allowDragging: noop
-});
+};
 
+const HeaderPanel = ColumnsView.inherit(members);
+
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const headerPanelModule = {
     defaultOptions: function() {
         return {

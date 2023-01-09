@@ -1,3 +1,5 @@
+// @ts-check
+
 import { getOuterHeight, getHeight, getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
@@ -104,7 +106,10 @@ function shouldPreventScroll(that) {
     return keyboardController._isVirtualScrolling() ? that.option('focusedRowIndex') === keyboardController.getRowIndex() : false;
 }
 
-const KeyboardNavigationController = core.ViewController.inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.keyboard_navigation').KeyboardNavigationController>}
+ */
+const keyboardNavigationMembers = {
     // #region Initialization
     init: function() {
         this._dataController = this.getController('data');
@@ -154,6 +159,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
                 if(!$element.closest($focusedCell).length) {
                     event.preventDefault();
+                    // @ts-expect-error
                     eventsEngine.trigger($focusedCell, 'focus');
                 }
             }
@@ -165,6 +171,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isFocusedViewCorrect = this._focusedView && this._focusedView.name === rowsView.name;
             let needUpdateFocus = false;
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
+            // @ts-expect-error
             const root = $(domAdapter.getRootNode($rowsView.get && $rowsView.get(0)));
             const $focusedElement = root.find(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
@@ -193,6 +200,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const columnsResizerController = this.getController('columnsResizer');
             const isColumnResizing = !!columnsResizerController && columnsResizerController.isResizing();
             if(!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
+                // @ts-expect-error
                 const targetInsideFocusedView = this._focusedView ? $target.parents().filter(this._focusedView.element()).length > 0 : false;
 
                 !targetInsideFocusedView && this._resetFocusedCell(true);
@@ -806,6 +814,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._focusEditFormCell($cell);
             setTimeout(this._editingController.saveEditData.bind(this._editingController));
         } else {
+            // @ts-expect-error
             eventsEngine.trigger($(target), 'change');
             this._closeEditCell();
 
@@ -997,6 +1006,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             if(!focusedRowEnabled) {
                 activeElementSelector += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';
             }
+            // @ts-expect-error
             element = this.component.$element().find(activeElementSelector).first();
         }
 
@@ -1103,6 +1113,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     .removeAttr('tabindex');
             }
 
+            // @ts-expect-error
             eventsEngine.one($focusElement, 'blur', e => {
                 if(e.relatedTarget) {
                     $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
@@ -1110,6 +1121,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             });
             if(!skipFocusEvent) {
                 this._applyTabIndexToElement($focusElement);
+                // @ts-expect-error
                 eventsEngine.trigger($focusElement, 'focus');
             }
             if(disableFocus) {
@@ -1160,6 +1172,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                             this._focusInteractiveElement.bind(this)($cell);
                         }
                     } else {
+                        // @ts-expect-error
                         eventsEngine.trigger($cell, 'focus');
                     }
                 }
@@ -1259,6 +1272,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(!isUpArrow) {
             that._editorFactory.loseFocus();
             that._applyTabIndexToElement($rowsViewElement);
+            // @ts-expect-error
             eventsEngine.trigger($rowsViewElement, 'focus');
         } else {
             $rowElement = rowsView.getRow(rowIndex - rowIndexOffset);
@@ -1592,9 +1606,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
 
         $input.get(0).select?.();
+        // @ts-expect-error
         eventsEngine.trigger($input, keyDownEvent);
 
         if(!keyDownEvent.isDefaultPrevented()) {
+            // @ts-expect-error
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
                 const timeout = browser.mozilla ? 25 : 0; // T882996
@@ -1602,10 +1618,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     $input.val(editorValue);
 
                     const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
+                    // @ts-expect-error
                     eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
+                    // @ts-expect-error
                     eventsEngine.one($widgetContainer, 'focusout', function() {
+                        // @ts-expect-error
                         eventsEngine.trigger($input, 'change');
                     });
+                    // @ts-expect-error
                     eventsEngine.trigger($input, inputEvent);
                 }, timeout);
 
@@ -1926,7 +1946,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         lastVisibleIndex >= 0 && visibleRowIndex > lastVisibleIndex && this.setFocusedRowIndex(lastVisibleIndex + rowIndexOffset);
     }
-});
+};
+
+const KeyboardNavigationController = core.ViewController.inherit(keyboardNavigationMembers);
 
 /**
 * @name GridBase.registerKeyHandler
@@ -1934,6 +1956,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 * @hidden
 */
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const keyboardNavigationModule = {
     defaultOptions: function() {
         return {
