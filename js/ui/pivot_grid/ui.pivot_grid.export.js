@@ -1,12 +1,12 @@
 import Class from '../../core/class';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { hasWindow } from '../../core/utils/window';
 import { getDefaultAlignment } from '../../core/utils/position';
 import formatHelper from '../../format_helper';
 import localizationNumber from '../../localization/number';
-import { excel as excelExporter, export as exportMethod } from '../../exporter';
+// import { excel as excelExporter, export as exportMethod } from '../../exporter';
 import { prepareItems } from '../grid_core/ui.grid_core.export';
 import { when, Deferred } from '../../core/utils/deferred';
 
@@ -15,16 +15,25 @@ const DEFAUL_COLUMN_WIDTH = 100;
 
 export const ExportController = {
     exportToExcel: function() {
-        const that = this;
+        // const that = this;
 
-        exportMethod(that.getDataProvider(), {
-            fileName: that.option('export.fileName'),
-            format: 'EXCEL',
-            rtlEnabled: that.option('rtlEnabled'),
-            exportingAction: that._actions.onExporting,
-            exportedAction: that._actions.onExported,
-            fileSavingAction: that._actions.onFileSaving
-        }, excelExporter.getData);
+        // exportMethod(that.getDataProvider(), {
+        //     fileName: that.option('export.fileName'),
+        //     format: 'EXCEL',
+        //     rtlEnabled: that.option('rtlEnabled'),
+        //     exportingAction: that._actions.onExporting,
+        //     exportedAction: that._actions.onExported,
+        //     fileSavingAction: that._actions.onFileSaving
+        // }, excelExporter.getData);
+
+        const onExporting = this.getAction('onExporting');
+        const eventArgs = {
+            rtlEnabled: this.option('rtlEnabled'),
+            fileName: this.option('export.fileName'),
+            cancel: false,
+        };
+
+        isFunction(onExporting) && onExporting(eventArgs);
     },
 
     _getLength: function(items) {

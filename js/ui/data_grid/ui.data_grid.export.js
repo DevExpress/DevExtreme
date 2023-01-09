@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
 import dataGridCore from './ui.data_grid.core';
 import { prepareItems } from '../grid_core/ui.grid_core.export';
-import { export as clientExport, excel } from '../../exporter';
+// import { export as clientExport, excel } from '../../exporter';
 import { format } from '../../core/utils/string';
 import messageLocalization from '../../localization/message';
 
@@ -622,27 +622,28 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
 
         return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    exportToExcel: function(selectedRowsOnly) {
-        const that = this;
+    // exportToExcel: function(selectedRowsOnly) {
+    //     const that = this;
 
-        that._selectionOnly = selectedRowsOnly;
+    //     that._selectionOnly = selectedRowsOnly;
 
-        clientExport(that.component.getDataProvider(), {
-            fileName: that.option('export.fileName'),
-            format: 'xlsx',
-            selectedRowsOnly: !!selectedRowsOnly,
-            autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
-            rtlEnabled: that.option('rtlEnabled'),
-            exportingAction: that.getAction('onExporting'),
-            exportedAction: that.getAction('onExported'),
-            fileSavingAction: that.getAction('onFileSaving')
-        }, excel.getData);
-    },
+    //     clientExport(that.component.getDataProvider(), {
+    //         fileName: that.option('export.fileName'),
+    //         format: 'xlsx',
+    //         selectedRowsOnly: !!selectedRowsOnly,
+    //         autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
+    //         rtlEnabled: that.option('rtlEnabled'),
+    //         exportingAction: that.getAction('onExporting'),
+    //         exportedAction: that.getAction('onExported'),
+    //         fileSavingAction: that.getAction('onFileSaving')
+    //     }, excel.getData);
+    // },
     exportTo: function(selectedRowsOnly, format) {
         this._selectionOnly = selectedRowsOnly;
 
         const onExporting = this.getAction('onExporting');
         const eventArgs = {
+            rtlEnabled: this.option('rtlEnabled'),
             selectedRowsOnly: !!selectedRowsOnly,
             format,
             fileName: this.option('export.fileName'),
@@ -653,7 +654,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     },
 
     publicMethods: function() {
-        return ['getDataProvider', 'exportToExcel'];
+        return ['getDataProvider'];
     },
 
     selectionOnly: function(value) {
@@ -781,13 +782,12 @@ dataGridCore.registerModule('export', {
                     const items = [];
 
                     formats.forEach((formatType) => {
-                        let exportMethod = 'exportTo';
+                        const exportMethod = 'exportTo';
                         let formatName = formatType.toUpperCase();
                         let exportAllIcon = DATAGRID_EXPORT_ICON;
                         const exportSelectedIcon = DATAGRID_EXPORT_SELECTED_ICON;
 
                         if(formatType === 'xlsx') {
-                            exportMethod = 'exportToExcel';
                             formatName = 'Excel';
                             exportAllIcon = DATAGRID_EXPORT_EXCEL_ICON;
                         }
