@@ -34,7 +34,7 @@ declare function config(config: GlobalConfig): void;
  * @public
  * @type object
  */
-export interface GlobalConfig {
+export type GlobalConfig = {
     /**
      * @docid
      * @default "."
