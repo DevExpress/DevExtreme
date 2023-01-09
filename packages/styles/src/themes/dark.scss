@@ -1,3 +1,5 @@
-:root, .dx-theme-dark {
-    --dx-background-color: gray
+@import "dark-scoped.scss";
+
+:root {
+@extend .dx-theme-dark
 }
