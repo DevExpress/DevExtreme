@@ -44,6 +44,12 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
+ * @public
+ * @deprecated Use /common/SliderValueChangeMode instead
+ */
+export type ValueChangeMode = SliderValueChangeMode;
+
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
