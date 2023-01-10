@@ -20806,10 +20806,6 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
-    /**
-     * @deprecated Use /common/SliderValueChangeMode instead
-     */
-    export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
   }
   /**
    * [descr:dxSliderBase]

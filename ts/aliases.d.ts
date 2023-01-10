@@ -450,6 +450,8 @@ declare module DevExpress.ui {
     export type ValidationRule = DevExpress.common.ValidationRule;
     /** @deprecated Use DevExpress.common.ValidationRuleType instead */
     export type ValidationRuleType = DevExpress.common.ValidationRuleType;
+    /** @deprecated Use DevExpress.common.SliderValueChangeMode instead */
+    export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
 }
 
 declare module DevExpress.viz {
