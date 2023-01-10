@@ -44,7 +44,6 @@ test('it should correctly load items with post processing', async (t) => {
     height: 600,
     width: 800,
   },
-  true,
 ));
 
 declare global {
@@ -89,7 +88,6 @@ const getWindow = ClientFunction(() => window.testOptions);
       views: ['week'],
       currentView: 'week',
     },
-    true,
   ));
 
   test(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async (t) => {
@@ -126,6 +124,5 @@ const getWindow = ClientFunction(() => window.testOptions);
       views: ['week'],
       currentView: 'week',
     },
-    true,
   ));
 });

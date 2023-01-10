@@ -63,7 +63,7 @@ testFixture()`Scrollable_visibility_integration`
             useSimulatedScrollbar,
             direction,
             showScrollbar: 'always',
-          }, false, '#scrollable');
+          }, '#scrollable');
         });
       });
     });

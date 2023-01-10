@@ -55,7 +55,7 @@ test('Buttons render', async (t) => {
               type,
               rtlEnabled,
               icon,
-            }, false, `#${id}`);
+            }, `#${id}`);
           }
         }
       }

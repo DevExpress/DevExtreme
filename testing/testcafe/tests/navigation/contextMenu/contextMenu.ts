@@ -44,7 +44,7 @@ test('Context menu should be shown in the same position when item was added in r
         }, 1000);
       }
     },
-  }, true, '#contextMenu');
+  }, '#contextMenu');
 }).after(async () => {
   await ClientFunction(() => {
     delete (window as any).isItemAdded;

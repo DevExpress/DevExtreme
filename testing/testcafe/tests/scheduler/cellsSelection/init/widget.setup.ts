@@ -17,7 +17,7 @@ export const createScheduler = async (options = {}): Promise<void> => {
       dataSource: [{ id: 0 }, { id: 1 }],
     }],
     ...options,
-  }, true);
+  });
 };
 
 export const selectCells = async (

@@ -58,5 +58,5 @@ test('ContextMenu items render', async (t) => {
     cssClass: 'custom-class',
     items: menuItems,
     target: 'body',
-  }, true, '#contextMenu');
+  }, '#contextMenu');
 });

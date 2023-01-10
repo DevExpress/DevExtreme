@@ -39,6 +39,6 @@ fixture.disablePageReloads`HtmlEditor`
       toolbar: {
         items: ['bold', 'color'],
       },
-    }, false, '#otherContainer');
+    }, '#otherContainer');
   });
 });

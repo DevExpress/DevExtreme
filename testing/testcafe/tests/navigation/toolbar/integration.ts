@@ -89,6 +89,6 @@ fixture.disablePageReloads`Toolbar_integration_with_DataGrid`
       },
     };
 
-    await createWidget('dxDataGrid', options, false, '#container');
+    await createWidget('dxDataGrid', options, '#container');
   });
 });
