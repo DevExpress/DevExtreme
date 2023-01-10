@@ -44,7 +44,7 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
 
   await createWidget('dxDraggable', {
     group: 'appointmentsGroup',
-  }, true, '#drag-container');
+  }, '#drag-container');
 
   return createWidget('dxScheduler', {
     dataSource: [{
@@ -79,7 +79,7 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
         e.component.deleteAppointment(e.itemData);
       },
     },
-  }, true, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });
 
 test('After drag over component area, shouldn\'t called onAppointment* data events and appointment shouldn\'t change position', async (t) => {
@@ -135,5 +135,5 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     startDayHour: 9,
     height: 600,
     width: 500,
-  }, true, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });

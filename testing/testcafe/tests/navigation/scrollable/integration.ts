@@ -39,6 +39,6 @@ fixture.disablePageReloads`Integration_DataGrid`
         { dataField: 'field2' },
       ],
       hoverStateEnabled: true,
-    }, false, '#grid');
+    }, '#grid');
   });
 });

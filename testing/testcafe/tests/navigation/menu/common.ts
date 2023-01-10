@@ -72,5 +72,5 @@ test('Menu items render', async (t) => {
     { text: 'coffee', icon: 'coffee' },
   ] as Item[];
 
-  return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, true, '#menu');
+  return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
 });

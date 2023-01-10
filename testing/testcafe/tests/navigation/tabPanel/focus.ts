@@ -43,7 +43,7 @@ test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', asy
 
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2'],
-  }, true, '#tabPanel');
+  }, '#tabPanel');
 });
 
 test('[{0: selected}] -> click to multiView -> click to external button', async () => {
@@ -73,7 +73,7 @@ test('[{0: selected}] -> click to multiView -> click to external button', async 
 
   return createWidget('dxTabPanel', {
     items: ['Item 1'],
-  }, true, '#tabPanel');
+  }, '#tabPanel');
 });
 
 test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> click to external button', async () => {
@@ -137,7 +137,7 @@ test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
 
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2', 'Item 3'],
-  }, true, '#tabPanel');
+  }, '#tabPanel');
 });
 
 test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click to external button', async () => {
@@ -189,7 +189,7 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
 
   return createWidget('dxTabPanel', {
     items: ['Item 1', 'Item 2'],
-  }, true, '#tabPanel');
+  }, '#tabPanel');
 });
 
 test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', async () => {
@@ -256,5 +256,5 @@ test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
 
   return createWidget('dxTabPanel', {
     items: ['Item 1'],
-  }, true, '#tabPanel');
+  }, '#tabPanel');
 });

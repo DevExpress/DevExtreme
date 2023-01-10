@@ -28,22 +28,22 @@ fixture.disablePageReloads`CheckBox`
     await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
     await appendElementTo('#container', 'div', 'checked');
-    await createWidget('dxCheckBox', { value: true, text: 'checked' }, false, '#checked');
+    await createWidget('dxCheckBox', { value: true, text: 'checked' }, '#checked');
 
     await appendElementTo('#container', 'div', 'unchecked');
-    await createWidget('dxCheckBox', { value: false, text: 'unchecked' }, false, '#unchecked');
+    await createWidget('dxCheckBox', { value: false, text: 'unchecked' }, '#unchecked');
 
     await appendElementTo('#container', 'div', 'indeterminate');
-    await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate' }, false, '#indeterminate');
+    await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate' }, '#indeterminate');
 
     // rtl
     await appendElementTo('#container', 'div', 'checkedRTL');
-    await createWidget('dxCheckBox', { value: true, text: 'checked', rtlEnabled: true }, false, '#checkedRTL');
+    await createWidget('dxCheckBox', { value: true, text: 'checked', rtlEnabled: true }, '#checkedRTL');
 
     await appendElementTo('#container', 'div', 'uncheckedRTL');
-    await createWidget('dxCheckBox', { value: false, text: 'unchecked', rtlEnabled: true }, false, '#uncheckedRTL');
+    await createWidget('dxCheckBox', { value: false, text: 'unchecked', rtlEnabled: true }, '#uncheckedRTL');
 
     await appendElementTo('#container', 'div', 'indeterminateRTL');
-    await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, false, '#indeterminateRTL');
+    await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, '#indeterminateRTL');
   });
 });

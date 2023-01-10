@@ -49,7 +49,7 @@ test('Control should be render top part of recurrent long appointment in day vie
     startDayHour: 2,
     endDayHour: 22,
     height: 600,
-  }, true);
+  });
 });
 
 test('Control should be render top part of recurrent long appointment in week view(T1086079)', async (t) => {
@@ -83,5 +83,5 @@ test('Control should be render top part of recurrent long appointment in week vi
     startDayHour: 2,
     endDayHour: 22,
     height: 600,
-  }, true);
+  });
 });

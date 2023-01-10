@@ -41,6 +41,5 @@ test('it should correctly render virtual table if scheduler sizes are set in % (
         mode: 'virtual',
       },
     },
-    true,
   );
 });
