@@ -466,5 +466,3 @@ declare module DevExpress.viz {
     /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
     export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
 }
-
-// v23.1
