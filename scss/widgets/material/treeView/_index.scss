@@ -7,6 +7,7 @@
 @use "../../base/treeView" as *;
 @use "../../base/icons" as *;
 @use "../checkBox/colors" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 
@@ -18,7 +19,19 @@ $material-treeview-container-padding:
   $material-treeview-border-padding
   $material-treeview-container-with-border-offset;
 
-$material-treeview-search-editor-height: 33px;
+// $material-treeview-search-editor-height: null !default;
+
+// @if $size == "default" {
+//   $material-treeview-search-editor-height: 48px;
+// }
+
+// @else if $size == "compact" {
+//   $material-treeview-search-editor-height: 33px;
+// }
+
+// $material-treeview-search-editor-height: 33px;
+// $material-treeview-search-editor-height: 48px;
+$material-treeview-search-editor-height: $material-filled-texteditor-input-height;
 $material-select-all-item-left-padding: 26px;
 $material-treeview-node-offset: $material-treeview-toggle-item-width;
 $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5;

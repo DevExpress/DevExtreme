@@ -47,6 +47,11 @@ $material-filled-texteditor-input-padding:
   $material-filled-texteditor-input-horizontal-padding
   $material-filled-texteditor-input-bottom-padding !default;
 
+$material-filled-texteditor-input-height:
+  $material-texteditor-font-size * $material-base-font-em-squere-height-factor +
+  $material-filled-texteditor-input-top-padding +
+  $material-filled-texteditor-input-bottom-padding;
+
 $material-standard-texteditor-input-padding:
   $material-standard-texteditor-input-top-padding
   $material-base-standard-texteditor-input-horizontal-padding
