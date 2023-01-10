@@ -424,6 +424,10 @@ declare module DevExpress.common.charts {
 }
 
 // v22.2
+declare module DevExpress {
+    /** @deprecated Use DevExpress.GlobalConfig instead */
+    export type globalConfig = DevExpress.common.GlobalConfig;
+}
 
 declare module DevExpress.ui {
     /** @deprecated Use DevExpress.common.AsyncRule instead */
