@@ -423,13 +423,6 @@ declare module DevExpress.common.charts {
     export type SummaryType = DevExpress.common.grids.SummaryType;
 }
 
-// v22.2
-
-declare module DevExpress {
-    /** @deprecated Use DevExpress.GlobalConfig instead */
-    export type globalConfig = DevExpress.common.GlobalConfig;
-}
-
 declare module DevExpress.ui {
     /** @deprecated Use DevExpress.common.AsyncRule instead */
     export type AsyncRule = DevExpress.common.AsyncRule;
@@ -466,4 +459,11 @@ declare module DevExpress.viz {
     export type VisualRange = DevExpress.common.charts.VisualRange
     /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
     export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
+}
+
+// v23.1
+
+declare module DevExpress {
+    /** @deprecated Use DevExpress.GlobalConfig instead */
+    export type globalConfig = DevExpress.common.GlobalConfig;
 }
