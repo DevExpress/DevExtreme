@@ -722,7 +722,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
     _validateRange: function(start, end) {
         const ensureValueInvalid = value => _isDefined(value) && !this._axis.getTranslator().isValid(value);
 
-        if(this._dataIsReady() && (valueDefinedAndNotValid(start) || valueDefinedAndNotValid(end))) {
+        if(this._dataIsReady() && (ensureValueInvalid(start) || ensureValueInvalid(end))) {
             this._incidentOccurred('E2203');
         }
     },
