@@ -24,7 +24,7 @@ const createScheduler = async (
     currentView: view,
     resources: resourcesValue,
     height: 600,
-  }, true);
+  });
 };
 
 const resources = [{

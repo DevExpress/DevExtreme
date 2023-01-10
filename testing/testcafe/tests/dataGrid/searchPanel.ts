@@ -48,5 +48,5 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
           .appendTo(container);
       },
     },
-  }, true);
+  });
 });

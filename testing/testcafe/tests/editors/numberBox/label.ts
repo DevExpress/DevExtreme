@@ -33,11 +33,11 @@ stylingModes.forEach((stylingMode) => {
     await createWidget('dxNumberBox', {
       ...componentOption,
       value: 'text',
-    }, true, '#numberBox1');
+    }, '#numberBox1');
 
     await createWidget('dxNumberBox', {
       ...componentOption,
       value: 123,
-    }, true, '#numberBox2');
+    }, '#numberBox2');
   });
 });

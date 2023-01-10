@@ -20,4 +20,4 @@ test('click on indicator item should change selected item', async (t) => {
   height: 300,
   showIndicator: true,
   items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
-}, true));
+}));

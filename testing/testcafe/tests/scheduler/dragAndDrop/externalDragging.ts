@@ -35,11 +35,11 @@ test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async
     onDragStart(e) {
       e.itemData = e.fromData;
     },
-  }, false, '#group');
+  }, '#group');
 
   await createWidget('dxDraggable', {
     group: 'draggableGroup',
-  }, false, '#drag-area');
+  }, '#drag-area');
 
   return createScheduler({
     views: ['week'],

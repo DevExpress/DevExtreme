@@ -39,7 +39,7 @@ test('Subject and description fields should be empty after showing popup on empt
       endDate: new Date(2017, 4, 22, 11, 30),
     },
   ],
-}, true));
+}));
 
 test('Custom form shouldn\'t throw exception, after second show appointment form(T812654)', async (t) => {
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';
@@ -96,7 +96,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
       endDate: new Date(2017, 4, 22, 11, 30),
     },
   ],
-}, true));
+}));
 
 test('Appointment should have correct form data on consecutive shows (T832711)', async (t) => {
   const APPOINTMENT_TEXT = 'Google AdWords Strategy';
@@ -137,7 +137,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
     allDay: true,
   }],
   height: 580,
-}, true));
+}));
 
 test('From elements for disabled appointments should be read only (T835731)', async (t) => {
   const APPOINTMENT_TEXT = 'Install New Router in Dev Room';

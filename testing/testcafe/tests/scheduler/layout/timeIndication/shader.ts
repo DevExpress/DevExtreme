@@ -44,7 +44,7 @@ const createScheduler = async (
     }],
     shadeUntilCurrentTime: true,
     ...additionalProps,
-  }, true);
+  });
 };
 
 [false, true].forEach((crossScrollingEnabled) => {

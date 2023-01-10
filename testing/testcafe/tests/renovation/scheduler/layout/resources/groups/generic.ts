@@ -32,7 +32,7 @@ const createScheduler = async (
     resources: resourceDataSource,
     groups: ['priorityId'],
     height: 700,
-  }, true);
+  });
 };
 
 ['vertical', 'horizontal'].forEach((groupOrientation) => {

@@ -32,5 +32,5 @@ test('Header cells should be aligned with date-table cells in timeline-month whe
     height: 600,
     views: ['timelineMonth'],
     crossScrollingEnabled: true,
-  }, true);
+  });
 });

@@ -49,5 +49,5 @@ test('appointmentTooltipTemplate layout should be rendered right', async (t, { s
       return result;
     }),
     height: 600,
-  }, true);
+  });
 });
