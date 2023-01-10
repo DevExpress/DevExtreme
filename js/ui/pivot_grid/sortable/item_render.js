@@ -3,8 +3,7 @@ import { each } from '../../../core/utils/iterator';
 import $ from '../../../core/renderer';
 import { SortableConst } from './const';
 
-
-function getTreeListItem($sourceItem) {
+function getTreeViewItem($sourceItem) {
     return $sourceItem
         .clone()
         .addClass(SortableConst.classes.areaBox)
@@ -15,7 +14,7 @@ function getAreaBoxItem($sourceItem, target) {
     const $item = $sourceItem.clone();
     if(target === SortableConst.targets.drag) {
         each($sourceItem, (idx, sourceItem) => {
-            const width = parseInt(getOuterWidth(sourceItem), 10) + SortableConst.IEFieldWidthCorrection;
+            const width = parseInt(getOuterWidth(sourceItem), 10);
             $item.eq(idx).css('width', width);
         });
     }
@@ -32,14 +31,14 @@ function getDefaultItem($sourceItem) {
 
 function getItem($sourceItem, target) {
     const isAreaBox = $sourceItem.hasClass(SortableConst.classes.areaBox);
-    const isTreeList = $sourceItem.attr(SortableConst.attrs.treeListItem);
+    const isTreeList = $sourceItem.attr(SortableConst.attrs.treeViewItem);
 
     if(isAreaBox) {
         return getAreaBoxItem($sourceItem, target);
     }
 
     if(isTreeList) {
-        return getTreeListItem($sourceItem);
+        return getTreeViewItem($sourceItem);
     }
 
     return getDefaultItem($sourceItem);

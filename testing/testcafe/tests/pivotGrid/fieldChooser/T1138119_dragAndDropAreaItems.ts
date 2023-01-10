@@ -3,6 +3,7 @@ import { ClientFunction } from 'testcafe';
 import { changeTheme } from '../../../helpers/changeTheme';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import PivotGrid from '../../../model/pivotGrid';
 
 const disableMouseUpEvent = ClientFunction(() => {
@@ -37,19 +38,19 @@ test('Drag-n-drop the tree view item in all directions', async (t) => {
   await disableMouseUpEvent();
 
   await t.drag(treeView.getNode(), 0, -30, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_tree-item_dnd_top', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_top.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await t.drag(treeView.getNode(), 30, 0, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_tree-item_dnd_right', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_right.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await t.drag(treeView.getNode(), 0, 30, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_tree-item_dnd_bottom', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_bottom.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await t.drag(treeView.getNode(), -30, 0, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_tree-item_dnd_left', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_left.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await enableMouseUpEvent();
@@ -94,19 +95,19 @@ test('Drag-n-drop the row area item in all directions', async (t) => {
   await disableMouseUpEvent();
 
   await t.drag(fieldChooser.getRowAreaItem(), 0, -30, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_row-area-item_dnd_top', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_top.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await t.drag(fieldChooser.getRowAreaItem(), 30, 0, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_row-area-item_dnd_right', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_right.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await t.drag(fieldChooser.getRowAreaItem(), 0, 30, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_row-area-item_dnd_bottom', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_bottom.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await t.drag(fieldChooser.getRowAreaItem(), -30, 0, DRAG_MOUSE_OPTIONS);
-  await takeScreenshot('field-chooser_row-area-item_dnd_left', fieldChooser.element);
+  await testScreenshot(t, takeScreenshot, 'field-chooser_row-area-item_dnd_left.png', { element: fieldChooser.element });
   await t.click(fieldChooser.element);
 
   await enableMouseUpEvent();

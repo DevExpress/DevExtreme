@@ -91,11 +91,6 @@ function getScrollable(container) {
     return container.find('.dx-scrollable').dxScrollable('instance');
 }
 
-function configureTreeViewScrollable(treeView) {
-    const treeViewScrollable = treeView.getScrollable();
-    treeViewScrollable.option('useNative', false);
-}
-
 const FieldChooser = BaseFieldChooser.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -450,10 +445,11 @@ const FieldChooser = BaseFieldChooser.inherit({
             expandNodesRecursive: false,
             searchEnabled: that.option('allowSearch'),
             searchTimeout: that.option('searchTimeout'),
+            useNativeScrolling: false,
             itemTemplate: function(itemData, itemIndex, itemElement) {
                 const $item = $('<div>')
                     .toggleClass('dx-area-field', !itemData.items)
-                    .attr(SortableConst.attrs.treeListItem, true)
+                    .attr(SortableConst.attrs.treeViewItem, true)
                     .data('field', itemData.field)
                     .appendTo(itemElement);
 
@@ -522,7 +518,6 @@ const FieldChooser = BaseFieldChooser.inherit({
                 });
             }
         });
-        configureTreeViewScrollable(treeView);
 
         const dataChanged = function() {
             let scrollable = getScrollable(container);
@@ -606,7 +601,6 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     resetTreeView: function() {
         const treeView = this.$element().find('.dx-treeview').dxTreeView('instance');
-        configureTreeViewScrollable(treeView);
 
         if(treeView) {
             treeView.option('searchValue', '');

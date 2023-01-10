@@ -1,5 +1,4 @@
 export const SortableConst = {
-    IEFieldWidthCorrection: 1,
     targets: {
         drag: 'drag',
     },
@@ -10,6 +9,6 @@ export const SortableConst = {
         widget: 'dx-widget',
     },
     attrs: {
-        treeListItem: 'tree-list-item'
+        treeViewItem: 'tree-view-item'
     },
 };
