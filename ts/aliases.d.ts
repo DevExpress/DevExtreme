@@ -267,11 +267,6 @@ declare module DevExpress.ui {
 
 // v22.1
 
-declare module DevExpress {
-    /** @deprecated Use DevExpress.GlobalConfig instead */
-    export type globalConfig = DevExpress.common.GlobalConfig;
-}
-
 declare module DevExpress.ui {
     /** @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution. */
     export type GridBase<TRowData = any, TKey = any> = DevExpress.common.grids.GridBase<TRowData, TKey>;
@@ -426,6 +421,12 @@ declare module DevExpress.common.charts {
     export type StateStoreType = DevExpress.common.grids.StateStoreType;
     /** @deprecated Use DevExpress.common.grids.SummaryType instead */
     export type SummaryType = DevExpress.common.grids.SummaryType;
+}
+
+// v22_1
+declare module DevExpress {
+    /** @deprecated Use DevExpress.GlobalConfig instead */
+    export type globalConfig = DevExpress.common.GlobalConfig;
 }
 
 declare module DevExpress.ui {
