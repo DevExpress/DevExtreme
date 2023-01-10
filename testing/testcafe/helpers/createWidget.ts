@@ -54,9 +54,12 @@ export type WidgetName =
 export default async function createWidget(
   widgetName: WidgetName,
   options: unknown,
-  disableAnimation = false,
   selector = '#container',
 ): Promise<void> {
+  await ClientFunction(() => {
+    (window as any).DevExpress.fx.off = true;
+  })();
+
   await ClientFunction(() => {
     const widgetOptions = typeof options === 'function' ? options() : options;
     (window as any).widget = $(`${selector}`)[widgetName](widgetOptions)[widgetName]('instance');
@@ -69,10 +72,4 @@ export default async function createWidget(
               selector,
             },
   })();
-
-  if (disableAnimation) {
-    await ClientFunction(() => {
-      (window as any).DevExpress.fx.off = true;
-    })();
-  }
 }

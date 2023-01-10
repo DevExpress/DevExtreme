@@ -24,4 +24,4 @@ test('Selection should work correctly with all-day panel appointments', async (t
     allDay: true,
     text: 'Appointment',
   }],
-}, true));
+}));

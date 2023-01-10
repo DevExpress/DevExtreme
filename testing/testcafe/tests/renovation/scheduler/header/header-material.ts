@@ -80,5 +80,4 @@ test('The toolbar should not display if the config is empty', async (t, { platfo
     height: 580,
     toolbar: [],
   },
-  true,
 ));

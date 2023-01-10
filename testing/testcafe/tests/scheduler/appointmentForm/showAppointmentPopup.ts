@@ -27,7 +27,7 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
   currentView: 'week',
   currentDate: new Date(2021, 2, 25).toISOString(),
   height: 600,
-}, true));
+}));
 
 test('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -58,5 +58,5 @@ test('Show appointment popup if deffereRendering is false (T1069753)', async (t)
     startDayHour: 9,
     endDayHour: 12,
     width: 400,
-  }, true);
+  });
 });

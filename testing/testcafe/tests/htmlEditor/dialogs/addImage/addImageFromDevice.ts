@@ -66,7 +66,7 @@ test('Image from device should be inserted', async (t) => {
       tabs: ['file'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });
 
 test('Image should be validated and inserted from device', async (t) => {
@@ -136,5 +136,5 @@ test('Image should be validated and inserted from device', async (t) => {
       },
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });

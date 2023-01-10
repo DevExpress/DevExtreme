@@ -28,7 +28,7 @@ const createScheduler = async (
     currentDate: new Date(2020, 6, 15),
     height: 600,
     ...additionalProps,
-  }, true);
+  });
 };
 
 [false, true].forEach((crossScrollingEnabled) => {

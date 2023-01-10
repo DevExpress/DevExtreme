@@ -49,4 +49,4 @@ test('message position is right (T1020449)', async (t) => {
       useSubmitBehavior: true,
     },
   }],
-}, true));
+}));

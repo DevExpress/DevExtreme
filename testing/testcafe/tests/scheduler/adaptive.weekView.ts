@@ -16,7 +16,7 @@ const createScheduler = async (data, width = '100%'): Promise<void> => {
     startDayHour: 9,
     height: 600,
     width,
-  }, true);
+  });
 };
 
 const sampleData = [

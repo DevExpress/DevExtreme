@@ -38,4 +38,4 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
   startDayHour: 9,
   height: 600,
   recurrenceEditMode: 'series',
-}, true));
+}));

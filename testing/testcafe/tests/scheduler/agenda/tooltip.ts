@@ -32,5 +32,5 @@ test('Tooltip\'s date should be equal to date of current appointment(T1037028)',
     currentView: 'agenda',
     currentDate: new Date(2021, 1, 1),
     height: 600,
-  }, true);
+  });
 });

@@ -91,7 +91,7 @@ stylingModes.forEach((stylingMode) => {
                 labelMode,
                 stylingMode,
                 rtlEnabled,
-              }, false, `#${id}`);
+              }, `#${id}`);
             }
           }
         }

@@ -51,7 +51,6 @@ test('it should skip weekend days in workWeek', async (t) => {
     currentDate: new Date(2021, 3, 5),
     height: 300,
   },
-  true,
 ));
 
 test('it should skip weekend days in timelineWorkWeek', async (t) => {
@@ -85,6 +84,5 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
       currentView: 'timelineWorkWeek',
       currentDate: new Date(2021, 3, 2),
     },
-    true,
   );
 });

@@ -29,7 +29,7 @@ const createScheduler = async (
     startDayHour: 0,
     endDayHour: 3,
     ...additionalProps,
-  }, true);
+  });
 };
 
 test('Virtual scrolling layout in scheduler views', async (t) => {

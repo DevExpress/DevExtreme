@@ -31,7 +31,7 @@ fixture.disablePageReloads.skip('Scheduler: Material theme and all-day panel');
       views: ['week'],
       currentView: 'week',
       height: 500,
-    }, true);
+    });
   })
     .after(async (t) => {
       await restoreBrowserSize(t);

@@ -37,8 +37,8 @@ stylingModes.forEach((stylingMode) => {
       await appendElementTo('#container', 'div', 'lookup1', { });
       await appendElementTo('#container', 'div', 'lookup2', { });
 
-      await createWidget('dxLookup', { ...componentOption }, true, '#lookup1');
-      await createWidget('dxLookup', { ...componentOption }, true, '#lookup2');
+      await createWidget('dxLookup', { ...componentOption }, '#lookup1');
+      await createWidget('dxLookup', { ...componentOption }, '#lookup2');
     });
   });
 });

@@ -36,7 +36,7 @@ safeSizeTest('Validation Message position should be correct after change visibil
   await createWidget('dxTextBox', {
     value: 'a',
     validationMessageMode: 'always',
-  }, true, '#textbox');
+  }, '#textbox');
 
   return createWidget('dxValidator', {
     validationRules: [
@@ -44,5 +44,5 @@ safeSizeTest('Validation Message position should be correct after change visibil
         type: 'required',
       },
     ],
-  }, true, '#textbox');
+  }, '#textbox');
 });

@@ -73,7 +73,7 @@ test('Keyboard navigation should work then tagBox is focused or list is focused'
   showSelectionControls: true,
   selectionMode: 'all',
   applyValueMode: 'useButtons',
-}, true));
+}));
 
 test('Select all checkbox should be focused by tab and closed by escape (T389453)', async (t) => {
   const tagBox = new TagBox('#container');
@@ -121,7 +121,7 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
   showSelectionControls: true,
   selectionMode: 'all',
   applyValueMode: 'useButtons',
-}, true));
+}));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

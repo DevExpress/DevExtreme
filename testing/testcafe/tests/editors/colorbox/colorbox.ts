@@ -23,5 +23,5 @@ test('Colorbox should display full placeholder', async (t) => {
   return createWidget('dxColorBox', {
     width: '100%',
     placeholder: 'I am a very long placeholder',
-  }, true, '#colorBox');
+  }, '#colorBox');
 });
