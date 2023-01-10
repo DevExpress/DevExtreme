@@ -116,9 +116,9 @@ export function FormItem({ name, children }: FormItemProps) {
     };
     return reduceChildrenByTypes(children, typesToSectionMapping);
   }, [children]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rulesToCheck = useMemo(() => (sections['rules'].map((rule) => ({ message: (rule as any).props.message, validate: (rule as any).props.validate }))), [sections]);
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rulesToCheck: Rule[] = sections['rules'].map((rule) => ({ message: (rule as any).props.message, validate: (rule as any).props.validate }));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formContext?.validate((sections['editor'] as any)[0].props.value, rulesToCheck, name);
   }, [children]);
