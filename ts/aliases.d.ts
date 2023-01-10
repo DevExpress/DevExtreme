@@ -423,7 +423,7 @@ declare module DevExpress.common.charts {
     export type SummaryType = DevExpress.common.grids.SummaryType;
 }
 
-// v22_1
+// v22.2
 declare module DevExpress {
     /** @deprecated Use DevExpress.GlobalConfig instead */
     export type globalConfig = DevExpress.common.GlobalConfig;
