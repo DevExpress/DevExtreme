@@ -466,3 +466,10 @@ declare module DevExpress.viz {
     /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
     export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
 }
+
+// v23.1
+
+declare module DevExpress.ui.dxSlider {
+    /** @deprecated Use DevExpress.common.SliderValueChangeMode instead */
+    export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
+}
