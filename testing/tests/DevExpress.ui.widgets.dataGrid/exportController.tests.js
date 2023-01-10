@@ -2345,6 +2345,7 @@ QUnit.module('Export menu', {
                 format,
                 selectedRowsOnly: false,
                 fileName: 'DataGrid',
+                rtlEnabled: false,
             }, 'called with selectedOnly=false');
 
             assert.deepEqual(onExporting.getCall(1).args[0], {
@@ -2352,6 +2353,7 @@ QUnit.module('Export menu', {
                 format,
                 selectedRowsOnly: true,
                 fileName: 'DataGrid',
+                rtlEnabled: false,
             }, 'called with selectedOnly=true');
         });
     });
@@ -2756,7 +2758,7 @@ QUnit.module('Export menu', {
         dropDownButton.open();
         const $menuItems = $('.dx-list-item-content');
         const _exportToExcel = this.headerPanel._exportController.exportToExcel;
-        this.headerPanel._exportController.exportToExcel = function() {
+        this.headerPanel._exportController.exportTo = function() {
             exportToCalled = true;
         };
 
