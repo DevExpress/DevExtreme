@@ -44,7 +44,6 @@ test('it should correctly load items with post processing', async (t) => {
     height: 600,
     width: 800,
   },
-  true,
 ));
 
 declare global {
