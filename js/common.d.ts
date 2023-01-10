@@ -376,12 +376,6 @@ export type GlobalConfig = {
 };
 
 /**
-* @namespace DevExpress.common
-* @deprecated Use GlobalConfig instead
-*/
-export type globalConfig = GlobalConfig;
-
-/**
  * @public
  * @namespace DevExpress.common
  */
