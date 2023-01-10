@@ -622,22 +622,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
 
         return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    // exportToExcel: function(selectedRowsOnly) {
-    //     const that = this;
 
-    //     that._selectionOnly = selectedRowsOnly;
-
-    //     clientExport(that.component.getDataProvider(), {
-    //         fileName: that.option('export.fileName'),
-    //         format: 'xlsx',
-    //         selectedRowsOnly: !!selectedRowsOnly,
-    //         autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
-    //         rtlEnabled: that.option('rtlEnabled'),
-    //         exportingAction: that.getAction('onExporting'),
-    //         exportedAction: that.getAction('onExported'),
-    //         fileSavingAction: that.getAction('onFileSaving')
-    //     }, excel.getData);
-    // },
     exportTo: function(selectedRowsOnly, format) {
         this._selectionOnly = selectedRowsOnly;
 
@@ -646,7 +631,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
             rtlEnabled: this.option('rtlEnabled'),
             selectedRowsOnly: !!selectedRowsOnly,
             format,
-            fileName: this.option('export.fileName'),
+            fileName: 'DataGrid',
             cancel: false,
         };
 

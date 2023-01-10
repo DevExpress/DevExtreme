@@ -14,22 +14,11 @@ const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
 export const ExportController = {
-    exportToExcel: function() {
-        // const that = this;
-
-        // exportMethod(that.getDataProvider(), {
-        //     fileName: that.option('export.fileName'),
-        //     format: 'EXCEL',
-        //     rtlEnabled: that.option('rtlEnabled'),
-        //     exportingAction: that._actions.onExporting,
-        //     exportedAction: that._actions.onExported,
-        //     fileSavingAction: that._actions.onFileSaving
-        // }, excelExporter.getData);
-
+    exportTo: function() {
         const onExporting = this.getAction('onExporting');
         const eventArgs = {
             rtlEnabled: this.option('rtlEnabled'),
-            fileName: this.option('export.fileName'),
+            fileName: 'PivotGrid',
             cancel: false,
         };
 
