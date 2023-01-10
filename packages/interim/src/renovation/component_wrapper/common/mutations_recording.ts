@@ -12,7 +12,7 @@ function revertMutation({ type, addedNodes }: MutationRecord): void {
   }
 }
 
-export function recordMutations<TReturn>(target: Node, func: () => TReturn): () => void {
+export function recordMutations(target: Node, func: () => unknown): () => void {
   const observer = new MutationObserver(() => {});
   // eslint-disable-next-line spellcheck/spell-checker
   observer.observe(target, { childList: true, subtree: false });
