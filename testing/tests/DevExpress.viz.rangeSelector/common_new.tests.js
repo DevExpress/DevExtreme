@@ -105,9 +105,9 @@ QUnit.test('Should show warning if deprecated "behavior.callValueChanged" option
         assert.deepEqual(errors.log.lastCall.args, [
             'W0001',
             'dxRangeSelector',
-            'callValueChanged',
+            'behavior.callValueChanged',
             '23.1',
-            'Use the "valueChangeMode" option instead'
+            'Use the "behavior.valueChangeMode" option instead'
         ]);
     } finally {
         errors.log.restore();
