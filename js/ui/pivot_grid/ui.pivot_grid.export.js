@@ -145,7 +145,6 @@ export const DataProvider = Class.inherit({
             items: items,
             rtlEnabled: exportController.option('rtlEnabled'),
             dataFields: exportController.getDataSource().getAreaFields('data'),
-            customizeExcelCell: exportController.option('export.customizeExcelCell'),
             rowsArea: exportController._rowsArea,
             columnsArea: exportController._columnsArea
         };
@@ -314,16 +313,6 @@ export const DataProvider = Class.inherit({
         }
 
         return this.getHeaderStyles().length + (item.dataIndex || 0);
-    },
-
-    hasCustomizeExcelCell: function() {
-        return isDefined(this._options.customizeExcelCell);
-    },
-
-    customizeExcelCell: function(e) {
-        if(this._options.customizeExcelCell) {
-            this._options.customizeExcelCell(e);
-        }
     },
 });
 

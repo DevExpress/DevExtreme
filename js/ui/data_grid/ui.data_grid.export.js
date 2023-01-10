@@ -52,60 +52,39 @@ export const DataProvider = Class.inherit({
     _initOptions: function() {
         const exportController = this._exportController;
         const groupColumns = exportController._columnsController.getGroupColumns();
-        const excelWrapTextEnabled = exportController.option('export.excelWrapTextEnabled');
+
         this._options = {
             columns: exportController._getColumns(this._initialColumnWidthsByColumnIndex),
             groupColumns: groupColumns,
             items: this._selectedRowsOnly || exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
-            getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
             isHeadersVisible: exportController.option('showColumnHeaders'),
             summaryTexts: exportController.option('summary.texts'),
-            customizeExportData: exportController.option('customizeExportData'),
             rtlEnabled: exportController.option('rtlEnabled'),
-            wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option('wordWrapEnabled'),
-            customizeExcelCell: exportController.option('export.customizeExcelCell'),
         };
-    },
-
-    hasCustomizeExcelCell: function() {
-        return isDefined(this._options.customizeExcelCell);
-    },
-
-    customizeExcelCell: function(e, cellSourceData) {
-        if(this._options.customizeExcelCell) {
-            e.gridCell = cellSourceData;
-            if(isDefined(this._exportController) && isDefined(this._exportController.component)) {
-                e.component = this._exportController.component;
-            }
-            this._options.customizeExcelCell(e);
-        }
     },
 
     getHeaderStyles() {
         return [
-            { bold: true, alignment: 'center', wrapText: true },
-            { bold: true, alignment: 'left', wrapText: true },
-            { bold: true, alignment: 'right', wrapText: true },
+            { bold: true, alignment: 'center' },
+            { bold: true, alignment: 'left' },
+            { bold: true, alignment: 'right' },
         ];
     },
 
     getGroupRowStyle() {
         return {
             bold: true,
-            wrapText: false,
             alignment: getDefaultAlignment(this._options.rtlEnabled)
         };
     },
 
     getColumnStyles() {
-        const wrapTextEnabled = this._options.wrapTextEnabled;
         const columnStyles = [];
 
         this.getColumns().forEach((column) => {
             columnStyles.push({
                 alignment: column.alignment || 'left',
                 format: column.format,
-                wrapText: wrapTextEnabled,
                 dataType: column.dataType
             });
         });
@@ -201,7 +180,6 @@ export const DataProvider = Class.inherit({
         const options = that._options;
 
         return when(options.items).done(function(items) {
-            options.customizeExportData && options.customizeExportData(that.getColumns(that.getHeaderRowCount() > 1), items);
             options.items = items;
         }).fail(function() {
             options.items = [];
@@ -658,9 +636,7 @@ dataGridCore.registerModule('export', {
             'export': {
                 enabled: false,
                 fileName: 'DataGrid',
-                excelFilterEnabled: false,
                 formats: ['xlsx'],
-                excelWrapTextEnabled: undefined,
                 allowExportSelectedData: false,
                 texts: {
                     exportTo: messageLocalization.format('dxDataGrid-exportTo'),
