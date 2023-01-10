@@ -136,7 +136,7 @@ QUnit.module('Value', function(hook) {
         assert.deepEqual(spy.getCall(0).args[0].target.text, 'The range you are trying to set is invalid');
     });
 
-    QUnit.test('T1136921. rangeSelector must not pass error when axis type changed after load dataSource', function(assert) {
+    QUnit.test('rangeSelector should not raise an error when axis type is changed after dataSource load (T1136921)', function(assert) {
         const onIncidentOccurred = sinon.spy();
         const done = assert.async();
         const dataSource = new DataSource({
