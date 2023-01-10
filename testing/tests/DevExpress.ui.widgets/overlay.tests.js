@@ -59,7 +59,7 @@ QUnit.testStart(function() {
         <div id="overlayWithClass" class="something another"></div>\
         \
         <div id="overlayWithBoundaryWindow" style="width: 600px; height: 300px; position: relative">\
-            <div id="boundary"  style="top:0; left:0; position: absolute"><div>\
+            <div id="boundary"  style="top:0; left:0; position: absolute"></div>\
         </div>\
         <div id="overlayWithAnonymousTmpl">\
             <div id="content"></div>\
