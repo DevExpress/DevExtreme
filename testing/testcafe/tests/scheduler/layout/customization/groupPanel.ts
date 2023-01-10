@@ -44,7 +44,7 @@ const createScheduler = async (
       label: 'Priority',
     }],
     ...additionalProps,
-  }, true);
+  });
 };
 
 const views = [{

@@ -46,7 +46,7 @@ test('should delete recurrent appointment if mode is "series"', async (t) => {
       apptColor: 1,
       recurrenceRule: 'FREQ=DAILY;COUNT=4',
     }],
-  }, true,
+  },
 ));
 
 test('should exclude from recurrence if mode is "occurrence"', async (t) => {
@@ -105,7 +105,7 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
       apptColor: 1,
       recurrenceRule: 'FREQ=DAILY;COUNT=4',
     }],
-  }, true,
+  },
 ));
 
 test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) => {
@@ -155,5 +155,5 @@ test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) 
       apptColor: 1,
       recurrenceRule: 'FREQ=DAILY;COUNT=4',
     }],
-  }, true,
+  },
 ));

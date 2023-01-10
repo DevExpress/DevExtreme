@@ -33,7 +33,7 @@ const createScheduler = async (
     startDayHour: 0,
     endDayHour: 3,
     ...additionalProps,
-  }, true);
+  });
 };
 
 test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled and zooming is used', async (t, { platform, screenshotComparerOptions }) => {

@@ -48,6 +48,5 @@ test('Should correctly render view if virtual scrolling and groupByDate', async 
         mode: 'virtual',
       },
     },
-    true,
   );
 });

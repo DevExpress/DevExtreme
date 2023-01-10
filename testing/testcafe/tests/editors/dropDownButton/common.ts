@@ -51,12 +51,12 @@ test('Item collection should be updated after direct option changing (T817436)',
   await createWidget('dxDropDownButton', {
     items: [{ text: 'text1' }, { text: 'text2' }],
     displayExpr: 'text',
-  }, true, '#dropDownButton1');
+  }, '#dropDownButton1');
 
   await createWidget('dxDropDownButton', {
     dataSource: [{ text: 'text1' }, { text: 'text2' }],
     displayExpr: 'text',
-  }, false, '#dropDownButton2');
+  }, '#dropDownButton2');
 });
 
 test('DropDownButton renders correctly', async (t) => {
@@ -100,7 +100,7 @@ test('DropDownButton renders correctly', async (t) => {
             stylingMode,
             showArrowIcon,
             splitButton,
-          }, false, `#${id}`);
+          }, `#${id}`);
         }
       }
     }

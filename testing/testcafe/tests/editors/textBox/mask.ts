@@ -67,5 +67,5 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
   return createWidget('dxTextBox', {
     mask: '9',
     valueChangeEvent: 'input',
-  }, false, '#textBox');
+  }, '#textBox');
 });

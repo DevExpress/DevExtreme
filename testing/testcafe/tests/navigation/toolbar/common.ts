@@ -86,7 +86,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
         items: toolbarItems,
         rtlEnabled,
         width: locateInMenu === 'auto' ? 50 : '100%',
-      }, false, '#toolbar');
+      }, '#toolbar');
     });
   });
 
@@ -165,7 +165,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
     return createWidget('dxToolbar', {
       items: toolbarItems,
       width: locateInMenu === 'auto' ? 50 : '100%',
-    }, false, '#toolbar');
+    }, '#toolbar');
   });
 });
 
@@ -264,7 +264,7 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
 
       return createWidget('dxToolbar', {
         items: toolbarItems,
-      }, false, '#toolbar');
+      }, '#toolbar');
     });
   });
 });

@@ -43,7 +43,7 @@ stylingModes.forEach((stylingMode) => {
         text: '',
         labelMode,
         stylingMode,
-      }, false, '#selectBox1');
+      }, '#selectBox1');
 
       await createWidget('dxSelectBox', {
         label: `this label is ${'very '.repeat(10)}long`,
@@ -51,7 +51,7 @@ stylingModes.forEach((stylingMode) => {
         items: ['item1', 'item2'],
         labelMode,
         stylingMode,
-      }, false, '#selectBox2');
+      }, '#selectBox2');
     });
   });
 });

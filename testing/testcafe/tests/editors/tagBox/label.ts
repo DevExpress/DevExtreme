@@ -41,12 +41,12 @@ stylingModes.forEach((stylingMode) => {
     await createWidget('dxTagBox', {
       ...componentOptions,
       multiline: false,
-    }, true, '#tagBox1');
+    }, '#tagBox1');
 
     await createWidget('dxTagBox', {
       ...componentOptions,
       multiline: true,
-    }, true, '#tagBox2');
+    }, '#tagBox2');
   });
 
   labelModes.forEach((labelMode) => {
@@ -95,7 +95,7 @@ stylingModes.forEach((stylingMode) => {
           paginate: true,
           pageSize: 20,
         },
-      }, true);
+      });
     });
   });
 });

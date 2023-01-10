@@ -27,6 +27,6 @@ stylingModes.forEach((stylingMode) => {
       label: 'qwerty QWERTY 1234567890',
       stylingMode,
       value: new Date(1900, 0, 1),
-    }, true, '#dateBox');
+    }, '#dateBox');
   });
 });

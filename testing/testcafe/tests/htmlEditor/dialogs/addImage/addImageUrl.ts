@@ -38,7 +38,7 @@ test('Image url should be validate before wil be inserted by add button click', 
       tabs: ['url'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });
 
 test('Image url should be validate before wil be inserted by add enter press', async (t) => {
@@ -71,7 +71,7 @@ test('Image url should be validate before wil be inserted by add enter press', a
       tabs: ['url'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });
 
 test('Image url should be updated', async (t) => {
@@ -117,5 +117,5 @@ test('Image url should be updated', async (t) => {
       tabs: ['url'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });

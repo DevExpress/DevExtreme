@@ -55,7 +55,7 @@ test('Popup should be centered regarding the container even if container is anim
     visible: true,
     width: 100,
     height: 100,
-  }, false, '#innerContainer');
+  }, '#innerContainer');
 });
 
 test('Popup wrapper left top corner should be the same as the container right left corner even if container is animated', async () => {
@@ -97,7 +97,7 @@ test('Popup wrapper left top corner should be the same as the container right le
     visible: true,
     width: 100,
     height: 100,
-  }, false, '#innerContainer');
+  }, '#innerContainer');
 });
 
 test('There should not be any errors when position.of is html (T946851)', async () => {
