@@ -378,11 +378,6 @@ declare module DevExpress.ui.dxDataGrid {
     export type ToolbarPreparingInfo = DevExpress.common.grids.ToolbarPreparingInfo;
 }
 
-declare module DevExpress.ui.dxSlider {
-    /** @deprecated Use DevExpress.common.SliderValueChangeMode instead */
-    export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
-}
-
 declare module DevExpress.common.charts {
     /** @deprecated Use DevExpress.common.grids.ApplyChangesMode instead */
     export type ApplyChangesMode = DevExpress.common.grids.ApplyChangesMode;
@@ -466,4 +461,11 @@ declare module DevExpress.viz {
     export type VisualRange = DevExpress.common.charts.VisualRange
     /** @deprecated Use DevExpress.common.TimeIntervalConfig instead */
     export type VizTimeInterval = DevExpress.common.charts.TimeIntervalConfig
+}
+
+// v23.1
+
+declare module DevExpress.ui.dxSlider {
+    /** @deprecated Use DevExpress.common.SliderValueChangeMode instead */
+    export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
 }
