@@ -79,7 +79,7 @@ test('Should correctly display the recurrent weekly appointment without timezone
     cellDuration: 180,
     width: 1000,
     height: 585,
-  }, false, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });
 
 test('Should correctly display the recurrent monthly appointment without timezone', async (t) => {
@@ -119,7 +119,7 @@ test('Should correctly display the recurrent monthly appointment without timezon
     cellDuration: 180,
     width: 1000,
     height: 585,
-  }, false, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });
 
 test('Should correctly display the recurrent yearly appointment without timezone', async (t) => {
@@ -159,7 +159,7 @@ test('Should correctly display the recurrent yearly appointment without timezone
     cellDuration: 180,
     width: 1000,
     height: 585,
-  }, false, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });
 
 test('Should correctly display morning weekly recurrent appointment in a greater timezone.', async (t) => {
@@ -188,7 +188,7 @@ test('Should correctly display morning weekly recurrent appointment in a greater
     cellDuration: 180,
     width: 1000,
     height: 585,
-  }, false, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });
 
 test('Should correctly display \'corner\' weekly recurrent appointments in a greater timezone.', async (t) => {
@@ -222,5 +222,5 @@ test('Should correctly display \'corner\' weekly recurrent appointments in a gre
     cellDuration: 180,
     width: 1000,
     height: 585,
-  }, false, SCHEDULER_SELECTOR);
+  }, SCHEDULER_SELECTOR);
 });

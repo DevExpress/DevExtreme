@@ -89,7 +89,6 @@ const getWindow = ClientFunction(() => window.testOptions);
       views: ['week'],
       currentView: 'week',
     },
-    true,
   ));
 
   test(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async (t) => {
@@ -126,6 +125,5 @@ const getWindow = ClientFunction(() => window.testOptions);
       views: ['week'],
       currentView: 'week',
     },
-    true,
   ));
 });
