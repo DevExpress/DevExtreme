@@ -1,5 +1,5 @@
 import {
-  Form, FormItem, FormItemLabel, RadioButton, RadioGroup,
+  CustomRule, CustomRule1, Form, FormItem, FormItemLabel, RadioButton, RadioGroup,
 } from '@devextreme/react';
 
 export function FormExample() {
@@ -17,7 +17,11 @@ export function FormExample() {
                 <RadioButton value="third" label="Third" name="example" />
               </RadioGroup>
               <FormItemLabel>Radio group:</FormItemLabel>
+              <CustomRule message="we out" validate={() => false} />
+              <CustomRule1 message="we out too" validate={() => false} />
+              <CustomRule message="we in" validate={() => true} />
             </FormItem>
+            <div>blalbla</div>
           </Form>
         </div>
       </div>
