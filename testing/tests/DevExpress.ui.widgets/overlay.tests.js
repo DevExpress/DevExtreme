@@ -1233,12 +1233,14 @@ testModule('position', moduleConfig, () => {
 
     test('overlay content should have correct position when position.boundary changes to window', function(assert) {
         const $overlay = $('<div>').appendTo('#qunit-fixture');
-        const $boundary = $('<div>').css({ width: 200, height: 300 }).appendTo('#qunit-fixture');
+        const $boundary = $('<div>').css({ width: 20, height: 30 }).appendTo('#qunit-fixture');
+        const widthContent = 25;
+        const heightContent = 35;
 
         $overlay.dxOverlay({
             visible: true,
-            width: 200,
-            height: 305,
+            width: widthContent,
+            height: heightContent,
             animation: null,
             position: {
                 collision: 'fit',
@@ -1254,8 +1256,8 @@ testModule('position', moduleConfig, () => {
 
         overlay.option('position.boundary', window);
 
-        assert.roughEqual($overlayContent.offset().top, getHeight($(window)) / 2 - getHeight($overlayContent) / 2, 0.51, 'top border of the content is correct after changing to window');
-        assert.roughEqual($overlayContent.offset().left, getWidth($(window)) / 2 - getWidth($overlayContent) / 2, 0.51, 'left border of the content is correct after changing to window');
+        assert.roughEqual($overlayContent.offset().top, getHeight($(window)) / 2 - heightContent / 2, 0.51, 'content is in the center of the window vertically');
+        assert.roughEqual($overlayContent.offset().left, getWidth($(window)) / 2 - widthContent / 2, 0.51, 'content is in the center of the window horizontally');
     });
 });
 
