@@ -14,10 +14,10 @@ import { RadioGroup } from '../radio-group/radio-group';
 
 type FormValidationResult = Record<string, string[]>;
 
-type Rule = {
+interface Rule {
   validate: (value: unknown) => boolean;
   message: string;
-};
+}
 
 type FormValidator = (
   value: unknown,
@@ -25,30 +25,19 @@ type FormValidator = (
   name: string
 ) => string | string[] | void;
 
-type FormContextValue = {
+interface FormContextValue {
   validationResult?: FormValidationResult;
   validate: FormValidator;
-};
+}
 
-type ChildType =
-  | string
-  | number
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-  | React.ReactFragment
-  | React.ReactPortal;
+interface FormProps {
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+  children?: React.ReactElement<FormItemProps>[] | React.ReactElement<FormItemProps>
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// const isChildOfType = (targetType: JSXElementConstructor<any>) => (
-//   child: ChildType,
-// ) => (React.isValidElement(child) && child.type === targetType);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// function findChildByType(children: React.ReactNode, targetType: JSXElementConstructor<any>) {
-//   const isTargetType = isChildOfType(targetType);
-//   return React.Children.toArray(children).find((child) => (
-//     isTargetType(child) ? child : null));
-// }
+interface FormItemProps extends React.PropsWithChildren {
+  name: string;
+}
 
 function reduceChildrenByTypes(
   children: React.ReactNode,
@@ -66,7 +55,8 @@ function reduceChildrenByTypes(
     return null;
   };
 
-  return React.Children.toArray(children).reduce<Record<string, ChildType[]>>((acc, child) => {
+  return React.Children.toArray(children)
+    .reduce<Record<string, React.ReactNode[]>>((acc, child) => {
     const section = findChildSection(child);
     if (section) {
       acc[section] = [...(acc[section] || []), child];
@@ -75,22 +65,13 @@ function reduceChildrenByTypes(
   }, {});
 }
 
-interface FormProps {
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-  children?: React.ReactElement<FormItemProps>[] | React.ReactElement<FormItemProps>
-}
-interface FormItemProps extends React.PropsWithChildren {
-  name: string;
-}
-
 const FormContext = createContext<FormContextValue | undefined>(
   undefined,
 );
 
 interface CustomRuleProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, react/no-unused-prop-types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validate: (value: any) => boolean,
-  // eslint-disable-next-line react/no-unused-prop-types
   message: string
 }
 
@@ -104,30 +85,43 @@ export function CustomRule1(_props: CustomRuleProps) {
   return null;
 }
 
+export function FormItemHint({ children }: { children: string }) {
+  return (<span>{children}</span>);
+}
+
 export function FormItemLabel({ children }: PropsWithChildren) {
   return <span>{children}</span>;
 }
 
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
+
   const sections = useMemo(() => {
     const typesToSectionMapping = {
-      label: [FormItemLabel], editor: [RadioGroup], hint: [], rules: [CustomRule, CustomRule1],
+      label: [FormItemLabel],
+      editor: [RadioGroup],
+      hint: [FormItemHint],
+      rules: [CustomRule, CustomRule1],
     };
     return reduceChildrenByTypes(children, typesToSectionMapping);
   }, [children]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rulesToCheck = useMemo(() => (sections['rules'].map((rule) => ({ message: (rule as any).props.message, validate: (rule as any).props.validate }))), [sections]);
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formContext?.validate((sections['editor'] as any)[0].props.value, rulesToCheck, name);
   }, [children]);
+
   const renderEditor = () => sections['editor'];
   const renderLabel = () => sections['label'];
-  const renderValidation = () => <span>{formContext?.validationResult?.[name]}</span>;
+  const renderHint = () => sections['hint'];
+  const renderValidation = () => <span>{formContext?.validationResult?.[name]?.join('. ')}</span>;
 
   return (
     <div>
+      <span>{renderHint()}</span>
       <span>{renderLabel()}</span>
       <span>{renderEditor()}</span>
       <span>{renderValidation()}</span>
@@ -136,7 +130,7 @@ export function FormItem({ name, children }: FormItemProps) {
 }
 
 export function Form({ children, onSubmit }: FormProps) {
-  const [validationResult, setValidationResult] = useState<FormValidationResult>({ example: ['not so valid', 'definately'] });
+  const [validationResult, setValidationResult] = useState<FormValidationResult>({});
 
   const defaultValidator: FormValidator = (value, rules, name) => {
     if (!rules.length) {

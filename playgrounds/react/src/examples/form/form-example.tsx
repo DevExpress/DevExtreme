@@ -1,5 +1,5 @@
 import {
-  CustomRule, CustomRule1, Form, FormItem, FormItemLabel, RadioButton, RadioGroup,
+  CustomRule, CustomRule1, Form, FormItem, FormItemHint, FormItemLabel, RadioButton, RadioGroup,
 } from '@devextreme/react';
 
 export function FormExample() {
@@ -20,6 +20,7 @@ export function FormExample() {
               <CustomRule message="we out" validate={() => false} />
               <CustomRule1 message="we out too" validate={() => false} />
               <CustomRule message="we in" validate={() => true} />
+              <FormItemHint>This is a hint</FormItemHint>
             </FormItem>
             <div>blalbla</div>
           </Form>
