@@ -5,8 +5,8 @@
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
     "baseBranches": [
-        "22_2",
-        "22_1"
+        "23_1",
+        "22_2"
     ],
     "labels": [
         "dependencies"
@@ -19,7 +19,7 @@
         {
             "matchPackagePrefixes": [ "cldr-" ],
             "groupName": "CLDR"
-        },        
+        },
         {
             "matchPackagePatterns": [
                 "^@devextreme-generator/"

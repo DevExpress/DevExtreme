@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [22_2]
+    branches: [23_1]
 
 jobs:
   build:
@@ -138,7 +138,7 @@ jobs:
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         export TESTCAFE_DASHBOARD_LAYOUT_TESTING_ENABLED=true
-        export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI3MDEyMTgyZC1iMzliLTQyYWMtYjRlZC02YWY2MWMyZmQyNzgiLCJ0b2tlblNlY3JldCI6ImtUODN0QjU1dFdyeWJva2VsdlpDb051R3pzOFZOYzVuaDI4dXNFb3pFd2hPOUZDZlRVaXh5OXBvVC8wS3hDZFAwd05SKzlmVkk0WWh3dXl2ZkhtZDFudTE0MHJqdEUxVnByTlI4Z1RTRHJwZlRPN1dZZXNEUnovUDRTOFF1L3NPTWNjSXpzWno1Y0ZIY2xVSFZKTVVTRVIxVGtaRlgwZTlhUU5tRTBaY1FPTmVkenovREFseGQ4YVoxZnNkN2dSd2VFNjBhSjNueG1vOHNGbGJwazVsYmlvN2JoVy9VTnBvWSs1Q0tFcVFvQ0JSTHJFSlUybUNxNkdGbmhtbmxUTW9SRXpjWDBjUlMwMk41NWlTakNMMXRxdlpMajc4MnB6ZnFrRWo1d29UT0dLY3V1bThRaXE2L1FnaWR2MFV0VWFTaGZvVW9sazhTWFlXNGtxWVNSalR1QT09In0=
+        export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI1Zjc4MTc1Ny01NGU0LTQ5ODAtYjhkNi1iMDY1OTM1NGIwYjMiLCJ0b2tlblNlY3JldCI6Ik9wSEhzZG1OVFdxUkdoWWJjY3Z0NWl0ZHd4aDZ2VURUSUVyRjNFUk92Z2FCb2RvQkZLMlNGQlY2L21NM3JIVnQvNHY4UnlqOXoxOW1YR0s4UzhVSzdueWhXb3kxdXZGZ1RWUk9HUkt5MDVUNkw2cTlIcnQrT1pFcjFZcnR3RU1ZTzErWDduQzNxcWI2cGFlL1pmSCtKZHlqZ2NSTG4rMGlOYjROSDdMcjhOTE5UeFQ0Q2tSaWI3dy82cXl0b04yTHBhcFhialJkbG1JejhMTlpEcjFVVXVtUVNuOFVSL2JjQ2NuRnBFcFc0R3BPaWRsa3l3WklCTHN5NHVNZDUxaHNrb1ZGQjJuK1IwZTBiMDVEdTdmZnJKcVByTEdTZHlLVXR1YzRaTFlLZlJlaGkrQmpOTzAyUDlzamdEQ040U0pvbS96SzhUVjRaeEdneVFaQW0yQ2YyZz09In0=
         export TESTCAFE_DASHBOARD_DEVEXTREME_URL=https://devextreme.resolve.sh
         export TESTCAFE_DASHBOARD_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $META_RENOVATION $INDICES $PLATFORM $THEME"
@@ -173,4 +173,4 @@ jobs:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 22_2
+          specific_branch: 23_1

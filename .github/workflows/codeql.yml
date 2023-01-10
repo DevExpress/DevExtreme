@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [ '21_2', '22_1', '22_2' ]
+        branch: [ '22_1', '22_2', '23_1' ]
         language: [ 'csharp', 'javascript' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
@@ -43,6 +43,12 @@ jobs:
         with:
           category: "/language:${{matrix.language}}"
 
+  fetch:
+    runs-on: devextreme-shr2
+    name: Fetch analysis
+    needs: [ analyze ]
+
+    steps:
       - name: Get Latest Analysis info
         run: |
           RESPONSE=$(curl \
@@ -53,6 +59,12 @@ jobs:
           echo $RESPONSE >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [ analyze, fetch ]
+
+    steps:
       - name: Get Date
         id: get-date
         run: |

@@ -41,6 +41,8 @@ import {
     VisualRangeUpdateMode,
 } from '../common/charts';
 
+import { SliderValueChangeMode } from '../common';
+
 export {
     ChartsDataType,
     DiscreteAxisDivisionMode,
@@ -144,6 +146,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @default 'onMovingComplete'
+       * @deprecated
        */
       callValueChanged?: ValueChangedCallMode;
       /**
@@ -161,6 +164,11 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default true
        */
       snapToTicks?: boolean;
+      /**
+       * @docid
+       * @default 'onHandleRelease'
+       */
+      valueChangeMode?: SliderValueChangeMode;
     };
     /**
      * @docid

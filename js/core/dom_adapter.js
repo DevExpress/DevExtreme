@@ -92,7 +92,11 @@ const nativeDOMAdapterStrategy = {
     },
 
     setAttribute(element, name, value) {
-        element.setAttribute(name, value);
+        if(name === 'style') {
+            element.style.cssText = value;
+        } else {
+            element.setAttribute(name, value);
+        }
     },
 
     removeAttribute(element, name) {

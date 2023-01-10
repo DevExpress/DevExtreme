@@ -560,6 +560,13 @@ const dxRangeSelector = baseWidgetModule.inherit({
 
     _fontFields: ['scale.label.font', 'sliderMarker.font'],
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'behavior.callValueChanged': { since: '23.1', message: 'Use the "behavior.valueChangeMode" option instead' }
+        });
+    },
+
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;

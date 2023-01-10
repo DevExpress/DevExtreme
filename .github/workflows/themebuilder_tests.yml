@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [22_2]
+    branches: [23_1]
 
 jobs:
   test:
@@ -62,4 +62,4 @@ jobs:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 22_2
+          specific_branch: 23_1
