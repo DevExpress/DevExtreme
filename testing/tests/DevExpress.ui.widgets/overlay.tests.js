@@ -58,9 +58,6 @@ QUnit.testStart(function() {
         \
         <div id="overlayWithClass" class="something another"></div>\
         \
-        <div id="overlayWithBoundaryWindow" style="width: 600px; height: 300px; position: relative">\
-            <div id="boundary"  style="top:0; left:0; position: absolute"></div>\
-        </div>\
         <div id="overlayWithAnonymousTmpl">\
             <div id="content"></div>\
         </div>\
@@ -1235,8 +1232,8 @@ testModule('position', moduleConfig, () => {
     });
 
     test('overlay content should have correct position when position.boundary changes to window', function(assert) {
-        const $boundary = $('#boundary');
-        const $overlay = $('<div>').appendTo('#overlayWithBoundaryWindow');
+        const $overlay = $('<div>').appendTo('#qunit-fixture');
+        const $boundary = $('<div>').css({ width: 200, height: 300 }).appendTo('#qunit-fixture');
 
         $overlay.dxOverlay({
             visible: true,
