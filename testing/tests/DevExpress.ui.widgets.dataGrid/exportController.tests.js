@@ -17,7 +17,6 @@ import 'ui/data_grid';
 
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
-import clientExporter from 'exporter';
 import messageLocalization from 'localization/message';
 import { prepareItems } from 'ui/grid_core/ui.grid_core.export';
 
@@ -1838,73 +1837,6 @@ QUnit.module('ExportController', {
         assert.equal(dataProvider.getCellData(1, 1).value, 12, 'row 2 cell 2');
     });
 
-    QUnit.test('The export to Excel api method', function(assert) {
-        const onExportedStub = sinon.stub();
-        const onExportingStub = sinon.stub();
-        const onFileSavingStub = sinon.stub();
-
-        sinon.stub(clientExporter, 'export');
-        this.setupModules({
-            'export': {
-                enabled: true,
-                excelFilterEnabled: true,
-                fileName: 'testName',
-            }
-        });
-        sinon.stub(this.exportController, 'getAction', function(arg) {
-            if(arg === 'onExporting') {
-                return onExportingStub;
-            } else if(arg === 'onExported') {
-                return onExportedStub;
-            } else if(arg === 'onFileSaving') {
-                return onFileSavingStub;
-            }
-        });
-        sinon.stub(this.exportController.component, 'getDataProvider');
-
-        this.exportController.exportTo();
-
-        assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
-        assert.deepEqual(clientExporter.export.getCall(0).args[0], this.exportController.component.getDataProvider.getCall(0).returnValue, 'First arg is data');
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-            autoFilterEnabled: true,
-            exportedAction: onExportedStub,
-            exportingAction: onExportingStub,
-            fileName: 'testName',
-            fileSavingAction: onFileSavingStub,
-            format: 'xlsx',
-            rtlEnabled: false,
-            selectedRowsOnly: false,
-        }, 'options');
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[2], clientExporter.excel.getData, 'Export to excel function is correct');
-
-        clientExporter.export.restore();
-        this.exportController.getAction.restore();
-        this.exportController.component.getDataProvider.restore();
-    });
-
-    QUnit.test('Default options', function(assert) {
-        sinon.stub(clientExporter, 'export');
-        this.setupModules({}, true);
-
-        this.exportController.exportToExcel();
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-            autoFilterEnabled: false,
-            exportedAction: undefined,
-            exportingAction: undefined,
-            fileName: 'DataGrid',
-            fileSavingAction: undefined,
-            format: 'xlsx',
-            rtlEnabled: false,
-            selectedRowsOnly: false,
-        }, 'options');
-
-        clientExporter.export.restore();
-    });
-
     QUnit.test('get header row count when headers is visible', function(assert) {
         this.setupModules({
             showColumnHeaders: true,
@@ -2757,7 +2689,8 @@ QUnit.module('Export menu', {
 
         dropDownButton.open();
         const $menuItems = $('.dx-list-item-content');
-        const _exportToExcel = this.headerPanel._exportController.exportToExcel;
+
+        const _exportTo = this.headerPanel._exportController.exportTo;
         this.headerPanel._exportController.exportTo = function() {
             exportToCalled = true;
         };
@@ -2765,7 +2698,7 @@ QUnit.module('Export menu', {
         $($menuItems.first()).trigger('dxclick');
 
         assert.ok(exportToCalled, 'exportTo Called');
-        this.headerPanel._exportController.exportToExcel = _exportToExcel;
+        this.headerPanel._exportController.exportTo = _exportTo;
     });
 });
 
