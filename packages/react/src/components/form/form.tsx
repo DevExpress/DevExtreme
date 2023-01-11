@@ -19,6 +19,8 @@ interface Rule {
   message: string;
 }
 
+type CustomRuleProps = Rule;
+
 type FormValidator = (
   value: unknown,
   rules: Rule[],
@@ -39,7 +41,14 @@ interface FormItemProps extends React.PropsWithChildren {
   name: string;
 }
 
-function reduceChildrenByTypes(
+interface FormItemChildrenInfo {
+  editor: React.ReactNode,
+  label?: React.ReactNode,
+  hint?: React.ReactNode,
+  rules: React.ReactNode[],
+}
+
+function groupChildrenByTypes(
   children: React.ReactNode,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   targetTypes: Record<string, JSXElementConstructor<any>[]>,
@@ -69,12 +78,6 @@ const FormContext = createContext<FormContextValue | undefined>(
   undefined,
 );
 
-interface CustomRuleProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  validate: (value: any) => boolean,
-  message: string
-}
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CustomRule(_props: CustomRuleProps) {
   return null;
@@ -96,27 +99,41 @@ export function FormItemLabel({ children }: PropsWithChildren) {
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
 
-  const sections = useMemo(() => {
-    const typesToSectionMapping = {
-      label: [FormItemLabel],
-      editor: [RadioGroup],
-      hint: [FormItemHint],
-      rules: [CustomRule, CustomRule1],
+  const typesToSectionMapping = {
+    label: [FormItemLabel],
+    editor: [RadioGroup],
+    hint: [FormItemHint],
+    rules: [CustomRule, CustomRule1],
+  };
+
+  const sections = useMemo<FormItemChildrenInfo>(() => {
+    const childrenByTypes = groupChildrenByTypes(children, typesToSectionMapping);
+    return {
+      label: childrenByTypes['label'][0],
+      editor: childrenByTypes['editor'][0],
+      hint: childrenByTypes['hint'][0],
+      rules: childrenByTypes['rules'] || [],
     };
-    return reduceChildrenByTypes(children, typesToSectionMapping);
   }, [children]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rulesToCheck = useMemo(() => (sections['rules'].map((rule) => ({ message: (rule as any).props.message, validate: (rule as any).props.validate }))), [sections]);
+  const rulesToCheck = useMemo<Rule[]>(() => (
+    sections.rules.map(
+      (rule) => {
+        const props = (rule as React.ReactElement).props as CustomRuleProps;
+        return props;
+      },
+    )
+  ),
+  [sections]);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    formContext?.validate((sections['editor'] as any)[0].props.value, rulesToCheck, name);
+    formContext?.validate((sections.editor as any).props.value, rulesToCheck, name);
   }, [children]);
 
-  const renderEditor = () => sections['editor'];
-  const renderLabel = () => sections['label'];
-  const renderHint = () => sections['hint'];
+  const renderEditor = () => sections.editor;
+  const renderLabel = () => sections.label;
+  const renderHint = () => sections.hint;
   const renderValidation = () => <span>{formContext?.validationResult?.[name]?.join('. ')}</span>;
 
   return (
@@ -146,8 +163,6 @@ export function Form({ children, onSubmit }: FormProps) {
       ...previousResult,
       [name]: result,
     }));
-    // eslint-disable-next-line consistent-return
-    return result;
   };
 
   const formContextValue = useMemo(
