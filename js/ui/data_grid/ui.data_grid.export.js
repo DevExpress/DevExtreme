@@ -743,7 +743,6 @@ dataGridCore.registerModule('export', {
                     const items = [];
 
                     formats.forEach((formatType) => {
-                        const exportMethod = 'exportTo';
                         let formatName = formatType.toUpperCase();
                         let exportAllIcon = DATAGRID_EXPORT_ICON;
                         const exportSelectedIcon = DATAGRID_EXPORT_SELECTED_ICON;
@@ -761,7 +760,7 @@ dataGridCore.registerModule('export', {
                             text: format(texts.exportAll, formatName),
                             icon: exportAllIcon,
                             onClick: () => {
-                                this._exportController[exportMethod](false, formatType);
+                                this._exportController.exportTo(false, formatType);
                             },
                         });
 
@@ -770,7 +769,7 @@ dataGridCore.registerModule('export', {
                                 text: format(texts.exportSelectedRows, formatName),
                                 icon: exportSelectedIcon,
                                 onClick: () => {
-                                    this._exportController[exportMethod](true, formatType);
+                                    this._exportController.exportTo(true, formatType);
                                 },
                             });
                         }
