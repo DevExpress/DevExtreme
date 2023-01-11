@@ -2573,6 +2573,10 @@ declare module DevExpress.excelExporter {
          */
         customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
         /**
+         * [descr:ExportDataGridProps.encodeExecutableContent]
+         */
+        encodeExecutableContent?: any;
+        /**
          * [descr:ExportDataGridProps.keepColumnWidths]
          */
         keepColumnWidths?: boolean;
