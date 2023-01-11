@@ -30,10 +30,10 @@ jobs:
     needs: [ fetch ]
 
     steps:
-      - uses: actions/download-artifact@v3
-        continue-on-error: true
+      - uses: dawidd6/action-download-artifact@v2
         with:
           name: dependabot_alerts.json
+          if_no_artifact_found: warn
 
       - name: Teams Notification
         uses: iBat/github-actions/send-teams-notification@ci/security-alerts
