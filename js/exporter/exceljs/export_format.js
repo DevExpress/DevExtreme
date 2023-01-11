@@ -1,7 +1,7 @@
 import stringUtils from '../../core/utils/string';
 import numberFormatter from '../../localization/number';
 import dateLocalization from '../../localization/date';
-import { isDefined, isString, isObject } from '../../core/utils/type';
+import { isDefined, isString, isObject, isNumeric } from '../../core/utils/type';
 import { getFormat } from '../../localization/ldml/date.format';
 import { getLanguageId } from '../../localization/language_codes';
 import { extend } from '../../core/utils/extend';
@@ -117,6 +117,39 @@ function _convertNumberFormat(format, precision, currency) {
     return result;
 }
 
+function _hasCSVInjection(value) {
+    if(!value || value.length < 2) { return false; }
+
+    return _includesCSVExpression(value);
+}
+
+function _hasCSVQuotedInjection(value, textQualifier) {
+    if(!value || value.length < 4 || value[0] !== textQualifier) {
+        return false;
+    }
+
+    return _includesCSVExpression(value.substring(1, value.length - 1));
+}
+
+function _includesCSVExpression(value) {
+    const injectionPrefix = /^[@=\t\r]/;
+    const possibleInjectionPrefix = /^[+-]/;
+
+    if(!value) {
+        return false;
+    }
+
+    if(injectionPrefix.test(value)) {
+        return true;
+    }
+
+    if(!possibleInjectionPrefix.test(value)) {
+        return false;
+    }
+
+    return !isNumeric(value);
+}
+
 const ExportFormat = {
     formatObjectConverter: function(format, dataType) {
         const result = {
@@ -145,7 +178,28 @@ const ExportFormat = {
                 }
             }
         }
-    }
+    },
+
+    encode(value) {
+        const textQualifier = '"';
+
+        let escaped = false;
+
+        if(_hasCSVInjection(value)) {
+            escaped = true;
+        } else if(_hasCSVQuotedInjection(value, textQualifier)) {
+            value = value.substring(1, value.length - 1);
+            escaped = true;
+        }
+
+        if(escaped) {
+            const singleTextQualifier = textQualifier;
+            const escapedTextQualifier = `${textQualifier}${textQualifier}`;
+            return textQualifier + '\'' + value.replaceAll(singleTextQualifier, escapedTextQualifier) + textQualifier;
+        }
+
+        return value;
+    },
 };
 
 

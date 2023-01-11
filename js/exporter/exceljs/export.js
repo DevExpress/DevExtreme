@@ -35,6 +35,9 @@ const Export = {
         if(!isDefined(fullOptions.loadPanel.text)) {
             fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
         }
+        if(!isDefined(fullOptions.encodeExecutableContent)) {
+            fullOptions.encodeExecutableContent = false;
+        }
 
         return fullOptions;
     },
@@ -143,7 +146,8 @@ const Export = {
             autoFilterEnabled,
             keepColumnWidths,
             selectedRowsOnly,
-            loadPanel
+            loadPanel,
+            encodeExecutableContent
         } = options;
 
         const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
@@ -184,7 +188,7 @@ const Export = {
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, styles, privateOptions);
+                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, styles, privateOptions, encodeExecutableContent);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -219,7 +223,7 @@ const Export = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, styles, privateOptions) {
+    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, styles, privateOptions, encodeExecutableContent) {
         privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -256,6 +260,10 @@ const Export = {
                 if(isDefined(mergeRange)) {
                     mergeRanges.push(mergeRange);
                 }
+            }
+
+            if(encodeExecutableContent) {
+                excelCell.value = ExportFormat.encode(excelCell.value);
             }
         }
     }
