@@ -197,15 +197,12 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build with Angular 7
-      run: |
-        cd ../devextreme-angular-repo
-        npm run build
-
+      working-directory: ../devextreme-angular-repo
+      run: npm run build
 
     - name: Run tests with Angular 7
-      run: |
-        cd ../devextreme-angular-repo
-        run: npx lerna run --scope devextreme-angular gulp -- run.tests
+      working-directory: ../devextreme-angular-repo
+      run: npx lerna run --scope devextreme-angular gulp -- run.tests
 
   test_bundlers:
     name: Bundlers tests
