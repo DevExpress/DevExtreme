@@ -15,6 +15,7 @@ const DIV = '<div>';
 const hasWindow = hasWindowFn();
 
 import './data_source';
+import { SortableConst } from './sortable/index';
 
 const FIELDCHOOSER_CLASS = 'dx-pivotgridfieldchooser';
 const FIELDCHOOSER_CONTAINER_CLASS = 'dx-pivotgridfieldchooser-container';
@@ -444,16 +445,21 @@ const FieldChooser = BaseFieldChooser.inherit({
             expandNodesRecursive: false,
             searchEnabled: that.option('allowSearch'),
             searchTimeout: that.option('searchTimeout'),
+            useNativeScrolling: false,
             itemTemplate: function(itemData, itemIndex, itemElement) {
+                const $item = $('<div>')
+                    .toggleClass('dx-area-field', !itemData.items)
+                    .attr(SortableConst.attrs.treeViewItem, true)
+                    .data('field', itemData.field)
+                    .appendTo(itemElement);
+
                 if(itemData.icon) {
-                    getImageContainer(itemData.icon).appendTo(itemElement);
+                    getImageContainer(itemData.icon).appendTo($item);
                 }
 
                 $('<span>')
-                    .toggleClass('dx-area-field', !itemData.items)
-                    .data('field', itemData.field)
                     .text(itemData.text)
-                    .appendTo(itemElement);
+                    .appendTo($item);
             },
             onItemCollapsed: function(e) {
                 const index = that._expandedPaths.indexOf(e.itemData.path);
@@ -573,7 +579,9 @@ const FieldChooser = BaseFieldChooser.inherit({
             };
             that._dataChangedHandlers.push(render);
             render();
-            $fieldsContainer.dxScrollable();
+            $fieldsContainer.dxScrollable({
+                useNative: false,
+            });
         } else {
             $areaContainer.addClass('dx-all-fields');
             $fieldsContainer.addClass('dx-treeview-border-visible');
