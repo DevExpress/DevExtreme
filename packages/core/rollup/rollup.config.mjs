@@ -1,13 +1,16 @@
-import esbuild from 'rollup-plugin-esbuild';
+import typescript from '@rollup/plugin-typescript';
+import postcss from 'rollup-plugin-postcss';
 import {
-  FORMAT_EXTENSIONS, getDtsConfig,
+  checkExternalPackage,
+  checkWatchMode,
+  FORMAT_EXTENSIONS,
 } from '../../../build/rollup/utils.js';
 
 const OUTPUT_DIR = './lib';
 
 function getBundleConfig(outputDir, format) {
   return {
-    input: './src/index.ts',
+    input: 'src/index.ts',
     output: {
       dir: outputDir,
       entryFileNames: `[name].${FORMAT_EXTENSIONS[format]}`,
@@ -15,10 +18,17 @@ function getBundleConfig(outputDir, format) {
       sourcemap: true,
     },
     plugins: [
-      esbuild({
+      typescript({
         tsconfig: './tsconfig.package.json',
-      })
+        compilerOptions: {
+          noEmitOnError: checkWatchMode(),
+          outDir: outputDir,
+        },
+        outputToFilesystem: true,
+      }),
+      postcss(),
     ],
+    external: checkExternalPackage,
   };
 }
 
@@ -26,7 +36,6 @@ function getRollupConfig(outputDir) {
   return [
     getBundleConfig(outputDir, 'esm'),
     getBundleConfig(outputDir, 'cjs'),
-    getDtsConfig(outputDir),
   ];
 }
 

@@ -19,6 +19,8 @@ packages/jquery/patch/*
 packages/jquery/src/generated/*
 packages/interim/*
 
-/.off.eslintrc.js
+/.eslintrc.cjs
 /gulpfile.js
 /webpack.config.js
+
+rollup.config.mjs
