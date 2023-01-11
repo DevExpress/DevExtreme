@@ -76,10 +76,8 @@ jobs:
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", indices: "2/2" },
-          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2" },
+          { componentFolder: "renovation", name: "renovation (jquery)", platform: "jquery" },
+          { componentFolder: "renovation", name: "renovation (react)", platform: "react" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
