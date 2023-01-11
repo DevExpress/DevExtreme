@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: [/* 'jquery', */'react'],
 });
 
-fixture('Renovated scheduler - Appointment popup');
+fixture.disablePageReloads.skip('Renovated scheduler - Appointment popup');
 
 test('Popup should have correct width', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);

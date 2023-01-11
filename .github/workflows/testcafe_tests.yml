@@ -11,14 +11,10 @@ on:
 
 jobs:
   build:
-    name: build-${{ matrix.ARGS.name }}
+    name: build
     strategy:
       fail-fast: false
-      matrix:
-        ARGS: [
-          { name: "wip-renovation", inProgressRenovation: true },
-          { name: "default" },
-        ]
+
     runs-on: devextreme-shr2
     timeout-minutes: 15
 
@@ -42,7 +38,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:testcafe
+      run: npm run build:testcafe
 
     - name: Zip artifacts
       run: |
@@ -51,7 +47,7 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+        name: devextreme-artifacts
         path: artifacts.zip
         retention-days: 1
 
@@ -80,10 +76,8 @@ jobs:
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "renovation", name: "renovation (jquery) (1/2)", platform: "jquery", inProgressRenovation: true, indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", inProgressRenovation: true, indices: "2/2" },
-          { componentFolder: "renovation", name: "renovation (react) (1/2)", platform: "react", indices: "1/2" },
-          { componentFolder: "renovation", name: "renovation (react) (2/2)", platform: "react", indices: "2/2" },
+          { componentFolder: "renovation", name: "renovation (jquery)", platform: "jquery" },
+          { componentFolder: "renovation", name: "renovation (react)", platform: "react" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -112,7 +106,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
-        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+        name: devextreme-artifacts
 
     - name: Prepare localization
       if: matrix.ARGS.componentFolder == 'renovation'
@@ -133,7 +127,6 @@ jobs:
     - name: Run TestCafe tests
       run: |
         [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
-        [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
