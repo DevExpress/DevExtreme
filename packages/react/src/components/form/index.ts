@@ -1,3 +1,4 @@
 export {
-  Form, FormItem, FormItemLabel, FormItemHint, CustomRule, CustomRule1,
-} from './form';
+  CustomRule, CustomRule1, FormItem, FormItemHint, FormItemLabel,
+} from './form-item';
+export { Form } from './form';
