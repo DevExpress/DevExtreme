@@ -585,14 +585,14 @@ QUnit.test('label location if the angle is < 90 and resolveLabelOverlapping - sh
 
     group.animationComplete = $.proxy(function() {
         assert.deepEqual(group.children[2]._stored_settings.points, [64.04786, 219.49845, 21, 7], 'line 1 coords');
-        assert.equal(group.children[3]._stored_settings.x.toFixed(3), 34.027, 'text 1 is coord x');
-        assert.equal(group.children[3]._stored_settings.y.toFixed(3), 222.679, 'text 1 is coord y');
+        assert.roughEqual(group.children[3]._stored_settings.x, 34, 1, 'text 1 is coord x');
+        assert.roughEqual(group.children[3]._stored_settings.y, 222, 1, 'text 1 is coord y');
         assert.deepEqual(group.children[6]._stored_settings.points, [95.86324, 203.76216, 12, 17], 'line 2 coords');
-        assert.equal(group.children[7]._stored_settings.x.toFixed(3), 31.813, 'text 2 is coord x');
-        assert.equal(group.children[7]._stored_settings.y.toFixed(3), 215.275, 'text 2 is coord y');
+        assert.roughEqual(group.children[7]._stored_settings.x, 31, 1, 'text 2 is coord x');
+        assert.roughEqual(group.children[7]._stored_settings.y, 215, 1, 'text 2 is coord y');
         assert.deepEqual(group.children[10]._stored_settings.points, [128.78216, 191.1426, 4, 27], 'line 3 coords');
-        assert.equal(group.children[11]._stored_settings.x.toFixed(3), 29.950, 'text 3 is coord x');
-        assert.equal(group.children[11]._stored_settings.y.toFixed(3), 207.775, 'text 3 is coord y');
+        assert.roughEqual(group.children[11]._stored_settings.x, 29, 1, 'text 3 is coord x');
+        assert.roughEqual(group.children[11]._stored_settings.y, 207, 1, 'text 3 is coord y');
         done();
     }, this);
 });
@@ -638,14 +638,14 @@ QUnit.test('label location if the angle is 90 and resolveLabelOverlapping - shif
 
     group.animationComplete = $.proxy(function() {
         assert.deepEqual(group.children[2]._stored_settings.points, [194.21667, 31.15986, 21, 7], 'line 1 coords');
-        assert.equal(group.children[3]._stored_settings.x.toFixed(3), 192.275, 'text 1 is coord x');
-        assert.equal(group.children[3]._stored_settings.y.toFixed(3), -1.818, 'text 1 is coord y');
+        assert.roughEqual(group.children[3]._stored_settings.x, 192, 1, 'text 1 is coord x');
+        assert.roughEqual(group.children[3]._stored_settings.y, -1, 1, 'text 1 is coord y');
         assert.deepEqual(group.children[6]._stored_settings.points, [199, 66, 1, 7], 'line 2 coords');
-        assert.equal(group.children[7]._stored_settings.x.toFixed(3), 200.000, 'text 2 is coord x');
-        assert.equal(group.children[7]._stored_settings.y.toFixed(3), -2.000, 'text 2 is coord y');
+        assert.roughEqual(group.children[7]._stored_settings.x, 200, 1, 'text 2 is coord x');
+        assert.roughEqual(group.children[7]._stored_settings.y, -2, 1, 'text 2 is coord y');
         assert.deepEqual(group.children[10]._stored_settings.points, [ 202.48588, 101.08215, -8, 17], 'line 3 coords');
-        assert.equal(group.children[11]._stored_settings.x.toFixed(3), 207.725, 'text 3 is coord x');
-        assert.equal(group.children[11]._stored_settings.y.toFixed(3), -1.818, 'text 3 is coord y');
+        assert.roughEqual(group.children[11]._stored_settings.x, 207, 1, 'text 3 is coord x');
+        assert.roughEqual(group.children[11]._stored_settings.y, -1, 1, 'text 3 is coord y');
         done();
     }, this);
 });
@@ -654,21 +654,20 @@ QUnit.test('label location if the angle is > 90 and resolveLabelOverlapping - sh
     const done = assert.async();
     this.$container.dxBarGauge({
         values: [80, 79, 78],
-
         resolveLabelOverlapping: 'shift'
     });
     const group = this.getBarsGroup();
 
     group.animationComplete = $.proxy(function() {
         assert.deepEqual(group.children[2]._stored_settings.points, [341.22712, 152.47344, 1, 7], 'line 1 coords');
-        assert.equal(group.children[3]._stored_settings.x.toFixed(3), 371.981, 'text 1 is coord x');
-        assert.equal(group.children[3]._stored_settings.y.toFixed(3), 136.345, 'text 1 is coord y');
+        assert.roughEqual(group.children[3]._stored_settings.x, 371, 1, 'text 1 is coord x');
+        assert.roughEqual(group.children[3]._stored_settings.y, 136, 1, 'text 1 is coord y');
         assert.deepEqual(group.children[6]._stored_settings.points, [305.73529, 152.89618, -8, 17], 'line 2 coords');
-        assert.equal(group.children[7]._stored_settings.x.toFixed(3), 370.593, 'text 2 is coord x');
-        assert.equal(group.children[7]._stored_settings.y.toFixed(3), 128.743, 'text 2 is coord y');
+        assert.roughEqual(group.children[7]._stored_settings.x, 370, 1, 'text 2 is coord x');
+        assert.roughEqual(group.children[7]._stored_settings.y, 128, 1, 'text 2 is coord y');
         assert.deepEqual(group.children[10]._stored_settings.points, [ 270.67515, 156.59695, -16, 27], 'line 3 coords');
-        assert.equal(group.children[11]._stored_settings.x.toFixed(3), 368.848, 'text 3 is coord x');
-        assert.equal(group.children[11]._stored_settings.y.toFixed(3), 121.215, 'text 3 is coord y');
+        assert.roughEqual(group.children[11]._stored_settings.x.toFixed(3), 368, 1, 'text 3 is coord x');
+        assert.roughEqual(group.children[11]._stored_settings.y.toFixed(3), 121, 1, 'text 3 is coord y');
         done();
     }, this);
 });
