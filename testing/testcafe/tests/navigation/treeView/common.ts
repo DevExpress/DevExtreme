@@ -18,7 +18,13 @@ test('TreeView: the height calculates incorrectly when searchEnabled is true (T1
 
   await scrollable.scrollTo({ top: 1000 });
 
-  await testScreenshot(t, takeScreenshot, 'TreeView scrollable has correct height.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TreeView scrollable has correct height.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+    compactCallBack: async () => {
+      await scrollable.scrollTo({ top: 1000 });
+    },
+  });
 
   await t
     .expect(compareResults.isValid())
