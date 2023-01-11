@@ -1,14 +1,10 @@
 /* eslint-disable import/exports-last */
 import {
-  createCore,
-  Dispatcher,
-  Disposable,
-  Handlers,
-  Selector,
+  createStore,
   StateConfigMap,
-  StateManager,
-  ViewModelManager,
+  Store,
 } from '@devextreme/core';
+import { UpdateStateAction } from '@devextreme/core/src';
 
 // === props ===
 export type ValueProps<T> = {
@@ -26,58 +22,26 @@ export type RadioGroupState<T> = ValueProps<T>;
 
 // === actions ===
 
-type RadioGroupActions<T> = {
-  updateValue: { value: T }
-};
-
-type RadioGroupHandlers<T> = Handlers<RadioGroupState<T>, RadioGroupActions<T>>;
-
-function createActionHandlers<T>(): RadioGroupHandlers<T> {
-  return {
-    updateValue(stateValue, { value }) {
-      return {
-        ...stateValue,
-        value,
-      };
-    },
-  };
-}
-
-// === selectors ===
-export type RadioButtonVM = {
-  selected: boolean;
-};
-
-export function createRadioButtonVMSelector<T>(
+function updateValueAction<T>(
   value: T,
-): Selector<RadioGroupState<T>, RadioButtonVM> {
+): UpdateStateAction<RadioGroupState<T>> {
   return (state) => ({
-    selected: state.value === value,
+    ...state,
+    value,
   });
 }
 
-// === component ===
-export type RadioGroupStateManager<T> =
-  StateManager<RadioGroupState<T>>;
-
-export type RadioGroupViewModelManager<T> =
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  Disposable<ViewModelManager<RadioGroupState<T>, {}>>;
-
-export type RadioGroupDispatcher<T> =
-  Dispatcher<RadioGroupState<T>, RadioGroupHandlers<T>>;
-
-export type RadioGroupCore<T> = {
-  stateManager: RadioGroupStateManager<T>,
-  viewModelManager: RadioGroupViewModelManager<T>,
-  dispatcher: RadioGroupDispatcher<T>,
+export const RADIO_GROUP_ACTIONS = {
+  updateValue: updateValueAction,
 };
 
-export function createRadioGroupCore<T>(
+// === component ===
+
+export type RadioGroupStore<T> = Store<RadioGroupState<T>>;
+
+export function createRadioGroupStore<T>(
   initialState: RadioGroupState<T>,
   config: StateConfigMap<RadioGroupState<T>>,
-): RadioGroupCore<T> {
-  return createCore()(initialState, config, createActionHandlers<T>());
+): RadioGroupStore<T> {
+  return createStore(initialState, config);
 }
-
-export type RadioGroupValue = string | number;
