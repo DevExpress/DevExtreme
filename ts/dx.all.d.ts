@@ -2575,7 +2575,7 @@ declare module DevExpress.excelExporter {
         /**
          * [descr:ExportDataGridProps.encodeExecutableContent]
          */
-        encodeExecutableContent?: any;
+        encodeExecutableContent?: boolean;
         /**
          * [descr:ExportDataGridProps.keepColumnWidths]
          */
