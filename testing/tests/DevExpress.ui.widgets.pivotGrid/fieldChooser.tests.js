@@ -930,7 +930,7 @@ QUnit.module('dxPivotGridFieldChooser', {
             assert.ok($item.hasClass('dx-drag-source'), 'dragging is started');
             assert.strictEqual($('.dx-drag').length, 1);
 
-            assert.strictEqual(parseInt($('.dx-drag').css('width'), 10), parseInt($item.css('width'), 10) + 1);
+            assert.strictEqual(parseInt($('.dx-drag').css('width'), 10), parseInt($item.css('width'), 10));
 
             assert.ok($('.dx-drag').hasClass('dx-widget'));
             assert.ok($('.dx-drag').hasClass('dx-pivotgrid-fields-container'));
