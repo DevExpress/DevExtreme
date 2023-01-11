@@ -143,7 +143,7 @@ export interface ExcelExportBaseProps {
      * @default false
      * @public
      */
-     encodeExecutableContent?: boolean;
+    encodeExecutableContent?: boolean;
 }
 
 /**

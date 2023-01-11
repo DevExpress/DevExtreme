@@ -2580,6 +2580,10 @@ declare module DevExpress.excelExporter {
      */
     export interface ExcelExportBaseProps {
         /**
+         * [descr:ExcelExportBaseProps.encodeExecutableContent]
+         */
+        encodeExecutableContent?: boolean;
+        /**
          * [descr:ExcelExportBaseProps.keepColumnWidths]
          */
         keepColumnWidths?: boolean;
