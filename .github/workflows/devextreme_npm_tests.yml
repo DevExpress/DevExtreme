@@ -122,15 +122,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/compared-screenshots/**/*
-        if-no-files-found: ignore
-
-    - name: Copy failed test artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: failed-tests
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/failedtests/**/*
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
   test_angular_wrappers:
@@ -205,12 +197,15 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build with Angular 7
-      working-directory: ../devextreme-angular-repo
-      run: npm run build
+      run: |
+        cd ../devextreme-angular-repo
+        npm run build
+
 
     - name: Run tests with Angular 7
-      working-directory: ../devextreme-angular-repo
-      run: npx lerna run --scope devextreme-angular gulp -- run.tests
+      run: |
+        cd ../devextreme-angular-repo
+        run: npx lerna run --scope devextreme-angular gulp -- run.tests
 
   test_bundlers:
     name: Bundlers tests
