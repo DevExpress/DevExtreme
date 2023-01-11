@@ -1,4 +1,4 @@
-import { RadioGroupCore } from '@devextreme/components';
+import { RadioGroupStore } from '@devextreme/components';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { doIfContextExist, waitContextAndDo } from '../../internal';
 // TODO: Move this code to separate directory radio-common in the future.
@@ -26,7 +26,7 @@ function createStandaloneStrategy(): RadioButtonStrategy {
 }
 
 function createRadioGroupStrategy<T>(
-  radioGroupCore$: Observable<RadioGroupCore<T> | undefined>,
+  radioGroupCore$: Observable<RadioGroupStore<T> | undefined>,
   getRadioButtonValue: () => T,
 ): RadioButtonStrategy {
   let unsubscribe: () => void | undefined;
@@ -35,8 +35,9 @@ function createRadioGroupStrategy<T>(
   const handleChange = () => {
     radioGroupCore$.pipe(
       doIfContextExist(),
-    ).subscribe(({ dispatcher }) => {
-      dispatcher.dispatch('updateValue', { value: getRadioButtonValue() });
+    ).subscribe((store) => {
+      store.addUpdate(() => ({ value: getRadioButtonValue() }));
+      store.commitUpdates();
     });
   };
 
@@ -44,12 +45,12 @@ function createRadioGroupStrategy<T>(
 
   const onInit = () => {
     radioGroupCore$.pipe(waitContextAndDo())
-      .subscribe(({ stateManager }) => {
-        unsubscribe = stateManager.subscribe(({ value }) => {
+      .subscribe((store) => {
+        unsubscribe = store.subscribe(({ value }) => {
           checkedSubject.next(getRadioButtonValue() === value);
         });
 
-        const { value } = stateManager.getState();
+        const { value } = store.getState();
         checkedSubject.next(getRadioButtonValue() === value);
       });
   };
@@ -74,7 +75,7 @@ export interface RadioButtonStrategy {
 }
 
 export function createRadioButtonStrategy(
-  radioGroupCore$: Observable<RadioGroupCore<unknown> | undefined> | undefined,
+  radioGroupCore$: Observable<RadioGroupStore<unknown> | undefined> | undefined,
   getRadioButtonValue: () => unknown,
 ): RadioButtonStrategy {
   if (radioGroupCore$) {
