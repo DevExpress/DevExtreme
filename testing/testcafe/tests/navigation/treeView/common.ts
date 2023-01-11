@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
@@ -6,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
-// import TreeView from '../../../model/treeView';
+import TreeView from '../../../model/treeView';
 
 fixture.disablePageReloads`TreeView`
   .page(url(__dirname, '../../container.html'));
@@ -14,13 +13,10 @@ fixture.disablePageReloads`TreeView`
 test('TreeView: the height calculates incorrectly when searchEnabled is true (T1138605)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // const treeView = new TreeView('#container');
-  // const scrollable = treeView.getScrollable();
+  const treeView = new TreeView('#container');
+  const scrollable = treeView.getScrollable();
 
-  // (scrollable as any).scrollTo(1000);
-
-  const scrollableContainer = Selector('.dx-scrollable-container');
-  await t.scroll(scrollableContainer, 'bottom');
+  await scrollable.scrollTo({ top: 1000 });
 
   await testScreenshot(t, takeScreenshot, 'TreeView scrollable has correct height.png', { element: '#container' });
 

@@ -1,12 +1,13 @@
-import { ClientFunction } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 import CheckBox from '../checkBox';
+import Scrollable from '../scrollView/scrollable';
 
 const CLASS = {
   treeview: 'dx-treeview',
   node: 'dx-treeview-node',
   checkbox: 'dx-checkbox',
+  scrollable: 'dx-scrollable',
 };
 
 export default class TreeView extends Widget {
@@ -25,12 +26,7 @@ export default class TreeView extends Widget {
     return new CheckBox(this.getNode(index).find(`.${CLASS.checkbox}`));
   }
 
-  getScrollable(): unknown {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => { (getInstance() as any).getScrollable(); },
-      { dependencies: { getInstance } },
-    )();
+  getScrollable(): Scrollable {
+    return new Scrollable(this.element.find(`.${CLASS.scrollable}`));
   }
 }
