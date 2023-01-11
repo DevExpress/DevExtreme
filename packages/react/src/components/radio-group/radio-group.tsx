@@ -1,6 +1,8 @@
 import {
-  createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
+  createRadioGroupStore,
+  ReadonlyProps, TemplateProps, ValueProps,
 } from '@devextreme/components';
+import { UpdateType } from '@devextreme/core';
 import { memo, useMemo } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { Props } from '../../internal/props';
@@ -10,7 +12,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 
-  const radioGroupCore = useMemo(() => createRadioGroupCore<T>({
+  const store = useMemo(() => createRadioGroupStore<T>({
     value: controlledMode ? props.value : props.defaultValue,
   }, {
     value: {
@@ -21,14 +23,14 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
 
   useSecondEffect(() => {
     if (controlledMode) {
-      radioGroupCore.stateManager.addUpdate({ value: props.value });
+      store.addUpdate(() => ({ value: props.value }));
     }
 
-    radioGroupCore.stateManager.commitUpdates();
+    store.commitUpdates(UpdateType.fromProps);
   }, [props.value]);
 
   return (
-    <RadioGroupContext.Provider value={radioGroupCore}>
+    <RadioGroupContext.Provider value={store}>
       <div>
         {props.children}
       </div>

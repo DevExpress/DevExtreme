@@ -1,18 +1,26 @@
-import { StateManager, UnknownRecord } from '@devextreme/core';
+import {
+  defaultSelector,
+  Selector,
+  Store,
+  UnknownRecord,
+} from '@devextreme/core';
 import { useEffect, useState } from 'react';
 
-export function useCoreState<TState extends UnknownRecord>(
-  stateManager: StateManager<TState>,
-): TState {
-  const [state, setState] = useState(stateManager.getState());
+export function useStoreSelector<TState extends UnknownRecord, TValue>(
+  store: Store<TState>,
+  selector: Selector<TState, TValue>,
+): TValue {
+  const [state, setState] = useState(selector(store.getState()));
 
-  useEffect(() => {
-    const unsubscribe = stateManager.subscribe((stateValue) => {
-      setState(stateValue);
-    });
-
-    return unsubscribe;
-  }, []);
+  useEffect(() => store.subscribe((stateValue) => {
+    setState(selector(stateValue));
+  }), []);
 
   return state;
+}
+
+export function useStoreState<TState extends UnknownRecord>(
+  store: Store<TState>,
+): TState {
+  return useStoreSelector(store, defaultSelector);
 }

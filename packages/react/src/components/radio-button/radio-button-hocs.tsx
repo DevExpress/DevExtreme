@@ -2,7 +2,7 @@ import {
   ComponentType,
   useState,
 } from 'react';
-import { useCoreState } from '../../internal/hooks';
+import { useStoreState } from '../../internal/hooks';
 import { RadioButtonInternal } from './radio-button-internal';
 import {
   CoreBoundRadioButtonProps,
@@ -40,18 +40,17 @@ function withUncontrolledBehavior<T>(
 //* Component={"name":"CoreBoundRadioButton"}
 function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
   function CoreBoundRadioButton({
-    radioGroupCore: { dispatcher, stateManager },
+    store,
     value,
     ...props
   }: CoreBoundRadioButtonProps<T>) {
-    const coreState = useCoreState(stateManager);
+    const state = useStoreState(store);
 
-    const checked = coreState.value === value;
+    const checked = state.value === value;
     const handleSelected = () => {
       props.onSelected?.(value);
-      dispatcher.dispatch('updateValue', {
-        value,
-      });
+      store.addUpdate(() => ({ value }));
+      store.commitUpdates();
     };
 
     return (

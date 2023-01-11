@@ -15,16 +15,16 @@ function RadioButtonWithForwardedRef<T>(
   props: RadioButtonProps<T>,
   inputRef: ForwardedRef<HTMLInputElement>,
 ) {
-  const radioGroupCore = useContext(RadioGroupContext);
+  const store = useContext(RadioGroupContext);
   const inputId = useId('radio-button');
 
   const RadioButtonComponent = props.checked === undefined
     ? UncontrolledRadioButton
     : RadioButtonInternal;
-  if (radioGroupCore) {
+  if (store) {
     return (
       <CoreBoundRadioButton
-        radioGroupCore={radioGroupCore}
+        store={store}
         inputId={inputId}
         inputRef={inputRef}
         // eslint-disable-next-line react/jsx-props-no-spreading
