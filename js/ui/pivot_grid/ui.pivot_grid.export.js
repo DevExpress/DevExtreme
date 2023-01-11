@@ -6,7 +6,6 @@ import { hasWindow } from '../../core/utils/window';
 import { getDefaultAlignment } from '../../core/utils/position';
 import formatHelper from '../../format_helper';
 import localizationNumber from '../../localization/number';
-// import { excel as excelExporter, export as exportMethod } from '../../exporter';
 import { prepareItems } from '../grid_core/ui.grid_core.export';
 import { when, Deferred } from '../../core/utils/deferred';
 

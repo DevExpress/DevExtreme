@@ -579,8 +579,6 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
         this._headersView = this.getView('columnHeadersView');
 
         this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
-        this.createAction('onExported', { excludeValidators: ['disabled', 'readOnly'] });
-        this.createAction('onFileSaving', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     callbackNames: function() {
