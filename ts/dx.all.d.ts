@@ -6249,6 +6249,10 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportBaseProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+    /**
+     * [descr:ExcelExportBaseProps.encodeExecutableContent]
+     */
+    encodeExecutableContent?: boolean;
   }
   /**
    * [descr:ExcelExportDataGridProps]

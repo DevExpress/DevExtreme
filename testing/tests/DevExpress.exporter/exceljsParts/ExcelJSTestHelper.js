@@ -144,7 +144,7 @@ class ExcelJSTestHelper {
 
     checkCellFormat(cellsArray) {
         this._iterateCells(cellsArray, (cellArgs) => {
-            const { address, dataType, type, numFmt } = cellArgs.excelCell;
+            const { address, dataType = 'string', type = 3, numFmt } = cellArgs.excelCell;
             const { row, column } = address;
 
             assert.deepEqual(typeof this.worksheet.getCell(row, column).value, dataType, `typeof this.worksheet.getCell(${row}, ${column}).value`);
@@ -230,7 +230,7 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
 
 class ExcelJSDataGridTestHelper extends ExcelJSTestHelper {
     checkCustomizeCell(eventArgs, expectedCells, callIndex) {
-        const { gridCell } = eventArgs;
+        const { gridCell = {} } = eventArgs;
         const expectedCell = super.checkCustomizeCell(eventArgs, expectedCells, callIndex);
 
         const expectedColumn = expectedCell.gridCell.column;
@@ -256,8 +256,10 @@ class ExcelJSDataGridTestHelper extends ExcelJSTestHelper {
 
     _extendExpectedCells(cellsArray, topLeft) {
         super._extendExpectedCells(cellsArray, topLeft, (cellArgs, rowIndex, columnIndex) => {
-            if(!('value' in cellArgs.gridCell)) {
-                cellArgs.gridCell.value = cellArgs.excelCell.value;
+            const { excelCell, gridCell = {} } = cellArgs;
+
+            if(!('value' in gridCell)) {
+                gridCell.value = excelCell.value;
             }
         });
     }
