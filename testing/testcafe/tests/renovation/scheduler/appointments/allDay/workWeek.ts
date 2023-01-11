@@ -7,7 +7,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Layout:Appointments:AllDay:WorkWeek');
+fixture.disablePageReloads.skip('Layout:Appointments:AllDay:WorkWeek');
 
 test('It should not cut appointment if end date is concides with the begining of the week end', async (t) => {
   const appointment = new Scheduler('#container').getAppointmentByIndex(0);

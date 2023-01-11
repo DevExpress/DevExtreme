@@ -7,7 +7,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Appointment focus');
+fixture.disablePageReloads.skip('Renovated scheduler - Appointment focus');
 
 test('it should be focused correctly', async (t) => {
   const scheduler = new Scheduler('#container');

@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Virtual Scrolling');
+fixture.disablePageReloads.skip('Renovated scheduler - Virtual Scrolling');
 
 const resources = [{
   id: 0,

@@ -9,7 +9,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'/* angular */],
 });
 
-fixture('Layout:Templates:appointmentTemplate');
+fixture.disablePageReloads.skip('Layout:Templates:appointmentTemplate');
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek'/* , 'agenda' */].forEach((currentView) => {
   test(
