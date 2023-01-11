@@ -10,11 +10,17 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build",
-        "outputs": [
-          "{projectRoot}/packages/jquery/src/generated"
-        ]
-      }
+        "script": "build"
+      },
+      "inputs": [
+        "default",
+        "^default",
+        "!{projectRoot}/src/generated"
+      ],
+      "outputs": [
+        "{projectRoot}/lib",
+        "{projectRoot}/src/generated"
+      ]
     }
   },
   "tags": []
