@@ -511,7 +511,7 @@ QUnit.test('Negative', function(assert) {
     assert.strictEqual(result, false);
 });
 
-QUnit.module('Check object in visible area', {
+QUnit.module('Check point in visible area', {
     beforeEach: function() {
         const that = this;
         this.options = {
@@ -542,172 +542,53 @@ QUnit.module('Check object in visible area', {
     }
 });
 
-QUnit.test('Object is in visible area', function(assert) {
+QUnit.test('Point is in visible area', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    point._calculateVisibility(10, 20, 30, 40);
+    point._calculateVisibility(10, 20);
     const isInVisibleArea = point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
 
-QUnit.test('Object is abroad on left', function(assert) {
+QUnit.test('Point is abroad on left', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    point._calculateVisibility(-50, 20, 30, 40);
+    point._calculateVisibility(-50, 20);
 
     const isInVisibleArea = point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
 
-QUnit.test('Object is abroad on right', function(assert) {
+QUnit.test('Point is abroad on right', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    point._calculateVisibility(120, 20, 30, 40);
+    point._calculateVisibility(120, 20);
 
     const isInVisibleArea = point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
 
-QUnit.test('Object is abroad on top', function(assert) {
+QUnit.test('Point is abroad on top', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    point._calculateVisibility(10, -70, 30, 40);
+    point._calculateVisibility(10, -70);
 
     const isInVisibleArea = point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
 
-QUnit.test('Object is abroad on bottom', function(assert) {
+QUnit.test('Point is abroad on bottom', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    point._calculateVisibility(10, 230, 30, 40);
+    point._calculateVisibility(10, 230);
 
     const isInVisibleArea = point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
-});
-
-QUnit.test('Object is visible, width and height are undefined', function(assert) {
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(10, 210);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(isInVisibleArea);
-});
-
-QUnit.test('Object is not visible, width and height are defined', function(assert) {
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(10, 210, 10, 10);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(!isInVisibleArea);
-});
-
-QUnit.test('Object is not visible, width and height are defined, on top', function(assert) {
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(10, -10, 10, 10);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(!isInVisibleArea);
-});
-
-QUnit.test('Object is visible, height is zero', function(assert) {
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(10, 210, 10, 0);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(isInVisibleArea);
-});
-
-QUnit.test('Object is visible, width and height are undefined, rotated', function(assert) {
-    this.options.rotated = true;
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(100, 10);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(isInVisibleArea);
-});
-
-QUnit.test('Object is not visible, width and height are defined, rotated', function(assert) {
-    this.options.rotated = true;
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(210, 10, 10, 10);
-
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(!isInVisibleArea);
-});
-
-QUnit.test('Object is not visible, width and height are defined, rotated, on left', function(assert) {
-    this.options.rotated = true;
-    const point = createPoint(this.series, this.data, this.options);
-
-    point._calculateVisibility(-10, 10, 10, 10);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(!isInVisibleArea);
-});
-
-QUnit.test('Object is visible, width is zero, rotated', function(assert) {
-    this.options.rotated = true;
-    const point = createPoint(this.series, this.data, this.options);
-    point._calculateVisibility(100, 10, 0, 10);
-    const isInVisibleArea = point.isInVisibleArea();
-
-    assert.ok(isInVisibleArea);
-});
-
-QUnit.test('Point is visible. Series visible. Point inside visible area', function(assert) {
-    this.options.rotated = true;
-    this.series.isVisible = function() { return true; };
-    const point = createPoint(this.series, this.data, this.options);
-    point._calculateVisibility(100, 10, 0, 10);
-    const isVisible = point.isVisible();
-
-    assert.ok(isVisible);
-});
-
-QUnit.test('Point is visible. Series visible. Point outside visible area', function(assert) {
-    this.options.rotated = true;
-    this.series.isVisible = function() { return true; };
-    const point = createPoint(this.series, this.data, this.options);
-    point._calculateVisibility(-10, 10, 10, 10);
-    const isVisible = point.isVisible();
-
-
-    assert.ok(!isVisible);
-});
-
-QUnit.test('Point is visible. Series no visible. Point inside visible area', function(assert) {
-    this.options.rotated = true;
-    this.series.isVisible = function() { return false; };
-    const point = createPoint(this.series, this.data, this.options);
-    point._calculateVisibility(100, 10, 0, 10);
-    const isVisible = point.isVisible();
-
-
-    assert.ok(!isVisible);
-});
-
-QUnit.test('Point is visible. Series no visible. Point outside visible area', function(assert) {
-    this.options.rotated = true;
-    this.series.isVisible = function() { return false; };
-    const point = createPoint(this.series, this.data, this.options);
-    point._calculateVisibility(-10, 10, 10, 10);
-    const isVisible = point.isVisible();
-
-
-    assert.ok(!isVisible);
 });
 
 QUnit.module('Draw point', {
