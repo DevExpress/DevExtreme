@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import { WidgetName } from '../../helpers/createWidget';
 import Widget from '../internal/widget';
 import CheckBox from '../checkBox';
@@ -22,5 +23,14 @@ export default class TreeView extends Widget {
 
   getCheckBoxByNodeIndex(index = 0): CheckBox {
     return new CheckBox(this.getNode(index).find(`.${CLASS.checkbox}`));
+  }
+
+  getScrollable(): unknown {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => { (getInstance() as any).getScrollable(); },
+      { dependencies: { getInstance } },
+    )();
   }
 }
