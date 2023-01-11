@@ -47,19 +47,26 @@ export function Form({ children, onSubmit }: FormProps) {
   );
 
   const validateForm = () => {
+    let isValid = true;
     const validationResults: FormValidationResult = {};
     Object.keys(validationRules.current).forEach((name) => {
       validationResults[name] = validateFormItemValue(
         formValues.current[name],
         validationRules.current[name],
       );
+      if (validationResults[name].length) {
+        isValid = false;
+      }
     });
     setFormValidationResult(validationResults);
+    return isValid;
   };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
-    validateForm();
-    event.preventDefault();
+    const isValid = validateForm();
+    if (!isValid) {
+      event.preventDefault();
+    }
     onSubmit?.(event);
   };
 
