@@ -134,7 +134,7 @@ jobs:
         export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI1Zjc4MTc1Ny01NGU0LTQ5ODAtYjhkNi1iMDY1OTM1NGIwYjMiLCJ0b2tlblNlY3JldCI6Ik9wSEhzZG1OVFdxUkdoWWJjY3Z0NWl0ZHd4aDZ2VURUSUVyRjNFUk92Z2FCb2RvQkZLMlNGQlY2L21NM3JIVnQvNHY4UnlqOXoxOW1YR0s4UzhVSzdueWhXb3kxdXZGZ1RWUk9HUkt5MDVUNkw2cTlIcnQrT1pFcjFZcnR3RU1ZTzErWDduQzNxcWI2cGFlL1pmSCtKZHlqZ2NSTG4rMGlOYjROSDdMcjhOTE5UeFQ0Q2tSaWI3dy82cXl0b04yTHBhcFhialJkbG1JejhMTlpEcjFVVXVtUVNuOFVSL2JjQ2NuRnBFcFc0R3BPaWRsa3l3WklCTHN5NHVNZDUxaHNrb1ZGQjJuK1IwZTBiMDVEdTdmZnJKcVByTEdTZHlLVXR1YzRaTFlLZlJlaGkrQmpOTzAyUDlzamdEQ040U0pvbS96SzhUVjRaeEdneVFaQW0yQ2YyZz09In0=
         export TESTCAFE_DASHBOARD_DEVEXTREME_URL=https://devextreme.resolve.sh
         export TESTCAFE_DASHBOARD_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
-        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $META_RENOVATION $INDICES $PLATFORM $THEME"
+        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
