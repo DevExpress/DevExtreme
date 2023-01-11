@@ -15,22 +15,9 @@ interface FormProps {
 }
 
 export function Form({ children, onSubmit }: FormProps) {
-  const [validationResult, setValidationResult] = useState<FormValidationResult>({});
+  const [formValidationResult, setFormValidationResult] = useState<FormValidationResult>({});
   const formValues = useRef<Record<string, unknown>>({});
   const validationRules = useRef<Record<string, Rule[]>>({});
-  const formContextValue = useMemo(
-    () => ({
-      validationResult,
-      onValueChanged: (name: string, value: unknown) => {
-        formValues.current = { ...formValues.current, [name]: value };
-      },
-      onValidationRulesInitialized: (name: string, rules: Rule[]) => {
-        validationRules.current = { ...validationRules.current, [name]: rules };
-      },
-    }),
-    [validationResult],
-  );
-
   const validateFormItemValue: FormItemValidator = (value, rules) => {
     const result: string[] = [];
     if (rules.length) {
@@ -43,6 +30,22 @@ export function Form({ children, onSubmit }: FormProps) {
     return result;
   };
 
+  const formContextValue = useMemo(
+    () => ({
+      validationResult: formValidationResult,
+      onValueChanged: (name: string, value: unknown) => {
+        formValues.current = { ...formValues.current, [name]: value };
+        const validationResult = validateFormItemValue(value, validationRules.current[name]);
+        setFormValidationResult(previousResult => (
+          { ...previousResult, [name]: validationResult }));
+      },
+      onValidationRulesInitialized: (name: string, rules: Rule[]) => {
+        validationRules.current = { ...validationRules.current, [name]: rules };
+      },
+    }),
+    [formValidationResult],
+  );
+
   const validateForm = () => {
     const validationResults: FormValidationResult = {};
     Object.keys(validationRules.current).forEach((name) => {
@@ -51,7 +54,7 @@ export function Form({ children, onSubmit }: FormProps) {
         validationRules.current[name],
       );
     });
-    setValidationResult(validationResults);
+    setFormValidationResult(validationResults);
   };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {

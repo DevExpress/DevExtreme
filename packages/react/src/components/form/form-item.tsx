@@ -1,6 +1,6 @@
 // eslint-disable-next-line rulesdir/no-mixed-import
 import React, {
-  JSXElementConstructor, PropsWithChildren, useContext, useEffect, useMemo,
+  JSXElementConstructor, PropsWithChildren, ReactElement, useContext, useEffect, useMemo,
 } from 'react';
 import { RadioGroup } from '../radio-group';
 import { FormContext } from './form-context';
@@ -66,19 +66,18 @@ export function FormItemLabel({ children }: PropsWithChildren) {
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
 
-  const typesToSectionMapping = {
-    label: [FormItemLabel],
-    editor: [RadioGroup],
-    hint: [FormItemHint],
-    rules: [CustomRule, CustomRule1],
-  };
-
   const sections = useMemo<FormItemChildrenInfo>(() => {
+    const typesToSectionMapping = {
+      label: [FormItemLabel],
+      editor: [RadioGroup],
+      hint: [FormItemHint],
+      rules: [CustomRule, CustomRule1],
+    };
     const childrenByTypes = groupChildrenByTypes(children, typesToSectionMapping);
     return {
-      label: childrenByTypes['label'][0],
+      label: childrenByTypes['label']?.[0],
       editor: childrenByTypes['editor'][0],
-      hint: childrenByTypes['hint'][0],
+      hint: childrenByTypes['hint']?.[0],
       rules: childrenByTypes['rules'] || [],
     };
   }, [children]);
@@ -97,13 +96,21 @@ export function FormItem({ name, children }: FormItemProps) {
     formContext?.onValidationRulesInitialized(name, validationRules);
   }, [children]);
 
+  const onEditorValueChanged = (value: unknown) => {
+    formContext?.onValueChanged(name, value);
+  };
+
   const renderValidation = () => <span>{formContext?.validationResult?.[name]?.join('. ')}</span>;
 
   return (
     <div>
       <span>{sections.label}</span>
-      <span>{sections.editor}</span>
       <span>{sections.hint}</span>
+      <span>
+        {/* We need to subscribe to different editors' valueChange.
+        Also, we need to get their initial value somehow */}
+        {React.cloneElement(sections.editor as ReactElement, { valueChange: onEditorValueChanged })}
+      </span>
       <span>{renderValidation()}</span>
     </div>
   );
