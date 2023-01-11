@@ -462,7 +462,7 @@ QUnit.test('Negative. LowValue', function(assert) {
     assert.strictEqual(result, false);
 });
 
-QUnit.module('Check object in visible area', {
+QUnit.module('Check point in visible area', {
     beforeEach: function() {
         const that = this;
         const translateXData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 };
@@ -617,7 +617,7 @@ QUnit.test('Point is visible on the bottom border', function(assert) {
     assert.ok(isInVisibleArea);
 });
 
-QUnit.module('Check object in visible area. Rotated.', {
+QUnit.module('Check point in visible area. Rotated.', {
     beforeEach: function() {
         const that = this;
         const translateXData = { 1: -10, 2: 0, 3: 10, 4: 40, 5: 50, 6: 90, 7: 100, 8: 110 };
