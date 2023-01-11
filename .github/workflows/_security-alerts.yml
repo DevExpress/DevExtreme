@@ -30,18 +30,10 @@ jobs:
     needs: [ fetch ]
 
     steps:
-      - name: Get Date
-        id: get-date
-        run: |
-          echo "date=$(/bin/date -u "+%s")" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - uses: actions/cache@v3
-        id: notify-cache
+      - uses: actions/download-artifact@v3
+        continue-on-error: true
         with:
-          path: dependabot_alerts.json
-          key: ${{ runner.os }}-security-${{ steps.get-date.outputs.date }}
-          restore-keys: ${{ runner.os }}-security
+          name: dependabot_alerts.json
 
       - name: Teams Notification
         uses: iBat/github-actions/send-teams-notification@ci/security-alerts
@@ -50,3 +42,8 @@ jobs:
           alerts: ${{ needs.fetch.outputs.alerts }}
           alert_type: Dependabot
           alerts_cache_file: dependabot_alerts.json
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dependabot_alerts.json
+          path: dependabot_alerts.json
