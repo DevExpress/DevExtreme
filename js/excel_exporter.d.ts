@@ -190,12 +190,6 @@ export interface ExportDataGridProps {
      * @public
      */
     loadPanel?: ExportLoadPanel;
-    /**
-      * @docid ExportDataGridProps.encodeExecutableContent
-      * @default false
-      * @public
-      */
-    encodeExecutableContent?: boolean;
 }
 
 /**
