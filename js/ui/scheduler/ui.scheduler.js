@@ -889,9 +889,11 @@ class Scheduler extends Widget {
             workspace.option('allDayExpanded', this._isAllDayExpanded());
             workspace._dimensionChanged();
 
-            const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
+            if(!this.option('height') || !this.option('width')) {
+                const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
-            this._appointments.option('items', appointments);
+                this._appointments.option('items', appointments);
+            }
         }
 
         this.hideAppointmentTooltip();
