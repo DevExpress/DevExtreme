@@ -513,7 +513,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _shouldHandleKey: function(e) {
         const keyName = eventUtils.normalizeKeyName(e);
-        const isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(keyName);
+        const isSpecialChar = eventUtils.isCommandKeyPressed(e) || e.altKey || e.shiftKey || !this._isChar(keyName);
         const isMinusKey = keyName === MINUS_KEY;
         const useMaskBehavior = this._useMaskBehavior();
 
@@ -776,9 +776,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         switch(args.name) {
             case 'format':
             case 'useMaskBehavior':
+                this._renderInputType();
                 this._updateFormat();
                 this._renderFormatter();
                 this._renderValue();
+                this._refreshValueChangeEvent();
+                this._refreshEvents();
                 break;
             case 'min':
             case 'max':

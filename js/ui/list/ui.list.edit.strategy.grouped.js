@@ -10,7 +10,7 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
 
 const SELECTION_SHIFT = 20;
-const SELECTION_MASK = 0x8FF;
+const SELECTION_MASK = (1 << SELECTION_SHIFT) - 1;
 
 const combineIndex = function(indices) {
     return (indices.group << SELECTION_SHIFT) + indices.item;

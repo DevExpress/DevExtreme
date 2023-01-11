@@ -3,16 +3,14 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { hasWindow } from '../../core/utils/window';
-import { format } from '../../format_helper';
-import { parse } from '../../localization/number';
+import { getDefaultAlignment } from '../../core/utils/position';
+import formatHelper from '../../format_helper';
+import localizationNumber from '../../localization/number';
 import clientExporter, { excel as excelExporter } from '../../exporter';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const DEFAULT_DATA_TYPE = 'string';
-const COLUMN_HEADER_STYLE_ID = 0;
-const ROW_HEADER_STYLE_ID = 1;
-const DATA_STYLE_OFFSET = 2;
 const DEFAUL_COLUMN_WIDTH = 100;
 
 exports.ExportMixin = extend({}, exportMixin, {
@@ -88,7 +86,7 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
             {
-                alignment: this._options.rtlEnabled ? 'right' : 'left',
+                alignment: getDefaultAlignment(this._options.rtlEnabled),
                 colspan: rowsLength,
                 rowspan: headerRowsCount
             }));
@@ -122,60 +120,19 @@ exports.ExportMixin = extend({}, exportMixin, {
     }
 });
 
-function getCellDataType(field) {
-    if(field && field.customizeText) {
-        return 'string';
-    }
-
-    if(field.dataType) {
-        return field.dataType;
-    }
-
-    if(field.format) {
-        if(parse(format(1, field.format)) === 1) {
-            return 'number';
-        }
-        if(format(new Date(), field.format)) {
-            return 'date';
-        }
-    }
-
-    return DEFAULT_DATA_TYPE;
-}
-
 exports.DataProvider = Class.inherit({
     ctor: function(options) {
         this._options = options;
-        this._styles = [];
     },
 
     ready: function() {
-        const that = this;
-        const options = that._options;
-        const dataFields = options.dataFields;
+        const options = this._options;
 
-        return when(options.items).done(function(items) {
+        return when(options.items).done((items) => {
             const headerSize = items[0][0].rowspan;
             const columns = items[headerSize - 1];
-            const dataItemStyle = { alignment: options.rtlEnabled ? 'left' : 'right' };
 
-            that._styles = [
-                { alignment: 'center', dataType: 'string' },
-                { alignment: options.rtlEnabled ? 'right' : 'left', dataType: 'string' }
-            ];
-
-            if(dataFields.length) {
-                dataFields.forEach(function(dataField) {
-                    that._styles.push(extend({}, dataItemStyle, {
-                        format: dataField.format,
-                        dataType: getCellDataType(dataField)
-                    }));
-                });
-            } else {
-                that._styles.push(dataItemStyle);
-            }
-
-            each(columns, function(columnIndex, column) {
+            each(columns, (columnIndex, column) => {
                 column.width = DEFAUL_COLUMN_WIDTH;
             });
 
@@ -217,13 +174,11 @@ exports.DataProvider = Class.inherit({
     },
 
     getFrozenArea: function() {
-        const items = this._options.items;
-
-        return { x: items[0][0].colspan, y: items[0][0].rowspan };
+        return { x: this.getRowAreaColCount(), y: this.getColumnAreaRowCount() };
     },
 
     getCellType: function(rowIndex, cellIndex) {
-        const style = this._styles[this.getStyleId(rowIndex, cellIndex)];
+        const style = this.getStyles()[this.getStyleId(rowIndex, cellIndex)];
         return style && style.dataType || 'string';
     },
 
@@ -234,7 +189,7 @@ exports.DataProvider = Class.inherit({
 
         if(isExcelJS) {
             result.cellSourceData = item;
-            const areaName = this._tryGetAreaName(items, item, rowIndex, cellIndex);
+            const areaName = this._tryGetAreaName(item, rowIndex, cellIndex);
             if(areaName) {
                 result.cellSourceData.area = areaName;
             }
@@ -255,38 +210,100 @@ exports.DataProvider = Class.inherit({
         return result;
     },
 
-    _tryGetAreaName(items, item, rowIndex, cellIndex) {
-        const columnHeaderSize = items[0][0].rowspan;
-        const rowHeaderSize = items[0][0].colspan;
-
-        if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+    _tryGetAreaName(item, rowIndex, cellIndex) {
+        if(this.isColumnAreaCell(rowIndex, cellIndex)) {
             return 'column';
-        } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
+        } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
             return 'row';
         } else if(isDefined(item.dataIndex)) {
             return 'data';
         }
     },
 
+    isRowAreaCell(rowIndex, cellIndex) {
+        return rowIndex >= this.getColumnAreaRowCount() && cellIndex < this.getRowAreaColCount();
+    },
+
+    isColumnAreaCell(rowIndex, cellIndex) {
+        return cellIndex >= this.getRowAreaColCount() && rowIndex < this.getColumnAreaRowCount();
+    },
+
+    getColumnAreaRowCount() {
+        return this._options.items[0][0].rowspan;
+    },
+
+    getRowAreaColCount() {
+        return this._options.items[0][0].colspan;
+    },
+
+    getHeaderStyles() {
+        return [
+            { alignment: 'center', dataType: 'string' },
+            { alignment: getDefaultAlignment(this._options.rtlEnabled), dataType: 'string' }
+        ];
+    },
+
+    getDataFieldStyles() {
+        const dataFields = this._options.dataFields;
+        const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
+        const dataFieldStyles = [];
+
+        if(dataFields.length) {
+            dataFields.forEach((dataField) => {
+                dataFieldStyles.push({
+                    ...dataItemStyle,
+                    ...{ format: dataField.format, dataType: this.getCellDataType(dataField) }
+                });
+            });
+
+            return dataFieldStyles;
+        }
+
+        return [dataItemStyle];
+    },
+
     getStyles: function() {
+        if(this._styles) {
+            return this._styles;
+        }
+
+        this._styles = [...this.getHeaderStyles(), ...this.getDataFieldStyles()];
+
         return this._styles;
+    },
+
+    getCellDataType: function(field) {
+        if(field && field.customizeText) {
+            return 'string';
+        }
+
+        if(field.dataType) {
+            return field.dataType;
+        }
+
+        if(field.format) {
+            if(localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
+                return 'number';
+            }
+            if(formatHelper.format(new Date(), field.format)) {
+                return 'date';
+            }
+        }
+
+        return DEFAULT_DATA_TYPE;
     },
 
     getStyleId: function(rowIndex, cellIndex) {
         const items = this._options.items;
-        const columnHeaderSize = items[0][0].rowspan;
-        const rowHeaderSize = items[0][0].colspan;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(cellIndex === 0 && rowIndex === 0) {
-            return COLUMN_HEADER_STYLE_ID;
-        } else if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
-            return COLUMN_HEADER_STYLE_ID;
-        } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
-            return ROW_HEADER_STYLE_ID;
+        if((cellIndex === 0 && rowIndex === 0) || this.isColumnAreaCell(rowIndex, cellIndex)) {
+            return 0;
+        } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
+            return 1;
         }
 
-        return DATA_STYLE_OFFSET + (item.dataIndex || 0);
+        return this.getHeaderStyles().length + (item.dataIndex || 0);
     },
 
     hasCustomizeExcelCell: function() {

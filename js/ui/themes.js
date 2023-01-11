@@ -39,7 +39,7 @@ function readThemeMarker() {
     let result;
 
     try {
-        result = element.css('fontFamily');
+        result = window.getComputedStyle(element.get(0))['fontFamily'];
         if(!result) {
             return null;
         }

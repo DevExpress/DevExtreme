@@ -3094,6 +3094,66 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.pageIndex(), 5, 'correct page index');
         assert.equal(dataGrid.getScrollable().scrollTop(), 3400, 'top scroll position');
     });
+
+    // T996914
+    QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
+        // arrange
+        const generateDataSource = function(count) {
+            const result = []; let i;
+            for(i = 0; i < count; ++i) {
+                result.push({ id: i, name: 'name_' + i });
+            }
+            return result;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: generateDataSource(1000),
+            height: 300,
+            width: 200,
+            columnAutoWidth: true,
+            columns: [{
+                dataField: 'id',
+                width: 150
+            }, {
+                dataField: 'name',
+                width: 150
+            }],
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                updateTimeout: 300 // by default
+            },
+            summary: {
+                totalItems: [
+                    {
+                        column: 'name', summaryType: 'count'
+                    }
+                ]
+            }
+        });
+
+        this.clock.tick(200);
+
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        scrollable.scrollTo({ left: 500 });
+        $(scrollable._container()).trigger('scroll');
+
+        this.clock.tick();
+
+        // assert
+        const footerScrollLeft = dataGrid.getView('footerView').element().children().scrollLeft();
+        assert.ok(footerScrollLeft > 0, 'scrollLeft of the footer');
+
+        // act
+        scrollable.scrollTo({ top: 1000 });
+        $(scrollable._container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.getView('footerView').element().children().scrollLeft(), footerScrollLeft, 'scrollLeft restored');
+    });
 });
 
 

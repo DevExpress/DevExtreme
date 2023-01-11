@@ -37,7 +37,6 @@ import devices from 'core/devices';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
 import themes from 'ui/themes';
-import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import config from 'core/config';
@@ -279,11 +278,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
 
         // assert
-        if(browser.mozilla) {
-            assert.ok(scrollable.scrollTop() <= 1, 'in mozilla first row is overlayed by parent container');
-        } else {
-            assert.ok(scrollable.scrollTop() <= 0.5, 'first row is not overlayed by parent container');
-        }
+        assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
 
         clock.restore();
     });
@@ -313,11 +308,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
 
         // assert
-        if(browser.mozilla) {
-            assert.ok(scrollable.scrollTop() <= 1, 'in mozilla first row is overlayed by parent container');
-        } else {
-            assert.ok(scrollable.scrollTop() <= 0.5, 'first row is not overlayed by parent container');
-        }
+        assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
 
         clock.restore();
     });
@@ -3231,48 +3222,53 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
     });
 
-
-    QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
-
+    // T848039, T988258
+    ['date', 'datetime'].forEach(dataType => {
         [true, false].forEach(useMaskBehavior => {
-            // arrange
-            const rowsViewWrapper = dataGridWrapper.rowsView;
-            const dataGrid = createDataGrid({
-                dataSource: [{ dateField: '01/01/2000' }],
-                editing: {
-                    mode: 'cell',
-                    allowUpdating: true
-                },
-                columns: [{
-                    dataField: 'dateField',
-                    dataType: 'date',
-                    editorOptions: {
-                        useMaskBehavior: useMaskBehavior
-                    }
-                }]
+            QUnit.testInActiveWindow(`Datebox editor's value should be selected from calendar by keyboard (useMaskBehavior = ${useMaskBehavior}, dataType = ${dataType})`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                    return;
+                }
+
+                // arrange
+                const rowsViewWrapper = dataGridWrapper.rowsView;
+                const dataGrid = createDataGrid({
+                    dataSource: [{ dateField: '01/01/2000' }],
+                    editing: {
+                        mode: 'cell',
+                        allowUpdating: true
+                    },
+                    columns: [{
+                        dataField: 'dateField',
+                        dataType,
+                        editorOptions: { useMaskBehavior }
+                    }]
+                });
+                this.clock.tick();
+
+                // act
+                dataGrid.editCell(0, 0);
+                this.clock.tick();
+
+                let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+                const instance = editor.getElement().dxDateBox('instance');
+                const keyboard = keyboardMock(editor.getInputElement());
+
+                instance.open();
+                keyboard
+                    .keyDown('left')
+                    .press('enter');
+
+                if(dataType === 'datetime') {
+                    keyboard.press('enter'); // confirm date
+                }
+
+                // assert
+                editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+                const expectedValue = dataType === 'date' ? '12/31/1999' : '12/31/1999, 12:00 AM';
+                assert.equal(editor.getInputElement().val(), expectedValue, 'dateBox value is changed');
             });
-            this.clock.tick();
-
-            // act
-            dataGrid.editCell(0, 0);
-            this.clock.tick();
-
-            let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
-            const instance = editor.getElement().dxDateBox('instance');
-            const keyboard = keyboardMock(editor.getInputElement());
-
-            instance.open();
-            keyboard
-                .keyDown('left')
-                .press('enter');
-
-            // assert
-            editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
-            assert.equal(editor.getInputElement().val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
         });
     });
 

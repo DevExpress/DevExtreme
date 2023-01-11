@@ -705,6 +705,17 @@ module('Keyboard navigation', setupModule, () => {
         this.keyboard.press('esc');
         assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event should not be prevented');
     });
+
+    QUnit.test('command+v should not be prevented (T988724)', function(assert) {
+        if(!devices.real().mac) {
+            assert.ok(true, 'Test is actual only for mac');
+            return;
+        }
+
+        this.keyboard.keyDown('v', { metaKey: true });
+
+        assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, 'keydown event is not prevented');
+    });
 });
 
 module('Events', setupModule, () => {

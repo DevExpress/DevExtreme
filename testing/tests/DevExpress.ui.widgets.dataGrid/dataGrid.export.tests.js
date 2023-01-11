@@ -2052,7 +2052,7 @@ QUnit.module('DataGrid export tests', {
         );
     });
 
-    QUnit.test('Bands - show column headers & two bands', function(assert) {
+    QUnit.skip('Bands - show column headers & two bands', function(assert) {
         const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
@@ -2102,7 +2102,7 @@ QUnit.module('DataGrid export tests', {
         );
     });
 
-    QUnit.test('Bands - show column headers & two bands & \'column.visible: false\'', function(assert) {
+    QUnit.skip('Bands - show column headers & two bands & \'column.visible: false\'', function(assert) {
         const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +

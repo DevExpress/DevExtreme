@@ -1166,7 +1166,7 @@ module.exports = Class.inherit((function() {
         },
 
         isEmpty: function() {
-            const dataFields = this.getAreaFields('data');
+            const dataFields = this.getAreaFields('data').filter(f => f.visible !== false);
             const data = this.getData();
             return !dataFields.length || !data.values.length;
         },

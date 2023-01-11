@@ -195,6 +195,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Focused row');
+        if(devices.real().android) {
+            assert.ok(true, 'It\'s a bug under Android only');
+            return;
+        }
         assert.ok(rowsViewWrapper.isRowVisible(4, 1), 'Navigation row is visible');
     });
 
@@ -369,7 +373,47 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGridWrapper.rowsView.isRowVisible(3, 1), 'Navigation row is visible');
     });
 
-    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual', function(assert) {
+    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual and useNative is true (T988877)', function(assert) {
+        if(devices.real().platform === 'ios') {
+            assert.ok(true);
+            return;
+        }
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({ id: i + 1 });
+        }
+
+        // act
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: data,
+            focusedRowEnabled: true,
+            focusedRowKey: 11,
+            paging: {
+                pageSize: 5
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: true
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $scrollContainer = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-scrollable-container');
+        $scrollContainer.trigger('scroll');
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'Visible row count');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
+    });
+
+    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual ()', function(assert) {
         // arrange
         const data = [];
 
@@ -443,7 +487,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
         assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });

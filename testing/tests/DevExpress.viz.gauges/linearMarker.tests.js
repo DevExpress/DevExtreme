@@ -232,42 +232,40 @@ QUnit.test('measure', function(assert) {
     options.horizontalOffset = String(options.horizontalOffset);
     options.verticalOffset = String(options.verticalOffset);
 
-    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 73, max: 100, indent: 56 }, 'horizontal, top');
+    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 73, max: 100, indent: 0 }, 'horizontal, top');
 
     options.verticalOrientation = 'bottom';
-    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 100, max: 127, indent: 56 }, 'horizontal, bottom');
+    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 100, max: 127, indent: 0 }, 'horizontal, bottom');
 
     options.vertical = true;
-    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 141, max: 200, indent: 24 }, 'vertical, left');
+    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 141, max: 200, indent: 0 }, 'vertical, left');
 
     options.horizontalOrientation = 'right';
-    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 200, max: 259, indent: 24 }, 'vertical, right');
+    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 200, max: 259, indent: 0 }, 'vertical, right');
 });
 
 //  B254470
 QUnit.test('measure (string-like numbers)', function(assert) {
-    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 73, max: 100, indent: 56 }, 'horizontal, top');
+    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 73, max: 100, indent: 0 }, 'horizontal, top');
 
     options.verticalOrientation = 'bottom';
-    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 100, max: 127, indent: 56 }, 'horizontal, bottom');
+    assert.deepEqual(marker.render(options).measure({ y: 100 }), { min: 100, max: 127, indent: 0 }, 'horizontal, bottom');
 
     options.vertical = true;
-    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 141, max: 200, indent: 24 }, 'vertical, left');
+    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 141, max: 200, indent: 0 }, 'vertical, left');
 
     options.horizontalOrientation = 'right';
-    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 200, max: 259, indent: 24 }, 'vertical, right');
+    assert.deepEqual(marker.render(options).measure({ x: 200 }), { min: 200, max: 259, indent: 0 }, 'vertical, right');
 });
 
 QUnit.test('render - horizontal, top', function(assert) {
-    const tc = new getTextCloudInfo({
+    const tc = getTextCloudInfo({
         x: 325,
         y: 100,
-        textWidth: 40,
-        textHeight: 16,
         tailLength: 3,
-        horMargin: 8,
-        verMargin: 4,
-        type: 'right-bottom'
+        type: 'left-bottom',
+        cloudWidth: 56,
+        cloudHeight: 24,
     });
 
     marker.render(options).resize(this.layout);
@@ -277,7 +275,6 @@ QUnit.test('render - horizontal, top', function(assert) {
 
     assert.ok(marker._rootElement, '_rootElement');
     assert.deepEqual(marker._rootElement._stored_settings, { 'class': 'root-class', fill: 'black' }, '_rootElement settings');
-
     assert.ok(marker._cloud, '_cloud');
     assert.strictEqual(marker._cloud.parent, marker._rootElement, '_cloud parent');
     assert.deepEqual(marker._cloud._stored_settings, { points: tc.points, type: 'area' }, '_cloud settings');
@@ -289,15 +286,13 @@ QUnit.test('render - horizontal, top', function(assert) {
 });
 
 QUnit.test('render - horizontal, bottom', function(assert) {
-    const tc = new getTextCloudInfo({
+    const tc = getTextCloudInfo({
         x: 325,
         y: 100,
-        textWidth: 40,
-        textHeight: 16,
+        cloudWidth: 56,
+        cloudHeight: 24,
         tailLength: 3,
-        horMargin: 8,
-        verMargin: 4,
-        type: 'right-top'
+        type: 'left-top'
     });
 
     options.verticalOrientation = 'bottom';
@@ -320,15 +315,13 @@ QUnit.test('render - horizontal, bottom', function(assert) {
 });
 
 QUnit.test('render - vertical, left', function(assert) {
-    const tc = new getTextCloudInfo({
+    const tc = getTextCloudInfo({
         x: 200,
         y: 325,
-        textWidth: 40,
-        textHeight: 16,
+        cloudWidth: 56,
+        cloudHeight: 24,
         tailLength: 3,
-        horMargin: 8,
-        verMargin: 4,
-        type: 'top-right'
+        type: 'bottom-right'
     });
 
     options.vertical = true;
@@ -351,15 +344,13 @@ QUnit.test('render - vertical, left', function(assert) {
 });
 
 QUnit.test('render - vertical, right', function(assert) {
-    const tc = new getTextCloudInfo({
+    const tc = getTextCloudInfo({
         x: 200,
         y: 325,
-        textWidth: 40,
-        textHeight: 16,
+        cloudWidth: 56,
+        cloudHeight: 24,
         tailLength: 3,
-        horMargin: 8,
-        verMargin: 4,
-        type: 'top-left'
+        type: 'bottom-left'
     });
 
     options.vertical = true;

@@ -13,7 +13,8 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import errors from '../../core/errors';
 import fx from '../../animation/fx';
 
-const TOOLBAR_CLASS = 'dx-toolbar';
+import { TOOLBAR_CLASS } from './constants';
+
 const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
 const TOOLBAR_CENTER_CLASS = 'dx-toolbar-center';
 const TOOLBAR_AFTER_CLASS = 'dx-toolbar-after';

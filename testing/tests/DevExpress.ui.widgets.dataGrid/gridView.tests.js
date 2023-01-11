@@ -18,6 +18,7 @@ QUnit.testStart(function() {
 <div id="itemsContainer"><div style="width:125px; display: inline-block;" ></div><div style="width:125px; display: inline-block;" ></div></div>';
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 
@@ -1480,7 +1481,7 @@ QUnit.module('Synchronize columns', {
                 items: [{ values: ['Test Test Test', 'Test', 'Test Test', 'Test Test Test Test Test Test'] }]
             })
         };
-        const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true });
+        const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true, showColumnLines: true });
         const testElement = $('<div />').width(300).appendTo($('#container'));
 
         // act

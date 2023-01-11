@@ -14,6 +14,7 @@ import { DataSource } from 'data/data_source/data_source';
 import commonUtils from 'core/utils/common';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import pointerMock from '../../helpers/pointerMock.js';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -467,5 +468,128 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         assert.equal(dataGrid.getCellElement(5, 1), undefined, 'wrong rowIndex');
         assert.equal(dataGrid.getCellElement(1, 'field5'), undefined, 'wrong column field name');
         assert.equal(dataGrid.getCellElement(1, 100), undefined, 'wrong column visible index');
+    });
+
+    QUnit.testInActiveWindow('Cells in fixed band columns should be editable on click (T996394)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 5; i++) {
+                items.push({
+                    id: i + 1,
+                    field1: `${i + 1}_1`,
+                    field2: `${i + 1}_2`,
+                    field3: `${i + 1}_3`,
+                    field4: `${i + 1}_4`,
+                    field5: `${i + 1}_5`,
+                    field6: `${i + 1}_6`,
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                startEditAction: 'click'
+            },
+            columns: [
+                {
+                    fixed: true,
+                    caption: 'A',
+                    columns: ['field1', 'field2', 'field3']
+                },
+                'field4',
+                {
+                    fixed: true,
+                    fixedPosition: 'right',
+                    caption: 'B',
+                    columns: ['field5', 'field6']
+                }
+            ]
+        });
+        this.clock.tick();
+
+        for(let rowIndex = 0; rowIndex < 5; rowIndex++) {
+            for(let columnIndex = 0; columnIndex < 5; columnIndex++) {
+                let $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
+
+                // act
+                $cell.trigger('dxclick');
+                this.clock.tick();
+                $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
+
+                // assert
+                assert.ok($cell.hasClass('dx-editor-cell'), `${rowIndex} ${columnIndex} editor cell`);
+                assert.ok($cell.hasClass('dx-focused'), `${rowIndex} ${columnIndex} focused`);
+                assert.ok($cell.find('.dx-texteditor-input').is(':focus'), `${rowIndex} ${columnIndex} input focused`);
+            }
+        }
+    });
+
+    QUnit.test('Master grid should scroll its content on mousewheel of an element in a detail grid (T1004881)', function(assert) {
+        // arrange, act
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 9; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Test ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            columnFixing: {
+                enabled: true
+            },
+            columns: [{
+                dataField: 'id',
+                fixed: true
+            }, 'name'],
+            scrolling: {
+                useNative: false,
+            },
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    const $detailGridContainer = $('<div>').addClass('mygrid');
+                    createDataGrid({
+                        loadingTimeout: null,
+                        dataSource: getData(),
+                        keyExpr: 'id',
+                        columns: ['id', 'name'],
+                        scrolling: {
+                            useNative: false,
+                        },
+                        columnAutoWidth: true,
+                    }, $detailGridContainer);
+                    $detailGridContainer.appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick();
+        const $detailGridContainer = $(dataGrid.element()).find('.mygrid');
+
+        // assert
+        assert.strictEqual($detailGridContainer.length, 1, 'one detail grid');
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0, 'initial scroll top');
+
+        // act
+        const pointer = pointerMock($detailGridContainer.find('.dx-data-row:eq(0)'));
+        pointer.start().wheel(-50);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 50, 'scroll top on mousewheel');
     });
 });

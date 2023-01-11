@@ -11670,11 +11670,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeView.Options.onItemSelectionChanged]
          */
-        onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
+        onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement, itemData?: any, itemIndex?: number }) => any);
         /**
          * [descr:dxTreeView.Options.onSelectAllValueChanged]
          */
-        onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
+        onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean | undefined }) => any);
         /**
          * [descr:dxTreeView.Options.onSelectionChanged]
          */

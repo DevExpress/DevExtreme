@@ -37,12 +37,16 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                     if(this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
                         const viewValue = this._getContouredValue();
                         const lastActionElement = this._lastActionElement;
-                        if(viewValue && lastActionElement === 'calendar') {
+                        const shouldCloseDropDown = this._closeDropDownByEnter();
+
+                        if(shouldCloseDropDown && viewValue && lastActionElement === 'calendar') {
                             this.dateBoxValue(viewValue, e);
                         }
 
-                        this.dateBox.close();
+                        shouldCloseDropDown && this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
+
+                        return !shouldCloseDropDown;
                     } else {
                         return true;
                     }
@@ -58,6 +62,8 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     getDisplayFormat: function(displayFormat) {
         return displayFormat || 'shortdate';
     },
+
+    _closeDropDownByEnter: () => true,
 
     _getWidgetName: function() {
         return Calendar;

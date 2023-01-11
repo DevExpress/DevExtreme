@@ -11,6 +11,7 @@ const NumberBox = require('../number_box');
 const TextBox = require('../text_box');
 const Draggable = require('../draggable');
 const clickEvent = require('../../events/click');
+const isCommandKeyPressed = require('../../events/utils/index').isCommandKeyPressed;
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -143,7 +144,7 @@ const ColorView = Editor.inherit({
             upArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(this._currentColor.hsv.h <= 360 && !this._isTopColorHue) {
                         this._saveValueChangeEvent(e);
                         updateHueScaleValue(getHueScaleStep(e));
@@ -156,7 +157,7 @@ const ColorView = Editor.inherit({
             downArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(this._currentColor.hsv.h >= 0) {
                         if(this._isTopColorHue) {
                             this._currentColor.hsv.h = 360;
@@ -173,7 +174,7 @@ const ColorView = Editor.inherit({
             rightArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(isRTL ? this._currentColor.a < 1 : this._currentColor.a > 0 && this.option('editAlphaChannel')) {
                         this._saveValueChangeEvent(e);
                         updateAlphaScaleValue(-getAlphaScaleStep(e));
@@ -186,7 +187,7 @@ const ColorView = Editor.inherit({
             leftArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(isRTL ? this._currentColor.a > 0 : this._currentColor.a < 1 && this.option('editAlphaChannel')) {
                         this._saveValueChangeEvent(e);
                         updateAlphaScaleValue(getAlphaScaleStep(e));

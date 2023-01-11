@@ -13,6 +13,7 @@ import domAdapter from 'core/dom_adapter';
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
 
+import 'ui/toolbar';
 import 'ui/text_area';
 import 'ui/autocomplete';
 import 'ui/calendar';
@@ -25,6 +26,8 @@ import 'ui/tag_box';
 
 import 'common.css!';
 import 'generic_light.css!';
+
+import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
@@ -420,6 +423,43 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-numberbox').hasClass('dx-editor-underlined'), 'right class rendered');
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
+
+QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
+    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    form.validate();
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is invalid after validate');
+
+    form.option('onFieldDataChanged', () => {});
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is still invalid after changing the onFieldDataChanged option');
+});
+
+QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler is called (T1014577)', function(assert) {
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    const onFieldDataChangedStub = sinon.stub();
+    form.option('onFieldDataChanged', onFieldDataChangedStub);
+
+    form.updateData({ field1: 'some value 1' });
+    assert.equal(onFieldDataChangedStub.callCount, 1, 'new handler is called after formData is updated');
+
+    form.getEditor('field1').option('value', 'some value 2');
+    assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
+});
+
 
 [
     { editorType: 'dxTextBox' },
@@ -1394,6 +1434,60 @@ QUnit.test('optional mark aligned', function(assert) {
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, 'optional mark should be after of the text');
 });
 
+QUnit.module('T986577', () => {
+    function getFormConfig() {
+        return {
+            width: 200,
+            screenByWidth: (_) => { return 'md'; },
+            colCountByScreen: {
+                md: 1
+            },
+            items: [ {
+                label: { text: 'text' },
+                template: function() {
+                    return $('<div></div>').dxToolbar({
+                        multiline: false,
+                        items: [
+                            { text: 'Item1', locateInMenu: 'auto' },
+                            { text: 'Item2', locateInMenu: 'auto' },
+                            { text: 'Item3', locateInMenu: 'auto' }
+                        ]
+                    });
+                }
+            }, {
+                label: { text: 'Very very long text' },
+                editorType: 'dxTextBox'
+            } ]
+        };
+    }
+
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: false }, getFormConfig()));
+
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 164, 5, 'toolbar width is correct');
+        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
+    });
+
+
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
+
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 72, 5, 'toolbar width is correct');
+        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
+    });
+});
 
 QUnit.module('Public API', {
     beforeEach: function() {
@@ -2807,6 +2901,102 @@ QUnit.module('visible/visibleIndex', () => {
         const $inputs_2 = form.$element().find('input');
         assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
         assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
+    });
+
+    QUnit.test('group.all.visible:false -> group.item1.visible:true,group.item2.visible:false (no visibleIndex), useUpdate=false', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: false } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.itemOption('group.field1', 'visible', true);
+        form.itemOption('group.field2', 'visible', false);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('group.all.visible:false -> group.item1.visible:true,group.item2.visible:false (no visibleIndex), useUpdate=true', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: false } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.beginUpdate();
+        form.itemOption('group.field1', 'visible', true);
+        form.itemOption('group.field2', 'visible', false);
+        form.endUpdate();
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('tabbedGroup.all.visible:false -> tabbedGroup.item1.visible:true, tabbedGroup.item2.visible:false (no visibleIndex), useUpdate=false', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: false }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field2', 'visible', false);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('tabbedGroup.all.visible:false -> tabbedGroup.item1.visible:true, tabbedGroup.item2.visible:false (no visibleIndex), useUpdate=true', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: false }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.beginUpdate();
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field2', 'visible', false);
+        form.endUpdate();
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
     });
 });
 

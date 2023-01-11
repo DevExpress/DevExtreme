@@ -15,6 +15,16 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - name: Setup legacy .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '2.1.x'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
     - name: Restore npm cache
       uses: actions/cache@v1
       with:

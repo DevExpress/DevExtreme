@@ -744,6 +744,7 @@ const TextEditorBase = Editor.inherit({
                 this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
                 this._buttonCollection.clean();
                 this._renderButtonContainers();
+                this._updateButtonsStyling(this.option('stylingMode'));
                 break;
             case 'displayValueFormatter':
                 this._invalidate();

@@ -404,6 +404,7 @@
             if($.now() - lastTestCaseDoneTime > 1000) {
                 lastTestCaseDoneTime = $.now();
                 notifyDeviceTestManager("QUnit.testCaseDone");
+                notifyIsAlive();
             }
 
             if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
@@ -441,7 +442,7 @@
 
             if(suite) {
                 suite.finalize(passed, qunitData.total);
-                notifySuiteFinalized(suite.name, passed);
+                notifySuiteFinalized(suite.name, passed, qunitData.runtime);
             }
         };
 
@@ -474,9 +475,13 @@
             }
         }
 
-        function notifySuiteFinalized(name, passed) {
+        function notifySuiteFinalized(name, passed, runtime) {
             var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
-            $.post(url, { name: name, passed: passed });
+            $.post(url, { name: name, passed: passed, runtime: runtime });
+        }
+        function notifyIsAlive(){
+            var url = @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive")));
+            $.post(url);
         }
 
         function roundTime(time) {

@@ -143,7 +143,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return item && (item.oldData || item.data || item);
                 },
                 filter: function() {
-                    return dataController.getCombinedFilter();
+                    return dataController.getCombinedFilter(true);
                 },
                 totalCount: function() {
                     return dataController.totalCount();

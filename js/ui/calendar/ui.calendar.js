@@ -19,6 +19,7 @@ import fx from '../../animation/fx';
 import windowUtils from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
+import { isCommandKeyPressed } from '../../events/utils/index';
 
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
@@ -127,7 +128,7 @@ const Calendar = Editor.inherit({
         return extend(this.callBase(), {
             rightArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._waitRenderView(1);
                 } else {
                     this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
@@ -135,7 +136,7 @@ const Calendar = Editor.inherit({
             },
             leftArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._waitRenderView(-1);
                 } else {
                     this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
@@ -143,7 +144,7 @@ const Calendar = Editor.inherit({
             },
             upArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._navigateUp();
                 } else {
                     if(fx.isAnimating(this._view.$element())) {
@@ -154,7 +155,7 @@ const Calendar = Editor.inherit({
             },
             downArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._navigateDown();
                 } else {
                     if(fx.isAnimating(this._view.$element())) {

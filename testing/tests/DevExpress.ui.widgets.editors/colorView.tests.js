@@ -774,6 +774,11 @@ QUnit.module('keyboard navigation', {
         this.ctrlRight = $.Event('keydown', { key: 'ArrowRight', ctrlKey: true });
         this.ctrlDown = $.Event('keydown', { key: 'ArrowDown', ctrlKey: true });
 
+        this.commandLeft = $.Event('keydown', { key: 'ArrowLeft', metaKey: true });
+        this.commandUp = $.Event('keydown', { key: 'ArrowUp', metaKey: true });
+        this.commandRight = $.Event('keydown', { key: 'ArrowRight', metaKey: true });
+        this.commandDown = $.Event('keydown', { key: 'ArrowDown', metaKey: true });
+
         this.shiftLeft = $.Event('keydown', { key: 'ArrowLeft', shiftKey: true });
         this.shiftUp = $.Event('keydown', { key: 'ArrowUp', shiftKey: true });
         this.shiftRight = $.Event('keydown', { key: 'ArrowRight', shiftKey: true });
@@ -783,6 +788,11 @@ QUnit.module('keyboard navigation', {
         this.ctrlShiftUp = $.Event('keydown', { key: 'ArrowUp', ctrlKey: true, shiftKey: true });
         this.ctrlShiftRight = $.Event('keydown', { key: 'ArrowRight', ctrlKey: true, shiftKey: true });
         this.ctrlShiftDown = $.Event('keydown', { key: 'ArrowDown', ctrlKey: true, shiftKey: true });
+
+        this.commandShiftLeft = $.Event('keydown', { key: 'ArrowLeft', ctrlKey: true, shiftKey: true });
+        this.commandShiftUp = $.Event('keydown', { key: 'ArrowUp', ctrlKey: true, shiftKey: true });
+        this.commandShiftRight = $.Event('keydown', { key: 'ArrowRight', ctrlKey: true, shiftKey: true });
+        this.commandShiftDown = $.Event('keydown', { key: 'ArrowDown', ctrlKey: true, shiftKey: true });
     },
     afterEach: function() {
         this.clock.restore();
@@ -842,10 +852,22 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'ctrl+up\' was pressed');
     });
 
+    QUnit.test('\'commandUp\' key test', function(assert) {
+        this.$element.trigger(this.commandUp);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'command+up\' was pressed');
+    });
+
     QUnit.test('\'ctrlShiftUp\' key test', function(assert) {
         this.$element.trigger(this.ctrlShiftUp);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 89, 99, 0.37)', 'value was changed correctly when \'ctrl+shift+up\' was pressed');
+    });
+
+    QUnit.test('\'commandShiftUp\' key test', function(assert) {
+        this.$element.trigger(this.commandShiftUp);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 89, 99, 0.37)', 'value was changed correctly when \'command+shift+up\' was pressed');
     });
 
     QUnit.test('\'ctrlDown\' key test', function(assert) {
@@ -854,16 +876,34 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'ctrl+down\' was pressed');
     });
 
+    QUnit.test('\'commandDown\' key test', function(assert) {
+        this.$element.trigger(this.commandDown);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'command+down\' was pressed');
+    });
+
     QUnit.test('\'ctrlShiftDown\' key test', function(assert) {
         this.$element.trigger(this.ctrlShiftDown);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 99, 89, 0.37)', 'value was changed correctly when \'ctrl+shift+down\' was pressed');
     });
 
+    QUnit.test('\'commandShiftDown\' key test', function(assert) {
+        this.$element.trigger(this.commandShiftDown);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 99, 89, 0.37)', 'value was changed correctly when \'command+shift+down\' was pressed');
+    });
+
     QUnit.test('\'ctrlRight\' key test', function(assert) {
         this.$element.trigger(this.ctrlRight);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'ctrl+right\' was pressed');
+    });
+
+    QUnit.test('\'commandRight\' key test', function(assert) {
+        this.$element.trigger(this.commandRight);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'command+right\' was pressed');
     });
 
     QUnit.test('\'ctrlShiftRight\' key test', function(assert) {
@@ -873,16 +913,35 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'ctrl+shift+right\' was pressed');
     });
 
+    QUnit.test('\'commandShiftRight\' key test', function(assert) {
+        this.instance.option('value', 'rgba(50, 100, 100, 0.4)');
+        this.$element.trigger(this.commandShiftRight);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'command+shift+right\' was pressed');
+    });
+
     QUnit.test('\'ctrlLeft\' key test', function(assert) {
         this.$element.trigger(this.ctrlLeft);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'ctrl+left\' was pressed');
     });
 
+    QUnit.test('\'commandLeft\' key test', function(assert) {
+        this.$element.trigger(this.commandLeft);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'command+left\' was pressed');
+    });
+
     QUnit.test('\'ctrlShiftLeft\' key test', function(assert) {
         this.$element.trigger(this.ctrlShiftLeft);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.41)', 'value was changed correctly when \'ctrl+shift+left\' was pressed');
+    });
+
+    QUnit.test('\'commandShiftLeft\' key test', function(assert) {
+        this.$element.trigger(this.commandShiftLeft);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.41)', 'value was changed correctly when \'command+shift+left\' was pressed');
     });
 
     QUnit.test('\'ctrlRight\' key test, rtl mode', function(assert) {
@@ -892,11 +951,25 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'ctrl+right\' was pressed');
     });
 
+    QUnit.test('\'commandRight\' key test, rtl mode', function(assert) {
+        this.$element.dxColorView('instance').option('rtlEnabled', true);
+        this.$element.trigger(this.commandRight);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'command+right\' was pressed');
+    });
+
     QUnit.test('\'ctrlLeft\' key test, rtl mode', function(assert) {
         this.$element.dxColorView('instance').option('rtlEnabled', true);
         this.$element.trigger(this.ctrlLeft);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'ctrl+left\' was pressed');
+    });
+
+    QUnit.test('\'commandLeft\' key test, rtl mode', function(assert) {
+        this.$element.dxColorView('instance').option('rtlEnabled', true);
+        this.$element.trigger(this.commandLeft);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'command+left\' was pressed');
     });
 
     QUnit.test('setting hueHandler to top position by keybord navigation change color to rgb(255,0,0)', function(assert) {

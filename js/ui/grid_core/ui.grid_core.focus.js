@@ -240,7 +240,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             const scrollable = that.getView('rowsView').getScrollable();
 
             if(rowsScrollController && scrollable && rowIndex >= 0) {
-                const focusedRowIndex = rowIndex + dataController.getRowIndexOffset() - dataController.getRowIndexDelta();
+                const focusedRowIndex = rowIndex + dataController.getRowIndexOffset(true);
                 const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
                 if(needFocusRow) {
@@ -715,6 +715,23 @@ module.exports = {
 
                 _getLastItemIndex: function() {
                     return this.items(true).length - 1;
+                }
+            },
+
+            editing: {
+                _deleteRowCore: function(rowIndex) {
+                    const deferred = this.callBase.apply(this, arguments);
+                    const dataController = this.getController('data');
+                    const rowKey = dataController.getKeyByRowIndex(rowIndex);
+
+                    deferred.done(() => {
+                        const rowIndex = dataController.getRowIndexByKey(rowKey);
+                        const visibleRows = dataController.getVisibleRows();
+
+                        if(rowIndex === -1 && !visibleRows.length) {
+                            this.getController('focus')._resetFocusedRow();
+                        }
+                    });
                 }
             }
         },

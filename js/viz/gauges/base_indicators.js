@@ -176,8 +176,8 @@ function getTextCloudInfo(options) {
     let x = options.x;
     let y = options.y;
     const type = COEFFICIENTS_MAP[options.type];
-    const cloudWidth = options.textWidth + 2 * options.horMargin;
-    const cloudHeight = options.textHeight + 2 * options.verMargin;
+    const cloudWidth = options.cloudWidth;
+    const cloudHeight = options.cloudHeight;
     let tailWidth;
     let tailHeight;
     const cx = x;
@@ -206,19 +206,23 @@ function getTextCloudInfo(options) {
 const BaseTextCloudMarker = BaseIndicator.inherit({
     _move: function() {
         const that = this;
+        const options = that._options;
         const textCloudOptions = that._getTextCloudOptions();
-        const text = _formatValue(that._actualValue, that._options.text);
+        const text = _formatValue(that._actualValue, options.text);
         that._text.attr({ text: text });
         const bBox = that._text.getBBox();
+        const x = textCloudOptions.x;
+        const y = textCloudOptions.y;
+        const cloudWidth = (bBox.width || text.length * that._textUnitWidth) + 2 * options.horizontalOffset;
+        const cloudHeight = (bBox.height || that._textHeight) + 2 * options.verticalOffset;
+
         const info = getTextCloudInfo({
-            x: textCloudOptions.x,
-            y: textCloudOptions.y,
-            textWidth: bBox.width || text.length * that._textUnitWidth, // T346511
-            textHeight: bBox.height || that._textHeight,
-            horMargin: that._options.horizontalOffset,
-            verMargin: that._options.verticalOffset,
-            tailLength: that._options.arrowLength,
-            type: textCloudOptions.type
+            x,
+            y,
+            cloudWidth,
+            cloudHeight,
+            tailLength: options.arrowLength,
+            type: that._correctCloudType(textCloudOptions.type, { x, y }, { width: cloudWidth, height: cloudHeight })
         });
         that._text.attr({ x: info.cx, y: info.cy + that._textVerticalOffset });
         that._cloud.attr({ points: info.points });
@@ -264,6 +268,10 @@ const BaseTextCloudMarker = BaseIndicator.inherit({
     getTooltipParameters: function() {
         const position = this._getTextCloudOptions();
         return { x: position.x, y: position.y, value: this._currentValue, color: this._options.color };
+    },
+
+    _correctCloudType(type) {
+        return type;
     }
 });
 
