@@ -44,7 +44,7 @@ jobs:
           restore-keys: ${{ runner.os }}-security
 
       - name: Teams Notification
-        uses: iBat/github-actions/send-teams-notification@ci/security-alerts
+        uses: DevExpress/github-actions/send-teams-notification@main
         with:
           hook_url: ${{ secrets.TEAMS_SECURITY_ALERTS }}
           alerts: ${{ needs.fetch.outputs.alerts }}
