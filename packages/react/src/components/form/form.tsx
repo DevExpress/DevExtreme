@@ -1,7 +1,5 @@
-/* eslint-disable react/require-default-props */
-// eslint-disable-next-line rulesdir/no-mixed-import
-import React, {
-  FormEventHandler, useMemo, useRef, useState,
+import {
+  FormEventHandler, ReactElement, useMemo, useRef, useState,
 } from 'react';
 import { FormContext } from './form-context';
 import { FormItemProps } from './form-item';
@@ -10,8 +8,8 @@ import { FormItemValidator, FormValidationResult, Rule } from './types';
 interface FormProps {
   onSubmit?: FormEventHandler<HTMLFormElement>;
   children?:
-  | React.ReactElement<FormItemProps>[]
-  | React.ReactElement<FormItemProps>;
+  | ReactElement<FormItemProps>[]
+  | ReactElement<FormItemProps>;
 }
 
 export function Form({ children, onSubmit }: FormProps) {
@@ -62,7 +60,7 @@ export function Form({ children, onSubmit }: FormProps) {
     return isValid;
   };
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     const isValid = validateForm();
     if (!isValid) {
       event.preventDefault();

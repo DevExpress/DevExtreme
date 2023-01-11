@@ -26,6 +26,7 @@ module.exports = {
     'react/jsx-sort-props': 'off',
     'react/jsx-newline': 'off',
     'react/jsx-max-depth': 'off',
+    'react/require-default-props': 'off',
   },
   overrides: [
     {

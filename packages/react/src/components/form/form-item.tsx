@@ -1,6 +1,8 @@
-// eslint-disable-next-line rulesdir/no-mixed-import
-import React, {
-  JSXElementConstructor, PropsWithChildren, ReactElement, useContext, useEffect, useMemo,
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  JSXElementConstructor, PropsWithChildren, ReactElement, ReactNode, useContext, useEffect, useMemo,
 } from 'react';
 import { RadioGroup } from '../radio-group';
 import { FormContext } from './form-context';
@@ -9,19 +11,19 @@ import { Rule } from './types';
 type CustomRuleProps = Rule;
 
 interface FormItemChildrenInfo {
-  editor: React.ReactNode,
-  label?: React.ReactNode,
-  hint?: React.ReactNode,
-  rules: React.ReactNode[],
+  editor: ReactNode,
+  label?: ReactNode,
+  hint?: ReactNode,
+  rules: ReactNode[],
 }
 
 function groupChildrenByTypes(
-  children: React.ReactNode,
+  children: ReactNode,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   targetTypes: Record<string, JSXElementConstructor<any>[]>,
 ) {
-  const findChildSection = (child: React.ReactNode) => {
-    if (React.isValidElement(child)) {
+  const findChildSection = (child: ReactNode) => {
+    if (isValidElement(child)) {
       for (const [section, types] of Object.entries(targetTypes)) {
         if (types.some(type => child.type === type)) {
           return section;
@@ -31,8 +33,8 @@ function groupChildrenByTypes(
     return null;
   };
 
-  return React.Children.toArray(children)
-    .reduce<Record<string, React.ReactNode[]>>((acc, child) => {
+  return Children.toArray(children)
+    .reduce<Record<string, ReactNode[]>>((acc, child) => {
     const section = findChildSection(child);
     if (section) {
       acc[section] = [...(acc[section] || []), child];
@@ -41,7 +43,7 @@ function groupChildrenByTypes(
   }, {});
 }
 
-export interface FormItemProps extends React.PropsWithChildren {
+export interface FormItemProps extends PropsWithChildren {
   name: string;
 }
 
@@ -85,7 +87,7 @@ export function FormItem({ name, children }: FormItemProps) {
   const validationRules = useMemo<Rule[]>(() => (
     sections.rules.map(
       (rule) => {
-        const props = (rule as React.ReactElement).props as CustomRuleProps;
+        const props = (rule as ReactElement).props as CustomRuleProps;
         return props;
       },
     )
@@ -109,7 +111,7 @@ export function FormItem({ name, children }: FormItemProps) {
       <span>
         {/* We need to subscribe to different editors' valueChange.
         Also, we need to get their initial value somehow */}
-        {React.cloneElement(sections.editor as ReactElement, { valueChange: onEditorValueChanged })}
+        {cloneElement(sections.editor as ReactElement, { valueChange: onEditorValueChanged })}
       </span>
       <span>{renderValidation()}</span>
     </div>
