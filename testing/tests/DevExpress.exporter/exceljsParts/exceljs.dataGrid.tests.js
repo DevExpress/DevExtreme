@@ -6664,7 +6664,7 @@ QUnit.module('encodeExecutableContent option', moduleConfig, () => {
     QUnit.test('All executable cell content should be encoded if encodeExecutableContent = true', function(assert) {
         const done = assert.async();
 
-        const dataSource = [
+        const ds = [
             { value: '=test', expected: { excelCell: { value: '"\'=test"', numFmt: '@' } } },
             { value: '="test"', expected: { excelCell: { value: '"\'=""test"""', numFmt: '@' } } },
             { value: '="test ', expected: { excelCell: { value: '"\'=""test "', numFmt: '@' } } },
@@ -6719,12 +6719,12 @@ QUnit.module('encodeExecutableContent option', moduleConfig, () => {
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: [{ dataField: 'value' }],
-            dataSource,
+            dataSource: ds,
             showColumnHeaders: false,
             loadingTimeout: null
         }).dxDataGrid('instance');
 
-        const expectedCells = dataSource.map((cell) => [cell.expected]);
+        const expectedCells = ds.map((cell) => [cell.expected]);
 
         helper._extendExpectedCells(expectedCells, { row: 1, column: 1 });
 
