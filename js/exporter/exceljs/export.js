@@ -36,6 +36,9 @@ export const Export = {
         if(!isDefined(fullOptions.loadPanel.text)) {
             fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
         }
+        if(!isDefined(fullOptions.encodeExecutableContent)) {
+            fullOptions.encodeExecutableContent = false;
+        }
 
         return fullOptions;
     },
@@ -121,6 +124,7 @@ export const Export = {
             loadPanel,
             mergeRowFieldValues,
             mergeColumnFieldValues,
+            encodeExecutableContent,
         } = options;
 
         const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
@@ -160,7 +164,7 @@ export const Export = {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
                     helpers._trySetOutlineLevel(dataProvider, row, rowIndex);
 
-                    this.exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, columns.length, row, cellRange.from.column, customizeCell, wrapText, styles);
+                    this.exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, columns.length, row, cellRange.from.column, customizeCell, wrapText, styles, encodeExecutableContent);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -195,7 +199,7 @@ export const Export = {
         });
     },
 
-    exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, cellCount, row, startColumnIndex, customizeCell, wrapText, styles) {
+    exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, cellCount, row, startColumnIndex, customizeCell, wrapText, styles, encodeExecutableContent) {
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
             const excelCell = row.getCell(startColumnIndex + cellIndex);
@@ -229,6 +233,10 @@ export const Export = {
 
             if(isFunction(customizeCell)) {
                 customizeCell(helpers._getCustomizeCellOptions(excelCell, cellData.cellSourceData));
+            }
+
+            if(encodeExecutableContent) {
+                excelCell.value = ExportFormat.encode(excelCell.value);
             }
         }
     }
