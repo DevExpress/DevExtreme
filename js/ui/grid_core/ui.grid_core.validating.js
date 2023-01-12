@@ -1278,6 +1278,8 @@ export const validatingModule = {
                             return this.callBase($element, hideBorder);
                         }
 
+                        hideBorder = $element?.find('.dx-checkbox').length || hideBorder;
+
                         const $focus = $element?.closest(this._getFocusCellSelector());
                         const callBase = this.callBase;
                         const validator = $focus && ($focus.data('dxValidator') || $element.find('.' + this.addWidgetPrefix(VALIDATOR_CLASS)).eq(0).data('dxValidator'));
