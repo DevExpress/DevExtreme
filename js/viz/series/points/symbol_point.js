@@ -124,16 +124,9 @@ export default {
     },
 
     _calculateVisibility: function(x, y) {
-        const that = this;
-        const visibleArea = that._getVisibleArea();
+        const { minX, maxX, minY, maxY } = this._getVisibleArea();
 
-        if((visibleArea.minX > x || (visibleArea.maxX < x) ||
-            (visibleArea.minY > y) || (visibleArea.maxY < y))
-        ) {
-            that.inVisibleArea = false;
-        } else {
-            that.inVisibleArea = true;
-        }
+        this.inVisibleArea = !(minX > x || maxX < x || minY > y || maxY < y);
     },
 
     _updateLabelData: function() {

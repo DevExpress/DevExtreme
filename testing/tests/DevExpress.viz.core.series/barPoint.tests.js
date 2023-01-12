@@ -373,7 +373,7 @@ QUnit.test('Point is out of boundaries on the left', function(assert) {
     assert.equal(point.vy, point.y, 'crosshair y Coord');
 });
 
-QUnit.test('Point is out of boundaries on the left, bar\'s right bound on left border', function(assert) {
+QUnit.test('Point is out of boundaries on the left, right bound of bar on left border', function(assert) {
     const point = createPoint(this.series, { argument: 1, value: 4 }, this.opt);
 
     point.width = 100;
@@ -452,7 +452,7 @@ QUnit.test('Point is out of boundaries on the right', function(assert) {
     assert.strictEqual(point.width, 50, 'width');
 });
 
-QUnit.test('Point is out of boundaries on the right, bar\'s left bound on right border', function(assert) {
+QUnit.test('Point is out of boundaries on the right, left bound of bar on right border', function(assert) {
     const point = createPoint(this.series, { argument: 6, value: 4 }, this.opt);
 
     point.width = 50;
