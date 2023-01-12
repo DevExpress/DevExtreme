@@ -216,13 +216,14 @@ export const columnHeadersModule = {
 
                     that.setAria('role', 'presentation', $container);
 
-                    that._updateContent(that._renderTable({ change }), change);
+                    const deferred = that._updateContent(that._renderTable({ change }), change);
 
                     if(that.getRowCount() > 1) {
                         $container.addClass(MULTI_ROW_HEADER_CLASS);
                     }
 
                     that.callBase.apply(that, arguments);
+                    return deferred;
                 },
 
                 _renderRows: function() {
