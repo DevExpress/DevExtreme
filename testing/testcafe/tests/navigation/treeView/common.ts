@@ -10,7 +10,7 @@ import TreeView from '../../../model/treeView';
 fixture.disablePageReloads`TreeView`
   .page(url(__dirname, '../../container.html'));
 
-test('TreeView: the height calculates incorrectly when searchEnabled is true (T1138605)', async (t) => {
+test('TreeView: height should be calculated correctly when searchEnabled is true (T1138605)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const treeView = new TreeView('#container');
