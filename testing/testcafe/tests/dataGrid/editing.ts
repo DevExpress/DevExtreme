@@ -1746,7 +1746,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton());
 
   await t
-    .dispatchEvent(dataGrid.getFormItemElement(0), 'focus');
+    .click(dataGrid.getFormItemElement(0));
 
   await t
     .typeText(dataGrid.getFormItemEditor(0), '1');
@@ -1755,7 +1755,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     .pressKey('enter');
 
   await t
-    .dispatchEvent(dataGrid.getFormItemElement(2), 'focus');
+    .click(dataGrid.getFormItemElement(2));
 
   await t
     .typeText(dataGrid.getFormItemEditor(2), '0');
