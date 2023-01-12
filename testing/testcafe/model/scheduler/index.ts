@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
 import AppointmentPopup from './appointment/popup';
 import AppointmentTooltip from './appointment/tooltip';
@@ -14,6 +15,7 @@ export const CLASS = {
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
+  droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
   headerPanelCell: 'dx-scheduler-header-panel-cell',
@@ -102,6 +104,12 @@ export default class Scheduler extends Widget {
     return cells.filter(`.${CLASS.selectedCell}`);
   }
 
+  getDroppableCell(isAllDay = false): Selector {
+    const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
+
+    return cells.filter(`.${CLASS.droppableCell}`);
+  }
+
   getAppointment(title: string, index = 0): Appointment {
     return new Appointment(this.element, index, title);
   }
@@ -128,5 +136,25 @@ export default class Scheduler extends Widget {
 
   getNavigator(): Navigator {
     return new Navigator(this.element);
+  }
+
+  scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
+    const { name, element } = this;
+    const scrollTo = (): any => $(element())[name]('instance').scrollTo(date, group, allDay);
+
+    return ClientFunction(scrollTo, {
+      dependencies: {
+        date, group, allDay, element, name,
+      },
+    })();
+  }
+
+  hideAppointmentTooltip(): Promise<any> {
+    const { name, element } = this;
+    const hideAppointmentTooltip = (): any => $(element())[name]('instance').hideAppointmentTooltip();
+
+    return ClientFunction(hideAppointmentTooltip, {
+      dependencies: { element, name },
+    })();
   }
 }

@@ -1,18 +1,18 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -20,20 +20,20 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 import {
-    ResizeInfo
+    ResizeInfo,
 } from './resizable';
 
 export interface TitleRenderedInfo {
-    readonly titleElement: DxElement
+    readonly titleElement: DxElement;
 }
 
 /** @public */
@@ -55,13 +55,13 @@ export type InitializedEvent = InitializedEventInfo<dxPopup>;
 export type ShownEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type ResizeEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
@@ -79,7 +79,7 @@ export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
-     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} [for](iOS)
+     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} &for(iOS)
      * @public
      * @type object
      */
@@ -93,13 +93,13 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     dragEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -111,7 +111,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     fullScreen?: boolean;
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxPopupOptions.onResize
      * @public
      */
@@ -123,6 +122,9 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
      * @action
      * @public
      */
@@ -134,6 +136,9 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
      * @action
      * @public
      */
@@ -145,6 +150,9 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
      * @action
      * @public
      */
@@ -160,13 +168,13 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @action
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent) => void);
+    onTitleRendered?: ((e: EventInfo<T> & TitleRenderedInfo) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default false
@@ -176,7 +184,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     showCloseButton?: boolean;
@@ -195,7 +203,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -208,7 +215,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     toolbarItems?: Array<ToolbarItem>;
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxPopupOptions.onResize
      * @public
      */
@@ -218,13 +224,13 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
      * @docid dxPopupOptions.animation.hide
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} [for](iOS)
+     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} &for(iOS)
      * @public
      */
     hide?: animationConfig;
     /**
      * @docid dxPopupOptions.animation.show
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} [for](iOS)
+     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} &for(iOS)
      * @public
      */
     show?: animationConfig;
@@ -298,8 +304,6 @@ export interface dxPopupToolbarItem {
  * @docid
  * @inherits dxOverlay
  * @hasTranscludedContent
- * @module ui/popup
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

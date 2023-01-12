@@ -303,6 +303,6 @@ QUnit.test('Header panel and date table should have a correct width, groupOrient
     const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(true);
     const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth(true);
 
-    assert.equal(headerPanelWidth, 797, 'Width is OK');
-    assert.equal(dateTableWidth, 797, 'Width is OK');
+    assert.roughEqual(headerPanelWidth, 797, 1.01, 'Width is OK');
+    assert.roughEqual(dateTableWidth, 797, 1.01, 'Width is OK');
 });

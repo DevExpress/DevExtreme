@@ -172,8 +172,8 @@ export const stateStoringModule = {
                         exportController.selectionOnly(state.exportSelectionOnly);
                     }
 
-                    if(selectedRowKeys) {
-                        that.option('selectedRowKeys', selectedRowKeys);
+                    if(!that.option('selection.deferred')) {
+                        that.option('selectedRowKeys', selectedRowKeys || []);
                     }
 
                     that.option('selectionFilter', selectionFilter);
@@ -182,14 +182,14 @@ export const stateStoringModule = {
                         that.option('pager').allowedPageSizes = allowedPageSizes;
                     }
 
-                    if(that.option('focusedRowEnabled') && state.focusedRowKey !== undefined) {
+                    if(that.option('focusedRowEnabled')) {
                         that.option('focusedRowIndex', -1);
-                        that.option('focusedRowKey', state.focusedRowKey);
+                        that.option('focusedRowKey', state.focusedRowKey || null);
                     }
 
                     that.component.endUpdate();
 
-                    searchText && that.option('searchPanel.text', searchText);
+                    that.option('searchPanel.text', searchText || '');
 
                     that.option('filterValue', getFilterValue(that, state));
 

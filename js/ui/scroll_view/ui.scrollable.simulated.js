@@ -415,8 +415,8 @@ export const Scroller = Class.inherit({
     },
 
     _updateBounds: function() {
-        this._maxOffset = Math.round(this._getMaxOffset());
-        this._minOffset = Math.round(this._getMinOffset());
+        this._maxOffset = this._getMaxOffset();
+        this._minOffset = this._getMinOffset();
     },
 
     _getMaxOffset: function() {
@@ -495,7 +495,7 @@ export const Scroller = Class.inherit({
     _validateEvent: function(e) {
         const $target = $(e.originalEvent.target);
 
-        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
+        return this._isThumb($target) || this._isScrollbar($target);
     },
 
     _isThumb: function($element) {
@@ -506,16 +506,12 @@ export const Scroller = Class.inherit({
         return this._scrollByThumb && $element && $element.is(this._$scrollbar);
     },
 
-    _isContent: function($element) {
-        return this._scrollByContent && !!$element.closest(this._$element).length;
-    },
-
     _reachedMin: function() {
-        return this._location <= this._minOffset;
+        return Math.round(this._location - this._minOffset) <= 0;
     },
 
     _reachedMax: function() {
-        return this._location >= this._maxOffset;
+        return Math.round(this._location - this._maxOffset) >= 0;
     },
 
     _cursorEnterHandler: function() {
@@ -545,9 +541,9 @@ export const SimulatedStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
+        this._$container = $(scrollable.container());
         this._$wrapper = scrollable._$wrapper;
-        this._$content = scrollable._$content;
+        this._$content = scrollable.$content();
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
@@ -591,7 +587,6 @@ export const SimulatedStrategy = Class.inherit({
             $container: this._$container,
             $wrapper: this._$wrapper,
             $element: this._$element,
-            scrollByContent: this.option('scrollByContent'),
             scrollByThumb: this.option('scrollByThumb'),
             scrollbarVisible: this.option('showScrollbar'),
             bounceEnabled: this.option('bounceEnabled'),
@@ -636,9 +631,15 @@ export const SimulatedStrategy = Class.inherit({
 
         this._prepareDirections();
         this._eachScroller(function(scroller, direction) {
-            const isValid = scroller._validateEvent(e);
+            const $target = $(e.originalEvent.target);
+
+            const isValid = scroller._validateEvent(e) || (this.option('scrollByContent') && this._isContent($target));
             this._validDirections[direction] = isValid;
         });
+    },
+
+    _isContent: function($element) {
+        return !!$element.closest(this._$element).length;
     },
 
     _prepareDirections: function(value) {

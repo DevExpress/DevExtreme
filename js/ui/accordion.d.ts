@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,13 +22,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -41,19 +41,19 @@ export type DisposingEvent = EventInfo<dxAccordion>;
 export type InitializedEvent = InitializedEventInfo<dxAccordion>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxAccordion, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxAccordion, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxAccordion, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemTitleClickEvent = NativeEventInfo<dxAccordion, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
@@ -61,7 +61,7 @@ export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
-/** 
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
@@ -69,7 +69,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     /**
      * @docid
      * @default 300
-     * @default 200 [for](Material)
+     * @default 200 &for(Material)
      * @public
      */
     animationDuration?: number;
@@ -94,14 +94,13 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     deferRendering?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -115,8 +114,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -125,8 +122,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -175,8 +170,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/accordion
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

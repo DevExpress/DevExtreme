@@ -17,7 +17,7 @@ const PagerView = modules.View.inherit({
 
         dataController.changed.add((e) => {
             if(e && e.repaintChangesOnly) {
-                const pager = this._getPager();
+                const pager = this._pager;
                 if(pager) {
                     pager.option({
                         pageIndex: getPageIndex(dataController),
@@ -30,14 +30,10 @@ const PagerView = modules.View.inherit({
                     this.render();
                 }
             } else if(!e || e.changeType !== 'update' && e.changeType !== 'updateSelection') {
+                this._pager = null;
                 this.render();
             }
         });
-    },
-
-    _getPager: function() {
-        const $element = this.element();
-        return $element && $element.data('dxPager');
     },
 
     _renderCore: function() {
@@ -61,15 +57,11 @@ const PagerView = modules.View.inherit({
             hasKnownLastPage: dataController.hasKnownLastPage(),
             pageIndexChanged: function(pageIndex) {
                 if(dataController.pageIndex() !== pageIndex - 1) {
-                    setTimeout(function() {
-                        dataController.pageIndex(pageIndex - 1);
-                    });
+                    dataController.pageIndex(pageIndex - 1);
                 }
             },
             pageSizeChanged: function(pageSize) {
-                setTimeout(function() {
-                    dataController.pageSize(pageSize);
-                });
+                dataController.pageSize(pageSize);
             },
             onKeyDown: e => keyboardController && keyboardController.executeAction('onKeyDown', e),
             useLegacyKeyboardNavigation: this.option('useLegacyKeyboardNavigation'),
@@ -79,13 +71,23 @@ const PagerView = modules.View.inherit({
         if(isDefined(pagerOptions.infoText)) {
             options.infoText = pagerOptions.infoText;
         }
+
+        if(this._pager) {
+            this._pager.repaint();
+            return;
+        }
+
         if(hasWindow()) {
-            that._createComponent($element, Pager, options);
+            this._pager = that._createComponent($element, Pager, options);
         } else {
             $element
                 .addClass('dx-pager')
                 .html('<div class="dx-pages"><div class="dx-page"></div></div>');
         }
+    },
+
+    getPager: function() {
+        return this._pager;
     },
 
     getPageSizes: function() {
@@ -148,12 +150,17 @@ const PagerView = modules.View.inherit({
             }
 
             if(!isDataSource) {
+                this._pager = null;
                 this._invalidate();
                 if(hasWindow() && isPager && this.component) {
                     this.component.resize();
                 }
             }
         }
+    },
+
+    dispose: function() {
+        this._pager = null;
     }
 });
 

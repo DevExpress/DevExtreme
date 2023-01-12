@@ -45,8 +45,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onItemListSelectionChanged.bind(this),
-            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
-            onContentReady: () => this._refreshDeferred?.resolve()
+            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this)
         });
     }
 
@@ -166,6 +165,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
             actualOptions.focusedItemKey = options.focusedItemKey;
+        }
+        if(options && Object.prototype.hasOwnProperty.call(options, 'selectedItemKeys')) {
+            actualOptions.selectedItemKeys = options.selectedItemKeys;
         }
 
         this._itemList.option(actualOptions);

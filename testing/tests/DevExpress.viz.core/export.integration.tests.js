@@ -8,6 +8,9 @@ const exportModule = require('viz/core/export');
 const Deferred = require('core/utils/deferred').Deferred;
 const logger = require('core/utils/console').logger;
 const { isFunction } = require('core/utils/type');
+const getWindow = require('core/utils/window').getWindow;
+
+const window = getWindow();
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -570,6 +573,52 @@ QUnit.test('Print method, error image loading - delete iFrame', function(assert)
 
     deferred.done(function() {
         assert.equal(window.frames.length, 0);
+        done();
+    });
+});
+
+QUnit.test('Printing. width of chart > width of page', function(assert) {
+    assert.expect(2);
+    const done = assert.async();
+    const deferred = new Deferred();
+    const exportFunc = clientExporter.export;
+    function getScaleValue(transformFieldValue) {
+        return transformFieldValue
+            .replace('scale(', '')
+            .replace(')', '');
+    }
+    const mockWindow = {
+        print: sinon.spy(function() {
+            this.afterPrintEventHandler();
+        }),
+        focus: sinon.spy(),
+        addEventListener: sinon.spy(function(name, callback) {
+            this.afterPrintEventHandler = callback;
+        }),
+        document: { body: { style: {} } }
+    };
+    const widget = this.createWidget({
+        size: {
+            width: 1000,
+        },
+        'export': {
+            __test: {
+                deferred,
+                imageSrc: '/testing/content/exporterTestsContent/test-image.png',
+                mockWindow,
+                checkAssertions: () => {}
+            }
+        }
+    });
+
+    // act
+    widget.print();
+
+    exportFunc.getCall(0).args[1].fileSavingAction({ data: 'imageData' });
+
+    deferred.done((_, style) => {
+        assert.strictEqual(parseFloat(getScaleValue(style.transform)).toFixed(2), '0.79');
+        assert.strictEqual(style['transform-origin'], '0 0');
         done();
     });
 });

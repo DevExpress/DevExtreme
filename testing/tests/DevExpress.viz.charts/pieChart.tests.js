@@ -467,6 +467,24 @@ const overlappingEnvironment = $.extend({}, environment, {
         assert.strictEqual(centerTemplate.callCount, 1);
     });
 
+    // T1014761
+    QUnit.test('Change centerTemplate on chart created without series', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const centerTemplate = sinon.spy();
+
+        const chart = this.createPieChart({
+            type: 'doughnut',
+            dataSource: [{
+                arg: 'Asia',
+                val: 4119626293
+            }]
+        });
+
+        chart.option({ centerTemplate, series: [{}] });
+
+        assert.strictEqual(centerTemplate.callCount, 1);
+    });
+
     QUnit.test('Async tempaltes rendering. called group visibilty', function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
         const renderSpy = sinon.spy();

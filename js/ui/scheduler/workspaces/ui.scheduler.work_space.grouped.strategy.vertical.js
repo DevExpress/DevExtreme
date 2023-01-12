@@ -1,6 +1,6 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
-import { cache } from './cache';
+import { Cache } from './cache';
 
 const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
 
@@ -8,6 +8,12 @@ const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
 
 class VerticalGroupedStrategy extends GroupedStrategy {
+    constructor(workSpace) {
+        super(workSpace);
+
+        this.cache = new Cache();
+    }
+
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
         let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
@@ -143,8 +149,8 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return cache.get('groupBoundsOffset', () => {
-            const groupIndex = coordinates.groupIndex;
+        const groupIndex = coordinates.groupIndex;
+        return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();

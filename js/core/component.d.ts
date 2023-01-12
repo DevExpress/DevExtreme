@@ -1,9 +1,5 @@
-import {
-  DxElement
-} from './element';
-
 /** @namespace DevExpress */
-export interface ComponentOptions<T = Component> {
+export interface ComponentOptions<TDisposingEvent = any, TInitializedEvent = any, TOptionChangedEvent = any> {
   /**
    * @docid
    * @type_function_param1 e:object
@@ -12,16 +8,17 @@ export interface ComponentOptions<T = Component> {
    * @action
    * @public
    */
-  onDisposing?: ((e: { component: T }) => void);
+  onDisposing?: ((e: TDisposingEvent) => void);
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 element:DxElement
    * @default null
+   * @action
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
+  onInitialized?: ((e: TInitializedEvent) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -33,7 +30,7 @@ export interface ComponentOptions<T = Component> {
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
+  onOptionChanged?: ((e: TOptionChangedEvent) => void);
 }
 /**
  * @docid Component
@@ -67,7 +64,6 @@ export class Component {
   /**
    * @docid
    * @publicName off(eventName)
-   * @param1 eventName:string
    * @return this
    * @public
    */
@@ -75,8 +71,6 @@ export class Component {
   /**
    * @docid
    * @publicName off(eventName, eventHandler)
-   * @param1 eventName:string
-   * @param2 eventHandler:function
    * @return this
    * @public
    */
@@ -84,8 +78,6 @@ export class Component {
   /**
    * @docid
    * @publicName on(eventName, eventHandler)
-   * @param1 eventName:string
-   * @param2 eventHandler:function
    * @return this
    * @public
    */
@@ -108,16 +100,12 @@ export class Component {
   /**
    * @docid
    * @publicName option(optionName)
-   * @param1 optionName:string
-   * @return any
    * @public
    */
   option(optionName: string): any;
   /**
    * @docid
    * @publicName option(optionName, optionValue)
-   * @param1 optionName:string
-   * @param2 optionValue:any
    * @public
    */
   option(optionName: string, optionValue: any): void;
@@ -131,7 +119,6 @@ export class Component {
   /**
    * @docid
    * @publicName resetOption(optionName)
-   * @param1 optionName:string
    * @public
    */
   resetOption(optionName: string): void;

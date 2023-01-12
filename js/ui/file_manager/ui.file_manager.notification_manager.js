@@ -206,7 +206,7 @@ class NotificationManager extends NotificationManagerBase {
     _onProgressPanelOperationClosed(operationInfo) {
         if(operationInfo.hasError) {
             this._failedOperationCount--;
-            this.tryHideActionProgress(operationInfo);
+            this.tryHideActionProgress();
         }
     }
 

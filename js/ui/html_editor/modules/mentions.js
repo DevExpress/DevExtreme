@@ -148,7 +148,9 @@ if(Quill) {
 
         _selectItemHandler() {
             if(this._isMentionActive) {
-                this._list.selectItem(this._list.option('focusedElement'));
+                this._list.option('items').length
+                    ? this._list.selectItem(this._list.option('focusedElement'))
+                    : this._popup.hide();
             }
             return !this._isMentionActive;
         }

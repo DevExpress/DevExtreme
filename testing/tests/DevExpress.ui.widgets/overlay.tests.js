@@ -115,7 +115,6 @@ const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 
 const HOVER_STATE_CLASS = 'dx-state-hover';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
 const RESIZABLE_HANDLE_CORNER_BR_CLASS = 'dx-resizable-handle-corner-bottom-right';
@@ -360,23 +359,7 @@ testModule('option', moduleConfig, () => {
         assert.ok(overlay.option('visible'), 'overlay is visible after rtlEnabled option change');
     });
 
-    test('disabled', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            disabled: true
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $content = overlay.$content();
-
-        assert.ok($content.hasClass(DISABLED_STATE_CLASS), 'disabled state present in content element');
-
-        overlay.option('disabled', false);
-        assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), 'disabled state not present in content element');
-
-        overlay.option('disabled', undefined);
-        assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), 'disabled state not present in content element');
-    });
-
-    test('there is no errors when overlay has a subscription on \'onHiding\' event where the widget is desposed', function(assert) {
+    test('there is no errors when overlay has a subscription on \'onHiding\' even when the widget is disposed', function(assert) {
         const instance = $('#overlay').dxOverlay({
             visible: true,
             onHiding: function(e) {
@@ -454,6 +437,12 @@ testModule('option', moduleConfig, () => {
         const onResizeStartFired = sinon.stub();
         const onResizeFired = sinon.stub();
         const onResizeEndFired = sinon.stub();
+        const checkExtraFields = (args, eventType) => {
+            ['event', 'height', 'width'].forEach((field) => {
+                assert.ok(field in args, `${field} field is existed`);
+            });
+            assert.strictEqual(args.event.type, eventType, 'correct event type');
+        };
 
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -470,8 +459,13 @@ testModule('option', moduleConfig, () => {
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
         assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
+        checkExtraFields(onResizeStartFired.lastCall.args[0], 'dxdragstart');
+
         assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
+        checkExtraFields(onResizeFired.lastCall.args[0], 'dxdrag');
+
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
+        checkExtraFields(onResizeEndFired.lastCall.args[0], 'dxdragend');
     });
 });
 
@@ -3488,25 +3482,6 @@ testModule('focus policy', {
 
         assert.strictEqual(contentFocusHandler.callCount, 1, 'focus has been triggered once from keyboardMock');
     });
-
-    test('focusin event should not be propagated (T342292)', function(assert) {
-        assert.expect(0);
-
-        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
-            visible: true,
-            shading: true,
-            contentTemplate: $('#focusableTemplate')
-        });
-        const $content = overlay.$content();
-
-        $(document).on('focusin.test', function() {
-            assert.ok(false, 'focusin bubbled');
-        });
-
-        $($content).trigger('focusin');
-
-        $(document).off('.test');
-    });
 });
 
 
@@ -3840,10 +3815,24 @@ testModule('overlay utils', moduleConfig, () => {
         assert.strictEqual(zIndex.create(), 1502, 'new zindex is larger than overlay\'s');
     });
 
-    test('overlay should remove its zindex from the stack on dispose', function(assert) {
+    test('overlay should remove its zindex from the stack on dispose if overlay is visible', function(assert) {
         const instance = new Overlay('#overlay', { visible: true });
         instance.dispose();
         assert.strictEqual(zIndex.create(), 1501, 'zindex has been removed');
+    });
+
+    test('overlay should not try to remove its zindex from the stack on dispose if overlay is not visible (T1070941)', function(assert) {
+        const instance = new Overlay('#overlay');
+
+        instance.show();
+        instance.hide();
+
+        const rememberedZIndex = 1501;
+        zIndex.create();
+
+        instance.dispose();
+
+        assert.strictEqual(zIndex.create(), rememberedZIndex + 1, 'remembered zIndex was not removed on dispose');
     });
 
     test('overlay should create new zindex only at first showing', function(assert) {

@@ -54,8 +54,6 @@ const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned',
 
 const OVERLAY_STACK = [];
 
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
-
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
@@ -272,8 +270,6 @@ const Overlay = Widget.inherit({
 
         // NOTE: hack to fix B251087
         eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
-        // NOTE: bootstrap integration T342292
-        eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
@@ -520,7 +516,8 @@ const Overlay = Widget.inherit({
     _normalizeAnimation: function(animation, prop) {
         if(animation) {
             animation = extend({
-                type: 'slide'
+                type: 'slide',
+                skipElementInitialStyles: true, // NOTE: for fadeIn animation
             }, animation);
 
             if(animation[prop] && typeof animation[prop] === 'object') {
@@ -919,16 +916,16 @@ const Overlay = Widget.inherit({
     _renderResize: function() {
         this._resizable = this._createComponent(this._$content, Resizable, {
             handles: this.option('resizeEnabled') ? 'all' : 'none',
-            onResizeEnd: this._resizeEndHandler.bind(this),
-            onResize: this._actions.onResize.bind(this),
-            onResizeStart: this._actions.onResizeStart.bind(this),
+            onResizeEnd: (e) => { this._resizeEndHandler(e); },
+            onResize: (e) => { this._actions.onResize(e); },
+            onResizeStart: (e) => { this._actions.onResizeStart(e); },
             minHeight: 100,
             minWidth: 100,
             area: this._getDragResizeContainer()
         });
     },
 
-    _resizeEndHandler: function() {
+    _resizeEndHandler: function(e) {
         this._positionChangeHandled = true;
 
         const width = this._resizable.option('width');
@@ -937,7 +934,7 @@ const Overlay = Widget.inherit({
         width && this.option('width', width);
         height && this.option('height', height);
 
-        this._actions.onResizeEnd();
+        this._actions.onResizeEnd(e);
     },
 
     _renderScrollTerminator: function() {
@@ -1214,8 +1211,11 @@ const Overlay = Widget.inherit({
 
             resetPosition(this._$content);
 
+            const wrapperOverflow = this._$wrapper.css('overflow');
+            this._$wrapper.css('overflow', 'hidden');
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);
+            this._$wrapper.css('overflow', wrapperOverflow);
 
             forceRepaint(this._$content);
 
@@ -1309,14 +1309,9 @@ const Overlay = Widget.inherit({
 
         this.callBase();
 
-        zIndexPool.remove(this._zIndex);
+        this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
-    },
-
-    _toggleDisabledState: function(value) {
-        this.callBase(...arguments);
-        this._$content.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
     },
 
     _toggleRTLDirection: function(rtl) {

@@ -28,6 +28,29 @@ const CLASS = {
   revertButton: 'dx-revert-button',
 };
 
+const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
+  if ($element?.length) {
+    const offset = $element.offset();
+
+    if (offset) {
+      if (isStart) {
+        $element
+          .trigger($.Event('dxpointerdown', {
+            pageX: offset.left,
+            pageY: offset.top,
+            pointers: [{ pointerId: 1 }],
+          }));
+      }
+
+      $element.trigger($.Event('dxpointermove', {
+        pageX: offset.left + x,
+        pageY: offset.top + y,
+        pointers: [{ pointerId: 1 }],
+      }));
+    }
+  }
+};
+
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
@@ -170,6 +193,15 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
+  isVisible(): Promise<boolean> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => $((getGridInstance() as any).element()).is(':visible'),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
   apiOption(name: any, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
@@ -278,5 +310,54 @@ export default class DataGrid extends Widget {
         rowType: r.rowType,
       }));
     }, { dependencies: { getGridInstance } })();
+  }
+
+  apiUpdateDimensions(): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).updateDimensions(),
+      {
+        dependencies: {
+          getGridInstance,
+        },
+      },
+    )();
+  }
+
+  moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      const gridInstance = getGridInstance() as any;
+      const $row = $(gridInstance.getRowElement(rowIndex));
+      let $dragElement = $row.children('.dx-command-drag');
+
+      $dragElement = $dragElement.length ? $dragElement : $row;
+
+      moveElement($dragElement, x, y, isStart);
+    },
+    {
+      dependencies: {
+        getGridInstance, rowIndex, x, y, isStart, moveElement,
+      },
+    })();
+  }
+
+  moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      const gridInstance = getGridInstance() as any;
+      const columnHeadersView = gridInstance.getView('columnHeadersView');
+      const $header = $(columnHeadersView.getHeaderElement(columnIndex));
+
+      moveElement($header, x, y, isStart);
+    },
+    {
+      dependencies: {
+        getGridInstance, columnIndex, x, y, isStart, moveElement,
+      },
+    })();
   }
 }

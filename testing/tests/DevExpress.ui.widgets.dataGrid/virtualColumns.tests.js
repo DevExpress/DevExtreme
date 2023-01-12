@@ -384,7 +384,7 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         this.columnsController.columnsChanged.add(e => {
             assert.deepEqual(e, {
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, length: 1 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
             }, 'columnsChanged args');
             columnsChangedPositions.push(pos);
         });
@@ -412,7 +412,7 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         this.columnsController.columnsChanged.add(e => {
             assert.deepEqual(e, {
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, length: 1 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
             }, 'columnsChanged args');
             columnsChangedPositions.push(pos);
         });

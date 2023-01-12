@@ -1,18 +1,17 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
@@ -20,13 +19,13 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
     dxPopupOptions,
-    TitleRenderedInfo
+    TitleRenderedInfo,
 } from './popup';
 
 /** @public */
@@ -54,7 +53,7 @@ export type ShowingEvent = EventInfo<dxPopover>;
 export type ShownEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -71,15 +70,13 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default "auto"
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -93,12 +90,12 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -106,7 +103,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @default 'bottom'
      * @public
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
     /**
      * @docid
      * @default false
@@ -123,12 +120,12 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -145,7 +142,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid
      * @default "auto"
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -169,8 +165,6 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @docid
  * @inherits dxPopup
  * @hasTranscludedContent
- * @module ui/popover
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

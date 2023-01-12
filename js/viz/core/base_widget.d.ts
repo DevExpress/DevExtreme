@@ -1,27 +1,27 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-  Device
+  Device,
 } from '../../core/devices';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     Cancelable,
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 import {
-    format
+    format,
 } from '../../ui/widget/ui.widget';
 
 import {
-    DashStyleType
+    DashStyleType,
 } from '../common';
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
@@ -42,7 +42,7 @@ export type FileSavingEventInfo<T> = Cancelable & {
   readonly fileName: string;
   readonly format: string;
   readonly data: Blob;
-}
+};
 
 /** @namespace DevExpress.viz */
 export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
@@ -61,7 +61,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     export?: BaseWidgetExport;
     /**
      * @docid
-     * @type_function_return number|string
      * @hidden
      */
     height?: number | string | (() => number | string);
@@ -189,7 +188,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     tooltip?: BaseWidgetTooltip;
     /**
      * @docid
-     * @type_function_return number|string
      * @hidden
      */
     width?: number | string | (() => number | string);
@@ -242,8 +240,6 @@ export interface BaseWidgetExport {
     proxyUrl?: string;
     /**
      * @docid BaseWidgetOptions.export.svgToCanvas
-     * @type_function_param1 svg:SVGElement
-     * @type_function_param2 canvas:HTMLCanvasElement
      * @type_function_return Promise<void>
      * @default undefined
      * @public
@@ -266,7 +262,7 @@ export interface BaseWidgetLoadingIndicator {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -330,10 +326,10 @@ export interface BaseWidgetSize {
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
-     * @default '#232323' [prop](color)
-     * @default 28 [prop](size)
-     * @default 200 [prop](weight)
-     * @extends CommonVizLightFontFamily
+     * @default '#232323' &prop(color)
+     * @default 28 &prop(size)
+     * @default 200 &prop(weight)
+     * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
      * @public
      */
     font?: Font;
@@ -354,22 +350,22 @@ export interface BaseWidgetTitle {
        * @docid BaseWidgetOptions.title.margin.bottom
        * @default 10
        */
-      bottom?: number,
+      bottom?: number;
       /**
        * @docid BaseWidgetOptions.title.margin.left
        * @default 10
        */
-      left?: number,
+      left?: number;
       /**
        * @docid BaseWidgetOptions.title.margin.right
        * @default 10
        */
-      right?: number,
+      right?: number;
       /**
        * @docid BaseWidgetOptions.title.margin.top
        * @default 10
        */
-      top?: number
+      top?: number;
     };
     /**
      * @docid BaseWidgetOptions.title.placeholderSize
@@ -384,34 +380,34 @@ export interface BaseWidgetTitle {
     subtitle?: {
       /**
        * @docid BaseWidgetOptions.title.subtitle.font
-       * @default '#232323' [prop](color)
-       * @default 16 [prop](size)
-       * @default 200 [prop](weight)
-       * @extends CommonVizLightFontFamily
+       * @default '#232323' &prop(color)
+       * @default 16 &prop(size)
+       * @default 200 &prop(weight)
+       * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid BaseWidgetOptions.title.subtitle.offset
        * @default 0
        */
-      offset?: number,
+      offset?: number;
       /**
        * @docid BaseWidgetOptions.title.subtitle.text
        * @default null
        */
-      text?: string,
+      text?: string;
       /**
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @type Enums.VizTextOverflow
        * @default "ellipsis"
        */
-      textOverflow?: VizTextOverflowType,
+      textOverflow?: VizTextOverflowType;
       /**
        * @docid BaseWidgetOptions.title.subtitle.wordWrap
        * @type Enums.VizWordWrap
        * @default "normal"
        */
-      wordWrap?: WordWrapType
+      wordWrap?: WordWrapType;
     } | string;
     /**
      * @docid BaseWidgetOptions.title.text
@@ -458,28 +454,28 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.border.color
        * @default '#d3d3d3'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseWidgetOptions.tooltip.border.dashStyle
        * @type Enums.DashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType,
+      dashStyle?: DashStyleType;
       /**
        * @docid BaseWidgetOptions.tooltip.border.opacity
        * @default undefined
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.border.visible
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid BaseWidgetOptions.tooltip.border.width
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid BaseWidgetOptions.tooltip.color
@@ -496,7 +492,7 @@ export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
-     * @default 4 [for](Material)
+     * @default 4 &for(Material)
      * @public
      */
     cornerRadius?: number;
@@ -508,13 +504,13 @@ export interface BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.tooltip.font
-     * @default '#232323' [prop](color)
+     * @default '#232323' &prop(color)
      * @public
      */
     font?: Font;
     /**
      * @docid BaseWidgetOptions.tooltip.format
-     * @extends CommonVizFormat
+     * @default undefined
      * @public
      */
     format?: format;
@@ -545,27 +541,27 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.shadow.blur
        * @default 2
        */
-      blur?: number,
+      blur?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.color
        * @default #000000
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.offsetX
        * @default 0
        */
-      offsetX?: number,
+      offsetX?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.offsetY
        * @default 4
        */
-      offsetY?: number,
+      offsetY?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.opacity
        * @default 0.4
        */
-      opacity?: number
+      opacity?: number;
     };
     /**
      * @docid BaseWidgetOptions.tooltip.zIndex
@@ -586,17 +582,13 @@ export default class BaseWidget extends DOMComponent {
      * @docid
      * @static
      * @publicName defaultOptions(rule)
-     * @param1 rule:Object
-     * @param1_field1 device:Device|Array<Device>|function
      * @param1_field2 options:Object
      * @hidden
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    static defaultOptions(rule: { device?: Device | Array<Device> | Function; options?: any }): void;
     /**
      * @docid
      * @publicName exportTo(fileName, format)
-     * @param1 fileName:string
-     * @param2 format:string
      * @public
      */
     exportTo(fileName: string, format: string): void;
@@ -634,7 +626,6 @@ export default class BaseWidget extends DOMComponent {
     /**
      * @docid
      * @publicName svg()
-     * @return string
      * @public
      */
     svg(): string;
@@ -711,34 +702,34 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default '#dddddd'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0
-       * @default 4 [for](Material)
+       * @default 4 &for(Material)
        */
-      cornerRadius?: number,
+      cornerRadius?: number;
       /**
        * @docid
        * @type Enums.DashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType,
+      dashStyle?: DashStyleType;
       /**
        * @docid
        * @default undefined
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -759,7 +750,7 @@ export interface BaseWidgetAnnotationConfig {
     description?: string;
     /**
      * @docid
-     * @default '#333333' [prop](color)
+     * @default '#333333' &prop(color)
      * @public
      */
     font?: Font;
@@ -778,17 +769,17 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 30
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default undefined
        */
-      url?: string,
+      url?: string;
       /**
        * @docid
        * @default 30
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -829,27 +820,27 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 4
        */
-      blur?: number,
+      blur?: number;
       /**
        * @docid
        * @default '#000000'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0
        */
-      offsetX?: number,
+      offsetX?: number;
       /**
        * @docid
        * @default 1
        */
-      offsetY?: number,
+      offsetY?: number;
       /**
        * @docid
        * @default 0.15
        */
-      opacity?: number
+      opacity?: number;
     };
     /**
      * @docid

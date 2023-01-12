@@ -3,7 +3,7 @@ import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
-import timeZoneUtils from './utils.timeZone.js';
+import timeZoneUtils from './utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 

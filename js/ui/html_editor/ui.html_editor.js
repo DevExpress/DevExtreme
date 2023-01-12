@@ -15,6 +15,9 @@ import { Event as dxEvent } from '../../events/index';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
+import pointerEvents from '../../events/pointer';
+import devices from '../../core/devices';
+
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
@@ -32,6 +35,8 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
+
+const isIos = devices.current().platform === 'ios';
 
 const HtmlEditor = Editor.inherit({
 
@@ -146,6 +151,54 @@ const HtmlEditor = Editor.inherit({
         return this._$submitElement;
     },
 
+    _removeXSSVulnerableHtml: function(value) {
+        // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
+        // "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+        // error can be logged to the console if the html value is XSS vulnerable.
+
+        const $frame = $('<iframe>')
+            .css('display', 'none')
+            .attr({
+                id: 'xss-frame',
+                sandbox: 'allow-same-origin'
+            })
+            .appendTo('body');
+
+        const frame = $frame.get(0);
+        const frameWindow = frame.contentWindow;
+        const frameDocument = frameWindow.document;
+        const frameDocumentBody = frameDocument.body;
+
+        frameDocumentBody.innerHTML = value;
+
+        const removeInlineHandlers = (element) => {
+            if(element.attributes) {
+                for(let i = 0; i < element.attributes.length; i++) {
+                    const name = element.attributes[i].name;
+                    if(name.indexOf('on') === 0) {
+                        element.removeAttribute(name);
+                    }
+                }
+            }
+            if(element.childNodes) {
+                for(let i = 0; i < element.childNodes.length; i++) {
+                    removeInlineHandlers(element.childNodes[i]);
+                }
+            }
+        };
+
+        removeInlineHandlers(frameDocumentBody);
+
+        $(frameDocumentBody)
+            .find('script')
+            .remove();
+
+        const sanitizedHtml = frameDocumentBody.innerHTML;
+
+        $frame.remove();
+        return sanitizedHtml;
+    },
+
     _updateContainerMarkup: function() {
         let markup = this.option('value');
 
@@ -155,7 +208,8 @@ const HtmlEditor = Editor.inherit({
         }
 
         if(markup) {
-            this._$htmlContainer.html(markup);
+            const sanitizedMarkup = this._removeXSSVulnerableHtml(markup);
+            this._$htmlContainer.html(sanitizedMarkup);
         }
     },
 
@@ -213,6 +267,12 @@ const HtmlEditor = Editor.inherit({
         return renderContentPromise;
     },
 
+    _pointerMoveHandler: function(e) {
+        if(isIos) {
+            e.stopPropagation();
+        }
+    },
+
     _attachFocusEvents: function() {
         deferRender(this.callBase.bind(this));
     },
@@ -261,6 +321,8 @@ const HtmlEditor = Editor.inherit({
         const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
+
+        eventsEngine.on($scrollContainer, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
     },
 
     _applyTranscludedContent: function() {

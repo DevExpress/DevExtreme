@@ -20,10 +20,7 @@ export interface dxSchedulerTimeZone {
  * @docid utils.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
- * @return Array<dxSchedulerTimeZone>
  * @namespace DevExpress.utils
- * @module time_zone_utils
- * @export getTimeZones
  * @static
  * @public
  */

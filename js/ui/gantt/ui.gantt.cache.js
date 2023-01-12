@@ -26,6 +26,9 @@ export class GanttDataCache {
     hasData(key) {
         return !!this._cache[key];
     }
+    resetCache(key) {
+        this._onKeyExpired(key);
+    }
     _getCache(key, forceCreate) {
         if(!this._cache[key] && forceCreate) {
             this._cache[key] = { };

@@ -1,17 +1,17 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 /** @public */
@@ -27,7 +27,7 @@ export type InitializedEvent = InitializedEventInfo<dxSwitch>;
 export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -42,7 +42,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -81,8 +81,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/switch
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

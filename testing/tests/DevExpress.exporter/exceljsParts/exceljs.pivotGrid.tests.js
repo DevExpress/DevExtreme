@@ -1621,6 +1621,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
     });
 
     QUnit.test('Check header/data/total cell style/data type, pivot.rtlEnabled = true', function(assert) {
+        const clock = sinon.useFakeTimers();
         const done = assert.async();
         const ds = {
             fields: [
@@ -1686,8 +1687,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
             helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
             helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { 'rightToLeft': true, state: 'frozen', ySplit: topLeft.row + 1, xSplit: topLeft.column + 1 });
             helper.checkCellRange(cellRange, { row: 5, column: 5 }, topLeft);
+
+            clock.restore();
             done();
         });
+
+        clock.tick(400);
     });
 
     QUnit.test('Export [string x string x number] with format: currency', function(assert) {
@@ -6179,6 +6184,30 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
+
+
+[
+    { enabled: true },
+    { enabled: false },
+    {},
+    null,
+    false,
+    true,
+    undefined,
+].forEach((loadPanel) => {
+    LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
+        {
+            fields: [
+                { area: 'row', dataField: 'row1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'data', summaryType: 'count', dataType: 'number' }
+            ],
+            store: [
+                { row1: 'A', col1: 'a' },
+            ],
+            loadPanel,
+        }, 'worksheet');
+});
 LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
     {
         fields: [
@@ -6189,17 +6218,4 @@ LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGri
         store: [
             { row1: 'A', col1: 'a' },
         ],
-        loadPanel: { enabled: true },
-    }, 'worksheet');
-LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
-    {
-        fields: [
-            { area: 'row', dataField: 'row1', dataType: 'string' },
-            { area: 'column', dataField: 'col1', dataType: 'string' },
-            { area: 'data', summaryType: 'count', dataType: 'number' }
-        ],
-        store: [
-            { row1: 'A', col1: 'a' },
-        ],
-        loadPanel: { enabled: false },
     }, 'worksheet');

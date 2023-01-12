@@ -73,7 +73,7 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
 const scrollTo = function(that, location) {
     const scrollable = that.getScrollable();
     scrollable.scrollTo(location);
-    $(scrollable._container()).trigger('scroll');
+    $(scrollable.container()).trigger('scroll');
 };
 
 QUnit.module('Focused row', getModuleConfig(true), () => {
@@ -324,6 +324,57 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex is 1');
+    });
+
+    // T1069848
+    ['batch', 'cell', 'row', 'form'].forEach((mode) => {
+        QUnit.testInActiveWindow(`The ${mode} edit mode - Arrow Down key should increase focusedRowIndex after inserting a new row`, function(assert) {
+            // arrange
+            this.$element = function() {
+                return $('#container');
+            };
+            this.options = {
+                focusedRowEnabled: true,
+                keyboardNavigation: {
+                    enabled: true
+                },
+                editing: {
+                    mode: mode,
+                    allowAdding: true
+                }
+            };
+            this.setupModule();
+            this.gridView.render($('#container'));
+            this.clock.tick();
+            const rowsView = this.gridView.getView('rowsView');
+            const keyboardController = this.getController('keyboardNavigation');
+            keyboardController._focusedView = rowsView;
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 2, 'count row');
+
+            // act
+            this.addRow();
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(this.getVisibleRows().length, 3, 'count row');
+            assert.ok($(this.getRowElement(0)).hasClass('dx-row-inserted'), 'new row');
+
+            // act
+            $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
+
+            // act
+            this.triggerKeyDown('downArrow', false, false, $(rowsView.getCellElement(1, 0)));
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowIndex'), 2, 'FocusedRowIndex is 2');
+        });
     });
 
     QUnit.testInActiveWindow('Click by cell should focus the row', function(assert) {
@@ -2451,7 +2502,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         rowsView.height(400);
         rowsView.resize();
         const scrollable = rowsView.getScrollable();
-        const $scrollContainer = $(scrollable._container());
+        const $scrollContainer = $(scrollable.container());
         const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 

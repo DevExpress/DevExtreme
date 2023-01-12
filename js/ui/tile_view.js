@@ -56,7 +56,7 @@ const TileView = CollectionWidget.inherit({
 
             hoverStateEnabled: true,
 
-            showScrollbar: false,
+            showScrollbar: 'never',
 
             height: 500,
 

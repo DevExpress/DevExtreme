@@ -1,69 +1,69 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
 } from './text_box';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxTextArea>;
+export type ChangeEvent = NativeEventInfo<dxTextArea, Event>;
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTextArea>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxTextArea>;
+export type CopyEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxTextArea>;
+export type CutEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxTextArea>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxTextArea>;
+export type EnterKeyEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxTextArea>;
+export type FocusInEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxTextArea>;
+export type FocusOutEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxTextArea>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTextArea>;
+export type InputEvent = NativeEventInfo<dxTextArea, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxTextArea>;
+export type KeyDownEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxTextArea>;
+export type KeyPressEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxTextArea>;
+export type KeyUpEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTextArea> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxTextArea>;
+export type PasteEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxTextArea> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -99,8 +99,6 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @docid
  * @isEditor
  * @inherits dxTextBox
- * @module ui/text_area
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

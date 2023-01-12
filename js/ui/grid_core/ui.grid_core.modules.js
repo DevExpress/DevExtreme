@@ -166,6 +166,12 @@ const ModuleItem = Class.inherit({
         const containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
         return this.addWidgetPrefix(containerName);
+    },
+
+    elementIsInsideGrid: function($element) {
+        const $gridElement = $element.closest('.' + this.getWidgetContainerClass()).parent();
+
+        return $gridElement.is(this.component.$element());
     }
 });
 

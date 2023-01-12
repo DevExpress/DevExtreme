@@ -2,11 +2,11 @@ import DOMComponent from '../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -15,12 +15,12 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxDraggable, {
     DraggableBase,
-    DraggableBaseOptions
+    DraggableBaseOptions,
 } from './draggable';
 
 /** @public */
@@ -28,7 +28,7 @@ export interface AddEvent {
     readonly component: dxSortable;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event: DxEvent;
+    readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -44,7 +44,7 @@ export interface AddEvent {
 export type DisposingEvent = EventInfo<dxSortable>;
 
 /** @public */
-export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
+export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex?: number;
@@ -54,10 +54,10 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem?: boolean;
-}
+};
 
 /** @public */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -67,10 +67,10 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-}
+};
 
 /** @public */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -80,15 +80,15 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-}
+};
 
 /** @public */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly fromData?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxSortable>;
@@ -97,7 +97,7 @@ export type InitializedEvent = InitializedEventInfo<dxSortable>;
 export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
 /** @public */
-export type RemoveEvent = NativeEventInfo<dxSortable> & {
+export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -106,10 +106,10 @@ export type RemoveEvent = NativeEventInfo<dxSortable> & {
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
     readonly toData?: any;
-}
+};
 
 /** @public */
-export type ReorderEvent = NativeEventInfo<dxSortable> & {
+export type ReorderEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -120,7 +120,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly toData?: any;
     readonly dropInsideItem: boolean;
     promise?: PromiseLike<void>;
-}
+};
 
 /** @public */
 export interface DragTemplateData {
@@ -152,7 +152,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:DxElement
      * @type_function_param1_field3 fromIndex:number
-     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -335,8 +334,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @docid
  * @inherits DraggableBase
  * @hasTranscludedContent
- * @module ui/sortable
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

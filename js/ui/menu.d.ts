@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -15,16 +15,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 /** @public */
@@ -37,13 +37,13 @@ export type DisposingEvent = EventInfo<dxMenu>;
 export type InitializedEvent = InitializedEventInfo<dxMenu>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxMenu, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxMenu, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxMenu> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxMenu> & ChangedOptionInfo;
@@ -54,22 +54,22 @@ export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
 /** @public */
 export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuShowingEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuShownEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -173,19 +173,19 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
          * @docid
          * @default 300
          */
-        hide?: number,
+        hide?: number;
         /**
          * @docid
          * @default 50
          */
-        show?: number
-      } | number,
+        show?: number;
+      } | number;
       /**
        * @docid
        * @type Enums.ShowSubmenuMode
        * @default "onClick"
        */
-      name?: 'onClick' | 'onHover'
+      name?: 'onClick' | 'onHover';
     } | 'onClick' | 'onHover';
     /**
      * @docid
@@ -198,8 +198,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -273,15 +271,16 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 export type Item = dxMenuItem;
 
 /**
- * @deprecated
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxMenuItem>
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */

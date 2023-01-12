@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,13 +13,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -32,16 +32,16 @@ export type DisposingEvent = EventInfo<dxMultiView>;
 export type InitializedEvent = InitializedEventInfo<dxMultiView>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxMultiView, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxMultiView, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxMultiView, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxMultiView> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
@@ -75,7 +75,7 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     deferRendering?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -108,8 +108,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/multi_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

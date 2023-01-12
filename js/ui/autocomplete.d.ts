@@ -1,5 +1,5 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
@@ -7,24 +7,24 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import dxDropDownList, {
     dxDropDownListOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxAutocomplete>;
+export type ChangeEvent = NativeEventInfo<dxAutocomplete, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxAutocomplete>;
@@ -33,40 +33,40 @@ export type ClosedEvent = EventInfo<dxAutocomplete>;
 export type ContentReadyEvent = EventInfo<dxAutocomplete>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxAutocomplete>;
+export type CopyEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxAutocomplete>;
+export type CutEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxAutocomplete>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxAutocomplete>;
+export type EnterKeyEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxAutocomplete>;
+export type FocusInEvent = NativeEventInfo<dxAutocomplete, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxAutocomplete>;
+export type FocusOutEvent = NativeEventInfo<dxAutocomplete, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxAutocomplete>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxAutocomplete>;
+export type InputEvent = NativeEventInfo<dxAutocomplete, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxAutocomplete> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxAutocomplete>;
+export type KeyDownEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxAutocomplete>;
+export type KeyPressEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxAutocomplete>;
+export type KeyUpEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxAutocomplete>;
@@ -75,13 +75,13 @@ export type OpenedEvent = EventInfo<dxAutocomplete>;
 export type OptionChangedEvent = EventInfo<dxAutocomplete> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxAutocomplete>;
+export type PasteEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SelectionChangedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxAutocomplete> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
@@ -120,8 +120,6 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/autocomplete
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

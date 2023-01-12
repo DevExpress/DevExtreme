@@ -762,6 +762,38 @@ QUnit.module('Convert to inner structure', function() {
             'and'
         ]);
     });
+
+    QUnit.test('with custom group operations', function(assert) {
+        // act
+        let model = utils.convertToInnerStructure(null, [], 'or');
+
+        // assert
+        assert.deepEqual(model, ['or'], 'null filter with or');
+
+        // act
+        model = utils.convertToInnerStructure([], [], 'or');
+
+        // assert
+        assert.deepEqual(model, ['or'], 'empty filter with or');
+
+        // act
+        model = utils.convertToInnerStructure(null, [], 'notOr');
+
+        // assert
+        assert.deepEqual(model, ['!', ['or']], 'null filter with notOr');
+
+        // act
+        model = utils.convertToInnerStructure([], [], 'notOr');
+
+        // assert
+        assert.deepEqual(model, ['!', ['or']], 'empty filter with notOr');
+
+        // act
+        model = utils.convertToInnerStructure(['a', '=', 'b'], [], 'or');
+
+        // assert
+        assert.deepEqual(model, [['a', '=', 'b'], 'or'], 'filter with or');
+    });
 });
 
 QUnit.module('Filter normalization', function() {
@@ -1699,7 +1731,8 @@ QUnit.module('Lookup Value', function() {
         const categories = [
             'Video Players',
             'Televisions'
-        ]; const field = {
+        ];
+        const field = {
             lookup: {
                 dataSource: new CustomStore({
                     load: () => categories,

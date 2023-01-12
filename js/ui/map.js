@@ -85,10 +85,6 @@ const Map = Widget.inherit({
             },
 
             /**
-            * @pseudo MapLocationType
-            * @type Object|string|Array<number>
-            */
-            /**
             * @name MapLocation
             * @hidden
             */

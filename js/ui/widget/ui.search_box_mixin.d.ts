@@ -1,8 +1,9 @@
 import {
-    dxTextBoxOptions
+    dxTextBoxOptions,
 } from '../text_box';
 
 /** @namespace DevExpress.ui */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     /**
      * @docid
@@ -45,10 +46,9 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
 }
 /**
  * @docid
- * @module ui/widget/ui.search_box_mixin
- * @export default
  * @hidden
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class SearchBoxMixin {
     constructor(options?: SearchBoxMixinOptions)
 }

@@ -4,6 +4,7 @@ import 'ui/html_editor';
 import 'ui/html_editor/converters/markdown';
 
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
+import Quill from 'devextreme-quill';
 
 const CONTENT_CLASS = 'dx-htmleditor-content';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
@@ -365,6 +366,69 @@ export default function() {
         });
     });
 
+    testModule('xss security', {
+        beforeEach: function() {
+            window._isScriptExecuted = false;
+            window._isInlineHandlerExecuted = false;
+
+            this.htmlWithScript = '<script>window._isScriptExecuted = true;</script>';
+            this.htmlWithInlineHandler = '<img src="undefined" onerror="window._isInlineHandlerExecuted = true;"/>';
+        },
+        afterEach: function() {
+            delete window._isScriptExecuted;
+            delete window._isInlineHandlerExecuted;
+        }
+    }, () => {
+        test('script embedded in html value should not be executed on init', function(assert) {
+            const done = assert.async();
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: this.htmlWithScript
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(window._isScriptExecuted, false, 'script was not executed');
+                done();
+            }, 100);
+        });
+
+        test('inline handler embedded in html value should not be executed on init', function(assert) {
+            const done = assert.async();
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: this.htmlWithInlineHandler
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+                done();
+            }, 100);
+        });
+
+        test('value change to html with embedded script should not execute the script', function(assert) {
+            const done = assert.async();
+
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+            htmlEditor.option('value', this.htmlWithScript);
+
+            setTimeout(() => {
+                assert.strictEqual(window._isScriptExecuted, false, 'script was not executed');
+                done();
+            }, 100);
+        });
+
+        test('value change to html with embedded inline handler should not execute the handler', function(assert) {
+            const done = assert.async();
+
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
+            htmlEditor.option('value', this.htmlWithInlineHandler);
+
+            setTimeout(() => {
+                assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+                done();
+            }, 100);
+        });
+    });
 
     testModule('Value as Markdown markup', {
         beforeEach: function() {
@@ -552,6 +616,95 @@ export default function() {
                 .dxHtmlEditor('instance');
 
             instance.insertEmbed(0, 'variable', { escapeChar: '#', value: 'Test' });
+        });
+    });
+
+    testModule('Table with paragraph support', {
+        ...moduleConfig,
+        before: function() {
+            this.originalTableModule = Quill.import('modules/table');
+            const TableModule = Quill.import('tableModules/main');
+            Quill.register('modules/table', TableModule, true);
+        },
+        after: function() {
+            Quill.register('modules/table', this.originalTableModule, true);
+        }
+    }, () => {
+        test('render table with header without paragraph', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: TABLE_WITH_HEADER_MARKUP
+            }).dxHtmlEditor('instance');
+            const $element = instance.$element();
+            const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
+            const expectedValue = '<table>' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th class="ql-table-header-cell"><p class="ql-table-header-cell-line">Header1</p></th>' +
+                        '<th class="ql-table-header-cell"><p class="ql-table-header-cell-line">Header2</p></th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                    '<tr>' +
+                        '<td class="ql-table-data-cell"><p class="ql-table-cell-line">Data1</p></td>' +
+                        '<td class="ql-table-data-cell"><p class="ql-table-cell-line">Data2</p></td>' +
+                    '</tr>' +
+                '</tbody>' +
+            '</table>';
+
+            assert.strictEqual(instance.option('value'), TABLE_WITH_HEADER_MARKUP);
+            assert.strictEqual(markup, expectedValue);
+        });
+
+        test('render table with header and multiple paragraphs', function(assert) {
+            const value = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <p>Header1</p>
+                            <p>Subheader1</p>
+                            </th>
+                        <th>Header2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>Data1</p>
+                            <p>Data1_1</p>
+                            <p>Data1_2</p>
+                        </td>
+                        <td>Data2</td>
+                    </tr>
+                </tbody>
+            </table>`;
+            const instance = $('#htmlEditor').dxHtmlEditor({ value }).dxHtmlEditor('instance');
+            const $element = instance.$element();
+            const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
+            const expectedValue = '<table>' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th class="ql-table-header-cell">' +
+                            '<p class="ql-table-header-cell-line">Header1</p>' +
+                            '<p class="ql-table-header-cell-line">Subheader1</p>' +
+                        '</th>' +
+                        '<th class="ql-table-header-cell"><p class="ql-table-header-cell-line">Header2</p></th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                    '<tr>' +
+                        '<td class="ql-table-data-cell">' +
+                            '<p class="ql-table-cell-line">Data1</p>' +
+                            '<p class="ql-table-cell-line">Data1_1</p>' +
+                            '<p class="ql-table-cell-line">Data1_2</p>' +
+                        '</td>' +
+                        '<td class="ql-table-data-cell"><p class="ql-table-cell-line">Data2</p></td>' +
+                    '</tr>' +
+                '</tbody>' +
+            '</table>';
+
+            assert.strictEqual(instance.option('value'), value);
+            assert.strictEqual(markup, expectedValue);
         });
     });
 }

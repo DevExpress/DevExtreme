@@ -106,10 +106,8 @@ class ScrollHelper {
     }
 
     isScrollable($element) {
-        const that = this;
-
-        return ($element.css(that._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
-            && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+        return ($element.css(this._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
+            && $element.prop(this._scrollSizeProp) > Math.ceil($element[this._sizeAttr]());
     }
 
     _trySetScrollable(element, mousePosition) {
@@ -258,11 +256,16 @@ const Draggable = DOMComponent.inherit({
             onDragEnd: null,
             onDragEnter: null,
             onDragLeave: null,
+
             /**
+             * @section Utils
+             * @default null
              * @name dxDraggableOptions.onDrop
              * @type function(e)
-             * @extends Action
              * @type_function_param1 e:object
+             * @type_function_param1_field1 component:this
+             * @type_function_param1_field2 element:DxElement
+             * @type_function_param1_field3 model:object
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 itemData:any
              * @type_function_param1_field6 itemElement:DxElement
@@ -592,11 +595,11 @@ const Draggable = DOMComponent.inherit({
     _dragStartHandler: function(e) {
         const $element = this._getDraggableElement(e);
 
-        if(this._$sourceElement) {
-            return;
-        }
         if(!this._isValidElement(e, $element)) {
             e.cancel = true;
+            return;
+        }
+        if(this._$sourceElement) {
             return;
         }
 
@@ -624,6 +627,11 @@ const Draggable = DOMComponent.inherit({
             dragElement: $dragElement.get(0),
             initialOffset: isFixedPosition && initialOffset
         }));
+
+        this._getAction('onDraggableElementShown')({
+            ...dragStartArgs,
+            dragElement: $dragElement
+        });
 
         const $area = this._getArea();
         const areaOffset = this._getAreaOffset($area);
@@ -938,6 +946,7 @@ const Draggable = DOMComponent.inherit({
             case 'onDrop':
             case 'onDragEnter':
             case 'onDragLeave':
+            case 'onDraggableElementShown':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
             case 'dragTemplate':

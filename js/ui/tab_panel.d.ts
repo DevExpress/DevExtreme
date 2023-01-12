@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -18,16 +18,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
-    dxMultiViewItem,
-    dxMultiViewOptions
+    Item as dxMultiViewItem,
+    dxMultiViewOptions,
 } from './multi_view';
 
 /** @public */
@@ -40,16 +40,16 @@ export type DisposingEvent = EventInfo<dxTabPanel>;
 export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTabPanel, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTabPanel, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
@@ -58,22 +58,22 @@ export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
 
 /** @public */
-export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
+export type TitleClickEvent = NativeEventInfo<dxTabPanel, KeyboardEvent | MouseEvent | PointerEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
-export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
+export type TitleHoldEvent = NativeEventInfo<dxTabPanel, MouseEvent | PointerEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -83,7 +83,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid
      * @default false
-     * @default true [for](Android|iOS)
+     * @default true &for(Android|iOS)
      * @public
      */
     animationEnabled?: boolean;
@@ -104,8 +104,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -184,7 +182,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     showNavButtons?: boolean;
     /**
      * @docid
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @public
      */
     swipeEnabled?: boolean;
@@ -192,8 +190,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
 /**
  * @docid
  * @inherits dxMultiView
- * @module ui/tab_panel
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

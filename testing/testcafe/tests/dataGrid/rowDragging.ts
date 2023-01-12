@@ -7,35 +7,40 @@ const isPlaceholderVisible = ClientFunction(() => $('.dx-sortable-placeholder').
 
 const getPlaceholderOffset = ClientFunction(() => $('.dx-sortable-placeholder').offset());
 
+const getRowsViewLeftOffset = ClientFunction(() => $('#container .dx-datagrid-rowsview').offset()?.left);
+
+const getDraggingElementLeftOffset = ClientFunction(() => $('.dx-sortable-dragging').offset()?.left);
+
+const getDraggingElementScrollPosition = ClientFunction(() => {
+  const $dataGrid = $('.dx-sortable-dragging').find('.dx-datagrid').first().parent();
+  const dataGridInstance = $dataGrid.data('dxDataGrid');
+  const scrollableInstance = dataGridInstance.getScrollable();
+
+  return {
+    left: scrollableInstance.scrollLeft(),
+    top: scrollableInstance.scrollTop(),
+  };
+});
+
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<void> {
-  return ClientFunction(() => {
-    const gridInstance = grid.getGridInstance();
-    const $row = $(gridInstance.getRowElement(rowIndex));
-    const $cell = $row.children('.dx-command-drag');
-    const cellOffset = $cell.offset();
+const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
+  const items: Record<string, unknown>[] = [];
 
-    $cell
-      .trigger($.Event('dxpointerdown', {
-        pageX: cellOffset.left,
-        pageY: cellOffset.top,
-        pointers: [{ pointerId: 1 }],
-      }))
-      .trigger($.Event('dxpointermove', {
-        pageX: cellOffset.left + x,
-        pageY: cellOffset.top + y,
-        pointers: [{ pointerId: 1 }],
-      }));
-  },
-  {
-    dependencies: {
-      grid, rowIndex, x, y,
-    },
-  })();
-}
+  for (let i = 0; i < rowCount; i += 1) {
+    const item = {};
+
+    for (let j = 0; j < columnCount; j += 1) {
+      item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
+    }
+
+    items.push(item);
+  }
+
+  return items;
+};
 
 fixture.disablePageReloads`Row dragging`
   .page(url(__dirname, '../container.html'))
@@ -46,8 +51,8 @@ test('The placeholder should appear when a cross-component dragging rows after s
   const dataGrid = new DataGrid('#container');
 
   await scrollTo(0, 10000);
-  await moveRow(dataGrid, 6, 500, 0);
-  await moveRow(dataGrid, 6, 550, 0);
+  await dataGrid.moveRow(6, 500, 0, true);
+  await dataGrid.moveRow(6, 550, 0);
 
   await t.expect(isPlaceholderVisible()).ok();
 }).before(async (t) => {
@@ -136,8 +141,8 @@ test('The placeholder should appear when a cross-component dragging rows after s
 test('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await moveRow(dataGrid, 0, 500, 0);
-  await moveRow(dataGrid, 0, 550, 0);
+  await dataGrid.moveRow(0, 500, 0, true);
+  await dataGrid.moveRow(0, 550, 0);
 
   await t
     .expect(isPlaceholderVisible())
@@ -329,4 +334,46 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
       },
     }, false, '#otherContainer'),
   ]);
+});
+
+// T1082538
+test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.scrollTo({ x: 2500 });
+
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(2500);
+
+  await dataGrid.moveRow(0, 0, 25, true);
+  await dataGrid.moveRow(0, 0, 50, false);
+
+  const rowsViewLeftOffset = await getRowsViewLeftOffset();
+
+  await t
+    .expect(getDraggingElementLeftOffset())
+    .eql(rowsViewLeftOffset)
+    .expect(getDraggingElementScrollPosition())
+    .eql({
+      left: 2500,
+      top: 0,
+    });
+}).before(async (t) => {
+  await t.maximizeWindow();
+
+  return createWidget('dxDataGrid', {
+    width: 600,
+    height: 500,
+    dataSource: generateData(10, 50),
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+      useNative: false,
+    },
+    rowDragging: {
+      allowReordering: true,
+      showDragIcons: false,
+    },
+  });
 });

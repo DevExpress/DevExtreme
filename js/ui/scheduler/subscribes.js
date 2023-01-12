@@ -106,8 +106,9 @@ const subscribes = {
 
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
+        const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
-        if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
+        if((newCellIndex !== oldCellIndex) || isDragAndDropBetweenComponents || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, (function() {
 
                 this._updateAppointment(rawAppointment, targetedRawAppointment, function() {

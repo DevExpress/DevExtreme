@@ -2831,6 +2831,35 @@ QUnit.module('Coords In', $.extend({}, environment2DTranslator, {
     }
 }));
 
+// T1044231
+QUnit.test('getTemplatesDef. State after remove some labels by resolveOverlapping', function(assert) {
+    const done = assert.async();
+    this.updateOptions({
+        label: { visible: true, template: sinon.spy(), overlappingBehavior: 'hide' }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+
+    this.generatedTicks = [0, 5, 10, 15, 20];
+
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    this.axis.getTemplatesDef().done(function() {
+        assert.ok(true, 'deferred resolved');
+        done();
+    });
+
+    this.templateRender.getCalls().forEach(currentCall => {
+        currentCall.args[0].onRendered();
+    });
+});
+
 QUnit.test('Horizontal axis. bottom position', function(assert) {
     this.updateOptions({
         isHorizontal: true,

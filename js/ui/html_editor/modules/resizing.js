@@ -54,6 +54,12 @@ export default class ResizingModule extends BaseModule {
 
             this._$target = e.target;
 
+            const $target = $(this._$target);
+            const minWidth = Math.max($target.outerWidth() - $target.width(), this.resizable.option('minWidth'));
+            const minHeight = Math.max($target.outerHeight() - $target.height(), this.resizable.option('minHeight'));
+
+            this.resizable.option({ minWidth, minHeight });
+
             this.updateFramePosition();
             this.showFrame();
             this._adjustSelection();
@@ -141,17 +147,16 @@ export default class ResizingModule extends BaseModule {
             e.preventDefault();
         });
 
-        this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
+        this.resizable = this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
+            _keepAspectRatio: true,
             onResize: (e) => {
                 if(!this._$target) {
                     return;
                 }
 
-                const correction = 2 * (FRAME_PADDING + this._getBorderWidth());
-
                 $(this._$target).attr({
-                    height: e.height - correction,
-                    width: e.width - correction
+                    height: e.height,
+                    width: e.width
                 });
                 this.updateFramePosition();
             }
@@ -160,7 +165,7 @@ export default class ResizingModule extends BaseModule {
 
     _deleteImage() {
         if(this._isAllowedTarget(this._$target)) {
-            Quill.find(this._$target).deleteAt(0);
+            Quill.find(this._$target)?.deleteAt(0);
         }
     }
 

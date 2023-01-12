@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 import { isFunction, isDefined } from '../../core/utils/type';
 import { compileSetter, compileGetter } from '../../core/utils/data';
 import positionUtils from '../../animation/position';
-import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
@@ -39,6 +38,7 @@ import EdgesOption from './diagram.edges_option';
 
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
+const DIAGRAM_OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
@@ -71,7 +71,6 @@ class Diagram extends Widget {
     _init() {
         this._updateDiagramLockCount = 0;
         this.toggleFullscreenLock = 0;
-        this._browserResizeTimer = -1;
         this._toolbars = [];
 
         super._init();
@@ -149,29 +148,31 @@ class Diagram extends Widget {
                 .addClass(DIAGRAM_SCROLL_VIEW_CLASS)
                 .appendTo(this._$content);
             this._createComponent($scrollViewWrapper, DiagramScrollView, {
+                useNativeScrolling: this.option('useNativeScrolling'),
                 onCreateDiagram: (e) => {
-                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView);
+                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView, $contentWrapper[0]);
                 }
-            });
-        }
-
-        if(hasWindow()) {
-            resizeCallbacks.add(() => {
-                this._killBrowserResizeTimer();
-                this._browserResizeTimer = setTimeout(() => this._processBrowserResize(), 100);
             });
         }
 
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
+
+        this._createOptionsUpdateBar();
     }
-    _processBrowserResize() {
+    _dimensionChanged() {
         this._isMobileScreenSize = undefined;
 
         this._processDiagramResize();
-        this._killBrowserResizeTimer();
+    }
+    _visibilityChanged(visible) {
+        if(visible) {
+            this._bindDiagramData();
+            this.repaint();
+        }
     }
     _processDiagramResize() {
+        this._diagramInstance.onDimensionChanged();
         if(this._historyToolbarResizeCallback) {
             this._historyToolbarResizeCallback.call(this);
         }
@@ -187,12 +188,6 @@ class Diagram extends Widget {
         if(this._toolboxResizeCallback) {
             this._toolboxResizeCallback.call(this);
         }
-    }
-    _killBrowserResizeTimer() {
-        if(this._browserResizeTimer > -1) {
-            clearTimeout(this._browserResizeTimer);
-        }
-        this._browserResizeTimer = -1;
     }
     isMobileScreenSize() {
         if(this._isMobileScreenSize === undefined) {
@@ -244,7 +239,6 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
-            container: this.$element(),
             excludeCommands: this._getExcludeCommands(),
             onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this),
@@ -283,7 +277,6 @@ class Diagram extends Widget {
         return this.option('historyToolbar.visible') && !this.isReadOnlyMode();
     }
     _renderHistoryToolbar($parent) {
-        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -293,18 +286,18 @@ class Diagram extends Widget {
                 locateInMenu: 'never'
             })
         );
-        this._updateHistoryToolbarPosition($container, $parent, isServerSide);
+        this._updateHistoryToolbarPosition();
         this._historyToolbarResizeCallback = () => {
             this._historyToolbar.option('isMobileView', this.isMobileScreenSize());
         };
     }
-    _updateHistoryToolbarPosition($container, $parent, isServerSide) {
-        if(isServerSide) return;
+    _updateHistoryToolbarPosition() {
+        if(!hasWindow()) return;
 
-        positionUtils.setup($container, {
+        positionUtils.setup(this._historyToolbar.$element(), {
             my: 'left top',
             at: 'left top',
-            of: $parent,
+            of: this._historyToolbar.$element().parent(),
             offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' ' + DIAGRAM_FLOATING_PANEL_OFFSET
         });
     }
@@ -339,7 +332,8 @@ class Diagram extends Widget {
                     {
                         shapeIconSpacing: DIAGRAM_TOOLBOX_SHAPE_SPACING,
                         shapeIconCountInRow: this.option('toolbox.shapeIconsPerRow'),
-                        shapeIconAttributes: { 'data-toggle': e.dataToggle }
+                        shapeIconAttributes: { 'data-toggle': e.dataToggle },
+                        toolboxClass: DIAGRAM_OVERLAY_CONTENT_CLASS
                     }
                 );
             },
@@ -390,6 +384,7 @@ class Diagram extends Widget {
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
+        this._toolbox._popup.option('propagateOutsideClick', !this.option('fullScreen'));
         this._toolboxResizeCallback = () => {
             const bounds = this._getToolboxBounds($parent, isServerSide);
             this._toolbox.option('height', bounds.height);
@@ -729,8 +724,7 @@ class Diagram extends Widget {
             }
         }
 
-        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
-        this._diagramInstance.registerBar(this.optionsUpdateBar);
+        this._createOptionsUpdateBar();
         if(hasWindow()) {
             // eslint-disable-next-line spellcheck/spell-checker
             this._diagramInstance.initMeasurer(this.$element()[0]);
@@ -738,11 +732,21 @@ class Diagram extends Widget {
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
+    _createOptionsUpdateBar() {
+        if(!this.optionsUpdateBar) {
+            this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
+            this._diagramInstance.registerBar(this.optionsUpdateBar);
+        }
+    }
+    _deleteOptionsUpdateBar() {
+        delete this.optionsUpdateBar;
+    }
     _clean() {
         if(this._diagramInstance) {
             this._diagramInstance.cleanMarkup((element) => {
                 $(element).empty();
             });
+            this._deleteOptionsUpdateBar();
         }
         super._clean();
     }
@@ -1080,7 +1084,7 @@ class Diagram extends Widget {
     }
     _isBindingMode() {
         return (this._nodesOption && this._nodesOption.hasItems()) ||
-            (this._edgesOption && this._nodesOption.hasItems());
+            (this._edgesOption && this._edgesOption.hasItems());
     }
     _beginUpdateDiagram() {
         this._updateDiagramLockCount++;
@@ -1173,19 +1177,41 @@ class Diagram extends Widget {
             ));
         }
     }
+    _getViewport() {
+        const $viewPort = this.$element().closest('.dx-viewport');
+        return $viewPort.length ? $viewPort : $('body');
+    }
     _onToggleFullScreen(fullScreen) {
         if(this.toggleFullscreenLock > 0) return;
 
         this._changeNativeFullscreen(fullScreen);
+
+        if(fullScreen) {
+            this._prevParent = this.$element().parent();
+            this._prevFullScreenZIndex = this.$element().css('zIndex');
+            this._fullScreenZIndex = zIndexPool.create(Overlay.baseZIndex());
+            this.$element().css('zIndex', this._fullScreenZIndex);
+            this.$element().appendTo(this._getViewport());
+        } else {
+            this.$element().appendTo(this._prevParent);
+            if(this._fullScreenZIndex) {
+                zIndexPool.remove(this._fullScreenZIndex);
+                this.$element().css('zIndex', this._prevFullScreenZIndex);
+            }
+        }
+
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
-        this._diagramInstance.updateLayout(true);
 
         this._processDiagramResize();
         if(this._toolbox) {
             this._toolbox.repaint();
+            this._toolbox._popup.option('propagateOutsideClick', !fullScreen);
         }
         if(this._propertiesPanel) {
             this._propertiesPanel.repaint();
+        }
+        if(this._historyToolbar) {
+            this._updateHistoryToolbarPosition();
         }
     }
     _changeNativeFullscreen(setModeOn) {
@@ -1271,11 +1297,6 @@ class Diagram extends Widget {
     }
     _onShowContextToolbox(x, y, side, category, callback) {
         if(this._contextToolbox) {
-            const rect = this._diagramInstance.getBoundingClientRectangle();
-            if(rect) {
-                x -= rect.x;
-                y -= rect.y;
-            }
             this._contextToolbox._show(x, y, side, category, callback);
         }
     }
@@ -1549,7 +1570,11 @@ class Diagram extends Widget {
     }
     updateToolbox() {
         this._diagramInstance && this._diagramInstance.refreshToolbox();
-        this._toolbox && this._toolbox.updateMaxHeight();
+        if(this._toolbox) {
+            this._toolbox.updateTooltips();
+            this._toolbox.updateFilter();
+            this._toolbox.updateMaxHeight();
+        }
     }
 
     _getDefaultOptions() {
@@ -2069,6 +2094,9 @@ class Diagram extends Widget {
                 break;
             case 'simpleView':
                 this._updateSimpleViewState();
+                break;
+            case 'useNativeScrolling':
+                this._invalidate();
                 break;
             case 'fullScreen':
                 this._updateFullscreenState();

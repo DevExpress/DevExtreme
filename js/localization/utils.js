@@ -1,4 +1,4 @@
-import { sign } from '../core/utils/math';
+import { sign, multiplyInExponentialForm } from '../core/utils/math';
 
 const DECIMAL_BASE = 10;
 
@@ -10,8 +10,7 @@ function roundByAbs(value) {
 
 function adjustValue(value, precision) {
     const precisionMultiplier = Math.pow(DECIMAL_BASE, precision);
-    const roundMultiplier = precisionMultiplier * DECIMAL_BASE;
-    const intermediateValue = (value * roundMultiplier) / DECIMAL_BASE;
+    const intermediateValue = multiplyInExponentialForm(value, precision);
 
     return roundByAbs(intermediateValue) / precisionMultiplier;
 }

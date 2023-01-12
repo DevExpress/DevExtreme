@@ -1,14 +1,14 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -16,7 +16,7 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxSortable from './sortable';
@@ -52,12 +52,12 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
     /**
      * @docid
@@ -104,37 +104,38 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
  * @hidden
  * @namespace DevExpress.ui
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DraggableBase { }
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDraggable>;
 
 /** @public */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
     readonly toData?: any;
-}
+};
 
 /** @public */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
     readonly toData?: any;
-}
+};
 
 /** @public */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromData?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxDraggable>;
@@ -142,12 +143,11 @@ export type InitializedEvent = InitializedEventInfo<dxDraggable>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 
-
 /** @public */
 export type DragTemplateData = {
     readonly itemData?: any;
     readonly itemElement: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -165,7 +165,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:DxElement
-     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -230,8 +229,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @docid
  * @inherits DraggableBase
  * @hasTranscludedContent
- * @module ui/draggable
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

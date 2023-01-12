@@ -1,20 +1,20 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    dxSliderBaseOptions
+    dxSliderBaseOptions,
 } from './slider';
 
 import dxTrackBar from './track_bar';
@@ -32,11 +32,11 @@ export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInfo & {
+export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo & {
     readonly start?: number;
     readonly end?: number;
     readonly value?: Array<number>;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -91,8 +91,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @docid
  * @isEditor
  * @inherits dxSliderBase
- * @module ui/range_slider
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

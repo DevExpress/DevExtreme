@@ -319,7 +319,7 @@ export const ListBase = CollectionWidget.inherit({
             return;
         }
 
-        this.callBase(e);
+        return this.callBase(e);
     },
 
     _allowDynamicItemsAppend: function() {
@@ -760,8 +760,8 @@ export const ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
-        each(groupItemsGetter(group) || [], (function(index, item) {
-            this._renderItem(index, item, $groupBody);
+        each(groupItemsGetter(group) || [], (function(itemIndex, item) {
+            this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
         }).bind(this));
 
         this._groupRenderAction({

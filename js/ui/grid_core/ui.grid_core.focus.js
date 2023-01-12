@@ -331,19 +331,26 @@ const FocusController = core.ViewController.inherit((function() {
             const rowsView = that.getView('rowsView');
             let $tableElement;
 
+            let $mainRow;
+
             each(rowsView.getTableElements(), function(index, element) {
                 const isMainTable = index === 0;
                 $tableElement = $(element);
 
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
 
-                that._prepareFocusedRow({
+                const $row = that._prepareFocusedRow({
                     changedItem: change?.items?.[focusedRowIndex],
                     $tableElement: $tableElement,
                     focusedRowIndex: focusedRowIndex,
-                    isMainTable: isMainTable
                 });
+
+                if(isMainTable) {
+                    $mainRow = $row;
+                }
             });
+
+            $mainRow && rowsView.scrollToElementVertically($mainRow);
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
             const isNotMasterDetailFocusedRow = (_, focusedRow) => {
@@ -373,15 +380,11 @@ const FocusController = core.ViewController.inherit((function() {
             if(changedItem && (changedItem.rowType === 'data' || changedItem.rowType === 'group')) {
                 const focusedRowIndex = options.focusedRowIndex;
                 const $tableElement = options.$tableElement;
-                const isMainTable = options.isMainTable;
                 const tabIndex = this.option('tabindex') || 0;
                 const rowsView = this.getView('rowsView');
 
                 $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
-                if(isMainTable) {
-                    rowsView.scrollToElementVertically($row);
-                }
             }
 
             return $row;
@@ -540,6 +543,8 @@ export const focusModule = {
                             this.processUpdateFocusedRow(e);
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
+                        } else if(e.changeType === 'update' && e.repaintChangesOnly) {
+                            this.processUpdateFocusedRow(e);
                         }
                     }
                 },
@@ -610,6 +615,11 @@ export const focusModule = {
                     const that = this;
                     const deferred = new Deferred();
                     const dataSource = that._dataSource;
+
+                    if(Array.isArray(key)) {
+                        return deferred.resolve(-1).promise();
+                    }
+
                     let filter = that._generateFilterByKey(key);
 
                     dataSource.load({
@@ -780,7 +790,10 @@ export const focusModule = {
                 },
 
                 updateFocusElementTabIndex: function($cellElements, preventScroll) {
-                    if(this.option('focusedRowEnabled')) {
+                    const rowIndex = this.getController('keyboardNavigation').getVisibleRowIndex();
+                    const row = this._dataController.getVisibleRows()[rowIndex];
+
+                    if(this.option('focusedRowEnabled') && !row?.isNewRow) {
                         this._setFocusedRowElementTabIndex(preventScroll);
                     } else {
                         this.callBase($cellElements);
@@ -837,8 +850,10 @@ export const focusModule = {
 
                 scrollToElementVertically: function($row) {
                     const scrollable = this.getScrollable();
-                    if(scrollable) {
+
+                    if(scrollable && $row.length) {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
+                        this._dataController.resetFilterApplying();
                         scrollable.scrollTo({ top: position });
                     }
                 }

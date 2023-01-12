@@ -59,11 +59,12 @@ export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
     let selectedItemKeyHashesMap;
 
-    const getSelectedItemKeyHashesMap = function(selectedItemKeys) {
+    const getSelectedItemKeyHashesMap = function(keyOf, keyExpr) {
         if(!selectedItemKeyHashesMap) {
             selectedItemKeyHashesMap = {};
-            for(let i = 0; i < selectedItemKeys.length; i++) {
-                selectedItemKeyHashesMap[getKeyHash(selectedItemKeys[i])] = true;
+            const normalizedKeys = normalizeKeys(selectedItemKeys, keyOf, keyExpr);
+            for(let i = 0; i < normalizedKeys.length; i++) {
+                selectedItemKeyHashesMap[getKeyHash(normalizedKeys[i])] = true;
             }
         }
         return selectedItemKeyHashesMap;
@@ -81,7 +82,7 @@ export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         if(!equalByReference) {
             keyHash = getKeyHash(key);
             if(!isObject(keyHash)) {
-                const selectedKeyHashesMap = getSelectedItemKeyHashesMap(normalizeKeys(selectedItemKeys, keyOf, keyExpr));
+                const selectedKeyHashesMap = getSelectedItemKeyHashesMap(keyOf, keyExpr);
                 if(selectedKeyHashesMap[keyHash]) {
                     return !isSelectAll;
                 }

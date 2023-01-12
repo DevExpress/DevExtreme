@@ -10,6 +10,7 @@
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../popup/colors" as *;
+@use "../popup/sizes" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
@@ -87,7 +88,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
 
       .dx-texteditor {
-        .dx-texteditor-input {
+        .dx-texteditor-input,
+        .dx-placeholder::before {
           padding-left: $material-grid-base-texteditor-input-padding;
         }
       }
@@ -318,14 +320,17 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
   }
 
   .dx-#{$widget-name}-edit-popup {
-    .dx-scrollable-container {
-      margin-left: -10px;
-      padding-left: 10px;
+    .dx-popup-content {
+      padding: 0;
     }
 
     .dx-error-message {
       padding: $material-grid-base-cell-padding;
     }
+  }
+
+  .dx-#{$widget-name}-edit-popup-form {
+    padding: $material-popup-content-padding;
   }
 
   .dx-#{$widget-name}-headers,
@@ -336,12 +341,13 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-lookup {
       height: auto;
-    }
 
-    .dx-lookup-field {
-      padding-left: $material-grid-base-cell-horizontal-padding;
-      padding-top: $material-grid-base-cell-vertical-padding;
-      padding-bottom: $material-grid-base-cell-vertical-padding;
+      .dx-lookup-field {
+        padding-left: $material-grid-base-cell-horizontal-padding;
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
+        font-size: $material-grid-base-cell-font-size;
+      }
     }
 
     .dx-dropdowneditor-button-visible.dx-dropdowneditor {
@@ -878,6 +884,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       border-top: $material-grid-base-row-border;
       border-bottom: $material-grid-base-row-border;
 
+      &:focus {
+        outline: none;
+      }
+
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
@@ -972,10 +982,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),

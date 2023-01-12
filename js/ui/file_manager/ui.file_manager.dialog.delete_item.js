@@ -4,7 +4,7 @@ import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
 import ScrollView from '../scroll_view';
-import FileManagerDialogBase from './ui.file_manager.dialog.js';
+import FileManagerDialogBase from './ui.file_manager.dialog';
 
 const FILE_MANAGER_DIALOG_DELETE_ITEM = 'dx-filemanager-dialog-delete-item';
 const FILE_MANAGER_DIALOG_DELETE_ITEM_POPUP = 'dx-filemanager-dialog-delete-item-popup'; // TODO ensure needed

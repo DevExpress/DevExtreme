@@ -55,6 +55,22 @@ const baseEnvironment = {
         this.$container = $('#chartContainer');
     }
 };
+const defaultCommonPaneSettings = {
+    backgroundColor: 'none',
+    border: {
+        visible: false,
+        top: true,
+        bottom: true,
+        left: true,
+        right: true,
+        dashStyle: 'solid'
+    }
+};
+
+const defaultCrosshairOptions = {
+    horizontalLine: {},
+    verticalLine: {}
+};
 
 // stubs
 rendererModule.Renderer = sinon.spy(function(parameters) {
@@ -148,17 +164,8 @@ exports.environment = {
             top: 0,
             bottom: 0
         });
-        that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
-            backgroundColor: 'none',
-            border: {
-                visible: false,
-                top: true,
-                bottom: true,
-                left: true,
-                right: true,
-                dashStyle: 'solid'
-            }
-        });
+        that.themeManager.getOptions.withArgs('commonPaneSettings').returns(defaultCommonPaneSettings);
+        that.themeManager.getOptions.withArgs('crosshair').returns(defaultCrosshairOptions);
 
         that.themeManager.getOptions.withArgs('dataPrepareSettings').returns({
             checkTypeForAllData: true,
@@ -189,17 +196,9 @@ exports.environment = {
         that.createChart = function(options) {
             $.each(options || {}, function(k, v) {
                 if(k === 'commonPaneSettings') {
-                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
-                        backgroundColor: 'none',
-                        border: {
-                            visible: false,
-                            top: true,
-                            bottom: true,
-                            left: true,
-                            right: true,
-                            dashStyle: 'solid'
-                        }
-                    }, v));
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
+                } else if(k === 'crosshair') {
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
                 } else if(k !== 'series') {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }

@@ -14,8 +14,12 @@ export default class TextBox extends Widget {
   constructor(id: string) {
     super(id);
 
-    this.input = this.element.find(`.${CLASS.input}`);
-    this.value = this.input.value;
+    this.input = this.getInput();
+    this.value = this.input?.value;
+  }
+
+  getInput(): Selector {
+    return this.element.find(`.${CLASS.input}`);
   }
 
   async getButton(index: number): Promise<ActionButton> {

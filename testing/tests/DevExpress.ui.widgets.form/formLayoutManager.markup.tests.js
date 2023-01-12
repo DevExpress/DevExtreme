@@ -5,21 +5,31 @@ import {
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_REQUIRED_CLASS,
+    LAYOUT_MANAGER_ONE_COLUMN,
+} from 'ui/form/constants';
+
+import {
+    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_CLASS,
+    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
+    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
+} from 'ui/form/components/field_item';
+
+import {
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_LABEL_LOCATION_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+} from 'ui/form/components/label';
+
+import {
     FIELD_EMPTY_ITEM_CLASS,
-    LAYOUT_MANAGER_ONE_COLUMN
-} from 'ui/form/constants';
+} from 'ui/form/components/empty_item';
+
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
 import { inArray } from 'core/utils/array';
@@ -1458,24 +1468,6 @@ QUnit.module('Layout manager', () => {
         });
 
         assert.equal($testContainer.find('.' + FIELD_EMPTY_ITEM_CLASS).length, 1);
-    });
-
-    test('Templates of form\'s items render with deferring_T638831', function(assert) {
-        let spy;
-
-        $('#container').dxLayoutManager({
-            onInitialized: function(e) {
-                spy = sinon.spy(e.component, '_renderTemplates');
-            },
-            items: [{
-                dataField: 'StartDate',
-                editorType: 'dxDateBox'
-            }]
-        });
-
-        const templatesInfo = spy.args[0][0];
-        assert.ok(templatesInfo[0].container.hasClass('dx-field-item'), 'template container of field item');
-        assert.equal(templatesInfo[0].formItem.dataField, 'StartDate', 'correct a form item for template');
     });
 
     test('layoutData with \'null\' fields shouldn\'t reset editor\'s \'isValid\' option', function(assert) {

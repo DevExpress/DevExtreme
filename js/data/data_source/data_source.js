@@ -159,6 +159,7 @@ export const DataSource = Class.inherit({
         clearTimeout(this._aggregationTimeoutId);
 
         delete this._store;
+        delete this._items;
 
         this._delayedLoadTask?.abort();
 

@@ -439,16 +439,16 @@ QUnit.module('AdaptiveColumns', {
         this.resizingController.updateDimensions();
         this.clock.tick();
         let $cols = $('.dx-datagrid-rowsview col');
-        const adaptiveRowsWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveRowsWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         this.dataController.collapseAll();
         this.clock.tick();
 
         $cols = $('.dx-datagrid-headers col');
-        const adaptiveHeadersWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveHeadersWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         // assert
-        assert.roughEqual(parseFloat(adaptiveRowsWidth), parseFloat(adaptiveHeadersWidth), 0.1, 'adaptive command column\'s width');
+        assert.roughEqual(adaptiveRowsWidth, adaptiveHeadersWidth, 0.1, 'adaptive command column\'s width');
     });
 
     QUnit.test('Adaptive command column should not be displayed for a group summary row', function(assert) {
@@ -3198,6 +3198,58 @@ QUnit.module('Editing', {
         assert.ok($itemsContent.eq(1).hasClass('dx-item-modified'), '2 item. modified css class is added');
     });
 
+    // T1094572
+    QUnit.test('Edit batch. Form\'s item text is chaned when repaintChangesOnly is true', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(300);
+
+        const dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
+            { firstName: 'Super', lastName: 'Man', count: 0.5 }
+        ];
+
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true },
+                { dataField: 'count', index: 2, allowEditing: true }
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            repaintChangesOnly: true,
+            columnHidingEnabled: true
+        };
+
+        setupDataGrid(this);
+        this.rowsView.render($('#container'));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+
+        let $itemsContent = $('.dx-field-item-content');
+        $($itemsContent.eq(0)).trigger('dxclick');
+        this.clock.tick();
+
+        // act
+        const editor = $('.dx-texteditor').first().dxTextBox('instance');
+        editor.option('value', 'Test');
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        $itemsContent = $('.dx-field-item-content');
+        assert.ok($itemsContent.eq(0).hasClass('dx-item-modified'), '1 item. modified css class is added');
+        assert.strictEqual($itemsContent.eq(0).text(), 'Test', 'first item value is changed');
+    });
+
     QUnit.test('Edit batch. Form\'s item is marked as modified for other adaptive row', function(assert) {
         // arrange
         $('.dx-datagrid').width(300);
@@ -3977,7 +4029,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Batch edit mode', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
@@ -3999,7 +4051,8 @@ QUnit.module('Validation', {
             },
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4034,7 +4087,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Batch edit mode if cellTemplate is defined', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
@@ -4059,7 +4112,7 @@ QUnit.module('Validation', {
             dataSource: dataSource,
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4094,7 +4147,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Batch edit mode. Editor is not marked as invalid when row is created', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         this.columns = [
             {
@@ -4119,7 +4172,7 @@ QUnit.module('Validation', {
                 }
             }
         };
-        setupDataGrid(this);
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4137,7 +4190,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Cell edit mode', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
@@ -4160,7 +4213,7 @@ QUnit.module('Validation', {
             },
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+        setupDataGrid(this, renderer($parentContainer.get(0)));
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4194,7 +4247,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Cell edit mode. Validation works only for editable form item with a validation rules', function(assert) {
         // arrange
-        $('.dx-datagrid').width(200);
+        const $parentContainer = $('.dx-datagrid').parent().width(200);
 
         const dataSource = [
             { firstName: 'Super', lastName: 'Man', description: 'Test Test Test' },
@@ -4229,7 +4282,7 @@ QUnit.module('Validation', {
             },
             columnHidingEnabled: true
         };
-        setupDataGrid(this);
+        setupDataGrid(this, $parentContainer);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -4305,7 +4358,7 @@ QUnit.module('Validation', {
 
     QUnit.test('The onRowValidating event is not called twice if isValid is set to \'false\'', function(assert) {
         // arrange
-        $('.dx-datagrid').width(800);
+        const $parentContainer = $('.dx-datagrid').parent().width(800);
 
         let rowValidatingCounter = 0;
 
@@ -4330,7 +4383,7 @@ QUnit.module('Validation', {
                 e.isValid = false;
             }
         };
-        setupDataGrid(this);
+        setupDataGrid(this, $parentContainer);
         this.rowsView.render($('#container'));
 
         // act

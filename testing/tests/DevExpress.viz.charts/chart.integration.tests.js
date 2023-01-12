@@ -1959,6 +1959,29 @@ QUnit.test('Chart can hide series on done event', function(assert) {
     assert.strictEqual(drawn.callCount, 2);
 });
 
+// T1037806
+QUnit.test('skipOptionsRallBack', function(assert) {
+    const skipOptionsRollBackValues = [];
+    const optionChanged = ({ component }) => {
+        skipOptionsRollBackValues.push(component.skipOptionsRollBack);
+    };
+    const chart = createChartInstance({
+        dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 100 }],
+        series: [{}],
+        valueAxis: {
+            visualRange: { startValue: 10, endValue: 20 }
+        }
+    }, $('#chartContainer'));
+
+    chart.on('optionChanged', optionChanged);
+    chart.option('valueAxis.visualRange', { startValue: null, endValue: null });
+
+    assert.strictEqual(skipOptionsRollBackValues.length, 3);
+    assert.strictEqual(skipOptionsRollBackValues[1], true);
+    assert.strictEqual(skipOptionsRollBackValues[2], true);
+    assert.strictEqual(chart.skipOptionsRollBack, false);
+});
+
 // T1009261
 QUnit.test('Chart with large scale break', function(assert) {
     const container = $('#chartContainer');
@@ -1990,7 +2013,111 @@ QUnit.test('Chart with large scale break', function(assert) {
     }, container);
 
     assert.strictEqual(container.find('.dxc-arg-breaks path').length, 3);
+});
 
+// T1062891
+QUnit.test('Chart with large scale break. No ticks in break', function(assert) {
+    const container = $('#chartContainer');
+
+    try {
+        createChartInstance({
+            size: {
+                width: 100
+            },
+            legend: { visible: false },
+            dataSource: [{ Date: '2022-01-13T00:00:00', Open: 1770.000000 }, { Date: '2022-01-14T00:00:00', Open: 1770.000000 }, { Date: '2022-01-17T00:00:00', Open: 1800.000000 }, { Date: '2022-01-18T00:00:00', Open: 1830.000000 }, { Date: '2022-01-19T00:00:00', Open: 1870.000000 }, { Date: '2022-01-20T00:00:00', Open: 1900.000000 }, { Date: '2022-01-21T00:00:00', Open: 1930.000000 }, { Date: '2022-01-24T00:00:00', Open: 1880.000000 }, { Date: '2022-01-25T00:00:00', Open: 1810.000000 }, { Date: '2022-01-26T00:00:00', Open: 1840.000000 }],
+            commonSeriesSettings: {
+                argumentField: 'Date',
+                type: 'bar'
+            },
+            series: [{
+                valueField: 'Open'
+            }],
+            argumentAxis: {
+                argumentType: 'datetime',
+                workdaysOnly: true
+            }
+        }, container);
+
+        assert.strictEqual(container.find('.dxc-arg-breaks path').length, 0);
+    } catch(e) {
+        assert.ok(false, 'Chart created with exception');
+    }
+});
+
+QUnit.test('Dispose unused axes (T1042940)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+
+    const chart = this.createChart({
+        valueAxis: [{
+            name: 'Total',
+            valueType: 'numeric',
+            pane: 'Total'
+        }, {
+            name: 'Count',
+            pane: 'Count'
+        }],
+        panes: [{
+            name: 'Total'
+        }, {
+            name: 'Count'
+        }],
+        dataSource: [{
+            'val': 43620,
+            'series': 'Africa | Total',
+            'arg': '2013'
+        }, {
+            'val': 101475,
+            'series': 'Australia | Total',
+            'arg': '2013'
+        }, {
+            'val': 100480,
+            'series': 'South America | Total',
+            'arg': '2014'
+        }, {
+            'val': 11,
+            'series': 'Africa | Count',
+            'arg': '2015'
+        }, {
+            'val': 38,
+            'series': 'South America | Count',
+            'arg': '2013'
+        }, {
+            'val': 44,
+            'series': 'Asia | Count',
+            'arg': '2014'
+        }],
+        seriesTemplate: {
+            nameField: 'series'
+        }
+    });
+
+    chart.option({
+        valueAxis: [{
+            name: 'Count',
+            pane: 'Count'
+        }],
+        panes: [{}],
+        dataSource: [{
+            'val': 26,
+            'series': 'Africa',
+            'arg': '2013'
+        }, {
+            'val': 41,
+            'series': 'Asia',
+            'arg': '2013'
+        }, {
+            'val': 13,
+            'series': 'Australia',
+            'arg': '2015'
+        }],
+        seriesTemplate: {
+            nameField: 'series'
+        }
+    });
+
+    assert.equal(chart.getValueAxis().pane, 'default0');
+    assert.equal($('.dxc-val-elements').length, 1);
 });
 
 QUnit.module('Legend title', $.extend({}, moduleSetup, {
@@ -2263,6 +2390,25 @@ QUnit.test('show selected point (points are hidden automatically)', function(ass
     assert.ok(point.graphic);
 
     chart.getAllSeries()[0].getVisiblePoints()[0].select();
+
+    assert.notOk(point.graphic);
+});
+
+// T1027922
+QUnit.test('View hovered point marker for invisible point', function(assert) {
+    const pointIndex = 1;
+    const chart = this.createChart({
+        customizePoint(args) {
+            if(args.index === pointIndex) {
+                return { visible: false };
+            }
+        }
+    });
+
+    const point = chart.getAllSeries()[0].getAllPoints()[pointIndex];
+
+    // act
+    point.hover();
 
     assert.notOk(point.graphic);
 });
@@ -3730,8 +3876,8 @@ QUnit.test('Rotated labels', function(assert) {
 
     const settings = chart.getArgumentAxis()._majorTicks[0].getContentContainer()._settings;
 
-    assert.roughEqual(Math.ceil(settings.translateX), 256, 1.5);
-    assert.roughEqual(Math.round(settings.translateY), 390, 1.5);
+    assert.roughEqual(Math.ceil(settings.translateX), 256, 3);
+    assert.roughEqual(Math.round(settings.translateY), 390, 3);
     assert.strictEqual(settings.rotate, 90);
 });
 

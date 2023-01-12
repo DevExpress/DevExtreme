@@ -81,9 +81,13 @@ const Validator = DOMComponent.inherit({
         });
     },
 
-    _initAdapter() {
+    _getEditor() {
         const element = this.$element()[0];
-        const dxStandardEditor = elementData(element, 'dx-validation-target');
+        return elementData(element, 'dx-validation-target');
+    },
+
+    _initAdapter() {
+        const dxStandardEditor = this._getEditor();
         let adapter = this.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
@@ -118,6 +122,26 @@ const Validator = DOMComponent.inherit({
         this.callBase();
     },
 
+    _render() {
+        this.callBase();
+        this._toggleAccessibilityAttributes();
+    },
+
+    _toggleAccessibilityAttributes() {
+        const dxStandardEditor = this._getEditor();
+        if(dxStandardEditor) {
+            const rules = this.option('validationRules') || [];
+            const isRequired = rules.some(({ type }) => type === 'required') || null;
+
+            if(dxStandardEditor.isInitialized()) {
+                dxStandardEditor.setAria('required', isRequired);
+            }
+            dxStandardEditor.option('_onMarkupRendered', () => {
+                dxStandardEditor.setAria('required', isRequired);
+            });
+        }
+    },
+
     _visibilityChanged(visible) {
         if(visible) {
             this._initGroupRegistration();
@@ -131,6 +155,7 @@ const Validator = DOMComponent.inherit({
                 return;
             case 'validationRules':
                 this._resetValidationRules();
+                this._toggleAccessibilityAttributes();
                 this.option('isValid') !== undefined && this.validate();
                 return;
             case 'adapter':

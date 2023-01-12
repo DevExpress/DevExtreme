@@ -215,14 +215,12 @@ class ViewDataGenerator {
         }
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const columnCount = completeViewDataMap[index].length;
-        const dateHeaderColumnCount = groupByDate
-            ? columnCount / horizontalGroupCount
-            : columnCount;
         const colSpan = groupByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        const slicedByColumnsData = completeViewDataMap[index].slice(0, dateHeaderColumnCount);
+        const slicedByColumnsData = groupByDate
+            ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
+            : completeViewDataMap[index];
 
         return slicedByColumnsData.map(({
             startDate,

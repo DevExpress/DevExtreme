@@ -2521,6 +2521,36 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
 
 QUnit.module('Misc', environment);
 
+// T1049139
+QUnit.test('visualRange updating after zoomming', function(assert) {
+    const dataSource = [{ arg: 1960, val: 10, }, { arg: 2020, val: 20, }];
+    const chart = this.createChart({
+        dataSource,
+        legend: {
+            visible: false,
+        },
+        series: { type: 'bar' },
+        argumentAxis: {
+            visualRange: {
+                length: 20
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both'
+        }
+    });
+
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    dataSource.push({ arg: 2030, val: 1 });
+    chart.option('dataSource', dataSource);
+
+    const visualRange = chart.getArgumentAxis().visualRange();
+
+    assert.strictEqual(Math.floor(visualRange.startValue), 2000);
+    assert.strictEqual(Math.floor(visualRange.endValue), 2018);
+});
+
 QUnit.test('Do nothing if no actions allowed', function(assert) {
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();

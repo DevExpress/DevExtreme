@@ -1,34 +1,34 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     ComponentDisabledDate,
-    dxCalendarOptions
+    dxCalendarOptions,
 } from './calendar';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    format
+    format,
 } from './widget/ui.widget';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxDateBox>;
+export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxDateBox>;
@@ -37,37 +37,37 @@ export type ClosedEvent = EventInfo<dxDateBox>;
 export type ContentReadyEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxDateBox>;
+export type CopyEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxDateBox>;
+export type CutEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxDateBox>;
+export type EnterKeyEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxDateBox>;
+export type FocusInEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxDateBox>;
+export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDateBox>;
+export type InputEvent = NativeEventInfo<dxDateBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxDateBox>;
+export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxDateBox>;
+export type KeyPressEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxDateBox>;
+export type KeyUpEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxDateBox>;
@@ -76,10 +76,10 @@ export type OpenedEvent = EventInfo<dxDateBox>;
 export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxDateBox>;
+export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxDateBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxDateBox>;
@@ -135,7 +135,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @type_function_param1_field1 component:dxDateBox
      * @type_function_param1_field2 date:Date
      * @type_function_param1_field3 view:string
-     * @type_function_return boolean
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
@@ -173,10 +172,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @docid
      * @type Enums.DateBoxPickerType
      * @default 'calendar'
-     * @default 'native' [for](iOS)
-     * @default 'native' [for](Android)
-     * @default 'rollers' [for](Android_below_version_4.4)
-     * @default 'rollers' [for](mobile_devices)
+     * @default 'native' &for(iOS)
+     * @default 'native' &for(Android)
+     * @default 'rollers' &for(Android_below_version_4.4)
+     * @default 'rollers' &for(mobile_devices)
      * @public
      */
     pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
@@ -216,8 +215,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @docid
  * @isEditor
  * @inherits dxDropDownEditor
- * @module ui/date_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

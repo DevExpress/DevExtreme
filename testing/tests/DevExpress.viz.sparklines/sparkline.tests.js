@@ -637,42 +637,42 @@ QUnit.begin(function() {
 
     QUnit.module('Prepare series options', environment);
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (unknown)', function(assert) {
         this.createSparkline({ type: 'abc' });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (not applicable)', function(assert) {
         this.createSparkline({ dataSource: [3], type: 'pie' });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (camel case)', function(assert) {
         this.createSparkline({ dataSource: [3], type: 'stepLine' });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'stepline', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (number)', function(assert) {
         this.createSparkline({ dataSource: [3], type: 111 });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (null)', function(assert) {
         this.createSparkline({ dataSource: [3], type: null });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (NaN)', function(assert) {
         this.createSparkline({ dataSource: [3], type: NaN });
 
         const options = this.getSeriesOptions();
@@ -1962,6 +1962,18 @@ QUnit.begin(function() {
 
         assert.equal(this.getSeriesOptions().type, 'bar');
         assert.ok(seriesModule.Series.calledOnce);
+    });
+
+    QUnit.test('Dispose series stored svg-elements when type changed (T1028256)', function(assert) {
+        const sparkline = this.createSparkline({
+            dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
+        });
+
+        sparkline.option('type', 'bar');
+
+        assert.ok(this.series.removePointElements.calledTwice);
+        assert.ok(this.series.removeGraphicElements.calledTwice);
+        assert.ok(this.series.removeBordersGroup.calledTwice);
     });
 
     QUnit.test('Change size - B239871', function(assert) {

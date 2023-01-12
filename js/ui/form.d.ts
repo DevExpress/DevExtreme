@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxButton, {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 import Editor from './editor/editor';
 
 import {
-    dxTabPanelOptions
+    dxTabPanelOptions,
 } from './tab_panel';
 
 import {
@@ -36,15 +36,15 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
+    StringLengthRule,
 } from './validation_rules';
 
 import {
-    dxValidationGroupResult
+    ValidationResult,
 } from './validation_group';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -56,13 +56,13 @@ export type DisposingEvent = EventInfo<dxForm>;
 /** @public */
 export type EditorEnterKeyEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
-}
+};
 
 /** @public */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxForm>;
@@ -74,7 +74,7 @@ export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 export type GroupItemTemplateData = {
     readonly component: dxForm;
     readonly formData?: any;
-}
+};
 
 /** @public */
 export type SimpleItemTemplateData = {
@@ -83,7 +83,7 @@ export type SimpleItemTemplateData = {
     readonly editorOptions?: any;
     readonly editorType?: string;
     readonly name?: string;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -111,7 +111,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     colCount?: number | 'auto';
     /**
      * @docid
-     * @extends ColCountResponsibleType
+     * @type object
      * @inherits ColCountResponsible
      * @default undefined
      * @public
@@ -141,7 +141,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @docid
      * @type Enums.FormLabelLocation
      * @default "left"
-     * @default "top" [for](Material)
+     * @default "top" &for(Material)
      * @public
      */
     labelLocation?: 'left' | 'right' | 'top';
@@ -215,7 +215,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @default true
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     showColonAfterLabel?: boolean;
@@ -247,8 +247,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/form
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -257,7 +255,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName getButton(name)
-     * @param1 name:string
      * @return dxButton | undefined
      * @public
      */
@@ -265,7 +262,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName getEditor(dataField)
-     * @param1 dataField:string
      * @return Editor | undefined
      * @public
      */
@@ -273,24 +269,18 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName itemOption(id)
-     * @param1 id:string
-     * @return any
      * @public
      */
     itemOption(id: string): any;
     /**
      * @docid
      * @publicName itemOption(id, option, value)
-     * @param1 id:string
-     * @param2 option:string
-     * @param3 value:any
      * @public
      */
     itemOption(id: string, option: string, value: any): void;
     /**
      * @docid
      * @publicName itemOption(id, options)
-     * @param1 id:string
      * @param2 options:object
      * @public
      */
@@ -311,7 +301,6 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName updateData(dataField, value)
-     * @param1 dataField:string
      * @param2 value:object
      * @public
      */
@@ -326,17 +315,17 @@ export default class dxForm extends Widget {
     /**
      * @docid
      * @publicName validate()
-     * @return dxValidationGroupResult
      * @public
+     * @return dxValidationGroupResult
      */
-    validate(): dxValidationGroupResult;
+    validate(): ValidationResult;
 }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxForm
  */
- export type Item = SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem ;
+ export type Item = SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem;
 
 /**
  * @public
@@ -489,7 +478,7 @@ export interface dxFormGroupItem {
     colCount?: number;
     /**
      * @docid
-     * @extends ColCountResponsibleType
+     * @type object
      * @inherits ColCountResponsible
      * @default undefined
      * @public
@@ -532,7 +521,6 @@ export interface dxFormGroupItem {
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 formData:object
-     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -622,28 +610,28 @@ export interface dxFormSimpleItem {
        * @type Enums.HorizontalAlignment
        * @default "left"
        */
-      alignment?: 'center' | 'left' | 'right',
+      alignment?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.FormLabelLocation
        * @default "left"
        */
-      location?: 'left' | 'right' | 'top',
+      location?: 'left' | 'right' | 'top';
       /**
        * @docid
        * @default from showColonAfterLabel
        */
-      showColon?: boolean,
+      showColon?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      text?: string,
+      text?: string;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -659,7 +647,6 @@ export interface dxFormSimpleItem {
      * @type_function_param1_field3 editorOptions:object
      * @type_function_param1_field4 editorType:string
      * @type_function_param1_field5 name:string
-     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -736,61 +723,57 @@ export interface dxFormTabbedItem {
        * @docid
        * @default true
        */
-      alignItemLabels?: boolean,
+      alignItemLabels?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      badge?: string,
+      badge?: string;
       /**
        * @docid
        * @default 1
        */
-      colCount?: number,
+      colCount?: number;
       /**
        * @docid
-       * @extends ColCountResponsibleType
+       * @type object
        * @inherits ColCountResponsible
        * @default undefined
        */
-      colCountByScreen?: any,
+      colCountByScreen?: any;
       /**
        * @docid
        * @default false
        */
-      disabled?: boolean,
+      disabled?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      icon?: string,
+      icon?: string;
       /**
        * @docid
        * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
        * @default undefined
        */
-      items?: Array<Item>,
+      items?: Array<Item>;
       /**
        * @docid
        * @type_function_param1 tabData:object
-       * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
       /**
        * @docid
        * @type_function_param1 tabData:object
-       * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
+      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
       /**
        * @docid
        * @default undefined
        */
-      title?: string
+      title?: string;
     }>;
     /**
      * @docid

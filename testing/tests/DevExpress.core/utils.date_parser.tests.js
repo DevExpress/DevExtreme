@@ -87,6 +87,14 @@ QUnit.test('date parsing with yyyy-MM-ddThh:mm:ss.SSSSSS', function(assert) {
     assert.equal(parsedDate.getTime(), value.getTime());
 });
 
+QUnit.test('date parsing if the year is below \'0100\' (T1025085)', function(assert) {
+    const stringValue = '0021-01-20T01:00:00';
+
+    const parsedDate = dateSerialization.dateParser(stringValue);
+
+    assert.equal(parsedDate.getFullYear(), 21);
+});
+
 QUnit.module('ISO8601 Time Only Formats', {
     beforeEach: function() {
         this.defaultForceIsoDateParsing = config().forceIsoDateParsing;

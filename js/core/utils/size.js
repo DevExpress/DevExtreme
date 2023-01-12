@@ -78,6 +78,8 @@ const parseHeight = function(value, container) {
         value = parseInt(value.replace('%', '')) * getContainerHeight(container) / 100;
     } else if(!isNaN(value)) {
         value = parseInt(value);
+    } else if(value.indexOf('vh') > 0) {
+        value = window.innerHeight / 100 * parseInt(value.replace('vh', ''));
     }
 
     return value;
@@ -139,6 +141,29 @@ const getVisibleHeight = function(element) {
     return 0;
 };
 
+const getWindowByElement = (el) => {
+    return isWindow(el) ? el : el.defaultView;
+};
+
+const getOffset = (el) => {
+    if(!el.getClientRects().length) {
+        return {
+            top: 0,
+            left: 0
+        };
+    }
+
+    const rect = el.getBoundingClientRect();
+    const win = getWindowByElement(el.ownerDocument);
+    const docElem = el.ownerDocument.documentElement;
+
+    return {
+        top: rect.top + win.pageYOffset - docElem.clientTop,
+        left: rect.left + win.pageXOffset - docElem.clientLeft
+    };
+};
+
+
 export {
     getSize,
     getElementBoxParams,
@@ -146,5 +171,6 @@ export {
     addOffsetToMinHeight,
     getVerticalOffsets,
     getVisibleHeight,
-    parseHeight
+    parseHeight,
+    getOffset
 };

@@ -1,9 +1,9 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 /**
@@ -14,7 +14,6 @@ import {
 export interface animationConfig {
     /**
      * @docid
-     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @public
      */
@@ -58,7 +57,6 @@ export interface animationConfig {
     staggerDelay?: number;
     /**
      * @docid
-     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @public
      */
@@ -79,18 +77,15 @@ export interface animationConfig {
 }
 
 /**
+ * @public
  * @docid
  * @section utils
- * @module animation/fx
  * @namespace DevExpress
- * @export default
  */
 declare const fx: {
     /**
      * @docid
      * @publicName animate(element, config)
-     * @param1 element:Element
-     * @param2 config:animationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
      * @public
@@ -100,8 +95,6 @@ declare const fx: {
     /**
      * @docid
      * @publicName isAnimating(element)
-     * @param1 element:Element
-     * @return boolean
      * @namespace DevExpress.fx
      * @public
      */
@@ -110,11 +103,9 @@ declare const fx: {
     /**
      * @docid
      * @publicName stop(element, jumpToEnd)
-     * @param1 element:Element
-     * @param2 jumpToEnd:boolean
      * @namespace DevExpress.fx
      * @public
      */
     stop(element: Element, jumpToEnd: boolean): void;
-}
+};
 export default fx;

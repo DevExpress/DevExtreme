@@ -2,6 +2,17 @@ import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import { normalizeEnum } from './core/utils';
 import { current as getCurrentTheme } from '../ui/themes';
+import { isEmptyObject } from '../core/utils/type';
+import lightThemes from './core/themes/generic.light';
+import carmineThemes from './core/themes/generic.carmine';
+import darkThemes from './core/themes/generic.dark';
+import contrastThemes from './core/themes/generic.contrast';
+import darkMoonThemes from './core/themes/generic.darkmoon';
+import darkVioletThemes from './core/themes/generic.darkviolet';
+import greenMistThemes from './core/themes/generic.greenmist';
+import softBlueThemes from './core/themes/generic.softblue';
+import materialThemes from './core/themes/material';
+
 const themes = {};
 const themesMapping = {};
 const themesSchemeMapping = {};
@@ -192,6 +203,23 @@ export function refreshTheme() {
     });
     // For chaining only
     return this;
+}
+
+// register themes
+if(isEmptyObject(themes) && isEmptyObject(themesMapping) && !defaultTheme) {
+    [].concat(
+        lightThemes,
+        carmineThemes,
+        darkThemes,
+        contrastThemes,
+        darkMoonThemes,
+        darkVioletThemes,
+        greenMistThemes,
+        softBlueThemes,
+        materialThemes
+    ).forEach(t => {
+        registerTheme(t.theme, t.baseThemeName);
+    });
 }
 
 ///#DEBUG

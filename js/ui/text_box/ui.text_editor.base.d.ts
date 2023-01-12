@@ -1,17 +1,17 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 import dxButton, {
-    dxButtonOptions
+    dxButtonOptions,
 } from '../button';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from '../editor/editor';
 
 /** @namespace DevExpress.ui */
@@ -82,7 +82,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onChange?: ((e: NativeEventInfo<T>) => void);
+    onChange?: ((e: NativeEventInfo<T, Event>) => void);
     /**
      * @docid
      * @default null
@@ -94,7 +94,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onCopy?: ((e: NativeEventInfo<T>) => void);
+    onCopy?: ((e: NativeEventInfo<T, ClipboardEvent>) => void);
     /**
      * @docid
      * @default null
@@ -106,7 +106,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onCut?: ((e: NativeEventInfo<T>) => void);
+    onCut?: ((e: NativeEventInfo<T, ClipboardEvent>) => void);
     /**
      * @docid
      * @default null
@@ -118,7 +118,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onEnterKey?: ((e: NativeEventInfo<T>) => void);
+    onEnterKey?: ((e: NativeEventInfo<T, KeyboardEvent>) => void);
     /**
      * @docid
      * @default null
@@ -130,7 +130,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onFocusIn?: ((e: NativeEventInfo<T>) => void);
+    onFocusIn?: ((e: NativeEventInfo<T, FocusEvent>) => void);
     /**
      * @docid
      * @default null
@@ -142,7 +142,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onFocusOut?: ((e: NativeEventInfo<T>) => void);
+    onFocusOut?: ((e: NativeEventInfo<T, FocusEvent>) => void);
     /**
      * @docid
      * @default null
@@ -154,7 +154,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onInput?: ((e: NativeEventInfo<T>) => void);
+    onInput?: ((e: NativeEventInfo<T, UIEvent>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -166,7 +166,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onKeyDown?: ((e: NativeEventInfo<T>) => void);
+    onKeyDown?: ((e: NativeEventInfo<T, KeyboardEvent>) => void);
     /**
      * @docid
      * @default null
@@ -179,7 +179,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onKeyPress?: ((e: NativeEventInfo<T>) => void);
+    onKeyPress?: ((e: NativeEventInfo<T, KeyboardEvent>) => void);
     /**
      * @docid
      * @default null
@@ -191,7 +191,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onKeyUp?: ((e: NativeEventInfo<T>) => void);
+    onKeyUp?: ((e: NativeEventInfo<T, KeyboardEvent>) => void);
     /**
      * @docid
      * @default null
@@ -203,7 +203,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @action
      * @public
      */
-    onPaste?: ((e: NativeEventInfo<T>) => void);
+    onPaste?: ((e: NativeEventInfo<T, ClipboardEvent>) => void);
     /**
      * @docid
      * @default ""
@@ -233,7 +233,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
-     * @default 'underlined' [for](Material)
+     * @default 'underlined' &for(Material)
      * @public
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
@@ -285,7 +285,6 @@ export default class dxTextEditor extends Editor {
     /**
      * @docid
      * @publicName getButton(name)
-     * @param1 name:string
      * @return dxButton | undefined
      * @public
      */

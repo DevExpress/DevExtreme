@@ -253,6 +253,31 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(createdDependency.successorId, dependencyData.successorId, 'new successorId is right');
         assert.equal(createdDependency.type, dependencyData.type, 'new type is right');
     });
+    test('insertDependency with validation (T1034713)', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        const dependencies = [];
+        this.instance.option('dependencies', { dataSource: dependencies });
+        this.instance.option('editing.enabled', true);
+        this.instance.option('validation.validateDependencies', true);
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.clock.tick();
+
+        const count = dependencies.length;
+        let dependencyData = { 'predecessorId': 2, 'successorId': 4, 'type': 0 };
+        this.instance.insertDependency(dependencyData);
+        this.clock.tick();
+
+        assert.equal(dependencies.length, count, 'new dependency was not created');
+        dependencyData = { 'predecessorId': 6, 'successorId': 7, 'type': 0 };
+        this.instance.insertDependency(dependencyData);
+        this.clock.tick();
+
+        assert.equal(dependencies.length, count + 1, 'new dependency was created');
+        const createdDependency = dependencies[dependencies.length - 1];
+        assert.equal(createdDependency.predecessorId, dependencyData.predecessorId, 'new predecessorId is right');
+        assert.equal(createdDependency.successorId, dependencyData.successorId, 'new successorId is right');
+        assert.equal(createdDependency.type, dependencyData.type, 'new type is right');
+    });
     test('deleteDependency', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
@@ -669,12 +694,113 @@ QUnit.module('Edit api', moduleConfig, () => {
         const data = {
             CustomText: 'new text'
         };
-
         this.instance.updateTask(task.Id, data);
         this.clock.tick(300);
         const taskData = this.instance.getTaskData(1);
 
         assert.equal(taskData.CustomText, onTaskUpdatingText, 'task cust field  is updated');
         assert.equal(values.CustomText, onTaskUpdatingText, 'onTaskUpdated is triggrered');
+    });
+    test('updateTask with empty or standard data should not raise Updating event (T1034933)', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.clock.tick();
+        let receivedValues;
+        this.instance.option('onTaskUpdating', (e) => { receivedValues = e.newValues; });
+        this.clock.tick();
+
+        this.instance.updateTask(task.Id);
+        this.clock.tick(300);
+        assert.notOk(receivedValues);
+
+        this.instance.updateTask(task.Id, {});
+        this.clock.tick(300);
+        assert.notOk(receivedValues);
+
+        this.instance.updateTask(task.Id, { TaskProgress: task.TaskProgress });
+        this.clock.tick(300);
+        assert.notOk(receivedValues);
+
+        this.instance.updateTask(task.Id, { ItemName: task.ItemName });
+        this.clock.tick(300);
+        assert.notOk(receivedValues);
+
+
+        this.instance.updateTask(task.Id, { SprintStartDate: task.SprintStartDate });
+        this.clock.tick(300);
+        assert.notOk(receivedValues);
+
+        this.instance.updateTask(task.Id, { TaskProgress: task.TaskProgress, ItemName: 'myText' });
+        this.clock.tick(300);
+        assert.ok(receivedValues);
+        assert.notOk(receivedValues['SprintStartDate']);
+        assert.notOk(receivedValues['SprintEndDate']);
+        assert.notOk(receivedValues['TaskColor']);
+        assert.notOk(receivedValues['TaskProgress']);
+        assert.equal(receivedValues['ItemName'], 'myText');
+    });
+    test('updateTask with custom data - check Updating cancel', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        let updatingEventTriggered = false;
+        let updatedEventTriggered = false;
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('onTaskUpdated', (e) => { updatedEventTriggered = true; });
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        this.instance.option('onTaskUpdating', (e) => {
+            updatingEventTriggered = true;
+            e.cancel = true;
+        });
+        this.clock.tick();
+
+        const data = { CustomText: 'new text' };
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick(300);
+
+        assert.ok(updatingEventTriggered, 'Updating event raised');
+        assert.notOk(updatedEventTriggered, 'onTaskUpdated is not triggrered');
     });
 });

@@ -746,6 +746,32 @@ QUnit.module('Events', moduleConfig, () => {
         assert.deepEqual(onDragLeaveSpy.getCall(0).args[0].fromComponent, draggable1, 'fromComponent');
         assert.deepEqual(onDragLeaveSpy.getCall(0).args[0].toComponent, draggable2, 'toComponent');
     });
+
+    // T1082538
+    QUnit.test('onDraggableElementShown - check args', function(assert) {
+        // arrange
+        const onDraggableElementShownSpy = sinon.spy();
+        const itemData = { test: true };
+
+        const draggable = this.createDraggable({
+            onDraggableElementShown: onDraggableElementShownSpy,
+            itemData,
+            data: itemData
+        });
+
+        // act
+        this.pointer.down().move(0, 20);
+
+        // assert
+        assert.ok(onDraggableElementShownSpy.calledOnce, 'event fired');
+
+        const args = onDraggableElementShownSpy.getCall(0).args[0];
+        assert.deepEqual($(args.itemElement).get(0), this.$element.get(0), 'itemElement');
+        assert.deepEqual(args.component, draggable, 'component');
+        assert.deepEqual(args.itemData, itemData, 'itemData');
+        assert.deepEqual(args.fromData, itemData, 'fromData');
+        assert.deepEqual($(args.dragElement).get(0), $('.dx-draggable-dragging').get(0), 'dragElement');
+    });
 });
 
 QUnit.module('\'dragDirection\' option', moduleConfig, () => {

@@ -1,28 +1,28 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import Store from '../data/abstract_store';
 
 import {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
     format,
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -44,7 +44,7 @@ export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
     readonly readOnly: boolean;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-}
+};
 
 /** @public */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
@@ -60,7 +60,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
     readonly readOnly: boolean;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
@@ -72,22 +72,22 @@ export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
 export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly previousValue?: any;
-}
+};
 
 /** @public */
 export type CustomOperationEditorTemplate = {
     readonly value?: string | number | Date;
-    readonly field: dxFilterBuilderField;
+    readonly field: Field;
     readonly setValue: Function;
-}
+};
 
 /** @public */
 export type FieldEditorTemplate = {
     readonly value?: string | number | Date;
     readonly filterOperation?: string;
-    readonly field: dxFilterBuilderField;
+    readonly field: Field;
     readonly setValue: Function;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -103,15 +103,17 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @default []
+     * @type Array<dxFilterBuilderCustomOperation>
      * @public
      */
-    customOperations?: Array<dxFilterBuilderCustomOperation>;
+    customOperations?: Array<CustomOperation>;
     /**
      * @docid
      * @default []
+     * @type Array<dxFilterBuilderField>
      * @public
      */
-    fields?: Array<dxFilterBuilderField>;
+    fields?: Array<Field>;
     /**
      * @docid
      * @public
@@ -121,67 +123,67 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
        * @docid
        * @default "Between"
        */
-      between?: string,
+      between?: string;
       /**
        * @docid
        * @default "Contains"
        */
-      contains?: string,
+      contains?: string;
       /**
        * @docid
        * @default "Ends with"
        */
-      endsWith?: string,
+      endsWith?: string;
       /**
        * @docid
        * @default "Equals"
        */
-      equal?: string,
+      equal?: string;
       /**
        * @docid
        * @default "Greater than"
        */
-      greaterThan?: string,
+      greaterThan?: string;
       /**
        * @docid
        * @default "Greater than or equal to"
        */
-      greaterThanOrEqual?: string,
+      greaterThanOrEqual?: string;
       /**
        * @docid
        * @default "Is blank"
        */
-      isBlank?: string,
+      isBlank?: string;
       /**
        * @docid
        * @default "Is not blank"
        */
-      isNotBlank?: string,
+      isNotBlank?: string;
       /**
        * @docid
        * @default "Less than"
        */
-      lessThan?: string,
+      lessThan?: string;
       /**
        * @docid
        * @default "Less than or equal to"
        */
-      lessThanOrEqual?: string,
+      lessThanOrEqual?: string;
       /**
        * @docid
        * @default "Does not contain"
        */
-      notContains?: string,
+      notContains?: string;
       /**
        * @docid
        * @default "Does not equal"
        */
-      notEqual?: string,
+      notEqual?: string;
       /**
        * @docid
        * @default "Starts with"
        */
-      startsWith?: string
+      startsWith?: string;
     };
     /**
      * @docid
@@ -192,22 +194,22 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
        * @docid
        * @default "And"
        */
-      and?: string,
+      and?: string;
       /**
        * @docid
        * @default "Not And"
        */
-      notAnd?: string,
+      notAnd?: string;
       /**
        * @docid
        * @default "Not Or"
        */
-      notOr?: string,
+      notOr?: string;
       /**
        * @docid
        * @default "Or"
        */
-      or?: string
+      or?: string;
     };
     /**
      * @docid
@@ -293,8 +295,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/filter_builder
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -310,19 +310,22 @@ export default class dxFilterBuilder extends Widget {
 }
 
 /**
- * @docid
- * @type object
+ * @public
+ */
+export type CustomOperation = dxFilterBuilderCustomOperation;
+
+/**
  * @namespace DevExpress.ui
+ * @deprecated Use the CustomOperation type instead
  */
 export interface dxFilterBuilderCustomOperation {
     /**
      * @docid
-     * @type_function_param1 filterValue:any
      * @type_function_param2 field:dxFilterBuilderField
      * @type_function_return Filter expression
      * @public
      */
-    calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
+    calculateFilterExpression?: ((filterValue: any, field: Field) => string | Array<any> | Function);
     /**
      * @docid
      * @default undefined
@@ -331,14 +334,12 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1 fieldInfo:object
-     * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 field:dxFilterBuilderField
-     * @type_function_return string
+     * @type_function_param1_field1 value:string|number|Date:optional
+     * @type_function_param1_field2 valueText:string:optional
+     * @type_function_param1_field3 field:dxFilterBuilderField:optional
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string, field?: dxFilterBuilderField }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
     /**
      * @docid
      * @type Array<Enums.FilterBuilderFieldDataType>
@@ -352,7 +353,6 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 field:dxFilterBuilderField
      * @type_function_param1_field3 setValue:function
-     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -378,15 +378,17 @@ export interface dxFilterBuilderCustomOperation {
 }
 
 /**
- * @@docid
- * @type object
+ * @public
+ */
+export type Field = dxFilterBuilderField;
+
+/**
  * @namespace DevExpress.ui
+ * @deprecated Use the Field type instead
  */
 export interface dxFilterBuilderField {
     /**
      * @docid
-     * @type_function_param1 filterValue:any
-     * @type_function_param2 selectedFilterOperation:string
      * @type_function_return Filter expression
      * @public
      */
@@ -399,13 +401,9 @@ export interface dxFilterBuilderField {
     caption?: string;
     /**
      * @docid
-     * @type_function_param1 fieldInfo:object
-     * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string }) => string);
     /**
      * @docid
      * @default undefined
@@ -431,7 +429,6 @@ export interface dxFilterBuilderField {
      * @type_function_param1_field2 filterOperation:string
      * @type_function_param1_field3 field:dxFilterBuilderField
      * @type_function_param1_field4 setValue:function
-     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -465,26 +462,24 @@ export interface dxFilterBuilderField {
        * @docid
        * @default false
        */
-      allowClearing?: boolean,
+      allowClearing?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      dataSource?: Array<any> | Store | DataSourceOptions,
-      /**
-       * @docid
-       * @default undefined
-       * @type_function_param1 data:object
-       * @type_function_return string
-       */
-      displayExpr?: string | ((data: any) => string),
+      dataSource?: Array<any> | Store | DataSourceOptions;
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
-       * @type_function_return string|number|boolean
        */
-      valueExpr?: string | ((data: any) => string | number | boolean)
+      displayExpr?: string | ((data: any) => string);
+      /**
+       * @docid
+       * @default undefined
+       * @type_function_param1 data:object
+       */
+      valueExpr?: string | ((data: any) => string | number | boolean);
     };
     /**
      * @docid

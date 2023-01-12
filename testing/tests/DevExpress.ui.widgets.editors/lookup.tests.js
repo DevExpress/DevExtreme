@@ -70,7 +70,6 @@ const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
-const LOOKUP_SEARCH_WRAPPER_CLASS = 'dx-lookup-search-wrapper';
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const CLEAR_BUTTON_CLASS = 'dx-popup-clear';
 const APPLY_BUTTON_CLASS = 'dx-popup-done';
@@ -93,6 +92,14 @@ const getList = function() {
     return $('.dx-list').dxList('instance');
 };
 
+const getSearchBox = (lookup) => {
+    return lookup._$searchBox;
+};
+
+const getSearchWrapper = (lookup) => {
+    return $(lookup.content()).find('.dx-lookup-search-wrapper');
+};
+
 QUnit.module('Lookup', {
     beforeEach: function() {
         fx.off = true;
@@ -112,7 +119,7 @@ QUnit.module('Lookup', {
             this.$list = $('.dx-list');
             this.list = this.$list.dxList('instance');
 
-            this.$search = $(this.instance._$searchBox);
+            this.$search = getSearchBox(this.instance);
             this.search = this.instance._searchBox;
         };
     },
@@ -1536,7 +1543,7 @@ QUnit.module('options', {
         }).dxLookup('instance');
 
         const popup = instance._popup;
-        const $search = instance._$searchBox;
+        const $search = getSearchBox(instance);
 
         assert.ok($(popup.$wrapper()).hasClass('dx-lookup-popup-search'));
         assert.ok($search.is(':visible'), 'default value');
@@ -1544,6 +1551,18 @@ QUnit.module('options', {
         instance.option('searchEnabled', false);
         assert.ok(!$(popup.$wrapper()).hasClass('dx-lookup-popup-search'));
         assert.ok($search.is(':hidden'), 'hidden');
+    });
+
+    QUnit.test('excess main input placeholder should not be rendered when deferRendering=false (T1054252)', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            deferRendering: false
+        }).dxLookup('instance');
+
+        const $searchWrapper = getSearchWrapper(lookup);
+        const $placeholders = $searchWrapper.find('.dx-placeholder');
+
+        assert.strictEqual($placeholders.length, 1, 'search wrapper contains the single placeholder');
+        assert.strictEqual($placeholders.eq(0).attr('data-dx_placeholder'), 'Search', 'it is search placeholder');
     });
 
     QUnit.test('cleanSearchOnOpening', function(assert) {
@@ -1930,7 +1949,7 @@ QUnit.module('options', {
             opened: true
         }).dxLookup('instance');
 
-        assert.equal($(instance.content()).find('.' + LOOKUP_SEARCH_WRAPPER_CLASS).length, 0, 'search wrapper is not rendered');
+        assert.equal(getSearchWrapper(instance).length, 0, 'search wrapper is not rendered');
     });
 
     QUnit.test('search wrapper should be rendered if the \'searchEnabled\' option is true', function(assert) {
@@ -1939,7 +1958,7 @@ QUnit.module('options', {
             opened: true
         }).dxLookup('instance');
 
-        assert.equal($(instance.content()).find('.' + LOOKUP_SEARCH_WRAPPER_CLASS).length, 1, 'search wrapper is rendered');
+        assert.equal(getSearchWrapper(instance).length, 1, 'search wrapper is rendered');
     });
 
     QUnit.test('clear button option runtime change', function(assert) {
@@ -1973,21 +1992,6 @@ QUnit.module('popup options', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $lookup = $('#lookup').dxLookup({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $lookup.dxLookup('option', 'opened', true);
-        assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $lookup.dxLookup('option', 'opened', false);
-        assert.equal($lookup.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
-    });
-
     QUnit.test('toolbarItems should be passed to the popover (T896951)', function(assert) {
         const buttonConfig = {
             location: 'after',
@@ -2293,26 +2297,20 @@ QUnit.module('popup options', {
 
     QUnit.test('Check closeOnTargetScroll option in Material theme', function(assert) {
         const isMaterialStub = sinon.stub(themes, 'isMaterial');
-        const $lookup = $('#lookup');
-
         isMaterialStub.returns(true);
 
         try {
-            const lookup = $lookup
-                .dxLookup({
-                    dataSource: ['blue', 'orange', 'lime', 'purple'],
-                    value: 'orange'
-                })
+            const lookup = $('#lookup')
+                .dxLookup({ deferRendering: false })
                 .dxLookup('instance');
 
-            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (without centering)');
+            assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'is true by default');
 
-            lookup.option('dropDownCentered', true);
-
-            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (with centering)');
+            lookup.open();
+            this.clock.tick();
+            assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'still true after opening');
 
         } finally {
-            $lookup.dxLookup('instance').dispose();
             isMaterialStub.restore();
         }
     });
@@ -2576,7 +2574,7 @@ QUnit.module('focus policy', {
 
         instance.option('opened', true);
 
-        const $searchBox = instance._$searchBox;
+        const $searchBox = getSearchBox(instance);
         assert.ok($searchBox.hasClass(FOCUSED_CLASS), '\'focus\' method focus searchBox with opened overlay');
     });
 
@@ -2659,7 +2657,7 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxLookup('instance');
 
         assert.ok(instance.option('opened'));
-        assert.ok(instance._$searchBox.hasClass(FOCUSED_CLASS), 'searchBox has focus after open popup');
+        assert.ok(getSearchBox(instance).hasClass(FOCUSED_CLASS), 'searchBox has focus after open popup');
     });
 
     QUnit.testInActiveWindow('lookup-list should be focused after \'down\' key pressing', function(assert) {
@@ -2676,7 +2674,7 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find('.dx-list-item').first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
@@ -2719,7 +2717,7 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
         keyboard.keyDown('down');
         keyboard.keyDown('down');
         keyboard.keyDown('enter');
@@ -2741,7 +2739,7 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
         keyboard.keyDown('down');
         keyboard.keyDown('down');
         keyboard.keyDown('space');
@@ -2812,7 +2810,7 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true,
             searchEnabled: true
         }).dxLookup('instance');
-        const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
@@ -3187,6 +3185,7 @@ if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
+                this.isMac = devices.real().mac;
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new Lookup($element,
                         $.extend({
@@ -3210,7 +3209,11 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
                 if($input.length) {
-                    helper.checkAttributes($input, { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' }, 'input');
+                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' };
+                    if(this.isMac) {
+                        expectedAttributes.placeholder = ' ';
+                    }
+                    helper.checkAttributes($input, expectedAttributes, 'input');
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
@@ -3219,7 +3222,11 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
                 if($input.length) {
-                    helper.checkAttributes($input, { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' }, 'input');
+                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' };
+                    if(this.isMac) {
+                        expectedAttributes.placeholder = ' ';
+                    }
+                    helper.checkAttributes($input, expectedAttributes, 'input');
                 }
             });
 
@@ -3249,9 +3256,11 @@ if(devices.real().deviceType === 'desktop') {
 QUnit.module('default options', {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('Check default popupWidth, popupHeight, position.of for Material theme', function(assert) {
@@ -3490,14 +3499,13 @@ QUnit.module('default options', {
         const $lookup = $('<div>').prependTo('body');
 
         try {
-
             const lookup = $lookup.dxLookup({ dataSource: [], searchEnabled: true }).dxLookup('instance');
 
             $(lookup.field()).trigger('dxclick');
 
             const $popup = $('.dx-popup-content');
 
-            assert.roughEqual($popup.height(), 91, 1, 'popup height if DataSource without items and `searchEnabled: true`');
+            assert.roughEqual($popup.height(), 112, 1.01, 'popup height if DataSource without items and `searchEnabled: true`');
         } finally {
             $lookup.remove();
             themes.isMaterial = origIsMaterial;

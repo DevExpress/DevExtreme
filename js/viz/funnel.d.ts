@@ -1,19 +1,19 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,18 +22,18 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    format
+    format,
 } from '../ui/widget/ui.widget';
 
 import {
     BaseLegend,
     BaseLegendItem,
     DashStyleType,
-    HatchingDirectionType
+    HatchingDirectionType,
 } from './common';
 
 import BaseWidget, {
@@ -44,9 +44,8 @@ import BaseWidget, {
     VizTextOverflowType,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
-
 
 /**
  * @public
@@ -68,7 +67,7 @@ export interface FunnelLegendItem extends BaseLegendItem {
 }
 
 interface FunnelItemInfo {
-  readonly item: Item
+  readonly item: Item;
 }
 
 /** @public */
@@ -96,10 +95,10 @@ export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+export type LegendClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
@@ -121,17 +120,17 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 80
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default true
        */
-      keepLabels?: boolean,
+      keepLabels?: boolean;
       /**
        * @docid
        * @default 80
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -154,7 +153,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     colorField?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -183,18 +182,18 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default #ffffff
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 2
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        */
@@ -207,18 +206,18 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          */
@@ -228,24 +227,24 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType,
+          direction?: HatchingDirectionType;
           /**
            * @docid
            * @default 0.75
            */
-          opacity?: number,
+          opacity?: number;
           /**
            * @docid
            * @default 6
            */
-          step?: number,
+          step?: number;
           /**
            * @docid
            * @default 2
            */
-          width?: number
-        }
-      },
+          width?: number;
+        };
+      };
       /**
        * @docid
        */
@@ -258,18 +257,18 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default undefined
            */
-          color?: string,
+          color?: string;
           /**
            * @docid
            * @default undefined
            */
-          visible?: boolean,
+          visible?: boolean;
           /**
            * @docid
            * @default undefined
            */
-          width?: number
-        },
+          width?: number;
+        };
         /**
          * @docid
          */
@@ -279,24 +278,24 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @type Enums.HatchingDirection
            * @default "right"
            */
-          direction?: HatchingDirectionType,
+          direction?: HatchingDirectionType;
           /**
            * @docid
            * @default 0.5
            */
-          opacity?: number,
+          opacity?: number;
           /**
            * @docid
            * @default 6
            */
-          step?: number,
+          step?: number;
           /**
            * @docid
            * @default 2
            */
-          width?: number
-        }
-      }
+          width?: number;
+        };
+      };
     };
     /**
      * @docid
@@ -306,7 +305,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       /**
        * @docid
        */
-      backgroundColor?: string,
+      backgroundColor?: string;
       /**
        * @docid
        */
@@ -315,24 +314,24 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default '#d3d3d3'
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @type Enums.DashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyleType,
+        dashStyle?: DashStyleType;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
        */
@@ -341,84 +340,78 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default undefined
          */
-        color?: string,
+        color?: string;
         /**
          * @docid
          * @default 0.5
          */
-        opacity?: number,
+        opacity?: number;
         /**
          * @docid
          * @default true
          */
-        visible?: boolean,
+        visible?: boolean;
         /**
          * @docid
          * @default 1
          */
-        width?: number
-      },
+        width?: number;
+      };
       /**
        * @docid
-       * @type_function_param1 itemInfo:object
        * @type_function_param1_field1 item:dxFunnelItem
-       * @type_function_param1_field2 value:Number
-       * @type_function_param1_field3 valueText:string
-       * @type_function_param1_field4 percent:Number
-       * @type_function_param1_field5 percentText:string
-       * @type_function_return string
        * @notUsedInTheme
        */
-      customizeText?: ((itemInfo: { item?: Item, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
+      customizeText?: ((itemInfo: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => string);
       /**
        * @docid
-       * @default '#767676' [prop](color)
+       * @default '#767676' &prop(color)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @default undefined
        */
-      format?: format,
+      format?: format;
       /**
        * @docid
        * @type Enums.HorizontalEdge
        * @default 'right'
        */
-      horizontalAlignment?: 'left' | 'right',
+      horizontalAlignment?: 'left' | 'right';
       /**
        * @docid
        * @default 0
        */
-      horizontalOffset?: number,
+      horizontalOffset?: number;
       /**
        * @docid
        * @type Enums.FunnelLabelPosition
        * @default 'columns'
        */
-      position?: 'columns' | 'inside' | 'outside',
+      position?: 'columns' | 'inside' | 'outside';
       /**
        * @docid
        * @default false
        */
-      showForZeroValues?: boolean,
+      showForZeroValues?: boolean;
       /**
        * @docid
        * @type Enums.VizTextOverflow
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflowType,
+      textOverflow?: VizTextOverflowType;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid
        * @type Enums.VizWordWrap
        * @default 'normal'
        */
-      wordWrap?: WordWrapType
+      wordWrap?: WordWrapType;
     };
     /**
      * @docid
@@ -443,9 +436,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
@@ -456,9 +449,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -470,9 +463,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -484,9 +477,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
@@ -495,7 +488,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -544,13 +537,10 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
 export interface dxFunnelLegend extends BaseLegend {
     /**
      * @docid dxFunnelOptions.legend.customizeHint
-     * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 text:string
-     * @type_function_return string
      * @public
      */
-    customizeHint?: ((itemInfo: { item?: Item, text?: string }) => string);
+    customizeHint?: ((itemInfo: { item?: Item; text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.customizeItems
      * @type_function_param1 items:Array<FunnelLegendItem>
@@ -560,19 +550,15 @@ export interface dxFunnelLegend extends BaseLegend {
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxFunnelOptions.legend.customizeText
-     * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 text:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((itemInfo: { item?: Item, text?: string }) => string);
+    customizeText?: ((itemInfo: { item?: Item; text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.markerTemplate
      * @default undefined
      * @type_function_param1 legendItem:FunnelLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -588,37 +574,24 @@ export interface dxFunnelLegend extends BaseLegend {
 export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
-     * @type_function_param1 info:object
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 value:Number
-     * @type_function_param1_field3 valueText:string
-     * @type_function_param1_field4 percent:Number
-     * @type_function_param1_field5 percentText:string
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: { item?: Item, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1 info:object
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 value:Number
-     * @type_function_param1_field3 valueText:string
-     * @type_function_param1_field4 percent:Number
-     * @type_function_param1_field5 percentText:string
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((info: { item?: Item, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
+    customizeTooltip?: ((info: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => any);
 }
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
- * @module viz/funnel
- * @export default
  * @namespace DevExpress.viz
  * @public
  */
@@ -647,6 +620,7 @@ export default class dxFunnel extends BaseWidget {
 }
 
 /**
+ * @public
  * @namespace DevExpress.viz.dxFunnel
  */
 export type Item = dxFunnelItem;
@@ -669,28 +643,24 @@ export interface dxFunnelItem {
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
@@ -702,7 +672,6 @@ export interface dxFunnelItem {
     /**
      * @docid
      * @publicName select(state)
-     * @param1 state:boolean
      * @public
      */
     select(state: boolean): void;

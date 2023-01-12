@@ -1,20 +1,20 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxScrollable, {
     dxScrollableOptions,
-    ScrollEventInfo
+    ScrollEventInfo,
 } from './scroll_view/ui.scrollable';
 
 /** @public */
@@ -68,28 +68,28 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default "Release to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pulledDownText?: string;
     /**
      * @docid
      * @default "Pull down to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pullingDownText?: string;
     /**
      * @docid
      * @default "Loading..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     reachBottomText?: string;
     /**
      * @docid
      * @default "Refreshing..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     refreshingText?: string;
@@ -98,8 +98,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @docid
  * @inherits dxScrollable
  * @hasTranscludedContent
- * @module ui/scroll_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -114,7 +112,6 @@ export default class dxScrollView extends dxScrollable {
     /**
      * @docid
      * @publicName release(preventScrollBottom)
-     * @param1 preventScrollBottom:boolean
      * @return Promise<void>
      * @public
      */

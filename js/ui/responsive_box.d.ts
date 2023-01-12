@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,12 +13,12 @@ import {
   NativeEventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
-  ItemInfo
+  ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -31,16 +31,16 @@ export type DisposingEvent = EventInfo<dxResponsiveBox>;
 export type InitializedEvent = InitializedEventInfo<dxResponsiveBox>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxResponsiveBox, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
@@ -60,22 +60,22 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
        * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto',
+      baseSize?: number | 'auto';
       /**
        * @docid
        * @default 1
        */
-      ratio?: number,
+      ratio?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string,
+      screen?: string;
       /**
        * @docid
        * @default 1
        */
-      shrink?: number
+      shrink?: number;
     }>;
     /**
      * @docid
@@ -86,7 +86,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type_function_return number|string
      * @default '100%'
      * @public
      */
@@ -108,22 +107,22 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
        * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto',
+      baseSize?: number | 'auto';
       /**
        * @docid
        * @default 1
        */
-      ratio?: number,
+      ratio?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string,
+      screen?: string;
       /**
        * @docid
        * @default 1
        */
-      shrink?: number
+      shrink?: number;
     }>;
     /**
      * @docid
@@ -139,7 +138,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     singleColumnScreen?: string;
     /**
      * @docid
-     * @type_function_return number|string
      * @default '100%'
      * @public
      */
@@ -148,8 +146,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/responsive_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -176,27 +172,27 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
       /**
        * @docid
        */
-      col?: number,
+      col?: number;
       /**
        * @docid
        * @default undefined
        */
-      colspan?: number,
+      colspan?: number;
       /**
        * @docid
        */
-      row?: number,
-      /**
-       * @docid
-       * @default undefined
-       */
-      rowspan?: number,
+      row?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string
-    } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
+      rowspan?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+    } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 
 /** @public */

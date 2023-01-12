@@ -1,27 +1,27 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxButton> & {
+export type ClickEvent = NativeEventInfo<dxButton, KeyboardEvent | MouseEvent | PointerEvent> & {
     validationGroup?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxButton>;
@@ -39,7 +39,7 @@ export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 export type TemplateData = {
     readonly text?: string;
     readonly icon?: string;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -54,7 +54,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -96,7 +96,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
      * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -131,8 +130,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @docid
  * @inherits Widget
  * @hasTranscludedContent
- * @module ui/button
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

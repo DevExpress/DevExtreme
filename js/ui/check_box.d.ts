@@ -1,17 +1,17 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     EditorOptions,
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 /** @public */
@@ -27,7 +27,7 @@ export type InitializedEvent = InitializedEventInfo<dxCheckBox>;
 export type OptionChangedEvent = EventInfo<dxCheckBox> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCheckBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -42,7 +42,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -75,8 +75,6 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/check_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

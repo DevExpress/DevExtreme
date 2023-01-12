@@ -105,13 +105,14 @@ function checkStackOverlap(rollingStocks) {
     return overlap;
 }
 
-function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction, customSorting = () => 0) {
+function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, isInverted, shiftFunction, customSorting = () => 0) {
     const rollingStocks = [];
     const stubCanvas = {
         start: isRotated ? canvas.left : canvas.top,
         end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
     };
     let hasStackedSeries = false;
+    let sortRollingStocks;
 
     points.forEach(function(p) {
         if(!p) return;
@@ -123,21 +124,23 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     });
 
     if(hasStackedSeries) {
-        !isRotated && rollingStocks.reverse();
+        (!isRotated ^ isInverted) && rollingStocks.reverse();
+
+        sortRollingStocks = !isInverted ? sortRollingStocksByValue(rollingStocks) : rollingStocks;
     } else {
         const rollingStocksTmp = rollingStocks.slice();
-        rollingStocks.sort(function(a, b) {
+        sortRollingStocks = rollingStocks.sort(function(a, b) {
             return customSorting(a, b) || (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
     }
 
-    if(!checkStackOverlap(rollingStocks)) return false;
-    checkHeightRollingStock(rollingStocks, stubCanvas);
+    if(!checkStackOverlap(sortRollingStocks)) return false;
+    checkHeightRollingStock(sortRollingStocks, stubCanvas);
 
-    prepareOverlapStacks(rollingStocks);
+    prepareOverlapStacks(sortRollingStocks);
 
-    rollingStocks.reverse();
-    moveRollingStock(rollingStocks, stubCanvas);
+    sortRollingStocks.reverse();
+    moveRollingStock(sortRollingStocks, stubCanvas);
     return true;
 }
 
@@ -147,7 +150,23 @@ function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
     const secondRect = secondRolling.getBoundingRect();
     const oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
             (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)) : true;
+
     return firstRect.end > secondRect.start && oppositeOverlapping;
+}
+
+function sortRollingStocksByValue(rollingStocks) {
+    const positiveRollingStocks = [];
+    const negativeRollingStocks = [];
+
+    rollingStocks.forEach((stock) => {
+        if(stock.value() > 0) {
+            positiveRollingStocks.push(stock);
+        } else {
+            negativeRollingStocks.unshift(stock);
+        }
+    });
+
+    return positiveRollingStocks.concat(negativeRollingStocks);
 }
 
 function prepareOverlapStacks(rollingStocks) {
@@ -1046,7 +1065,7 @@ export const BaseChart = BaseWidget.inherit({
         scrollBar: 'SCROLL_BAR'
     },
 
-    _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
+    _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'USE_SPIDER_WEB', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
 
     _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
         'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],

@@ -154,15 +154,14 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _valueChangedHandler: function(e) {
-        const dateBox = this.dateBox;
         const value = e.value;
         const prevValue = e.previousValue;
 
-        if(dateUtils.sameDate(value, prevValue)) {
+        if(dateUtils.sameDate(value, prevValue) && dateUtils.sameHoursAndMinutes(value, prevValue)) {
             return;
         }
 
-        if(dateBox.option('applyValueMode') === 'instantly') {
+        if(this.dateBox.option('applyValueMode') === 'instantly') {
             this.dateBoxValue(this.getValue(), e.event);
         }
     },

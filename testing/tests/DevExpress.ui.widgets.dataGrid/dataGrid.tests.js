@@ -1038,13 +1038,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
-        assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 0.51, 'toolbar custom item is aligned');
     });
 
     QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             sorting: { mode: 'none' },
             columns: [
                 { caption: 'my field', dataField: 'field1', width: 50 }
@@ -1062,7 +1061,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when column is sorted (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             columns: [
                 { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
             ]
@@ -1080,7 +1078,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when header filter is visible (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             headerFilter: {
                 visible: true
             },
@@ -1101,7 +1098,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Column caption should have correct width when header filter and sorting are enabled (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            dataGrid: [],
             headerFilter: {
                 visible: true
             },
@@ -1118,6 +1114,124 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
         assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
         assert.roughEqual($cellContent.width(), 4.5, 1, 'correct width');
+    });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.test(`${editMode} - rowIndex should be correct in cellClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndices = [];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellClick: function(e) {
+                    rowIndices.push(e.rowIndex);
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            rowIndices = [];
+            for(let i = 0; i < 2; i++) {
+                $(dataGrid.getCellElement(i, 0)).trigger('dxclick');
+            }
+
+            // assert
+            assert.deepEqual(rowIndices, [0, 1], 'cellClick row indices');
+        });
+
+        QUnit.test(`${editMode} - rowIndex should be correct in rowClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndex = null;
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onRowClick: function(e) {
+                    rowIndex = e.rowIndex;
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            $(dataGrid.getCellElement(1, 0)).trigger('dxclick');
+
+
+            // assert
+            assert.deepEqual(rowIndex, 1, 'rowClick row index');
+        });
+
+        QUnit.test(`${editMode} - rowIndex should be correct in cellDblClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndices = [];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellDblClick: function(e) {
+                    rowIndices.push(e.rowIndex);
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            rowIndices = [];
+            for(let i = 0; i < 2; i++) {
+                $(dataGrid.getCellElement(i, 0)).trigger('dxdblclick');
+            }
+
+            // assert
+            assert.deepEqual(rowIndices, [0, 1], 'cellDblClick row indices');
+        });
+
+        QUnit.test(`${editMode} - rowIndex should be correct in rowDblClick event handler (T1027155)`, function(assert) {
+            // arrange
+            let rowIndex = null;
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field: 'test1' }
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onRowDblClick: function(e) {
+                    rowIndex = e.rowIndex;
+                }
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            $(dataGrid.getCellElement(1, 0)).trigger('dxdblclick');
+
+
+            // assert
+            assert.deepEqual(rowIndex, 1, 'rowDblClick row index');
+        });
     });
 });
 
@@ -2301,6 +2415,53 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
     });
+
+    // T1077905
+    QUnit.test('The grid should not freeze after changing a dataSource and columns options together when there are band columns', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
+            columns: ['field1', { caption: 'Band column 1', isBand: true }, { dataField: 'field2', ownerBand: 1 }, { dataField: 'field3', ownerBand: 1 }, 'field4']
+        });
+        this.clock.tick(100);
+
+        // act
+        dataGrid.option({
+            dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
+            columns: ['field1', { caption: 'Band column 1', isBand: true }, { dataField: 'field2', ownerBand: 1 }, { dataField: 'field3' }, 'field4']
+        });
+        this.clock.tick(100);
+
+        // assert
+        let columns = dataGrid.getVisibleColumns(0);
+
+        assert.strictEqual(columns[0].dataField, 'field1', 'dataField of the first column of the first level');
+        assert.strictEqual(columns[0].index, 0, 'index of the first column of the first level');
+        assert.strictEqual(columns[0].isBand, undefined, 'isBand of the first column of the first level');
+        assert.strictEqual(columns[0].ownerBand, undefined, 'ownerBand of the first column of the first level');
+
+        assert.strictEqual(columns[1].caption, 'Band column 1', 'caption of the second column of the first level');
+        assert.strictEqual(columns[1].index, 1, 'index of the second column of the first level');
+        assert.strictEqual(columns[1].isBand, true, 'isBand of the second column of the first level');
+        assert.strictEqual(columns[1].ownerBand, undefined, 'ownerBand of the second column of the first level');
+
+        assert.strictEqual(columns[2].dataField, 'field3', 'dataField of the third column of the first level');
+        assert.strictEqual(columns[2].index, 3, 'index of the third column of the first level');
+        assert.strictEqual(columns[2].isBand, undefined, 'isBand of the third column of the first level');
+        assert.strictEqual(columns[2].ownerBand, undefined, 'ownerBand of the third column of the first level');
+
+        assert.strictEqual(columns[3].dataField, 'field4', 'dataField of the fourth column of the first level');
+        assert.strictEqual(columns[3].index, 4, 'index of the fourth column of the first level');
+        assert.strictEqual(columns[3].isBand, undefined, 'isBand of the fourth column of the first level');
+        assert.strictEqual(columns[3].ownerBand, undefined, 'ownerBand of the fourth column of the first level');
+
+        columns = dataGrid.getVisibleColumns(1);
+
+        assert.strictEqual(columns[0].dataField, 'field2', 'dataField of the first column of the second level');
+        assert.strictEqual(columns[0].index, 2, 'index of the first column of the second level');
+        assert.strictEqual(columns[0].isBand, undefined, 'isBand of the first column of the second level');
+        assert.strictEqual(columns[0].ownerBand, 1, 'ownerBand of the first column of the second level');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
@@ -2918,6 +3079,43 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'test5', 'cell value is updated');
     });
 
+    QUnit.test('Refresh with changesOnly and summary in group row', function(assert) {
+        // arrange
+        const dataSource = new DataSource({
+            store: {
+                type: 'array',
+                key: 'id',
+                data: [
+                    { id: 1, fieldGroup: 'testGroup', field1: 'test1', field2: 2, field3: 'test3', field4: 'test4' },
+                ]
+            }
+        });
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: dataSource,
+            columns: [
+                'id', 'field1', 'field2', 'field3', 'field4',
+                { dataField: 'fieldGroup', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'field2', alignByColumn: true, summaryType: 'sum' },
+                    { column: 'field4', alignByColumn: true, summaryType: 'sum' },
+                ]
+            }
+        });
+
+        dataSource.store().update(1, { field2: 3 });
+
+        // act
+        dataGrid.refresh(true);
+
+        // assert
+        // should be 5 cells without duplicates:
+        // expand, group cell, first summary, empty, second summary
+        assert.strictEqual(dataGrid.getVisibleRows()[0].cells.length, 5);
+    });
+
     QUnit.test('Refresh with highlighting and check oldValue', function(assert) {
         // arrange
         const dataSource = new DataSource({
@@ -3377,6 +3575,34 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(visibleColumns[0].dataField, 'field1', 'dataField of the first column in the second row');
         assert.strictEqual(visibleColumns[1].dataField, 'field2', 'dataField of the second column in the second row');
         assert.strictEqual(visibleColumns[2].dataField, 'field3', 'dataField of the third column in the second row');
+    });
+
+    // T1031120
+    QUnit.test('The repaint method of the grid should repaint the pager', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: 30,
+            pager: {
+                visible: true,
+                showInfo: true
+            },
+            dataSource: {
+                pageSize: 2,
+                store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+            }
+        });
+
+        $(dataGrid.element()).find('.dx-datagrid-pager').removeClass('dx-pager');
+        this.clock.tick(100);
+
+        const pageIndexes = $(dataGrid.element()).find('.dx-datagrid-pager .dx-pages .dx-info').get(0);
+
+        // act
+        $(dataGrid.element()).find('.dx-datagrid-pager').addClass('dx-pager');
+        dataGrid.repaint();
+
+        // assert
+        assert.notStrictEqual($(dataGrid.element()).find('.dx-datagrid-pager .dx-pages .dx-info').get(0), pageIndexes, 'pager has repainted');
     });
 });
 

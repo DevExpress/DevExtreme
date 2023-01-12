@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -13,28 +13,28 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxSelectBox, {
     dxSelectBoxOptions,
-    CustomItemCreatingInfo
+    CustomItemCreatingInfo,
 } from './select_box';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxTagBox>;
+export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxTagBox>;
@@ -49,38 +49,38 @@ export type CustomItemCreatingEvent = EventInfo<dxTagBox> & CustomItemCreatingIn
 export type DisposingEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxTagBox>;
+export type EnterKeyEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxTagBox>;
+export type FocusInEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxTagBox>;
+export type FocusOutEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTagBox>;
+export type InputEvent = NativeEventInfo<dxTagBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxTagBox>;
+export type KeyDownEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxTagBox>;
+export type KeyPressEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxTagBox>;
+export type KeyUpEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
 export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
     readonly multiTagElement: DxElement;
     readonly selectedItems?: Array<string | number | any>;
     text?: string;
-}
+};
 
 /** @public */
 export type OpenedEvent = EventInfo<dxTagBox>;
@@ -91,13 +91,13 @@ export type OptionChangedEvent = EventInfo<dxTagBox> & ChangedOptionInfo;
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
     readonly value: boolean;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxTagBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTagBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
@@ -207,7 +207,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @docid
      * @default "tag"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -223,8 +222,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @docid
  * @isEditor
  * @inherits dxSelectBox
- * @module ui/tag_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

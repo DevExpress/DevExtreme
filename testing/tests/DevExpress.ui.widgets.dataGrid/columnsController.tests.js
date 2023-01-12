@@ -211,6 +211,30 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         ]);
     });
 
+    QUnit.test('Lookup column with boolean values should not have showEditorAlways (T1063568)', function(assert) {
+        const dataSource = createDataSource(this, [
+            { boolField: true }
+        ]);
+        dataSource.load();
+
+        this.columnsController.applyDataSource(dataSource);
+
+        this.applyOptions({
+            columns: [
+                { dataField: 'boolField', lookup: { dataSource: [false, true] } },
+            ]
+        });
+
+        this.editingController.init();
+
+        assert.ok(this.columnsController.isInitialized());
+        const visibleColumns = this.columnsController.getVisibleColumns();
+
+        assert.strictEqual(visibleColumns[0].dataType, 'boolean');
+        assert.strictEqual(visibleColumns[0].lookup.dataType, 'boolean');
+        assert.strictEqual(visibleColumns[0].showEditorAlways, false);
+    });
+
     QUnit.test('Boolean columns initialize with correct \'showEditorAlways\' option when cellTemplate is defined', function(assert) {
         this.applyOptions({
             columns: [{
@@ -6438,6 +6462,28 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
         assert.strictEqual(expandColumns[0].groupIndex, 0);
         assert.strictEqual(expandColumns[0].headerCellTemplate, null);
     });
+
+    // T1075560
+    QUnit.test('Fixed position of expand columns should be identical to RTL', function(assert) {
+        [true, false].forEach((rtlEnabled) => {
+            ['left', 'right'].forEach((initialFixedPosition) => {
+                this.applyOptions({
+                    columns: [{
+                        dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: initialFixedPosition
+                    }],
+                    rtlEnabled,
+                });
+
+                // assert
+                const expandColumns = this.columnsController.getExpandColumns();
+                const properFixedPosition = rtlEnabled ? 'right' : 'left';
+
+                assert.strictEqual(expandColumns.length, 1, 'count expand column');
+                assert.strictEqual(expandColumns[0].fixedPosition, properFixedPosition, `rtl: ${rtlEnabled}, initialFixedPosition: ${initialFixedPosition}`);
+            });
+        });
+
+    });
 });
 
 QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule }, () => {
@@ -8824,6 +8870,38 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         const visibleColumns = this.columnsController.getVisibleColumns(0);
         assert.strictEqual(visibleColumns.length, 1, 'column count');
         assert.strictEqual(visibleColumns[0].dataField, 'TestField1', 'dataField of the column');
+        assert.strictEqual(this.columnsController.getRowCount(), 1, 'header row count');
+    });
+
+    QUnit.test('Delete several band columns via API inside beginUpdate/endUpdate (T1049616)', function(assert) {
+        // arrange
+
+        this.applyOptions({
+            columns: [{
+                dataField: 'Area',
+            }, {
+                caption: 'Population',
+                columns: [{
+                    dataField: 'Population_Total',
+                }],
+            }, {
+                caption: 'Nominal GDP',
+                columns: [{
+                    dataField: 'GDP_Total',
+                }],
+            }],
+        });
+
+        // act
+        this.beginUpdate();
+        this.columnsController.deleteColumn('Population');
+        this.columnsController.deleteColumn('Nominal GDP');
+        this.endUpdate();
+
+        // assert
+        const visibleColumns = this.columnsController.getVisibleColumns(0);
+        assert.strictEqual(visibleColumns.length, 1, 'column count');
+        assert.strictEqual(visibleColumns[0].dataField, 'Area', 'dataField of the last column');
         assert.strictEqual(this.columnsController.getRowCount(), 1, 'header row count');
     });
 

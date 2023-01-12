@@ -44,7 +44,7 @@ export default SelectionStrategy.inherit({
             const item = items[i];
             const key = keyOf(item);
             if(isDeselect) {
-                keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap);
+                keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap, item?.disabled);
                 if(keyIndicesToRemoveMap && keyIndex >= 0) {
                     keyIndicesToRemoveMap[keyIndex] = true;
                 }
@@ -76,7 +76,7 @@ export default SelectionStrategy.inherit({
         this.updateSelectedItemKeyHash(this.options.selectedItemKeys);
     },
 
-    _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll) {
+    _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll, filter) {
         let deferred = new Deferred();
         const key = this.options.key();
 
@@ -85,7 +85,6 @@ export default SelectionStrategy.inherit({
             return deferred;
         }
 
-        const filter = this.options.filter();
         if(isSelectAll && isDeselect && !filter) {
             deferred.resolve(this.getSelectedItems());
             return deferred;
@@ -96,7 +95,10 @@ export default SelectionStrategy.inherit({
 
         let deselectedItems = [];
         if(isDeselect) {
-            deselectedItems = combinedFilter ? dataQuery(this.options.selectedItems).filter(combinedFilter).toArray() : this.options.selectedItems.slice(0);
+            const selectedItems = this.options.selectedItems;
+            deselectedItems = combinedFilter && keys.length !== selectedItems.length
+                ? dataQuery(selectedItems).filter(combinedFilter).toArray()
+                : selectedItems.slice(0);
         }
 
         let filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems(true).filter(this.options.isSelectableItem).map(this.options.getItemData);
@@ -211,6 +213,8 @@ export default SelectionStrategy.inherit({
     _loadSelectedItems: function(keys, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = new Deferred();
+        const filter = that.options.filter();
+
         this._shouldMergeWithLastRequest = this._requestInProgress();
 
         this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys);
@@ -220,7 +224,7 @@ export default SelectionStrategy.inherit({
 
             that._shouldMergeWithLastRequest = false;
 
-            that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll)
+            that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll, filter)
                 .done(deferred.resolve)
                 .fail(deferred.reject);
         });
@@ -326,7 +330,11 @@ export default SelectionStrategy.inherit({
         }
     },
 
-    removeSelectedItem: function(key, keyIndicesToRemoveMap) {
+    removeSelectedItem: function(key, keyIndicesToRemoveMap, isDisabled) {
+        if(!this.options.ignoreDisabledItems && isDisabled) {
+            return;
+        }
+
         const keyHash = this._getKeyHash(key);
         const isBatchDeselect = !!keyIndicesToRemoveMap;
         const keyIndex = this._indexOfSelectedItemKey(keyHash, keyIndicesToRemoveMap);
@@ -387,7 +395,8 @@ export default SelectionStrategy.inherit({
     _isItemSelectionInProgress: function(key, checkPending) {
         const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
         if(shouldCheckPending) {
-            return this._lastRequestData.addedItems?.indexOf(key) !== -1;
+            const addedItems = this._lastRequestData.addedItems ?? [];
+            return addedItems.indexOf(key) > -1;
         } else {
             return false;
         }

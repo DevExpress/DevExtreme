@@ -1,34 +1,37 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
+/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface EventExtension { }
 export interface EventType { }
+/* eslint-enable @typescript-eslint/no-empty-interface */
+
 /**
  * @docid
  * @type EventObject|jQuery.Event
  */
-export type DxEvent = {} extends EventType ? EventObject : EventType;
+export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
 
 /** @public */
-export interface InitializedEventInfo<T> {
-    readonly component?: T;
+export interface InitializedEventInfo<TComponent> {
+    readonly component?: TComponent;
     readonly element?: DxElement;
 }
 
 /** @public */
-export interface EventInfo<T> {
-    readonly component: T;
+export interface EventInfo<TComponent> {
+    readonly component: TComponent;
     readonly element: DxElement;
     readonly model?: any;
 }
 
 /** @public */
-export interface NativeEventInfo<T> {
-    readonly component: T;
+export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
+    readonly component: TComponent;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event?: DxEvent;
+    readonly event?: DxEvent<TNativeEvent>;
 }
 
 /** @public */
@@ -58,22 +61,25 @@ export type dxEvent = EventObject;
  * @section commonObjectStructures
  * @public
  */
-export class EventObject {
+export type EventObject = {
     /**
      * @docid
      * @public
      */
     currentTarget: Element;
+
     /**
      * @docid
      * @public
      */
     data: any;
+
     /**
      * @docid
      * @public
      */
     delegateTarget: Element;
+
     /**
      * @docid
      * @public
@@ -82,21 +88,18 @@ export class EventObject {
     /**
      * @docid
      * @publicName isDefaultPrevented()
-     * @return boolean
      * @public
      */
     isDefaultPrevented(): boolean;
     /**
      * @docid
      * @publicName isImmediatePropagationStopped()
-     * @return boolean
      * @public
      */
     isImmediatePropagationStopped(): boolean;
     /**
      * @docid
      * @publicName isPropagationStopped()
-     * @return boolean
      * @public
      */
     isPropagationStopped(): boolean;
@@ -118,7 +121,7 @@ export class EventObject {
      * @public
      */
     stopPropagation(): void;
-}
+};
 
 /**
  * @docid
@@ -131,9 +134,7 @@ export type event = DxEvent;
 /**
  * @docid
  * @publicName handler(event, extraParameters)
- * @param1 event:DxEvent
  * @param2 extraParameters:object
- * @return boolean
  * @hidden
  */
 export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
@@ -142,9 +143,7 @@ export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
  * @docid eventsMethods.off
  * @publicName off(element)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
  * @module events
- * @export off
  * @public
  */
 export function off(element: Element | Array<Element>): void;
@@ -153,10 +152,7 @@ export function off(element: Element | Array<Element>): void;
  * @docid eventsMethods.off
  * @publicName off(element, eventName)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
  * @module events
- * @export off
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string): void;
@@ -165,11 +161,7 @@ export function off(element: Element | Array<Element>, eventName: string): void;
  * @docid eventsMethods.off
  * @publicName off(element, eventName, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 handler:function
  * @module events
- * @export off
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -178,11 +170,7 @@ export function off(element: Element | Array<Element>, eventName: string, handle
  * @docid eventsMethods.off
  * @publicName off(element, eventName, selector)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 selector:string
  * @module events
- * @export off
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
@@ -191,12 +179,7 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.off
  * @publicName off(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 selector:string
- * @param4 handler:function
  * @module events
- * @export off
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -205,12 +188,8 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.on
  * @publicName on(element, eventName, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
  * @param3 data:object
- * @param4 handler:function
  * @module events
- * @export on
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
@@ -219,11 +198,7 @@ export function on(element: Element | Array<Element>, eventName: string, data: a
  * @docid eventsMethods.on
  * @publicName on(element, eventName, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 handler:function
  * @module events
- * @export on
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -232,13 +207,8 @@ export function on(element: Element | Array<Element>, eventName: string, handler
  * @docid eventsMethods.on
  * @publicName on(element, eventName, selector, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 selector:string
  * @param4 data:object
- * @param5 handler:function
  * @module events
- * @export on
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
@@ -247,12 +217,7 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @docid eventsMethods.on
  * @publicName on(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 selector:string
- * @param4 handler:function
  * @module events
- * @export on
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -261,12 +226,8 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @docid eventsMethods.one
  * @publicName one(element, eventName, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
  * @param3 data:object
- * @param4 handler:function
  * @module events
- * @export one
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
@@ -275,11 +236,7 @@ export function one(element: Element | Array<Element>, eventName: string, data: 
  * @docid eventsMethods.one
  * @publicName one(element, eventName, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 handler:function
  * @module events
- * @export one
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -288,13 +245,8 @@ export function one(element: Element | Array<Element>, eventName: string, handle
  * @docid eventsMethods.one
  * @publicName one(element, eventName, selector, data, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 selector:string
  * @param4 data:object
- * @param5 handler:function
  * @module events
- * @export one
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
@@ -303,12 +255,7 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.one
  * @publicName one(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
- * @param2 eventName:string
- * @param3 selector:string
- * @param4 handler:function
  * @module events
- * @export one
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -317,10 +264,8 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.trigger
  * @publicName trigger(element, event)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @module events
- * @export trigger
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
@@ -329,11 +274,9 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @docid eventsMethods.trigger
  * @publicName trigger(element, event, extraParameters)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @param3 extraParameters:object
  * @module events
- * @export trigger
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
@@ -342,10 +285,8 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @docid eventsMethods.triggerHandler
  * @publicName triggerHandler(element, event)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @module events
- * @export triggerHandler
  * @hidden
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
@@ -354,11 +295,9 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @docid eventsMethods.triggerHandler
  * @publicName triggerHandler(element, event, extraParameters)
  * @namespace DevExpress.events
- * @param1 element:Element|Array<Element>
  * @param2 event:string|event
  * @param3 extraParameters:object
  * @module events
- * @export triggerHandler
  * @hidden
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

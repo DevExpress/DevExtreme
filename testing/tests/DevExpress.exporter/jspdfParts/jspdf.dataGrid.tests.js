@@ -1,3 +1,4 @@
+import '../../../helpers/noIntl.js';
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -4497,23 +4498,27 @@ QUnit.module('customizeCell', moduleConfig, () => {
 });
 
 JSPdfOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
-    {
-        dataSource: [{ f1: 'f1_1' }],
-        loadPanel: { enabled: true },
-        loadingTimeout: null
-    }, 'jsPDFDocument');
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
-    {
-        dataSource: [{ f1: 'f1_1' }],
-        loadPanel: { enabled: false },
-        loadingTimeout: null
-    }, 'jsPDFDocument');
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
-    {
-        dataSource: [{ f1: 'f1_1' }],
-        loadPanel: { enabled: 'auto' },
-        loadingTimeout: null
-    }, 'jsPDFDocument');
 
+[
+    { enabled: true },
+    { enabled: false },
+    { enabled: 'auto' },
+    {},
+    null,
+    undefined,
+    false,
+    true,
+].forEach((loadPanel) => {
+    LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+        {
+            dataSource: [{ f1: 'f1_1' }],
+            loadPanel,
+            loadingTimeout: null
+        }, 'jsPDFDocument');
+});
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadingTimeout: null
+    }, 'jsPDFDocument');
 

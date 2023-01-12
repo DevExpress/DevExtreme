@@ -9,7 +9,8 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
@@ -23,7 +24,9 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import viewPortUtils from 'core/utils/view_port';
 import fx from 'animation/fx';
 import messageLocalization from 'localization/message';
+import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
+import browser from 'core/utils/browser';
 
 QUnit.module('Header Filter dataController', {
     beforeEach: function() {
@@ -489,6 +492,35 @@ QUnit.module('Header Filter', {
         assert.equal(popup.show.type, 'pop', 'animation show type');
 
         devices._currentDevice = null;
+    });
+
+    [
+        { showColumnLines: false, alignment: 'left', position: 'left' },
+        { showColumnLines: false, alignment: 'center', position: 'left' },
+        { showColumnLines: false, alignment: 'right', position: 'right' },
+        { showColumnLines: true, alignment: 'left', position: 'right' },
+        { showColumnLines: true, alignment: 'center', position: 'right' },
+        { showColumnLines: true, alignment: 'right', position: 'left' },
+    ].forEach(({ showColumnLines, alignment, position }) => {
+        QUnit.test(`Header filter position (column.alignment=${alignment}, showColumnLines=${showColumnLines}) (T1033810)`, function(assert) {
+            // arrange
+            const that = this;
+            const testElement = $('#container');
+
+            that.options.showColumnLines = showColumnLines;
+            that.columns[0].alignment = alignment;
+            that.setupDataGrid();
+            that.columnHeadersView.render(testElement);
+            that.headerFilterView.render(testElement);
+
+            // act
+            that.headerFilterController.showHeaderFilterMenu(0);
+
+
+            // assert
+            assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.my'), `${position} top`, 'my position');
+            assert.strictEqual(that.headerFilterView.getPopupContainer().option('position.at'), `${position} bottom`, 'at position');
+        });
     });
 
     QUnit.test('Show header filter when column with dataType date', function(assert) {
@@ -2290,8 +2322,8 @@ QUnit.module('Header Filter with real columnsController', {
     },
     afterEach: function() {
         this.clock.restore();
-        this.headerFilterController.hideHeaderFilterMenu();
-        this.dispose();
+        this.headerFilterController && this.headerFilterController.hideHeaderFilterMenu();
+        this.dispose && this.dispose();
     }
 }, () => {
 
@@ -3946,16 +3978,143 @@ QUnit.module('Header Filter with real columnsController', {
         this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
         this.setupDataGrid();
         const column = this.columnsController.getVisibleColumns()[0];
-        const headerFilterDataSource = this.headerFilterController.getDataSource(column);
+        const dataSourceOptions = this.headerFilterController.getDataSource(column);
 
         // act
-        headerFilterDataSource.load({ group: headerFilterDataSource.group }).done(function(data) {
+        dataSourceOptions.load({ group: dataSourceOptions.group }).done(function(data) {
             items = data;
         });
         this.clock.tick();
 
         // assert
         assert.deepEqual(getTreeText(items), ['1992', 'September', '6', '12', '13'], 'loaded data');
+    });
+
+    [null, 'yyyy-MM-ddTHH:mm:ssZ', 'yyyy-MM-ddTHH:mm:ss\'Z\'', 'yyyy-MM-dd HH:mm:ss'].forEach(dateSerializationFormat => {
+        [false, true].forEach(remoteOperations => {
+            QUnit.test(`Load data for column with dataType is 'datetime' if remoteOperations is enabled and dates are formatted in UTC (dateSerializationFormat=${dateSerializationFormat}, remoteOperations=${remoteOperations}) (T1029128, T1051815)`, function(assert) {
+                if(dateSerializationFormat === 'yyyy-MM-dd HH:mm:ss' && !remoteOperations && browser.msie && parseInt(browser.version) <= 11) {
+                    assert.ok(true, 'Date.parse in IE11 does not support yyyy-MM-dd HH:mm:ss format');
+                    return;
+                }
+                // arrange
+                let items;
+                const getTreeText = function(items) {
+                    const result = [];
+                    let item = items[0];
+
+                    while(item) {
+                        result.push(item.text);
+                        item = item.items && item.items[0];
+                    }
+
+                    return result;
+                };
+
+                const loadArgs = [];
+                const date = new Date(2021, 3, 26, 16, 30);
+
+                this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
+                this.options.remoteOperations = remoteOperations;
+                this.options.dateSerializationFormat = dateSerializationFormat;
+
+                const isUTCFormat = dateSerializationFormat && dateSerializationFormat.indexOf('Z') >= 0;
+                this.options.dataSource = {
+                    load: function(options) {
+                        loadArgs.push(options);
+                        if(!remoteOperations) {
+                            const birthday = dateSerialization.serializeDate(date, dateSerializationFormat);
+                            return $.Deferred().resolve([{ birthday }]);
+                        }
+                        return $.Deferred().resolve([{
+                            key: 2021, items: [{
+                                key: date.getMonth() + 1, items: [{
+                                    key: isUTCFormat ? date.getUTCDate() : date.getDate(), items: [{
+                                        key: isUTCFormat ? date.getUTCHours() : date.getHours(), items: [{
+                                            key: isUTCFormat ? date.getUTCMinutes() : date.getMinutes(), items: null
+                                        }]
+                                    }]
+                                }]
+                            }]
+                        }], { totalCount: 1 });
+                    }
+                };
+                this.setupDataGrid();
+                const column = this.columnsController.getVisibleColumns()[0];
+                const dataSourceOptions = this.headerFilterController.getDataSource(column);
+
+                // act
+                const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteOperations);
+
+                dataSourceOptions.load({
+                    group
+                }).done(function(data) {
+                    items = data;
+                });
+                this.clock.tick();
+
+                // assert
+                assert.deepEqual(getTreeText(items), [
+                    '2021',
+                    'April',
+                    date.getDate().toString(),
+                    date.getHours().toString(),
+                    date.getMinutes().toString()
+                ], 'loaded data');
+            });
+        });
+    });
+
+    QUnit.test('Load null data for column with dataType is \'datetime\' if remoteOperations is enabled and dates are formatted in UTC (T1029128)', function(assert) {
+        // arrange
+        let items;
+        const getTreeText = function(items) {
+            const result = [];
+            let item = items[0];
+
+            while(item) {
+                result.push(item.text);
+                item = item.items && item.items[0];
+            }
+
+            return result;
+        };
+
+        const loadArgs = [];
+
+        this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
+        this.options.remoteOperations = true;
+        this.options.dateSerializationFormat = 'yyyy-MM-ddTHH:mm:ssZ';
+        this.options.dataSource = {
+            load: function(options) {
+                loadArgs.push(options);
+                return $.Deferred().resolve([{
+                    key: null, items: [{
+                        key: null, items: [{
+                            key: null, items: [{
+                                key: null, items: [{
+                                    key: null, items: null
+                                }]
+                            }]
+                        }]
+                    }]
+                }], { totalCount: 1 });
+            }
+        };
+        this.setupDataGrid();
+        const column = this.columnsController.getVisibleColumns()[0];
+        const dataSourceOptions = this.headerFilterController.getDataSource(column);
+
+        // act
+        dataSourceOptions.load({}).done(function(data) {
+            items = data;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(getTreeText(items), [
+            '(Blanks)',
+        ], 'loaded data');
     });
 
     // T534059

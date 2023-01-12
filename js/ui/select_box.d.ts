@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -12,20 +12,20 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import dxDropDownList, {
     dxDropDownListOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 export interface CustomItemCreatingInfo {
@@ -34,7 +34,7 @@ export interface CustomItemCreatingInfo {
 }
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxSelectBox>;
+export type ChangeEvent = NativeEventInfo<dxSelectBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxSelectBox>;
@@ -43,42 +43,42 @@ export type ClosedEvent = EventInfo<dxSelectBox>;
 export type ContentReadyEvent = EventInfo<dxSelectBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxSelectBox>;
+export type CopyEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 /** @public */
 export type CustomItemCreatingEvent = EventInfo<dxSelectBox> & CustomItemCreatingInfo;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxSelectBox>;
+export type CutEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSelectBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxSelectBox>;
+export type EnterKeyEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxSelectBox>;
+export type FocusInEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxSelectBox>;
+export type FocusOutEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxSelectBox>;
+export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxSelectBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxSelectBox>;
+export type KeyDownEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxSelectBox>;
+export type KeyPressEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxSelectBox>;
+export type KeyUpEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxSelectBox>;
@@ -87,13 +87,13 @@ export type OpenedEvent = EventInfo<dxSelectBox>;
 export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxSelectBox>;
+export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSelectBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
@@ -113,15 +113,18 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
+     * @section Utils
+     * @type function
      * @docid
-     * @extends Action
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:object
      * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>
      * @type_function_param1_field1 component:this
@@ -131,7 +134,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
      * @public
      */
-    onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
+    onCustomItemCreating?: ((e: EventInfo<T> & CustomItemCreatingInfo) => void);
     /**
      * @docid
      * @default true
@@ -166,8 +169,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
  * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/select_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

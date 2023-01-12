@@ -5,6 +5,13 @@ const _Number = Number;
 const _getCosAndSin = getCosAndSin;
 const _convertAngleToRendererSpace = convertAngleToRendererSpace;
 
+function correctRadius(layout, size) {
+    if(layout && layout.radius - size <= 0) {
+        layout.radius = size + 1;
+    }
+    return layout;
+}
+
 const SimpleIndicator = BaseIndicator.inherit({
     _move: function() {
         const that = this;
@@ -205,8 +212,12 @@ const triangleMarker = SimpleIndicator.inherit({
         return this._options.length > 0 && this._options.width > 0;
     },
 
-    _isVisible: function(layout) {
-        return layout.radius > 0;
+    _isVisible(layout) {
+        return true;
+    },
+
+    resize(layout) {
+        return this.callBase(correctRadius(layout, 0));
     },
 
     _render: function() {
@@ -261,8 +272,12 @@ const textCloud = BaseTextCloudMarker.inherit({
         return true;
     },
 
-    _isVisible: function(layout) {
-        return layout.radius > 0;
+    _isVisible(layout) {
+        return true;
+    },
+
+    resize(layout) {
+        return this.callBase(correctRadius(layout, 0));
     },
 
     _getTextCloudOptions: function() {
@@ -302,8 +317,12 @@ const rangeBar = BaseRangeBar.inherit({
         return this._options.size > 0;
     },
 
-    _isVisible: function(layout) {
-        return layout.radius - _Number(this._options.size) > 0;
+    _isVisible(layout) {
+        return true;
+    },
+
+    resize(layout) {
+        return this.callBase(correctRadius(layout, _Number(this._options.size)));
     },
 
     _createBarItem: function() {

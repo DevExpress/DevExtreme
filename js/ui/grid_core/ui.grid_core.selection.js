@@ -111,16 +111,23 @@ const SelectionController = gridCore.Controller.inherit((function() {
             this._selection = this._createSelection();
             this._updateSelectColumn();
             this.createAction('onSelectionChanged', { excludeValidators: ['disabled', 'readOnly'] });
+            this._dataController && this._dataController.pushed.add(this._handleDataPushed.bind(this));
+        },
+
+        _handleDataPushed: function(changes) {
+            const removedKeys = changes.filter(change => change.type === 'remove').map(change => change.key);
+            removedKeys.length && this.deselectRows(removedKeys);
         },
 
         _getSelectionConfig: function() {
             const dataController = this._dataController;
             const selectionOptions = this.option('selection') || {};
+            const deferred = selectionOptions.deferred;
 
             return {
                 selectedKeys: this.option('selectedRowKeys'),
                 mode: this._selectionMode,
-                deferred: selectionOptions.deferred,
+                deferred,
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
                 selectionFilter: this.option('selectionFilter'),
                 ignoreDisabledItems: true,
@@ -149,7 +156,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item?.oldData || item?.data || item;
                 },
                 filter: function() {
-                    return dataController.getCombinedFilter(true);
+                    return dataController.getCombinedFilter(deferred);
                 },
                 totalCount: () => {
                     return dataController.totalCount();
@@ -185,15 +192,15 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _fireSelectionChanged: function(options) {
-            if(options) {
-                this.executeAction('onSelectionChanged', options);
-            }
-
             const argument = this.option('selection.deferred') ?
                 { selectionFilter: this.option('selectionFilter') } :
                 { selectedRowKeys: this.option('selectedRowKeys') };
 
             this.selectionChanged.fire(argument);
+
+            if(options) {
+                this.executeAction('onSelectionChanged', options);
+            }
         },
 
         _updateCheckboxesState: function(options) {
@@ -408,12 +415,12 @@ const SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.getSelectedItems();
         },
 
-        changeItemSelection: function(itemIndex, keys) {
+        changeItemSelection: function(itemIndex, keys, setFocusOnly) {
             keys = keys || {};
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
+            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys, setFocusOnly);
         },
 
         focusedItemIndex: function(itemIndex) {
@@ -584,12 +591,6 @@ export const selectionModule = {
                         this._changes = [{ changeType: 'updateSelection', itemIndexes }];
                     }
                     this.callBase.apply(this, arguments);
-                },
-
-                push: function(changes) {
-                    this.callBase.apply(this, arguments);
-                    const removedKeys = changes.filter(change => change.type === 'remove').map(change => change.key);
-                    removedKeys.length && this.getController('selection').deselectRows(removedKeys);
                 }
             },
             contextMenu: {
@@ -801,7 +802,7 @@ export const selectionModule = {
                     const $row = this.callBase(row);
 
                     if(row) {
-                        const isSelected = !!row.isSelected;
+                        const isSelected = row.isSelected;
                         if(isSelected) {
                             $row.addClass(ROW_SELECTION_CLASS);
                         }

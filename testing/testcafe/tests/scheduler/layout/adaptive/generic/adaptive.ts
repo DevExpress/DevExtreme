@@ -34,9 +34,11 @@ const createScheduler = async (
     for (const view of views) {
       await scheduler.option('currentView', view);
 
-      await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}.png`),
-      ).ok();
+      await t
+        .expect(scheduler.getAppointmentCount())
+        .gt(0)
+        .expect(await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}.png`))
+        .ok();
     }
 
     await t.expect(compareResults.isValid())
@@ -61,9 +63,11 @@ const createScheduler = async (
     for (const view of views) {
       await scheduler.option('currentView', view);
 
-      await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal.png`),
-      ).ok();
+      await t
+        .expect(scheduler.getAppointmentCount())
+        .gt(0)
+        .expect(await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal.png`))
+        .ok();
     }
 
     await t.expect(compareResults.isValid())
@@ -90,9 +94,11 @@ const createScheduler = async (
     for (const view of views) {
       await scheduler.option('currentView', view);
 
-      await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-vertical.png`),
-      ).ok();
+      await t
+        .expect(scheduler.getAppointmentCount())
+        .gt(0)
+        .expect(await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-vertical.png`))
+        .ok();
     }
 
     await t.expect(compareResults.isValid())

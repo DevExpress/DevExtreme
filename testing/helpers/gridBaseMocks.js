@@ -242,6 +242,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             loadingChanged: $.Callbacks(),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
+            pushed: $.Callbacks(),
             fireError: function() { },
             getMaxRowIndex: function() {
                 this.items().length - 1;

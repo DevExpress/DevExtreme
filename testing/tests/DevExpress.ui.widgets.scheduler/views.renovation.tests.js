@@ -2,6 +2,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 
 import {
+    CLASSES,
     createWrapper,
     initTestMarkup,
 } from '../../helpers/scheduler/helpers.js';
@@ -241,5 +242,44 @@ module('Renovated Views', () => {
                 assert.equal($(this).text(), text, 'Correct text');
             });
         });
+    });
+
+    test('current time header cells should be displayed correctly when grouping by date is used', function(assert) {
+        const clock = sinon.useFakeTimers((new Date(2021, 7, 4)).getTime());
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            groupByDate: true,
+            currentDate: new Date(2021, 7, 1),
+            groups: ['priorityId'],
+            resources: [
+                {
+                    fieldExpr: 'priorityId',
+                    allowMultiple: false,
+                    dataSource: [
+                        {
+                            text: 'Low Priority',
+                            id: 1,
+                            color: '#1e90ff'
+                        }, {
+                            text: 'High Priority',
+                            id: 2,
+                            color: '#ff9747'
+                        }
+                    ],
+                    label: 'Priority'
+                }
+            ],
+            height: 700,
+        });
+
+        const headerPanelCells = scheduler.workSpace.getOrdinaryHeaderPanelCells();
+        const currentTimeCells = scheduler.workSpace.getHeaderPanelCurrentTimeCells();
+
+        assert.equal(currentTimeCells.length, 1, 'Correct number of current time cells');
+        assert.ok(headerPanelCells.eq(3).hasClass(CLASSES.headerPanelCurrentTimeCell.substring(1)), 'Correct cell is current time cell');
+
+        clock.restore();
     });
 });

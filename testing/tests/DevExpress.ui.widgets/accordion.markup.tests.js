@@ -52,7 +52,8 @@ QUnit.module('widget markup', moduleSetup, () => {
             items: this.items
         });
 
-        const $container = this.$element.find('.' + ACCORDION_WRAPPER_CLASS); const $items = $container.find('.' + ACCORDION_ITEM_CLASS);
+        const $container = this.$element.find('.' + ACCORDION_WRAPPER_CLASS);
+        const $items = $container.find('.' + ACCORDION_ITEM_CLASS);
 
         assert.equal($items.length, 3, 'items were added');
         assert.equal($items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS).length, 1, 'container has item title');
@@ -75,7 +76,8 @@ QUnit.module('widget markup', moduleSetup, () => {
             selectedIndex: 0
         }).dxAccordion('instance');
 
-        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS); const $openedItems = this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS);
+        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS);
+        const $openedItems = this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS);
 
         assert.ok($items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'first item is opened so it has \'item opened\' class');
         assert.equal($openedItems.length, 1, 'only opened item has \'item opened\' class');
@@ -185,7 +187,9 @@ QUnit.module('widget options', moduleSetup, () => {
             dataSource: this.items
         });
 
-        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS); const $title = $items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS); const $content = $items.eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
+        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS);
+        const $title = $items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS);
+        const $content = $items.eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
 
         assert.equal($items.length, this.items.length, 'all items is rendered');
         assert.equal($title.text(), this.items[0].title, 'title text is correct');
@@ -198,7 +202,8 @@ QUnit.module('widget options', moduleSetup, () => {
             collapsible: false
         });
 
-        const $element = this.$element; const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
+        const $element = this.$element;
+        const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
 
         assert.equal($element.find('.' + ACCORDION_ITEM_CLOSED_CLASS).length, $titles.length - 1, 'one item content is visible');
     });

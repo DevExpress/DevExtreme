@@ -163,6 +163,10 @@ class FileManagerAdaptivityControl extends Widget {
         const isSplitterActive = this._isDrawerOpened() && !this.isInAdaptiveState();
         this._splitter.toggleDisabled(!isSplitterActive);
     }
+
+    getSplitterElement() {
+        return this._splitter.getSplitterBorderElement().get(0);
+    }
 }
 
 export default FileManagerAdaptivityControl;

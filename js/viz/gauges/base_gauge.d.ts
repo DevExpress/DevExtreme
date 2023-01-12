@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from '../palette';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 import {
-    format
+    format,
 } from '../../ui/widget/ui.widget';
 
 import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
 } from '../core/base_widget';
 
 export interface TooltipInfo {
@@ -158,7 +158,7 @@ export interface BaseGaugeRangeContainer {
     offset?: number;
     /**
      * @docid BaseGaugeOptions.rangeContainer.palette
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -181,15 +181,15 @@ export interface BaseGaugeRangeContainer {
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
        *
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
        */
-      endValue?: number,
+      endValue?: number;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.startValue
        */
-      startValue?: number
+      startValue?: number;
     }>;
 }
 /** @namespace DevExpress.viz */
@@ -236,27 +236,27 @@ export interface BaseGaugeScale {
        * @docid BaseGaugeOptions.scale.minorTick.color
        * @default '#FFFFFF'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.length
        * @default 3
        */
-      length?: number,
+      length?: number;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.opacity
        * @default 1
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.visible
        * @default false
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.width
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid BaseGaugeOptions.scale.minorTickInterval
@@ -286,27 +286,27 @@ export interface BaseGaugeScale {
        * @docid BaseGaugeOptions.scale.tick.color
        * @default '#FFFFFF'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseGaugeOptions.scale.tick.length
        * @default 5
        */
-      length?: number,
+      length?: number;
       /**
        * @docid BaseGaugeOptions.scale.tick.opacity
        * @default 1
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid BaseGaugeOptions.scale.tick.visible
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid BaseGaugeOptions.scale.tick.width
        * @default 2
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid BaseGaugeOptions.scale.tickInterval
@@ -319,23 +319,19 @@ export interface BaseGaugeScale {
 export interface BaseGaugeScaleLabel {
     /**
      * @docid BaseGaugeOptions.scale.label.customizeText
-     * @type_function_param1 scaleValue:object
-     * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((scaleValue: { value?: number, valueText?: string }) => string);
+    customizeText?: ((scaleValue: { value?: number; valueText?: string }) => string);
     /**
      * @docid BaseGaugeOptions.scale.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
     /**
      * @docid BaseGaugeOptions.scale.label.format
-     * @extends CommonVizFormat
+     * @default undefined
      * @public
      */
     format?: format;
@@ -363,25 +359,18 @@ export interface BaseGaugeScaleLabel {
 export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.contentTemplate
-     * @type_function_param1 scaleValue:object
-     * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1 scaleValue:object
-     * @type_function_param1_field1 value:Number
-     * @type_function_param1_field2 valueText:string
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
+    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string }) => any);
     /**
      * @docid BaseGaugeOptions.tooltip.interactive
      * @default false
@@ -401,28 +390,24 @@ export class BaseGauge extends BaseWidget {
     /**
      * @docid
      * @publicName subvalues()
-     * @return Array<number>
      * @public
      */
     subvalues(): Array<number>;
     /**
      * @docid
      * @publicName subvalues(subvalues)
-     * @param1 subvalues:Array<number>
      * @public
      */
     subvalues(subvalues: Array<number>): void;
     /**
      * @docid
      * @publicName value()
-     * @return number
      * @public
      */
     value(): number;
     /**
      * @docid
      * @publicName value(value)
-     * @param1 value:number
      * @public
      */
     value(value: number): void;
@@ -473,8 +458,8 @@ export interface CommonIndicator {
     /**
      * @docid
      * @type Enums.HorizontalEdge
-     * @default 'right' [for](value_indicators)
-     * @default 'left' [for](subvalue_indicators)
+     * @default 'right' &for(value_indicators)
+     * @default 'left' &for(subvalue_indicators)
      * @propertyOf linearRangeBar
      * @public
      */
@@ -500,7 +485,7 @@ export interface CommonIndicator {
     offset?: number;
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -548,39 +533,35 @@ export interface CommonIndicator {
     text?: {
       /**
        * @docid
-       * @type_function_param1 indicatedValue:object
-       * @type_function_param1_field1 value:Number
-       * @type_function_param1_field2 valueText:string
-       * @type_function_return string
        * @notUsedInTheme
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string),
+      customizeText?: ((indicatedValue: { value?: number; valueText?: string }) => string);
       /**
        * @docid
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-       * @default 14 [prop](size)
+       * @default 14 &prop(size)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
-       * @extends CommonVizFormat
+       * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      format?: format,
+      format?: format;
       /**
        * @docid
        * @default 0
        * @propertyOf circularRangeBar,linearRangeBar
        */
-      indent?: number
+      indent?: number;
     };
     /**
      * @docid
      * @type Enums.VerticalEdge
-     * @default 'bottom' [for](value_indicators)
-     * @default 'top' [for](subvalue_indicators)
+     * @default 'bottom' &for(value_indicators)
+     * @default 'top' &for(subvalue_indicators)
      * @propertyOf linearRangeBar
      * @public
      */

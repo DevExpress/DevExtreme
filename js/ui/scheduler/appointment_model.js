@@ -47,7 +47,7 @@ class FilterMaker {
 
                 this._filterRegistry.date = [
                     [
-                        [endDate, '>', min],
+                        [endDate, '>=', min],
                         [startDate, '<', max]
                     ],
                     'or',
@@ -292,7 +292,8 @@ class AppointmentModel {
             viewEndDayHour,
             resources,
             firstDayOfWeek,
-            checkIntersectViewport
+            checkIntersectViewport,
+            supportMultiDayAppointments
         } = filterOptions;
         const that = this;
 
@@ -347,9 +348,10 @@ class AppointmentModel {
                 }, min, max, startDayHour, endDayHour, firstDayOfWeek);
             }
 
-            // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
-            if(result && comparableEndDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !recurrenceRule))) {
-                result = false;
+            if(!isAllDay && supportMultiDayAppointments && appointmentIsLong) {
+                if(comparableEndDate < min && (!useRecurrence || (useRecurrence && !recurrenceRule))) {
+                    result = false;
+                }
             }
 
             if(result && isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
@@ -372,8 +374,8 @@ class AppointmentModel {
                 });
             }
 
-            if(result && useRecurrence && !recurrenceRule) {
-                if(comparableEndDate < min && !isAllDay) {
+            if(!isAllDay && (!appointmentIsLong || supportMultiDayAppointments)) {
+                if(comparableEndDate < min && useRecurrence && !recurrenceRule) {
                     result = false;
                 }
             }

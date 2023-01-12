@@ -6546,22 +6546,28 @@ ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, () => $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'));
+
+
+[
+    { enabled: true },
+    { enabled: false },
+    { enabled: 'auto' },
+    {},
+    null,
+    undefined,
+    false,
+    true,
+].forEach((loadPanel) => {
+    LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+        {
+            dataSource: [{ f1: 'f1_1' }],
+            loadPanel,
+            loadingTimeout: null
+        }, 'worksheet');
+});
 LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
     {
         dataSource: [{ f1: 'f1_1' }],
-        loadPanel: { enabled: true },
-        loadingTimeout: null
-    }, 'worksheet');
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
-    {
-        dataSource: [{ f1: 'f1_1' }],
-        loadPanel: { enabled: false },
-        loadingTimeout: null
-    }, 'worksheet');
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
-    {
-        dataSource: [{ f1: 'f1_1' }],
-        loadPanel: { enabled: 'auto' },
         loadingTimeout: null
     }, 'worksheet');
 

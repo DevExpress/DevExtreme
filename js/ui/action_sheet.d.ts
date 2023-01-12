@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -20,12 +20,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -41,21 +41,21 @@ export type DisposingEvent = EventInfo<dxActionSheet>;
 export type InitializedEvent = InitializedEventInfo<dxActionSheet>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxActionSheet, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxActionSheet, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
 
-/** 
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
@@ -118,7 +118,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     /**
      * @docid
      * @default false
-     * @default true [for](iPad)
+     * @default true &for(iPad)
      * @public
      */
     usePopover?: boolean;
@@ -133,8 +133,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/action_sheet
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -157,7 +155,6 @@ export default class dxActionSheet extends CollectionWidget {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
      * @public
      */
@@ -183,14 +180,11 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet; element?: DxElement; model?: any; event?: DxEvent<MouseEvent | PointerEvent> }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

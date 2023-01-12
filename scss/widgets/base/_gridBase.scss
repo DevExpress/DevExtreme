@@ -858,6 +858,14 @@
       &:not(.dx-#{$widget-name}-content-fixed) {
         min-height: 100%; /* IE, Edge */
       }
+
+      &.dx-scrollable-container {
+        width: auto;
+      }
+
+      &.dx-#{$widget-name}-content-fixed.dx-scrollable-container {
+        height: auto;
+      }
     }
 
 

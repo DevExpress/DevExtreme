@@ -425,6 +425,9 @@ const ValidatingController = modules.Controller.inherit((function() {
                     if(adapter) {
                         adapter.getValue = getValue;
                         adapter.validationRequestsCallbacks = [];
+                        adapter.bypass = () => {
+                            return parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
+                        };
                     }
                 }
 
@@ -583,11 +586,11 @@ export const validatingModule = {
     extenders: {
         controllers: {
             editing: {
-                _addChange: function(options, row) {
-                    const index = this.callBase(options, row);
+                _addChange: function(changeParams) {
+                    const index = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
-                    if(index >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
+                    if(index >= 0 && changeParams.type !== EDIT_DATA_REMOVE_TYPE) {
                         const change = this.getChanges()[index];
                         change && validatingController.updateValidationState(change);
                     }
@@ -637,7 +640,7 @@ export const validatingModule = {
 
                 _validateEditFormAfterUpdate: function(row, isCustomSetCellValue) {
                     // T816256, T844143
-                    if(isCustomSetCellValue && this._editForm && !row.isNewRow) {
+                    if(isCustomSetCellValue && this._editForm) {
                         this._editForm.validate();
                     }
 
@@ -1024,7 +1027,7 @@ export const validatingModule = {
                             return;
                         }
 
-                        let $tooltipElement = $container.find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        let $tooltipElement = this._rowsView.element().find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
                         const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
                         $tooltipElement && $tooltipElement.remove();
@@ -1119,10 +1122,14 @@ export const validatingModule = {
                             errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
                         });
 
+                        const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+
+                        this._rowsView.element().find('.' + invalidMessageClass).remove();
+
                         const $overlayElement = $('<div>')
                             .addClass(INVALID_MESSAGE_CLASS)
                             .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                            .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                            .addClass(invalidMessageClass)
                             .html(errorMessageText)
                             .appendTo($cell);
 
@@ -1248,9 +1255,14 @@ export const validatingModule = {
                         if(showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
                             const errorMessages = [];
                             validationResult.brokenRules.forEach(function(rule) {
-                                errorMessages.push(rule.message);
+                                if(rule.message) {
+                                    errorMessages.push(rule.message);
+                                }
                             });
-                            this._showValidationMessage($focus, errorMessages, column.alignment || 'left', revertTooltip);
+
+                            if(errorMessages.length) {
+                                this._showValidationMessage($focus, errorMessages, column.alignment || 'left', revertTooltip);
+                            }
                         }
 
                         !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
@@ -1309,7 +1321,7 @@ export const validatingModule = {
             })(),
             data: {
                 _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-                    const cell = oldRow.cells[columnIndex];
+                    const cell = oldRow.cells?.[columnIndex];
                     const oldValidationStatus = cell && cell.validationStatus;
                     const validatingController = this.getController('validating');
                     const validationResult = validatingController.getCellValidationResult({
@@ -1320,8 +1332,12 @@ export const validatingModule = {
                     const newValidationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
                     const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
+                    const editingChanged = oldRow.isEditing !== newRow.isEditing;
+                    const hasValidationRules = cell?.column.validationRules?.length;
 
-                    if((oldValidationStatus !== newValidationStatus && rowIsModified) || (validationData.isValid && cellIsMarkedAsInvalid)) {
+                    if((editingChanged && hasValidationRules) ||
+                        (oldValidationStatus !== newValidationStatus && rowIsModified) ||
+                        (validationData.isValid && cellIsMarkedAsInvalid)) {
                         return true;
                     }
 

@@ -625,7 +625,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
 function getBaseTick(breakValue, [tick, insideTick], interval, getValue) {
     if(!isDefined(tick) || mathAbs(getValue(breakValue) - getValue(tick)) / interval > 0.25) {
-        if(isDefined(insideTick)) {
+        if(isDefined(insideTick) && mathAbs(getValue(insideTick) - getValue(tick)) / interval < 2) {
             tick = insideTick;
         } else if(!isDefined(tick)) {
             tick = breakValue;
@@ -646,11 +646,7 @@ function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
 
             breakTicks = ticks.filter(tick => tick >= b.to);
 
-            let to = addCorrection(getBaseTick(b.to, [].concat(breakTicks[0], ticks[ticks.length - breakTicks.length - 1]), interval, getValue), -correction);
-
-            if(getValue(to) - getValue(from) < 0) {
-                to = addCorrection(breakTicks[0], -correction);
-            }
+            const to = addCorrection(getBaseTick(b.to, [].concat(breakTicks[0], ticks[ticks.length - breakTicks.length - 1]), interval, getValue), -correction);
 
             if(getValue(to) - getValue(from) < interval && !b.gapSize) {
                 return result;

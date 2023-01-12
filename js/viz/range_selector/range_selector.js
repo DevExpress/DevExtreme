@@ -4,6 +4,7 @@ import {
     isNumeric as _isNumber,
     isDate as _isDate,
     type as _type,
+    isFunction,
     isPlainObject
 } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -1022,7 +1023,7 @@ function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) 
     }
 }
 
-function getShiftDirection() {
+function getSharpDirection() {
     return 1;
 }
 
@@ -1071,21 +1072,13 @@ function AxisWrapper(params) {
         getTemplate() {}
     });
     that._updateSelectedRangeCallback = params.updateSelectedRange;
-    that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
+    that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getSharpDirection;
     that._axis.getTickStartPositionShift = getTickStartPositionShift;
     that._axis._checkShiftedLabels = checkShiftedLabels;
 }
 
 AxisWrapper.prototype = {
     constructor: AxisWrapper,
-
-    dispose: function() {
-        this._axis.dispose();
-    },
-
-    calculateInterval: function(value, prevValue) {
-        return this._axis.calculateInterval(value, prevValue);
-    },
 
     update: function(options, isCompactMode, canvas, businessRange, seriesDataSource) {
         const axis = this._axis;
@@ -1125,12 +1118,14 @@ AxisWrapper.prototype = {
     }
 };
 
-['setMarginOptions', 'getFullTicks', 'updateCanvas', 'updateOptions', 'getAggregationInfo', 'getTranslator', 'getVisualRangeLength', 'getVisibleArea', 'getMarginOptions', 'getVisualRangeCenter'].forEach(methodName => {
-    AxisWrapper.prototype[methodName] = function() {
-        const axis = this._axis;
+each(Axis.prototype, field => {
+    if(field !== 'constructor' && field[0] !== '_' && isFunction(Axis.prototype[field]) && !(field in AxisWrapper.prototype)) {
+        AxisWrapper.prototype[field] = function() {
+            const axis = this._axis;
 
-        return axis[methodName].apply(axis, arguments);
-    };
+            return axis[field].apply(axis, arguments);
+        };
+    }
 });
 
 registerComponent('dxRangeSelector', dxRangeSelector);

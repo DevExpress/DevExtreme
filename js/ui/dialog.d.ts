@@ -1,32 +1,28 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 /**
  * @public
  */
 export interface CustomDialogOptions {
-    title?: string,
-    messageHtml?: string,
-    buttons?: Array<dxButtonOptions>,
-    showTitle?: boolean,
-    message?: string,
-    dragEnabled?: boolean
+    title?: string;
+    messageHtml?: string;
+    buttons?: Array<dxButtonOptions>;
+    showTitle?: boolean;
+    message?: string;
+    dragEnabled?: boolean;
 }
 /**
  * @docid ui.dialog.alert
  * @publicName alert(messageHtml,title)
- * @param1 messageHtml:string
- * @param2 title:string
  * @return Promise<void>
  * @static
- * @module ui/dialog
  * @namespace DevExpress.ui.dialog
- * @export alert
  * @public
  */
 export function alert(messageHtml: string, title: string): DxPromise<void>;
@@ -34,13 +30,9 @@ export function alert(messageHtml: string, title: string): DxPromise<void>;
 /**
  * @docid ui.dialog.confirm
  * @publicName confirm(messageHtml,title)
- * @param1 messageHtml:string
- * @param2 title:string
  * @return Promise<boolean>
  * @static
- * @module ui/dialog
  * @namespace DevExpress.ui.dialog
- * @export confirm
  * @public
  */
 export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
@@ -57,11 +49,7 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @param1_field5 message:String:deprecated(messageHtml)
  * @param1_field6 dragEnabled:boolean
  * @static
- * @module ui/dialog
  * @namespace DevExpress.ui.dialog
- * @export custom
  * @public
  */
 export function custom(options: CustomDialogOptions): any;
-
-

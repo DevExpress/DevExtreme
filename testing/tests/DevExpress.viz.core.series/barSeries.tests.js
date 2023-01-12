@@ -1145,18 +1145,18 @@ QUnit.module('getMarginOptions', {
     beforeEach: environment.beforeEach,
     afterEach: environment.afterEach,
     createSeries: function(options) {
-        const axis = environment.createAxisWithTranslator.apply(this, arguments);
+        this.axis = environment.createAxisWithTranslator.apply(this, arguments);
 
         return createSeries(options, {
             renderer: this.renderer,
-            argumentAxis: axis.argAxis,
-            valueAxis: axis.valAxis
+            argumentAxis: this.axis.argAxis,
+            valueAxis: this.axis.valAxis
         });
     }
 });
 
 QUnit.test('bar series', function(assert) {
-    const series = createSeries({
+    const series = this.createSeries({
         type: 'bar'
     });
 
@@ -1167,13 +1167,27 @@ QUnit.test('bar series', function(assert) {
 });
 
 QUnit.test('bar series (useAggregation)', function(assert) {
-    const series = createSeries({
+    const series = this.createSeries({
         type: 'bar',
         aggregation: { enabled: true }
     });
 
     assert.deepEqual(series.getMarginOptions(), {
         checkInterval: false,
+        percentStick: false
+    });
+});
+
+QUnit.test('bar series (useAggregation). aggregatedPointsPosition = crossTicks', function(assert) {
+    const series = this.createSeries({
+        type: 'bar',
+        aggregation: { enabled: true }
+    });
+
+    this.axis.argAxis.aggregatedPointBetweenTicks.returns(true);
+
+    assert.deepEqual(series.getMarginOptions(), {
+        checkInterval: true,
         percentStick: false
     });
 });

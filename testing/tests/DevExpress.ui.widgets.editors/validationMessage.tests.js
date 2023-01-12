@@ -1,11 +1,21 @@
 import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
 
+const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
+
 const moduleSetup = {
     beforeEach: function() {
         this._$container = $('<div>').appendTo('#qunit-fixture');
         this._$validationMessage = $('<div>').attr('id', 'validationMessageRootElement').appendTo(this._$container);
-        this._validationMessage = new ValidationMessage(this._$validationMessage);
+        this.init = (options) => {
+            this._validationMessage = new ValidationMessage(this._$validationMessage, options);
+        };
+        this.reinit = (options) => {
+            this._validationMessage.dispose();
+            this.init(options);
+        };
+
+        this.init({ validationErrors: [{ message: 'some' }] });
     },
     afterEach: function() {
         this._$container.remove();
@@ -13,6 +23,26 @@ const moduleSetup = {
 };
 
 QUnit.module('options', moduleSetup, () => {
+    QUnit.test('should not render if message is empty (T1033883)', function(assert) {
+        this.reinit({
+            validationErrors: [{
+                message: ''
+            }]
+        });
+
+        assert.notOk(this._validationMessage.$wrapper().hasClass(INVALID_MESSAGE_CLASS), 'validationMessage is not visible');
+    });
+
+    QUnit.test('should hide if message becomes empty', function(assert) {
+        this._validationMessage.option({
+            validationErrors: [{
+                message: ''
+            }]
+        });
+
+        assert.notOk(this._validationMessage.$wrapper().hasClass(INVALID_MESSAGE_CLASS), 'validationMessage is not visible');
+    });
+
     QUnit.test('default maxWidth should be 100%', function(assert) {
         assert.strictEqual(this._validationMessage.option('maxWidth'), '100%', 'default maxWidth was calculated correctly');
     });
@@ -33,27 +63,27 @@ QUnit.module('options', moduleSetup, () => {
     });
 
     QUnit.test('position should be recalculated after target option runtime change', function(assert) {
-        const $element = $('<div>');
+        const $target = $('<div>').css({
+            position: 'absolute',
+            left: 100
+        });
+        $target.appendTo('body');
 
         try {
-            $element.appendTo('#qunit-fixture');
+            this._validationMessage.option('target', $target);
+            const targetRect = $target.get(0).getBoundingClientRect();
 
-            this._validationMessage.option('target', $element);
-
-            assert.strictEqual(this._validationMessage.option('position').of, $element, 'position is recalculated');
+            const messagePositionLeft = this._validationMessage.$wrapper().get(0).getBoundingClientRect().left;
+            assert.strictEqual(messagePositionLeft, targetRect.left, 'position is recalculated');
         } finally {
-            $element.remove();
+            $target.remove();
         }
     });
 });
 
 QUnit.module('message inner html', moduleSetup, () => {
     QUnit.test('message html should be rendered correctly when there is one validation error on init', function(assert) {
-        const validationErrors = [{
-            message: 'required'
-        }];
-        this._validationMessage = new ValidationMessage(this._$validationMessage, { 'validationErrors': validationErrors });
-        assert.strictEqual(this._validationMessage.$content().html(), 'required', 'message html is correct');
+        assert.strictEqual(this._validationMessage.$content().html(), 'some', 'message html is correct');
     });
 
     QUnit.test('message html should be rendered correctly when there is one validation error after runtime change', function(assert) {

@@ -204,13 +204,13 @@ const TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
-        this._renderPlaceholder();
+        this.callBase();
+
         this._refreshValueChangeEvent();
         this._renderEvents();
 
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
-        this.callBase();
     },
 
     _renderInput: function() {
@@ -574,14 +574,16 @@ const TextEditorBase = Editor.inherit({
             return true;
         }
 
-        let result = this._isNestedTarget(event.relatedTarget);
+        let shouldPrevent = this._isNestedTarget(event.relatedTarget);
 
         if(event.type === 'focusin') {
-            result = result && this._isNestedTarget(event.target) && !this._isInput(event.target);
+            shouldPrevent = shouldPrevent && this._isNestedTarget(event.target) && !this._isInput(event.target);
+        } else if(!shouldPrevent) {
+            this._toggleFocusClass(false, this.$element());
         }
 
-        result && event.preventDefault();
-        return result;
+        shouldPrevent && event.preventDefault();
+        return shouldPrevent;
     },
 
     _isNestedTarget: function(target) {
@@ -626,6 +628,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _valueChangeEventHandler: function(e, formattedValue) {
+        if(this.option('readOnly')) {
+            return;
+        }
         this._saveValueChangeEvent(e);
         this.option('value', arguments.length > 1 ? formattedValue : this._input().val());
         this._saveValueChangeEvent(undefined);

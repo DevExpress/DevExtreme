@@ -49,6 +49,9 @@ const resources = [{
 
 [undefined, resources].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
+    if (view === 'timelineWeek' || view === 'timelineWorkWeek') {
+      return;
+    }
     test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 

@@ -2225,4 +2225,34 @@ module('selection', {
             assert.deepEqual(selectedItemKeys, [2], 'after selection \'selectedItemKeys\' container correct item key');
         });
     });
+
+    test('selection totalCount should return correct value if items are grouped (T1053754)', function(assert) {
+        const dataSource = new DataSource({
+            store: [{
+                group: 1,
+                key: 1,
+                name: '1'
+            }, {
+                group: 1,
+                key: 2,
+                name: '2'
+            }, {
+                group: 2,
+                key: 3,
+                name: '3'
+            }, {
+                group: 2,
+                key: 4,
+                name: '4'
+            }],
+            group: 'group',
+            key: 'id'
+        });
+        const instance = this.createWidget({
+            dataSource,
+            grouped: true
+        });
+
+        assert.strictEqual(instance._selection.options.totalCount(), 4, 'total count is correct');
+    });
 });

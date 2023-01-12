@@ -37,7 +37,7 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const location = getTranslateValues($content.get(0));
 
@@ -230,7 +230,7 @@ QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is tru
     });
 
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
@@ -252,7 +252,7 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
         useSimulatedScrollbar: true
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 

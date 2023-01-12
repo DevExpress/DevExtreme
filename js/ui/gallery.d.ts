@@ -1,13 +1,13 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,13 +17,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -36,16 +36,16 @@ export type DisposingEvent = EventInfo<dxGallery>;
 export type InitializedEvent = InitializedEventInfo<dxGallery>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxGallery, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxGallery, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxGallery, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxGallery> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
@@ -79,7 +79,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -159,8 +159,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/gallery
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -170,7 +168,6 @@ export default class dxGallery extends CollectionWidget {
      * @docid
      * @publicName goToItem(itemIndex, animation)
      * @param1 itemIndex:numeric
-     * @param2 animation:boolean
      * @return Promise<void>
      * @public
      */
@@ -178,7 +175,6 @@ export default class dxGallery extends CollectionWidget {
     /**
      * @docid
      * @publicName nextItem(animation)
-     * @param1 animation:boolean
      * @return Promise<void>
      * @public
      */
@@ -186,7 +182,6 @@ export default class dxGallery extends CollectionWidget {
     /**
      * @docid
      * @publicName prevItem(animation)
-     * @param1 animation:boolean
      * @return Promise<void>
      * @public
      */

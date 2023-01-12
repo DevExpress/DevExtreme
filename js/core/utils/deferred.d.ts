@@ -1,6 +1,5 @@
-interface Callback<T> {
-    (value?: T, ...args: T[]): void;
-}
+// eslint-disable-next-line @typescript-eslint/prefer-function-type
+type Callback<T> = (value?: T, ...args: T[]) => void;
 declare class DeferredObj<T> {
     constructor();
     state(): string;
@@ -21,10 +20,11 @@ declare class DeferredObj<T> {
 
 export function Deferred<T>(): DeferredObj<T>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface PromiseType<T> { }
 /**
  * @docid
  * @type Promise<void>
  * @namespace DevExpress.core.utils
  */
-export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>
+export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;

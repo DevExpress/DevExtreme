@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,60 +17,60 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import {
-    DataExpressionMixinOptions
+    DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxDropDownBox>;
+export type ChangeEvent = NativeEventInfo<dxDropDownBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxDropDownBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxDropDownBox>;
+export type CopyEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxDropDownBox>;
+export type CutEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDropDownBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxDropDownBox>;
+export type EnterKeyEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxDropDownBox>;
+export type FocusInEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxDropDownBox>;
+export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDropDownBox>;
+export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent & { target: HTMLInputElement }>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxDropDownBox>;
+export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxDropDownBox>;
+export type KeyPressEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxDropDownBox>;
+export type KeyUpEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxDropDownBox>;
@@ -79,16 +79,16 @@ export type OpenedEvent = EventInfo<dxDropDownBox>;
 export type OptionChangedEvent = EventInfo<dxDropDownBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxDropDownBox>;
+export type PasteEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxDropDownBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type ContentTemplateData = {
     component: dxDropDownBox;
     readonly value?: any;
-}
+};
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
@@ -110,7 +110,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_param1 templateData:object
      * @type_function_param1_field1 component:dxDropDownBox
      * @type_function_param1_field2 value:any
-     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -123,8 +122,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @type_function_param1 value:string|Array<any>
-     * @type_function_return string
      * @public
      */
     displayValueFormatter?: ((value: string | Array<any>) => string);
@@ -132,7 +129,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @type_function_param1 value:object
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -160,8 +156,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @isEditor
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @hasTranscludedContent
- * @module ui/drop_down_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

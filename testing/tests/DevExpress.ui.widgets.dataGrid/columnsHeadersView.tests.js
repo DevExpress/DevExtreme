@@ -526,7 +526,7 @@ QUnit.module('Headers', {
             const $element = $(element);
             assert.equal($element.attr('aria-colindex'), index + 1);
             assert.equal($element.attr('role'), 'gridcell');
-            assert.equal($element.attr('aria-selected'), 'false');
+            assert.notOk(element.hasAttribute('aria-selected'), 'element has no aria-selected attribute'); // T1093760
         });
     });
 
@@ -789,12 +789,12 @@ QUnit.module('Headers', {
         this.columnHeadersView.render(testElement);
 
         // assert
-        let sortElements = testElement.find('.' + 'dx-sort');
+        let sortElements = testElement.find('.dx-sort:not(.dx-sort-none)');
         assert.equal(sortElements.length, 0, 'sortElements count');
 
 
         let headerElement = testElement.find('td');
-        sortElements = testElement.find('.' + 'dx-sort');
+        sortElements = testElement.find('.dx-sort:not(.dx-sort-none)');
         assert.equal(sortElements.length, 0, 'not sorting');
         assert.equal(headerElement.attr('aria-sort'), 'none');
 
@@ -1132,14 +1132,14 @@ QUnit.module('Headers', {
         this.columnHeadersView.render(testElement);
 
         // assert
-        assert.equal(testElement.find('td').last().find('.' + 'dx-sort').length, 1);
+        assert.equal(testElement.find('td').last().find('.dx-sort:not(.dx-sort-none)').length, 1);
 
         // act
         testElement.find('td').last().trigger('dxclick');
 
         this.clock.tick();
         // assert
-        assert.strictEqual(testElement.find('td').last().find('.' + 'dx-sort').length, 0);
+        assert.strictEqual(testElement.find('td').last().find('.dx-sort:not(.dx-sort-none)').length, 0);
     });
 
     QUnit.test('Apply alignment for sorting', function(assert) {

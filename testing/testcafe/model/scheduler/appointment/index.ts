@@ -8,6 +8,7 @@ const CLASS = {
   resizableHandleTop: 'dx-resizable-handle-top',
   stateFocused: 'dx-state-focused',
   allDay: 'dx-scheduler-all-day-appointment',
+  draggableSource: 'dx-draggable-source',
 };
 
 export default class Appointment {
@@ -22,6 +23,8 @@ export default class Appointment {
   isFocused: Promise<boolean>;
 
   isAllDay: Promise<boolean>;
+
+  isDraggableSource: Promise<boolean>;
 
   constructor(scheduler: Selector, index = 0, title?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
@@ -47,5 +50,7 @@ export default class Appointment {
 
     this.isFocused = this.element.hasClass(CLASS.stateFocused);
     this.isAllDay = this.element.hasClass(CLASS.allDay);
+
+    this.isDraggableSource = this.element.hasClass(CLASS.draggableSource);
   }
 }

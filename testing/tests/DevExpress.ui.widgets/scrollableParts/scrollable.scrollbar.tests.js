@@ -129,7 +129,7 @@ QUnit.test('scrollbar height calculated correctly', function(assert) {
     });
 
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
@@ -216,7 +216,7 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -246,7 +246,7 @@ QUnit.test('scrollbar width calculated correctly', function(assert) {
         direction: 'horizontal'
     });
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.width(containerWidth);
@@ -271,7 +271,7 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
         }
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -298,7 +298,7 @@ QUnit.test('scrollbar has correct position after update', function(assert) {
         inertiaEnabled: false
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
@@ -602,7 +602,7 @@ QUnit.test('content size should be rounded to prevent unexpected scrollbar appea
 
 QUnit.test('scrollbar should be hidden when container size is almost similar to content size when zooming', function(assert) {
     const scrollable = new Scrollable($('#scrollable'), {
-        'useNative': false
+        useNative: false
     });
 
     const dimension = 'height';
@@ -611,11 +611,11 @@ QUnit.test('scrollbar should be hidden when container size is almost similar to 
     const fakeContentAndContainerSizeWhenZoomIs100 = 405;
 
     const scroller = scrollable._strategy._scrollers['vertical'];
-    const scrollerContainer = scroller._$container.get(0);
-    const scrollerContent = scroller._$content.get(0);
+    const scrollableContainerElement = $(scrollable.container()).get(0);
+    const scrollableContentElement = $(scrollable.content()).get(0);
 
-    sinon.stub(scrollerContainer, 'getBoundingClientRect').returns({ [dimension]: fakeContainerSizeWhenZoomIs125 });
-    sinon.stub(scrollerContent, 'getBoundingClientRect').returns({ [dimension]: fakeContentSizeWhenZoomIs125 });
+    sinon.stub(scrollableContainerElement, 'getBoundingClientRect').returns({ [dimension]: fakeContainerSizeWhenZoomIs125 });
+    sinon.stub(scrollableContentElement, 'getBoundingClientRect').returns({ [dimension]: fakeContentSizeWhenZoomIs125 });
     sinon.stub(scroller, '_getBaseDimension').returns(fakeContentAndContainerSizeWhenZoomIs100);
 
     scrollable.update();

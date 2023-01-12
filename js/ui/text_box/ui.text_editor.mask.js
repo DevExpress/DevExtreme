@@ -436,7 +436,10 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _adjustCaret: function(char) {
-        const caret = this._maskRulesChain.adjustedCaret(this._caret().start, this.isForwardDirection(), char);
+        const caretStart = this._caret().start;
+        const isForwardDirection = this.isForwardDirection();
+
+        const caret = this._maskRulesChain.adjustedCaret(caretStart, isForwardDirection, char);
         this._caret({ start: caret, end: caret });
     },
 

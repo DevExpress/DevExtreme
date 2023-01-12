@@ -84,6 +84,7 @@ class Gantt extends Widget {
         delete this._ganttView;
         delete this._dialogInstance;
         delete this._loadPanel;
+        delete this._exportHelper;
         super._clean();
     }
     _refresh() {
@@ -211,9 +212,8 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = validatedData;
-            const expandedRowKeys = validatedData.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
-            this._ganttTreeList?.setOption('expandedRowKeys', expandedRowKeys);
-            this._ganttTreeList?.updateDataSource(validatedData);
+            const forceUpdate = !this._ganttTreeList?.getDataSource() && !this._ganttView;
+            this._ganttTreeList?.updateDataSource(validatedData, forceUpdate);
         }
     }
     _validateSourceData(dataSourceName, data) {
@@ -478,7 +478,14 @@ class Gantt extends Widget {
         const coreTaskData = this._mappingHelper.convertMappedToCoreData(GANTT_TASKS, data);
         const isCustomFieldsUpdateOnly = !Object.keys(coreTaskData).length;
         this._customFieldsManager.saveCustomFieldsDataToCache(key, data, true, isCustomFieldsUpdateOnly);
-        this._ganttView._ganttViewCore.updateTask(key, coreTaskData);
+        if(isCustomFieldsUpdateOnly) {
+            const customFieldsData = this._customFieldsManager._getCustomFieldsData(data);
+            if(Object.keys(customFieldsData).length > 0) {
+                this._actionsManager.raiseUpdatingAction(GANTT_TASKS, { cancel: false, key: key, newValues: { } });
+            }
+        } else {
+            this._ganttView._ganttViewCore.updateTask(key, coreTaskData);
+        }
     }
     getDependencyData(key) {
         if(!isDefined(key)) {

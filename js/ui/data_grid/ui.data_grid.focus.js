@@ -42,16 +42,17 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
                     }
                     return true;
                 },
-                _getGroupPath: function(group) {
-                    const groupPath = [group.key];
-                    let items = group.items;
+                _getGroupPath: function(groupItem, groupCount) {
+                    const groupPath = [];
+                    let items = [groupItem];
 
-                    while(items && items[0]) {
+                    while(items && items[0] && groupCount) {
                         const item = items[0];
                         if(item.key !== undefined) {
                             groupPath.push(item.key);
                         }
                         items = item.items;
+                        groupCount--;
                     }
                     return groupPath;
                 },
@@ -100,7 +101,7 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
                             return deferred.resolve(-1).promise();
                         }
 
-                        const groupPath = that._getGroupPath(data[0]);
+                        const groupPath = that._getGroupPath(data[0], group.length);
 
                         that._expandGroupByPath(that, groupPath, 0).done(function() {
 

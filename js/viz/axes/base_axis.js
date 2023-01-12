@@ -304,6 +304,7 @@ export const Axis = function(renderSettings) {
     that._translator = that._createTranslator();
     that.isArgumentAxis = renderSettings.isArgumentAxis;
     that._viewport = {};
+    that._prevDataInfo = {};
 
     that._firstDrawing = true;
 
@@ -771,14 +772,19 @@ Axis.prototype = {
         return isFunction(labelOptions.customizeHint) ? labelOptions.customizeHint.call(formatObject, formatObject) : undefined;
     },
 
-    formatRange(startValue, endValue, interval) {
-        return formatRange(startValue, endValue, interval, this.getOptions());
+    formatRange(startValue, endValue, interval, argumentFormat) {
+        return formatRange({ startValue, endValue, tickInterval: interval, argumentFormat, axisOptions: this.getOptions() });
     },
 
     _setTickOffset: function() {
         const options = this._options;
         const discreteAxisDivisionMode = options.discreteAxisDivisionMode;
         this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
+    },
+
+    // T1068023,T948359
+    aggregatedPointBetweenTicks() {
+        return this._options.aggregatedPointsPosition === 'crossTicks';
     },
 
     resetApplyingAnimation: function(isFirstDrawing) {
@@ -1149,6 +1155,20 @@ Axis.prototype = {
         let value = this._options.visualRangeUpdateMode;
         const translator = this._translator;
         const range = this._seriesData;
+        const prevDataInfo = this._prevDataInfo;
+
+        if(prevDataInfo.isEmpty && !prevDataInfo.containsConstantLine) {
+            return KEEP;
+        }
+
+        if(!this.isArgumentAxis) {
+            const viewport = this.getViewport();
+            if(!isDefined(viewport.startValue) &&
+                !isDefined(viewport.endValue) &&
+                !isDefined(viewport.length)) {
+                return RESET;
+            }
+        }
 
         if(this.isArgumentAxis) {
             if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
@@ -1182,6 +1202,10 @@ Axis.prototype = {
                         value = KEEP;
                     }
                 }
+
+                if(value === KEEP && prevDataInfo.isEmpty && prevDataInfo.containsConstantLine) {
+                    value = RESET;
+                }
             }
         } else {
             if([KEEP, RESET].indexOf(value) === -1) {
@@ -1204,25 +1228,13 @@ Axis.prototype = {
             return;
         }
 
-        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
-        if(!that.isArgumentAxis) {
-            const viewport = that.getViewport();
-            if(!isDefined(viewport.startValue) &&
-                !isDefined(viewport.endValue) &&
-                !isDefined(viewport.length)) {
-                visualRangeUpdateMode = RESET;
-            }
-        }
-
-        that._prevDataWasEmpty && (visualRangeUpdateMode = KEEP);
+        const visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
 
         if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([visualRange.startValue, visualRange.endValue]);
-        }
-        if(visualRangeUpdateMode === RESET) {
+        } else if(visualRangeUpdateMode === RESET) {
             that._setVisualRange([null, null]);
-        }
-        if(visualRangeUpdateMode === SHIFT) {
+        } else if(visualRangeUpdateMode === SHIFT) {
             that._setVisualRange({ length: that.getVisualRangeLength() });
         }
     },
@@ -1274,7 +1286,14 @@ Axis.prototype = {
         that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, range);
         that._seriesData = new Range(range);
         const dataIsEmpty = that._seriesData.isEmpty();
-        that._prevDataWasEmpty = dataIsEmpty;
+
+        const rangeWithConstantLines = new Range(that._seriesData);
+
+        that._addConstantLinesToRange(rangeWithConstantLines, 'minVisible', 'maxVisible');
+        that._prevDataInfo = {
+            isEmpty: dataIsEmpty,
+            containsConstantLine: rangeWithConstantLines.containsConstantLine
+        };
 
         that._seriesData.addRange({
             categories: options.categories,
@@ -1321,6 +1340,7 @@ Axis.prototype = {
             if(cl.options.extendAxis) {
                 const value = cl.getParsedValue();
                 dataRange.addRange({
+                    containsConstantLine: true,
                     [minValueField]: value,
                     [maxValueField]: value
                 });
@@ -1944,9 +1964,6 @@ Axis.prototype = {
         that._templatesRendered && that._templatesRendered.reject();
         that._templatesRendered = new Deferred();
 
-        when.apply(this, that._majorTicks.map(tick => tick.getTemplateDeferred())).done(() => {
-            that._templatesRendered.resolve();
-        });
         that._majorTicks.forEach(function(tick) {
             tick.labelRotationAngle = 0;
             tick.labelAlignment = undefined;
@@ -1993,6 +2010,10 @@ Axis.prototype = {
             that._setLabelsPlacement();
             offset = that._adjustLabels(offset);
         }
+
+        when.apply(this, that._majorTicks.map(tick => tick.getTemplateDeferred())).done(() => {
+            that._templatesRendered.resolve();
+        });
 
         offset = that._adjustDateMarkers(offset);
         that._adjustTitle(offset);

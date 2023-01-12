@@ -1,25 +1,25 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     DxEvent,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -52,10 +52,9 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @default false
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default null
@@ -110,7 +109,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     target?: string | UserDefinedElement;
     /**
      * @docid
-     * @type_function_param1 Element:DxElement
      * @default 'panel'
      * @public
      */
@@ -120,8 +118,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @docid
  * @inherits Widget
  * @hasTranscludedContent
- * @module ui/drawer
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -130,7 +126,6 @@ export default class dxDrawer extends Widget {
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;

@@ -94,6 +94,7 @@ const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -415,6 +416,44 @@ QUnit.module('basic', () => {
         assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-text'), 'shortcut has dx-button-mode-text class');
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
+    });
+
+    QUnit.test('disabled=true should add "dx-state-disabled" class to popup content (T1046427)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true
+        }).dxPopup('instance');
+
+        assert.ok(popup.$content().hasClass(DISABLED_STATE_CLASS));
+
+        popup.option('disabled', false);
+        assert.notOk(popup.$content().hasClass(DISABLED_STATE_CLASS), 'class is removed after runtime change to false');
+    });
+
+    QUnit.test('disabled=true should pass disabled to toolbars', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true,
+            toolbarItems: [{
+                location: 'before',
+                name: 'topButton',
+                visible: true,
+                widget: 'dxButton'
+            }, {
+                location: 'after',
+                toolbar: 'bottom',
+                name: 'bottomButton',
+                visible: true,
+                widget: 'dxButton'
+            }]
+        }).dxPopup('instance');
+
+        assert.ok(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'top toolbar has disabled class');
+        assert.ok(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'bottom toolbar has disabled class');
+
+        popup.option('disabled', false);
+        assert.notOk(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from top toolbar');
+        assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
     });
 });
 
@@ -1326,6 +1365,12 @@ QUnit.module('resize', {
         const onResizeStartStub = sinon.stub();
         const onResizeStub = sinon.stub();
         const onResizeEndStub = sinon.stub();
+        const checkExtraFields = (args, eventType) => {
+            ['event', 'height', 'width'].forEach((field) => {
+                assert.ok(field in args, `${field} field is existed`);
+            });
+            assert.strictEqual(args.event.type, eventType, 'correct event type');
+        };
 
         const instance = $('#popup').dxPopup({
             resizeEnabled: true,
@@ -1342,8 +1387,11 @@ QUnit.module('resize', {
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
         assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
+        checkExtraFields(onResizeStartStub.lastCall.args[0], 'dxdragstart');
         assert.ok(onResizeStub.calledOnce, 'onResize fired');
+        checkExtraFields(onResizeStub.lastCall.args[0], 'dxdrag');
         assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
+        checkExtraFields(onResizeEndStub.lastCall.args[0], 'dxdragend');
     });
 
     QUnit.test('resize event handlers should correctly added via "on" method', function(assert) {

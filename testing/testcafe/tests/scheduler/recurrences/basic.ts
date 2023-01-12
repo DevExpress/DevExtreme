@@ -93,3 +93,23 @@ test('Appointments in end of DST should have correct offset', async (t) => {
   currentDate: new Date(2021, 10, 1),
   firstDayOfWeek: 1,
 }));
+
+test('Appointment displayed without errors if it was only one DST in year(T1037853)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.getAppointmentByIndex(0).element.exists)
+    .eql(true);
+}).before(async () => createScheduler({
+  timeZone: 'America/Los_Angeles',
+  dataSource: [{
+    text: 'Recurrence',
+    startDate: new Date(1942, 3, 29, 0),
+    endDate: new Date(1942, 3, 29, 1),
+    recurrenceRule: 'FREQ=DAILY;COUNT=2',
+  }],
+  views: ['day'],
+  currentView: 'day',
+  currentDate: new Date(1942, 3, 29),
+  height: 600,
+}));

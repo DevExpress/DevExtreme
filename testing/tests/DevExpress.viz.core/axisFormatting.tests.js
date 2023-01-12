@@ -1503,6 +1503,7 @@ QUnit.test('Numeric axis. Format range', function(assert) {
     // act
     this.createAxis();
     assert.strictEqual(this.axis.formatRange(10000, 15000, 5000), '10K - 15K');
+    assert.strictEqual(this.axis.formatRange(10000, 15000, 5000, 'currency'), '$10,000 - $15,000');
 });
 
 QUnit.test('Logarithmic axis. Format range', function(assert) {

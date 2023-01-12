@@ -898,23 +898,33 @@ Series.prototype = {
 
         const aggregatedData = [];
 
-        for(let i = 1; i < ticks.length; i++) {
-            const intervalEnd = ticks[i];
-            const intervalStart = ticks[i - 1];
-            const dataInInterval = [];
-            while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
-                if(data[dataIndex].argument >= intervalStart) {
-                    dataInInterval.push(data[dataIndex]);
-                }
-                dataIndex++;
-            }
+        if(ticks.length === 1) {
             const aggregationInfo = {
-                intervalStart,
-                intervalEnd,
-                aggregationInterval: interval,
-                data: dataInInterval.map(getData)
+                intervalStart: ticks[0],
+                intervalEnd: ticks[0],
+                aggregationInterval: null,
+                data: data.map(getData)
             };
             addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
+        } else {
+            for(let i = 1; i < ticks.length; i++) {
+                const intervalEnd = ticks[i];
+                const intervalStart = ticks[i - 1];
+                const dataInInterval = [];
+                while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
+                    if(data[dataIndex].argument >= intervalStart) {
+                        dataInInterval.push(data[dataIndex]);
+                    }
+                    dataIndex++;
+                }
+                const aggregationInfo = {
+                    intervalStart,
+                    intervalEnd,
+                    aggregationInterval: interval,
+                    data: dataInInterval.map(getData)
+                };
+                addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
+            }
         }
 
         that._endUpdateData();
@@ -1254,6 +1264,33 @@ Series.prototype = {
 
     getRenderer() {
         return this._renderer;
+    },
+
+    removePointElements() {
+        if(this._markersGroup) {
+            _each(this._points, (_, p) => p.deleteMarker());
+            this._markersGroup.dispose();
+            this._markersGroup = null;
+        }
+    },
+
+    removeGraphicElements() {
+        const that = this;
+        if(that._elementsGroup) {
+            that._elementsGroup.dispose();
+            that._elementsGroup = null;
+        }
+        _each(that._graphics || [], (_, elem) => {
+            that._removeElement(elem);
+        });
+        that._graphics = null;
+    },
+
+    removeBordersGroup() {
+        if(this._bordersGroup) {
+            this._bordersGroup.dispose();
+            this._bordersGroup = null;
+        }
     }
 };
 

@@ -195,6 +195,64 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.ok(lastArgs.items[0].values);
     });
 
+    QUnit.test('The pushed callback on initialize', function(assert) {
+        // arrange
+        const pushedSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        const dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController.pushed.add(pushedSpy);
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 1, 'the pushed callback was called only once');
+        assert.deepEqual(pushedSpy.getCall(0).args[0], [{ type: 'remove', key: 1 }], 'the pushed callback args');
+    });
+
+    QUnit.test('The handler of the dataSource pushed callback should be removed after disposing dataSource', function(assert) {
+        // arrange
+        const dataPushedHandlerSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        let dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.setDataSource(dataSource);
+        dataSource = this.dataController.dataSource();
+        dataSource.load();
+
+        // assert
+        assert.ok(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has handler');
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 0);
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 1, 'the handler of the pushed callback was called only once');
+
+        // act
+        this.dataController.dispose();
+
+        // assert
+        assert.notOk(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has no handler');
+    });
+
     // B255430
     QUnit.test('Call changed after all columnsChanged', function(assert) {
     // arrange
@@ -950,6 +1008,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(count, 1, 'Count');
     });
 
+    QUnit.test('Get page index by group key if there is no groouping and remoteOperations is true and data (T1042661)', function(assert) {
+        // arrange
+        let count = 0;
+        const loadingSpy = sinon.spy();
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+        this.applyOptions({
+            remoteOperations: true,
+            dataSource: dataSource
+        });
+
+        dataSource.store().on('loading', loadingSpy);
+
+        // act
+        this.dataController._refreshDataSource();
+        assert.equal(loadingSpy.callCount, 1, 'loading count');
+
+        this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
+            ++count;
+            assert.equal(pageIndex, -1);
+        });
+        assert.equal(count, 1, 'Count');
+        assert.equal(loadingSpy.callCount, 1, 'loading count is not changed');
+    });
+
     QUnit.test('Get page index by composite key', function(assert) {
     // arrange
         const dataSource = createDataSource([
@@ -1232,6 +1321,32 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         assert.equal(foundRowCount, 8, 'Found row count');
+    });
+
+    QUnit.test('Get row index if group by one column and data item contains key field (T1078374)', function(assert) {
+        const done = assert.async();
+        // arrange
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', key: 1 },
+            { team: 'internal', name: 'Bob', key: 2 }
+        ],
+        { key: 'name' },
+        { group: 'team', sort: 'name', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+        this.applyOptions({
+            commonColumnSettings: { autoExpandGroup: true },
+            dataSource: dataSource
+        });
+
+        const dataController = this.dataController;
+        dataController._refreshDataSource();
+
+        // act
+        dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
+            assert.equal(globalRowIndex, 2, 'Bob');
+            done();
+        });
     });
 
     ['string', 'number', 'date', 'boolean'].forEach(dataField => {
@@ -2037,6 +2152,40 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(this.dataController.pageIndex(), 0);
         assert.equal(this.dataController.items().length, 2);
         assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
+    });
+
+    QUnit.test('calculateSortValue should have correct context on sorting if customizeColumns is used (T1036411)', function(assert) {
+        const array = [
+            { name: 'Alex', age: 30 },
+            { name: 'Dan', age: 25 },
+            { name: 'Bob', age: 20 }
+        ];
+
+        const dataSource = createDataSource(array, { key: 'name' });
+
+        const ascOrder = ['Dan', 'Alex', 'Bob'];
+
+        this.applyOptions({
+            commonColumnSettings: { allowSorting: true },
+            customizeColumns: function() {},
+            columns: [{
+                dataField: 'name', calculateSortValue: function(data) {
+                    if(this.sortOrder === 'asc') {
+                        return $.inArray(data.name, ascOrder);
+                    }
+
+                    return data.name;
+                }
+            }, 'age'],
+            sorting: { mode: 'single' }
+        });
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        this.columnsController.changeSortOrder(0, 'asc');
+
+        assert.deepEqual(this.dataController.items().map(item => item.key), ascOrder);
     });
 
     QUnit.test('sorting when sortingMethod is defined', function(assert) {
@@ -3569,7 +3718,7 @@ const setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'editingRowBased', 'editingCellBased', 'grouping', 'headerFilter', 'masterDetail'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editorFactory', 'editing', 'editingRowBased', 'editingCellBased', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });

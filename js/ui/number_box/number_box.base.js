@@ -234,8 +234,6 @@ const NumberBoxBase = TextEditor.inherit({
     },
 
     _renderProps: function() {
-        this.callBase();
-
         this._input().prop({
             'min': this.option('min'),
             'max': this.option('max'),

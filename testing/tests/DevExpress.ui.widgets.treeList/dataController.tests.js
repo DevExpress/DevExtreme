@@ -13,6 +13,18 @@ const createDataSource = function(data, storeOptions, dataSourceOptions) {
     return dataSource;
 };
 
+const generateData = function(count) {
+    let i = 1;
+    const result = [];
+
+    while(i < count * 2) {
+        result.push({ id: i, parentId: 0, field: 'a' }, { id: i + 1, parentId: i, field: 'b' });
+        i += 2;
+    }
+
+    return result;
+};
+
 const setupModule = function() {
     this.options = {
         keyExpr: 'id',
@@ -2954,6 +2966,27 @@ QUnit.module('Filtering', { beforeEach: function() {
         assert.strictEqual(rows[0].key, 1, 'first row');
         assert.strictEqual(rows[1].key, 6, 'second row');
         assert.strictEqual(rows[2].key, 7, 'third row');
+    });
+
+    // T1087885
+    QUnit.test('There should not be looping after search when filterMode is \'fullBranch\' and all nodes are expanded', function(assert) {
+        // arrange, act
+        const data = generateData(200);
+
+        this.setupTreeList({
+            dataSource: data,
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            filterMode: 'fullBranch',
+            expandNodesOnFiltering: true,
+            searchPanel: {
+                text: 'b'
+            },
+            expandedRowKeys: data.map((item) => item.id)
+        });
+
+        // act
+        assert.ok(true, 'no looping');
     });
 });
 

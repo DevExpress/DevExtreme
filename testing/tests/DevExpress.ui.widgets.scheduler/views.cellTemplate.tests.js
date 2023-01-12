@@ -2254,4 +2254,46 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
     });
+
+    module('Template Change', () => {
+        [{
+            templateName: 'dataCellTemplate',
+            expectedTemplateCount: 56,
+        }, {
+            templateName: 'timeCellTemplate',
+            expectedTemplateCount: 4,
+        }, {
+            templateName: 'dateCellTemplate',
+            expectedTemplateCount: 14,
+        }, {
+            templateName: 'resourceCellTemplate',
+            expectedTemplateCount: 2,
+        }].forEach(({ templateName, expectedTemplateCount }) => {
+            test(`Scheduler should be rerendered once when ${templateName} is changed (T1028189)`, function(assert) {
+                const scheduler = createWrapper({
+                    views: ['week'],
+                    currentView: 'week',
+                    showAllDayPanel: false,
+                    startDayHour: 0,
+                    endDayHour: 2,
+                    resources: [{
+                        fieldExpr: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John' },
+                            { id: 2, text: 'Mike' },
+                        ],
+                    }],
+                    groups: ['ownerId'],
+                });
+
+                let templateCount = 0;
+
+                scheduler.instance.option(templateName, () => {
+                    templateCount++;
+                });
+
+                assert.equal(templateCount, expectedTemplateCount, 'Correct number of templates was rendered');
+            });
+        });
+    });
 });

@@ -16,4 +16,8 @@ export default class HeaderCell extends FocusableElement {
   getFilterIcon(): Selector {
     return this.element.find('.dx-column-indicators > .dx-header-filter');
   }
+
+  getEditor(): FocusableElement {
+    return new FocusableElement(this.element.find('.dx-texteditor-input, .dx-checkbox'));
+  }
 }

@@ -7,7 +7,6 @@ const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const sass = require('gulp-dart-sass');
 
-const fiber = require('fibers');
 const CleanCss = require('clean-css');
 const through = require('through2');
 const autoPrefix = require('gulp-autoprefixer');
@@ -21,7 +20,7 @@ const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'light',
-    'material.blue.light'
+    'material.blue.light',
 ];
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
@@ -34,7 +33,6 @@ const compileBundles = (bundles) => {
         }))
         .on('data', (chunk) => console.log('Build: ', chunk.path))
         .pipe(sass({
-            fiber,
             functions
         }))
         .pipe(autoPrefix())

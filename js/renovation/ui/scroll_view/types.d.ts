@@ -23,3 +23,10 @@ export interface AllowedDirection {
   vertical: boolean;
   horizontal: boolean;
 }
+
+export interface ElementOffset {
+  bottom?: number;
+  top?: number;
+  left?: number;
+  right?: number;
+}

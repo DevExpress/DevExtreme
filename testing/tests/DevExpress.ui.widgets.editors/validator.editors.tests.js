@@ -442,5 +442,63 @@ QUnit.module('Editors Standard Adapter', {
             done();
         });
     });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute if the "required" rule is removed', function(assert) {
+        this.fixture.createTextEditor();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{ type: 'required' }]
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        assert.ok(Boolean($input.attr('aria-required')), 'input have an "aria-required" attribute');
+
+        validator.option('validationRules', []);
+        assert.notOk(Boolean($input.attr('aria-required')), 'input does not have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute if the "required" rule is added', function(assert) {
+        this.fixture.createTextEditor();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        assert.notOk(Boolean($input.attr('aria-required')), 'input does not have an "aria-required" attribute');
+
+        validator.option('validationRules', [{ type: 'required' }]);
+        assert.ok(Boolean($input.attr('aria-required')), 'input have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should not toggle an "aria-required" attribute if the "required" rule is added, but editor is not initialized yet', function(assert) {
+        const editor = this.fixture.createTextEditor();
+        editor._initialized = false; // to not render attributes
+        editor._initializing = true; // to not call initMarkup after onMarkupRendered option update
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        validator.option('validationRules', [{ type: 'required' }]);
+        assert.notOk(Boolean($input.attr('aria-required')), 'input still does not have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute on markup render if the "required" rule is added', function(assert) {
+        const editor = this.fixture.createTextEditor();
+        editor._initialized = false;
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        validator.option('validationRules', [{ type: 'required' }]); // initMarkup is called on endUpdate
+
+        assert.ok(Boolean($input.attr('aria-required')), '"aria-required" is rendered after editor initialization');
+    });
 });
 

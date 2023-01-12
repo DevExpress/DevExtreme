@@ -177,6 +177,10 @@ const dxSparkline = BaseSparkline.inherit({
         this._seriesLabelGroup.remove();
         this._seriesGroup.clear();
         this._seriesLabelGroup.clear();
+
+        this._series.removeGraphicElements();
+        this._series.removePointElements();
+        this._series.removeBordersGroup();
     },
 
     _drawWidgetElements: function() {

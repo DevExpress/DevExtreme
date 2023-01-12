@@ -913,6 +913,31 @@ QUnit.module('Recursive selection', {
         assert.notOk(items[3].isSelected, 'fourth item isn\'t selected');
     });
 
+    QUnit.test('Selecting row with preserve = false', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.expandedRowKeys = [1];
+        this.options.dataSource = [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' },
+            { id: 3, parentId: 1, field1: 'test3' }
+        ],
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectRows(2);
+        this.selectRows(3, false);
+
+        // assert
+        const items = this.dataController.items();
+        assert.deepEqual(this.option('selectedRowKeys'), [3], 'selected row keys');
+        assert.notOk(items[0].isSelected, 'first item is not selected');
+        assert.notOk(items[1].isSelected, 'second item is not selected');
+        assert.ok(items[2].isSelected, 'third item is selected');
+    });
+
     QUnit.test('Checking arguments of the \'onSelectionChanged\' event when select row', function(assert) {
     // arrange
         const selectionChangedArgs = [];
@@ -1631,6 +1656,37 @@ QUnit.module('Recursive selection', {
         assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [0], 'currentSelectedRowKeys');
         assert.deepEqual(this.option('selectedRowKeys'), [0], 'selected row keys');
         assert.ok(items[0].isSelected, 'first item is selected');
+    });
+
+    // T1085491
+    QUnit.test('The aria-selected attribute of the parent node should be in an indeterminate state after select child node -> collapse parent node', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.dataSource = [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' },
+            { id: 3, parentId: 1, field1: 'test3' },
+        ];
+        this.options.expandedRowKeys = [1];
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectRows([3]);
+
+        // assert
+        let items = this.dataController.items();
+        assert.strictEqual(items[0].isSelected, undefined, 'selection state of the first item is indeterminate');
+        assert.strictEqual($(this.rowsView.getRowElement(0)).attr('aria-selected'), 'undefined', 'aria-selected attr with \'undefined\' value');
+
+        // act
+        this.collapseRow(1);
+
+        // assert
+        items = this.dataController.items();
+        assert.strictEqual(items[0].isSelected, undefined, 'selection state of the first item is indeterminate');
+        assert.strictEqual($(this.rowsView.getRowElement(0)).attr('aria-selected'), 'undefined', 'aria-selected attr with \'undefined\' value');
     });
 });
 

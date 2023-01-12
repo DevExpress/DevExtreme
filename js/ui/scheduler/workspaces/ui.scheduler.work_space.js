@@ -45,7 +45,7 @@ import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/grou
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
-import { cache } from './cache';
+import { Cache } from './cache';
 import { isDateInRange } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
@@ -159,7 +159,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._viewDataProvider;
     }
 
-    get cache() { return cache; }
+    get cache() {
+        if(!this._cache) {
+            this._cache = new Cache();
+        }
+
+        return this._cache;
+    }
     get virtualSelectionState() {
         if(!this._virtualSelectionState) {
             this._virtualSelectionState = new VirtualSelectionState(this.viewDataProvider);
@@ -181,6 +187,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     get viewDirection() { return 'vertical'; }
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
+    get isDefaultDraggingMode() {
+        return this.option('draggingMode') === 'default';
+    }
 
     _supportedKeys() {
         const clickHandler = function(e) {
@@ -938,19 +948,26 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
+            onScroll: () => {
+                this._groupedStrategy.cache?.clear();
+            },
         };
         if(this._needCreateCrossScrolling()) {
-            config = extend(config, this._createCrossScrollingConfig());
+            config = extend(config, this._createCrossScrollingConfig(config));
         }
 
         return config;
     }
 
-    _createCrossScrollingConfig() {
+    _createCrossScrollingConfig(currentConfig) {
         const config = {};
         config.direction = 'both';
 
+        const currentOnScroll = currentConfig.onScroll;
+
         config.onScroll = e => {
+            currentOnScroll();
+
             this._dataTableSemaphore.take();
 
             this._sideBarSemaphore.isFree() && this._sidebarScrollable && this._sidebarScrollable.scrollTo({
@@ -1019,7 +1036,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _headerScrollableConfig() {
         const config = {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'never',
             direction: 'horizontal',
             useNative: false,
             updateManually: true,
@@ -1041,7 +1058,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'never',
             direction: 'vertical',
             useNative: false,
             updateManually: true,
@@ -1115,6 +1132,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
@@ -1127,6 +1146,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.headerPanelOffsetRecalculate();
+
+        this._updateScrollable();
 
         this.cache.clear();
         this._cleanAllowedPositions();
@@ -2233,8 +2254,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._detachDragEvents(element);
 
         const onDragEnter = e => {
-            this.removeDroppableCellClass();
-            $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            if(!this.preventDefaultDragging) {
+                this.removeDroppableCellClass();
+                $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            }
+        };
+
+        const removeClasses = () => {
+            if(!this.preventDefaultDragging) {
+                this.removeDroppableCellClass();
+            }
         };
 
         const onCheckDropTarget = (target, event) => {
@@ -2242,8 +2271,17 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
-        eventsEngine.on(element, DragEventNames.LEAVE, () => this.removeDroppableCellClass());
-        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => this.removeDroppableCellClass());
+        eventsEngine.on(element, DragEventNames.LEAVE, removeClasses);
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => {
+            if(!this.dragBehavior?.dragBetweenComponentsPromise) {
+                this.dragBehavior.removeDroppableClasses();
+                return;
+            }
+
+            this.dragBehavior.dragBetweenComponentsPromise?.then(() => {
+                this.dragBehavior.removeDroppableClasses();
+            });
+        });
     }
 
     _attachPointerEvents(element) {
@@ -2401,7 +2439,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getScrollableContainer() {
-        return this._dateTableScrollable._container();
+        return $(this._dateTableScrollable.container());
     }
 
     getHeaderPanelHeight() {
@@ -2527,8 +2565,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(this._needCreateCrossScrolling()) {
                 return getBoundingRect(this._$dateTable.get(0)).width;
             }
+            const totalWidth = getBoundingRect(this.$element().get(0)).width;
+            const timePanelWidth = this.getTimePanelWidth();
+            const groupTableWidth = this.getGroupTableWidth();
 
-            return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+            return totalWidth - timePanelWidth - groupTableWidth;
         });
     }
 
@@ -3510,20 +3551,26 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createDragBehaviorBase($element, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
-        const element = this.$element();
+        const disableDefaultDragging = () => {
+            if(!this.isDefaultDraggingMode) {
+                this.preventDefaultDragging = true;
+            }
+        };
 
-        const attachGeneralEvents = () => this._attachDragEvents(element);
-        const detachGeneralEvents = () => this._detachDragEvents(element);
-
-        const isDefaultDraggingMode = this.option('draggingMode') === 'default';
+        const enableDefaultDragging = () => {
+            if(!this.isDefaultDraggingMode) {
+                this.preventDefaultDragging = false;
+            }
+        };
 
         this.dragBehavior.addTo($element, createDragBehaviorConfig(
             container,
-            isDefaultDraggingMode,
+            this.isDefaultDraggingMode,
             this.dragBehavior,
-            attachGeneralEvents,
-            detachGeneralEvents,
+            enableDefaultDragging,
+            disableDefaultDragging,
             () => this._getDroppableCell(),
+            () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
             () => this.getCellWidth(),
             options)
@@ -3619,9 +3666,10 @@ const createDragBehaviorConfig = (
     container,
     isDefaultDraggingMode,
     dragBehavior,
-    attachGeneralEvents,
-    detachGeneralEvents,
+    enableDefaultDragging,
+    disableDefaultDragging,
     getDroppableCell,
+    getDateTables,
     removeDroppableCellClass,
     getCellWidth,
     options) => {
@@ -3647,7 +3695,7 @@ const createDragBehaviorConfig = (
 
     const onDragStart = e => {
         if(!isDefaultDraggingMode) {
-            detachGeneralEvents();
+            disableDefaultDragging();
         }
 
         const canceled = e.cancel;
@@ -3700,7 +3748,18 @@ const createDragBehaviorConfig = (
             getElementsFromPoint(newX, newY) :
             getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
-        const droppableCell = elements.filter(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1)[0];
+        const dateTables = getDateTables();
+        const droppableCell = elements.filter(el => {
+            const classList = el.classList;
+
+            const isCurrentSchedulerElement = dateTables.find(el).length === 1;
+
+            return isCurrentSchedulerElement &&
+                (
+                    classList.contains(DATE_TABLE_CELL_CLASS) ||
+                    classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+                );
+        })[0];
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();
@@ -3715,7 +3774,7 @@ const createDragBehaviorConfig = (
 
     const onDragEnd = e => {
         if(!isDefaultDraggingMode) {
-            attachGeneralEvents();
+            enableDefaultDragging();
         }
 
         if(state.itemData && !state.itemData.disabled) {

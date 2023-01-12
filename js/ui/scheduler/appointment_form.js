@@ -35,10 +35,6 @@ const SchedulerAppointmentForm = {
         return new Date(new Date(startDate).setHours(0, 0, 0, 0));
     },
 
-    _getAllDayEndDate: function(startDate) {
-        return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
-    },
-
     _getStartDateWithStartHour: function(startDate, startDayHour) {
         return new Date(new Date(startDate).setHours(startDayHour));
     },
@@ -201,8 +197,8 @@ const SchedulerAppointmentForm = {
                             if(!this._appointmentForm._lockDateShiftFlag && startDate) {
                                 if(value) {
                                     const allDayStartDate = this._getAllDayStartDate(startDate);
-                                    startDateEditor.option('value', allDayStartDate);
-                                    endDateEditor.option('value', this._getAllDayEndDate(allDayStartDate));
+                                    startDateEditor.option('value', new Date(allDayStartDate));
+                                    endDateEditor.option('value', new Date(allDayStartDate));
                                 } else {
                                     const startDateWithStartHour = this._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
                                     const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);

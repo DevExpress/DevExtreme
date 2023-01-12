@@ -44,6 +44,24 @@ QUnit.module('Sync with FilterValue', {
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValue'), 2);
     });
 
+    ['string', 'number', 'date'].forEach(dataType => {
+        QUnit.test(`check equals to null for ${dataType} column (T1017975)`, function(assert) {
+            // act
+            this.setupDataGrid({
+                filterValue: ['field', '=', null],
+                columns: [{ dataField: 'field', allowHeaderFiltering: true, dataType }]
+            });
+
+            // act
+            this.columnOption('field', { filterValues: [null] });
+
+            // assert
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), [null]);
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterType'), 'include');
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterValue'), undefined);
+        });
+    });
+
     QUnit.test('anyof with one value', function(assert) {
         // arrange, act
         this.setupDataGrid({
@@ -795,7 +813,7 @@ QUnit.module('Sync on initialization', {
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), ['1']);
     });
 
-    // T695018
+    // T695018 -> T1049956
     QUnit.test('sync column.filterValue if column has dataField && name', function(assert) {
         // act
         this.setupDataGrid({
@@ -811,7 +829,38 @@ QUnit.module('Sync on initialization', {
         });
 
         // assert
-        assert.deepEqual(this.option('filterValue'), ['field', '=', '1' ], 'filterValue');
+        assert.deepEqual(this.option('filterValue'), ['field1', '=', '1' ], 'filterValue');
+    });
+
+    // T1049956
+    QUnit.test('sync column.filterValue when there are columns with the same dataField and and different names', function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: null,
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: 'field',
+                name: 'field1',
+                dataType: 'string'
+            }, {
+                dataField: 'field',
+                name: 'field2',
+                dataType: 'string',
+                selectedFilterOperation: '=',
+                filterValue: '1'
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option('filterValue'), ['field2', '=', '1' ], 'filterValue');
+
+        // act
+        this.option('filterValue', null);
+
+        // assert
+        assert.deepEqual(this.option('filterValue'), null, 'filterValue');
+        assert.strictEqual(this.columnsController.columnOption(0, 'filterValue'), undefined, 'filterValue of the first column');
+        assert.strictEqual(this.columnsController.columnOption(1, 'filterValue'), undefined, 'filterValue of the second column');
     });
 
     QUnit.test('Error E1049', function(assert) {
@@ -1212,6 +1261,42 @@ QUnit.module('Real dataGrid', {
 
         // assert
         assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', 2]);
+    });
+
+    ['string', 'number', 'date'].forEach(dataType => {
+        QUnit.test(`check equals to null for ${dataType} column (T1017975)`, function(assert) {
+            // arrange
+            const dataGrid = this.initDataGrid({
+                columns: [{ dataField: 'field', allowHeaderFiltering: true, dataType }]
+            });
+
+            // act
+            dataGrid.columnOption('field', { filterValues: [null] });
+
+            // assert
+            assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', null]);
+            assert.deepEqual(dataGrid.columnOption('field', 'selectedFilterOperation'), undefined);
+        });
+    });
+
+    QUnit.test('check equals to null for column with headerFilter.dataSource (T1017975)', function(assert) {
+        // arrange
+        const dataGrid = this.initDataGrid({
+            columns: [{
+                dataField: 'field',
+                allowHeaderFiltering: true,
+                headerFilter: {
+                    dataSource: (options) => options.dataSource
+                }
+            }]
+        });
+
+        // act
+        dataGrid.columnOption('field', { filterValues: [null] });
+
+        // assert
+        assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', null]);
+        assert.deepEqual(dataGrid.columnOption('field', 'selectedFilterOperation'), undefined);
     });
 
     QUnit.test('check any of (two value)', function(assert) {

@@ -2,12 +2,12 @@
  * @public
  */
 export interface ValidationCallbackData {
-    value?: string | number,
-    rule: any,
-    validator: any,
-    data?: any,
-    column?: any,
-    formItem?: any
+    value?: any;
+    rule: any;
+    validator: any;
+    data?: any;
+    column?: any;
+    formItem?: any;
 }
 
 /**
@@ -90,12 +90,6 @@ export interface CompareRule {
     message?: string;
     /**
      * @docid
-     * @default true
-     * @public
-     */
-    reevaluate?: boolean;
-    /**
-     * @docid
      * @type Enums.ValidationRuleType
      * @public
      */
@@ -135,7 +129,6 @@ export interface CustomRule {
     type: 'custom';
     /**
      * @docid
-     * @type_function_return boolean
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object
@@ -223,7 +216,6 @@ export interface PatternRule {
     message?: string;
     /**
      * @docid
-     * @type regexp|string
      * @public
      */
     pattern?: RegExp | string;

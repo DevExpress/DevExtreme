@@ -27,7 +27,7 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
         };
 
         super(providerPredefinedOptions);
-        this._realProviderInstance = new ObjectFileSystemProvider({ data: createTestFileSystem() });
+        this._realProviderInstance = options['realProviderInstance'] || new ObjectFileSystemProvider({ data: createTestFileSystem() });
         stubFileReader(this._realProviderInstance);
         this._operationTimeout = options['operationDelay'];
         this._operationsToDelay = options['operationsToDelay'];

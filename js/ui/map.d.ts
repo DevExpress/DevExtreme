@@ -1,24 +1,24 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
   EventInfo,
   NativeEventInfo,
   InitializedEventInfo,
-  ChangedOptionInfo
+  ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxMap>;
+export type ClickEvent = NativeEventInfo<dxMap, MouseEvent | PointerEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxMap>;
@@ -30,12 +30,12 @@ export type InitializedEvent = InitializedEventInfo<dxMap>;
 export type MarkerAddedEvent = EventInfo<dxMap> & {
   readonly options: any;
   originalMarker: any;
-}
+};
 
 /** @public */
 export type MarkerRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxMap> & ChangedOptionInfo;
@@ -43,18 +43,18 @@ export type OptionChangedEvent = EventInfo<dxMap> & ChangedOptionInfo;
 /** @public */
 export type ReadyEvent = EventInfo<dxMap> & {
   originalMap: any;
-}
+};
 
 /** @public */
 export type RouteAddedEvent = EventInfo<dxMap> & {
   readonly options: any;
   originalRoute: any;
-}
+};
 
 /** @public */
 export type RouteRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
-}
+};
 
 /**
  * @public
@@ -90,17 +90,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default ""
        */
-      bing?: string,
+      bing?: string;
       /**
        * @docid
        * @default ""
        */
-      google?: string,
+      google?: string;
       /**
        * @docid
        * @default ""
        */
-      googleStatic?: string
+      googleStatic?: string;
     };
     /**
      * @docid
@@ -109,8 +109,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     autoAdjust?: boolean;
     /**
+     * @type Object|string|Array<number>
      * @docid
-     * @extends MapLocationType
      * @fires dxMapOptions.onOptionChanged
      * @inherits MapLocation
      * @public
@@ -124,14 +124,13 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     controls?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default 300
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -146,17 +145,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default ""
        */
-      bing?: string,
+      bing?: string;
       /**
        * @docid
        * @default ""
        */
-      google?: string,
+      google?: string;
       /**
        * @docid
        * @default ""
        */
-      googleStatic?: string
+      googleStatic?: string;
     };
     /**
      * @docid
@@ -173,17 +172,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       /**
        * @docid
        */
-      iconSrc?: string,
+      iconSrc?: string;
       /**
+       * @type Object|string|Array<number>
        * @docid
-       * @extends MapLocationType
        * @inherits MapLocation
        */
-      location?: any | string | Array<number>,
+      location?: any | string | Array<number>;
       /**
        * @docid
        */
-      onClick?: Function,
+      onClick?: Function;
       /**
        * @docid
        */
@@ -192,12 +191,12 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
          * @docid
          * @default false
          */
-        isShown?: boolean,
+        isShown?: boolean;
         /**
          * @docid
          */
-        text?: string
-      }
+        text?: string;
+      };
     }>;
     /**
      * @docid
@@ -292,30 +291,29 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default '#0000FF'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
-       * @extends MapLocationType
        * @inherits MapLocation
        * @type Array<object>
        */
-      locations?: Array<any>,
+      locations?: Array<any>;
       /**
        * @docid
        * @type Enums.GeoMapRouteMode
        * @default 'driving'
        */
-      mode?: 'driving' | 'walking',
+      mode?: 'driving' | 'walking';
       /**
        * @docid
        * @default 0.5
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default 5
        */
-      weight?: number
+      weight?: number;
     }>;
     /**
      * @docid
@@ -327,7 +325,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
      * @default 300
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -342,8 +339,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/map
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

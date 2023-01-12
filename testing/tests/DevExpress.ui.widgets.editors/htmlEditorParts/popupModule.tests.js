@@ -90,4 +90,21 @@ QUnit.module('Popup module', moduleConfig, () => {
         assert.strictEqual(popupModule.maxHeight, MIN_HEIGHT, 'Max height cannot be less than a threshold');
         windowStub.restore();
     });
+
+    test('Popup should prevent editor focusout on mousedown event (T1063461)', function(assert) {
+        const windowStub = sinon.stub(windowUtils, 'getWindow').returns($('<div>').height(80));
+        const popupModule = new PopupModule({}, this.options);
+
+        popupModule.showPopup();
+        this.clock.tick();
+
+        const $wrapper = $(popupModule._popup.$wrapper());
+
+        $wrapper.on('mousedown', (e) => {
+            assert.ok(e.isDefaultPrevented(), 'Default prevented');
+        });
+
+        $wrapper.trigger('mousedown');
+        windowStub.restore();
+    });
 });

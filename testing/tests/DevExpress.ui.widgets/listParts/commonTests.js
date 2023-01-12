@@ -945,6 +945,21 @@ QUnit.module('options', moduleSetup, () => {
         instance.option('wrapItemText', false);
         assert.notOk($container.hasClass('dx-wrap-item-text'), 'class was removed');
     });
+
+    [
+        { isGrouped: false, items: [1] },
+        { isGrouped: true, items: [{ key: 'testGroup', items: [1] }] }
+    ].forEach(({ isGrouped, items }) => {
+        QUnit.test(`wrapItemText option should add the "white-space" style to the ${isGrouped ? 'group' : 'simple'} item content`, function(assert) {
+            const $element = this.element.dxList({
+                items,
+                grouped: isGrouped,
+                wrapItemText: true
+            });
+            const $itemContent = $element.find('.dx-list-item-content');
+            assert.strictEqual($itemContent.css('whiteSpace'), 'normal', 'white-space: normal');
+        });
+    });
 });
 
 QUnit.module('options changed', moduleSetup, () => {
@@ -1894,6 +1909,22 @@ QUnit.module('events', moduleSetup, () => {
 
         instance.option('items', ['a', 'b']);
         assert.strictEqual(itemRenderedSpy.callCount, 2);
+    });
+
+    QUnit.test('onItemRendered should have correct itemIndex parameter when data is grouped (T989015)', function(assert) {
+        const itemRenderedStub = sinon.stub();
+
+        $('#list').dxList({
+            dataSource: [{
+                key: 'a',
+                items: ['1']
+            }],
+            grouped: true,
+            onItemRendered: itemRenderedStub
+        }).dxList('instance');
+
+        const { itemIndex } = itemRenderedStub.getCall(0).args[0];
+        assert.deepEqual(itemIndex, { group: 0, item: 0 });
     });
 
     QUnit.test('itemRendered event', function(assert) {

@@ -18,7 +18,7 @@ import { overlapping } from './chart_components/base_chart';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import { ScrollBar } from './chart_components/scroll_bar';
-import { Crosshair } from './chart_components/crosshair';
+import { Crosshair, getMargins } from './chart_components/crosshair';
 import rangeDataCalculator from './series/helpers/range_data_calculator';
 import { LayoutManager } from './chart_components/layout_manager';
 import { Range } from './translators/range';
@@ -577,6 +577,20 @@ const dxChart = AdvancedChart.inherit({
         return boundaryStateChanged;
     },
 
+    _getCrosshairMargins: function() {
+        const crosshairOptions = this._getCrosshairOptions() || {};
+        const crosshairEnabled = crosshairOptions.enabled;
+        const margins = getMargins();
+
+        const horizontalLabel = _extend(true, {}, crosshairOptions.label, crosshairOptions.horizontalLine.label);
+        const verticalLabel = _extend(true, {}, crosshairOptions.label, crosshairOptions.verticalLine.label);
+
+        return {
+            x: crosshairEnabled && crosshairOptions.horizontalLine.visible && horizontalLabel.visible ? margins.x : 0,
+            y: crosshairEnabled && crosshairOptions.verticalLine.visible && verticalLabel.visible ? margins.y : 0
+        };
+    },
+
     _getValueAxis: function(paneName, axisName) {
         const that = this;
         const valueAxes = that._valueAxes;
@@ -641,7 +655,12 @@ const dxChart = AdvancedChart.inherit({
             if(!axis.pane) {
                 axis.setPane(that.defaultPane);
             }
-            return doesPaneExist(that.panes, axis.pane);
+            const paneExists = doesPaneExist(that.panes, axis.pane);
+            if(!paneExists) {
+                axis.dispose();
+                axis = null;
+            }
+            return paneExists;
         }).sort(compareAxes);
 
         const defaultAxis = this.getValueAxis();
@@ -1378,7 +1397,8 @@ const dxChart = AdvancedChart.inherit({
 
         _each(that._getStackPoints(), function(_, stacks) {
             _each(stacks, function(_, points) {
-                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection, (a, b) => {
+                const isInverted = points[0].series.getValueAxis().getOptions().inverted;
+                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, isInverted, shiftDirection, (a, b) => {
                     const coordPosition = isRotated ? 1 : 0;
                     const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
                     const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];

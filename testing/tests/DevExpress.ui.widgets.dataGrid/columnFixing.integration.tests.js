@@ -637,4 +637,32 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 50, 'scroll top on mousewheel');
     });
+
+    // Regression after T1090735
+    QUnit.test('The fixed cell value should not be empty when columns are generated from data and scrolling.columnRenderingMode is \'virtual\'', function(assert) {
+        // arrange, act
+        const data = {};
+
+        for(let i = 1; i <= 50; i++) {
+            data[`field${i}`] = i;
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 900,
+            columnWidth: 100,
+            dataSource: [data],
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(100);
+
+        // assert
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+        assert.strictEqual($fixedCell.text(), '1', 'fixed cell value');
+    });
 });

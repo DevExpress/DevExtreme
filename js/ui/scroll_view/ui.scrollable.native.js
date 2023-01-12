@@ -6,7 +6,7 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
-import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
+import browser from '../../core/utils/browser';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -17,7 +17,7 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
-
+const isIE = browser.msie && browser.version < 12;
 
 const NativeStrategy = Class.inherit({
 
@@ -28,12 +28,11 @@ const NativeStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
-        this._$content = scrollable._$content;
+        this._$container = $(scrollable.container());
+        this._$content = scrollable.$content();
 
         this._direction = scrollable.option('direction');
         this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
-        this._showScrollbar = scrollable.option('showScrollbar');
 
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
@@ -41,7 +40,7 @@ const NativeStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
-        this._isScrollInverted = scrollable._isScrollInverted.bind(scrollable);
+        this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
     },
 
     render: function() {
@@ -51,16 +50,16 @@ const NativeStrategy = Class.inherit({
         this._$element
             .addClass(SCROLLABLE_NATIVE_CLASS)
             .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType)
-            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._showScrollbar);
+            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._isScrollbarVisible());
 
-        if(this._showScrollbar && this._useSimulatedScrollbar) {
+        if(this._isScrollbarVisible() && this._useSimulatedScrollbar) {
             this._renderScrollbars();
         }
     },
 
     updateRtlPosition: function(isFirstRender) {
         if(isFirstRender && this.option('rtlEnabled')) {
-            if(this._showScrollbar && this._useSimulatedScrollbar) {
+            if(this._isScrollbarVisible() && this._useSimulatedScrollbar) {
                 this._moveScrollbars();
             }
         }
@@ -123,10 +122,10 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
-            reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
-            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top : undefined
+            reachedLeft: this._isRtlNativeStrategy() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isRtlNativeStrategy() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
+            reachedTop: this._isDirection(VERTICAL) ? Math.round(top) >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? Math.round(Math.abs(top) - this._getMaxOffset().top) >= 0 : undefined
         };
     },
 
@@ -140,24 +139,25 @@ const NativeStrategy = Class.inherit({
     },
 
     _normalizeOffsetLeft(scrollLeft) {
-        if(this._isScrollInverted()) {
-            if(getScrollRtlBehavior().positive) {
-                // for ie11 support
-                return this._getMaxOffset().left - scrollLeft;
-            }
-
-            return this._getMaxOffset().left + scrollLeft;
+        if(this._isRtlNativeStrategy()) {
+            return this._getMaxOffset().left + this._getScrollSign() * scrollLeft;
         }
 
         return scrollLeft;
     },
 
     _isReachedLeft: function(left) {
-        return this._isDirection(HORIZONTAL) ? left >= 0 : undefined;
+        return this._isDirection(HORIZONTAL) ? Math.round(left) >= 0 : undefined;
     },
 
     _isReachedRight: function(left) {
-        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxOffset().left : undefined;
+        return this._isDirection(HORIZONTAL) ? Math.round(Math.abs(left) - this._getMaxOffset().left) >= 0 : undefined;
+    },
+
+    _isScrollbarVisible: function() {
+        const { showScrollbar } = this.option();
+
+        return showScrollbar !== 'never' && showScrollbar !== false;
     },
 
     handleScroll: function(e) {
@@ -266,7 +266,7 @@ const NativeStrategy = Class.inherit({
     },
 
     _getScrollSign() {
-        return this._isScrollInverted() && getScrollRtlBehavior().positive ? -1 : 1;
+        return isIE && this._isRtlNativeStrategy() ? -1 : 1;
     },
 
     validate: function(e) {

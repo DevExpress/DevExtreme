@@ -120,7 +120,7 @@ QUnit.module('Filtering', () => {
 
                 assert.equal(dateFilter.length, 2, 'Date filter contains 2 items');
 
-                assert.deepEqual(dateFilter[0], ['endDate', '>', startViewDate]);
+                assert.deepEqual(dateFilter[0], ['endDate', '>=', startViewDate]);
 
                 assert.deepEqual(dateFilter[1], ['startDate', '<', endViewDate]);
 

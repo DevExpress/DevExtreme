@@ -527,6 +527,13 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Sắp xếp Tăng dần",
+        "dxGantt-sortingDescendingText": "Sắp xếp Giảm dần",
+        "dxGantt-sortingClearText": "Loại bỏ việc sắp xếp",
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

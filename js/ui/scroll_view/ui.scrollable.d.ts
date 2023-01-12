@@ -1,21 +1,21 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
-export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
+export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
@@ -27,7 +27,7 @@ export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
     /**
      * @docid
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @default true
      * @public
      */
@@ -81,30 +81,28 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     onUpdated?: ((e: ScrollEventInfo<T>) => void);
     /**
      * @docid
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @default true
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @default false
      * @public
      */
     scrollByThumb?: boolean;
     /**
      * @docid
-     * @default 'onHover' [for](desktop)
-     * @type string
-     * @acceptValues 'onScroll'|'onHover'|'always'|'never'
+     * @default 'onHover' &for(desktop)
      * @default 'onScroll'
      * @public
      */
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
      * @docid
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @default true
      * @public
      */
@@ -135,7 +133,6 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;

@@ -811,18 +811,17 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
     _getElasticScrollTop: function(e) {
         let elasticScrollTop = 0;
-        const scrollbarWidth = this.getScrollbarWidth(true);
 
         if(e.scrollOffset.top < 0) {
             elasticScrollTop = -e.scrollOffset.top;
         } else if(e.reachedBottom) {
-            const scrollableContent = this._findContentElement();
-            const scrollableContainer = e.component._container();
-            const maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - scrollableContainer.height(), 0);
+            const $scrollableContent = $(this._findContentElement());
+            const $scrollableContainer = $(e.component.container());
+            const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 
-        return elasticScrollTop;
+        return Math.floor(elasticScrollTop);
     },
 
     _applyElasticScrolling: function(e) {

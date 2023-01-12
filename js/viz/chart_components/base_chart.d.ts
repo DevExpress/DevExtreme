@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from '../palette';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
 import {
     EventInfo,
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 import {
-    format
+    format,
 } from '../../ui/widget/ui.widget';
 
 import {
@@ -33,7 +33,7 @@ import {
     chartSeriesObject,
     dxChartAnnotationConfig,
     dxChartSeriesTypesCommonSeriesLabel,
-    dxChartSeriesTypesCommonSeriesPoint
+    dxChartSeriesTypesCommonSeriesPoint,
 } from '../chart';
 
 import {
@@ -44,7 +44,7 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
 } from '../core/base_widget';
 
 export interface PointInteractionInfo {
@@ -72,23 +72,23 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
        * @docid
        * @default 1000
        */
-      duration?: number,
+      duration?: number;
       /**
        * @docid
        * @type Enums.VizAnimationEasing
        * @default 'easeOutCubic'
        */
-      easing?: 'easeOutCubic' | 'linear',
+      easing?: 'easeOutCubic' | 'linear';
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 300
        */
-      maxPointCountSupported?: number
+      maxPointCountSupported?: number;
     } | boolean;
     /**
      * @docid
@@ -106,7 +106,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
-     * @extends CommonVizDataSource
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -142,7 +142,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<T> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<T, MouseEvent | PointerEvent> & PointInteractionInfo) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -193,7 +193,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
-     * @extends CommonVizPalette
+     * @default "Material"
      * @type Array<string>|Enums.VizPalette
      * @public
      */
@@ -252,16 +252,12 @@ export interface BaseChartAdaptiveLayout {
 export interface BaseChartLegend extends BaseLegend {
     /**
      * @docid BaseChartOptions.legend.customizeItems
-     * @type_function_param1 items:Array<BaseChartLegendItem>
-     * @type_function_return Array<BaseChartLegendItem>
      * @public
      */
     customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
     /**
      * @docid BaseChartOptions.legend.markerTemplate
      * @default undefined
-     * @type_function_param1 legendItem:BaseChartLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
@@ -271,14 +267,13 @@ export interface BaseChartLegend extends BaseLegend {
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
-     * @extends CommonVizFormat
+     * @default undefined
      * @public
      */
     argumentFormat?: format;
     /**
      * @docid BaseChartOptions.tooltip.contentTemplate
      * @type_function_param1 pointInfo:object
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -323,7 +318,6 @@ export class BaseChart extends BaseWidget {
     /**
      * @docid
      * @publicName getAllSeries()
-     * @return Array<baseSeriesObject>
      * @public
      */
     getAllSeries(): Array<baseSeriesObject>;
@@ -331,16 +325,12 @@ export class BaseChart extends BaseWidget {
     /**
      * @docid
      * @publicName getSeriesByName(seriesName)
-     * @param1 seriesName:any
-     * @return chartSeriesObject
      * @public
      */
     getSeriesByName(seriesName: any): chartSeriesObject;
     /**
      * @docid
      * @publicName getSeriesByPos(seriesIndex)
-     * @param1 seriesIndex:number
-     * @return chartSeriesObject
      * @public
      */
     getSeriesByPos(seriesIndex: number): chartSeriesObject;

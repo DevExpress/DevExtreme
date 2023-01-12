@@ -17,8 +17,8 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
+import browser from 'core/utils/browser';
 
 import 'generic_light.css!';
 
@@ -39,6 +39,7 @@ const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
 const TEXTBOX_CLASS = 'dx-texteditor-input';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
+const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
 const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_TAG_CLASS = 'dx-tag';
@@ -66,7 +67,7 @@ const getListItems = (tagBox) => {
     return $((instance).content()).find(`.${LIST_ITEM_CLASS}`);
 };
 
-const getDSWithAsyncSearch = () => {
+const getAsyncLoad = () => {
     const data = [{
         'id': 'item 1'
     }, {
@@ -87,50 +88,55 @@ const getDSWithAsyncSearch = () => {
         'id': 'item for search 4'
     }];
 
+    return (loadOptions) => {
+        const deferred = $.Deferred();
+        setTimeout(() => {
+            if(loadOptions.take && !loadOptions.searchValue) {
+                deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+            } else if(loadOptions.filter) {
+                const result = data.filter((item) => {
+                    if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                        return item[2];
+                    } else if(item.id === loadOptions.filter[2].id) {
+                        return item;
+                    } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                        for(let i = 0; i < loadOptions.filter.length; i++) {
+                            const element = loadOptions.filter[i];
+                            if(Array.isArray(element) && element[2] === item.id) {
+                                return item;
+                            }
+                        }
+                    } else {
+                        deferred.reject();
+                    }
+                });
+
+                deferred.resolve(result, { totalCount: 9 });
+            } else if(loadOptions.searchValue) {
+                const result = data.filter((item) => {
+                    if(item.id.indexOf(loadOptions.searchValue) >= 0) {
+                        return item;
+                    }
+                });
+
+                deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+            } else {
+                deferred.resolve(data, { totalCount: 9 });
+            }
+        }, TIME_TO_WAIT * 2);
+
+        return deferred.promise();
+    };
+};
+
+const getDSWithAsyncSearch = (asyncLoad = getAsyncLoad()) => {
+
     return new DataSource({
         paginate: true,
         pageSize: 5,
         store: new CustomStore({
             key: 'id',
-            load: function(loadOptions) {
-                const deferred = $.Deferred();
-                setTimeout(() => {
-                    if(loadOptions.take && !loadOptions.searchValue) {
-                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
-                    } else if(loadOptions.filter) {
-                        const result = data.filter((item) => {
-                            if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
-                                return item[2];
-                            } else if(item.id === loadOptions.filter[2].id) {
-                                return item;
-                            } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
-                                for(let i = 0; i < loadOptions.filter.length; i++) {
-                                    const element = loadOptions.filter[i];
-                                    if(Array.isArray(element) && element[2] === item.id) {
-                                        return item;
-                                    }
-                                }
-                            } else {
-                                deferred.reject();
-                            }
-                        });
-
-                        deferred.resolve(result, { totalCount: 9 });
-                    } else if(loadOptions.searchValue) {
-                        const result = data.filter((item) => {
-                            if(item.id.indexOf(loadOptions.searchValue) >= 0) {
-                                return item;
-                            }
-                        });
-
-                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
-                    } else {
-                        deferred.resolve(data, { totalCount: 9 });
-                    }
-                }, TIME_TO_WAIT * 2);
-
-                return deferred.promise();
-            }
+            load: asyncLoad
         })
     });
 };
@@ -168,21 +174,6 @@ QUnit.module('rendering', moduleSetup, () => {
         assert.ok(!$tagBox.hasClass(EMPTY_INPUT_CLASS), 'empty class not present');
         tagBox.option('value', []);
         assert.ok($tagBox.hasClass(EMPTY_INPUT_CLASS), 'empty class present');
-    });
-
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $tagBox.dxTagBox('option', 'opened', true);
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $tagBox.dxTagBox('option', 'opened', false);
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
     });
 });
 
@@ -583,7 +574,7 @@ QUnit.module('tags', moduleSetup, () => {
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
         $($element.find('.dx-clear-button-area')).trigger('dxclick');
-        $($listItems.eq(2)).trigger('dxclick');
+        getListItems($element).eq(2).trigger('dxclick');
 
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'one item is chosen');
     });
@@ -695,6 +686,51 @@ QUnit.module('tags', moduleSetup, () => {
             const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
             assert.equal($tag.text(), 'updated', 'tag has updated text');
         });
+    });
+
+    QUnit.test('Tags should be rendered on start if fieldTemplate is async (T1056792)', function(assert) {
+        const done = assert.async();
+        assert.expect(1);
+        this.clock.restore();
+
+        let rendered = false;
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+            fieldTemplate: 'fieldTemplate',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    fieldTemplate: {
+                        render: (data) => {
+                            const text = $('<div>');
+                            if(!rendered) {
+                                setTimeout(() => {
+                                    text.dxTextBox({});
+                                    $(data.container).append(text.get(0));
+                                    data.onRendered();
+                                    rendered = true;
+                                }, TIME_TO_WAIT / 2);
+                            } else {
+                                text.dxTextBox({});
+                                data.container.append(text);
+                                data.onRendered();
+                            }
+
+                            return text;
+                        }
+                    }
+                }
+            },
+        });
+
+        setTimeout(() => {
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.equal($tag.length, 1, 'tag was rendered');
+            done();
+        }, TIME_TO_WAIT);
     });
 });
 
@@ -2506,6 +2542,39 @@ QUnit.module('keyboard navigation', {
         const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
+
+    QUnit.test('keyboard event handlers passed from a config', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.dispose();
+        this.reinit({
+            onKeyDown: keyDownStub,
+            onKeyUp: keyUpStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
+
+    QUnit.test('keyboard event handlers added dynamically', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.on('keyDown', keyDownStub);
+        this.instance.on('keyUp', keyUpStub);
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
 });
 
 QUnit.module('keyboard navigation through tags', {
@@ -4017,9 +4086,14 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                     const d = $.Deferred();
 
                     setTimeout(function() {
-                        const data = loadOptions && loadOptions.searchValue ?
-                            ['test1'] :
-                            ['test1', 'test2', 'test3'];
+                        let data;
+                        if(loadOptions && loadOptions.searchValue) {
+                            data = ['test1'];
+                        } else if(loadOptions && loadOptions.filter) {
+                            data = ['test2'];
+                        } else {
+                            data = ['test1', 'test2', 'test3'];
+                        }
 
                         d.resolve(data);
                     }, TIME_TO_WAIT);
@@ -4049,12 +4123,12 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         keyboardMock(instance._input()).type('te');
-        this.clock.tick(TIME_TO_WAIT);
+        this.clock.tick(TIME_TO_WAIT * 2);
 
         const $listItems = getListItems(instance);
 
         $listItems.first().trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
+        this.clock.tick(TIME_TO_WAIT * 2);
     });
 
     QUnit.test('TagBox should not request dataSource after item selecting using search when all selected items are available (T944099)', function(assert) {
@@ -4281,6 +4355,47 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
         assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 0, 'no tags');
         assert.deepEqual(tagBox.option('value'), [], 'all items are deselected');
+    });
+
+    QUnit.test('TagBox should send one request if we select second item after search (T1029049)', function(assert) {
+        const loadSpy = sinon.spy(getAsyncLoad());
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(loadSpy),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            selectAllMode: 'allPages',
+            searchEnabled: true,
+            searchExpr: 'id',
+            dropDownOptions: {
+                height: 120,
+            },
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input).type('item');
+
+        let $listItems = getListItems(tagBox);
+
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 5);
+
+        $listItems = getListItems(tagBox);
+
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        assert.strictEqual(loadSpy.callCount, 5, 'correct count of ds load');
     });
 
     QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
@@ -4957,17 +5072,21 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 QUnit.module('options changing', moduleSetup, () => {
     ['readOnly', 'disabled'].forEach((optionName) => {
         QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
-            const tagBox = $('#tagBox').dxTagBox({
+            const $element = $('#tagBox');
+            const tagBox = $element.dxTagBox({
                 items: [1, 2],
                 value: [1],
                 searchEnabled: true
             }).dxTagBox('instance');
-            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
 
             tagBox.option(optionName, true);
             tagBox.option(optionName, false);
 
-            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+            keyboardMock($element.find(`.${TEXTBOX_CLASS}`))
+                .focus()
+                .keyDown('backspace');
+
+            assert.deepEqual(tagBox.option('value'), []);
         });
     });
 });
@@ -5394,6 +5513,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
 QUnit.module('the \'onSelectAllValueChanged\' option', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.items = [1, 2, 3];
 
         this._init = (options) => {
@@ -5420,6 +5540,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
     },
     afterEach: function() {
+        this.clock.restore();
         this.$element.remove();
     }
 }, () => {
@@ -5485,6 +5606,49 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         $selectAllElement.trigger('dxclick');
 
         assert.equal(spy.callCount, 1, 'count is correct');
+    });
+
+    QUnit.test('only all filtered items are selected if popup is closed on selectAllValueChanged (T1066477)', function(assert) {
+        const loadTimeout = 200;
+
+        this.reinit({
+            opened: false,
+            dataSource: {
+                load: ({ searchValue, filter }) => {
+                    const deferred = $.Deferred();
+
+                    setTimeout(() => {
+                        if(searchValue || filter) {
+                            deferred.resolve({ data: [1], totalCount: 1 });
+                        } else {
+                            deferred.resolve({ data: [1, 2, 3], totalCount: 3 });
+                        }
+                    }, loadTimeout);
+
+                    return deferred.promise();
+                }
+            },
+            onSelectAllValueChanged: (e) => {
+                if(e.value) {
+                    e.component.close();
+                }
+            },
+            selectAllMode: 'allPages',
+            searchTimeout: 0,
+            searchEnabled: true,
+            animation: null
+        });
+
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('1').change();
+
+        this.clock.tick(loadTimeout);
+        const $list = getList(this.instance);
+
+        $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+        this.clock.tick(loadTimeout);
+
+        assert.deepEqual(this.instance.option('selectedItems'), [1], 'selected items are correct');
     });
 });
 
@@ -5708,37 +5872,45 @@ QUnit.module('single line mode', {
         assert.equal(scrollView.scrollTop(), 2, 'list should not be scrolled to the top after value changed');
     });
 
-    QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)', function(assert) {
-        this.instance.option('rtlEnabled', true);
 
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
+    QUnit.module('scroll rtl behavior', {
+        beforeEach: function() {
+            const isIe = browser.msie && browser.version < 12;
+            this.scrollBehavior = isIe
+                ? { decreasing: false, positive: true }
+                : { decreasing: true, positive: false };
+        }
+    }, () => {
+        QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)', function(assert) {
+            this.instance.option('rtlEnabled', true);
 
-        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
+            const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
-        this.instance.focus();
-        this.instance.blur();
+            assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
-    });
+            this.instance.focus();
+            this.instance.blur();
 
-    QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
-        this.instance.option('rtlEnabled', true);
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
+        });
 
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+        QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
+            this.instance.option('rtlEnabled', true);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
 
-        this.instance.focus();
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
+            const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+            this.instance.focus();
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
+        });
     });
 
     QUnit.test('tags container should be scrolled on mobile devices', function(assert) {
@@ -5752,9 +5924,7 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('focusOut should be prevented when tagContainer clicked - T454876', function(assert) {
-        assert.expect(1);
-
-        const $inputWrapper = this.$element.find('.dx-dropdowneditor-input-wrapper');
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
 
         $inputWrapper.on('mousedown', e => {
             // note: you should not prevent pointerdown because it will prevent click on ios real devices
@@ -5763,6 +5933,17 @@ QUnit.module('single line mode', {
         });
 
         $inputWrapper.trigger('mousedown');
+    });
+
+    QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+
+        $inputWrapper.on('mousedown', e => {
+            assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
+        });
+
+        $input.trigger('mousedown');
     });
 });
 
@@ -5893,31 +6074,67 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
     });
 
-    QUnit.test('tags container should be scrolled to the start on value change in the RTL mode', function(assert) {
-        this.reinit({
-            items: this.items,
-            value: this.items,
-            multiline: false,
-            focusStateEnabled: true,
-            rtlEnabled: true
+    QUnit.module('scroll rtl behavior during kbn', {
+        beforeEach: function() {
+            const isIe = browser.msie && browser.version < 12;
+            this.scrollBehavior = isIe
+                ? { decreasing: false, positive: true }
+                : { decreasing: true, positive: false };
+        }
+    }, () => {
+        QUnit.test('tags container should be scrolled to the start on value change in the RTL mode', function(assert) {
+            this.reinit({
+                items: this.items,
+                value: this.items,
+                multiline: false,
+                focusStateEnabled: true,
+                rtlEnabled: true
+            });
+
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
+
+            this.instance.focus();
+            this.instance.option('value', [this.items[0]]);
+
+            let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+
+            this.instance.option('value', this.items);
+            expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
         });
 
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+        QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
+            this.reinit({
+                items: this.items,
+                value: this.items,
+                multiline: false,
+                focusStateEnabled: true,
+                acceptCustomValue: true,
+                rtlEnabled: true
+            });
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
+            this.keyboard
+                .focus()
+                .press('right')
+                .press('right')
+                .press('right')
+                .press('left')
+                .press('left')
+                .press('left');
 
-        this.instance.focus();
-        this.instance.option('value', [this.items[0]]);
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
-        this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+        });
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
@@ -5987,38 +6204,33 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
     });
-
-    QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
-        this.reinit({
-            items: this.items,
-            value: this.items,
-            multiline: false,
-            focusStateEnabled: true,
-            acceptCustomValue: true,
-            rtlEnabled: true
-        });
-
-        this.keyboard
-            .focus()
-            .press('right')
-            .press('right')
-            .press('right')
-            .press('left')
-            .press('left')
-            .press('left');
-
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-
-        const scrollBehavior = getScrollRtlBehavior();
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
-    });
 });
 
 QUnit.module('dataSource integration', moduleSetup, () => {
+    [{
+        dataSource: [1, 2, 3, 4, 5],
+        titleSuffix: 'is not grouped'
+    }, {
+        dataSource: [{ key: 'key', items: [1, 2] }],
+        titleSuffix: 'is grouped'
+    }].forEach(({ dataSource, titleSuffix }) => {
+        QUnit.test(`setting dataSource to null after opening should not raise any errors if dataSource ${titleSuffix} (T1046896)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                dataSource
+            }).dxTagBox('instance');
+
+            tagBox.open();
+
+            try {
+                tagBox.option('dataSource', null);
+            } catch(e) {
+                assert.ok(false, `error is raised: ${e}`);
+            } finally {
+                assert.ok(true, 'no errors is raised');
+            }
+        });
+    });
+
     QUnit.test('item should be chosen synchronously if item is already loaded', function(assert) {
         assert.expect(0);
 

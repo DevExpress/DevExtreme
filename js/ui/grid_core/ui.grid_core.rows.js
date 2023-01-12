@@ -12,10 +12,9 @@ import { compileGetter } from '../../core/utils/data';
 import gridCoreUtils from './ui.grid_core.utils';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import Scrollable from '../scroll_view/ui.scrollable';
-import { removeEvent } from '../../core/remove_event';
+import { removeEvent } from '../../events/remove';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
-import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -271,7 +270,8 @@ export const rowsModule = {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
 
                         if(isNativeScrolling) {
-                            scrollLeft = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+                            const isIE = browser.msie && browser.version < 12;
+                            scrollLeft = isIE ? this._scrollRight : -this._scrollRight;
                         }
 
                         if(!this.isScrollbarVisible(true)) {
@@ -289,7 +289,7 @@ export const rowsModule = {
                     dxScrollableOptions.onScroll = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
-                    that._scrollableContainer = that._scrollable && that._scrollable._$container;
+                    that._scrollableContainer = that._scrollable && $(that._scrollable.container());
                 },
 
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,

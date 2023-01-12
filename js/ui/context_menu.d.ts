@@ -1,18 +1,17 @@
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -24,19 +23,19 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from './menu';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -55,21 +54,21 @@ export type HidingEvent = Cancelable & EventInfo<dxContextMenu>;
 export type InitializedEvent = InitializedEventInfo<dxContextMenu>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxContextMenu> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 
 /** @public */
-export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
-    readonly position: positionConfig;
-}
+export type PositioningEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & {
+    readonly position: PositionConfig;
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxContextMenu> & SelectionChangedInfo;
@@ -89,10 +88,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @docid
      * @default true
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
@@ -170,8 +168,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default { my: 'top left', at: 'top left' }
      * @ref
      * @public
+     * @type positionConfig
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default "dxcontextmenu"
@@ -182,12 +181,12 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -214,8 +213,6 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/context_menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -238,7 +235,6 @@ export default class dxContextMenu extends dxMenuBase {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
      * @public
      */
@@ -259,8 +255,9 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxContextMenuItem>
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */

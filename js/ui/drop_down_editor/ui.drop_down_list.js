@@ -25,10 +25,11 @@ const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper';
 
-const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
 const SEARCH_EVENT = 'input';
 
 const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
+
+const useCompositionEvents = devices.real().platform !== 'android';
 
 const DropDownList = DropDownEditor.inherit({
 
@@ -258,16 +259,6 @@ const DropDownList = DropDownEditor.inherit({
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
-
-        const that = this;
-        this._popup.on({
-            'shown': function() {
-                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
-            },
-            'hidden': function() {
-                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
-            }
-        });
     },
 
     _updateCustomBoundaryContainer: function() {
@@ -441,7 +432,6 @@ const DropDownList = DropDownEditor.inherit({
 
         this._clearFilter();
         this._clearSelectedItem();
-        this._preventFiltering = true;
     },
 
     _listItemElements: function() {
@@ -483,17 +473,15 @@ const DropDownList = DropDownEditor.inherit({
         this._setAriaTargetForList();
         this._list.option('_listAttributes', { 'role': 'combobox' });
 
-        this._renderPreventBlur(this._$list);
+        this._renderPreventBlurOnListClick();
         this._setListFocusedElementOptionChange();
     },
 
-    _renderPreventBlur: function($target) {
+    _renderPreventBlurOnListClick: function() {
         const eventName = addNamespace('mousedown', 'dxDropDownList');
 
-        eventsEngine.off($target, eventName);
-        eventsEngine.on($target, eventName, function(e) {
-            e.preventDefault();
-        }.bind(this));
+        eventsEngine.off(this._$list, eventName);
+        eventsEngine.on(this._$list, eventName, (e) => e.preventDefault());
     },
 
     _renderOpenedState: function() {
@@ -659,11 +647,13 @@ const DropDownList = DropDownEditor.inherit({
 
         if(this._shouldRenderSearchEvent()) {
             eventsEngine.on(this._input(), this._getSearchEvent(), (e) => { this._searchHandler(e); });
-            eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
-            eventsEngine.on(this._input(), this._getCompositionEndEvent(), (e) => {
-                this._isTextCompositionInProgress(undefined);
-                this._searchHandler(e, this._searchValue());
-            });
+            if(useCompositionEvents) {
+                eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
+                eventsEngine.on(this._input(), this._getCompositionEndEvent(), (e) => {
+                    this._isTextCompositionInProgress(undefined);
+                    this._searchHandler(e, this._searchValue());
+                });
+            }
         }
     },
 
@@ -674,8 +664,10 @@ const DropDownList = DropDownEditor.inherit({
     _refreshEvents: function() {
         eventsEngine.off(this._input(), this._getSearchEvent());
         eventsEngine.off(this._input(), this._getSetFocusPolicyEvent());
-        eventsEngine.off(this._input(), this._getCompositionStartEvent());
-        eventsEngine.off(this._input(), this._getCompositionEndEvent());
+        if(useCompositionEvents) {
+            eventsEngine.off(this._input(), this._getCompositionStartEvent());
+            eventsEngine.off(this._input(), this._getCompositionEndEvent());
+        }
 
         this.callBase();
     },

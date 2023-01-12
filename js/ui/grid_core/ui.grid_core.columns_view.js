@@ -30,8 +30,10 @@ const TABLE_FIXED_CLASS = 'table-fixed';
 const CONTENT_FIXED_CLASS = 'content-fixed';
 const ROW_CLASS = 'dx-row';
 const GROUP_ROW_CLASS = 'dx-group-row';
+const GROUP_CELL_CLASS = 'dx-group-cell';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
+const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
@@ -273,7 +275,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const getOptions = function(event) {
             const $cell = $(event.currentTarget);
             const $fieldItemContent = $(event.target).closest('.' + FORM_FIELD_ITEM_CONTENT_CLASS);
-            const rowOptions = $cell.parent().data('options');
+            const $row = $cell.parent();
+            const rowOptions = $row.data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
@@ -283,6 +286,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 event: event,
                 eventType: event.type
             });
+
+            resultOptions.rowIndex = that.getRowIndex($row);
 
             if($fieldItemContent.length) {
                 const formItemOptions = $fieldItemContent.data('dx-form-item');
@@ -598,7 +603,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _setCellAriaAttributes: function($cell, cellOptions) {
         if(cellOptions.rowType !== 'freeSpace') {
-            this.setAria('selected', false, $cell);
             this.setAria('role', 'gridcell', $cell);
 
             const columnIndexOffset = this._columnsController.getColumnIndexOffset();
@@ -612,7 +616,13 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(options.columnIndices) {
             if(options.row.cells) {
-                options.row.cells[cellOptions.columnIndex] = cellOptions;
+                let cellIndex;
+                options.row.cells.forEach((cell, i) => {
+                    if(cell.columnIndex === cellOptions.columnIndex) {
+                        cellIndex = i;
+                    }
+                });
+                options.row.cells[cellIndex] = cellOptions;
             }
         } else {
             options.row.cells.push(cellOptions);
@@ -663,15 +673,19 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         source = source || options;
 
-        source.watch = source.watch || function(getter, updateFunc) {
+        source.watch = source.watch || function(getter, updateValueFunc, updateRowFunc) {
             let oldValue = getter(source.data);
 
             const watcher = function(row) {
+                if(row && updateRowFunc) {
+                    updateRowFunc(row);
+                }
+
                 const newValue = getter(source.data);
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, row);
+                        updateValueFunc(newValue);
                     }
                     oldValue = newValue;
                 }
@@ -689,14 +703,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return stopWatch;
         };
 
-        source.update = source.update || function(row) {
+        source.update = source.update || function(row, keepRow) {
             if(row) {
                 this.data = options.data = row.data;
                 this.rowIndex = options.rowIndex = row.rowIndex;
                 this.dataIndex = options.dataIndex = row.dataIndex;
                 this.isExpanded = options.isExpanded = row.isExpanded;
 
-                if(options.row) {
+                if(options.row && !keepRow) {
                     options.row = row;
                 }
             }
@@ -896,7 +910,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             for(let i = 0; i < $rows.length; i++) {
                 const $row = $rows.eq(i);
                 const isRowVisible = $row.get(0).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
-                if(!$row.is('.' + GROUP_ROW_CLASS) && !$row.is('.' + DETAIL_ROW_CLASS) && isRowVisible) {
+                if(!$row.is('.' + GROUP_ROW_CLASS) && !$row.is('.' + DETAIL_ROW_CLASS) && !$row.is('.' + ERROR_ROW_CLASS) && isRowVisible) {
                     $cells = $row.children('td');
                     break;
                 }
@@ -936,10 +950,17 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + GROUP_ROW_CLASS).not('.' + DETAIL_ROW_CLASS);
+                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + DETAIL_ROW_CLASS);
                         for(let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+                            const row = $rows[rowIndex];
+
+                            let cell;
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
-                            const cell = $rows[rowIndex].cells[visibleIndex];
+                            if(row.classList.contains(GROUP_ROW_CLASS)) {
+                                cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`);
+                            } else {
+                                cell = row.cells[visibleIndex];
+                            }
                             if(cell) {
                                 setCellWidth(cell, columns[i], width);
                                 cell.style.minWidth = minWidth;

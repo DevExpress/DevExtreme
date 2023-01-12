@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -18,12 +18,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -36,16 +36,16 @@ export type DisposingEvent = EventInfo<dxToolbar>;
 export type InitializedEvent = InitializedEventInfo<dxToolbar>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxToolbar, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxToolbar, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxToolbar, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
@@ -73,8 +73,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -83,7 +81,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @docid
      * @deprecated
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -91,8 +88,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/toolbar
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

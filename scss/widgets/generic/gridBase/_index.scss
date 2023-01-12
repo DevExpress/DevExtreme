@@ -650,6 +650,10 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
       border-top: $generic-grid-base-row-border;
       border-bottom: $generic-grid-base-row-border;
 
+      &:focus {
+        outline: none;
+      }
+
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
@@ -753,10 +757,6 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),

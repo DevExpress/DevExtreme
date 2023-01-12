@@ -1,17 +1,17 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 import UploadInfo from '../file_management/upload_info';
@@ -21,7 +21,7 @@ export type BeforeSendEvent = EventInfo<dxFileUploader> & {
     readonly request: XMLHttpRequest;
     readonly file: File;
     readonly uploadInfo?: UploadInfo;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileUploader>;
@@ -30,14 +30,14 @@ export type ContentReadyEvent = EventInfo<dxFileUploader>;
 export type DisposingEvent = EventInfo<dxFileUploader>;
 
 /** @public */
-export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader> & {
+export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent> & {
     readonly dropZoneElement: DxElement;
-}
+};
 
 /** @public */
-export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader> & {
+export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent> & {
     readonly dropZoneElement: DxElement;
-}
+};
 
 /** @public */
 export type FilesUploadedEvent = EventInfo<dxFileUploader>;
@@ -55,21 +55,21 @@ export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
     readonly bytesLoaded: number;
     readonly bytesTotal: number;
     readonly request: XMLHttpRequest;
-}
+};
 
 /** @public */
 export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
-    message: string
-}
+    message: string;
+};
 
 /** @public */
 export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
     message: string;
-}
+};
 
 /** @public */
 export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
@@ -77,19 +77,19 @@ export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
     readonly request: XMLHttpRequest;
     readonly error: any;
     message: string;
-}
+};
 
 /** @public */
 export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
-    readonly request: XMLHttpRequest 
-}
+    readonly request: XMLHttpRequest;
+};
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
     readonly value?: Array<File>;
     readonly previousValue?: Array<File>;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -98,7 +98,6 @@ export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
-     * @type_function_param1 file:File
      * @type_function_param2 uploadInfo?:UploadInfo
      * @type_function_return Promise<any>|any
      * @public
@@ -130,10 +129,16 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     chunkSize?: number;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hoverStateEnabled?: boolean;
     /**
      * @docid
      * @default "File type is not allowed"
@@ -161,7 +166,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default "or Drop file here"
-     * @default "" [for](InternetExplorer|desktop)
+     * @default "" &for(InternetExplorer|desktop)
      * @public
      */
     labelText?: string;
@@ -375,8 +380,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     uploadButtonText?: string;
     /**
      * @docid
-     * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:UploadInfo
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -395,8 +398,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     uploadAbortedMessage?: string;
     /**
      * @docid
-     * @type_function_param1 file:File
-     * @type_function_param2 progressCallback:Function
      * @type_function_return Promise<any>|any
      * @public
      */
@@ -449,8 +450,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
 /**
  * @docid
  * @inherits Editor
- * @module ui/file_uploader
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -465,14 +464,12 @@ export default class dxFileUploader extends Editor {
     /**
      * @docid
      * @publicName upload(fileIndex)
-     * @param1 fileIndex:number
      * @public
      */
     upload(fileIndex: number): void;
     /**
      * @docid
      * @publicName upload(file)
-     * @param1 file:File
      * @public
      */
     upload(file: File): void;
@@ -485,28 +482,24 @@ export default class dxFileUploader extends Editor {
     /**
      * @docid
      * @publicName abortUpload(fileIndex)
-     * @param1 fileIndex:number
      * @public
      */
     abortUpload(fileIndex: number): void;
     /**
      * @docid
      * @publicName abortUpload(file)
-     * @param1 file:File
      * @public
      */
     abortUpload(file: File): void;
     /**
      * @docid
      * @publicName removeFile(fileIndex)
-     * @param1 fileIndex:number
      * @public
      */
     removeFile(fileIndex: number): void;
     /**
      * @docid
      * @publicName removeFile(file)
-     * @param1 file:File
      * @public
      */
     removeFile(file: File): void;

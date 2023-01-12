@@ -202,4 +202,139 @@ QUnit.module('Actions', moduleConfig, () => {
         assert.equal(ganttView.width(), splitter.width());
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
     });
+    test('splitter should resize panels with 2 gantts (T1091934)', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        const $element2 = $('<div>').attr('id', 'gantt2').appendTo('#qunit-fixture');
+        const instance2 = $element2.dxGantt().dxGantt('instance');
+        this.clock.tick();
+
+        [this.$element, $element2].forEach(($element, index) => {
+            const splitterWrapper = $element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
+            const splitter = $element.find(Consts.SPLITTER_SELECTOR);
+
+            const treeListWrapperElement = $element.find(Consts.TREELIST_WRAPPER_SELECTOR);
+            const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
+            const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
+
+            const ganttView = $element.find(Consts.GANTT_VIEW_SELECTOR);
+
+            const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
+
+            assert.ok(splitterWrapper, `Splitter ${index} wrapper has been found`);
+            assert.ok(splitter, `Splitter ${index} has been found`);
+
+            splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
+            splitter.trigger($.Event('dxpointermove', {
+                pointerType: 'mouse',
+                pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
+
+            assert.equal(treeListWrapperElement.width(), 100);
+            assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, `Splitter ${index} has been moved by mouse`);
+
+            splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
+            splitter.trigger($.Event('dxpointermove', {
+                pointerType: 'touch',
+                pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
+
+            assert.equal(treeListWrapperElement.width(), 300);
+            assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, `Splitter ${index} has been moved by touch`);
+
+            splitter.trigger($.Event('dxpointerdown'));
+            splitter.trigger($.Event('dxpointermove', {
+                pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup'));
+
+            assert.equal(treeListWrapperElement.width(), 0);
+            assert.equal(ganttView.width(), splitterContainerWrapperWidth);
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, `Splitter ${index} has not cross the left side`);
+
+            splitter.trigger($.Event('dxpointerdown'));
+            splitter.trigger($.Event('dxpointermove', {
+                pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
+                pageY: treeListWrapperTopOffset + 100 }));
+            splitter.trigger($.Event('dxpointerup'));
+
+            assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
+            assert.equal(ganttView.width(), splitter.width());
+            assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), `Splitter ${index} has not cross the right side`);
+        });
+
+        instance2.dispose();
+        $element2.remove();
+    });
+
+    test('collapse and check state after custom field updating', function(assert) {
+        const taskOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 1, 'title': 'Scope', 'start': new Date('2020-02-21T05:00:00.000Z'), 'end': new Date('2020-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            validation: { autoUpdateParentTasks: false },
+            editing: { enabled: true },
+            columns: [
+                { dataField: 'CustomText', caption: 'Task', visible: false },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End' }
+            ]
+        };
+
+        this.createInstance(taskOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        this.instance._collapseAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+
+        const customText = 'new';
+        const data = {
+            'CustomText': customText
+        };
+
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+    });
+
+    test('collapse and check state after custom field updating (autoUpdateParentTasks=true)', function(assert) {
+        const taskOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 1, 'title': 'Scope', 'start': new Date('2020-02-21T05:00:00.000Z'), 'end': new Date('2020-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            validation: { autoUpdateParentTasks: true },
+            editing: { enabled: true },
+            columns: [
+                { dataField: 'CustomText', caption: 'Task', visible: false },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End' }
+            ]
+        };
+
+        this.createInstance(taskOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        this.instance._collapseAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+
+        const customText = 'new';
+        const data = {
+            'CustomText': customText
+        };
+
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+    });
 });

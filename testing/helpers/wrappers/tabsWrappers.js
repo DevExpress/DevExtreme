@@ -32,13 +32,13 @@ export class TestTabsWrapper {
     }
 
     checkTabsWithoutScrollable() {
-        const $tabs = this._$tabs.find('> .dx-tabs-wrapper > .dx-tab');
+        const $tabs = this._$tabs.find('.dx-tabs-wrapper > .dx-tab');
         QUnit.assert.equal($tabs.length, this._tabs.option('items').length, 'tabs are rendered');
         this._checkTabsContent($tabs);
     }
 
     checkTabsWithScrollable() {
-        const $tabs = this._$tabs.find('> .dx-tabs-scrollable .dx-scrollable-content > .dx-tabs-wrapper > .dx-tab');
+        const $tabs = this._$tabs.find('> .dx-tabs-scrollable .dx-scrollable-content .dx-tabs-wrapper > .dx-tab');
         QUnit.assert.equal($tabs.length, this._tabs.option('items').length, 'tabs are rendered in the Scrollable');
         this._checkTabsContent($tabs);
     }

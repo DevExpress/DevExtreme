@@ -1,13 +1,13 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 /** @namespace DevExpress.ui */
@@ -75,8 +75,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
 /**
  * @docid
  * @inherits DOMComponent
- * @module ui/widget/ui.widget
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -91,8 +89,6 @@ export default class Widget extends DOMComponent {
     /**
      * @docid
      * @publicName registerKeyHandler(key, handler)
-     * @param1 key:string
-     * @param2 handler:function
      * @public
      */
     registerKeyHandler(key: string, handler: Function): void;
@@ -110,13 +106,12 @@ export default class Widget extends DOMComponent {
  * @public
  * @namespace DevExpress.ui
  */
+// eslint-disable-next-line no-var, vars-on-top, import/no-mutable-exports
 export var dxItem: any;
 
 /**
  * @docid
  * @type Enums.Format|string|function|Object
- * @type_function_param1 value:number|date
- * @type_function_return string
  * @default undefined
  * @section Common
  * @namespace DevExpress.ui
@@ -126,26 +121,22 @@ export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
   /**
    * @docid
    */
-  currency?: string,
-  /**
-   * @docid
-   * @type_function_param1 value:number|date
-   * @type_function_return string
-   */
-  formatter?: ((value: number | Date) => string),
-  /**
-   * @docid
-   * @type_function_param1 value:string
-   * @type_function_return number|date
-   */
-  parser?: ((value: string) => number | Date),
+  currency?: string;
   /**
    * @docid
    */
-  precision?: number,
+  formatter?: ((value: number | Date) => string);
+  /**
+   * @docid
+   */
+  parser?: ((value: string) => number | Date);
+  /**
+   * @docid
+   */
+  precision?: number;
   /**
    * @docid
    * @type Enums.Format|string
    */
-  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string
+  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string;
 };

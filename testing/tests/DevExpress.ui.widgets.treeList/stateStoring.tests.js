@@ -19,7 +19,7 @@ QUnit.module('State Storing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options) {
-            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection'], {
+            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection', 'filterSync'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: $.extend({
@@ -154,7 +154,8 @@ QUnit.module('State Storing', {
             expandedRowKeys: [1],
             pageIndex: 0,
             pageSize: 20,
-            searchText: ''
+            searchText: '',
+            selectedRowKeys: [],
         };
         let customSaveCallCount = 0;
 
@@ -225,6 +226,22 @@ QUnit.module('State Storing', {
         assert.deepEqual(expandedRowKeys, [], 'expandedRowKeys');
         assert.deepEqual(state.expandedRowKeys, [], 'expandedRowKeys has been updated in the state storage');
         assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
+    });
+
+    [null, {}].forEach(emptyState => {
+        QUnit.test(`expandedRowKeys should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                expandedRowKeys: [1]
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.deepEqual(this.option('expandedRowKeys'), []);
+        });
     });
 });
 

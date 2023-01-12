@@ -17,7 +17,6 @@ const through2 = require('through2');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
-const globTs = require('./ts').GLOB_TS;
 const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
 const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
@@ -27,7 +26,7 @@ require('./generator/gulpfile');
 
 const src = [
     'js/**/*.*',
-    `!${globTs}`,
+    '!js/**/*.d.ts',
     '!js/**/*.{tsx,ts}',
     '!js/renovation/code_coverage/**/*.*'
 ];

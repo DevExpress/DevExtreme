@@ -1,5 +1,5 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 /**
@@ -11,8 +11,6 @@ export interface Query {
      * @docid
      * @publicName aggregate(seed, step, finalize)
      * @param1 seed:object
-     * @param2 step:function
-     * @param3 finalize:function
      * @return Promise<any>
      * @public
      */
@@ -20,7 +18,6 @@ export interface Query {
     /**
      * @docid
      * @publicName aggregate(step)
-     * @param1 step:function
      * @return Promise<any>
      * @public
      */
@@ -57,16 +54,12 @@ export interface Query {
     /**
      * @docid
      * @publicName filter(criteria)
-     * @param1 criteria:Array<any>
-     * @return Query
      * @public
      */
     filter(criteria: Array<any>): Query;
     /**
      * @docid
      * @publicName filter(predicate)
-     * @param1 predicate:function
-     * @return Query
      * @public
      */
     filter(predicate: Function): Query;
@@ -74,7 +67,6 @@ export interface Query {
      * @docid
      * @publicName groupBy(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     groupBy(getter: any): Query;
@@ -112,16 +104,13 @@ export interface Query {
      * @docid
      * @publicName select(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     select(getter: any): Query;
     /**
      * @docid
      * @publicName slice(skip, take)
-     * @param1 skip:number
      * @param2 take:number|undefined
-     * @return Query
      * @public
      */
     slice(skip: number, take?: number): Query;
@@ -129,7 +118,6 @@ export interface Query {
      * @docid
      * @publicName sortBy(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     sortBy(getter: any): Query;
@@ -137,8 +125,6 @@ export interface Query {
      * @docid
      * @publicName sortBy(getter, desc)
      * @param1 getter:object
-     * @param2 desc:boolean
-     * @return Query
      * @public
      */
     sortBy(getter: any, desc: boolean): Query;
@@ -161,7 +147,6 @@ export interface Query {
      * @docid
      * @publicName thenBy(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     thenBy(getter: any): Query;
@@ -169,15 +154,12 @@ export interface Query {
      * @docid
      * @publicName thenBy(getter, desc)
      * @param1 getter:object
-     * @param2 desc:boolean
-     * @return Query
      * @public
      */
     thenBy(getter: any, desc: boolean): Query;
     /**
      * @docid
      * @publicName toArray()
-     * @return Array<any>
      * @public
      */
     toArray(): Array<any>;
@@ -186,11 +168,7 @@ export interface Query {
 /**
  * @docid Utils.query
  * @publicName query(array)
- * @param1 array:Array<any>
- * @return Query
  * @namespace DevExpress.data
- * @module data/query
- * @export default
  * @public
  */
 declare function query(array: Array<any>): Query;
@@ -198,12 +176,8 @@ declare function query(array: Array<any>): Query;
 /**
  * @docid Utils.query
  * @publicName query(url, queryOptions)
- * @param1 url:string
  * @param2 queryOptions:object
- * @return Query
  * @namespace DevExpress.data
- * @module data/query
- * @export default
  * @public
  */
 declare function query(url: string, queryOptions: any): Query;

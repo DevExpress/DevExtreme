@@ -563,10 +563,11 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 $tables.each((index, element) => {
                     const isFixed = index > 0;
+                    const prevFixed = this._isFixedTableRendering;
                     this._isFixedTableRendering = isFixed;
                     this._addVirtualRow($(element), isFixed, 'top', top);
                     this._addVirtualRow($(element), isFixed, 'bottom', bottom);
-                    this._isFixedTableRendering = false;
+                    this._isFixedTableRendering = prevFixed;
                 });
             }
         },
@@ -680,7 +681,12 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 const viewportHeight = this._hasHeight ? this.element().outerHeight() : $(getWindow()).outerHeight();
                 const dataController = this._dataController;
-                dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
+                const itemsCount = dataController.items().length;
+                const $tableElement = this.getTableElement();
+                const rowsHeight = this._getRowsHeight($tableElement);
+                const rowHeight = itemsCount ? (rowsHeight / itemsCount) : this._rowHeight;
+
+                dataController.viewportSize(Math.ceil(viewportHeight / rowHeight));
 
                 if(this.option(NEW_SCROLLING_MODE) && !isDefined(dataController._loadViewportParams)) {
                     const viewportSize = dataController.viewportSize();
@@ -808,7 +814,7 @@ export const virtualScrollingModule = {
                                 const scrollable = component.getScrollable && component.getScrollable();
                                 const isSortingOperation = this.dataSource().operationTypes().sorting;
 
-                                if(scrollable && !isSortingOperation) {
+                                if(scrollable && !isSortingOperation && rowIndex >= 0) {
                                     const rowElement = component.getRowElement(rowIndex);
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;

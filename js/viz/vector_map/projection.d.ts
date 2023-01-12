@@ -12,15 +12,11 @@ export interface VectorMapProjectionConfig {
     aspectRatio?: number;
     /**
      * @docid
-     * @type_function_param1 coordinates:Array<number>
-     * @type_function_return Array<number>
      * @public
      */
     from?: ((coordinates: Array<number>) => Array<number>);
     /**
      * @docid
-     * @type_function_param1 coordinates:Array<number>
-     * @type_function_return Array<number>
      * @public
      */
     to?: ((coordinates: Array<number>) => Array<number>);
@@ -33,14 +29,11 @@ export interface VectorMapProjectionConfig {
  * @return object
  * @static
  * @namespace DevExpress.viz.map
- * @module viz/vector_map/projection
- * @export projection
  */
 export const projection: {
     /**
      * @docid viz.map.projection.add
      * @publicName add(name, projection)
-     * @param1 name:string
      * @param2 projection:VectorMapProjectionConfig|object
      * @namespace DevExpress.viz.map.projection
      * @static
@@ -60,4 +53,4 @@ export const projection: {
     get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
 
     (data: VectorMapProjectionConfig): any;
-}
+};

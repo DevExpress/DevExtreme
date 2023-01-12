@@ -154,14 +154,14 @@ class FileManagerFilesTreeView extends Widget {
         if(!hasWindow()) {
             return;
         }
-        this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
+        this._scrollTopPosition = this._filesTreeView.getScrollable().scrollTop();
     }
 
     _restoreScrollTopPosition() {
         if(!hasWindow() || !isNumeric(this._scrollTopPosition)) {
             return;
         }
-        setTimeout(() => this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition));
+        setTimeout(() => this._filesTreeView.getScrollable().scrollTo(this._scrollTopPosition));
     }
 
     _updateFocusedElement() {

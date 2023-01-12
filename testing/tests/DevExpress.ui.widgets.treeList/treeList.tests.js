@@ -674,11 +674,11 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
         const $dataRows = $dataTable.find('.dx-data-row');
         assert.equal($dataRows.eq(0).attr('aria-expanded'), 'true', 'first data row - value of \'aria-expanded\' attribute');
-        assert.equal($dataRows.eq(0).attr('aria-level'), '0', 'first data row - value of \'aria-level\' attribute');
+        assert.equal($dataRows.eq(0).attr('aria-level'), '1', 'first data row - value of \'aria-level\' attribute');
         assert.equal($dataRows.eq(1).attr('aria-expanded'), 'false', 'second data row - value of \'aria-expanded\' attribute');
-        assert.equal($dataRows.eq(1).attr('aria-level'), '1', 'second data row - value of \'aria-level\' attribute');
+        assert.equal($dataRows.eq(1).attr('aria-level'), '2', 'second data row - value of \'aria-level\' attribute');
         assert.equal($dataRows.eq(2).attr('aria-expanded'), undefined, 'third data row hasn\'t the \'aria-expanded\' attribute');
-        assert.equal($dataRows.eq(2).attr('aria-level'), '0', 'third data row - value of \'aria-level\' attribute');
+        assert.equal($dataRows.eq(2).attr('aria-level'), '1', 'third data row - value of \'aria-level\' attribute');
     });
 
     QUnit.test('Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)', function(assert) {
@@ -1224,7 +1224,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
         try {
             scrollable.scrollTo({ y: 300 }); // scroll to the last page
-            isNativeScrolling && $(scrollable._container()).trigger('scroll');
+            isNativeScrolling && $(scrollable.container()).trigger('scroll');
             clock.tick();
 
             const topVisibleRowData = treeList.getTopVisibleRowData();
@@ -1778,6 +1778,118 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(2))).hasClass('dx-row-focused'), 'focused row is visible');
         });
     });
+
+    QUnit.test('Editor should be focused after adding row if some cell was focused (T1023022)', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            height: 100,
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            dataSource: [{ id: 1, parentId: 0 }],
+            loadingTimeout: null,
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+            },
+            columns: ['id'],
+        });
+
+        // act
+        treeList.focus(treeList.getCellElement(0, 0));
+        treeList.addRow(1);
+        this.clock.tick();
+
+        // assert
+        const $firstCellInAddedRow = $(treeList.getCellElement(1, 0));
+        assert.ok($firstCellInAddedRow.hasClass('dx-editor-cell'), 'editor is rendered');
+        assert.ok($firstCellInAddedRow.hasClass('dx-focused'), 'editor is focused');
+    });
+
+    [true, false].forEach(withColumns => {
+        QUnit.testInActiveWindow(`Row should be focused correctly when dataSource and focusedRowKey are changed simultaneously ${withColumns ? 'with columns' : 'without columns'} (T1062545)`, function(assert) {
+            // arrange
+            const focusedRowIndices = [];
+            const config = {
+                dataSource: [
+                    {
+                        id: 1,
+                        name: 'name 1',
+                        hasChildren: true,
+                        children: []
+                    },
+                    {
+                        id: 3,
+                        name: 'name 3',
+                        hasChildren: false,
+                        children: []
+                    }
+                ],
+                keyExpr: 'id',
+                dataStructure: 'tree',
+                rootValue: null,
+                itemsExpr: 'children',
+                focusedRowEnabled: true,
+                repaintChangesOnly: true,
+                hasItemsExpr: 'hasChildren',
+                focusedRowKey: 1,
+                onFocusedRowChanged: function(e) {
+                    focusedRowIndices.push(e.rowIndex);
+                }
+            };
+            if(withColumns) {
+                config.columns = [
+                    {
+                        dataField: 'name'
+                    }
+                ];
+            }
+            const treeList = createTreeList(config);
+            this.clock.tick(300);
+
+            // assert
+            assert.deepEqual(focusedRowIndices, [0], 'initial focused row indices');
+
+            // act
+            treeList.expandRow(1);
+            this.clock.tick(300);
+
+            // assert
+            assert.equal($(treeList.element()).find('.dx-treelist-expanded').length, 1, 'one expanded row');
+
+            // act
+            treeList.option('dataSource', [
+                {
+                    id: 1,
+                    name: 'name 1',
+                    hasChildren: true,
+                    children: [
+                        {
+
+                            id: 2,
+                            name: 'name 2',
+                            hasChildren: false,
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: 'name 3',
+                    hasChildren: false,
+                    children: []
+                }
+
+            ]);
+            treeList.option('focusedRowKey', 2);
+            this.clock.tick(300);
+            const $focusedRowElement = $(treeList.element()).find('.dx-row-focused');
+
+            // assert
+            assert.deepEqual(focusedRowIndices, [0, 1], 'focused row indices');
+            assert.equal($focusedRowElement.length, 1, 'one row is marked as focused');
+            assert.strictEqual($focusedRowElement.attr('aria-rowindex'), '2', 'aria-rowindex');
+        });
+    });
 });
 
 QUnit.module('Scroll', defaultModuleConfig, () => {
@@ -2198,6 +2310,109 @@ QUnit.module('Selection', defaultModuleConfig, () => {
             assert.deepEqual(treeList.getSelectedRowKeys(), [], 'selected row keys');
             assert.deepEqual(treeList.option('selectedRowKeys'), [], 'selected row keys');
         });
+    });
+
+    QUnit.test('Rows should be selected correctly with Shift when recursive selection is enabled (T1072845)', function(assert) {
+        // arrange
+        const items = [{
+            ID: 1,
+            Parent_ID: 0,
+            Name: 'Test1'
+        }, {
+            ID: 2,
+            Parent_ID: 1,
+            Name: 'Test2'
+        }, {
+            ID: 3,
+            Parent_ID: 2,
+            Name: 'Test3'
+        }, {
+            ID: 4,
+            Parent_ID: 3,
+            Name: 'Test4'
+        }, {
+            ID: 5,
+            Parent_ID: 3,
+            Name: 'Test5'
+        }, {
+            ID: 6,
+            Parent_ID: 3,
+            Name: 'Test6'
+        }, {
+            ID: 7,
+            Parent_ID: 3,
+            Name: 'Test7'
+        }, {
+            ID: 8,
+            Parent_ID: 1,
+            Name: 'Test8'
+        }, {
+            ID: 9,
+            Parent_ID: 1,
+            Name: 'Test9'
+        }];
+
+        const treeList = createTreeList({
+            dataSource: items,
+            keyExpr: 'ID',
+            parentIdExpr: 'Parent_ID',
+            showRowLines: true,
+            showBorders: true,
+            columnAutoWidth: true,
+            selection: {
+                mode: 'multiple',
+                recursive: true,
+            },
+            columns: ['Name'],
+            height: 400,
+            expandedRowKeys: [1, 2, 3]
+        });
+
+        const getSelectedRowIndices = () => {
+            const selectedIndices = [];
+            $(treeList.element()).find('.dx-data-row.dx-selection').each((_, element) => selectedIndices.push($(element).index()));
+            return selectedIndices;
+        };
+
+        this.clock.tick(300);
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(3)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [4], 'selected key');
+        assert.deepEqual(getSelectedRowIndices(), [3], 'selected index');
+
+        // act
+        let pointer = pointerMock($(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(6)'));
+        pointer.start({ shiftKey: true }).down().up();
+        this.clock.tick(300);
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [4, 7, 6, 5], 'selected keys with Shift');
+        assert.deepEqual(getSelectedRowIndices(), [1, 2, 3, 4, 5, 6], 'selected indices with Shift');
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(2)').trigger('dxclick');
+
+        // assert
+        assert.equal(treeList.getSelectedRowKeys().length, 0, 'no selected keys');
+        assert.equal(getSelectedRowIndices().length, 0, 'no selected indices');
+
+        // act
+        $(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(1)').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2], 'selected key after the second row click');
+        assert.deepEqual(getSelectedRowIndices(), [1, 2, 3, 4, 5, 6], 'selected indices after the second row click');
+
+        // act
+        pointer = pointerMock($(treeList.element()).find('.dx-treelist-rowsview .dx-checkbox:eq(8)'));
+        pointer.start({ shiftKey: true }).down().up();
+        this.clock.tick(300);
+
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2, 9, 8, 7, 6, 5, 4, 3], 'selected keys after the last row click with Shift');
+        assert.deepEqual(getSelectedRowIndices(), [0, 1, 2, 3, 4, 5, 6, 7, 8], 'selected indices after the last row click with Shift');
     });
 });
 

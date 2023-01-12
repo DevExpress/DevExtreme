@@ -1,19 +1,19 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from '../abstract_store';
 
 import {
-    LoadOptions
-} from '../load_options';
+    LoadOptions,
+} from '../index';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
-        onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
 
@@ -21,17 +21,12 @@ interface PromiseExtension<T> {
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 url:string
-     * @type_function_param1_field2 async:boolean
-     * @type_function_param1_field3 method:string
-     * @type_function_param1_field4 timeout:number
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url?: string; async?: boolean; method?: string; timeout?: number; params?: any; payload?: any; headers?: any }) => void);
     /**
      * @docid
      * @public
@@ -40,12 +35,11 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus?: number; errorDetails?: any; requestOptions?: any }) => void);
     /**
      * @docid
      * @default {}
@@ -72,7 +66,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid
-     * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
@@ -99,8 +92,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
 /**
  * @docid
  * @inherits Store
- * @module data/odata/store
- * @export default
  * @public
  */
 export default class ODataStore extends Store {
@@ -110,13 +101,10 @@ export default class ODataStore extends Store {
      * @docid
      * @publicName byKey(key, extraOptions)
      * @param1 key:object|string|number
-     * @param2 extraOptions:object
-     * @param2_field1 expand:string|Array<string>
-     * @param2_field2 select:string|Array<string>
      * @return Promise<any>
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<any>;
+    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<any>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)

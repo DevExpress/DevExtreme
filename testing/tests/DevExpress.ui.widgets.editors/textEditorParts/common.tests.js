@@ -343,6 +343,25 @@ QUnit.module('general', {}, () => {
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
 
+    QUnit.testInActiveWindow('text editor should be focused out after focus is moved from custom button outside of editor (T1066348)', function(assert) {
+        const focusOutStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onFocusOut: focusOutStub,
+            buttons: [{ name: 'test' }]
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const actionButton = textEditor.getButton('test');
+
+        textEditor.focus();
+        actionButton.focus();
+
+        $(actionButton.$element()).trigger('focusout');
+
+        assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
+        assert.strictEqual(focusOutStub.callCount, 1, 'focusout was triggered');
+    });
+
     QUnit.testInActiveWindow('input should be focused even after focus from inner button move (T963822)', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             buttons: [{
@@ -640,6 +659,13 @@ QUnit.module('options changing', moduleConfig, () => {
 
             input.trigger(prepareEvent(eventName));
         });
+    });
+
+    QUnit.test('editor should not change value if it is readOnly (T1022447)', function(assert) {
+        this.instance.option({ value: null, readOnly: true });
+        this.keyboard.type('f').change();
+
+        assert.strictEqual(this.instance.option('value'), null);
     });
 
     QUnit.test('Click on \'clear\' button', function(assert) {

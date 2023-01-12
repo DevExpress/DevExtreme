@@ -282,6 +282,41 @@ QUnit.module('Context menu with rowsView', {
         assert.strictEqual(contextMenuOptions.column.dataField, 'Column2', 'dataField');
     });
 
+    // T1084959
+    QUnit.test('Context menu should work if `cells` is empty array', function(assert) {
+        // arrange
+        const $testElement = $('#secondContainer');
+
+        this.options = {
+            dataRowTemplate: function(container, options) {
+                const data = options.data;
+                $(container).append('<tr class=\'main-row\'>' +
+                            '<td class=\'click-me\'>CLICK ME</td>' +
+                        '</tr>' +
+                        '<tr class=\'notes-row\'>' +
+                            '<td><div>' + data.id + '</div></td>' +
+                        '</tr>');
+            }
+        };
+
+        this.items = [
+            { data: { id: 1 }, values: [1], rowType: 'data', dataIndex: 0, cells: [] },
+            { data: { id: 2 }, values: [2], rowType: 'data', dataIndex: 1, cells: [] },
+        ];
+
+        this.columns = [{ dataField: 'Column1' }];
+
+        this.setupDataGrid();
+        this.rowsView.render($testElement);
+        this.contextMenuView.render($testElement);
+
+        // act
+        $('.click-me').eq(1).trigger('contextmenu');
+
+        // assert
+        assert.ok(true, 'no error thrown');
+    });
+
     // T403458
     QUnit.test('Context menu with option onContextMenuPreparing when no data and scrollbar', function(assert) {
     // arrange

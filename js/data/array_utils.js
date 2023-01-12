@@ -80,19 +80,32 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function cloneInstance(instance) {
+function cloneInstance(instance, clonedInstances) {
+    clonedInstances = clonedInstances || new WeakMap();
+
     const result = instance ? Object.create(Object.getPrototypeOf(instance)) : {};
+    if(instance) {
+        clonedInstances.set(instance, result);
+    }
     const instanceWithoutPrototype = extendFromObject({}, instance);
 
     for(const name in instanceWithoutPrototype) {
         const prop = instanceWithoutPrototype[name];
 
-        if(isObject(prop) && !isPlainObject(prop)) {
-            instanceWithoutPrototype[name] = cloneInstance(prop);
+        if(isObject(prop) && !isPlainObject(prop) && !clonedInstances.has(prop)) {
+            instanceWithoutPrototype[name] = cloneInstance(prop, clonedInstances);
         }
     }
 
     deepExtendArraySafe(result, instanceWithoutPrototype, true, true);
+
+    for(const name in result) {
+        const prop = result[name];
+
+        if(isObject(prop) && clonedInstances.has(prop)) {
+            result[name] = clonedInstances.get(prop);
+        }
+    }
 
     return result;
 }

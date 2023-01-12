@@ -9,6 +9,7 @@ import Button from '../button';
 import devices from '../../core/devices';
 import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
+import { equalByValue } from '../../core/utils/common';
 import Scrollable from '../scroll_view/ui.scrollable';
 import Popup from '../popup';
 import {
@@ -17,12 +18,14 @@ import {
     FOCUSABLE_ELEMENT_SELECTOR,
     EDITING_EDITROWKEY_OPTION_NAME,
     EDITING_POPUP_OPTION_NAME,
-    DATA_EDIT_DATA_INSERT_TYPE
+    DATA_EDIT_DATA_INSERT_TYPE,
+    EDITING_FORM_OPTION_NAME
 } from './ui.grid_core.editing_constants';
 
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 const EDIT_POPUP_CLASS = 'edit-popup';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
 const BUTTON_CLASS = 'dx-button';
 
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
@@ -93,10 +96,13 @@ export const editingFormBasedModule = {
                 },
 
                 _handleDataChanged: function(args) {
-                    const editForm = this._editForm;
+                    if(this.isPopupEditMode()) {
+                        const editRowKey = this.option('editing.editRowKey');
+                        const hasEditRow = args?.items?.some((item) => equalByValue(item.key, editRowKey));
 
-                    if(args.changeType === 'refresh' && this.isPopupEditMode() && editForm?.option('visible')) {
-                        this._repaintEditPopup();
+                        if(args.changeType === 'refresh' || hasEditRow) {
+                            this._repaintEditPopup();
+                        }
                     }
 
                     this.callBase.apply(this, arguments);
@@ -184,9 +190,13 @@ export const editingFormBasedModule = {
                     const row = this.component.getVisibleRows()[rowIndex];
                     const templateOptions = {
                         row: row,
+                        values: row.values,
                         rowType: row.rowType,
-                        key: row.key
+                        key: row.key,
+                        rowIndex
                     };
+
+                    this._rowsView._addWatchMethod(templateOptions, row);
 
                     return (container) => {
                         const formTemplate = this.getEditFormTemplate();
@@ -195,6 +205,7 @@ export const editingFormBasedModule = {
                         this._$popupContent = scrollable.$content();
 
                         formTemplate(this._$popupContent, templateOptions, true);
+                        this._rowsView.renderDelayedTemplates();
                     };
                 },
 
@@ -217,20 +228,12 @@ export const editingFormBasedModule = {
                 optionChanged: function(args) {
                     if(args.name === 'editing' && this.isFormOrPopupEditMode()) {
                         const fullName = args.fullName;
-                        const editPopup = this._editPopup;
 
-                        if(fullName?.indexOf(EDITING_POPUP_OPTION_NAME) === 0) {
-                            if(editPopup) {
-                                const popupOptionName = fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
-                                if(popupOptionName) {
-                                    editPopup.option(popupOptionName, args.value);
-                                } else {
-                                    editPopup.option(args.value);
-                                }
-                            }
+                        if(fullName.indexOf(EDITING_FORM_OPTION_NAME) === 0) {
+                            this._handleFormOptionChange(args);
                             args.handled = true;
-                        } else if(editPopup?.option('visible') && fullName.indexOf('editing.form') === 0) {
-                            this._repaintEditPopup();
+                        } else if(fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0) {
+                            this._handlePopupOptionChange(args);
                             args.handled = true;
                         }
                     }
@@ -238,6 +241,31 @@ export const editingFormBasedModule = {
                     this.callBase.apply(this, arguments);
                 },
 
+                _handleFormOptionChange: function(args) {
+                    if(this.isFormEditMode()) {
+                        const editRowIndex = this._getVisibleEditRowIndex();
+                        if(editRowIndex >= 0) {
+                            this._dataController.updateItems({
+                                changeType: 'update',
+                                rowIndices: [editRowIndex]
+                            });
+                        }
+                    } else if(this._editPopup?.option('visible') && args.fullName.indexOf(EDITING_FORM_OPTION_NAME) === 0) {
+                        this._repaintEditPopup();
+                    }
+                },
+
+                _handlePopupOptionChange: function(args) {
+                    const editPopup = this._editPopup;
+                    if(editPopup) {
+                        const popupOptionName = args.fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
+                        if(popupOptionName) {
+                            editPopup.option(popupOptionName, args.value);
+                        } else {
+                            editPopup.option(args.value);
+                        }
+                    }
+                },
                 renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
                     const that = this;
                     const $container = $(container);
@@ -362,15 +390,19 @@ export const editingFormBasedModule = {
                 },
 
                 getEditFormTemplate: function() {
-                    return ($container, detailOptions, renderFormOnly) => {
-                        const editFormOptions = this.option('editing.form');
+                    return ($container, detailOptions, isPopupForm) => {
+                        const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
                         const baseEditFormOptions = this.getEditFormOptions(detailOptions);
+                        const $formContainer = $('<div>').appendTo($container);
 
                         this._firstFormItem = undefined;
 
-                        this._editForm = this._createComponent($('<div>').appendTo($container), Form, extend({}, editFormOptions, baseEditFormOptions));
+                        if(isPopupForm) {
+                            $formContainer.addClass(this.addWidgetPrefix(EDIT_POPUP_FORM_CLASS));
+                        }
+                        this._editForm = this._createComponent($formContainer, Form, extend({}, editFormOptions, baseEditFormOptions));
 
-                        if(!renderFormOnly) {
+                        if(!isPopupForm) {
                             const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());
@@ -406,11 +438,13 @@ export const editingFormBasedModule = {
                     this.callBase.apply(this, arguments);
                 },
 
-                _editRowFromOptionChangedCore: function(rowIndices, rowIndex, oldRowIndex) {
-                    if(this.isPopupEditMode()) {
+                _editRowFromOptionChangedCore: function(rowIndices, rowIndex) {
+                    const isPopupEditMode = this.isPopupEditMode();
+
+                    this.callBase(rowIndices, rowIndex, isPopupEditMode);
+
+                    if(isPopupEditMode) {
                         this._showEditPopup(rowIndex);
-                    } else {
-                        this.callBase.apply(this, arguments);
                     }
                 }
             },
@@ -419,6 +453,14 @@ export const editingFormBasedModule = {
                     if(this._editingController.isFormEditMode()) {
                         item.rowType = 'detail';
                     }
+                },
+
+                _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
+                    if(isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 }
             }
         },

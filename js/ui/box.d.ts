@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,12 +13,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -31,16 +31,16 @@ export type DisposingEvent = EventInfo<dxBox>;
 export type InitializedEvent = InitializedEventInfo<dxBox>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxBox, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxBox, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxBox, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxBox> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
@@ -89,8 +89,6 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

@@ -535,6 +535,13 @@ QUnit.test('isShared', function(assert) {
     this.testCase(5, true);
 });
 
+QUnit.test('getOptions', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: {} });
+    tooltip.setOptions(this.options);
+
+    assert.strictEqual(tooltip.getOptions(), this.options);
+});
+
 QUnit.module('Manipulation', {
     beforeEach: function() {
         let tooltip;
@@ -1210,19 +1217,10 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
-    assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
-    assert.deepEqual(this.tooltip._textHtml.html(), 'custom html', 'textHtml html');
-
-    assert.ok(this.tooltip._textHtml.empty.calledOnce, 'textHtml empty');
+    assert.deepEqual(this.tooltip._textGroupHtml[0].children[0].innerHTML, 'custom html', 'textHtml html');
 
     assert.equal(this.tooltip._text.css.callCount, 0, 'text styles');
     assert.equal(this.tooltip._text.stub('attr').callCount, 0, 'text attrs');
-
-    if(this.getComputedStyle) {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
-    } else {
-        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
-    }
 
     assert.equal(this.options.contentTemplate.callCount, 1);
     assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
@@ -1265,6 +1263,37 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
 
     assert.equal(callback.callCount, 1);
     assert.equal(callback.getCall(0).args[0], false);
+});
+
+// T1015148
+QUnit.test('Tooltip shown twice with template. Async template emulation', function(assert) {
+    const eventData = { tag: 'event-data' };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    const renderTemplate = (container, onRendered, content) => {
+        assert.ok(container[0].parentNode, 'container should be appended to the group');
+        $(container).append($(`<span>${content}</span>`));
+        onRendered();
+    };
+
+    this.options.contentTemplate = sinon.spy();
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    const formatObject = { valueText: 'some text' };
+    const callback = sinon.stub();
+    // act
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
+
+    this.options.contentTemplate.getCalls().forEach((c, index) => {
+        renderTemplate(c.args[1], c.args[2], index);
+    });
+
+    assert.equal(this.options.contentTemplate.callCount, 2);
+    assert.strictEqual(this.tooltip._textGroupHtml[0].children[0].innerHTML, '<span>1</span>');
 });
 
 QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div', function(assert) {

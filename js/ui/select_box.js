@@ -451,7 +451,8 @@ const SelectBox = DropDownList.inherit({
 
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
-            const showDataImmediately = this.option('showDataBeforeSearch') || this.option('minSearchLength') === 0;
+            const showDataImmediately = this.option('showDataBeforeSearch')
+                || this._isMinSearchLengthExceeded();
 
             if(showDataImmediately && this._dataSource) {
                 if(this._searchTimer) return;
@@ -519,11 +520,11 @@ const SelectBox = DropDownList.inherit({
         }
 
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
-            const initialSelectedItem = this.option('selectedItem');
+            const { selectedItem: initialSelectedItem, text } = this.option();
 
             if(this.option('acceptCustomValue')) {
                 if(!saveEditingValue) {
-                    this._updateField(initialSelectedItem);
+                    this._updateField(initialSelectedItem ?? this._createCustomItem(text));
                     this._clearFilter();
                 }
                 return;
@@ -574,6 +575,7 @@ const SelectBox = DropDownList.inherit({
 
         if(shouldCancelSearch) {
             const isPopupVisible = this._popup?._hideAnimationProcessing;
+            this._clearSearchTimer();
             if(isPopupVisible) {
                 this._shouldCancelSearch(true);
             } else {
@@ -764,14 +766,16 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearValueHandler: function(e) {
+        this._preventFiltering = true;
         this.callBase(e);
+        this._searchCanceled();
 
         return false;
     },
 
     _wasSearch: function(value) {
         if(!arguments.length) {
-            return this._wasSearchValue;
+            return !!this._wasSearchValue;
         }
         this._wasSearchValue = value;
     },
@@ -800,10 +804,12 @@ const SelectBox = DropDownList.inherit({
 
     _valueSubstituted: function() {
         const input = this._input().get(0);
-        const isAllSelected = input.selectionStart === 0 && input.selectionEnd === this._searchValue().length;
+        const currentSearchLength = this._searchValue().length;
+        const isAllSelected = input.selectionStart === 0 && input.selectionEnd === currentSearchLength;
         const inputHasSelection = input.selectionStart !== input.selectionEnd;
+        const isLastSymbolSelected = currentSearchLength === input.selectionEnd;
 
-        return this._wasSearch() && inputHasSelection && !isAllSelected;
+        return this._wasSearch() && inputHasSelection && !isAllSelected && isLastSymbolSelected && this._shouldSubstitutionBeRendered();
     },
 
     _shouldSubstitutionBeRendered: function() {

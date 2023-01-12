@@ -15,15 +15,20 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position) {
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const allDay = this.instance.fire('getField', 'allDay', appointment);
-        const startDate = position.info.appointment.startDate;
-        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
+        const {
+            startDate,
+            endDate
+        } = position.info.appointment;
+        const normalizedEndDate = this.normalizeEndDateByViewEnd(appointment, endDate);
 
-        let appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
+        let appointmentDuration = this._getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
 
-        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
+        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, normalizedEndDate);
 
         const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute');
-        const durationInCells = appointmentDuration / cellDuration;
+
+        const skippedHours = this.getSkippedHoursInRange(startDate, endDate);
+        const durationInCells = (appointmentDuration - skippedHours * toMs('hour')) / cellDuration;
         const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;
@@ -107,6 +112,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
     needSeparateAppointment() {
         return this.instance.fire('isGroupedByDate');
+    }
+
+    _isItemsCross(firstItem, secondItem) {
+        const orientation = this._getOrientation();
+
+        return this._checkItemsCrossing(firstItem, secondItem, orientation);
     }
 }
 

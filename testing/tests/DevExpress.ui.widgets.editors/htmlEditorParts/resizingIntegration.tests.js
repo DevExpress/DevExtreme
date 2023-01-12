@@ -10,6 +10,7 @@ import PointerMock from '../../../helpers/pointerMock.js';
 const { test, module } = QUnit;
 
 const RESIZE_FRAME_CLASS = 'dx-resize-frame';
+const RESIZABLE_CLASS = 'dx-resizable';
 const RESIZABLE_HANDLER_CLASS = 'dx-resizable-handle-corner-bottom-right';
 
 const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==';
@@ -109,7 +110,7 @@ module('Resizing integration', {
         assert.notOk($resizeFrame.is(':visible'), 'Resize frame isn\'t visible, image isn\'t resizable');
     });
 
-    test('check editor value after resizing', function(assert) {
+    test('check editor value after resizing with aspect ratio keeping', function(assert) {
         const done = assert.async();
         const hOffset = 10;
         const vOffset = 5;
@@ -118,7 +119,7 @@ module('Resizing integration', {
             const $image = $(e.value).children();
 
             assert.ok($image.is('img'), 'It\'s an image');
-            assert.strictEqual(parseInt($image.attr('height')), IMAGE_SIZE + vOffset, `Height + ${vOffset}`);
+            assert.strictEqual(parseInt($image.attr('height')), IMAGE_SIZE + hOffset, `Height + ${hOffset} because aspect ratio is kept`);
             assert.strictEqual(parseInt($image.attr('width')), IMAGE_SIZE + hOffset, `Width + ${hOffset}`);
             done();
         };
@@ -136,6 +137,20 @@ module('Resizing integration', {
             .dragStart()
             .drag(hOffset, vOffset)
             .dragEnd();
+    });
+
+
+    test('integrated resizable should have _keepAspectRatio=true (T1049676)', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+
+        this.createWidget();
+        this.$element
+            .find('img')
+            .trigger(clickEvent);
+
+        const resizable = $(`.${RESIZABLE_CLASS}`).dxResizable('instance');
+
+        assert.strictEqual(resizable.option('_keepAspectRatio'), true, 'aspect ratio keeping is enabled');
     });
 
     test('check frame position for list item with nested image', function(assert) {

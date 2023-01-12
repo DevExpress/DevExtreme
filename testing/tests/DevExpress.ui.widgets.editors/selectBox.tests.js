@@ -93,7 +93,7 @@ QUnit.module('hidden input', moduleSetup, () => {
             value: 2
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find('input[type=\'hidden\']');
+        const $input = $element.find('input[type="hidden"]');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');
@@ -130,17 +130,17 @@ QUnit.module('hidden input', moduleSetup, () => {
 
         this.clock.tick(timeout);
 
-        assert.equal($element.find('input[type=\'hidden\']').val(), initialValue, 'first rendered option value is correct');
+        assert.equal($element.find('input[type="hidden"]').val(), initialValue, 'first rendered option value is correct');
 
         instance.option('value', newValue);
         this.clock.tick(timeout);
-        assert.equal($element.find('input[type=\'hidden\']').val(), newValue, 'first rendered option value is correct');
+        assert.equal($element.find('input[type="hidden"]').val(), newValue, 'first rendered option value is correct');
     });
 });
 
 QUnit.module('functionality', moduleSetup, () => {
 
-    QUnit.test('value can be set to \'null\'', function(assert) {
+    QUnit.test('value can be set to "null"', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: ['first', 'second', 'third'],
             value: 'first',
@@ -153,7 +153,7 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.strictEqual($input.val(), 'first', 'value displayed correct');
 
         instance.option('value', null);
-        assert.strictEqual(instance.option('value'), null, 'value set to \'null\'');
+        assert.strictEqual(instance.option('value'), null, 'value set to "null"');
 
         instance.option('value', 'second');
         assert.strictEqual(instance.option('value'), 'second', 'new value set correct');
@@ -198,7 +198,7 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.ok($list.is(':hidden'), 'when click on lists item, list is hidden');
     });
 
-    QUnit.test('click on list item set \'selected\' class', function(assert) {
+    QUnit.test('click on list item set "selected" class', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: ['first', 'second', 'third']
         });
@@ -215,7 +215,7 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(2).hasClass(LIST_ITEM_SELECTED_CLASS), 'selected item has selected class, after click on it');
     });
 
-    QUnit.test('changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
+    QUnit.test('changing the "value" option must invoke the "onValueChanged" action', function(assert) {
         const selectBox = $('#selectBox').dxSelectBox({
             items: ['first', 'second', 'third'],
             onValueChanged: () => {
@@ -225,7 +225,7 @@ QUnit.module('functionality', moduleSetup, () => {
         selectBox.option('value', 'first');
     });
 
-    QUnit.test('changing the \'value\' option must set \'selected\' class on correct item', function(assert) {
+    QUnit.test('changing the "value" option must set "selected" class on correct item', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: ['first', 'second', 'third'],
             value: 'first'
@@ -1153,7 +1153,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal($element.find(toSelector(PLACEHOLDER_CLASS)).attr('data-dx_placeholder'), 'John Jr. Doe');
     });
 
-    QUnit.test('the \'fieldTemplate\' function should be called only once on init and value change', function(assert) {
+    QUnit.test('the "fieldTemplate" function should be called only once on init and value change', function(assert) {
         let callCount = 0;
         const instance = $('#selectBoxWithItemTemplate').dxSelectBox({
             items: [1, 2],
@@ -1165,11 +1165,11 @@ QUnit.module('widget options', moduleSetup, () => {
             }
         }).dxSelectBox('instance');
 
-        assert.equal(callCount, 1, 'the \'fieldTemplate\' called only once on init');
+        assert.equal(callCount, 1, 'the "fieldTemplate" called only once on init');
 
         callCount = 0;
         instance.option('value', 2);
-        assert.equal(callCount, 1, 'the \'fieldTemplate; called only one on value change');
+        assert.equal(callCount, 1, 'the "fieldTemplate" called only one on value change');
     });
 
     QUnit.test('popup should not prevent closing when fieldTemplate is used', function(assert) {
@@ -1206,12 +1206,12 @@ QUnit.module('widget options', moduleSetup, () => {
                 { ID: 3, name: 'Third' }
             ],
             fieldTemplate: (selectedItem) => {
-                return $('<div id=\'myfield\'>').dxTextBox({
+                return $('<div id="myfield">').dxTextBox({
                     value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
                 });
             },
             itemTemplate: (itemData) => {
-                return $('<div class=\'item\'>').text(
+                return $('<div class="item">').text(
                     itemData.ID + ' - ' + itemData.name
                 );
             },
@@ -1247,7 +1247,7 @@ QUnit.module('widget options', moduleSetup, () => {
                 { name: 'Third' }
             ],
             fieldTemplate: (selectedItem) => {
-                return $('<div id=\'myfield\'>').dxTextBox({
+                return $('<div id="myfield">').dxTextBox({
                     value: selectedItem && selectedItem.name
                 });
             },
@@ -1276,7 +1276,7 @@ QUnit.module('widget options', moduleSetup, () => {
             searchValue: true,
             searchTimeout: 0,
             fieldTemplate: (value) => {
-                return $('<div id=\'myfield\'>').dxTextBox({
+                return $('<div id="myfield">').dxTextBox({
                     value: 'test'
                 });
             },
@@ -1509,7 +1509,7 @@ QUnit.module('widget options', moduleSetup, () => {
 
 QUnit.module('clearButton', moduleSetup, () => {
 
-    QUnit.test('\'clear\' button click should not open selectbox', function(assert) {
+    QUnit.test('"clear" button click should not open selectbox', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
             showClearButton: true,
@@ -1545,7 +1545,26 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
-    QUnit.test('drop down list should be still opened if click \'clear\' during the search', function(assert) {
+    QUnit.test('search should not be prevented after reset method call (T1021888)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            value: 1,
+            searchTimeout: 0
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+        const $list = $selectBox.find(`.${LIST_CLASS}`);
+
+        selectBox.reset();
+
+        keyboard.type('1');
+
+        assert.strictEqual($list.find(toSelector(LIST_ITEM_CLASS)).length, 1, 'items are filtered');
+    });
+
+    QUnit.test('drop down list should be still opened if click "clear" during the search', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
             showClearButton: true,
@@ -1565,7 +1584,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.ok(selectBox.option('opened'), 'selectbox is opened');
     });
 
-    QUnit.test('\'clear\' button should clear value when items is object and searchEnabled is true', function(assert) {
+    QUnit.test('"clear" button should clear value when items is object and searchEnabled is true', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             items: [{ key: 1, value: 'one' }],
             valueExpr: 'key',
@@ -1582,7 +1601,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '', 'text is cleared');
     });
 
-    QUnit.test('selectedItem should be reset on \'clear\' button', function(assert) {
+    QUnit.test('selectedItem should be reset on "clear" button', function(assert) {
         const $selectBox = $('#selectBox');
 
         const selectBox = $selectBox.dxSelectBox({
@@ -1605,7 +1624,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.strictEqual(selectBox.option('selectedItem'), null, 'selected item');
     });
 
-    QUnit.test('\'clear\' button should reset selectedValue if \'acceptCustomValue\' is set to true', function(assert) {
+    QUnit.test('"clear" button should reset selectedValue if "acceptCustomValue" is set to true', function(assert) {
         const data = [{ id: '1', text: 'text 1' }, { id: '2', text: 'text 2' }, { id: '3', text: 'text 3' }];
         const $selectBox = $('#selectBox');
 
@@ -1625,12 +1644,44 @@ QUnit.module('clearButton', moduleSetup, () => {
         const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
         $($clearButton).trigger('dxclick');
 
-        assert.equal(selectBox.option('value'), null, 'value is reset after click on \'clear\' button');
-        assert.equal(selectBox.option('text'), '', 'text is reset after click on \'clear\' button');
+        assert.equal(selectBox.option('value'), null, 'value is reset after click on "clear" button');
+        assert.equal(selectBox.option('text'), '', 'text is reset after click on "clear" button');
 
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         assert.equal($input.val(), '', 'input is empty');
+    });
+
+    QUnit.test('click on clear button should filter dataSource by null (T1051100)', function(assert) {
+        $('#selectBox')
+            .dxSelectBox({
+                items: [1, 11],
+                searchEnabled: true,
+                minSearchLength: 1,
+                value: 1,
+                showClearButton: true
+            });
+
+        $(toSelector(CLEAR_BUTTON_AREA)).trigger('dxclick');
+        const items = $(toSelector(LIST_ITEM_CLASS));
+
+        assert.strictEqual(items.length, 0, 'items are re-filtered, and no item is shown because of minSearchLength=1');
+    });
+
+    QUnit.test('click on clear button should correctly update dx-dropdowneditor-active class (T1073102)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 11],
+            searchEnabled: true,
+            value: 1,
+            showClearButton: true,
+            onValueChanged: ({ component }) => {
+                component.option('value', 11); // NOTE: to fill "searchValue"
+            }
+        });
+
+        $(`.${CLEAR_BUTTON_AREA}`).trigger('dxclick');
+
+        assert.strictEqual($selectBox.hasClass('dx-dropdowneditor-active'), false, 'dx-dropdowneditor-active class is not added');
     });
 });
 
@@ -1829,7 +1880,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'custom', 'initial value');
     });
 
-    QUnit.test('selectBox should restore initial value after press \'down\' and outside click', function(assert) {
+    QUnit.test('selectBox should restore initial value after press "down" and outside click', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: ['item 1', 'item 2'],
             value: 'item 1',
@@ -2213,7 +2264,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.ok(!event.isDefaultPrevented(), 'default event is not prevented');
     });
 
-    QUnit.test('The \'onCustomItemCreating\' option should throw a warning if handler returns an item', function(assert) {
+    QUnit.test('The "onCustomItemCreating" option should throw a warning if handler returns an item', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
             displayExpr: 'display',
@@ -2286,7 +2337,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.strictEqual(handlerCallCount, 1, 'onCustomItemCreating is called only once');
     });
 
-    QUnit.test('creating custom item via the \'customItem\' event parameter', function(assert) {
+    QUnit.test('creating custom item via the "customItem" event parameter', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
             displayExpr: 'display',
@@ -2310,7 +2361,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'display ' + customValue, 'displayed value is correct');
     });
 
-    QUnit.test('create custom item by subscribe on event via \'on\' method', function(assert) {
+    QUnit.test('create custom item by subscribe on event via "on" method', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
             displayExpr: 'display',
@@ -2337,7 +2388,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'display ' + customValue, 'displayed value is correct');
     });
 
-    QUnit.test('The \'onCustomItemCreating\' option with Deferred', function(assert) {
+    QUnit.test('The "onCustomItemCreating" option with Deferred', function(assert) {
         const deferred = $.Deferred();
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
@@ -2367,7 +2418,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'display ' + customValue, 'displayed value is changed');
     });
 
-    QUnit.test('The \'onCustomItemCreating\' option with Promise', function(assert) {
+    QUnit.test('The "onCustomItemCreating" option with Promise', function(assert) {
         assert.expect(4);
 
         let resolve;
@@ -2406,7 +2457,7 @@ QUnit.module('editing', moduleSetup, () => {
         return promise;
     });
 
-    QUnit.test('Value should be reset if the \'onCustomItemCreating\' deferred is rejected', function(assert) {
+    QUnit.test('Value should be reset if the "onCustomItemCreating" deferred is rejected', function(assert) {
         const deferred = $.Deferred();
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
@@ -2430,7 +2481,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), '', 'input value is reset after deferred is rejected');
     });
 
-    QUnit.test('Filter should be cleared if the \'onCustomItemCreating\' deferred is rejected', function(assert) {
+    QUnit.test('Filter should be cleared if the "onCustomItemCreating" deferred is rejected', function(assert) {
         const deferred = $.Deferred();
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
@@ -2583,7 +2634,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'Item 2', 'input text is correct');
     });
 
-    QUnit.test('The error should be thrown if the \'onCustomItemCreating\' option returns nothing', function(assert) {
+    QUnit.test('The error should be thrown if the "onCustomItemCreating" option returns nothing', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
             onCustomItemCreating: noop
@@ -2728,6 +2779,31 @@ QUnit.module('search', moduleSetup, () => {
             });
         });
 
+        QUnit.test('item selection even if new search is in progress (T1027535)', function(assert) {
+            const clock = sinon.useFakeTimers();
+            fx.off = false;
+            const searchTimeout = 500;
+
+            try {
+                this.reinit({ searchTimeout });
+
+                this.keyboard.type('1');
+                clock.tick(searchTimeout);
+
+                this.keyboard.type('2');
+                const $firstItem = this.getListItems().eq(0);
+                $firstItem.trigger('dxclick');
+                clock.tick(searchTimeout);
+
+                const $overlayContent = $(this.instance.content()).parent();
+
+                assert.ok($overlayContent.hasClass('dx-state-invisible'), 'popup is not visible');
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            } finally {
+                clock.restore();
+            }
+        });
+
         QUnit.test('item adding when acceptCustomValue is true', function(assert) {
             this.reinit({ acceptCustomValue: true });
 
@@ -2793,7 +2869,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($items.length, 0, 'items is not rendered');
     });
 
-    QUnit.test('no data to display is not displayed after change option \'showDataBeforeSearch\' with empty input', function(assert) {
+    QUnit.test('no data to display is not displayed after change option "showDataBeforeSearch" with empty input', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             showDataBeforeSearch: false,
@@ -2808,7 +2884,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok($items.length, 'items is shown');
     });
 
-    QUnit.test('data is displayed before min search length is exceeded when showData=\'true\'', function(assert) {
+    QUnit.test('data is displayed before min search length is exceeded when showData="true"', function(assert) {
         $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             showDataBeforeSearch: true,
@@ -2910,7 +2986,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($items.length, 3, 'items are not filtered');
     });
 
-    QUnit.test('data is reset to first page fully after string < \'minSearchLength\'', function(assert) {
+    QUnit.test('data is reset to first page fully after string < "minSearchLength"', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'tree'],
             showDataBeforeSearch: true,
@@ -2935,7 +3011,7 @@ QUnit.module('search', moduleSetup, () => {
 
     });
 
-    QUnit.test('data should not be filtering before than string.length < \'minSearchLength\'', function(assert) {
+    QUnit.test('data should not be filtering before than string.length < "minSearchLength"', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'tree'],
             showDataBeforeSearch: true,
@@ -3260,7 +3336,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.notOk(selectBox.option('opened'), 'popup is opened after filtering');
     });
 
-    QUnit.test('item should not be reset on the \'tab\' key press after popup is opened', function(assert) {
+    QUnit.test('item should not be reset on the "tab" key press after popup is opened', function(assert) {
         const item = 'aaa';
         const $selectBox = $('#selectBox').dxSelectBox({
             searchEnabled: true,
@@ -3283,7 +3359,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal(selectBox.option('value'), item, 'value is correct');
     });
 
-    QUnit.test('Opening selectBox after search should not load data if the \'showDataBeforeSearch\' option is false', function(assert) {
+    QUnit.test('Opening selectBox after search should not load data if the "showDataBeforeSearch" option is false', function(assert) {
         const dataSource = new DataSource({
             load: () => {
                 return ['aaa', 'aab', 'bbb'];
@@ -3304,7 +3380,7 @@ QUnit.module('search', moduleSetup, () => {
 
         keyboardMock($input)
             .focus()
-            .type('aa');
+            .type('a');
 
         instance.close();
 
@@ -3320,7 +3396,27 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($emptyMessage.length, 1, 'empty message is rendered');
     });
 
-    QUnit.test('Input value should not be changed after dropdown click when \'startswith\' search mode is enabled', function(assert) {
+    QUnit.test('selectBox opening after search should trigger search if minSearchLength is exceeded (T1027110)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['11'],
+            searchEnabled: true,
+            minSearchLength: 2,
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type('11');
+
+        $input.trigger('dxclick');
+        $input.trigger('dxclick');
+
+        const $items = $(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.length, 1, 'filtered item is shown');
+    });
+
+    QUnit.test('Input value should not be changed after dropdown click when "startswith" search mode is enabled', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'the test is not actual for non-desktop devices');
             return;
@@ -3510,7 +3606,7 @@ QUnit.module('search substitution', {
         }
     });
 
-    QUnit.test('caret should be at the end of the input if search is used with \'startswith\' mode and items are numbers', function(assert) {
+    QUnit.test('caret should be at the end of the input if search is used with "startswith" mode and items are numbers', function(assert) {
         this.reinit({
             dataSource: [1, 2, 3],
             value: null,
@@ -3538,7 +3634,7 @@ QUnit.module('search substitution', {
         }
     });
 
-    QUnit.test('search value substitution is applied on the \'right\' key press', function(assert) {
+    QUnit.test('search value substitution is applied on the "right" key press', function(assert) {
         this.keyboard
             .focus()
             .type(this.testItem[0])
@@ -3548,7 +3644,7 @@ QUnit.module('search substitution', {
         assert.notOk(this.hasSelection(), 'there is no input value selection');
     });
 
-    QUnit.test('items should not be loaded after substitution is removed on the \'backspace\' key press', function(assert) {
+    QUnit.test('items should not be loaded after substitution is removed on the "backspace" key press', function(assert) {
         const loadMock = sinon.stub().returns([this.testItem]);
 
         this.reinit({
@@ -3566,6 +3662,43 @@ QUnit.module('search substitution', {
         assert.equal(loadMock.callCount, 0, 'items are not loaded');
     });
 
+    QUnit.test('items should be loaded after the selection was changed and removed on the "backspace" key press (T1058326)', function(assert) {
+        const loadMock = sinon.stub().returns([this.testItem]);
+
+        this.reinit({
+            searchMode: 'contains',
+            dataSource: new DataSource({ load: loadMock })
+        });
+
+        this.keyboard
+            .type(this.testItem.substring(0, 2));
+        loadMock.reset();
+
+        this.$input.get(0).setSelectionRange(0, 1);
+        this.keyboard
+            .press('backspace');
+
+        assert.equal(loadMock.callCount, 1, 'items are loaded');
+    });
+
+    QUnit.test('items should be loaded if the substitution was added and after selection was changed and removed on the "backspace" key press', function(assert) {
+        const loadMock = sinon.stub().returns([this.testItem]);
+
+        this.reinit({
+            dataSource: new DataSource({ load: loadMock })
+        });
+
+        this.keyboard
+            .type(this.testItem.substring(0, 1));
+        loadMock.reset();
+
+        this.$input.get(0).setSelectionRange(0, 1);
+        this.keyboard
+            .press('backspace');
+
+        assert.equal(loadMock.callCount, 1, 'items are loaded');
+    });
+
     QUnit.test('there is no search value substitution if no items are found', function(assert) {
         const newValue = this.testItem[0] + 'd';
 
@@ -3577,7 +3710,7 @@ QUnit.module('search substitution', {
         assert.notOk(this.hasSelection(), 'there is no input value selection');
     });
 
-    QUnit.test('the value chars deleting using the \'backspace\' key do not lead to the search value substitution', function(assert) {
+    QUnit.test('the value chars deleting using the "backspace" key do not lead to the search value substitution', function(assert) {
         const itemLength = this.testItem.length;
 
         this.keyboard
@@ -3594,7 +3727,7 @@ QUnit.module('search substitution', {
         assert.notOk(this.hasSelection(), 'there is no selection');
     });
 
-    QUnit.test('the \'left\', \'right\', \'home\' and \'end\' keys press should lead to the list dataSource filtering', function(assert) {
+    QUnit.test('the "left", "right", "home" and "end" keys press should lead to the list dataSource filtering', function(assert) {
         const keys = ['left', 'right', 'home', 'end'];
         const items = ['item1', 'item2'];
 
@@ -3610,12 +3743,12 @@ QUnit.module('search substitution', {
                 .type('it')
                 .press(key);
 
-            assert.deepEqual(this.selectBox._list.option('items'), [items[0]], 'list dataSource is filtered after the \'' + key + '\' key press');
-            assert.notOk(this.hasSelection(), 'there is no selection after the \'' + key + '\' key press');
+            assert.deepEqual(this.selectBox._list.option('items'), [items[0]], 'list dataSource is filtered after the "' + key + '" key press');
+            assert.notOk(this.hasSelection(), 'there is no selection after the "' + key + '" key press');
         }
     });
 
-    QUnit.test('the \'left\', \'right\', \'home\' and \'end\' keys press should lead to the list dataSource filtering and loadCount: 0', function(assert) {
+    QUnit.test('the "left", "right", "home" and "end" keys press should lead to the list dataSource filtering and loadCount: 0', function(assert) {
         const keys = ['left', 'right', 'home', 'end'];
         const item = 'item1';
 
@@ -3642,11 +3775,11 @@ QUnit.module('search substitution', {
             this.keyboard
                 .press(key);
 
-            assert.equal(loadCount, 0, 'dataSource is not loaded after the \'' + key + '\' key press if there is no substitution');
+            assert.equal(loadCount, 0, 'dataSource is not loaded after the "' + key + '" key press if there is no substitution');
         }
     });
 
-    QUnit.test('substitution should not be rendered if the \'searchMode\' is \'contains\' only', function(assert) {
+    QUnit.test('substitution should not be rendered if the "searchMode" is "contains" only', function(assert) {
         this.reinit({
             searchMode: 'contains'
         });
@@ -3673,9 +3806,9 @@ QUnit.module('search substitution', {
         $.each(items, $.proxy((_, item) => {
             this.keyboard.press('down');
 
-            assert.equal(this.$input.val(), item, 'input value is correct for the \'' + item + '\' item');
-            assert.notOk(this.hasSelection(), 'input value has no selection for the \'' + item + '\' item');
-            assert.equal(this.selectBox.option('value'), null, 'the widget\'s value option is not changed for the \'' + item + '\' item');
+            assert.equal(this.$input.val(), item, 'input value is correct for the "' + item + '" item');
+            assert.notOk(this.hasSelection(), 'input value has no selection for the "' + item + '" item');
+            assert.equal(this.selectBox.option('value'), null, 'the widget\'s value option is not changed for the "' + item + '" item');
         }, this));
     });
 
@@ -3749,7 +3882,7 @@ QUnit.module('search substitution', {
         assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(0).hasClass(STATE_FOCUSED_CLASS), 'the focused element is correct after the first searching');
     });
 
-    QUnit.test('There is no substitution if the \'acceptCustomValue\' option is true', function(assert) {
+    QUnit.test('There is no substitution if the "acceptCustomValue" option is true', function(assert) {
         this.reinit({
             acceptCustomValue: true
         });
@@ -3761,7 +3894,7 @@ QUnit.module('search substitution', {
         assert.notOk(this.hasSelection(), 'the input value has no selection');
     });
 
-    QUnit.test('No items should be focused while searching if the \'acceptCustomValue\' option is true', function(assert) {
+    QUnit.test('No items should be focused while searching if the "acceptCustomValue" option is true', function(assert) {
         this.reinit({
             acceptCustomValue: true
         });
@@ -3901,6 +4034,40 @@ QUnit.module('Async tests', {}, () => {
         });
     });
 
+    QUnit.test('no items should be selected if selected item is not on the first page (T1025148)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const data = [...new Array(26)].map((_, idx) => ({ id: idx + 1, name: String.fromCharCode(65 + idx) }));
+        const selectBox = $('#selectBox').dxSelectBox({
+            dataSource: {
+                pageSize: 10,
+                paginate: true,
+                store: new CustomStore({
+                    key: 'id',
+                    byKey: key => data.filter(el => el.id === key)[0],
+                    load: () => {
+                        const d = $.Deferred();
+                        setTimeout(() => {
+                            d.resolve(data.slice(0, 10));
+                        }, 50);
+                        return d.promise();
+                    }
+                })
+            },
+            displayExpr: 'name',
+            valueExpr: 'id',
+            value: 20,
+            opened: true
+        }).dxSelectBox('instance');
+        const $list = $(selectBox.content()).find('.dx-list');
+
+        clock.tick(50);
+
+        const $selectedItems = $list.find(toSelector(LIST_ITEM_SELECTED_CLASS));
+
+        assert.strictEqual($selectedItems.length, 0, 'no items are selected');
+        clock.restore();
+    });
+
     QUnit.test('selectbox should not render own components if it was disposed (T517486)', function(assert) {
         this.clock = sinon.useFakeTimers();
 
@@ -4038,7 +4205,7 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.equal(loadAttempts, 0, 'there were no attempts of loading');
     });
 
-    QUnit.test('press \'enter\' key sets option value (T100679)', function(assert) {
+    QUnit.test('press "enter" key sets option value (T100679)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -4068,7 +4235,7 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.deepEqual(selectBox.option('value'), value, 'value selected');
     });
 
-    QUnit.test('press \'space\' key sets option value', function(assert) {
+    QUnit.test('press "space" key sets option value', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -4098,7 +4265,7 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.deepEqual(selectBox.option('value'), value, 'value selected');
     });
 
-    QUnit.test('press \'space\' key shouldn\'t sets option value if SelectBox accept custom value', function(assert) {
+    QUnit.test('press "space" key shouldn\'t sets option value if SelectBox accept custom value', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -4129,7 +4296,7 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.deepEqual(selectBox.option('value'), null, 'There is no value');
     });
 
-    QUnit.test('press \'space\' key shouldn\'t sets option value if search is enabled', function(assert) {
+    QUnit.test('press "space" key shouldn\'t sets option value if search is enabled', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -4237,7 +4404,7 @@ QUnit.module('regressions', moduleSetup, () => {
             .find(toSelector(TEXTEDITOR_INPUT_CLASS))
             .trigger('keyup');
 
-        assert.equal(valueChanged, 1, 'after keypress \'optionChanged\' didn\'t changed');
+        assert.equal(valueChanged, 1, 'after keypress "optionChanged" didn\'t changed');
 
         $element
             .find(toSelector(TEXTEDITOR_INPUT_CLASS))
@@ -4246,7 +4413,7 @@ QUnit.module('regressions', moduleSetup, () => {
 
     });
 
-    QUnit.test('value change should select correct list item with the \'acceptCustomValue\' set to true', function(assert) {
+    QUnit.test('value change should select correct list item with the "acceptCustomValue" set to true', function(assert) {
         const selectBox = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
             acceptCustomValue: true
@@ -4853,7 +5020,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.equal($input.val(), '9', 'chosen value is correct');
     });
 
-    QUnit.testInActiveWindow('value should be reset to the previous one on the \'tab\' press if popup is closed', function(assert) {
+    QUnit.testInActiveWindow('value should be reset to the previous one on the "tab" press if popup is closed', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'not actual');
             return;
@@ -4881,7 +5048,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.equal(selectBox.option('value'), items[0], 'widget value is reset');
     });
 
-    QUnit.testInActiveWindow('input value should be reset to the previous one on the \'esc\' press', function(assert) {
+    QUnit.testInActiveWindow('input value should be reset to the previous one on the "esc" press', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'not actual');
             return;
@@ -4903,7 +5070,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.equal($input.val(), items[0], 'input value is reset');
     });
 
-    QUnit.testInActiveWindow('value should be reset on the \'tab\' press after input value was cleared', function(assert) {
+    QUnit.testInActiveWindow('value should be reset on the "tab" press after input value was cleared', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'not actual');
             return;
@@ -4991,13 +5158,13 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 
         keyboard.keyDown('esc');
 
-        assert.ok(handler.calledOnce, 'Children keyboard processor can process the \'esc\' key pressing');
+        assert.ok(handler.calledOnce, 'Children keyboard processor can process the "esc" key pressing');
     });
 });
 
-QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
+QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
 
-    QUnit.test('T309987 - item should not be changed on the \'tab\' press', function(assert) {
+    QUnit.test('T309987 - item should not be changed on the "tab" press', function(assert) {
         const items = ['first', 'second'];
         const value = items[1];
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -5031,7 +5198,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
         assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'was selected first item and be set');
     });
 
-    QUnit.test('If no influence on selectBox, \'input\' should be empty after \'tab\' key pressed', function(assert) {
+    QUnit.test('If no influence on selectBox, "input" should be empty after "tab" key pressed', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             dataSource: ['a', 'b', 'c'],
             searchEnabled: true,
@@ -5051,7 +5218,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
         assert.equal(instance.option('value'), null, 'value is empty');
     });
 
-    QUnit.test('After typing a couple letters of search criteria value should be set to input text (searchEnabled=\'true\' acceptCustomValue=\'true\')', function(assert) {
+    QUnit.test('After typing a couple letters of search criteria value should be set to input text (searchEnabled="true" acceptCustomValue="true")', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             dataSource: ['United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu'],
             searchEnabled: true,
@@ -5074,7 +5241,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
         assert.equal(instance.option('value'), 'an', 'value is correct');
     });
 
-    QUnit.test('After highlighting item and pressing \'tab\' it should be chosen', function(assert) {
+    QUnit.test('After highlighting item and pressing "tab" it should be chosen', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -5139,7 +5306,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
         assert.equal(instance.option('value'), 'Uruguay', 'value is correct');
     });
 
-    QUnit.test('the \'Tab\' key press should clear input selection', function(assert) {
+    QUnit.test('the "Tab" key press should clear input selection', function(assert) {
         const items = ['aaa', 'aab', 'acc'];
         const $element = $('#selectBox').dxSelectBox({
             dataSource: items,
@@ -5158,7 +5325,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
         assert.equal(caret.start, caret.end, 'the input has no selection');
     });
 
-    QUnit.testInActiveWindow('the \'tab\' key press should focus the \'apply\' button if the input is focused', function(assert) {
+    QUnit.testInActiveWindow('the "tab" key press should focus the "apply" button if the input is focused', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
             return;
@@ -5300,6 +5467,22 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         assert.equal(onCustomItemCreating.callCount, 1, 'action was called');
     });
 
+    QUnit.test('initial input custom text should not be restored on blur if acceptCustomValue=true (T1075506)', function(assert) {
+        const initialCustomValue = 'custom';
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            value: initialCustomValue
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input
+            .focus()
+            .blur();
+
+        assert.strictEqual(selectBox.option('text'), initialCustomValue, 'text was not restored');
+    });
+
     QUnit.test('custom value should be added on enter key when acceptCustomValue=true and dd is initially closed', function(assert) {
         const onCustomItemCreating = sinon.stub().returns('Custom item');
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -5334,7 +5517,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         assert.deepEqual($('.dx-list').dxList('option', 'items'), ['a', 'b'], 'all items');
     });
 
-    QUnit.test('value must appear in the INPUT ​​after removal of value with searchEnabled=\'true\'', function(assert) {
+    QUnit.test('value must appear in the INPUT ​​after removal of value with searchEnabled="true"', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             searchEnabled: true,
             dataSource: ['a', 'b', 'c'],
@@ -5605,6 +5788,7 @@ if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
+                this.isMac = devices.real().mac;
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new SelectBox($element,
                         $.extend({
@@ -5637,6 +5821,9 @@ if(devices.real().deviceType === 'desktop') {
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
+                }
+                if(this.isMac) {
+                    inputAttributes.placeholder = ' ';
                 }
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
@@ -5673,6 +5860,9 @@ if(devices.real().deviceType === 'desktop') {
                 };
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
+                }
+                if(this.isMac) {
+                    inputAttributes.placeholder = ' ';
                 }
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');

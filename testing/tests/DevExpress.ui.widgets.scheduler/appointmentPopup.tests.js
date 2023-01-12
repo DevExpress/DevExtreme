@@ -1199,7 +1199,8 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         assert.deepEqual(startDate.option('value'), new Date(2015, 1, 1), 'value is right');
         assert.equal(startDate.option('type'), 'date', 'type is right');
-        assert.deepEqual(endDate.option('value'), new Date(2015, 1, 2), 'value is right');
+
+        assert.deepEqual(endDate.option('value'), new Date(2015, 1, 1), 'value is right');
         assert.equal(endDate.option('type'), 'date', 'type is right');
 
         allDayEditor.option('value', false);

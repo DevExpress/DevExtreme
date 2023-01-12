@@ -6,12 +6,11 @@ import { inArray } from '../core/utils/array';
 import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
-import { fitIntoRange } from '../core/utils/math';
+import { fitIntoRange, inRange } from '../core/utils/math';
 import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
 import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
-import { getBoundingRect } from '../core/utils/position';
 import { addNamespace } from '../events/utils/index';
 import { triggerResizeEvent } from '../events/visibility_change';
 
@@ -44,6 +43,7 @@ const Resizable = DOMComponent.inherit({
 
             handles: 'all',
 
+            // NOTE: does not affect proportional resize
             step: '1',
 
             /**
@@ -71,7 +71,9 @@ const Resizable = DOMComponent.inherit({
 
             onResizeEnd: null,
 
-            roundStepValue: true
+            roundStepValue: true,
+
+            _keepAspectRatio: false
         });
     },
 
@@ -154,6 +156,20 @@ const Resizable = DOMComponent.inherit({
         shouldAttachEvents ? this._attachEventHandlers() : this._detachEventHandlers();
     },
 
+    _getElementSize: function() {
+        const $element = this.$element();
+
+        return $element.css('boxSizing') === 'border-box'
+            ? {
+                width: $element.outerWidth(),
+                height: $element.outerHeight(),
+            }
+            : {
+                width: $element.width(),
+                height: $element.height()
+            };
+    },
+
     _dragStartHandler: function(e) {
         const $element = this.$element();
         if($element.is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -166,12 +182,7 @@ const Resizable = DOMComponent.inherit({
 
         this._elementLocation = locate($element);
 
-        const elementRect = getBoundingRect($element.get(0));
-
-        this._elementSize = {
-            width: elementRect.width,
-            height: elementRect.height
-        };
+        this._elementSize = this._getElementSize();
 
         this._renderDragOffsets(e);
 
@@ -204,10 +215,10 @@ const Resizable = DOMComponent.inherit({
         const scrollOffset = this._getAreaScrollOffset();
 
 
-        e.maxLeftOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
-        e.maxRightOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
-        e.maxTopOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
-        e.maxBottomOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
+        e.maxLeftOffset = this._leftMaxOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
+        e.maxRightOffset = this._rightMaxOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
+        e.maxTopOffset = this._topMaxOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
+        e.maxBottomOffset = this._bottomMaxOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
     },
 
     _getBorderWidth: function($element, direction) {
@@ -216,29 +227,163 @@ const Resizable = DOMComponent.inherit({
         return parseInt(borderWidth) || 0;
     },
 
-    _dragHandler: function(e) {
-        const $element = this.$element();
+    _proportionate: function(direction, value) {
+        const size = this._elementSize;
+        const factor = direction === 'x'
+            ? size.width / size.height
+            : size.height / size.width;
+
+        return value * factor;
+    },
+
+    _getProportionalDelta: function({ x, y }) {
+        const proportionalY = this._proportionate('y', x);
+        if(proportionalY >= y) {
+            return {
+                x,
+                y: proportionalY
+            };
+        }
+
+        const proportionalX = this._proportionate('x', y);
+        if(proportionalX >= x) {
+            return {
+                x: proportionalX,
+                y
+            };
+        }
+
+        return {
+            x: 0,
+            y: 0
+        };
+    },
+
+    _getDirectionName: function(axis) {
         const sides = this._movingSides;
 
-        const location = this._elementLocation;
+        if(axis === 'x') {
+            return sides.left ? 'left' : 'right';
+        } else {
+            return sides.top ? 'top' : 'bottom';
+        }
+    },
+
+    _fitIntoArea: function(axis, value) {
+        const directionName = this._getDirectionName(axis);
+        return Math.min(value, this[`_${directionName}MaxOffset`] ?? Infinity);
+    },
+
+    _fitDeltaProportionally: function(delta) {
+        let fittedDelta = { ...delta };
         const size = this._elementSize;
-        const offset = this._getOffset(e);
+        const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
 
-        const width = size.width + offset.x * (sides.left ? -1 : 1);
-        const height = size.height + offset.y * (sides.top ? -1 : 1);
+        const getWidth = () => size.width + fittedDelta.x;
+        const getHeight = () => size.height + fittedDelta.y;
+        const getFittedWidth = () => fitIntoRange(getWidth(), minWidth, maxWidth);
+        const getFittedHeight = () => fitIntoRange(getHeight(), minHeight, maxHeight);
+        const isInArea = (axis) => fittedDelta[axis] === this._fitIntoArea(axis, fittedDelta[axis]);
+        const isFittedX = () => inRange(getWidth(), minWidth, maxWidth) && isInArea('x');
+        const isFittedY = () => inRange(getHeight(), minHeight, maxHeight) && isInArea('y');
 
-        if(offset.x || this.option('stepPrecision') === 'strict') this._renderWidth(width);
-        if(offset.y || this.option('stepPrecision') === 'strict') this._renderHeight(height);
+        if(!isFittedX()) {
+            const x = this._fitIntoArea('x', getFittedWidth() - size.width);
+            fittedDelta = { x, y: this._proportionate('y', x) };
+        }
+        if(!isFittedY()) {
+            const y = this._fitIntoArea('y', getFittedHeight() - size.height);
+            fittedDelta = { x: this._proportionate('x', y), y };
+        }
 
-        const elementRect = getBoundingRect($element.get(0));
-        const offsetTop = offset.y - ((elementRect.height || height) - height);
-        const offsetLeft = offset.x - ((elementRect.width || width) - width);
+        return isFittedX() && isFittedY()
+            ? fittedDelta
+            : { x: 0, y: 0 };
+    },
+
+    _fitDelta: function({ x, y }) {
+        const size = this._elementSize;
+        const { minWidth, minHeight, maxWidth, maxHeight } = this.option();
+
+        return {
+            x: fitIntoRange(size.width + x, minWidth, maxWidth) - size.width,
+            y: fitIntoRange(size.height + y, minHeight, maxHeight) - size.height,
+        };
+    },
+
+    _getDeltaByOffset: function(offset) {
+        const sides = this._movingSides;
+        const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('_keepAspectRatio');
+
+        let delta = {
+            x: offset.x * (sides.left ? -1 : 1),
+            y: offset.y * (sides.top ? -1 : 1)
+        };
+
+        if(shouldKeepAspectRatio) {
+            const proportionalDelta = this._getProportionalDelta(delta);
+            const fittedProportionalDelta = this._fitDeltaProportionally(proportionalDelta);
+
+            delta = fittedProportionalDelta;
+        } else {
+            const fittedDelta = this._fitDelta(delta);
+            const roundedFittedDelta = this._roundByStep(fittedDelta);
+
+            delta = roundedFittedDelta;
+        }
+
+        return delta;
+    },
+
+    _updatePosition: function(delta, { width, height }) {
+        const location = this._elementLocation;
+        const sides = this._movingSides;
+        const $element = this.$element();
+
+        const elementRect = this._getElementSize();
+        const offsetTop = delta.y * (sides.top ? -1 : 1) - ((elementRect.height || height) - height);
+        const offsetLeft = delta.x * (sides.left ? -1 : 1) - ((elementRect.width || width) - width);
 
         move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
             left: location.left + (sides.left ? offsetLeft : 0)
         });
+    },
 
+    _dragHandler: function(e) {
+        const offset = this._getOffset(e);
+        const delta = this._getDeltaByOffset(offset);
+
+        const dimensions = this._updateDimensions(delta);
+
+        this._updatePosition(delta, dimensions);
+        this._triggerResizeAction(e, dimensions);
+    },
+
+    _updateDimensions: function(delta) {
+        const isAbsoluteSize = (size) => {
+            return size.substring(size.length - 2) === 'px';
+        };
+
+        const isStepPrecisionStrict = this.option('stepPrecision') === 'strict';
+        const size = this._elementSize;
+
+        const width = size.width + delta.x;
+        const height = size.height + delta.y;
+        const elementStyle = this.$element().get(0).style;
+        const shouldRenderWidth = delta.x || isStepPrecisionStrict || isAbsoluteSize(elementStyle.width);
+        const shouldRenderHeight = delta.y || isStepPrecisionStrict || isAbsoluteSize(elementStyle.height);
+
+        if(shouldRenderWidth) this.option({ width });
+        if(shouldRenderHeight) this.option({ height });
+
+        return {
+            width: shouldRenderWidth ? width : size.width,
+            height: shouldRenderHeight ? height : size.height
+        };
+    },
+
+    _triggerResizeAction: function(e, { width, height }) {
         this._resizeAction({
             event: e,
             width: this.option('width') || width,
@@ -246,29 +391,52 @@ const Resizable = DOMComponent.inherit({
             handles: this._movingSides
         });
 
-        triggerResizeEvent($element);
+        triggerResizeEvent(this.$element());
+    },
+
+    _isCornerHandler(sides) {
+        return Object
+            .keys(sides)
+            .map(key => sides[key])
+            .reduce((xor, value) => xor ^ value, 0) === 0;
     },
 
     _getOffset: function(e) {
         const offset = e.offset;
-        const steps = pairToObject(this.option('step'), !this.option('roundStepValue'));
-        const sides = this._getMovingSides(e);
-        const strictPrecision = this.option('stepPrecision') === 'strict';
+        const sides = this._movingSides;
 
         if(!sides.left && !sides.right) offset.x = 0;
         if(!sides.top && !sides.bottom) offset.y = 0;
 
-        return strictPrecision ? this._getStrictOffset(offset, steps, sides) : this._getSimpleOffset(offset, steps);
+        return offset;
     },
 
-    _getSimpleOffset: function(offset, steps) {
+    _roundByStep: function(delta) {
+        return this.option('stepPrecision') === 'strict'
+            ? this._roundStrict(delta)
+            : this._roundNotStrict(delta);
+    },
+
+    _getSteps: function() {
+        return pairToObject(this.option('step'), !this.option('roundStepValue'));
+    },
+
+    _roundNotStrict: function(delta) {
+        const steps = this._getSteps();
+
         return {
-            x: offset.x - offset.x % steps.h,
-            y: offset.y - offset.y % steps.v
+            x: delta.x - delta.x % steps.h,
+            y: delta.y - delta.y % steps.v
         };
     },
 
-    _getStrictOffset: function(offset, steps, sides) {
+    _roundStrict: function(delta) {
+        const sides = this._movingSides;
+        const offset = {
+            x: delta.x * (sides.left ? -1 : 1),
+            y: delta.y * (sides.top ? -1 : 1)
+        };
+        const steps = this._getSteps();
         const location = this._elementLocation;
         const size = this._elementSize;
         const xPos = sides.left ? location.left : location.left + size.width;
@@ -300,9 +468,14 @@ const Resizable = DOMComponent.inherit({
             newOffsetY += steps.v;
         }
 
-        return {
+        const roundedOffset = {
             x: (sides.left || sides.right) && !isSmallOffset(offset.x, steps.h) ? newOffsetX : 0,
             y: (sides.top || sides.bottom) && !isSmallOffset(offset.y, steps.v) ? newOffsetY : 0
+        };
+
+        return {
+            x: roundedOffset.x * (sides.left ? -1 : 1),
+            y: roundedOffset.y * (sides.top ? -1 : 1)
         };
     },
 
@@ -445,6 +618,7 @@ const Resizable = DOMComponent.inherit({
             case 'stepPrecision':
             case 'step':
             case 'roundStepValue':
+            case '_keepAspectRatio':
                 break;
             default:
                 this.callBase(args);

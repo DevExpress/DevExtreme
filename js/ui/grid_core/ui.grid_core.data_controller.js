@@ -74,6 +74,7 @@ export const dataControllerModule = {
                     that._loadErrorHandler = that._handleLoadError.bind(that);
                     that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
                     that._changingHandler = that._handleChanging.bind(that);
+                    that._dataPushedHandler = that._handleDataPushed.bind(that);
 
                     that._columnsController.columnsChanged.add(that._columnsChangedHandler);
 
@@ -91,7 +92,7 @@ export const dataControllerModule = {
                     that._refreshDataSource();
                 },
                 callbackNames: function() {
-                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged'];
+                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
                 },
                 callbackFlags: function(name) {
                     if(name === 'dataErrorOccurred') {
@@ -245,6 +246,12 @@ export const dataControllerModule = {
 
                     storeLoadOptions.filter = this.combinedFilter(storeLoadOptions.filter);
 
+                    if(storeLoadOptions.filter?.length === 1 && storeLoadOptions.filter[0] === '!') {
+                        e.data = [];
+                        e.extra = e.extra || {};
+                        e.extra.totalCount = 0;
+                    }
+
                     if(!columnsController.isDataSourceApplied()) {
                         columnsController.updateColumnDataTypes(dataSource);
                     }
@@ -270,9 +277,9 @@ export const dataControllerModule = {
                     let filterApplied;
 
                     // B255430
-                    const updateItemsHandler = function() {
+                    const updateItemsHandler = function(change) {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
-                        that.updateItems();
+                        that.updateItems(change?.changeTypes?.virtualColumnsScrolling ? { virtualColumnsScrolling: true } : {});
                     };
 
                     if(changeTypes.sorting || changeTypes.grouping) {
@@ -363,6 +370,9 @@ export const dataControllerModule = {
                 },
                 _handleLoadError: function(e) {
                     this.dataErrorOccurred.fire(e);
+                },
+                _handleDataPushed: function(changes) {
+                    this.pushed.fire(changes);
                 },
                 fireError: function() {
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
@@ -691,6 +701,7 @@ export const dataControllerModule = {
                     const changeTypes = [];
                     const items = [];
                     const newIndexByKey = {};
+                    const isLiveUpdate = change?.isLiveUpdate ?? true;
 
                     function getRowKey(row) {
                         if(row) {
@@ -707,7 +718,7 @@ export const dataControllerModule = {
                             item1.update && item1.update(item2);
                             item1.cells.forEach(function(cell) {
                                 if(cell && cell.update) {
-                                    cell.update(item2);
+                                    cell.update(item2, true);
                                 }
                             });
                         }
@@ -737,7 +748,7 @@ export const dataControllerModule = {
                                 const index = change.index;
                                 const newItem = change.data;
                                 const oldItem = change.oldItem;
-                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, true);
+                                const changedColumnIndices = this._partialUpdateRow(oldItem, newItem, index, isLiveUpdate);
 
                                 rowIndices.push(index);
                                 changeTypes.push('update');
@@ -854,7 +865,7 @@ export const dataControllerModule = {
                         }
                     }
 
-                    if(that._updateLockCount) {
+                    if(that._updateLockCount && !change.cancel) {
                         that._changes.push(change);
                         return;
                     }
@@ -889,15 +900,24 @@ export const dataControllerModule = {
                     return null;
                 },
                 _applyFilter: function() {
-                    const that = this;
-                    const dataSource = that._dataSource;
+                    const dataSource = this._dataSource;
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
+                        this._isFilterApplying = true;
 
-                        return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
+                        return this.reload().done(() => {
+                            if(this._isFilterApplying) {
+                                this.pageChanged.fire();
+                            }
+                        });
                     }
                 },
+
+                resetFilterApplying: function() {
+                    this._isFilterApplying = false;
+                },
+
                 filter: function(filterExpr) {
                     const dataSource = this._dataSource;
                     const filter = dataSource && dataSource.filter();
@@ -1009,6 +1029,7 @@ export const dataControllerModule = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
+                        oldDataSource.pushed.remove(that._dataPushedHandler);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1028,6 +1049,7 @@ export const dataControllerModule = {
                         dataSource.loadError.add(that._loadErrorHandler);
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
                         dataSource.changing.add(that._changingHandler);
+                        dataSource.pushed.add(that._dataPushedHandler);
                     }
                 },
                 items: function() {

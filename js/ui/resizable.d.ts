@@ -1,16 +1,16 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 export interface ResizeInfo {
@@ -21,7 +21,7 @@ export interface ResizeInfo {
         readonly top: boolean;
         readonly right: boolean;
         readonly bottom: boolean;
-    }
+    };
 }
 
 /** @public */
@@ -34,13 +34,13 @@ export type InitializedEvent = InitializedEventInfo<dxResizable>;
 export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
 
 /** @public */
-export type ResizeEvent = NativeEventInfo<dxResizable> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = NativeEventInfo<dxResizable> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
  * @deprecated use Properties instead
@@ -56,7 +56,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @public
      */
@@ -129,7 +128,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
-     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @public
      */
@@ -139,8 +137,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
- * @module ui/resizable
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

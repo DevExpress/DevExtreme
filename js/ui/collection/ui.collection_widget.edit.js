@@ -72,10 +72,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemReordered
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -87,10 +91,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onItemReordered: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleting
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -101,10 +109,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             onItemDeleting: null,
 
             /**
+            * @section Utils
+            * @default null
             * @name CollectionWidgetOptions.onItemDeleted
-            * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -204,7 +216,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             totalCount: function() {
                 const items = that.option('items');
                 const dataSource = that._dataSource;
-                return dataSource && dataSource.totalCount() >= 0 ? dataSource.totalCount() : items.length;
+                return dataSource && dataSource.totalCount() >= 0
+                    ? dataSource.totalCount()
+                    : that._getItemsCount(items);
             },
             key: that.key.bind(that),
             keyOf: that.keyOf.bind(that),
@@ -235,6 +249,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             },
             plainItems: itemsGetter.bind(that._editStrategy)
         });
+    },
+
+    _getItemsCount: function(items) {
+        return items.reduce((itemsCount, item) => {
+            return itemsCount += item.items
+                ? this._getItemsCount(item.items)
+                : 1;
+        }, 0);
     },
 
     _initEditStrategy: function() {
@@ -428,8 +450,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemClickHandler: function(e) {
+        let itemSelectPromise = new Deferred().resolve();
+        const callBase = this.callBase;
+
         this._createAction((function(e) {
-            this._itemSelectHandler(e.event);
+            itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
         }).bind(this), {
             validatingTargetName: 'itemElement'
         })({
@@ -437,10 +462,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             event: e
         });
 
-        this.callBase.apply(this, arguments);
+        itemSelectPromise.always(() => {
+            callBase.apply(this, arguments);
+        });
     },
 
     _itemSelectHandler: function(e) {
+        let itemSelectPromise;
+
         if(!this.option('selectionByClick')) {
             return;
         }
@@ -450,8 +479,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         if(this.isItemSelected($itemElement)) {
             this.unselectItem(e.currentTarget);
         } else {
-            this.selectItem(e.currentTarget);
+            itemSelectPromise = this.selectItem(e.currentTarget);
         }
+
+        return itemSelectPromise?.promise();
     },
 
     _selectedItemElement: function(index) {
@@ -724,10 +755,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         }
 
         if(this.option('selectionMode') === 'single') {
-            this._selection.setSelection([key]);
+            return this._selection.setSelection([key]);
         } else {
             const selectedItemKeys = this.option('selectedItemKeys') || [];
-            this._selection.setSelection([...selectedItemKeys, key], [key]);
+            return this._selection.setSelection([...selectedItemKeys, key], [key]);
         }
     },
 

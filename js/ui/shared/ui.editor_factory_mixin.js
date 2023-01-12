@@ -81,10 +81,12 @@ const EditorFactoryMixin = (function() {
             onValueChanged: function(args) {
                 options.setValue(args.value);
             },
-            onKeyDown: function(e) {
-                if(checkEnterBug() && normalizeKeyName(e.event) === 'enter') {
-                    e.component.blur();
-                    e.component.focus();
+            onKeyDown: function({ component, event }) {
+                const useMaskBehavior = component.option('useMaskBehavior');
+
+                if((checkEnterBug() || useMaskBehavior) && normalizeKeyName(event) === 'enter') {
+                    component.blur();
+                    component.focus();
                 }
             },
             displayFormat: options.format,
@@ -160,9 +162,10 @@ const EditorFactoryMixin = (function() {
             const stopWatch = options.row.watch(() => {
                 dataSource = options.lookup.dataSource(options.row);
                 return dataSource && dataSource.filter;
-            }, (newValue, row) => {
-                options.row = row;
+            }, () => {
                 selectBox.option('dataSource', dataSource);
+            }, (row) => {
+                options.row = row;
             });
         }
     }
@@ -307,13 +310,14 @@ const EditorFactoryMixin = (function() {
                 }
             }
 
-            const editorName = options.editorName;
+            if(options.parentType === 'dataRow' && options.editorType) {
+                options.editorName = options.editorType;
+            }
+
             this.executeAction('onEditorPreparing', options);
 
             if(options.cancel) {
                 return;
-            } else if(options.parentType === 'dataRow' && options.editorType && editorName === options.editorName) {
-                options.editorName = options.editorType;
             }
 
             if(options.parentType === 'dataRow' && !options.isOnForm && !isDefined(options.editorOptions.showValidationMark)) {

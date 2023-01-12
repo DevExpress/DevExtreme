@@ -2,6 +2,7 @@ const $ = require('jquery');
 const mock = require('../../helpers/mockModule.js').mock;
 const vizMocks = require('../../helpers/vizMocks.js');
 const { ChartTracker } = require('viz/chart_components/tracker');
+const domAdapter = require('core/dom_adapter');
 const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
 const trackerModule = mock('viz/chart_components/tracker', {
     ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
@@ -38,6 +39,23 @@ setupSeriesFamily();
 
 rendererModule.Renderer = function(parameters) {
     return new vizMocks.Renderer(parameters);
+};
+
+const defaultCrosshairOptions = {
+    horizontalLine: {},
+    verticalLine: {}
+};
+
+const defaultCommonPaneSettings = {
+    backgroundColor: 'none',
+    border: {
+        visible: false,
+        top: true,
+        bottom: true,
+        left: true,
+        right: true,
+        dashStyle: 'solid'
+    }
 };
 
 const ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
@@ -90,17 +108,8 @@ const environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
         that.themeManager.getOptions.withArgs('export').returns({ enabled: true });
-        that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
-            backgroundColor: 'none',
-            border: {
-                visible: false,
-                top: true,
-                bottom: true,
-                left: true,
-                right: true,
-                dashStyle: 'solid'
-            }
-        });
+        that.themeManager.getOptions.withArgs('commonPaneSettings').returns(defaultCommonPaneSettings);
+        that.themeManager.getOptions.withArgs('crosshair').returns(defaultCrosshairOptions);
 
         that.themeManager.getOptions.withArgs('dataPrepareSettings').returns({
             checkTypeForAllData: true,
@@ -127,17 +136,9 @@ const environment = {
             }, options);
             $.each(options || {}, function(k, v) {
                 if(k === 'commonPaneSettings') {
-                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
-                        backgroundColor: 'none',
-                        border: {
-                            visible: false,
-                            top: true,
-                            bottom: true,
-                            left: true,
-                            right: true,
-                            dashStyle: 'solid'
-                        }
-                    }, v));
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
+                } else if(k === 'crosshair') {
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
                 } else if(k !== 'valueAxis' && k !== 'argumentAxis' && k !== 'series') {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }
@@ -166,9 +167,11 @@ const environment = {
             return layoutManager;
         });
 
-        tooltipModule.Tooltip = function(parameters) {
+
+        sinon.stub(tooltipModule, 'Tooltip', function(parameters) {
             return new StubTooltip(parameters);
-        };
+        });
+
         sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
@@ -196,6 +199,9 @@ const environment = {
 
         layoutManagerModule.LayoutManager.reset();
         layoutManagerModule.LayoutManager.restore();
+
+        tooltipModule.Tooltip.reset();
+        tooltipModule.Tooltip.restore();
 
         this.layoutManager.layoutElements.reset();
 
@@ -1002,7 +1008,8 @@ const environment = {
         assert.ok(chart._labelsGroup.stub('clear').called, 'Series Labels group should be cleared');
         assert.ok(chart._labelsGroup.linkAppend.called, 'Series labels group should be added to root');
         assert.ok(chart._axesGroup.linkAppend.called, 'Axes group should be added to root');
-        assert.ok(chart._stripLabelAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._labelsAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._stripLabelAxesGroup.linkAppend.called, 'Strips label group should be added to root');
         assert.ok(chart._panesBorderGroup.linkAppend.called, 'Panes border group should be added to root');
         assert.ok(chart._stripsGroup.linkAppend.called, 'Strips group should be added to root');
         assert.ok(chart._constantLinesGroup.above.linkAppend.called, 'Constant lines group should be added to root');
@@ -1600,9 +1607,34 @@ const environment = {
 
         this.$container.remove();
 
-        chart._annotationsPointerEventHandler({});
+        try {
+            chart._annotationsPointerEventHandler({});
 
-        assert.ok(true, 'should be no exceptions');
+            assert.ok(true, 'should be no exceptions');
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
+    });
+
+    // T1063025
+    QUnit.test('mousedown handling when chart disposed', function(assert) {
+        $(domAdapter.getDocument()).on('dxpointerdown', () => {
+            this.$container.remove();
+        });
+
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+
+        this.createChart({
+            series: [{ type: 'line' }]
+        });
+
+        try {
+            $(domAdapter.getDocument()).trigger(new $.Event('mousedown'));
+
+            assert.strictEqual(tooltipModule.Tooltip.lastCall.returnValue.stub('isCursorOnTooltip').callCount, 0);
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
     });
 
     QUnit.test('Call Dispose several times', function() {
