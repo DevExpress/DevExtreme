@@ -260,9 +260,15 @@ const View = ModuleItem.inherit({
     $element.toggleClass('dx-hidden', !isVisible);
     if (isVisible) {
       this.component._optionCache = {};
-      this._renderCore(options);
+      const deferred = this._renderCore(options);
       this.component._optionCache = undefined;
-      this.renderCompleted.fire(options);
+      if (deferred) {
+        deferred.done(() => {
+          this.renderCompleted.fire(options);
+        });
+      } else {
+        this.renderCompleted.fire(options);
+      }
     }
   },
 
