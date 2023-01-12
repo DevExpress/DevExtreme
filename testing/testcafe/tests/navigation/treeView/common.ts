@@ -5,9 +5,39 @@ import createWidget from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
+import TreeView from '../../../model/treeView';
 
-fixture.disablePageReloads`TreeView_selectAll`
+fixture.disablePageReloads`TreeView`
   .page(url(__dirname, '../../container.html'));
+
+test('TreeView: height should be calculated correctly when searchEnabled is true (T1138605)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const treeView = new TreeView('#container');
+  const scrollable = treeView.getScrollable();
+
+  await scrollable.scrollTo({ top: 1000 });
+
+  await testScreenshot(t, takeScreenshot, 'TreeView scrollable has correct height.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+    compactCallBack: async () => {
+      await scrollable.scrollTo({ top: 1000 });
+    },
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxTreeView', {
+  width: 300,
+  height: 350,
+  searchEnabled: true,
+  items: employees,
+  itemTemplate(item) {
+    return `<div>${item.fullName} (${item.position})</div>`;
+  },
+}));
 
 [true, false].forEach((rtlEnabled) => {
   ['selectAll', 'normal', 'none'].forEach((showCheckBoxesMode) => {
