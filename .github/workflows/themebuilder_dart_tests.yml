@@ -34,7 +34,7 @@ jobs:
       uses: dart-lang/setup-dart@v1
 
     - name: Install dart packeges
-      run: pub get
+      run: dart pub get
       working-directory: ./themebuilder-scss/dart-compiler
 
     - name: Run npm install

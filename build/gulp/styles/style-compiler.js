@@ -7,7 +7,6 @@ const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const sass = require('gulp-dart-sass');
 
-const fiber = require('fibers');
 const cleanCss = require('gulp-clean-css');
 const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
@@ -33,7 +32,6 @@ const compileBundles = (bundles) => {
         }))
         .on('data', (chunk) => console.log('Build: ', chunk.path))
         .pipe(sass({
-            fiber,
             functions
         }))
         .pipe(autoPrefix())

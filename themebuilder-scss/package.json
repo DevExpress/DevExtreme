@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/autoprefixer": "^9.7.2",
+    "@types/babel__traverse": "ts3.8",
     "@types/clean-css": "^4.2.2",
     "@types/dependency-tree": "^7.2.0",
     "@types/filing-cabinet": "^2.5.0",
@@ -39,6 +40,8 @@
     "@types/jest": "^26.0.15",
     "@types/less": "^3.0.1",
     "@types/node-sass": "^4.11.0",
+    "@types/prettier": "2.6.0",
+    "@types/sass": "ts3.8",
     "express": "^4.16.4",
     "filing-cabinet": "^2.5.1",
     "fs-extra": "^9.0.0",

@@ -19,6 +19,11 @@ jobs:
       with:
         node-version: '14'
 
+    - name: Setup .NET SDK 2.1
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '2.1.x'
+
     - name: Get sources
       uses: actions/checkout@v2
 

@@ -411,8 +411,10 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
 
         const keyboard = keyboardMock(element);
 
-        element.trigger('focusin');
-        keyboard.keyDown('enter');
+        act(() => {
+            element.trigger('focusin');
+            keyboard.keyDown('enter');
+        });
 
         assert.ok(clickHandler.calledOnce, 'Handler should be called');
 
