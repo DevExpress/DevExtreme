@@ -650,6 +650,7 @@ class Scheduler extends Widget {
                 break;
             case 'width':
                 // TODO: replace with css
+                this.sizeChangeFlag = true;
                 this._updateOption('header', name, value);
                 if(this.option('crossScrollingEnabled')) {
                     this._updateOption('workSpace', 'width', value);
@@ -659,6 +660,7 @@ class Scheduler extends Widget {
                 this._dimensionChanged();
                 break;
             case 'height':
+                this.sizeChangeFlag = true;
                 super._optionChanged(args);
                 this._dimensionChanged();
                 this._updateOption('workSpace', 'schedulerHeight', value);
@@ -880,6 +882,9 @@ class Scheduler extends Widget {
     }
 
     _dimensionChanged() {
+        const optionHeight = this.option('height') && !/%/.test(this.option('height'));
+        const optionWidth = this.option('width') && !/%/.test(this.option('width'));
+
         if(!this._isVisible()) {
             return;
         }
@@ -892,10 +897,11 @@ class Scheduler extends Widget {
             workspace.option('allDayExpanded', this._isAllDayExpanded());
             workspace._dimensionChanged();
 
-            if(!this.option('height') || !this.option('width')) {
+            if((!optionHeight || !optionWidth) || this.sizeChangeFlag) {
                 const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
                 this._appointments.option('items', appointments);
+                this.sizeChangeFlag = false;
             }
         }
 
