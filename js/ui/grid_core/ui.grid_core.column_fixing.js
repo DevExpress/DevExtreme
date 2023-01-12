@@ -791,7 +791,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _renderCore: function(change) {
         this._detachHoverEvents();
 
-        this.callBase(change);
+        const deferred = this.callBase(change);
 
         const isFixedColumns = this._isFixedColumns;
 
@@ -800,6 +800,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if(this.option('hoverStateEnabled') && isFixedColumns) {
             this._attachHoverEvents();
         }
+        return deferred;
     },
 
     setRowsOpacity: function(columnIndex, value) {
