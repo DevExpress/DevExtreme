@@ -126,7 +126,7 @@ export default {
     _calculateVisibility: function(x, y) {
         const { minX, maxX, minY, maxY } = this._getVisibleArea();
 
-        this.inVisibleArea = !(minX > x || maxX < x || minY > y || maxY < y);
+        this.inVisibleArea = minX <= x && maxX >= x && minY <= y && maxY >= y;
     },
 
     _updateLabelData: function() {
