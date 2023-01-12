@@ -1426,6 +1426,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         assert.equal(cellTemplateArgs[0].column.dataField, 'template', 'cell template column');
     });
 
+    // T1126234
     QUnit.test('component should resize on first render without async if renderAsync = true', function(assert) {
         // act
         const grid = createDataGrid({
