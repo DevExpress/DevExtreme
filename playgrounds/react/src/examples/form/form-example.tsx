@@ -1,6 +1,7 @@
+import { RadioButton, RadioGroup } from '@devextreme/react';
 import {
-  CustomRule, CustomRule1, Form, FormItem, FormItemHint, FormItemLabel, RadioButton, RadioGroup,
-} from '@devextreme/react';
+  CustomRule, CustomRule1, Form, FormItem, FormItemHint, FormItemLabel,
+} from './components';
 
 export function FormExample() {
   return (
@@ -27,7 +28,7 @@ export function FormExample() {
                 <RadioButton value={1} label="1" name="example1" />
                 <RadioButton value={2} label="2" name="example1" />
                 <RadioButton value={3} label="3" name="example1" />
-                <RadioButton value={4} label="3" name="example1" />
+                <RadioButton value={4} label="4" name="example1" />
               </RadioGroup>
               <FormItemLabel>Radio group 2:</FormItemLabel>
               <CustomRule message="Should be > 3" validate={(value) => (value as number) > 3} />

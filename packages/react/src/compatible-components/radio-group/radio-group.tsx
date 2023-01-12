@@ -12,13 +12,9 @@ interface ItemComponentProps {
 
 interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
   items: Array<ItemLike>;
-  // eslint-disable-next-line react/require-default-props
   itemRender?: (data: ItemLike, index?: number) => JSX.Element;
-  // eslint-disable-next-line react/require-default-props
   itemComponent?: ComponentType<ItemComponentProps>;
-  // eslint-disable-next-line react/require-default-props
   valueExpr?: string;
-  // eslint-disable-next-line react/require-default-props
   displayExpr?: string;
 }
 

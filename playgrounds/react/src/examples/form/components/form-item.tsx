@@ -1,10 +1,10 @@
+import { RadioGroup } from '@devextreme/react';
 import {
   Children,
   cloneElement,
   isValidElement,
   JSXElementConstructor, PropsWithChildren, ReactElement, ReactNode, useContext, useEffect, useMemo,
 } from 'react';
-import { RadioGroup } from '../radio-group';
 import { FormContext } from './form-context';
 import { Rule } from './types';
 
