@@ -316,7 +316,7 @@ export const searchModule = {
         },
 
         _renderCore() {
-          this.callBase.apply(this, arguments);
+          const deferred = this.callBase.apply(this, arguments);
 
           // T103538
           if (this.option().rowTemplate || this.option('dataRowTemplate')) {
@@ -330,6 +330,8 @@ export const searchModule = {
               this._highlightSearchText(this.getTableElement());
             }
           }
+
+          return deferred;
         },
 
         _updateCell($cell, parameters) {

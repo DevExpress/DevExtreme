@@ -2082,8 +2082,11 @@ export const keyboardNavigationModule = {
           }
         },
         _renderCore(change) {
-          this.callBase.apply(this, arguments);
+          const deferred = this.callBase.apply(this, arguments);
+
           this._renderFocusByChange(change);
+
+          return deferred;
         },
         _editCellPrepared($cell) {
           const editorInstance = this._getEditorInstance($cell);
