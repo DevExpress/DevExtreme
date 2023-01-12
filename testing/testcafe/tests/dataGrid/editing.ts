@@ -1800,6 +1800,56 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   await changeTheme('generic.light');
 });
 
+test('DataGrid checkboxes in adaptive row should have correct paddings and no outline (T1126956)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton());
+
+  await t
+    .dispatchEvent(dataGrid.getFormItemElement(2), 'click');
+
+  await t
+    .expect(await takeScreenshot('grid-adaptive-checkbox.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    width: 400,
+    dataSource: [{
+      OrderNumber: 35703,
+      SaleAmount: 11800,
+      OrderDate: '2014/04/10',
+      Checkbox: true,
+    }],
+    keyExpr: 'OrderNumber',
+    columnHidingEnabled: true,
+    editing: {
+      allowUpdating: true,
+      mode: 'batch',
+    },
+    columns: [{
+      dataField: 'OrderNumber',
+      caption: 'Invoice Number',
+      width: 300,
+    }, {
+      dataField: 'Employee',
+    }, {
+      dataField: 'OrderDate',
+      dataType: 'date',
+    }, {
+      dataField: 'Checkbox',
+      dataType: 'boolean',
+    }],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
   const lastName0 = dataGrid.getDataCell(0, 1);
