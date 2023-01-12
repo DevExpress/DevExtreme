@@ -154,6 +154,12 @@ export interface ExcelExportBaseProps {
      * @public
      */
     loadPanel?: ExportLoadPanel;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+     encodeExecutableContent?: boolean;
 }
 
 /**
