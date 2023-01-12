@@ -46,16 +46,9 @@ export default _extend({}, symbolPoint, {
     },
 
     _calculateVisibility: function(x, y, width, height) {
-        const that = this;
-        const visibleArea = that._getVisibleArea();
+        const { minX, maxX, minY, maxY } = this._getVisibleArea();
 
-        if((visibleArea.minX >= (x + width) || (visibleArea.maxX <= x) ||
-            (visibleArea.minY >= (y + height)) || (visibleArea.maxY <= y))
-        ) {
-            that.inVisibleArea = false;
-        } else {
-            that.inVisibleArea = true;
-        }
+        this.inVisibleArea = !((minX >= x + width) || maxX <= x || (minY >= y + height) || maxY <= y);
     },
 
     _getGraphicBBox: function(location) {
