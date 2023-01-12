@@ -195,7 +195,7 @@ export const ExportFormat = {
         if(escaped) {
             const singleTextQualifier = textQualifier;
             const escapedTextQualifier = `${textQualifier}${textQualifier}`;
-            return textQualifier + '\'' + value.replaceAll(singleTextQualifier, escapedTextQualifier) + textQualifier;
+            return textQualifier + '\'' + value.replace(new RegExp(singleTextQualifier, 'g'), escapedTextQualifier) + textQualifier;
         }
 
         return value;
