@@ -64,8 +64,7 @@ const ResizingController = modules.ViewController.inherit({
             this._refreshSizesHandler = (e) => {
                 dataController.changed.remove(this._refreshSizesHandler);
 
-                const templateDeferreds = e && e.templateDeferreds || [];
-                when.apply(this, templateDeferreds).done(() => {
+                this.getView('rowsView')._waitAsyncTemplates(e || {}).done(() => {
                     this._refreshSizes(e);
                 });
             };
