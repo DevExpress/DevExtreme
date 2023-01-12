@@ -1092,7 +1092,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return this._columnsController.getVisibleColumns(rowIndex);
     },
 
-    getCell: function(cellPosition, rows) {
+    getCell: function(cellPosition, rows, cells) {
         const $rows = rows || this._getRowElements();
         let $cells;
 
@@ -1100,7 +1100,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             if(this.option('scrolling.mode') !== 'virtual' && this.option('scrolling.rowRenderingMode') !== 'virtual') {
                 cellPosition.rowIndex = cellPosition.rowIndex < $rows.length ? cellPosition.rowIndex : $rows.length - 1;
             }
-            $cells = this.getCellElements(cellPosition.rowIndex);
+            $cells = cells || this.getCellElements(cellPosition.rowIndex);
             if($cells && $cells.length > 0) {
                 return $cells.eq($cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1);
             }
