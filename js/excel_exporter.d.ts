@@ -139,7 +139,8 @@ export interface ExcelExportBaseProps {
      */
     loadPanel?: ExportLoadPanel;
     /**
-     * @docid
+     * @docid ExcelExportBaseProps.loadPanel
+     * @type boolean
      * @default false
      * @public
      */
