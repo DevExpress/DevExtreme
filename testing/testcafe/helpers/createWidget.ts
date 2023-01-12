@@ -57,10 +57,6 @@ export default async function createWidget(
   selector = '#container',
 ): Promise<void> {
   await ClientFunction(() => {
-    (window as any).DevExpress.fx.off = true;
-  })();
-
-  await ClientFunction(() => {
     const widgetOptions = typeof options === 'function' ? options() : options;
     (window as any).widget = $(`${selector}`)[widgetName](widgetOptions)[widgetName]('instance');
   },
