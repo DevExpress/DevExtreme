@@ -689,10 +689,6 @@ declare module DevExpress {
   }
   /**
    * [descr:Device]
-<<<<<<< HEAD
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-=======
->>>>>>> 21_1
    */
   export type Device = {
     /**
@@ -936,10 +932,6 @@ declare module DevExpress {
   }
   /**
    * [descr:fx]
-<<<<<<< HEAD
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-=======
->>>>>>> 21_1
    */
   export const fx: {
     /**
@@ -1280,31 +1272,6 @@ declare module DevExpress.animation {
 declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-<<<<<<< HEAD
-   */
-  interface Component {
-    _optionsByReference: Record<string, any>;
-    _deprecatedOptions: Record<string, any>;
-    _options: {
-      silent(path: any, value: any): void;
-    };
-    _createActionByOption(
-      optionName: string,
-      config: Record<string, any>
-    ): (...args: any[]) => any;
-    _dispose(): void;
-    _getDefaultOptions(): Record<string, any>;
-    _init(): void;
-    _initializeComponent(): void;
-    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
-    _optionChanged(args: { name: string; value: unknown }): void;
-    _setOptionsByReference(): void;
-    _setDeprecatedOptions(): void;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-=======
->>>>>>> 21_1
    */
   export interface Condition {}
   /**
@@ -1461,10 +1428,7 @@ declare module DevExpress.data {
     export type Options = ArrayStoreOptions;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ArrayStoreOptions<T = ArrayStore>
@@ -1492,10 +1456,7 @@ declare module DevExpress.data {
     export type Options = CustomStoreOptions;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions extends DevExpress.data.Store.Options {
@@ -1708,10 +1669,7 @@ declare module DevExpress.data {
     export type Options = DataSourceOptions;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DataSourceOptions {
@@ -1828,10 +1786,6 @@ declare module DevExpress.data {
   }
   /**
    * [descr:LoadOptions]
-<<<<<<< HEAD
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-=======
->>>>>>> 21_1
    */
   export interface LoadOptions {
     /**
@@ -2416,10 +2370,7 @@ declare module DevExpress.data {
     wordWrapEnabled?: boolean;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface PivotGridDataSourceOptions {
@@ -3261,10 +3212,7 @@ declare module DevExpress.fileManagement {
     export type Options = CustomFileSystemProviderOptions;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomFileSystemProviderOptions
@@ -3554,10 +3502,7 @@ declare module DevExpress.fileManagement {
     export type Options = ObjectFileSystemProviderOptions;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ObjectFileSystemProviderOptions
@@ -3587,10 +3532,7 @@ declare module DevExpress.fileManagement {
     export type Options = RemoteFileSystemProviderOptions;
   }
   /**
-<<<<<<< HEAD
-=======
    * @deprecated Use Options instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RemoteFileSystemProviderOptions
@@ -5168,11 +5110,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxContextMenu>;
   }
   /**
-<<<<<<< HEAD
-   * @deprecated Use Item instead
-=======
    * @deprecated Use DevExpress.ui.dxContextMenu.Item instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxContextMenuItem extends dxMenuBaseItem {
@@ -6015,14 +5953,7 @@ declare module DevExpress.ui {
         readonly rowIndex: number;
         readonly row?: Row;
       };
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface CustomSummaryInfo {
-=======
     export type CustomSummaryInfo = {
->>>>>>> 21_1
       readonly component: dxDataGrid;
       readonly name?: string;
       readonly summaryProcess: string;
@@ -6093,14 +6024,7 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid> &
       DataChangeInfo;
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Editing extends EditingBase {
-=======
     export type Editing = EditingBase & {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
        */
@@ -6261,14 +6185,7 @@ declare module DevExpress.ui {
         readonly dataField?: string;
         readonly row?: Row;
       };
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ExcelCellInfo {
-=======
     export type ExcelCellInfo = {
->>>>>>> 21_1
       readonly component: dxDataGrid;
       horizontalAlignment?:
         | 'center'
@@ -6312,14 +6229,7 @@ declare module DevExpress.ui {
       readonly value?: string | number | Date;
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
-<<<<<<< HEAD
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-=======
     };
->>>>>>> 21_1
     export interface Export {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
@@ -6369,14 +6279,7 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid> & {
         fileName?: string;
       };
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface ExportTexts {
-=======
     export type ExportTexts = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.export.texts.exportAll]
        */
@@ -6571,14 +6474,7 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row>;
       };
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Grouping {
-=======
     export type Grouping = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.grouping.allowCollapsing]
        */
@@ -6599,16 +6495,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.grouping.texts]
        */
       texts?: GroupingTexts;
-<<<<<<< HEAD
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface GroupingTexts {
-=======
     };
     export type GroupingTexts = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.grouping.texts.groupByThisColumn]
        */
@@ -6629,16 +6517,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.grouping.texts.ungroupAll]
        */
       ungroupAll?: string;
-<<<<<<< HEAD
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface GroupPanel {
-=======
     };
     export type GroupPanel = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.groupPanel.allowColumnDragging]
        */
@@ -6775,14 +6655,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface MasterDetail {
-=======
     export type MasterDetail = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.masterDetail.autoExpandAll]
        */
@@ -7143,55 +7016,6 @@ declare module DevExpress.ui {
     export interface RowKeyInfo {
       readonly key: any;
     }
-<<<<<<< HEAD
-    /**
-     * [descr:dxDataGridRowObject]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface RowObject {
-      /**
-       * [descr:dxDataGridRowObject.data]
-       */
-      readonly data: any;
-      /**
-       * [descr:dxDataGridRowObject.groupIndex]
-       */
-      readonly groupIndex?: number;
-      /**
-       * [descr:dxDataGridRowObject.isEditing]
-       */
-      readonly isEditing?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.isExpanded]
-       */
-      readonly isExpanded?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.isNewRow]
-       */
-      readonly isNewRow?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.isSelected]
-       */
-      readonly isSelected?: boolean;
-      /**
-       * [descr:dxDataGridRowObject.key]
-       */
-      readonly key: any;
-      /**
-       * [descr:dxDataGridRowObject.rowIndex]
-       */
-      readonly rowIndex: number;
-      /**
-       * [descr:dxDataGridRowObject.rowType]
-       */
-      readonly rowType: string;
-      /**
-       * [descr:dxDataGridRowObject.values]
-       */
-      readonly values: Array<any>;
-    }
-=======
->>>>>>> 21_1
     export type RowPreparedEvent = DevExpress.events.EventInfo<dxDataGrid> & {
       readonly data: any;
       readonly key: any;
@@ -7294,18 +7118,11 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Scrolling extends ScrollingBase {
-=======
     export type Scrollable = DevExpress.core.Skip<
       dxScrollable,
       '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
     >;
     export type Scrolling = ScrollingBase & {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
@@ -7377,14 +7194,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Selection extends SelectionBase {
-=======
     export type Selection = SelectionBase & {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.selection.deferred]
        */
@@ -7501,16 +7311,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems]
        */
       totalItems?: Array<SummaryTotalItem>;
-<<<<<<< HEAD
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface SummaryGroupItem {
-=======
     };
     export type SummaryGroupItem = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.summary.groupItems.alignByColumn]
        */
@@ -7551,27 +7353,12 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
       valueFormat?: format;
-<<<<<<< HEAD
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface SummaryItemTextInfo {
-      readonly value?: string | number | Date;
-      readonly valueText: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface SummaryTexts {
-=======
     };
     export type SummaryItemTextInfo = {
       readonly value?: string | number | Date;
       readonly valueText: string;
     };
     export type SummaryTexts = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.summary.texts.avg]
        */
@@ -7608,16 +7395,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.texts.sumOtherColumn]
        */
       sumOtherColumn?: string;
-<<<<<<< HEAD
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface SummaryTotalItem {
-=======
     };
     export type SummaryTotalItem = {
->>>>>>> 21_1
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
        */
@@ -10914,11 +10693,7 @@ declare module DevExpress.ui {
     >;
   }
   /**
-<<<<<<< HEAD
-   * @deprecated Use ContexMenuItem instead
-=======
    * @deprecated Use DevExpress.ui.dxFileManager.ContextMenuItem instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFileManagerContextMenuItem
@@ -11669,11 +11444,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-<<<<<<< HEAD
-   * [descr:dxFilterBuilderCustomOperation]
-=======
    * @deprecated Use the CustomOperation type instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFilterBuilderCustomOperation {
@@ -11725,11 +11496,7 @@ declare module DevExpress.ui {
     name?: string;
   }
   /**
-<<<<<<< HEAD
-   * [descr:dxFilterBuilderField]
-=======
    * @deprecated Use the Field type instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFilterBuilderField {
@@ -15162,11 +14929,7 @@ declare module DevExpress.ui {
       | 'onHover';
   }
   /**
-<<<<<<< HEAD
-   * @deprecated 
-=======
    * @deprecated Use DevExpress.ui.dxMenu.Item instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxMenuItem extends dxMenuBaseItem {
@@ -20464,12 +20227,6 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.DataChangeInfo;
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-=======
->>>>>>> 21_1
     export interface Editing extends DevExpress.ui.dxDataGrid.EditingBase {
       /**
        * [descr:dxTreeListOptions.editing.allowAdding]
@@ -20597,10 +20354,6 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
-<<<<<<< HEAD
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-=======
->>>>>>> 21_1
      */
     export interface Node {
       /**
@@ -20650,10 +20403,6 @@ declare module DevExpress.ui {
     export type Properties = dxTreeListOptions;
     /**
      * [descr:dxTreeListRowObject]
-<<<<<<< HEAD
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-=======
->>>>>>> 21_1
      */
     export interface Row {
       /**
@@ -20793,28 +20542,16 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type SavingEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.SavingInfo;
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-=======
     export type Scrollable = DevExpress.core.Skip<
       dxScrollable,
       '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
     >;
->>>>>>> 21_1
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
        */
       mode?: 'standard' | 'virtual';
     }
-<<<<<<< HEAD
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-=======
->>>>>>> 21_1
     export interface Selection extends DevExpress.ui.dxDataGrid.SelectionBase {
       /**
        * [descr:dxTreeListOptions.selection.recursive]
@@ -21289,11 +21026,7 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeView>;
   }
   /**
-<<<<<<< HEAD
-   * @deprecated Use Item instead
-=======
    * @deprecated Use DevExpress.ui.dxTreeView.Item instead
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTreeViewItem extends CollectionWidgetItem {
@@ -21328,10 +21061,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxTreeViewNode]
-<<<<<<< HEAD
-=======
    * @deprecated [depNote:dxTreeViewNode]
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTreeViewNode {
@@ -21542,10 +21272,7 @@ declare module DevExpress.ui {
     extends DOMComponentOptions<dxValidationGroup> {}
   /**
    * [descr:dxValidationGroupResult]
-<<<<<<< HEAD
-=======
    * @deprecated [depNote:dxValidationGroupResult]
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxValidationGroupResult {
@@ -21735,10 +21462,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxValidatorResult]
-<<<<<<< HEAD
-=======
    * @deprecated [depNote:dxValidatorResult]
->>>>>>> 21_1
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxValidatorResult {
@@ -34682,12 +34406,6 @@ declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
 }
 declare module DevExpress.viz.dxFunnel {
-<<<<<<< HEAD
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-=======
->>>>>>> 21_1
   export type Item = dxFunnelItem;
   export type LegendItem = FunnelLegendItem;
 }
