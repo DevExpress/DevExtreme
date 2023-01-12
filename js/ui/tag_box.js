@@ -1020,7 +1020,10 @@ const TagBox = SelectBox.inherit({
     _integrateInput: function() {
         this._isInputReady.resolve();
         this.callBase();
-        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+
+        const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
+
+        this._updateTagsContainer(tagsContainer);
         this._renderTagRemoveAction();
     },
 
