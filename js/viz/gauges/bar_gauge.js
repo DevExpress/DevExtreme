@@ -272,7 +272,7 @@ export const dxBarGauge = BaseGauge.inherit({
             clearLabelsCrossTitle(bars, titleCoords.y + titleCoords.height);
             drawConnector(bars, connectorWidth);
         } else {
-            clearOverlappingLabels(bars,);
+            clearOverlappingLabels(bars);
         }
     },
 
