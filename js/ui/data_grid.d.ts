@@ -2452,7 +2452,7 @@ export interface ColumnBase<TRowData = any> {
     defaultCalculateFilterExpression?: this['calculateFilterExpression'];
     /**
      * @docid GridBaseColumn.calculateSortValue
-     * @type_function_param2 rowData:object
+     * @type_function_param1 rowData:object
      * @public
      */
     calculateSortValue?: string | ((rowData: TRowData) => any);
