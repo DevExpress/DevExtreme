@@ -52,20 +52,28 @@ export type WidgetName =
 'dxDropDownBox';
 
 export default async function createWidget(
-  widgetName: WidgetName,
-  options: unknown,
+  componentName: WidgetName,
+  componentOptions: unknown,
   selector = '#container',
+  options: {
+    disableFxAnimation: boolean;
+  } = {
+    disableFxAnimation: true,
+  },
 ): Promise<void> {
   await ClientFunction(() => {
-    const widgetOptions = typeof options === 'function' ? options() : options;
-    (window as any).widget = $(`${selector}`)[widgetName](widgetOptions)[widgetName]('instance');
+    (window as any).DevExpress.fx.off = options.disableFxAnimation;
+  })();
+
+  await ClientFunction(() => {
+    const widgetOptions = typeof componentOptions === 'function' ? componentOptions() : componentOptions;
+    (window as any).widget = $(`${selector}`)[componentName](widgetOptions)[componentName]('instance');
   },
   {
-    dependencies:
-            {
-              widgetName,
-              options,
-              selector,
-            },
+    dependencies: {
+      componentName,
+      componentOptions,
+      selector,
+    },
   })();
 }

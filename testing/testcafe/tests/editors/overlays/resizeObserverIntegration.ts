@@ -46,7 +46,7 @@ test('Popup should be centered regarding the container even if content dimension
   width: 'auto',
   height: 'auto',
   contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-}));
+}, undefined, { disableFxAnimation: false }));
 
 test('Popup should be centered regarding the container even if popup dimension option is changed during animation', async (t) => {
   const popup = new Popup('#container');
@@ -85,7 +85,7 @@ test('Popup should be centered regarding the container even if popup dimension o
   width: 'auto',
   height: 'auto',
   contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-}));
+}, undefined, { disableFxAnimation: false }));
 
 test('Popup should be centered regarding the container even if content dimension is changed', async (t) => {
   const popup = new Popup('#container');
@@ -125,7 +125,7 @@ test('Popup should be centered regarding the container even if content dimension
   height: 'auto',
   contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
   animation: null,
-}));
+}, undefined, { disableFxAnimation: false }));
 
 safeSizeTest('popup should be repositioned after window resize', async (t) => {
   const popup = new Popup('#container');
@@ -162,7 +162,7 @@ safeSizeTest('popup should be repositioned after window resize', async (t) => {
   visible: true,
   width: 100,
   height: 100,
-}));
+}, undefined, { disableFxAnimation: false }));
 
 test('Popup dimensions should be correct after width or height animation', async (t) => {
   const popup = new Popup('#container');
@@ -193,7 +193,7 @@ test('Popup dimensions should be correct after width or height animation', async
       to: { width: '300px', height: '300px' },
     },
   },
-}));
+}, undefined, { disableFxAnimation: false }));
 
 test('Showing and shown events should be raised only once even after resize during animation', async (t) => {
   const popup = new Popup('#container');
@@ -226,7 +226,7 @@ test('Showing and shown events should be raised only once even after resize duri
   width: 'auto',
   height: 'auto',
   contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
-})).after(async () => {
+}, undefined, { disableFxAnimation: false })).after(async () => {
   await ClientFunction(() => {
     delete (window as any).shownCallCount;
     delete (window as any).showingCallCount;
