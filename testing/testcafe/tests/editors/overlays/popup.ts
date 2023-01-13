@@ -44,7 +44,7 @@ test('Popup should be centered regarding the container even if container is anim
     width: 600,
     height: 400,
     visible: true,
-  });
+  }, undefined, { disableFxAnimation: false });
 
   await appendElementTo('#container', 'div', 'innerContainer', {});
   await t.wait(500);
@@ -55,7 +55,7 @@ test('Popup should be centered regarding the container even if container is anim
     visible: true,
     width: 100,
     height: 100,
-  }, '#innerContainer');
+  }, '#innerContainer', { disableFxAnimation: false });
 });
 
 test('Popup wrapper left top corner should be the same as the container right left corner even if container is animated', async () => {
@@ -86,7 +86,7 @@ test('Popup wrapper left top corner should be the same as the container right le
     width: 600,
     height: 400,
     visible: true,
-  });
+  }, undefined, { disableFxAnimation: false });
 
   await appendElementTo('#container', 'div', 'innerContainer', {});
   await t.wait(500);
@@ -97,7 +97,7 @@ test('Popup wrapper left top corner should be the same as the container right le
     visible: true,
     width: 100,
     height: 100,
-  }, '#innerContainer');
+  }, '#innerContainer', { disableFxAnimation: false });
 });
 
 test('There should not be any errors when position.of is html (T946851)', async () => {
@@ -106,4 +106,4 @@ test('There should not be any errors when position.of is html (T946851)', async 
 }).before(async () => createWidget('dxPopup', {
   position: { of: 'html' },
   visible: true,
-}));
+}, undefined, { disableFxAnimation: false }));
