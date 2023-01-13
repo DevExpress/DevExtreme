@@ -48,7 +48,7 @@ DemoApp.controller('DemoController', ($scope) => {
       series,
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
     },
     onValueChanged(e) {
       const zoomedChart = $('#chart-demo #zoomedChart').dxChart('instance');

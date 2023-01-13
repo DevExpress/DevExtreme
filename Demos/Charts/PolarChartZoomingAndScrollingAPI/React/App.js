@@ -85,7 +85,7 @@ class App extends React.Component {
           >
             <MinorTick visible={false} />
           </Scale>
-          <Behavior callValueChanged="onMoving" />
+          <Behavior valueChangeMode="onHandleMove" />
         </RangeSelector>
       </React.Fragment>
     );

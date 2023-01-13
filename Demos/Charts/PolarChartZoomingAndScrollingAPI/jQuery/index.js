@@ -58,7 +58,7 @@ $(() => {
       },
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
     },
     onValueChanged(e) {
       const zoomedChart = $('#zoomedChart').dxPolarChart('instance');

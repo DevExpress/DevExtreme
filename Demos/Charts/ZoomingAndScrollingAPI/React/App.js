@@ -57,7 +57,7 @@ class App extends React.Component {
           <Margin left={10} />
           <Scale minorTickCount={1} startValue={10} endValue={880} />
           <ChartOptions palette="Harmony Light">
-            <Behavior callValueChanged="onMoving" />
+            <Behavior valueChangeMode="onHandleMove" />
             <Legend visible={false} />
             <Series argumentField="arg" valueField="y1" />
             <Series argumentField="arg" valueField="y2" />

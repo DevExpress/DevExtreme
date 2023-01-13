@@ -42,7 +42,7 @@ DemoApp.controller('DemoController', ($scope) => {
       palette: 'Harmony Light',
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
     },
     onValueChanged(e) {
       const zoomedChart = $('#zoomedChart').dxChart('instance');

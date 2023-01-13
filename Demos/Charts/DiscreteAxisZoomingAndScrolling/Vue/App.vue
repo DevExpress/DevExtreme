@@ -51,7 +51,7 @@
             type="bar"
           />
         </DxRsChart>
-        <DxBehavior call-value-changed="onMoving"/>
+        <DxBehavior value-change-mode="onHandleMove"/>
       </DxRangeSelector>
     </div>
   </div>

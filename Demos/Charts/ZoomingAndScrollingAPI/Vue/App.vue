@@ -22,7 +22,7 @@
         :series="series"
         palette="Harmony Light"
       />
-      <DxBehavior call-value-changed="onMoving"/>
+      <DxBehavior value-change-mode="onHandleMove"/>
     </DxRangeSelector>
   </div>
 </template>

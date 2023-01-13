@@ -33,7 +33,7 @@ class App extends React.Component {
               <Format type="decimal" />
             </Label>
           </Scale>
-          <Behavior callValueChanged="onMoving" />
+          <Behavior valueChangeMode="onHandleMove" />
         </RangeSelector>
         <h2 className="grid-header">Selected Employees</h2>
         <DataGrid

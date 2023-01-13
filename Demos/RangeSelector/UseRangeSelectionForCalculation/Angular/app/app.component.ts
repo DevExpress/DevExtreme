@@ -17,7 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   pipe: any = new DatePipe('en-US');
 
-  dataSource: string[] = ['onMoving', 'onMovingComplete'];
+  dataSource: string[] = ['onHandleMove', 'onHandleRelease'];
 
   workingDaysCount = 260;
 

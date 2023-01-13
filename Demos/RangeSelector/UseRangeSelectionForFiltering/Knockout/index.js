@@ -25,7 +25,7 @@ window.onload = function () {
       },
       dataSourceField: 'BirthYear',
       behavior: {
-        callValueChanged: 'onMoving',
+        valueChangeMode: 'onHandleMove',
       },
       title: 'Filter Employee List by Birth Year',
       onValueChanged(e) {

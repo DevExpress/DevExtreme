@@ -63,7 +63,7 @@ DemoApp.controller('DemoController', ($scope) => {
       placeholderHeight: 20,
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
       snapToTicks: false,
     },
     onValueChanged(e) {

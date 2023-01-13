@@ -88,7 +88,7 @@ class App extends React.Component {
           />
           <Behavior
             snapToTicks={false}
-            callValueChanged="onMoving"
+            valueChangeMode="onHandleMove"
           />
         </RangeSelector>
       </div>

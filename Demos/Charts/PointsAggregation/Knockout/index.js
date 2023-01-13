@@ -55,7 +55,7 @@ window.onload = function () {
       },
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
       snapToTicks: false,
     },
     onValueChanged(e) {

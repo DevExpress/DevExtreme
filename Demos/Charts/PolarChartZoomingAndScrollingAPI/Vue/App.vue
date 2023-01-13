@@ -53,7 +53,7 @@
       >
         <DxMinorTick :visible="false"/>
       </DxScale>
-      <DxBehavior call-value-changed="onMoving"/>
+      <DxBehavior value-change-mode="onHandleMove"/>
     </DxRangeSelector>
   </div>
 </template>

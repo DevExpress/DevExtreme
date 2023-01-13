@@ -41,7 +41,7 @@ window.onload = function () {
       palette: 'Harmony Light',
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
     },
     onValueChanged(e) {
       const zoomedChart = $('#container #zoomedChart').dxChart('instance');

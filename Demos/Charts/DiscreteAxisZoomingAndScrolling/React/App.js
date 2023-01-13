@@ -71,7 +71,7 @@ class App extends React.Component {
           <Size height={120} />
           <Margin left={10} />
           <Scale minorTickCount={1} startValue="Inner Core" endValue="Upper Crust" />
-          <Behavior callValueChanged="onMoving" />
+          <Behavior valueChangeMode="onHandleMove" />
 
           <ChartOptions palette="Soft">
             {rsChartSeriesList}

@@ -17,7 +17,7 @@ $(() => {
       },
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
     },
     sliderMarker: {
       format: 'dd EEEE',
@@ -38,11 +38,11 @@ $(() => {
   }).dxRangeSelector('instance');
 
   $('#handle').dxSelectBox({
-    dataSource: ['onMoving', 'onMovingComplete'],
+    dataSource: ['onHandleMove', 'onHandleRelease'],
     width: 210,
-    value: 'onMoving',
+    value: 'onHandleMove',
     onValueChanged(data) {
-      rangeSelector.option('behavior.callValueChanged', data.value);
+      rangeSelector.option('behavior.valueChangeMode', data.value);
     },
   });
 });

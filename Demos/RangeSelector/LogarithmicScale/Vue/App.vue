@@ -36,7 +36,7 @@
       <DxSliderMarker format="exponential"/>
       <DxBehavior
         :snap-to-ticks="false"
-        call-value-changed="onMoving"
+        value-change-mode="onHandleMove"
       />
     </DxRangeSelector>
   </div>

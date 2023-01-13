@@ -46,7 +46,7 @@ $(() => {
       series,
     },
     behavior: {
-      callValueChanged: 'onMoving',
+      valueChangeMode: 'onHandleMove',
     },
     onValueChanged(e) {
       chart.getArgumentAxis().visualRange(e.value);

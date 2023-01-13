@@ -49,7 +49,7 @@ class App extends React.Component {
             <RsLabel format="exponential" />
           </Scale>
           <SliderMarker format="exponential" />
-          <Behavior snapToTicks={false} callValueChanged="onMoving" />
+          <Behavior snapToTicks={false} valueChangeMode="onHandleMove" />
         </RangeSelector>
       </React.Fragment>
     );

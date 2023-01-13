@@ -45,7 +45,7 @@ window.onload = function () {
         format: 'exponential',
       },
       behavior: {
-        callValueChanged: 'onMoving',
+        valueChangeMode: 'onHandleMove',
         snapToTicks: false,
       },
       onValueChanged(e) {

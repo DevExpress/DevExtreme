@@ -6,7 +6,7 @@ import { SelectBox } from 'devextreme-react/select-box';
 
 const startValue = new Date(2011, 0, 1);
 const endValue = new Date(2011, 11, 31);
-const behaviorModes = ['onMoving', 'onMovingComplete'];
+const behaviorModes = ['onHandleMove', 'onHandleRelease'];
 
 class App extends React.Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class App extends React.Component {
             <Marker visible={false} />
             <Label format="MMM" />
           </Scale>
-          <Behavior callValueChanged={this.state.behaviorMode} />
+          <Behavior valueChangeMode={this.state.behaviorMode} />
           <SliderMarker format="dd EEEE" />
         </RangeSelector>
         <h2>Working days count: { this.state.workingDaysCount }</h2>

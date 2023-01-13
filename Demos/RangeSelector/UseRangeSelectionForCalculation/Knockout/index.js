@@ -1,12 +1,12 @@
 window.onload = function () {
   const workingDaysCount = ko.observable(260);
-  const callValueChanged = ko.observable('onMoving');
+  const valueChangeMode = ko.observable('onHandleMove');
 
   const viewModel = {
     workingDaysCount,
     rangeSelectorOptions: {
       behavior: {
-        callValueChanged,
+        valueChangeMode,
       },
       margin: {
         top: 50,
@@ -42,8 +42,8 @@ window.onload = function () {
       },
     },
     selectBoxOptions: {
-      value: callValueChanged,
-      dataSource: ['onMoving', 'onMovingComplete'],
+      value: valueChangeMode,
+      dataSource: ['onHandleMove', 'onHandleRelease'],
       width: 210,
     },
   };

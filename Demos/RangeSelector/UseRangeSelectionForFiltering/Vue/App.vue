@@ -16,7 +16,7 @@
           <DxFormat type="decimal"/>
         </DxLabel>
       </DxScale>
-      <DxBehavior call-value-changed="onMoving"/>
+      <DxBehavior value-change-mode="onHandleMove"/>
     </DxRangeSelector>
     <h2 class="grid-header">Selected Employees</h2>
     <DxDataGrid

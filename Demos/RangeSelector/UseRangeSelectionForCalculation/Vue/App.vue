@@ -17,7 +17,7 @@
           <DxMarker :visible="false"/>
           <DxLabel format="MMM"/>
         </DxScale>
-        <DxBehavior :call-value-changed="currentBehaviorMode"/>
+        <DxBehavior :value-change-mode="currentBehaviorMode"/>
         <DxSliderMarker format="dd EEEE"/>
       </DxRangeSelector>
       <h2>Working days count: {{ workingDaysCount }}</h2>
@@ -62,7 +62,7 @@ export default {
   },
   data() {
     const range = [new Date(2011, 0, 1), new Date(2011, 11, 31)];
-    const behaviorModes = ['onMoving', 'onMovingComplete'];
+    const behaviorModes = ['onHandleMove', 'onHandleRelease'];
     return {
       startValue: range[0],
       endValue: range[1],

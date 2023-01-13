@@ -3,7 +3,7 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', ($scope) => {
   $scope.workingDaysCount = 260;
   $scope.behavior = {
-    callValueChanged: 'onMoving',
+    valueChangeMode: 'onHandleMove',
   };
 
   $scope.rangeSelectorOptions = {
@@ -46,9 +46,9 @@ DemoApp.controller('DemoController', ($scope) => {
 
   $scope.selectBoxOptions = {
     bindingOptions: {
-      value: 'behavior.callValueChanged',
+      value: 'behavior.valueChangeMode',
     },
-    dataSource: ['onMoving', 'onMovingComplete'],
+    dataSource: ['onHandleMove', 'onHandleRelease'],
     width: 210,
   };
 });
