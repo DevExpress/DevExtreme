@@ -2426,40 +2426,36 @@ export interface ColumnBase<TRowData = any> {
     allowSorting?: boolean;
     /**
      * @docid GridBaseColumn.calculateCellValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_param1 rowData:object
      * @public
      */
-    calculateCellValue?: ((this: ColumnBase, rowData: TRowData) => any);
+    calculateCellValue?: ((rowData: TRowData) => any);
     /**
      * @public
      */
     defaultCalculateCellValue?: this['calculateCellValue'];
     /**
      * @docid GridBaseColumn.calculateDisplayValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_param1 rowData:object
      * @public
      */
-    calculateDisplayValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
+    calculateDisplayValue?: string | ((rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
-     * @type_function_param1 this:GridBaseColumn
      * @type_function_return Filter expression
      * @public
      */
-    calculateFilterExpression?: ((this: ColumnBase, filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
+    calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
     /**
      * @public
      */
     defaultCalculateFilterExpression?: this['calculateFilterExpression'];
     /**
      * @docid GridBaseColumn.calculateSortValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_param1 rowData:object
      * @public
      */
-    calculateSortValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
+    calculateSortValue?: string | ((rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.caption
      * @default undefined
@@ -2474,15 +2470,14 @@ export interface ColumnBase<TRowData = any> {
     cssClass?: string;
     /**
      * @docid GridBaseColumn.customizeText
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 cellInfo:object
-     * @type_function_param2_field1 value:string|number|date
-     * @type_function_param2_field2 valueText:string
-     * @type_function_param2_field3 target:string
-     * @type_function_param2_field4 groupInterval:string|number
+     * @type_function_param1 cellInfo:object
+     * @type_function_param1_field1 value:string|number|date
+     * @type_function_param1_field2 valueText:string
+     * @type_function_param1_field3 target:string
+     * @type_function_param1_field4 groupInterval:string|number
      * @public
      */
-    customizeText?: ((this: ColumnBase, cellInfo: ColumnCustomizeTextArg) => string);
+    customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
     /**
      * @docid GridBaseColumn.dataField
      * @default undefined
@@ -2625,13 +2620,12 @@ export interface ColumnBase<TRowData = any> {
     selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
     /**
      * @docid GridBaseColumn.setCellValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 newData:object
-     * @type_function_param4 currentRowData:object
+     * @type_function_param1 newData:object
+     * @type_function_param3 currentRowData:object
      * @type_function_return void|Promise<void>
      * @public
      */
-    setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+    setCellValue?: ((newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
     /**
      * @public
      */
@@ -2667,10 +2661,9 @@ export interface ColumnBase<TRowData = any> {
     /**
      * @docid GridBaseColumn.sortingMethod
      * @default undefined
-     * @type_function_param1 this:GridBaseColumn
      * @public
      */
-    sortingMethod?: ((this: ColumnBase, value1: any, value2: any) => number);
+    sortingMethod?: ((value1: any, value2: any) => number);
     /**
      * @docid GridBaseColumn.trueText
      * @default "true"
@@ -4589,11 +4582,10 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxDataGridColumn.calculateGroupValue
-     * @type_function_param1 this:GridBaseColumn
-     * @type_function_param2 rowData:object
+     * @type_function_param1 rowData:object
      * @public
      */
-    calculateGroupValue?: string | ((this: ColumnBase, rowData: TRowData) => any);
+    calculateGroupValue?: string | ((rowData: TRowData) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
      * @type_function_param2 cellInfo:object
