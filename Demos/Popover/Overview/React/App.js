@@ -20,22 +20,6 @@ const animationConfig = {
 };
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      defaultVisible: false,
-      withTitleVisible: false,
-      withAnimationOptionsVisible: false,
-      withShadingOptionsVisible: false,
-    };
-
-    this.toggleDefault = this.toggleDefault.bind(this);
-    this.toggleWithTitle = this.toggleWithTitle.bind(this);
-    this.toggleWithAnimationOptions = this.toggleWithAnimationOptions.bind(this);
-    this.showWithShadingOptions = this.showWithShadingOptions.bind(this);
-    this.hideWithShadingOptions = this.hideWithShadingOptions.bind(this);
-  }
-
   render() {
     return (
       <div className="dx-fieldset form">
@@ -49,16 +33,15 @@ class App extends React.Component {
               <span id="subject1">Google AdWords Strategy </span>
                             (<a
                 id="link1"
-                onMouseEnter={this.toggleDefault}
-                onMouseLeave={this.toggleDefault}
               >details</a>)
             </p>
 
             <Popover
               target="#link1"
+              showEvent="mouseenter"
+              hideEvent="mouseleave"
               position="top"
               width={300}
-              visible={this.state.defaultVisible}
             >
                             Make final decision on whether we are going to
                             increase our Google AdWord spend based
@@ -76,18 +59,17 @@ class App extends React.Component {
               <span id="subject2">Rollout of New Website and Marketing Brochures </span>
                             (<a
                 id="link2"
-                onMouseEnter={this.toggleWithTitle}
-                onMouseLeave={this.toggleWithTitle}
               >details</a>)
             </p>
 
             <Popover
               target="#link2"
+              showEvent="mouseenter"
+              hideEvent="mouseleave"
               position="top"
               width={300}
               showTitle={true}
-              title="Details:"
-              visible={this.state.withTitleVisible}
+              title="Details"
             >
                             The designs for new brochures and
                             website have been approved.
@@ -105,16 +87,15 @@ class App extends React.Component {
               <span id="subject3">Create 2012 Sales Report </span>
                             (<a
                 id="link3"
-                onMouseEnter={this.toggleWithAnimationOptions}
-                onMouseLeave={this.toggleWithAnimationOptions}
               >details</a>)
             </p>
 
             <Popover
               target="#link3"
+              showEvent="mouseenter"
+              hideEvent="mouseleave"
               position="top"
               width={300}
-              visible={this.state.withAnimationOptionsVisible}
               animation={animationConfig}
             >
               2012 Sales Report has to be completed
@@ -133,16 +114,14 @@ class App extends React.Component {
               <span id="subject4">Website Re-Design Plan </span>
                 (<a
                 id="link4"
-                onClick={this.showWithShadingOptions}
               >more</a>)
             </p>
 
             <Popover
               target="#link4"
+              showEvent="click"
               position="top"
               width={300}
-              visible={this.state.withShadingOptionsVisible}
-              onHiding={this.hideWithShadingOptions}
               shading={true}
               shadingColor="rgba(0, 0, 0, 0.5)"
             >
@@ -154,36 +133,6 @@ class App extends React.Component {
 
       </div>
     );
-  }
-
-  toggleDefault() {
-    this.setState({
-      defaultVisible: !this.state.defaultVisible,
-    });
-  }
-
-  toggleWithTitle() {
-    this.setState({
-      withTitleVisible: !this.state.withTitleVisible,
-    });
-  }
-
-  toggleWithAnimationOptions() {
-    this.setState({
-      withAnimationOptionsVisible: !this.state.withAnimationOptionsVisible,
-    });
-  }
-
-  showWithShadingOptions() {
-    this.setState({
-      withShadingOptionsVisible: true,
-    });
-  }
-
-  hideWithShadingOptions() {
-    this.setState({
-      withShadingOptionsVisible: false,
-    });
   }
 }
 

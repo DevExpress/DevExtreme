@@ -14,25 +14,6 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  defaultVisible = false;
-
-  withTemplateVisible = false;
-
-  withAnimationVisible = false;
-
-  constructor() {}
-
-  toggleDefault() {
-    this.defaultVisible = !this.defaultVisible;
-  }
-
-  toggleWithTemplate() {
-    this.withTemplateVisible = !this.withTemplateVisible;
-  }
-
-  toggleWithAnimation() {
-    this.withAnimationVisible = !this.withAnimationVisible;
-  }
 }
 
 @NgModule({

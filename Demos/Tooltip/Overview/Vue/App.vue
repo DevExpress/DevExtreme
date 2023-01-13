@@ -6,14 +6,13 @@
       <img
         id="product1"
         src="../../../../images/products/17.png"
-        @mouseenter="toggleDefault"
-        @mouseleave="toggleDefault"
       >
 
       <DxTooltip
-        v-model:visible="defaultVisible"
         :hide-on-outside-click="false"
         target="#product1"
+        show-event="mouseenter"
+        hide-event="mouseleave"
       >
         ExcelRemote IR
       </DxTooltip>
@@ -24,14 +23,13 @@
       <img
         id="product2"
         src="../../../../images/products/3.png"
-        @mouseenter="toggleWithTemplate"
-        @mouseleave="toggleWithTemplate"
       >
 
       <DxTooltip
-        v-model:visible="withTemplateVisible"
         :hide-on-outside-click="false"
         target="#product2"
+        show-event="mouseenter"
+        hide-event="mouseleave"
         position="right"
       >
         <img
@@ -47,15 +45,14 @@
       <img
         :id="'product3'"
         src="../../../../images/products/15.png"
-        @mouseenter="toggleWithAnimation"
-        @mouseleave="toggleWithAnimation"
       >
 
       <DxTooltip
         :target="'#product3'"
+        show-event="mouseenter"
+        hide-event="mouseleave"
         :position="'top'"
         :animation="animationConfig"
-        v-model:visible="withAnimationVisible"
         :hide-on-outside-click="false"
       >
         Projector PlusHD
@@ -74,9 +71,6 @@ export default {
 
   data() {
     return {
-      defaultVisible: false,
-      withAnimationVisible: false,
-      withTemplateVisible: false,
       animationConfig: {
         show: {
           type: 'slide',
@@ -102,20 +96,6 @@ export default {
         },
       },
     };
-  },
-
-  methods: {
-    toggleDefault() {
-      this.defaultVisible = !this.defaultVisible;
-    },
-
-    toggleWithTemplate() {
-      this.withTemplateVisible = !this.withTemplateVisible;
-    },
-
-    toggleWithAnimation() {
-      this.withAnimationVisible = !this.withAnimationVisible;
-    },
   },
 };
 </script>

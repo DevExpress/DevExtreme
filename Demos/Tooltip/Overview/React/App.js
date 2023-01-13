@@ -28,19 +28,6 @@ const animationConfig = {
 };
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      defaultVisible: false,
-      withAnimationVisible: false,
-      withTemplateVisible: false,
-    };
-
-    this.toggleDefault = this.toggleDefault.bind(this);
-    this.toggleWithTemplate = this.toggleWithTemplate.bind(this);
-    this.toggleWithAnimation = this.toggleWithAnimation.bind(this);
-  }
-
   render() {
     return (
       <div className="form">
@@ -50,13 +37,12 @@ class App extends React.Component {
           <img
             id="product1"
             src="../../../../images/products/17.png"
-            onMouseEnter={this.toggleDefault}
-            onMouseLeave={this.toggleDefault}
           />
 
           <Tooltip
             target="#product1"
-            visible={this.state.defaultVisible}
+            showEvent="mouseenter"
+            hideEvent="mouseleave"
             hideOnOutsideClick={false}
           >
             <div>ExcelRemote IR</div>
@@ -68,14 +54,13 @@ class App extends React.Component {
           <img
             id="product2"
             src="../../../../images/products/3.png"
-            onMouseEnter={this.toggleWithTemplate}
-            onMouseLeave={this.toggleWithTemplate}
           />
 
           <Tooltip
             target="#product2"
+            showEvent="mouseenter"
+            hideEvent="mouseleave"
             position="right"
-            visible={this.state.withTemplateVisible}
             hideOnOutsideClick={false}
           >
             <img width="150" src="../../../../images/products/3.png" /><br />
@@ -88,15 +73,14 @@ class App extends React.Component {
           <img
             id="product3"
             src="../../../../images/products/15.png"
-            onMouseEnter={this.toggleWithAnimation}
-            onMouseLeave={this.toggleWithAnimation}
           />
 
           <Tooltip
             target="#product3"
+            showEvent="mouseenter"
+            hideEvent="mouseleave"
             position="top"
             animation={animationConfig}
-            visible={this.state.withAnimationVisible}
             hideOnOutsideClick={false}
           >
             <div>Projector PlusHD</div>
@@ -105,24 +89,6 @@ class App extends React.Component {
 
       </div>
     );
-  }
-
-  toggleDefault() {
-    this.setState({
-      defaultVisible: !this.state.defaultVisible,
-    });
-  }
-
-  toggleWithTemplate() {
-    this.setState({
-      withTemplateVisible: !this.state.withTemplateVisible,
-    });
-  }
-
-  toggleWithAnimation() {
-    this.setState({
-      withAnimationVisible: !this.state.withAnimationVisible,
-    });
   }
 }
 

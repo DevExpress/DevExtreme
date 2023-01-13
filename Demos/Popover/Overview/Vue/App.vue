@@ -10,15 +10,14 @@
           <span id="subject1">Google AdWords Strategy</span>
           (<a
             id="link1"
-            @mouseenter="toggleDefault"
-            @mouseleave="toggleDefault"
           >details</a>)
         </p>
 
         <DxPopover
           :width="300"
-          :visible="defaultVisible"
           target="#link1"
+          show-event="mouseenter"
+          hide-event="mouseleave"
           position="top"
         >
           Make final decision on whether we are going to
@@ -37,18 +36,17 @@
           <span id="subject2">Rollout of New Website and Marketing Brochures</span>
           (<a
             id="link2"
-            @mouseenter="toggleWithTitle"
-            @mouseleave="toggleWithTitle"
           >details</a>)
         </p>
 
         <DxPopover
           :width="300"
           :show-title="true"
-          :visible="withTitleVisible"
           target="#link2"
+          show-event="mouseenter"
+          hide-event="mouseleave"
           position="top"
-          title="Details:"
+          title="Details"
         >
           The designs for new brochures and
           website have been approved.
@@ -66,16 +64,15 @@
           <span id="subject3">Create 2012 Sales Report</span>
           (<a
             id="link3"
-            @mouseenter="toggleWithAnimationOptions"
-            @mouseleave="toggleWithAnimationOptions"
           >details</a>)
         </p>
 
         <DxPopover
           :width="300"
-          :visible="withAnimationOptionsVisible"
           :animation="animationConfig"
           target="#link3"
+          show-event="mouseenter"
+          hide-event="mouseleave"
           position="top"
         >
           2012 Sales Report has to be completed
@@ -94,15 +91,14 @@
           <span id="subject4">Website Re-Design Plan</span>
           (<a
             id="link4"
-            @click="showWithShadingOptions"
           >more</a>)
         </p>
 
         <DxPopover
           :width="300"
-          v-model:visible="withShadingOptionsVisible"
           :shading="true"
           target="#link4"
+          show-event="click"
           position="top"
           shading-color="rgba(0, 0, 0, 0.5)"
         >
@@ -122,10 +118,6 @@ export default {
   },
   data() {
     return {
-      defaultVisible: false,
-      withTitleVisible: false,
-      withAnimationOptionsVisible: false,
-      withShadingOptionsVisible: false,
       animationConfig: {
         show: {
           type: 'pop',
@@ -143,23 +135,6 @@ export default {
         },
       },
     };
-  },
-  methods: {
-    toggleDefault() {
-      this.defaultVisible = !this.defaultVisible;
-    },
-
-    toggleWithTitle() {
-      this.withTitleVisible = !this.withTitleVisible;
-    },
-
-    toggleWithAnimationOptions() {
-      this.withAnimationOptionsVisible = !this.withAnimationOptionsVisible;
-    },
-
-    showWithShadingOptions() {
-      this.withShadingOptionsVisible = true;
-    },
   },
 };
 </script>

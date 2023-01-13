@@ -13,36 +13,6 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-  defaultVisible: boolean;
-
-  withTitleVisible: boolean;
-
-  withAnimationOptionsVisible: boolean;
-
-  withShadingOptionsVisible: boolean;
-
-  constructor() {
-    this.defaultVisible = false;
-    this.withTitleVisible = false;
-    this.withAnimationOptionsVisible = false;
-    this.withShadingOptionsVisible = false;
-  }
-
-  toggleDefault() {
-    this.defaultVisible = !this.defaultVisible;
-  }
-
-  toggleWithTitle() {
-    this.withTitleVisible = !this.withTitleVisible;
-  }
-
-  toggleWithAnimationOptions() {
-    this.withAnimationOptionsVisible = !this.withAnimationOptionsVisible;
-  }
-
-  toggleWithShadingOptions() {
-    this.withShadingOptionsVisible = !this.withShadingOptionsVisible;
-  }
 }
 
 @NgModule({

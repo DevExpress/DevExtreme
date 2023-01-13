@@ -4,18 +4,14 @@
     <div class="dx-field-value-static">
       <p>
         <span id="subject1">Google AdWords Strategy</span>
-        (<a
-          id="link1"
-          (mouseenter)="toggleDefault()"
-          (mouseleave)="toggleDefault()"
-          >details</a
-        >)
+        (<a id="link1">details</a>)
       </p>
       <dx-popover
         target="#link1"
+        showEvent="mouseenter"
+        hideEvent="mouseleave"
         position="top"
         [width]="300"
-        [(visible)]="defaultVisible"
       >
         <div *dxTemplate="let data = model; of: 'content'">
           Make final decision on whether we are going to increase our Google
@@ -32,20 +28,16 @@
         <span id="subject2">
           Rollout of New Website and Marketing Brochures
         </span>
-        (<a
-          id="link2"
-          (mouseenter)="toggleWithTitle()"
-          (mouseleave)="toggleWithTitle()"
-          >details</a
-        >)
+        (<a id="link2">details</a>)
       </p>
       <dx-popover
         target="#link2"
+        showEvent="mouseenter"
+        hideEvent="mouseleave"
         position="bottom"
         [width]="300"
         [showTitle]="true"
-        title="Details:"
-        [(visible)]="withTitleVisible"
+        title="Details"
       >
         <div *dxTemplate="let data = model; of: 'content'">
           The designs for new brochures and website have been approved. Launch
@@ -60,18 +52,14 @@
     <div class="dx-field-value-static">
       <p>
         <span id="subject3"> Create 2012 Sales Report </span>
-        (<a
-          id="link3"
-          (mouseenter)="toggleWithAnimationOptions()"
-          (mouseleave)="toggleWithAnimationOptions()"
-          >details</a
-        >)
+        (<a id="link3">details</a>)
       </p>
       <dx-popover
         target="#link3"
+        showEvent="mouseenter"
+        hideEvent="mouseleave"
         position="top"
         [width]="300"
-        [(visible)]="withAnimationOptionsVisible"
       >
         <dxo-animation>
           <dxo-show
@@ -94,15 +82,15 @@
     <div class="dx-field-value-static">
       <p>
         <span id="subject4">Website Re-Design Plan</span>
-        (<a id="link4" (click)="toggleWithShadingOptions()">more</a>)
+        (<a id="link4">more</a>)
       </p>
       <dx-popover
         target="#link4"
+        showEvent="click"
         position="top"
         [width]="300"
         [shading]="true"
         shadingColor="rgba(0, 0, 0, 0.5)"
-        [(visible)]="withShadingOptionsVisible"
       >
         <div *dxTemplate="let data of 'content'">
           The changes in our brochure designs for 2013 require us to update key
