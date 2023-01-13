@@ -5069,31 +5069,22 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.equal($field.text(), '', 'text was cleared after the deselect');
     });
 
-    QUnit.module('one tabBox with fieldTemplate and another tagBox', {
-        beforeEach: function() {
-            const $tagBox = $('#anotherContainer').dxTagBox({
-                items: [1, 2, 3],
-                value: [1],
-            });
-            this.tagBox = $tagBox.dxTagBox('instance');
-
-            this.tagBoxWithFieldTemplate = $('#tagBox').dxTagBox({
-                items: [1, 2, 3],
-                value: [1],
-                fieldTemplate: () => $('<div>').dxTextBox()
-            }).dxTagBox('instance');
-
-
-            $tagBox.find('.dx-tag-remove-button').trigger('dxclick');
-        }
-    }, () => {
-        QUnit.test('tag should be removed after click on remove button in tagBox without template (T1137828)', function(assert) {
-            assert.strictEqual(this.tagBox.option('value').length, 0);
+    QUnit.test('tagBox with fieldTemplate should not add removeTagHandler to other tagBoxes (T1137828)', function(assert) {
+        const $tagBox = $('#anotherContainer').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
         });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const tagBoxWithFieldTemplate = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            fieldTemplate: () => $('<div>').dxTextBox()
+        }).dxTagBox('instance');
 
-        QUnit.test('no tags should be removed in tagBox with template after removing tag in tagBox without template (T1137828)', function(assert) {
-            assert.strictEqual(this.tagBoxWithFieldTemplate.option('value').length, 1);
-        });
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+
+        assert.strictEqual(tagBox.option('value').length, 0);
+        assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
     });
 });
 
