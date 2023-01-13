@@ -63,7 +63,7 @@ export default async function createWidget(
 ): Promise<void> {
   await ClientFunction(() => {
     (window as any).DevExpress.fx.off = options.disableFxAnimation;
-  })();
+  }, { dependencies: options })();
 
   await ClientFunction(() => {
     const widgetOptions = typeof componentOptions === 'function' ? componentOptions() : componentOptions;
