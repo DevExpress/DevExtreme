@@ -32,7 +32,7 @@
     "devexpress-gantt": "2.0.40",
     "jszip": "^3.7.1",
     "devextreme-quill": "~1.1.5",
-    "rrule": "2.6.6",
+    "rrule": "2.7.0",
     "showdown": "^1.9.1",
     "turndown": "~7.0.0",
     "preact": "10.9.0"
