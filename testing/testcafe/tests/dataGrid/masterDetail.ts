@@ -3,6 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../container.html'));
@@ -79,7 +80,7 @@ fixture.disablePageReloads`Master detail`
 });
 
 // T1113525
-test.skip('pageSizeSelector has correct layout inside masterDetail', async (t) => {
+safeSizeTest('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
