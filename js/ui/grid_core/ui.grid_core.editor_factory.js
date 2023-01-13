@@ -41,7 +41,7 @@ const EditorFactory = modules.ViewController.inherit({
     _updateFocusCore: function() {
         const $dataGridElement = this.component && this.component.$element();
         let $focusCell;
-        let hideBorders;
+        let isHideBorder;
 
         if($dataGridElement) {
             // this selector is specific to IE
@@ -50,12 +50,12 @@ const EditorFactory = modules.ViewController.inherit({
             if($focus && $focus.length) {
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
                     $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
-                    hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
+                    isHideBorder = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
                     $focus = $focusCell;
                 }
 
                 if($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
-                    this.focus($focus, hideBorders);
+                    this.focus($focus, isHideBorder);
                     return;
                 }
             }
@@ -101,8 +101,9 @@ const EditorFactory = modules.ViewController.inherit({
         return ['focused'];
     },
 
-    focus: function($element, hideBorder) {
+    focus: function($element, isHideBorder) {
         const that = this;
+        const isHideBorderInternal = $element?.find('.dx-checkbox').length || isHideBorder;
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -118,7 +119,7 @@ const EditorFactory = modules.ViewController.inherit({
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
 
-                that.renderFocusOverlay($element, hideBorder);
+                that.renderFocusOverlay($element, isHideBorderInternal);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
                 that.focused.fire($element);
@@ -131,7 +132,7 @@ const EditorFactory = modules.ViewController.inherit({
         this.focus($focus);
     },
 
-    renderFocusOverlay: function($element, hideBorder) {
+    renderFocusOverlay: function($element, isHideBorder) {
         const that = this;
 
         if(!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
@@ -142,7 +143,7 @@ const EditorFactory = modules.ViewController.inherit({
             that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
         }
 
-        if(hideBorder) {
+        if(isHideBorder) {
             that._$focusOverlay.addClass(DX_HIDDEN);
         } else if($element.length) {
             // align "right bottom" for Mozilla
