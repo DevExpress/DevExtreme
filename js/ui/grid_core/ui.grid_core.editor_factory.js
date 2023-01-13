@@ -110,7 +110,6 @@ const members = {
 
     focus: function($element, isHideBorder) {
         const that = this;
-        const isHideBorderInternal = $element?.find('.dx-checkbox').length || isHideBorder;
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -126,7 +125,7 @@ const members = {
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
 
-                that.renderFocusOverlay($element, isHideBorderInternal);
+                that.renderFocusOverlay($element, isHideBorder);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
                 that.focused.fire($element);
