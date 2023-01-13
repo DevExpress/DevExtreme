@@ -926,11 +926,6 @@ $grid-masterdetail-padding: 16px;
         &.dx-focused {
           padding: 0;
         }
-
-        .dx-checkbox {
-          padding-left: $material-filled-texteditor-input-horizontal-padding;
-          padding-right: $material-filled-texteditor-input-horizontal-padding;
-        }
       }
 
       .dx-texteditor-input {
@@ -1225,6 +1220,14 @@ $grid-masterdetail-padding: 16px;
     &.dx-#{$widget-name}-invalid {
       padding-top: 0;
       padding-bottom: 0;
+    }
+  }
+
+  .dx-popup-content,
+  .dx-master-detail-row {
+    .dx-field-item-content .dx-checkbox {
+      margin: 0 $material-filled-texteditor-input-horizontal-padding;
+      line-height: 40px;
     }
   }
 }
