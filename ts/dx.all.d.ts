@@ -6582,19 +6582,16 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.calculateCellValue]
        */
-      calculateCellValue?: (this: ColumnBase, rowData: TRowData) => any;
+      calculateCellValue?: (rowData: TRowData) => any;
       defaultCalculateCellValue?: this['calculateCellValue'];
       /**
        * [descr:GridBaseColumn.calculateDisplayValue]
        */
-      calculateDisplayValue?:
-        | string
-        | ((this: ColumnBase, rowData: TRowData) => any);
+      calculateDisplayValue?: string | ((rowData: TRowData) => any);
       /**
        * [descr:GridBaseColumn.calculateFilterExpression]
        */
       calculateFilterExpression?: (
-        this: ColumnBase,
         filterValue: any,
         selectedFilterOperation: string,
         target: string
@@ -6603,9 +6600,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.calculateSortValue]
        */
-      calculateSortValue?:
-        | string
-        | ((this: ColumnBase, rowData: TRowData) => any);
+      calculateSortValue?: string | ((rowData: TRowData) => any);
       /**
        * [descr:GridBaseColumn.caption]
        */
@@ -6618,7 +6613,6 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.customizeText]
        */
       customizeText?: (
-        this: ColumnBase,
         cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
       ) => string;
       /**
@@ -6746,7 +6740,6 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.setCellValue]
        */
       setCellValue?: (
-        this: ColumnBase,
         newData: DevExpress.core.DeepPartial<TRowData>,
         value: any,
         currentRowData: TRowData
@@ -6771,7 +6764,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.sortingMethod]
        */
-      sortingMethod?: (this: ColumnBase, value1: any, value2: any) => number;
+      sortingMethod?: (value1: any, value2: any) => number;
       /**
        * [descr:GridBaseColumn.trueText]
        */
@@ -8438,9 +8431,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
      */
-    calculateGroupValue?:
-      | string
-      | ((this: DevExpress.ui.dxDataGrid.ColumnBase, rowData: TRowData) => any);
+    calculateGroupValue?: string | ((rowData: TRowData) => any);
     /**
      * [descr:dxDataGridColumn.cellTemplate]
      */
