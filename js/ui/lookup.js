@@ -108,6 +108,7 @@ const Lookup = DropDownList.inherit({
 
             /**
              * @name dxLookupOptions.dropDownButtonTemplate
+             * @type template
              * @hidden
              */
 
