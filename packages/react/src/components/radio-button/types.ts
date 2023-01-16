@@ -1,4 +1,4 @@
-import { RadioGroupCore } from '@devextreme/components';
+import { RadioGroupStore } from '@devextreme/components';
 import { ComponentType, ReactElement } from 'react';
 
 export type LabelType = string | ReactElement;
@@ -34,7 +34,7 @@ export interface RadioButtonRenderProps<T> extends RadioButtonProps<T> {
 
 export interface CoreBoundRadioButtonProps<T>
   extends RadioButtonRenderProps<T> {
-  radioGroupCore: RadioGroupCore<T>;
+  store: RadioGroupStore<T>;
 }
 
 export type RadioButtonRenderType<T> = (
