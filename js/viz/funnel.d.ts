@@ -40,6 +40,7 @@ import {
 } from '../common';
 
 import {
+    ChartsShiftLabelOverlap,
     DashStyle,
     HatchDirection,
     LabelPosition,
@@ -63,7 +64,7 @@ export {
 /** @public */
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
 /** @public */
-export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
+export type FunnelLabelOverlap = ChartsShiftLabelOverlap;
 
 /**
  * @public

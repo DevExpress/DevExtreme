@@ -46,6 +46,7 @@ import {
 
 import {
     ChartsDataType,
+    ChartsShiftLabelOverlap,
     DashStyle,
     HatchDirection,
     LabelPosition,
@@ -69,7 +70,7 @@ export type PieChartAnnotationLocation = 'center' | 'edge';
 /** @public */
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
 /** @public */
-export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+export type PieChartLabelOverlap = ChartsShiftLabelOverlap;
 /** @public */
 export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
 /** @public */

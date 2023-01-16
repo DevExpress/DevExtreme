@@ -1965,6 +1965,7 @@ declare module DevExpress.common.charts {
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
+  export type ChartsShiftLabelOverlap = 'hide' | 'none' | 'shift';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   export type HatchDirection = 'left' | 'none' | 'right';
@@ -26765,7 +26766,8 @@ declare module DevExpress.viz {
     values(values: Array<number>): void;
   }
   module dxBarGauge {
-    export type BarGaugeLabelOverlap = 'hide' | 'none' | 'shift';
+    export type BarGaugeLabelOverlap =
+      DevExpress.common.charts.ChartsShiftLabelOverlap;
     export type DisposingEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxBarGauge>;
@@ -30821,7 +30823,8 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
-    export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
+    export type FunnelLabelOverlap =
+      DevExpress.common.charts.ChartsShiftLabelOverlap;
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -31422,7 +31425,8 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
     export type PieChartAnnotationLocation = 'center' | 'edge';
-    export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+    export type PieChartLabelOverlap =
+      DevExpress.common.charts.ChartsShiftLabelOverlap;
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
     export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
     export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';

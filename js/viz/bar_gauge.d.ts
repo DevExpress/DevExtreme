@@ -33,6 +33,7 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
+    ChartsShiftLabelOverlap,
     LabelOverlap,
     Palette,
     PaletteExtensionMode,
@@ -90,7 +91,7 @@ export interface TooltipInfo {
 }
 
 /** @public */
-export type BarGaugeLabelOverlap = 'hide' | 'none' | 'shift';
+export type BarGaugeLabelOverlap = ChartsShiftLabelOverlap;
 /** @public */
 export type DisposingEvent = EventInfo<dxBarGauge>;
 
