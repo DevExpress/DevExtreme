@@ -27,6 +27,11 @@ const fromPregroupedData = new DataSource({
 });
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    fromPregroupedData.load();
+  }
+
   render() {
     return (
       <div className="dx-fieldset">
@@ -37,7 +42,8 @@ class App extends React.Component {
               dataSource={fromUngroupedData}
               valueExpr="ID"
               grouped={true}
-              displayExpr="Name" />
+              displayExpr="Name"
+              defaultValue={1} />
           </div>
         </div>
         <div className="dx-field">
@@ -47,7 +53,8 @@ class App extends React.Component {
               dataSource={fromPregroupedData}
               valueExpr="ID"
               grouped={true}
-              displayExpr="Name" />
+              displayExpr="Name"
+              defaultValue={1} />
           </div>
         </div>
         <div className="dx-field">
@@ -58,7 +65,8 @@ class App extends React.Component {
               valueExpr="ID"
               grouped={true}
               displayExpr="Name"
-              groupRender={Group} />
+              groupRender={Group}
+              defaultValue={1} />
           </div>
         </div>
       </div>

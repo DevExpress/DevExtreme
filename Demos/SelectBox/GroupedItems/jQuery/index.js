@@ -21,11 +21,14 @@ $(() => {
     },
   });
 
+  fromPregroupedData.load();
+
   $('#selectbox-ungroupeddata').dxSelectBox({
     dataSource: fromUngroupedData,
     valueExpr: 'ID',
     grouped: true,
     displayExpr: 'Name',
+    value: 1,
   });
 
   $('#selectbox-pregroupeddata').dxSelectBox({
@@ -33,6 +36,7 @@ $(() => {
     valueExpr: 'ID',
     grouped: true,
     displayExpr: 'Name',
+    value: 1,
   });
 
   $('#selectbox-template').dxSelectBox({
@@ -43,5 +47,6 @@ $(() => {
       return $(`<div class='custom-icon'><span class='dx-icon-box icon'></span> ${data.key}</div>`);
     },
     displayExpr: 'Name',
+    value: 1,
   });
 });

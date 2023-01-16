@@ -8,6 +8,7 @@
           :grouped="true"
           display-expr="Name"
           value-expr="ID"
+          :value="1"
         />
       </div>
     </div>
@@ -19,6 +20,7 @@
           :grouped="true"
           display-expr="Name"
           value-expr="ID"
+          :value="1"
         />
       </div>
     </div>
@@ -30,6 +32,7 @@
           :grouped="true"
           display-expr="Name"
           value-expr="ID"
+          :value="1"
         >
           <template #group="{ data }">
             <Group :item-data="data"/>
@@ -50,6 +53,9 @@ export default {
   components: {
     DxSelectBox,
     Group,
+  },
+  created() {
+    this.fromPregroupedData.load();
   },
   data() {
     return {

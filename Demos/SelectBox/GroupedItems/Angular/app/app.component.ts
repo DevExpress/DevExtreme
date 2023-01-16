@@ -45,6 +45,8 @@ export class AppComponent {
         return item;
       },
     });
+
+    this.fromPregroupedData.load();
   }
 }
 
