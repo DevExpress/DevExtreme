@@ -4,7 +4,6 @@ import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
-// @ts-expect-error
 import { deferRender, deferUpdate } from '../../core/utils/common';
 import { setHeight } from '../../core/utils/style';
 import { isDefined, isNumeric, isString } from '../../core/utils/type';

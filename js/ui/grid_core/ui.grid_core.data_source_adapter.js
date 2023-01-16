@@ -2,7 +2,6 @@
 
 import Callbacks from '../../core/utils/callbacks';
 import gridCore from '../data_grid/ui.data_grid.core';
-// @ts-expect-error
 import { executeAsync, getKeyHash } from '../../core/utils/common';
 import { isDefined, isPlainObject, isFunction } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
