@@ -8,4 +8,5 @@ export default {
   },
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$', '^.+\\.module\\.(css|sass|scss)$'],
   resetMocks: true,
+  coverageDirectory: '<rootDir>/.reports/coverage/',
 };
