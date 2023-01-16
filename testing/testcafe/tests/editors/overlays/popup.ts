@@ -108,7 +108,7 @@ test('There should not be any errors when position.of is html (T946851)', async 
   visible: true,
 }));
 
-test('Popup should be centered regarding the window', async (t) => {
+test('Popup should be centered regarding the window after position.boundary is set to window', async (t) => {
   const popup = new Popup('#container');
   const initialRect: { bottom: number;
     top: number;
