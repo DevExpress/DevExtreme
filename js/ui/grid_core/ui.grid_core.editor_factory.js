@@ -103,6 +103,7 @@ const EditorFactory = modules.ViewController.inherit({
 
     focus: function($element, isHideBorder) {
         const that = this;
+        const isHideBorderInternal = $element?.find('.dx-checkbox').length || isHideBorder;
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -118,7 +119,7 @@ const EditorFactory = modules.ViewController.inherit({
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
 
-                that.renderFocusOverlay($element, isHideBorder);
+                that.renderFocusOverlay($element, isHideBorderInternal);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
                 that.focused.fire($element);

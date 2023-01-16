@@ -1271,13 +1271,11 @@ export const validatingModule = {
                     focus: function($element, isHideBorder) {
                         if(!arguments.length) return this.callBase();
 
-                        let isHideBorderInternal = $element?.find('.dx-checkbox').length || isHideBorder;
-
                         const $tooltips = $element && $element.closest('.' + this.addWidgetPrefix(ROWS_VIEW_CLASS)).find(this._getTooltipsSelector());
                         $tooltips && $tooltips.remove();
 
                         if($element?.hasClass('dx-row') || $element?.hasClass('dx-master-detail-cell')) {
-                            return this.callBase($element, isHideBorderInternal);
+                            return this.callBase($element, isHideBorder);
                         }
 
                         const $focus = $element?.closest(this._getFocusCellSelector());
@@ -1301,18 +1299,18 @@ export const validatingModule = {
                                             return;
                                         }
                                         if(validationResult.status === VALIDATION_STATUS.invalid) {
-                                            isHideBorderInternal = true;
+                                            isHideBorder = true;
                                         }
-                                        this.updateCellState($element, validationResult, isHideBorderInternal);
-                                        callBase.call(this, $element, isHideBorderInternal);
+                                        this.updateCellState($element, validationResult, isHideBorder);
+                                        callBase.call(this, $element, isHideBorder);
                                     });
                                 });
-                                return this.callBase($element, isHideBorderInternal);
+                                return this.callBase($element, isHideBorder);
                             }
                         }
 
-                        this.updateCellState($element, validationResult, isHideBorderInternal);
-                        return this.callBase($element, isHideBorderInternal);
+                        this.updateCellState($element, validationResult, isHideBorder);
+                        return this.callBase($element, isHideBorder);
                     },
 
                     getEditorInstance: function($container) {
