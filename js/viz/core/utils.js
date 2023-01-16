@@ -470,8 +470,8 @@ export function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
         noArc = false;
     }
 
-    startAngle = startAngle * PI_DIV_180;
-    endAngle = endAngle * PI_DIV_180;
+    startAngle *= PI_DIV_180;
+    endAngle *= PI_DIV_180;
 
     return [
         x,

@@ -254,7 +254,6 @@ export const dxBarGauge = BaseGauge.inherit({
         const that = this;
         const overlapStrategy = _normalizeEnum(that._getOption('resolveLabelOverlapping', true));
 
-
         function shiftFunction(box, length) {
             return getVerticallyShiftedAngularCoords(box, -length, that._context);
         }
@@ -263,7 +262,6 @@ export const dxBarGauge = BaseGauge.inherit({
             return;
         }
         if(overlapStrategy === 'shift') {
-
             const newBars = that._dividePoints();
 
             overlapping.resolveLabelOverlappingInOneDirection(newBars.left, that._canvas, false, false, shiftFunction);
@@ -320,8 +318,9 @@ export const dxBarGauge = BaseGauge.inherit({
             const angle = normalizeAngle(bar._angle);
             const isRightSide = angle <= 90 || angle >= 270;
             bar._text._lastCoords = { x: 0, y: 0 };
+            const barToExtend = isRightSide ? stackBars.right : stackBars.left;
 
-            (isRightSide ? stackBars.right : stackBars.left)
+            barToExtend
                 .push({
                     series: {
                         isStackedSeries: () => false,
@@ -346,8 +345,8 @@ export const dxBarGauge = BaseGauge.inherit({
                             bar._text._lastCoords = { x: x - box.x, y: y - box.y };
                             bar._text.attr({ translateX: x - box.x, translateY: y - box.y });
                         },
-                        draw: ()=> bar.hideLabel(),
-                        getData: ()=> { return { value: bar.getValue() }; },
+                        draw: () => bar.hideLabel(),
+                        getData: () => { return { value: bar.getValue() }; },
                         hideInsideLabel: ()=> false,
                     }]
                 }
