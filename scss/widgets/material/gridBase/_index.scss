@@ -1223,12 +1223,4 @@ $grid-masterdetail-padding: 16px;
       padding-bottom: 0;
     }
   }
-
-  .dx-popup-content,
-  .dx-master-detail-row {
-    .dx-field-item-content .dx-checkbox {
-      margin: 0 $material-filled-texteditor-input-horizontal-padding;
-      line-height: 40px;
-    }
-  }
 }
