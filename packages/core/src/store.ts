@@ -1,44 +1,33 @@
 import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from './middlewares';
-import { createReducer, Handlers } from './reducer';
 import {
   createObservableEmitter, getChangedKeys,
   pipe, PipeFunc, SubscribeFunc, UnknownRecord,
 } from './utils';
 
-export interface StoreState<TState extends UnknownRecord> {
+export type UpdateStateAction<TState extends UnknownRecord> = (state: TState) => Partial<TState>;
+
+export interface Store<TState extends UnknownRecord> {
   getState(): TState;
   subscribe: SubscribeFunc<TState>;
-}
-
-export interface Store<
-  TState extends UnknownRecord,
-  THandlers extends Handlers<TState>,
-  > extends StoreState<TState> {
-  addUpdate(statePart: Partial<TState>): void;
+  addUpdate(updateAction: UpdateStateAction<TState>): void;
+  commitPropsUpdates(): void;
   commitUpdates(): void;
   rollbackUpdates(): void;
-  dispatch: <TAction extends keyof THandlers>(
-    action: TAction,
-    value: Parameters<THandlers[TAction]>[1],
-  ) => void;
 }
 
 export function createStore<
   TState extends UnknownRecord,
-  THandlers extends Handlers<TState>,
   >(
   initialState: TState,
   stateConfig: StateConfigMap<TState>,
-  actionHandlers: THandlers,
   validation: PipeFunc<TState>[] = [],
-): Store<TState, THandlers> {
+): Store<TState> {
   let currentState = initialState;
   let nextState = initialState;
 
   const { emit, subscribe } = createObservableEmitter<TState>(
     initialState,
   );
-  const reducer = createReducer<TState>()(actionHandlers);
   const validator = pipe(...validation);
 
   const baseCommitUpdate = (validatedState: TState) => {
@@ -65,41 +54,33 @@ export function createStore<
   const getState = () => currentState;
 
   const addUpdate = (
-    statePart: Partial<TState>,
+    updateAction: UpdateStateAction<TState>,
   ): void => {
     nextState = {
       ...nextState,
-      ...statePart,
+      ...updateAction(nextState),
     };
   };
 
-  const commitUpdates = () => {
+  const commitPropsUpdates = () => {
     currentState = nextState;
     baseCommitUpdate(validator(currentState));
+  };
+
+  const commitUpdates = () => {
+    baseCommitUpdate(validator(nextState));
   };
 
   const rollbackUpdates = () => {
     nextState = currentState;
   };
 
-  const dispatch = <TAction extends keyof THandlers>(
-    action: TAction,
-    value: Parameters<THandlers[TAction]>[1],
-  ) => {
-    nextState = {
-      ...currentState,
-      ...reducer(currentState, action, value),
-    };
-
-    baseCommitUpdate(nextState);
-  };
-
   return {
     getState,
     subscribe,
     addUpdate,
+    commitPropsUpdates,
     commitUpdates,
     rollbackUpdates,
-    dispatch,
   };
 }

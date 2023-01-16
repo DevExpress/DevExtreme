@@ -4,16 +4,12 @@ export type {
 } from './middlewares';
 
 export type {
-  Handlers,
-} from './reducer';
-
-export type {
   Selector,
 } from './selector';
 
 export type {
   Store,
-  StoreState,
+  UpdateStateAction,
 } from './store';
 
 export {
