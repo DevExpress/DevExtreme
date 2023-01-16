@@ -1,7 +1,7 @@
+import { getChangedKeys } from '../../utils';
 import { callbacksMiddleware } from '../callbacks-middleware';
-import { getChangedKeys } from '../get-changed-keys';
 
-jest.mock('../get-changed-keys');
+jest.mock('../../utils');
 const getChangedKeysMock = jest.mocked(getChangedKeys);
 
 describe('Core: Component: Middlewares: callbacksMiddleware', () => {

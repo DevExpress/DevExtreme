@@ -1,7 +1,7 @@
+import { getChangedKeys } from '../../utils';
 import { controlledModeMiddleware } from '../controlled-mode-middleware';
-import { getChangedKeys } from '../get-changed-keys';
 
-jest.mock('../get-changed-keys');
+jest.mock('../../utils');
 const getChangedKeysMock = jest.mocked(getChangedKeys);
 
 describe('Core: Component: Middlewares: changesMiddleware', () => {
@@ -18,7 +18,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = controlledModeMiddleware(prevObject, nextObject);
+    const newModel = controlledModeMiddleware(prevObject, nextObject);
 
     expect(newModel).toEqual(nextObject);
   });
@@ -44,7 +44,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = controlledModeMiddleware(prevObject, nextObject, config);
+    const newModel = controlledModeMiddleware(prevObject, nextObject, config);
 
     expect(newModel).toEqual(nextObject);
   });
@@ -70,7 +70,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = controlledModeMiddleware(prevObject, nextObject, config);
+    const newModel = controlledModeMiddleware(prevObject, nextObject, config);
 
     expect(newModel).toEqual(prevObject);
   });
@@ -100,34 +100,8 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = controlledModeMiddleware(prevObject, nextObject, config);
+    const newModel = controlledModeMiddleware(prevObject, nextObject, config);
 
     expect(newModel).toEqual(expectedModel);
-  });
-
-  it('Returns hasChanges = true if returned model object has changes', () => {
-    const prev = { a: 1 };
-    const next = { a: 2 };
-    getChangedKeysMock.mockReturnValue(['a']);
-
-    const [, hasChanges] = controlledModeMiddleware(prev, next);
-
-    expect(hasChanges).toBeTruthy();
-  });
-
-  it('Returns hasChanges = false if returned model object hasn\'t changes', () => {
-    const prev = { a: 1 };
-    const next = { a: 2 };
-    const config = {
-      a: {
-        controlledMode: true,
-        changeCallback() {},
-      },
-    };
-    getChangedKeysMock.mockReturnValue(['a']);
-
-    const [, hasChanges] = controlledModeMiddleware(prev, next, config);
-
-    expect(hasChanges).toBeFalsy();
   });
 });
