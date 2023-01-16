@@ -1,5 +1,5 @@
 import {
-  createRadioGroupStore,
+  createRadioGroupStore, RADIO_GROUP_ACTIONS,
   ReadonlyProps,
   TemplateProps,
   ValueProps,
@@ -24,10 +24,10 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
 
   useSecondEffect(() => {
     if (controlledMode) {
-      store.addUpdate({ value: props.value });
+      store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(props.value));
     }
 
-    store.commitUpdates();
+    store.commitPropsUpdates();
   }, [props.value]);
 
   return (

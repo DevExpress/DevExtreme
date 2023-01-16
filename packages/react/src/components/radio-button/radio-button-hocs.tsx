@@ -1,4 +1,4 @@
-import { createCheckedSelector } from '@devextreme/components';
+import { createCheckedSelector, RADIO_GROUP_ACTIONS } from '@devextreme/components';
 import {
   ComponentType,
   useState,
@@ -49,9 +49,8 @@ function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
 
     const handleSelected = () => {
       props.onSelected?.(value);
-      store.dispatch('updateValue', {
-        value,
-      });
+      store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(value));
+      store.commitUpdates();
     };
 
     return (
