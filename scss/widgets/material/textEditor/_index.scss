@@ -339,8 +339,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-top: 1px solid $texteditor-invalid-focused-border-color;
-      border-bottom: 1px solid $texteditor-invalid-focused-border-color;
+      border-bottom: 2px solid $texteditor-invalid-focused-border-color;
     }
   }
 
