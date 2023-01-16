@@ -164,51 +164,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(dataGrid.getVisibleRows().slice(0, -1).every(row => row.isSelected === false), 'other rows are not selected');
     });
 
-    // T916093
-    ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
-        QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
-            $('#dataGrid').dxDataGrid({
-                height: 400,
-                dataSource: {
-                    load: function(loadOptions) {
-                        const d = $.Deferred();
-
-                        const data = [];
-                        const start = loadOptions.skip || 0;
-                        const end = loadOptions.skip + loadOptions.take || 1000;
-                        for(let i = start; i < end; i++) {
-                            data.push({
-                                id: i + 1
-                            });
-                        }
-
-                        setTimeout(function() {
-                            d.resolve({ data: data, totalCount: 1000 });
-                        }, 2000);
-
-                        return d;
-                    }
-                },
-                remoteOperations: true,
-                scrolling: {
-                    mode: scrollingMode
-                },
-                export: {
-                    enabled: true
-                }
-            });
-
-            this.clock.tick(4500);
-
-            $('.dx-datagrid-export-button').trigger('dxclick');
-
-            this.clock.tick(1000);
-            const $loadPanel = $('.dx-loadpanel');
-
-            assert.notOk($loadPanel.hasClass('dx-state-invisible'), 'load panel is visible');
-        });
-    });
-
     ['standard', 'virtual'].forEach((scrollingMode) => {
         ['standard', 'virtual'].forEach((rowRenderingMode) => {
             QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${rowRenderingMode} (T836612)`, function(assert) {

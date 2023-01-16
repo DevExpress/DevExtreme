@@ -27,5 +27,5 @@ test('Placeholder is visible after items option change when value is not chosen 
   return createWidget('dxAutocomplete', {
     width: '100%',
     placeholder: 'Choose a value',
-  }, true, '#autocomplete');
+  }, '#autocomplete');
 });

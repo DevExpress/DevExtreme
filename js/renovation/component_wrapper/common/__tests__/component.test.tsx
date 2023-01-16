@@ -831,15 +831,18 @@ describe('templates and slots', () => {
 
     it('template with index', () => {
       const template = jest.fn();
+      const indexedTemplatePayload = { value: 'test' };
 
       $('#component').dxTemplatedTestWidget({
         indexedTemplate: template,
+        indexedTemplatePayload,
+        index: 1,
       });
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
       expect(template).toBeCalledTimes(1);
-      expect(template.mock.calls[0]).toEqual([{ indexedTemplate: 'data' }, 2, templateRoot]);
+      expect(template.mock.calls[0]).toEqual([indexedTemplatePayload, 1, templateRoot]);
     });
 
     it('wraps DOM nodes in "data" param with jQuery and gets public element', () => {
@@ -861,9 +864,9 @@ describe('templates and slots', () => {
       });
 
       const templateRoot = $('#component').children('.templates-root')[0];
-      expect(getPublicElement).toBeCalledTimes(2);
-      expect(getPublicElement).toHaveBeenNthCalledWith(1, $(param1));
-      expect(getPublicElement).toHaveBeenNthCalledWith(2, $(templateRoot));
+
+      expect(getPublicElement).toHaveBeenNthCalledWith(2, $(param1));
+      expect(getPublicElement).toHaveBeenNthCalledWith(1, $(templateRoot));
     });
 
     it('Tempate\'s data can have null/undefined values', () => {
@@ -945,7 +948,7 @@ describe('templates and slots', () => {
     });
     const root = $('#component').children('.templates-root')[0];
 
-    expect($(root.firstChild)[0]).toBe(template[0]);
+    expect($(root.lastChild)[0]).toBe(template[0]);
   });
 
   it('should render content in right order if children placed between other nodes', () => {
@@ -956,10 +959,9 @@ describe('templates and slots', () => {
     $('#component').dxChildrenTestWidget({});
 
     const children = $('#component')[0].childNodes;
-    expect(children.length).toBe(5);
-    expect(children[1]).toBe(slotBefore[0]);
-    expect(children[2]).toBe(slotContent[0]);
-    expect(children[3]).toBe(slotAfter[0]);
+    expect(children[2]).toBe(slotBefore[0]);
+    expect(children[3]).toBe(slotContent[0]);
+    expect(children[4]).toBe(slotAfter[0]);
   });
 
   it('should not fail if template returned parent node', () => {
@@ -1036,6 +1038,29 @@ describe('templates and slots', () => {
     expect(template).toBeCalledTimes(2);
   });
 
+  it('should not re-render template with custom equal is used', () => {
+    const template = jest.fn();
+    const isEqual1 = jest.fn().mockReturnValue(true);
+    const isEqual2 = jest.fn().mockReturnValue(false);
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      elementTemplate: template,
+      elementTemplatePayload: { value: 'test' },
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('elementTemplatePayload', { value: 'test', isEqual: isEqual1 });
+    expect(isEqual1).toBeCalledTimes(1);
+    expect(template).toBeCalledTimes(1);
+
+    isEqual1.mockReset();
+    instance.option('elementTemplatePayload', { value: 'newValue', isEqual: isEqual2 });
+    expect(isEqual1).not.toBeCalled();
+    expect(isEqual2).toBeCalledTimes(1);
+    expect(template).toBeCalledTimes(2);
+  });
+
   it('should not re-render template if non-related option changed', () => {
     const template = jest.fn();
 
@@ -1048,6 +1073,27 @@ describe('templates and slots', () => {
 
     instance.option('text', { value: 'test' });
     expect(template).toBeCalledTimes(1);
+  });
+
+  it('should rerender if index changed', () => {
+    const template = jest.fn();
+    const indexedTemplatePayload = { value: 'test' };
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      indexedTemplate: template,
+      indexedTemplatePayload,
+      index: 123,
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+    expect(template.mock.calls[0][1]).toEqual(123);
+
+    instance.option({
+      indexedTemplatePayload,
+      index: 456,
+    });
+    expect(template).toBeCalledTimes(2);
+    expect(template.mock.calls[1][1]).toEqual(456);
   });
 });
 

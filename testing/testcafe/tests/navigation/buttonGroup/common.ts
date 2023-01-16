@@ -67,7 +67,7 @@ fixture.disablePageReloads`ButtonGroup_Styles`
             stylingMode,
             keyExpr: 'id',
             selectionMode: 'none',
-          }, false, `#buttongroup${stylingMode}${state}`);
+          }, `#buttongroup${stylingMode}${state}`);
     }
 
     await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container' });

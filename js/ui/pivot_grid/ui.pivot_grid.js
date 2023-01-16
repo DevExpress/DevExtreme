@@ -232,8 +232,6 @@ const PivotGrid = Widget.inherit({
             onExpandValueChanging: null,
             renderCellCountLimit: 20000,
             onExporting: null,
-            onExported: null,
-            onFileSaving: null,
             headerFilter: {
                 width: 252,
                 height: 325,
@@ -338,8 +336,6 @@ const PivotGrid = Widget.inherit({
             onContextMenuPreparing: that._createActionByOption('onContextMenuPreparing'),
             onCellClick: that._createActionByOption('onCellClick'),
             onExporting: that._createActionByOption('onExporting'),
-            onExported: that._createActionByOption('onExported'),
-            onFileSaving: that._createActionByOption('onFileSaving'),
             onCellPrepared: that._createActionByOption('onCellPrepared'),
         };
     },

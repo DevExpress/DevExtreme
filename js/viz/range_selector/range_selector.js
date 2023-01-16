@@ -560,6 +560,13 @@ const dxRangeSelector = baseWidgetModule.inherit({
 
     _fontFields: ['scale.label.font', 'sliderMarker.font'],
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'behavior.callValueChanged': { since: '23.1', message: 'Use the "behavior.valueChangeMode" option instead' }
+        });
+    },
+
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;
@@ -720,11 +727,10 @@ const dxRangeSelector = baseWidgetModule.inherit({
     },
 
     _validateRange: function(start, end) {
-        const that = this;
-        const translator = that._axis.getTranslator();
-        if(_isDefined(start) && !translator.isValid(start) ||
-            _isDefined(end) && !translator.isValid(end)) {
-            that._incidentOccurred('E2203');
+        const ensureValueInvalid = value => _isDefined(value) && !this._axis.getTranslator().isValid(value);
+
+        if(this._dataIsReady() && (ensureValueInvalid(start) || ensureValueInvalid(end))) {
+            this._incidentOccurred('E2203');
         }
     },
 

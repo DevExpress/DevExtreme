@@ -94,7 +94,7 @@ test('menu should be closed after press on "escape" key when submenu was shown b
   }],
   showFirstSubmenuMode: 'onClick',
   hideSubmenuOnMouseLeave: true,
-}, true));
+}));
 
 test('menu should be closed after press on "escape" key when submenu was shown by hover, showFirstSubmenuMode="onHover" (T1115916)', async (t) => {
   const menu = new Menu();
@@ -123,4 +123,4 @@ test('menu should be closed after press on "escape" key when submenu was shown b
   }],
   showFirstSubmenuMode: 'onHover',
   hideSubmenuOnMouseLeave: true,
-}, true));
+}));

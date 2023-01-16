@@ -24,7 +24,7 @@ const createScheduler = async (data): Promise<void> => {
     allDayExpr: 'AllDay',
     recurrenceRuleExpr: 'RecurrenceRule',
     recurrenceExceptionExpr: 'RecurrenceException',
-  }, true);
+  });
 };
 
 const createSimpleData = (): Record<string, unknown>[] => [{

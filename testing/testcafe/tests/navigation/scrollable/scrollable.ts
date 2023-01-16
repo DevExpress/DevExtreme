@@ -78,7 +78,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             direction,
             rtlEnabled,
             showScrollbar: 'always',
-          }, false, `#${id}`);
+          }, `#${id}`);
 
           const scrollable = new Scrollable(`#${id}`, { useNative, direction });
 
@@ -163,7 +163,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             direction,
             showScrollbar: 'always',
             rtlEnabled,
-          }, false, `#${id}`);
+          }, `#${id}`);
 
           const scrollable = new Scrollable(`#${id}`, { useNative, direction });
 
@@ -238,7 +238,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             direction,
             showScrollbar: 'always',
             rtlEnabled,
-          }, false, `#${id}`);
+          }, `#${id}`);
 
           const scrollable = new Scrollable(`#${id}`, { useNative, direction });
 
@@ -314,7 +314,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
           useSimulatedScrollbar,
           direction: 'horizontal',
           showScrollbar: 'always',
-        }, false, '#scrollable');
+        }, '#scrollable');
       });
 
       [1, 10, 20].forEach((scrollOffset) => {
@@ -393,7 +393,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             useSimulatedScrollbar,
             direction: 'horizontal',
             showScrollbar: 'always',
-          }, false, '#scrollable');
+          }, '#scrollable');
         });
       });
 
@@ -468,7 +468,7 @@ fixture.disablePageReloads`Scrollable_ScrollToElement`
             useSimulatedScrollbar,
             direction: 'horizontal',
             showScrollbar: 'always',
-          }, false, '#scrollable');
+          }, '#scrollable');
         });
       });
     });

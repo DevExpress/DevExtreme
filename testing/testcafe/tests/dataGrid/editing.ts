@@ -85,7 +85,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
       startEditAction: 'click',
     },
   }),
-  createWidget('dxSelectBox', {}, false, '#otherContainer'),
+  createWidget('dxSelectBox', {}, '#otherContainer'),
 ]));
 
 test('Async Validation(Row) - Only valid data is saved in a new row', async (t) => {
@@ -1693,6 +1693,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .expect(popupDataGrid.getDataRow(0).element.exists)
     .ok();
 
+  await t.debug();
   // assert
   await t
     .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
@@ -1745,7 +1746,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton());
 
   await t
-    .dispatchEvent(dataGrid.getFormItemElement(0), 'focus');
+    .click(dataGrid.getFormItemElement(0));
 
   await t
     .typeText(dataGrid.getFormItemEditor(0), '1');
@@ -1754,7 +1755,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     .pressKey('enter');
 
   await t
-    .dispatchEvent(dataGrid.getFormItemElement(2), 'focus');
+    .click(dataGrid.getFormItemElement(2));
 
   await t
     .typeText(dataGrid.getFormItemEditor(2), '0');

@@ -1,5 +1,10 @@
 import { Deferred } from '../../../../core/utils/deferred';
 
+const STORE_EVENTS = {
+    updating: 'updating',
+    push: 'push',
+};
+
 export class AppointmentDataSource {
     constructor(dataSource) {
         this.setDataSource(dataSource);
@@ -29,7 +34,7 @@ export class AppointmentDataSource {
         const store = dataSource?.store();
 
         if(store) {
-            store.on('updating', (key) => {
+            store.on(STORE_EVENTS.updating, (key) => {
                 const keyName = store.key();
                 if(keyName) {
                     this._updatedAppointmentKeys.push({
@@ -41,7 +46,7 @@ export class AppointmentDataSource {
                 }
             });
 
-            store.on('push', pushItems => {
+            store.on(STORE_EVENTS.push, pushItems => {
                 const items = dataSource.items();
                 const keyName = store.key();
 
@@ -97,5 +102,14 @@ export class AppointmentDataSource {
     remove(rawAppointment) {
         const key = this._getStoreKey(rawAppointment);
         return this._dataSource.store().remove(key).done(() => this._dataSource.load());
+    }
+
+    destroy() {
+        const store = this._dataSource?.store();
+
+        if(store) {
+            store.off(STORE_EVENTS.updating);
+            store.off(STORE_EVENTS.push);
+        }
     }
 }

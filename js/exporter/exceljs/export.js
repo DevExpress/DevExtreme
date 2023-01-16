@@ -33,6 +33,9 @@ export const Export = {
         if(!isDefined(fullOptions.loadPanel.enabled)) {
             fullOptions.loadPanel.enabled = true;
         }
+        if(!isDefined(fullOptions.encodeExecutableContent)) {
+            fullOptions.encodeExecutableContent = false;
+        }
 
         return fullOptions;
     },
@@ -105,6 +108,7 @@ export const Export = {
             keepColumnWidths,
             selectedRowsOnly,
             loadPanel,
+            encodeExecutableContent,
         } = options;
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
@@ -167,7 +171,7 @@ export const Export = {
 
                     helpers._trySetOutlineLevel(row, rowIndex);
 
-                    this.exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columns.length, wrapText, styles);
+                    this.exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columns.length, wrapText, styles, encodeExecutableContent);
 
                     cellRange.to.row = currentRowIndex;
                 }
@@ -206,7 +210,7 @@ export const Export = {
         });
     },
 
-    exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columnsCount, wrapText, styles) {
+    exportRow(dataProvider, helpers, row, rowIndex, startColumnIndex, columnsCount, wrapText, styles, encodeExecutableContent) {
         for(let cellIndex = startColumnIndex; cellIndex < columnsCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
             const excelCell = row.getCell(helpers._getFirstColumnIndex() + cellIndex);
@@ -239,6 +243,10 @@ export const Export = {
             }
 
             helpers._customizeCell(excelCell, cellData.cellSourceData);
+
+            if(encodeExecutableContent) {
+                excelCell.value = ExportFormat.encode(excelCell.value);
+            }
         }
     }
 };

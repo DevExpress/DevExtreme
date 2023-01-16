@@ -53,7 +53,7 @@ safeSizeTest('Popup can not be dragged outside of the container (window)', async
   visible: true,
   dragEnabled: true,
   animation: undefined,
-}, true));
+}));
 
 test('Popup can not be dragged if content bigger than container', async (t) => {
   const popup = new Popup('#popup');
@@ -98,7 +98,7 @@ test('Popup can not be dragged if content bigger than container', async (t) => {
     width: 100,
     height: 100,
     animation: undefined,
-  }, true, '#popup');
+  }, '#popup');
 });
 
 test('Popup can be dragged outside of the container if dragOutsideBoundary is enabled', async (t) => {
@@ -132,4 +132,4 @@ test('Popup can be dragged outside of the container if dragOutsideBoundary is en
   dragEnabled: true,
   dragOutsideBoundary: true,
   animation: undefined,
-}, true));
+}));
