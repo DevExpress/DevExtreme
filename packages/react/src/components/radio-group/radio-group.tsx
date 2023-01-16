@@ -1,9 +1,11 @@
 import {
-  createRadioGroupCore, ReadonlyProps, TemplateProps, ValueProps,
+  createRadioGroupCore,
 } from '@devextreme/components';
-import { memo, useMemo } from 'react';
+import {
+  Children, cloneElement, isValidElement, memo, useMemo,
+} from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
-import { Props } from '../../internal/props';
+import { EditorProps } from '../../types';
 import { RadioGroupContext } from '../radio-common';
 
 function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
@@ -30,14 +32,23 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   return (
     <RadioGroupContext.Provider value={radioGroupCore}>
       <div>
-        {props.children}
+        {props.name
+          ? Children.map(
+            props.children,
+            child => (
+              isValidElement<EditorProps<T>>(child)
+                ? cloneElement(child, { name: props.name })
+                : child
+            ),
+          )
+          : props.children}
       </div>
     </RadioGroupContext.Provider>
   );
 }
 
 export type RadioGroupProps<T> =
-  React.PropsWithChildren<Props<ValueProps<T>, ReadonlyProps, TemplateProps>>;
+  React.PropsWithChildren<EditorProps<T>>;
 
 //* Component={"name":"RadioGroup"}
 export const RadioGroup = memo(RadioGroupInternal) as typeof RadioGroupInternal;

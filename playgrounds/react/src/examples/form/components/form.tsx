@@ -1,16 +1,10 @@
 import {
-  FormEventHandler, ReactElement, useMemo, useRef, useState,
+  FormEventHandler, useMemo, useRef, useState,
 } from 'react';
 import { FormContext } from './form-context';
-import { FormItemProps } from './form-item';
-import { FormItemValidator, FormValidationResult, Rule } from './types';
-
-interface FormProps {
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-  children?:
-  | ReactElement<FormItemProps>[]
-  | ReactElement<FormItemProps>;
-}
+import {
+  FormItemValidator, FormProps, FormValidationResult, Rule,
+} from './types';
 
 export function Form({ children, onSubmit }: FormProps) {
   const [formValidationResult, setFormValidationResult] = useState<FormValidationResult>({});
@@ -18,7 +12,7 @@ export function Form({ children, onSubmit }: FormProps) {
   const validationRules = useRef<Record<string, Rule[]>>({});
   const validateFormItemValue: FormItemValidator = (value, rules) => {
     const result: string[] = [];
-    if (rules.length) {
+    if (rules?.length) {
       rules.forEach((rule) => {
         if (!rule.validate(value)) {
           result.push(rule.message);
