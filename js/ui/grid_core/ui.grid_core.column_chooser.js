@@ -1,9 +1,13 @@
+// @ts-check
+
 import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
+// @ts-expect-error
 import { deferUpdate, noop } from '../../core/utils/common';
 import modules from './ui.grid_core.modules';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import messageLocalization from '../../localization/message';
+// @ts-expect-error
 import { isMaterial as isMaterialTheme, isGeneric, current } from '../themes';
 import TreeView from '../tree_view';
 import devices from '../../core/devices';
@@ -57,7 +61,10 @@ const processItems = function(that, chooserColumns) {
     return items;
 };
 
-const ColumnChooserController = modules.ViewController.inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.column_chooser').ColumnChooserController>}
+ */
+const columnChooserControllerMembers = {
     renderShowColumnChooserButton: function($element) {
         const that = this;
         const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
@@ -99,12 +106,17 @@ const ColumnChooserController = modules.ViewController.inherit({
             boundaryOffset: '2 2'
         };
     }
-});
+};
+const ColumnChooserController = modules.ViewController.inherit(columnChooserControllerMembers);
 
-const ColumnChooserView = ColumnsView.inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.column_chooser').ColumnChooserView>}
+ */
+const columnChooserMembers = {
     _resizeCore: noop,
 
     _isWinDevice: function() {
+        // @ts-expect-error
         return !!devices.real().win;
     },
 
@@ -172,12 +184,14 @@ const ColumnChooserView = ColumnsView.inherit({
                     $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
                 }
             },
+            // @ts-expect-error
             container: columnChooserOptions.container
         };
 
         if(isGenericTheme || isMaterial) {
             extend(dxPopupOptions, { showCloseButton: true });
         } else {
+            // @ts-expect-error
             dxPopupOptions.toolbarItems[dxPopupOptions.toolbarItems.length] = { shortcut: 'cancel' };
         }
 
@@ -186,6 +200,7 @@ const ColumnChooserView = ColumnsView.inherit({
 
             that._popupContainer.on('optionChanged', function(args) {
                 if(args.name === 'visible') {
+                    // @ts-expect-error
                     that.renderCompleted.fire();
                 }
             });
@@ -225,6 +240,10 @@ const ColumnChooserView = ColumnsView.inherit({
                         $checkBox = $treeViewNode.find(CHECKBOX_SELECTOR);
 
                         if($checkBox.length) {
+                            /**
+                             * @type {import('../check_box').default}
+                             */
+                            // @ts-expect-error
                             const checkBoxInstance = $checkBox.data('dxCheckBox');
 
                             checkBoxInstance && checkBoxInstance.option('disabled', true);
@@ -244,10 +263,15 @@ const ColumnChooserView = ColumnsView.inherit({
         treeViewConfig.onContentReady = function(e) {
             deferUpdate(function() {
                 if(scrollTop) {
+                    /**
+                     * @type {import('../scroll_view/ui.scrollable').default}
+                    */
+                    // @ts-expect-error
                     const scrollable = $(e.element).find('.dx-scrollable').data('dxScrollable');
                     scrollable && scrollable.scrollTo({ y: scrollTop });
                 }
 
+                // @ts-expect-error
                 that.renderCompleted.fire();
             });
         };
@@ -359,6 +383,7 @@ const ColumnChooserView = ColumnsView.inherit({
             });
         }
 
+        // @ts-expect-error
         return $(result);
     },
 
@@ -398,7 +423,6 @@ const ColumnChooserView = ColumnsView.inherit({
         ///#DEBUG
         this._isPopupContainerShown = true;
         ///#ENDDEBUG
-
         if(!this._popupContainer) {
             this._initializePopupContainer();
             this.render();
@@ -429,8 +453,12 @@ const ColumnChooserView = ColumnsView.inherit({
     publicMethods: function() {
         return ['showColumnChooser', 'hideColumnChooser'];
     }
-});
+};
+const ColumnChooserView = ColumnsView.inherit(columnChooserMembers);
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const columnChooserModule = {
     defaultOptions: function() {
         return {
@@ -475,6 +503,9 @@ export const columnChooserModule = {
                             $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
                         };
                         const hintText = that.option('columnChooser.title');
+                        /**
+                         * @type {import('../data_grid').ToolbarItem}
+                         */
                         const toolbarItem = {
                             widget: 'dxButton',
                             options: {
@@ -489,6 +520,7 @@ export const columnChooserModule = {
                             location: 'after',
                             name: 'columnChooserButton',
                             locateInMenu: 'auto',
+                            // @ts-expect-error
                             sortIndex: 40
                         };
 

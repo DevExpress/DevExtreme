@@ -1,36 +1,75 @@
+/* eslint-disable max-classes-per-file */
 import DataGrid, { Properties } from '../data_grid';
-import { PropertyType } from '../../core/index';
+import { PropertyType as _PropertyType, DeepPartial } from '../../core/index';
+
+type PropertyType<O, K extends string> = _PropertyType<O, K> extends never ? any : _PropertyType<O, K>;
 
 export interface InternalGrid extends Omit<DataGrid<unknown, unknown>, 'option'> {
-  option<TPropertyName extends string>(optionName: TPropertyName): PropertyType<Properties, TPropertyName>;
+  option<TPropertyName extends string>(optionName: TPropertyName): PropertyType<InternalGridOptions, TPropertyName>;
 
-  option<TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<Properties, TPropertyName>): void;
+  option<TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<InternalGridOptions, TPropertyName>): void;
+
+  option(): InternalGridOptions;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
   _updateLockCount: number;
 
   _requireResize: boolean;
+
+  _optionCache: any;
+
+  _fireContentReadyAction: any;
+
+  setAria: any;
+
+  _renderDimensions: any;
+
+  getView: <T extends keyof Views>(name: T) => Views[T];
+
+  getController: <T extends keyof Controllers>(name: T) => Controllers[T];
+
+  _optionsByReference: any;
+
+  _disposed: any;
 }
 
-export type OptionChangedArgs = {
-  name: any;
-  fullName: any;
-  previousValue: any;
-  value: any;
-  handled: any;
+export type InternalGridOptions = Properties & {
+  loadingTimeout?: number;
 };
 
+export interface OptionChangedArgs<T extends string = string> {
+  name: T extends `${infer TName}.${string}` ? TName : T;
+  fullName: T;
+  previousValue: PropertyType<InternalGridOptions, T>;
+  value: PropertyType<InternalGridOptions, T>;
+  handled: boolean;
+}
+
 export type Controllers = {
-  data: import('../grid_core/ui.grid_core.data_controller').DataController;
-  columns: import('../grid_core/ui.grid_core.columns_controller').ColumnsController;
+  data: import('./ui.grid_core.data_controller').DataController;
+  columns: import('./ui.grid_core.columns_controller').ColumnsController;
+  resizing: import('./ui.grid_core.grid_view').ResizingController;
+  adaptiveColumns: import('./ui.grid_core.adaptivity').AdaptiveColumnsController;
+  columnChooser: import('./ui.grid_core.column_chooser').ColumnChooserController;
+  editorFactory: import('./ui.grid_core.editor_factory').EditorFactory;
+  editing: import('./ui.grid_core.editing').EditingController;
+  keyboardNavigation: import('./ui.grid_core.keyboard_navigation').KeyboardNavigationController;
+  focus: import('./ui.grid_core.focus').FocusController;
+  columnsResizer: any;
+  validating: any;
+  export: any;
+  draggingHeader: any;
+  selection: any;
 };
 
 export type Views = {
-
+  headerPanel: import('./ui.grid_core.header_panel').HeaderPanel;
+  rowsView: import('./ui.grid_core.rows').RowsView;
+  columnChooserView: import('./ui.grid_core.column_chooser').ColumnChooserView;
 };
 
-interface ModuleItem {
+declare class ModuleItem {
   component: InternalGrid;
 
   callBase: any;
@@ -53,7 +92,7 @@ interface ModuleItem {
 
   option: InternalGrid['option'];
 
-  _silentOption: <TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<Properties, TPropertyName>) => void;
+  _silentOption: <TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<InternalGridOptions, TPropertyName>) => void;
 
   localize: (this: this, str: string) => string;
 
@@ -67,9 +106,9 @@ interface ModuleItem {
 
   setAria: (this: this, ...args: any[]) => void;
 
-  _createComponent: (this: this, ...args: any[]) => void;
+  _createComponent: (this: this, ...args: any[]) => any;
 
-  getController: <T extends keyof Controllers>(this: this, name: T) => Controllers[T];
+  getController: InternalGrid['getController'];
 
   createAction: (this: this, ...args: any[]) => void;
 
@@ -82,46 +121,61 @@ interface ModuleItem {
   getWidgetContainerClass: (this: this) => string;
 
   elementIsInsideGrid: (this: this, element: any) => boolean;
+
+  name: string;
+
+  static inherit: (obj: any) => any;
 }
 
-export interface Controller extends ModuleItem {
+export class Controller extends ModuleItem {
 }
 
-export interface ViewController extends Controller {
-  getView: <T extends keyof Views>(this: this, name: T) => Views[T];
+export class ViewController extends Controller {
+  getView: InternalGrid['getView'];
+
   getViews: (this: this) => View[];
 }
 
-export interface View extends ModuleItem {
-  _endUpdateCore: () => void;
+export class View extends ModuleItem {
+  _endUpdateCore: (this: this) => void;
 
-  _invalidate: (requireResize?: any, requireReady?: any) => void;
+  _invalidate: (this: this, requireResize?: any, requireReady?: any) => void;
 
-  _renderCore: () => void;
+  _renderCore: (this: this) => void;
 
-  _resizeCore: () => void;
+  _resizeCore: (this: this) => void;
 
-  _parentElement: () => any;
+  _parentElement: (this: this) => any;
 
-  element: () => any;
+  element: (this: this) => any;
 
-  getElementHeight: () => number;
+  getElementHeight: (this: this) => number;
 
-  isVisible: () => boolean;
+  isVisible: (this: this) => boolean;
 
-  getTemplate: (name) => any;
+  getTemplate: (this: this, name: string) => any;
 
-  render: ($parent?: any, options?: any) => void;
+  render: (this: this, $parent?: any, options?: any) => void;
 
-  resize: () => void;
+  resize: (this: this) => void;
 
-  focus: (preventScroll?: boolean) => void;
+  focus: (this: this, preventScroll?: boolean) => void;
+}
 
+export interface Module {
+  controllers?: DeepPartial<Controllers>;
+  views?: DeepPartial<Views>;
+  extenders?: {
+    controllers?: DeepPartial<Controllers>;
+    views?: DeepPartial<Views>;
+  };
+  defaultOptions?: () => InternalGridOptions;
 }
 
 declare const exportVar: {
-  Controller: { inherit: (obj: any) => any };
-  View: { inherit: (obj: any) => any };
+  Controller;
+  View;
+  ViewController;
 };
 
 export default exportVar;

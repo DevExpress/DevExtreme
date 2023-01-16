@@ -15,7 +15,7 @@ export interface dxElementWrapper {
 
   appendTo(element: Element | dxElementWrapper): this;
 
-  attr(attributeName: string, value: string | number | null): this;
+  attr(attributeName: string, value?: string | number | null): this;
 
   before(element: Element | dxElementWrapper): this;
 
@@ -29,7 +29,7 @@ export interface dxElementWrapper {
 
   css(propertyName: string, value: string | number): this;
 
-  data(key: string, value: any): this;
+  data(key: string, value?: any): this;
 
   detach(): this;
 
@@ -53,7 +53,7 @@ export interface dxElementWrapper {
 
   html(value: string): this;
 
-  index(element: Element | dxElementWrapper): number;
+  index(element?: Element | dxElementWrapper): number;
 
   insertAfter(element: Element | dxElementWrapper): this;
 
@@ -95,7 +95,7 @@ export interface dxElementWrapper {
 
   replaceWith(element: Element | dxElementWrapper): this;
 
-  scrollLeft(value: string | undefined): this;
+  scrollLeft(value?: string | undefined): this;
 
   scrollTop(value: string | undefined): this;
 

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { setOuterWidth, getOuterWidth, setOuterHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
@@ -5,6 +7,7 @@ import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import pointerEvents from '../../events/pointer';
+// @ts-ignore
 import positionUtils from '../../animation/position';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 import browser from '../../core/utils/browser';
@@ -23,7 +26,10 @@ const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
 const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
 
-const EditorFactory = modules.ViewController.inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.editor_factory').EditorFactory>}
+ */
+const members = {
     _getFocusedElement: function($dataGridElement) {
         const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
         const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus, .dx-adaptive-item-text:focus`;
@@ -84,6 +90,7 @@ const EditorFactory = modules.ViewController.inherit({
     _updateFocusOverlaySize: function($element, position) {
         $element.hide();
 
+        // @ts-ignore
         const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
         if(location.h.oversize > 0) {
@@ -165,6 +172,7 @@ const EditorFactory = modules.ViewController.inherit({
             };
 
             that._updateFocusOverlaySize(that._$focusOverlay, focusOverlayPosition);
+            // @ts-ignore
             positionUtils.setup(that._$focusOverlay, focusOverlayPosition);
 
             that._$focusOverlay.css('visibility', 'visible'); // for ios
@@ -197,8 +205,10 @@ const EditorFactory = modules.ViewController.inherit({
 
     _getContainerRoot: function() {
         const $container = this.component?.$element();
+        // @ts-expect-error
         const root = domAdapter.getRootNode($container?.get(0));
 
+        // @ts-ignore
         // NOTE: this condition is for the 'Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)'
         // testcafe test. The detail grid is created inside document_fragment_node but it is not shadow dom
         // eslint-disable-next-line no-undef
@@ -228,8 +238,13 @@ const EditorFactory = modules.ViewController.inherit({
         clearTimeout(this._updateFocusTimeoutID);
         eventsEngine.off(this._getContainerRoot(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
     }
-}).include(EditorFactoryMixin);
+};
 
+const EditorFactory = modules.ViewController.inherit(members).include(EditorFactoryMixin);
+
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const editorFactoryModule = {
     defaultOptions: function() {
         return {
