@@ -5070,7 +5070,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.equal($field.text(), '', 'text was cleared after the deselect');
     });
 
-    QUnit.test('tagBox with fieldTemplate should not add removeTagHandler to other tagBoxes (T1137828)', function(assert) {
+    QUnit.test('click on remove tag button should not remove tag in another tagBox with fieldTemplate (T1137828)', function(assert) {
         const $tagBox = $('#anotherContainer').dxTagBox({
             items: [1, 2, 3],
             value: [1],
