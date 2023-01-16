@@ -561,7 +561,6 @@ export const dataControllerModule = {
 
                     each(items, function(index, item) {
                         if(isDefined(item)) {
-                            // @ts-expect-error
                             options.rowIndex = index - rowIndexDelta;
                             item = that._processItem(item, options);
                             result.push(item);

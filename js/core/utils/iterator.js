@@ -13,10 +13,8 @@ const map = (values, callback) => {
 };
 
 /**
- * @type {{
- *   <T>(values: T[], callback: (this: T,          index: number,  value: T)          => void | boolean): T[],
- *   <T>(values: T,   callback: (this: T[keyof T], index: keyof T, value: T[keyof T]) => void | boolean): T,
- * }}
+ * @param {any} values
+ * @param {(this: any, index: any, value: any)} callback
  */
 const each = (values, callback) => {
     if(!values) return;

@@ -2436,7 +2436,6 @@ export const editingModule = {
 
                         each($cellElements, function(index, cellElement) {
                             if($(cellElement).find($cell).length) {
-                                // @ts-expect-error
                                 cellIndex = index;
                             }
                         });

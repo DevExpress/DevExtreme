@@ -273,9 +273,7 @@ export default gridCore.Controller.inherit((function() {
 
             each(dataSource, function(memberName, member) {
                 if(!that[memberName] && isFunction(member)) {
-                    // @ts-expect-error
                     that[memberName] = function() {
-                        // @ts-expect-error
                         return this._dataSource[memberName].apply(this._dataSource, arguments);
                     };
                 }
