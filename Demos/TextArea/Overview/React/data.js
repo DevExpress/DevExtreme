@@ -1,5 +1,5 @@
 const valueChangeEvents = [{
-  title: 'On Blur',
+  title: 'On Change',
   name: 'change',
 }, {
   title: 'On Key Up',

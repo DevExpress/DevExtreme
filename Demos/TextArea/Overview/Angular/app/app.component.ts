@@ -35,7 +35,7 @@ export class AppComponent {
     this.valueForEditableTextArea = this.service.getContent();
     this.value = this.service.getContent();
     this.valueChangeEvents = [{
-      title: 'On Blur',
+      title: 'On Change',
       name: 'change',
     }, {
       title: 'On Key Up',
