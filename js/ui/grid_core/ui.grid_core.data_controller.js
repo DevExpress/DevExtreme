@@ -10,10 +10,12 @@ import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import DataHelperMixin from '../../data_helper';
-// @ts-ignore
 import { when, Deferred } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const dataControllerModule = {
     defaultOptions: function() {
         return {
@@ -22,6 +24,10 @@ export const dataControllerModule = {
             cacheEnabled: true,
             repaintChangesOnly: false,
             highlightChanges: false,
+            /**
+             * @type {undefined}
+             */
+            // @ts-expect-error
             onDataErrorOccurred: null,
             remoteOperations: 'auto',
             paging: {
@@ -33,6 +39,12 @@ export const dataControllerModule = {
     },
     controllers: {
         data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
+            /**
+             * @param {import('./ui.grid_core.data_controller').DataController} that
+             * @param {string} optionName
+             * @param {unknown} value
+             * @returns {any}
+             */
             const changePaging = function(that, optionName, value) {
                 const dataSource = that._dataSource;
 
@@ -152,7 +164,7 @@ export const dataControllerModule = {
                         if(isValueChanged) {
                             const store = this.store();
                             if(store) {
-                                // @ts-ignore
+                                // @ts-expect-error
                                 store._array = args.value;
                             }
                         }
@@ -179,6 +191,7 @@ export const dataControllerModule = {
 
                     if(args.name === 'dataSource'
                         && args.name === args.fullName
+                        // @ts-expect-error
                         && this._handleDataSourceChange(args)) {
                         handled();
                         return;
@@ -262,9 +275,9 @@ export const dataControllerModule = {
                     return filter;
                 },
                 waitReady: function() {
-                    // @ts-ignore
+                    // @ts-expect-error
                     if(this._updateLockCount) {
-                        // @ts-ignore
+                        // @ts-expect-error
                         this._readyDeferred = new Deferred();
                         return this._readyDeferred;
                     }
@@ -428,6 +441,7 @@ export const dataControllerModule = {
                     this.pushed.fire(changes);
                 },
                 fireError: function() {
+                    // @ts-ignore
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
                 },
                 _setPagingOptions: function(dataSource) {
@@ -492,8 +506,9 @@ export const dataControllerModule = {
                     if(dataSource) {
                         const changedPagingOptions = that._setPagingOptions(dataSource);
 
-                        // @ts-ignore
+                        // @ts-expect-error
                         this._isPaging = changedPagingOptions?.isPageIndexChanged;
+                        // @ts-expect-error
                         that.setDataSource(dataSource);
                     } else if(oldDataSource) {
                         that.updateItems();
@@ -502,7 +517,7 @@ export const dataControllerModule = {
                 _loadDataSource: function() {
                     const that = this;
                     const dataSource = that._dataSource;
-                    // @ts-ignore
+                    // @ts-expect-error
                     const result = new Deferred();
 
                     when(this._columnsController.refresh(true)).always(function() {
@@ -528,6 +543,7 @@ export const dataControllerModule = {
                     const visibleItems = this._items;
                     const lastVisibleItem = change.changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null;
 
+                    // @ts-expect-error
                     return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
                 },
                 _processItems: function(items, change) {
@@ -735,7 +751,7 @@ export const dataControllerModule = {
                     let changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
 
                     if(changedColumnIndices?.length && this.option('dataRowTemplate')) {
-                        // @ts-ignore
+                        // @ts-expect-error
                         changedColumnIndices = undefined;
                     }
 
@@ -968,7 +984,7 @@ export const dataControllerModule = {
                         }
                     }
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     if(that._updateLockCount && !change.cancel) {
                         that._changes.push(change);
                         return;
@@ -1109,7 +1125,7 @@ export const dataControllerModule = {
                     const store = dataSource.store();
                     const enabledRemoteOperations = { filtering: true, sorting: true, paging: true, grouping: true, summary: true };
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     if(remoteOperations && remoteOperations.groupPaging) {
                         remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
                     }
@@ -1121,6 +1137,7 @@ export const dataControllerModule = {
                         remoteOperations = enabledRemoteOperations;
                     }
 
+                    // @ts-expect-error
                     return this._createDataSourceAdapterCore(dataSource, remoteOperations);
                 },
                 setDataSource: function(dataSource) {
@@ -1128,6 +1145,7 @@ export const dataControllerModule = {
                     const oldDataSource = that._dataSource;
 
                     if(!dataSource && oldDataSource) {
+                        // @ts-expect-error
                         oldDataSource.cancelAll();
                         oldDataSource.changed.remove(that._dataChangedHandler);
                         oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
@@ -1139,9 +1157,11 @@ export const dataControllerModule = {
                     }
 
                     if(dataSource) {
+                        // @ts-expect-error
                         dataSource = that._createDataSourceAdapter(dataSource);
                     }
 
+                    // @ts-expect-error
                     that._dataSource = dataSource;
 
                     if(dataSource) {
@@ -1149,17 +1169,17 @@ export const dataControllerModule = {
                         that._isLoading = !dataSource.isLoaded();
                         that._needApplyFilter = true;
                         that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
-                        // @ts-ignore
+                        // @ts-expect-error
                         dataSource.changed.add(that._dataChangedHandler);
-                        // @ts-ignore
+                        // @ts-expect-error
                         dataSource.loadingChanged.add(that._loadingChangedHandler);
-                        // @ts-ignore
+                        // @ts-expect-error
                         dataSource.loadError.add(that._loadErrorHandler);
-                        // @ts-ignore
+                        // @ts-expect-error
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
-                        // @ts-ignore
+                        // @ts-expect-error
                         dataSource.changing.add(that._changingHandler);
-                        // @ts-ignore
+                        // @ts-expect-error
                         dataSource.pushed.add(that._dataPushedHandler);
                     }
                 },
@@ -1181,7 +1201,7 @@ export const dataControllerModule = {
                 },
                 loadAll: function(data) {
                     const that = this;
-                    // @ts-ignore
+                    // @ts-expect-error
                     const d = new Deferred();
                     const dataSource = that._dataSource;
 
@@ -1242,7 +1262,7 @@ export const dataControllerModule = {
                     if(!store) return;
 
                     if(rowIndex >= 0) {
-                        // @ts-ignore
+                        // @ts-expect-error
                         result = new Deferred().resolve(this.items()[rowIndex].data);
                     }
 
@@ -1260,7 +1280,7 @@ export const dataControllerModule = {
                 },
                 getDataByKeys: function(rowKeys) {
                     const that = this;
-                    // @ts-ignore
+                    // @ts-expect-error
                     const result = new Deferred();
                     const deferreds = [];
                     const data = [];
@@ -1303,7 +1323,7 @@ export const dataControllerModule = {
                     const that = this;
                     const dataSource = that.getDataSource();
                     const changesOnly = options.changesOnly;
-                    // @ts-ignore
+                    // @ts-expect-error
                     const d = new Deferred();
 
 
@@ -1313,11 +1333,11 @@ export const dataControllerModule = {
 
                     when(!options.lookup || that._columnsController.refresh()).always(function() {
                         if(options.load || options.reload) {
-                            // @ts-ignore
+                            // @ts-expect-error
                             dataSource && dataSource.on('customizeLoadResult', customizeLoadResult);
 
                             when(that.reload(options.reload, changesOnly)).always(function() {
-                                // @ts-ignore
+                                // @ts-expect-error
                                 dataSource && dataSource.off('customizeLoadResult', customizeLoadResult);
                                 that._repaintChangesOnly = undefined;
                             }).done(d.resolve).fail(d.reject);

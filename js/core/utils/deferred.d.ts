@@ -1,6 +1,6 @@
 interface Callback<T> {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
-    (value?: T, ...args: T[]): void;
+    (value: T, ...args: T[]): void;
 }
 declare class DeferredObj<T> {
     constructor();
@@ -39,3 +39,5 @@ export type DxExtendedPromise<T> = DxPromise<T> & {
         onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): PromiseLike<TResult1 | TResult2>;
 };
+
+export function when<T>(...args: (DeferredObj<T> | T)[]): DeferredObj<T>;

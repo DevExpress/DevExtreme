@@ -1,3 +1,5 @@
+// @ts-check
+
 import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
@@ -69,7 +71,10 @@ export const columnHeadersModule = {
                     .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('headerFilter')).length);
             }
 
-            return {
+            /**
+             * @type {Partial<import('./ui.grid_core.column_headers').ColumnHeadersView>}
+             */
+            const members = {
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
@@ -186,6 +191,10 @@ export const columnHeadersModule = {
                     this._lastActionElement = event.target;
 
                     if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+                        /**
+                         * @type {any}
+                         */
+                        // @ts-expect-error
                         const headerFilterController = this.getController('headerFilter');
                         const $column = $target.closest('td');
                         const columnIndex = this.getColumnIndexByElement($column);
@@ -371,6 +380,7 @@ export const columnHeadersModule = {
                                 $cellElement && result.push($cellElement.get(0));
                             });
 
+                            // @ts-expect-error
                             return $(result);
                         } else if(!index || index < rowCount) {
                             return that.getCellElements(index || 0);
@@ -536,6 +546,8 @@ export const columnHeadersModule = {
                     }
                 }
             };
+
+            return members;
         })())
     }
 };
