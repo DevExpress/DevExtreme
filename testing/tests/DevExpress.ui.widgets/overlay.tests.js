@@ -1232,32 +1232,38 @@ testModule('position', moduleConfig, () => {
     });
 
     test('overlay content should have correct position when position.boundary changes to window', function(assert) {
-        const $overlay = $('<div>').appendTo('#qunit-fixture');
-        const $boundary = $('<div>').css({ width: 20, height: 30 }).appendTo('#qunit-fixture');
-        const widthContent = 25;
-        const heightContent = 35;
-
-        $overlay.dxOverlay({
+        const $boundary = $('<div>')
+            .css({ width: 20, height: 30 })
+            .appendTo('#qunit-fixture');
+        const contentWidth = 25;
+        const contentHeight = 35;
+        const overlay = $('#overlay').dxOverlay({
             visible: true,
-            width: widthContent,
-            height: heightContent,
+            width: contentWidth,
+            height: contentHeight,
             animation: null,
             position: {
                 collision: 'fit',
                 boundary: $boundary,
             }
-        });
-
-        const overlay = $overlay.dxOverlay('instance');
+        }).dxOverlay('instance');
         const $overlayContent = overlay.$content();
+        let contentOffset = $overlayContent.offset();
+        const boundaryOffset = $boundary.offset();
 
-        assert.strictEqual($overlayContent.offset().top, $boundary.offset().top, 'top border of the content is correct');
-        assert.strictEqual($overlayContent.offset().left, $boundary.offset().left, 'left border of the content is correct');
+        assert.strictEqual(contentOffset.top, boundaryOffset.top, 'top border of the content is correct');
+        assert.strictEqual(contentOffset.left, boundaryOffset.left, 'left border of the content is correct');
 
         overlay.option('position.boundary', window);
 
-        assert.roughEqual($overlayContent.offset().top, getHeight($(window)) / 2 - heightContent / 2, 0.51, 'content is in the center of the window vertically');
-        assert.roughEqual($overlayContent.offset().left, getWidth($(window)) / 2 - widthContent / 2, 0.51, 'content is in the center of the window horizontally');
+        contentOffset = $overlayContent.offset();
+        const contentCenterY = contentOffset.top + contentHeight / 2;
+        const windowCenterY = window.innerHeight / 2;
+        const contentCenterX = contentOffset.left + contentWidth / 2;
+        const windowCenterX = window.innerWidth / 2;
+
+        assert.roughEqual(contentCenterY, windowCenterY, 0.51, 'content is in the center of window vertically');
+        assert.roughEqual(contentCenterX, windowCenterX, 0.51, 'content is in the center of window horizontally');
     });
 });
 
