@@ -1804,7 +1804,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   await changeTheme('generic.light');
 });
 
-test('DataGrid checkboxes in adaptive row should have correct paddings and no outline (T1126956)', async (t) => {
+test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -1834,7 +1834,7 @@ test('DataGrid checkboxes in adaptive row should have correct paddings and no ou
     columnHidingEnabled: true,
     editing: {
       allowUpdating: true,
-      mode: 'batch',
+      mode: 'cell',
     },
     columns: [{
       dataField: 'OrderNumber',
