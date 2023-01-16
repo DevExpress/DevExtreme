@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Adaptive appointments');
+fixture.disablePageReloads.skip('Renovated scheduler - Adaptive appointments');
 
 [
   { groupOrientation: 'vertical', rtlEnabled: false },

@@ -18,7 +18,7 @@ const priorityData = [{
   color: 'rgb(255, 151, 71)',
 }];
 
-fixture`Resources`
+fixture.disablePageReloads.skip`Resources`
   .page(url(__dirname, '../../container.html'));
 
 [

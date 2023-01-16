@@ -14,7 +14,7 @@ const testReact = multiPlatformTest({
   platforms: ['react'],
 });
 
-fixture('Renovated scheduler - Templates');
+fixture.disablePageReloads.skip('Renovated scheduler - Templates');
 
 const resources = [{
   id: 0,

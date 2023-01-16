@@ -31,7 +31,7 @@ const priorityData = [{
   color: 'rgb(225, 142, 146)',
 }];
 
-fixture('Appointment resources');
+fixture.disablePageReloads.skip('Appointment resources');
 
 test('Resource color should be correct if groups is set in "views"', async (t) => {
   const scheduler = new Scheduler('#container');

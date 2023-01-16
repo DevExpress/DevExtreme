@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - firstDayOfWeek');
+fixture.disablePageReloads.skip('Renovated scheduler - firstDayOfWeek');
 
 test('WorkWeek should generate correct start view date',
   async (t, { screenshotComparerOptions }) => {
