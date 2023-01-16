@@ -1965,7 +1965,6 @@ declare module DevExpress.common.charts {
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type ChartsShiftLabelOverlap = 'hide' | 'none' | 'shift';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   export type HatchDirection = 'left' | 'none' | 'right';
@@ -2058,6 +2057,7 @@ declare module DevExpress.common.charts {
     | 'steparea'
     | 'stepline'
     | 'stock';
+  export type ShiftLabelOverlap = 'hide' | 'none' | 'shift';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
     | 'generic.dark'
@@ -26767,7 +26767,7 @@ declare module DevExpress.viz {
   }
   module dxBarGauge {
     export type BarGaugeLabelOverlap =
-      DevExpress.common.charts.ChartsShiftLabelOverlap;
+      DevExpress.common.charts.ShiftLabelOverlap;
     export type DisposingEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxBarGauge>;
@@ -30823,8 +30823,7 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
-    export type FunnelLabelOverlap =
-      DevExpress.common.charts.ChartsShiftLabelOverlap;
+    export type FunnelLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -31426,7 +31425,7 @@ declare module DevExpress.viz {
       DevExpress.events.ChangedOptionInfo;
     export type PieChartAnnotationLocation = 'center' | 'edge';
     export type PieChartLabelOverlap =
-      DevExpress.common.charts.ChartsShiftLabelOverlap;
+      DevExpress.common.charts.ShiftLabelOverlap;
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
     export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
     export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';

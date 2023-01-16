@@ -68,7 +68,7 @@ export type LabelOverlap = 'hide' | 'none';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type ChartsShiftLabelOverlap = 'hide' | 'none' | 'shift';
+export type ShiftLabelOverlap = 'hide' | 'none' | 'shift';
 
 /**
  * @public

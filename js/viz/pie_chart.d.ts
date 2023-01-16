@@ -46,11 +46,11 @@ import {
 
 import {
     ChartsDataType,
-    ChartsShiftLabelOverlap,
     DashStyle,
     HatchDirection,
     LabelPosition,
     Palette,
+    ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
 } from '../common/charts';
@@ -70,7 +70,7 @@ export type PieChartAnnotationLocation = 'center' | 'edge';
 /** @public */
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
 /** @public */
-export type PieChartLabelOverlap = ChartsShiftLabelOverlap;
+export type PieChartLabelOverlap = ShiftLabelOverlap;
 /** @public */
 export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
 /** @public */
