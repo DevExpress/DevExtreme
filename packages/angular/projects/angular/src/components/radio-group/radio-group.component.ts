@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import {
   createRadioGroupStore,
+  RADIO_GROUP_ACTIONS,
   ReadonlyProps,
   TemplateProps,
   ValueProps,
@@ -35,7 +36,7 @@ export class RadioGroupComponent<T>
     this.setValue(value);
   }
 
-  constructor(private radioGroupService: RadioGroupService) {
+  constructor(private radioGroupService: RadioGroupService<T>) {
     super();
   }
 
@@ -57,8 +58,8 @@ export class RadioGroupComponent<T>
 
     this.radioGroupService.context$.pipe(doIfContextExist())
       .subscribe((store) => {
-        store.addUpdate({ value });
-        store.commitUpdates();
+        store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(value));
+        store.commitPropsUpdates();
       });
   }
 }

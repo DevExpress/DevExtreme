@@ -3,4 +3,5 @@ import { RadioGroupStore } from '@devextreme/components';
 import { ContextService } from '../../internal';
 
 @Injectable()
-export class RadioGroupService extends ContextService<RadioGroupStore<unknown>> {}
+export class RadioGroupService<T> extends ContextService<RadioGroupStore<T>> {
+}

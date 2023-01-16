@@ -1,11 +1,11 @@
-import { Selector, StoreState, UnknownRecord } from '@devextreme/core';
+import { Selector, Store, UnknownRecord } from '@devextreme/core';
 import { finalize, Observable, startWith } from 'rxjs';
 
 export function useStoreSelector<
   TState extends UnknownRecord,
   TValue,
   >(
-  store: StoreState<TState>,
+  store: Store<TState>,
   selector: Selector<TState, TValue>,
 ): Observable<TValue> {
   let unsubscribe: () => void;
