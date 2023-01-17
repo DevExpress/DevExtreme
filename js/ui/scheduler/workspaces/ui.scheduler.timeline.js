@@ -345,6 +345,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
 
         this.renderWorkSpace();
+
         if(this.isRenovatedRender()) {
             this.virtualScrollingDispatcher.updateDimensions();
         }
