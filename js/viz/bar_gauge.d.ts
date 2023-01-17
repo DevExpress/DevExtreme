@@ -43,6 +43,7 @@ export {
     LabelOverlap,
     Palette,
     PaletteExtensionMode,
+    ShiftLabelOverlap,
 };
 
 /**

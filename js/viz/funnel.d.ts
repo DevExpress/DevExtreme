@@ -58,6 +58,7 @@ export {
     Palette,
     PaletteExtensionMode,
     TextOverflow,
+    ShiftLabelOverlap,
     WordWrap,
 };
 

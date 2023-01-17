@@ -63,6 +63,7 @@ export {
     Palette,
     TextOverflow,
     WordWrap,
+    ShiftLabelOverlap,
 };
 
 /** @public */
