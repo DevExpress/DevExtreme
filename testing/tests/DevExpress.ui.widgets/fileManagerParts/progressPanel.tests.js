@@ -1,14 +1,17 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
+import FileUploader from 'ui/file_uploader';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
+import { createTestFileSystem, createUploaderFiles, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
+import CustomFileSystemProvider from 'file_management/custom_provider';
 import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;
+const FileUploaderInternals = FileUploader.__internals;
 
 const moduleConfig = {
 
@@ -34,6 +37,8 @@ const integrationModuleConfig = {
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
+
+        FileUploaderInternals.changeFileInputRenderer(() => $('<div>'));
 
         this.$element = $('#fileManager').dxFileManager({
             fileSystemProvider: fileSystem,
@@ -65,6 +70,8 @@ const integrationModuleConfig = {
 
         this.clock.restore();
         fx.off = false;
+
+        FileUploaderInternals.resetFileInputTag();
     }
 };
 
@@ -737,4 +744,38 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         assert.strictEqual(details[0].$image.css('height'), '36px', 'detail item icon has correct height');
     });
 
+    test('upload operation must be finalized correctly when notifications.showPanel is false (T1136702)', function(assert) {
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
+        resizeCallbacks.fire();
+
+        const uploadChunkSpy = sinon.spy();
+        const operationDelay = 1500;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'u',
+                realProviderInstance: new CustomFileSystemProvider({
+                    uploadFileChunk: uploadChunkSpy
+                }),
+                assert
+            }),
+            notifications: {
+                showPanel: false
+            }
+        });
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        this.wrapper.setUploadInputFile(createUploaderFiles(1));
+
+        this.clock.tick(operationDelay * 2 + 1);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'file is uploaded');
+        assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
+        implementationsMap.getWidth = originalFunc;
+    });
 });
