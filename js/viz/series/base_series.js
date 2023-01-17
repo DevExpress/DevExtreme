@@ -570,6 +570,7 @@ Series.prototype = {
             that._applyVisibleArea();
             that._translatePoints();
         }
+
         that._isCoordsPoints = false;
 
         that._setGroupsSettings(animationEnabled, firstDrawing);
