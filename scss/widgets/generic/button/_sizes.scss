@@ -15,6 +15,7 @@ $generic-button-border-weight: $generic-base-border-width !default;
   $generic-button-horizontal-padding: 18px !default;
   $generic-button-icon-horizontal-padding: 8px !default;
   $generic-button-box-shadow-size: 0 1px 3px !default;
+  $generic-button-withtext-vertical-padding: 8px !default;
 }
 
 @else if $size == "compact" {
@@ -22,4 +23,5 @@ $generic-button-border-weight: $generic-base-border-width !default;
   $generic-button-horizontal-padding: 10px !default;
   $generic-button-icon-horizontal-padding: 5px !default;
   $generic-button-box-shadow-size: 0 1px 2px !default;
+  $generic-button-withtext-vertical-padding: 4px !default;
 }
