@@ -26766,8 +26766,6 @@ declare module DevExpress.viz {
     values(values: Array<number>): void;
   }
   module dxBarGauge {
-    export type BarGaugeLabelOverlap =
-      DevExpress.common.charts.ShiftLabelOverlap;
     export type DisposingEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxBarGauge>;
@@ -26946,7 +26944,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxBarGauge.BarGaugeLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxBarGaugeOptions.startValue]
      */
