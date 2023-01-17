@@ -1,4 +1,4 @@
-import { getKeys } from '../get-keys';
+import { getChangedKeys, getKeys } from '../get-keys';
 
 describe('Core: Utils: getKeys', () => {
   it('Returns string key array of the passed object with string keys', () => {
@@ -54,6 +54,26 @@ describe('Core: Utils: getKeys', () => {
     const expectedResult = ['10', 'a', symbol];
 
     const result = getKeys(testObject);
+
+    expect(result).toEqual(expectedResult);
+  });
+});
+
+describe('Core: Utils: getChangedKeys', () => {
+  it('Returns changed keys', () => {
+    const prevObj = {
+      a: 1,
+      b: 2,
+      c: 3,
+    };
+    const nextObj = {
+      a: 2,
+      b: 2,
+      c: 2,
+    };
+    const expectedResult = ['a', 'c'];
+
+    const result = getChangedKeys(prevObj, nextObj);
 
     expect(result).toEqual(expectedResult);
   });

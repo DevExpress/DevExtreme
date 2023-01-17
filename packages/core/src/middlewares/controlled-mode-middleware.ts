@@ -1,14 +1,11 @@
-import { UnknownRecord } from '../utils';
-import { getChangedKeys } from './get-changed-keys';
+import { getChangedKeys, UnknownRecord } from '../utils';
 import { StateConfigMap } from './types';
-
-type ModelChangesTuple<TState extends UnknownRecord> = [newModel: TState, hasChanges: boolean];
 
 export function controlledModeMiddleware<TState extends UnknownRecord>(
   prev: TState,
   next: TState,
   config: StateConfigMap<TState> = {},
-): ModelChangesTuple<TState> {
+): TState {
   const result = { ...next };
   const changedKeys = getChangedKeys(prev, next);
   const controlledModeKeys = changedKeys
@@ -18,6 +15,5 @@ export function controlledModeMiddleware<TState extends UnknownRecord>(
     result[controlledKey] = prev[controlledKey];
   });
 
-  const hasChanges = changedKeys.length - controlledModeKeys.length > 0;
-  return [result, hasChanges];
+  return result;
 }

@@ -5,12 +5,11 @@ import {
   OnInit,
 } from '@angular/core';
 import {
-  createRadioGroupCore,
+  createRadioGroupStore,
   ReadonlyProps,
   TemplateProps,
   ValueProps,
 } from '@devextreme/components';
-import { filter, map } from 'rxjs';
 import { doIfContextExist, Inputs } from '../../internal';
 import { RadioGroupBaseComponent, RadioGroupService } from '../radio-common';
 
@@ -42,7 +41,7 @@ export class RadioGroupComponent<T>
 
   ngOnInit(): void {
     this.radioGroupService.setContext(
-      createRadioGroupCore({
+      createRadioGroupStore({
         value: this.inputValue,
       }, {
         value: {
@@ -56,16 +55,10 @@ export class RadioGroupComponent<T>
   private setValue(value?: T): void {
     this.inputValue = value;
 
-    this.radioGroupService.context$.pipe(
-      doIfContextExist(),
-      map(({ stateManager }) => stateManager),
-      filter((stateManager) => {
-        const stateValue = stateManager.getState();
-        return stateValue.value !== value;
-      }),
-    ).subscribe((stateManager) => {
-      stateManager.addUpdate({ value });
-      stateManager.commitUpdates();
-    });
+    this.radioGroupService.context$.pipe(doIfContextExist())
+      .subscribe((store) => {
+        store.addUpdate({ value });
+        store.commitUpdates();
+      });
   }
 }
