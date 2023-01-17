@@ -110,7 +110,7 @@ const members = {
 
     focus: function($element, isHideBorder) {
         const that = this;
-        const isHideBorderInternal = $element?.find('.dx-checkbox').length || isHideBorder;
+        const isHideBorderInternal = ($element?.hasClass('dx-field-item-content') && $element?.find('.dx-checkbox').length) || isHideBorder;
 
         if($element === undefined) {
             return that._$focusedElement;
