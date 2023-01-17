@@ -2416,6 +2416,8 @@ export const columnsControllerModule = {
                         return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
+                    calculatedColumnOptions.defaultFilterOperation = '=';
+
                     calculatedColumnOptions.createFilterExpression = function(filterValue) {
                         /**
                          * @type {any}
