@@ -97,6 +97,7 @@ export const BaseGauge = BaseWidget.inherit({
         if(!that._isValidDomain) return;
 
         that._renderContent();
+        that._renderPatterns();
         that._tracker.setTooltipState(that._tooltip.isEnabled());
         that._tracker.activate();
         that._noAnimation = false;

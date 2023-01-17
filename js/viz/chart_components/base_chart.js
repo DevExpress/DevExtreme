@@ -731,6 +731,8 @@ export const BaseChart = BaseWidget.inherit({
         that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
+        that._renderPatterns();
+
         that._renderer.unlock();
     },
 

@@ -632,3 +632,8 @@ export function valueOf(value) {
 export function pointInCanvas(canvas, x, y) {
     return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
+
+export const getNextDefsSvgId = (function() {
+    let numDefsSvgElements = 1;
+    return function() { return 'DevExpress_' + numDefsSvgElements++; };
+})();

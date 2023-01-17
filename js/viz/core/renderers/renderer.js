@@ -6,7 +6,7 @@ import callOnce from '../../../core/utils/call_once';
 import eventsEngine from '../../../events/core/events_engine';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
-import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams } from '../utils';
+import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams, getNextDefsSvgId } from '../utils';
 import { isDefined } from '../../../core/utils/type';
 
 const window = getWindow();
@@ -91,11 +91,6 @@ function restoreRoot(root, container) {
         domAdapter.getBody().removeChild(getBackup().backupContainer);
     }
 }
-
-let getNextDefsSvgId = (function() {
-    let numDefsSvgElements = 1;
-    return function() { return 'DevExpress_' + numDefsSvgElements++; };
-})();
 
 function isObjectArgument(value) {
     return value && (typeof value !== 'string');
@@ -1318,10 +1313,6 @@ function arcAnimate(params, options, complete) {
 }
 
 ///#DEBUG
-export const DEBUG_set_getNextDefsSvgId = function(newFunction) {
-    getNextDefsSvgId = newFunction;
-};
-
 export const DEBUG_removeBackupContainer = function() {
     if(getBackup().backupCounter) {
         getBackup().backupCounter = 0;
@@ -1985,6 +1976,30 @@ Renderer.prototype = {
         ///#ENDDEBUG
 
         return pattern;
+    },
+
+    customLinearGradient: function(id, options) {
+        const gradient = this._createElement('linearGradient', { id: id, gradientTransform: `rotate(${options.rotationAngle || 0})` }).append(this._defs);
+
+        options.children.forEach(el => {
+            this._createElement('stop', { offset: el.offset, 'stop-color': el.color, 'stop-opacity': el.opacity }).append(gradient);
+        });
+    },
+
+    customRadialGradient: function(id, options) {
+        const gradient = this._createElement('radialGradient', { id: id }).append(this._defs);
+        options.children.forEach(el => {
+            this._createElement('stop', { offset: el.offset, 'stop-color': el.color, 'stop-opacity': el.opacity }).append(gradient);
+        });
+    },
+
+    customPattern: function(id, options) {
+        const isPointFilling = options.width === '100%' && options.height === '100%';
+        const opt = isPointFilling ? { id: id, width: options.width, height: options.height, patternContentUnits: 'userSpaceOnUse' } :
+            { id: id, width: options.width, height: options.height, patternUnits: 'userSpaceOnUse' };
+        const pattern = this._createElement('pattern', opt).append(this._defs);
+
+        options.children(pattern.element);
     },
 
     _getPointsWithYOffset: function(points, offset) {

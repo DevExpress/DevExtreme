@@ -16,6 +16,7 @@ import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
 import { when } from '../../core/utils/deferred';
+import { getGraphicObjects } from '../graphic_objects';
 import {
     createEventTrigger,
     createResizeHandler,
@@ -718,6 +719,15 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _resetIsReady: function() {
         this.isReady = getFalse;
+    },
+
+    _renderPatterns: function() {
+        const graphics = getGraphicObjects();
+
+        for(const id in graphics) {
+            const opt = graphics[id];
+            this._renderer[opt.element](id, graphics[id].options);
+        }
     },
 
     _drawn: function() {

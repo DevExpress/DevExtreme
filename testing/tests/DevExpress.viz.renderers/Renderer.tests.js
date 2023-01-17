@@ -1,7 +1,8 @@
-const $ = require('jquery');
-const animation = require('viz/core/renderers/animation');
-const renderers = require('viz/core/renderers/renderer');
-const vizMocks = require('../../helpers/vizMocks.js');
+import $ from 'jquery';
+import animation from 'viz/core/renderers/animation';
+import renderers from 'viz/core/renderers/renderer';
+import vizMocks from '../../helpers/vizMocks.js';
+import utils from 'viz/core/utils';
 
 $('<div>')
     .attr('id', 'qunit-fixture')
@@ -15,7 +16,7 @@ function getMockElement() {
     };
 }
 
-renderers.DEBUG_set_getNextDefsSvgId(function() { return 'DevExpressId'; });
+utils.getNextDefsSvgId = sinon.stub().returns('DevExpressId');
 
 QUnit.testDone(function() {
     renderers.SvgElement.reset && renderers.SvgElement.reset();
