@@ -5068,6 +5068,24 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
     });
+
+    QUnit.test('click on remove tag button should not remove tag in another tagBox with fieldTemplate (T1137828)', function(assert) {
+        const $tagBox = $('#anotherContainer').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const tagBoxWithFieldTemplate = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            fieldTemplate: () => $('<div>').dxTextBox()
+        }).dxTagBox('instance');
+
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+
+        assert.strictEqual(tagBox.option('value').length, 0);
+        assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
+    });
 });
 
 

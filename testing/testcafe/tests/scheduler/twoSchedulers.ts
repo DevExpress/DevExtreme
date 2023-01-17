@@ -12,7 +12,7 @@ const createScheduler = async (container): Promise<void> => {
     height: 600,
     views: ['day'],
     currentView: 'day',
-  }, true, container);
+  }, container);
 };
 
 test('First scheduler should work after removing second (T1063130)', async (t) => {

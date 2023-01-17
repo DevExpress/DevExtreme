@@ -2,7 +2,7 @@ import $ from 'jquery';
 import notify from 'ui/notify';
 import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
-
+import { isPlainObject } from 'core/utils/type';
 import 'generic_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
@@ -174,6 +174,26 @@ QUnit.module('notify', {
             const toastsBaseZIndex = 9500;
 
             assert.strictEqual(stackZIndex, toastsBaseZIndex);
+        });
+    });
+
+    [
+        'onShowing',
+        'onShown',
+        'onHiding',
+        'onHidden'
+    ].forEach(eventName => {
+        QUnit.test(`${eventName} argument should be plain object`, function(assert) {
+            const options = { displayTime: 100 };
+            const stub = sinon.stub();
+            options[eventName] = stub;
+
+            notify(options, { position: 'top left' });
+            this.clock.tick(100);
+
+            const eventArg = stub.lastCall.args[0];
+
+            assert.ok(isPlainObject(eventArg), 'argument is plain object');
         });
     });
 });

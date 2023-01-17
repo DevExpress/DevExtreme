@@ -1,3 +1,5 @@
+// @ts-check
+
 import $ from '../../core/renderer';
 import core from './ui.grid_core.modules';
 import { each } from '../../core/utils/iterator';
@@ -12,7 +14,10 @@ const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
 const FocusController = core.ViewController.inherit((function() {
-    return {
+    /**
+     * @type {Partial<import('./ui.grid_core.focus').FocusController>}
+     */
+    const members = {
         init: function() {
             this._dataController = this.getController('data');
             this._keyboardController = this.getController('keyboardNavigation');
@@ -186,6 +191,7 @@ const FocusController = core.ViewController.inherit((function() {
             const that = this;
             const dataController = that.getController('data');
             const isAutoNavigate = that.isAutoNavigateToFocusedRow();
+            // @ts-expect-error
             const d = new Deferred();
 
             if(key === undefined || !dataController.dataSource()) {
@@ -402,8 +408,13 @@ const FocusController = core.ViewController.inherit((function() {
             return $row;
         }
     };
+
+    return members;
 })());
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const focusModule = {
     defaultOptions: function() {
         return {
@@ -610,6 +621,7 @@ export const focusModule = {
 
                 getPageIndexByKey: function(key) {
                     const that = this;
+                    // @ts-expect-error
                     const d = new Deferred();
 
                     that.getGlobalRowIndexByKey(key).done(function(globalIndex) {
@@ -626,6 +638,7 @@ export const focusModule = {
                 },
                 _calculateGlobalRowIndexByFlatData: function(key, groupFilter, useGroup) {
                     const that = this;
+                    // @ts-expect-error
                     const deferred = new Deferred();
                     const dataSource = that._dataSource;
 
@@ -883,10 +896,12 @@ export const focusModule = {
                         return this.scrollTopPosition(position);
                     }
 
+                    // @ts-expect-error
                     return (new Deferred()).resolve();
                 },
 
                 scrollTopPosition: function(scrollTop) {
+                    // @ts-expect-error
                     const d = new Deferred();
                     const scrollable = this.getScrollable();
 

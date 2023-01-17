@@ -14,10 +14,13 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
   await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-init.png')).ok();
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0), { speed: 0.2 })
-    .expect(scheduler.getAppointmentCount()).eql(7)
-    .expect(draggableAppointment.size.width)
-    .eql('114px')
+    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0))
+    .expect(scheduler.getAppointmentCount()).eql(7);
+
+  await t
+    .wait(500)
+    .expect((await scheduler.getAppointment('Simple recurrence appointment').element.boundingClientRect).width)
+    .eql(114)
     .expect(draggableAppointment.isAllDay)
     .ok();
 

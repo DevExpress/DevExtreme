@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Map`
+fixture.disablePageReloads`Map`
   .page(url(__dirname, '../../container.html'));
 
 test('Map should not raise errors when it is disposed immediately after creating (T914315)', async (t) => {
@@ -10,7 +10,6 @@ test('Map should not raise errors when it is disposed immediately after creating
 
   await t
     .click($editButton)
-    .wait(500)
     .expect(true).ok();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{

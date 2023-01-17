@@ -55,5 +55,5 @@ fixture.disablePageReloads`Display* arguments in appointment templates and event
 
       return `${displayStartDate.toLocaleTimeString('en-US', { hour12: false })} ${displayEndDate.toLocaleTimeString('en-US', { hour12: false })}`;
     },
-  }, true));
+  }));
 });

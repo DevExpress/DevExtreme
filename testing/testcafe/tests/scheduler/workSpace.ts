@@ -13,7 +13,7 @@ const createScheduler = async (options = {}): Promise<void> => {
     dataSource: [],
     startDayHour: 9,
     height: 600,
-  }, true));
+  }));
 };
 
 test('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {

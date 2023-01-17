@@ -1,3 +1,5 @@
+// @ts-check
+
 import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
@@ -73,7 +75,18 @@ function adaptiveCellTemplate(container, options) {
     }
 }
 
-const AdaptiveColumnsController = modules.ViewController.inherit({
+function focusCellHandler(e) {
+    const $nextCell = e.data?.$nextCell;
+
+    eventsEngine.off($nextCell, 'focus', focusCellHandler);
+    // @ts-expect-error
+    eventsEngine.trigger($nextCell, 'dxclick');
+}
+
+/**
+ * @type {Partial<import('./ui.grid_core.adaptivity').AdaptiveColumnsController>}
+ */
+const adaptiveColumnsControllerMembers = {
     _isRowEditMode: function() {
         const editMode = this._getEditMode();
         return editMode === EDIT_MODE_ROW;
@@ -91,7 +104,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const that = this;
         const column = item.column;
         const focusAction = that.createAction(function() {
-            eventsEngine.trigger($container, clickEventName);
+            if(that._editingController.isEditing()) {
+                // @ts-expect-error
+                eventsEngine.trigger($container, clickEventName);
+            }
         });
         const rowData = cellOptions.row.data;
         const value = column.calculateCellValue(rowData);
@@ -152,6 +168,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 const isItemEdited = that._isItemEdited(item);
                 templateOptions.value = cellOptions.row.values[columnIndex];
                 if(isItemEdited || column.showEditorAlways) {
+                    // @ts-expect-error
                     editingController.renderFormEditTemplate(templateOptions, item, options, $container, !isItemEdited);
                 } else {
                     templateOptions.column = column;
@@ -167,6 +184,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                     value: cellOptions.row.values[columnIndex]
                 };
             }, function() {
+                // @ts-expect-error
                 $container.contents().remove();
                 $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
                 renderFormTemplate();
@@ -385,6 +403,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     _showHiddenColumns: function() {
         for(let i = 0; i < COLUMN_VIEWS.length; i++) {
+            /**
+             * @type {any}
+             */
+            // @ts-expect-error
             const view = this.getView(COLUMN_VIEWS[i]);
             if(view && view.isVisible() && view.element()) {
                 const viewName = view.name;
@@ -410,6 +432,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     _hideVisibleColumn: function({ isCommandColumn, visibleIndex }) {
         const that = this;
         COLUMN_VIEWS.forEach(function(viewName) {
+            // @ts-expect-error
             const view = that.getView(viewName);
             view && that._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
         });
@@ -492,6 +515,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             const $rootElement = that.component.$element();
             let rootElementWidth = getWidth($rootElement) - that._getCommandColumnsWidth();
             const getVisibleContentColumns = function() {
+                // @ts-ignore
                 return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.index === item.index).length === 0);
             }.bind(this);
             let visibleContentColumns = getVisibleContentColumns();
@@ -558,6 +582,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
+    getAdaptiveDetailItems: function() {
+        return this._$itemContents;
+    },
+
     getItemContentByColumnIndex: function(visibleColumnIndex) {
         let $itemContent;
 
@@ -583,6 +611,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
             formID: 'dx-' + new Guid()
         };
+        // @ts-expect-error
         const defaultFormOptions = isMaterial() ? { colCount: 2 } : {};
 
         this.executeAction('onAdaptiveDetailRowPreparing', { formOptions: userFormOptions });
@@ -734,6 +763,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             return;
         }
 
+        // @ts-expect-errors
         const $row = $(this.component.getRowElement(rowIndex));
 
         this.setCommandAdaptiveAriaLabel($row, label);
@@ -743,12 +773,20 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const $adaptiveCommand = $row.find('.dx-command-adaptive');
         $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
     }
-});
+};
+const AdaptiveColumnsController = modules.ViewController.inherit(adaptiveColumnsControllerMembers);
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const adaptivityModule = {
     defaultOptions: function() {
         return {
             columnHidingEnabled: false,
+            /**
+             * @type {undefined}
+             */
+            // @ts-expect-error
             onAdaptiveDetailRowPreparing: null
         };
     },
@@ -812,6 +850,17 @@ export const adaptivityModule = {
                         $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                     }
                 },
+                getCell: function(cellPosition, rows) {
+                    const item = this._dataController.items()[cellPosition?.rowIndex];
+
+                    if(item?.rowType === ADAPTIVE_ROW_TYPE) {
+                        const $adaptiveDetailItems = this._adaptiveColumnsController.getAdaptiveDetailItems();
+
+                        return this.callBase(cellPosition, rows, $adaptiveDetailItems);
+                    } else {
+                        return this.callBase.apply(this, arguments);
+                    }
+                },
 
                 _getCellElement: function(rowIndex, columnIdentifier) {
                     const item = this._dataController.items()[rowIndex];
@@ -825,9 +874,13 @@ export const adaptivityModule = {
 
                 getContextMenuItems: function(options) {
                     if(options.row && options.row.rowType === 'detailAdaptive') {
+                        // @ts-expect-error
                         const view = this.component.getView('columnHeadersView');
+                        // @ts-expect-error
                         const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
+                        // @ts-expect-error
                         options.column = formItem ? formItem.column : options.column;
+                        // @ts-expect-error
                         return view.getContextMenuItems && view.getContextMenuItems(options);
                     }
                     return this.callBase && this.callBase(options);
@@ -948,6 +1001,7 @@ export const adaptivityModule = {
 
                 _afterSaveEditData: function() {
                     this.callBase.apply(this, arguments);
+                    // @ts-expect-error
                     const deferred = new Deferred();
                     if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()) {
                         when(this.getController('validating').validate(true)).done((isValid) => {
@@ -1165,36 +1219,23 @@ export const adaptivityModule = {
                         && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
                 },
 
-                _processNextCellInMasterDetail: function($nextCell) {
+                _processNextCellInMasterDetail: function($nextCell, $cell) {
                     this.callBase($nextCell);
 
                     const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
+                    const isEditing = this._editingController.isEditing();
 
-                    if(!this._isInsideEditForm($nextCell) && $nextCell && isCellOrBatchMode) {
-                        const focusHandler = function() {
-                            eventsEngine.off($nextCell, 'focus', focusHandler);
-                            eventsEngine.trigger($nextCell, 'dxclick');
-                        };
-                        eventsEngine.on($nextCell, 'focus', focusHandler);
+                    if(isEditing && $nextCell && isCellOrBatchMode && !this._isInsideEditForm($nextCell)) {
+                        eventsEngine.off($nextCell, 'focus', focusCellHandler);
+                        eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
+
+                        // @ts-expect-error
+                        eventsEngine.trigger($cell, 'focus');
                     }
                 },
 
-                _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
-                    const result = this.callBase(eventTarget, direction);
-                    const $currentCell = this._getFocusedCell();
-                    const $row = $currentCell && $currentCell.parent();
-
-                    if(!result && $row && $row.length) {
-                        const $dataCells = getDataCellElements($row);
-                        const $targetCell = direction === 'next' ? $dataCells.last() : $dataCells.first();
-                        const rowIndex = $row.get(0).rowIndex;
-                        const adaptiveController = this._adaptiveController;
-                        const key = this._dataController.getKeyByRowIndex(direction === 'next' ? rowIndex : rowIndex - 1);
-                        const isCellElementsEquals = $currentCell && $targetCell && $currentCell.get(0) === $targetCell.get(0);
-
-                        return adaptiveController.isAdaptiveDetailRowExpanded(key) && isCellElementsEquals;
-                    }
-                    return result;
+                _isCellElement: function($cell) {
+                    return this.callBase.apply(this, arguments) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
                 },
 
                 init: function() {

@@ -1,56 +1,76 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import {
+  insertStylesheetRulesToPage,
+  appendElementTo, setAttribute,
+} from '../../../helpers/domUtils';
+import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
-// import { Item } from '../../../../../js/ui/menu.d';
-import { deleteStylesheetRule, insertStylesheetRule } from '../helpers/domUtils';
+import { Item } from '../../../../../js/ui/menu.d';
+import Menu from '../../../model/menu';
 
-fixture`Menu_common`
+fixture.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'));
 
-['generic.light', 'generic.dark', 'generic.contrast', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  test(`Menu_items,theme=${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Menu items render', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.click(Selector('.dx-icon-remove'));
-    await t.click(Selector('.dx-icon-save'));
+  const menu = new Menu();
 
+  const expandMenuItems = async () => {
     await t
-      .expect(await takeScreenshot(`Menu_items,theme=${theme.replace(/\./g, '-')}.png`))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(300, 400);
-    await changeTheme(theme);
-    await insertStylesheetRule('.custom-class { border: 2px solid green !important }', 0);
+      .click(menu.getItem(0))
+      .pressKey('down')
+      .pressKey('down')
+      .pressKey('right');
+  };
 
-    const menuItems = [
-      {
-        text: 'remove',
-        icon: 'remove',
-        items: [
-          { text: 'user', icon: 'user' },
-          {
-            text: 'save',
-            icon: 'save',
-            items: [
-              { text: 'export', icon: 'export' },
-              { text: 'edit', icon: 'edit' },
-            ],
-          },
-        ],
-      },
-      { text: 'user', icon: 'user' },
-      { text: 'coffee', icon: 'coffee' },
-    ] as any[];
+  await expandMenuItems();
 
-    return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' });
-  }).after(async (t) => {
-    await deleteStylesheetRule(0);
-    await restoreBrowserSize(t);
-    await changeTheme('generic.light');
+  if (!isMaterial()) {
+    await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.dark' });
+    await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.contrast' });
+  }
+
+  await testScreenshot(t, takeScreenshot, 'Menu render items.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+    compactCallBack: async () => {
+      await menu.repaint();
+      await expandMenuItems();
+    },
   });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'menu');
+
+  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
+  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
+
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important }');
+
+  const menuItems = [
+    {
+      text: 'remove',
+      icon: 'remove',
+      items: [
+        { text: 'user', icon: 'user' },
+        {
+          text: 'save',
+          icon: 'save',
+          items: [
+            { text: 'export', icon: 'export' },
+            { text: 'edit', icon: 'edit' },
+          ],
+        },
+      ],
+    },
+    { text: 'user', icon: 'user' },
+    { text: 'coffee', icon: 'coffee' },
+  ] as Item[];
+
+  return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
 });

@@ -14,7 +14,9 @@ export const view = ({
     children,
     elementTemplate: ElementTemplateComp,
     elementTemplatePayload,
+    index,
     indexedTemplate: IndexedTemplateComp,
+    indexedTemplatePayload,
     template: TemplateComp,
     templateWithoutData: TemplateWithoutData,
     text,
@@ -38,8 +40,8 @@ export const view = ({
         )}
         {IndexedTemplateComp && (
         <IndexedTemplateComp
-          data={{ indexedTemplate: text }}
-          index={2}
+          data={indexedTemplatePayload}
+          index={index}
         />
         )}
         {ElementTemplateComp && (
@@ -65,7 +67,11 @@ export class TemplatedTestWidgetProps {
 
   @Template() template?: any;
 
+  @OneWay() index?: number = 1;
+
   @Template() indexedTemplate?: any;
+
+  @OneWay() indexedTemplatePayload?: any;
 
   @Template() elementTemplate?: any;
 

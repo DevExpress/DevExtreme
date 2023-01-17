@@ -42,7 +42,6 @@ fixture.disablePageReloads`Scheduler - Multiday appointments (screenshot)`
         currentDate: new Date(2021, 3, 4),
         startDayHour: 12,
       },
-      true,
     );
   });
 });

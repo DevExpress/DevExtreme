@@ -1,3 +1,5 @@
+// @ts-check
+
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -15,6 +17,7 @@ import { addNamespace } from '../../events/utils/index';
 import { confirm } from '../dialog';
 import messageLocalization from '../../localization/message';
 import devices from '../../core/devices';
+// @ts-expect-error
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { equalByValue, noop } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
@@ -141,10 +144,14 @@ const EditingController = modules.ViewController.inherit((function() {
     };
 
     function getButtonName(button) {
+        // @ts-expect-error
         return isObject(button) ? button.name : button;
     }
 
-    return {
+    /**
+     * @type {Partial<import('./ui.grid_core.editing').EditingController>}
+     */
+    const members = {
         init: function() {
             this._columnsController = this.getController('columns');
             this._dataController = this.getController('data');
@@ -638,6 +645,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                     if(isObject(item)) {
                         if(isProcessedItem || isDefined(item[INSERT_INDEX])) {
+                            // @ts-expect-error
                             if(equalByValue(item.key, key)) {
                                 result = index;
                             }
@@ -764,6 +772,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this.executeAction('onInitNewRow', options);
 
             if(options.promise) {
+                // @ts-expect-error
                 const deferred = new Deferred();
 
                 when(fromPromise(options.promise))
@@ -881,6 +890,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(!store) {
                 dataController.fireError('E1052', this.component.NAME);
+                // @ts-expect-error
                 return new Deferred().reject();
             }
 
@@ -893,6 +903,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = store && store.key();
             const param = { data: {} };
             const oldEditRowIndex = this._getVisibleEditRowIndex();
+            // @ts-expect-error
             const deferred = new Deferred();
 
             this.refresh({ allowCancelEditing: true });
@@ -940,6 +951,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _navigateToNewRow: function(oldEditRowIndex, change, editRowIndex) {
+            // @ts-expect-error
             const d = new Deferred();
             const dataController = this._dataController;
             const focusController = this.getController('focus');
@@ -1314,6 +1326,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 } else {
                     const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
                     const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
+                    // @ts-expect-error
                     confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(confirmResult => {
                         if(confirmResult) {
                             this._deleteRowCore(rowIndex);
@@ -1380,6 +1393,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 changes: [...this.getChanges()]
             };
             this.executeAction('onSaving', onSavingParams);
+            // @ts-expect-error
             const d = new Deferred();
             when(fromPromise(onSavingParams.promise))
                 .done(() => {
@@ -1398,6 +1412,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 return null;
             }
 
+            // @ts-expect-error
             const deferred = new Deferred();
 
             this.executeAction(actionName, params);
@@ -1433,6 +1448,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         params = { data: oldData, key: change.key, cancel: false };
                         deferred = this._executeEditingAction('onRowRemoving', params, function() {
+                            // @ts-ignore
                             return store.remove(change.key).done(function(key) {
                                 dataChanges.push({ type: 'remove', key: key });
                             });
@@ -1441,6 +1457,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_INSERT_TYPE:
                         params = { data: data, cancel: false };
                         deferred = this._executeEditingAction('onRowInserting', params, function() {
+                            // @ts-ignore
                             return store.insert(params.data).done(function(data, key) {
                                 if(isDefined(key)) {
                                     changeCopy.key = key;
@@ -1455,6 +1472,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         params = { newData: data, oldData: oldData, key: change.key, cancel: false };
                         deferred = this._executeEditingAction('onRowUpdating', params, function() {
+                            // @ts-ignore
                             return store.update(change.key, params.newData).done(function(data, key) {
                                 if(data && isObject(data) && data !== params.newData) {
                                     changeCopy.data = data;
@@ -1468,6 +1486,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 changes[index] = changeCopy;
 
                 if(deferred) {
+                    // @ts-expect-error
                     const doneDeferred = new Deferred();
                     deferred
                         .always(function(data) {
@@ -1567,6 +1586,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         saveEditData: function() {
+            // @ts-expect-error
             const deferred = new Deferred();
             this.waitForDeferredOperations().done(() => {
                 if(this.isSaving()) {
@@ -1606,6 +1626,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataChanges = [];
             const dataController = this._dataController;
             const dataSource = dataController.dataSource();
+            // @ts-expect-error
             const result = new Deferred();
 
             when(this._fireOnSaving()).done(({ cancel, changes }) => {
@@ -1616,16 +1637,19 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._processChanges(deferreds, results, dataChanges, changes);
 
                 if(deferreds.length) {
+                    // @ts-expect-error
                     dataSource?.beginLoading();
 
                     when(...deferreds).done(() => {
                         if(this._processSaveEditDataResult(results)) {
                             this._endSaving(dataChanges, changes, result);
                         } else {
+                            // @ts-expect-error
                             dataSource?.endLoading();
                             result.resolve();
                         }
                     }).fail(error => {
+                        // @ts-expect-error
                         dataSource?.endLoading();
                         result.resolve(error);
                     });
@@ -1650,6 +1674,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             this._beforeEndSaving(changes);
 
+            // @ts-expect-error
             dataSource?.endLoading();
 
             this._refreshDataAfterSave(dataChanges, changes, deferred);
@@ -1811,6 +1836,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const newData = {};
             const oldData = options.row?.data;
             const rowKey = options.key;
+            // @ts-expect-error
             const deferred = new Deferred();
 
             if(rowKey !== undefined) {
@@ -1855,6 +1881,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
             const rowKey = options.key;
+            // @ts-expect-error
             const deferred = new Deferred();
 
             if(rowKey === undefined) {
@@ -1936,11 +1963,13 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _updateRowWithDelay: function(row, isCustomSetCellValue) {
+            // @ts-expect-error
             const deferred = new Deferred();
             this.addDeferred(deferred);
             setTimeout(() => {
                 // NOTE: if the editForm is enabled then we need to search for focused element in the document root
                 // otherwise we need to search for element in the shadow dom
+                // @ts-expect-error
                 const elementContainer = this._editForm?.element() || this.component.$element().get(0);
                 const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
                 const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
@@ -1954,6 +1983,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const $focusedItem = this._rowsView._getCellElement(row.rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItem, () => {
                         setTimeout(() => {
+                            // @ts-expect-error
                             focusedElement = domAdapter.getActiveElement(this.component.$element()?.get(0));
                             if(selectionRange.selectionStart >= 0) {
                                 gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
@@ -2071,6 +2101,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const iconType = iconUtils.getImageSourceType(icon);
 
                     if(iconType === 'image' || iconType === 'svg') {
+                        // @ts-expect-error
                         $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
                     } else {
                         $button.addClass('dx-icon' + (iconType === 'dxIcon' ? '-' : ' ') + icon).attr('title', button.text);
@@ -2230,8 +2261,13 @@ const EditingController = modules.ViewController.inherit((function() {
 
         }
     };
+
+    return members;
 })());
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const editingModule = {
     defaultOptions: function() {
         return {
@@ -2267,6 +2303,9 @@ export const editingModule = {
 
                 editRowKey: null,
 
+                /**
+                 * @type {any}
+                 */
                 editColumnName: null,
 
                 changes: []
@@ -2397,6 +2436,7 @@ export const editingModule = {
 
                         each($cellElements, function(index, cellElement) {
                             if($(cellElement).find($cell).length) {
+                                // @ts-expect-error
                                 cellIndex = index;
                             }
                         });

@@ -3959,6 +3959,39 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         assert.equal($popupContent.length, 1, 'There is editing popup');
     });
+
+    // T1136955
+    QUnit.test('Editing lookups with lookup optimization in form should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ value: 1, displayValue: 'text1' }],
+            columns: [{
+                dataField: 'value',
+                calculateDisplayValue: 'displayValue',
+                lookup: {
+                    dataSource: [{ id: 1, text: 'text1' }, { id: 2, text: 'text2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'text',
+                },
+            }],
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        $(dataGrid.getCellElement(0, 0)).find('.dx-selectbox').dxSelectBox('option', 'value', 2);
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        const $cell = $(dataGrid.getCellElement(0, 0));
+        assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
+    });
+
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {

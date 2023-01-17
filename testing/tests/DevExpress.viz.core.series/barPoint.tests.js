@@ -320,9 +320,12 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
                 visible: false
             }
         };
+        const visibleAreaX = [100, 480];
+        const visibleAreaY = [200, 300];
 
-        const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, 'canvas_position_default': 100 };
-        const translateYData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 300 };
+        const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: visibleAreaX[1], 7: 600, 'canvas_position_default': 100 };
+        const translateYData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 295 };
+
 
         this.continuousTranslators = {
             arg: new MockTranslator({
@@ -339,9 +342,13 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
             name: 'series',
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [200, 300]),
-            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [100, 500]),
-            getVisibleArea: function() { return { minX: 100, maxX: 500, minY: 200, maxY: 300 }; },
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, visibleAreaY),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, visibleAreaX),
+            getVisibleArea: function() {
+                return {
+                    minX: visibleAreaX[0], maxX: visibleAreaX[1], minY: visibleAreaY[0], maxY: visibleAreaY[1]
+                };
+            },
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
@@ -355,10 +362,10 @@ QUnit.test('Point is out of boundaries on the left', function(assert) {
 
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, false, 'inVisibleArea');
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 250, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 50, 'height');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 45, 'height');
     assert.strictEqual(point.x, 0, 'x');
     assert.strictEqual(point.width, 50, 'width');
 
@@ -366,74 +373,69 @@ QUnit.test('Point is out of boundaries on the left', function(assert) {
     assert.equal(point.vy, point.y, 'crosshair y Coord');
 });
 
-QUnit.test('Point is partially out of boundaries on the left and bottom', function(assert) {
+QUnit.test('Point is out of boundaries on the left, right bound of bar on left border', function(assert) {
+    const point = createPoint(this.series, { argument: 1, value: 4 }, this.opt);
+
+    point.width = 100;
+    point.translate();
+
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+});
+
+QUnit.test('Point is partially out of boundaries on the left', function(assert) {
     const point = createPoint(this.series, { argument: 2, value: 5 }, this.opt);
 
     point.width = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 225, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 75, 'height');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 70, 'height');
     assert.strictEqual(point.x, 100, 'x');
     assert.strictEqual(point.width, 30, 'width');
 });
 
-QUnit.test('Point is partially out of boundaries at the top and bottom', function(assert) {
+QUnit.test('Point is partially out of boundaries on the top', function(assert) {
     const point = createPoint(this.series, { argument: 3, value: 6 }, this.opt);
 
     point.width = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 200, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 100, 'height');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 95, 'height');
     assert.strictEqual(point.x, 200, 'x');
     assert.strictEqual(point.width, 50, 'width');
 });
 
-QUnit.test('Point is partially out of boundaries at the bottom', function(assert) {
+QUnit.test('Point is partially out of boundaries on the bottom', function(assert) {
+    const point = createPoint(this.series, { argument: 3, value: 1 }, this.opt);
+
+    point.width = 50;
+    point.translate();
+
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
+    assert.strictEqual(point.y, 295, 'y');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 5, 'height');
+    assert.strictEqual(point.x, 200, 'x');
+    assert.strictEqual(point.width, 50, 'width');
+});
+
+QUnit.test('Point is inside visible area', function(assert) {
     const point = createPoint(this.series, { argument: 4, value: 4 }, this.opt);
 
     point.width = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 250, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 50, 'height');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 45, 'height');
     assert.strictEqual(point.x, 300, 'x');
     assert.strictEqual(point.width, 50, 'width');
-});
-
-QUnit.test('Point is partially out of boundaries at the top', function(assert) {
-    const point = createPoint(this.series, { argument: 5, value: 6 }, this.opt);
-
-    point.width = 50;
-    point.translate();
-
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
-    assert.strictEqual(point.y, 200, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 100, 'height');
-    assert.strictEqual(point.x, 400, 'x');
-    assert.strictEqual(point.width, 50, 'width');
-});
-
-QUnit.test('Point is partially out of boundaries on the right', function(assert) {
-    const point = createPoint(this.series, { argument: 6, value: 5 }, this.opt);
-
-    point.width = 50;
-    point.translate();
-
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
-    assert.strictEqual(point.y, 225, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 75, 'height');
-    assert.strictEqual(point.x, 480, 'x');
-    assert.strictEqual(point.width, 20, 'width');
 });
 
 QUnit.test('Point is out of boundaries on the right', function(assert) {
@@ -442,12 +444,35 @@ QUnit.test('Point is out of boundaries on the right', function(assert) {
     point.width = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, false, 'inVisibleArea');
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 225, 'y');
-    assert.strictEqual(point.minY, 300, 'minY');
-    assert.strictEqual(point.height, 75, 'height');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 70, 'height');
     assert.strictEqual(point.x, 600, 'x');
     assert.strictEqual(point.width, 50, 'width');
+});
+
+QUnit.test('Point is out of boundaries on the right, left bound of bar on right border', function(assert) {
+    const point = createPoint(this.series, { argument: 6, value: 4 }, this.opt);
+
+    point.width = 50;
+    point.translate();
+
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+});
+
+QUnit.test('Point is partially out of boundaries at the right', function(assert) {
+    const point = createPoint(this.series, { argument: 5, value: 4 }, this.opt);
+
+    point.width = 100;
+    point.translate();
+
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
+    assert.strictEqual(point.y, 250, 'y');
+    assert.strictEqual(point.minY, 295, 'minY');
+    assert.strictEqual(point.height, 45, 'height');
+    assert.strictEqual(point.x, 400, 'x');
+    assert.strictEqual(point.width, 80, 'width');
 });
 
 QUnit.test('hasCoords returns false if point doesn\'t have x', function(assert) {
@@ -475,18 +500,22 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
             },
             rotated: true
         };
+
+        const visibleAreaX = [100, 480];
+        const visibleAreaY = [200, 300];
+
         this.series = {
             name: 'series',
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [200, 300]),
-            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [100, 500]),
-            getVisibleArea: function() { return { minX: 200, maxX: 300, minY: 100, maxY: 500 }; },
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [visibleAreaY[0], visibleAreaY[1]]),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [visibleAreaX[0], visibleAreaX[1]]),
+            getVisibleArea: function() { return { minX: visibleAreaY[0], maxX: visibleAreaY[1], minY: visibleAreaX[0], maxY: visibleAreaX[1] }; },
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        const translateYData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, 'canvas_position_default': 100 };
-        const translateXData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 300 };
+        const translateYData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: visibleAreaX[1], 7: 600, 'canvas_position_default': 100 };
+        const translateXData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 295 };
 
         this.continuousTranslators = {
             val: new MockTranslator({
@@ -501,105 +530,123 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
     }
 });
 
-QUnit.test('Point is out of boundaries on the left', function(assert) {
+QUnit.test('Point is out of boundaries on the top', function(assert) {
     const point = createPoint(this.series, { argument: 1, value: 4 }, this.opt);
 
     point.height = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, false, 'inVisibleArea');
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 0, 'y');
     assert.strictEqual(point.height, 50, 'height');
     assert.strictEqual(point.x, 250, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 50, 'width');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 45, 'width');
 
     assert.equal(point.vx, 250, 'crosshair x Coord');
     assert.equal(point.vy, 25, 'crosshair y Coord');
 });
 
-QUnit.test('Point is partially out of boundaries on the left and bottom', function(assert) {
+QUnit.test('Point is out of boundaries on the top, bar\'s bottom bound on top border', function(assert) {
+    const point = createPoint(this.series, { argument: 1, value: 4 }, this.opt);
+
+    point.height = 100;
+    point.translate();
+
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+});
+
+QUnit.test('Point is partially out of boundaries on the top', function(assert) {
     const point = createPoint(this.series, { argument: 2, value: 5 }, this.opt);
 
     point.height = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 100, 'y');
     assert.strictEqual(point.height, 30, 'height');
     assert.strictEqual(point.x, 225, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 75, 'width');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 70, 'width');
 });
 
-QUnit.test('Point is partially out of boundaries at the top and bottom', function(assert) {
+QUnit.test('Point is partially out of boundaries on the left', function(assert) {
     const point = createPoint(this.series, { argument: 3, value: 6 }, this.opt);
 
     point.height = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 200, 'y');
     assert.strictEqual(point.height, 50, 'height');
     assert.strictEqual(point.x, 200, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 100, 'width');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 95, 'width');
 });
 
-QUnit.test('Point is partially out of boundaries at the bottom', function(assert) {
+QUnit.test('Point is partially out of boundaries right', function(assert) {
+    const point = createPoint(this.series, { argument: 3, value: 1 }, this.opt);
+
+    point.height = 50;
+    point.translate();
+
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
+    assert.strictEqual(point.y, 200, 'y');
+    assert.strictEqual(point.height, 50, 'height');
+    assert.strictEqual(point.x, 295, 'x');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 5, 'width');
+});
+
+QUnit.test('Point is inside visible area', function(assert) {
     const point = createPoint(this.series, { argument: 4, value: 4 }, this.opt);
 
     point.height = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 300, 'y');
     assert.strictEqual(point.height, 50, 'height');
     assert.strictEqual(point.x, 250, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 50, 'width');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 45, 'width');
 });
 
-QUnit.test('Point is partially out of boundaries at the top', function(assert) {
-    const point = createPoint(this.series, { argument: 5, value: 6 }, this.opt);
+QUnit.test('Point is partially out of boundaries on the bottom', function(assert) {
+    const point = createPoint(this.series, { argument: 5, value: 4 }, this.opt);
 
-    point.height = 50;
+    point.height = 100;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 400, 'y');
-    assert.strictEqual(point.height, 50, 'height');
-    assert.strictEqual(point.x, 200, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 100, 'width');
+    assert.strictEqual(point.height, 80, 'height');
+    assert.strictEqual(point.x, 250, 'x');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 45, 'width');
 });
 
-QUnit.test('Point is partially out of boundaries on the right', function(assert) {
-    const point = createPoint(this.series, { argument: 6, value: 5 }, this.opt);
+QUnit.test('Point is out of boundaries on the bottom, bar\'s top bound on bottom border', function(assert) {
+    const point = createPoint(this.series, { argument: 6, value: 4 }, this.opt);
 
     point.height = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, 'inVisibleArea');
-    assert.strictEqual(point.y, 480, 'y');
-    assert.strictEqual(point.height, 20, 'height');
-    assert.strictEqual(point.x, 225, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 75, 'width');
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
 });
 
-QUnit.test('Point is out of boundaries on the right', function(assert) {
+QUnit.test('Point is out of boundaries on the bottom', function(assert) {
     const point = createPoint(this.series, { argument: 7, value: 5 }, this.opt);
 
     point.height = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, false, 'inVisibleArea');
+    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
     assert.strictEqual(point.y, 600, 'y');
     assert.strictEqual(point.height, 50, 'height');
     assert.strictEqual(point.x, 225, 'x');
-    assert.strictEqual(point.minX, 300, 'minX');
-    assert.strictEqual(point.width, 75, 'width');
+    assert.strictEqual(point.minX, 295, 'minX');
+    assert.strictEqual(point.width, 70, 'width');
 });
 
 QUnit.module('Point coordinates correction', {

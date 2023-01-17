@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import RadioGroup from '../../../model/radioGroup';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Radio Group`
+fixture.disablePageReloads`Radio Group`
   .page(url(__dirname, '../../container.html'));
 
 test('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async (t) => {
@@ -70,11 +70,4 @@ test('Radio buttons placed into the template should not be selected after clicki
     dataSource: [{}, {}, {}],
     layout: 'horizontal',
   }),
-}, true));
-
-fixture`Radio Group dataSource updating`
-  .page(url(__dirname, '../pages/t901779.html'));
-
-test('There is no error on updating async CustomStore', async (t) => {
-  await t.wait(50);
-});
+}));

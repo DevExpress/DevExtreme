@@ -19,5 +19,5 @@ test('WorkWeek should generate correct start view date', async (t) => {
     firstDayOfWeek: 1,
     currentDate: new Date(2021, 11, 12),
     height: 600,
-  }, true);
+  });
 });
