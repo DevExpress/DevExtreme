@@ -687,11 +687,12 @@ export const rowsModule = {
                     this.setAria('role', 'presentation', $element);
 
                     const $table = this._renderTable({ change: change });
-                    this._updateContent($table, change);
+                    const deferred = this._updateContent($table, change);
 
                     this.callBase(change);
 
                     this._lastColumnWidths = null;
+                    return deferred;
                 },
 
                 _getRows: function(change) {
