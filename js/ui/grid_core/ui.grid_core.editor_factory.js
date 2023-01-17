@@ -40,18 +40,21 @@ const EditorFactory = modules.ViewController.inherit({
 
     _updateFocusCore: function() {
         const $dataGridElement = this.component && this.component.$element();
-        let $focusCell;
-        let isHideBorder;
 
         if($dataGridElement) {
             // this selector is specific to IE
             let $focus = this._getFocusedElement($dataGridElement);
 
             if($focus && $focus.length) {
+                let isHideBorder;
+
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
-                    $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
-                    isHideBorder = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
-                    $focus = $focusCell;
+                    const $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
+
+                    if($focusCell.get(0) !== $focus.get(0)) {
+                        isHideBorder = this._needHideBorder($focusCell);
+                        $focus = $focusCell;
+                    }
                 }
 
                 if($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
@@ -62,6 +65,10 @@ const EditorFactory = modules.ViewController.inherit({
         }
 
         this.loseFocus();
+    },
+
+    _needHideBorder($element) {
+        return $element.hasClass(EDITOR_INLINE_BLOCK);
     },
 
     _updateFocus: function(e) {
@@ -103,7 +110,6 @@ const EditorFactory = modules.ViewController.inherit({
 
     focus: function($element, isHideBorder) {
         const that = this;
-        const isHideBorderInternal = ($element?.hasClass('dx-field-item-content') && $element?.find('.dx-checkbox').length) || isHideBorder;
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -119,7 +125,7 @@ const EditorFactory = modules.ViewController.inherit({
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
 
-                that.renderFocusOverlay($element, isHideBorderInternal);
+                that.renderFocusOverlay($element, isHideBorder);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
                 that.focused.fire($element);
