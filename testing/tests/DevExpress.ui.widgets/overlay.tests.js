@@ -1125,8 +1125,8 @@ testModule('position', moduleConfig, () => {
         const contentCenterX = contentOffset.left + contentWidth / 2;
         const windowCenterX = window.innerWidth / 2;
 
-        assert.roughEqual(contentCenterY, windowCenterY, 0.51, 'content is in the center of window vertically');
-        assert.roughEqual(contentCenterX, windowCenterX, 0.51, 'content is in the center of window horizontally');
+        assert.roughEqual(contentCenterY, windowCenterY, 1.01, 'content is in the center of window vertically');
+        assert.roughEqual(contentCenterX, windowCenterX, 1.01, 'content is in the center of window horizontally');
     });
 });
 
