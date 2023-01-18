@@ -10,17 +10,9 @@ export function Form({ children, onSubmit }: FormProps) {
   const [formValidationResult, setFormValidationResult] = useState<FormValidationResult>({});
   const formValues = useRef<Record<string, unknown>>({});
   const validationRules = useRef<Record<string, Rule[]>>({});
-  const validateFormItemValue: FormItemValidator = (value, rules) => {
-    const result: string[] = [];
-    if (rules?.length) {
-      rules.forEach((rule) => {
-        if (!rule.validate(value)) {
-          result.push(rule.message);
-        }
-      });
-    }
-    return result;
-  };
+  const validateFormItemValue: FormItemValidator = (
+    value, rules,
+  ) => rules?.filter(({ validate }) => !validate(value)).map(({ message }) => message);
 
   const formContextValue = useMemo(
     () => ({
