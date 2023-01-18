@@ -8,9 +8,8 @@ export function withFormContext<T>(Editor: ComponentType<EditorProps<T>>) {
   function FormEditor(props: EditorProps<T>) {
     const formContext = useContext(FormContext);
     useEffect(() => {
-      const initialValue = props.value || props.defaultValue;
       if (props.name) {
-        formContext?.onValueChanged(props.name, initialValue);
+        formContext?.onValueChanged(props.name, props.value || props.defaultValue);
       }
     }, []);
 
