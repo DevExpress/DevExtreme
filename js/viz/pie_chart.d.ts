@@ -260,7 +260,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: PieChartLabelOverlap;
+    resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
      * @docid
      * @default 'clockwise'

@@ -30821,11 +30821,6 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
-    /**
-     * @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type FunnelLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -31228,7 +31223,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxFunnel.FunnelLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
@@ -31426,12 +31421,6 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
     export type PieChartAnnotationLocation = 'center' | 'edge';
-    /**
-     * @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type PieChartLabelOverlap =
-      DevExpress.common.charts.ShiftLabelOverlap;
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
     export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
     export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
@@ -31609,7 +31598,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxPieChart.PieChartLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */

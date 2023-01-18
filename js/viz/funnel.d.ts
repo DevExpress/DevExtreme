@@ -512,7 +512,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "shift"
      * @public
      */
-    resolveLabelOverlapping?: FunnelLabelOverlap;
+    resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
      * @docid
      * @default 'single'
