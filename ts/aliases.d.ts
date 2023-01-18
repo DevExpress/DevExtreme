@@ -421,6 +421,10 @@ declare module DevExpress.common.charts {
     export type StateStoreType = DevExpress.common.grids.StateStoreType;
     /** @deprecated Use DevExpress.common.grids.SummaryType instead */
     export type SummaryType = DevExpress.common.grids.SummaryType;
+    /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
+    export type FunnelLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
+    /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
+    export type PieChartLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
 }
 
 // v22.2
