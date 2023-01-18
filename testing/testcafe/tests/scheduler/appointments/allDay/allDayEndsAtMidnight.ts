@@ -31,7 +31,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await takeScreenshot(
-        `midnight_all-day-appointment_view=${view}_startDayHour=${startDayHour}_endDayHour=${endDayHour}.png`,
+        `midnight_all-day-appt_view=${view}_start=${startDayHour}_end=${endDayHour}.png`,
         scheduler.workSpace,
       );
 
@@ -79,7 +79,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
     await scheduler.scrollTo(new Date(2022, 11, 31, 23, 59));
 
     await takeScreenshot(
-      `midnight-next-month_all-day-appointment_view=${view}_first.png`,
+      `midnight-next-month_all-day-appt_view=${view}_first.png`,
       scheduler.workSpace,
     );
 
@@ -88,7 +88,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
     await scheduler.scrollTo(new Date(2023, 0, 1, 0, 1));
 
     await takeScreenshot(
-      `midnight-next-month_all-day-appointment_view=${view}_second.png`,
+      `midnight-next-month_all-day-appt_view=${view}_second.png`,
       scheduler.workSpace,
     );
 
