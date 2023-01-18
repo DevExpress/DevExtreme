@@ -1,3 +1,5 @@
+import { ReadonlyProps, TemplateProps, ValueProps } from '@devextreme/components';
+
 type HandlerProp<P extends string> = `${P}Change`;
 type DefaultProp<P extends string> = `default${Capitalize<P>}`;
 
@@ -14,3 +16,7 @@ export type Props<
   & WithHandlerProps<TValues>
   & Partial<TReadonly>
   & Partial<TTemplate>;
+
+export interface EditorProps<T> extends Props<ValueProps<T>, ReadonlyProps, TemplateProps> {
+  name?: string
+}

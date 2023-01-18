@@ -5,7 +5,7 @@ import {
   Children, cloneElement, isValidElement, memo, useMemo,
 } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
-import { EditorProps } from '../../types';
+import { EditorProps } from '../../internal/props';
 import { RadioGroupContext } from '../radio-common';
 
 function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
