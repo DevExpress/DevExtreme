@@ -4561,9 +4561,10 @@ QUnit.module('Keyboard navigation', {
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 0 });
     });
 
     // T821699
@@ -4647,9 +4648,10 @@ QUnit.module('Keyboard navigation', {
         e.key = 'Tab';
         e.shiftKey = true;
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
-        assert.equal(this.getActiveInputElement().val(), 'Super');
+        assert.equal(this.getActiveInputElement().val(), 'Full Name');
     });
 
     QUnit.testInActiveWindow('Skip editing via \'tab\' key before entry to adaptive detail form', function(assert) {
@@ -4669,6 +4671,6 @@ QUnit.module('Keyboard navigation', {
         this.getActiveInputElement().trigger(e);
 
         // assert
-        assert.equal(this.getActiveInputElement().val(), 'Blablablablablablablablablabla');
+        assert.equal(this.getActiveInputElement().val(), 'Psy');
     });
 });

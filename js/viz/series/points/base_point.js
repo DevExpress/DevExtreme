@@ -396,22 +396,6 @@ Point.prototype = {
         return this.series.getValueAxis().getTranslator();
     },
 
-    _calculateVisibility: function(x, y, width, height) {
-        const that = this;
-        const visibleArea = that._getVisibleArea();
-        const rotated = that._options.rotated;
-
-        if(((visibleArea.minX) > (x + (width || 0)) || ((visibleArea.maxX) < x) ||
-            ((visibleArea.minY) > (y + (height || 0))) || ((visibleArea.maxY) < y)) ||
-            (rotated && _isDefined(width) && width !== 0 && (visibleArea.minX === (x + width) || visibleArea.maxX === x)) ||
-        (!rotated && _isDefined(height) && height !== 0 && (visibleArea.minY === (y + height) || visibleArea.maxY === y))
-        ) {
-            that.inVisibleArea = false;
-        } else {
-            that.inVisibleArea = true;
-        }
-    },
-
     isArgumentCorrect() {
         return this.series._argumentChecker(this.argument);
     },

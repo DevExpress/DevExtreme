@@ -11,6 +11,8 @@ const _round = _math.round;
 const DEFAULT_FINANCIAL_TRACKER_MARGIN = 2;
 
 export default _extend({}, barPoint, {
+    _calculateVisibility: symbolPoint._calculateVisibility,
+
     _getContinuousPoints: function(openCoord, closeCoord) {
         const that = this;
         const x = that.x;

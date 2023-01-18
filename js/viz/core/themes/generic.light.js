@@ -1173,7 +1173,7 @@ export default [{
                 moveSelectedRangeByClick: true,
                 manualRangeSelectionEnabled: true,
                 allowSlidersSwap: true,
-                callValueChanged: 'onMovingComplete'
+                valueChangeMode: 'onHandleRelease'
             },
             redrawOnResize: true,
             chart: {

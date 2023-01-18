@@ -18,7 +18,6 @@ import dateSerialization from '../../core/utils/date_serialization';
 import numberLocalization from '../../localization/number';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
-// @ts-expect-error
 import { when, Deferred } from '../../core/utils/deferred';
 import Store from '../../data/abstract_store';
 import { DataSource } from '../../data/data_source/data_source';
@@ -37,6 +36,9 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const columnsControllerModule = {
     defaultOptions: function() {
         return {
@@ -57,7 +59,6 @@ export const columnsControllerModule = {
             adaptColumnWidthByRatio: true,
 
             columns: undefined,
-
             /**
              * @name dxDataGridColumn.grouped
              * @type boolean
@@ -77,6 +78,10 @@ export const columnsControllerModule = {
              * @default false
              */
             regenerateColumnsByVisibleItems: false,
+            /**
+             * @type {undefined}
+             */
+            // @ts-expect-error
             customizeColumns: null,
             dateSerializationFormat: undefined
         };
@@ -359,6 +364,9 @@ export const columnsControllerModule = {
                 }
             };
 
+            /**
+             * @this {import('./ui.grid_core.columns_controller').Column}
+             */
             const customizeTextForBooleanDataType = function(e) {
                 if(e.value === true) {
                     return this.trueText || 'true';
@@ -400,6 +408,9 @@ export const columnsControllerModule = {
                 return result;
             };
 
+            /**
+             * @param {import('./ui.grid_core.columns_controller').ColumnsController} that
+             */
             const updateColumnIndexes = function(that) {
                 each(that._columns, function(index, column) {
                     column.index = index;
@@ -786,11 +797,19 @@ export const columnsControllerModule = {
                 that.addCommandColumn(options);
             };
 
+            /**
+             * @type {import('./ui.grid_core.columns_controller').Column['setCellValue']}
+             */
             const defaultSetCellValue = function(data, value) {
+                if(!this.dataField) {
+                    return;
+                }
                 const path = this.dataField.split('.');
                 const dotCount = path.length - 1;
 
+                // @ts-expect-error
                 if(this.serializeValue) {
+                    // @ts-expect-error
                     value = this.serializeValue(value);
                 }
 
@@ -849,6 +868,9 @@ export const columnsControllerModule = {
                 return column.fixedPosition;
             };
 
+            /**
+             * @this {import('./ui.grid_core.columns_controller').ColumnsController}
+             */
             const processExpandColumns = function(columns, expandColumns, type, columnIndex) {
                 let customColumnIndex;
                 const rowCount = this.getRowCount();
@@ -1319,6 +1341,7 @@ export const columnsControllerModule = {
                         return [];
                     }
 
+                    // @ts-ignore
                     return this._compileVisibleColumns.apply(this, arguments);
                 },
                 getFixedColumns: function(rowIndex) {
@@ -2229,13 +2252,13 @@ export const columnsControllerModule = {
 
                     that._columns.push(column);
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     if(column.isBand) {
                         that._columns = createColumnsFromOptions(that, that._columns);
                         column = that._columns[index];
                     }
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
@@ -2407,12 +2430,19 @@ export const columnsControllerModule = {
                         calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
                     }
                     calculatedColumnOptions.calculateFilterExpression = function() {
+                        // @ts-ignore
                         return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
+                    calculatedColumnOptions.defaultFilterOperation = '=';
+
                     calculatedColumnOptions.createFilterExpression = function(filterValue) {
+                        /**
+                         * @type {any}
+                         */
                         let result;
                         if(this.calculateFilterExpression) {
+                            // @ts-ignore
                             result = this.calculateFilterExpression.apply(this, arguments);
                         }
                         if(isFunction(result)) {
