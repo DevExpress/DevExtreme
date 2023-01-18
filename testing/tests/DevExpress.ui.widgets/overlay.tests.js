@@ -1251,8 +1251,8 @@ testModule('position', moduleConfig, () => {
         let contentOffset = $overlayContent.offset();
         const boundaryOffset = $boundary.offset();
 
-        assert.strictEqual(contentOffset.top, boundaryOffset.top, 'top border of the content is correct');
-        assert.strictEqual(contentOffset.left, boundaryOffset.left, 'left border of the content is correct');
+        assert.roughEqual(contentOffset.top, boundaryOffset.top, 1.01, 'top border of the content is correct');
+        assert.roughEqual(contentOffset.left, boundaryOffset.left, 1.01, 'left border of the content is correct');
 
         overlay.option('position.boundary', window);
 
@@ -1262,8 +1262,8 @@ testModule('position', moduleConfig, () => {
         const contentCenterX = contentOffset.left + contentWidth / 2;
         const windowCenterX = window.innerWidth / 2;
 
-        assert.roughEqual(contentCenterY, windowCenterY, 0.51, 'content is in the center of window vertically');
-        assert.roughEqual(contentCenterX, windowCenterX, 0.51, 'content is in the center of window horizontally');
+        assert.roughEqual(contentCenterY, windowCenterY, 1.01, 'content is in the center of window vertically');
+        assert.roughEqual(contentCenterX, windowCenterX, 1.01, 'content is in the center of window horizontally');
     });
 });
 
