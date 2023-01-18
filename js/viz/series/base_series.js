@@ -526,7 +526,6 @@ Series.prototype = {
         that._graphics = that._graphics || [];
         that._segments = [];
 
-
         const segments = points.reduce(function(segments, p) {
             const segment = segments[segments.length - 1];
 
@@ -572,7 +571,6 @@ Series.prototype = {
         }
 
         that._isCoordsPoints = false;
-
         that._setGroupsSettings(animationEnabled, firstDrawing);
         !firstDrawing && !that._resetApplyingAnimation && that._preparePositionSegments();
         that._drawElements(animationEnabled, firstDrawing);

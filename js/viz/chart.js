@@ -885,9 +885,8 @@ const dxChart = AdvancedChart.inherit({
 
             if(s.autoHidePointMarkersEnabled()) {
                 let checkOverlap = 0;
-                checkOverlap = 0;
-                s._points.forEach(point => {
 
+                s._points.forEach(point => {
                     if(cycleComparison(0, overlapPoints, point)) {
                         checkOverlap++;
                     }
