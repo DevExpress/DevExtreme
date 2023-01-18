@@ -1,15 +1,15 @@
 import {
   ReactElement, ReactNode, useContext, useEffect, useMemo,
 } from 'react';
+import { ValidationContext } from '../contexts/validation-context';
 import { CustomRuleProps } from '../dummy-validation';
-import { FormContext } from '../form-context';
 import { Rule } from '../types';
 
 export function useFormItemRulesInitialization(
   formItemName: string,
   ruleComponents: ReactNode[] = [],
 ) {
-  const formContext = useContext(FormContext);
+  const validationContext = useContext(ValidationContext);
 
   const validationRules = useMemo<Rule[]>(
     () => ruleComponents.map((rule) => {
@@ -20,6 +20,6 @@ export function useFormItemRulesInitialization(
   );
 
   useEffect(() => {
-    formContext?.onValidationRulesInitialized(formItemName, validationRules);
+    validationContext?.initializeEditorRules(formItemName, validationRules);
   }, [validationRules, formItemName]);
 }

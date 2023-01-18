@@ -14,8 +14,6 @@ export interface FormProps {
 
 export type FormValidationResult = Record<string, string[]>;
 
-export type FormItemValidator = (value: unknown, rules: Rule[]) => string[];
-
 export interface FormItemProps extends PropsWithChildren {
   name: string;
 }

@@ -1,10 +1,10 @@
 import {
-  FormEventHandler, useMemo, useRef, useState,
+  FormEventHandler, useMemo, useRef,
 } from 'react';
-import { FormContext } from './form-context';
-import {
-  FormItemValidator, FormProps, FormValidationResult, Rule,
-} from './types';
+import { FormContext } from './contexts/form-context';
+import { ValidationContext } from './contexts/validation-context';
+import { useValidation } from './hooks/use-validation';
+import { FormProps } from './types';
 
 /*
 Vitik: The previous form implements parts:
@@ -14,49 +14,29 @@ Vitik: The previous form implements parts:
 - editors validation
 The previous form doesn't allow the use of them separately the next form should allow this.
 */
-
 export function Form({ children, onSubmit }: FormProps) {
-  const [formValidationResult, setFormValidationResult] = useState<FormValidationResult>({});
   const formValues = useRef<Record<string, unknown>>({});
-  const validationRules = useRef<Record<string, Rule[]>>({});
-  const validateFormItemValue: FormItemValidator = (
-    value, rules,
-  ) => rules?.filter(({ validate }) => !validate(value)).map(({ message }) => message);
+  const {
+    validationResult, validateAll, validateEditor, initializeEditorRules,
+  } = useValidation();
 
   const formContextValue = useMemo(
     () => ({
-      validationResult: formValidationResult,
       onValueChanged: (name: string, value: unknown) => {
         formValues.current = { ...formValues.current, [name]: value };
-        const validationResult = validateFormItemValue(value, validationRules.current[name]);
-        setFormValidationResult(previousResult => (
-          { ...previousResult, [name]: validationResult }));
-      },
-      onValidationRulesInitialized: (name: string, rules: Rule[]) => {
-        validationRules.current = { ...validationRules.current, [name]: rules };
+        validateEditor(name, value);
       },
     }),
-    [formValidationResult],
+    [validationResult],
   );
 
-  const validateForm = () => {
-    let isValid = true;
-    const validationResults: FormValidationResult = {};
-    Object.keys(validationRules.current).forEach((name) => {
-      validationResults[name] = validateFormItemValue(
-        formValues.current[name],
-        validationRules.current[name],
-      );
-      if (validationResults[name].length) {
-        isValid = false;
-      }
-    });
-    setFormValidationResult(validationResults);
-    return isValid;
-  };
+  const validationContextValue = useMemo(() => ({
+    validationResult,
+    initializeEditorRules,
+  }), [validationResult, initializeEditorRules]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    const isValid = validateForm();
+    const isValid = validateAll(formValues.current);
     if (!isValid) {
       event.preventDefault();
     }
@@ -65,10 +45,12 @@ export function Form({ children, onSubmit }: FormProps) {
 
   return (
     <FormContext.Provider value={formContextValue}>
-      <form onSubmit={handleSubmit}>
-        {children}
-        <input type="submit" value="Submit" />
-      </form>
+      <ValidationContext.Provider value={validationContextValue}>
+        <form onSubmit={handleSubmit}>
+          {children}
+          <input type="submit" value="Submit" />
+        </form>
+      </ValidationContext.Provider>
     </FormContext.Provider>
   );
 }
