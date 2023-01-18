@@ -10,7 +10,7 @@ import {
 Vitik: The previous form implements parts:
 - formData collection
 - item layout: a label for the editor, groups, columns, and tab panels,
-- editor factory base on dataType 
+- editor factory base on dataType
 - editors validation
 The previous form doesn't allow the use of them separately the next form should allow this.
 */
