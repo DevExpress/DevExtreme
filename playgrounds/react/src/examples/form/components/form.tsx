@@ -6,6 +6,15 @@ import {
   FormItemValidator, FormProps, FormValidationResult, Rule,
 } from './types';
 
+/*
+Vitik: The previous form implements parts:
+- formData collection
+- item layout: a label for the editor, groups, columns, and tab panels,
+- editor factory base on dataType 
+- editors validation
+The previous form doesn't allow the use of them separately the next form should allow this.
+*/
+
 export function Form({ children, onSubmit }: FormProps) {
   const [formValidationResult, setFormValidationResult] = useState<FormValidationResult>({});
   const formValues = useRef<Record<string, unknown>>({});
