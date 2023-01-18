@@ -58,7 +58,10 @@ export class DateGeneratorBaseStrategy {
 
         let dateSettings = this._createGridAppointmentList(appointmentList, appointmentAdapter);
 
-        dateSettings = this._cropAppointmentsByStartDayHour(dateSettings, this.rawAppointment);
+        const firstViewDates = this._getAppointmentsFirstViewDate(dateSettings);
+        this._fillNormalizedStartDate(dateSettings, firstViewDates);
+
+        dateSettings = this._cropAppointmentsByStartDayHour(dateSettings, firstViewDates, this.rawAppointment);
         dateSettings = this._fillNormalizedEndDate(dateSettings, this.rawAppointment);
 
         if(this._needSeparateLongParts()) {
@@ -372,39 +375,38 @@ export class DateGeneratorBaseStrategy {
         });
     }
 
-    _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
-        return appointments.filter(appointment => {
-            const firstViewDate = this._getAppointmentFirstViewDate(appointment);
+    _getAppointmentsFirstViewDate(appointments) {
+        return appointments.map((appointment) => this._getAppointmentFirstViewDate(appointment));
+    }
 
-            if(!firstViewDate) {
-                return false;
-            }
-
-            const startDayHour = this._getViewStartDayHour(firstViewDate);
-            const startDate = new Date(appointment.startDate);
-
+    _fillNormalizedStartDate(
+        appointments,
+        firstViewDates,
+        rawAppointment,
+    ) {
+        appointments.forEach((appointment, idx) => {
             appointment.startDate = this._getAppointmentResultDate({
                 appointment,
                 rawAppointment,
-                startDate,
-                startDayHour,
-                firstViewDate
+                startDate: new Date(appointment.startDate),
+                startDayHour: this.viewStartDayHour,
+                firstViewDate: firstViewDates[idx],
             });
-
-            if(this.isAllDayRowAppointment) {
-                return true;
-            }
-
-            // NOTE: The scheduler displays all-day appointment if its duration in the view is zero
-            return appointment.allDay
-                ? appointment.endDate >= appointment.startDate
-                : appointment.endDate > appointment.startDate;
         });
     }
 
-    _getViewStartDayHour() {
-        return this.viewStartDayHour;
+    _cropAppointmentsByStartDayHour(appointments, firstViewDates) {
+        return appointments.filter((appointment, idx) => {
+            if(!firstViewDates[idx]) {
+                return false;
+            } else if(this.appointmentTakesAllDay) {
+                return true;
+            }
+
+            return appointment.endDate > appointment.startDate;
+        });
     }
+
     _getAppointmentResultDate(options) {
         const {
             appointment,
@@ -436,11 +438,14 @@ export class DateGeneratorBaseStrategy {
             endDate
         } = appointment;
 
+        if(this.isAllDayRowAppointment || appointment.allDay) {
+            return this.viewDataProvider.findAllDayGroupCellStartDate(groupIndex, startDate);
+        }
+
         return this.viewDataProvider.findGroupCellStartDate(
             groupIndex,
             startDate,
             endDate,
-            this.isAllDayRowAppointment,
             this.isDateAppointment
         );
     }
@@ -492,10 +497,6 @@ export class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
         });
 
         return result;
-    }
-
-    _getViewStartDayHour(firstViewDate) {
-        return firstViewDate.getHours();
     }
 
     _updateGroupIndices(appointments, groupIndices) {
