@@ -8,7 +8,6 @@ $material-button-icon-size: null !default;
 $material-button-icon-vertical-padding: null !default;
 $material-button-height: null !default;
 $material-button-min-width: null !default;
-$material-text-button-horizontal-padding: null !default;
 
 $material-button-content-line-height: 0 !default;
 
@@ -22,7 +21,6 @@ $material-button-active-box-shadow-size: 0 4px 6px !default;
 
 @if $size == "default" {
   $material-button-horizontal-padding: 16px !default;
-  $material-text-button-horizontal-padding: 8px;
   $material-button-vertical-padding: 6px !default;
   $material-button-icon-size: 18px !default;
   $material-button-icon-vertical-padding: 8px !default;
@@ -32,7 +30,6 @@ $material-button-active-box-shadow-size: 0 4px 6px !default;
 
 @else if $size == "compact" {
   $material-button-horizontal-padding: 16px !default;
-  $material-text-button-horizontal-padding: 5px;
   $material-button-vertical-padding: 5px !default;
   $material-button-icon-vertical-padding: 8px !default;
   $material-button-icon-size: 16px !default;
