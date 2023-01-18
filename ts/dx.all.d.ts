@@ -30821,6 +30821,10 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
+    /**
+     * @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type FunnelLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
@@ -31422,6 +31426,10 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
     export type PieChartAnnotationLocation = 'center' | 'edge';
+    /**
+     * @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export type PieChartLabelOverlap =
       DevExpress.common.charts.ShiftLabelOverlap;
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';

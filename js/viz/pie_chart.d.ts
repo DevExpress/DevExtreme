@@ -70,7 +70,9 @@ export {
 export type PieChartAnnotationLocation = 'center' | 'edge';
 /** @public */
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
-/** @public */
+/**
+ * @deprecated Use ShiftLabelOverlap instead
+ */
 export type PieChartLabelOverlap = ShiftLabelOverlap;
 /** @public */
 export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
