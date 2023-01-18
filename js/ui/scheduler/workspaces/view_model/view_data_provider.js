@@ -142,8 +142,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getGroupEndDate(groupIndex);
     }
 
-    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay, isFindByDate) {
-        return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay, isFindByDate);
+    findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate = false) {
+        return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
     }
 
     findAllDayGroupCellStartDate(groupIndex, startDate) {
