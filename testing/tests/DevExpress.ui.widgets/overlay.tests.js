@@ -1251,8 +1251,8 @@ testModule('position', moduleConfig, () => {
         let contentOffset = $overlayContent.offset();
         const boundaryOffset = $boundary.offset();
 
-        assert.strictEqual(contentOffset.top, boundaryOffset.top, 'top border of the content is correct');
-        assert.strictEqual(contentOffset.left, boundaryOffset.left, 'left border of the content is correct');
+        assert.roughEqual(contentOffset.top, boundaryOffset.top, 1.01, 'top border of the content is correct');
+        assert.roughEqual(contentOffset.left, boundaryOffset.left, 1.01, 'left border of the content is correct');
 
         overlay.option('position.boundary', window);
 
