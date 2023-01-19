@@ -44,5 +44,5 @@ export interface EditorFactory extends ViewController, State {
 
   createEditor: (this: this, ...args: any[]) => any;
 
-  _getRevertTooltipsSelector: (this: this, ...args: any[]) => any;
+  _getRevertTooltipsSelector: (this: this) => string;
 }
