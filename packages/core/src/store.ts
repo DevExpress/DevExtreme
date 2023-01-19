@@ -30,14 +30,14 @@ export function createStore<
   );
   const validator = pipe(...validation);
 
-  const baseCommitUpdate = (validatedState: TState) => {
+  const baseCommitUpdate = (stateToCompare: TState, validatedState: TState) => {
     const pendingCallbacks = callbacksMiddleware(
-      currentState,
+      stateToCompare,
       validatedState,
       stateConfig,
     );
     const newState = controlledModeMiddleware(
-      currentState,
+      stateToCompare,
       validatedState,
       stateConfig,
     );
@@ -63,12 +63,11 @@ export function createStore<
   };
 
   const commitPropsUpdates = () => {
-    currentState = nextState;
-    baseCommitUpdate(validator(currentState));
+    baseCommitUpdate(nextState, validator(nextState));
   };
 
   const commitUpdates = () => {
-    baseCommitUpdate(validator(nextState));
+    baseCommitUpdate(currentState, validator(nextState));
   };
 
   const rollbackUpdates = () => {
