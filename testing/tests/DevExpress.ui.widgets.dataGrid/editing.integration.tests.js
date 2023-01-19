@@ -3332,11 +3332,11 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // act
             selectLookupValue(1);
-            const revertBtn = $('.dx-revert-button').get(0);
+            const revertButton = $('.dx-revert-button').get(0);
             selectLookupValue(2);
 
             // assert
-            assert.strictEqual($('.dx-revert-button').get(0), revertBtn, 'revert button should not be rerendered');
+            assert.strictEqual($('.dx-revert-button').get(0), revertButton, 'revert button should not be rerendered');
         } catch(e) {
             assert.ok(false, 'error occured');
         }
