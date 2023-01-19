@@ -1290,6 +1290,40 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         this.clock.tick();
         assert.deepEqual(selectedKeysAfter, [1]);
     });
+
+    // T1136904
+    QUnit.test('selection should be reset after changing dataSource and paging at the same time', function(assert) {
+        // arrange
+        const dataSource1 = [{ a: 1 }, { a: 2 }];
+        const dataSource2 = [{ a: 3 }, { a: 4 }];
+
+        const dataGrid = createDataGrid({
+            dataSource: dataSource1,
+            keyExpr: 'a',
+            selectedRowKeys: [1],
+            paging: {
+                pageSize: 1,
+                pageIndex: 1,
+            },
+            selection: {
+                mode: 'multiple',
+            },
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.option({
+            dataSource: dataSource2,
+            paging: {
+                pageIndex: 0
+            },
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.deepEqual(dataGrid.option('selectedRowKeys'), []);
+    });
 });
 
 QUnit.module('columnWidth auto option', {
