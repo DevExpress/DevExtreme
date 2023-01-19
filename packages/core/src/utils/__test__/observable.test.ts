@@ -1,6 +1,6 @@
 import { createObservableEmitter } from '../observable';
 
-describe('Core: Utils: observable', () => {
+describe('observable', () => {
   interface Observed {
     value: number
   }

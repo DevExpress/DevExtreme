@@ -1,6 +1,6 @@
 import { getChangedKeys, getKeys } from '../get-keys';
 
-describe('Core: Utils: getKeys', () => {
+describe('getKeys', () => {
   it('Returns string key array of the passed object with string keys', () => {
     const testObject = {
       a: 1,
@@ -59,7 +59,7 @@ describe('Core: Utils: getKeys', () => {
   });
 });
 
-describe('Core: Utils: getChangedKeys', () => {
+describe('getChangedKeys', () => {
   it('Returns changed keys', () => {
     const prevObj = {
       a: 1,

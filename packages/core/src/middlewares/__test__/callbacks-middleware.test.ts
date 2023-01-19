@@ -4,7 +4,7 @@ import { callbacksMiddleware } from '../callbacks-middleware';
 jest.mock('../../utils');
 const getChangedKeysMock = jest.mocked(getChangedKeys);
 
-describe('Core: Component: Middlewares: callbacksMiddleware', () => {
+describe('callbacksMiddleware', () => {
   it('Returns empty functions array if config not set', () => {
     const prev = { a: 1, b: 2 };
     const next = { a: 3, b: 4 };

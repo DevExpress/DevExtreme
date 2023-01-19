@@ -1,6 +1,6 @@
 import { pipe } from '../pipe';
 
-describe('Core: Utils: pipe', () => {
+describe('pipe', () => {
   it('Correctly handles one function', () => {
     const spyFunc = jest.fn();
 

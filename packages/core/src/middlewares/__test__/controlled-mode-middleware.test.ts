@@ -4,7 +4,7 @@ import { controlledModeMiddleware } from '../controlled-mode-middleware';
 jest.mock('../../utils');
 const getChangedKeysMock = jest.mocked(getChangedKeys);
 
-describe('Core: Component: Middlewares: changesMiddleware', () => {
+describe('changesMiddleware', () => {
   it('Returns next model object if config not set (all values in uncontrolled mode)', () => {
     const prevObject = {
       a: 1,

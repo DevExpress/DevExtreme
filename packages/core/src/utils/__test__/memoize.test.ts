@@ -1,6 +1,6 @@
 import { memoize } from '../memoize';
 
-describe('Core: Utils: memoize', () => {
+describe('memoize', () => {
   it('Calls cached func on the first call', () => {
     const spyFunc = jest.fn();
     const cachedFunc = memoize(spyFunc, () => true);

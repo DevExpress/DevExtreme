@@ -1,6 +1,6 @@
 import { shallowComparer } from '../shallow-comparer';
 
-describe('Core: Utils: shallowComparer', () => {
+describe('shallowComparer', () => {
   it('Returns false for arguments of different type', () => {
     const prev = { a: 1 } as unknown;
     const next = (() => {}) as unknown;

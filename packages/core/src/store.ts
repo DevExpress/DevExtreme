@@ -42,7 +42,7 @@ export function createStore<
       stateConfig,
     );
 
-    const hasChanges = getChangedKeys(currentState, newState);
+    const hasChanges = getChangedKeys(currentState, newState).length > 0;
     if (hasChanges) {
       currentState = newState;
       emit(newState);

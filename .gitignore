@@ -27,4 +27,5 @@ testing/CompletedSuites.txt
 tsconfig.package.tsbuildinfo
 
 .angular
+.reports
 /dist
