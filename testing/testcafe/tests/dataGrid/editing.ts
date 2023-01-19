@@ -1810,10 +1810,8 @@ test('DataGrid checkboxes should have correct outline in adaptive row', async (t
 
   // act
   await t
-    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton());
-
-  await t
-    .dispatchEvent(dataGrid.getFormItemElement(2), 'click');
+    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
+    .click(dataGrid.getFormItemElement(2));
 
   await t
     .expect(await takeScreenshot('grid-adaptive-checkbox.png', dataGrid.element))
@@ -1864,8 +1862,6 @@ test('DataGrid cell with checkbox should have outline on focused', async (t) => 
     .expect(dataGrid.getDataCell(0, 0).isFocused).ok()
     .pressKey('enter')
     .pressKey('tab');
-
-  await t.takeElementScreenshot(dataGrid.element, 'myscreenshot.png');
 
   await t
     .expect(await takeScreenshot('grid-checkbox-outline.png', dataGrid.element))
