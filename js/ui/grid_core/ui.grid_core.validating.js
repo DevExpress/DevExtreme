@@ -1176,8 +1176,8 @@ export const validatingModule = {
                     },
 
                     _hideValidationMessage() {
-                        const $tooltips = this._rowsView.element().find(this._getInvalidMessagesSelector());
-                        $tooltips && $tooltips.remove();
+                        const validationMessages = this._rowsView.element()?.find(this._getValidationMessagesSelector());
+                        validationMessages?.remove();
                     },
 
                     _normalizeValidationMessagePositionAndMaxWidth: function(options, isRevertButton, isOverlayVisible) {
@@ -1235,7 +1235,7 @@ export const validatingModule = {
                         return '.dx-editor-cell .' + revertTooltipClass;
                     },
 
-                    _getInvalidMessagesSelector: function() {
+                    _getValidationMessagesSelector: function() {
                         const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
                         return '.dx-editor-cell .' + invalidMessageClass + ', .dx-cell-modified .' + invalidMessageClass;
                     },
