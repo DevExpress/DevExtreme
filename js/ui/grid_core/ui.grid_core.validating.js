@@ -1020,12 +1020,13 @@ export const validatingModule = {
 
                 return {
                     _showRevertButton: function($container) {
+                        let $tooltipElement = this._revertTooltip?.$element();
+
                         if(!$container || !$container.length) {
+                            $tooltipElement?.remove();
                             this._revertTooltip = undefined;
                             return;
                         }
-
-                        let $tooltipElement = this._revertTooltip && this._revertTooltip.$element();
 
                         // do not render tooltip if it is already rendered
                         if($container.find($tooltipElement).length) {
@@ -1034,7 +1035,7 @@ export const validatingModule = {
 
                         const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
-                        $tooltipElement && $tooltipElement.remove();
+                        $tooltipElement?.remove();
                         $tooltipElement = $('<div>')
                             .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container);
