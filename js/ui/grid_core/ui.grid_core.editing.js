@@ -2503,7 +2503,6 @@ export const editingModule = {
                     }
 
                     if(eventName === 'down') {
-                        // T1023809
                         if(devices.real().ios || devices.real().android) {
                             resetActiveElement();
                         }
