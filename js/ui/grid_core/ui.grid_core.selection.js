@@ -551,7 +551,7 @@ export const selectionModule = {
                 _loadDataSource: function() {
                     const that = this;
 
-                    return that.callBase().done(function() {
+                    return that.callBase().always(function() {
                         that.getController('selection').refresh();
                     });
                 },
