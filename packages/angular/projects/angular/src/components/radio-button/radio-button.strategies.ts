@@ -1,7 +1,8 @@
-import { RadioGroupCore } from '@devextreme/components';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { doIfContextExist, waitContextAndDo } from '../../internal';
-// TODO: Move this code to separate directory radio-common in the future.
+import { createCheckedSelector, RADIO_GROUP_ACTIONS, RadioGroupStore } from '@devextreme/components';
+import {
+  BehaviorSubject, Observable, Subject, switchMap, takeUntil,
+} from 'rxjs';
+import { doIfContextExist, useStoreSelector, waitContextAndDo } from '../../internal';
 
 const DEFAULT_CHECKED_VALUE = false;
 
@@ -26,35 +27,35 @@ function createStandaloneStrategy(): RadioButtonStrategy {
 }
 
 function createRadioGroupStrategy<T>(
-  radioGroupCore$: Observable<RadioGroupCore<T> | undefined>,
+  radioGroupStore$: Observable<RadioGroupStore<T> | undefined>,
   getRadioButtonValue: () => T,
 ): RadioButtonStrategy {
-  let unsubscribe: () => void | undefined;
+  const destroy$ = new Subject<void>();
   const checkedSubject = new BehaviorSubject<boolean>(DEFAULT_CHECKED_VALUE);
 
   const handleChange = () => {
-    radioGroupCore$.pipe(
+    radioGroupStore$.pipe(
       doIfContextExist(),
-    ).subscribe(({ dispatcher }) => {
-      dispatcher.dispatch('updateValue', { value: getRadioButtonValue() });
+    ).subscribe((store) => {
+      store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(getRadioButtonValue()));
+      store.commitUpdates();
     });
   };
 
   const setChecked = () => {};
 
   const onInit = () => {
-    radioGroupCore$.pipe(waitContextAndDo())
-      .subscribe(({ stateManager }) => {
-        unsubscribe = stateManager.subscribe(({ value }) => {
-          checkedSubject.next(getRadioButtonValue() === value);
-        });
-
-        const { value } = stateManager.getState();
-        checkedSubject.next(getRadioButtonValue() === value);
-      });
+    radioGroupStore$.pipe(
+      waitContextAndDo(),
+      switchMap((store) => useStoreSelector(store, createCheckedSelector(getRadioButtonValue()))),
+      takeUntil(destroy$),
+    ).subscribe((checked) => { checkedSubject.next(checked); });
   };
 
-  const onDestroy = () => { unsubscribe?.(); };
+  const onDestroy = () => {
+    destroy$.next();
+    destroy$.complete();
+  };
 
   return {
     checked$: checkedSubject.asObservable(),
@@ -74,11 +75,11 @@ export interface RadioButtonStrategy {
 }
 
 export function createRadioButtonStrategy(
-  radioGroupCore$: Observable<RadioGroupCore<unknown> | undefined> | undefined,
+  radioGroupStore$: Observable<RadioGroupStore<unknown> | undefined> | undefined,
   getRadioButtonValue: () => unknown,
 ): RadioButtonStrategy {
-  if (radioGroupCore$) {
-    return createRadioGroupStrategy(radioGroupCore$, getRadioButtonValue);
+  if (radioGroupStore$) {
+    return createRadioGroupStrategy(radioGroupStore$, getRadioButtonValue);
   }
 
   return createStandaloneStrategy();

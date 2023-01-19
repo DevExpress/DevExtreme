@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { RadioGroupCore } from '@devextreme/components';
+import { RadioGroupStore } from '@devextreme/components';
 import { ContextService } from '../../internal';
 
 @Injectable()
-export class RadioGroupService extends ContextService<RadioGroupCore<unknown>> {}
+export class RadioGroupService<T> extends ContextService<RadioGroupStore<T>> {
+}

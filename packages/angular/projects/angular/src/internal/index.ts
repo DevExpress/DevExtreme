@@ -10,3 +10,7 @@ export {
   ApplyPipe,
   ApplyPipeModule,
 } from './apply-pipe';
+
+export {
+  useStoreSelector,
+} from './rxjs';

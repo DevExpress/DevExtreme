@@ -4,24 +4,20 @@ export type {
 } from './middlewares';
 
 export type {
-  StateManager,
-  Dispatcher,
-} from './state-manager';
-
-export type {
-  Handlers,
-} from './reducer';
-
-export type {
   Selector,
-} from './view-model';
+} from './selector';
 
 export type {
-  ViewModelManager,
-} from './view-model-manager';
+  Store,
+  UpdateStateAction,
+} from './store';
 
 export {
-  createCore,
-} from './create-core';
+  createSelector,
+} from './selector';
+
+export {
+  createStore,
+} from './store';
 
 export * from './utils';

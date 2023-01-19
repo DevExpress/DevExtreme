@@ -1,5 +1,4 @@
-import { ActionFunc, UnknownRecord } from '../utils';
-import { getChangedKeys } from './get-changed-keys';
+import { ActionFunc, getChangedKeys, UnknownRecord } from '../utils';
 import { StateConfigMap } from './types';
 
 export function callbacksMiddleware<TState extends UnknownRecord>(

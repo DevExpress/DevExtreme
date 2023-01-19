@@ -4,7 +4,7 @@ import {
   useContext,
 } from 'react';
 import { useId } from '../../internal/hooks';
-import { RadioGroupContext } from '../radio-common';
+import { RadioGroupStoreContext } from '../radio-common';
 import { CoreBoundRadioButton, UncontrolledRadioButton } from './radio-button-hocs';
 import { RadioButtonInternal } from './radio-button-internal';
 import {
@@ -15,16 +15,16 @@ function RadioButtonWithForwardedRef<T>(
   props: RadioButtonProps<T>,
   inputRef: ForwardedRef<HTMLInputElement>,
 ) {
-  const radioGroupCore = useContext(RadioGroupContext);
+  const store = useContext(RadioGroupStoreContext);
   const inputId = useId('radio-button');
 
   const RadioButtonComponent = props.checked === undefined
     ? UncontrolledRadioButton
     : RadioButtonInternal;
-  if (radioGroupCore) {
+  if (store) {
     return (
       <CoreBoundRadioButton
-        radioGroupCore={radioGroupCore}
+        store={store}
         inputId={inputId}
         inputRef={inputRef}
         // eslint-disable-next-line react/jsx-props-no-spreading
