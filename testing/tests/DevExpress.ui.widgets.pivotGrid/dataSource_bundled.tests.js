@@ -4232,7 +4232,28 @@ QUnit.module('dxPivotGrid dataSource with Store', {
         assert.ok(dataSource.isEmpty());
     });
 
+    // T1141142
+    QUnit.test('fields with same dataField should not pollute each other', function(assert) {
+        // arrange
+        const dataSource = createDataSource({
+            fields: [
+                { dataField: 'a', area: 'data', summaryType: 'sum', dataType: 'string' },
+                { dataField: 'a', area: 'row', summaryType: 'avg', dataType: 'number' },
+            ],
+            store: []
+        });
 
+        // assert
+        const [firstField, secondField] = dataSource.fields();
+
+        assert.strictEqual(firstField.area, 'data');
+        assert.strictEqual(firstField.summaryType, 'sum');
+        assert.strictEqual(firstField.dataType, 'string');
+
+        assert.strictEqual(secondField.area, 'row');
+        assert.strictEqual(secondField.summaryType, 'avg');
+        assert.strictEqual(secondField.dataType, 'number');
+    });
 });
 
 QUnit.module('Sorting', defaultEnvironment, () => {
