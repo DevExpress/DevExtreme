@@ -1,11 +1,11 @@
 /* eslint-disable import/exports-last */
 import {
   createStore,
-  Handlers,
   Selector,
   StateConfigMap,
   Store,
 } from '@devextreme/core';
+import { UpdateStateAction } from '@devextreme/core/src/store';
 
 // === props ===
 export type ValueProps<T> = {
@@ -23,22 +23,18 @@ export type RadioGroupState<T> = ValueProps<T>;
 
 // === actions ===
 
-type RadioGroupActions<T> = {
-  updateValue: { value: T }
-};
-
-type RadioGroupHandlers<T> = Handlers<RadioGroupState<T>, RadioGroupActions<T>>;
-
-function createActionHandlers<T>(): RadioGroupHandlers<T> {
-  return {
-    updateValue(stateValue, { value }) {
-      return {
-        ...stateValue,
-        value,
-      };
-    },
-  };
+function updateValueAction<T>(
+  value: T | undefined,
+): UpdateStateAction<RadioGroupState<T>> {
+  return (state) => ({
+    ...state,
+    value,
+  });
 }
+
+export const RADIO_GROUP_ACTIONS = {
+  updateValue: updateValueAction,
+};
 
 // === selectors ===
 export function createCheckedSelector<T>(
@@ -48,11 +44,11 @@ export function createCheckedSelector<T>(
 }
 
 // === component ===
-export type RadioGroupStore<T> = Store<RadioGroupState<T>, RadioGroupHandlers<T>>;
+export type RadioGroupStore<T> = Store<RadioGroupState<T>>;
 
 export function createRadioGroupStore<T>(
   initialState: RadioGroupState<T>,
   config: StateConfigMap<RadioGroupState<T>>,
 ): RadioGroupStore<T> {
-  return createStore(initialState, config, createActionHandlers<T>());
+  return createStore(initialState, config);
 }

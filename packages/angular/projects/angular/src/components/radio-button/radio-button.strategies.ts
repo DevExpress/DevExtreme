@@ -1,4 +1,4 @@
-import { createCheckedSelector, RadioGroupStore } from '@devextreme/components';
+import { createCheckedSelector, RADIO_GROUP_ACTIONS, RadioGroupStore } from '@devextreme/components';
 import {
   BehaviorSubject, Observable, Subject, switchMap, takeUntil,
 } from 'rxjs';
@@ -37,7 +37,8 @@ function createRadioGroupStrategy<T>(
     radioGroupStore$.pipe(
       doIfContextExist(),
     ).subscribe((store) => {
-      store.dispatch('updateValue', { value: getRadioButtonValue() });
+      store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(getRadioButtonValue()));
+      store.commitUpdates();
     });
   };
 

@@ -96,7 +96,7 @@ implements OnInit, OnDestroy {
 
   radioTemplateValue: AngularTemplate<RadioViewComponent> = RadioViewComponent;
 
-  constructor(@Optional() private radioGroupService: RadioGroupService) {
+  constructor(@Optional() private radioGroupService: RadioGroupService<T>) {
   }
 
   ngOnInit(): void {
