@@ -26,6 +26,7 @@ module.exports = {
     'react/jsx-newline': 'off',
     'react/jsx-max-depth': 'off',
     'react/no-unstable-nested-components': 'off',
+    'react/require-default-props': 'off',
   },
   overrides: [
     {

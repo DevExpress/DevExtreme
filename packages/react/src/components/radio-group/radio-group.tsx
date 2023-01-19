@@ -1,12 +1,9 @@
+import { createRadioGroupStore, RADIO_GROUP_ACTIONS } from '@devextreme/components';
 import {
-  createRadioGroupStore, RADIO_GROUP_ACTIONS,
-  ReadonlyProps,
-  TemplateProps,
-  ValueProps,
-} from '@devextreme/components';
-import { memo, useMemo } from 'react';
+  Children, cloneElement, isValidElement, memo, useMemo,
+} from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
-import { Props } from '../../internal/props';
+import { EditorProps } from '../../internal/props';
 import { RadioGroupStoreContext } from '../radio-common';
 
 function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
@@ -18,7 +15,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   }, {
     value: {
       controlledMode,
-      changeCallback: (value) => { valueChange.current(value); },
+      changeCallback: (value: T) => { valueChange.current(value); },
     },
   }), []);
 
@@ -33,14 +30,23 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   return (
     <RadioGroupStoreContext.Provider value={store}>
       <div>
-        {props.children}
+        {props.name
+          ? Children.map(
+            props.children,
+            child => (
+              isValidElement<EditorProps<T>>(child)
+                ? cloneElement(child, { name: props.name })
+                : child
+            ),
+          )
+          : props.children}
       </div>
     </RadioGroupStoreContext.Provider>
   );
 }
 
 export type RadioGroupProps<T> =
-  React.PropsWithChildren<Props<ValueProps<T>, ReadonlyProps, TemplateProps>>;
+  React.PropsWithChildren<EditorProps<T>>;
 
 //* Component={"name":"RadioGroup"}
 export const RadioGroup = memo(RadioGroupInternal) as typeof RadioGroupInternal;

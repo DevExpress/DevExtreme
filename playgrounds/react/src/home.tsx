@@ -11,6 +11,7 @@ function Home() {
       <Link to="/radio-button">Radio Button</Link>
       <Link to="/theme">Theme</Link>
       <Link to="/dynamic-theme">Dynamic theme</Link>
+      <Link to="/form">Form</Link>
     </div>
   );
 }
