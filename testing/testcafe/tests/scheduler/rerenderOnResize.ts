@@ -2,6 +2,7 @@ import { getStyleAttribute, setStyleAttribute } from '../../helpers/domUtils';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Re-render on resize`
   .page(url(__dirname, '../container.html'));
@@ -30,9 +31,9 @@ const createScheduler = async (container, options?): Promise<void> => {
   }, container);
 };
 
-test('Appointment should re-rendered on window resize when width and height not set (T1139566)', async (t) => {
+safeSizeTest('Appointment should re-rendered on window resize when width and height not set (T1139566)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { element } = scheduler.getAppointment('', 0);
+  const { element } = scheduler.getAppointment('test');
 
   await setStyleAttribute(element, 'background-color: red;');
   await t.resizeWindow(300, 300);
@@ -41,9 +42,9 @@ test('Appointment should re-rendered on window resize when width and height not 
   await createScheduler('#container');
 });
 
-test('Appointment should re-rendered on window resize when width and height have percent value (T1139566)', async (t) => {
+safeSizeTest('Appointment should re-rendered on window resize when width and height have percent value (T1139566)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { element } = scheduler.getAppointment('', 0);
+  const { element } = scheduler.getAppointment('test');
 
   await setStyleAttribute(element, 'background-color: red;');
   await t.resizeWindow(300, 400);
@@ -52,7 +53,7 @@ test('Appointment should re-rendered on window resize when width and height have
   await createScheduler('#container', { width: '100%', height: '100%' });
 });
 
-test('Appointment should not re-rendered on window resize when width and height have static value (T1139566)', async (t) => {
+safeSizeTest('Appointment should not re-rendered on window resize when width and height have static value (T1139566)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('test');
 
