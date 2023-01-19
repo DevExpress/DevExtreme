@@ -2448,8 +2448,7 @@ export const editingModule = {
 
                     if(eventName === 'down') {
                         // T1023809
-                        // check for mac also, because iPads' have same user agent as Mac
-                        if(devices.real().ios || devices.real().android || devices.real().mac) {
+                        if(devices.real().ios || devices.real().android) {
                             resetActiveElement();
                         }
 
