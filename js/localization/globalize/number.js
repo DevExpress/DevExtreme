@@ -5,7 +5,7 @@ import numberLocalization from '../number';
 import errors from '../../core/errors';
 
 // eslint-disable-next-line no-restricted-imports
-import 'globalize/number';
+import 'globalize/dist/globalize/number';
 const MAX_FRACTION_DIGITS = 20;
 
 if(Globalize && Globalize.formatNumber) {
