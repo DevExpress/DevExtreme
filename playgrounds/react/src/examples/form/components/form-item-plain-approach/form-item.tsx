@@ -3,17 +3,14 @@ import { cloneElement, ReactElement, useContext } from 'react';
 import { FormContext } from '../contexts/form-context';
 import { ValidationContext } from '../contexts/validation-context';
 import { useFormItemLayout } from '../hooks/use-form-item-layout';
-import { useFormItemRulesInitialization } from '../hooks/use-form-item-rules-initialization';
+import { useEditorValidationRulesInitialization } from '../hooks/use-validation-rules-extractor';
 import { FormItemProps } from '../types';
 
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
   const validationContext = useContext(ValidationContext);
-  const {
-    label, hint, editor, rules,
-  } = useFormItemLayout(children, [RadioGroup]);
-
-  useFormItemRulesInitialization(name, rules);
+  const { label, hint, editor } = useFormItemLayout(children, [RadioGroup]);
+  useEditorValidationRulesInitialization(name, children);
 
   const onEditorValueChanged = (value: unknown) => {
     formContext?.onValueChanged(name, value);

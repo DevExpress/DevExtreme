@@ -1,15 +1,14 @@
 import { cloneElement, ReactElement } from 'react';
 import { useFormItemLayout } from '../hooks/use-form-item-layout';
-import { useFormItemRulesInitialization } from '../hooks/use-form-item-rules-initialization';
+import { useEditorValidationRulesInitialization } from '../hooks/use-validation-rules-extractor';
 import { FormItemProps } from '../types';
 import { RadioGroupEditor } from './radio-group-form-editor';
 
 export function FormItem({ name, children }: FormItemProps) {
-  const {
-    label, hint, editor, rules,
-  } = useFormItemLayout(children, [RadioGroupEditor]);
-
-  useFormItemRulesInitialization(name, rules);
+  const { label, hint, editor } = useFormItemLayout(children, [
+    RadioGroupEditor,
+  ]);
+  useEditorValidationRulesInitialization(name, children);
 
   return (
     <div>
