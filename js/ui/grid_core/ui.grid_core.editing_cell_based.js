@@ -31,8 +31,6 @@ const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 
 const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
 
-const TOUCH_END = 'touchend';
-
 export default {
     extenders: {
         controllers: {
@@ -82,34 +80,7 @@ export default {
                         eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
                         eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
                         eventsEngine.on(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
-
-
-                        // iOS, T1131810
-                        // on iphones and ipads if on 'touchstart' DOM content was updated, mouse events (click, mousedown, ...) listeners are not called
-                        // to make elements possible to hover.
-                        // This listener triggers 'dxclick' event if it wasn't triggered
-                        this._iosClickTimeout;
-
-                        this._iosClickEmitter = (e) => {
-                            let clickFired = false;
-                            eventsEngine.one(domAdapter.getDocument(), clickEventName, () => clickFired = true);
-
-                            this._iosClickTimeout = setTimeout(() => {
-                                if(!clickFired) {
-                                    eventsEngine.trigger(e.target, clickEventName);
-                                }
-                            }, 300);
-                        };
-
-                        eventsEngine.on(domAdapter.getDocument(), TOUCH_END, this._iosClickEmitter);
                     }
-                },
-
-                dispose: function() {
-                    this.callBase.apply(this, arguments);
-
-                    clearTimeout(this._iosClickTimeout);
-                    eventsEngine.off(domAdapter.getDocument(), TOUCH_END, this._iosClickEmitter);
                 },
 
                 isCellEditMode: function() {
