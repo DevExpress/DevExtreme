@@ -444,7 +444,7 @@ export function getVizRangeObject(value) {
     }
 }
 
-export function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
+export function normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle) {
     let isCircle;
     let noArc = true;
     const angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
@@ -476,8 +476,8 @@ export function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
     return [
         x,
         y,
-        Math.min(outerR, innerR),
-        Math.max(outerR, innerR),
+        Math.min(outerRadius, innerRadius),
+        Math.max(outerRadius, innerRadius),
         Math.cos(startAngle),
         Math.sin(startAngle),
         Math.cos(endAngle),
