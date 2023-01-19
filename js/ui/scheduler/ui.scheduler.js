@@ -923,7 +923,7 @@ class Scheduler extends Widget {
     }
 
     _visibilityChanged(visible) {
-        visible && this._dimensionChanged();
+        visible && this._dimensionChanged(true);
     }
 
     _dataSourceOptions() {
