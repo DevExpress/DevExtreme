@@ -20,7 +20,8 @@ import {
     isFunction,
     isEmptyObject,
     isDeferred,
-    isPromise
+    isPromise,
+    isBoolean
 } from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 import DataHelperMixin from '../../data_helper';
@@ -650,19 +651,17 @@ class Scheduler extends Widget {
                 break;
             case 'width':
                 // TODO: replace with css
-                this.sizeChangeFlag = true;
                 this._updateOption('header', name, value);
                 if(this.option('crossScrollingEnabled')) {
                     this._updateOption('workSpace', 'width', value);
                 }
                 this._updateOption('workSpace', 'schedulerWidth', value);
                 super._optionChanged(args);
-                this._dimensionChanged();
+                this._dimensionChanged(true);
                 break;
             case 'height':
-                this.sizeChangeFlag = true;
                 super._optionChanged(args);
-                this._dimensionChanged();
+                this._dimensionChanged(true);
                 this._updateOption('workSpace', 'schedulerHeight', value);
                 break;
             case 'editing': {
@@ -881,9 +880,10 @@ class Scheduler extends Widget {
         }
     }
 
-    _dimensionChanged() {
-        const optionHeight = this.option('height') && !/%/.test(this.option('height'));
-        const optionWidth = this.option('width') && !/%/.test(this.option('width'));
+    _dimensionChanged(isForce = false) {
+        const isFixedHeight = typeof this.option('height') === 'number';
+        const isFixedWidth = typeof this.option('width') === 'number';
+        const isForceBoolean = isBoolean(isForce) && isForce === true;
 
         if(!this._isVisible()) {
             return;
@@ -897,11 +897,10 @@ class Scheduler extends Widget {
             workspace.option('allDayExpanded', this._isAllDayExpanded());
             workspace._dimensionChanged();
 
-            if((!optionHeight || !optionWidth) || this.sizeChangeFlag) {
+            if((!isFixedHeight || !isFixedWidth) || isForceBoolean) {
                 const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
                 this._appointments.option('items', appointments);
-                this.sizeChangeFlag = false;
             }
         }
 
