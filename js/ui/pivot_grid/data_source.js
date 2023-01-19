@@ -458,8 +458,8 @@ export default Class.inherit((function() {
                 } else {
                     fieldsDictionary[fieldKey] = mergedField = field;
                 }
-                if(dataTypes[field.dataField]) {
-                    mergedField.dataType ||= dataTypes[field.dataField];
+                if(!mergedField.dataType && dataTypes[field.dataField]) {
+                    mergedField.dataType = dataTypes[field.dataField];
                 }
                 delete fieldsDictionary[fieldKey];
                 removedFields[fieldKey] = storeField;
