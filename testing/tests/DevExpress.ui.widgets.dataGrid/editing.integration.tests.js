@@ -3292,17 +3292,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
-    // T1131810
-    // on iOS devices if on touch events element content was changed, click events are not fired.
-    // So this test checks if lookup cell works properly only when revert button is shown if only touch events are fired
-    QUnit.test('Cell - lookup cell should be able to be unfocused after its value was changed on iOS', function(assert) {
+    // T1131810, T1102203
+    // Revert button should not rerendered on focus, because it makes cell unfocusable on iOS devices
+    QUnit.test('Cell - Revert button should not rerendered on focus', function(assert) {
         try {
-            // arrange
-            if(!devices.real().ios) {
-                assert.ok(true, 'test only for iOS devices');
-                return;
-            }
-
             const lookupDataSource = [{ value: 'first' }, { value: 'second' }, { value: 'third' }, { value: 'fourh' }, { value: 'fifth' }];
             const dataGrid = createDataGrid({
                 dataSource: [
@@ -3326,47 +3319,6 @@ QUnit.module('Editing', baseModuleConfig, () => {
             });
             this.clock.tick();
 
-            const touchStart = (element) => {
-                const event = {
-                    target: element,
-                    type: 'touchstart',
-                    originalEvent: {
-                        type: 'touchstart',
-                        target: element,
-                        touches: [{ identifier: 1 }],
-                        changedTouches: [{ identifier: 1 }]
-                    }
-                };
-
-                const $element = $(element);
-                $element.trigger('dxpointerdown');
-                $element.trigger(event);
-                this.clock.tick();
-            };
-
-            const touchEnd = (element) => {
-                const event = {
-                    target: element,
-                    type: 'touchend',
-                    originalEvent: {
-                        type: 'touchend',
-                        target: element,
-                        touches: [{ identifier: 1 }],
-                        changedTouches: [{ identifier: 1 }]
-                    }
-                };
-
-                const $element = $(element);
-                $element.trigger('dxpointerup');
-                $element.trigger(event);
-                this.clock.tick();
-            };
-
-            const touch = (getElement) => {
-                touchStart(getElement());
-                touchEnd(getElement());
-            };
-
             const getLookupCell = () => dataGrid.getCellElement(0, 1);
 
             const selectLookupValue = (lookupValueIndex) => {
@@ -3379,33 +3331,12 @@ QUnit.module('Editing', baseModuleConfig, () => {
             };
 
             // act
-            // Check revert button
             selectLookupValue(1);
-
-            touch(() => $('.dx-revert-button').get(0));
-            this.clock.tick(500);
-
-            // assert
-            assert.strictEqual(dataGrid.cellValue(0, 1), lookupDataSource[0].value, 'lookup value must be reseted after touch on revert button');
-
-            // act
-            // check unfocus on document touch
+            const revertBtn = $('.dx-revert-button').get(0);
             selectLookupValue(2);
-            touch(() => document.body);
-            this.clock.tick(500);
 
             // assert
-            assert.strictEqual(dataGrid.cellValue(0, 1), lookupDataSource[2].value, 'lookup value must not be reseted');
-            assert.strictEqual(document.activeElement, document.body, 'Focus must reseted from cell to body');
-
-            // act
-            // open dropdown after value changed
-            selectLookupValue(3);
-            touch(() => $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor-button').get(0));
-            this.clock.tick(500);
-
-            // assert
-            assert.ok($('.dx-dropdowneditor-overlay').length, 'dropdown list must be opened');
+            assert.strictEqual($('.dx-revert-button').get(0), revertBtn, 'revert button should not be rerendered');
         } catch(e) {
             assert.ok(false, 'error occured');
         }

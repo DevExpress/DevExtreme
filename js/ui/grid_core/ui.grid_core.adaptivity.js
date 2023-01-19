@@ -1174,7 +1174,7 @@ export const adaptivityModule = {
                     return this.callBase() + ', .dx-adaptive-detail-row .dx-field-item > .dx-field-item-content';
                 },
 
-                _getTooltipsSelector: function() {
+                _getRevertTooltipsSelector: function() {
                     return this.callBase() + ', .dx-field-item-content .' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
                 }
             },
