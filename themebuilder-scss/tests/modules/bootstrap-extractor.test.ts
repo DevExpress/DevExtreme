@@ -53,10 +53,10 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions.toString()
-      + variables.toString()
-      + testSassString
-      + setterServiceCode
+      .toBe(functions.toString() + '\n'
+      + variables.toString() + '\n'
+      + testSassString + '\n'
+      + setterServiceCode + '\n'
       + collectorServiceCode);
   });
 
@@ -73,10 +73,10 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions.toString()
-      + variables.toString()
-      + testSassString
-      + setterServiceCode
+      .toBe(functions.toString() + '\n'
+      + variables.toString() + '\n'
+      + testSassString + '\n'
+      + setterServiceCode + '\n'
       + collectorServiceCode);
   });
 
