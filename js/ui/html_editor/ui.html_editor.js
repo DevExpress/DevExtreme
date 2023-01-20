@@ -67,7 +67,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _init: function() {
-        this.id = editorsCount++;
+        this._id = editorsCount++;
         this.callBase();
         this._cleanCallback = Callbacks();
         this._contentInitializedCallback = Callbacks();
@@ -735,6 +735,10 @@ const HtmlEditor = Editor.inherit({
 
     blur: function() {
         this._applyQuillMethod('blur');
+    },
+
+    getID() {
+        return this._id;
     }
 });
 
