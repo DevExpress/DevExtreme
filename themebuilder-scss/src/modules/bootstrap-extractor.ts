@@ -36,7 +36,7 @@ export default class BootstrapExtractor {
   async getRootVariablesSass(): Promise<ConfigMetaItem[]> {
     const result: ConfigMetaItem[] = [];
 
-    if (this.version === 4) {
+    if (this.version === 3 || this.version === 4) {
       return result;
     }
 
