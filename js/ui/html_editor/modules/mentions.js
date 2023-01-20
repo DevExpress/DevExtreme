@@ -73,7 +73,7 @@ if(Quill) {
                 const template = item.template;
                 if(template) {
                     const preparedTemplate = this.editorInstance._getTemplate(template);
-                    preparedTemplate && Mention.addTemplate({ marker, widgetID: this.editorInstance.id }, preparedTemplate);
+                    preparedTemplate && Mention.addTemplate({ marker, widgetID: this.editorInstance.getID() }, preparedTemplate);
                 }
 
                 this._mentions[marker] = extend({}, this._getDefaultOptions(), item);
@@ -197,7 +197,7 @@ if(Quill) {
                 value: this._valueGetter(selectedItem),
                 id: this._idGetter(selectedItem),
                 marker: this._activeMentionConfig.marker,
-                widgetID: this.editorInstance.id
+                widgetID: this.editorInstance.getID()
             };
             const Delta = Quill.import('delta');
             const startIndex = Math.max(0, caretPosition - markerLength);
@@ -404,7 +404,7 @@ if(Quill) {
         clean() {
             Object.keys(this._mentions).forEach((marker) => {
                 if(this._mentions[marker].template) {
-                    Mention.removeTemplate({ marker, widgetID: this.editorInstance.id });
+                    Mention.removeTemplate({ marker, widgetID: this.editorInstance.getID() });
                 }
             });
         }
