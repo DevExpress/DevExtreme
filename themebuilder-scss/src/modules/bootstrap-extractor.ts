@@ -33,6 +33,31 @@ export default class BootstrapExtractor {
     }
   }
 
+  async getRootVariablesSass(): Promise<ConfigMetaItem[]> {
+    const result: ConfigMetaItem[] = [];
+
+    if (this.version === 4) {
+      return result;
+    }
+
+    const path = require.resolve(`bootstrap${this.version}/dist/css/bootstrap.css`);
+    const content = await fs.readFile(path, 'utf8');
+    const rootVariables = new RegExp(':root {.+?}', 's').exec(content)[0];
+
+    const ruleRegex = /(--.+): (.+);/gm;
+    let match = ruleRegex.exec(rootVariables);
+    while (match !== null) {
+      const key = match[1];
+      const value = match[2];
+
+      result.push({ key, value });
+
+      match = ruleRegex.exec(rootVariables);
+    }
+
+    return result;
+  }
+
   static async sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
       sass.compileStringAsync(input)
@@ -68,11 +93,14 @@ export default class BootstrapExtractor {
   async sassProcessor(): Promise<string> {
     const functions = await this.readSassFile('_functions.scss');
     const variables = await this.readSassFile('_variables.scss');
-    return functions
+
+    const result = functions
       + this.input
       + variables
       + this.getSetterServiceCode('!default')
       + this.getCollectorServiceCode();
+
+    return result;
   }
 
   async lessProcessor(): Promise<string> {
@@ -102,16 +130,24 @@ export default class BootstrapExtractor {
     const serviceCodeRegex = /dx-varibles-collector\s{([\s\S]*)}/;
     const ruleRegex = /([\w-]*):\s(.*);/g;
     const serviceCode = serviceCodeRegex.exec(css)[1];
+    const rootVariables = await this.getRootVariablesSass();
     const result: ConfigMetaItem[] = [];
 
     let match = ruleRegex.exec(serviceCode);
     while (match !== null) {
       const key = `$${match[1]}`;
-      const valueMatch = match[2];
+      let valueMatch = match[2];
+
       if (valueMatch !== 'dx-empty') {
+        if (valueMatch.startsWith('var')) {
+          const cssVariableName = valueMatch.replace('var(', '').replace(')', '');
+          valueMatch = rootVariables.find((item) => item.key === cssVariableName).value;
+        }
+
         const value = BootstrapExtractor.convertRemToPx(valueMatch);
         result.push({ key, value });
       }
+
       match = ruleRegex.exec(serviceCode);
     }
 

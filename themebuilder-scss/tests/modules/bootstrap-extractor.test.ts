@@ -150,6 +150,21 @@ describe('BootstrapExtractor', () => {
     ]);
   });
 
+  test('extract (bootstrap 5)', async () => {
+    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;';
+    const extractor = new BootstrapExtractor(input, 5);
+    extractor.meta = {
+      'dx-var1': '$var1',
+      'dx-var2': '$var2',
+      'dx-var3': '$var3',
+    };
+
+    expect(await extractor.extract()).toEqual([
+      { key: '$dx-var1', value: 'test1' },
+      { key: '$dx-var2', value: 'test2' },
+    ]);
+  });
+
   test('extract variable with rem (bootstrap 4) (T951945)', async () => {
     const input = `
     $var1: -.25rem;
