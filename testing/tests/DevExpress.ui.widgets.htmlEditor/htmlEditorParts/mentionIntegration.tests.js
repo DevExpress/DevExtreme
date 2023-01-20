@@ -571,5 +571,36 @@ export default function() {
             const value = prepareEmbedValue(this.$element.find(`.${MENTION_CLASS}`).parent().html());
             assert.strictEqual(value, expectedMention);
         });
+
+        test('Mentions template must be applyed after removing second editor(T1110266)', function(assert) {
+            const done = assert.async();
+            const expectedMention = '<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">custom template</span></span> </p>';
+            const valueChangeSpy = sinon.spy(({ value }) => {
+                if(valueChangeSpy.calledOnce) {
+                    $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
+
+                    this.clock.tick();
+                } else {
+                    assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
+                    done();
+                }
+            });
+            this.options.mentions[0].template = (_, container) => {
+                $(container).text('custom template');
+            };
+
+            this.options.onValueChanged = valueChangeSpy;
+
+            this.createWidget();
+
+            const container = $('<div>').appendTo('#qunit-fixture');
+
+            container.dxHtmlEditor(this.options);
+            container.remove();
+
+            this.instance.focus();
+            this.$element.find('p').first().text('@');
+            this.clock.tick();
+        });
     });
 }
