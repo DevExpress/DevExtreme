@@ -95,8 +95,8 @@ export default class BootstrapExtractor {
     const variables = await this.readSassFile('_variables.scss');
 
     const result = functions
-      + this.input
       + variables
+      + this.input
       + this.getSetterServiceCode('!default')
       + this.getCollectorServiceCode();
 
