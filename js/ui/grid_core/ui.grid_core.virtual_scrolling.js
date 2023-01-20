@@ -440,7 +440,7 @@ const VirtualScrollingRowsViewExtender = (function() {
         _renderCore: function(e) {
             const startRenderTime = new Date();
 
-            this.callBase.apply(this, arguments);
+            const deferred = this.callBase.apply(this, arguments);
 
             const dataSource = this._dataController._dataSource;
 
@@ -454,6 +454,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                     dataSource._renderTime = (new Date() - startRenderTime);
                 }
             }
+            return deferred;
         },
 
         _getRowElements: function(tableElement) {

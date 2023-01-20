@@ -4,7 +4,6 @@ import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
-// @ts-expect-error
 import { deferRender, deferUpdate } from '../../core/utils/common';
 import { setHeight } from '../../core/utils/style';
 import { isDefined, isNumeric, isString } from '../../core/utils/type';
@@ -688,11 +687,12 @@ export const rowsModule = {
                     this.setAria('role', 'presentation', $element);
 
                     const $table = this._renderTable({ change: change });
-                    this._updateContent($table, change);
+                    const deferred = this._updateContent($table, change);
 
                     this.callBase(change);
 
                     this._lastColumnWidths = null;
+                    return deferred;
                 },
 
                 _getRows: function(change) {

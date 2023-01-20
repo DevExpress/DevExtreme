@@ -2,7 +2,6 @@
 
 import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
-// @ts-expect-error
 import { deferUpdate, noop } from '../../core/utils/common';
 import modules from './ui.grid_core.modules';
 import { ColumnsView } from './ui.grid_core.columns_view';

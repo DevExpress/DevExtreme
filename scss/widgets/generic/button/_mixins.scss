@@ -11,7 +11,6 @@ $generic-button-padding:
   $generic-button-horizontal-padding;
 
 $generic-button-icon-size: $generic-base-icon-size;
-$generic-editor-custom-button-margin: 1px;
 
 @mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
   .dx-button-content {

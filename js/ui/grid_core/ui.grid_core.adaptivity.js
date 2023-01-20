@@ -1199,6 +1199,10 @@ export const adaptivityModule = {
                 }
             },
             editorFactory: {
+                _needHideBorder: function($element) {
+                    return this.callBase($element) || ($element?.hasClass('dx-field-item-content') && $element?.find('.dx-checkbox').length);
+                },
+
                 _getFocusCellSelector: function() {
                     return this.callBase() + ', .dx-adaptive-detail-row .dx-field-item > .dx-field-item-content';
                 },
