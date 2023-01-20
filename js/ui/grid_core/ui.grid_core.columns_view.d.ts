@@ -1,4 +1,3 @@
-import { DeferredObj } from '../../core/utils/deferred';
 import { HandleDataChangedArguments } from './ui.grid_core.data_controller';
 import { View } from './ui.grid_core.modules';
 
@@ -119,7 +118,7 @@ export class ColumnsView extends View {
 
   _needWaitAsyncTemplates: (this: this) => any;
 
-  waitAsyncTemplates: (this: this, change: HandleDataChangedArguments, forceWaiting?: boolean) => DeferredObj<void>;
+  waitAsyncTemplates: (this: this, change: HandleDataChangedArguments, forceWaiting?: boolean) => any;
 
   _updateContent: (this: this, $newTableElement, change) => any;
 
