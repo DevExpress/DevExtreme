@@ -421,10 +421,6 @@ declare module DevExpress.common.charts {
     export type StateStoreType = DevExpress.common.grids.StateStoreType;
     /** @deprecated Use DevExpress.common.grids.SummaryType instead */
     export type SummaryType = DevExpress.common.grids.SummaryType;
-    /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
-    export type FunnelLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
-    /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
-    export type PieChartLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
 }
 
 // v22.2
@@ -476,4 +472,14 @@ declare module DevExpress.viz {
 declare module DevExpress.ui.dxSlider {
     /** @deprecated Use DevExpress.common.SliderValueChangeMode instead */
     export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
+}
+
+declare module DevExpress.viz.dxFunnel {
+    /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
+    export type FunnelLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
+}
+
+declare module DevExpress.viz.dxPieChart {
+    /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
+    export type PieChartLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
 }
