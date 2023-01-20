@@ -85,6 +85,7 @@ const moduleConfig = {
                 dataSource: ['Alex', 'John', 'Freddy', 'Sam']
             }],
             editorInstance: {
+                id: 1,
                 addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
@@ -167,10 +168,11 @@ QUnit.module('Mention format', () => {
         const data = {
             value: 'John Smith',
             marker: '@',
-            id: 'JohnSm'
+            id: 'JohnSm',
+            widgetID: 1
         };
 
-        MentionFormat.addTemplate('@', {
+        MentionFormat.addTemplate({ marker: '@', widgetID: 1 }, {
             render: ({ container, model: mentionData }) => {
                 container.innerText = 'test';
                 assert.deepEqual(mentionData, data);
@@ -181,7 +183,7 @@ QUnit.module('Mention format', () => {
 
         assert.strictEqual(element.innerText, 'test');
 
-        MentionFormat.removeTemplate('@');
+        MentionFormat.removeTemplate({ marker: '@', widgetID: 1 });
         element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, '@John Smith');
@@ -245,7 +247,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex manager',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                widgetID: 1
             } })
             .insert(' ');
 
