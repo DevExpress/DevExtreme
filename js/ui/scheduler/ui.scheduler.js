@@ -21,7 +21,6 @@ import {
     isEmptyObject,
     isDeferred,
     isPromise,
-    isBoolean
 } from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 import DataHelperMixin from '../../data_helper';
@@ -657,11 +656,11 @@ class Scheduler extends Widget {
                 }
                 this._updateOption('workSpace', 'schedulerWidth', value);
                 super._optionChanged(args);
-                this._dimensionChanged(true);
+                this._dimensionChanged(null, true);
                 break;
             case 'height':
                 super._optionChanged(args);
-                this._dimensionChanged(true);
+                this._dimensionChanged(null, true);
                 this._updateOption('workSpace', 'schedulerHeight', value);
                 break;
             case 'editing': {
@@ -880,10 +879,9 @@ class Scheduler extends Widget {
         }
     }
 
-    _dimensionChanged(isForce = false) {
+    _dimensionChanged(value, isForce = false) {
         const isFixedHeight = typeof this.option('height') === 'number';
         const isFixedWidth = typeof this.option('width') === 'number';
-        const isForceBoolean = isBoolean(isForce) && isForce === true;
 
         if(!this._isVisible()) {
             return;
@@ -894,10 +892,9 @@ class Scheduler extends Widget {
         const workspace = this.getWorkSpace();
 
         if(!this._isAgenda() && this.filteredItems && workspace) {
-            workspace.option('allDayExpanded', this._isAllDayExpanded());
-            workspace._dimensionChanged();
-
-            if((!isFixedHeight || !isFixedWidth) || isForceBoolean) {
+            if(isForce || (!isFixedHeight || !isFixedWidth)) {
+                workspace.option('allDayExpanded', this._isAllDayExpanded());
+                workspace._dimensionChanged();
                 const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
                 this._appointments.option('items', appointments);
@@ -926,7 +923,7 @@ class Scheduler extends Widget {
     }
 
     _visibilityChanged(visible) {
-        visible && this._dimensionChanged(true);
+        visible && this._dimensionChanged(null, true);
     }
 
     _dataSourceOptions() {
