@@ -54,8 +54,8 @@ describe('BootstrapExtractor', () => {
 
     expect(await extractor.sassProcessor())
       .toBe(functions.toString()
-      + testSassString
       + variables.toString()
+      + testSassString
       + setterServiceCode
       + collectorServiceCode);
   });
@@ -74,8 +74,8 @@ describe('BootstrapExtractor', () => {
 
     expect(await extractor.sassProcessor())
       .toBe(functions.toString()
-      + testSassString
       + variables.toString()
+      + testSassString
       + setterServiceCode
       + collectorServiceCode);
   });
