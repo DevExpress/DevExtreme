@@ -400,7 +400,8 @@ const columnsViewMembers = {
     _renderDelayedTemplatesCoreAsync: function(templates) {
         const that = this;
         if(templates.length) {
-            getWindow().setTimeout(function() {
+            getWindow().clearTimeout(that._templateTimeout);
+            that._templateTimeout = getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }
@@ -490,6 +491,7 @@ const columnsViewMembers = {
             model: options,
             deferred: templateDeferred,
             onRendered: () => {
+                if(that.component._disposed) return;
                 templateDeferred.resolve();
             }
         };
@@ -1191,6 +1193,9 @@ const columnsViewMembers = {
         }
 
         return false;
+    },
+    dispose: function() {
+        getWindow().clearTimeout(this._templateTimeout);
     }
 };
 
