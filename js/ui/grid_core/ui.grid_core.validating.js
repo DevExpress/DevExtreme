@@ -1235,7 +1235,7 @@ export const validatingModule = {
                         this.callBase();
                     },
 
-                    updateCellState: function($element, validationResult, hideBorder) {
+                    updateCellState: function($element, validationResult, isHideBorder) {
                         const $focus = $element?.closest(this._getFocusCellSelector());
                         const $cell = $focus?.is('td') ? $focus : null;
                         const rowOptions = $focus?.closest('.dx-row').data('options');
@@ -1265,17 +1265,17 @@ export const validatingModule = {
                             }
                         }
 
-                        !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
+                        !isHideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
                     },
 
-                    focus: function($element, hideBorder) {
+                    focus: function($element, isHideBorder) {
                         if(!arguments.length) return this.callBase();
 
                         const $tooltips = $element && $element.closest('.' + this.addWidgetPrefix(ROWS_VIEW_CLASS)).find(this._getTooltipsSelector());
                         $tooltips && $tooltips.remove();
 
                         if($element?.hasClass('dx-row') || $element?.hasClass('dx-master-detail-cell')) {
-                            return this.callBase($element, hideBorder);
+                            return this.callBase($element, isHideBorder);
                         }
 
                         const $focus = $element?.closest(this._getFocusCellSelector());
@@ -1284,8 +1284,8 @@ export const validatingModule = {
                         const rowOptions = $focus && $focus.closest('.dx-row').data('options');
                         const editingController = this.getController('editing');
                         const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
-                        let validationResult;
                         const validatingController = this.getController('validating');
+                        let validationResult;
 
                         if(validator) {
                             validatingController.setValidator(validator);
@@ -1299,18 +1299,18 @@ export const validatingModule = {
                                             return;
                                         }
                                         if(validationResult.status === VALIDATION_STATUS.invalid) {
-                                            hideBorder = true;
+                                            isHideBorder = true;
                                         }
-                                        this.updateCellState($element, validationResult, hideBorder);
-                                        callBase.call(this, $element, hideBorder);
+                                        this.updateCellState($element, validationResult, isHideBorder);
+                                        callBase.call(this, $element, isHideBorder);
                                     });
                                 });
-                                return this.callBase($element, hideBorder);
+                                return this.callBase($element, isHideBorder);
                             }
                         }
 
-                        this.updateCellState($element, validationResult, hideBorder);
-                        return this.callBase($element, hideBorder);
+                        this.updateCellState($element, validationResult, isHideBorder);
+                        return this.callBase($element, isHideBorder);
                     },
 
                     getEditorInstance: function($container) {

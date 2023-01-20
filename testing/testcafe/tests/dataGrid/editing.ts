@@ -1800,6 +1800,85 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   await changeTheme('generic.light');
 });
 
+test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
+    .click(dataGrid.getFormItemElement(2));
+
+  await t
+    .expect(await takeScreenshot('grid-adaptive-checkbox.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    width: 400,
+    dataSource: [{
+      OrderNumber: 35703,
+      Employee: 'Sam',
+      OrderDate: '2014/04/10',
+      Checkbox: true,
+    }],
+    keyExpr: 'OrderNumber',
+    columnHidingEnabled: true,
+    editing: {
+      allowUpdating: true,
+      mode: 'cell',
+    },
+    columns: [{
+      dataField: 'OrderNumber',
+      caption: 'Invoice Number',
+      width: 300,
+    }, {
+      dataField: 'Employee',
+    }, {
+      dataField: 'OrderDate',
+      dataType: 'date',
+    }, {
+      dataField: 'Checkbox',
+      dataType: 'boolean',
+    }],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
+test('DataGrid cell with checkbox should have outline on focused', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .expect(dataGrid.getDataCell(0, 0).isFocused).ok()
+    .pressKey('enter')
+    .pressKey('tab');
+
+  await t
+    .expect(await takeScreenshot('grid-checkbox-outline.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 150,
+  width: 200,
+  dataSource: [{
+    Id: 0,
+    Checkbox: true,
+  }],
+  keyExpr: 'Id',
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+  columns: ['Id', 'Checkbox'],
+}));
+
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
   const lastName0 = dataGrid.getDataCell(0, 1);
