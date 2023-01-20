@@ -53,11 +53,11 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions.toString() + '\n'
-      + variables.toString() + '\n'
-      + testSassString + '\n'
-      + setterServiceCode + '\n'
-      + collectorServiceCode);
+      .toBe(`${functions.toString()}
+${variables.toString()}
+${testSassString}
+${setterServiceCode}
+${collectorServiceCode}`);
   });
 
   test('sassProcessor (bootstrap5)', async () => {
@@ -73,11 +73,11 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions.toString() + '\n'
-      + variables.toString() + '\n'
-      + testSassString + '\n'
-      + setterServiceCode + '\n'
-      + collectorServiceCode);
+      .toBe(`${functions.toString()}
+${variables.toString()}
+${testSassString}
+${setterServiceCode}
+${collectorServiceCode}`);
   });
 
   test('lessProcessor', async () => {
