@@ -2,45 +2,47 @@ import { isDefined } from '../../../core/utils/type';
 
 export default class TemplatesStorage {
     constructor() {
-        this._map = {};
+        this._widgetsMap = {};
     }
 
     set({ widgetID, marker }, value) {
-        let innerMap = this._map[widgetID];
-        if(!innerMap) {
-            innerMap = new Map();
-            this._map[widgetID] = innerMap;
+        let widgetTemplates = this._widgetsMap[widgetID];
+        if(!widgetTemplates) {
+            widgetTemplates = new Map();
+            this._widgetsMap[widgetID] = widgetTemplates;
         }
 
-        innerMap.set(marker, value);
+        widgetTemplates.set(marker, value);
     }
 
     get({ widgetID, marker }) {
         if(isDefined(widgetID)) {
-            const innerMap = this._map[widgetID];
-            return innerMap ? innerMap.get(marker) : undefined;
+            const widgetTemplates = this._widgetsMap[widgetID];
+            return widgetTemplates ? widgetTemplates.get(marker) : undefined;
         }
 
-        const ids = Object.keys(this._map).sort((a, b) => a - b);
+        const ids = Object.keys(this._widgetsMap).sort((a, b) => b - a);
+        let resultTemplate;
 
-        for(let i = ids.length - 1; i >= 0; i--) {
-            const current = this._map[ids[i]].get(marker);
+        ids.some(id => {
+            const current = this._widgetsMap[id].get(marker);
             if(isDefined(current)) {
-                return current;
+                resultTemplate = current;
+                return true;
             }
-        }
-        return undefined;
+        });
+        return resultTemplate;
     }
 
     delete({ widgetID, marker }) {
-        const innerMap = this._map[widgetID];
-        if(!innerMap) {
+        const widgetTemplates = this._widgetsMap[widgetID];
+        if(!widgetTemplates) {
             return;
         }
 
-        innerMap.delete(marker);
-        if(innerMap.size === 0) {
-            delete this._map[widgetID];
+        widgetTemplates.delete(marker);
+        if(widgetTemplates.size === 0) {
+            delete this._widgetsMap[widgetID];
         }
     }
 }
