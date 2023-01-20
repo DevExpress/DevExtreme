@@ -971,6 +971,7 @@ class Scheduler extends Widget {
     }
 
     createAppointmentDataProvider() {
+        this.appointmentDataProvider?.destroy();
         this.appointmentDataProvider = new AppointmentDataProvider({
             dataSource: this._dataSource,
             dataAccessors: this._dataAccessors,

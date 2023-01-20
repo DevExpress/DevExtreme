@@ -295,7 +295,7 @@ const calculatePosition = function(what, options) {
         let boundaryWidth = windowWidth;
         let boundaryHeight = windowHeight;
 
-        if(boundary) {
+        if(boundary && !isWindow(boundary)) {
             const $boundary = $(boundary);
             const boundaryPosition = $boundary.offset();
 

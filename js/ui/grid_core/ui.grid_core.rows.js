@@ -1,3 +1,5 @@
+// @ts-check
+
 import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
@@ -37,6 +39,9 @@ function getMaxHorizontalScrollOffset(scrollable) {
     return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const rowsModule = {
     defaultOptions: function() {
         return {
@@ -55,6 +60,10 @@ export const rowsModule = {
                 indicatorSrc: '',
                 showPane: true
             },
+            /**
+             * @type {undefined}
+             */
+            // @ts-expect-error
             dataRowTemplate: null,
             columnAutoWidth: false,
             noDataText: messageLocalization.format('dxDataGrid-noDataText'),
@@ -84,10 +93,14 @@ export const rowsModule = {
 
             const getScrollableBottomPadding = function(that) {
                 const scrollable = that.getScrollable();
+                // @ts-expect-error
                 return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
             };
 
-            return {
+            /**
+             * @type {Partial<import('./ui.grid_core.rows').RowsView>}
+             */
+            const members = {
                 _getDefaultTemplate: function(column) {
                     switch(column.command) {
                         case 'empty':
@@ -288,6 +301,7 @@ export const rowsModule = {
                     dxScrollableOptions.onScroll = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
+                    // @ts-expect-error
                     that._scrollableContainer = that._scrollable && $(that._scrollable.container());
                 },
 
@@ -485,6 +499,7 @@ export const rowsModule = {
                     this.executeAction('onRowClick', extend({
                         evaluate: function(expr) {
                             const getter = compileGetter(expr);
+                            // @ts-expect-error
                             return getter(item.data);
                         }
                     }, e, item));
@@ -672,11 +687,12 @@ export const rowsModule = {
                     this.setAria('role', 'presentation', $element);
 
                     const $table = this._renderTable({ change: change });
-                    this._updateContent($table, change);
+                    const deferred = this._updateContent($table, change);
 
                     this.callBase(change);
 
                     this._lastColumnWidths = null;
+                    return deferred;
                 },
 
                 _getRows: function(change) {
@@ -793,6 +809,7 @@ export const rowsModule = {
                                 const scrollingMode = this.option('scrolling.mode');
 
                                 if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
+                                    // @ts-expect-error
                                     setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
@@ -835,7 +852,9 @@ export const rowsModule = {
 
                 _getHeightCorrection: function() {
                     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
+                    // @ts-expect-error
                     const isChromeLatest = browser.chrome && browser.version >= 91;
+                    // @ts-expect-error
                     const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
                     return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
                 },
@@ -860,6 +879,7 @@ export const rowsModule = {
                     const dataController = that.getController('data');
 
                     that.callBase();
+                    // @ts-expect-error
                     that._editorFactoryController = that.getController('editorFactory');
                     that._rowHeight = 0;
                     that._scrollTop = 0;
@@ -911,8 +931,10 @@ export const rowsModule = {
 
                     if(scrollableContainer) {
                         if(!isHorizontal) {
+                            // @ts-expect-error
                             scrollbarWidth = scrollableContainer.clientWidth ? scrollableContainer.offsetWidth - scrollableContainer.clientWidth : 0;
                         } else {
+                            // @ts-expect-error
                             scrollbarWidth = scrollableContainer.clientHeight ? scrollableContainer.offsetHeight - scrollableContainer.clientHeight : 0;
                             scrollbarWidth += getScrollableBottomPadding(this); // T703649, T697699
                         }
@@ -946,11 +968,16 @@ export const rowsModule = {
                 },
 
                 _updateScrollable: function() {
+                    /**
+                     * @type {import('../scroll_view/ui.scrollable').default}
+                     */
+                    // @ts-expect-error
                     const scrollable = Scrollable.getInstance(this.element());
 
                     if(scrollable) {
                         scrollable.update();
 
+                        // @ts-expect-error
                         if(scrollable.option('useNative') || !scrollable?.isRenovated()) {
                             this._updateHorizontalScrollPosition();
                         }
@@ -1024,6 +1051,7 @@ export const rowsModule = {
                     let loadPanel = that._loadPanel;
                     const dataController = that._dataController;
                     const loadPanelOptions = that.option('loadPanel') || {};
+                    // @ts-expect-error
                     const animation = dataController.isLoaded() ? loadPanelOptions.animation : null;
                     const $element = that.element();
 
@@ -1076,6 +1104,9 @@ export const rowsModule = {
                     const that = this;
                     let itemIndex = 0;
                     let prevOffset = 0;
+                    /**
+                     * @type {any}
+                     */
                     let offset = 0;
                     let viewportBoundary = that._scrollTop;
                     const $contentElement = that._findContentElement();
@@ -1186,6 +1217,8 @@ export const rowsModule = {
 
                 _restoreErrorRow: function() { }
             };
+
+            return members;
         })())
     }
 };

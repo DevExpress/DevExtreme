@@ -47,7 +47,7 @@ const data = [
     }, {
       dependencies: { cancel },
     }),
-  }, true));
+  }));
 
   test(`UI behaviour should be valid in case argument pass Promise resolved, e.cancel=${cancel}`, async (t) => {
     const scheduler = new Scheduler('#container');
@@ -77,5 +77,5 @@ const data = [
     }, {
       dependencies: { cancel },
     }),
-  }, true));
+  }));
 });

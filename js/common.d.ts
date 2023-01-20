@@ -1,6 +1,8 @@
+import { PositionConfig } from './animation/position';
 import type {
   OmitInternal,
 } from './core';
+import { FloatingActionButtonDirection } from './core/config';
 
 import type dxDraggable from './ui/draggable';
 import type dxScrollable from './ui/scroll_view/ui.scrollable';
@@ -252,6 +254,126 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
  * @namespace DevExpress.common
  */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+
+/**
+ * @docid
+ * @section commonObjectStructures
+ * @namespace DevExpress.common
+ * @public
+ * @type object
+ */
+export type GlobalConfig = {
+  /**
+   * @docid
+   * @default "."
+   * @deprecated
+   * @public
+   */
+  decimalSeparator?: string;
+  /**
+   * @docid
+   * @default "USD"
+   * @public
+   */
+  defaultCurrency?: string;
+  /**
+   * @docid
+   * @type boolean
+   * @default true
+   * @public
+   */
+  defaultUseCurrencyAccountingStyle?: boolean;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  editorStylingMode?: EditorStyle;
+  /**
+   * @docid
+   * @public
+   */
+  floatingActionButtonConfig?: {
+    /**
+     * @docid
+     * @default "close"
+     */
+    closeIcon?: string;
+    /**
+     * @docid
+     * @default "auto"
+     */
+    direction?: FloatingActionButtonDirection;
+    /**
+     * @docid
+     * @default "add"
+     */
+    icon?: string;
+    /**
+     * @docid
+     * @default ""
+     */
+    label?: string;
+    /**
+     * @docid
+     * @default 5
+     */
+    maxSpeedDialActionCount?: number;
+    /**
+     * @docid
+     * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
+     */
+    position?: PositionAlignment | PositionConfig | Function;
+    /**
+     * @docid
+     * @default false
+     */
+    shading?: boolean;
+  };
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  forceIsoDateParsing?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  oDataFilterToLower?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  rtlEnabled?: boolean;
+  /**
+   * @docid
+   * @default "."
+   * @public
+   */
+  serverDecimalSeparator?: string;
+  /**
+   * @docid
+   * @default ","
+   * @deprecated
+   * @public
+   */
+  thousandsSeparator?: string;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  useLegacyStoreResult?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  useLegacyVisibleIndex?: boolean;
+};
 
 /**
  * @public
@@ -507,6 +629,12 @@ export type SingleOrMultiple = 'single' | 'multiple';
  * @namespace DevExpress.common
  */
 export type SingleOrNone = 'single' | 'none';
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
+export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
 
 /**
  * @public

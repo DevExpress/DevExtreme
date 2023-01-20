@@ -56,7 +56,7 @@ const createScheduler = async (
       endDate: new Date('2021-05-13T23:30:00.000Z'),
     }],
     ...additionalProps,
-  }, true);
+  });
 };
 
 [false, true].forEach((crossScrollingEnabled) => {

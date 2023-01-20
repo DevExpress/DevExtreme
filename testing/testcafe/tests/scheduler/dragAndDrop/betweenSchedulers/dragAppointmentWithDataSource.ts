@@ -120,7 +120,6 @@ test('Should set correct start and end dates in drag&dropped appointment', async
       ...getBaseSchedulerOptions(new Date(2021, 4, 26)),
       dataSource: [],
     },
-    false,
     `#${SECOND_SCHEDULER_SELECTOR}`,
   );
 });

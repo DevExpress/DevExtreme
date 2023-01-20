@@ -70,4 +70,4 @@ test('Radio buttons placed into the template should not be selected after clicki
     dataSource: [{}, {}, {}],
     layout: 'horizontal',
   }),
-}, true));
+}));

@@ -38,5 +38,5 @@ test('Should not select cells outside the scheduler(T1040795)', async () => {
     currentDate: new Date(2021, 3, 26),
     height: 200,
     width: 400,
-  }, false, '#scheduler');
+  }, '#scheduler');
 });

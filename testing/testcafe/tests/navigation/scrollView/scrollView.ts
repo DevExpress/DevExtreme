@@ -35,7 +35,7 @@ fixture.disablePageReloads`ScrollView`
           useNative: false,
           direction,
           showScrollbar,
-        }, false, '#scrollView');
+        }, '#scrollView');
       });
     });
   });

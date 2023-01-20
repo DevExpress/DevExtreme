@@ -2,6 +2,7 @@ import { ColumnBase } from '../data_grid';
 import { Controller } from './ui.grid_core.modules';
 
 export interface Column extends ColumnBase {
+  serializeValue?: any;
 }
 
 interface State {

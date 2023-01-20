@@ -875,8 +875,9 @@ export const selectionModule = {
                 },
 
                 _renderCore: function(change) {
-                    this.callBase(change);
+                    const deferred = this.callBase(change);
                     this._updateCheckboxesClass();
+                    return deferred;
                 },
 
                 _updateCheckboxesClass: function() {

@@ -1,6 +1,7 @@
 import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
+// @ts-expect-error
 import { deferRender, deferUpdate } from '../../core/utils/common';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import { each } from '../../core/utils/iterator';
@@ -56,7 +57,10 @@ const restoreFocus = function(focusedElement, selectionRange) {
     gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
-const ResizingController = modules.ViewController.inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.grid_view').ResizingController>}
+ */
+const resizingControllerMembers = {
     _initPostRenderHandlers: function() {
         const dataController = this._dataController;
 
@@ -118,6 +122,7 @@ const ResizingController = modules.ViewController.inherit({
         component.setAria({
             'rowCount': this._dataController.totalItemsCount(),
             'colCount': component.columnCount()
+        // @ts-expect-error
         }, component.$element().children('.' + GRIDBASE_CONTAINER_CLASS));
     },
 
@@ -246,12 +251,14 @@ const ResizingController = modules.ViewController.inherit({
         const $element = this.component.$element();
 
         if(needBestFit) {
+            // @ts-expect-error
             focusedElement = domAdapter.getActiveElement($element.get(0));
             selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             this._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
 
+        // @ts-expect-error
         if($element && $element.get(0) && this._maxWidth) {
             delete this._maxWidth;
             $element[0].style.maxWidth = '';
@@ -387,6 +394,7 @@ const ResizingController = modules.ViewController.inherit({
                             : 0;
 
                         that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
+                        // @ts-expect-error
                         $element.css('maxWidth', that._maxWidth);
                     }
                 }
@@ -524,6 +532,7 @@ const ResizingController = modules.ViewController.inherit({
         }
 
         const prevResult = that._resizeDeferred;
+        // @ts-expect-error
         const result = that._resizeDeferred = new Deferred();
 
         when(prevResult).always(function() {
@@ -541,12 +550,14 @@ const ResizingController = modules.ViewController.inherit({
                         });
                     });
                 });
+            // @ts-expect-error
             }).done(result.resolve).fail(result.reject);
         });
 
         return result.promise();
     },
     _resetGroupElementHeight: function() {
+        // @ts-expect-error
         const groupElement = this.component.$element().children().get(0);
         const scrollable = this._rowsView.getScrollable();
 
@@ -561,6 +572,7 @@ const ResizingController = modules.ViewController.inherit({
             this._lastWidth === getWidth($rootElement) &&
             this._lastHeight === getHeight($rootElement) &&
             this._devicePixelRatio === getWindow().devicePixelRatio ||
+            // @ts-expect-error
             !$rootElement.is(':visible')
         )) {
             return false;
@@ -595,11 +607,16 @@ const ResizingController = modules.ViewController.inherit({
         const dataController = that._dataController;
         const rowsView = that._rowsView;
         const $rootElement = that.component.$element();
+        // @ts-expect-error
         const groupElement = $rootElement.children().get(0);
+        // @ts-expect-error
         const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
+        // @ts-expect-error
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
+        // @ts-expect-error
         const height = that.option('height') || $rootElement.get(0).style.height;
+        // @ts-expect-error
         const editorFactory = that.getController('editorFactory');
         const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
         let $testDiv;
@@ -607,11 +624,13 @@ const ResizingController = modules.ViewController.inherit({
         that.updateSize($rootElement);
         const hasHeight = that._hasHeight || maxHeightHappened;
 
+        // @ts-expect-error
         if(height && (that._hasHeight ^ (height !== 'auto'))) {
             $testDiv = $('<div>');
             setHeight($testDiv, height);
             $testDiv.appendTo($rootElement);
             that._hasHeight = !!getHeight($testDiv);
+            // @ts-expect-error
             $testDiv.remove();
         }
 
@@ -631,12 +650,15 @@ const ResizingController = modules.ViewController.inherit({
                 that._setScrollerSpacing(hasHeight);
 
                 each(VIEW_NAMES, function(index, viewName) {
+                    // @ts-expect-error
                     const view = that.getView(viewName);
                     if(view) {
+                        // @ts-expect-error
                         view.resize();
                     }
                 });
 
+                // @ts-expect-error
                 editorFactory && editorFactory.resize();
             });
         });
@@ -668,11 +690,15 @@ const ResizingController = modules.ViewController.inherit({
 
         that._dataController = that.getController('data');
         that._columnsController = that.getController('columns');
+        // @ts-expect-error
         that._columnHeadersView = that.getView('columnHeadersView');
+        // @ts-expect-error
         that._footerView = that.getView('footerView');
         that._rowsView = that.getView('rowsView');
     }
-});
+};
+
+const ResizingController = modules.ViewController.inherit(resizingControllerMembers);
 
 const SynchronizeScrollingController = modules.ViewController.inherit({
     _scrollChangedHandler: function(views, pos, viewName) {

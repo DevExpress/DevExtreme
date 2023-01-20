@@ -26,5 +26,5 @@ test('Placeholder is visible after items option change when value is not chosen 
   return createWidget('dxSelectBox', {
     width: '100%',
     placeholder: 'Choose a value',
-  }, false, '#selectBox');
+  }, '#selectBox');
 });

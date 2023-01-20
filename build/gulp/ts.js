@@ -28,6 +28,8 @@ function compileTS(settings) {
         noEmitOnError: true,
         allowJs: true,
         lib: [ "es6", "es7", "es2017.object", "dom" ],
+        strict: true,
+        noImplicitAny: false,
         ...settings
     })(ts.reporter.fullReporter());
 }

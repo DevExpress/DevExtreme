@@ -1,4 +1,3 @@
-import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import ArrayStore from '../../data/array_store';
@@ -20,8 +19,8 @@ import sortingMixin from '../grid_core/ui.grid_core.sorting_mixin';
 import { foreachTree, createPath } from './ui.pivot_grid.utils';
 import Sortable from './ui.sortable';
 import { Deferred } from '../../core/utils/deferred';
+import { sortableItemRender } from './sortable/index';
 
-const IE_FIELD_WIDTH_CORRECTION = 1;
 const DIV = '<div>';
 
 const HeaderFilterView = HeaderFilterViewBase.inherit({
@@ -214,34 +213,7 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 }
                 return false;
             },
-            itemRender: function($sourceItem, target) {
-                let $item;
-                if($sourceItem.hasClass('dx-area-box')) {
-                    $item = $sourceItem.clone();
-                    if(target === 'drag') {
-                        each($sourceItem, function(index, sourceItem) {
-                            $item.eq(index).css('width', parseInt(getOuterWidth(sourceItem), 10) + IE_FIELD_WIDTH_CORRECTION);
-                        });
-                    }
-                } else {
-                    $item = $(DIV)
-                        .addClass('dx-area-field')
-                        .addClass('dx-area-box')
-                        .text($sourceItem.text());
-                }
-                if(target === 'drag') {
-                    const wrapperContainer = $(DIV);
-                    each($item, function(_, item) {
-                        const wrapper = $('<div>')
-                            .addClass('dx-pivotgrid-fields-container')
-                            .addClass('dx-widget')
-                            .append($(item));
-                        wrapperContainer.append(wrapper);
-                    });
-                    return wrapperContainer.children();
-                }
-                return $item;
-            },
+            itemRender: sortableItemRender,
             onDragging: function(e) {
                 const field = e.sourceElement.data('field');
                 const targetGroup = e.targetGroup;

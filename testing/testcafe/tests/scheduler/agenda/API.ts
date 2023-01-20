@@ -102,5 +102,5 @@ test('Html elements should be absent in Agenda view', async (t) => {
     crossScrollingEnabled: true,
     focusStateEnabled: true,
     height: 600,
-  }, true);
+  });
 });

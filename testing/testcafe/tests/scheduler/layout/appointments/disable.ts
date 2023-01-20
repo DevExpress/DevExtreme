@@ -72,5 +72,5 @@ test('Appointment popup should be readOnly if appointment is disabled', async (t
     views: ['week'],
     currentView: 'week',
     currentDate: new Date(2021, 4, 27),
-  }, true);
+  });
 });

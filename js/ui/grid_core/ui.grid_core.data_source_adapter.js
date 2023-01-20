@@ -1,5 +1,8 @@
+// @ts-check
+
 import Callbacks from '../../core/utils/callbacks';
 import gridCore from '../data_grid/ui.data_grid.core';
+// @ts-expect-error
 import { executeAsync, getKeyHash } from '../../core/utils/common';
 import { isDefined, isPlainObject, isFunction } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
@@ -23,7 +26,17 @@ export default gridCore.Controller.inherit((function() {
         return items;
     }
 
+    /**
+     *
+     * @param {import('./ui.grid_core.data_source_adapter').LoadOptions} loadOptions
+     * @param {import('./ui.grid_core.data_source_adapter').LoadOptions} lastLoadOptions
+     * @param {boolean} [isFullReload]
+     * @returns {import('./ui.grid_core.data_source_adapter').OperationTypes}
+     */
     function calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload) {
+        /**
+         * @type {import('./ui.grid_core.data_source_adapter').OperationTypes}
+         */
         let operationTypes = { reload: true, fullReload: true };
 
         if(lastLoadOptions) {
@@ -36,7 +49,9 @@ export default gridCore.Controller.inherit((function() {
                 skip: loadOptions.skip !== lastLoadOptions.skip,
                 take: loadOptions.take !== lastLoadOptions.take,
                 pageSize: loadOptions.pageSize !== lastLoadOptions.pageSize,
-                fullReload: isFullReload
+                fullReload: isFullReload,
+                reload: false,
+                paging: false,
             };
 
             operationTypes.reload = isFullReload || operationTypes.sorting || operationTypes.grouping || operationTypes.filtering;
@@ -209,7 +224,10 @@ export default gridCore.Controller.inherit((function() {
         return loadedItem;
     }
 
-    return {
+    /**
+     * @type {Partial<import('./ui.grid_core.data_source_adapter').DataSourceAdapter>}
+     */
+    const members = {
         init: function(dataSource, remoteOperations) {
             const that = this;
 
@@ -221,6 +239,7 @@ export default gridCore.Controller.inherit((function() {
             that._currentTotalCount = 0;
             that._cachedData = createEmptyCachedData();
             that._lastOperationTypes = {};
+            // @ts-expect-error
             that._eventsStrategy = dataSource._eventsStrategy;
             that._totalCountCorrection = 0;
             that._isLoadingAll = false;
@@ -242,16 +261,22 @@ export default gridCore.Controller.inherit((function() {
             that._changingHandler = that._handleChanging.bind(that);
 
             dataSource.on('changed', that._dataChangedHandler);
+            // @ts-expect-error
             dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+            // @ts-expect-error
             dataSource.on('customizeLoadResult', that._dataLoadedHandler);
             dataSource.on('loadingChanged', that._loadingChangedHandler);
             dataSource.on('loadError', that._loadErrorHandler);
+            // @ts-expect-error
             dataSource.on('changing', that._changingHandler);
+            // @ts-expect-error
             dataSource.store().on('beforePush', that._pushHandler);
 
             each(dataSource, function(memberName, member) {
                 if(!that[memberName] && isFunction(member)) {
+                    // @ts-expect-error
                     that[memberName] = function() {
+                        // @ts-expect-error
                         return this._dataSource[memberName].apply(this._dataSource, arguments);
                     };
                 }
@@ -266,11 +291,15 @@ export default gridCore.Controller.inherit((function() {
             const store = dataSource.store();
 
             dataSource.off('changed', that._dataChangedHandler);
+            // @ts-expect-error
             dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+            // @ts-expect-error
             dataSource.off('customizeLoadResult', that._dataLoadedHandler);
             dataSource.off('loadingChanged', that._loadingChangedHandler);
             dataSource.off('loadError', that._loadErrorHandler);
+            // @ts-expect-error
             dataSource.off('changing', that._changingHandler);
+            // @ts-expect-error
             store && store.off('beforePush', that._pushHandler);
 
             if(!isSharedDataSource) {
@@ -317,6 +346,7 @@ export default gridCore.Controller.inherit((function() {
             this.resetPagesCache(true);
 
             if(this._cachedStoreData) {
+                // @ts-expect-error
                 applyBatch({
                     keyInfo: store,
                     data: this._cachedStoreData,
@@ -371,6 +401,7 @@ export default gridCore.Controller.inherit((function() {
             const getItemCount = () => groupCount ? this.itemsCount() : this.items().length;
             const oldItemCount = getItemCount();
 
+            // @ts-expect-error
             applyBatch({
                 keyInfo,
                 data: this._items,
@@ -379,6 +410,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true,
                 skipCopying: !this._needToCopyDataObject(),
             });
+            // @ts-expect-error
             applyBatch({
                 keyInfo,
                 data: dataSource.items(),
@@ -595,12 +627,14 @@ export default gridCore.Controller.inherit((function() {
                             options.data = this._cachedStoreData = this._cachedStoreData.concat(options.data);
                         }
                     }
+                    // @ts-ignore
                     new ArrayStore(options.data).load(loadOptions).done(data => {
                         options.data = data;
                         if(needStoreCache) {
                             this._cachedPagingData = cloneItems(options.data, groupCount);
                         }
                     }).fail(error => {
+                        // @ts-ignore
                         options.data = new Deferred().reject(error);
                     });
                 }
@@ -754,6 +788,7 @@ export default gridCore.Controller.inherit((function() {
             if(!arguments.length && !dataSource.paginate()) {
                 return 0;
             }
+            // @ts-ignore
             return dataSource.pageSize.apply(dataSource, arguments);
         },
         pageCount: function() {
@@ -771,6 +806,7 @@ export default gridCore.Controller.inherit((function() {
         },
         loadFromStore: function(loadOptions, store) {
             const dataSource = this._dataSource;
+            // @ts-expect-error
             const d = new Deferred();
 
             if(!dataSource) return;
@@ -793,6 +829,7 @@ export default gridCore.Controller.inherit((function() {
         load: function(options) {
             const that = this;
             const dataSource = that._dataSource;
+            // @ts-expect-error
             const d = new Deferred();
 
             if(options) {
@@ -803,6 +840,7 @@ export default gridCore.Controller.inherit((function() {
                     isCustomLoading: true
                 };
 
+                // @ts-expect-error
                 each(store._customLoadOptions() || [], function(_, optionName) {
                     if(!(optionName in loadResult.storeLoadOptions)) {
                         loadResult.storeLoadOptions[optionName] = dataSourceLoadOptions[optionName];
@@ -812,6 +850,7 @@ export default gridCore.Controller.inherit((function() {
                 this._isLoadingAll = options.isLoadingAll;
 
                 that._scheduleCustomLoadCallbacks(d);
+                // @ts-expect-error
                 dataSource._scheduleLoadCallbacks(d);
 
                 that._handleCustomizeStoreLoadOptions(loadResult);
@@ -852,4 +891,6 @@ export default gridCore.Controller.inherit((function() {
             return this._cachedStoreData;
         }
     };
+
+    return members;
 })());
