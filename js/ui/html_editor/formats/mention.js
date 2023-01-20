@@ -1,7 +1,7 @@
 
 import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
-import MentionsStorage from '../utils/mentions_storage';
+import TemplatesStorage from '../utils/templates_storage';
 
 let Mention = {};
 
@@ -65,7 +65,7 @@ if(Quill) {
     Mention.blotName = 'mention';
     Mention.tagName = 'span';
     Mention.className = MENTION_CLASS;
-    Mention._templatesStorage = new MentionsStorage();
+    Mention._templatesStorage = new TemplatesStorage();
 }
 
 
