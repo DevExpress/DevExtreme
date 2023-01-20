@@ -206,7 +206,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                widgetID: 1
             } })
             .insert(' ');
 
@@ -227,7 +228,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex manager',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                widgetID: 1
             } })
             .insert(' ');
 
@@ -373,7 +375,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                widgetID: 1
             } })
             .insert(' ');
         assert.deepEqual(this.log[0].delta.ops, firstDelta.ops, 'insert user mention');
@@ -392,7 +395,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 4421,
                 marker: '#',
-                id: 4421
+                id: 4421,
+                widgetID: 1
             } })
             .insert(' ');
         assert.deepEqual(this.log[2].delta.ops, secondDelta.ops, 'insert issue mention');
@@ -533,7 +537,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
                 .insert({ mention: {
                     value: 'Alex',
                     marker: '@',
-                    id: 'Alex'
+                    id: 'Alex',
+                    widgetID: 1
                 } })
                 .insert(' ');
             assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
@@ -660,7 +665,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                widgetID: 1
             } })
             .insert(' ');
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
