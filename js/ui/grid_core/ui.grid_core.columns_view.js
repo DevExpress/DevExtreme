@@ -916,7 +916,7 @@ const columnsViewMembers = {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
-    _waitAsyncTemplates: function(change, forceWaiting) {
+    waitAsyncTemplates: function(change, forceWaiting) {
         const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
         const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate)) && change?.templateDeferreds ? change?.templateDeferreds : [];
 
@@ -924,7 +924,7 @@ const columnsViewMembers = {
     },
 
     _updateContent: function($newTableElement, change) {
-        return this._waitAsyncTemplates(change).done(() => {
+        return this.waitAsyncTemplates(change).done(() => {
             this.setTableElement($newTableElement);
             this._wrapTableInScrollContainer($newTableElement);
         });
