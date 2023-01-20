@@ -1,6 +1,7 @@
 
 import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
+import MentionsStorage from '../utils/mentions_storage';
 
 let Mention = {};
 
@@ -31,7 +32,7 @@ if(Quill) {
         }
 
         static renderContent(node, data) {
-            const template = this._templates.get(data.marker);
+            const template = this._templatesStorage.get({ widgetID: data.widgetID, marker: data.marker });
 
             if(template) {
                 template.render({
@@ -52,19 +53,19 @@ if(Quill) {
                 .append(data.value);
         }
 
-        static addTemplate(marker, template) {
-            this._templates.set(marker, template);
+        static addTemplate(data, template) {
+            this._templatesStorage.set(data, template);
         }
 
-        static removeTemplate(marker) {
-            this._templates.delete(marker);
+        static removeTemplate(data) {
+            this._templatesStorage.delete(data);
         }
     };
 
     Mention.blotName = 'mention';
     Mention.tagName = 'span';
     Mention.className = MENTION_CLASS;
-    Mention._templates = new Map();
+    Mention._templatesStorage = new MentionsStorage();
 }
 
 
