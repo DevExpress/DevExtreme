@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 
-export default class MentionsStorage {
+export default class TemplatesStorage {
     constructor() {
         this._map = {};
     }
