@@ -18,6 +18,8 @@ export interface EditorFactory extends ViewController, State {
 
   _updateFocusCore: (this: this) => any;
 
+  _needHideBorder: (this: this, $element) => boolean;
+
   _updateFocus: (this: this, e) => any;
 
   _updateFocusOverlaySize: (this: this, $element, position) => any;
