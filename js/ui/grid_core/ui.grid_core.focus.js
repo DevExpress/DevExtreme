@@ -501,14 +501,14 @@ export const focusModule = {
             },
 
             editorFactory: {
-                renderFocusOverlay: function($element, hideBorder) {
+                renderFocusOverlay: function($element, isHideBorder) {
                     const keyboardController = this.getController('keyboardNavigation');
                     const focusedRowEnabled = this.option('focusedRowEnabled');
                     const editingController = this.getController('editing');
                     let $cell;
 
                     if(!focusedRowEnabled || !keyboardController?.isRowFocusType() || editingController.isEditing()) {
-                        this.callBase($element, hideBorder);
+                        this.callBase($element, isHideBorder);
                     } else if(focusedRowEnabled) {
                         const isRowElement = keyboardController._getElementType($element) === 'row';
 
