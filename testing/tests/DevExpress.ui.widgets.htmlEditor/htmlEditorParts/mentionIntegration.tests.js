@@ -572,9 +572,10 @@ export default function() {
             assert.strictEqual(value, expectedMention);
         });
 
-        test('Mentions template must be applyed after removing second editor(T1110266)', function(assert) {
+        test('Mention template is applied correctly after removing of a neighbour editor with the same mention marker(T1110266)', function(assert) {
             const done = assert.async();
-            const expectedMention = '<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">custom template</span></span> </p>';
+            const templateResult = 'custom template';
+            const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">${templateResult}</span></span> </p>`;
             const valueChangeSpy = sinon.spy(({ value }) => {
                 if(valueChangeSpy.calledOnce) {
                     $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
@@ -586,17 +587,18 @@ export default function() {
                 }
             });
             this.options.mentions[0].template = (_, container) => {
-                $(container).text('custom template');
+                $(container).text(templateResult);
             };
 
             this.options.onValueChanged = valueChangeSpy;
 
             this.createWidget();
 
-            const container = $('<div>').appendTo('#qunit-fixture');
+            const $secondContainer = $('<div>').appendTo('#qunit-fixture');
 
-            container.dxHtmlEditor(this.options);
-            container.remove();
+            $secondContainer.dxHtmlEditor(this.options);
+
+            $secondContainer.remove();
 
             this.instance.focus();
             this.$element.find('p').first().text('@');
