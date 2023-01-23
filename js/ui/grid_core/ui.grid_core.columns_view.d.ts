@@ -19,6 +19,8 @@ export class ColumnsView extends View {
 
   scrollChanged: any;
 
+  _templateTimeout?: number;
+
   // Methods:
   _handleDataChanged: (this: this, e: HandleDataChangedArguments) => void;
 
