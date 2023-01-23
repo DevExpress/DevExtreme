@@ -67,7 +67,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _init: function() {
-        this._keyInTemplateStorage = editorsCount++;
+        this._mentionKeyInTemplateStorage = editorsCount++;
         this.callBase();
         this._cleanCallback = Callbacks();
         this._contentInitializedCallback = Callbacks();
@@ -737,8 +737,8 @@ const HtmlEditor = Editor.inherit({
         this._applyQuillMethod('blur');
     },
 
-    getKeyInTemplateStorage() {
-        return this._keyInTemplateStorage;
+    getMentionKeyInTemplateStorage() {
+        return this._mentionKeyInTemplateStorage;
     }
 });
 
