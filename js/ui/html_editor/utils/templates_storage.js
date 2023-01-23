@@ -2,47 +2,38 @@ import { isDefined } from '../../../core/utils/type';
 
 export default class TemplatesStorage {
     constructor() {
-        this._widgetsMap = {};
+        this._widgetsStorage = {};
     }
 
     set({ widgetKey, marker }, value) {
-        let widgetTemplates = this._widgetsMap[widgetKey];
+        let widgetTemplates = this._widgetsStorage[widgetKey];
         if(!widgetTemplates) {
-            widgetTemplates = new Map();
-            this._widgetsMap[widgetKey] = widgetTemplates;
+            this._widgetsStorage[widgetKey] = widgetTemplates = widgetTemplates = {};
         }
 
-        widgetTemplates.set(marker, value);
+        widgetTemplates[marker] = value;
     }
 
     get({ widgetKey, marker }) {
         if(isDefined(widgetKey)) {
-            const widgetTemplates = this._widgetsMap[widgetKey];
-            return widgetTemplates ? widgetTemplates.get(marker) : undefined;
+            const widgetTemplates = this._widgetsStorage[widgetKey];
+            return widgetTemplates ? widgetTemplates[marker] : undefined;
         }
 
-        const ids = Object.keys(this._widgetsMap).sort((a, b) => b - a);
-        let resultTemplate;
+        const widgetsStorageKeys = Object.keys(this._widgetsStorage);
 
-        ids.some(id => {
-            const current = this._widgetsMap[id].get(marker);
-            if(isDefined(current)) {
-                resultTemplate = current;
-                return true;
-            }
-        });
-        return resultTemplate;
+        return widgetsStorageKeys.length > 0 ? this._widgetsStorage[widgetsStorageKeys[widgetsStorageKeys.length - 1]][marker] : undefined;
     }
 
     delete({ widgetKey, marker }) {
-        const widgetTemplates = this._widgetsMap[widgetKey];
+        const widgetTemplates = this._widgetsStorage[widgetKey];
         if(!widgetTemplates) {
             return;
         }
 
-        widgetTemplates.delete(marker);
-        if(widgetTemplates.size === 0) {
-            delete this._widgetsMap[widgetKey];
+        delete widgetTemplates[marker];
+        if(Object.keys(widgetTemplates).length === 0) {
+            delete this._widgetsStorage[widgetKey];
         }
     }
 }
