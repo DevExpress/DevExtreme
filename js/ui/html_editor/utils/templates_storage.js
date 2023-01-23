@@ -2,38 +2,38 @@ import { isDefined } from '../../../core/utils/type';
 
 export default class TemplatesStorage {
     constructor() {
-        this._widgetsStorage = {};
+        this._storage = {};
     }
 
     set({ widgetKey, marker }, value) {
-        let widgetTemplates = this._widgetsStorage[widgetKey];
-        if(!widgetTemplates) {
-            this._widgetsStorage[widgetKey] = widgetTemplates = widgetTemplates = {};
-        }
-
-        widgetTemplates[marker] = value;
+        this._storage[widgetKey] ??= {};
+        this._storage[widgetKey][marker] = value;
     }
 
     get({ widgetKey, marker }) {
+        // reason for add double key is T1110266
         if(isDefined(widgetKey)) {
-            const widgetTemplates = this._widgetsStorage[widgetKey];
+            const widgetTemplates = this._storage[widgetKey];
+
             return widgetTemplates ? widgetTemplates[marker] : undefined;
+        } else {
+            // When Quill parse markup, we do not have info about widget (widgetKey)
+            // In this case, we take latest template from storage because this (latest) template related to current widget(this widget initialized parsing of markup)
+            const lastWidgetTemplates = Object.values(this._storage).at(-1);
+
+            return lastWidgetTemplates ? lastWidgetTemplates[marker] : undefined;
         }
-
-        const widgetsStorageKeys = Object.keys(this._widgetsStorage);
-
-        return widgetsStorageKeys.length > 0 ? this._widgetsStorage[widgetsStorageKeys[widgetsStorageKeys.length - 1]][marker] : undefined;
     }
 
     delete({ widgetKey, marker }) {
-        const widgetTemplates = this._widgetsStorage[widgetKey];
+        const widgetTemplates = this._storage[widgetKey];
         if(!widgetTemplates) {
             return;
         }
 
         delete widgetTemplates[marker];
         if(Object.keys(widgetTemplates).length === 0) {
-            delete this._widgetsStorage[widgetKey];
+            delete this._storage[widgetKey];
         }
     }
 }

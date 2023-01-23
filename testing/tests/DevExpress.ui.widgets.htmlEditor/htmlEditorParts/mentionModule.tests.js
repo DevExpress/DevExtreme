@@ -85,7 +85,7 @@ const moduleConfig = {
                 dataSource: ['Alex', 'John', 'Freddy', 'Sam']
             }],
             editorInstance: {
-                getKeyInTemplateStorage: sinon.spy(() => 'my_key_in_storage'),
+                getMentionKeyInTemplateStorage: sinon.spy(() => 'my_key_in_storage'),
                 addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
@@ -212,7 +212,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert(' ');
 
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
-        assert.ok(this.options.editorInstance.getKeyInTemplateStorage.calledOnce, 'id requested from widget');
+        assert.ok(this.options.editorInstance.getMentionKeyInTemplateStorage.calledOnce, 'id requested from widget');
     });
 
     test('Display and value expression with complex data', function(assert) {
