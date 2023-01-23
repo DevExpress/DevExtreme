@@ -1209,6 +1209,7 @@ export const rowsModule = {
                 },
 
                 dispose: function() {
+                    this.callBase();
                     clearTimeout(this._hideLoadingTimeoutID);
                     this._scrollable && this._scrollable.dispose();
                 },
