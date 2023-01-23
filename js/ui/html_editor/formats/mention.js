@@ -32,7 +32,7 @@ if(Quill) {
         }
 
         static renderContent(node, data) {
-            const template = this._templatesStorage.get({ widgetID: data.widgetID, marker: data.marker });
+            const template = this._templatesStorage.get({ widgetKey: data.keyInTemplateStorage, marker: data.marker });
 
             if(template) {
                 template.render({

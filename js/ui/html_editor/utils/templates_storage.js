@@ -5,19 +5,19 @@ export default class TemplatesStorage {
         this._widgetsMap = {};
     }
 
-    set({ widgetID, marker }, value) {
-        let widgetTemplates = this._widgetsMap[widgetID];
+    set({ widgetKey, marker }, value) {
+        let widgetTemplates = this._widgetsMap[widgetKey];
         if(!widgetTemplates) {
             widgetTemplates = new Map();
-            this._widgetsMap[widgetID] = widgetTemplates;
+            this._widgetsMap[widgetKey] = widgetTemplates;
         }
 
         widgetTemplates.set(marker, value);
     }
 
-    get({ widgetID, marker }) {
-        if(isDefined(widgetID)) {
-            const widgetTemplates = this._widgetsMap[widgetID];
+    get({ widgetKey, marker }) {
+        if(isDefined(widgetKey)) {
+            const widgetTemplates = this._widgetsMap[widgetKey];
             return widgetTemplates ? widgetTemplates.get(marker) : undefined;
         }
 
@@ -34,15 +34,15 @@ export default class TemplatesStorage {
         return resultTemplate;
     }
 
-    delete({ widgetID, marker }) {
-        const widgetTemplates = this._widgetsMap[widgetID];
+    delete({ widgetKey, marker }) {
+        const widgetTemplates = this._widgetsMap[widgetKey];
         if(!widgetTemplates) {
             return;
         }
 
         widgetTemplates.delete(marker);
         if(widgetTemplates.size === 0) {
-            delete this._widgetsMap[widgetID];
+            delete this._widgetsMap[widgetKey];
         }
     }
 }
