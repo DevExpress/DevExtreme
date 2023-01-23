@@ -3,7 +3,7 @@
 import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
 import pointerEvents from '../../events/pointer';
@@ -1195,7 +1195,9 @@ const columnsViewMembers = {
         return false;
     },
     dispose: function() {
-        getWindow().clearTimeout(this._templateTimeout);
+        if(hasWindow()) {
+            getWindow().clearTimeout(this._templateTimeout);
+        }
     }
 };
 
