@@ -3,8 +3,10 @@ import {
 } from 'react';
 import { FormContext } from './contexts/form-context';
 import { ValidationContext } from './contexts/validation-context';
+import { ValidationEngineContext } from './contexts/validation-engine-context';
 import { useValidation } from './hooks/use-validation';
 import { FormProps } from './types';
+import { createValidationEngine, ValidationEngine } from './utils/validation-engine';
 
 /*
 Vitik: The previous form implements parts:
@@ -16,9 +18,10 @@ The previous form doesn't allow the use of them separately the next form should 
 */
 export function Form({ children, onSubmit }: FormProps) {
   const formValues = useRef<Record<string, unknown>>({});
+  const validationEngine = useMemo<ValidationEngine>(createValidationEngine, []);
   const {
-    validationResult, validateAll, validateEditor, initializeEditorRules,
-  } = useValidation();
+    validationResult, validateAll, validateEditor,
+  } = useValidation(validationEngine);
 
   const formContextValue = useMemo(
     () => ({
@@ -32,8 +35,7 @@ export function Form({ children, onSubmit }: FormProps) {
 
   const validationContextValue = useMemo(() => ({
     validationResult,
-    initializeEditorRules,
-  }), [validationResult, initializeEditorRules]);
+  }), [validationResult]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     const isValid = validateAll(formValues.current);
@@ -44,13 +46,15 @@ export function Form({ children, onSubmit }: FormProps) {
   };
 
   return (
-    <FormContext.Provider value={formContextValue}>
-      <ValidationContext.Provider value={validationContextValue}>
-        <form onSubmit={handleSubmit}>
-          {children}
-          <input type="submit" value="Submit" />
-        </form>
-      </ValidationContext.Provider>
-    </FormContext.Provider>
+    <ValidationEngineContext.Provider value={validationEngine}>
+      <FormContext.Provider value={formContextValue}>
+        <ValidationContext.Provider value={validationContextValue}>
+          <form onSubmit={handleSubmit}>
+            {children}
+            <input type="submit" value="Submit" />
+          </form>
+        </ValidationContext.Provider>
+      </FormContext.Provider>
+    </ValidationEngineContext.Provider>
   );
 }

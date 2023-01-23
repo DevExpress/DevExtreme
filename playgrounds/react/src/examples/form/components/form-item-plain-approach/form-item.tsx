@@ -3,14 +3,13 @@ import { cloneElement, ReactElement, useContext } from 'react';
 import { FormContext } from '../contexts/form-context';
 import { ValidationContext } from '../contexts/validation-context';
 import { useFormItemLayout } from '../hooks/use-form-item-layout';
-import { useEditorValidationRulesInitialization } from '../hooks/use-validation-rules-extractor';
 import { FormItemProps } from '../types';
+import { Validator } from '../validator';
 
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
   const validationContext = useContext(ValidationContext);
   const { label, hint, editor } = useFormItemLayout(children, [RadioGroup]);
-  useEditorValidationRulesInitialization(name, children);
 
   const onEditorValueChanged = (value: unknown) => {
     formContext?.onValueChanged(name, value);
@@ -33,6 +32,7 @@ export function FormItem({ name, children }: FormItemProps) {
         })}
       </span>
       <span>{renderValidation()}</span>
+      <Validator name={name}>{children}</Validator>
     </div>
   );
 }

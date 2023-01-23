@@ -6,7 +6,7 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import { ValidationContext } from '../contexts/validation-context';
+import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { CustomRule, CustomRule1, CustomRuleProps } from '../dummy-validation';
 import { Rule } from '../types';
 import { filterNodesByTypes } from '../utils';
@@ -15,7 +15,7 @@ export function useEditorValidationRulesInitialization(
   editorName: string,
   children: ReactNode | ReactNode[] = [],
 ) {
-  const validationContext = useContext(ValidationContext);
+  const validationEngineContext = useContext(ValidationEngineContext);
 
   const ruleComponents = filterNodesByTypes(
     Children.toArray(children), [CustomRule, CustomRule1],
@@ -29,6 +29,6 @@ export function useEditorValidationRulesInitialization(
   );
 
   useEffect(() => {
-    validationContext?.initializeEditorRules(editorName, validationRules);
+    validationEngineContext?.initializeEditorRules(editorName, validationRules);
   }, [validationRules, editorName]);
 }
