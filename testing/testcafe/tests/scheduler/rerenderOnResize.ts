@@ -7,29 +7,27 @@ import { safeSizeTest } from '../../helpers/safeSizeTest';
 fixture.disablePageReloads`Re-render on resize`
   .page(url(__dirname, '../container.html'));
 
-const createScheduler = async (container, options?): Promise<void> => {
-  await createWidget('dxScheduler', {
-    ...options,
-    currentDate: new Date(2020, 8, 7),
-    startDayHour: 8,
-    endDayHour: 20,
-    cellDuration: 60,
-    scrolling: {
-      mode: 'virtual',
-    },
-    currentView: 'Timeline',
-    views: [{
-      type: 'timelineWorkWeek',
-      name: 'Timeline',
-      groupOrientation: 'vertical',
-    }],
-    dataSource: [{
-      startDate: new Date(2020, 8, 7, 8),
-      endDate: new Date(2020, 8, 7, 9),
-      text: 'test',
-    }],
-  }, container);
-};
+const createScheduler = async (container, options?): Promise<void> => createWidget('dxScheduler', {
+  ...options,
+  currentDate: new Date(2020, 8, 7),
+  startDayHour: 8,
+  endDayHour: 20,
+  cellDuration: 60,
+  scrolling: {
+    mode: 'virtual',
+  },
+  currentView: 'Timeline',
+  views: [{
+    type: 'timelineWorkWeek',
+    name: 'Timeline',
+    groupOrientation: 'vertical',
+  }],
+  dataSource: [{
+    startDate: new Date(2020, 8, 7, 8),
+    endDate: new Date(2020, 8, 7, 9),
+    text: 'test',
+  }],
+}, container);
 
 safeSizeTest('Appointment should re-rendered on window resize when width and height not set (T1139566)', async (t) => {
   const scheduler = new Scheduler('#container');
