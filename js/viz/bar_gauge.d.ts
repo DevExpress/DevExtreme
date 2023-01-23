@@ -36,12 +36,14 @@ import {
     LabelOverlap,
     Palette,
     PaletteExtensionMode,
+    ShiftLabelOverlap,
 } from '../common/charts';
 
 export {
     LabelOverlap,
     Palette,
     PaletteExtensionMode,
+    ShiftLabelOverlap,
 };
 
 /**
@@ -271,7 +273,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default 'hide'
      * @public
      */
-    resolveLabelOverlapping?: LabelOverlap;
+    resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
      * @docid
      * @default 0

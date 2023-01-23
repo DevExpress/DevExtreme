@@ -6,14 +6,13 @@ import callOnce from '../../../core/utils/call_once';
 import eventsEngine from '../../../events/core/events_engine';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
-import { normalizeBBox, rotateBBox, normalizeEnum } from '../utils';
+import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams } from '../utils';
 import { isDefined } from '../../../core/utils/type';
 
 const window = getWindow();
 
-const { max, min, floor, round, sin, cos, abs, PI } = Math;
+const { max, round, } = Math;
 
-const PI_DIV_180 = PI / 180;
 const SHARPING_CORRECTION = 0.5;
 const ARC_COORD_PREC = 5;
 
@@ -118,14 +117,6 @@ function extend(target, source) {
     return target;
 }
 
-function roundValue(value, exp) {
-    value = value.toString().split('e');
-    value = round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
-    value = value.toString().split('e');
-
-    return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
-}
-
 const preserveAspectRatioMap = {
     'full': NONE,
     'lefttop': 'xMinYMin',
@@ -154,51 +145,6 @@ export function processHatchingAttrs(element, attrs) {
 //
 // Build path segments
 //
-
-function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
-    let isCircle;
-    let noArc = true;
-    const angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
-
-    if(angleDiff) {
-        if((abs(angleDiff) % 360) === 0) {
-            startAngle = 0;
-            endAngle = 360;
-            isCircle = true;
-            endAngle -= 0.01;
-        }
-
-        if(startAngle > 360) {
-            startAngle = startAngle % 360;
-        }
-
-        if(endAngle > 360) {
-            endAngle = endAngle % 360;
-        }
-
-        if(startAngle > endAngle) {
-            startAngle -= 360;
-        }
-        noArc = false;
-    }
-
-    startAngle = startAngle * PI_DIV_180;
-    endAngle = endAngle * PI_DIV_180;
-
-    return [
-        x,
-        y,
-        min(outerR, innerR),
-        max(outerR, innerR),
-        cos(startAngle),
-        sin(startAngle),
-        cos(endAngle),
-        sin(endAngle),
-        isCircle,
-        floor(abs(endAngle - startAngle) / PI) % 2 ? '1' : '0',
-        noArc
-    ];
-}
 
 const buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
     return [

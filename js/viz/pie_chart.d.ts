@@ -50,6 +50,7 @@ import {
     HatchDirection,
     LabelPosition,
     Palette,
+    ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
 } from '../common/charts';
@@ -62,14 +63,17 @@ export {
     Palette,
     TextOverflow,
     WordWrap,
+    ShiftLabelOverlap,
 };
 
 /** @public */
 export type PieChartAnnotationLocation = 'center' | 'edge';
 /** @public */
 export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
-/** @public */
-export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
+/**
+ * @deprecated Use ShiftLabelOverlap from 'devextreme/common/charts' instead
+ */
+export type PieChartLabelOverlap = ShiftLabelOverlap;
 /** @public */
 export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
 /** @public */
@@ -256,7 +260,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default "none"
      * @public
      */
-    resolveLabelOverlapping?: PieChartLabelOverlap;
+    resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
      * @docid
      * @default 'clockwise'
