@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
 } from '@angular/core';
 import {
   createRadioGroupStore,
@@ -11,7 +11,7 @@ import {
   TemplateProps,
   ValueProps,
 } from '@devextreme/components';
-import { doIfContextExist, Inputs } from '../../internal';
+import { Inputs } from '../../internal';
 import { RadioGroupBaseComponent, RadioGroupService } from '../radio-common';
 
 export type RadioGroupInputs<T> =
@@ -29,37 +29,27 @@ export type RadioGroupInputs<T> =
 })
 export class RadioGroupComponent<T>
   extends RadioGroupBaseComponent<T>
-  implements OnInit, RadioGroupInputs<T> {
-  private inputValue?: T;
+  implements OnChanges, RadioGroupInputs<T> {
+  // TODO Vinogradov: Think about splitting core initialization into two parts.
+  // First one with config for creating instance, second one for setting the initial state.
+  private store = createRadioGroupStore<T>({
+    value: undefined,
+  }, {
+    value: {
+      controlledMode: false,
+      changeCallback: (value) => { this.valueChange.emit(value); },
+    },
+  });
 
-  @Input() set value(value: T | undefined) {
-    this.setValue(value);
-  }
+  @Input() value: T | undefined;
 
   constructor(private radioGroupService: RadioGroupService<T>) {
     super();
+    this.radioGroupService.context = this.store;
   }
 
-  ngOnInit(): void {
-    this.radioGroupService.setContext(
-      createRadioGroupStore({
-        value: this.inputValue,
-      }, {
-        value: {
-          controlledMode: false,
-          changeCallback: (value) => { this.valueChange.emit(value); },
-        },
-      }),
-    );
-  }
-
-  private setValue(value?: T): void {
-    this.inputValue = value;
-
-    this.radioGroupService.context$.pipe(doIfContextExist())
-      .subscribe((store) => {
-        store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(value));
-        store.commitPropsUpdates();
-      });
+  ngOnChanges(): void {
+    this.store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(this.value));
+    this.store.commitPropsUpdates();
   }
 }

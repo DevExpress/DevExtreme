@@ -1,1 +1,1 @@
-export * from './use-store-selector';
+export { useSelector } from './use-selector';

@@ -12,5 +12,5 @@ export {
 } from './apply-pipe';
 
 export {
-  useStoreSelector,
+  useSelector,
 } from './rxjs';
