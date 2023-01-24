@@ -33,3 +33,5 @@ export class RadioButton extends ComponentWrapper {
 }
 
 registerComponent('dxRadioButton', RadioButton);
+
+export default RadioButton;

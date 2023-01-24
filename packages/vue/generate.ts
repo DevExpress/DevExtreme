@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, rmdirSync } from 'fs';
 import devextremeGenerator from 'devextreme-vue-generator';
 
 const vueVersion = 3;
@@ -10,11 +10,17 @@ const metadataFile = './artifacts/internal-tools/integration-data.json'
 
 console.log('Generating wrappers...');
 
-if(!existsSync(componentsDir))
-    mkdirSync(componentsDir);
+if(existsSync(componentsDir)) {
+    rmdirSync(componentsDir, { recursive: true });
+}
 
-if(!existsSync(oldComponentsDir))
-    mkdirSync(oldComponentsDir);
+mkdirSync(componentsDir);
+
+if(existsSync(oldComponentsDir)) {
+    rmdirSync(oldComponentsDir, { recursive: true });
+}
+
+mkdirSync(oldComponentsDir);
 
 devextremeGenerator(
     JSON.parse(readFileSync(metadataFile).toString()),
@@ -25,7 +31,7 @@ devextremeGenerator(
         oldComponentsDir,
         indexFileName
     },
-    "devextreme",
+    "../../jquery/src",
     vueVersion
 );
 
