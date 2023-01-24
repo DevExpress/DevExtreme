@@ -1,5 +1,6 @@
+import { createCheckedSelector, RADIO_GROUP_ACTIONS } from '@devextreme/components';
 import { HookContainer, useState } from '@devextreme/runtime/inferno-hooks';
-import { useCoreState } from '../../internal/hooks';
+import { useStoreSelector } from '../../internal/hooks';
 import { RadioButtonInternal } from './radio-button-internal';
 
 function withUncontrolledBehavior(RadioButton) {
@@ -19,12 +20,12 @@ function withUncontrolledBehavior(RadioButton) {
 }
 
 function withRadioGroup(RadioButton) {
-  function CoreBoundRadioButton({ radioGroupCore: { dispatcher, stateManager }, value, ...props }) {
-      const coreState = useCoreState(stateManager);
-      const checked = coreState.value === value;
+  function CoreBoundRadioButton({ store, value, ...props }) {
+      const checked = useStoreSelector(store, createCheckedSelector(value));
       const handleSelected = () => {
           props.onSelected?.(value);
-          dispatcher.dispatch('updateValue', { value });
+          store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(value));
+          store.commitUpdates();
       };
       return (<RadioButton {...props} value={value} checked={checked} onSelected={handleSelected}/>);
   }
