@@ -18,9 +18,9 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
 import uiErrors from '../widget/ui.errors';
 import eventsEngine from '../../events/core/events_engine';
-import {
-    move as dragEventMove
-} from '../../events/drag';
+// import {
+//     move as dragEventMove
+// } from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
@@ -28,7 +28,7 @@ import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../..
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import { tabbable } from '../widget/selectors';
 import Widget from '../widget/ui.widget';
-import browser from '../../core/utils/browser';
+// import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
 const ready = readyCallbacks.add;
@@ -48,7 +48,7 @@ const RTL_DIRECTION_CLASS = 'dx-rtl';
 
 const OVERLAY_STACK = [];
 
-const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+// const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
 
@@ -225,6 +225,7 @@ const Overlay = Widget.inherit({
         this._initActions();
         this._initHideOnOutsideClickHandler();
         this._initTabTerminatorHandler();
+        this._initScrollTerminator();
 
         this._customWrapperClass = null;
         this._$wrapper = $('<div>').addClass(OVERLAY_WRAPPER_CLASS);
@@ -246,6 +247,39 @@ const Overlay = Widget.inherit({
         };
 
         this.warnPositionAsFunction();
+    },
+
+    _initScrollTerminator: function() {
+        this._proxiedScrollTerminatorHandler = (...args) => {
+            this._scrollHandler(...args);
+        };
+    },
+
+    _scrollHandler: function(e) {
+        const isOverlayWrapperArea = e.target.closest('.dx-popup-content');
+
+        if(isOverlayWrapperArea === null) {
+            const originalEvent = e.originalEvent.originalEvent;
+            const { type } = originalEvent || {};
+            const isWheel = type === 'wheel';
+            const isZoomByWheel = isWheel && isCommandKeyPressed(e);
+
+            if(originalEvent && isZoomByWheel) {
+                return;
+            }
+
+            e.preventDefault();
+        }
+    },
+
+    _toggleScrollTerminator: function(enabled) {
+        const eventName = addNamespace('dxmousewheel', this.NAME);
+
+        if(enabled) {
+            eventsEngine.on(this.$wrapper(), eventName, this._proxiedScrollTerminatorHandler);
+        } else {
+            eventsEngine.off(this.$wrapper(), eventName, this._proxiedScrollTerminatorHandler);
+        }
     },
 
     warnPositionAsFunction() {
@@ -287,6 +321,8 @@ const Overlay = Widget.inherit({
         this.callBase();
         this._renderWrapperAttributes();
         this._initPositionController();
+
+        this._toggleScrollTerminator(true);
     },
 
     _documentDownHandler: function(e) {
@@ -867,7 +903,7 @@ const Overlay = Widget.inherit({
             }
         });
 
-        this._renderScrollTerminator();
+        // this._renderScrollTerminator();
 
         whenContentRendered.done(() => {
             if(this.option('visible')) {
@@ -901,38 +937,39 @@ const Overlay = Widget.inherit({
         );
     },
 
-    _renderScrollTerminator: function() {
-        const $scrollTerminator = this._$wrapper;
-        const terminatorEventName = addNamespace(dragEventMove, this.NAME);
+    // _renderScrollTerminator: function() {
+    //     const $scrollTerminator = this._$wrapper;
+    //     const terminatorEventName = addNamespace(dragEventMove, this.NAME);
 
-        eventsEngine.off($scrollTerminator, terminatorEventName);
-        eventsEngine.on($scrollTerminator, terminatorEventName, {
-            validate: function() {
-                return true;
-            },
-            getDirection: function() {
-                return 'both';
-            },
-            _toggleGestureCover: function(toggle) {
-                if(!toggle) {
-                    this._toggleGestureCoverImpl(toggle);
-                }
-            },
-            _clearSelection: noop,
-            isNative: true
-        }, e => {
-            const originalEvent = e.originalEvent.originalEvent;
-            const { type } = originalEvent || {};
-            const isWheel = type === 'wheel';
-            const isMouseMove = type === 'mousemove';
-            const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
-            e._cancelPreventDefault = true;
+    //     eventsEngine.off($scrollTerminator, terminatorEventName);
+    //     eventsEngine.on($scrollTerminator, terminatorEventName, {
+    //         validate: function() {
+    //             return true;
+    //         },
+    //         getDirection: function() {
+    //             return 'both';
+    //         },
+    //         // _toggleGestureCover: noop,
+    //         _toggleGestureCover: function(toggle) {
+    //             if(!toggle) {
+    //                 this._toggleGestureCoverImpl(toggle);
+    //             }
+    //         },
+    //         _clearSelection: noop,
+    //         isNative: true
+    //     }, e => {
+    //         const originalEvent = e.originalEvent.originalEvent;
+    //         const { type } = originalEvent || {};
+    //         const isWheel = type === 'wheel';
+    //         const isMouseMove = type === 'mousemove';
+    //         const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
+    //         e._cancelPreventDefault = true;
 
-            if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
-                e.preventDefault();
-            }
-        });
-    },
+    //         if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
+    //             e.preventDefault();
+    //         }
+    //     });
+    // },
 
     _moveFromContainer: function() {
         this._$content.appendTo(this.$element());
@@ -981,28 +1018,28 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSafariScrolling: function() {
-        const visible = this.option('visible');
-        const $body = $(domAdapter.getBody());
-        const isIosSafari = devices.real().platform === 'ios' && browser.safari;
-        const isAllWindowCovered = this._isAllWindowCovered();
-        const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
+        // const visible = this.option('visible');
+        // const $body = $(domAdapter.getBody());
+        // const isIosSafari = devices.real().platform === 'ios' && browser.safari;
+        // const isAllWindowCovered = this._isAllWindowCovered();
+        // const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
 
-        const shouldPreventScrolling = !isScrollingPrevented
-            && visible
-            && isAllWindowCovered;
-        const shouldEnableScrolling = isScrollingPrevented
-            && (!visible || !isAllWindowCovered || this._disposed);
+        // const shouldPreventScrolling = !isScrollingPrevented
+        //     && visible
+        //     && isAllWindowCovered;
+        // const shouldEnableScrolling = isScrollingPrevented
+        //     && (!visible || !isAllWindowCovered || this._disposed);
 
-        if(isIosSafari) {
-            if(shouldEnableScrolling) {
-                $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
-                window.scrollTo(0, this._cachedBodyScrollTop);
-                this._cachedBodyScrollTop = undefined;
-            } else if(shouldPreventScrolling) {
-                this._cachedBodyScrollTop = window.pageYOffset;
-                $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
-            }
-        }
+        // if(isIosSafari) {
+        //     if(shouldEnableScrolling) {
+        //         $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+        //         window.scrollTo(0, this._cachedBodyScrollTop);
+        //         this._cachedBodyScrollTop = undefined;
+        //     } else if(shouldPreventScrolling) {
+        //         this._cachedBodyScrollTop = window.pageYOffset;
+        //         $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+        //     }
+        // }
     },
 
     _renderWrapper: function() {
@@ -1067,9 +1104,11 @@ const Overlay = Widget.inherit({
         if(visible) {
             if(this.option('visible')) {
                 this._renderVisibilityAnimate(visible);
+                this._toggleScrollTerminator(true);
             }
         } else {
             this._renderVisibilityAnimate(visible);
+            this._toggleScrollTerminator(false);
         }
     },
 
@@ -1155,6 +1194,7 @@ const Overlay = Widget.inherit({
                 this._toggleSafariScrolling();
                 break;
             case 'visible':
+                this._toggleScrollTerminator(value);
                 this._renderVisibilityAnimate(value)
                     .done(() => this._animateDeferred?.resolveWith(this))
                     .fail(() => this._animateDeferred?.reject());

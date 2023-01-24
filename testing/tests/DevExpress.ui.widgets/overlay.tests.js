@@ -3376,31 +3376,81 @@ testModule('scrollable interaction', {
         moduleConfig.afterEach.apply(this, arguments);
     }
 }, () => {
-    test('scroll event prevented on overlay shader 1', function(assert) {
-        assert.expect(0);
+    test('scroll event prevented on overlay shader, visible on inizialization', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            shading: true,
+            visible: true,
+        }).dxOverlay('instance');
 
-        const $overlay = $('#overlay').dxOverlay({
-            shading: true
-        });
+        const $shader = $(overlay.content()).closest(toSelector(OVERLAY_SHADER_CLASS));
 
-        $overlay.dxOverlay('option', 'visible', true);
-
-        const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
-
-        $($shader.parent()).on('dxdrag.TEST', {
-            getDirection: function() { return 'both'; },
-            validate: function() { return true; }
-        }, function() {
-            assert.ok(false, 'scroll should not be fired');
+        $($shader.parent()).on('dxmousewheel', (e) => {
+            assert.strictEqual(e.isDefaultPrevented(), true, 'scroll should not be fired');
         });
 
         pointerMock($shader).start().wheel(10);
 
-        $($shader.parent()).off('.TEST');
+        $($shader.parent()).off('dxmousewheel');
     });
 
-    test('scroll event should not be prevented if originalEvent is mousemove', function(assert) {
+    test('scroll event prevented on overlay shader, visible on inizialization, shading: false', function(assert) {
+        assert.expect(0);
+
+        const overlay = $('#overlay').dxOverlay({
+            shading: false,
+            visible: true,
+        }).dxOverlay('instance');
+
+        const $shader = $(overlay.content()).closest(toSelector(OVERLAY_SHADER_CLASS));
+
+        $($shader.parent()).on('dxmousewheel', (e) => {
+            assert.ok(false, 'scroll not fired');
+        });
+
+        pointerMock($shader).start().wheel(10);
+
+        $($shader.parent()).off('dxmousewheel');
+    });
+
+    test('scroll event prevented on overlay shader, visible after option changed', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            shading: true,
+        }).dxOverlay('instance');
+
+        overlay.option('visible', true);
+
+        const $shader = $(overlay.content()).closest(toSelector(OVERLAY_SHADER_CLASS));
+
+        $($shader.parent()).on('dxmousewheel', (e) => {
+            assert.strictEqual(e.isDefaultPrevented(), true, 'scroll should not be fired');
+        });
+
+        pointerMock($shader).start().wheel(10);
+
+        $($shader.parent()).off('dxmousewheel');
+    });
+
+    test('scroll event prevented on overlay shader, visible after option changed, shading: false', function(assert) {
+        assert.expect(0);
+
+        const overlay = $('#overlay').dxOverlay({
+            shading: false,
+        }).dxOverlay('instance');
+
+        overlay.option('visible', true);
+
+        const $shader = $(overlay.content()).closest(toSelector(OVERLAY_SHADER_CLASS));
+
+        $($shader.parent()).on('dxmousewheel', (e) => {
+            assert.ok(false, 'scroll not fired');
+        });
+
+        pointerMock($shader).start().wheel(10);
+
+        $($shader.parent()).off('dxmousewheel');
+    });
+
+    test('scroll event should be prevented if originalEvent is mousemove or touchmove', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             shading: true,
             visible: true
@@ -3409,18 +3459,11 @@ testModule('scrollable interaction', {
         const $content = $overlay.dxOverlay('$content');
         const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
 
-        $($shader).on('dxdrag', {
-            getDirection: function() { return 'both'; },
-            validate: function() { return true; }
-        }, function(e) {
-            if(e.originalEvent.originalEvent.type === 'mousemove') {
-                assert.strictEqual(e.isDefaultPrevented(), false, 'mousemove is not prevented');
-                return;
-            }
-            assert.strictEqual(e.isDefaultPrevented(), true, 'touchmove is prevented');
+        $($shader).on('dxmousewheel', function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), true, 'event is prevented');
         });
 
-        let event = $.Event('dxdrag', {
+        let event = $.Event('dxmousewheel', {
             originalEvent: $.Event('dxpointermove', {
                 originalEvent: $.Event('mousemove')
             })
@@ -3428,7 +3471,7 @@ testModule('scrollable interaction', {
 
         $($shader).trigger(event);
 
-        event = $.Event('dxdrag', {
+        event = $.Event('dxmousewheel', {
             originalEvent: $.Event('dxpointermove', {
                 originalEvent: $.Event('touchmove')
             })
@@ -3562,12 +3605,9 @@ testModule('scrollable interaction', {
         const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
 
         $($shader).on({
-            'dxdragstart': function() {
+            'dxmousewheel': function() {
                 assert.strictEqual($gestureCover.css('pointerEvents'), originalPointerEvents, 'selection is enabled');
             },
-            'dxdragend': function() {
-                assert.strictEqual($gestureCover.css('pointerEvents'), originalPointerEvents, 'selection is enabled');
-            }
         });
 
         pointerMock($shader)
@@ -3578,46 +3618,48 @@ testModule('scrollable interaction', {
     test('scroll event should not prevent text selection in content', function(assert) {
         assert.expect(1);
 
-        const $overlay = $('#overlay').dxOverlay({
+        const overlay = $('#overlay').dxOverlay({
             shading: true,
             visible: true
+        }).dxOverlay('instance');
+
+        const $shader = overlay.content().closest(toSelector(OVERLAY_SHADER_CLASS));
+
+        $($shader).on('dxdrag', function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), false, 'event is not prevented');
         });
 
-        const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
-
-        const e = pointerMock($shader)
+        pointerMock($shader)
             .start()
             .dragStart()
             .drag(10, 0)
             .lastEvent();
-
-        assert.ok(e._cancelPreventDefault, 'overlay should set special flag for prevent default cancelling');
     });
 
     ['ctrlKey', 'metaKey'].forEach((commandKey) => {
-        test(`scroll event should not prevent zooming (${commandKey} pressed)`, function(assert) {
-            assert.expect(1);
+        [true, false].forEach((shading) => {
+            test(`scroll event should not prevent zooming (${commandKey} pressed), shading: ${shading}`, function(assert) {
+                assert.expect(1);
 
-            const $overlay = $('#overlay').dxOverlay({
-                shading: true,
-                visible: true
+                const overlay = $('#overlay').dxOverlay({
+                    shading,
+                    visible: true
+                }).dxOverlay('instance');
+
+                const $wrapper = $(overlay.content()).parent();
+
+                $($wrapper).on('dxmousewheel', (e) => {
+                    assert.strictEqual(e.isDefaultPrevented(), false, 'zoom is not prevented');
+                });
+
+                nativePointerMock($wrapper)
+                    .start()
+                    .wheel(10, { [commandKey]: true });
+
+                $($wrapper).off('dxmousewheel');
             });
-            const handler = () => {
-                assert.ok(true, 'event popped up');
-            };
-
-            $('#qunit-fixture').on('wheel', handler);
-
-            const $content = $overlay.dxOverlay('$content');
-            const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
-
-            nativePointerMock($shader)
-                .start()
-                .wheel(10, { [commandKey]: true });
-
-            $('#qunit-fixture').off('wheel', handler);
         });
+
     });
 });
 
