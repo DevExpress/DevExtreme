@@ -28,7 +28,6 @@ $(() => {
     showClearButton: true,
     dataSource: makeAsyncDataSource('treeProducts.json'),
     contentTemplate(e) {
-      const value = e.component.option('value');
       const $treeView = $('<div>').dxTreeView({
         dataSource: e.component.getDataSource(),
         dataStructure: 'plain',
@@ -38,6 +37,7 @@ $(() => {
         displayExpr: 'name',
         selectByClick: true,
         onContentReady(args) {
+          const value = e.component.option('value');
           syncTreeViewSelection(args.component, value);
         },
         selectNodesRecursive: false,
