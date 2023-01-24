@@ -100,7 +100,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const supportedKeyNames = this.getSupportedKeyNames();
     const hasComponentDefaultKeyHandlers = supportedKeyNames.length > 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const hasComponentKeyDownMethod = typeof (this._viewComponent.prototype as any).keyDown === 'function';
+    const hasComponentKeyDownMethod = typeof (this._viewComponent?.prototype as any)?.keyDown === 'function';
 
     if (hasComponentDefaultKeyHandlers && !hasComponentKeyDownMethod) {
       throw Error('Component\'s declaration must have \'keyDown\' method.');
