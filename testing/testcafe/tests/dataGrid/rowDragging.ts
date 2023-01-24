@@ -52,7 +52,8 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
 };
 
 fixture.disablePageReloads`Row dragging`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .beforeEach(async (t) => { await t.maximizeWindow(); });
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
@@ -63,9 +64,7 @@ test('The placeholder should appear when a cross-component dragging rows after s
   await dataGrid.moveRow(6, 550, 0);
 
   await t.expect(isPlaceholderVisible()).ok();
-}).before(async (t) => {
-  await t.maximizeWindow();
-
+}).before(async () => {
   await ClientFunction(() => {
     $('body').css('display', 'flex');
     $('#container, #otherContainer').css({
@@ -165,9 +164,7 @@ test('The cross-component drag and drop rows should work when there are fixed co
     .ok()
     .expect(getPlaceholderOffset())
     .eql(dataRowOffset);
-}).before(async (t) => {
-  await t.maximizeWindow();
-
+}).before(async () => {
   await ClientFunction(() => {
     $('body').css('display', 'flex');
     $('#container, #otherContainer').css({
@@ -263,9 +260,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
     .eql('none')
     .expect(otherFixedPointerEvents)
     .eql('none');
-}).before(async (t) => {
-  await t.maximizeWindow();
-
+}).before(async () => {
   await ClientFunction(() => {
     $('body').css('display', 'flex');
     $('#container, #otherContainer').css({
@@ -520,24 +515,20 @@ test('The draggable element should be displayed correctly after horizontal scrol
       left: 2500,
       top: 0,
     });
-}).before(async (t) => {
-  await t.maximizeWindow();
-
-  return createWidget('dxDataGrid', {
-    width: 600,
-    height: 500,
-    dataSource: generateData(10, 50),
-    columnWidth: 100,
-    scrolling: {
-      columnRenderingMode: 'virtual',
-      useNative: false,
-    },
-    rowDragging: {
-      allowReordering: true,
-      showDragIcons: false,
-    },
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  width: 600,
+  height: 500,
+  dataSource: generateData(10, 50),
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+    useNative: false,
+  },
+  rowDragging: {
+    allowReordering: true,
+    showDragIcons: false,
+  },
+}));
 
 // T1085143
 test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
@@ -553,33 +544,29 @@ test('The placeholder should have correct position after dragging the row to the
   await t
     .expect(getPlaceholderOffset())
     .eql(freeSpaceRowOffset);
-}).before(async (t) => {
-  await t.maximizeWindow();
-
-  return createWidget('dxDataGrid', {
-    width: 400,
-    height: 600,
-    dataSource: [
-      {
-        id: 1, name: 'Name 1', age: 19,
-      },
-      {
-        id: 2, name: 'Name 2', age: 11,
-      },
-    ],
-    columns: ['name', 'age'],
-    dataRowTemplate(_, { data }) {
-      return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 400,
+  height: 600,
+  dataSource: [
+    {
+      id: 1, name: 'Name 1', age: 19,
     },
-    rowDragging: {
-      allowReordering: true,
-      dragTemplate() {
-        return $('<div>test</div>');
-      },
-      showDragIcons: false,
+    {
+      id: 2, name: 'Name 2', age: 11,
     },
-  });
-});
+  ],
+  columns: ['name', 'age'],
+  dataRowTemplate(_, { data }) {
+    return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+  },
+  rowDragging: {
+    allowReordering: true,
+    dragTemplate() {
+      return $('<div>test</div>');
+    },
+    showDragIcons: false,
+  },
+}));
 
 // T1126013
 // TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
@@ -606,8 +593,62 @@ test.skip('toIndex should not be corrected when source item gets removed from DO
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
   await t.expect(draggedRowIndex)
     .eql(toIndex - 1);
-}).before(async (t) => {
-  await t.maximizeWindow();
+}).before(async () => {
+  const items = generateData(50, 1);
+  return createWidget('dxDataGrid', {
+    height: 250,
+    keyExpr: 'field1',
+    scrolling: {
+      mode: 'virtual',
+    },
+    paging: {
+      pageSize: 4,
+    },
+    dataSource: items,
+    rowDragging: {
+      scrollSpeed: 300,
+      allowReordering: true,
+      onReorder: ClientFunction((e) => {
+        const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line max-len
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
+
+        e.component.refresh();
+      }, { dependencies: { items } }),
+    },
+    showBorders: true,
+  });
+});
+
+// T1139685
+test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+  const fromIndex = 2;
+  const toIndex = 4;
+
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.moveRow(fromIndex, 0, 50, true);
+  await t.wait(100);
+  await dataGrid.moveRow(fromIndex, 0, 90);
+  await t.wait(300);
+  await dataGrid.moveRow(toIndex, 0, 10);
+  await t.wait(200);
+
+  await ClientFunction((grid) => {
+    const instance = grid.getInstance();
+    $(instance.element()).trigger($.Event('dxpointerup'));
+  })(dataGrid);
+  await t.wait(200);
+
+  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
+    .getVisibleRows()
+    .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
+
+  await t.expect(draggedRowIndex)
+    .eql(toIndex);
+}).before(async () => {
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
     height: 250,
