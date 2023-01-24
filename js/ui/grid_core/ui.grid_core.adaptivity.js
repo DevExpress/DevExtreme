@@ -152,7 +152,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 const isItemEdited = that._isItemEdited(item);
                 templateOptions.value = cellOptions.row.values[columnIndex];
                 if(isItemEdited || column.showEditorAlways) {
-                    editingController.renderFormEditTemplate(templateOptions, item, options, $container, !isItemEdited);
+                    editingController.renderFormEditorTemplate(templateOptions, item, options, $container, !isItemEdited);
                 } else {
                     templateOptions.column = column;
                     templateOptions.columnIndex = columnIndex;
