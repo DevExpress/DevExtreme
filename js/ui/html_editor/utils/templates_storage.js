@@ -1,4 +1,4 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isEmptyObject } from '../../../core/utils/type';
 
 export default class TemplatesStorage {
     constructor() {
@@ -11,28 +11,25 @@ export default class TemplatesStorage {
     }
 
     get({ widgetKey, marker }) {
-        // reason for add double key is T1110266
-        if(isDefined(widgetKey)) {
-            const widgetTemplates = this._storage[widgetKey];
+        const isQuillFormatCall = !isDefined(widgetKey);
 
-            return widgetTemplates ? widgetTemplates[marker] : undefined;
-        } else {
-            // When Quill parse markup, we do not have info about widget (widgetKey)
-            // In this case, we take latest template from storage because this (latest) template related to current widget(this widget initialized parsing of markup)
-            const lastWidgetTemplates = Object.values(this._storage).at(-1);
-
-            return lastWidgetTemplates ? lastWidgetTemplates[marker] : undefined;
-        }
+        // T1110266
+        // NOTE: If anonymous templates is used, mention is parsed from the markup.
+        // Quill format does not have information about related HtmlEditor instance.
+        // In this case, the latest template in the storage is what we need
+        // because appropriate instance has already been created and has added its templates to the storage.
+        return isQuillFormatCall
+            ? Object.values(this._storage).at(-1)?.[marker]
+            : this._storage[widgetKey]?.[marker];
     }
 
     delete({ widgetKey, marker }) {
-        const widgetTemplates = this._storage[widgetKey];
-        if(!widgetTemplates) {
+        if(!this._storage[widgetKey]) {
             return;
         }
 
-        delete widgetTemplates[marker];
-        if(Object.keys(widgetTemplates).length === 0) {
+        delete this._storage[widgetKey][marker];
+        if(isEmptyObject(this._storage[widgetKey])) {
             delete this._storage[widgetKey];
         }
     }
