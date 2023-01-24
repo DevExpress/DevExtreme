@@ -372,22 +372,32 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
 }
 
 const checkOverlay = (overlayPoint, currentPoint, radiusPoint) => {
-    const minBoundaryOverlayX = overlayPoint.x - radiusPoint <= currentPoint.x;
-    const maxBoundaryOverlayX = overlayPoint.x + radiusPoint >= currentPoint.x;
-    const minBoundaryOverlayY = overlayPoint.y - radiusPoint <= currentPoint.y;
-    const maxBoundaryOverlayY = overlayPoint.y + radiusPoint >= currentPoint.y;
+    const leftBoundaryOverlay = overlayPoint.x - radiusPoint <= currentPoint.x;
+    const rightBoundaryOverlay = overlayPoint.x + radiusPoint >= currentPoint.x;
+    const topBoundaryOverlay = overlayPoint.y - radiusPoint <= currentPoint.y;
+    const bottomBoundaryOverlay = overlayPoint.y + radiusPoint >= currentPoint.y;
 
-    const IsOverlayX = minBoundaryOverlayX && maxBoundaryOverlayX;
-    const isOverlayY = minBoundaryOverlayY && maxBoundaryOverlayY;
+    const IsOverlayX = leftBoundaryOverlay && rightBoundaryOverlay;
+    const isOverlayY = topBoundaryOverlay && bottomBoundaryOverlay;
 
     return IsOverlayX && isOverlayY;
 };
 
-const cycleComparison = (startCounter, points, currentPoint) => {
+const cycleComparison = (startCounter, points, currentPoint, skippingSamePoints = true) => {
     const radiusPoint = currentPoint._options.size / 2;
 
-    for(let j = startCounter; j < points.length; j++) {
-        if(checkOverlay(points[j], currentPoint, radiusPoint)) {
+    for(let i = startCounter; i < points.length; i++) {
+
+        if(!skippingSamePoints) {
+            const isSameCoordinateX = points[i].x === currentPoint.x;
+            const isSameCoordinateY = points[i].y === currentPoint.y;
+
+            if(isSameCoordinateX && isSameCoordinateY) {
+                continue;
+            }
+        }
+
+        if(checkOverlay(points[i], currentPoint, radiusPoint)) {
             return true;
         }
     }
@@ -880,24 +890,39 @@ const dxChart = AdvancedChart.inherit({
 
     _applyAutoHidePointMarkers(filteredSeries) {
         let overlapPoints = [];
-        filteredSeries.reduceRight((_, s) => {
-            s.autoHidePointMarkers = false;
+        filteredSeries.reduceRight((_, currentSeries) => {
+            currentSeries.autoHidePointMarkers = false;
 
-            if(s.autoHidePointMarkersEnabled()) {
-                let checkOverlap = 0;
+            if(currentSeries.autoHidePointMarkersEnabled()) {
+                let counterOverlapSingle = 0;
+                const seriesPoints = currentSeries._points;
 
-                s._points.forEach(point => {
-                    if(cycleComparison(0, overlapPoints, point)) {
-                        checkOverlap++;
+
+                seriesPoints.forEach((currentPoint, index) => {
+                    if(cycleComparison(index + 1, seriesPoints, currentPoint, true)) {
+                        counterOverlapSingle++;
+                    }
+                    if(counterOverlapSingle > (seriesPoints.length / 2)) {
+                        currentSeries.autoHidePointMarkers = true;
                     }
                 });
 
-                if(checkOverlap < s._points.length) {
-                    overlapPoints = overlapPoints.concat(s._points);
-                }
+                if(!currentSeries.autoHidePointMarkers) {
+                    let checkOverlap = 0;
 
-                if(checkOverlap >= s._points.length) {
-                    s.autoHidePointMarkers = true;
+                    currentSeries._points.forEach(currentPoint => {
+                        if(cycleComparison(0, overlapPoints, currentPoint)) {
+                            checkOverlap++;
+                        }
+                    });
+
+                    if(checkOverlap < seriesPoints.length) {
+                        overlapPoints = overlapPoints.concat(seriesPoints);
+                    }
+
+                    if(checkOverlap >= seriesPoints.length) {
+                        currentSeries.autoHidePointMarkers = true;
+                    }
                 }
             }
         }, null);

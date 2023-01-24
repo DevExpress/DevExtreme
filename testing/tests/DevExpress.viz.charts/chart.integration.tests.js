@@ -2287,51 +2287,51 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
 QUnit.test('check for automatic hiding of points', function(assert) {
     const dataSource = [ {
         country: 'USA',
-        hydro: 10,
-        oil: 11,
-        gas: 10.5,
-        coal: 40,
-        nuclear: 50
+        val1: 10,
+        val2: 11,
+        val3: 10.5,
+        val4: 40,
+        val5: 50
     },
     {
         country: 'China',
-        hydro: 10,
-        oil: 20,
-        gas: 10,
-        coal: 20.2,
-        nuclear: 50
+        val1: 10,
+        val2: 20,
+        val3: 10,
+        val4: 20.2,
+        val5: 50
     },
     {
         country: 'Russia',
-        hydro: 10,
-        oil: 20,
-        gas: 20.3,
-        coal: 10.5,
-        nuclear: 50
+        val1: 10,
+        val2: 20,
+        val3: 20.3,
+        val4: 10.5,
+        val5: 50
     },
     {
         country: 'Japan',
-        hydro: 10,
-        oil: 20,
-        gas: 30,
-        coal: 19.8,
-        nuclear: 10
+        val1: 10,
+        val2: 20,
+        val3: 30,
+        val4: 19.8,
+        val5: 10
     },
     {
         country: 'India',
-        hydro: 10,
-        oil: 20,
-        gas: 19.3,
-        coal: 40,
-        nuclear: 11
+        val1: 10,
+        val2: 20,
+        val3: 19.3,
+        val4: 40,
+        val5: 11
     },
     {
         country: 'Germany',
-        hydro: 10,
-        oil: 20,
-        gas: 21,
-        coal: 10.2,
-        nuclear: 50
+        val1: 10,
+        val2: 20,
+        val3: 21,
+        val4: 10.2,
+        val5: 50
     }, ];
 
     const chart = moduleSetup.createChart.call(this, {
@@ -2340,18 +2340,44 @@ QUnit.test('check for automatic hiding of points', function(assert) {
             argumentField: 'country',
         },
         series: [
-            { valueField: 'hydro', name: 'Hydro-electric', point: { size: 14 } },
-            { valueField: 'oil', name: 'Oil', point: { size: 14 } },
-            { valueField: 'gas', name: 'Natural gas', point: { size: 14 } },
-            { valueField: 'coal', name: 'Coal', point: { size: 14 } },
-            { valueField: 'nuclear', name: 'Nuclear', point: { size: 14 } }
+            { valueField: 'val1', name: 'val1', point: { size: 14 } },
+            { valueField: 'val2', name: 'val2', point: { size: 14 } },
+            { valueField: 'val3', name: 'val3', point: { size: 14 } },
+            { valueField: 'val4', name: 'val4', point: { size: 14 } },
+            { valueField: 'val5', name: 'val5', point: { size: 14 } }
         ],
     });
 
-    assert.ok(chart.getAllSeries()[2].getVisiblePoints()[0].graphic);
-    assert.ok(chart.getAllSeries()[3].getVisiblePoints()[0].graphic);
-    assert.ok(chart.getAllSeries()[4].getVisiblePoints()[0].graphic);
+    const series = chart.getAllSeries();
+
+    assert.notOk(series[0].getVisiblePoints()[0].graphic);
+    assert.notOk(series[1].getVisiblePoints()[0].graphic);
+    assert.ok(series[2].getVisiblePoints()[0].graphic);
+    assert.ok(series[3].getVisiblePoints()[0].graphic);
+    assert.ok(series[4].getVisiblePoints()[0].graphic);
 });
+
+QUnit.test('The points on the graph should be hidden when they have multiple intersections in a single series', function(assert) {
+    const dataSource = [];
+
+    for(let i = 0; i < 600; i += 1) {
+        const argument = i / 100;
+        dataSource.push({ arg: argument, val: Math.exp(-argument) * Math.cos(2 * Math.PI * argument) });
+    }
+
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource,
+        series: [{
+            point: { size: 14 }
+        }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.notOk(series[0].getVisiblePoints()[0].graphic);
+
+});
+
 
 QUnit.test('don\'t hide scatter points (T929480)', function(assert) {
     const chart = this.createChart({
