@@ -7,6 +7,7 @@ const componentsDir = outputDir;
 const oldComponentsDir = `${outputDir}/ui`;
 const indexFileName = `${outputDir}/index.ts`;
 const metadataFile = './artifacts/internal-tools/integration-data.json'
+const targetsDir = '../../jquery/lib/esm';
 
 console.log('Generating wrappers...');
 
@@ -24,14 +25,14 @@ mkdirSync(oldComponentsDir);
 
 devextremeGenerator(
     JSON.parse(readFileSync(metadataFile).toString()),
-    "devextreme-vue/core/index",
-    "devextreme-vue/core/index",
+    'devextreme-vue/core/index',
+    'devextreme-vue/core/index',
     {
         componentsDir,
         oldComponentsDir,
         indexFileName
     },
-    "../../jquery/src",
+    targetsDir,
     vueVersion
 );
 
