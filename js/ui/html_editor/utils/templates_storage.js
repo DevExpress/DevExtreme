@@ -14,10 +14,11 @@ export default class TemplatesStorage {
         const isQuillFormatCall = !isDefined(widgetKey);
 
         // T1110266
-        // NOTE: If anonymous templates is used, mention is parsed from the markup.
-        // Quill format does not have information about related HtmlEditor instance.
-        // In this case, the latest template in the storage is what we need
-        // because appropriate instance has already been created and has added its templates to the storage.
+        // NOTE: If anonymous templates are used, mentions are parsed from the markup.
+        // The Quill format does not have information about a related HtmlEditor instance.
+        // In this case, we need to use the latest template in the storage
+        // because the appropriate instance was already created and added to the storage.
+
         return isQuillFormatCall
             ? Object.values(this._storage).at(-1)?.[marker]
             : this._storage[widgetKey]?.[marker];
