@@ -594,11 +594,11 @@ export default function() {
 
             this.createWidget();
 
-            const $secondContainer = $('<div>').appendTo('#qunit-fixture');
+            const $secondEditor = $('<div>').appendTo('#qunit-fixture');
 
-            $secondContainer.dxHtmlEditor(this.options);
+            $secondEditor.dxHtmlEditor(this.options);
 
-            $secondContainer.remove();
+            $secondEditor.remove();
 
             this.instance.focus();
             this.$element.find('p').first().text('@');

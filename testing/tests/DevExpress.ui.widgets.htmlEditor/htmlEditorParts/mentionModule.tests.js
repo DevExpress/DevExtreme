@@ -172,7 +172,7 @@ QUnit.module('Mention format', () => {
             keyInTemplateStorage: 'my_key_in_storage'
         };
 
-        MentionFormat.addTemplate({ marker: '@', widgetKey: 'my_key_in_storage' }, {
+        MentionFormat.addTemplate({ marker: '@', editorKey: 'my_key_in_storage' }, {
             render: ({ container, model: mentionData }) => {
                 container.innerText = 'test';
                 assert.deepEqual(mentionData, data);
@@ -183,7 +183,7 @@ QUnit.module('Mention format', () => {
 
         assert.strictEqual(element.innerText, 'test');
 
-        MentionFormat.removeTemplate({ marker: '@', widgetKey: 'my_key_in_storage' });
+        MentionFormat.removeTemplate({ marker: '@', editorKey: 'my_key_in_storage' });
         element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, '@John Smith');

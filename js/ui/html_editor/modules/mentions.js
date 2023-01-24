@@ -73,7 +73,7 @@ if(Quill) {
                 const template = item.template;
                 if(template) {
                     const preparedTemplate = this.editorInstance._getTemplate(template);
-                    preparedTemplate && Mention.addTemplate({ marker, widgetKey: this.editorInstance.getMentionKeyInTemplateStorage() }, preparedTemplate);
+                    preparedTemplate && Mention.addTemplate({ marker, editorKey: this.editorInstance.getMentionKeyInTemplateStorage() }, preparedTemplate);
                 }
 
                 this._mentions[marker] = extend({}, this._getDefaultOptions(), item);
@@ -406,7 +406,7 @@ if(Quill) {
                 if(this._mentions[marker].template) {
                     Mention.removeTemplate({
                         marker,
-                        widgetKey: this.editorInstance.getMentionKeyInTemplateStorage()
+                        editorKey: this.editorInstance.getMentionKeyInTemplateStorage()
                     });
                 }
             });
