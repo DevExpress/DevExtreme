@@ -8,7 +8,7 @@ import { DynamicThemeExample } from './examples/themes/dynamic-theme-example';
 import { ThemeExample } from './examples/themes/theme-example';
 import { Home } from './home';
 
-import '@devextreme/styles/lib/themes/light.css';
+import '@devextreme/styles/lib/themes/material-blue-light.css';
 import './app.css';
 
 export function App() {

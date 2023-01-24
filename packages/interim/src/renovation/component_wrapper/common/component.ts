@@ -97,6 +97,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   validateKeyDownHandler(): void {
+    // TODO Vitik functional inferno component doesn't have prototype as previous inferno class component 
+    /* 
     const supportedKeyNames = this.getSupportedKeyNames();
     const hasComponentDefaultKeyHandlers = supportedKeyNames.length > 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,6 +107,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (hasComponentDefaultKeyHandlers && !hasComponentKeyDownMethod) {
       throw Error('Component\'s declaration must have \'keyDown\' method.');
     }
+    */
   }
 
   public get viewRef(): unknown {
