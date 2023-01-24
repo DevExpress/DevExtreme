@@ -23,7 +23,6 @@ import browser from '../../core/utils/browser';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
-const ROWS_VIEW_CLASS = 'rowsview';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const WIDGET_INVALID_MESSAGE_CLASS = 'invalid-message';
 const INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always';
@@ -1021,14 +1020,22 @@ export const validatingModule = {
 
                 return {
                     _showRevertButton: function($container) {
+                        let $tooltipElement = this._revertTooltip?.$element();
+
                         if(!$container || !$container.length) {
+                            $tooltipElement?.remove();
+                            this._revertTooltip = undefined;
                             return;
                         }
 
-                        let $tooltipElement = this._rowsView.element().find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        // do not render tooltip if it is already rendered
+                        if($container.find($tooltipElement).length) {
+                            return;
+                        }
+
                         const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
-                        $tooltipElement && $tooltipElement.remove();
+                        $tooltipElement?.remove();
                         $tooltipElement = $('<div>')
                             .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container);
@@ -1066,7 +1073,8 @@ export const validatingModule = {
                             },
                             onPositioned: this._positionedHandler.bind(this)
                         };
-                        return new Overlay($tooltipElement, tooltipOptions);
+
+                        this._revertTooltip = new Overlay($tooltipElement, tooltipOptions);
                     },
 
                     _hideFixedGroupCell: function($cell, overlayOptions) {
@@ -1109,7 +1117,7 @@ export const validatingModule = {
                         }
                     },
 
-                    _showValidationMessage: function($cell, messages, alignment, revertTooltip) {
+                    _showValidationMessage: function($cell, messages, alignment) {
                         const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
                         const isOverlayVisible = editorPopup && editorPopup.option('visible');
                         const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
@@ -1158,13 +1166,18 @@ export const validatingModule = {
                             },
                             onPositioned: e => {
                                 this._positionedHandler(e, isOverlayVisible);
-                                this._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
+                                this._shiftValidationMessageIfNeed(e.component.$content(), $cell);
                             }
                         };
 
                         this._hideFixedGroupCell($cell, overlayOptions);
 
                         new Overlay($overlayElement, overlayOptions);
+                    },
+
+                    _hideValidationMessage() {
+                        const validationMessages = this._rowsView.element()?.find(this._getValidationMessagesSelector());
+                        validationMessages?.remove();
                     },
 
                     _normalizeValidationMessagePositionAndMaxWidth: function(options, isRevertButton, isOverlayVisible) {
@@ -1203,7 +1216,9 @@ export const validatingModule = {
                         return position && { position: position, maxWidth: needMaxWidth ? visibleTableWidth - 2 : undefined };
                     },
 
-                    _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
+                    _shiftValidationMessageIfNeed: function($content, $cell) {
+                        const $revertContent = this._revertTooltip && this._revertTooltip.$content();
+
                         if(!$revertContent) return;
 
                         const contentOffset = $content.offset();
@@ -1215,10 +1230,14 @@ export const validatingModule = {
                         }
                     },
 
-                    _getTooltipsSelector: function() {
-                        const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+                    _getRevertTooltipsSelector: function() {
                         const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
-                        return '.dx-editor-cell .' + revertTooltipClass + ', .dx-editor-cell .' + invalidMessageClass + ', .dx-cell-modified .' + invalidMessageClass;
+                        return '.dx-editor-cell .' + revertTooltipClass;
+                    },
+
+                    _getValidationMessagesSelector: function() {
+                        const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+                        return '.dx-editor-cell .' + invalidMessageClass + ', .dx-cell-modified .' + invalidMessageClass;
                     },
 
                     init: function() {
@@ -1242,11 +1261,12 @@ export const validatingModule = {
                         const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
                         const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
                         const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
-                        let revertTooltip;
 
-                        if((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
-                            if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
-                                revertTooltip = this._showRevertButton($focus);
+                        if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
+                            if((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
+                                this._showRevertButton($focus);
+                            } else {
+                                this._revertTooltip && this._revertTooltip.$element().remove();
                             }
                         }
 
@@ -1261,7 +1281,7 @@ export const validatingModule = {
                             });
 
                             if(errorMessages.length) {
-                                this._showValidationMessage($focus, errorMessages, column.alignment || 'left', revertTooltip);
+                                this._showValidationMessage($focus, errorMessages, column.alignment || 'left');
                             }
                         }
 
@@ -1271,8 +1291,7 @@ export const validatingModule = {
                     focus: function($element, isHideBorder) {
                         if(!arguments.length) return this.callBase();
 
-                        const $tooltips = $element && $element.closest('.' + this.addWidgetPrefix(ROWS_VIEW_CLASS)).find(this._getTooltipsSelector());
-                        $tooltips && $tooltips.remove();
+                        this._hideValidationMessage();
 
                         if($element?.hasClass('dx-row') || $element?.hasClass('dx-master-detail-cell')) {
                             return this.callBase($element, isHideBorder);

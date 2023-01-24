@@ -2504,7 +2504,7 @@ export const editingModule = {
                     }
 
                     if(eventName === 'down') {
-                        if((devices.real().ios || devices.real().android)) {
+                        if(devices.real().ios || devices.real().android) {
                             resetActiveElement();
                         }
 
