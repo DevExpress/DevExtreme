@@ -1,4 +1,4 @@
-import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
+import { getOuterWidth, getInnerWidth, getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 // @ts-expect-error
@@ -98,7 +98,7 @@ const resizingControllerMembers = {
             if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                 !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
                 deferUpdate(() => deferRender(() => deferUpdate(() => {
-                    that._setScrollerSpacing(that._hasHeight);
+                    that._setScrollerSpacing();
                     that._rowsView.resize();
                 })));
             } else {
@@ -580,9 +580,9 @@ const resizingControllerMembers = {
         }
         return true;
     },
-    _setScrollerSpacingCore: function(hasHeight) {
+    _setScrollerSpacingCore: function() {
         const that = this;
-        const vScrollbarWidth = hasHeight ? that._rowsView.getScrollbarWidth() : 0;
+        const vScrollbarWidth = that._rowsView.getScrollbarWidth();
         const hScrollbarWidth = that._rowsView.getScrollbarWidth(true);
 
         deferRender(function() {
@@ -591,16 +591,16 @@ const resizingControllerMembers = {
             that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
         });
     },
-    _setScrollerSpacing: function(hasHeight) {
+    _setScrollerSpacing: function() {
         if(this.option('scrolling.useNative') === true) {
             // T722415, T758955
             deferRender(() => {
                 deferUpdate(() => {
-                    this._setScrollerSpacingCore(hasHeight);
+                    this._setScrollerSpacingCore();
                 });
             });
         } else {
-            this._setScrollerSpacingCore(hasHeight);
+            this._setScrollerSpacingCore();
         }
     },
     _updateDimensionsCore: function() {
@@ -620,23 +620,12 @@ const resizingControllerMembers = {
         // @ts-expect-error
         const editorFactory = that.getController('editorFactory');
         const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
-        let $testDiv;
-
         that.updateSize($rootElement);
-        const hasHeight = that._hasHeight || maxHeightHappened;
 
-        // @ts-expect-error
-        if(height && (that._hasHeight ^ (height !== 'auto'))) {
-            $testDiv = $('<div>');
-            setHeight($testDiv, height);
-            $testDiv.appendTo($rootElement);
-            that._hasHeight = !!getHeight($testDiv);
-            // @ts-expect-error
-            $testDiv.remove();
-        }
+        that._hasHeight = that._hasHeight || !!maxHeight || (!!height && height !== 'auto');
 
         deferRender(function() {
-            rowsView.height(null, hasHeight);
+            rowsView.height(null, that._hasHeight);
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
@@ -648,7 +637,7 @@ const resizingControllerMembers = {
             }
             deferUpdate(function() {
                 that._updateLastSizes($rootElement);
-                that._setScrollerSpacing(hasHeight);
+                that._setScrollerSpacing();
 
                 each(VIEW_NAMES, function(index, viewName) {
                     // @ts-expect-error
