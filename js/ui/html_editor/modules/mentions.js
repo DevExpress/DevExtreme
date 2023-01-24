@@ -404,7 +404,10 @@ if(Quill) {
         clean() {
             Object.keys(this._mentions).forEach((marker) => {
                 if(this._mentions[marker].template) {
-                    Mention.removeTemplate({ marker, widgetKey: this.editorInstance.getMentionKeyInTemplateStorage() });
+                    Mention.removeTemplate({
+                        marker,
+                        widgetKey: this.editorInstance.getMentionKeyInTemplateStorage()
+                    });
                 }
             });
         }
