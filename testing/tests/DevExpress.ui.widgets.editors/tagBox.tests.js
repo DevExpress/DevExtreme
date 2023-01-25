@@ -2342,6 +2342,10 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('escape key should close popup', function(assert) {
+        this.reinit({
+            opened: true,
+        });
+
         this.keyboard.keyDown('esc');
 
         assert.notOk(this.instance.option('opened'), 'popup closed');
