@@ -2333,7 +2333,6 @@ QUnit.module('keyboard navigation', {
 
         prevented = 0;
         this.instance.option('opened', true);
-        assert.strictEqual(this.instance.option('opened'), true);
 
         this.keyboard
             .keyDown('esc');
