@@ -15,7 +15,7 @@ export function DynamicThemeExample(): JSX.Element {
   return (
     <div id="dynamic-theme" className="example">
       <div className="example__title" style={{ color: 'var(--primary-900)' }}>
-        {`Select theme (this text use primary color from current theme):`}
+        Select theme (this text use primary color from current theme):
       </div>
       <div className="example__control">
         <RadioGroup defaultValue={OPTIONS[0]} valueChange={handleChange}>
