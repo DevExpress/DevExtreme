@@ -486,13 +486,13 @@ const ResizingController = modules.ViewController.inherit({
         const $rootElement = $(rootElement);
         const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-        if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
+        if(that._rootElementHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
             $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
             if($groupElement.length) {
                 $groupElement.detach();
             }
 
-            that._hasHeight = !!getContainerHeight($rootElement);
+            that._rootElementHeight = getContainerHeight($rootElement);
 
             width = getWidth($rootElement);
             $rootElement.addClass(importantMarginClass);
@@ -599,13 +599,14 @@ const ResizingController = modules.ViewController.inherit({
         const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
-        const height = that.option('height') || $rootElement.get(0).style.height;
+        const height = that.option('height') || $rootElement.get(0).style.height; // we need to use $.css?
         const isHeightSpecified = !!height && height !== 'auto';
         const editorFactory = that.getController('editorFactory');
         const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
 
         that.updateSize($rootElement);
 
+        that._hasHeight = !!that._rootElementHeight || !!maxHeight;
         // height value validation
         if(!that._hasHeight && isHeightSpecified) {
             const $testDiv = $('<div>');
@@ -615,10 +616,8 @@ const ResizingController = modules.ViewController.inherit({
             $testDiv.remove();
         }
 
-        const hasHeight = that._hasHeight || !!maxHeight;
-
         deferRender(function() {
-            rowsView.height(null, hasHeight);
+            rowsView.height(null, that._hasHeight);
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
