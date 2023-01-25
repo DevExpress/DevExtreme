@@ -2164,6 +2164,7 @@ export const columnsControllerModule = {
                     } else if(isFunction(filter[0])) {
                         filter[0].columnIndex = columnIndex;
                         filter[0].filterValue = filterValue;
+                        filter[0].selectedFilterOperation = filter.selectedFilterOperation;
                     }
 
                     for(let i = 0; i < filter.length; i++) {
@@ -2436,7 +2437,7 @@ export const columnsControllerModule = {
 
                     calculatedColumnOptions.defaultFilterOperation = '=';
 
-                    calculatedColumnOptions.createFilterExpression = function(filterValue) {
+                    calculatedColumnOptions.createFilterExpression = function(filterValue, selectedFilterOperation) {
                         /**
                          * @type {any}
                          */
@@ -2451,6 +2452,7 @@ export const columnsControllerModule = {
                         if(result) {
                             result.columnIndex = this.index;
                             result.filterValue = filterValue;
+                            result.selectedFilterOperation = selectedFilterOperation;
                         }
                         return result;
                     };

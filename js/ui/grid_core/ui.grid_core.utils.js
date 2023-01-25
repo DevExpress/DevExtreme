@@ -146,7 +146,9 @@ const equalFilterParameters = function(filter1, filter2) {
         }
         return true;
     } else if(isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
-        return filter1.columnIndex === filter2.columnIndex && toComparable(filter1.filterValue) === toComparable(filter2.filterValue);
+        return filter1.columnIndex === filter2.columnIndex &&
+            toComparable(filter1.filterValue) === toComparable(filter2.filterValue) &&
+            toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
     } else {
         return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
     }
