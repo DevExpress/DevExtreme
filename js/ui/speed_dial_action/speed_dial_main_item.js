@@ -39,6 +39,8 @@ const modifyActionOptions = (action) => {
         direction
     } = action.option();
 
+    const { class: _customElementClass } = action._options.silent('elementAttr');
+
     return extend({}, {
         icon,
         onClick,
@@ -57,7 +59,8 @@ const modifyActionOptions = (action) => {
         position,
         hint,
         parentPosition,
-        direction
+        direction,
+        _customElementClass,
     }, {
         onInitialized: null,
         onDisposing: null
