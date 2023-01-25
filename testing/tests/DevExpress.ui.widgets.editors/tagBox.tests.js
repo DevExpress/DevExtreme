@@ -2341,6 +2341,12 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual(this.instance.option('opened'), false);
     });
 
+    QUnit.test('escape key should close popup', function(assert) {
+        this.keyboard.keyDown('esc');
+
+        assert.notOk(this.instance.option('opened'), 'popup closed');
+    });
+
     QUnit.test('Enter and escape key press prevent default when popup is opened and field edit enabled is not set', function(assert) {
         this.reinit({
             items: [0, 1, 2],
