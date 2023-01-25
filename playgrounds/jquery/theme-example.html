@@ -3,13 +3,13 @@
 
 <head>
     <title>jQuery app</title>
-    <link rel="stylesheet" href="../../packages/styles/lib/themes/dark-scoped.css" />
-    <link rel="stylesheet" href="../../packages/styles/lib/themes/light.css" />
+    <link rel="stylesheet" href="../../packages/styles/lib/themes/material-purple-light-scoped.css" />
+    <link rel="stylesheet" href="../../packages/styles/lib/themes/material-blue-light.css" />
 </head>
 
 <body>
     <script src="../../packages/jquery/lib/bundle.debug.js" charset="utf-8"></script>
-    <span>Component styled by global theme (the last css link to the styles/lib/themes/*.css)</span>
+    <span>Component styled by global theme (the last stylesheet link to the styles/lib/themes/*.css)</span>
     <div id="cmp">
         <script>
             (function() {
@@ -17,8 +17,8 @@
             })()
         </script>
     </div>
-    <div class="dx-theme-dark">
-        <span>Scoped dark theme</span>
+    <div class="dx-material-purple-light">
+        <span>Scoped purple theme</span>
         <div id="scoped-style-cmp">
             <script>
                 (function() {
