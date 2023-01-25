@@ -1994,7 +1994,7 @@ Renderer.prototype = {
     },
 
     customPattern: function(id, options) {
-        const isPointFilling = options.width === '100%' && options.height === '100%';
+        const isPointFilling = typeof options.width === 'string' && typeof options.height === 'string';
         const opt = isPointFilling ? { id: id, width: options.width, height: options.height, patternContentUnits: 'userSpaceOnUse' } :
             { id: id, width: options.width, height: options.height, patternUnits: 'userSpaceOnUse' };
         const pattern = this._createElement('pattern', opt).append(this._defs);
