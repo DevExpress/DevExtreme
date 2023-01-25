@@ -8,28 +8,14 @@ export interface ValidationResult {
 export interface ValidationEngine {
   initializeEditorRules: (name: string, rules: Rule[]) => void;
   validateValue: (name: string, value: unknown) => string[];
-  validateEditorValue: (name: string, value: unknown) => void;
   validateValues: (values: Record<string, unknown>) => ValidationResult;
-  getValidationResult: () => ValidationResult;
-  validationResult: ValidationResult;
 }
 
 export function createValidationEngine(): ValidationEngine {
   let validationRules: Record<string, Rule[]> = {};
-  let validationEngineResult: ValidationResult = {
-    isValid: true,
-    results: {},
-  };
 
   const initializeEditorRules = (name: string, rules: Rule[]) => {
     validationRules = { ...validationRules, [name]: rules };
-  };
-
-  const updateValidationResult = ({ isValid, results }: ValidationResult) => {
-    validationEngineResult = {
-      isValid: validationEngineResult.isValid && isValid,
-      results: { ...validationEngineResult.results, ...results },
-    };
   };
 
   const validateValue = (name: string, value: unknown) => validationRules[name]
@@ -50,20 +36,9 @@ export function createValidationEngine(): ValidationEngine {
     return validationResult;
   };
 
-  const validateEditorValue = (name: string, value: unknown) => {
-    const result = validateValue(name, value);
-    updateValidationResult({
-      isValid: !result || !result.length,
-      results: { [name]: result },
-    });
-  };
-
   return {
     initializeEditorRules,
     validateValue,
     validateValues,
-    validateEditorValue,
-    getValidationResult: () => validationEngineResult,
-    validationResult: validationEngineResult,
   };
 }
