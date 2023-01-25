@@ -2284,7 +2284,7 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
     assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
 });
 
-QUnit.test('check for automatic hiding of points', function(assert) {
+QUnit.test('All points should be hidden when all points are overlapped', function(assert) {
     const dataSource = [ {
         country: 'USA',
         val1: 10,

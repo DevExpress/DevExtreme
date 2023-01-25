@@ -899,7 +899,7 @@ const dxChart = AdvancedChart.inherit({
 
 
                 seriesPoints.forEach((currentPoint, index) => {
-                    if(cycleComparison(index + 1, seriesPoints, currentPoint, true)) {
+                    if(cycleComparison(index + 1, seriesPoints, currentPoint, false)) {
                         counterOverlapSingle++;
                     }
                     if(counterOverlapSingle > (seriesPoints.length / 2)) {
