@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, rmdirSync } from 'fs';
 import devextremeGenerator from 'devextreme-vue-generator';
 
 const vueVersion = 3;
-const outputDir = './generated';
+const outputDir = './src';
 const componentsDir = outputDir;
 const oldComponentsDir = `${outputDir}/ui`;
 const indexFileName = `${outputDir}/index.ts`;
