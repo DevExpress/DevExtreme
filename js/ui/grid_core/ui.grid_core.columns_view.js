@@ -415,7 +415,7 @@ const columnsViewMembers = {
             const options = templateParameters.options;
             // @ts-expect-error
             const doc = domAdapter.getRootNode($(options.container).get(0));
-            const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
+            const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
 
             // @ts-expect-error
             if(!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
@@ -912,12 +912,12 @@ const columnsViewMembers = {
         return $scrollContainer;
     },
 
-    _needWaitAsyncTemplates: function() {
+    needWaitAsyncTemplates: function() {
         return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
     },
 
     waitAsyncTemplates: function(change, forceWaiting) {
-        const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
+        const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
         const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate)) && change?.templateDeferreds ? change?.templateDeferreds : [];
 
         return when.apply(this, templateDeferreds);
