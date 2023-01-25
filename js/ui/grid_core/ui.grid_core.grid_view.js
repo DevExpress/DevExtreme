@@ -621,10 +621,10 @@ const resizingControllerMembers = {
         const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
         that.updateSize($rootElement);
 
-        that._hasHeight = that._hasHeight || !!maxHeight || (!!height && height !== 'auto');
+        const hasHeight = that._hasHeight || !!maxHeight || (!!height && height !== 'auto');
 
         deferRender(function() {
-            rowsView.height(null, that._hasHeight);
+            rowsView.height(null, hasHeight);
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
