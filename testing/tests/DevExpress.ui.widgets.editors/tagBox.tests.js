@@ -2180,6 +2180,57 @@ QUnit.module('keyboard navigation', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('navigation keys should focus items', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        const $listItems = getListItems(this.instance);
+
+        this.keyboard.press('down');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+
+        this.keyboard.press('down');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+
+        this.keyboard.press('up');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+
+        this.keyboard.press('up');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+
+        this.keyboard.focus().press('pagedown');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+
+        this.keyboard.press('pageup');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+    });
+
+    ['enter', 'space'].forEach(key => {
+        QUnit.test(`item should be selected when pressing ${key}`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            assert.deepEqual(this.instance.option('value'), [1, 2], 'the value is correct');
+
+            this.keyboard.press('down');
+            this.keyboard.press('down');
+
+            this.keyboard.press(key);
+            this.clock.tick(TIME_TO_WAIT);
+            assert.deepEqual(this.instance.option('value'), [1, 2, 3], 'the value is correct');
+        });
+    });
+
     QUnit.test('backspace', function(assert) {
         assert.expect(2);
 
@@ -2297,10 +2348,13 @@ QUnit.module('keyboard navigation', {
 
         prevented = 0;
         this.instance.option('opened', true);
+        assert.strictEqual(this.instance.option('opened'), true);
 
         this.keyboard
             .keyDown('esc');
         assert.equal(prevented, 1, 'defaults prevented on escape keys');
+
+        assert.strictEqual(this.instance.option('opened'), false);
     });
 
     QUnit.test('Enter and escape key press prevent default when popup is opened and field edit enabled is not set', function(assert) {
