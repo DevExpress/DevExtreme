@@ -12,6 +12,7 @@ function Home() {
       <Link to="/theme">Theme</Link>
       <Link to="/dynamic-theme">Dynamic theme</Link>
       <Link to="/form">Form</Link>
+      <Link to="/validation">Validation</Link>
     </div>
   );
 }

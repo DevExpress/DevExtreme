@@ -1,12 +1,10 @@
-import {
-  FormEventHandler, useMemo, useRef,
-} from 'react';
+import { FormEventHandler, useMemo, useRef } from 'react';
+import { ValidationContext } from 'src/examples/validation/contexts/validation-context';
+import { ValidationEngineContext } from 'src/examples/validation/contexts/validation-engine-context';
+import { useValidation } from 'src/examples/validation/hooks/use-validation';
+import { createValidationEngine, ValidationEngine } from 'src/examples/validation/utils/validation-engine';
 import { FormContext } from './contexts/form-context';
-import { ValidationContext } from './contexts/validation-context';
-import { ValidationEngineContext } from './contexts/validation-engine-context';
-import { useValidation } from './hooks/use-validation';
 import { FormProps } from './types';
-import { createValidationEngine, ValidationEngine } from './utils/validation-engine';
 
 /*
 Vitik: The previous form implements parts:
@@ -19,9 +17,7 @@ The previous form doesn't allow the use of them separately the next form should 
 export function Form({ children, onSubmit }: FormProps) {
   const formValues = useRef<Record<string, unknown>>({});
   const validationEngine = useMemo<ValidationEngine>(createValidationEngine, []);
-  const {
-    validationResult, validateAll, validateEditor,
-  } = useValidation(validationEngine);
+  const { validationResult, validateAll, validateEditor } = useValidation(validationEngine);
 
   const formContextValue = useMemo(
     () => ({
@@ -33,9 +29,12 @@ export function Form({ children, onSubmit }: FormProps) {
     [validationResult],
   );
 
-  const validationContextValue = useMemo(() => ({
-    validationResult,
-  }), [validationResult]);
+  const validationContextValue = useMemo(
+    () => ({
+      validationResult,
+    }),
+    [validationResult],
+  );
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     const isValid = validateAll(formValues.current);

@@ -1,7 +1,6 @@
 import { RadioButton, RadioGroup } from '@devextreme/react';
+import { CustomRule, CustomRule1 } from '../validation/components/dummy-validation';
 import {
-  CustomRule,
-  CustomRule1,
   Form,
   FormItemHint,
   FormItemHoc,

@@ -6,10 +6,14 @@ import {
   useEffect,
   useMemo,
 } from 'react';
+import { filterNodesByTypes } from '../../form/components/utils';
+import {
+  CustomRule,
+  CustomRule1,
+  CustomRuleProps,
+} from '../components/dummy-validation';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
-import { CustomRule, CustomRule1, CustomRuleProps } from '../dummy-validation';
 import { Rule } from '../types';
-import { filterNodesByTypes } from '../utils';
 
 export function useEditorValidationRulesInitialization(
   editorName: string,
@@ -23,7 +27,7 @@ export function useEditorValidationRulesInitialization(
 
   const validationRules = useMemo<Rule[]>(
     () => ruleComponents.map(
-      (rule) => ((rule as ReactElement).props as CustomRuleProps),
+      (rule) => (rule as ReactElement).props as CustomRuleProps,
     ),
     [ruleComponents],
   );

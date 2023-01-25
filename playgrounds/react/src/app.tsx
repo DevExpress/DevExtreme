@@ -6,6 +6,7 @@ import { RadioGroupCompatibleExample } from './examples/radio-group-compatible/r
 import { RadioGroupExample } from './examples/radio-group/radio-group-example';
 import { DynamicThemeExample } from './examples/themes/dynamic-theme-example';
 import { ThemeExample } from './examples/themes/theme-example';
+import { RadioGroupValidatorExample } from './examples/validation/radio-group-validator-example';
 import { Home } from './home';
 
 import '@devextreme/styles/lib/themes/light.css';
@@ -16,11 +17,15 @@ export function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/radio-group" element={<RadioGroupExample />} />
-      <Route path="/radio-group-compatible" element={<RadioGroupCompatibleExample />} />
+      <Route
+        path="/radio-group-compatible"
+        element={<RadioGroupCompatibleExample />}
+      />
       <Route path="/radio-button" element={<RadioButtonExample />} />
       <Route path="/theme" element={<ThemeExample />} />
       <Route path="/dynamic-theme" element={<DynamicThemeExample />} />
       <Route path="/form" element={<FormExample />} />
+      <Route path="/validation" element={<RadioGroupValidatorExample />} />
     </Routes>
   );
 }

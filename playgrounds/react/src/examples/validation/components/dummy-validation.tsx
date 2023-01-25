@@ -1,4 +1,4 @@
-import { Rule } from './types';
+import { Rule } from '../types';
 
 export type CustomRuleProps = Rule;
 

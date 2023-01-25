@@ -1,7 +1,7 @@
 import { cloneElement, ReactElement } from 'react';
+import { Validator } from '../../../validation/components/validator';
 import { useFormItemLayout } from '../hooks/use-form-item-layout';
 import { FormItemProps } from '../types';
-import { Validator } from '../validator';
 import { RadioGroupEditor } from './radio-group-form-editor';
 
 export function FormItem({ name, children }: FormItemProps) {
@@ -14,7 +14,7 @@ export function FormItem({ name, children }: FormItemProps) {
       <span>{label}</span>
       <span>{hint}</span>
       <span>{cloneElement(editor as ReactElement, { name })}</span>
-      <Validator name={name}>{children}</Validator>
+      <Validator editorName={name}>{children}</Validator>
     </div>
   );
 }

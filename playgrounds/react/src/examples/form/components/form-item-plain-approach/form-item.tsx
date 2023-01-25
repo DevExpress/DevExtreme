@@ -1,23 +1,18 @@
 import { RadioGroup } from '@devextreme/react';
 import { cloneElement, ReactElement, useContext } from 'react';
 import { FormContext } from '../contexts/form-context';
-import { ValidationContext } from '../contexts/validation-context';
 import { useFormItemLayout } from '../hooks/use-form-item-layout';
 import { FormItemProps } from '../types';
-import { Validator } from '../validator';
+import { ValidationResult } from '../../../validation/components/validation-result';
+import { Validator } from '../../../validation/components/validator';
 
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
-  const validationContext = useContext(ValidationContext);
   const { label, hint, editor } = useFormItemLayout(children, [RadioGroup]);
 
   const onEditorValueChanged = (value: unknown) => {
     formContext?.onValueChanged(name, value);
   };
-
-  const renderValidation = () => (
-    <span>{validationContext?.validationResult?.[name]?.join('. ')}</span>
-  );
 
   return (
     <div>
@@ -31,8 +26,8 @@ export function FormItem({ name, children }: FormItemProps) {
           name,
         })}
       </span>
-      <span>{renderValidation()}</span>
-      <Validator name={name}>{children}</Validator>
+      <ValidationResult editorName={name} />
+      <Validator editorName={name}>{children}</Validator>
     </div>
   );
 }

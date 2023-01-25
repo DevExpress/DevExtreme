@@ -2,13 +2,12 @@ import { EditorProps } from '@devextreme/react';
 import {
   ComponentType, useContext, useEffect,
 } from 'react';
+import { ValidationResult } from '../../../validation/components/validation-result';
 import { FormContext } from '../contexts/form-context';
-import { ValidationContext } from '../contexts/validation-context';
 
 export function withFormContext<T>(Editor: ComponentType<EditorProps<T>>) {
   function FormEditor(props: EditorProps<T>) {
     const formContext = useContext(FormContext);
-    const validationContext = useContext(ValidationContext);
     useEffect(() => {
       if (props.name) {
         formContext?.onValueChanged(props.name, props.value || props.defaultValue);
@@ -21,11 +20,6 @@ export function withFormContext<T>(Editor: ComponentType<EditorProps<T>>) {
       }
       props.valueChange?.(newValue);
     };
-    const renderValidation = () => (
-      props.name
-        ? <span>{validationContext?.validationResult?.[props.name]?.join('. ')}</span>
-        : null
-    );
     return (
       <>
         <Editor
@@ -33,7 +27,7 @@ export function withFormContext<T>(Editor: ComponentType<EditorProps<T>>) {
           {...props}
           valueChange={handleValueChange}
         />
-        <span>{renderValidation()}</span>
+        {props.name ? <ValidationResult editorName={props.name} /> : null}
       </>
     );
   }

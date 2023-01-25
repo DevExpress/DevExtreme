@@ -7,8 +7,10 @@ export function useValidation(validationEngine: ValidationEngine) {
 
   const validateEditor = (name: string, value: unknown) => {
     const result = validationEngine.validateValue(name, value);
-    setValidationResult(previousResult => (
-      { ...previousResult, [name]: result }));
+    setValidationResult((previousResult) => ({
+      ...previousResult,
+      [name]: result,
+    }));
   };
 
   const validateAll = (values: Record<string, unknown>) => {
