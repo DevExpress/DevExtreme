@@ -772,14 +772,13 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.notOk(instance.option(OPENED_OPTION_NAME), 'dropDownBox closed by default');
 
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        assertOpenStatus(assert, false, instance, $input, 'dropDownBox not opened after down key pressed');
-        assertOpenStatus(assert, true, instance, $input, 'dropDownBox opened after alt+down key pressed');
-    });
 
-    function assertOpenStatus(assert, altKeyPressed, instance, input, assertionMessage) {
-        keyboardMock(input).keyDown('down', { altKey: altKeyPressed });
-        assert.ok(instance.option(OPENED_OPTION_NAME) === altKeyPressed, assertionMessage);
-    }
+        keyboardMock($input).keyDown('down', { altKey: false });
+        assert.notOk(instance.option(OPENED_OPTION_NAME), 'dropDownBox not opened after down key pressed');
+
+        keyboardMock($input).keyDown('down', { altKey: true });
+        assert.ok(instance.option(OPENED_OPTION_NAME), 'dropDownBox opened after alt+down pressed');
+    });
 
     QUnit.testInActiveWindow('first focusable element inside of content should get focused after tab pressing', function(assert) {
         const $input1 = $('<input>', { id: 'input1', type: 'text' });

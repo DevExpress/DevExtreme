@@ -2190,27 +2190,27 @@ QUnit.module('keyboard navigation', {
 
         this.keyboard.press('down');
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
 
         this.keyboard.press('down');
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
 
         this.keyboard.press('up');
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
 
         this.keyboard.press('up');
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
 
         this.keyboard.focus().press('pagedown');
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
 
         this.keyboard.press('pageup');
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has have the \'focused\' class');
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
     });
 
     ['enter', 'space'].forEach(key => {
