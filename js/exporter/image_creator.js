@@ -423,27 +423,36 @@ function drawElement(element, context, parentOptions, shared) {
         strokeElement(context, options);
     }
 
-    applyGradient(context, options, shared, element);
+    applyGradient(context, options, shared, element, 'linear');
+    applyGradient(context, options, shared, element, 'radial');
 
     context.restore();
 
     return promise;
 }
 
-function applyGradient(context, options, { gradients }, element) {
-    if(gradients.length === 0) {
+function applyGradient(context, options, shared, element, type) {
+    const gradients = type === 'linear' ? shared.linearGradients : shared.radialGradients;
+    if(Object.keys(gradients).length === 0) {
         return;
     }
     const id = parseUrl(options.fill);
     if(id && gradients[id]) {
         const box = element.getBBox();
-        const gradient = context.createLinearGradient(box.x, 0, box.x + box.width, 0);
+        const gradient = type === 'linear' ? context.createLinearGradient(box.x, 0, box.x + box.width, 0) :
+            context.createRadialGradient(box.x + box.width / 2, box.y + box.height / 2, 0, box.x + box.width / 2, box.y + box.height / 2, Math.max(box.height / 2, box.width / 2));
 
-        gradients[id].forEach(opt => {
+        gradients[id].colors.forEach(opt => {
             const offset = parseInt(opt.offset.replace(/%/, ''));
             gradient.addColorStop(offset / 100, opt.stopColor);
         });
 
+        type === 'radial' && context.transform(1, 0, 0, box.height / box.width, 0, -box.width / box.height);
+        if(type === 'linear') {
+            context.translate(box.x + box.width / 2, box.y + box.height / 2);
+            context.rotate(gradients[id].transform ? gradients[id].transform.replace(/\D/g, '') * Math.PI / 180 : 0);
+            context.translate(-box.x - box.width / 2, -box.y - box.height / 2);
+        }
         context.globalAlpha = options.opacity;
         context.fillStyle = gradient;
         context.fill();
@@ -510,12 +519,12 @@ function hex2rgba(hexColor, alpha) {
 }
 
 function createGradient(element) {
-    const options = [];
+    const options = { colors: [], transform: element.attributes.gradientTransform?.textContent };
 
     _each(element.childNodes, (_, { attributes }) => {
-        options.push({
+        options.colors.push({
             offset: attributes.offset.value,
-            stopColor: attributes['stop-color'].value
+            stopColor: attributes['stop-color'].value,
         });
     });
     return options;
@@ -611,7 +620,10 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                 shared.filters[element.id] = createFilter(element);
                 break;
             case 'lineargradient':
-                shared.gradients[element.attributes.id.textContent] = createGradient(element);
+                shared.linearGradients[element.attributes.id.textContent] = createGradient(element);
+                break;
+            case 'radialgradient':
+                shared.radialGradients[element.attributes.id.textContent] = createGradient(element);
                 break;
             default:
                 return drawElement(element, context, parentOptions, shared);
@@ -644,14 +656,26 @@ function strokeElement(context, options, isText) {
     }
 }
 
-function getPattern(context, pattern, shared) {
+function getPattern(context, pattern, shared, parentOptions) {
     const options = getElementOptions(pattern, shared.rootAppended);
     const patternCanvas = imageCreator._createCanvas(options.width, options.height, 0);
     const patternContext = patternCanvas.getContext('2d');
 
-    drawCanvasElements(pattern.childNodes, patternContext, options, shared);
+    const d = drawCanvasElements(pattern.childNodes, patternContext, options, shared);
+    const onDone = () => {
+        context.fillStyle = context.createPattern(patternCanvas, 'repeat');
+        context.globalAlpha = parentOptions.fillOpacity;
+        context.fill();
+        context.globalAlpha = 1;
+    };
 
-    return context.createPattern(patternCanvas, 'repeat');
+    if(isPromise(d)) {
+        d.then(onDone);
+    } else {
+        onDone();
+    }
+
+    return d;
 }
 
 function fillElement(context, options, shared) {
@@ -660,16 +684,18 @@ function fillElement(context, options, shared) {
     if(fill && fill !== 'none') {
         if(fill.search(/url/) === -1) {
             context.fillStyle = fill;
+
+            context.globalAlpha = options.fillOpacity;
+            context.fill();
+            context.globalAlpha = 1;
         } else {
             const pattern = shared.patterns[parseUrl(fill)];
             if(!pattern) {
                 return;
             }
-            context.fillStyle = getPattern(context, pattern, shared);
+
+            getPattern(context, pattern, shared, options);
         }
-        context.globalAlpha = options.fillOpacity;
-        context.fill();
-        context.globalAlpha = 1;
     }
 }
 
@@ -705,7 +731,8 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
         clipPaths: {},
         patterns: {},
         filters: {},
-        gradients: {},
+        linearGradients: {},
+        radialGradients: {},
         rootAppended
     });
 }
