@@ -607,6 +607,22 @@ QUnit.module('add visible option', {
 });
 
 
+QUnit.test('Overlay classes should contains custom class, if elementAttr.class is setting (T1140620)', function(assert) {
+    const customClass = 'custom-class';
+    const fabOneId = '#fab-one';
+
+    this.firstSDA = $(fabOneId).dxSpeedDialAction({
+        icon: 'add',
+        elementAttr: {
+            class: customClass,
+        },
+    }).dxSpeedDialAction('instance');
+
+    assert.ok($(FAB_MAIN_SELECTOR).hasClass(customClass), 'FAB has correct custom class');
+    assert.ok($(fabOneId).hasClass(customClass), 'FAB root element has correct custom class');
+});
+
+
 QUnit.test('check label rendering before/after toggling visibility (T985992)', function(assert) {
     this.firstSDA = $('#fab-one').dxSpeedDialAction({
         icon: 'add',
