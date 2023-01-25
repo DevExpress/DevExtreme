@@ -2181,37 +2181,20 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.test('navigation keys should focus items', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
         const $listItems = getListItems(this.instance);
 
-        this.keyboard.press('down');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
-
-        this.keyboard.press('down');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
-
-        this.keyboard.press('up');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(1).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
-
-        this.keyboard.press('up');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
-
-        this.keyboard.focus().press('pagedown');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
-
-        this.keyboard.press('pageup');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the tag has the \'focused\' class');
+        assertFocusedItem(assert, this.keyboard, 'down', $listItems, 1);
+        assertFocusedItem(assert, this.keyboard, 'down', $listItems, 2);
+        assertFocusedItem(assert, this.keyboard, 'up', $listItems, 1);
+        assertFocusedItem(assert, this.keyboard, 'up', $listItems, 0);
+        assertFocusedItem(assert, this.keyboard, 'pagedown', $listItems, 2);
+        assertFocusedItem(assert, this.keyboard, 'pageup', $listItems, 0);
     });
+
+    function assertFocusedItem(assert, keyboard, key, listItems, expectedFocusedItemIndex) {
+        keyboard.press(key);
+        assert.ok(listItems.eq(expectedFocusedItemIndex).hasClass(FOCUSED_CLASS), `the tag with index ${expectedFocusedItemIndex} has the 'focused' class `);
+    }
 
     ['enter', 'space'].forEach(key => {
         QUnit.test(`item should be selected when pressing ${key}`, function(assert) {
