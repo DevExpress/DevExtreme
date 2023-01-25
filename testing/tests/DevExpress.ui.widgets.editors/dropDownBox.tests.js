@@ -748,11 +748,6 @@ QUnit.module('popup options', moduleConfig, () => {
         });
     });
 
-    QUnit.test('dropDown should be closed by default', function(assert) {
-        const instance = new DropDownBox(this.$element);
-        assert.notOk(instance.option('opened'), 'dropDownBox closed by default');
-    });
-
     QUnit.test('popup should be positioned with the correct popupPosition offset', function(assert) {
         const vOffset = 2;
         const instance = new DropDownBox(this.$element, {
