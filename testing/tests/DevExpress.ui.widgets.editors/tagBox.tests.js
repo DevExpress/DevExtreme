@@ -2182,7 +2182,7 @@ QUnit.module('keyboard navigation', {
 }, () => {
     QUnit.test('navigation keys should focus items', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+            assert.ok(true, 'desktop specific test');
             return;
         }
 
@@ -2215,11 +2215,6 @@ QUnit.module('keyboard navigation', {
 
     ['enter', 'space'].forEach(key => {
         QUnit.test(`item should be selected when pressing ${key}`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
-                return;
-            }
-
             assert.deepEqual(this.instance.option('value'), [1, 2], 'the value is correct');
 
             this.keyboard.press('down');
