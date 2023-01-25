@@ -96,6 +96,8 @@ class NotificationManagerStub extends NotificationManagerBase {
 
     completeOperationItem() {}
 
+    finishOperation() {}
+
     completeOperation() {}
 
     completeSingleOperationWithError() {}
