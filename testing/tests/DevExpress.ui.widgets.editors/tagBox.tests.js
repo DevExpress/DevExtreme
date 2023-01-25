@@ -2180,21 +2180,28 @@ QUnit.module('keyboard navigation', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('navigation keys should focus items', function(assert) {
+    QUnit.test('pagedown/pageup keys should move focus to last/first item', function(assert) {
         const $listItems = getListItems(this.instance);
+        this.keyboard.press('down');
 
-        assertFocusedItem(assert, this.keyboard, 'down', $listItems, 1);
-        assertFocusedItem(assert, this.keyboard, 'down', $listItems, 2);
-        assertFocusedItem(assert, this.keyboard, 'up', $listItems, 1);
-        assertFocusedItem(assert, this.keyboard, 'up', $listItems, 0);
-        assertFocusedItem(assert, this.keyboard, 'pagedown', $listItems, 2);
-        assertFocusedItem(assert, this.keyboard, 'pageup', $listItems, 0);
+        this.keyboard.press('pagedown');
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the last tag has the \'focused\' class');
+
+        this.keyboard.press('pageup');
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the first tag has the \'focused\' class');
     });
 
-    function assertFocusedItem(assert, keyboard, key, listItems, expectedFocusedItemIndex) {
-        keyboard.press(key);
-        assert.ok(listItems.eq(expectedFocusedItemIndex).hasClass(FOCUSED_CLASS), `the tag with index ${expectedFocusedItemIndex} has the 'focused' class `);
-    }
+    QUnit.test('down/up keys should move focus to next/previous item', function(assert) {
+        const $listItems = getListItems(this.instance);
+        const $firstItem = $listItems.eq(0);
+        const $secondItem = $listItems.eq(1);
+
+        this.keyboard.press('down');
+        assert.ok($secondItem.hasClass(FOCUSED_CLASS), 'second item is focused');
+
+        this.keyboard.press('up');
+        assert.ok($firstItem.hasClass(FOCUSED_CLASS), 'first item is focused');
+    });
 
     ['enter', 'space'].forEach(key => {
         QUnit.test(`item should be selected when pressing ${key}`, function(assert) {

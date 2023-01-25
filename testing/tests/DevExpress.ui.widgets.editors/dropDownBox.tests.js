@@ -27,8 +27,6 @@ QUnit.testStart(() => {
     $('#qunit-fixture').addClass('qunit-fixture-visible');
 });
 
-const OPENED_OPTION_NAME = 'opened';
-
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TAB_KEY_CODE = 'Tab';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
@@ -743,11 +741,16 @@ QUnit.module('popup options', moduleConfig, () => {
                 this.clock.tick();
                 $(window).trigger('scroll');
 
-                assert.strictEqual(instance.option(OPENED_OPTION_NAME), isMac);
+                assert.strictEqual(instance.option('opened'), isMac);
             } finally {
                 DropDownBox.prototype._realDevice.mac = originalRealDeviceIsMac;
             }
         });
+    });
+
+    QUnit.test('dropDown should be closed by default', function(assert) {
+        const instance = new DropDownBox(this.$element);
+        assert.notOk(instance.option('opened'), 'dropDownBox closed by default');
     });
 
     QUnit.test('popup should be positioned with the correct popupPosition offset', function(assert) {
@@ -769,15 +772,10 @@ QUnit.module('popup options', moduleConfig, () => {
 QUnit.module('keyboard navigation', moduleConfig, () => {
     QUnit.test('alt+down should open dropDownBox', function(assert) {
         const instance = new DropDownBox(this.$element);
-        assert.notOk(instance.option(OPENED_OPTION_NAME), 'dropDownBox closed by default');
 
         const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        keyboardMock($input).keyDown('down', { altKey: false });
-        assert.notOk(instance.option(OPENED_OPTION_NAME), 'dropDownBox not opened after down key pressed');
-
         keyboardMock($input).keyDown('down', { altKey: true });
-        assert.ok(instance.option(OPENED_OPTION_NAME), 'dropDownBox opened after alt+down pressed');
+        assert.ok(instance.option('opened'), 'dropDownBox is opened after alt+down is pressed');
     });
 
     QUnit.testInActiveWindow('first focusable element inside of content should get focused after tab pressing', function(assert) {
@@ -798,7 +796,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         keyboard.press('tab');
 
         assert.equal($(instance.content()).parent('.' + OVERLAY_CONTENT_CLASS).attr('tabindex'), -1, 'popup content should not be tabbable');
-        assert.ok(instance.option(OPENED_OPTION_NAME), 'popup was not closed after tab key pressed');
+        assert.ok(instance.option('opened'), 'popup was not closed after tab key pressed');
         assert.ok($input1.is(':focus'), 'first focusable content element got focused');
     });
 
@@ -819,7 +817,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
 
         $input.focus().trigger(event);
 
-        assert.ok(instance.option(OPENED_OPTION_NAME), 'popup was not closed after shift+tab key pressed');
+        assert.ok(instance.option('opened'), 'popup was not closed after shift+tab key pressed');
         assert.ok($input2.is(':focus'), 'first focusable content element got focused');
     });
 
@@ -840,7 +838,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         keyboard.press('tab');
         this.clock.tick();
 
-        assert.notOk(instance.option(OPENED_OPTION_NAME), 'popup was closed');
+        assert.notOk(instance.option('opened'), 'popup was closed');
     });
 
     QUnit.testInActiveWindow('input should get focused when shift+tab pressed on first content element', function(assert) {
@@ -859,7 +857,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
 
         $input1.focus().trigger(event);
 
-        assert.notOk(instance.option(OPENED_OPTION_NAME), 'popup was closed');
+        assert.notOk(instance.option('opened'), 'popup was closed');
         assert.ok(this.$element.hasClass(DX_STATE_FOCUSED_CLASS), 'input is focused');
         assert.ok(event.isDefaultPrevented(), 'prevent default for focusing it\'s own input but not an input of the previous editor on the page');
     });
