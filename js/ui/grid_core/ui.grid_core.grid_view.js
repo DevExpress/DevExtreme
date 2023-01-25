@@ -1,4 +1,4 @@
-import { getOuterWidth, getInnerWidth, getWidth, getHeight } from '../../core/utils/size';
+import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import { deferRender, deferUpdate } from '../../core/utils/common';
@@ -600,11 +600,24 @@ const ResizingController = modules.ViewController.inherit({
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
         const height = that.option('height') || $rootElement.get(0).style.height;
+        const isHeightSpecified = !!height && height !== 'auto';
         const editorFactory = that.getController('editorFactory');
         const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
+
         that.updateSize($rootElement);
 
-        const hasHeight = that._hasHeight || !!maxHeight || (!!height && height !== 'auto');
+        // @ts-expect-error
+        // height value validation
+        if(!that._hasHeight && isHeightSpecified) {
+            const $testDiv = $('<div>');
+            setHeight($testDiv, height);
+            $testDiv.appendTo($rootElement);
+            that._hasHeight = !!getHeight($testDiv);
+            // @ts-expect-error
+            $testDiv.remove();
+        }
+
+        const hasHeight = that._hasHeight || !!maxHeight;
 
         deferRender(function() {
             rowsView.height(null, hasHeight);
