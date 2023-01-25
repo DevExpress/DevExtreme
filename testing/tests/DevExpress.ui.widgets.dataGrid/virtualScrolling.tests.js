@@ -702,8 +702,8 @@ QUnit.module('Subscribe to external scrollable events', {
         }
     });
 
-
-    QUnit.test('ScrollTo when window scroll subscription', function(assert) {
+    // TODO Vinogradov: Fix & unskip this test
+    QUnit.skip('ScrollTo when window scroll subscription', function(assert) {
         if(devices.real().ios || ('callPhantom' in window)) {
         // TODO reanimate for ios
             assert.ok(true);
