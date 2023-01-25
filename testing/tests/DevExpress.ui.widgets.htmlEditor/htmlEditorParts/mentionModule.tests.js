@@ -85,6 +85,7 @@ const moduleConfig = {
                 dataSource: ['Alex', 'John', 'Freddy', 'Sam']
             }],
             editorInstance: {
+                getMentionKeyInTemplateStorage: sinon.spy(() => 'my_key_in_storage'),
                 addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
@@ -167,10 +168,11 @@ QUnit.module('Mention format', () => {
         const data = {
             value: 'John Smith',
             marker: '@',
-            id: 'JohnSm'
+            id: 'JohnSm',
+            keyInTemplateStorage: 'my_key_in_storage'
         };
 
-        MentionFormat.addTemplate('@', {
+        MentionFormat.addTemplate({ marker: '@', editorKey: 'my_key_in_storage' }, {
             render: ({ container, model: mentionData }) => {
                 container.innerText = 'test';
                 assert.deepEqual(mentionData, data);
@@ -181,7 +183,7 @@ QUnit.module('Mention format', () => {
 
         assert.strictEqual(element.innerText, 'test');
 
-        MentionFormat.removeTemplate('@');
+        MentionFormat.removeTemplate({ marker: '@', editorKey: 'my_key_in_storage' });
         element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, '@John Smith');
@@ -204,11 +206,13 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                keyInTemplateStorage: 'my_key_in_storage'
             } })
             .insert(' ');
 
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
+        assert.ok(this.options.editorInstance.getMentionKeyInTemplateStorage.calledOnce, 'id requested from widget');
     });
 
     test('Display and value expression with complex data', function(assert) {
@@ -225,7 +229,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex manager',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                keyInTemplateStorage: 'my_key_in_storage'
             } })
             .insert(' ');
 
@@ -245,7 +250,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex manager',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                keyInTemplateStorage: 'my_key_in_storage'
             } })
             .insert(' ');
 
@@ -370,7 +376,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                keyInTemplateStorage: 'my_key_in_storage'
             } })
             .insert(' ');
         assert.deepEqual(this.log[0].delta.ops, firstDelta.ops, 'insert user mention');
@@ -389,7 +396,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 4421,
                 marker: '#',
-                id: 4421
+                id: 4421,
+                keyInTemplateStorage: 'my_key_in_storage'
             } })
             .insert(' ');
         assert.deepEqual(this.log[2].delta.ops, secondDelta.ops, 'insert issue mention');
@@ -530,7 +538,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
                 .insert({ mention: {
                     value: 'Alex',
                     marker: '@',
-                    id: 'Alex'
+                    id: 'Alex',
+                    keyInTemplateStorage: 'my_key_in_storage'
                 } })
                 .insert(' ');
             assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');
@@ -657,7 +666,8 @@ QUnit.module('Mentions module', moduleConfig, () => {
             .insert({ mention: {
                 value: 'Alex',
                 marker: '@',
-                id: 'Alex'
+                id: 'Alex',
+                keyInTemplateStorage: 'my_key_in_storage'
             } })
             .insert(' ');
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');

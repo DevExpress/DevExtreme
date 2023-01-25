@@ -80,6 +80,18 @@ testModule('API', moduleConfig, () => {
         assert.ok(quillInstance.format, 'specific method isn\'t undefined');
     });
 
+    test('getMentionKeyInTemplateStorage', function(assert) {
+        this.createEditor();
+        const firstEditorKey = this.instance.getMentionKeyInTemplateStorage();
+        const $secondEditor = $('<div>').appendTo('#qunit-fixture');
+
+        const secondEditorKey = $secondEditor
+            .dxHtmlEditor(this.options)
+            .dxHtmlEditor('getMentionKeyInTemplateStorage');
+
+        assert.strictEqual(secondEditorKey - firstEditorKey, 1);
+    });
+
     test('get module instance', function(assert) {
         this.createEditor();
         const Clipboard = this.instance.get('modules/clipboard');
