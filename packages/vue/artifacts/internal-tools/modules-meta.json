@@ -1,9 +1,0 @@
-{
-  "ToolsVersion": "8.1.0",
-  "Modules": {
-    "radio-button": {
-      "default": {},
-      "Properties": {}
-    }
-  }
-}
