@@ -1,4 +1,4 @@
-import { RadioButton, RadioGroup } from '@devextreme/react';
+import { RadioButton } from '@devextreme/react';
 import { CustomRule, CustomRule1 } from '../validation/components/dummy-validation';
 import {
   Form,
@@ -7,7 +7,7 @@ import {
   FormItemLabel,
   FormItemPlain,
 } from './components';
-import { RadioGroupEditor } from './components/form-item-hoc-approach/radio-group-form-editor';
+import { RadioGroupEditor as RadioGroup } from './components/form-item-hoc-approach/radio-group-form-editor';
 
 export function FormExample() {
   return (
@@ -52,11 +52,11 @@ export function FormExample() {
           <br />
           <Form>
             <FormItemHoc name="example2">
-              <RadioGroupEditor defaultValue="Toe">
+              <RadioGroup defaultValue="Toe">
                 <RadioButton value="Tic" label="Tic" />
                 <RadioButton value="Tac" label="Tac" />
                 <RadioButton value="Toe" label="Toe" />
-              </RadioGroupEditor>
+              </RadioGroup>
               <CustomRule
                 message="Should not be Toe"
                 validate={(value) => value !== 'Toe'}
