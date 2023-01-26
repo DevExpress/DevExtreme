@@ -14,7 +14,7 @@ export function FormItem({ name, children }: FormItemProps) {
       <span>{label}</span>
       <span>{hint}</span>
       <span>{cloneElement(editor as ReactElement, { name })}</span>
-      <Validator editorName={name}>{children}</Validator>
+      <Validator>{children}</Validator>
     </div>
   );
 }

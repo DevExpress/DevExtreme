@@ -1,6 +1,6 @@
 import { RadioButton } from '@devextreme/react';
 import { CustomRule } from './components/dummy-validation';
-import { RadioGroupEditor as RadioGroup } from './components/radio-group-with-validation';
+import { RadioGroupEditor as RadioGroup } from './components/enhanced-radio-group';
 import { ValidationGroup } from './components/validation-group';
 import { Validator } from './components/validator';
 
@@ -16,7 +16,7 @@ export function RadioGroupValidatorExample() {
             {OPTIONS.map((option) => (
               <RadioButton key={option} value={option} />
             ))}
-            <Validator editorName="validation-example">
+            <Validator>
               <CustomRule
                 message="Should be < 3"
                 validate={(value) => (value as number) < 3}
@@ -33,7 +33,7 @@ export function RadioGroupValidatorExample() {
               {OPTIONS.map((option) => (
                 <RadioButton key={option} value={option} />
               ))}
-              <Validator editorName="validation-example-1">
+              <Validator>
                 <CustomRule
                   message="Should be > 2"
                   validate={(value) => (value as number) > 2}
@@ -44,7 +44,7 @@ export function RadioGroupValidatorExample() {
               {OPTIONS.map((option) => (
                 <RadioButton key={option} value={option} />
               ))}
-              <Validator editorName="validation-example-2">
+              <Validator>
                 <CustomRule
                   message="Should be > 2"
                   validate={(value) => (value as number) > 2}

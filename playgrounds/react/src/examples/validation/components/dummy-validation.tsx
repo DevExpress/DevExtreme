@@ -1,13 +1,21 @@
+import { useContext, useEffect } from 'react';
+import { ValidatorContext } from '../contexts/validator-context';
 import { Rule } from '../types';
 
 export type CustomRuleProps = Rule;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function CustomRule(_props: CustomRuleProps) {
+export function CustomRule(props: CustomRuleProps) {
+  const validatorContext = useContext(ValidatorContext);
+  useEffect(() => {
+    validatorContext?.registerRule(props);
+  }, []);
   return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function CustomRule1(_props: CustomRuleProps) {
+export function CustomRule1(props: CustomRuleProps) {
+  const validatorContext = useContext(ValidatorContext);
+  useEffect(() => {
+    validatorContext?.registerRule(props);
+  }, []);
   return null;
 }

@@ -7,8 +7,8 @@ export interface ValidationResult {
 
 export interface ValidationEngine {
   initializeEditorRules: (name: string, rules: Rule[]) => void;
-  validateValue: (name: string, value: unknown) => string[];
-  validateValues: (values: Record<string, unknown>) => ValidationResult;
+  validateEditorValue: (name: string, value: unknown) => string[];
+  validateEditorValues: (values: Record<string, unknown>) => ValidationResult;
 }
 
 export function createValidationEngine(): ValidationEngine {
@@ -18,17 +18,22 @@ export function createValidationEngine(): ValidationEngine {
     validationRules = { ...validationRules, [name]: rules };
   };
 
-  const validateValue = (name: string, value: unknown) => validationRules[name]
-    ?.filter(({ validate }) => !validate(value))
-    .map(({ message }) => message);
+  const validateEditorValue = (
+    editorName: string, editorValue: unknown,
+  ) => {
+    console.log({ editorName, editorValue, rules: validationRules[editorName] });
+    return validationRules[editorName]
+      ?.filter(({ validate }) => !validate(editorValue))
+      .map(({ message }) => message);
+  };
 
-  const validateValues = (values: Record<string, unknown>) => {
+  const validateEditorValues = (editorValues: Record<string, unknown>) => {
     const validationResult: ValidationResult = {
       isValid: true,
       results: {},
     };
     Object.keys(validationRules).forEach((name) => {
-      validationResult.results[name] = validateValue(name, values[name]);
+      validationResult.results[name] = validateEditorValue(name, editorValues[name]);
       if (validationResult.results[name].length) {
         validationResult.isValid = false;
       }
@@ -38,7 +43,7 @@ export function createValidationEngine(): ValidationEngine {
 
   return {
     initializeEditorRules,
-    validateValue,
-    validateValues,
+    validateEditorValue,
+    validateEditorValues,
   };
 }

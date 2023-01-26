@@ -6,7 +6,7 @@ export function useValidation(validationEngine: ValidationEngine) {
   const [validationResult, setValidationResult] = useState<FormValidationResult>({});
 
   const validateEditor = (name: string, value: unknown) => {
-    const result = validationEngine.validateValue(name, value);
+    const result = validationEngine.validateEditorValue(name, value);
     setValidationResult((previousResult) => ({
       ...previousResult,
       [name]: result,
@@ -14,7 +14,7 @@ export function useValidation(validationEngine: ValidationEngine) {
   };
 
   const validateAll = (values: Record<string, unknown>) => {
-    const engineResult = validationEngine.validateValues(values);
+    const engineResult = validationEngine.validateEditorValues(values);
     setValidationResult(engineResult.results);
     return engineResult.isValid;
   };

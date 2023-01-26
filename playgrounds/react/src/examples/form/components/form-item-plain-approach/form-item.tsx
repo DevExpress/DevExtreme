@@ -27,7 +27,7 @@ export function FormItem({ name, children }: FormItemProps) {
         })}
       </span>
       <ValidationResult editorName={name} />
-      <Validator editorName={name}>{children}</Validator>
+      <Validator>{children}</Validator>
     </div>
   );
 }
