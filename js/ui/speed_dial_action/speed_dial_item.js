@@ -45,9 +45,7 @@ class SpeedDialItem extends Overlay {
     }
 
     _render() {
-        const fabClasses = [FAB_CLASS, this.option('_customClass')].join(' ');
-
-        this.$element().addClass(fabClasses);
+        this.$element().addClass(FAB_CLASS);
         this._renderIcon();
         this._renderLabel();
         super._render();

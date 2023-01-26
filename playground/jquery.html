@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@4.6.3/dist/css/ionicons.min.css">
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -30,16 +32,47 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+
+    <style>
+        #app-container {
+            height: 360px;
+            width: 320px;
+        }
+        
+        .custom-class .dx-overlay-content {
+            background-color: red !important;
+        }
+    </style>
 </head>
-<body>
-    <div id="button"></div>
+
+<body class="dx-viewport">
+    <div id="app-container">
+        <div id="action-edit"></div>
+    </div>
+
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+        $(function () {
+            DevExpress.config({
+                floatingActionButtonConfig: {
+                    icon: "icon ion-md-share",
+                    position: {
+                        my: "right bottom",
+                        at: "right bottom",
+                        of: "#app-container",
+                        offset: "-16 -16"
+                    }
+                }
             });
+
+            const editAction = $("#action-edit").dxSpeedDialAction({
+                hint: "Edit",
+                icon: "icon ion-md-create",
+                elementAttr: {
+                    class: 'custom-class',
+                },
+            }).dxSpeedDialAction("instance");
         });
     </script>
 </body>
+
 </html>
