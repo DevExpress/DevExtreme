@@ -1459,7 +1459,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.expandRow(1);
         this.clock.tick();
 
-        assert.ok(dataGrid.isScrollbarVisible(), 'scroll bar should be shown');
+        assert.ok(!!dataGrid.getScrollbarWidth(), 'scroll bar should be shown');
     });
 
     QUnit.test('Vertical scrollbar should be shown if max-height is set and form editing was expanded', function(assert) {
@@ -1480,7 +1480,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.editRow(1);
         this.clock.tick();
 
-        assert.ok(dataGrid.isScrollbarVisible(), 'scroll bar should be shown');
+        assert.ok(!!dataGrid.getScrollbarWidth(), 'scroll bar should be shown');
     });
 
     QUnit.test('Vertical scrollbar should be shown if max-height is set and adaptive was expanded', function(assert) {
@@ -1502,7 +1502,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.expandAdaptiveDetailRow(1);
         this.clock.tick();
 
-        assert.ok(dataGrid.isScrollbarVisible(), 'scroll bar should be shown');
+        assert.ok(!!dataGrid.getScrollbarWidth(), 'scroll bar should be shown');
     });
 
     QUnit.test('Vertical scrollbar should not be shown on last page if max-height is set', function(assert) {
