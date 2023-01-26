@@ -9,7 +9,8 @@ type AccessibleOptions = Pick<Properties,
   "name" |
   "onClick" |
   "onSelected" |
-  "radioTemplate"
+  "radioTemplate" |
+  "value"
 >;
 
 interface DxRadioButton extends AccessibleOptions {
@@ -21,10 +22,11 @@ const DxRadioButton = createComponent({
     defaultChecked: Boolean,
     label: String,
     labelTemplate: Function,
-    name: {},
+    name: String,
     onClick: Function,
     onSelected: Function,
-    radioTemplate: Function
+    radioTemplate: Function,
+    value: {}
   },
   emits: {
     "update:isActive": null,
@@ -37,6 +39,7 @@ const DxRadioButton = createComponent({
     "update:onClick": null,
     "update:onSelected": null,
     "update:radioTemplate": null,
+    "update:value": null,
   },
   computed: {
     instance(): RadioButton {

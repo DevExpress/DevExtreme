@@ -1,20 +1,27 @@
+/* eslint-disable import/no-default-export, max-classes-per-file */
+
 /**
  * @public
  * @docid
  * @wrappable
  */
-export default class RadioButton {
-};
+export class RadioButton {}
+
+/* eslint-disable-next-line @typescript-eslint/naming-convention */
+export default class dxRadioButton {}
 
 /**
  * @public
  */
-export type Properties<T = any> = {
+export type Properties<T = unknown> = {
+  /**
+   * @docid RadioButtonOptions.value
+   * @public
+   */
   value: T;
   /**
    * @docid RadioButtonOptions.name
    * @public
-   * @type any
    */
   name?: string;
   /**
@@ -36,20 +43,20 @@ export type Properties<T = any> = {
    * @docid RadioButtonOptions.radioTemplate
    * @public
    */
-  radioTemplate?: Function;
+  radioTemplate?: () => unknown;
   /**
    * @docid RadioButtonOptions.labelTemplate
    * @public
    */
-  labelTemplate?: Function;
+  labelTemplate?: () => unknown;
   /**
    * @docid RadioButtonOptions.onSelected
    * @public
    */
-  onSelected?: Function;
+  onSelected?: () => unknown;
   /**
    * @docid RadioButtonOptions.onClick
    * @public
    */
-  onClick?: Function;
-}
+  onClick?: () => unknown;
+};
