@@ -609,17 +609,17 @@ QUnit.module('add visible option', {
 
 QUnit.test('Overlay classes should contains custom class, if elementAttr.class is setting (T1140620)', function(assert) {
     const customClass = 'custom-class';
-    const fabOneId = '#fab-one';
+    const fabOneId = 'fab-one';
 
-    this.firstSDA = $(fabOneId).dxSpeedDialAction({
+    this.firstSDA = $(`#${fabOneId}`).dxSpeedDialAction({
         icon: 'add',
         elementAttr: {
             class: customClass,
         },
     }).dxSpeedDialAction('instance');
 
-    assert.ok($(FAB_MAIN_SELECTOR).hasClass(customClass), 'FAB has correct custom class');
-    assert.ok($(fabOneId).hasClass(customClass), 'FAB root element has correct custom class');
+    assert.ok($(FAB_MAIN_SELECTOR).hasClass(customClass), 'FAB has custom class');
+    assert.ok($(`#${fabOneId}`).hasClass(customClass), 'FAB root element has custom class');
 });
 
 
