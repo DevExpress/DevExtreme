@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading, react/jsx-handler-names */
 import { compileGetter, ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
@@ -6,18 +6,26 @@ import {
   RadioGroup,
   RadioGroupProps,
 } from '../../components/radio-group';
+import {
+  CompatibleOmittedProps,
+  DomOptionsAccessKeyCompatible,
+  FocusableCompatible,
+} from '../../internal/props';
 
-interface ItemComponentProps {
+type ItemComponentProps = {
   data: ItemLike;
-}
+};
 
-interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
+type CompatibleRadioGroupProps<T> = Omit<RadioGroupProps<T>, CompatibleOmittedProps>
+& FocusableCompatible
+& DomOptionsAccessKeyCompatible
+& {
   items: Array<ItemLike>;
   itemRender?: (data: ItemLike, index?: number) => JSX.Element;
   itemComponent?: ComponentType<ItemComponentProps>;
   valueExpr?: string;
   displayExpr?: string;
-}
+};
 
 type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
@@ -43,8 +51,14 @@ export function RadioGroupCompatible<T>({
     }
     return getItemLabel(item);
   };
+
   return (
-    <RadioGroup<T> {...radioGroupProps}>
+    <RadioGroup<T>
+      {...radioGroupProps}
+      shortcutKey={radioGroupProps.accessKey}
+      onFocus={radioGroupProps.onFocusIn}
+      onBlur={radioGroupProps.onFocusOut}
+    >
       {items.map((item, index) => {
         const value = getItemValue(item);
         const key = `${value}-${index}`;

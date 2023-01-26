@@ -1,4 +1,6 @@
-import { RadioButton, RadioGroup, RadioGroupRef } from '@devextreme/react';
+import {
+  RadioButton, RadioGroup, RadioGroupCompatible, RadioGroupRef,
+} from '@devextreme/react';
 import { ChangeEvent, useReducer, useRef } from 'react';
 
 interface PlaygroundBtnData {
@@ -95,7 +97,7 @@ function playgroundReducer(
   }
 }
 
-export function RadioGroupControlledPlayground() {
+export function RadioGroupCompatibleUncontrolledPlayground() {
   const radioGroupRef = useRef<RadioGroupRef>(null);
 
   const [state, dispatch] = useReducer(playgroundReducer, {
@@ -111,7 +113,7 @@ export function RadioGroupControlledPlayground() {
       tabIndex: 0,
       hoverCss: true,
       activeCss: true,
-      accessKey: 'a',
+      accessKey: 'b',
       disabled: false,
       hint: 'Hello!',
     },
@@ -120,46 +122,33 @@ export function RadioGroupControlledPlayground() {
   return (
     <div className="example">
       <div className="example__title">
-        Controlled playground
+        Compatible uncontrolled playground
       </div>
       <div className="example__control-container">
         <div className="example__control">
-          <RadioGroup
+          <RadioGroupCompatible
             componentRef={radioGroupRef}
-            value={state.groupValue}
+            items={state.buttons}
+            displayExpr="label"
+            valueExpr="value"
+            defaultValue={state.groupValue}
             valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
             focusStateEnabled={state.baseSettings.focusCss}
-            tabIndex={state.baseSettings.tabIndex}
             hoverStateEnabled={state.baseSettings.hoverCss}
             activeStateEnabled={state.baseSettings.activeCss}
-            shortcutKey={state.baseSettings.accessKey}
+            accessKey={state.baseSettings.accessKey}
             disabled={state.baseSettings.disabled}
             hint={state.baseSettings.hint}
-            onFocus={() => dispatch({ type: 'setFocus', focused: true })}
-            onBlur={() => dispatch({ type: 'setFocus', focused: false })}
-          >
-            {state.buttons.map((button) => (
-              <RadioButton
-                label={button.label}
-                key={button.value}
-                value={button.value}
-              />
-            ))}
-          </RadioGroup>
+            onFocusIn={() => dispatch({ type: 'setFocus', focused: true })}
+            onFocusOut={() => dispatch({ type: 'setFocus', focused: false })}
+          />
         </div>
       </div>
       <div className="example__play-part">
         <span className="example__block">
           RadioGroup value:
+          { state.groupValue }
         </span>
-        <input
-          type="text"
-          className="example-input"
-          value={state.groupValue}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            dispatch({ type: 'setValue', groupValue: event?.target?.value });
-          }}
-        />
       </div>
       <div className="example__play-part">
         {state.buttons.map((button, idx) => (
@@ -283,8 +272,8 @@ export function RadioGroupControlledPlayground() {
             type="checkbox"
             checked={state.baseSettings.disabled}
             onChange={
-            () => { dispatch({ type: 'setDisabled', disabled: !state.baseSettings.disabled }); }
-          }
+              () => { dispatch({ type: 'setDisabled', disabled: !state.baseSettings.disabled }); }
+            }
           />
         </span>
       </div>

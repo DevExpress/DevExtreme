@@ -1,4 +1,4 @@
-import { RadioButton, RadioGroup } from '@devextreme/react';
+import { RadioButton, RadioGroup, RadioGroupRef } from '@devextreme/react';
 import { ChangeEvent, useReducer, useRef } from 'react';
 
 interface PlaygroundBtnData {
@@ -96,7 +96,8 @@ function playgroundReducer(
 }
 
 export function RadioGroupUncontrolledPlayground() {
-  const radioGroupRef = useRef<HTMLDivElement>(null);
+  const radioGroupRef = useRef<RadioGroupRef>(null);
+
   const [state, dispatch] = useReducer(playgroundReducer, {
     groupValue: '1',
     focused: false,
@@ -110,7 +111,7 @@ export function RadioGroupUncontrolledPlayground() {
       tabIndex: 0,
       hoverCss: true,
       activeCss: true,
-      accessKey: 's',
+      accessKey: 'b',
       disabled: false,
       hint: 'Hello!',
     },
@@ -124,7 +125,7 @@ export function RadioGroupUncontrolledPlayground() {
       <div className="example__control-container">
         <div className="example__control">
           <RadioGroup
-            ref={radioGroupRef}
+            componentRef={radioGroupRef}
             defaultValue={state.groupValue}
             valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
             focusStateEnabled={state.baseSettings.focusCss}
