@@ -2,12 +2,14 @@
   <div>
     <DxDataGrid
       :data-source="employees"
-      :selection="{ mode: 'single' }"
       :show-borders="true"
       :hover-state-enabled="true"
       key-expr="ID"
       @selection-changed="onSelectionChanged"
     >
+      <DxSelection
+        mode="single"
+      />
       <DxColumn
         :width="70"
         data-field="Prefix"
@@ -41,13 +43,14 @@
   </div>
 </template>
 <script>
-import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn, DxSelection } from 'devextreme-vue/data-grid';
 import { employees } from './data.js';
 
 export default {
   components: {
     DxDataGrid,
     DxColumn,
+    DxSelection,
   },
   data() {
     return {
