@@ -377,17 +377,16 @@ const checkOverlay = (overlayPoint, currentPoint, radiusPoint) => {
     const topBoundaryOverlay = overlayPoint.y - radiusPoint <= currentPoint.y;
     const bottomBoundaryOverlay = overlayPoint.y + radiusPoint >= currentPoint.y;
 
-    const IsOverlayX = leftBoundaryOverlay && rightBoundaryOverlay;
+    const isOverlayX = leftBoundaryOverlay && rightBoundaryOverlay;
     const isOverlayY = topBoundaryOverlay && bottomBoundaryOverlay;
 
-    return IsOverlayX && isOverlayY;
+    return isOverlayX && isOverlayY;
 };
 
 const cycleComparison = (startCounter, points, currentPoint, skippingSamePoints = true) => {
     const radiusPoint = currentPoint._options.size / 2;
 
     for(let i = startCounter; i < points.length; i++) {
-
         if(!skippingSamePoints) {
             const isSameCoordinateX = points[i].x === currentPoint.x;
             const isSameCoordinateY = points[i].y === currentPoint.y;
@@ -895,22 +894,23 @@ const dxChart = AdvancedChart.inherit({
 
             if(currentSeries.autoHidePointMarkersEnabled()) {
                 let counterOverlapSingle = 0;
-                const seriesPoints = currentSeries._points;
+                const seriesPoints = currentSeries.getPoints();
 
 
-                seriesPoints.forEach((currentPoint, index) => {
+                seriesPoints.some((currentPoint, index) => {
                     if(cycleComparison(index + 1, seriesPoints, currentPoint, false)) {
                         counterOverlapSingle++;
                     }
                     if(counterOverlapSingle > (seriesPoints.length / 2)) {
                         currentSeries.autoHidePointMarkers = true;
+                        return true;
                     }
                 });
 
                 if(!currentSeries.autoHidePointMarkers) {
                     let checkOverlap = 0;
 
-                    currentSeries._points.forEach(currentPoint => {
+                    seriesPoints.forEach(currentPoint => {
                         if(cycleComparison(0, overlapPoints, currentPoint)) {
                             checkOverlap++;
                         }
