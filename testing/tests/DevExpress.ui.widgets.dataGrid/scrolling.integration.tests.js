@@ -1434,7 +1434,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     });
 
     // T1139557
-    QUnit.test('Vertical scrollbar should be shown if max-height is set and master detail was expanded', function(assert) {
+    QUnit.test('DataGrid should be scrollable if max-height is set and master detail was expanded', function(assert) {
         $('#dataGrid').css('max-height', '150px');
 
         const dataGrid = createDataGrid({
@@ -1459,10 +1459,10 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.expandRow(1);
         this.clock.tick();
 
-        assert.ok(!!dataGrid.getScrollbarWidth(), 'scroll bar should be shown');
+        assert.ok(!!dataGrid.getScrollable(), 'scroll bar should be shown');
     });
 
-    QUnit.test('Vertical scrollbar should be shown if max-height is set and form editing was expanded', function(assert) {
+    QUnit.test('DataGrid should be scrollable if max-height is set and form editing was expanded', function(assert) {
         $('#dataGrid').css('max-height', '150px');
 
         const dataGrid = createDataGrid({
@@ -1480,10 +1480,10 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.editRow(1);
         this.clock.tick();
 
-        assert.ok(!!dataGrid.getScrollbarWidth(), 'scroll bar should be shown');
+        assert.ok(!!dataGrid.getScrollable(), 'scroll bar should be shown');
     });
 
-    QUnit.test('Vertical scrollbar should be shown if max-height is set and adaptive was expanded', function(assert) {
+    QUnit.test('DataGrid should be scrollable if max-height is set and adaptive was expanded', function(assert) {
         $('#dataGrid').css('max-height', '150px');
 
         const dataGrid = createDataGrid({
@@ -1502,10 +1502,10 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.expandAdaptiveDetailRow(1);
         this.clock.tick();
 
-        assert.ok(!!dataGrid.getScrollbarWidth(), 'scroll bar should be shown');
+        assert.ok(!!dataGrid.getScrollable(), 'scroll bar should be shown');
     });
 
-    QUnit.test('Vertical scrollbar should not be shown on last page if max-height is set', function(assert) {
+    QUnit.test('DataGrid should not be scrollable on last page where rows height is less than max-height', function(assert) {
         const getData = () => {
             const data = [];
 
@@ -1517,7 +1517,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         };
 
         $('#dataGrid').css('max-height', '150px');
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+
         const dataGrid = createDataGrid({
             width: 400,
             dataSource: getData(),
