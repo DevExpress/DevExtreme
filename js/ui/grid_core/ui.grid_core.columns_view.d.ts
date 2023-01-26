@@ -8,6 +8,8 @@ export class ColumnsView extends View {
 
   _dataController: import('./ui.grid_core.data_controller').DataController;
 
+  _rowsView: import('./ui.grid_core.rows').RowsView;
+
   _delayedTemplates: any[];
 
   _templatesCache: any;
@@ -170,6 +172,4 @@ export class ColumnsView extends View {
   getName: (this: this) => any;
 
   setScrollerSpacing: (this: this, width) => any;
-
-  isScrollbarVisible: (this: this, isHorizontal) => any;
 }

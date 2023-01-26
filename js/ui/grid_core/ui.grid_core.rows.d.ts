@@ -132,6 +132,8 @@ export interface RowsView extends State, ColumnsView {
 
   contentWidth: (this: this) => any;
 
+  isScrollbarVisible: (this: this, isHorizontal?: boolean) => boolean;
+
   getScrollbarWidth: (this: this, isHorizontal?) => any;
 
   _fireColumnResizedCallbacks: (this: this) => any;
