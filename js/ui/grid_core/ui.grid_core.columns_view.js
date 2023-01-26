@@ -1,5 +1,6 @@
 // @ts-check
 
+import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow, hasWindow } from '../../core/utils/window';
@@ -842,7 +843,6 @@ const columnsViewMembers = {
         that._scrollLeft = -1;
         that._columnsController = that.getController('columns');
         that._dataController = that.getController('data');
-        that._rowsView = that.component.getView('rowsView');
         that._delayedTemplates = [];
         that._templatesCache = {};
         that.createAction('onCellClick');
@@ -1188,6 +1188,17 @@ const columnsViewMembers = {
         if(hasWindow()) {
             getWindow().clearTimeout(this._templateTimeout);
         }
+    },
+
+    isScrollbarVisible: function(isHorizontal) {
+        const $element = this.element();
+        const $tableElement = this._tableElement;
+
+        if($element && $tableElement) {
+            return isHorizontal ? (getOuterWidth($tableElement) - getWidth($element) > 0) : (getOuterHeight($tableElement) - getHeight($element) > 0);
+        }
+
+        return false;
     }
 };
 

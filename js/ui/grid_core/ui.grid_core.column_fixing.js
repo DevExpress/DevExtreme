@@ -445,7 +445,7 @@ const baseFixedColumns = {
 
         if(this._fixedTableElement) {
             const hasAutoWidth = widths && widths.some(function(width) { return width === 'auto'; });
-            useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this._rowsView.isScrollbarVisible(true));
+            useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this.isScrollbarVisible(true));
 
             if(useVisibleColumns) {
                 columns = visibleColumns;
