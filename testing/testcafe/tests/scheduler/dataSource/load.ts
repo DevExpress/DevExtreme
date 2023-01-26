@@ -1,13 +1,32 @@
 import { ClientFunction } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler - DataSource loading`
+fixture.disablePageReloads`Scheduler - DataSource loading`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('it should correctly load items with post processing', async (t) => {
+declare global {
+  interface Window {
+    testOptions: {
+      startDate?: Date;
+      endDate?: Date;
+      loadCount?: number;
+    };
+  }
+}
+
+const getWindow = ClientFunction(() => window.testOptions);
+const repaint = ClientFunction(() => {
+  (window as any).widget.repaint();
+});
+
+const pushDataToStore = async (key, data): Promise<void> => ClientFunction(() => {
+  const store = (window as any).widget.getDataSource().store();
+  store.push([{ type: 'update', key, data }]);
+}, { dependencies: { key, data } })();
+
+test('it should correctly load items with post processing', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment0 = scheduler.getAppointment('appt-0');
 
@@ -45,22 +64,10 @@ safeSizeTest('it should correctly load items with post processing', async (t) =>
     height: 600,
     width: 800,
   },
-  true,
 ));
 
-declare global {
-  interface Window {
-    testOptions: {
-      startDate: Date;
-      endDate: Date;
-    };
-  }
-}
-
-const getWindow = ClientFunction(() => window.testOptions);
-
 [true, false].forEach((groupByDate) => {
-  safeSizeTest(`it should have start and end date in load options groupByDate=${groupByDate}`, async (t) => {
+  test(`it should have start and end date in load options groupByDate=${groupByDate}`, async (t) => {
     const win = await getWindow();
     await t
       .expect(win.startDate)
@@ -90,10 +97,9 @@ const getWindow = ClientFunction(() => window.testOptions);
       views: ['week'],
       currentView: 'week',
     },
-    true,
   ));
 
-  safeSizeTest(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async (t) => {
+  test(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async (t) => {
     const { toolbar } = new Scheduler('#container');
 
     await t
@@ -127,6 +133,29 @@ const getWindow = ClientFunction(() => window.testOptions);
       views: ['week'],
       currentView: 'week',
     },
-    true,
   ));
 });
+
+test('it should not call additional DataSource loads after repaint', async (t) => {
+  await repaint();
+  await repaint();
+  await repaint();
+
+  await pushDataToStore(0, {});
+
+  const testClientData = await getWindow();
+  await t.expect(testClientData?.loadCount).eql(2);
+}).before(async () => ClientFunction(() => {
+  window.testOptions = {
+    loadCount: 0,
+  };
+  (window as any).widget = ($('#container') as any)
+    .dxScheduler({
+      dataSource: {
+        store: new (window as any).DevExpress.data.ArrayStore({
+          data: [],
+          onLoaded: () => { window.testOptions.loadCount! += 1; },
+        }),
+      },
+    }).dxScheduler('instance');
+})());

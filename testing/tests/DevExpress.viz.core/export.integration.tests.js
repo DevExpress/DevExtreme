@@ -51,7 +51,6 @@ QUnit.test('Export method. Defined options', function(assert) {
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40,
             svgToCanvas: svgToCanvas
         },
@@ -79,7 +78,6 @@ QUnit.test('Export method. Defined options', function(assert) {
     assert.equal(firstExportCall.args[1].backgroundColor, '#ff0000', 'backgroundColor');
     assert.equal(firstExportCall.args[1].fileName, 'testName', 'fileName');
     assert.equal(firstExportCall.args[1].format, 'JPEG', 'format');
-    assert.equal(firstExportCall.args[1].proxyUrl, 'testProxy', 'proxyUrl');
     assert.equal(firstExportCall.args[1].margin, 40, 'margin');
     assert.equal(firstExportCall.args[1].svgToCanvas, svgToCanvas, 'svgToCanvas passed');
 
@@ -95,9 +93,6 @@ QUnit.test('Export method. PNG format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub
@@ -119,9 +114,6 @@ QUnit.test('Export method. JPEG format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub
@@ -143,9 +135,6 @@ QUnit.test('Export method. GIF format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub
@@ -167,9 +156,6 @@ QUnit.test('Export method. SVG format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub
@@ -191,9 +177,6 @@ QUnit.test('Export method. PDF format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub
@@ -216,9 +199,6 @@ QUnit.test('Export method. invalid format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub,
@@ -245,9 +225,6 @@ QUnit.test('Export method. unsopported image format', function(assert) {
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const widget = this.createWidget({
-        'export': {
-            proxyUrl: 'testProxy'
-        },
         onExporting: exportingStub,
         onExported: exportedStub,
         onFileSaving: fileSavingStub,
@@ -279,7 +256,6 @@ QUnit.test('Export method. Undefined options', function(assert) {
     assert.equal(firstExportCall.args[1].backgroundColor, '#ffffff', 'backgroundColor');
     assert.equal(firstExportCall.args[1].fileName, 'file', 'fileName');
     assert.equal(firstExportCall.args[1].format, 'PNG', 'format');
-    assert.equal(firstExportCall.args[1].proxyUrl, undefined, 'proxyUrl');
 });
 
 QUnit.test('Disable pointer events while exporting', function(assert) {
@@ -287,7 +263,6 @@ QUnit.test('Disable pointer events while exporting', function(assert) {
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40
         }
     });
@@ -305,7 +280,6 @@ QUnit.test('Restore pointer events after export', function(assert) {
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40
         }
     });
@@ -327,7 +301,6 @@ QUnit.test('Restore pointer events after export if rejected', function(assert) {
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40
         }
     });
@@ -348,7 +321,6 @@ QUnit.test('Disable pointer events while printing', function(assert) {
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40
         }
     });
@@ -366,7 +338,6 @@ QUnit.test('Restore pointer events after printing', function(assert) {
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40
         }
     });
@@ -388,7 +359,6 @@ QUnit.test('Restore pointer events after printing if rejected', function(assert)
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             margin: 40
         }
     });
@@ -449,7 +419,7 @@ QUnit.test('Depends on theme', function(assert) {
 });
 
 QUnit.test('Print method - use export to prepare image, create hidden iFrame with image, delete iFrame after printing', function(assert) {
-    assert.expect(32);
+    assert.expect(31);
     const done = assert.async();
     const deferred = new Deferred();
     const exportFunc = clientExporter.export;
@@ -468,9 +438,7 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
     const widget = this.createWidget({
         'export': {
             backgroundColor: '#ff0000',
-            proxyUrl: 'testProxy',
             format: 'JPEG',
-            forceProxy: false,
             margin: 40,
             __test: {
                 deferred: deferred,
@@ -522,9 +490,8 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
         assert.equal(firstExportCall.args[1].backgroundColor, '#ff0000', 'backgroundColor');
         assert.equal(firstExportCall.args[1].fileName, 'file', 'fileName');
         assert.equal(firstExportCall.args[1].format, 'PNG', 'format');
-        assert.equal(firstExportCall.args[1].proxyUrl, 'testProxy', 'proxyUrl');
+        assert.equal(firstExportCall.args[1].useBase64, true, 'image data should be base64');
         assert.equal(firstExportCall.args[1].margin, 0, 'margin');
-        assert.equal(firstExportCall.args[1].forceProxy, true, 'image data should be base64');
         assert.ok(firstExportCall.args[1].fileSavingAction);
         assert.equal(firstExportCall.args[1].exportingAction, null);
         assert.equal(firstExportCall.args[1].exportedAction, null);

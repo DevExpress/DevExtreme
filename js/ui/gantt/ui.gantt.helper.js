@@ -212,7 +212,8 @@ export const GanttHelper = {
                 showSortIndexes: false
             },
             filterRow: undefined,
-            headerFilter: undefined
+            headerFilter: undefined,
+            rtlEnabled: false,
         };
     }
 

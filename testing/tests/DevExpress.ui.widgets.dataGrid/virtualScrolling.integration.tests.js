@@ -40,6 +40,13 @@ const generateDataSource = function(count) {
 
 QUnit.testStart(function() {
     const markup = `
+        <style>\
+            .qunit-fixture-static {\
+                position: absolute !important;\
+                left: 0 !important;\
+                top: 0 !important;\
+            }\
+        </style>\
         <div id="dataGrid"></div>
     `;
 
@@ -155,51 +162,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [100], 'selectedRowKeys is actual');
         assert.deepEqual(dataGrid.getVisibleRows().slice(-1)[0].isSelected, true, 'last row is selected');
         assert.ok(dataGrid.getVisibleRows().slice(0, -1).every(row => row.isSelected === false), 'other rows are not selected');
-    });
-
-    // T916093
-    ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
-        QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
-            $('#dataGrid').dxDataGrid({
-                height: 400,
-                dataSource: {
-                    load: function(loadOptions) {
-                        const d = $.Deferred();
-
-                        const data = [];
-                        const start = loadOptions.skip || 0;
-                        const end = loadOptions.skip + loadOptions.take || 1000;
-                        for(let i = start; i < end; i++) {
-                            data.push({
-                                id: i + 1
-                            });
-                        }
-
-                        setTimeout(function() {
-                            d.resolve({ data: data, totalCount: 1000 });
-                        }, 2000);
-
-                        return d;
-                    }
-                },
-                remoteOperations: true,
-                scrolling: {
-                    mode: scrollingMode
-                },
-                export: {
-                    enabled: true
-                }
-            });
-
-            this.clock.tick(4500);
-
-            $('.dx-datagrid-export-button').trigger('dxclick');
-
-            this.clock.tick(1000);
-            const $loadPanel = $('.dx-loadpanel');
-
-            assert.notOk($loadPanel.hasClass('dx-state-invisible'), 'load panel is visible');
-        });
     });
 
     ['standard', 'virtual'].forEach((scrollingMode) => {
@@ -1116,6 +1078,47 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.deepEqual(dataIndexes, [undefined, 0, 1, 2, 3, 4], 'dataIndex values in rows');
         assert.deepEqual(alternatedRowIndexes, [2, 4], 'row indexes with dx-row-alt class');
+    });
+
+    // T1131109
+    QUnit.test('row alternation should be correct if virtual scrolling is enabled and pageSize = 1', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 300,
+            dataSource: generateDataSource(100),
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageSize: 1
+            },
+            rowAlternationEnabled: true
+        });
+        this.clock.tick(200);
+
+        // assert
+        let dataIndexes = dataGrid.getVisibleRows().map((row) => row.dataIndex);
+        let alternatedRowIndexes = dataIndexes.filter((_, index) => $(dataGrid.getRowElement(index)).hasClass('dx-row-alt'));
+        assert.deepEqual(dataIndexes, [0, 1, 2, 3, 4, 5, 6, 7, 8], 'dataIndex values in rows');
+        assert.deepEqual(alternatedRowIndexes, [1, 3, 5, 7], 'row indexes with dx-row-alt class');
+
+        // arrange
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        scrollable.scrollTo({ y: 200 });
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick(200);
+        scrollable.scrollTo({ y: 300 });
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick(200);
+
+        // assert
+        dataIndexes = dataGrid.getVisibleRows().map((row) => row.dataIndex);
+        alternatedRowIndexes = dataIndexes.filter((_, index) => $(dataGrid.getRowElement(index)).hasClass('dx-row-alt'));
+        assert.deepEqual(dataIndexes, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'dataIndex values in rows');
+        assert.deepEqual(alternatedRowIndexes, [9, 11, 13, 15, 17], 'row indexes with dx-row-alt class');
     });
 
     // T583229
@@ -6275,6 +6278,70 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'fixed cell is not rerendered');
         assert.ok($detailRow.hasClass('dx-master-detail-row'), 'master detail row');
         assert.equal($detailRow.children().first().attr('colspan'), dataGrid.getVisibleColumns().length, 'master detail cell: colspan');
+    });
+
+    // T1124157
+    QUnit.test('Virtual rows should render correctly after horizontal scrolling when cellTemplate is set', function(assert) {
+        if(devices.real().ios || ('callPhantom' in window)) {
+            assert.ok(true);
+            return;
+        }
+        // arrange
+        $('#qunit-fixture').addClass('qunit-fixture-static');
+
+        try {
+            const data = [];
+
+            for(let i = 0; i < 100; i++) {
+                data[i] = { id: i };
+
+                for(let j = 0; j < 20; j++) {
+                    data[i][`field_${j}`] = `0-${j + 1}`;
+                }
+            }
+
+            const cellHeight = 100;
+            const dataGrid = createDataGrid({
+                loadingTimeout: null,
+                dataSource: data,
+                columnMinWidth: 100,
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                },
+                customizeColumns: (columns) => {
+                    columns[2].cellTemplate = (container, options) => {
+                        $(container).append(`<div style="height: ${cellHeight}px">${options.data.id}</div>`);
+                    };
+                }
+            });
+
+            // act
+            $(window).scrollTop(2000);
+            $(window).trigger('scroll');
+            this.clock.tick(500);
+
+            // assert
+            let $virtualRows = $(dataGrid.element()).find('.dx-virtual-row');
+            assert.strictEqual($virtualRows.length, 2, 'virtual row count');
+
+            const firstVirtualRowHeight = getHeight($virtualRows.first());
+            const lastVirtualRowHeight = getHeight($virtualRows.last());
+
+            // act
+            const scrollable = dataGrid.getScrollable();
+            scrollable.scrollTo({ x: 300 });
+            $(scrollable.container()).triggerHandler('scroll');
+            this.clock.tick(500);
+
+            // assert
+            $virtualRows = $(dataGrid.element()).find('.dx-virtual-row');
+            assert.strictEqual($virtualRows.length, 2, 'virtual row count');
+            assert.strictEqual(getHeight($virtualRows.first()), firstVirtualRowHeight, 'height of the first virtual row');
+            assert.strictEqual(getHeight($virtualRows.last()), lastVirtualRowHeight, 'height of the last virtual row');
+        } finally {
+            $('#qunit-fixture').removeClass('qunit-fixture-static');
+        }
     });
 });
 

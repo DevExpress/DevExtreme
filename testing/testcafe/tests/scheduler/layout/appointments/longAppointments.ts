@@ -1,11 +1,10 @@
 // T1086079
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Appointments:longAppointments(T1086079)`
+fixture.disablePageReloads`Layout:Appointments:longAppointments(T1086079)`
   .page(url(__dirname, '../../../container.html'));
 
 const dataSource = [{
@@ -17,7 +16,7 @@ const dataSource = [{
 
 const appointmentName = 'Website Re-Design Plan';
 
-safeSizeTest('Control should be render top part of recurrent long appointment in day view(T1086079)', async (t) => {
+test('Control should be render top part of recurrent long appointment in day view(T1086079)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -50,10 +49,10 @@ safeSizeTest('Control should be render top part of recurrent long appointment in
     startDayHour: 2,
     endDayHour: 22,
     height: 600,
-  }, true);
+  });
 });
 
-safeSizeTest('Control should be render top part of recurrent long appointment in week view(T1086079)', async (t) => {
+test('Control should be render top part of recurrent long appointment in week view(T1086079)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -84,5 +83,5 @@ safeSizeTest('Control should be render top part of recurrent long appointment in
     startDayHour: 2,
     endDayHour: 22,
     height: 600,
-  }, true);
+  });
 });

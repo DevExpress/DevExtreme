@@ -2041,7 +2041,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this._createDragBehavior(this.getWorkArea(), $rootElement);
             this._createDragBehavior(this.getAllDayContainer(), $rootElement);
-            this._createDragBehavior(this._$allDayPanel, $rootElement);
         }
     }
 
@@ -2607,6 +2606,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.renderWorkSpace();
+        if(this.isRenovatedRender()) {
+            this.virtualScrollingDispatcher.updateDimensions();
+        }
 
         this._updateGroupTableHeight();
         this.updateHeaderEmptyCellWidth();
@@ -2791,8 +2793,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.isRenovatedRender()) {
             this.renderRWorkSpace();
-
-            this.virtualScrollingDispatcher.updateDimensions();
         } else {
             this._renderDateHeader();
             this._renderTimePanel();

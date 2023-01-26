@@ -162,7 +162,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item?.rowType === 'data' && !item.isNewRow;
                 },
                 getItemData: function(item) {
-                    return item?.oldData || item?.data || item;
+                    return isDefined(item?.rowType) ? item?.oldData || item?.data : item;
                 },
                 filter: function() {
                     return dataController.getCombinedFilter(deferred);
@@ -551,7 +551,7 @@ export const selectionModule = {
                 _loadDataSource: function() {
                     const that = this;
 
-                    return that.callBase().done(function() {
+                    return that.callBase().always(function() {
                         that.getController('selection').refresh();
                     });
                 },
@@ -875,8 +875,9 @@ export const selectionModule = {
                 },
 
                 _renderCore: function(change) {
-                    this.callBase(change);
+                    const deferred = this.callBase(change);
                     this._updateCheckboxesClass();
+                    return deferred;
                 },
 
                 _updateCheckboxesClass: function() {

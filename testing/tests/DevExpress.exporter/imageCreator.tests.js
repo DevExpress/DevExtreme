@@ -431,6 +431,7 @@ QUnit.test('toDataURL ImageQuality', function(assert) {
 QUnit.test('Special symbols drown on canvas correct', function(assert) {
     const that = this;
     const done = assert.async();
+    // eslint-disable-next-line i18n/no-russian-character
     const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Специальные символы</text></g>' + testingMarkupEnd,
         {
             width: 500,
@@ -442,6 +443,7 @@ QUnit.test('Special symbols drown on canvas correct', function(assert) {
     $.when(imageBlob).done(function() {
         try {
             assert.equal(that.drawnElements[1].type, 'text', 'Text element was drawned correct');
+            // eslint-disable-next-line i18n/no-russian-character
             assert.equal(that.drawnElements[1].args[0], 'Специальные символы', 'The text symbols is correct');
         } finally {
             done();
@@ -505,7 +507,6 @@ QUnit.test('Transformation of canvas context args (T892041, T1020859)', function
         }
     });
 });
-
 
 QUnit.module('Svg to canvas', {
     beforeEach: function() {
@@ -2331,72 +2332,6 @@ QUnit.test('Export.color option', function(assert) {
     });
 });
 
-QUnit.test('getData returns Blob when it supported by Browser', function(assert) {
-    if(!typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t blob');
-        return;
-    }
-
-    const done = assert.async();
-    const _getBlob = imageCreator._getBlob;
-    const _getBase64 = imageCreator._getBase64;
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
-
-    imageCreator._getBlob = function() {
-        return 'blobData';
-    };
-
-    imageCreator._getBase64 = function() {
-        return 'base64Data';
-    };
-
-    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
-
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        try {
-            assert.equal(data, 'blobData', '_getBlob was called');
-        } finally {
-            imageCreator._getBlob = _getBlob;
-            imageCreator._getBase64 = _getBase64;
-            done();
-        }
-    });
-});
-
-QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
-    if(typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t Blob');
-        return;
-    }
-
-    const done = assert.async();
-    const _getBlob = imageCreator._getBlob;
-    const _getBase64 = imageCreator._getBase64;
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
-
-    imageCreator._getBlob = function() {
-        return 'blobData';
-    };
-
-    imageCreator._getBase64 = function() {
-        return 'base64Data';
-    };
-
-    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
-
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        try {
-            assert.equal(data, 'base64Data', '_getBase64 was called');
-        } finally {
-            imageCreator._getBlob = _getBlob;
-            imageCreator._getBase64 = _getBase64;
-            done();
-        }
-    });
-});
-
 QUnit.test('Read computed style of elements if export target is attached element', function(assert) {
     const that = this;
     const done = assert.async();
@@ -2621,4 +2556,69 @@ QUnit.test('Some items is async', function(assert) {
         }
         done();
     });
+});
+
+QUnit.module('Tests with private API usage', {
+    beforeEach() {
+        this.originalGetBlob = imageCreator._getBlob;
+        this.originalGetBase64 = imageCreator._getBase64;
+
+        imageCreator._getBlob = () => 'blobData';
+        imageCreator._getBase64 = () => 'base64Data';
+    },
+    afterEach() {
+        imageCreator._getBlob = this.originalGetBlob;
+        imageCreator._getBase64 = this.originalGetBase64;
+    }
+}, () => {
+
+    QUnit.test('getData returns Blob when it supported by Browser', function(assert) {
+        if(!typeUtils.isFunction(window.Blob)) {
+            assert.ok(true, 'Skip if there isn\'t blob');
+            return;
+        }
+
+        const done = assert.async();
+        const markup = '<svg></svg>';
+
+        const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
+
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'blobData', '_getBlob was called');
+            done();
+        });
+    });
+
+    QUnit.test('data has base64 format if useBase64 is true(T1136337)', function(assert) {
+        const done = assert.async();
+        const markup = '<svg></svg>';
+
+        const deferred = imageCreator.getData(markup, { useBase64: true });
+
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'base64Data', 'data has base64 format');
+            done();
+        });
+    });
+
+    QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
+        if(typeUtils.isFunction(window.Blob)) {
+            assert.ok(true, 'Skip if there isn\'t Blob');
+            return;
+        }
+
+        const done = assert.async();
+        const markup = '<svg></svg>';
+
+        const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
+
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'base64Data', '_getBase64 was called');
+            done();
+        });
+    });
+
 });

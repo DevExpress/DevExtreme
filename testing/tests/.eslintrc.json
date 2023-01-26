@@ -1,5 +1,5 @@
 {
-    "extends": [
-        "devextreme/qunit"
-    ]
+  "extends": [
+    "devextreme/qunit"
+  ]
 }

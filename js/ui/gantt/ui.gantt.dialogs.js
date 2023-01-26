@@ -106,7 +106,8 @@ class DialogInfoBase {
                 items: this._getFormItems(),
                 elementAttr: {
                     class: this._getFormCssClass()
-                }
+                },
+                rtlEnabled: false
             });
             return content;
         };
@@ -236,13 +237,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
 
     }
     _getFormattedDateText(date) {
-        let result = '';
-        if(date) {
-            const datePart = dateLocalization.format(date, 'shortDate');
-            const timePart = dateLocalization.format(date, 'hh:mm');
-            result = datePart + ' ' + timePart;
-        }
-        return result;
+        return date ? dateLocalization.format(date, 'shortDateShortTime') : '';
     }
     _isReadOnlyField(field) {
         return this._parameters.readOnlyFields.indexOf(field) > -1;

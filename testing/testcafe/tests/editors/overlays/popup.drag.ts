@@ -1,14 +1,14 @@
-import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import Popup from '../../../model/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import createWidget from '../../../helpers/createWidget';
-import { setStyleAttribute } from '../../navigation/helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Popup`
+fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));
 
-test('Popup can not be dragged outside of the container (window)', async (t) => {
+safeSizeTest('Popup can not be dragged outside of the container (window)', async (t) => {
   const popup = new Popup('#container');
 
   const content = popup.getContent();
@@ -19,7 +19,6 @@ test('Popup can not be dragged outside of the container (window)', async (t) => 
   };
 
   await t
-    .resizeWindow(700, 700)
     .drag(toolbar, -10000, -10000);
 
   await asyncForEach(['bottom', 'left', 'top', 'right'], async (prop) => {
@@ -48,7 +47,7 @@ test('Popup can not be dragged outside of the container (window)', async (t) => 
   await t
     .expect(popupRect.right)
     .eql(700);
-}).before(async () => createWidget('dxPopup', {
+}, [700, 700]).before(async () => createWidget('dxPopup', {
   width: 100,
   height: 100,
   visible: true,
@@ -57,7 +56,7 @@ test('Popup can not be dragged outside of the container (window)', async (t) => 
 }));
 
 test('Popup can not be dragged if content bigger than container', async (t) => {
-  const popup = new Popup('#container');
+  const popup = new Popup('#popup');
 
   const content = popup.getContent();
   const toolbar = popup.getToolbar();
@@ -89,16 +88,17 @@ test('Popup can not be dragged if content bigger than container', async (t) => {
     .expect(popupPosition.left)
     .eql(newPopupPosition.left);
 }).before(async () => {
-  await setStyleAttribute(Selector('#otherContainer'), 'width: 99px; height: 99px;');
+  await appendElementTo('#container', 'div', 'popup', {});
+  await appendElementTo('#container', 'div', 'popupContainer', { width: '99px', height: '99px' });
 
   return createWidget('dxPopup', {
-    position: { of: '#otherContainer' },
-    container: '#otherContainer',
+    position: { of: '#popupContainer' },
+    container: '#popupContainer',
     visible: true,
     width: 100,
     height: 100,
     animation: undefined,
-  }, false);
+  }, '#popup');
 });
 
 test('Popup can be dragged outside of the container if dragOutsideBoundary is enabled', async (t) => {
@@ -132,4 +132,4 @@ test('Popup can be dragged outside of the container if dragOutsideBoundary is en
   dragEnabled: true,
   dragOutsideBoundary: true,
   animation: undefined,
-}, false));
+}));

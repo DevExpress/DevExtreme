@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:AppointmentForm:IntegerFormatNumberBox`
+fixture.disablePageReloads`Layout:AppointmentForm:IntegerFormatNumberBox`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {
+test('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -17,7 +16,7 @@ safeSizeTest('dxNumberBox should not allow to enter not integer chars(T1002864)'
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
 
   await t
-    .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.1 });
+    .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.5 });
 
   await t
     .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', scheduler.appointmentPopup.wrapper))
@@ -39,4 +38,4 @@ safeSizeTest('dxNumberBox should not allow to enter not integer chars(T1002864)'
   startDayHour: 9,
   height: 600,
   recurrenceEditMode: 'series',
-}, true));
+}));

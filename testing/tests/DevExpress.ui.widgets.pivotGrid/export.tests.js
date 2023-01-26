@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { DataProvider } from 'ui/pivot_grid/ui.pivot_grid.export';
-import clientExporter from 'exporter';
 import dateLocalization from 'localization/date';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
@@ -174,32 +173,6 @@ QUnit.module('dxPivotGrid', {
 
         assert.strictEqual(this.dataProvider.getCellData(5, 0).value, 'C1 Total', 'RowInfo part cellText is correct');
         assert.strictEqual(this.dataProvider.getCellData(555, 555).value, undefined, 'CellValue out of index is undefined');
-    });
-
-    QUnit.test('exportToExcel', function(assert) {
-        const pivotGrid = this.pivotGrid;
-
-        sinon.stub(pivotGrid, 'getDataProvider');
-        sinon.stub(clientExporter, 'export');
-
-        pivotGrid.exportToExcel();
-
-        assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
-        assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, 'First arg is data');
-
-        assert.equal(clientExporter.export.getCall(0).args[1].format, 'EXCEL', 'format');
-        assert.strictEqual(clientExporter.export.getCall(0).args[1].proxyUrl, undefined, 'proxyUrl');
-        assert.strictEqual(clientExporter.export.getCall(0).args[1].rtlEnabled, false, 'rtlEnabled');
-        assert.strictEqual(clientExporter.export.getCall(0).args[1].fileName, 'PivotGrid', 'fileName');
-        assert.strictEqual(clientExporter.export.getCall(0).args[1].ignoreErrors, true, 'ignoreErrors');
-
-        assert.ok(clientExporter.export.getCall(0).args[1].exportedAction, 'exportedAction');
-        assert.ok(clientExporter.export.getCall(0).args[1].exportingAction, 'exportingAction');
-        assert.ok(clientExporter.export.getCall(0).args[1].fileSavingAction, 'fileSavingAction');
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[2], clientExporter.excel.getData, 'Export to excel function is correct');
-
-        clientExporter.export.restore();
     });
 
     QUnit.test('getAllItems', function(assert) {

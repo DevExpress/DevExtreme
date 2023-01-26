@@ -1082,6 +1082,39 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         this.clock.tick();
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
+        assert.strictEqual($fileUploader.dxFileUploader('option', 'progress'), 100, 'progress is 100%');
+    });
+    test('uploading multiple empty files and regular file keeps total progress = 0 until all files are uploaded and completes with 100% of total progress - T1122867', function(assert) {
+        this.xhrMock.startSeries();
+
+        const fileSize = 0;
+        const chunkSize = 20000;
+        const files = [createBlobFile('fake1.png', fileSize), createBlobFile('fake2.png', fileSize)];
+        let chunkIndex = 0;
+        const defaultTimeout = 200;
+        const progressSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize,
+            onProgress: progressSpy
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        fileUploader._uploadStrategy._sendChunkCore = () => {
+            const deferred = new Deferred();
+            const timeout = chunkIndex++ < 1 ? defaultTimeout : defaultTimeout * 2;
+            setTimeout(() => deferred.resolve(this.xhrMock), timeout);
+            return deferred.promise();
+        };
+        simulateFileChoose($fileUploader, files);
+
+        this.clock.tick(defaultTimeout + 1);
+        assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
+        assert.strictEqual(fileUploader.option('progress'), 0, 'progress is 0%');
+
+        this.clock.tick(defaultTimeout + 1);
+        assert.strictEqual(progressSpy.callCount, 2, 'all chunks are sent');
+        assert.strictEqual(fileUploader.option('progress'), 100, 'progress is 100%');
     });
 });
 
@@ -4003,7 +4036,7 @@ QUnit.module('disabled option', () => {
         assert.equal($fileInput.css('display'), 'none', 'input is hidden');
     });
 
-    QUnit.test('label text must be visible when disabled option chаnged dynamically', function(assert) {
+    QUnit.test('label text must be visible when disabled option changed dynamically', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             disabled: true,
             useDragOver: true,

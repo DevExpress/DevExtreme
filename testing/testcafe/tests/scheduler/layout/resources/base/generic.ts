@@ -1,11 +1,10 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import { createDataSetForScreenShotTests } from '../../utils';
 
-fixture`Scheduler: Generic theme layout`
+fixture.disablePageReloads`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
@@ -16,7 +15,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
     currentView: view,
     resources: resourcesValue,
     height: 600,
-  }, true);
+  });
 };
 
 const resources = [{
@@ -37,10 +36,10 @@ const resources = [{
 
 [undefined, resources].forEach((resourcesValue) => {
   ['day', 'week', 'workWeek', 'month'].forEach((view) => {
-    safeSizeTest(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
-      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
@@ -50,10 +49,10 @@ const resources = [{
 
 [undefined, resources].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    safeSizeTest(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
-      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();

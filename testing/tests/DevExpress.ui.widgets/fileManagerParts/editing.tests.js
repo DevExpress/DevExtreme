@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import pointerEvents from 'events/pointer';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileSystemError from 'file_management/error.js';
@@ -560,6 +561,189 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(uploadInfo.bytesUploaded, 0, 'bytesUploaded correct');
     });
 
+    test('uploading an empty file completes with 100% of total progress - T1122867', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                uploadFileChunk: uploadChunkSpy
+            }),
+            upload: { chunkSize }
+        });
+
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1, 0)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+        assert.strictEqual(uploadChunkSpy.callCount, 1, 'fileUploaded');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is present');
+
+        const common = infos[0].common;
+        assert.equal(common.commonText, 'Uploaded an item to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 100, 'task is completed');
+    });
+
+    test('uploading multiple empty files keeps total progress = 0 until all files are uploaded and completes with 100% of total progress - T1122867', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+        const operationDelay = 200;
+
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationDelays: [operationDelay, operationDelay, operationDelay * 2],
+                operationsToDelay: 'cud',
+                realProviderInstance: new CustomFileSystemProvider({
+                    uploadFileChunk: uploadChunkSpy
+                })
+            }),
+            upload: { chunkSize }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const emptyFiles = createUploaderFiles(3, 0);
+        this.wrapper.setUploadInputFile(emptyFiles);
+
+        this.clock.tick(operationDelay + 1);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, '2 empty files are uploaded, and 1 isn\'t started');
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is present');
+
+        let common = infos[0].common;
+        assert.equal(common.commonText, 'Uploading 3 items to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 0, 'summary task is in progress');
+
+        let details = infos[0].details;
+        assert.equal(details.length, 3, '3 detail items rendered');
+        for(let i = 0; i < 3; i++) {
+            const detail = details[i];
+            if(i < 2) {
+                assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+                assert.equal(detail.progressBarValue, 100, 'task is completed');
+            } else {
+                assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+                assert.equal(detail.progressBarValue, 0, 'task is not started yet');
+            }
+        }
+
+        this.clock.tick(operationDelay + 1);
+        assert.strictEqual(uploadChunkSpy.callCount, 3, 'all files are uploaded');
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is still present');
+
+        common = infos[0].common;
+        assert.equal(common.commonText, 'Uploaded 3 items to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 100, 'summary task is completed');
+
+        details = infos[0].details;
+        assert.equal(details.length, 3, '3 detail items still rendered');
+        for(let i = 0; i < 3; i++) {
+            const detail = details[i];
+            assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+            assert.equal(detail.progressBarValue, 100, 'task is completed');
+        }
+    });
+
+    test('uploading multiple empty files and regular file keeps total progress = 0 until all files are uploaded and completes with 100% of total progress - T1122867', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+        const operationDelay = 200;
+
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationDelays: [operationDelay, operationDelay, operationDelay * 2],
+                operationsToDelay: 'cud',
+                realProviderInstance: new CustomFileSystemProvider({
+                    uploadFileChunk: uploadChunkSpy
+                })
+            }),
+            upload: { chunkSize }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const emptyFiles = createUploaderFiles(2, 0);
+        const file = createUploaderFiles(3, chunkSize * 2)[2];
+        this.wrapper.setUploadInputFile([ ...emptyFiles, file ]);
+
+        this.clock.tick(operationDelay + 1);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'empty files are uploaded, and 0 % of regular file is uploaded');
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is present');
+
+        let common = infos[0].common;
+        assert.equal(common.commonText, 'Uploading 3 items to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 0, 'summary task is in progress');
+
+        let details = infos[0].details;
+        assert.equal(details.length, 3, '3 detail items rendered');
+        for(let i = 0; i < 3; i++) {
+            const detail = details[i];
+            if(i < 2) {
+                assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+                assert.equal(detail.progressBarValue, 100, 'task is completed');
+            } else {
+                assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+                assert.equal(detail.progressBarValue, 0, 'task is not started yet');
+            }
+        }
+
+        this.clock.tick(operationDelay + 1);
+        assert.strictEqual(uploadChunkSpy.callCount, 3, 'empty files are uploaded, and 50 % of regular file is uploaded');
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is still present');
+
+        common = infos[0].common;
+        assert.equal(common.commonText, 'Uploading 3 items to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 50, 'summary task is in progress');
+
+        details = infos[0].details;
+        assert.equal(details.length, 3, '3 detail items still rendered');
+        for(let i = 0; i < 3; i++) {
+            const detail = details[i];
+            if(i < 2) {
+                assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+                assert.equal(detail.progressBarValue, 100, 'task is completed');
+            } else {
+                assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+                assert.equal(detail.progressBarValue, 50, 'task is in progress');
+            }
+        }
+
+        this.clock.tick(operationDelay + 1);
+        assert.strictEqual(uploadChunkSpy.callCount, 4, 'all files are uploaded');
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'one operation is still present');
+
+        common = infos[0].common;
+        assert.equal(common.commonText, 'Uploaded 3 items to Files', 'common text is correct');
+        assert.equal(common.progressBarValue, 100, 'summary task is completed');
+
+        details = infos[0].details;
+        assert.equal(details.length, 3, '3 detail items still rendered');
+        for(let i = 0; i < 3; i++) {
+            const detail = details[i];
+            assert.equal(detail.commonText, `Upload file ${i}.txt`, 'common text is correct');
+            assert.equal(detail.progressBarValue, 100, 'task is completed');
+        }
+    });
+
     test('copying file must be completed in progress panel and current directory must be changed to the destination', function(assert) {
         const longPath = 'Files/Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1';
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
@@ -1012,7 +1196,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let itemNames = this.wrapper.getDetailsItemNamesTexts();
         let uploadedFileIndex = itemNames.indexOf(file0.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
 
@@ -1035,7 +1219,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         itemNames = this.wrapper.getDetailsItemNamesTexts();
         uploadedFileIndex = itemNames.indexOf(file1.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '488.3 KB', 'file size is correct');
 
@@ -2077,5 +2261,96 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal($cells.length, 1, 'file count is correct');
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'first file is the target file');
         assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
+    });
+
+    test('currentPath must not be changed when remaning a file after its moving (T1132584)', function(assert) {
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+
+        // moving file
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that it moved
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), 'Folder 3', 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), ['Folder 3'], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file moved to another folder');
+
+        assert.strictEqual(this.wrapper.getColumnCellsInDetailsView(2).length, 1, 'file count is correct');
+
+        // renaming moved file
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val('File 1 renamed.txt').trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that file is renamed and we are still in the folder 'Folder 3'
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), 'Folder 3', 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), ['Folder 3'], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1 renamed.txt', 'file renamed to another folder');
+
+        assert.strictEqual(this.wrapper.getColumnCellsInDetailsView(2).length, 1, 'file count is correct');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1 renamed.txt', 'first file is the target file');
+    });
+
+    test('current directory must not be changed when all items not moved - events - try rename after operation (T1080473, T1132584)', function(assert) {
+        const initialDirName = 'Folder 1';
+        const fileName1 = 'File 1-1.txt';
+        const fileName2 = 'File 1-2.jpg';
+        const fileKey1 = `${initialDirName}/${fileName1}`;
+        const fileKey2 = `${initialDirName}/${fileName2}`;
+        const newFileName = 'File 1 renamed.txt';
+
+        this.fileManager.option({
+            currentPath: initialDirName,
+            selectionMode: 'multiple',
+            selectedItemKeys: [ fileKey1, fileKey2 ],
+            onItemMoving: e => {
+                e.cancel = true;
+            }
+        });
+        this.clock.tick(400);
+
+        // try moving selected files to the 'Folder 2'
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(4).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        // clear selection
+        this.wrapper.getSelectAllCheckBox().trigger('dxclick');
+        this.clock.tick(400);
+
+        // renaming file 'File 1-1.txt'
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(newFileName).trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        // check that no files have been moved and we are still in 'Folder 1'
+        assert.strictEqual(this.wrapper.getInstance().option('currentPath'), initialDirName, 'currentPath option matches destination directory');
+        assert.deepEqual(this.wrapper.getInstance().option('currentPathKeys'), [initialDirName], 'currentPathKeys option matches destination directory');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), initialDirName, 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, initialDirName, 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), newFileName, '1st file is still in the initial dir');
+        assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
     });
 });

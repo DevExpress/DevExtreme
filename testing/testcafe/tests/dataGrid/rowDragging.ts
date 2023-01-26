@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 
@@ -51,9 +51,8 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   return items;
 };
 
-fixture`Row dragging`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture.disablePageReloads`Row dragging`
+  .page(url(__dirname, '../container.html'));
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
@@ -143,7 +142,7 @@ test('The placeholder should appear when a cross-component dragging rows after s
       rowDragging: {
         group: 'shared',
       },
-    }, false, '#otherContainer'),
+    }, '#otherContainer'),
   ]);
 });
 
@@ -243,7 +242,7 @@ test('The cross-component drag and drop rows should work when there are fixed co
       rowDragging: {
         group: 'shared',
       },
-    }, false, '#otherContainer'),
+    }, '#otherContainer'),
   ]);
 });
 
@@ -251,7 +250,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
-  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 500, 0);
+  await t.drag(dataGrid.getDataRow(2).element.find('.dx-datagrid-drag-icon'), 500, 0);
 
   const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
     $(`.${CLASS.dataGridRowsView} .${CLASS.dataGridContentFixed}:eq(0)`).css('pointer-events'),
@@ -341,7 +340,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
       rowDragging: {
         group: 'shared',
       },
-    }, false, '#otherContainer'),
+    }, '#otherContainer'),
   ]);
 });
 
@@ -579,5 +578,61 @@ test('The placeholder should have correct position after dragging the row to the
       },
       showDragIcons: false,
     },
+  });
+});
+
+// T1126013
+// TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
+test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+  const fromIndex = 2;
+  const toIndex = 4;
+
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.scrollTo({ y: 3000 });
+  await dataGrid.moveRow(fromIndex, 0, 50, true);
+  await dataGrid.moveRow(fromIndex, 0, -20);
+  await t.wait(500);
+  await dataGrid.moveRow(toIndex, 0, 5);
+  await t.wait(200);
+
+  await ClientFunction((grid) => {
+    const instance = grid.getInstance();
+    $(instance.element()).trigger($.Event('dxpointerup'));
+  })(dataGrid);
+  await t.wait(200);
+
+  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
+    .getVisibleRows()
+    .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
+  await t.expect(draggedRowIndex)
+    .eql(toIndex - 1);
+}).before(async (t) => {
+  await t.maximizeWindow();
+  const items = generateData(50, 1);
+  return createWidget('dxDataGrid', {
+    height: 250,
+    keyExpr: 'field1',
+    scrolling: {
+      mode: 'virtual',
+    },
+    paging: {
+      pageSize: 4,
+    },
+    dataSource: items,
+    rowDragging: {
+      scrollSpeed: 300,
+      allowReordering: true,
+      onReorder: ClientFunction((e) => {
+        const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line max-len
+        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+        const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
+        items.splice(fromIndex, 1);
+        items.splice(toIndex, 0, e.itemData);
+
+        e.component.refresh();
+      }, { dependencies: { items } }),
+    },
+    showBorders: true,
   });
 });

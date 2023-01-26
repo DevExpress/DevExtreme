@@ -19,7 +19,6 @@ import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
-import errors from '../widget/ui.errors';
 import { nativeScrolling } from '../../core/utils/support';
 import { getRelativeOffset } from '../../renovation/ui/scroll_view/utils/get_relative_offset';
 import { SCROLLABLE_CONTENT_CLASS, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
@@ -587,7 +586,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _fireContentReadyAction: function() {
         const dataSource = this.getDataSource();
-        const skipContentReadyAction = dataSource && !dataSource.isLoaded();
+        const skipContentReadyAction = dataSource && !dataSource.isLoaded() || this._skipContentReadyAndItemExpanded;
 
         const scrollable = this.getScrollable();
 
@@ -1013,7 +1012,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireExpandedStateUpdatedEvent: function(isExpanded, node, e) {
-        if(!this._hasChildren(node)) {
+        if(!this._hasChildren(node) || this._skipContentReadyAndItemExpanded) {
             return;
         }
 
@@ -1066,6 +1065,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const value = this._dataAdapter.isAllSelected();
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
+            tabIndex: 1,
             text: this.option('selectAllText'),
             onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
@@ -1366,11 +1366,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _focusInHandler: function(e) {
         this._updateFocusState(e, true);
 
-        if(this.option('focusedElement')) {
+        const isSelectAllItem = $(e.target).hasClass(SELECT_ALL_ITEM_CLASS);
+
+        if(isSelectAllItem || this.option('focusedElement')) {
             clearTimeout(this._setFocusedItemTimeout);
 
+            const element = isSelectAllItem ? getPublicElement(this._$selectAllItem) : $(this.option('focusedElement'));
+
             this._setFocusedItemTimeout = setTimeout(() => {
-                this._setFocusedItem($(this.option('focusedElement')));
+                this._setFocusedItem(element);
             });
 
             return;
@@ -1602,12 +1606,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
-    getSelectedNodesKeys: function() {
-        errors.log('W0002', 'dxTreeView', 'getSelectedNodesKeys', '20.1', 'Use the \'getSelectedNodeKeys\' method instead');
-        return this.getSelectedNodeKeys();
-    },
-
     getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
     },
@@ -1628,10 +1626,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    _allItemsExpandedHandler: function() {
+        this._skipContentReadyAndItemExpanded = false;
+        this._fireContentReadyAction();
+    },
+
     expandAll: function() {
-        const dataAdapter = this._dataAdapter;
-        each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
-        this.repaint();
+        const nodes = this._dataAdapter.getData();
+        const expandingPromises = [];
+
+        this._skipContentReadyAndItemExpanded = true;
+
+        // NOTE: This is needed to support animation on expandAll, but stop triggering multiple contentReady/itemExpanded events.
+        nodes.forEach((node) => expandingPromises.push(this._toggleExpandedState(node.internalFields.key, true)));
+
+        Promise.allSettled(expandingPromises).then(() => this._allItemsExpanded?.());
     },
 
     collapseAll: function() {
@@ -1707,6 +1716,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _dispose: function() {
         this.callBase();
         clearTimeout(this._setFocusedItemTimeout);
+        this._allItemsExpandedHandler = null;
     }
 });
 

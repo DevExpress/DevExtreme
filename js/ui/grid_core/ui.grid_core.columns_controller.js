@@ -1,3 +1,4 @@
+// @ts-check
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';
@@ -35,6 +36,9 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const columnsControllerModule = {
     defaultOptions: function() {
         return {
@@ -55,7 +59,6 @@ export const columnsControllerModule = {
             adaptColumnWidthByRatio: true,
 
             columns: undefined,
-
             /**
              * @name dxDataGridColumn.grouped
              * @type boolean
@@ -75,6 +78,10 @@ export const columnsControllerModule = {
              * @default false
              */
             regenerateColumnsByVisibleItems: false,
+            /**
+             * @type {undefined}
+             */
+            // @ts-expect-error
             customizeColumns: null,
             dateSerializationFormat: undefined
         };
@@ -297,6 +304,9 @@ export const columnsControllerModule = {
             };
 
             const getValueDataType = function(value) {
+                /**
+                 * @type {string | undefined}
+                 */
                 let dataType = type(value);
                 if(dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
                     dataType = undefined;
@@ -354,6 +364,9 @@ export const columnsControllerModule = {
                 }
             };
 
+            /**
+             * @this {import('./ui.grid_core.columns_controller').Column}
+             */
             const customizeTextForBooleanDataType = function(e) {
                 if(e.value === true) {
                     return this.trueText || 'true';
@@ -395,6 +408,9 @@ export const columnsControllerModule = {
                 return result;
             };
 
+            /**
+             * @param {import('./ui.grid_core.columns_controller').ColumnsController} that
+             */
             const updateColumnIndexes = function(that) {
                 each(that._columns, function(index, column) {
                     column.index = index;
@@ -455,10 +471,12 @@ export const columnsControllerModule = {
             };
 
             const getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
+                // @ts-expect-error
                 const rowIndex = isObject(visibleIndex) ? visibleIndex.rowIndex : null;
                 const columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex);
                 let column;
 
+                // @ts-expect-error
                 visibleIndex = isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
 
@@ -603,6 +621,7 @@ export const columnsControllerModule = {
             };
 
             function assignColumns(that, columns) {
+                that._previousColumns = that._columns;
                 that._columns = columns;
                 resetColumnsCache(that);
                 that.updateColumnDataTypes();
@@ -653,7 +672,9 @@ export const columnsControllerModule = {
                     }
                     that._columnChanges = undefined;
                     if(needReinit(columnChanges.optionNames)) {
+                        that._reinitAfterLookupChanges = columnChanges?.optionNames['lookup'];
                         that.reinit();
+                        that._reinitAfterLookupChanges = undefined;
                     } else {
                         that.columnsChanged.fire(columnChanges);
                     }
@@ -705,8 +726,10 @@ export const columnsControllerModule = {
                 let initialColumn;
 
                 if(arguments.length === 3) {
+                    // @ts-expect-error
                     return optionGetter(column, { functionsAsIs: true });
                 }
+                // @ts-expect-error
                 const prevValue = optionGetter(column, { functionsAsIs: true });
                 if(!equalByValue(prevValue, value)) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
@@ -719,11 +742,13 @@ export const columnsControllerModule = {
                     }
 
                     const optionSetter = compileSetter(optionName);
+                    // @ts-expect-error
                     optionSetter(column, value, { functionsAsIs: true });
                     const fullOptionName = getColumnFullPath(that, column);
 
                     if(COLUMN_INDEX_OPTIONS[optionName]) {
                         updateIndexes(that, column);
+                        // @ts-expect-error
                         value = optionGetter(column);
                     }
 
@@ -744,6 +769,7 @@ export const columnsControllerModule = {
                                 initialColumn = columns[columnIndex] = { dataField: initialColumn };
                             }
                             if(initialColumn && checkUserStateColumn(initialColumn, column)) {
+                                // @ts-expect-error
                                 optionSetter(initialColumn, value, { functionsAsIs: true });
                             }
                         }
@@ -771,11 +797,19 @@ export const columnsControllerModule = {
                 that.addCommandColumn(options);
             };
 
+            /**
+             * @type {import('./ui.grid_core.columns_controller').Column['setCellValue']}
+             */
             const defaultSetCellValue = function(data, value) {
+                if(!this.dataField) {
+                    return;
+                }
                 const path = this.dataField.split('.');
                 const dotCount = path.length - 1;
 
+                // @ts-expect-error
                 if(this.serializeValue) {
+                    // @ts-expect-error
                     value = this.serializeValue(value);
                 }
 
@@ -834,6 +868,9 @@ export const columnsControllerModule = {
                 return column.fixedPosition;
             };
 
+            /**
+             * @this {import('./ui.grid_core.columns_controller').ColumnsController}
+             */
             const processExpandColumns = function(columns, expandColumns, type, columnIndex) {
                 let customColumnIndex;
                 const rowCount = this.getRowCount();
@@ -985,7 +1022,10 @@ export const columnsControllerModule = {
                 }
             };
 
-            return {
+            /**
+             * @type {Partial<import('./ui.grid_core.columns_controller').ColumnsController>}
+             */
+            const members = {
                 _getExpandColumnOptions: function() {
                     return {
                         type: 'expand',
@@ -1192,6 +1232,7 @@ export const columnsControllerModule = {
                     } else if(isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
                         updateColumnChanges(that, 'columns');
                         fireColumnsChanged(that);
+                        // @ts-expect-error
                         return new Deferred().reject().promise();
                     }
                 },
@@ -1300,6 +1341,7 @@ export const columnsControllerModule = {
                         return [];
                     }
 
+                    // @ts-ignore
                     return this._compileVisibleColumns.apply(this, arguments);
                 },
                 getFixedColumns: function(rowIndex) {
@@ -1444,6 +1486,7 @@ export const columnsControllerModule = {
 
                         columns.forEach(function(column) {
                             const ownerBand = column.ownerBand;
+                            // @ts-expect-error
                             let parentIndex = isObject(ownerBand) ? ownerBand.index : ownerBand;
                             const parent = columns[parentIndex];
 
@@ -1633,7 +1676,9 @@ export const columnsControllerModule = {
                                 return false;
                             }
 
+                            // @ts-expect-error
                             fromVisibleIndex = isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
+                            // @ts-expect-error
                             toVisibleIndex = isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
 
                             return fromVisibleIndex !== toVisibleIndex && fromVisibleIndex + 1 !== toVisibleIndex;
@@ -1656,6 +1701,7 @@ export const columnsControllerModule = {
 
                     if(fromIndex >= 0) {
                         const column = that._columns[fromIndex];
+                        // @ts-expect-error
                         toVisibleIndex = isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
                         targetGroupIndex = toIndex >= 0 ? that._columns[toIndex].groupIndex : -1;
 
@@ -1818,6 +1864,13 @@ export const columnsControllerModule = {
                 },
                 _updateColumnOptions: function(column, columnIndex) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
+                    if(this._reinitAfterLookupChanges && this._previousColumns) {
+                        column.selector.columnIndex = columnIndex;
+                        column.selector.originalCallback = this._previousColumns[columnIndex].selector.originalCallback;
+                    } else {
+                        column.selector.columnIndex = columnIndex;
+                        column.selector.originalCallback = column.selector;
+                    }
 
                     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         const calculateCallback = column[calculateCallbackName];
@@ -2199,11 +2252,13 @@ export const columnsControllerModule = {
 
                     that._columns.push(column);
 
+                    // @ts-expect-error
                     if(column.isBand) {
                         that._columns = createColumnsFromOptions(that, that._columns);
                         column = that._columns[index];
                     }
 
+                    // @ts-expect-error
                     column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
@@ -2257,6 +2312,9 @@ export const columnsControllerModule = {
                 setUserState: function(state) {
                     const that = this;
                     const dataSource = that._dataSource;
+                    /**
+                     * @type {any[]}
+                     */
                     let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
 
                     state?.forEach(this.setName);
@@ -2327,9 +2385,11 @@ export const columnsControllerModule = {
                     if(dataField) {
                         if(isString(dataField)) {
                             const getter = compileGetter(dataField);
+                            // @ts-expect-error
                             calculatedColumnOptions = {
                                 caption: captionize(dataField),
                                 calculateCellValue: function(data, skipDeserialization) {
+                                    // @ts-expect-error
                                     const value = getter(data);
                                     return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
                                 },
@@ -2352,6 +2412,7 @@ export const columnsControllerModule = {
                                             result = false;
                                         }
                                     } else if(gridCoreUtils.isDateType(column.dataType)) {
+                                        // @ts-expect-error
                                         parsedValue = dateLocalization.parse(text, column.format);
                                         if(parsedValue) {
                                             result = parsedValue;
@@ -2369,12 +2430,19 @@ export const columnsControllerModule = {
                         calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
                     }
                     calculatedColumnOptions.calculateFilterExpression = function() {
+                        // @ts-ignore
                         return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
+                    calculatedColumnOptions.defaultFilterOperation = '=';
+
                     calculatedColumnOptions.createFilterExpression = function(filterValue) {
+                        /**
+                         * @type {any}
+                         */
                         let result;
                         if(this.calculateFilterExpression) {
+                            // @ts-ignore
                             result = this.calculateFilterExpression.apply(this, arguments);
                         }
                         if(isFunction(result)) {
@@ -2404,6 +2472,7 @@ export const columnsControllerModule = {
                         calculatedColumnOptions.userDataType = columnOptions.dataType;
                     }
                     if(columnOptions.selectedFilterOperation && !('defaultSelectedFilterOperation' in calculatedColumnOptions)) {
+                        // @ts-expect-error
                         calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
                     }
                     if(columnOptions.lookup) {
@@ -2414,11 +2483,19 @@ export const columnsControllerModule = {
                                 }
                                 return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
                             },
+                            /**
+                             * @this {any}
+                             */
                             updateValueMap: function() {
-
                                 this.valueMap = {};
                                 if(this.items) {
+                                    /**
+                                     * @type {any}
+                                     */
                                     const calculateValue = compileGetter(this.valueExpr);
+                                    /**
+                                     * @type {any}
+                                     */
                                     const calculateDisplayValue = compileGetter(this.displayExpr);
                                     for(let i = 0; i < this.items.length; i++) {
                                         const item = this.items[i];
@@ -2547,6 +2624,8 @@ export const columnsControllerModule = {
                     return columnAlignment;
                 }
             };
+
+            return members;
         })())
     }
 };

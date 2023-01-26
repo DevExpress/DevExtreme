@@ -7,7 +7,7 @@ concurrency:
 on:
 #  pull_request:
   push:
-    branches: [22_2]
+    branches: [23_1]
 
 jobs:
   build:
@@ -122,15 +122,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/compared-screenshots/**/*
-        if-no-files-found: ignore
-
-    - name: Copy failed test artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: failed-tests
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/failedtests/**/*
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
   test_angular_wrappers:
@@ -291,7 +283,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '15'
+        node-version: '16'
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
@@ -317,7 +309,7 @@ jobs:
 
     - name: Delete DX packages
       working-directory: ./devextreme-demos
-      run:  sed -i '/22.2-next/d' ./package.json
+      run:  sed -i '/23.1-next/d' ./package.json
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
@@ -346,7 +338,7 @@ jobs:
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
-        ENABLE_DEMO_TEST_SETTINGS: true
+        CI_ENV: true
       run: npm run test-testcafe
 
     - name: Copy screenshots artifacts
@@ -370,4 +362,4 @@ jobs:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 22_2
+          specific_branch: 23_1

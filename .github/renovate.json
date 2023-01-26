@@ -5,8 +5,8 @@
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
     "baseBranches": [
-        "22_2",
-        "22_1"
+        "23_1",
+        "22_2"
     ],
     "labels": [
         "dependencies"
@@ -17,16 +17,25 @@
     },
     "packageRules": [
         {
-            "matchPackagePatterns": [ "^@devextreme-generator/" ],
+            "matchPackagePrefixes": [ "cldr-" ],
+            "groupName": "CLDR"
+        },
+        {
+            "matchPackagePatterns": [
+                "^@devextreme-generator/"
+            ],
             "enabled": false
         },
         {
             "matchPackageNames": [
-              "eslint-config-devextreme",
-              "rrule",
-              "sass-embedded",
-              "sinon",
-              "systemjs"
+                "@devextreme/runtime",
+                "devexpress-gantt",
+                "devexpress-diagram",
+                "eslint-config-devextreme",
+                "rrule",
+                "sass-embedded",
+                "sinon",
+                "systemjs"
             ],
             "enabled": false
         },
@@ -42,6 +51,7 @@
         },
         {
             "matchPackagePatterns": [ "*" ],
+            "excludePackagePrefixes": [ "cldr-" ],
             "matchUpdateTypes": [ "major" ],
             "enabled": false
         }

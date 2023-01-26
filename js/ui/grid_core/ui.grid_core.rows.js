@@ -1,3 +1,5 @@
+// @ts-check
+
 import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
@@ -37,6 +39,9 @@ function getMaxHorizontalScrollOffset(scrollable) {
     return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
 
+/**
+ * @type {import('./ui.grid_core.modules').Module}
+ */
 export const rowsModule = {
     defaultOptions: function() {
         return {
@@ -55,6 +60,10 @@ export const rowsModule = {
                 indicatorSrc: '',
                 showPane: true
             },
+            /**
+             * @type {undefined}
+             */
+            // @ts-expect-error
             dataRowTemplate: null,
             columnAutoWidth: false,
             noDataText: messageLocalization.format('dxDataGrid-noDataText'),
@@ -84,10 +93,14 @@ export const rowsModule = {
 
             const getScrollableBottomPadding = function(that) {
                 const scrollable = that.getScrollable();
+                // @ts-expect-error
                 return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
             };
 
-            return {
+            /**
+             * @type {Partial<import('./ui.grid_core.rows').RowsView>}
+             */
+            const members = {
                 _getDefaultTemplate: function(column) {
                     switch(column.command) {
                         case 'empty':
@@ -288,6 +301,7 @@ export const rowsModule = {
                     dxScrollableOptions.onScroll = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
+                    // @ts-expect-error
                     that._scrollableContainer = that._scrollable && $(that._scrollable.container());
                 },
 
@@ -300,71 +314,72 @@ export const rowsModule = {
                 },
 
                 _updateContent: function(newTableElement, change) {
-                    const that = this;
-                    const tableElement = that.getTableElement();
-                    const contentElement = that._findContentElement();
-                    const changeType = change && change.changeType;
-                    const executors = [];
-                    const highlightChanges = this.option('highlightChanges');
-                    const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
+                    return this._waitAsyncTemplates(change).done(() => {
+                        const tableElement = this.getTableElement();
+                        const contentElement = this._findContentElement();
+                        const changeType = change && change.changeType;
+                        const executors = [];
+                        const highlightChanges = this.option('highlightChanges');
+                        const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
 
-                    switch(changeType) {
-                        case 'update':
-                            each(change.rowIndices, function(index, rowIndex) {
-                                const $newRowElement = that._getRowElements(newTableElement).eq(index);
-                                const changeType = change.changeTypes && change.changeTypes[index];
-                                const item = change.items && change.items[index];
+                        switch(changeType) {
+                            case 'update':
+                                each(change.rowIndices, (index, rowIndex) => {
+                                    const $newRowElement = this._getRowElements(newTableElement).eq(index);
+                                    const changeType = change.changeTypes && change.changeTypes[index];
+                                    const item = change.items && change.items[index];
 
-                                executors.push(function() {
-                                    const $rowsElement = that._getRowElements();
-                                    const $rowElement = $rowsElement.eq(rowIndex);
+                                    executors.push(() => {
+                                        const $rowsElement = this._getRowElements();
+                                        const $rowElement = $rowsElement.eq(rowIndex);
 
-                                    switch(changeType) {
-                                        case 'update':
-                                            if(item) {
-                                                const columnIndices = change.columnIndices && change.columnIndices[index];
-                                                if(isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
-                                                    $rowElement.toggle(item.visible);
-                                                } else if(columnIndices) {
-                                                    that._updateCells($rowElement, $newRowElement, columnIndices);
+                                        switch(changeType) {
+                                            case 'update':
+                                                if(item) {
+                                                    const columnIndices = change.columnIndices && change.columnIndices[index];
+                                                    if(isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
+                                                        $rowElement.toggle(item.visible);
+                                                    } else if(columnIndices) {
+                                                        this._updateCells($rowElement, $newRowElement, columnIndices);
+                                                    } else {
+                                                        $rowElement.replaceWith($newRowElement);
+                                                    }
+                                                }
+                                                break;
+                                            case 'insert':
+                                                if(!$rowsElement.length) {
+                                                    if(tableElement) {
+                                                        const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
+                                                        $newRowElement.prependTo(target);
+                                                    }
+                                                } else if($rowElement.length) {
+                                                    $newRowElement.insertBefore($rowElement);
                                                 } else {
-                                                    $rowElement.replaceWith($newRowElement);
+                                                    $newRowElement.insertAfter($rowsElement.last());
                                                 }
-                                            }
-                                            break;
-                                        case 'insert':
-                                            if(!$rowsElement.length) {
-                                                if(tableElement) {
-                                                    const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
-                                                    $newRowElement.prependTo(target);
+                                                if(highlightChanges && change.isLiveUpdate) {
+                                                    $newRowElement.addClass(rowInsertedClass);
                                                 }
-                                            } else if($rowElement.length) {
-                                                $newRowElement.insertBefore($rowElement);
-                                            } else {
-                                                $newRowElement.insertAfter($rowsElement.last());
-                                            }
-                                            if(highlightChanges && change.isLiveUpdate) {
-                                                $newRowElement.addClass(rowInsertedClass);
-                                            }
-                                            break;
-                                        case 'remove':
-                                            $rowElement.remove();
-                                            break;
-                                    }
+                                                break;
+                                            case 'remove':
+                                                $rowElement.remove();
+                                                break;
+                                        }
+                                    });
                                 });
-                            });
-                            each(executors, function() {
-                                this();
-                            });
+                                each(executors, function() {
+                                    this();
+                                });
 
-                            newTableElement.remove();
-                            break;
-                        default:
-                            that.setTableElement(newTableElement);
-                            contentElement.addClass(that.addWidgetPrefix(CONTENT_CLASS));
-                            that._renderContent(contentElement, newTableElement);
-                            break;
-                    }
+                                newTableElement.remove();
+                                break;
+                            default:
+                                this.setTableElement(newTableElement);
+                                contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
+                                this._renderContent(contentElement, newTableElement);
+                                break;
+                        }
+                    });
                 },
 
                 _createEmptyRow: function(className, isFixed, height) {
@@ -484,6 +499,7 @@ export const rowsModule = {
                     this.executeAction('onRowClick', extend({
                         evaluate: function(expr) {
                             const getter = compileGetter(expr);
+                            // @ts-expect-error
                             return getter(item.data);
                         }
                     }, e, item));
@@ -553,7 +569,8 @@ export const rowsModule = {
                                 rowIndex: rowIndex,
                                 column: expandColumn,
                                 columnIndex: i,
-                                columnIndices: options.columnIndices
+                                columnIndices: options.columnIndices,
+                                change: options.change
                             });
                         }
                     }
@@ -584,7 +601,8 @@ export const rowsModule = {
                             rowIndex: rowIndex,
                             column: groupColumn,
                             columnIndex: groupCellOptions.columnIndex + 1,
-                            columnIndices: options.columnIndices
+                            columnIndices: options.columnIndices,
+                            change: options.change
                         });
                     }
                 },
@@ -669,11 +687,12 @@ export const rowsModule = {
                     this.setAria('role', 'presentation', $element);
 
                     const $table = this._renderTable({ change: change });
-                    this._updateContent($table, change);
+                    const deferred = this._updateContent($table, change);
 
                     this.callBase(change);
 
                     this._lastColumnWidths = null;
+                    return deferred;
                 },
 
                 _getRows: function(change) {
@@ -790,6 +809,7 @@ export const rowsModule = {
                                 const scrollingMode = this.option('scrolling.mode');
 
                                 if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
+                                    // @ts-expect-error
                                     setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
@@ -832,7 +852,9 @@ export const rowsModule = {
 
                 _getHeightCorrection: function() {
                     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
+                    // @ts-expect-error
                     const isChromeLatest = browser.chrome && browser.version >= 91;
+                    // @ts-expect-error
                     const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
                     return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
                 },
@@ -857,6 +879,7 @@ export const rowsModule = {
                     const dataController = that.getController('data');
 
                     that.callBase();
+                    // @ts-expect-error
                     that._editorFactoryController = that.getController('editorFactory');
                     that._rowHeight = 0;
                     that._scrollTop = 0;
@@ -867,11 +890,13 @@ export const rowsModule = {
                         that.setLoading(isLoading, messageText);
                     });
 
-                    dataController.dataSourceChanged.add(function() {
-                        if(that._scrollLeft >= 0) {
-                            that._handleScroll({
-                                component: that.getScrollable(),
-                                scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                    dataController.dataSourceChanged.add(() => {
+                        if(this._scrollLeft >= 0 && !this._dataController.isLoading()) {
+                            this._handleScroll({
+                                component: this.getScrollable(),
+                                forceUpdateScrollPosition: true,
+                                scrollOffset: { top: this._scrollTop, left: this._scrollLeft }
+                            });
                         }
                     });
                 },
@@ -906,8 +931,10 @@ export const rowsModule = {
 
                     if(scrollableContainer) {
                         if(!isHorizontal) {
+                            // @ts-expect-error
                             scrollbarWidth = scrollableContainer.clientWidth ? scrollableContainer.offsetWidth - scrollableContainer.clientWidth : 0;
                         } else {
+                            // @ts-expect-error
                             scrollbarWidth = scrollableContainer.clientHeight ? scrollableContainer.offsetHeight - scrollableContainer.clientHeight : 0;
                             scrollbarWidth += getScrollableBottomPadding(this); // T703649, T697699
                         }
@@ -941,11 +968,16 @@ export const rowsModule = {
                 },
 
                 _updateScrollable: function() {
+                    /**
+                     * @type {import('../scroll_view/ui.scrollable').default}
+                     */
+                    // @ts-expect-error
                     const scrollable = Scrollable.getInstance(this.element());
 
                     if(scrollable) {
                         scrollable.update();
 
+                        // @ts-expect-error
                         if(scrollable.option('useNative') || !scrollable?.isRenovated()) {
                             this._updateHorizontalScrollPosition();
                         }
@@ -1010,11 +1042,16 @@ export const rowsModule = {
                     }
                 },
 
+                hasHeight: function() {
+                    return !!this._hasHeight;
+                },
+
                 setLoading: function(isLoading, messageText) {
                     const that = this;
                     let loadPanel = that._loadPanel;
                     const dataController = that._dataController;
                     const loadPanelOptions = that.option('loadPanel') || {};
+                    // @ts-expect-error
                     const animation = dataController.isLoaded() ? loadPanelOptions.animation : null;
                     const $element = that.element();
 
@@ -1067,6 +1104,9 @@ export const rowsModule = {
                     const that = this;
                     let itemIndex = 0;
                     let prevOffset = 0;
+                    /**
+                     * @type {any}
+                     */
                     let offset = 0;
                     let viewportBoundary = that._scrollTop;
                     const $contentElement = that._findContentElement();
@@ -1169,6 +1209,7 @@ export const rowsModule = {
                 },
 
                 dispose: function() {
+                    this.callBase();
                     clearTimeout(this._hideLoadingTimeoutID);
                     this._scrollable && this._scrollable.dispose();
                 },
@@ -1177,6 +1218,8 @@ export const rowsModule = {
 
                 _restoreErrorRow: function() { }
             };
+
+            return members;
         })())
     }
 };

@@ -1,22 +1,29 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextArea from '../../../model/textArea';
+import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture`Label`
+fixture.disablePageReloads`Label`
   .page(url(__dirname, '../../container.html'));
 
 const labelMods = ['floating', 'static'];
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
 test('Label scroll input dxTextArea', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
   const textArea = new TextArea('#container');
 
   await t.scroll(textArea.getInput(), 0, 20);
 
-  await t.expect(await compareScreenshot(t, 'label-scroll-text-area.png', textArea.element)).ok();
+  await testScreenshot(t, takeScreenshot, 'TextArea label after scroll.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxTextArea', {
   height: 50,
   width: 200,
@@ -24,33 +31,37 @@ test('Label scroll input dxTextArea', async (t) => {
   label: 'label text',
 }));
 
-themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    labelMods.forEach((labelMode) => {
-      test(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
-        await t.click('#otherContainer');
+stylingModes.forEach((stylingMode) => {
+  labelMods.forEach((labelMode) => {
+    safeSizeTest(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await t.expect(await compareScreenshot(t, `label-dxTextArea-labelMode=${labelMode}-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-      }).before(async (t) => {
-        await t.resizeWindow(300, 400);
-        await changeTheme(theme);
+      await t.click('#textArea2');
 
-        await createWidget('dxTextArea', {
-          width: 100,
-          label: 'label',
-          text: '',
-          labelMode,
-          stylingMode,
-        });
+      await testScreenshot(t, takeScreenshot, `TextArea with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`);
 
-        return createWidget('dxTextArea', {
-          label: `this label is ${'very '.repeat(10)}long`,
-          text: `this content is ${'very '.repeat(10)}long`,
-          items: ['item1', 'item2'],
-          labelMode,
-          stylingMode,
-        }, false, '#otherContainer');
-      });
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }, [300, 400]).before(async () => {
+      await appendElementTo('#container', 'div', 'textArea1', { });
+      await appendElementTo('#container', 'div', 'textArea2', { });
+
+      await createWidget('dxTextArea', {
+        width: 100,
+        label: 'label',
+        text: '',
+        labelMode,
+        stylingMode,
+      }, '#textArea1');
+
+      return createWidget('dxTextArea', {
+        label: `this label is ${'very '.repeat(10)}long`,
+        text: `this content is ${'very '.repeat(10)}long`,
+        items: ['item1', 'item2'],
+        labelMode,
+        stylingMode,
+      }, '#textArea2');
     });
   });
 });

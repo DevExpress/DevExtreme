@@ -1,6 +1,5 @@
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import { Export } from './export';
-import errors from '../../core/errors';
 import { MergedRangesManager } from './export_merged_ranges_manager';
 
 class DataGridHelpers {
@@ -51,19 +50,6 @@ class DataGridHelpers {
         }
     }
 
-    _getCustomizeCellOptions(excelCell, gridCell) {
-        const options = { excelCell, gridCell };
-
-        Object.defineProperty(options, 'cell', {
-            get() {
-                errors.log('W0003', 'CustomizeCell handler argument', 'cell', '20.1', 'Use the \'excelCell\' field instead');
-                return excelCell;
-            },
-        });
-
-        return options;
-    }
-
     _isFrozenZone(dataProvider) {
         return dataProvider.getHeaderRowCount() > 0;
     }
@@ -86,7 +72,7 @@ class DataGridHelpers {
 
     _customizeCell(excelCell, gridCell) {
         if(isFunction(this.customizeCell)) {
-            this.customizeCell(this._getCustomizeCellOptions(excelCell, gridCell));
+            this.customizeCell({ excelCell, gridCell });
         }
     }
 

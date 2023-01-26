@@ -17,7 +17,6 @@ import 'ui/data_grid';
 
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
-import clientExporter from 'exporter';
 import messageLocalization from 'localization/message';
 import { prepareItems } from 'ui/grid_core/ui.grid_core.export';
 
@@ -503,7 +502,7 @@ QUnit.module('ExportController', {
                 }
             }, {
                 dataField: 'TestField2', width: 90, dataType: 'boolean', customizeText: function(cellInfo) {
-                    return cellInfo.value ? 'да' : 'нет';
+                    return cellInfo.value ? 'yes' : 'no';
                 }
             }]
         });
@@ -517,10 +516,10 @@ QUnit.module('ExportController', {
         assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
 
         assert.equal(dataProvider.getCellData(0, 0).value, '$1 current price', '1 row 1 cell');
-        assert.equal(dataProvider.getCellData(0, 1).value, 'да', '1 row 2 cell');
+        assert.equal(dataProvider.getCellData(0, 1).value, 'yes', '1 row 2 cell');
 
         assert.equal(dataProvider.getCellData(1, 0).value, '$12 current price', '2 row 1 cell');
-        assert.equal(dataProvider.getCellData(1, 1).value, 'нет', '2 row 2 cell');
+        assert.equal(dataProvider.getCellData(1, 1).value, 'no', '2 row 2 cell');
     });
 
     QUnit.test('Get cell value when value is not finite', function(assert) {
@@ -776,7 +775,6 @@ QUnit.module('ExportController', {
     });
 
     QUnit.test('Get total summary value', function(assert) {
-        const summaryRowTypes = [];
         this.setupModules({
             dataSource: [
                 { Name: 1, Price: 1, Sale: 0.03 },
@@ -787,14 +785,6 @@ QUnit.module('ExportController', {
             selection: {
                 mode: 'multiple',
                 showCheckBoxesMode: 'onClick'
-            },
-            customizeExportData: function(columns, rows) {
-                for(let i = 0; i < rows.length; i++) {
-                    const row = rows[i];
-                    if(row.rowType === 'totalFooter') {
-                        summaryRowTypes.push(row.rowType);
-                    }
-                }
             },
             summary: {
                 texts: {
@@ -833,7 +823,6 @@ QUnit.module('ExportController', {
         this.clock.tick();
 
         // assert, act
-        assert.equal(summaryRowTypes.length, 2, 'total footer types');
         assert.equal(dataProvider.getRowsCount(), 6, 'rows count');
         assert.equal(dataProvider.getCellData(4, 0).value, '4 tests', 'summary cell 1');
         assert.equal(dataProvider.getCellData(4, 1).value, 'Sum: $26', 'summary cell 2');
@@ -1359,19 +1348,16 @@ QUnit.module('ExportController', {
 
         assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
             bold: true,
-            wrapText: false,
             alignment: 'left'
         }, 'group row style');
 
         assert.deepEqual(styles[dataProvider.getStyleId(1, 1)], {
             bold: true,
-            wrapText: true,
             alignment: 'center'
         }, 'Total cell 1 style');
 
         assert.deepEqual(styles[dataProvider.getStyleId(1, 2)], {
             bold: true,
-            wrapText: true,
             alignment: 'right'
         }, 'Total cell 2 style');
 
@@ -1407,13 +1393,11 @@ QUnit.module('ExportController', {
         const styles = dataProvider.getStyles();
         assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
             bold: true,
-            wrapText: false,
             alignment: 'right'
         }, 'group row style');
     });
 
     QUnit.test('Summary group footers are contained in the options', function(assert) {
-        const summaryRowTypes = [];
         this.setupModules({
             dataSource: [
                 { Name: 'test 1', Price: 1, Sale: 0.03 },
@@ -1421,14 +1405,6 @@ QUnit.module('ExportController', {
                 { Name: 'test 2', Price: 12, Sale: 0.63 },
                 { Name: 'test 1', Price: 1, Sale: 0.93 }
             ],
-            customizeExportData: function(columns, rows) {
-                for(let i = 0; i < rows.length; i++) {
-                    const row = rows[i];
-                    if(row.rowType === 'groupFooter') {
-                        summaryRowTypes.push(row.rowType);
-                    }
-                }
-            },
             summary: {
                 groupItems: [
                     {
@@ -1458,7 +1434,6 @@ QUnit.module('ExportController', {
         this.exportController.getDataProvider().ready();
 
         assert.ok(this.exportController._hasSummaryGroupFooters());
-        assert.equal(summaryRowTypes.length, 2, 'group footers count');
     });
 
     QUnit.test('Summary group footers are not contained in the options', function(assert) {
@@ -1838,78 +1813,6 @@ QUnit.module('ExportController', {
         assert.equal(dataProvider.getCellData(1, 1).value, 12, 'row 2 cell 2');
     });
 
-    QUnit.test('The export to Excel api method', function(assert) {
-        const onExportedStub = sinon.stub();
-        const onExportingStub = sinon.stub();
-        const onFileSavingStub = sinon.stub();
-
-        sinon.stub(clientExporter, 'export');
-        this.setupModules({
-            'export': {
-                enabled: true,
-                excelFilterEnabled: true,
-                fileName: 'testName',
-                proxyUrl: 'testProxy'
-            }
-        });
-        sinon.stub(this.exportController, 'getAction', function(arg) {
-            if(arg === 'onExporting') {
-                return onExportingStub;
-            } else if(arg === 'onExported') {
-                return onExportedStub;
-            } else if(arg === 'onFileSaving') {
-                return onFileSavingStub;
-            }
-        });
-        sinon.stub(this.exportController.component, 'getDataProvider');
-
-        this.exportController.exportToExcel();
-
-        assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
-        assert.deepEqual(clientExporter.export.getCall(0).args[0], this.exportController.component.getDataProvider.getCall(0).returnValue, 'First arg is data');
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-            autoFilterEnabled: true,
-            exportedAction: onExportedStub,
-            exportingAction: onExportingStub,
-            ignoreErrors: true,
-            fileName: 'testName',
-            fileSavingAction: onFileSavingStub,
-            format: 'xlsx',
-            proxyUrl: 'testProxy',
-            rtlEnabled: false,
-            selectedRowsOnly: false,
-        }, 'options');
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[2], clientExporter.excel.getData, 'Export to excel function is correct');
-
-        clientExporter.export.restore();
-        this.exportController.getAction.restore();
-        this.exportController.component.getDataProvider.restore();
-    });
-
-    QUnit.test('Default options', function(assert) {
-        sinon.stub(clientExporter, 'export');
-        this.setupModules({}, true);
-
-        this.exportController.exportToExcel();
-
-        assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-            autoFilterEnabled: false,
-            exportedAction: undefined,
-            exportingAction: undefined,
-            ignoreErrors: true,
-            fileName: 'DataGrid',
-            fileSavingAction: undefined,
-            format: 'xlsx',
-            proxyUrl: undefined,
-            rtlEnabled: false,
-            selectedRowsOnly: false,
-        }, 'options');
-
-        clientExporter.export.restore();
-    });
-
     QUnit.test('get header row count when headers is visible', function(assert) {
         this.setupModules({
             showColumnHeaders: true,
@@ -2063,7 +1966,6 @@ QUnit.module('ExportController', {
         assert.deepEqual(styles[dataProvider.getStyleId(0, 0)], {
             bold: true,
             alignment: 'center',
-            wrapText: true
         });
     });
 
@@ -2088,7 +1990,6 @@ QUnit.module('ExportController', {
         // assert, act
         assert.deepEqual(styles[dataProvider.getStyleId(0, 0)], {
             alignment: 'right',
-            wrapText: false,
             format: undefined,
             dataType: 'string'
         });
@@ -2117,67 +2018,18 @@ QUnit.module('ExportController', {
         // assert, act
         assert.deepEqual(styles[dataProvider.getStyleId(1, 0)], {
             alignment: 'right',
-            wrapText: false,
             format: undefined,
             dataType: 'string'
         });
 
         assert.deepEqual(styles[dataProvider.getStyleId(1, 1)], {
             alignment: 'right',
-            wrapText: false,
             format: {
                 type: 'currency',
                 precision: 0
             },
             dataType: 'number'
         });
-    });
-
-    QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', function(assert) {
-        this.setupModules({
-            dataSource: [
-                { TestField1: 'test1', TestField2: 1 }
-            ],
-            showColumnHeaders: true,
-            wordWrapEnabled: true,
-            columns: [{ dataField: 'TestField1', dataType: 'string', alignment: 'right' }]
-        });
-        const dataProvider = this.exportController.getDataProvider();
-
-        dataProvider.ready();
-
-        this.clock.tick();
-
-        const styles = dataProvider.getStyles();
-
-        // assert, act
-        assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].wrapText, true, 'header');
-        assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].wrapText, true, 'data');
-    });
-
-    QUnit.test('data wrapText enabled. wrapTextEnabled option is set to true', function(assert) {
-        this.setupModules({
-            dataSource: [
-                { TestField1: 'test1', TestField2: 1 }
-            ],
-            showColumnHeaders: true,
-            wordWrapEnabled: true,
-            export: {
-                excelWrapTextEnabled: false
-            },
-            columns: [{ dataField: 'TestField1', dataType: 'string', alignment: 'right' }]
-        });
-        const dataProvider = this.exportController.getDataProvider();
-
-        dataProvider.ready();
-
-        this.clock.tick();
-
-        const styles = dataProvider.getStyles();
-
-        // assert, act
-        assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].wrapText, true, 'header');
-        assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].wrapText, false, 'data');
     });
 
     // T592026
@@ -2350,6 +2202,7 @@ QUnit.module('Export menu', {
                 format,
                 selectedRowsOnly: false,
                 fileName: 'DataGrid',
+                rtlEnabled: false,
             }, 'called with selectedOnly=false');
 
             assert.deepEqual(onExporting.getCall(1).args[0], {
@@ -2357,6 +2210,7 @@ QUnit.module('Export menu', {
                 format,
                 selectedRowsOnly: true,
                 fileName: 'DataGrid',
+                rtlEnabled: false,
             }, 'called with selectedOnly=true');
         });
     });
@@ -2760,15 +2614,16 @@ QUnit.module('Export menu', {
 
         dropDownButton.open();
         const $menuItems = $('.dx-list-item-content');
-        const _exportToExcel = this.headerPanel._exportController.exportToExcel;
-        this.headerPanel._exportController.exportToExcel = function() {
+
+        const _exportTo = this.headerPanel._exportController.exportTo;
+        this.headerPanel._exportController.exportTo = function() {
             exportToCalled = true;
         };
 
         $($menuItems.first()).trigger('dxclick');
 
         assert.ok(exportToCalled, 'exportTo Called');
-        this.headerPanel._exportController.exportToExcel = _exportToExcel;
+        this.headerPanel._exportController.exportTo = _exportTo;
     });
 });
 
@@ -2859,54 +2714,6 @@ QUnit.module('Real dataGrid ExportController tests', {
         assert.equal(columns[1].width, 75, '2 column width');
         assert.equal(columns[2].width, 75, '3 column width');
         assert.equal(columns[3].width, 75, '4 column width');
-    });
-
-    QUnit.test('Customize a data and a columns before exporting', function(assert) {
-        const options = {
-            width: 300,
-            customizeExportData: function(columns, data) {
-                columns[2].width = 333;
-                for(let i = 0; i < data.length; i++) {
-                    const item = data[i];
-                    if(item.rowType === 'data') {
-                        item.values[1] = 'TEST ' + item.values[1] * 10;
-                    }
-                }
-            },
-            loadingTimeout: null,
-            dataSource: [
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
-                { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 }
-            ],
-            columns: [{ dataField: 'TestField1', groupIndex: 0 }, 'TestField2', 'TestField3', 'TestField4']
-        };
-        const dataGrid = createDataGrid(options);
-        const columnsController = dataGrid.getController('columns');
-        const dataController = dataGrid.getController('data');
-        const dataProvider = dataGrid.getController('export').getDataProvider();
-
-        this.clock.tick();
-        dataProvider.ready();
-        this.clock.tick();
-
-        const columns = columnsController.getVisibleColumns();
-        const items = dataController.items();
-        const exportedColumns = dataProvider.getColumns();
-        const exportedItems = dataProvider._options.items;
-
-        assert.equal(exportedColumns[2].width, 333, 'third exported column\'s width');
-        assert.equal(exportedItems[1].values[1], 'TEST 30', '2 exported item of data');
-        assert.equal(exportedItems[2].values[1], 'TEST 30', '3 exported item of data');
-        assert.equal(exportedItems[3].values[1], 'TEST 30', '4 exported item of data');
-        assert.equal(exportedItems[4].values[1], 'TEST 30', '5 exported item of data');
-
-        assert.notStrictEqual(columns[2].width, 333, 'third column\'s width');
-        assert.equal(items[1].values[2], '3', '2 item of data');
-        assert.equal(items[2].values[2], '3', '3 item of data');
-        assert.equal(items[3].values[2], '3', '4 item of data');
-        assert.equal(items[4].values[2], '3', '5 item of data');
     });
 
     // T399787

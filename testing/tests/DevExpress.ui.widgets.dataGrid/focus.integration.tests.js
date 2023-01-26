@@ -396,6 +396,47 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-focused'), 'first row has focused class');
     });
 
+    // T1126967
+    QUnit.test('autoNavigateToFocusedRow should not change page after lookup dataSource changing', function(assert) {
+        // arrange
+        const data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: data,
+            columns: [{
+                dataField: 'id',
+                lookup: {
+                    dataSource: [],
+                },
+                sortOrder: 'asc',
+            }],
+            keyExpr: 'id',
+            paging: {
+                pageSize: 2
+            },
+            autoNavigateToFocusedRow: true,
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.columnOption(0, 'lookup.dataSource', [{}]);
+        this.clock.tick();
+
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(dataGrid.option('focusedRowKey'), 3, 'focusedRowKey');
+        assert.equal(dataGrid.option('paging.pageIndex'), 1, 'pageIndex');
+    });
+
     QUnit.test('Focused row should be visible if it\'s on the first page and page height larger than container one (T756177)', function(assert) {
         // arrange
         const data = [
@@ -1010,6 +1051,46 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.equal($cell.text(), '0');
         assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 1, columnIndex: 3 }, 'focused cell position');
+    });
+
+    // T1125984
+    QUnit.test('Tab keydown event should not be prevented if dataRowTemplate is used', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { field1: 'test', field2: 1 },
+                { field1: 'test1', field2: 2 }
+            ],
+            width: 400,
+            keyboardNavigation: {
+                enabled: true
+            },
+            columns: ['field1', 'field2'],
+            dataRowTemplate(container, item) {
+                const textBox = $('<div>').dxTextBox({ value: item.data.field1 });
+                const numberBox = $('<div>').dxNumberBox({ value: item.data.field2 });
+
+                const cellText = $('<td>').append(textBox);
+                const cellNumber = $('<td>').append(numberBox);
+
+                const tr = $('<tr>').append(cellText).append(cellNumber);
+                $(container).append(tr);
+            },
+        });
+        this.clock.tick();
+
+        // act
+        const input = $(dataGrid.getRowElement(0)).find('.dx-texteditor-input').eq(0);
+        const keyboard = keyboardMock(input);
+
+        input.trigger('focus');
+        this.clock.tick();
+
+        keyboard.keyDown('tab');
+        this.clock.tick();
+
+        // assert
+        assert.notOk(keyboard.event._defaultPrevented, 'event should not be prevented');
     });
 
     QUnit.testInActiveWindow('Focus search textbox after change search text', function(assert) {

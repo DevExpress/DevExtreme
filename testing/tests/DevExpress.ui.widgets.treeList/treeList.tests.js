@@ -854,6 +854,34 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         // assert
         assert.equal($headerPanel.css('border-bottom-width'), '0px', 'bottom border width');
     });
+
+    // T1136079
+    QUnit.test('No exceptions when a custom command button\'s template is defined', function(assert) {
+        // arrange, act
+        createTreeList({
+            dataSource: [
+                { id: 0, parentId: -1, c0: 'c0' },
+                { id: 1, parentId: 0, c0: 'c1' }
+            ],
+            columns: [
+                {
+                    type: 'buttons',
+                    buttons: [{
+                        template: () => {
+                            return $('<span>test</span>');
+                        }
+                    }]
+                },
+                'id',
+                'c0'
+            ]
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'not exception');
+    });
 });
 
 QUnit.module('Option Changed', defaultModuleConfig, () => {

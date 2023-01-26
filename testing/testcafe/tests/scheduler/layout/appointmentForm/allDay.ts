@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:AppointmentForm:AllDay`
+fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
+test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -54,10 +53,10 @@ safeSizeTest('Start and end dates should be reflect the current day(appointment 
     currentDate: new Date(2021, 3, 29),
     startDayHour: 9,
     height: 600,
-  }, true);
+  });
 });
 
-safeSizeTest('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
+test('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -98,10 +97,10 @@ safeSizeTest('Start and end dates should be reflect the current day(create new a
     currentDate: new Date(2021, 3, 29),
     startDayHour: 9,
     height: 600,
-  }, true);
+  });
 });
 
-safeSizeTest('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
+test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 

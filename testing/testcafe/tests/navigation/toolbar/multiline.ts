@@ -1,27 +1,32 @@
+/* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import Toolbar from '../../../model/toolbar/toolbar';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
-fixture`Toolbar_multiline`
+fixture.disablePageReloads`Toolbar_multiline`
   .page(url(__dirname, '../../container.html'));
 
 const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+const stylingModes = ['text', 'outlined', 'contained'];
+const types = ['back', 'danger', 'default', 'normal', 'success'];
 
 [true, false].forEach((rtlEnabled) => {
   test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const toolbar = new Toolbar('#container');
+    await testScreenshot(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, {
+      element: '#toolbar',
+      shouldTestInCompact: true,
+    });
 
     await t
-      .expect(await takeScreenshot(`Default-nested-widgets-render-in-multiline,rtlEnabled=${rtlEnabled}.png`, toolbar.element))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.resizeWindow(400, 400);
+  }).before(async () => {
+    await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
+    await appendElementTo('#container', 'div', 'toolbar');
 
     const toolbarItems = [] as any[];
     (supportedWidgets as any[]).forEach((widgetName) => {
@@ -47,8 +52,51 @@ const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox
       multiline: true,
       items: toolbarItems,
       rtlEnabled,
-    });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
+    }, '#toolbar');
   });
+});
+
+test('Buttons render in toolbar', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar buttons render.png', {
+    element: '#toolbar',
+    shouldTestInCompact: true,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 1200px; height: 800px; padding: 8px;');
+  await appendElementTo('#container', 'div', 'toolbar');
+
+  const items = [] as any;
+
+  for (const stylingMode of stylingModes) {
+    for (const type of types) {
+      for (const text of ['Button Text', '']) {
+        for (const icon of ['home', undefined]) {
+          for (const rtlEnabled of [true, false]) {
+            items.push({
+              widget: 'dxButton',
+              options: {
+                stylingMode,
+                text,
+                type,
+                hint: `stylingMode=${stylingMode}, text=${text}, icon=${icon}, type=${type}, rtlEnabled=${rtlEnabled}`,
+                rtlEnabled,
+                icon,
+              },
+            });
+          }
+        }
+      }
+    }
+  }
+
+  await createWidget('dxToolbar', {
+    multiline: true,
+    items,
+  }, '#toolbar');
 });

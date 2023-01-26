@@ -1,9 +1,8 @@
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 
-fixture`Cancel drag-n-drop when dragging an appointment inside the scheduler`
+fixture.disablePageReloads`Cancel drag-n-drop when dragging an appointment inside the scheduler`
   .page(url(__dirname, '../../../container.html'));
 
 const METHODS_TO_CANCEL = [
@@ -28,7 +27,7 @@ const getSchedulerOptions = () => ({
 });
 
 METHODS_TO_CANCEL.forEach((methodName) => {
-  safeSizeTest(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
+  test(`Should remove drag-n-drop classes if event was canceled in method ${methodName}`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     const appointmentToMoveElement = scheduler
@@ -37,7 +36,7 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     const cellToMoveElement = scheduler
       .getDateTableCell(1, 0);
 
-    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.1 });
+    await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
 
     const droppableCellExists = await scheduler
       .getDroppableCell()

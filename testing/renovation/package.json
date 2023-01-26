@@ -37,8 +37,8 @@
     "babel-preset-react-app": "10.0.1",
     "html-loader": "2.1.2",
     "raw-loader": "4.0.2",
-    "ts-loader": "9.4.1",
+    "ts-loader": "9.4.2",
     "vue-loader": "17.0.1",
-    "vue-template-compiler": "2.7.13"
+    "vue-template-compiler": "2.7.14"
   }
 }

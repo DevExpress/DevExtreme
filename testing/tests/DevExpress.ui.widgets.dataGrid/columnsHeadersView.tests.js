@@ -8,6 +8,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
@@ -1360,7 +1361,7 @@ QUnit.module('Headers', {
     });
 
     QUnit.test('Check correct work getColumnsWidth without columns', function(assert) {
-    // act
+        // act
         this.columnHeadersView.render($('#container'));
         // assert
         assert.deepEqual(this.columnHeadersView.getColumnWidths(), [], 'empty column widths');
@@ -1533,6 +1534,7 @@ QUnit.module('Headers', {
             return {
                 render: function(options) {
                     options.container.append('<b>' + options.model.caption + '</b>');
+                    options.deferred && options.deferred.resolve();
                 }
             };
         };
@@ -2941,5 +2943,96 @@ QUnit.module('Headers with RTL', {
         assert.notOk($headerCellIndicators.eq(2).hasClass('dx-visibility-hidden'), 'indicator is not hidden');
 
         assert.ok($headerCellContent.eq(2).offset().left > $headerCellIndicators.eq(3).offset().left, 'indicators are on the left');
+    });
+});
+
+QUnit.module('Render templates with renderAsync', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.setupDataGrid = function(options) {
+            dataGridMocks.setupDataGridModules(this, ['data', 'columns', 'headerFilter', 'columnHeaders', 'sorting', 'gridView', 'rows'], {
+                initViews: true,
+                initDefaultOptions: true,
+                options: options
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+
+    [true, false].forEach((templatesRenderAsynchronously) => {
+        [true, false].forEach((renderAsync) => {
+            QUnit.test(`Render column with headerCellTemplate when renderAsync = ${renderAsync} and templatesRenderAsynchronously=${templatesRenderAsynchronously}`, function(assert) {
+                // arrange
+                assert.expect(1);
+
+                const $testElement = $('#container');
+                const options = {
+                    columns: [{
+                        dataField: 'name',
+                        headerCellTemplate: '#testTemplate'
+                    }],
+                    renderAsync,
+                    templatesRenderAsynchronously
+                };
+
+                this.setupDataGrid(options);
+                this._getTemplate = function() {
+                    return {
+                        render: function(options) {
+                            const container = $(options.container).get(0);
+
+                            // assert
+                            if(templatesRenderAsynchronously && renderAsync === false) {
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
+                            } else {
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
+                            }
+                            setTimeout(() => {
+                                options.deferred && options.deferred.resolve();
+                            }, 50);
+                        }
+                    };
+                };
+
+                // act
+                this.columnHeadersView.render($testElement);
+                this.clock.tick(50);
+            });
+        });
+    });
+    // T1139245 - DataGrid - It is not possible to reorder columns when headerCellRender is used in React
+    QUnit.test('The renderCompleted should raise then content has rendered', function(assert) {
+        const $testElement = $('#container');
+        const options = {
+            columns: [{
+                dataField: 'name',
+                headerCellTemplate: '#testTemplate'
+            }],
+            renderAsync: false,
+            templatesRenderAsynchronously: true
+        };
+
+        this.setupDataGrid(options);
+        this._getTemplate = function() {
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 50);
+                }
+            };
+        };
+        let renderCompletedCall = false;
+        this.columnHeadersView.renderCompleted.add(() => { renderCompletedCall = true; });
+
+        // act
+        this.columnHeadersView.render($testElement);
+        assert.ok(!renderCompletedCall, 'renderCompleted isnt fired because template isnt rendered');
+        this.clock.tick(50);
+        assert.ok(renderCompletedCall, 'renderCompleted fired after template is rendered');
     });
 });

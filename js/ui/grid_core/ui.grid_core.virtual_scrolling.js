@@ -431,14 +431,16 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         renderDelayedTemplates: function(e) {
-            this._updateContentPosition(true);
+            this._waitAsyncTemplates(e).done(() => {
+                this._updateContentPosition(true);
+            });
             this.callBase.apply(this, arguments);
         },
 
         _renderCore: function(e) {
             const startRenderTime = new Date();
 
-            this.callBase.apply(this, arguments);
+            const deferred = this.callBase.apply(this, arguments);
 
             const dataSource = this._dataController._dataSource;
 
@@ -452,6 +454,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                     dataSource._renderTime = (new Date() - startRenderTime);
                 }
             }
+            return deferred;
         },
 
         _getRowElements: function(tableElement) {
@@ -480,33 +483,41 @@ const VirtualScrollingRowsViewExtender = (function() {
             let $freeSpaceRowElements;
             const contentElement = this._findContentElement();
             const changeType = change && change.changeType;
+            const d = Deferred();
 
             const contentTable = contentElement.children().first();
             if(changeType === 'append' || changeType === 'prepend') {
-                const $tBodies = this._getBodies(tableElement);
-                if($tBodies.length === 1) {
-                    this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
-                } else {
-                    $tBodies[changeType === 'append' ? 'appendTo' : 'prependTo'](contentTable);
-                }
+                this._waitAsyncTemplates(change).done(() => {
+                    const $tBodies = this._getBodies(tableElement);
+                    if($tBodies.length === 1) {
+                        this._getBodies(contentTable)[changeType === 'append' ? 'append' : 'prepend']($tBodies.children());
+                    } else {
+                        $tBodies[changeType === 'append' ? 'appendTo' : 'prependTo'](contentTable);
+                    }
 
-                tableElement.remove();
-                $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
-                removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
+                    tableElement.remove();
+                    $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
+                    removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
 
-                if(change.removeCount) {
-                    this._removeRowsElements(contentTable, change.removeCount, changeType);
-                }
+                    if(change.removeCount) {
+                        this._removeRowsElements(contentTable, change.removeCount, changeType);
+                    }
 
-                this._restoreErrorRow(contentTable);
-            } else {
-                this.callBase.apply(this, arguments);
-                if(changeType === 'update') {
                     this._restoreErrorRow(contentTable);
-                }
+                    d.resolve();
+                }).fail(d.reject);
+            } else {
+                this.callBase.apply(this, arguments).done(() => {
+                    if(changeType === 'update') {
+                        this._restoreErrorRow(contentTable);
+                    }
+                    d.resolve();
+                }).fail(d.reject);
             }
 
-            this._updateBottomLoading();
+            return d.promise().done(() => {
+                this._updateBottomLoading();
+            });
         },
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;
@@ -669,8 +680,9 @@ const VirtualScrollingRowsViewExtender = (function() {
         _handleScroll: function(e) {
             const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
             const zeroTopPosition = e.scrollOffset.top === 0;
+            const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;
 
-            if((this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+            if((isScrollTopChanged || e.forceUpdateScrollPosition) && (this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
                 this._scrollTop = e.scrollOffset.top;
 
                 if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false) {
@@ -1227,6 +1239,13 @@ export const virtualScrollingModule = {
                         }
 
                         return offset;
+                    },
+                    getDataIndex: function(change) {
+                        if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                            return this.getRowIndexOffset(true);
+                        }
+
+                        return this.callBase.apply(this, arguments);
                     },
                     viewportSize: function() {
                         const rowsScrollController = this._rowsScrollController;

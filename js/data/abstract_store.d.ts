@@ -1,6 +1,14 @@
-import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
+// eslint-disable-next-line max-classes-per-file
+import {
+  DxPromise,
+  DxExtendedPromise,
+} from '../core/utils/deferred';
 import { DeepPartial } from '../core/index';
-import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
+import {
+  FilterDescriptor,
+  GroupDescriptor,
+  LoadOptions,
+} from './index';
 
 export type Options<
     TItem = any,
@@ -107,11 +115,9 @@ export interface StoreOptions<
 type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
 
 /**
- * @docid
- * @hidden
  * @namespace DevExpress.data
  */
-export default class Store<
+export class Store<
     TItem = any,
     TKey = any,
 > {
@@ -147,21 +153,6 @@ export default class Store<
      * @public
      */
     keyOf(obj: TItem): TKey;
-    /**
-     * @docid
-     * @publicName load()
-     * @return Promise<any>
-     * @public
-     */
-    load(): DxExtendedPromise<Array<TItem>>;
-    /**
-     * @docid
-     * @publicName load(options)
-     * @param1 options:LoadOptions
-     * @return Promise<any>
-     * @public
-     */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -228,3 +219,32 @@ export default class Store<
      */
     update(key: TKey, values: DeepPartial<TItem>): DxExtendedPromise<TItem>;
 }
+
+  /**
+   * @docid Store
+   * @hidden
+   * @namespace DevExpress.data
+   */
+  export default class AbstractStore<
+    TItem = any,
+    TKey = any,
+    > extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>);
+
+    /**
+     * @docid Store.load()
+     * @publicName load()
+     * @return Promise<any>
+     * @public
+     */
+    load(): DxExtendedPromise<Array<TItem>>;
+
+    /**
+     * @docid Store.load(options)
+     * @publicName load(options)
+     * @param1 options:LoadOptions
+     * @return Promise<any>
+     * @public
+     */
+    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
+  }

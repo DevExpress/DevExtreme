@@ -666,11 +666,11 @@ declare module DevExpress {
   /**
    * [descr:config()]
    */
-  export function config(): globalConfig;
+  export function config(): DevExpress.common.GlobalConfig;
   /**
    * [descr:config(config)]
    */
-  export function config(config: globalConfig): void;
+  export function config(config: DevExpress.common.GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -998,94 +998,6 @@ declare module DevExpress {
     stop(element: Element, jumpToEnd: boolean): void;
   };
   /**
-   * [descr:globalConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface globalConfig {
-    /**
-     * [descr:globalConfig.decimalSeparator]
-     * @deprecated [depNote:globalConfig.decimalSeparator]
-     */
-    decimalSeparator?: string;
-    /**
-     * [descr:globalConfig.defaultCurrency]
-     */
-    defaultCurrency?: string;
-    /**
-     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
-     */
-    defaultUseCurrencyAccountingStyle?: boolean;
-    /**
-     * [descr:globalConfig.editorStylingMode]
-     */
-    editorStylingMode?: DevExpress.common.EditorStyle;
-    /**
-     * [descr:globalConfig.floatingActionButtonConfig]
-     */
-    floatingActionButtonConfig?: {
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.closeIcon]
-       */
-      closeIcon?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.direction]
-       */
-      direction?: DevExpress.core.FloatingActionButtonDirection;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.icon]
-       */
-      icon?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.label]
-       */
-      label?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
-       */
-      maxSpeedDialActionCount?: number;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.position]
-       */
-      position?:
-        | DevExpress.common.PositionAlignment
-        | PositionConfig
-        | Function;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.shading]
-       */
-      shading?: boolean;
-    };
-    /**
-     * [descr:globalConfig.forceIsoDateParsing]
-     */
-    forceIsoDateParsing?: boolean;
-    /**
-     * [descr:globalConfig.oDataFilterToLower]
-     */
-    oDataFilterToLower?: boolean;
-    /**
-     * [descr:globalConfig.rtlEnabled]
-     */
-    rtlEnabled?: boolean;
-    /**
-     * [descr:globalConfig.serverDecimalSeparator]
-     */
-    serverDecimalSeparator?: string;
-    /**
-     * [descr:globalConfig.thousandsSeparator]
-     * @deprecated [depNote:globalConfig.thousandsSeparator]
-     */
-    thousandsSeparator?: string;
-    /**
-     * [descr:globalConfig.useLegacyStoreResult]
-     */
-    useLegacyStoreResult?: boolean;
-    /**
-     * [descr:globalConfig.useLegacyVisibleIndex]
-     */
-    useLegacyVisibleIndex?: boolean;
-  }
-  /**
    * [descr:hideTopOverlay()]
    */
   export function hideTopOverlay(): boolean;
@@ -1379,8 +1291,92 @@ declare module DevExpress.animation {
 }
 declare module DevExpress.common {
   export type ApplyValueMode = 'instantly' | 'useButtons';
+  /**
+   * [descr:AsyncRule]
+   */
+  export type AsyncRule = {
+    /**
+     * [descr:AsyncRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:AsyncRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:AsyncRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:AsyncRule.type]
+     */
+    type: 'async';
+    /**
+     * [descr:AsyncRule.validationCallback]
+     */
+    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
+  };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  /**
+   * [descr:CompareRule]
+   */
+  export type CompareRule = {
+    /**
+     * [descr:CompareRule.comparisonTarget]
+     */
+    comparisonTarget?: () => any;
+    /**
+     * [descr:CompareRule.comparisonType]
+     */
+    comparisonType?: ComparisonOperator;
+    /**
+     * [descr:CompareRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:CompareRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:CompareRule.type]
+     */
+    type: 'compare';
+  };
+  export type ComparisonOperator =
+    | '!='
+    | '!=='
+    | '<'
+    | '<='
+    | '=='
+    | '==='
+    | '>'
+    | '>=';
+  /**
+   * [descr:CustomRule]
+   */
+  export type CustomRule = {
+    /**
+     * [descr:CustomRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:CustomRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:CustomRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:CustomRule.type]
+     */
+    type: 'custom';
+    /**
+     * [descr:CustomRule.validationCallback]
+     */
+    validationCallback?: (options: ValidationCallbackData) => boolean;
+  };
   export type DataStructure = 'plain' | 'tree';
   export type DataType =
     | 'string'
@@ -1395,6 +1391,23 @@ declare module DevExpress.common {
     DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
   export type DragHighlight = 'push' | 'indicate';
   export type EditorStyle = 'outlined' | 'underlined' | 'filled';
+  /**
+   * [descr:EmailRule]
+   */
+  export type EmailRule = {
+    /**
+     * [descr:EmailRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:EmailRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:EmailRule.type]
+     */
+    type: 'email';
+  };
   export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
   export type FieldChooserLayout = 0 | 1 | 2;
   export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -1427,15 +1440,137 @@ declare module DevExpress.common {
     | 'minute'
     | 'second'
     | 'shortDateShortTime';
+  /**
+   * [descr:GlobalConfig]
+   */
+  export type GlobalConfig = {
+    /**
+     * [descr:GlobalConfig.decimalSeparator]
+     * @deprecated [depNote:GlobalConfig.decimalSeparator]
+     */
+    decimalSeparator?: string;
+    /**
+     * [descr:GlobalConfig.defaultCurrency]
+     */
+    defaultCurrency?: string;
+    /**
+     * [descr:GlobalConfig.defaultUseCurrencyAccountingStyle]
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * [descr:GlobalConfig.editorStylingMode]
+     */
+    editorStylingMode?: EditorStyle;
+    /**
+     * [descr:GlobalConfig.floatingActionButtonConfig]
+     */
+    floatingActionButtonConfig?: {
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.closeIcon]
+       */
+      closeIcon?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.direction]
+       */
+      direction?: DevExpress.core.FloatingActionButtonDirection;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.icon]
+       */
+      icon?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.label]
+       */
+      label?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
+       */
+      maxSpeedDialActionCount?: number;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.position]
+       */
+      position?: PositionAlignment | PositionConfig | Function;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.shading]
+       */
+      shading?: boolean;
+    };
+    /**
+     * [descr:GlobalConfig.forceIsoDateParsing]
+     */
+    forceIsoDateParsing?: boolean;
+    /**
+     * [descr:GlobalConfig.oDataFilterToLower]
+     */
+    oDataFilterToLower?: boolean;
+    /**
+     * [descr:GlobalConfig.rtlEnabled]
+     */
+    rtlEnabled?: boolean;
+    /**
+     * [descr:GlobalConfig.serverDecimalSeparator]
+     */
+    serverDecimalSeparator?: string;
+    /**
+     * [descr:GlobalConfig.thousandsSeparator]
+     * @deprecated [depNote:GlobalConfig.thousandsSeparator]
+     */
+    thousandsSeparator?: string;
+    /**
+     * [descr:GlobalConfig.useLegacyStoreResult]
+     */
+    useLegacyStoreResult?: boolean;
+    /**
+     * [descr:GlobalConfig.useLegacyVisibleIndex]
+     */
+    useLegacyVisibleIndex?: boolean;
+  };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
   export type LabelMode = 'static' | 'floating' | 'hidden';
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
 
+  /**
+   * [descr:NumericRule]
+   */
+  export type NumericRule = {
+    /**
+     * [descr:NumericRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:NumericRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:NumericRule.type]
+     */
+    type: 'numeric';
+  };
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
+  /**
+   * [descr:PatternRule]
+   */
+  export type PatternRule = {
+    /**
+     * [descr:PatternRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:PatternRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:PatternRule.pattern]
+     */
+    pattern?: RegExp | string;
+    /**
+     * [descr:PatternRule.type]
+     */
+    type: 'pattern';
+  };
   export type Position = 'bottom' | 'left' | 'right' | 'top';
   export type PositionAlignment =
     | 'bottom'
@@ -1447,6 +1582,35 @@ declare module DevExpress.common {
     | 'right bottom'
     | 'right top'
     | 'top';
+  /**
+   * [descr:RangeRule]
+   */
+  export type RangeRule = {
+    /**
+     * [descr:RangeRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:RangeRule.max]
+     */
+    max?: Date | number;
+    /**
+     * [descr:RangeRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:RangeRule.min]
+     */
+    min?: Date | number;
+    /**
+     * [descr:RangeRule.reevaluate]
+     */
+    reevaluate?: boolean;
+    /**
+     * [descr:RangeRule.type]
+     */
+    type: 'range';
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1461,6 +1625,23 @@ declare module DevExpress.common {
       'component' | 'event'
     >
   >;
+  /**
+   * [descr:RequiredRule]
+   */
+  export type RequiredRule = {
+    /**
+     * [descr:RequiredRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:RequiredRule.trim]
+     */
+    trim?: boolean;
+    /**
+     * [descr:RequiredRule.type]
+     */
+    type: 'required';
+  };
   export type Scrollable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
@@ -1473,9 +1654,39 @@ declare module DevExpress.common {
   export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
   export type SingleOrMultiple = 'single' | 'multiple';
   export type SingleOrNone = 'single' | 'none';
+  export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
+  /**
+   * [descr:StringLengthRule]
+   */
+  export type StringLengthRule = {
+    /**
+     * [descr:StringLengthRule.ignoreEmptyValue]
+     */
+    ignoreEmptyValue?: boolean;
+    /**
+     * [descr:StringLengthRule.max]
+     */
+    max?: number;
+    /**
+     * [descr:StringLengthRule.message]
+     */
+    message?: string;
+    /**
+     * [descr:StringLengthRule.min]
+     */
+    min?: number;
+    /**
+     * [descr:StringLengthRule.trim]
+     */
+    trim?: boolean;
+    /**
+     * [descr:StringLengthRule.type]
+     */
+    type: 'stringLength';
+  };
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TextBoxPredefinedButton = 'clear';
 
@@ -1493,7 +1704,35 @@ declare module DevExpress.common {
     | 'dxDropDownButton';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
+  export type ValidationCallbackData = {
+    value?: any;
+    rule: any;
+    validator: any;
+    data?: any;
+    column?: any;
+    formItem?: any;
+  };
   export type ValidationMessageMode = 'always' | 'auto';
+  export type ValidationRule =
+    | AsyncRule
+    | CompareRule
+    | CustomRule
+    | EmailRule
+    | NumericRule
+    | PatternRule
+    | RangeRule
+    | RequiredRule
+    | StringLengthRule;
+  export type ValidationRuleType =
+    | 'required'
+    | 'numeric'
+    | 'range'
+    | 'stringLength'
+    | 'custom'
+    | 'compare'
+    | 'pattern'
+    | 'email'
+    | 'async';
   export type ValidationStatus = 'valid' | 'invalid' | 'pending';
   export type VerticalAlignment = 'bottom' | 'center' | 'top';
   export type VerticalEdge = 'bottom' | 'top';
@@ -1503,6 +1742,226 @@ declare module DevExpress.common.charts {
   export type AnnotationType = 'text' | 'image' | 'custom';
   export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
   export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
+  /**
+   * [descr:BaseLegend]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface BaseLegend {
+    /**
+     * [descr:BaseLegend.backgroundColor]
+     */
+    backgroundColor?: string;
+    /**
+     * [descr:BaseLegend.border]
+     */
+    border?: {
+      /**
+       * [descr:BaseLegend.border.color]
+       */
+      color?: string;
+      /**
+       * [descr:BaseLegend.border.cornerRadius]
+       */
+      cornerRadius?: number;
+      /**
+       * [descr:BaseLegend.border.dashStyle]
+       */
+      dashStyle?: DashStyle;
+      /**
+       * [descr:BaseLegend.border.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:BaseLegend.border.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:BaseLegend.border.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:BaseLegend.columnCount]
+     */
+    columnCount?: number;
+    /**
+     * [descr:BaseLegend.columnItemSpacing]
+     */
+    columnItemSpacing?: number;
+    /**
+     * [descr:BaseLegend.font]
+     */
+    font?: DevExpress.viz.Font;
+    /**
+     * [descr:BaseLegend.horizontalAlignment]
+     */
+    horizontalAlignment?: HorizontalAlignment;
+    /**
+     * [descr:BaseLegend.itemTextPosition]
+     */
+    itemTextPosition?: Position;
+    /**
+     * [descr:BaseLegend.itemsAlignment]
+     */
+    itemsAlignment?: HorizontalAlignment;
+    /**
+     * [descr:BaseLegend.margin]
+     */
+    margin?:
+      | number
+      | {
+          /**
+           * [descr:BaseLegend.margin.bottom]
+           */
+          bottom?: number;
+          /**
+           * [descr:BaseLegend.margin.left]
+           */
+          left?: number;
+          /**
+           * [descr:BaseLegend.margin.right]
+           */
+          right?: number;
+          /**
+           * [descr:BaseLegend.margin.top]
+           */
+          top?: number;
+        };
+    /**
+     * [descr:BaseLegend.markerSize]
+     */
+    markerSize?: number;
+    /**
+     * [descr:BaseLegend.orientation]
+     */
+    orientation?: Orientation;
+    /**
+     * [descr:BaseLegend.paddingLeftRight]
+     */
+    paddingLeftRight?: number;
+    /**
+     * [descr:BaseLegend.paddingTopBottom]
+     */
+    paddingTopBottom?: number;
+    /**
+     * [descr:BaseLegend.rowCount]
+     */
+    rowCount?: number;
+    /**
+     * [descr:BaseLegend.rowItemSpacing]
+     */
+    rowItemSpacing?: number;
+    /**
+     * [descr:BaseLegend.title]
+     */
+    title?:
+      | {
+          /**
+           * [descr:BaseLegend.title.font]
+           */
+          font?: DevExpress.viz.Font;
+          /**
+           * [descr:BaseLegend.title.horizontalAlignment]
+           */
+          horizontalAlignment?: HorizontalAlignment;
+          /**
+           * [descr:BaseLegend.title.margin]
+           */
+          margin?: {
+            /**
+             * [descr:BaseLegend.title.margin.bottom]
+             */
+            bottom?: number;
+            /**
+             * [descr:BaseLegend.title.margin.left]
+             */
+            left?: number;
+            /**
+             * [descr:BaseLegend.title.margin.right]
+             */
+            right?: number;
+            /**
+             * [descr:BaseLegend.title.margin.top]
+             */
+            top?: number;
+          };
+          /**
+           * [descr:BaseLegend.title.placeholderSize]
+           */
+          placeholderSize?: number;
+          /**
+           * [descr:BaseLegend.title.subtitle]
+           */
+          subtitle?:
+            | {
+                /**
+                 * [descr:BaseLegend.title.subtitle.font]
+                 */
+                font?: DevExpress.viz.Font;
+                /**
+                 * [descr:BaseLegend.title.subtitle.offset]
+                 */
+                offset?: number;
+                /**
+                 * [descr:BaseLegend.title.subtitle.text]
+                 */
+                text?: string;
+              }
+            | string;
+          /**
+           * [descr:BaseLegend.title.text]
+           */
+          text?: string;
+          /**
+           * [descr:BaseLegend.title.verticalAlignment]
+           */
+          verticalAlignment?: VerticalEdge;
+        }
+      | string;
+    /**
+     * [descr:BaseLegend.verticalAlignment]
+     */
+    verticalAlignment?: VerticalEdge;
+    /**
+     * [descr:BaseLegend.visible]
+     */
+    visible?: boolean;
+  }
+  /**
+   * [descr:BaseLegendItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface BaseLegendItem {
+    /**
+     * [descr:BaseLegendItem.marker]
+     */
+    marker?: {
+      /**
+       * [descr:BaseLegendItem.marker.fill]
+       */
+      fill?: string;
+      /**
+       * [descr:BaseLegendItem.marker.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:BaseLegendItem.marker.size]
+       */
+      size?: number;
+      /**
+       * [descr:BaseLegendItem.marker.state]
+       */
+      state?: LegendMarkerState;
+    };
+    /**
+     * [descr:BaseLegendItem.text]
+     */
+    text?: string;
+    /**
+     * [descr:BaseLegendItem.visible]
+     */
+    visible?: boolean;
+  }
   export type ChartsAxisLabelOverlap = 'rotate' | 'stagger' | 'none' | 'hide';
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
@@ -1545,6 +2004,19 @@ declare module DevExpress.common.charts {
     | 'triangleDown'
     | 'triangleUp';
   export type RelativePosition = 'inside' | 'outside';
+  /**
+   * [descr:ScaleBreak]
+   */
+  export type ScaleBreak = {
+    /**
+     * [descr:ScaleBreak.endValue]
+     */
+    endValue?: number | Date | string;
+    /**
+     * [descr:ScaleBreak.startValue]
+     */
+    startValue?: number | Date | string;
+  };
   export type ScaleBreakLineStyle = 'straight' | 'waved';
   export type SeriesHoverMode =
     | 'allArgumentPoints'
@@ -1561,6 +2033,31 @@ declare module DevExpress.common.charts {
     | 'includePoints'
     | 'none'
     | 'onlyPoint';
+  export type SeriesType =
+    | 'area'
+    | 'bar'
+    | 'bubble'
+    | 'candlestick'
+    | 'fullstackedarea'
+    | 'fullstackedbar'
+    | 'fullstackedline'
+    | 'fullstackedspline'
+    | 'fullstackedsplinearea'
+    | 'line'
+    | 'rangearea'
+    | 'rangebar'
+    | 'scatter'
+    | 'spline'
+    | 'splinearea'
+    | 'stackedarea'
+    | 'stackedbar'
+    | 'stackedline'
+    | 'stackedspline'
+    | 'stackedsplinearea'
+    | 'steparea'
+    | 'stepline'
+    | 'stock';
+  export type ShiftLabelOverlap = 'hide' | 'none' | 'shift';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
     | 'generic.dark'
@@ -1586,6 +2083,50 @@ declare module DevExpress.common.charts {
     | 'second'
     | 'week'
     | 'year';
+  /**
+   * [descr:VizTimeInterval]
+   */
+  export type TimeIntervalConfig =
+    | number
+    | {
+        /**
+         * [descr:VizTimeInterval.days]
+         */
+        days?: number;
+        /**
+         * [descr:VizTimeInterval.hours]
+         */
+        hours?: number;
+        /**
+         * [descr:VizTimeInterval.milliseconds]
+         */
+        milliseconds?: number;
+        /**
+         * [descr:VizTimeInterval.minutes]
+         */
+        minutes?: number;
+        /**
+         * [descr:VizTimeInterval.months]
+         */
+        months?: number;
+        /**
+         * [descr:VizTimeInterval.quarters]
+         */
+        quarters?: number;
+        /**
+         * [descr:VizTimeInterval.seconds]
+         */
+        seconds?: number;
+        /**
+         * [descr:VizTimeInterval.weeks]
+         */
+        weeks?: number;
+        /**
+         * [descr:VizTimeInterval.years]
+         */
+        years?: number;
+      }
+    | TimeInterval;
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -1593,6 +2134,23 @@ declare module DevExpress.common.charts {
     | 'stdDeviation'
     | 'stdError'
     | 'variance';
+  /**
+   * [descr:VisualRange]
+   */
+  export type VisualRange = {
+    /**
+     * [descr:VisualRange.endValue]
+     */
+    endValue?: number | Date | string;
+    /**
+     * [descr:VisualRange.length]
+     */
+    length?: TimeIntervalConfig;
+    /**
+     * [descr:VisualRange.startValue]
+     */
+    startValue?: number | Date | string;
+  };
   export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
   export type WordWrap = 'normal' | 'breakWord' | 'none';
   export type ZoomPanAction = 'zoom' | 'pan';
@@ -1654,25 +2212,30 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.calculateCellValue]
      */
-    calculateCellValue?: (rowData: TRowData) => any;
-    defaultCalculateCellValue?: ColumnBase['calculateCellValue'];
+    calculateCellValue?: (this: ColumnBase, rowData: TRowData) => any;
+    defaultCalculateCellValue?: this['calculateCellValue'];
     /**
      * [descr:GridBaseColumn.calculateDisplayValue]
      */
-    calculateDisplayValue?: string | ((rowData: TRowData) => any);
+    calculateDisplayValue?:
+      | string
+      | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * [descr:GridBaseColumn.calculateFilterExpression]
      */
     calculateFilterExpression?: (
+      this: ColumnBase,
       filterValue: any,
-      selectedFilterOperation: string,
+      selectedFilterOperation: string | null,
       target: string
     ) => string | Array<any> | Function;
-    defaultCalculateFilterExpression?: ColumnBase['calculateFilterExpression'];
+    defaultCalculateFilterExpression?: this['calculateFilterExpression'];
     /**
      * [descr:GridBaseColumn.calculateSortValue]
      */
-    calculateSortValue?: string | ((rowData: TRowData) => any);
+    calculateSortValue?:
+      | string
+      | ((this: ColumnBase, rowData: TRowData) => any);
     /**
      * [descr:GridBaseColumn.caption]
      */
@@ -1684,7 +2247,10 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.customizeText]
      */
-    customizeText?: (cellInfo: ColumnCustomizeTextArg) => string;
+    customizeText?: (
+      this: ColumnBase,
+      cellInfo: ColumnCustomizeTextArg
+    ) => string;
     /**
      * [descr:GridBaseColumn.dataField]
      */
@@ -1777,11 +2343,12 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseColumn.setCellValue]
      */
     setCellValue?: (
+      this: ColumnBase,
       newData: DevExpress.core.DeepPartial<TRowData>,
       value: any,
       currentRowData: TRowData
     ) => void | PromiseLike<void>;
-    defaultSetCellValue?: ColumnBase['setCellValue'];
+    defaultSetCellValue?: this['setCellValue'];
     /**
      * [descr:GridBaseColumn.showEditorAlways]
      */
@@ -1801,7 +2368,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.sortingMethod]
      */
-    sortingMethod?: (value1: any, value2: any) => number;
+    sortingMethod?: (this: ColumnBase, value1: any, value2: any) => number;
     /**
      * [descr:GridBaseColumn.trueText]
      */
@@ -1809,7 +2376,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.validationRules]
      */
-    validationRules?: Array<DevExpress.ui.ValidationRule>;
+    validationRules?: Array<ValidationRule>;
     /**
      * [descr:GridBaseColumn.visible]
      */
@@ -2575,11 +3142,14 @@ declare module DevExpress.common.grids {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface GridBaseOptions<
+  export type GridBaseOptions<
     TComponent extends GridBase<TRowData, TKey>,
     TRowData = any,
     TKey = any
-  > extends DevExpress.ui.WidgetOptions<TComponent> {
+  > = Omit<
+    GridBaseOptionsBlank<TComponent, TRowData, TKey>,
+    'focusStateEnabled'
+  > & {
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -2930,6 +3500,19 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.syncLookupFilterValues]
      */
     syncLookupFilterValues?: boolean;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface GridBaseOptionsBlank<
+    TComponent extends GridBase<TRowData, TKey>,
+    TRowData = any,
+    TKey = any
+  > extends DevExpress.ui.WidgetOptions<TComponent> {
+    /**
+     * [descr:GridBaseOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: any;
   }
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
@@ -3333,7 +3916,7 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowValidatingInfo<TRowData = any, TKey = any> {
-    readonly brokenRules: Array<DevExpress.ui.ValidationRule>;
+    readonly brokenRules: Array<ValidationRule>;
     isValid: boolean;
     readonly key: TKey;
     readonly newData: DevExpress.core.DeepPartial<TRowData>;
@@ -3698,6 +4281,49 @@ declare module DevExpress.core.utils {
 }
 declare module DevExpress.data {
   /**
+   * [descr:Store]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export class AbstractStore<TItem = any, TKey = any> extends Store<
+    TItem,
+    TKey
+  > {
+    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
+
+    /**
+     * [descr:Store.load()]
+     */
+    load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+
+    /**
+     * [descr:Store.load(options)]
+     */
+    load(
+      options: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+  }
+  module AbstractStore {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type EventName =
+      | 'loaded'
+      | 'loading'
+      | 'inserted'
+      | 'inserting'
+      | 'updated'
+      | 'updating'
+      | 'push'
+      | 'removed'
+      | 'removing'
+      | 'modified'
+      | 'modifying';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
+  }
+  /**
    * [descr:Utils.applyChanges(data, changes, options)]
    */
   export function applyChanges(
@@ -3708,7 +4334,10 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+  export class ArrayStore<TItem = any, TKey = any> extends AbstractStore<
+    TItem,
+    TKey
+  > {
     constructor(options?: DevExpress.data.ArrayStore.Options<TItem, TKey>);
     /**
      * [descr:ArrayStore.clear()]
@@ -3730,7 +4359,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ArrayStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
@@ -3755,22 +4384,46 @@ declare module DevExpress.data {
      * [descr:CustomStore.clearRawDataCache()]
      */
     clearRawDataCache(): void;
+    /**
+     * [descr:CustomStore.load()]
+     */
+    load(): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
+    /**
+     * [descr:CustomStore.load(options)]
+     */
+    load(
+      options: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
   }
   module CustomStore {
     export type GroupItem<TItem = any> = {
       key: any | string | number;
-      items: Array<TItem> | Array<GroupItem> | null;
+      items: Array<TItem> | Array<GroupItem<TItem>> | null;
       count?: number;
       summary?: Array<any>;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type LoadResult<T> =
+      | T
+      | DevExpress.core.utils.DxPromise<T>
+      | PromiseLike<T>;
     export type Options<TItem = any, TKey = any> = CustomStoreOptions<
       TItem,
       TKey
     >;
     export type ResolvedData<TItem = any> =
       | Object
-      | Array<TItem>
-      | Array<GroupItem>
+      | ItemsArray<TItem>
       | {
           data: Array<TItem> | Array<GroupItem>;
           totalCount?: number;
@@ -3783,7 +4436,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -3801,13 +4454,9 @@ declare module DevExpress.data {
      */
     load: (
       options: LoadOptions<TItem>
-    ) =>
-      | DevExpress.core.utils.DxPromise<
-          DevExpress.data.CustomStore.ResolvedData<TItem>
-        >
-      | PromiseLike<DevExpress.data.CustomStore.ResolvedData<TItem>>
-      | Array<DevExpress.data.CustomStore.GroupItem>
-      | Array<TItem>;
+    ) => DevExpress.data.CustomStore.LoadResult<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -4425,7 +5074,10 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+  export class ODataStore<TItem = any, TKey = any> extends AbstractStore<
+    TItem,
+    TKey
+  > {
     constructor(options?: DevExpress.data.ODataStore.Options<TItem, TKey>);
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
     /**
@@ -4458,7 +5110,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ODataStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.Store.Options<TItem, TKey> {
+    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
@@ -5047,11 +5699,10 @@ declare module DevExpress.data {
    */
   export type SortDescriptor<T> = GroupDescriptor<T>;
   /**
-   * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
-    constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
+    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
     /**
      * [descr:Store.byKey(key)]
      */
@@ -5072,37 +5723,29 @@ declare module DevExpress.data {
      */
     keyOf(obj: TItem): TKey;
     /**
-     * [descr:Store.load()]
-     */
-    load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
-    /**
-     * [descr:Store.load(options)]
-     */
-    load(
-      options: LoadOptions<TItem>
-    ): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
-    /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: DevExpress.data.Store.EventName): this;
+    off(eventName: DevExpress.data.AbstractStore.EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
     off(
-      eventName: DevExpress.data.Store.EventName,
+      eventName: DevExpress.data.AbstractStore.EventName,
       eventHandler: Function
     ): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
     on(
-      eventName: DevExpress.data.Store.EventName,
+      eventName: DevExpress.data.AbstractStore.EventName,
       eventHandler: Function
     ): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(events: { [key in DevExpress.data.Store.EventName]?: Function }): this;
+    on(
+      events: { [key in DevExpress.data.AbstractStore.EventName]?: Function }
+    ): this;
     /**
      * [descr:Store.push(changes)]
      */
@@ -5132,27 +5775,6 @@ declare module DevExpress.data {
       key: TKey,
       values: DevExpress.core.DeepPartial<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
-  }
-  module Store {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type EventName =
-      | 'loaded'
-      | 'loading'
-      | 'inserted'
-      | 'inserting'
-      | 'updated'
-      | 'updating'
-      | 'push'
-      | 'removed'
-      | 'removing'
-      | 'modified'
-      | 'modifying';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
   }
   /**
    * @deprecated Use Options instead
@@ -5629,6 +6251,10 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportBaseProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+    /**
+     * [descr:ExcelExportBaseProps.encodeExecutableContent]
+     */
+    encodeExecutableContent?: boolean;
   }
   /**
    * [descr:ExcelExportDataGridProps]
@@ -5731,45 +6357,6 @@ declare module DevExpress.excelExporter {
     options: ExcelExportPivotGridProps
   ): DevExpress.core.utils.DxPromise<CellRange>;
   export type PivotGridCell = ExcelPivotGridCell;
-}
-declare module DevExpress.exporter {
-  /**
-   * [descr:ExcelFont]
-   * @deprecated [depNote:ExcelFont]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ExcelFont {
-    /**
-     * [descr:ExcelFont.bold]
-     */
-    bold?: boolean;
-    /**
-     * [descr:ExcelFont.color]
-     */
-    color?: string;
-    /**
-     * [descr:ExcelFont.italic]
-     */
-    italic?: boolean;
-    /**
-     * [descr:ExcelFont.name]
-     */
-    name?: string;
-    /**
-     * [descr:ExcelFont.size]
-     */
-    size?: number;
-    /**
-     * [descr:ExcelFont.underline]
-     */
-    underline?: ExcelUnderlineType;
-  }
-  export type ExcelUnderlineType =
-    | 'double'
-    | 'doubleAccounting'
-    | 'none'
-    | 'single'
-    | 'singleAccounting';
 }
 declare module DevExpress.fileManagement {
   /**
@@ -6456,32 +7043,6 @@ declare module DevExpress.pdfExporter {
 }
 declare module DevExpress.ui {
   /**
-   * [descr:AsyncRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface AsyncRule {
-    /**
-     * [descr:AsyncRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:AsyncRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:AsyncRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:AsyncRule.type]
-     */
-    type: 'async';
-    /**
-     * [descr:AsyncRule.validationCallback]
-     */
-    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
-  }
-  /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6660,44 +7221,6 @@ declare module DevExpress.ui {
      */
     selectedItems?: Array<TItem>;
   }
-  /**
-   * [descr:CompareRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface CompareRule {
-    /**
-     * [descr:CompareRule.comparisonTarget]
-     */
-    comparisonTarget?: () => any;
-    /**
-     * [descr:CompareRule.comparisonType]
-     */
-    comparisonType?: ComparisonOperator;
-    /**
-     * [descr:CompareRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:CompareRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:CompareRule.type]
-     */
-    type: 'compare';
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type ComparisonOperator =
-    | '!='
-    | '!=='
-    | '<'
-    | '<='
-    | '=='
-    | '==='
-    | '>'
-    | '>=';
   export interface CustomDialogOptions {
     title?: string;
     messageHtml?: string;
@@ -6705,32 +7228,6 @@ declare module DevExpress.ui {
     showTitle?: boolean;
     message?: string;
     dragEnabled?: boolean;
-  }
-  /**
-   * [descr:CustomRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface CustomRule {
-    /**
-     * [descr:CustomRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:CustomRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:CustomRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:CustomRule.type]
-     */
-    type: 'custom';
-    /**
-     * [descr:CustomRule.validationCallback]
-     */
-    validationCallback?: (options: ValidationCallbackData) => boolean;
   }
   /**
    * [descr:DataExpressionMixin]
@@ -8147,11 +8644,6 @@ declare module DevExpress.ui {
      */
     expandRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:dxDataGrid.exportToExcel(selectionOnly)]
-     * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
-     */
-    exportToExcel(selectionOnly: boolean): void;
-    /**
      * [descr:dxDataGrid.getSelectedRowKeys()]
      */
     getSelectedRowKeys(): Array<TKey> &
@@ -8617,54 +9109,6 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly row?: Row<TRowData, TKey>;
     };
-    export type ExcelCellHorizontalAlignment =
-      | 'center'
-      | 'centerContinuous'
-      | 'distributed'
-      | 'fill'
-      | 'general'
-      | 'justify'
-      | 'left'
-      | 'right';
-    export type ExcelCellInfo<TRowData = any, TKey = any> = {
-      readonly component: dxDataGrid<TRowData, TKey>;
-      horizontalAlignment?: ExcelCellHorizontalAlignment;
-      verticalAlignment?: ExcelCellVerticalAlignment;
-      wrapTextEnabled?: boolean;
-      backgroundColor?: string;
-      fillPatternType?: ExcelCellPatternType;
-      fillPatternColor?: string;
-      font?: DevExpress.exporter.ExcelFont;
-      readonly value?: string | number | Date;
-      numberFormat?: string;
-      gridCell?: DevExpress.excelExporter.DataGridCell;
-    };
-    export type ExcelCellPatternType =
-      | 'darkDown'
-      | 'darkGray'
-      | 'darkGrid'
-      | 'darkHorizontal'
-      | 'darkTrellis'
-      | 'darkUp'
-      | 'darkVertical'
-      | 'gray0625'
-      | 'gray125'
-      | 'lightDown'
-      | 'lightGray'
-      | 'lightGrid'
-      | 'lightHorizontal'
-      | 'lightTrellis'
-      | 'lightUp'
-      | 'lightVertical'
-      | 'mediumGray'
-      | 'none'
-      | 'solid';
-    export type ExcelCellVerticalAlignment =
-      | 'bottom'
-      | 'center'
-      | 'distributed'
-      | 'justify'
-      | 'top';
     export type ExplicitTypes<TRowData, TKey> = {
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
@@ -8697,12 +9141,9 @@ declare module DevExpress.ui {
       EditingStartEvent: EditingStartEvent<TRowData, TKey>;
       EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
       EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
-      ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
-      Export: Export<TRowData, TKey>;
-      ExportedEvent: ExportedEvent<TRowData, TKey>;
+      Export: Export;
       ExportingEvent: ExportingEvent<TRowData, TKey>;
       ExportTexts: ExportTexts;
-      FileSavingEvent: FileSavingEvent<TRowData, TKey>;
       FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
       FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
       FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
@@ -8756,58 +9197,24 @@ declare module DevExpress.ui {
       ToolbarItem: ToolbarItem;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
     };
-    export type Export<TRowData = any, TKey = any> = {
+    export type Export = {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
        */
       allowExportSelectedData?: boolean;
       /**
-       * [descr:dxDataGridOptions.export.customizeExcelCell]
-       * @deprecated [depNote:dxDataGridOptions.export.customizeExcelCell]
-       */
-      customizeExcelCell?: (options: ExcelCellInfo<TRowData, TKey>) => void;
-      /**
        * [descr:dxDataGridOptions.export.enabled]
        */
       enabled?: boolean;
-      /**
-       * [descr:dxDataGridOptions.export.excelFilterEnabled]
-       * @deprecated [depNote:dxDataGridOptions.export.excelFilterEnabled]
-       */
-      excelFilterEnabled?: boolean;
-      /**
-       * [descr:dxDataGridOptions.export.excelWrapTextEnabled]
-       * @deprecated [depNote:dxDataGridOptions.export.excelWrapTextEnabled]
-       */
-      excelWrapTextEnabled?: boolean;
       /**
        * [descr:dxDataGridOptions.export.formats]
        */
       formats?: ('xlsx' | 'pdf' | string)[];
       /**
-       * [descr:dxDataGridOptions.export.fileName]
-       * @deprecated [depNote:dxDataGridOptions.export.fileName]
-       */
-      fileName?: string;
-      /**
-       * [descr:dxDataGridOptions.export.ignoreExcelErrors]
-       * @deprecated [depNote:dxDataGridOptions.export.ignoreExcelErrors]
-       */
-      ignoreExcelErrors?: boolean;
-      /**
-       * [descr:dxDataGridOptions.export.proxyUrl]
-       * @deprecated [depNote:dxDataGridOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
-      /**
        * [descr:dxDataGridOptions.export.texts]
        */
       texts?: ExportTexts;
     };
-    export type ExportedEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
     export type ExportingEvent<
       TRowData = any,
       TKey = any
@@ -8830,16 +9237,6 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.export.texts.exportTo]
        */
       exportTo?: string;
-    };
-    export type FileSavingEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.events.Cancelable & {
-      readonly component: dxDataGrid<TRowData, TKey>;
-      readonly element: DevExpress.core.DxElement;
-      fileName?: string;
-      format?: string;
-      readonly data: Blob;
     };
     export type FilterPanel<
       TRowData = any,
@@ -9471,7 +9868,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.calculateGroupValue]
      */
-    calculateGroupValue?: string | ((rowData: TRowData) => any);
+    calculateGroupValue?:
+      | string
+      | ((this: DevExpress.common.grids.ColumnBase, rowData: TRowData) => any);
     /**
      * [descr:dxDataGridColumn.cellTemplate]
      */
@@ -9596,12 +9995,14 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxDataGridOptions<TRowData = any, TKey = any>
-    extends DevExpress.common.grids.GridBaseOptions<
-      dxDataGrid<TRowData, TKey>,
-      TRowData,
-      TKey
-    > {
+  export type dxDataGridOptions<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.common.grids.GridBaseOptions<
+    dxDataGrid<TRowData, TKey>,
+    TRowData,
+    TKey
+  > & {
     /**
      * [descr:dxDataGridOptions.columns]
      */
@@ -9613,21 +10014,13 @@ declare module DevExpress.ui {
       columns: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey>>
     ) => void;
     /**
-     * [descr:dxDataGridOptions.customizeExportData]
-     * @deprecated [depNote:dxDataGridOptions.customizeExportData]
-     */
-    customizeExportData?: (
-      columns: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey>>,
-      rows: Array<DevExpress.ui.dxDataGrid.Row<TRowData, TKey>>
-    ) => void;
-    /**
      * [descr:dxDataGridOptions.editing]
      */
     editing?: DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
     /**
      * [descr:dxDataGridOptions.export]
      */
-    export?: DevExpress.ui.dxDataGrid.Export<TRowData, TKey>;
+    export?: DevExpress.ui.dxDataGrid.Export;
     /**
      * [descr:dxDataGridOptions.groupPanel]
      */
@@ -9693,24 +10086,10 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxDataGrid.EditorPreparingEvent<TRowData, TKey>
     ) => void;
     /**
-     * [descr:dxDataGridOptions.onExported]
-     * @deprecated [depNote:dxDataGridOptions.onExported]
-     */
-    onExported?: (
-      e: DevExpress.ui.dxDataGrid.ExportedEvent<TRowData, TKey>
-    ) => void;
-    /**
      * [descr:dxDataGridOptions.onExporting]
      */
     onExporting?: (
       e: DevExpress.ui.dxDataGrid.ExportingEvent<TRowData, TKey>
-    ) => void;
-    /**
-     * [descr:dxDataGridOptions.onFileSaving]
-     * @deprecated [depNote:dxDataGridOptions.onFileSaving]
-     */
-    onFileSaving?: (
-      e: DevExpress.ui.dxDataGrid.FileSavingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxDataGridOptions.onFocusedCellChanged]
@@ -9829,7 +10208,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
-  }
+  };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
    */
@@ -11064,11 +11443,6 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.export.fileName]
        */
       fileName?: string;
-      /**
-       * [descr:dxDiagramOptions.export.proxyUrl]
-       * @deprecated [depNote:dxDiagramOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
     };
     /**
      * [descr:dxDiagramOptions.fullScreen]
@@ -13905,15 +14279,15 @@ declare module DevExpress.ui {
      * [descr:dxFormSimpleItem.validationRules]
      */
     validationRules?: Array<
-      | RequiredRule
-      | NumericRule
-      | RangeRule
-      | StringLengthRule
-      | CustomRule
-      | CompareRule
-      | PatternRule
-      | EmailRule
-      | AsyncRule
+      | DevExpress.common.RequiredRule
+      | DevExpress.common.NumericRule
+      | DevExpress.common.RangeRule
+      | DevExpress.common.StringLengthRule
+      | DevExpress.common.CustomRule
+      | DevExpress.common.CompareRule
+      | DevExpress.common.PatternRule
+      | DevExpress.common.EmailRule
+      | DevExpress.common.AsyncRule
     >;
     /**
      * [descr:dxFormSimpleItem.visible]
@@ -17694,11 +18068,6 @@ declare module DevExpress.ui {
       }
     ): Function & null;
     /**
-     * [descr:dxPivotGrid.exportToExcel()]
-     * @deprecated [depNote:dxPivotGrid.exportToExcel()]
-     */
-    exportToExcel(): void;
-    /**
      * [descr:dxPivotGrid.getDataSource()]
      */
     getDataSource(): DevExpress.data.PivotGridDataSource;
@@ -17748,18 +18117,10 @@ declare module DevExpress.ui {
         items?: Array<any>;
       };
     export type DisposingEvent = DevExpress.events.EventInfo<dxPivotGrid>;
-    export type ExportedEvent = DevExpress.events.EventInfo<dxPivotGrid>;
     export type ExportingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPivotGrid> & {
         fileName?: string;
       };
-    export type FileSavingEvent = DevExpress.events.Cancelable & {
-      readonly component: dxPivotGrid;
-      readonly element: DevExpress.core.DxElement;
-      readonly data?: Blob;
-      readonly format?: string;
-      fileName?: string;
-    };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPivotGrid>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPivotGrid> &
@@ -17970,21 +18331,6 @@ declare module DevExpress.ui {
        * [descr:dxPivotGridOptions.export.enabled]
        */
       enabled?: boolean;
-      /**
-       * [descr:dxPivotGridOptions.export.fileName]
-       * @deprecated [depNote:dxPivotGridOptions.export.fileName]
-       */
-      fileName?: string;
-      /**
-       * [descr:dxPivotGridOptions.export.ignoreExcelErrors]
-       * @deprecated [depNote:dxPivotGridOptions.export.ignoreExcelErrors]
-       */
-      ignoreExcelErrors?: boolean;
-      /**
-       * [descr:dxPivotGridOptions.export.proxyUrl]
-       * @deprecated [depNote:dxPivotGridOptions.export.proxyUrl]
-       */
-      proxyUrl?: string;
     };
     /**
      * [descr:dxPivotGridOptions.fieldChooser]
@@ -18200,19 +18546,9 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxPivotGrid.ContextMenuPreparingEvent
     ) => void;
     /**
-     * [descr:dxPivotGridOptions.onExported]
-     * @deprecated [depNote:dxPivotGridOptions.onExported]
-     */
-    onExported?: (e: DevExpress.ui.dxPivotGrid.ExportedEvent) => void;
-    /**
      * [descr:dxPivotGridOptions.onExporting]
      */
     onExporting?: (e: DevExpress.ui.dxPivotGrid.ExportingEvent) => void;
-    /**
-     * [descr:dxPivotGridOptions.onFileSaving]
-     * @deprecated [depNote:dxPivotGridOptions.onFileSaving]
-     */
-    onFileSaving?: (e: DevExpress.ui.dxPivotGrid.FileSavingEvent) => void;
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */
@@ -20471,7 +20807,6 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
-    export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   }
   /**
    * [descr:dxSliderBase]
@@ -20548,7 +20883,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSliderBaseOptions.valueChangeMode]
      */
-    valueChangeMode?: DevExpress.ui.dxSlider.ValueChangeMode;
+    valueChangeMode?: DevExpress.common.SliderValueChangeMode;
   }
   /**
    * @deprecated use Properties instead
@@ -23205,12 +23540,14 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxTreeListOptions<TRowData = any, TKey = any>
-    extends DevExpress.common.grids.GridBaseOptions<
-      dxTreeList<TRowData, TKey>,
-      TRowData,
-      TKey
-    > {
+  export type dxTreeListOptions<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.common.grids.GridBaseOptions<
+    dxTreeList<TRowData, TKey>,
+    TRowData,
+    TKey
+  > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -23396,7 +23733,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
-  }
+  };
   /**
    * @deprecated 
    */
@@ -23878,15 +24215,15 @@ declare module DevExpress.ui {
      * [descr:dxValidationGroupResult.brokenRules]
      */
     brokenRules?: Array<
-      | RequiredRule
-      | NumericRule
-      | RangeRule
-      | StringLengthRule
-      | CustomRule
-      | CompareRule
-      | PatternRule
-      | EmailRule
-      | AsyncRule
+      | DevExpress.common.RequiredRule
+      | DevExpress.common.NumericRule
+      | DevExpress.common.RangeRule
+      | DevExpress.common.StringLengthRule
+      | DevExpress.common.CustomRule
+      | DevExpress.common.CompareRule
+      | DevExpress.common.PatternRule
+      | DevExpress.common.EmailRule
+      | DevExpress.common.AsyncRule
     >;
     /**
      * [descr:dxValidationGroupResult.complete]
@@ -24031,9 +24368,9 @@ declare module DevExpress.ui {
       name?: string;
       isValid?: boolean;
       value?: any;
-      validationRules?: Array<ValidationRule>;
-      brokenRule?: ValidationRule;
-      brokenRules?: ValidationRule;
+      validationRules?: Array<DevExpress.common.ValidationRule>;
+      brokenRule?: DevExpress.common.ValidationRule;
+      brokenRules?: DevExpress.common.ValidationRule;
       status?: DevExpress.common.ValidationStatus;
     };
     export type ValidationResult = dxValidatorResult;
@@ -24089,7 +24426,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorOptions.validationRules]
      */
-    validationRules?: Array<ValidationRule>;
+    validationRules?: Array<DevExpress.common.ValidationRule>;
   }
   /**
    * [descr:dxValidatorResult]
@@ -24100,11 +24437,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.brokenRule]
      */
-    brokenRule?: ValidationRule;
+    brokenRule?: DevExpress.common.ValidationRule;
     /**
      * [descr:dxValidatorResult.brokenRules]
      */
-    brokenRules?: Array<ValidationRule>;
+    brokenRules?: Array<DevExpress.common.ValidationRule>;
     /**
      * [descr:dxValidatorResult.complete]
      */
@@ -24116,7 +24453,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.pendingRules]
      */
-    pendingRules?: Array<AsyncRule>;
+    pendingRules?: Array<DevExpress.common.AsyncRule>;
     /**
      * [descr:dxValidatorResult.status]
      */
@@ -24124,7 +24461,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.validationRules]
      */
-    validationRules?: Array<ValidationRule>;
+    validationRules?: Array<DevExpress.common.ValidationRule>;
     /**
      * [descr:dxValidatorResult.value]
      */
@@ -24206,24 +24543,6 @@ declare module DevExpress.ui {
      * [descr:EditorOptions.stylingMode]
      */
     stylingMode?: DevExpress.common.EditorStyle;
-  }
-  /**
-   * [descr:EmailRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface EmailRule {
-    /**
-     * [descr:EmailRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:EmailRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:EmailRule.type]
-     */
-    type: 'email';
   }
   /**
    * [descr:Format]
@@ -24353,97 +24672,9 @@ declare module DevExpress.ui {
    */
   export function notify(options: any, stack?: Stack): void;
   /**
-   * [descr:NumericRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface NumericRule {
-    /**
-     * [descr:NumericRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:NumericRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:NumericRule.type]
-     */
-    type: 'numeric';
-  }
-  /**
-   * [descr:PatternRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface PatternRule {
-    /**
-     * [descr:PatternRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:PatternRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:PatternRule.pattern]
-     */
-    pattern?: RegExp | string;
-    /**
-     * [descr:PatternRule.type]
-     */
-    type: 'pattern';
-  }
-  /**
-   * [descr:RangeRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface RangeRule {
-    /**
-     * [descr:RangeRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:RangeRule.max]
-     */
-    max?: Date | number;
-    /**
-     * [descr:RangeRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:RangeRule.min]
-     */
-    min?: Date | number;
-    /**
-     * [descr:RangeRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
-     * [descr:RangeRule.type]
-     */
-    type: 'range';
-  }
-  /**
    * [descr:ui.repaintFloatingActionButton()]
    */
   export function repaintFloatingActionButton(): void;
-  /**
-   * [descr:RequiredRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface RequiredRule {
-    /**
-     * [descr:RequiredRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:RequiredRule.trim]
-     */
-    trim?: boolean;
-    /**
-     * [descr:RequiredRule.type]
-     */
-    type: 'required';
-  }
   /**
    * [descr:SearchBoxMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -24526,36 +24757,6 @@ declare module DevExpress.ui {
       | 'right-stack';
   }
   /**
-   * [descr:StringLengthRule]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface StringLengthRule {
-    /**
-     * [descr:StringLengthRule.ignoreEmptyValue]
-     */
-    ignoreEmptyValue?: boolean;
-    /**
-     * [descr:StringLengthRule.max]
-     */
-    max?: number;
-    /**
-     * [descr:StringLengthRule.message]
-     */
-    message?: string;
-    /**
-     * [descr:StringLengthRule.min]
-     */
-    min?: number;
-    /**
-     * [descr:StringLengthRule.trim]
-     */
-    trim?: boolean;
-    /**
-     * [descr:StringLengthRule.type]
-     */
-    type: 'stringLength';
-  }
-  /**
    * [descr:ui.template]
    * @deprecated [depNote:ui.template]
    */
@@ -24582,34 +24783,6 @@ declare module DevExpress.ui {
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
   }
-  export interface ValidationCallbackData {
-    value?: any;
-    rule: any;
-    validator: any;
-    data?: any;
-    column?: any;
-    formItem?: any;
-  }
-  export type ValidationRule =
-    | AsyncRule
-    | CompareRule
-    | CustomRule
-    | EmailRule
-    | NumericRule
-    | PatternRule
-    | RangeRule
-    | RequiredRule
-    | StringLengthRule;
-  export type ValidationRuleType =
-    | 'required'
-    | 'numeric'
-    | 'range'
-    | 'stringLength'
-    | 'custom'
-    | 'compare'
-    | 'pattern'
-    | 'email'
-    | 'async';
   /**
    * [descr:Widget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -24734,9 +24907,8 @@ declare module DevExpress.ui.dxDataGrid {
   };
   /**
    * [descr:dxDataGridToolbarItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface ToolbarItem extends dxToolbarItem {
+  export type ToolbarItem = dxToolbarItem & {
     /**
      * [descr:dxDataGridToolbarItem.name]
      */
@@ -24745,7 +24917,7 @@ declare module DevExpress.ui.dxDataGrid {
      * [descr:dxDataGridToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
-  }
+  };
 }
 declare module DevExpress.ui.dxDiagram {
   export type Item = dxDiagramItem;
@@ -24912,7 +25084,8 @@ declare module DevExpress.viz {
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BarGaugeLegendItem extends BaseLegendItem {
+  export interface BarGaugeLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:BarGaugeLegendItem.item]
      */
@@ -25007,7 +25180,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartLegend extends BaseLegend {
+  export interface BaseChartLegend extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:BaseChartOptions.legend.customizeItems]
      */
@@ -25028,7 +25201,8 @@ declare module DevExpress.viz {
    * [descr:BaseChartLegendItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartLegendItem extends BaseLegendItem {
+  export interface BaseChartLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:BaseChartLegendItem.series]
      */
@@ -25511,226 +25685,6 @@ declare module DevExpress.viz {
      * [descr:baseLabelObject.show(holdVisible)]
      */
     show(holdVisible: boolean): void;
-  }
-  /**
-   * [descr:BaseLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseLegend {
-    /**
-     * [descr:BaseLegend.backgroundColor]
-     */
-    backgroundColor?: string;
-    /**
-     * [descr:BaseLegend.border]
-     */
-    border?: {
-      /**
-       * [descr:BaseLegend.border.color]
-       */
-      color?: string;
-      /**
-       * [descr:BaseLegend.border.cornerRadius]
-       */
-      cornerRadius?: number;
-      /**
-       * [descr:BaseLegend.border.dashStyle]
-       */
-      dashStyle?: DevExpress.common.charts.DashStyle;
-      /**
-       * [descr:BaseLegend.border.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:BaseLegend.border.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:BaseLegend.border.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:BaseLegend.columnCount]
-     */
-    columnCount?: number;
-    /**
-     * [descr:BaseLegend.columnItemSpacing]
-     */
-    columnItemSpacing?: number;
-    /**
-     * [descr:BaseLegend.font]
-     */
-    font?: Font;
-    /**
-     * [descr:BaseLegend.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:BaseLegend.itemTextPosition]
-     */
-    itemTextPosition?: DevExpress.common.Position;
-    /**
-     * [descr:BaseLegend.itemsAlignment]
-     */
-    itemsAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:BaseLegend.margin]
-     */
-    margin?:
-      | number
-      | {
-          /**
-           * [descr:BaseLegend.margin.bottom]
-           */
-          bottom?: number;
-          /**
-           * [descr:BaseLegend.margin.left]
-           */
-          left?: number;
-          /**
-           * [descr:BaseLegend.margin.right]
-           */
-          right?: number;
-          /**
-           * [descr:BaseLegend.margin.top]
-           */
-          top?: number;
-        };
-    /**
-     * [descr:BaseLegend.markerSize]
-     */
-    markerSize?: number;
-    /**
-     * [descr:BaseLegend.orientation]
-     */
-    orientation?: DevExpress.common.Orientation;
-    /**
-     * [descr:BaseLegend.paddingLeftRight]
-     */
-    paddingLeftRight?: number;
-    /**
-     * [descr:BaseLegend.paddingTopBottom]
-     */
-    paddingTopBottom?: number;
-    /**
-     * [descr:BaseLegend.rowCount]
-     */
-    rowCount?: number;
-    /**
-     * [descr:BaseLegend.rowItemSpacing]
-     */
-    rowItemSpacing?: number;
-    /**
-     * [descr:BaseLegend.title]
-     */
-    title?:
-      | {
-          /**
-           * [descr:BaseLegend.title.font]
-           */
-          font?: Font;
-          /**
-           * [descr:BaseLegend.title.horizontalAlignment]
-           */
-          horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-          /**
-           * [descr:BaseLegend.title.margin]
-           */
-          margin?: {
-            /**
-             * [descr:BaseLegend.title.margin.bottom]
-             */
-            bottom?: number;
-            /**
-             * [descr:BaseLegend.title.margin.left]
-             */
-            left?: number;
-            /**
-             * [descr:BaseLegend.title.margin.right]
-             */
-            right?: number;
-            /**
-             * [descr:BaseLegend.title.margin.top]
-             */
-            top?: number;
-          };
-          /**
-           * [descr:BaseLegend.title.placeholderSize]
-           */
-          placeholderSize?: number;
-          /**
-           * [descr:BaseLegend.title.subtitle]
-           */
-          subtitle?:
-            | {
-                /**
-                 * [descr:BaseLegend.title.subtitle.font]
-                 */
-                font?: Font;
-                /**
-                 * [descr:BaseLegend.title.subtitle.offset]
-                 */
-                offset?: number;
-                /**
-                 * [descr:BaseLegend.title.subtitle.text]
-                 */
-                text?: string;
-              }
-            | string;
-          /**
-           * [descr:BaseLegend.title.text]
-           */
-          text?: string;
-          /**
-           * [descr:BaseLegend.title.verticalAlignment]
-           */
-          verticalAlignment?: DevExpress.common.VerticalEdge;
-        }
-      | string;
-    /**
-     * [descr:BaseLegend.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalEdge;
-    /**
-     * [descr:BaseLegend.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:BaseLegendItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseLegendItem {
-    /**
-     * [descr:BaseLegendItem.marker]
-     */
-    marker?: {
-      /**
-       * [descr:BaseLegendItem.marker.fill]
-       */
-      fill?: string;
-      /**
-       * [descr:BaseLegendItem.marker.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:BaseLegendItem.marker.size]
-       */
-      size?: number;
-      /**
-       * [descr:BaseLegendItem.marker.state]
-       */
-      state?: DevExpress.common.charts.LegendMarkerState;
-    };
-    /**
-     * [descr:BaseLegendItem.text]
-     */
-    text?: string;
-    /**
-     * [descr:BaseLegendItem.visible]
-     */
-    visible?: boolean;
   }
   /**
    * [descr:basePointObject]
@@ -26220,11 +26174,6 @@ declare module DevExpress.viz {
      */
     printingEnabled?: boolean;
     /**
-     * [descr:BaseWidgetOptions.export.proxyUrl]
-     * @deprecated [depNote:BaseWidgetOptions.export.proxyUrl]
-     */
-    proxyUrl?: string;
-    /**
      * [descr:BaseWidgetOptions.export.svgToCanvas]
      */
     svgToCanvas?: (
@@ -26567,11 +26516,15 @@ declare module DevExpress.viz {
     /**
      * [descr:chartAxisObject.visualRange()]
      */
-    visualRange(): VizRange;
+    visualRange(): DevExpress.common.charts.VisualRange;
     /**
      * [descr:chartAxisObject.visualRange(visualRange)]
      */
-    visualRange(visualRange: Array<number | string | Date> | VizRange): void;
+    visualRange(
+      visualRange:
+        | Array<number | string | Date>
+        | DevExpress.common.charts.VisualRange
+    ): void;
   }
   /**
    * [descr:chartPointAggregationInfoObject]
@@ -26649,7 +26602,7 @@ declare module DevExpress.viz {
     /**
      * [descr:ChartSeries.type]
      */
-    type?: SeriesType;
+    type?: DevExpress.common.charts.SeriesType;
   }
   /**
    * [descr:chartSeriesObject]
@@ -26842,7 +26795,8 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxBarGaugeLegend extends BaseLegend {
+  export interface dxBarGaugeLegend
+    extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:dxBarGaugeOptions.legend.customizeHint]
      */
@@ -26990,7 +26944,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.LabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxBarGaugeOptions.startValue]
      */
@@ -27210,8 +27164,8 @@ declare module DevExpress.viz {
         readonly rangeStart: Date | number;
         readonly rangeEnd: Date | number;
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
-        readonly previousRange: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
+        readonly previousRange: DevExpress.common.charts.VisualRange;
         readonly actionType: DevExpress.common.charts.ZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
@@ -27219,7 +27173,7 @@ declare module DevExpress.viz {
     export type ZoomStartEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
         readonly actionType?: DevExpress.common.charts.ZoomPanAction;
       };
   }
@@ -27249,7 +27203,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.aggregationInterval]
      */
-    aggregationInterval?: VizTimeInterval;
+    aggregationInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.argumentType]
      */
@@ -27261,7 +27215,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.breaks]
      */
-    breaks?: Array<ScaleBreak>;
+    breaks?: Array<DevExpress.common.charts.ScaleBreak>;
     /**
      * [descr:dxChartOptions.argumentAxis.categories]
      */
@@ -27301,7 +27255,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.minVisualRangeLength]
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.minorTickCount]
      */
@@ -27309,7 +27263,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.position]
      */
@@ -27337,7 +27291,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.argumentAxis.title]
      */
@@ -27349,7 +27303,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.visualRange]
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxChartOptions.argumentAxis.visualRangeUpdateMode]
      */
@@ -27357,7 +27313,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.wholeRange]
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxChartOptions.argumentAxis.workWeek]
      */
@@ -28035,7 +27993,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonSeriesSettings.type]
      */
-    type?: SeriesType;
+    type?: DevExpress.common.charts.SeriesType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -30477,7 +30435,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.breaks]
      */
-    breaks?: Array<ScaleBreak>;
+    breaks?: Array<DevExpress.common.charts.ScaleBreak>;
     /**
      * [descr:dxChartOptions.valueAxis.categories]
      */
@@ -30513,7 +30471,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.minVisualRangeLength]
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.valueAxis.minorTickCount]
      */
@@ -30521,7 +30479,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.valueAxis.multipleAxesSpacing]
      */
@@ -30561,7 +30519,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxChartOptions.valueAxis.title]
      */
@@ -30577,7 +30535,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.visualRange]
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
      */
@@ -30585,7 +30545,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.wholeRange]
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -30859,7 +30821,6 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
-    export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -30931,7 +30892,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxFunnelLegend extends BaseLegend {
+  export interface dxFunnelLegend extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:dxFunnelOptions.legend.customizeHint]
      */
@@ -31262,7 +31223,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxFunnel.FunnelLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
@@ -31460,7 +31421,6 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
     export type PieChartAnnotationLocation = 'center' | 'edge';
-    export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
     export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
     export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
@@ -31638,7 +31598,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxPieChart.PieChartLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */
@@ -32069,8 +32029,8 @@ declare module DevExpress.viz {
         MouseEvent | TouchEvent
       > & {
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
-        readonly previousRange: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
+        readonly previousRange: DevExpress.common.charts.VisualRange;
         readonly actionType: DevExpress.common.charts.ZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
@@ -32081,7 +32041,7 @@ declare module DevExpress.viz {
         MouseEvent | TouchEvent
       > & {
         readonly axis: chartAxisObject;
-        readonly range: VizRange;
+        readonly range: DevExpress.common.charts.VisualRange;
         readonly actionType: DevExpress.common.charts.ZoomPanAction;
       };
   }
@@ -32161,7 +32121,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.argumentAxis.originValue]
      */
@@ -32185,7 +32145,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.argumentAxis.type]
      */
@@ -33420,7 +33380,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.minVisualRangeLength]
      */
-    minVisualRangeLength?: VizTimeInterval;
+    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.valueAxis.minorTickCount]
      */
@@ -33428,7 +33388,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.minorTickInterval]
      */
-    minorTickInterval?: VizTimeInterval;
+    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.valueAxis.showZero]
      */
@@ -33444,7 +33404,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.tickInterval]
      */
-    tickInterval?: VizTimeInterval;
+    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
     /**
      * [descr:dxPolarChartOptions.valueAxis.type]
      */
@@ -33460,7 +33420,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRange]
      */
-    visualRange?: VizRange | Array<number | string | Date>;
+    visualRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
      */
@@ -33468,7 +33430,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.wholeRange]
      */
-    wholeRange?: VizRange | Array<number | string | Date>;
+    wholeRange?:
+      | DevExpress.common.charts.VisualRange
+      | Array<number | string | Date>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -33585,7 +33549,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelector.setValue(value)]
      */
-    setValue(value: Array<number | string | Date> | VizRange): void;
+    setValue(
+      value:
+        | Array<number | string | Date>
+        | DevExpress.common.charts.VisualRange
+    ): void;
   }
   module dxRangeSelector {
     export type AxisScale =
@@ -33676,6 +33644,7 @@ declare module DevExpress.viz {
       animationEnabled?: boolean;
       /**
        * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
+       * @deprecated [depNote:dxRangeSelectorOptions.behavior.callValueChanged]
        */
       callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
       /**
@@ -33690,6 +33659,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.behavior.snapToTicks]
        */
       snapToTicks?: boolean;
+      /**
+       * [descr:dxRangeSelectorOptions.behavior.valueChangeMode]
+       */
+      valueChangeMode?: DevExpress.common.SliderValueChangeMode;
     };
     /**
      * [descr:dxRangeSelectorOptions.chart]
@@ -33850,7 +33823,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregationInterval]
        */
-      aggregationInterval?: VizTimeInterval;
+      aggregationInterval?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.discreteAxisDivisionMode]
        */
@@ -33879,7 +33852,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.breaks]
        */
-      breaks?: Array<ScaleBreak>;
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
       /**
        * [descr:dxRangeSelectorOptions.scale.categories]
        */
@@ -33980,11 +33953,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.maxRange]
        */
-      maxRange?: VizTimeInterval;
+      maxRange?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.minRange]
        */
-      minRange?: VizTimeInterval;
+      minRange?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.minorTick]
        */
@@ -34013,7 +33986,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.minorTickInterval]
        */
-      minorTickInterval?: VizTimeInterval;
+      minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.placeholderHeight]
        */
@@ -34050,7 +34023,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.tickInterval]
        */
-      tickInterval?: VizTimeInterval;
+      tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
       /**
        * [descr:dxRangeSelectorOptions.scale.type]
        */
@@ -34157,7 +34130,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelectorOptions.value]
      */
-    value?: Array<number | string | Date> | VizRange;
+    value?:
+      | Array<number | string | Date>
+      | DevExpress.common.charts.VisualRange;
   }
   /**
    * [descr:dxSankey]
@@ -35462,7 +35437,8 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxVectorMapLegends extends BaseLegend {
+  export interface dxVectorMapLegends
+    extends DevExpress.common.charts.BaseLegend {
     /**
      * [descr:dxVectorMapOptions.legends.customizeHint]
      */
@@ -35884,7 +35860,6 @@ declare module DevExpress.viz {
       fileName?: string;
       format?: string;
       backgroundColor?: string;
-      proxyUrl?: string;
       width?: number;
       height?: number;
       onExporting?: Function;
@@ -35913,7 +35888,6 @@ declare module DevExpress.viz {
       gridLayout?: boolean;
       verticalAlignment?: DevExpress.common.VerticalAlignment;
       horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-      proxyUrl?: string;
       onExporting?: Function;
       onExported?: Function;
       onFileSaving?: Function;
@@ -35950,7 +35924,8 @@ declare module DevExpress.viz {
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface FunnelLegendItem extends BaseLegendItem {
+  export interface FunnelLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:FunnelLegendItem.item]
      */
@@ -36063,7 +36038,8 @@ declare module DevExpress.viz {
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface PieChartLegendItem extends BaseLegendItem {
+  export interface PieChartLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:PieChartLegendItem.argument]
      */
@@ -36182,51 +36158,11 @@ declare module DevExpress.viz {
    */
   export function registerTheme(customTheme: any, baseTheme: string): void;
   /**
-   * [descr:ScaleBreak]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ScaleBreak {
-    /**
-     * [descr:ScaleBreak.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:ScaleBreak.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type SeriesType =
-    | 'area'
-    | 'bar'
-    | 'bubble'
-    | 'candlestick'
-    | 'fullstackedarea'
-    | 'fullstackedbar'
-    | 'fullstackedline'
-    | 'fullstackedspline'
-    | 'fullstackedsplinearea'
-    | 'line'
-    | 'rangearea'
-    | 'rangebar'
-    | 'scatter'
-    | 'spline'
-    | 'splinearea'
-    | 'stackedarea'
-    | 'stackedbar'
-    | 'stackedline'
-    | 'stackedspline'
-    | 'stackedsplinearea'
-    | 'steparea'
-    | 'stepline'
-    | 'stock';
-  /**
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface VectorMapLegendItem extends BaseLegendItem {
+  export interface VectorMapLegendItem
+    extends DevExpress.common.charts.BaseLegendItem {
     /**
      * [descr:VectorMapLegendItem.color]
      */
@@ -36267,69 +36203,6 @@ declare module DevExpress.viz {
      */
     to?: (coordinates: Array<number>) => Array<number>;
   }
-  /**
-   * [descr:VizRange]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface VizRange {
-    /**
-     * [descr:VizRange.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:VizRange.length]
-     */
-    length?: VizTimeInterval;
-    /**
-     * [descr:VizRange.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * [descr:VizTimeInterval]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type VizTimeInterval =
-    | number
-    | {
-        /**
-         * [descr:VizTimeInterval.days]
-         */
-        days?: number;
-        /**
-         * [descr:VizTimeInterval.hours]
-         */
-        hours?: number;
-        /**
-         * [descr:VizTimeInterval.milliseconds]
-         */
-        milliseconds?: number;
-        /**
-         * [descr:VizTimeInterval.minutes]
-         */
-        minutes?: number;
-        /**
-         * [descr:VizTimeInterval.months]
-         */
-        months?: number;
-        /**
-         * [descr:VizTimeInterval.quarters]
-         */
-        quarters?: number;
-        /**
-         * [descr:VizTimeInterval.seconds]
-         */
-        seconds?: number;
-        /**
-         * [descr:VizTimeInterval.weeks]
-         */
-        weeks?: number;
-        /**
-         * [descr:VizTimeInterval.years]
-         */
-        years?: number;
-      }
-    | DevExpress.common.charts.TimeInterval;
   export type VizWidget =
     | dxChart
     | dxPieChart
@@ -36361,9 +36234,9 @@ declare module DevExpress.viz.map {
    */
   export const projection: {
     /**
-     * [descr:viz.map.projection.add(name, projection)]
+     * [descr:viz.map.projection.add(name, projectionConfig)]
      */
-    add(name: string, projection: VectorMapProjectionConfig | any): void;
+    add(name: string, projectionConfig: VectorMapProjectionConfig | any): void;
 
     /**
      * [descr:viz.map.projection.get(name)]

@@ -9,18 +9,14 @@
 // adduse
 
 .dx-button-content {
-  line-height: 0;
+  line-height: $material-button-content-line-height;
 }
 
 .dx-button-text {
-  line-height: $material-button-height - 2 * $material-button-vertical-padding - 1;
-  text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-
-.dx-button a {
-  text-decoration: none;
+  line-height: $material-button-text-line-height;
+  text-transform: $material-button-text-transform;
+  font-weight: $material-button-text-font-weight;
+  letter-spacing: $material-button-text-letter-spacing;
 }
 
 .dx-button {
@@ -162,13 +158,8 @@
     border-radius: 50%;
 
     @include dx-button-onlyicon-sizing();
-
-    .dx-button-text {
-      display: none;
-    }
   }
 }
-
 
 .dx-button-mode-text {
   @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);

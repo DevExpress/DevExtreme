@@ -1,12 +1,11 @@
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-n-drop appointment after resize (T835545)`
+fixture.disablePageReloads`Drag-n-drop appointment after resize (T835545)`
   .page(url(__dirname, '../../container.html'));
 
-['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => safeSizeTest(
+['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => test(
   `After drag-n-drop appointment, size of appointment shouldn't change in the '${view}' view`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { element, resizableHandle } = scheduler.getAppointment('app');
@@ -40,18 +39,24 @@ fixture`Drag-n-drop appointment after resize (T835545)`
         offsetY: 0,
       });
 
+    const elementClientWidth = await element.clientWidth;
+    const elementClientHeight = await element.clientHeight;
+
+    const elementClientLeft = await element.clientLeft;
+    const elementClientTop = await element.clientTop;
+
     await t
       .expect(sizeBeforeDrag.width)
-      .eql(await element.clientWidth)
+      .eql(elementClientWidth)
 
       .expect(sizeBeforeDrag.height)
-      .eql(await element.clientHeight)
+      .eql(elementClientHeight)
 
       .expect(positionBeforeDrag.left)
-      .eql(await element.clientLeft)
+      .eql(elementClientLeft)
 
       .expect(positionBeforeDrag.top)
-      .eql(await element.clientTop);
+      .eql(elementClientTop);
   },
 ).before(async () => createScheduler({
   views: [view],

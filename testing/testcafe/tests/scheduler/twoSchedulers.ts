@@ -1,10 +1,8 @@
-import { ClientFunction } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';
 import url from '../../helpers/getPageUrl';
 
-fixture`Interaction of two schedulers`
+fixture.disablePageReloads`Interaction of two schedulers`
   .page(url(__dirname, '../container.html'));
 
 const createScheduler = async (container): Promise<void> => {
@@ -14,18 +12,12 @@ const createScheduler = async (container): Promise<void> => {
     height: 600,
     views: ['day'],
     currentView: 'day',
-  }, true, container);
+  }, container);
 };
 
-const dispose = ClientFunction((container) => {
-  ($(container) as any).dxScheduler('dispose');
-});
-
-safeSizeTest('First scheduler should work after removing second (T1063130)', async (t) => {
+test('First scheduler should work after removing second (T1063130)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { navigator } = scheduler.toolbar;
-
-  await dispose('#otherContainer');
 
   await t
     .click(navigator.nextButton)

@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Appointments:two-schedulers`
+fixture.disablePageReloads`Layout:Appointments:two-schedulers`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Appointment\'s dragging should be work properly, if on page placed two dxSchedulers(T1020820)', async (t) => {
+test('Appointment\'s dragging should be work properly, if on page placed two dxSchedulers(T1020820)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -16,7 +15,7 @@ safeSizeTest('Appointment\'s dragging should be work properly, if on page placed
     .ok();
 
   await t
-    .drag(scheduler.getAppointment('Install New Database').element, -100, -100)
+    .drag(scheduler.getAppointment('Install New Database').element, -100, -100, { speed: 0.5 })
     .expect(await takeScreenshot('after-dragging(T1020820).png'))
     .ok();
 
@@ -52,7 +51,7 @@ safeSizeTest('Appointment\'s dragging should be work properly, if on page placed
     currentDate: new Date(2021, 2, 29),
     startDayHour: 9,
     height: 400,
-  }, true);
+  });
 
   await createWidget('dxScheduler', {
     maxAppointmentsPerCell: 'unlimited',
@@ -70,5 +69,5 @@ safeSizeTest('Appointment\'s dragging should be work properly, if on page placed
     currentDate: new Date(2021, 2, 29),
     startDayHour: 9,
     height: 400,
-  }, true, '#otherContainer');
+  }, '#otherContainer');
 });

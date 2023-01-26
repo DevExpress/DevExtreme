@@ -1,11 +1,11 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
 import createWidget from '../../../../helpers/createWidget';
+import { appendElementTo, setStyleAttribute } from '../../../../helpers/domUtils';
 
-fixture`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
-  .page(url(__dirname, '../pages/containerForTwoSchedulers.html'));
+fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
+  .page(url(__dirname, '../../../container.html'));
 
 interface TestAppointment {
   id: number;
@@ -14,8 +14,8 @@ interface TestAppointment {
   endDate: Date;
 }
 
-const FIRST_SCHEDULER_SELECTOR = '#scheduler-first';
-const SECOND_SCHEDULER_SELECTOR = '#scheduler-second';
+const FIRST_SCHEDULER_SELECTOR = 'scheduler-first';
+const SECOND_SCHEDULER_SELECTOR = 'scheduler-second';
 const EXPECTED_APPOINTMENT_TIME = '12:00 AM - 1:00 AM';
 
 const TEST_APPOINTMENT = {
@@ -85,9 +85,9 @@ const createSchedulerWithRemoteDataSource = async (
   }, { dependencies: { selector, options, appointments } })();
 };
 
-safeSizeTest('Should set correct start and end dates in drag&dropped appointment', async (t) => {
-  const firstScheduler = new Scheduler(FIRST_SCHEDULER_SELECTOR);
-  const secondScheduler = new Scheduler(SECOND_SCHEDULER_SELECTOR);
+test('Should set correct start and end dates in drag&dropped appointment', async (t) => {
+  const firstScheduler = new Scheduler(`#${FIRST_SCHEDULER_SELECTOR}`);
+  const secondScheduler = new Scheduler(`#${SECOND_SCHEDULER_SELECTOR}`);
 
   const appointmentToMoveElement = firstScheduler
     .getAppointment(TEST_APPOINTMENT.text)
@@ -95,7 +95,7 @@ safeSizeTest('Should set correct start and end dates in drag&dropped appointment
   const cellToMoveElement = secondScheduler
     .getDateTableCell(0, 0);
 
-  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.1 });
+  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
 
   const movedAppointmentTime = await secondScheduler
     .getAppointment(TEST_APPOINTMENT.text)
@@ -104,9 +104,13 @@ safeSizeTest('Should set correct start and end dates in drag&dropped appointment
 
   await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
 }).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'display: flex;');
+  await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);
+  await appendElementTo('#container', 'div', SECOND_SCHEDULER_SELECTOR);
+
   await createSchedulerWithRemoteDataSource(
     getBaseSchedulerOptions(new Date(2021, 3, 26)),
-    FIRST_SCHEDULER_SELECTOR,
+    `#${FIRST_SCHEDULER_SELECTOR}`,
     [TEST_APPOINTMENT],
   );
 
@@ -116,7 +120,6 @@ safeSizeTest('Should set correct start and end dates in drag&dropped appointment
       ...getBaseSchedulerOptions(new Date(2021, 4, 26)),
       dataSource: [],
     },
-    false,
-    SECOND_SCHEDULER_SELECTOR,
+    `#${SECOND_SCHEDULER_SELECTOR}`,
   );
 });

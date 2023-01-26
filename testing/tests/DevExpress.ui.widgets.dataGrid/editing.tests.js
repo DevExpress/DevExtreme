@@ -15700,6 +15700,99 @@ QUnit.module('Editing with validation', {
             }
         });
     });
+
+    // T1135692
+    QUnit.test('repaintChangedOnly is true - cell should not be repaint on editing an another cell with given setCellValue when validation passed', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.rowsView.render($testElement);
+        this.applyOptions({
+            repaintChangesOnly: true,
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        message: 'Test',
+                        reevaluate: true,
+                        validationCallback: function(e) {
+                            return !!e.data.age;
+                        }
+                    }]
+                }, {
+                    dataField: 'age',
+                    setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); }
+                }]
+        });
+
+        // act
+        this.editRow(0);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
+
+        const $cellElement = $(this.getCellElement(0, 'name'));
+
+        // act
+        this.cellValue(0, 'age', 123);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell isn\'t repainted');
+    });
+
+    // T1135692
+    QUnit.test('repaintChangedOnly is true - cell should be repaint on editing an another cell with given setCellValue when validation fails', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.rowsView.render($testElement);
+        this.applyOptions({
+            repaintChangesOnly: true,
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        message: 'Test',
+                        reevaluate: true,
+                        validationCallback: function(e) {
+                            return !!e.data.age;
+                        }
+                    }]
+                }, {
+                    dataField: 'age',
+                    setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); }
+                }]
+        });
+
+        // act
+        this.editRow(0);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getRowElement(0)).hasClass('dx-edit-row'), 'edit row');
+
+        const $cellElement = $(this.getCellElement(0, 'name'));
+
+        // act
+        this.cellValue(0, 'age', '');
+        this.clock.tick();
+
+        // assert
+        assert.notDeepEqual($cellElement.get(0), $(this.getCellElement(0, 'name')).get(0), 'first cell is repainted');
+        assert.ok($(this.getCellElement(0, 'name')).hasClass('dx-datagrid-invalid'), 'first cell is repainted as invalid');
+    });
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
@@ -17898,7 +17991,7 @@ QUnit.module('Edit Form', {
     });
 
     // T562662
-    QUnit.test('Render detail form row - creation а validator should not throw an exception when editCellTemplate  specified for column', function(assert) {
+    QUnit.test('Render detail form row - creation a validator should not throw an exception when editCellTemplate specified for column', function(assert) {
         // arrange
         this.setupModules(this);
 

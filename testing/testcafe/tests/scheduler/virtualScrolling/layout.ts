@@ -1,7 +1,6 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import {
   resources,
@@ -13,7 +12,7 @@ import {
   groupedByDateViews,
 } from './utils';
 
-fixture`Scheduler: Virtual Scrolling`
+fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (
@@ -30,10 +29,10 @@ const createScheduler = async (
     startDayHour: 0,
     endDayHour: 3,
     ...additionalProps,
-  }, true);
+  });
 };
 
-safeSizeTest('Virtual scrolling layout in scheduler views', async (t) => {
+test('Virtual scrolling layout in scheduler views', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -63,7 +62,7 @@ safeSizeTest('Virtual scrolling layout in scheduler views', async (t) => {
   await createScheduler({});
 });
 
-safeSizeTest('Virtual scrolling layout in scheduler views when horizontal grouping is enabled', async (t) => {
+test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -96,7 +95,7 @@ safeSizeTest('Virtual scrolling layout in scheduler views when horizontal groupi
   });
 });
 
-safeSizeTest('Virtual scrolling layout in scheduler views when grouping by date is enabled', async (t) => {
+test('Virtual scrolling layout in scheduler views when grouping by date is enabled', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -130,7 +129,7 @@ safeSizeTest('Virtual scrolling layout in scheduler views when grouping by date 
   });
 });
 
-safeSizeTest('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used', async (t) => {
+test('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('currentDate', new Date(2020, 11, 1));

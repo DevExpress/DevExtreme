@@ -241,7 +241,7 @@ const triangleMarker = SimpleIndicator.inherit({
                 minBound = maxBound - length;
             }
         }
-        return { min: minBound, max: maxBound, indent: that._options.width / 2 };
+        return { min: minBound, max: maxBound };
     },
 
     getTooltipParameters: function() {

@@ -1,6 +1,7 @@
 import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
+import visibilityChange from 'events/visibility_change';
 import ArrayStore from 'data/array_store';
 import fx from 'animation/fx';
 import animationFrame from 'animation/frame';
@@ -12,6 +13,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/gallery';
+import 'ui/button';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -739,6 +741,16 @@ QUnit.module('behavior', {
 
         assert.equal(instance._pagesCount(), 2, 'pages count is correct');
     });
+
+    QUnit.test('resizeCallback is called after item is rendered (T1132935)', function(assert) {
+        const resizeEventSpy = sinon.spy(visibilityChange, 'triggerResizeEvent');
+
+        this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+        }).dxGallery('instance');
+
+        assert.ok(resizeEventSpy.called);
+    });
 });
 
 QUnit.module('render', {
@@ -1026,6 +1038,23 @@ QUnit.module('render', {
                 done();
             })
             .attr('src', '../../testing/content/LightBlueSky.jpg');
+    });
+
+    QUnit.test('gallary with loop should not remove component content from templates (T1125857)', function(assert) {
+        const $gallery = $('#gallerySimple').dxGallery({
+            dataSource: [1, 2],
+            loop: true,
+            itemTemplate() {
+                return $('<div>').dxButton({});
+            },
+        });
+        const items = $gallery.find(`.${GALLERY_ITEM_CLASS}`).toArray().slice(0, 2);
+
+        items.forEach(item => {
+            const $button = $(item).find('.dx-button');
+
+            assert.equal($button.children().length, 1);
+        });
     });
 });
 

@@ -1,17 +1,16 @@
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`Scheduler: Cells Selection in Virtual Scrolling`
+fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Selection should work correctly with all-day panel appointments', async (t) => {
+test('Selection should work correctly with all-day panel appointments', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
-    .click(scheduler.getAppointment('Appointment').element, { speed: 0.1 })
-    .click(scheduler.getDateTableCell(0, 0), { speed: 0.1 })
+    .click(scheduler.getAppointment('Appointment').element)
+    .click(scheduler.getDateTableCell(0, 0))
 
     .expect(scheduler.getSelectedCells().count)
     .eql(1);
@@ -25,4 +24,4 @@ safeSizeTest('Selection should work correctly with all-day panel appointments', 
     allDay: true,
     text: 'Appointment',
   }],
-}, true));
+}));

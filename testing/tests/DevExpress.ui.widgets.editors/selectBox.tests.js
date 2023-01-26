@@ -16,6 +16,8 @@ import { normalizeKeyName } from 'events/utils/index';
 
 import 'generic_light.css!';
 
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
+
 QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture">\
@@ -703,6 +705,18 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.equal(displayValue, 'zero', 'value is rendered correctly');
     });
 
+    QUnit.test('can be rendered with a dropDown in fullScreen mode (T1135997)', function(assert) {
+        $('#selectBox').dxSelectBox({
+            items: ['one'],
+            opened: true,
+            dropDownOptions: {
+                fullScreen: true
+            }
+        });
+
+        assert.strictEqual($(toSelector(LIST_ITEM_CLASS)).length, 1, 'dropDown is shown in fullScreen mode');
+    });
+
     QUnit.test('selectBox should display value when item is 0 or boolean false', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: [null, 0, true, false],
@@ -764,8 +778,34 @@ QUnit.module('functionality', moduleSetup, () => {
             .change();
 
         $selectBox.dxSelectBox('instance').option('opened', true);
-        const noDataText = $('.dx-list .dx-empty-message').text();
+        const noDataText = $(`.dx-list .${EMPTY_MESSAGE_CLASS}`).text();
         assert.equal(noDataText, customersNoDataText, 'empty message is correct');
+    });
+
+    QUnit.test('No data text message after search, encodeNoDataText: true', function(assert) {
+        const simpleProducts = [];
+        const customersNoDataText = '<a href="javascript:alert(1)">link</a>';
+        const encodedNoDataText = '&lt;a href="javascript:alert(1)"&gt;link&lt;/a&gt;';
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: simpleProducts,
+            searchEnabled: true,
+            noDataText: customersNoDataText,
+            opened: true,
+            searchTimeout: 0,
+            encodeNoDataText: true,
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type('2')
+            .change();
+
+        $selectBox.dxSelectBox('instance').option('opened', true);
+        const noDataText = $(`.dx-list .${EMPTY_MESSAGE_CLASS}`).html();
+        assert.strictEqual(noDataText, encodedNoDataText, 'empty message is correct');
     });
 
     QUnit.test('dxList has not empty message', function(assert) {
@@ -1506,6 +1546,21 @@ QUnit.module('widget options', moduleSetup, () => {
 
         assert.strictEqual(instance.option('text'), '', 'widget has no text');
         assert.strictEqual($input.val(), '', 'input has no text');
+    });
+
+    QUnit.test('no errors should be thown after changing dropDownOptions and option that triggers refresing (T1129836)', function(assert) {
+        const selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            opened: true,
+        }).dxSelectBox('instance');
+
+        try {
+            selectBox.option('dropDownOptions', { disabled: true });
+            selectBox.option('searchEnabled', false);
+            assert.ok(true);
+        } catch(error) {
+            assert.ok(false, 'error is trown');
+        }
     });
 });
 
@@ -3391,7 +3446,7 @@ QUnit.module('search', moduleSetup, () => {
         const loadSpy = sinon.spy(dataSource, 'load');
         $($input).trigger('dxclick');
 
-        const $emptyMessage = $('.dx-empty-message');
+        const $emptyMessage = $(`.${EMPTY_MESSAGE_CLASS}`);
         const $items = $(toSelector(LIST_ITEM_CLASS));
 
         assert.equal(loadSpy.callCount, 0, 'the was no load');

@@ -878,7 +878,7 @@ QUnit.module('Sync on initialization', {
             function(e) {
                 return /E1049/.test(e.message);
             },
-            'Сolumn \'Field\': filtering is allowed but the \'dataField\' or \'name\' option is not specified'
+            'Column \'Field\': filtering is allowed but the \'dataField\' or \'name\' option is not specified'
         );
     });
 

@@ -114,13 +114,13 @@ const Overlay = Widget.inherit({
                 hide: {
                     type: 'pop',
                     duration: 300,
-                    to: {
-                        opacity: 0,
-                        scale: 0.55
-                    },
                     from: {
                         opacity: 1,
                         scale: 1
+                    },
+                    to: {
+                        opacity: 0,
+                        scale: 0.55
                     }
                 }
             },
@@ -499,6 +499,7 @@ const Overlay = Widget.inherit({
 
             if(this.option('templatesRenderAsynchronously')) {
                 this._stopShowTimer();
+                // NOTE: T390360, T386038
                 this._asyncShowTimeout = setTimeout(show);
             } else {
                 show();
@@ -579,7 +580,6 @@ const Overlay = Widget.inherit({
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
-
                 this._animateHiding();
             };
 
@@ -859,6 +859,8 @@ const Overlay = Widget.inherit({
             transclude,
             onRendered: () => {
                 whenContentRendered.resolve();
+
+                // NOTE: T1114344
                 if(this.option('templatesRenderAsynchronously')) {
                     this._dimensionChanged();
                 }
@@ -1083,7 +1085,6 @@ const Overlay = Widget.inherit({
 
         this._renderVisibility(false);
         this._stopShowTimer();
-
         this._cleanFocusState();
     },
 

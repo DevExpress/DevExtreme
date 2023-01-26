@@ -5,6 +5,7 @@ import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
 import devices from 'core/devices.js';
 import { implementationsMap } from 'core/utils/size';
+import { getWindow } from 'core/utils/window.js';
 
 const setupPosition = positionUtils.setup;
 const calculatePosition = positionUtils.calculate;
@@ -697,6 +698,20 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('bounds should be correct if boundary is equal to window', function(assert) {
+        fixtures.customBoundary.create();
+        try {
+            const window = getWindow();
+            const position = calculatePosition('#what', { collision: 'fit', boundary: window, of: '#where' });
+
+            assert.strictEqual(position.v.oversize, 0, 'vertical bounds are correct ');
+            assert.strictEqual(position.h.oversize, 0, 'horizontal bounds are correc');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            fixtures.customBoundary.drop();
+        }
+    });
 })();
 
 (function preciseModule() {
@@ -929,13 +944,6 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should return window.innerHeight if window.outerHeight < window.innerHeight', function(assert) {
-        const isPhone = devices.real().deviceType === 'phone';
-        if(isPhone) {
-            // skip for ie because we can not write window.innerHeight in IE
-            assert.expect(0);
-            return;
-        }
-
         const $what = $('#what').height(300);
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;

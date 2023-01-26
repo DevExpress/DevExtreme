@@ -2,23 +2,24 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import TextBox from '../../../model/textBox';
 import createWidget from '../../../helpers/createWidget';
+import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture`TextBox_mask`
+fixture.disablePageReloads`TextBox_mask`
   .page(url(__dirname, '../../container.html'));
 
 // note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377
 test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabled (T814440)', async (t) => {
-  const textBox = new TextBox('#container');
+  const textBox = new TextBox('#textBox');
   const { input } = textBox;
 
-  const eventLog = Selector('#otherContainer');
+  const eventLog = Selector('#eventLog');
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   await textBox.option('onValueChanged', () => {
-    const log = ($('#otherContainer').get(0) as any).value;
-    ($('#otherContainer').get(0) as any).value = !log ? 'changed' : `${log}changed`;
+    const log = ($('#eventLog').get(0) as any).value;
+    ($('#eventLog').get(0) as any).value = !log ? 'changed' : `${log}changed`;
   });
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  await textBox.option('onInput', () => { ($('#otherContainer').get(0) as any).value += 'input'; });
+  await textBox.option('onInput', () => { ($('#eventLog').get(0) as any).value += 'input'; });
 
   await t
     .typeText(input, '1', { caretPos: 0 })
@@ -59,7 +60,12 @@ test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabl
     .eql('_')
     .expect(eventLog.value)
     .eql('changedinputchangedinput');
-}).before(async () => createWidget('dxTextBox', {
-  mask: '9',
-  valueChangeEvent: 'input',
-}));
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'textBox', { });
+  await appendElementTo('#container', 'div', 'eventLog', { });
+
+  return createWidget('dxTextBox', {
+    mask: '9',
+    valueChangeEvent: 'input',
+  }, '#textBox');
+});

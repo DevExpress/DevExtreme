@@ -273,24 +273,6 @@ describe('DomComponentWrapper', () => {
         expect(instance.option).toBeCalledWith('someProp', 'someValue');
         expect(instance.endUpdate).toBeCalledTimes(1);
       });
-
-      it('setRootElementRef, set rootElementRef to div ref', () => {
-        const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
-        const component = new DomComponentWrapper({
-          rootElementRef: {} as RefObject<HTMLDivElement>,
-        } as DomComponentWrapperProps);
-        component.widgetRef = widgetRef;
-        component.setRootElementRef();
-
-        expect(component.props.rootElementRef?.current).toBe(component.widgetRef.current);
-      });
-
-      it('setRootElementRef, hasnt rootElementRef', () => {
-        const component = new DomComponentWrapper({ } as DomComponentWrapperProps);
-        component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
-        component.setRootElementRef();
-        expect(component.props.rootElementRef?.current).toBeUndefined();
-      });
     });
   });
 });

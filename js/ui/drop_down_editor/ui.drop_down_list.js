@@ -85,6 +85,8 @@ const DropDownList = DropDownEditor.inherit({
 
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
+            encodeNoDataText: false,
+
             onSelectionChanged: null,
 
             onItemClick: noop,
@@ -486,14 +488,15 @@ const DropDownList = DropDownEditor.inherit({
         eventsEngine.on(this._$list, eventName, (e) => e.preventDefault());
     },
 
+    _getControlsAria() {
+        return this._list && this._listId;
+    },
+
     _renderOpenedState: function() {
         this.callBase();
 
         this._list && this._updateActiveDescendant();
-        this.setAria({
-            'controls': this._list && this._listId,
-            'owns': this._popup && this._popupContentId
-        });
+        this.setAria('owns', this._popup && this._popupContentId);
     },
 
     _setDefaultAria: function() {
@@ -525,6 +528,7 @@ const DropDownList = DropDownEditor.inherit({
             _templates: this.option('_templates'),
             templateProvider: this.option('templateProvider'),
             noDataText: this.option('noDataText'),
+            encodeNoDataText: this.option('encodeNoDataText'),
             grouped: this.option('grouped'),
             wrapItemText: this.option('wrapItemText'),
             useItemTextAsTitle: this.option('useItemTextAsTitle'),
@@ -575,7 +579,9 @@ const DropDownList = DropDownEditor.inherit({
             this._refreshSelected();
         }
 
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._updateListDimensions();
+
         this._contentReadyAction();
     },
 
@@ -757,7 +763,8 @@ const DropDownList = DropDownEditor.inherit({
         this.option('opened', shouldOpenPopup);
 
         if(shouldOpenPopup) {
-            this._dimensionChanged();
+            this._updatePopupWidth();
+            this._updateListDimensions();
         }
     },
 
@@ -784,13 +791,14 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._updateListDimensions();
     },
 
     _dimensionChanged: function() {
-        this.callBase(arguments);
+        this.callBase();
 
-        this._popup && this._updatePopupDimensions();
+        this._updateListDimensions();
     },
 
     _needPopupRepaint: function() {
@@ -803,7 +811,11 @@ const DropDownList = DropDownEditor.inherit({
         return needRepaint;
     },
 
-    _updatePopupDimensions: function() {
+    _updateListDimensions: function() {
+        if(!this._popup) {
+            return;
+        }
+
         if(this._needPopupRepaint()) {
             this._popup.repaint();
         }
@@ -898,6 +910,7 @@ const DropDownList = DropDownEditor.inherit({
             case 'groupTemplate':
             case 'wrapItemText':
             case 'noDataText':
+            case 'encodeNoDataText':
             case 'useItemTextAsTitle':
                 this._setListOption(args.name);
                 break;

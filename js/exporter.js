@@ -1,10 +1,4 @@
 import { fileSaver } from './exporter/file_saver';
-import { ///#DEBUG
-    __internals,
-    ///#ENDDEBUG
-    ExcelCreator,
-    getData as getExcelData
-} from './exporter/excel_creator';
 import {
     imageCreator, testFormats, getData as getImageData,
     ///#DEBUG
@@ -14,7 +8,6 @@ import {
 import { svgCreator, getData as getSvgData } from './exporter/svg_creator';
 import { isFunction as _isFunction, isBoolean } from './core/utils/type';
 import { Deferred } from './core/utils/deferred';
-import formatConverter from './exporter/excel_format_converter';
 import { getData } from './exporter/pdf_creator';
 
 function _export(data, options, getData) {
@@ -50,7 +43,7 @@ function _export(data, options, getData) {
 
             if(!eventArgs.cancel) {
                 const format = options.format === 'xlsx' ? 'EXCEL' : options.format;
-                fileSaver.saveAs(eventArgs.fileName, format, blob, options.proxyUrl, options.forceProxy);
+                fileSaver.saveAs(eventArgs.fileName, format, blob);
             }
         });
     }
@@ -61,15 +54,6 @@ function _export(data, options, getData) {
 export {
     _export as export,
     fileSaver
-};
-
-export const excel = {
-    ///#DEBUG
-    __internals: __internals,
-    ///#ENDDEBUG
-    creator: ExcelCreator,
-    getData: getExcelData,
-    formatConverter: formatConverter
 };
 
 export const image = {

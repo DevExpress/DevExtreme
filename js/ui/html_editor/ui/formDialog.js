@@ -60,7 +60,7 @@ class FormDialog {
         return extend({
             onInitialized: (e) => {
                 this._popup = e.component;
-                this._popup.on('hiding', () => { this.deferred.reject(); });
+                this._popup.on('hiding', () => this.onHiding());
                 this._popup.on('shown', () => { this._form.focus(); });
             },
             deferRendering: false,
@@ -71,9 +71,7 @@ class FormDialog {
                 const $formContainer = $('<div>').appendTo(contentElem);
 
                 this._renderForm($formContainer, {
-                    onEditorEnterKey: ({ component, dataField, event }) => {
-                        this.hide(component.option('formData'), event);
-                    },
+                    onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
                     customizeItem: (item) => {
                         if(item.itemType === 'simple') {
                             item.editorOptions = extend(
@@ -94,9 +92,7 @@ class FormDialog {
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('OK'),
-                        onClick: ({ event }) => {
-                            this.hide(this._form.option('formData'), event);
-                        }
+                        onClick: (e) => this.callAddButtonAction(e.event)
                     }
                 }, {
                     toolbar: 'bottom',
@@ -113,6 +109,19 @@ class FormDialog {
             ],
             _wrapperClassExternal: DIALOG_CLASS,
         }, this._popupUserConfig);
+    }
+
+    onHiding() {
+        this.beforeAddButtonAction = undefined;
+        this.deferred.reject();
+    }
+
+    callAddButtonAction(event) {
+        if(this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
+            return;
+        }
+
+        this.hide(this._form.option('formData'), event);
     }
 
     _renderForm($container, options) {

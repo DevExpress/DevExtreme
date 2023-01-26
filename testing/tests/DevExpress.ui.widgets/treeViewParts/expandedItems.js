@@ -610,7 +610,7 @@ module('Expanded items', {
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
         assert.equal(getNodeItemId($node2), 11, 'id for second node');
 
-        assert.notOk(isNodeExpanded($node3), 'third node is expanded');
+        assert.ok(isNodeExpanded($node3), 'third node is expanded');
         assert.equal(getNodeItemId($node3), 111, 'id for third node');
     });
 
@@ -635,7 +635,7 @@ module('Expanded items', {
 
         treeView.expandAll();
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown twice');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source', function(assert) {
@@ -660,7 +660,7 @@ module('Expanded items', {
 
         this.clock.tick(400);
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown twice');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source and the virtual mode', function(assert) {
@@ -686,7 +686,7 @@ module('Expanded items', {
 
         this.clock.tick(400);
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown once');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with load data on demand', function(assert) {
@@ -715,7 +715,7 @@ module('Expanded items', {
 
         this.clock.tick(400);
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown twice');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
 

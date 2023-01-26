@@ -9,6 +9,7 @@ export type WidgetName =
 'dxCheckBox' |
 'dxColorBox' |
 'dxDropDownButton' |
+'dxDraggable' |
 'dxTabPanel' |
 'dxForm' |
 'dxFilterBuilder' |
@@ -20,7 +21,6 @@ export type WidgetName =
 'dxPivotGrid' |
 'dxPivotGridFieldChooser' |
 'dxDataGrid' |
-'dxDataGridNext' |
 'dxTreeList' |
 'dxPager' |
 'dxRadioGroup' |
@@ -34,6 +34,7 @@ export type WidgetName =
 'dxPopup' |
 'dxPopover' |
 'dxSelectBox' |
+'dxSortable' |
 'dxButton' |
 'dxTextBox' |
 'dxTextArea' |
@@ -45,48 +46,38 @@ export type WidgetName =
 'dxList' |
 'dxHtmlEditor' |
 'dxNumberBox' |
-'dxValidator';
+'dxValidator' |
+'dxHtmlEditor' |
+'dxFileUploader' |
+'dxDropDownBox';
 
 export default async function createWidget(
-  widgetName: WidgetName,
-  options: unknown,
-  disableAnimation = false,
+  componentName: WidgetName,
+  componentOptions: unknown,
   selector = '#container',
+  options: {
+    disableFxAnimation: boolean;
+  } = {
+    disableFxAnimation: true,
+  },
 ): Promise<void> {
   await ClientFunction(() => {
-    const widgetOptions = typeof options === 'function' ? options() : options;
-    (window as any).widget = $(`${selector}`)[widgetName](widgetOptions)[widgetName]('instance');
-  },
-  {
-    dependencies:
-            {
-              widgetName,
-              options,
-              selector,
-            },
+    (window as any).DevExpress.fx.off = options.disableFxAnimation;
+  }, {
+    dependencies: {
+      options,
+    },
   })();
 
-  if (disableAnimation) {
-    await ClientFunction(() => {
-      (window as any).DevExpress.fx.off = true;
-    })();
-  }
-}
-
-export async function disposeWidgets(): Promise<void> {
   await ClientFunction(() => {
-    const widgetSelector = '.dx-widget';
-    const $elements = $(widgetSelector)
-      .filter((_, element) => $(element).parents(widgetSelector).length === 0);
-    $elements.each((_, element) => {
-      const $widgetElement = $(element);
-      const widgetNames = $widgetElement.data().dxComponents;
-      widgetNames?.forEach((name) => {
-        if ($widgetElement.hasClass('dx-widget')) {
-          ($widgetElement as any)[name]('dispose');
-        }
-      });
-      $widgetElement.empty();
-    });
+    const widgetOptions = typeof componentOptions === 'function' ? componentOptions() : componentOptions;
+    (window as any).widget = $(`${selector}`)[componentName](widgetOptions)[componentName]('instance');
+  },
+  {
+    dependencies: {
+      componentName,
+      componentOptions,
+      selector,
+    },
   })();
 }

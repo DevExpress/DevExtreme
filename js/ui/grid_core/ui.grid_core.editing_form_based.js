@@ -298,8 +298,8 @@ export const editingFormBasedModule = {
                             }, column.editorOptions, item.editorOptions)
                         }),
                         columnIndex: column.index,
-                        setValue: !isReadOnly && column.allowEditing && function(value) {
-                            that.updateFieldValue(cellOptions, value);
+                        setValue: !isReadOnly && column.allowEditing && function(value, text) {
+                            that.updateFieldValue(cellOptions, value, text);
                         }
                     });
 

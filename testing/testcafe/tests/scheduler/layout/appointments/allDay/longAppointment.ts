@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../../model/scheduler';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
-fixture`Layout:Appointments:AllDay`
+fixture.disablePageReloads`Layout:Appointments:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
-safeSizeTest('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
+test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -42,10 +41,10 @@ safeSizeTest('Long all day appointment should be render, if him ended on next vi
     startDayHour: 9,
     width: 400,
     height: 600,
-  }, true);
+  });
 });
 
-safeSizeTest('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
+test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -76,5 +75,5 @@ safeSizeTest('Long all day appointment should be render, if him ended on next vi
     startDayHour: 9,
     width: 600,
     height: 600,
-  }, true);
+  });
 });

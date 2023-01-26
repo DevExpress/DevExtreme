@@ -870,7 +870,7 @@ QUnit.test('scroll should restore on second dxshown', function(assert) {
 });
 
 if(styleUtils.styleProp('touchAction')) {
-    QUnit.module('nested scrolling in IE/Edge');
+    QUnit.module('nested scrolling in Edge');
 
     QUnit.test('touch-action none should be present on not stretched list', function(assert) {
         const $content = $('<div>').width(100).height(100);

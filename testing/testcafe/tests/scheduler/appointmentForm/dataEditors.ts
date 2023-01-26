@@ -1,12 +1,11 @@
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment popup form:date editors`
+fixture.disablePageReloads`Appointment popup form:date editors`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Form date editors should be pass numeric chars according by date mask', async (t) => {
+test('Form date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -14,19 +13,28 @@ safeSizeTest('Form date editors should be pass numeric chars according by date m
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
 
   await t
-    .click(appointmentPopup.startDateElement, { offsetX: 0, offsetY: 0 })
+    .click(appointmentPopup.subjectElement);
+
+  await t
+    .pressKey('tab')
     .typeText(appointmentPopup.startDateElement, '111111111111')
     .expect(appointmentPopup.startDateElement.value)
     .eql('11/11/1111, 11:11 AM');
 
   await t
-    .click(appointmentPopup.endDateElement, { offsetX: 0, offsetY: 0 })
+    .pressKey('tab')
     .typeText(appointmentPopup.endDateElement, '111111111111')
     .expect(appointmentPopup.endDateElement.value)
     .eql('11/11/1111, 11:11 PM');
 
   await t
-    .click(appointmentPopup.endRepeatDateElement, { offsetX: 0, offsetY: 0 })
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
     .typeText(appointmentPopup.endRepeatDateElement, '11111111')
     .expect(appointmentPopup.endRepeatDateElement.value)
     .eql('11/11/1111');
@@ -43,9 +51,9 @@ safeSizeTest('Form date editors should be pass numeric chars according by date m
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
-}, true));
+}));
 
-safeSizeTest('Form date editors should not be pass chars according by date mask', async (t) => {
+test('Form date editors should not be pass chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -53,19 +61,28 @@ safeSizeTest('Form date editors should not be pass chars according by date mask'
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
 
   await t
-    .click(appointmentPopup.startDateElement, { offsetX: 0, offsetY: 0 })
+    .click(appointmentPopup.subjectElement);
+
+  await t
+    .pressKey('tab')
     .typeText(appointmentPopup.startDateElement, 'TEXT')
     .expect(appointmentPopup.startDateElement.value)
     .eql('3/30/2021, 11:00 AM');
 
   await t
-    .click(appointmentPopup.endDateElement, { offsetX: 0, offsetY: 0 })
+    .pressKey('tab')
     .typeText(appointmentPopup.endDateElement, 'TEXT')
     .expect(appointmentPopup.endDateElement.value)
     .eql('3/30/2021, 12:00 PM');
 
   await t
-    .click(appointmentPopup.endRepeatDateElement, { offsetX: 0, offsetY: 0 })
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
     .typeText(appointmentPopup.endRepeatDateElement, 'TEXT')
     .expect(appointmentPopup.endRepeatDateElement.value)
     .eql('10/29/2021');
@@ -82,9 +99,9 @@ safeSizeTest('Form date editors should not be pass chars according by date mask'
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
-}, true));
+}));
 
-safeSizeTest('Form date editors should not be pass chars after remove all characters according by date mask', async (t) => {
+test('Form date editors should not be pass chars after remove all characters according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -142,4 +159,4 @@ safeSizeTest('Form date editors should not be pass chars after remove all charac
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
-}, true));
+}));

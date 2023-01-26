@@ -1,7 +1,6 @@
 import fx from 'animation/fx';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
 import browser from 'core/utils/browser';
 import { DataSource } from 'data/data_source/data_source';
 import translator from 'animation/translator';
@@ -712,46 +711,6 @@ module('Common', commonModuleConfig, () => {
             top: positionBeforeDrag.top
         }, 'appointment position is correct');
         assert.notOk($appointment.hasClass('dx-draggable-dragging'), 'appointment isn\'t dragging');
-    });
-
-    // T832754
-    test('The appointment should be dropped correctly after pressing Esc key', function(assert) {
-        const scheduler = createWrapper({
-            _draggingMode: 'default',
-            editing: true,
-            height: 600,
-            views: [{ type: 'day' }],
-            currentView: 'day',
-            dataSource: [{
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 11, 30)
-            }],
-            currentDate: new Date(2015, 1, 9),
-            startDayHour: 9
-        });
-
-        let $appointment = scheduler.appointments.find('Task 1').first();
-        const positionBeforeDrag = getAbsolutePosition($appointment);
-        const pointer = pointerMock($appointment).start();
-        const cellHeight = scheduler.workSpace.getCellHeight();
-
-        pointer
-            .down(positionBeforeDrag.left, positionBeforeDrag.top)
-            .move(0, -cellHeight);
-
-        keyboardMock($appointment.get(0)).keyDown('esc');
-
-        pointer.up();
-
-        $appointment = scheduler.appointments.find('Task 1').first();
-        const positionAfterDrag = getAbsolutePosition($appointment);
-
-        assert.deepEqual(positionAfterDrag, {
-            left: positionBeforeDrag.left,
-            top: positionBeforeDrag.top - cellHeight
-        }, 'appointment position is correct');
-        assert.deepEqual(scheduler.option('dataSource')[0].startDate, new Date(2015, 1, 9, 10, 30), 'Start date is OK');
     });
 
     // Timezone-sensitive test, use US/Pacific for proper testing
@@ -2237,42 +2196,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         const dragSource = scheduler.appointments.getDragSource();
 
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
-
-        pointer.up();
-    });
-
-    test('Esc click should be processed crrectly', function(assert) {
-        const appointmentTitle = 'Appointment';
-        const data = [{
-            text: appointmentTitle,
-            startDate: new Date(2020, 9, 14, 0, 0),
-            endDate: new Date(2020, 9, 14, 0, 5),
-        }];
-
-        const scheduler = createWrapper({
-            _draggingMode: 'default',
-            height: 600,
-            views: ['day'],
-            currentView: 'day',
-            cellDuration: 1,
-            dataSource: data,
-            currentDate: new Date(2020, 9, 14),
-            showAllDayPanel: false,
-        });
-
-        const $appointment = scheduler.appointments.find(appointmentTitle).first();
-        const positionBeforeDrag = getAbsolutePosition($appointment);
-
-        const pointer = pointerMock($appointment)
-            .start()
-            .down(positionBeforeDrag.left, positionBeforeDrag.top)
-            .move(0, 50);
-
-        keyboardMock($appointment.get(0)).keyDown('esc');
-
-        const dragSource = scheduler.appointments.getDragSource();
-
-        assert.equal(dragSource.length, 1, 'Drag source did not disappear');
 
         pointer.up();
     });

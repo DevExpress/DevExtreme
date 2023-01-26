@@ -4,6 +4,7 @@ import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { AreaItem } from './ui.pivot_grid.area_item';
 import Scrollable from '../scroll_view/ui.scrollable';
+import domAdapter from '../../core/dom_adapter';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_COLUMN_CLASS = 'dx-pivotgrid-horizontal-headers';
@@ -81,7 +82,9 @@ export const HorizontalHeadersArea = AreaItem.inherit({
     },
 
     _getMainElementMarkup: function() {
-        return '<thead class=\'' + this._getAreaClassName() + '\'>';
+        const thead = domAdapter.createElement('thead');
+        thead.setAttribute('class', this._getAreaClassName());
+        return thead;
     },
 
     _getCloseMainElementMarkup: function() {
@@ -274,7 +277,9 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     },
 
     _getMainElementMarkup: function() {
-        return '<tbody class=\'' + this._getAreaClassName() + '\'>';
+        const tbody = domAdapter.createElement('tbody');
+        tbody.classList.add(this._getAreaClassName());
+        return tbody;
     },
 
     _getCloseMainElementMarkup: function() {

@@ -27,7 +27,8 @@ const dateLocalization = require('localization/date');
 
 require('ui/date_box');
 require('viz/chart');
-const excelCreator = require('exporter').excel;
+
+const ExcelExport = require('exporter/exceljs/export_format');
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const DATEVIEW_ITEM_SELECTOR = '.dx-dateview-item';
@@ -380,7 +381,7 @@ QUnit.module('Excel creator', commonEnvironment, () => {
             Globalize.locale('ar');
 
             const convertDate = function(formatter) {
-                return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
+                return ExcelExport.ExportFormat.convertFormat(formatter, null, 'date');
             };
 
             const pattern = '[$-2010001]d\\/M\\/yyyy';

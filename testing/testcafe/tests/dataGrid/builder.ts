@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import { DateBoxPopup } from '../../model/filterBuilder/dateboxPopup';
 
 const scrollTo = ClientFunction((x, y) => {
@@ -10,8 +10,7 @@ const scrollTo = ClientFunction((x, y) => {
 });
 
 fixture.disablePageReloads`Filter Builder`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 test('Field menu should be opened on field click if window scroll exists (T852701)', async (t) => {
   const filterBuilder = new FilterBuilder('#container');

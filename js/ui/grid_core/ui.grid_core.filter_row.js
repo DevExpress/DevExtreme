@@ -12,6 +12,7 @@ import Editor from '../editor/editor';
 import Overlay from '../overlay/ui.overlay';
 import Menu from '../menu';
 import { selectView } from '../shared/accessibility';
+import { equalByValue } from '../../core/utils/common';
 
 const OPERATION_ICONS = {
     '=': 'filter-operation-equals',
@@ -227,7 +228,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
         _renderCore: function() {
             this._filterRangeOverlayInstance = null;
-            this.callBase.apply(this, arguments);
+            return this.callBase.apply(this, arguments);
         },
 
         _resizeCore: function() {
@@ -667,11 +668,11 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             this.callBase.apply(this, arguments);
 
             if(e.operationTypes?.filtering || e.operationTypes?.fullReload) {
-                this.updateLookupDataSource();
+                this.updateLookupDataSource(e.operationTypes?.filtering);
             }
         },
 
-        updateLookupDataSource: function() {
+        updateLookupDataSource: function(filterChanged) {
             if(!this.option('syncLookupFilterValues')) {
                 return;
             }
@@ -699,12 +700,19 @@ const ColumnHeadersViewFilterRowExtender = (function() {
 
                 if(editor) {
                     applyFilterViewController.setCurrentColumnForFiltering(column);
-                    const filter = this._dataController.getCombinedFilter();
+                    const filter = this._dataController.getCombinedFilter() || null;
                     applyFilterViewController.setCurrentColumnForFiltering(null);
 
-                    const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                    const editorDataSource = editor.option('dataSource');
+                    const shouldUpdateFilter =
+                        !filterChanged ||
+                        !equalByValue(editorDataSource.__dataGridSourceFilter, filter);
 
-                    editor.option('dataSource', lookupDataSource);
+                    if(shouldUpdateFilter) {
+                        const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+                        editor.option('dataSource', lookupDataSource);
+                    }
+
                 }
             });
         },

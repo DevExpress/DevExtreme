@@ -2180,6 +2180,32 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         assert.equal(lookupColumn.lookup.calculateCellValue(4), 'Category 4', 'lookup calculateCellValue return correct value for added item');
     });
 
+    // T1130874
+    QUnit.test('defaultFilterOperationLookup of lookup column should not be undefined if dataSource is empty and calculateDisplayValue is set', function(assert) {
+        const lookupDataSource = [
+            { id: 1, category_name: 'Category 1' },
+            { id: 2, category_name: 'Category 2' },
+            { id: 3, category_name: 'Category 3' }
+        ];
+
+        this.applyOptions({
+            columns: [{
+                dataType: 'number',
+                dataField: 'test_column',
+                calculateDisplayValue: 'lookupColumnDisplayValue',
+                lookup: {
+                    dataSource: lookupDataSource,
+                    valueExpr: 'id',
+                    displayExpr: 'category_name',
+                }
+            }]
+        });
+
+        const lookupColumn = this.columnsController.getVisibleColumns()[0];
+
+        assert.strictEqual(lookupColumn.defaultFilterOperation, '=', 'defaultFilterOperation must be defined');
+    });
+
     QUnit.test('Initialize Lookup column when calculateDisplayValue is defined as string', function(assert) {
         const array = [
             { name: 'Alex', age: 15, category_id: 1, category: { name: 'Category 1' } },
@@ -9362,7 +9388,7 @@ QUnit.module('Customization of the command columns', {
         }, 'select column');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering selection', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering selection', function(assert) {
         // arrange
         this.applyOptions({
             selection: {
@@ -9376,7 +9402,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'index');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering command column', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering command column', function(assert) {
         // arrange
         this.applyOptions({
             columns: [{
@@ -9388,7 +9414,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'index');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering grouping', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering grouping', function(assert) {
         // arrange
         this.applyOptions({
             columns: ['field1', {
@@ -9402,7 +9428,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'regular column');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering reordering', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering reordering', function(assert) {
         // arrange
         this.applyOptions({
             columns: [{

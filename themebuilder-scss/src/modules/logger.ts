@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 export function log(message: string, data: unknown = undefined): void {
   const debugEnvVariableName = 'THEMEBUILDER_DEBUG';
-  const needLog = process.env[debugEnvVariableName] !== undefined;
+  const needLog = typeof process !== 'undefined' && process.env && process.env[debugEnvVariableName] !== undefined;
   if (!needLog) return;
 
   let timedMessage = `${new Date().toISOString()}: ${message}`;

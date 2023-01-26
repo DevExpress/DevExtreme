@@ -16,7 +16,7 @@ import type { UserDefinedElement } from '../../../core/element';
 import {
   isDefined, isRenderer, isString,
 } from '../../../core/utils/type';
-import { TemplateModel, TemplateWrapper } from './template_wrapper';
+import { TemplateModel, TemplateWrapper, buildTemplateArgs } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
 
@@ -43,36 +43,36 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   static IS_RENOVATED_WIDGET = false;
 
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
-  _actionsMap!: {
+  declare _actionsMap: {
     [name: string]: Function;
   };
 
-  _aria!: Record<string, string>;
+  declare _aria: Record<string, string>;
 
-  customKeyHandlers!: Record<string, Function>;
+  declare customKeyHandlers: Record<string, Function>;
 
-  defaultKeyHandlers!: Record<string, Function>;
+  declare defaultKeyHandlers: Record<string, Function>;
 
-  _documentFragment!: DocumentFragment;
+  declare _documentFragment: DocumentFragment;
 
-  _elementAttr!: {
+  declare _elementAttr: {
     [name: string]: unknown;
     class?: string;
   };
 
-  _isNodeReplaced!: boolean;
+  declare _isNodeReplaced: boolean;
 
-  _props!: Record<string, unknown>;
+  declare _props: Record<string, unknown>;
 
-  _storedClasses?: string;
+  declare _storedClasses?: string;
 
-  _viewRef!: RefObject<unknown>;
+  declare _viewRef: RefObject<unknown>;
 
-  _viewComponent!: typeof Component;
+  declare _viewComponent: typeof Component;
 
   _shouldRaiseContentReady = false;
 
-  _componentTemplates!: Record<string, TemplateComponent | undefined>;
+  declare _componentTemplates: Record<string, TemplateComponent | undefined>;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -131,17 +131,18 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _getDefaultOptions(): Record<string, unknown> {
+    const viewDefaultProps = this._getViewComponentDefaultProps();
     return extend(
       true,
       super._getDefaultOptions(),
-      this._viewComponent.defaultProps,
+      viewDefaultProps,
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
           [name, defaultName, eventName],
         ) => ({
           ...options,
-          [name]: this._viewComponent.defaultProps[defaultName],
+          [name]: viewDefaultProps[defaultName],
           [eventName]: (value: unknown): void => this.option(name, value),
         }),
         {},
@@ -273,7 +274,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const {
       allowNull, twoWay, elements, props,
     } = this._propsInfo;
-    const defaultWidgetPropsKeys = Object.keys(this._viewComponent.defaultProps);
+    const viewDefaultProps = this._getViewComponentDefaultProps();
+    const defaultWidgetPropsKeys = Object.keys(viewDefaultProps);
     const defaultOptions = this._getDefaultOptions();
     const { ref, children, onKeyboardHandled } = options;
     const onKeyDown = onKeyboardHandled
@@ -493,7 +495,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const templateWrapper = (model: TemplateModel): VNode => renderer.createElement(
-      TemplateWrapper, { template, model },
+      TemplateWrapper,
+      buildTemplateArgs(model, template),
     );
 
     return templateWrapper;
@@ -565,6 +568,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   setAria(name: string, value: string): void {
     this._aria[name] = value;
     this._initMarkup();
+  }
+
+  _getViewComponentDefaultProps(): Record<PropertyKey, unknown> {
+    return this._viewComponent.defaultProps as Record<PropertyKey, unknown> || {};
   }
 }
 

@@ -45,6 +45,7 @@ import {
     LabelPosition,
     Palette,
     PaletteExtensionMode,
+    ShiftLabelOverlap,
     TextOverflow,
     WordWrap,
 } from '../common/charts';
@@ -57,13 +58,16 @@ export {
     Palette,
     PaletteExtensionMode,
     TextOverflow,
+    ShiftLabelOverlap,
     WordWrap,
 };
 
 /** @public */
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
-/** @public */
-export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
+/**
+ * @deprecated Use ShiftLabelOverlap from 'devextreme/common/charts' instead
+ */
+export type FunnelLabelOverlap = ShiftLabelOverlap;
 
 /**
  * @public
@@ -508,7 +512,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "shift"
      * @public
      */
-    resolveLabelOverlapping?: FunnelLabelOverlap;
+    resolveLabelOverlapping?: ShiftLabelOverlap;
     /**
      * @docid
      * @default 'single'
