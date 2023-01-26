@@ -616,7 +616,7 @@ const resizingControllerMembers = {
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
         // @ts-expect-error
-        const height = that.option('height') || $rootElement.get(0).style.height; // we need to use $.css?
+        const height = that.option('height') || $rootElement.get(0).style.height;
         const isHeightSpecified = !!height && height !== 'auto';
         // @ts-expect-error
         const editorFactory = that.getController('editorFactory');
