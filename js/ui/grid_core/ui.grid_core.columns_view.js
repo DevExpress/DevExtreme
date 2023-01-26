@@ -1,4 +1,3 @@
-import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
@@ -1128,16 +1127,5 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             paddingLeft: rtlEnabled ? width : '',
             paddingRight: !rtlEnabled ? width : ''
         });
-    },
-
-    isScrollbarVisible: function(isHorizontal) {
-        const $element = this.element();
-        const $tableElement = this._tableElement;
-
-        if($element && $tableElement) {
-            return isHorizontal ? (getOuterWidth($tableElement) - getWidth($element) > 0) : (getOuterHeight($tableElement) - getHeight($element) > 0);
-        }
-
-        return false;
     }
 });
