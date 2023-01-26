@@ -905,6 +905,10 @@ export const rowsModule = {
                     return getWidth(this.element()) - this.getScrollbarWidth();
                 },
 
+                isScrollbarVisible: function(isHorizontal) {
+                    return !!this.getScrollbarWidth(isHorizontal);
+                },
+
                 getScrollbarWidth: function(isHorizontal) {
                     const scrollableContainer = this._scrollableContainer && this._scrollableContainer.get(0);
                     let scrollbarWidth = 0;
