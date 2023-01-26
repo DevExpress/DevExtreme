@@ -1,13 +1,16 @@
-import { PropsWithChildren, useMemo } from 'react';
-import { ValidationEngineContext } from '../contexts/validation-engine-context';
-import { createValidationEngine, ValidationEngine } from '../utils/validation-engine';
+import { PropsWithChildren, useMemo, useRef } from 'react';
+import { ValidationGroupContext } from '../contexts/validation-group-context';
 
-export function ValidationGroup({ children }: PropsWithChildren) {
-  const validationEngine = useMemo<ValidationEngine>(createValidationEngine, []);
+interface ValidationGroupProps extends PropsWithChildren {
+  name?: string
+}
 
+export function ValidationGroup({ name, children }: ValidationGroupProps) {
+  const groupRef = useRef(Symbol(name || 'validation-group'));
+  const validationGroupContext = useMemo(() => ({ name, group: groupRef.current }), [name]);
   return (
-    <ValidationEngineContext.Provider value={validationEngine}>
+    <ValidationGroupContext.Provider value={validationGroupContext}>
       {children}
-    </ValidationEngineContext.Provider>
+    </ValidationGroupContext.Provider>
   );
 }

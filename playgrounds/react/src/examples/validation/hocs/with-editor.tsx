@@ -1,14 +1,20 @@
 import { EditorProps } from '@devextreme/react';
 import {
-  ComponentType, useMemo, useState,
+  ComponentType, useCallback, useMemo, useState,
 } from 'react';
 import { EditorContext } from '../contexts/editor-context';
 
 export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
   function Editor(props: EditorProps<T>) {
     const [editorValue, setEditorValue] = useState(props.value || props.defaultValue);
+    const [editorErrors, setEditorErrors] = useState<string[]>();
+
+    const notifyErrorRaised = useCallback((errors: string[]) => {
+      setEditorErrors(errors);
+    }, [setEditorErrors]);
+
     const editorContextValue = useMemo(
-      () => ({ editorName: props.name || '', editorValue }), [editorValue, props.name],
+      () => ({ editorName: props.name || '', editorValue, notifyErrorRaised }), [editorValue, props.name],
     );
 
     const handleValueChange = (newValue?: T) => {
@@ -23,7 +29,9 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...props}
           valueChange={handleValueChange}
+          errors={editorErrors}
         />
+        {editorErrors ? <div>{editorErrors.join('. ')}</div> : null}
       </EditorContext.Provider>
     );
   }

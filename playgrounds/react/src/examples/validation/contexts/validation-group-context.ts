@@ -1,7 +1,8 @@
 import { createContext } from 'react';
 
 export interface ValidationGroupContextValue {
-  groupName: string ;
+  name?: string;
+  group?: symbol;
 }
 
 export const ValidationGroupContext = createContext<ValidationGroupContextValue | undefined>(

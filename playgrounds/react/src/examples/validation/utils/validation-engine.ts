@@ -1,3 +1,4 @@
+import { ValidationGroupContextValue } from '../contexts/validation-group-context';
 import { Rule } from '../types';
 
 export interface ValidationResult {
@@ -6,7 +7,9 @@ export interface ValidationResult {
 }
 
 export interface ValidationEngine {
-  initializeEditorRules: (name: string, rules: Rule[]) => void;
+  initializeEditorRules: (
+    name: string, rules: Rule[], group?: ValidationGroupContextValue
+  ) => void;
   validateEditorValue: (name: string, value: unknown) => string[];
   validateEditorValues: (values: Record<string, unknown>) => ValidationResult;
 }
@@ -14,17 +17,21 @@ export interface ValidationEngine {
 export function createValidationEngine(): ValidationEngine {
   let validationRules: Record<string, Rule[]> = {};
 
-  const initializeEditorRules = (name: string, rules: Rule[]) => {
+  const initializeEditorRules = (
+    name: string, rules: Rule[], group?: ValidationGroupContextValue,
+  ) => {
+    console.log(group);
     validationRules = { ...validationRules, [name]: rules };
   };
 
   const validateEditorValue = (
     editorName: string, editorValue: unknown,
   ) => {
-    console.log({ editorName, editorValue, rules: validationRules[editorName] });
-    return validationRules[editorName]
+    const validationResult = validationRules[editorName]
       ?.filter(({ validate }) => !validate(editorValue))
       .map(({ message }) => message);
+    console.log({ editorName, editorValue, validationResult });
+    return validationResult;
   };
 
   const validateEditorValues = (editorValues: Record<string, unknown>) => {

@@ -8,7 +8,7 @@ import { ValidatorContext } from '../contexts/validator-context';
 import { Rule } from '../types';
 
 export function Validator({
-  validationGroup,
+  validationGroup: validationGroupProp,
   children,
 }: PropsWithChildren & { validationGroup?: string }) {
   const rules = useRef<Rule[]>([]);
@@ -18,18 +18,18 @@ export function Validator({
 
   useEffect(() => {
     if (editorContext) {
-      const { editorName, editorValue } = editorContext;
-      validationEngine.initializeEditorRules(editorName, rules.current);
-      validationEngine.validateEditorValue(editorName, editorValue);
+      const { editorName, editorValue, notifyErrorRaised } = editorContext;
+      const validationGroup = validationGroupProp
+        ? { name: validationGroupProp } : validationGroupContext;
+      validationEngine.initializeEditorRules(editorName, rules.current, validationGroup);
+      const validationResult = validationEngine.validateEditorValue(editorName, editorValue);
+      notifyErrorRaised(validationResult);
     }
   }, [editorContext?.editorName, editorContext?.editorValue]);
 
   const validatorContextValue = useMemo(() => ({
     registerRule: (rule: Rule) => { rules.current.push(rule); },
   }), []);
-
-  const validationGroupName = validationGroup || validationGroupContext?.groupName;
-  console.log(validationGroupName);
 
   return (
     <ValidatorContext.Provider value={validatorContextValue}>
