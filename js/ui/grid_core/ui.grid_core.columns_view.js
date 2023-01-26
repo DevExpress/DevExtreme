@@ -843,6 +843,7 @@ const columnsViewMembers = {
         that._scrollLeft = -1;
         that._columnsController = that.getController('columns');
         that._dataController = that.getController('data');
+        that._rowsView = that.component.getView('rowsView');
         that._delayedTemplates = [];
         that._templatesCache = {};
         that.createAction('onCellClick');
