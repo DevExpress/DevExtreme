@@ -1684,4 +1684,41 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.ok($('.dx-header-filter').is(':focus'), 'header filter indicator has focus');
     });
+
+    // T1129825
+    QUnit.test('Filter should be updated after changing filterOperation when calculateFilterExpression returns getter func', function(assert) {
+        // arrange
+        const grid = createDataGrid({
+            dataSource: [{ a: 'asd' }],
+            columns: [{
+                dataField: 'a',
+                filterValue: 'a',
+                selectedFilterOperation: '=',
+                calculateFilterExpression: function(filterValue, selectedFilterOperation) {
+                    function getter(data) {
+                        if(selectedFilterOperation === 'contains') {
+                            return data.a.includes(filterValue);
+                        } else if(selectedFilterOperation === '=') {
+                            return data.a === filterValue;
+                        }
+                    }
+
+                    return [getter, '=', true];
+                }
+            }],
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(grid.getVisibleRows().length, 0);
+
+        // act
+        grid.option('columns[0].selectedFilterOperation', 'contains');
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(grid.getVisibleRows().length, 1);
+        assert.deepEqual(grid.getVisibleRows()[0].data, { a: 'asd' });
+    });
 });
