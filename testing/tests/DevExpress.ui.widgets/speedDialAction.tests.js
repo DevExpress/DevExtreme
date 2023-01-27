@@ -607,35 +607,23 @@ QUnit.module('add visible option', {
 });
 
 
-QUnit.test('Overlay options should contain "elementAttr" when it is setting in SpeedDialAction (T1140620)', function(assert) {
-    const customClass = 'custom-class';
-
+QUnit.test('Overlay element should contain attrs provided with "elementAttr" from SpeedDialAction (T1140620)', function(assert) {
     this.firstSDA = $('#fab-one').dxSpeedDialAction({
         icon: 'add',
         elementAttr: {
-            class: customClass,
+            class: 'custom-class',
+            'data-test': true,
         },
     }).dxSpeedDialAction('instance');
 
-    const overlay = this.firstSDA.option('_overlayInstance');
-    const { elementAttr } = overlay.option();
+    const $fabElement = this.firstSDA.$element();
+    const $overlayElement = $(FAB_MAIN_SELECTOR);
 
-    // const $overlay = $(FAB_MAIN_SELECTOR).dxSpeedDialMainItem('instance');
+    assert.ok($fabElement.hasClass('custom-class'), 'FAB element has corect custom class');
+    assert.ok($overlayElement.hasClass('custom-class'), 'Overlay element has corect custom class');
 
-    // debugger;
-
-    // const elementAttr = overlay.option('elementAttr');
-    // .dxOverlay('instance');
-
-    // const speedDialItemOptions = this.firstSDA._createComponent($('<div>'), SpeedDialItem, {
-    //     actions: [this.firstSDA],
-    // }).option();
-
-    // debugger;
-
-    // eslint-disable-next-line no-prototype-builtins
-    // assert.ok(speedDialItemOptions.hasOwnProperty('elementAttr'), 'test');
-    assert.strictEqual(elementAttr.class, customClass, 'test');
+    assert.ok($fabElement.attr('data-test'), 'FAB element has corect data-test attribute');
+    assert.ok($overlayElement.attr('data-test'), 'Overlay element has corect data-test attribute');
 });
 
 

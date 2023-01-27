@@ -74,8 +74,7 @@ class SpeedDialAction extends Widget {
                     }
                 }
             },
-            id: new Guid(),
-            _overlayInstance: null,
+            id: new Guid()
         });
     }
     _optionChanged(args) {
@@ -100,11 +99,9 @@ class SpeedDialAction extends Widget {
         this._toggleVisibility(false);
 
         if(!getSwatchContainer(this.$element())) {
-            ready(() => {
-                this.option('_overlayInstance', initAction(this));
-            });
+            ready(() => initAction(this));
         } else {
-            this.option('_overlayInstance', initAction(this));
+            initAction(this);
         }
     }
     _dispose() {

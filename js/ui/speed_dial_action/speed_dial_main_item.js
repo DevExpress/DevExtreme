@@ -394,8 +394,6 @@ export function initAction(newAction) {
             }));
         }
     }
-
-    return speedDialMainItem;
 }
 
 export function disposeAction(actionId) {
