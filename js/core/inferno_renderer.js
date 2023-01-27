@@ -9,7 +9,7 @@ const remove = (element) => {
     const { parentNode } = element;
 
     if(parentNode) {
-        const nextSibling = null; // element.nextSibling;
+        const nextSibling = element.nextSibling;
         cleanDataRecursive(element);
         parentNode.$V = element.$V;
         render(null, parentNode);
