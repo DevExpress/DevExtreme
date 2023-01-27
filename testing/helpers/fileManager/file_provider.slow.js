@@ -33,6 +33,7 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
         this._operationTimeouts = options['operationDelays'];
         this._operationIndex = 0;
         this._operationsToDelay = options['operationsToDelay'];
+        this._assert = options['assert'];
     }
 
     _doDelay(action, operationType) {
@@ -44,7 +45,7 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
                 : this._operationTimeout;
         }
 
-        setTimeout(function() {
+        setTimeout(() => {
             try {
                 const actionResult = action();
                 if(actionResult.then) {
@@ -53,6 +54,7 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
                     promise.resolve(actionResult);
                 }
             } catch(e) {
+                this._assert && this._assert.deepEqual(e, {}, 'An exception was thrown when it shouldn\'t be.');
                 promise.reject(e);
             }
         }, operationTimeout);
