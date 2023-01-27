@@ -619,11 +619,11 @@ QUnit.test('Overlay element should contain attrs provided with "elementAttr" fro
     const $fabElement = this.firstSDA.$element();
     const $overlayElement = $(FAB_MAIN_SELECTOR);
 
-    assert.ok($fabElement.hasClass('custom-class'), 'FAB element has corect custom class');
-    assert.ok($overlayElement.hasClass('custom-class'), 'Overlay element has corect custom class');
+    assert.ok($fabElement.hasClass('custom-class'), 'FAB element has correct custom class');
+    assert.ok($overlayElement.hasClass('custom-class'), 'Overlay element has correct custom class');
 
-    assert.ok($fabElement.attr('data-test'), 'FAB element has corect data-test attribute');
-    assert.ok($overlayElement.attr('data-test'), 'Overlay element has corect data-test attribute');
+    assert.ok($fabElement.attr('data-test'), 'FAB element has correct data-test attribute');
+    assert.ok($overlayElement.attr('data-test'), 'Overlay element has correct data-test attribute');
 });
 
 
