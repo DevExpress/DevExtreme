@@ -360,9 +360,21 @@ testModule('API', moduleConfig, () => {
         this.instance.option('value', 'New text');
         this.clock.tick();
 
-        assert.strictEqual(valueChangeStub.lastCall.args[0].value, 'New text');
+        assert.strictEqual(valueChangeStub.lastCall.args[0].value, '<p>New text</p>');
         assert.strictEqual(updateContentSpy.callCount, 2, 'value changed twice -> update content two times');
         assert.strictEqual(updateContentSpy.lastCall.args[0], 'New text', 'Update content with the new value');
+    });
+
+    test('ValueChanged event should be triggered once when value contains non optimized markup(T1137577)', function(assert) {
+        this.createEditor();
+        const valueChangeStub = sinon.stub();
+
+        this.instance.on('valueChanged', valueChangeStub);
+        this.instance.option('value', '<p>after click</p><p></p>');
+        this.clock.tick();
+
+        assert.strictEqual(valueChangeStub.callCount, 1);
+        assert.strictEqual(valueChangeStub.getCall(0).args[0].value, '<p>after click</p>');
     });
 
     test('customize module', function(assert) {
