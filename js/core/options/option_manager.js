@@ -62,7 +62,7 @@ export class OptionManager {
     }
 
     set(options, value, merge, silent) {
-        options = normalizeOptions(options, value);
+        options = normalizeOptions.current(options, value);
 
         for(const name in options) {
             this._prepareRelevantNames(options, name, options[name], silent);

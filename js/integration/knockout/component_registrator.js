@@ -14,12 +14,14 @@ import Editor from '../../ui/editor/editor';
 import Locker from '../../core/utils/locker';
 import { getClosestNodeWithContext } from './utils';
 import config from '../../core/config';
+import PatchAttributes from './attributes_config';
 
 if(ko) {
     const LOCKS_DATA_KEY = 'dxKoLocks';
     const CREATED_WITH_KO_DATA_KEY = 'dxKoCreation';
 
     const editorsBindingHandlers = [];
+    PatchAttributes();
     const registerComponentKoBinding = function(componentName, componentClass) {
 
         if(Editor.isEditor(componentClass.prototype)) {

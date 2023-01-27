@@ -21,8 +21,10 @@ export const convertRulesToOptions = (rules) => {
     }, {});
 };
 
-export const normalizeOptions = (options, value) => {
-    return typeof options !== 'string' ? options : { [options]: value };
+export const normalizeOptions = {
+    current: (options, value) => {
+        return typeof options !== 'string' ? options : { [options]: value };
+    }
 };
 
 export const deviceMatch = (device, filter) => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
