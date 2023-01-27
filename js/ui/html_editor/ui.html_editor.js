@@ -512,14 +512,27 @@ const HtmlEditor = Editor.inherit({
     },
 
     _optionChanged: function(args) {
+        const needCallBase = this._isEditorUpdating;
+        let callBaseArgs = args;
+
         switch(args.name) {
             case 'value':
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
+                        if('_previousValue' in this) {
+                            callBaseArgs = {
+                                ...args,
+                                previousValue: this._previousValue
+                            };
+                            this._valueChangeCalled = true;
+                        }
                     } else {
                         const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
+
+                        this._previousValue = args.previousValue;
                         this._updateHtmlContent(updatedValue);
+                        delete this._previousValue;
                     }
                 } else {
                     this._$htmlContainer.html(args.value);
@@ -527,7 +540,11 @@ const HtmlEditor = Editor.inherit({
 
                 this._setSubmitValue(args.value);
 
-                this.callBase(args);
+                if(Boolean(needCallBase) === false && this._valueChangeCalled) {
+                    this._valueChangeCalled = false;
+                } else {
+                    this.callBase(callBaseArgs);
+                }
                 break;
             case 'placeholder':
             case 'variables':
