@@ -5,15 +5,15 @@ import {
 export type Selector<TState extends UnknownRecord, TValue> = (state: TState) => TValue;
 
 export function createSelector<
-  TStateProps extends UnknownRecord,
+  TState extends UnknownRecord,
   TParam extends UnknownRecord,
   TValue,
   >(
+  paramsGetter: (state: TState) => TParam,
   buildViewProp: (params: TParam) => TValue,
-  paramsGetter: (state: TStateProps | undefined) => TParam,
   paramsComparer: Comparer<[TParam]> = shallowComparer,
-): Selector<TStateProps, TValue> {
+): Selector<TState, TValue> {
   const cached = memoize(buildViewProp, paramsComparer);
 
-  return (state: TStateProps | undefined) => cached(paramsGetter(state));
+  return (state: TState) => cached(paramsGetter(state));
 }
