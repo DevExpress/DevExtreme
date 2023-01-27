@@ -183,7 +183,10 @@
         },
         svg: function() { return ''; },
         getRootOffset: function() { return this.offsetTemplate || { left: 3, top: 5 }; },
-        brightFilter: function() { return createMockElement(this, 'brightFilter'); }
+        brightFilter: function() { return createMockElement(this, 'brightFilter'); },
+        linearGradient: function(colors, id, rotationAngle) { return createMockElement(this, 'linearGradient', { color: colors, rotationAngle: rotationAngle, id: id }); },
+        radialGradient: function(colors, id) { return createMockElement(this, 'linearGradient', { color: colors, id: id }); },
+        customPattern: function(id, template, width, height) { return createMockElement(this, 'pattern', { id: id, template: template, width: width, height: height }); }
     }, {
         $constructor: function(options) { this._options = options; this.root = createMockElement(this, 'root'); this.bBoxTemplate = { x: 1, y: 2, height: 10, width: 20 }; },
         $thisReturnFunctions: ['resize', 'draw', 'clear']
