@@ -965,6 +965,140 @@ QUnit.test('text with params. text argument is null', function(assert) {
     assert.strictEqual(text.stub('css').callCount, 0, 'text\'s css is not called');
     assert.strictEqual(text.stub('append').callCount, 0, 'text is not appended');
 });
+
+QUnit.test('linear gradient, id is set', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id');
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, stops color set as `stop-color` (sankey chart)', function(assert) {
+    const stops = [{ offset: 'offset_1', 'stop-color': 'color_1' }, { offset: 'offset_2', 'stop-color': 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id');
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, id is not set', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops);
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'DevExpressId'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, with rotationAngle', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id', 30);
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(30)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.strictEqual(renderers.SvgElement.getCall(3).returnValue.append.callCount, 1);
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+    assert.strictEqual(renderers.SvgElement.getCall(4).returnValue.append.callCount, 1);
+});
+
+QUnit.test('radial gradient', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const radialGradient = this.renderer.radialGradient(stops, 'id');
+
+    assert.ok(radialGradient);
+    assert.ok(radialGradient instanceof renderers.SvgElement);
+    assert.strictEqual(radialGradient.append.callCount, 1, 'radialGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('custom pattern', function(assert) {
+    const template = { render: sinon.stub() };
+    const customPattern = this.renderer.customPattern('id', template, 20, 10);
+
+    assert.ok(customPattern);
+    assert.ok(customPattern instanceof renderers.SvgElement);
+    assert.strictEqual(customPattern.append.callCount, 1, 'customPattern is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+        width: 20,
+        height: 10,
+        patternContentUnits: 'userSpaceOnUse',
+        patternUnits: 'userSpaceOnUse'
+    });
+    assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
+});
+
 QUnit.module('Hatching', {
     before: setMockElements,
 
