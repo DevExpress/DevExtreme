@@ -599,7 +599,7 @@ const ResizingController = modules.ViewController.inherit({
         const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
-        const height = that.option('height') || $rootElement.get(0).style.height; // we need to use $.css?
+        const height = that.option('height') || $rootElement.get(0).style.height;
         const isHeightSpecified = !!height && height !== 'auto';
         const editorFactory = that.getController('editorFactory');
         const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;

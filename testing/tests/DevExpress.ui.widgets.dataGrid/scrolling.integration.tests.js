@@ -699,9 +699,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             columnAutoWidth: true,
             columns: [
                 { dataField: 'field1', width: 100 },
-                { dataField: 'field1', width: 100 },
-                { dataField: 'field1', width: 100 },
-                { dataField: 'field1', width: 100 }
+                { dataField: 'field2', width: 100 },
+                { dataField: 'field3', width: 100 },
+                { dataField: 'field4', width: 100 }
             ]
         });
 
@@ -1431,5 +1431,110 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         assert.strictEqual(table.find('tr').length, 3);
         assert.strictEqual(tableFixed.find('tr').length, 3);
+    });
+
+    // T1139557
+    QUnit.test('Vertical scrollbar should be shown if max-height is set and master detail was expanded', function(assert) {
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 0, column1: 'item 1' }, { id: 1, column1: 'item 2' }],
+            keyExpr: 'id',
+            showBorders: true,
+            columns: ['column1'],
+            masterDetail: {
+                enabled: true,
+                template(container, options) {
+                    $('<div>').dxDataGrid({
+                        columnAutoWidth: true,
+                        showBorders: true,
+                        columns: ['MasterColumn'],
+                        dataSource: [{ masterColumn: 'test' }]
+                    }).appendTo(container);
+                },
+            },
+        });
+        this.clock.tick(300);
+
+        dataGrid.expandRow(1);
+        this.clock.tick();
+
+        assert.ok(dataGrid.isScrollbarVisible(), 'scroll bar should be shown');
+    });
+
+    QUnit.test('Vertical scrollbar should be shown if max-height is set and form editing was expanded', function(assert) {
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 0, column1: 'item 1' }, { id: 1, column1: 'item 2' }],
+            keyExpr: 'id',
+            showBorders: true,
+            columns: ['column1'],
+            editing: {
+                mode: 'form',
+                allowUpdating: true
+            }
+        });
+        this.clock.tick(300);
+
+        dataGrid.editRow(1);
+        this.clock.tick();
+
+        assert.ok(dataGrid.isScrollbarVisible(), 'scroll bar should be shown');
+    });
+
+    QUnit.test('Vertical scrollbar should be shown if max-height is set and adaptive was expanded', function(assert) {
+        $('#dataGrid').css('max-height', '150px');
+
+        const dataGrid = createDataGrid({
+            width: 400,
+            dataSource: [{ id: 0, column1: 'item 1', column2: 'test' }, { id: 1, column1: 'item 2', column2: 'test' }],
+            keyExpr: 'id',
+            showBorders: true,
+            columnHidingEnabled: true,
+            columns: [{
+                dataField: 'column1',
+                width: 340
+            }, 'column2'],
+        });
+        this.clock.tick(300);
+
+        dataGrid.expandAdaptiveDetailRow(1);
+        this.clock.tick();
+
+        assert.ok(dataGrid.isScrollbarVisible(), 'scroll bar should be shown');
+    });
+
+    QUnit.test('Vertical scrollbar should not be shown on last page if max-height is set', function(assert) {
+        const getData = () => {
+            const data = [];
+
+            for(let i = 0; i < 5; i++) {
+                data.push({ id: i, column: 'item ' + i });
+            }
+
+            return data;
+        };
+
+        $('#dataGrid').css('max-height', '150px');
+        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+        const dataGrid = createDataGrid({
+            width: 400,
+            dataSource: getData(),
+            keyExpr: 'id',
+            showBorders: true,
+            columnHidingEnabled: true,
+            columns: ['column'],
+            paging: {
+                pageSize: 4
+            }
+        });
+        this.clock.tick(300);
+        window.grid = dataGrid;
+
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+
+        assert.ok($('#dataGrid').height() < 150, 'second page should not have scrollbar');
     });
 });
