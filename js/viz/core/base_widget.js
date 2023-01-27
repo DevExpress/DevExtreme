@@ -137,6 +137,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
         that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
 
+        that._graphicObjects = {};
+
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
         that._optionChangedLocker = 0;
@@ -399,6 +401,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         this._renderer.dispose();
     },
 
+    _disposeGraphicObjects: function() {
+        for(const id in this._graphicObjects) {
+            this._graphicObjects[id].dispose();
+        }
+        this._graphicObjects = null;
+    },
+
     _getAnimationOptions: noop,
 
     render: function() {
@@ -444,6 +453,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._eventTrigger.dispose();
         that._disposeCore();
         that._disposePlugins();
+        that._disposeGraphicObjects();
         that._disposeRenderer();
         that._themeManager.dispose();
         that._themeManager = that._renderer = that._eventTrigger = null;
@@ -721,12 +731,25 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         this.isReady = getFalse;
     },
 
-    _renderPatterns: function() {
+    _renderGraphicObjects: function() {
         const graphics = getGraphicObjects();
-
         for(const id in graphics) {
-            const opt = graphics[id];
-            this._renderer[opt.element](id, graphics[id].options);
+            if(!this._graphicObjects[id]) {
+                const { element, colors, rotationAngle, template, width, height } = graphics[id];
+                const renderer = this._renderer;
+
+                switch(element) {
+                    case 'linear':
+                        this._graphicObjects[id] = renderer.linearGradient(colors, id, rotationAngle);
+                        break;
+                    case 'radial':
+                        this._graphicObjects[id] = renderer.radialGradient(colors, id);
+                        break;
+                    case 'pattern':
+                        this._graphicObjects[id] = renderer.customPattern(id, this._getTemplate(template), width, height);
+                        break;
+                }
+            }
         }
     },
 

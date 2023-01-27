@@ -19,8 +19,8 @@ QUnit.test('should register pattern', function(assert) {
     assert.equal(id_1, 'DevExpressId_1');
     assert.equal(id_2, 'DevExpressId_2');
     assert.deepEqual(getGraphicObjects(), {
-        'DevExpressId_1': { options: { key: 'test_key_1' }, element: 'pattern' },
-        'DevExpressId_2': { options: { key: 'test_key_2' }, element: 'pattern' }
+        'DevExpressId_1': { key: 'test_key_1', element: 'pattern' },
+        'DevExpressId_2': { key: 'test_key_2', element: 'pattern' }
     });
 });
 
@@ -32,7 +32,7 @@ QUnit.test('should register gradient', function(assert) {
     assert.equal(id_1, 'DevExpressId_1');
     assert.equal(id_2, 'DevExpressId_2');
     assert.deepEqual(getGraphicObjects(), {
-        'DevExpressId_1': { options: { key: 'test_key_1' }, element: 'gradient_type' },
-        'DevExpressId_2': { options: { key: 'test_key_2' }, element: 'gradient_type' }
+        'DevExpressId_1': { key: 'test_key_1', element: 'gradient_type' },
+        'DevExpressId_2': { key: 'test_key_2', element: 'gradient_type' }
     });
 });

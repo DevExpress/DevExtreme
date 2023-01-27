@@ -1937,17 +1937,36 @@ Renderer.prototype = {
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
-    linearGradient: function(stops) {
-        const id = getNextDefsSvgId();
-        const that = this;
-        const gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
+    linearGradient: function(stops, _id, rotationAngle) {
+        const id = _id || getNextDefsSvgId();
+        const gradient = this._createElement('linearGradient', {
+            id: id,
+            gradientTransform: `rotate(${rotationAngle || 0})`
+        }).append(this._defs);
         gradient.id = id;
 
-        stops.forEach((stop) => {
-            that._createElement('stop', { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
-        });
+        this._createGradientStops(stops, gradient);
 
         return gradient;
+    },
+
+    radialGradient: function(stops, id) {
+        const gradient = this._createElement('radialGradient', { id: id }).append(this._defs);
+
+        this._createGradientStops(stops, gradient);
+
+        return gradient;
+    },
+
+    _createGradientStops: function(stops, group) {
+        const that = this;
+        stops.forEach((stop) => {
+            that._createElement('stop', {
+                offset: stop.offset,
+                'stop-color': stop['stop-color'] || stop.color,
+                'stop-opacity': stop.opacity
+            }).append(group);
+        });
     },
 
     // appended automatically
@@ -1978,28 +1997,19 @@ Renderer.prototype = {
         return pattern;
     },
 
-    customLinearGradient: function(id, options) {
-        const gradient = this._createElement('linearGradient', { id: id, gradientTransform: `rotate(${options.rotationAngle || 0})` }).append(this._defs);
-
-        options.children.forEach(el => {
-            this._createElement('stop', { offset: el.offset, 'stop-color': el.color, 'stop-opacity': el.opacity }).append(gradient);
-        });
-    },
-
-    customRadialGradient: function(id, options) {
-        const gradient = this._createElement('radialGradient', { id: id }).append(this._defs);
-        options.children.forEach(el => {
-            this._createElement('stop', { offset: el.offset, 'stop-color': el.color, 'stop-opacity': el.opacity }).append(gradient);
-        });
-    },
-
-    customPattern: function(id, options) {
-        const isPointFilling = typeof options.width === 'string' && typeof options.height === 'string';
-        const opt = isPointFilling ? { id: id, width: options.width, height: options.height, patternContentUnits: 'userSpaceOnUse' } :
-            { id: id, width: options.width, height: options.height, patternUnits: 'userSpaceOnUse' };
+    customPattern: function(id, templateFunction, width, height) {
+        const opt = {
+            id: id,
+            width,
+            height,
+            patternContentUnits: 'userSpaceOnUse',
+            patternUnits: 'userSpaceOnUse'
+        };
         const pattern = this._createElement('pattern', opt).append(this._defs);
 
-        options.children(pattern.element);
+        templateFunction.render({ container: pattern.element });
+
+        return pattern;
     },
 
     _getPointsWithYOffset: function(points, offset) {
