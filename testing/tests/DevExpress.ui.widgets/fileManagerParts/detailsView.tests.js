@@ -4,7 +4,7 @@ import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
 import localization from 'localization';
 import messageLocalization from 'localization/message';
-import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice, createHugeFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 import { implementationsMap } from 'core/utils/size';
 
@@ -799,5 +799,90 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(fileManager.option('focusedItemKey'), undefined, 'no focus (option)');
         assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
+    });
+
+    test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is focused (T1129252, T1125089, T1125526)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(),
+            itemView: {
+                showParentFolder: true
+            },
+            currentPath: 'Folder 1'
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
+
+        fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
+
+        fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
+    });
+
+    test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is selected (T1129252, T1125089, T1125526)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(),
+            itemView: {
+                showParentFolder: true
+            },
+            currentPath: 'Folder 1'
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
+
+        fileManager.option({
+            focusedItemKey: 'Folder 1/File 99.txt',
+            selectedItemKeys: ['Folder 1/File 99.txt']
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
+
+        fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
     });
 });
