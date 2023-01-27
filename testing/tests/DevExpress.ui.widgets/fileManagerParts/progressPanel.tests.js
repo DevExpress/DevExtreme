@@ -758,7 +758,9 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
                 realProviderInstance: new CustomFileSystemProvider({
                     uploadFileChunk: uploadChunkSpy
                 }),
-                assert
+                exceptionThrown: e => {
+                    assert.deepEqual(e, {}, 'An exception was thrown when it shouldn\'t be.');
+                }
             }),
             notifications: {
                 showPanel: false
