@@ -419,7 +419,9 @@ function drawElement(element, context, parentOptions, shared) {
 
     if(!isText) {
         applyFilter(context, options, shared);
-        fillElement(context, options, shared);
+        if(!isImage) {
+            promise = fillElement(context, options, shared);
+        }
         strokeElement(context, options);
     }
 
@@ -680,6 +682,7 @@ function getPattern(context, pattern, shared, parentOptions) {
 
 function fillElement(context, options, shared) {
     const fill = options.fill;
+    let promise;
 
     if(fill && fill !== 'none') {
         if(fill.search(/url/) === -1) {
@@ -694,9 +697,11 @@ function fillElement(context, options, shared) {
                 return;
             }
 
-            getPattern(context, pattern, shared, options);
+            promise = getPattern(context, pattern, shared, options);
         }
     }
+
+    return promise;
 }
 
 parseAttributes = function(attributes) {

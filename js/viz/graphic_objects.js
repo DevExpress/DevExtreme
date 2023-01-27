@@ -4,7 +4,7 @@ const graphic_objects = {};
 
 export const registerPattern = (options) => {
     const id = getNextDefsSvgId();
-    graphic_objects[id] = { options: options, element: 'customPattern' };
+    graphic_objects[id] = { options: options, element: 'pattern' };
     return id;
 };
 
