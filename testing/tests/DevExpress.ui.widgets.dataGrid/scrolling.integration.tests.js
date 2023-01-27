@@ -45,6 +45,28 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
     $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
 }
 
+function checkScrollWorks(dataGrid, scrollBy = 10, isHorizontal = false) {
+    const scrollable = dataGrid.getScrollable();
+
+    if(scrollable && scrollable.element()) {
+        if(isHorizontal) {
+            const initScrollPosition = scrollable.scrollLeft();
+
+            scrollable.scrollBy({ left: scrollBy });
+
+            return initScrollPosition + scrollBy === scrollable.scrollLeft();
+        } else {
+            const initScrollPosition = scrollable.scrollTop();
+
+            scrollable.scrollBy({ top: scrollBy });
+
+            return initScrollPosition + scrollBy === scrollable.scrollTop();
+        }
+    }
+
+    return false;
+}
+
 QUnit.module('Scrolling', baseModuleConfig, () => {
     [true, false].forEach(nativeScrolling => {
         QUnit.test(`Correct start scroll position when RTL with nativeScrolling: ${nativeScrolling}`, function(assert) {
@@ -1459,7 +1481,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.expandRow(1);
         this.clock.tick();
 
-        assert.ok(!!dataGrid.getScrollable(), 'scroll bar should be shown');
+        assert.ok(checkScrollWorks(dataGrid), 'vertical scrollbar should work');
     });
 
     QUnit.test('DataGrid should be scrollable if max-height is set and form editing was expanded', function(assert) {
@@ -1480,7 +1502,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.editRow(1);
         this.clock.tick();
 
-        assert.ok(!!dataGrid.getScrollable(), 'scroll bar should be shown');
+        assert.ok(checkScrollWorks(dataGrid), 'vertical scrollbar should work');
     });
 
     QUnit.test('DataGrid should be scrollable if max-height is set and adaptive was expanded', function(assert) {
@@ -1502,7 +1524,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.expandAdaptiveDetailRow(1);
         this.clock.tick();
 
-        assert.ok(!!dataGrid.getScrollable(), 'scroll bar should be shown');
+        assert.ok(checkScrollWorks(dataGrid), 'vertical scrollbar should work');
     });
 
     QUnit.test('DataGrid should not be scrollable on last page where rows height is less than max-height', function(assert) {
