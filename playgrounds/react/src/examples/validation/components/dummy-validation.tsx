@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { ValidatorContext } from '../contexts/validator-context';
 import { Rule } from '../types';
 
@@ -6,16 +6,12 @@ export type CustomRuleProps = Rule;
 
 export function CustomRule(props: CustomRuleProps) {
   const validatorContext = useContext(ValidatorContext);
+  const ruleRegistered = useRef(false);
   useEffect(() => {
-    validatorContext?.registerRule(props);
-  }, []);
-  return null;
-}
-
-export function CustomRule1(props: CustomRuleProps) {
-  const validatorContext = useContext(ValidatorContext);
-  useEffect(() => {
-    validatorContext?.registerRule(props);
+    if (!ruleRegistered.current) {
+      validatorContext?.registerRule(props);
+      ruleRegistered.current = true;
+    }
   }, []);
   return null;
 }

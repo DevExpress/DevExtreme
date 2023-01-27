@@ -1,5 +1,5 @@
 import { RadioButton } from '@devextreme/react';
-import { CustomRule, CustomRule1 } from '../validation/components/dummy-validation';
+import { CustomRule } from '../validation/components/dummy-validation';
 import {
   Form,
   FormItemHint,
@@ -28,7 +28,7 @@ export function FormExample() {
                 message="Should not be First"
                 validate={(value) => value !== 'first'}
               />
-              <CustomRule1
+              <CustomRule
                 message="Should be First or Second"
                 validate={(value) => value === 'first' || value === 'second'}
               />
