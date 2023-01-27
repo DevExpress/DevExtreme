@@ -436,6 +436,9 @@ test('Header container should have padding-right if grid has max-height and scro
   return createWidget('dxDataGrid', {
     width: 400,
     showBorders: true,
+    scrolling: {
+      useNative: true,
+    },
     dataSource: [
       {
         id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
