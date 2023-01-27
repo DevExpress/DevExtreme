@@ -2180,6 +2180,42 @@ QUnit.module('keyboard navigation', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('pagedown/pageup keys should move focus to last/first item', function(assert) {
+        const $listItems = getListItems(this.instance);
+        this.keyboard.press('down');
+
+        this.keyboard.press('pagedown');
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the last tag has the \'focused\' class');
+
+        this.keyboard.press('pageup');
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the first tag has the \'focused\' class');
+    });
+
+    QUnit.test('down/up keys should move focus to next/previous item', function(assert) {
+        const $listItems = getListItems(this.instance);
+        const $firstItem = $listItems.eq(0);
+        const $secondItem = $listItems.eq(1);
+
+        this.keyboard.press('down');
+        assert.ok($secondItem.hasClass(FOCUSED_CLASS), 'second item is focused');
+
+        this.keyboard.press('up');
+        assert.ok($firstItem.hasClass(FOCUSED_CLASS), 'first item is focused');
+    });
+
+    ['enter', 'space'].forEach(key => {
+        QUnit.test(`item should be selected when pressing ${key}`, function(assert) {
+            assert.deepEqual(this.instance.option('value'), [1, 2], 'the value is correct');
+
+            this.keyboard.press('down');
+            this.keyboard.press('down');
+
+            this.keyboard.press(key);
+            this.clock.tick(TIME_TO_WAIT);
+            assert.deepEqual(this.instance.option('value'), [1, 2, 3], 'the value is correct');
+        });
+    });
+
     QUnit.test('backspace', function(assert) {
         assert.expect(2);
 
@@ -2301,6 +2337,18 @@ QUnit.module('keyboard navigation', {
         this.keyboard
             .keyDown('esc');
         assert.equal(prevented, 1, 'defaults prevented on escape keys');
+
+        assert.strictEqual(this.instance.option('opened'), false);
+    });
+
+    QUnit.test('escape key should close popup', function(assert) {
+        this.reinit({
+            opened: true,
+        });
+
+        this.keyboard.keyDown('esc');
+
+        assert.notOk(this.instance.option('opened'), 'popup closed');
     });
 
     QUnit.test('Enter and escape key press prevent default when popup is opened and field edit enabled is not set', function(assert) {
