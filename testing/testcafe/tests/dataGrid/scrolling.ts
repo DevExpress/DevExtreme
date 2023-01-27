@@ -414,11 +414,16 @@ test('Header container should have padding-right if grid has max-height and scro
   // act
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
-  await t.takeElementScreenshot('#container');
+  await dataGrid.scrollBy({ y: 20 });
+
   // assert
   await t
     .expect(await getRightPadding())
     .eql(scrollBarWidth)
+
+    .expect(await dataGrid.getScrollTop())
+    .eql(20)
+
     .expect(await takeScreenshot('grid-header-row-scrollbar-padding.png', '#container'))
     .ok()
     .expect(compareResults.isValid())
