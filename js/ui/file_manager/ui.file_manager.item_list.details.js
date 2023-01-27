@@ -58,8 +58,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._parentDirectoryItemKey = null;
         this._selectAllCheckBox = null;
         this._selectAllCheckBoxUpdating = false;
-        this._needResetScrollPosition = false;
-        this._counter = 0;
 
         this.$element().addClass(FILE_MANAGER_DETAILS_ITEM_LIST_CLASS);
 
@@ -356,13 +354,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 sortOrder: 'asc',
                 sortIndex: 0
             });
-        }
-    }
-
-    _onFilesViewContentReady() {
-        if(this._needResetScrollPosition) {
-            this._resetScrollTopPosition();
-            this._needResetScrollPosition = false;
         }
     }
 
