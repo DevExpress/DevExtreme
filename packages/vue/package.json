@@ -1,0 +1,22 @@
+{
+  "name": "@devextreme/vue",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "generate": "npm run generate:metadata && npm run generate:components",
+    "generate:metadata": "dx-tools update-integration-meta --js-scripts ../jquery/src --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
+    "generate:components": "tsc ./generate.ts --outdir ./artifacts --types \"node\" && node ./artifacts/generate.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "devextreme-vue": "^22.2.3"
+  },
+  "optionalDependencies": {
+    "devextreme-internal-tools": "^9.3.0",
+    "devextreme-vue-generator": "^1.3.1"
+  }
+}

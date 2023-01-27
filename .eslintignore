@@ -17,6 +17,8 @@ lib
 
 packages/jquery/patch/*
 packages/jquery/src/generated/*
+packages/vue/src/*
+packages/vue/artifacts/*
 packages/interim/*
 
 /.eslintrc.cjs
