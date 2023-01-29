@@ -44,7 +44,7 @@ test('TimeZone editors should be have data after hide forms data(T1080932)', asy
     currentDate: new Date(2020, 6, 25),
     startDayHour: 9,
     height: 600,
-  }, true);
+  });
 });
 
 test('TimeZone editors should be have data in default case(T1080932)', async (t) => {
@@ -73,5 +73,5 @@ test('TimeZone editors should be have data in default case(T1080932)', async (t)
     currentDate: new Date(2020, 6, 25),
     startDayHour: 9,
     height: 600,
-  }, true);
+  });
 });

@@ -24,4 +24,4 @@ export default async (options = {}, selector = '#container'): Promise<void> => c
   maxAppointmentsPerCell: 5,
   currentView: 'day',
   currentDate: new Date(2019, 3, 1),
-}, options), false, selector);
+}, options), selector);

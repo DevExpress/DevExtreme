@@ -1165,6 +1165,37 @@ QUnit.module('API methods', baseModuleConfig, () => {
             'done rowCount: 2, groupRow: true, dataRow: true'
         ]);
     });
+
+    QUnit.test('Grid repaint should not result in extra toolbar items (T1138904)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            keyExpr: 'ID',
+            columns: ['a', 'b', 'c', 'd', 'e'],
+            showBorders: true,
+            toolbar: {
+                items: [{
+                    location: 'before',
+                    locateInMenu: 'never',
+                    name: 'groupPanel'
+                }, {
+                    location: 'after',
+                    locateInMenu: 'always',
+                    name: 'columnChooserButton'
+                }]
+            },
+            groupPanel: { visible: true },
+            columnChooser: { enabled: true }
+        });
+        this.clock.tick();
+        // assert
+        const toolbarItems = $('.dx-toolbar-button').length;
+        // act
+        dataGrid.repaint();
+        this.clock.tick();
+        // assert
+        assert.equal($('.dx-toolbar-button').length, toolbarItems);
+    });
 });
 
 

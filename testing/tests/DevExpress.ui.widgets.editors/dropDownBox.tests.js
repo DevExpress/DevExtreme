@@ -765,6 +765,14 @@ QUnit.module('popup options', moduleConfig, () => {
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
+    QUnit.test('alt+down should open dropDownBox', function(assert) {
+        const instance = new DropDownBox(this.$element);
+
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).keyDown('down', { altKey: true });
+        assert.ok(instance.option('opened'), 'dropDownBox is opened after alt+down is pressed');
+    });
+
     QUnit.testInActiveWindow('first focusable element inside of content should get focused after tab pressing', function(assert) {
         const $input1 = $('<input>', { id: 'input1', type: 'text' });
         const $input2 = $('<input>', { id: 'input2', type: 'text' });

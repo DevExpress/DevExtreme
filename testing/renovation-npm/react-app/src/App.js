@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import 'devextreme/dist/css/dx.light.css';
 import Button from '@devextreme/react/button';
-import Scheduler from '@devextreme/react/scheduler';
 
 export const data = [
     {
@@ -18,15 +17,6 @@ function App() {
         <div className="App">
             <Button
                 text="Click me"
-            />
-            <Scheduler
-                timeZone="America/Los_Angeles"
-                dataSource={data}
-                views={views}
-                defaultCurrentView="week"
-                defaultCurrentDate={currentDate}
-                height={600}
-                startDayHour={9}
             />
         </div>
     );

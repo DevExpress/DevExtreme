@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { changeTheme } from '../../helpers/changeTheme';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
-fixture`Search Panel`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture.disablePageReloads`Search Panel`
+  .page(url(__dirname, '../container.html'));
 
 // T1046688
 safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
@@ -49,5 +48,5 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
           .appendTo(container);
       },
     },
-  }, true);
+  });
 });

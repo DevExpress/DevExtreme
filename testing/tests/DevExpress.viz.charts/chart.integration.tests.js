@@ -2167,6 +2167,7 @@ QUnit.test('check horizontal alignment === center', function(assert) {
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
+        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
         const dataSource = [];
         for(let i = 0; i < 500000; i += 250) {
             const y1 = Math.sin(i);

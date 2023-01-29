@@ -32,7 +32,7 @@ test('it should correctly drag external item to the appointment after drag appoi
 
   await createWidget('dxSortable', {
     group: 'resourceGroup',
-  }, false, '#list');
+  }, '#list');
 
   return createWidget('dxScheduler', {
     resources: [
@@ -76,5 +76,5 @@ test('it should correctly drag external item to the appointment after drag appoi
           },
         });
     },
-  }, false, '#scheduler');
+  }, '#scheduler');
 });

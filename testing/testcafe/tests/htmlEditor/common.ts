@@ -1,12 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { clearTestPage } from '../../helpers/clearPage';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
+import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor`
-  .page(url(__dirname, '../containerQuill.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../containerQuill.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';
@@ -16,12 +15,14 @@ fixture.disablePageReloads`HtmlEditor`
   test(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
+
     await t
-      .expect(await takeScreenshot(`${baseScreenName}.png`, selector))
-      .ok()
-      .click(Selector(clickTarget))
-      .expect(await takeScreenshot(`${baseScreenName}-focused.png`, selector))
-      .ok()
+      .click(Selector(clickTarget));
+
+    await testScreenshot(t, takeScreenshot, `${baseScreenName}-focused.png`, { element: selector });
+
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
@@ -38,6 +39,6 @@ fixture.disablePageReloads`HtmlEditor`
       toolbar: {
         items: ['bold', 'color'],
       },
-    }, false, '#otherContainer');
+    }, '#otherContainer');
   });
 });

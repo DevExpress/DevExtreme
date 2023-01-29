@@ -30,5 +30,5 @@ test('View switching should work for empty agenda', async (t) => {
     currentView: 'day',
     currentDate: new Date(2021, 4, 25),
     height: 600,
-  }, true);
+  });
 });

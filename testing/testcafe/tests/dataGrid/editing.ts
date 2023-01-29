@@ -3,15 +3,14 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 
 fixture.disablePageReloads`Editing`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
@@ -86,7 +85,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
       startEditAction: 'click',
     },
   }),
-  createWidget('dxSelectBox', {}, false, '#otherContainer'),
+  createWidget('dxSelectBox', {}, '#otherContainer'),
 ]));
 
 test('Async Validation(Row) - Only valid data is saved in a new row', async (t) => {
@@ -1669,7 +1668,6 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     columns: ['LastName'],
   });
 }).after(async () => {
-  await disposeWidgets();
   await changeTheme('generic.light');
 });
 
@@ -1677,7 +1675,12 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
   // act
+
+  await t
+    .click(Selector('body'), { offsetY: dataGridOffsetBottom + 10 });
+
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
 
@@ -1690,6 +1693,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .expect(popupDataGrid.getDataRow(0).element.exists)
     .ok();
 
+  await t.debug();
   // assert
   await t
     .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
@@ -1698,6 +1702,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await changeTheme('material.blue.light');
+
   return createWidget('dxDataGrid', {
     dataSource: [{
       ID: 1,
@@ -1729,7 +1734,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     },
   });
 }).after(async () => {
-  await disposeWidgets();
   await changeTheme('generic.light');
 });
 
@@ -1742,7 +1746,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton());
 
   await t
-    .dispatchEvent(dataGrid.getFormItemElement(0), 'focus');
+    .click(dataGrid.getFormItemElement(0));
 
   await t
     .typeText(dataGrid.getFormItemEditor(0), '1');
@@ -1751,7 +1755,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     .pressKey('enter');
 
   await t
-    .dispatchEvent(dataGrid.getFormItemElement(2), 'focus');
+    .click(dataGrid.getFormItemElement(2));
 
   await t
     .typeText(dataGrid.getFormItemEditor(2), '0');
@@ -1797,9 +1801,87 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
     }],
   });
 }).after(async () => {
-  await disposeWidgets();
   await changeTheme('generic.light');
 });
+
+test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
+    .click(dataGrid.getFormItemElement(2));
+
+  await t
+    .expect(await takeScreenshot('grid-adaptive-checkbox.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    width: 400,
+    dataSource: [{
+      OrderNumber: 35703,
+      Employee: 'Sam',
+      OrderDate: '2014/04/10',
+      Checkbox: true,
+    }],
+    keyExpr: 'OrderNumber',
+    columnHidingEnabled: true,
+    editing: {
+      allowUpdating: true,
+      mode: 'cell',
+    },
+    columns: [{
+      dataField: 'OrderNumber',
+      caption: 'Invoice Number',
+      width: 300,
+    }, {
+      dataField: 'Employee',
+    }, {
+      dataField: 'OrderDate',
+      dataType: 'date',
+    }, {
+      dataField: 'Checkbox',
+      dataType: 'boolean',
+    }],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
+test('DataGrid cell with checkbox should have outline on focused', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .expect(dataGrid.getDataCell(0, 0).isFocused).ok()
+    .pressKey('enter')
+    .pressKey('tab');
+
+  await t
+    .expect(await takeScreenshot('grid-checkbox-outline.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 150,
+  width: 200,
+  dataSource: [{
+    Id: 0,
+    Checkbox: true,
+  }],
+  keyExpr: 'Id',
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+  columns: ['Id', 'Checkbox'],
+}));
 
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -2037,7 +2119,6 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     }],
   });
 }).after(async () => {
-  await disposeWidgets();
   await ClientFunction(() => {
     delete (window as any).myStore;
   })();

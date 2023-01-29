@@ -666,11 +666,11 @@ declare module DevExpress {
   /**
    * [descr:config()]
    */
-  export function config(): globalConfig;
+  export function config(): DevExpress.common.GlobalConfig;
   /**
    * [descr:config(config)]
    */
-  export function config(config: globalConfig): void;
+  export function config(config: DevExpress.common.GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -997,94 +997,6 @@ declare module DevExpress {
      */
     stop(element: Element, jumpToEnd: boolean): void;
   };
-  /**
-   * [descr:globalConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface globalConfig {
-    /**
-     * [descr:globalConfig.decimalSeparator]
-     * @deprecated [depNote:globalConfig.decimalSeparator]
-     */
-    decimalSeparator?: string;
-    /**
-     * [descr:globalConfig.defaultCurrency]
-     */
-    defaultCurrency?: string;
-    /**
-     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
-     */
-    defaultUseCurrencyAccountingStyle?: boolean;
-    /**
-     * [descr:globalConfig.editorStylingMode]
-     */
-    editorStylingMode?: DevExpress.common.EditorStyle;
-    /**
-     * [descr:globalConfig.floatingActionButtonConfig]
-     */
-    floatingActionButtonConfig?: {
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.closeIcon]
-       */
-      closeIcon?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.direction]
-       */
-      direction?: DevExpress.core.FloatingActionButtonDirection;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.icon]
-       */
-      icon?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.label]
-       */
-      label?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
-       */
-      maxSpeedDialActionCount?: number;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.position]
-       */
-      position?:
-        | DevExpress.common.PositionAlignment
-        | PositionConfig
-        | Function;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.shading]
-       */
-      shading?: boolean;
-    };
-    /**
-     * [descr:globalConfig.forceIsoDateParsing]
-     */
-    forceIsoDateParsing?: boolean;
-    /**
-     * [descr:globalConfig.oDataFilterToLower]
-     */
-    oDataFilterToLower?: boolean;
-    /**
-     * [descr:globalConfig.rtlEnabled]
-     */
-    rtlEnabled?: boolean;
-    /**
-     * [descr:globalConfig.serverDecimalSeparator]
-     */
-    serverDecimalSeparator?: string;
-    /**
-     * [descr:globalConfig.thousandsSeparator]
-     * @deprecated [depNote:globalConfig.thousandsSeparator]
-     */
-    thousandsSeparator?: string;
-    /**
-     * [descr:globalConfig.useLegacyStoreResult]
-     */
-    useLegacyStoreResult?: boolean;
-    /**
-     * [descr:globalConfig.useLegacyVisibleIndex]
-     */
-    useLegacyVisibleIndex?: boolean;
-  }
   /**
    * [descr:hideTopOverlay()]
    */
@@ -1528,6 +1440,90 @@ declare module DevExpress.common {
     | 'minute'
     | 'second'
     | 'shortDateShortTime';
+  /**
+   * [descr:GlobalConfig]
+   */
+  export type GlobalConfig = {
+    /**
+     * [descr:GlobalConfig.decimalSeparator]
+     * @deprecated [depNote:GlobalConfig.decimalSeparator]
+     */
+    decimalSeparator?: string;
+    /**
+     * [descr:GlobalConfig.defaultCurrency]
+     */
+    defaultCurrency?: string;
+    /**
+     * [descr:GlobalConfig.defaultUseCurrencyAccountingStyle]
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * [descr:GlobalConfig.editorStylingMode]
+     */
+    editorStylingMode?: EditorStyle;
+    /**
+     * [descr:GlobalConfig.floatingActionButtonConfig]
+     */
+    floatingActionButtonConfig?: {
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.closeIcon]
+       */
+      closeIcon?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.direction]
+       */
+      direction?: DevExpress.core.FloatingActionButtonDirection;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.icon]
+       */
+      icon?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.label]
+       */
+      label?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
+       */
+      maxSpeedDialActionCount?: number;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.position]
+       */
+      position?: PositionAlignment | PositionConfig | Function;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.shading]
+       */
+      shading?: boolean;
+    };
+    /**
+     * [descr:GlobalConfig.forceIsoDateParsing]
+     */
+    forceIsoDateParsing?: boolean;
+    /**
+     * [descr:GlobalConfig.oDataFilterToLower]
+     */
+    oDataFilterToLower?: boolean;
+    /**
+     * [descr:GlobalConfig.rtlEnabled]
+     */
+    rtlEnabled?: boolean;
+    /**
+     * [descr:GlobalConfig.serverDecimalSeparator]
+     */
+    serverDecimalSeparator?: string;
+    /**
+     * [descr:GlobalConfig.thousandsSeparator]
+     * @deprecated [depNote:GlobalConfig.thousandsSeparator]
+     */
+    thousandsSeparator?: string;
+    /**
+     * [descr:GlobalConfig.useLegacyStoreResult]
+     */
+    useLegacyStoreResult?: boolean;
+    /**
+     * [descr:GlobalConfig.useLegacyVisibleIndex]
+     */
+    useLegacyVisibleIndex?: boolean;
+  };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
   export type LabelMode = 'static' | 'floating' | 'hidden';
@@ -1658,6 +1654,7 @@ declare module DevExpress.common {
   export type SingleMultipleOrNone = 'single' | 'multiple' | 'none';
   export type SingleOrMultiple = 'single' | 'multiple';
   export type SingleOrNone = 'single' | 'none';
+  export type SliderValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   export type Sortable = DevExpress.core.OmitInternal<DevExpress.ui.dxSortable>;
   export type SortOrder = 'asc' | 'desc';
   export type StoreType = 'array' | 'local' | 'odata';
@@ -2060,6 +2057,7 @@ declare module DevExpress.common.charts {
     | 'steparea'
     | 'stepline'
     | 'stock';
+  export type ShiftLabelOverlap = 'hide' | 'none' | 'shift';
   export type TextOverflow = 'ellipsis' | 'hide' | 'none';
   export type Theme =
     | 'generic.dark'
@@ -6253,6 +6251,10 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportBaseProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+    /**
+     * [descr:ExcelExportBaseProps.encodeExecutableContent]
+     */
+    encodeExecutableContent?: boolean;
   }
   /**
    * [descr:ExcelExportDataGridProps]
@@ -20805,7 +20807,6 @@ declare module DevExpress.ui {
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
-    export type ValueChangeMode = 'onHandleMove' | 'onHandleRelease';
   }
   /**
    * [descr:dxSliderBase]
@@ -20882,7 +20883,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSliderBaseOptions.valueChangeMode]
      */
-    valueChangeMode?: DevExpress.ui.dxSlider.ValueChangeMode;
+    valueChangeMode?: DevExpress.common.SliderValueChangeMode;
   }
   /**
    * @deprecated use Properties instead
@@ -26943,7 +26944,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.common.charts.LabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxBarGaugeOptions.startValue]
      */
@@ -30820,7 +30821,6 @@ declare module DevExpress.viz {
     interface FunnelItemInfo {
       readonly item: Item;
     }
-    export type FunnelLabelOverlap = 'hide' | 'none' | 'shift';
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxFunnel> &
@@ -31223,7 +31223,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxFunnel.FunnelLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
@@ -31421,7 +31421,6 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
     export type PieChartAnnotationLocation = 'center' | 'edge';
-    export type PieChartLabelOverlap = 'hide' | 'none' | 'shift';
     export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
     export type PieChartSegmentDirection = 'anticlockwise' | 'clockwise';
     export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
@@ -31599,7 +31598,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: DevExpress.viz.dxPieChart.PieChartLabelOverlap;
+    resolveLabelOverlapping?: DevExpress.common.charts.ShiftLabelOverlap;
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */
@@ -33645,6 +33644,7 @@ declare module DevExpress.viz {
       animationEnabled?: boolean;
       /**
        * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
+       * @deprecated [depNote:dxRangeSelectorOptions.behavior.callValueChanged]
        */
       callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
       /**
@@ -33659,6 +33659,10 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.behavior.snapToTicks]
        */
       snapToTicks?: boolean;
+      /**
+       * [descr:dxRangeSelectorOptions.behavior.valueChangeMode]
+       */
+      valueChangeMode?: DevExpress.common.SliderValueChangeMode;
     };
     /**
      * [descr:dxRangeSelectorOptions.chart]

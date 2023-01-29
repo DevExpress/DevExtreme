@@ -346,6 +346,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         this.renderWorkSpace();
 
+        if(this.isRenovatedRender()) {
+            this.virtualScrollingDispatcher.updateDimensions();
+        }
+
         this._shader = new HorizontalShader(this);
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());

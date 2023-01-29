@@ -7,6 +7,7 @@ const CLASS = {
   area: 'dx-area',
   fields: 'dx-area-fields',
   field: 'dx-area-field',
+  box: 'dx-area-box',
 };
 
 export default class FieldChooser extends Widget {
@@ -19,6 +20,18 @@ export default class FieldChooser extends Widget {
 
   getAreas(): Selector {
     return this.element.find(`.${CLASS.area}`);
+  }
+
+  getRowAreaItem(idx = 0): Selector {
+    return this.getAreas().nth(1).find(`.${CLASS.field}.${CLASS.box}`).nth(idx);
+  }
+
+  getColumnAreaItem(idx = 0): Selector {
+    return this.getAreas().nth(2).find(`.${CLASS.field}.${CLASS.box}`).nth(idx);
+  }
+
+  getFilterAreaItem(idx = 0): Selector {
+    return this.getAreas().nth(3).find(`.${CLASS.field}.${CLASS.box}`).nth(idx);
   }
 
   getDataFields(): Selector {

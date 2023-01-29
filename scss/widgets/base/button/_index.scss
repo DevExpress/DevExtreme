@@ -27,6 +27,16 @@
   }
 }
 
+.dx-button a {
+  text-decoration: none;
+}
+
+.dx-button-back {
+  .dx-button-text {
+    display: none;
+  }
+}
+
 .dx-button-content {
   flex: 1 1 auto;
   height: 100%;

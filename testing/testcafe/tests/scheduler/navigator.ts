@@ -13,7 +13,7 @@ const createScheduler = async (options = {}): Promise<void> => {
     firstDayOfWeek: 1,
     height: 600,
     views: ['week', 'month'],
-  }), true);
+  }));
 };
 
 test('Navigator can change week when current date interval is more than diff between current date and `max` (T830754)', async (t) => {

@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
 import dataGridCore from './ui.data_grid.core';
 import { prepareItems } from '../grid_core/ui.grid_core.export';
-import { export as clientExport, excel } from '../../exporter';
+// import { export as clientExport, excel } from '../../exporter';
 import { format } from '../../core/utils/string';
 import messageLocalization from '../../localization/message';
 
@@ -52,60 +52,39 @@ export const DataProvider = Class.inherit({
     _initOptions: function() {
         const exportController = this._exportController;
         const groupColumns = exportController._columnsController.getGroupColumns();
-        const excelWrapTextEnabled = exportController.option('export.excelWrapTextEnabled');
+
         this._options = {
             columns: exportController._getColumns(this._initialColumnWidthsByColumnIndex),
             groupColumns: groupColumns,
             items: this._selectedRowsOnly || exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
-            getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
             isHeadersVisible: exportController.option('showColumnHeaders'),
             summaryTexts: exportController.option('summary.texts'),
-            customizeExportData: exportController.option('customizeExportData'),
             rtlEnabled: exportController.option('rtlEnabled'),
-            wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option('wordWrapEnabled'),
-            customizeExcelCell: exportController.option('export.customizeExcelCell'),
         };
-    },
-
-    hasCustomizeExcelCell: function() {
-        return isDefined(this._options.customizeExcelCell);
-    },
-
-    customizeExcelCell: function(e, cellSourceData) {
-        if(this._options.customizeExcelCell) {
-            e.gridCell = cellSourceData;
-            if(isDefined(this._exportController) && isDefined(this._exportController.component)) {
-                e.component = this._exportController.component;
-            }
-            this._options.customizeExcelCell(e);
-        }
     },
 
     getHeaderStyles() {
         return [
-            { bold: true, alignment: 'center', wrapText: true },
-            { bold: true, alignment: 'left', wrapText: true },
-            { bold: true, alignment: 'right', wrapText: true },
+            { bold: true, alignment: 'center' },
+            { bold: true, alignment: 'left' },
+            { bold: true, alignment: 'right' },
         ];
     },
 
     getGroupRowStyle() {
         return {
             bold: true,
-            wrapText: false,
             alignment: getDefaultAlignment(this._options.rtlEnabled)
         };
     },
 
     getColumnStyles() {
-        const wrapTextEnabled = this._options.wrapTextEnabled;
         const columnStyles = [];
 
         this.getColumns().forEach((column) => {
             columnStyles.push({
                 alignment: column.alignment || 'left',
                 format: column.format,
-                wrapText: wrapTextEnabled,
                 dataType: column.dataType
             });
         });
@@ -201,7 +180,6 @@ export const DataProvider = Class.inherit({
         const options = that._options;
 
         return when(options.items).done(function(items) {
-            options.customizeExportData && options.customizeExportData(that.getColumns(that.getHeaderRowCount() > 1), items);
             options.items = items;
         }).fail(function() {
             options.items = [];
@@ -601,8 +579,6 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
         this._headersView = this.getView('columnHeadersView');
 
         this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
-        this.createAction('onExported', { excludeValidators: ['disabled', 'readOnly'] });
-        this.createAction('onFileSaving', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     callbackNames: function() {
@@ -622,30 +598,16 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
 
         return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    exportToExcel: function(selectedRowsOnly) {
-        const that = this;
 
-        that._selectionOnly = selectedRowsOnly;
-
-        clientExport(that.component.getDataProvider(), {
-            fileName: that.option('export.fileName'),
-            format: 'xlsx',
-            selectedRowsOnly: !!selectedRowsOnly,
-            autoFilterEnabled: !!that.option('export.excelFilterEnabled'),
-            rtlEnabled: that.option('rtlEnabled'),
-            exportingAction: that.getAction('onExporting'),
-            exportedAction: that.getAction('onExported'),
-            fileSavingAction: that.getAction('onFileSaving')
-        }, excel.getData);
-    },
     exportTo: function(selectedRowsOnly, format) {
         this._selectionOnly = selectedRowsOnly;
 
         const onExporting = this.getAction('onExporting');
         const eventArgs = {
+            rtlEnabled: this.option('rtlEnabled'),
             selectedRowsOnly: !!selectedRowsOnly,
             format,
-            fileName: this.option('export.fileName'),
+            fileName: 'DataGrid',
             cancel: false,
         };
 
@@ -653,7 +615,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     },
 
     publicMethods: function() {
-        return ['getDataProvider', 'exportToExcel'];
+        return ['getDataProvider'];
     },
 
     selectionOnly: function(value) {
@@ -672,9 +634,7 @@ dataGridCore.registerModule('export', {
             'export': {
                 enabled: false,
                 fileName: 'DataGrid',
-                excelFilterEnabled: false,
                 formats: ['xlsx'],
-                excelWrapTextEnabled: undefined,
                 allowExportSelectedData: false,
                 texts: {
                     exportTo: messageLocalization.format('dxDataGrid-exportTo'),
@@ -781,13 +741,11 @@ dataGridCore.registerModule('export', {
                     const items = [];
 
                     formats.forEach((formatType) => {
-                        let exportMethod = 'exportTo';
                         let formatName = formatType.toUpperCase();
                         let exportAllIcon = DATAGRID_EXPORT_ICON;
                         const exportSelectedIcon = DATAGRID_EXPORT_SELECTED_ICON;
 
                         if(formatType === 'xlsx') {
-                            exportMethod = 'exportToExcel';
                             formatName = 'Excel';
                             exportAllIcon = DATAGRID_EXPORT_EXCEL_ICON;
                         }
@@ -800,7 +758,7 @@ dataGridCore.registerModule('export', {
                             text: format(texts.exportAll, formatName),
                             icon: exportAllIcon,
                             onClick: () => {
-                                this._exportController[exportMethod](false, formatType);
+                                this._exportController.exportTo(false, formatType);
                             },
                         });
 
@@ -809,7 +767,7 @@ dataGridCore.registerModule('export', {
                                 text: format(texts.exportSelectedRows, formatName),
                                 icon: exportSelectedIcon,
                                 onClick: () => {
-                                    this._exportController[exportMethod](true, formatType);
+                                    this._exportController.exportTo(true, formatType);
                                 },
                             });
                         }

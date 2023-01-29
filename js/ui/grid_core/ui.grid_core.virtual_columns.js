@@ -28,11 +28,12 @@ const VirtualScrollingRowsViewExtender = {
 
 const HeaderViewExtender = {
     _renderCore: function() {
-        this.callBase.apply(this, arguments);
+        const deferred = this.callBase.apply(this, arguments);
 
         if(this._columnsController.isVirtualMode()) {
             this._updateScrollLeftPosition();
         }
+        return deferred;
     }
 };
 

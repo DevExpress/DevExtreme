@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 const TEST_IMAGE_PATH_2 = './images/test-image-2.png';
@@ -45,9 +46,7 @@ test('Image from device should be inserted', async (t) => {
   await t
     .setFilesToUpload(fileUploader.input, [TEST_IMAGE_PATH_2]);
 
-  await t.expect(
-    await takeScreenshot('editor-before-click-add-button-from-device.png'),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'editor-before-click-add-button-from-device.png');
 
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
@@ -55,9 +54,7 @@ test('Image from device should be inserted', async (t) => {
 
   await t.click(htmlEditor.dialog.footerToolbar.addButton.element);
 
-  await t.expect(
-    await takeScreenshot('editor-after-add-image-from-device.png', htmlEditor.content),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'editor-after-add-image-from-device.png', { element: htmlEditor.content });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -69,7 +66,7 @@ test('Image from device should be inserted', async (t) => {
       tabs: ['file'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });
 
 test('Image should be validated and inserted from device', async (t) => {
@@ -116,9 +113,7 @@ test('Image should be validated and inserted from device', async (t) => {
     .expect(file.statusMessage)
     .eql('Ready to upload');
 
-  await t.expect(
-    await takeScreenshot('editor-before-click-add-button-and-validation.png'),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'editor-before-click-add-button-and-validation.png');
 
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
@@ -126,9 +121,7 @@ test('Image should be validated and inserted from device', async (t) => {
 
   await t.click(htmlEditor.dialog.footerToolbar.addButton.element);
 
-  await t.expect(
-    await takeScreenshot('editor-after-click-add-button-and-validation.png', htmlEditor.content),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'editor-after-click-add-button-and-validation.png', { element: htmlEditor.content });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -143,5 +136,5 @@ test('Image should be validated and inserted from device', async (t) => {
       },
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });

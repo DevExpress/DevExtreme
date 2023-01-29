@@ -798,10 +798,10 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
   };
   const getWindowScrollPosition = ClientFunction(() => (window as any).scrollY);
 
-  let visibleRows = await dataGrid.apiGetVisibleRows();
-
   await t
     .resizeWindow(800, 800);
+
+  let visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
   await t
@@ -931,6 +931,7 @@ test('The data should display correctly after changing the dataSource and focuse
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   height: 250,
+  width: 200,
   keyExpr: 'id',
   dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
   columnWidth: 100,
@@ -1098,8 +1099,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
   });
 });
 
-// TODO: this scenario works incorrect for renovated scrollable
-test.skip('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
@@ -1140,11 +1140,6 @@ test.skip('New virtual mode. Navigation to the last row if new row is added (T10
 }));
 
 [false, true].forEach((useNative) => {
-  if (!useNative) {
-    // TODO: this scenario works incorrect for renovated scrollable
-    return;
-  }
-
   test(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
