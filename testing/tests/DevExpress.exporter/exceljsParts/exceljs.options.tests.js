@@ -42,6 +42,17 @@ const ExcelJSOptionTests = {
                 }
             });
 
+            QUnit.test('encodeExecutableContent', function(assert) {
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).encodeExecutableContent, false, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: undefined }).encodeExecutableContent, false, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: null }).encodeExecutableContent, false, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: false }).encodeExecutableContent, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: true }).encodeExecutableContent, true, 'true');
+            });
+
             QUnit.test('loadPanel', function(assert) {
                 const component = getComponent();
                 const defaultLoadPanel = { enabled: true };

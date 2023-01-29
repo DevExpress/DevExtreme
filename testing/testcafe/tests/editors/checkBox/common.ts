@@ -1,43 +1,49 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../../navigation/helpers/domUtils';
-import { changeTheme } from '../../../helpers/changeTheme';
+import {
+  appendElementTo,
+  insertStylesheetRulesToPage, setStyleAttribute,
+} from '../../../helpers/domUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture`CheckBox`
+const CHECKBOX_CLASS = 'dx-checkbox';
+
+fixture.disablePageReloads`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
-const themes = ['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'];
+[false, true].forEach((isColumnCountStyle) => {
+  test(`Render ${!isColumnCountStyle ? 'default' : 'with column-count style on container'}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-themes.forEach((theme) => {
-  [true, false].forEach((isColumnCountStyle) => {
-    test(`Render ${!isColumnCountStyle ? 'default' : 'with column-count style on container'}, theme=${theme}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `Checkbox_states${isColumnCountStyle ? '_with_column_count_style' : ''},theme=${theme.replace(/\./g, '-')}.png`, '#container')).ok();
-    }).before(async () => {
-      await changeTheme(theme);
+    await testScreenshot(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, { element: '#container', shouldTestInCompact: true });
 
-      await setAttribute('#container', 'style', `width: 300px; ${isColumnCountStyle ? 'column-count: 2' : ''}`);
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), `padding: 5px; width: 300px; height: 200px; ${isColumnCountStyle ? 'column-count: 2' : ''}`);
 
-      await appendElementTo('#container', 'div', 'checked', { display: 'block' });
-      await createWidget('dxCheckBox', { value: true, text: 'checked' }, false, '#checked');
+    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
-      await appendElementTo('#container', 'div', 'unchecked', { display: 'block' });
-      await createWidget('dxCheckBox', { value: false, text: 'unchecked' }, false, '#unchecked');
+    await appendElementTo('#container', 'div', 'checked');
+    await createWidget('dxCheckBox', { value: true, text: 'checked' }, '#checked');
 
-      await appendElementTo('#container', 'div', 'indeterminate', { display: 'block' });
-      await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate' }, false, '#indeterminate');
+    await appendElementTo('#container', 'div', 'unchecked');
+    await createWidget('dxCheckBox', { value: false, text: 'unchecked' }, '#unchecked');
 
-      // rtl
-      await appendElementTo('#container', 'div', 'checkedRTL', { display: 'block' });
-      await createWidget('dxCheckBox', { value: true, text: 'checked', rtlEnabled: true }, false, '#checkedRTL');
+    await appendElementTo('#container', 'div', 'indeterminate');
+    await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate' }, '#indeterminate');
 
-      await appendElementTo('#container', 'div', 'uncheckedRTL', { display: 'block' });
-      await createWidget('dxCheckBox', { value: false, text: 'unchecked', rtlEnabled: true }, false, '#uncheckedRTL');
+    // rtl
+    await appendElementTo('#container', 'div', 'checkedRTL');
+    await createWidget('dxCheckBox', { value: true, text: 'checked', rtlEnabled: true }, '#checkedRTL');
 
-      await appendElementTo('#container', 'div', 'indeterminateRTL', { display: 'block' });
-      await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, false, '#indeterminateRTL');
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
+    await appendElementTo('#container', 'div', 'uncheckedRTL');
+    await createWidget('dxCheckBox', { value: false, text: 'unchecked', rtlEnabled: true }, '#uncheckedRTL');
+
+    await appendElementTo('#container', 'div', 'indeterminateRTL');
+    await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, '#indeterminateRTL');
   });
 });

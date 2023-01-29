@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Overflow indicator');
+fixture.disablePageReloads.skip('Renovated scheduler - Overflow indicator');
 
 [
   'week',

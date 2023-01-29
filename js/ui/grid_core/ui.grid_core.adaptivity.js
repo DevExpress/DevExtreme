@@ -73,6 +73,13 @@ function adaptiveCellTemplate(container, options) {
     }
 }
 
+function focusCellHandler(e) {
+    const $nextCell = e.data?.$nextCell;
+
+    eventsEngine.off($nextCell, 'focus', focusCellHandler);
+    eventsEngine.trigger($nextCell, 'dxclick');
+}
+
 const AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
         const editMode = this._getEditMode();
@@ -91,7 +98,9 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const that = this;
         const column = item.column;
         const focusAction = that.createAction(function() {
-            eventsEngine.trigger($container, clickEventName);
+            if(that._editingController.isEditing()) {
+                eventsEngine.trigger($container, clickEventName);
+            }
         });
         const rowData = cellOptions.row.data;
         const value = column.calculateCellValue(rowData);
@@ -558,6 +567,10 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
+    getAdaptiveDetailItems: function() {
+        return this._$itemContents;
+    },
+
     getItemContentByColumnIndex: function(visibleColumnIndex) {
         let $itemContent;
 
@@ -810,6 +823,18 @@ export const adaptivityModule = {
 
                     if(options.row.rowType !== ADAPTIVE_ROW_TYPE && options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
                         $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    }
+                },
+
+                getCell: function(cellPosition, rows) {
+                    const item = this._dataController.items()[cellPosition?.rowIndex];
+
+                    if(item?.rowType === ADAPTIVE_ROW_TYPE) {
+                        const $adaptiveDetailItems = this._adaptiveColumnsController.getAdaptiveDetailItems();
+
+                        return this.callBase(cellPosition, rows, $adaptiveDetailItems);
+                    } else {
+                        return this.callBase.apply(this, arguments);
                     }
                 },
 
@@ -1145,11 +1170,15 @@ export const adaptivityModule = {
                 }
             },
             editorFactory: {
+                _needHideBorder: function($element) {
+                    return this.callBase($element) || ($element?.hasClass('dx-field-item-content') && $element?.find('.dx-checkbox').length);
+                },
+
                 _getFocusCellSelector: function() {
                     return this.callBase() + ', .dx-adaptive-detail-row .dx-field-item > .dx-field-item-content';
                 },
 
-                _getTooltipsSelector: function() {
+                _getRevertTooltipsSelector: function() {
                     return this.callBase() + ', .dx-field-item-content .' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
                 }
             },
@@ -1165,36 +1194,22 @@ export const adaptivityModule = {
                         && !$cell.hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
                 },
 
-                _processNextCellInMasterDetail: function($nextCell) {
+                _processNextCellInMasterDetail: function($nextCell, $cell) {
                     this.callBase($nextCell);
 
                     const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
+                    const isEditing = this._editingController.isEditing();
 
-                    if(!this._isInsideEditForm($nextCell) && $nextCell && isCellOrBatchMode) {
-                        const focusHandler = function() {
-                            eventsEngine.off($nextCell, 'focus', focusHandler);
-                            eventsEngine.trigger($nextCell, 'dxclick');
-                        };
-                        eventsEngine.on($nextCell, 'focus', focusHandler);
+                    if(isEditing && $nextCell && isCellOrBatchMode && !this._isInsideEditForm($nextCell)) {
+                        eventsEngine.off($nextCell, 'focus', focusCellHandler);
+                        eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
+
+                        eventsEngine.trigger($cell, 'focus');
                     }
                 },
 
-                _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
-                    const result = this.callBase(eventTarget, direction);
-                    const $currentCell = this._getFocusedCell();
-                    const $row = $currentCell && $currentCell.parent();
-
-                    if(!result && $row && $row.length) {
-                        const $dataCells = getDataCellElements($row);
-                        const $targetCell = direction === 'next' ? $dataCells.last() : $dataCells.first();
-                        const rowIndex = $row.get(0).rowIndex;
-                        const adaptiveController = this._adaptiveController;
-                        const key = this._dataController.getKeyByRowIndex(direction === 'next' ? rowIndex : rowIndex - 1);
-                        const isCellElementsEquals = $currentCell && $targetCell && $currentCell.get(0) === $targetCell.get(0);
-
-                        return adaptiveController.isAdaptiveDetailRowExpanded(key) && isCellElementsEquals;
-                    }
-                    return result;
+                _isCellElement: function($cell) {
+                    return this.callBase.apply(this, arguments) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
                 },
 
                 init: function() {

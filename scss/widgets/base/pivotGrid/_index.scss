@@ -479,7 +479,8 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-treeview-item .dx-icon {
-    margin-bottom: 1px;
+    vertical-align: middle;
+    margin: 0 5px 1px 0;
 
     @include dx-icon-sizing(16px);
   }

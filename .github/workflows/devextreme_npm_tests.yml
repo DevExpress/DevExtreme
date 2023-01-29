@@ -122,15 +122,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/compared-screenshots/**/*
-        if-no-files-found: ignore
-
-    - name: Copy failed test artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: failed-tests
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts/failedtests/**/*
+        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
   test_angular_wrappers:
@@ -289,7 +281,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '15'
+        node-version: '16'
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true

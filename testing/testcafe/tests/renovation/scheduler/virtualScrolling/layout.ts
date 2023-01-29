@@ -27,7 +27,7 @@ const scrollTo = (scrollableContent, position) => ClientFunction(() => {
 })();
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler: Virtual Scrolling');
+fixture.disablePageReloads.skip('Scheduler: Virtual Scrolling');
 
 const createScheduler = async (
   platform: PlatformType,
@@ -44,7 +44,7 @@ const createScheduler = async (
     startDayHour: 0,
     endDayHour: 3,
     ...additionalProps,
-  }, true);
+  });
 };
 
 test('Virtual scrolling layout in scheduler views', async (t, { platform, screenshotComparerOptions }) => {

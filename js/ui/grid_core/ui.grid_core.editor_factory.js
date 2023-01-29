@@ -26,7 +26,7 @@ const DX_HIDDEN = 'dx-hidden';
 const EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
         const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
-        const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus`;
+        const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus, .dx-adaptive-item-text:focus`;
 
         // T181706
         const $focusedElement = $dataGridElement.find(focusedElementSelector);
@@ -40,28 +40,35 @@ const EditorFactory = modules.ViewController.inherit({
 
     _updateFocusCore: function() {
         const $dataGridElement = this.component && this.component.$element();
-        let $focusCell;
-        let hideBorders;
 
         if($dataGridElement) {
             // this selector is specific to IE
             let $focus = this._getFocusedElement($dataGridElement);
 
             if($focus && $focus.length) {
+                let isHideBorder;
+
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
-                    $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
-                    hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
-                    $focus = $focusCell;
+                    const $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
+
+                    if($focusCell.get(0) !== $focus.get(0)) {
+                        isHideBorder = this._needHideBorder($focusCell);
+                        $focus = $focusCell;
+                    }
                 }
 
                 if($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
-                    this.focus($focus, hideBorders);
+                    this.focus($focus, isHideBorder);
                     return;
                 }
             }
         }
 
         this.loseFocus();
+    },
+
+    _needHideBorder($element) {
+        return $element.hasClass(EDITOR_INLINE_BLOCK);
     },
 
     _updateFocus: function(e) {
@@ -101,7 +108,7 @@ const EditorFactory = modules.ViewController.inherit({
         return ['focused'];
     },
 
-    focus: function($element, hideBorder) {
+    focus: function($element, isHideBorder) {
         const that = this;
 
         if($element === undefined) {
@@ -118,7 +125,7 @@ const EditorFactory = modules.ViewController.inherit({
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
 
-                that.renderFocusOverlay($element, hideBorder);
+                that.renderFocusOverlay($element, isHideBorder);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
                 that.focused.fire($element);
@@ -131,7 +138,7 @@ const EditorFactory = modules.ViewController.inherit({
         this.focus($focus);
     },
 
-    renderFocusOverlay: function($element, hideBorder) {
+    renderFocusOverlay: function($element, isHideBorder) {
         const that = this;
 
         if(!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
@@ -142,7 +149,7 @@ const EditorFactory = modules.ViewController.inherit({
             that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
         }
 
-        if(hideBorder) {
+        if(isHideBorder) {
             that._$focusOverlay.addClass(DX_HIDDEN);
         } else if($element.length) {
             // align "right bottom" for Mozilla

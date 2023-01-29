@@ -1,43 +1,32 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`DateBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+fixture.disablePageReloads`DateBox_Label`
+  .page(url(__dirname, '../../container.html'));
 
-themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    test(`Label for dxDateBox ${theme} stylingMode=${stylingMode}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `label-date-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(300, 400);
-      await changeTheme(theme);
+stylingModes.forEach((stylingMode) => {
+  test(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      return createWidget('dxDateBox', {
-        label: 'label text',
-        stylingMode,
-        value: new Date(1900, 0, 1),
-      });
-    });
+    await testScreenshot(t, takeScreenshot, `Datebox label symbols with stylingMode=${stylingMode}.png`, { element: '#container' });
 
-    test(`Symbol parts in label should not be cropped in ${theme} with stylingMode=${stylingMode}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `label-symbols-stylingMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(300, 400);
-      await changeTheme(theme);
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await appendElementTo('#container', 'div', 'dateBox');
+    await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
 
-      return createWidget('dxDateBox', {
-        label: 'qwertyuiopasdfghjklzxcvbmn QWERTYUIOPLKJHGFDSAZXCVBNM 1234567890',
-        stylingMode,
-        value: new Date(1900, 0, 1),
-      });
-    });
+    return createWidget('dxDateBox', {
+      label: 'qwerty QWERTY 1234567890',
+      stylingMode,
+      value: new Date(1900, 0, 1),
+    }, '#dateBox');
   });
 });

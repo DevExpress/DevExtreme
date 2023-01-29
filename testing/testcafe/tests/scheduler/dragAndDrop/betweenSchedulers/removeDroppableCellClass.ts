@@ -69,14 +69,12 @@ METHODS_TO_CANCEL.forEach((methodName) => {
     await createWidget(
       'dxScheduler',
       getSchedulerOptions([TEST_APPOINTMENT], new Date(2021, 3, 26), methodName),
-      false,
       `#${FIRST_SCHEDULER_SELECTOR}`,
     );
 
     await createWidget(
       'dxScheduler',
       getSchedulerOptions([], new Date(2021, 4, 26), methodName),
-      false,
       `#${SECOND_SCHEDULER_SELECTOR}`,
     );
   });

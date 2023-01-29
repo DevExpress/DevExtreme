@@ -15,7 +15,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
     currentView: view,
     resources: resourcesValue,
     height: 600,
-  }, true);
+  });
 };
 
 const resources = [{

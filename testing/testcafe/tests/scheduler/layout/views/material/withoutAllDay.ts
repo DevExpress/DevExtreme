@@ -26,7 +26,7 @@ test('Week view without all-day panel should be rendered correctly', async (t) =
     views: ['week'],
     currentView: 'week',
     height: 500,
-  }, true);
+  });
 }).after(async () => {
   await changeTheme('generic.light');
 });

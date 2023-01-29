@@ -51,7 +51,7 @@ test('Appointment\'s dragging should be work properly, if on page placed two dxS
     currentDate: new Date(2021, 2, 29),
     startDayHour: 9,
     height: 400,
-  }, true);
+  });
 
   await createWidget('dxScheduler', {
     maxAppointmentsPerCell: 'unlimited',
@@ -69,5 +69,5 @@ test('Appointment\'s dragging should be work properly, if on page placed two dxS
     currentDate: new Date(2021, 2, 29),
     startDayHour: 9,
     height: 400,
-  }, true, '#otherContainer');
+  }, '#otherContainer');
 });

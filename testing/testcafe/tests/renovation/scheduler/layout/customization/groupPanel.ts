@@ -10,7 +10,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler: Layout Customization: Group Panel');
+fixture.disablePageReloads.skip('Scheduler: Layout Customization: Group Panel');
 
 const createScheduler = async (
   platform: PlatformType,
@@ -50,7 +50,7 @@ const createScheduler = async (
       label: 'Priority',
     }],
     ...additionalProps,
-  }, true);
+  });
 };
 
 const views = [{

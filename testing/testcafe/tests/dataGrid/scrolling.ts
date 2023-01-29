@@ -798,10 +798,10 @@ test('Rows are rendered properly when window content is scrolled (T1070388)', as
   };
   const getWindowScrollPosition = ClientFunction(() => (window as any).scrollY);
 
-  let visibleRows = await dataGrid.apiGetVisibleRows();
-
   await t
     .resizeWindow(800, 800);
+
+  let visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
   await t
@@ -931,6 +931,7 @@ test('The data should display correctly after changing the dataSource and focuse
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   height: 250,
+  width: 200,
   keyExpr: 'id',
   dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
   columnWidth: 100,

@@ -1,39 +1,43 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
+import {
+  appendElementTo,
+} from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-const stylingMods = ['outlined', 'underlined', 'filled'];
-const themes = ['generic.light', 'material.blue.light'];
+const stylingModes = ['outlined', 'underlined', 'filled'];
 
-fixture`NumberBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+fixture.disablePageReloads`NumberBox_Label`
+  .page(url(__dirname, '../../container.html'));
 
-themes.forEach((theme) => {
-  stylingMods.forEach((stylingMode) => {
-    test(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `label-number-box-styleMode=${stylingMode},theme=${theme.replace(/\./g, '-')}.png`)).ok();
-    }).before(async (t) => {
-      await t.resizeWindow(300, 400);
-      await changeTheme(theme);
+stylingModes.forEach((stylingMode) => {
+  safeSizeTest(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const componentOption = {
-        label: 'label text',
-        stylingMode,
-      };
+    await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`);
 
-      await createWidget('dxNumberBox', {
-        ...componentOption,
-        value: 'text',
-      });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [300, 400]).before(async () => {
+    const componentOption = {
+      label: 'label text',
+      stylingMode,
+    };
 
-      return createWidget('dxNumberBox', {
-        ...componentOption,
-        value: 123,
-      }, true, '#otherContainer');
-    });
+    await appendElementTo('#container', 'div', 'numberBox1', { });
+    await appendElementTo('#container', 'div', 'numberBox2', { });
+
+    await createWidget('dxNumberBox', {
+      ...componentOption,
+      value: 'text',
+    }, '#numberBox1');
+
+    await createWidget('dxNumberBox', {
+      ...componentOption,
+      value: 123,
+    }, '#numberBox2');
   });
 });

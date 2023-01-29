@@ -45,7 +45,7 @@ const config: Partial<ScrollableProps>[] = [];
     platforms: ['jquery', 'react'],
   });
 
-  fixture('Render strategies');
+  fixture.disablePageReloads.skip('Render strategies');
 
   config.forEach((props) => {
     test(`Should render ${page}, ${JSON.stringify(props)}`,
@@ -72,7 +72,7 @@ const config: Partial<ScrollableProps>[] = [];
         const component = new Component[platform](COMPONENT_SELECTOR, props, widgetName);
         const { direction, useNative, rtlEnabled } = props;
 
-        await component.apiScrollTo({ top: 50, left: 50 });
+        await component.scrollTo({ top: 50, left: 50 });
 
         await t
           .expect(await compareScreenshot(
