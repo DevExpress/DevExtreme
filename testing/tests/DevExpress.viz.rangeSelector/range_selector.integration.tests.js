@@ -136,6 +136,37 @@ QUnit.module('Value', function(hook) {
         assert.deepEqual(spy.getCall(0).args[0].target.text, 'The range you are trying to set is invalid');
     });
 
+    QUnit.test('rangeSelector should not raise an error when axis type is changed after dataSource load (T1136921)', function(assert) {
+        const onIncidentOccurred = sinon.spy();
+        const done = assert.async();
+        const dataSource = new DataSource({
+            load() {
+                const d = new $.Deferred();
+
+                setTimeout(() => {
+                    d.resolve([{ arg: '2013-10-19', val: 1 }, { arg: '2016-10-19', val: 1 }]);
+
+                    assert.strictEqual(onIncidentOccurred.callCount, 0, 'no errors with async dataSource');
+                    done();
+                }, 10);
+
+                return d.promise();
+            }
+        });
+
+        this.rangeSelector.option({
+            dataSource,
+            onIncidentOccurred,
+            chart: {
+                series: {},
+            },
+            scale: {
+                valueType: 'datetime',
+            },
+            value: ['2015-10-19', '2014-10-19']
+        });
+    });
+
     QUnit.test('parse custom value option, with dataSource, valid value', function(assert) {
         const spy = sinon.spy();
         this.rangeSelector.option({

@@ -8,7 +8,7 @@ const test = multiPlatformTest({
   platforms: ['jquery'],
 });
 
-fixture.skip('Layout:Templates:appointmentTooltipTemplate'); // TODO unskip after fix tooltip
+fixture.disablePageReloads.skip('Layout:Templates:appointmentTooltipTemplate'); // TODO unskip after fix tooltip
 
 test('appointmentTooltipTemplate layout should be rendered right', async (t, { screenshotComparerOptions }) => {
   const scheduler = new Scheduler('#container');
@@ -49,5 +49,5 @@ test('appointmentTooltipTemplate layout should be rendered right', async (t, { s
       return result;
     }),
     height: 600,
-  }, true);
+  });
 });

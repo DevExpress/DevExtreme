@@ -15,7 +15,7 @@ const config = {
     wrapActionsBeforeExecute: true,
     useLegacyStoreResult: false,
     /**
-    * @name globalConfig.useJQuery
+    * @name GlobalConfig.useJQuery
     * @type boolean
     * @hidden
     */

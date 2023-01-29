@@ -52,5 +52,5 @@ test('Dragging should be work right in case dxScheduler placed in container with
     startDayHour: 9,
     height: 600,
     width: 800,
-  }, false, '#scheduler');
+  }, '#scheduler');
 });

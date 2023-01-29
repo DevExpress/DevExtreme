@@ -9,7 +9,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Layout:Templates:CellTemplate');
+fixture.disablePageReloads.skip('Layout:Templates:CellTemplate');
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'timelineMonth'].forEach((currentView) => {
   test(`dataCellTemplate and dateCellTemplate layout should be rendered right in '${currentView}'`, async (t, { screenshotComparerOptions }) => {

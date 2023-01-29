@@ -9,7 +9,7 @@ const test = multiPlatformTest({
 });
 
 // TODO resolve material theme container
-fixture.skip('Scheduler: Adaptive material theme layout');
+fixture.disablePageReloads.skip('Scheduler: Adaptive material theme layout');
 
 test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
@@ -80,5 +80,4 @@ test('The toolbar should not display if the config is empty', async (t, { platfo
     height: 580,
     toolbar: [],
   },
-  true,
 ));

@@ -7,7 +7,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler header - View switcher');
+fixture.disablePageReloads.skip('Scheduler header - View switcher');
 
 test('it should correctly switch a differently typed views (T1080992)', async (t) => {
   const scheduler = new Scheduler('#container');

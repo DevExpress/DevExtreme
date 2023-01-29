@@ -15,6 +15,8 @@ const removeDebug = lazyPipe().pipe(function() {
 
 function saveLicenseComments(node, comment) {
     return comment.value.charAt(0) === '!'
+        // Workaround for rrule, on v2.7.1 the space char was added to the license header https://github.com/jakubroztocil/rrule/commit/803c03b85ac074d92d443306805a68e104069c02#diff-a2a171449d862fe29692ce031981047d7ab755ae7f84c707aef80701b3ea0c80R1
+        || comment.value.startsWith(' !')
         || comment.value.indexOf(context.EULA_URL) > -1;
 }
 

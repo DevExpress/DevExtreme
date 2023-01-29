@@ -8,7 +8,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Layout:Appointments:AllDay');
+fixture.disablePageReloads.skip('Layout:Appointments:AllDay');
 
 test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\' (T1021963)', async (t, { screenshotComparerOptions }) => {
   const { workSpace, toolbar } = new Scheduler('#container');
@@ -45,7 +45,7 @@ test('Long all day appointment should be render, if him ended on next view day i
     startDayHour: 9,
     width: 400,
     height: 600,
-  }, true);
+  });
 });
 
 test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t, { screenshotComparerOptions }) => {
@@ -79,5 +79,5 @@ test('Long all day appointment should be render, if him ended on next view day i
     startDayHour: 9,
     width: 600,
     height: 600,
-  }, true);
+  });
 });

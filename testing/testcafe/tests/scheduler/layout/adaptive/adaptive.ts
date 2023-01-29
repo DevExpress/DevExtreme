@@ -24,7 +24,7 @@ const createScheduler = async (
     currentDate: new Date(2020, 6, 15),
     height: 600,
     ...additionalProps,
-  }, true);
+  });
 };
 
 ['generic.light', 'material.blue.light'].forEach((theme) => {

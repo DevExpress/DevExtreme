@@ -4241,8 +4241,8 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Tooltips selector for the revert button', function(assert) {
         setupDataGrid(this);
-        const expected = '.dx-editor-cell .dx-datagrid-revert-tooltip, .dx-editor-cell .dx-datagrid-invalid-message, .dx-cell-modified .dx-datagrid-invalid-message, .dx-field-item-content .dx-datagrid-revert-tooltip';
-        assert.equal(this.editorFactoryController._getTooltipsSelector(), expected, 'tooltips selector');
+        const expected = '.dx-editor-cell .dx-datagrid-revert-tooltip, .dx-field-item-content .dx-datagrid-revert-tooltip';
+        assert.equal(this.editorFactoryController._getRevertTooltipsSelector(), expected, 'tooltips selector');
     });
 
     QUnit.testInActiveWindow('Cell edit mode. Validation works only for editable form item with a validation rules', function(assert) {
@@ -4561,9 +4561,10 @@ QUnit.module('Keyboard navigation', {
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 0 });
     });
 
     // T821699
@@ -4647,9 +4648,10 @@ QUnit.module('Keyboard navigation', {
         e.key = 'Tab';
         e.shiftKey = true;
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
-        assert.equal(this.getActiveInputElement().val(), 'Super');
+        assert.equal(this.getActiveInputElement().val(), 'Full Name');
     });
 
     QUnit.testInActiveWindow('Skip editing via \'tab\' key before entry to adaptive detail form', function(assert) {
@@ -4669,6 +4671,6 @@ QUnit.module('Keyboard navigation', {
         this.getActiveInputElement().trigger(e);
 
         // assert
-        assert.equal(this.getActiveInputElement().val(), 'Blablablablablablablablablabla');
+        assert.equal(this.getActiveInputElement().val(), 'Psy');
     });
 });

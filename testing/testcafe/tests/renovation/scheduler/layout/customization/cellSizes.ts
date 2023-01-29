@@ -10,7 +10,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler: Layout Customization: Cell Sizes');
+fixture.disablePageReloads.skip('Scheduler: Layout Customization: Cell Sizes');
 
 const createScheduler = async (
   platform: PlatformType,
@@ -55,7 +55,7 @@ const createScheduler = async (
       label: 'Priority',
     }],
     ...additionalProps,
-  }, true);
+  });
 };
 
 const views = [{
@@ -90,7 +90,7 @@ test('Cell sizes customization should work', async (t, { platform, screenshotCom
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (_, { platform }) => {
-  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }');
 
   await createScheduler(platform, {
     views,
@@ -110,7 +110,7 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (_, { platform }) => {
-  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }');
 
   await createScheduler(platform, {
     views,

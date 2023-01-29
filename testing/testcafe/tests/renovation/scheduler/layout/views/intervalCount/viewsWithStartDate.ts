@@ -7,7 +7,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture.skip('Layout: Views: IntervalCount with StartDate'); // TODO unskip after editing implementation
+fixture.disablePageReloads.skip('Layout: Views: IntervalCount with StartDate'); // TODO unskip after editing implementation
 
 [{
   view: 'timelineDay',

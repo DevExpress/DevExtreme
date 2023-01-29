@@ -15,6 +15,18 @@ function createElement(
   return element;
 }
 
+export const setAttribute = ClientFunction((selector, attribute, value) => {
+  const element = document.querySelector(selector);
+
+  element.setAttribute(attribute, value);
+});
+
+export const removeAttribute = ClientFunction((selector, attribute) => {
+  const element = document.querySelector(selector);
+
+  element.removeAttribute(attribute);
+});
+
 export const getStyleAttribute = ClientFunction((selector) => {
   const element = selector();
   return element.getAttribute('style');
@@ -27,6 +39,24 @@ export const setStyleAttribute = ClientFunction((selector, styleValue) => {
   const updatedStyles = `${styles} ${styleValue}`;
 
   element.setAttribute('style', updatedStyles);
+});
+
+export const setClassAttribute = ClientFunction((selector, styleValue) => {
+  const element = selector();
+
+  const styles = element.getAttribute('class') || '';
+  const updatedClasses = `${styles} ${styleValue}`;
+
+  element.setAttribute('class', updatedClasses);
+});
+
+export const removeClassAttribute = ClientFunction((selector, styleValue) => {
+  const element = selector();
+
+  const styles = element.getAttribute('class') || '';
+  const updatedClasses = `${styles.replace(styleValue, '')}`;
+
+  element.setAttribute('class', updatedClasses);
 });
 
 export const insertStylesheetRulesToPage = ClientFunction((

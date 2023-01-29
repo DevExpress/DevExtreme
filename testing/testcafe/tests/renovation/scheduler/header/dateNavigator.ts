@@ -7,7 +7,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Date navigator');
+fixture.disablePageReloads.skip('Date navigator');
 
 test('dateNavigator buttons should not be selected after clicking', async (t) => {
   const { toolbar } = new Scheduler('#container');

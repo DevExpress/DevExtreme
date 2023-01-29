@@ -6,9 +6,9 @@ export const removeDifferentElements = (
   $children: dxElementWrapper,
   $newChildren: dxElementWrapper,
 ): void => {
-  each($newChildren, (__: never, element: Element) => {
+  each($newChildren, (__: unknown, element: Element) => {
     let hasComponent = false;
-    each($children, (_: never, oldElement: Element) => {
+    each($children, (_: unknown, oldElement: Element) => {
       if (element === oldElement) {
         hasComponent = true;
       }

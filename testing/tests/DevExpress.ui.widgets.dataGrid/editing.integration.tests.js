@@ -3292,6 +3292,56 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
+    // T1131810, T1102203
+    // Revert button should not rerendered on focus, because it makes cell unfocusable on iOS devices
+    QUnit.test('Cell - Revert button should not rerendered on focus', function(assert) {
+        try {
+            const lookupDataSource = [{ value: 'first' }, { value: 'second' }, { value: 'third' }, { value: 'fourh' }, { value: 'fifth' }];
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'first' },
+                ],
+                keyExpr: 'id',
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true,
+                    allowAdding: true,
+                    allowDeleting: true,
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    lookup: {
+                        dataSource: lookupDataSource,
+                        displayExpr: 'value',
+                        valueExpr: 'value',
+                    },
+                }]
+            });
+            this.clock.tick();
+
+            const getLookupCell = () => dataGrid.getCellElement(0, 1);
+
+            const selectLookupValue = (lookupValueIndex) => {
+                $(getLookupCell()).trigger('dxclick');
+                this.clock.tick();
+                $(getLookupCell()).find('.dx-dropdowneditor-button').trigger('dxclick');
+                this.clock.tick();
+                $('.dx-scrollable-wrapper .dx-scrollview-content .dx-item-content').eq(lookupValueIndex).trigger('dxclick');
+                this.clock.tick();
+            };
+
+            // act
+            selectLookupValue(1);
+            const revertButton = $('.dx-revert-button').get(0);
+            selectLookupValue(2);
+
+            // assert
+            assert.strictEqual($('.dx-revert-button').get(0), revertButton, 'revert button should not be rerendered');
+        } catch(e) {
+            assert.ok(false, 'error occured');
+        }
+    });
+
     ['Cell', 'Batch'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - cell value should be validated when a value in a neighboring cell is modified (repaintChangesOnly enabled) (T1026857)`, function(assert) {
             const data = [
@@ -3958,6 +4008,38 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const $popupContent = dataGrid.getController('editing').getPopupContent() || [];
 
         assert.equal($popupContent.length, 1, 'There is editing popup');
+    });
+
+    // T1136955
+    QUnit.test('Editing lookups with lookup optimization in form should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ value: 1, displayValue: 'text1' }],
+            columns: [{
+                dataField: 'value',
+                calculateDisplayValue: 'displayValue',
+                lookup: {
+                    dataSource: [{ id: 1, text: 'text1' }, { id: 2, text: 'text2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'text',
+                },
+            }],
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        $(dataGrid.getCellElement(0, 0)).find('.dx-selectbox').dxSelectBox('option', 'value', 2);
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        const $cell = $(dataGrid.getCellElement(0, 0));
+        assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
     });
 });
 

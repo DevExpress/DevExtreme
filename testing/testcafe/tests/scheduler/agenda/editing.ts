@@ -36,7 +36,7 @@ test('It should be possible to delete an appointment', async (t) => {
     currentView: 'agenda',
     currentDate: new Date(2021, 1, 1),
     height: 600,
-  }, true);
+  });
 });
 
 test('It should be possible to change the data source of agenda resources', async (t) => {

@@ -666,11 +666,11 @@ declare module DevExpress {
   /**
    * [descr:config()]
    */
-  export function config(): globalConfig;
+  export function config(): DevExpress.common.GlobalConfig;
   /**
    * [descr:config(config)]
    */
-  export function config(config: globalConfig): void;
+  export function config(config: DevExpress.common.GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -997,94 +997,6 @@ declare module DevExpress {
      */
     stop(element: Element, jumpToEnd: boolean): void;
   };
-  /**
-   * [descr:globalConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface globalConfig {
-    /**
-     * [descr:globalConfig.decimalSeparator]
-     * @deprecated [depNote:globalConfig.decimalSeparator]
-     */
-    decimalSeparator?: string;
-    /**
-     * [descr:globalConfig.defaultCurrency]
-     */
-    defaultCurrency?: string;
-    /**
-     * [descr:globalConfig.defaultUseCurrencyAccountingStyle]
-     */
-    defaultUseCurrencyAccountingStyle?: boolean;
-    /**
-     * [descr:globalConfig.editorStylingMode]
-     */
-    editorStylingMode?: DevExpress.common.EditorStyle;
-    /**
-     * [descr:globalConfig.floatingActionButtonConfig]
-     */
-    floatingActionButtonConfig?: {
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.closeIcon]
-       */
-      closeIcon?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.direction]
-       */
-      direction?: DevExpress.core.FloatingActionButtonDirection;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.icon]
-       */
-      icon?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.label]
-       */
-      label?: string;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
-       */
-      maxSpeedDialActionCount?: number;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.position]
-       */
-      position?:
-        | DevExpress.common.PositionAlignment
-        | PositionConfig
-        | Function;
-      /**
-       * [descr:globalConfig.floatingActionButtonConfig.shading]
-       */
-      shading?: boolean;
-    };
-    /**
-     * [descr:globalConfig.forceIsoDateParsing]
-     */
-    forceIsoDateParsing?: boolean;
-    /**
-     * [descr:globalConfig.oDataFilterToLower]
-     */
-    oDataFilterToLower?: boolean;
-    /**
-     * [descr:globalConfig.rtlEnabled]
-     */
-    rtlEnabled?: boolean;
-    /**
-     * [descr:globalConfig.serverDecimalSeparator]
-     */
-    serverDecimalSeparator?: string;
-    /**
-     * [descr:globalConfig.thousandsSeparator]
-     * @deprecated [depNote:globalConfig.thousandsSeparator]
-     */
-    thousandsSeparator?: string;
-    /**
-     * [descr:globalConfig.useLegacyStoreResult]
-     */
-    useLegacyStoreResult?: boolean;
-    /**
-     * [descr:globalConfig.useLegacyVisibleIndex]
-     */
-    useLegacyVisibleIndex?: boolean;
-  }
   /**
    * [descr:hideTopOverlay()]
    */
@@ -1528,6 +1440,90 @@ declare module DevExpress.common {
     | 'minute'
     | 'second'
     | 'shortDateShortTime';
+  /**
+   * [descr:GlobalConfig]
+   */
+  export type GlobalConfig = {
+    /**
+     * [descr:GlobalConfig.decimalSeparator]
+     * @deprecated [depNote:GlobalConfig.decimalSeparator]
+     */
+    decimalSeparator?: string;
+    /**
+     * [descr:GlobalConfig.defaultCurrency]
+     */
+    defaultCurrency?: string;
+    /**
+     * [descr:GlobalConfig.defaultUseCurrencyAccountingStyle]
+     */
+    defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * [descr:GlobalConfig.editorStylingMode]
+     */
+    editorStylingMode?: EditorStyle;
+    /**
+     * [descr:GlobalConfig.floatingActionButtonConfig]
+     */
+    floatingActionButtonConfig?: {
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.closeIcon]
+       */
+      closeIcon?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.direction]
+       */
+      direction?: DevExpress.core.FloatingActionButtonDirection;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.icon]
+       */
+      icon?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.label]
+       */
+      label?: string;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.maxSpeedDialActionCount]
+       */
+      maxSpeedDialActionCount?: number;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.position]
+       */
+      position?: PositionAlignment | PositionConfig | Function;
+      /**
+       * [descr:GlobalConfig.floatingActionButtonConfig.shading]
+       */
+      shading?: boolean;
+    };
+    /**
+     * [descr:GlobalConfig.forceIsoDateParsing]
+     */
+    forceIsoDateParsing?: boolean;
+    /**
+     * [descr:GlobalConfig.oDataFilterToLower]
+     */
+    oDataFilterToLower?: boolean;
+    /**
+     * [descr:GlobalConfig.rtlEnabled]
+     */
+    rtlEnabled?: boolean;
+    /**
+     * [descr:GlobalConfig.serverDecimalSeparator]
+     */
+    serverDecimalSeparator?: string;
+    /**
+     * [descr:GlobalConfig.thousandsSeparator]
+     * @deprecated [depNote:GlobalConfig.thousandsSeparator]
+     */
+    thousandsSeparator?: string;
+    /**
+     * [descr:GlobalConfig.useLegacyStoreResult]
+     */
+    useLegacyStoreResult?: boolean;
+    /**
+     * [descr:GlobalConfig.useLegacyVisibleIndex]
+     */
+    useLegacyVisibleIndex?: boolean;
+  };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
   export type LabelMode = 'static' | 'floating' | 'hidden';
@@ -6253,6 +6249,10 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportBaseProps.loadPanel]
      */
     loadPanel?: ExportLoadPanel;
+    /**
+     * [descr:ExcelExportBaseProps.encodeExecutableContent]
+     */
+    encodeExecutableContent?: boolean;
   }
   /**
    * [descr:ExcelExportDataGridProps]

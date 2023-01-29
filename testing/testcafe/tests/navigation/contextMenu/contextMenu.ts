@@ -1,15 +1,14 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
-import { appendElementTo } from '../helpers/domUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture`ContextMenu`
+fixture.disablePageReloads`ContextMenu`
   .page(url(__dirname, '../../container.html'));
 
-// T755681
-test('Context menu should be shown in the same position when item was added in runtime', async (t) => {
-  const contextMenu = new ContextMenu('#container');
+test('Context menu should be shown in the same position when item was added in runtime (T755681)', async (t) => {
+  const contextMenu = new ContextMenu('#contextMenu');
   const target = Selector('#menuTarget');
 
   await t
@@ -26,7 +25,8 @@ test('Context menu should be shown in the same position when item was added in r
     .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
 }).before(async () => {
   const menuTargetID = 'menuTarget';
-  await appendElementTo('body', 'button', menuTargetID, {
+  await appendElementTo('#container', 'div', 'contextMenu');
+  await appendElementTo('#container', 'button', menuTargetID, {
     width: '150px', height: '50px', backgroundColor: 'steelblue',
   });
 
@@ -44,5 +44,9 @@ test('Context menu should be shown in the same position when item was added in r
         }, 1000);
       }
     },
-  });
+  }, '#contextMenu');
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).isItemAdded;
+  })();
 });

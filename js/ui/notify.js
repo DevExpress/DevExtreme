@@ -1,5 +1,4 @@
 import $ from '../core/renderer';
-import Action from '../core/action';
 import { value as viewPort } from '../core/utils/view_port';
 import { extend } from '../core/utils/extend';
 import { isPlainObject, isString } from '../core/utils/type';
@@ -14,7 +13,7 @@ function notify(message, /* optional */ typeOrStack, displayTime) {
     const options = isPlainObject(message) ? message : { message: message };
     const stack = isPlainObject(typeOrStack) ? typeOrStack : undefined;
     const type = isPlainObject(typeOrStack) ? undefined : typeOrStack;
-    const { onHidden: userHiddenAction } = options;
+    const { onHidden: userOnHidden } = options;
 
     if(stack?.position) {
         const { position } = stack;
@@ -23,7 +22,7 @@ function notify(message, /* optional */ typeOrStack, displayTime) {
             ? position
             : `${position.top}-${position.left}-${position.bottom}-${position.right}`;
 
-        const { onShowing: userShowingAction } = options;
+        const { onShowing: userOnShowing } = options;
         const $container = getStackContainer(containerKey);
         setContainerClasses($container, direction);
 
@@ -31,10 +30,7 @@ function notify(message, /* optional */ typeOrStack, displayTime) {
             container: $container,
             onShowing: function(args) {
                 setContainerStyles($container, direction, position);
-
-                new Action(userShowingAction, {
-                    context: args.model
-                }).execute(arguments);
+                userOnShowing?.(args);
             }
         });
     }
@@ -44,10 +40,7 @@ function notify(message, /* optional */ typeOrStack, displayTime) {
         displayTime: displayTime,
         onHidden: function(args) {
             $(args.element).remove();
-
-            new Action(userHiddenAction, {
-                context: args.model
-            }).execute(arguments);
+            userOnHidden?.(args);
         }
     });
 

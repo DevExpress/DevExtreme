@@ -8,7 +8,7 @@ const test = multiPlatformTest({
 });
 
 // NOTE RENOVATION TESTCAFE: All these test scenarios have analogs in jQuery's testcafe tests.
-fixture.skip('Scheduler: Layout Views: Timeline Month');
+fixture.disablePageReloads.skip('Scheduler: Layout Views: Timeline Month');
 
 test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t, { platform, screenshotComparerOptions }) => {
   const scheduler = new Scheduler('#container');
@@ -32,5 +32,5 @@ test('Header cells should be aligned with date-table cells in timeline-month whe
     height: 600,
     views: ['timelineMonth'],
     crossScrollingEnabled: true,
-  }, true);
+  });
 });
