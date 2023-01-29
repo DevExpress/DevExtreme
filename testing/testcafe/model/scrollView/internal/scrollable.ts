@@ -79,7 +79,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
-  apiScrollOffset(): Promise<{ top: number; left: number }> {
+  scrollOffset(): Promise<{ top: number; left: number }> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -88,7 +88,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
-  apiScrollTo(value: { top?: number; left?: number }): Promise<void> {
+  scrollTo(value: { top?: number; left?: number }): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -97,7 +97,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
-  apiScrollToElement(selector: string): Promise<void> {
+  scrollToElement(selector: string): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -106,7 +106,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
-  apiUpdate(): Promise<void> {
+  update(): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -141,7 +141,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
-  apiTriggerHidingEvent(): Promise<unknown> {
+  triggerHidingEvent(): Promise<unknown> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -165,7 +165,7 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
     )();
   }
 
-  apiTriggerShownEvent(): Promise<unknown> {
+  triggerShownEvent(): Promise<unknown> {
     const { getInstance } = this;
 
     return ClientFunction(

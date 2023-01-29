@@ -9,9 +9,6 @@
 
 // adduse
 
-
-$generic-popover-toolbar-padding: 15px;
-
 .dx-popover-wrapper {
   &.dx-position-bottom .dx-popover-arrow::after {
     background: $popover-arrow-bg;
@@ -21,10 +18,6 @@ $generic-popover-toolbar-padding: 15px;
     margin: 0;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-
-    &.dx-toolbar {
-      padding-left: $generic-popover-toolbar-padding;
-    }
   }
 
   .dx-popover-arrow::after,
@@ -35,13 +28,4 @@ $generic-popover-toolbar-padding: 15px;
 
 .dx-popover-arrow::after {
   border: 1px solid $texteditor-border-color;
-}
-
-.dx-popover-wrapper { // stylelint-disable-line no-duplicate-selectors
-  .dx-rtl.dx-popup-title {
-    &.dx-toolbar {
-      padding-right: $generic-popover-toolbar-padding;
-      padding-left: 0;
-    }
-  }
 }

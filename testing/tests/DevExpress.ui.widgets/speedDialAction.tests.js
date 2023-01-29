@@ -607,6 +607,26 @@ QUnit.module('add visible option', {
 });
 
 
+QUnit.test('Overlay element should contain attrs provided with "elementAttr" from SpeedDialAction (T1140620)', function(assert) {
+    this.firstSDA = $('#fab-one').dxSpeedDialAction({
+        icon: 'add',
+        elementAttr: {
+            class: 'custom-class',
+            'data-test': true,
+        },
+    }).dxSpeedDialAction('instance');
+
+    const $fabElement = this.firstSDA.$element();
+    const $overlayElement = $(FAB_MAIN_SELECTOR);
+
+    assert.ok($fabElement.hasClass('custom-class'), 'FAB element has correct custom class');
+    assert.ok($overlayElement.hasClass('custom-class'), 'Overlay element has correct custom class');
+
+    assert.ok($fabElement.attr('data-test'), 'FAB element has correct data-test attribute');
+    assert.ok($overlayElement.attr('data-test'), 'Overlay element has correct data-test attribute');
+});
+
+
 QUnit.test('check label rendering before/after toggling visibility (T985992)', function(assert) {
     this.firstSDA = $('#fab-one').dxSpeedDialAction({
         icon: 'add',

@@ -110,6 +110,7 @@ const Lookup = DropDownList.inherit({
 
             /**
              * @name dxLookupOptions.dropDownButtonTemplate
+             * @type template
              * @hidden
              */
 
@@ -805,7 +806,7 @@ const Lookup = DropDownList.inherit({
 
     _refreshPopupVisibility: function() {
         if(this.option('opened')) {
-            this._updatePopupDimensions();
+            this._updateListDimensions();
         }
     },
 
@@ -814,7 +815,7 @@ const Lookup = DropDownList.inherit({
             this.option('dropDownOptions.width', getWidth(this.$element()));
         }
 
-        this._popup && this._updatePopupDimensions();
+        this._updateListDimensions();
     },
 
     _input: function() {

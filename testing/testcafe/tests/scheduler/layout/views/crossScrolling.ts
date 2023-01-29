@@ -46,7 +46,7 @@ test('Scrollable synchronization should work after changing current date (T10272
       label: 'Priority',
     }],
     height: 600,
-  }, true);
+  });
 });
 
 test('Scrollable should be prepared correctly after change visibility (T1032171)', async (t) => {
@@ -70,5 +70,5 @@ test('Scrollable should be prepared correctly after change visibility (T1032171)
     cellDuration: 60,
     visible: false,
     height: 400,
-  }, true);
+  });
 });

@@ -32,6 +32,6 @@ fixture.disablePageReloads`Scheduler Timeline: Grouping`
           { id: 2, text: 'b' },
         ],
       }],
-    }, true);
+    });
   });
 });

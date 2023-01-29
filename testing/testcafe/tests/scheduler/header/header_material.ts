@@ -81,7 +81,7 @@ test('The toolbar should not display if the config is empty', async (t) => {
     views: ['day'],
     height: 580,
     toolbar: [],
-  }, true);
+  });
 });
 
 test('The viewSwitcher should not drop down if only one view', async (t) => {
@@ -107,5 +107,5 @@ test('The viewSwitcher should not drop down if only one view', async (t) => {
     views: ['day'],
     useDropDownViewSwitcher: true,
     height: 580,
-  }, true);
+  });
 });

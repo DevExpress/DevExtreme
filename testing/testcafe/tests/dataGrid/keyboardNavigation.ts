@@ -1,6 +1,6 @@
 import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import CommandCell from '../../model/dataGrid/commandCell';
 import { ClassNames } from '../../model/dataGrid/classNames';
@@ -8,8 +8,7 @@ import { ClassNames } from '../../model/dataGrid/classNames';
 const CLASS = ClassNames;
 
 fixture.disablePageReloads`Keyboard Navigation`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1876,7 +1875,6 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       await ClientFunction(() => {
         $('#myinput').remove();
       })();
-      await disposeWidgets();
     });
   });
 });
@@ -1967,7 +1965,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     $('#myinput1').remove();
     $('#myinput2').remove();
   })();
-  await disposeWidgets();
 });
 
 [false, true].forEach((isCommandColumnFixed) => {
@@ -2442,14 +2439,13 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
     onClick() {
       ($('#container') as any).dxDataGrid('instance').focus();
     },
-  }, false, '#mycontainer');
+  }, '#mycontainer');
   await createWidget('dxDataGrid', {
     dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
     keyExpr: 'id',
     focusedRowEnabled: true,
   });
 }).after(async () => {
-  await disposeWidgets();
   await ClientFunction(() => {
     $('#mycontainer').remove();
   })();
@@ -3475,3 +3471,485 @@ test('Navigation shouldn\'t get stuck on cell templates with links in them when 
     showPageSizeSelector: true,
   },
 }));
+
+// T1134231
+test('Adaptive - Adaptive cells should be focused by tab key press', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const firstDataRow = dataGrid.getDataRow(0);
+  const secondDataRow = dataGrid.getDataRow(1);
+  const adaptiveDetailRow = dataGrid.getAdaptiveRow(0);
+
+  await dataGrid.apiExpandAdaptiveDetailRow('Alex');
+
+  await t
+    .expect(adaptiveDetailRow.element.exists)
+    .ok();
+
+  // header row
+  await t
+    // first cell
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
+    .ok()
+
+    // second cell
+    .expect(headerRow.getHeaderCell(1).isHidden)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
+    .notOk('the second header cell does not have tabindex')
+
+    // third cell
+    .expect(headerRow.getHeaderCell(2).isHidden)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).element.hasAttribute('tabindex'))
+    .notOk('the third header cell does not have tabindex')
+
+    // fourth cell
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(3).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(3).element.hasAttribute('tabindex'))
+    .ok()
+
+    // first data row
+    // first cell
+    .pressKey('tab')
+    .expect(firstDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(0).element.focused)
+    .ok()
+
+    // second cell
+    .expect(firstDataRow.getDataCell(1).isHidden)
+    .ok()
+    .expect(firstDataRow.getDataCell(1).element.getAttribute('tabindex'))
+    .eql('-1', 'the second data cell does not have tabindex')
+
+    // third cell
+    .expect(firstDataRow.getDataCell(2).isHidden)
+    .ok()
+    .expect(firstDataRow.getDataCell(2).element.getAttribute('tabindex'))
+    .eql('-1', 'the third data cell does not have tabindex')
+
+    // fourth cell
+    .pressKey('tab')
+    .expect(firstDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(3).element.focused)
+    .ok()
+
+    // fifth cell
+    .pressKey('tab')
+    .expect(firstDataRow.getCommandCell(4).isFocused)
+    .ok()
+    .expect(firstDataRow.getCommandCell(4).element.focused)
+    .ok()
+
+    // adaptive detail row
+    // first item
+    .pressKey('tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).element.focused)
+    .ok()
+
+    // second item
+    .pressKey('tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).element.focused)
+    .ok()
+
+    // second data row
+    // first cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).element.focused)
+    .ok()
+    // second cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(3).element.focused)
+    .ok()
+    // first cell
+    .pressKey('shift+tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).element.focused)
+    .ok()
+
+    // adaptive detail row
+    // second item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).element.focused)
+    .ok()
+
+    // first item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).element.focused)
+    .ok()
+
+    // first data row
+    // fifth cell
+    .pressKey('shift+tab')
+    .expect(firstDataRow.getCommandCell(4).isFocused)
+    .ok()
+    .expect(firstDataRow.getCommandCell(4).element.focused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    keyExpr: 'name',
+    dataSource: [
+      {
+        name: 'Alex', phone: '555555', text: 'aaaaaa', room: 1,
+      },
+      {
+        name: 'Bob', phone: '777777', text: 'bbbbbb', room: 2,
+      },
+    ],
+    width: 150,
+    columnHidingEnabled: true,
+    columns: [
+      'name',
+      {
+        dataField: 'phone',
+        hidingPriority: 0,
+      }, {
+        dataField: 'text',
+        hidingPriority: 1,
+      },
+      'room',
+    ],
+  });
+});
+
+test('Adaptive with batch edit mode - Adaptive cells should not go into edit state by tab key press', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const firstDataRow = dataGrid.getDataRow(0);
+  const secondDataRow = dataGrid.getDataRow(1);
+  const adaptiveDetailRow = dataGrid.getAdaptiveRow(0);
+
+  await dataGrid.apiExpandAdaptiveDetailRow('Alex');
+
+  await t
+    .expect(adaptiveDetailRow.element.exists)
+    .ok();
+
+  // header row
+  await t
+    // first cell
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
+    .ok()
+
+    // second cell
+    .expect(headerRow.getHeaderCell(1).isHidden)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
+    .notOk('the second header cell does not have tabindex')
+
+    // third cell
+    .expect(headerRow.getHeaderCell(2).isHidden)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).element.hasAttribute('tabindex'))
+    .notOk('the third header cell does not have tabindex')
+
+    // fourth cell
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(3).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(3).element.hasAttribute('tabindex'))
+    .ok()
+
+    // first data row
+    // first cell
+    .pressKey('tab')
+    .expect(firstDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(0).element.focused)
+    .ok()
+
+    // second cell
+    .expect(firstDataRow.getDataCell(1).isHidden)
+    .ok()
+    .expect(firstDataRow.getDataCell(1).element.getAttribute('tabindex'))
+    .eql('-1', 'the second data cell does not have tabindex')
+
+    // third cell
+    .expect(firstDataRow.getDataCell(2).isHidden)
+    .ok()
+    .expect(firstDataRow.getDataCell(2).element.getAttribute('tabindex'))
+    .eql('-1', 'the third data cell does not have tabindex')
+
+    // fourth cell
+    .pressKey('tab')
+    .expect(firstDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(3).element.focused)
+    .ok()
+
+    // fifth cell
+    .pressKey('tab')
+    .expect(firstDataRow.getCommandCell(4).isFocused)
+    .ok()
+    .expect(firstDataRow.getCommandCell(4).element.focused)
+    .ok()
+
+    // adaptive detail row
+    // first item
+    .pressKey('tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).element.focused)
+    .ok()
+
+    // second item
+    .pressKey('tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).element.focused)
+    .ok()
+
+    // second data row
+    // first cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).element.focused)
+    .ok()
+    // second cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(3).element.focused)
+    .ok()
+    // first cell
+    .pressKey('shift+tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).element.focused)
+    .ok()
+
+    // adaptive detail row
+    // second item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).element.focused)
+    .ok()
+
+    // first item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).element.focused)
+    .ok()
+
+    // first data row
+    // fifth cell
+    .pressKey('shift+tab')
+    .expect(firstDataRow.getCommandCell(4).isFocused)
+    .ok()
+    .expect(firstDataRow.getCommandCell(4).element.focused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    keyExpr: 'name',
+    dataSource: [
+      {
+        name: 'Alex', phone: '555555', text: 'aaaaaa', room: 1,
+      },
+      {
+        name: 'Bob', phone: '777777', text: 'bbbbbb', room: 2,
+      },
+    ],
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    width: 150,
+    columnHidingEnabled: true,
+    columns: [
+      'name',
+      {
+        dataField: 'phone',
+        hidingPriority: 0,
+      }, {
+        dataField: 'text',
+        hidingPriority: 1,
+      },
+      'room',
+    ],
+  });
+});
+
+test('Adaptive with batch edit mode - Adaptive cells should be focused by tab key press when they are in edit state', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const firstDataRow = dataGrid.getDataRow(0);
+  const secondDataRow = dataGrid.getDataRow(2);
+  const adaptiveDetailRow = dataGrid.getAdaptiveRow(0);
+
+  await dataGrid.apiExpandAdaptiveDetailRow('Alex');
+
+  await t
+    .expect(adaptiveDetailRow.element.exists)
+    .ok();
+
+  // header row
+  await t
+    // first cell
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(0).element.focused).ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
+    .ok()
+
+    // second cell
+    .expect(headerRow.getHeaderCell(1).isHidden)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
+    .notOk('the second header cell does not have tabindex')
+
+    // third cell
+    .expect(headerRow.getHeaderCell(2).isHidden)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).element.hasAttribute('tabindex'))
+    .notOk('the third header cell does not have tabindex')
+
+    // fourth cell
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(3).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(3).element.hasAttribute('tabindex'))
+    .ok()
+
+    // first data row
+    // first cell
+    .pressKey('tab')
+    .expect(firstDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(0).element.focused)
+    .ok()
+
+    .click(firstDataRow.getDataCell(0).element)
+    .expect(firstDataRow.getDataCell(0).isEditCell)
+    .ok()
+
+    // second cell
+    .expect(firstDataRow.getDataCell(1).isHidden)
+    .ok()
+    .expect(firstDataRow.getDataCell(1).element.hasAttribute('tabindex'))
+    .notOk('the second data cell does not have tabindex')
+
+    // third cell
+    .expect(firstDataRow.getDataCell(2).isHidden)
+    .ok()
+    .expect(firstDataRow.getDataCell(2).element.hasAttribute('tabindex'))
+    .notOk('the third data cell does not have tabindex')
+
+    // fourth cell
+    .pressKey('tab')
+    .expect(firstDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(3).isEditCell)
+    .ok()
+
+    // adaptive detail row
+    // first item
+    .pressKey('tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isEditCell)
+    .ok()
+
+    // second item
+    .pressKey('tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isEditCell)
+    .ok()
+
+    // second data row
+    // first cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).isEditCell)
+    .ok()
+    // second cell
+    .pressKey('tab')
+    .expect(secondDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(3).isEditCell)
+    .ok()
+    // first cell
+    .pressKey('shift+tab')
+    .expect(secondDataRow.getDataCell(0).isFocused)
+    .ok()
+    .expect(secondDataRow.getDataCell(0).isEditCell)
+    .ok()
+
+    // adaptive detail row
+    // second item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isEditCell)
+    .ok()
+
+    // first item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isEditCell)
+    .ok()
+
+    // first data row
+    // fifth cell
+    .pressKey('shift+tab')
+    .expect(firstDataRow.getDataCell(3).isFocused)
+    .ok()
+    .expect(firstDataRow.getDataCell(3).isEditCell)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    keyExpr: 'name',
+    dataSource: [
+      {
+        name: 'Alex', phone: '555555', text: 'aaaaaa', room: 1,
+      },
+      {
+        name: 'Bob', phone: '777777', text: 'bbbbbb', room: 2,
+      },
+    ],
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    width: 150,
+    columnHidingEnabled: true,
+    columns: [
+      'name',
+      {
+        dataField: 'phone',
+        hidingPriority: 0,
+      }, {
+        dataField: 'text',
+        hidingPriority: 1,
+      },
+      'room',
+    ],
+  });
+});

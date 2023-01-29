@@ -1,8 +1,9 @@
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Menu from '../../../model/menu';
 
-fixture`Menu_keyboard`
+fixture.disablePageReloads`Menu_keyboard`
   .page(url(__dirname, '../../container.html'));
 
 test('keyboard navigation should work after click on a root item if showFirstSubmenuMode is "onClick"', async (t) => {
@@ -39,6 +40,7 @@ test('keyboard navigation should work after hover a root item if showFirstSubmen
   const menu = new Menu();
 
   await t
+    .click(Selector('body'))
     .hover(menu.getItem(0))
     .pressKey('down')
     .pressKey('right')
@@ -69,6 +71,7 @@ test('menu should be closed after press on "escape" key when submenu was shown b
   const menu = new Menu();
 
   await t
+    .click(Selector('body'))
     .click(menu.getItem(0));
 
   const submenu = menu.getSubMenuInstance(menu.getItem(0));
@@ -91,12 +94,13 @@ test('menu should be closed after press on "escape" key when submenu was shown b
   }],
   showFirstSubmenuMode: 'onClick',
   hideSubmenuOnMouseLeave: true,
-}, true));
+}));
 
 test('menu should be closed after press on "escape" key when submenu was shown by hover, showFirstSubmenuMode="onHover" (T1115916)', async (t) => {
   const menu = new Menu();
 
   await t
+    .click(Selector('body'))
     .hover(menu.getItem(0));
 
   const submenu = menu.getSubMenuInstance(menu.getItem(0));
@@ -105,7 +109,6 @@ test('menu should be closed after press on "escape" key when submenu was shown b
     .expect(submenu.option('visible'))
     .eql(true)
     .pressKey('esc')
-    .wait(100)
     .expect(submenu.option('visible'))
     .eql(false);
 }).before(async () => createWidget('dxMenu', {
@@ -120,4 +123,4 @@ test('menu should be closed after press on "escape" key when submenu was shown b
   }],
   showFirstSubmenuMode: 'onHover',
   hideSubmenuOnMouseLeave: true,
-}, true));
+}));

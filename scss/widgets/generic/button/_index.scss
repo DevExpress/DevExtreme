@@ -9,12 +9,15 @@
 
 // adduse
 
-.dx-button-text {
-  line-height: $generic-button-text-line-height;
+.dx-button-content {
+  line-height: $generic-button-content-line-height;
 }
 
-.dx-button a {
-  text-decoration: none;
+.dx-button-text {
+  line-height: $generic-button-text-line-height;
+  text-transform: $generic-button-text-transform;
+  font-weight: $generic-button-text-font-weight;
+  letter-spacing: $generic-button-text-letter-spacing;
 }
 
 .dx-button {
@@ -31,10 +34,6 @@
 
 .dx-button-back {
   @include dx-button-onlyicon-sizing();
-
-  .dx-button-text {
-    display: none;
-  }
 }
 
 // NOTE: Button styles
@@ -58,21 +57,4 @@
 .dx-button-normal,
 .dx-button-back {
   @include dx-button-special-hover($button-special-hover);
-}
-
-.dx-texteditor-buttons-container {
-  > .dx-button {
-    margin: 1px $generic-editor-custom-button-margin;
-
-    > .dx-button-content {
-      padding-top: $generic-editor-button-top-padding;
-      padding-bottom: $generic-editor-button-bottom-padding;
-    }
-
-    &.dx-button-has-icon:not(.dx-button-has-text) {
-      > .dx-button-content {
-        padding: $generic-editor-button-icononly-top-padding $generic-editor-button-icononly-horizontal-padding $generic-editor-button-icononly-bottom-padding;
-      }
-    }
-  }
 }

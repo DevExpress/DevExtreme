@@ -5,7 +5,7 @@ import { BASE64_IMAGE_1 } from './images/base64';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 
-fixture`HtmlEditor - common`
+fixture.disablePageReloads`HtmlEditor - common`
   .page(url(__dirname, '../../../containerQuill.html'));
 
 test('Add button should be enabled after switch to url form', async (t) => {
@@ -35,7 +35,7 @@ test('Add button should be enabled after switch to url form', async (t) => {
       tabs: ['file', 'url'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });
 
 test('Add button should be disable after switch to image upload form', async (t) => {
@@ -74,7 +74,7 @@ test('Add button should be disable after switch to image upload form', async (t)
       tabs: ['url', 'file'],
     },
     toolbar: { items: ['image'] },
-  }, true);
+  });
 });
 
 test('AddImage form shouldn\'t lead to side effects in other forms', async (t) => {
@@ -120,5 +120,5 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
       tabs: ['file', 'url'],
     },
     toolbar: { items: ['image', 'link', 'color'] },
-  }, true);
+  });
 });

@@ -5,6 +5,8 @@ import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
+import { setStyle } from '../../core/utils/style';
+import domAdapter from '../../core/dom_adapter';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -108,7 +110,7 @@ export const AreaItem = Class.inherit({
     },
 
     _getMainElementMarkup: function() {
-        return '<tbody>';
+        return domAdapter.createElement('tbody');
     },
 
     _getCloseMainElementMarkup: function() {
@@ -126,25 +128,21 @@ export const AreaItem = Class.inherit({
         let cellElement;
         let cellText;
         const rtlEnabled = that.option('rtlEnabled');
-        const markupArray = [];
         const encodeHtml = that.option('encodeHtml');
         let rowClassNames;
-        const colspan = 'colspan=\'';
-        const rowspan = 'rowspan=\'';
 
         tableElement.data('area', that._getAreaName());
         tableElement.data('data', data);
 
         tableElement.css('width', '');
 
-        markupArray.push(that._getMainElementMarkup());
+        const tbody = this._getMainElementMarkup();
 
         for(i = 0; i < rowsCount; i++) {
             row = data[i];
-            const columnMarkupArray = [];
             rowClassNames = [];
 
-            markupArray.push('<tr ');
+            const tr = domAdapter.createElement('tr');
 
             for(j = 0; j < row.length; j++) {
 
@@ -152,12 +150,12 @@ export const AreaItem = Class.inherit({
 
                 this._getRowClassNames(i, cell, rowClassNames);
 
-                columnMarkupArray.push('<td ');
+                const td = domAdapter.createElement('td');
 
 
                 if(cell) {
-                    cell.rowspan && columnMarkupArray.push(rowspan + (cell.rowspan || 1) + '\'');
-                    cell.colspan && columnMarkupArray.push(colspan + (cell.colspan || 1) + '\'');
+                    cell.rowspan && td.setAttribute('rowspan', (cell.rowspan || 1));
+                    cell.colspan && td.setAttribute('colspan', (cell.colspan || 1));
 
                     const styleOptions = {
                         cellElement: cellElement,
@@ -175,21 +173,20 @@ export const AreaItem = Class.inherit({
                     that._applyCustomStyles(styleOptions);
 
                     if(styleOptions.cssArray.length) {
-                        columnMarkupArray.push('style=\'');
-                        columnMarkupArray.push(styleOptions.cssArray.join(';'));
-                        columnMarkupArray.push('\'');
+                        setStyle(td, styleOptions.cssArray.join(';'));
                     }
 
                     if(styleOptions.classArray.length) {
-                        columnMarkupArray.push('class=\'');
-                        columnMarkupArray.push(styleOptions.classArray.join(' '));
-                        columnMarkupArray.push('\'');
+                        td.setAttribute('class', styleOptions.classArray.join(' '));
                     }
 
-                    columnMarkupArray.push('>');
-
                     if(isDefined(cell.expanded)) {
-                        columnMarkupArray.push('<div class=\'dx-expand-icon-container\'><span class=\'' + PIVOTGRID_EXPAND_CLASS + '\'></span></div>');
+                        const div = domAdapter.createElement('div');
+                        div.classList.add('dx-expand-icon-container');
+                        const span = domAdapter.createElement('span');
+                        span.classList.add(PIVOTGRID_EXPAND_CLASS);
+                        div.appendChild(span);
+                        td.appendChild(div);
                     }
 
                     cellText = this._getCellText(cell, encodeHtml);
@@ -198,34 +195,31 @@ export const AreaItem = Class.inherit({
                     cellText = '';
                 }
 
-                columnMarkupArray.push('<span ');
+                const span = domAdapter.createElement('span');
 
                 if(isDefined(cell.wordWrapEnabled)) {
-                    columnMarkupArray.push('style=\'white-space:', cell.wordWrapEnabled ? 'normal' : 'nowrap', ';\'');
+                    span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
                 }
 
-                columnMarkupArray.push('>' + cellText + '</span>');
+                span.innerHTML = cellText;
+                td.appendChild(span);
 
                 if(cell.sorted) {
-                    columnMarkupArray.push('<span class=\'dx-icon-sorted\'></span>');
+                    const span = domAdapter.createElement('span');
+                    span.classList.add('dx-icon-sorted');
+                    td.appendChild(span);
                 }
 
-                columnMarkupArray.push('</td>');
+                tr.appendChild(td);
             }
 
             if(rowClassNames.length) {
-                markupArray.push('class=\'');
-                markupArray.push(rowClassNames.join(' '));
-                markupArray.push('\'');
+                tr.setAttribute('class', rowClassNames.join(' '));
             }
-            markupArray.push('>');
-            markupArray.push(columnMarkupArray.join(''));
-            markupArray.push('</tr>');
+            tbody.appendChild(tr);
         }
 
-        markupArray.push(this._getCloseMainElementMarkup());
-
-        tableElement.append(markupArray.join(''));
+        tableElement.append(tbody);
 
         this._triggerOnCellPrepared(tableElement, data);
     },
@@ -372,7 +366,7 @@ export const AreaItem = Class.inherit({
     setColumnsWidth: function(values) {
         let i;
         const tableElement = this._tableElement[0];
-        let colgroupElementHTML = '';
+        this._colgroupElement.html('');
         const columnsCount = this.getColumnsCount();
         const columnWidth = [];
 
@@ -385,9 +379,10 @@ export const AreaItem = Class.inherit({
         }
 
         for(i = 0; i < columnsCount; i++) {
-            colgroupElementHTML += '<col style="width: ' + columnWidth[i] + 'px">';
+            const col = domAdapter.createElement('col');
+            col.style.width = columnWidth[i] + 'px';
+            this._colgroupElement.append(col);
         }
-        this._colgroupElement.html(colgroupElementHTML);
         this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
 
         tableElement.style.width = this._tableWidth + 'px';

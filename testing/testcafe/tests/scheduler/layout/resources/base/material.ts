@@ -28,7 +28,7 @@ test('Scheduler should have correct height in month view (T927862)', async (t) =
     views: ['month'],
     currentView: 'month',
     height: 800,
-  }, true);
+  });
 });
 
 const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
@@ -39,7 +39,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
     currentView: view,
     resources: resourcesValue,
     height: 600,
-  }, true);
+  });
 };
 
 [undefined, resourceDataSource].forEach((resourcesValue) => {

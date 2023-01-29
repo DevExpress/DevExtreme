@@ -10,8 +10,16 @@ const moduleConfig = {
 
     beforeEach: function() {
         this.data = [
-            { name: 'F1', isDirectory: true },
-            { name: 'F2', isDirectory: true },
+            {
+                name: 'F1',
+                isDirectory: true,
+                items: [{ name: 'F1_1', isDirectory: true }]
+            },
+            {
+                name: 'F2',
+                isDirectory: true,
+                items: [{ name: 'F2_1', isDirectory: true }]
+            },
             { name: 'File1' }
         ];
 
@@ -167,7 +175,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test('move file items', function(assert) {
+    test('move file items from parent folder to child folder', function(assert) {
         const done = assert.async();
         const rootDir = this.controller.getCurrentDirectory();
         let targetItems = null;
@@ -199,19 +207,74 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 assert.strictEqual(onMoved.args[0][0].itemName, 'F1');
                 assert.strictEqual(onMoved.args[0][0].itemPath, 'F2/F1');
 
-                assert.notOk(rootDir.itemsLoaded);
-                assert.equal(rootDir.items.length, 0);
+                assert.ok(rootDir.itemsLoaded);
+                assert.strictEqual(rootDir.items.length, 2);
                 return this.controller.getDirectories(rootDir);
             })
             .then(directories => {
-                assert.equal(directories.length, 1);
-                assert.equal(directories[0].fileItem.name, 'F2');
+                assert.strictEqual(directories.length, 1);
+                assert.strictEqual(directories[0].fileItem.name, 'F2');
                 return this.controller.getDirectories(directories[0]);
             })
             .then(directories => {
-                assert.equal(directories.length, 1);
-                assert.equal(directories[0].fileItem.name, 'F1');
+                assert.strictEqual(directories.length, 2);
+                assert.strictEqual(directories[0].fileItem.name, 'F2_1');
+                assert.strictEqual(directories[1].fileItem.name, 'F1');
                 done();
+            });
+
+        this.clock.tick(100);
+    });
+
+    test('move file items between sibling folders (T1132584)', function(assert) {
+        const done = assert.async();
+        const rootDir = this.controller.getCurrentDirectory();
+        this.controller.getDirectories(rootDir)
+            .then(dirs => {
+                const f1Dir = dirs[0];
+                const f2Dir = dirs[1];
+                let targetItems = null;
+                let destinationDir = null;
+                const onMoving = this.editingEvents.onItemMoving;
+                const onMoved = this.editingEvents.onItemMoved;
+
+                this.controller
+                    .getDirectories(f1Dir)
+                    .then(directories => {
+                        targetItems = [ directories[0] ];
+                        destinationDir = f2Dir;
+                        return this.controller.moveItems(targetItems, destinationDir);
+                    })
+                    .then(() => {
+                        assert.ok(onMoving.calledOnce);
+                        assert.strictEqual(onMoving.args[0][0].item.name, 'F1_1');
+                        assert.strictEqual(onMoving.args[0][0].item.relativeName, 'F1/F1_1');
+                        assert.strictEqual(onMoving.args[0][0].item.parentPath, 'F1');
+                        assert.strictEqual(onMoving.args[0][0].item.pathKeys.join('|'), 'F1|F1/F1_1');
+                        assert.strictEqual(onMoving.args[0][0].destinationDirectory.name, 'F2');
+
+                        assert.ok(onMoved.calledOnce);
+                        assert.strictEqual(onMoved.args[0][0].sourceItem.name, 'F1_1');
+                        assert.strictEqual(onMoved.args[0][0].sourceItem.relativeName, 'F1/F1_1');
+                        assert.strictEqual(onMoved.args[0][0].sourceItem.parentPath, 'F1');
+                        assert.strictEqual(onMoved.args[0][0].sourceItem.pathKeys.join('|'), 'F1|F1/F1_1');
+                        assert.strictEqual(onMoved.args[0][0].parentDirectory.name, 'F2');
+                        assert.strictEqual(onMoved.args[0][0].itemName, 'F1_1');
+                        assert.strictEqual(onMoved.args[0][0].itemPath, 'F2/F1_1');
+
+                        assert.notOk(f1Dir.itemsLoaded);
+                        assert.strictEqual(f1Dir.items.length, 0);
+                        assert.notOk(f2Dir.itemsLoaded);
+                        assert.strictEqual(f2Dir.items.length, 0);
+                        return this.controller.getDirectories(f2Dir);
+                    })
+                    .then(directories => {
+                        assert.strictEqual(directories.length, 2);
+                        assert.strictEqual(directories[0].fileItem.name, 'F2_1');
+                        assert.strictEqual(directories[1].fileItem.name, 'F1_1');
+                        done();
+                    });
+                this.clock.tick(100);
             });
 
         this.clock.tick(100);
@@ -254,9 +317,10 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 return this.controller.getDirectories(destinationDir);
             })
             .then(directories => {
-                assert.equal(directories.length, 1);
-                assert.equal(directories[0].fileItem.name, 'F1');
-                assert.ok(directories[0].parentDirectory.expanded);
+                assert.equal(directories.length, 2);
+                assert.equal(directories[0].fileItem.name, 'F2_1');
+                assert.equal(directories[1].fileItem.name, 'F1');
+                assert.ok(directories[1].parentDirectory.expanded);
                 done();
             });
 

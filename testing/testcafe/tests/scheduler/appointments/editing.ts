@@ -40,7 +40,7 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
   startDayHour: 9,
   endDayHour: 14,
   height: 600,
-}, true));
+}));
 
 test('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);

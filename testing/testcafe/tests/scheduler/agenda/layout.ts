@@ -133,7 +133,7 @@ const createScheduler = async (
     rtlEnabled,
     groups,
     height: 600,
-  }, true);
+  });
 };
 
 [false, true].forEach((rtlEnabled) => {

@@ -111,10 +111,16 @@ const setHeight = function(elements, value) {
     setDimensionProperty(elements, 'height', value);
 };
 
+const setStyle = function(element, value) {
+    element.style.cssText = value;
+};
+
 export {
     styleProp,
+    setStyle,
     stylePropPrefix,
     normalizeStyleProp,
     parsePixelValue,
     setWidth,
-    setHeight };
+    setHeight
+};

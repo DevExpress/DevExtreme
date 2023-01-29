@@ -38,6 +38,8 @@ const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
 const isIos = devices.current().platform === 'ios';
 
+let editorsCount = 0;
+
 const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
@@ -65,6 +67,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _init: function() {
+        this._mentionKeyInTemplateStorage = editorsCount++;
         this.callBase();
         this._cleanCallback = Callbacks();
         this._contentInitializedCallback = Callbacks();
@@ -732,6 +735,10 @@ const HtmlEditor = Editor.inherit({
 
     blur: function() {
         this._applyQuillMethod('blur');
+    },
+
+    getMentionKeyInTemplateStorage() {
+        return this._mentionKeyInTemplateStorage;
     }
 });
 

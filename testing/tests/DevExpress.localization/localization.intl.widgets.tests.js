@@ -4,7 +4,7 @@ import { locale } from 'localization/core';
 
 import $ from 'jquery';
 import 'ui/date_box';
-import { excel as excelCreator } from 'exporter';
+import { ExportFormat } from 'exporter/exceljs/export_format';
 import dateLocalization from 'localization/date';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
@@ -138,7 +138,7 @@ QUnit.module('Excel creator', commonEnvironment, () => {
             locale('ar-u-nu-arab');
 
             const convertDate = function(formatter) {
-                return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
+                return ExportFormat.convertFormat(formatter, null, 'date');
             };
 
             const pattern = '[$-2010000]d\\/M\\/yyyy';

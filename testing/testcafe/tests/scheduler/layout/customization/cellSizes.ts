@@ -49,7 +49,7 @@ const createScheduler = async (
       label: 'Priority',
     }],
     ...additionalProps,
-  }, true);
+  });
 };
 
 const views = [{
@@ -81,7 +81,7 @@ test('Cell sizes customization should work', async (t) => {
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }');
   await createScheduler({
     views,
   });
@@ -98,7 +98,7 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px;}');
+  await insertStylesheetRulesToPage('#container .dx-scheduler-cell-sizes-vertical { height: 150px; } #container .dx-scheduler-cell-sizes-horizontal { width: 150px; }');
 
   await createScheduler({
     views,

@@ -1,9 +1,10 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import TagBox from '../../../model/tagBox';
 import createWidget from '../../../helpers/createWidget';
 
-fixture`TagBox`
+fixture.disablePageReloads`TagBox`
   .page(url(__dirname, '../../container.html'));
 
 test('Keyboard navigation should work then tagBox is focused or list is focused', async (t) => {
@@ -72,7 +73,7 @@ test('Keyboard navigation should work then tagBox is focused or list is focused'
   showSelectionControls: true,
   selectionMode: 'all',
   applyValueMode: 'useButtons',
-}, true));
+}));
 
 test('Select all checkbox should be focused by tab and closed by escape (T389453)', async (t) => {
   const tagBox = new TagBox('#container');
@@ -120,16 +121,19 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
   showSelectionControls: true,
   selectionMode: 'all',
   applyValueMode: 'useButtons',
-}, true));
+}));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const tagBox = new TagBox('#container');
 
   await tagBox.option('items', [1, 2, 3]);
 
+  await testScreenshot(t, takeScreenshot, 'TagBox placeholder if value is not choosen.png', { element: '#container' });
+
   await t
-    .expect(await compareScreenshot(t, 'TagBox placeholder if value is not choosen.png', '#container'))
-    .ok();
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxTagBox', {
   width: 300,
   placeholder: 'Choose a value',

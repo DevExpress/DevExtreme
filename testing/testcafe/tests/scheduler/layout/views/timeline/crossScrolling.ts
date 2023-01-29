@@ -65,5 +65,5 @@ test('Timeline should have Cross-Scrolling enabled', async (t) => {
       }],
       label: 'Employee',
     }],
-  }, true);
+  });
 });
