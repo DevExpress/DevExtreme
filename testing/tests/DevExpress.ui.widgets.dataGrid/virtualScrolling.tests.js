@@ -63,6 +63,12 @@ function getContentSizes(size, count) {
     return items;
 }
 
+function toggleUi(visible) {
+    $('#qunit').css('display', !visible ? 'none' : '');
+    $('body').css('margin', !visible ? '0px' : '');
+    $('body > .up').css('display', !visible ? 'none' : '');
+}
+
 const moduleConfig = {
     beforeEach: function() {
         mockComponent.option.withArgs('scrolling.mode').returns('virtual');
@@ -85,12 +91,14 @@ const moduleConfig = {
         mockDataSource.load = sinon.spy(function() {
             that.scrollController.handleDataChanged(that.externalDataChangedHandler);
         });
+        toggleUi(false);
     },
 
     afterEach: function() {
         resetMock(mockComponent);
         resetMock(mockDataSource);
         mockDataSource.pageIndex(0);
+        toggleUi(true);
     }
 };
 
@@ -703,8 +711,7 @@ QUnit.module('Subscribe to external scrollable events', {
     });
 
 
-    // TODO Vinogradov: Fix & unskip this test
-    QUnit.skip('ScrollTo when window scroll subscription', function(assert) {
+    QUnit.test('ScrollTo when window scroll subscription', function(assert) {
         if(devices.real().ios || ('callPhantom' in window)) {
         // TODO reanimate for ios
             assert.ok(true);
