@@ -358,11 +358,23 @@ testModule('API', moduleConfig, () => {
         const valueChangeStub = sinon.stub();
 
         this.instance.on('valueChanged', valueChangeStub);
-        this.instance.option('value', '<p>after click</p><p></p>');
+        this.instance.option('value', '<p>new markup</p><p></p>');
         this.clock.tick();
 
         assert.strictEqual(valueChangeStub.callCount, 1);
-        assert.strictEqual(valueChangeStub.getCall(0).args[0].value, '<p>after click</p>');
+        assert.strictEqual(valueChangeStub.getCall(0).args[0].value, '<p>new markup</p>', 'markup optimized');
+    });
+
+    test('ValueChanged event should not be triggered when new value is different only by non optimized markup(T1137577)', function(assert) {
+        this.options.value = '<p>markup</p>';
+        this.createEditor();
+        const valueChangeStub = sinon.stub();
+
+        this.instance.on('valueChanged', valueChangeStub);
+        this.instance.option('value', '<p>markup</p><p></p>');
+        this.clock.tick();
+
+        assert.strictEqual(valueChangeStub.callCount, 0);
     });
 
     test('customize module', function(assert) {
