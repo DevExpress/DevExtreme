@@ -4247,6 +4247,7 @@ QUnit.test('Get all points API', function(assert) {
     series.updateData(this.data);
     series.createPoints();
 
+
     // act
     const points = series.getAllPoints();
     // assert
@@ -4256,6 +4257,22 @@ QUnit.test('Get all points API', function(assert) {
     assert.equal(points[1].argument, this.data[1].arg);
     assert.equal(points[2].argument, this.data[2].arg);
     assert.equal(points[3].argument, this.data[3].arg);
+});
+
+QUnit.test('Get all points API1111', function(assert) {
+    const series = createSeries({});
+    series.createPoints();
+
+    // act
+    series.preparingCoordinatesForPoints();
+    const points = series.getAllPoints();
+    // assert
+
+    assert.ok(points, 'Points were returned');
+    assert.equal(points[0].translate.callCount, 1);
+    assert.equal(points[1].translate.callCount, 1);
+    assert.equal(points[2].translate.callCount, 1);
+    assert.equal(points[3].translate.callCount, 1);
 });
 
 QUnit.test('Get all points API. Before update data', function(assert) {

@@ -2292,47 +2292,42 @@ QUnit.test('All points should be hidden when all points are overlapped', functio
         val3: 10.5,
         val4: 40,
         val5: 50
-    },
-    {
+    }, {
         country: 'China',
         val1: 10,
         val2: 20,
         val3: 10,
         val4: 20.2,
         val5: 50
-    },
-    {
+    }, {
         country: 'Russia',
         val1: 10,
         val2: 20,
         val3: 20.3,
         val4: 10.5,
         val5: 50
-    },
-    {
+    }, {
         country: 'Japan',
         val1: 10,
         val2: 20,
         val3: 30,
         val4: 19.8,
         val5: 10
-    },
-    {
+    }, {
         country: 'India',
         val1: 10,
         val2: 20,
         val3: 19.3,
         val4: 40,
         val5: 11
-    },
-    {
+    }, {
         country: 'Germany',
         val1: 10,
         val2: 20,
         val3: 21,
         val4: 10.2,
         val5: 50
-    }, ];
+    }];
 
     const chart = moduleSetup.createChart.call(this, {
         dataSource,
@@ -2357,12 +2352,14 @@ QUnit.test('All points should be hidden when all points are overlapped', functio
     assert.ok(series[4].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test('The points on the graph should be hidden when they have multiple intersections in a single series', function(assert) {
+QUnit.test('Points on the graph should be hidden when they have multiple intersections in a single series', function(assert) {
     const dataSource = [];
 
     for(let i = 0; i < 600; i += 1) {
         const argument = i / 100;
-        dataSource.push({ arg: argument, val: Math.exp(-argument) * Math.cos(2 * Math.PI * argument) });
+        dataSource.push({
+            arg: argument,
+            val: Math.exp(-argument) * Math.cos(2 * Math.PI * argument) });
     }
 
     const chart = moduleSetup.createChart.call(this, {
@@ -2375,7 +2372,6 @@ QUnit.test('The points on the graph should be hidden when they have multiple int
     const series = chart.getAllSeries();
 
     assert.notOk(series[0].getVisiblePoints()[0].graphic);
-
 });
 
 

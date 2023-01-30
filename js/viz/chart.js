@@ -371,32 +371,31 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
-const checkOverlay = (overlayPoint, currentPoint, radiusPoint) => {
-    const leftBoundaryOverlay = overlayPoint.x - radiusPoint <= currentPoint.x;
-    const rightBoundaryOverlay = overlayPoint.x + radiusPoint >= currentPoint.x;
-    const topBoundaryOverlay = overlayPoint.y - radiusPoint <= currentPoint.y;
-    const bottomBoundaryOverlay = overlayPoint.y + radiusPoint >= currentPoint.y;
+const checkOverlay = (currentPoint, overlayPoint, radiusPoint) => {
+    const isPointHitLeftBorder = overlayPoint.x - radiusPoint <= currentPoint.x;
+    const isPointHitRightBorder = overlayPoint.x + radiusPoint >= currentPoint.x;
+    const isPointHitTopBorder = overlayPoint.y - radiusPoint <= currentPoint.y;
+    const isPointHitBottomBorder = overlayPoint.y + radiusPoint >= currentPoint.y;
+    const isPointOverlayHorizontally = isPointHitLeftBorder && isPointHitRightBorder;
+    const isPointOverlayVertically = isPointHitTopBorder && isPointHitBottomBorder;
 
-    const isOverlayX = leftBoundaryOverlay && rightBoundaryOverlay;
-    const isOverlayY = topBoundaryOverlay && bottomBoundaryOverlay;
-
-    return isOverlayX && isOverlayY;
+    return isPointOverlayHorizontally && isPointOverlayVertically;
 };
 
-const cycleComparison = (startCounter, points, currentPoint, skippingSamePoints = true) => {
-    const radiusPoint = currentPoint._options.size / 2;
+const isPointOverlapped = (currentPoint, overlappingPoints, startCounter = 0, skippingSamePoints = true) => {
+    const radiusPoint = currentPoint.getOptions().size / 2;
 
-    for(let i = startCounter; i < points.length; i++) {
+    for(let i = startCounter; i < overlappingPoints.length; i++) {
         if(!skippingSamePoints) {
-            const isSameCoordinateX = points[i].x === currentPoint.x;
-            const isSameCoordinateY = points[i].y === currentPoint.y;
+            const isXCoordinateSame = overlappingPoints[i].x === currentPoint.x;
+            const isYCoordinateSame = overlappingPoints[i].y === currentPoint.y;
 
-            if(isSameCoordinateX && isSameCoordinateY) {
+            if(isXCoordinateSame && isYCoordinateSame) {
                 continue;
             }
         }
 
-        if(checkOverlay(points[i], currentPoint, radiusPoint)) {
+        if(checkOverlay(currentPoint, overlappingPoints[i], radiusPoint)) {
             return true;
         }
     }
@@ -887,45 +886,74 @@ const dxChart = AdvancedChart.inherit({
         return rangeDataCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
     },
 
+    _applyHidingPointsForSingleSeries(series) {
+        const seriesPoints = series.getPoints();
+        let counterOverlay = 0;
+        for(let i = 0; i < seriesPoints.length; i++) {
+            const currentPoint = seriesPoints[i];
+
+            counterOverlay += isPointOverlapped(currentPoint, seriesPoints, i + 1, false);
+            if(counterOverlay > (seriesPoints.length / 2)) {
+                series.autoHidePointMarkers = true;
+                break;
+            }
+        }
+    },
+
+    // _applyHidingPointsForMultiSeries(series, overlayPoints) {
+
+    //     if(!series.autoHidePointMarkers) {
+    //         const seriesPoints = series.getPoints();
+    //         let checkOverlap = 0;
+
+    //         seriesPoints.forEach(currentPoint => {
+    //             checkOverlap += isPointOverlapped(0, overlayPoints, currentPoint);
+    //         });
+
+    //         if(checkOverlap < seriesPoints.length) {
+    //             overlayPoints = [...overlayPoints, ...seriesPoints];
+    //         }
+
+    //         if(checkOverlap >= seriesPoints.length) {
+    //             series.autoHidePointMarkers = true;
+    //         }
+
+    //     }
+    // },
+
     _applyAutoHidePointMarkers(filteredSeries) {
-        let overlapPoints = [];
-        filteredSeries.reduceRight((_, currentSeries) => {
+        let overlappingPoints = [];
+
+        for(let i = filteredSeries.length - 1; i >= 0; i--) {
+            const currentSeries = filteredSeries[i];
+
+            if(!currentSeries.autoHidePointMarkersEnabled()) {
+                continue;
+            }
+
             currentSeries.autoHidePointMarkers = false;
+            this._applyHidingPointsForSingleSeries(currentSeries);
 
-            if(currentSeries.autoHidePointMarkersEnabled()) {
-                let counterOverlapSingle = 0;
+            if(!currentSeries.autoHidePointMarkers) {
                 const seriesPoints = currentSeries.getPoints();
+                let checkOverlap = 0;
 
-
-                seriesPoints.some((currentPoint, index) => {
-                    if(cycleComparison(index + 1, seriesPoints, currentPoint, false)) {
-                        counterOverlapSingle++;
-                    }
-                    if(counterOverlapSingle > (seriesPoints.length / 2)) {
-                        currentSeries.autoHidePointMarkers = true;
-                        return true;
-                    }
+                seriesPoints.forEach(currentPoint => {
+                    checkOverlap += isPointOverlapped(currentPoint, overlappingPoints);
                 });
 
-                if(!currentSeries.autoHidePointMarkers) {
-                    let checkOverlap = 0;
-
-                    seriesPoints.forEach(currentPoint => {
-                        if(cycleComparison(0, overlapPoints, currentPoint)) {
-                            checkOverlap++;
-                        }
-                    });
-
-                    if(checkOverlap < seriesPoints.length) {
-                        overlapPoints = overlapPoints.concat(seriesPoints);
-                    }
-
-                    if(checkOverlap >= seriesPoints.length) {
-                        currentSeries.autoHidePointMarkers = true;
-                    }
+                if(checkOverlap < seriesPoints.length) {
+                    overlappingPoints = [...overlappingPoints, ...seriesPoints];
                 }
+
+                if(checkOverlap >= seriesPoints.length) {
+                    currentSeries.autoHidePointMarkers = true;
+                }
+
+
             }
-        }, null);
+        }
+
     },
 
     _applyPointMarkersAutoHiding() {
@@ -939,11 +967,8 @@ const dxChart = AdvancedChart.inherit({
 
         that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
-            series.forEach(singleSeries => {
-                singleSeries._applyVisibleArea();
-                singleSeries._translatePoints();
-                singleSeries._isCoordsPoints = true;
-            });
+            series.forEach(singleSeries =>
+                singleSeries.preparingCoordinatesForPoints());
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
             fastHidingPointMarkersByArea(borderCoords, markersInfo, series);

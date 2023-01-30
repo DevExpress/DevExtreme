@@ -565,12 +565,12 @@ Series.prototype = {
 
         that._appendInGroup();
 
-        if(!that._isCoordsPoints) {
+        if(!that._isAllPointsTranslated) {
             that._applyVisibleArea();
             that._translatePoints();
         }
 
-        that._isCoordsPoints = false;
+        that._isAllPointsTranslated = false;
         that._setGroupsSettings(animationEnabled, firstDrawing);
         !firstDrawing && !that._resetApplyingAnimation && that._preparePositionSegments();
         that._drawElements(animationEnabled, firstDrawing);
@@ -588,9 +588,17 @@ Series.prototype = {
     },
 
     _translatePoints() {
-        (this._points || []).forEach(p => {
+        const points = this._points ?? [];
+
+        points.forEach(p => {
             p.translate();
         });
+    },
+
+    preparingCoordinatesForPoints() {
+        this._applyVisibleArea();
+        this._translatePoints();
+        this._isAllPointsTranslated = true;
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
