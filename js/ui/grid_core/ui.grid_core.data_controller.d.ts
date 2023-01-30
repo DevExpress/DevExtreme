@@ -5,8 +5,9 @@ import { Store } from '../../data/index';
 import { Controller, Controllers, OptionChangedArgs } from './ui.grid_core.modules';
 
 type HandleDataChangedArguments = {
-  changeType?: 'refresh' | 'update';
-  isDelayed: boolean;
+  changeType?: 'refresh' | 'update' | 'loadError';
+  isDelayed?: boolean;
+  error?: any;
 };
 
 type UserData = Record<string, unknown>;
