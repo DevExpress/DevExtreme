@@ -1693,7 +1693,7 @@ declare module DevExpress.common.grids {
     sortOrder?: SortOrder;
   }
   export interface ColumnCustomizeTextArg {
-    value?: string | number | Date;
+    value?: any;
     valueText?: string;
     target?: string;
     groupInterval?: string | number;
