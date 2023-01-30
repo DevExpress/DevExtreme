@@ -2942,9 +2942,11 @@ QUnit.module('Supported editors', () => {
         const editor = layoutManager.getEditor('description');
         editor.option('value', 'new <b>value</b>');
 
-        assert.deepEqual(layoutManager.option('layoutData'), { description: 'new <b>value</b>' }, 'layoutData');
         if(windowUtils.hasWindow()) {
             assert.equal($('.dx-htmleditor-content').html(), '<p>new <strong>value</strong></p>', 'HtmlEditor content');
+            assert.deepEqual(layoutManager.option('layoutData'), { description: '<p>new <strong>value</strong></p>' }, 'layoutData');
+        } else {
+            assert.deepEqual(layoutManager.option('layoutData'), { description: 'new <b>value</b>' }, 'layoutData');
         }
     });
 });
