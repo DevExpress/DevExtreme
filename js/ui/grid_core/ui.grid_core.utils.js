@@ -649,6 +649,7 @@ export default {
                         ...lookupDataSourceOptions,
                         ...loadOptions,
                         filter: this.combineFilters([filter, loadOptions.filter], 'and'),
+                        paginate: false, // pagination is included to filter
                     });
 
                     newDataSource
