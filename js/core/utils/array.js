@@ -4,9 +4,10 @@ import config from '../config';
 
 function createOccurrenceMap(array) {
     return array.reduce((map, value) => {
-        map[value] = (map[value] ?? 0) + 1;
+        const count = (map.get(value) ?? 0) + 1;
+        map.set(value, count);
         return map;
-    }, {});
+    }, new Map());
 }
 
 export const wrapToArray = function(item) {
@@ -18,15 +19,21 @@ export const getUniqueValues = function(values) {
 };
 
 export const getIntersection = function(firstArray, secondArray) {
-    const secondArrayMap = createOccurrenceMap(secondArray);
-
-    return firstArray.filter(value => secondArrayMap[value]--);
+    const toRemoveMap = createOccurrenceMap(secondArray);
+    return firstArray.filter(value => {
+        const occurrencesCount = toRemoveMap.get(value);
+        occurrencesCount && toRemoveMap.set(value, occurrencesCount - 1);
+        return occurrencesCount;
+    });
 };
 
 export const removeDuplicates = function(from = [], toRemove = []) {
     const toRemoveMap = createOccurrenceMap(toRemove);
-
-    return from.filter(value => !toRemoveMap[value]--);
+    return from.filter(value => {
+        const occurrencesCount = toRemoveMap.get(value);
+        occurrencesCount && toRemoveMap.set(value, occurrencesCount - 1);
+        return !occurrencesCount;
+    });
 };
 
 export const normalizeIndexes = function(items, indexPropName, currentItem, needIndexCallback) {
