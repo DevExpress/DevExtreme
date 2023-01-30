@@ -3,7 +3,11 @@ import { orderEach } from './object';
 import config from '../config';
 
 function createOccurrenceMap(array) {
-    return array.reduce((map, value) => map.set(value, (map.get(value) ?? 0) + 1), new Map());
+    const map = new Map();
+    array.forEach(element => {
+        map.set(element, (map.get(element) ?? 0) + 1);
+    });
+    return map;
 }
 
 function getFilteredArray(from, toRemove, getUniqueItems) {
