@@ -1,0 +1,34 @@
+{
+  "name": "@devextreme/devextreme",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/devextreme",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "inputs": [
+        "{projectRoot}/build",
+        "{projectRoot}/fonts",
+        "{projectRoot}/icons",
+        "{projectRoot}/images",
+        "{projectRoot}/js",
+        "{projectRoot}/scss/widgets",
+        "{projectRoot}/testing",
+        "!{projectRoot}/testing/*.txt",
+        "!{projectRoot}/testing/*.xml",
+        "{projectRoot}/themebuilder-scss/src",
+        "{projectRoot}/themebuilder-scss/tests",
+        "{projectRoot}/ts"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts",
+        "{projectRoot}/dist",
+        "{projectRoot}/themebuilder-scss/dist"
+      ]
+    }
+  },
+  "tags": []
+}
