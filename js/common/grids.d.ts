@@ -519,7 +519,7 @@ export type ColumnChooserMode = 'dragAndDrop' | 'select';
  * @namespace DevExpress.common.grids
  */
 export type ColumnCustomizeTextArg = {
-  value?: string | number | Date;
+  value?: any;
   valueText?: string;
   target?: string;
   groupInterval?: string | number;
