@@ -4259,12 +4259,13 @@ QUnit.test('Get all points API', function(assert) {
     assert.equal(points[3].argument, this.data[3].arg);
 });
 
-QUnit.test('Get all points API1111', function(assert) {
+QUnit.test('All points should be translated', function(assert) {
     const series = createSeries({});
+    series.updateData(this.data);
     series.createPoints();
 
     // act
-    series.preparingCoordinatesForPoints();
+    series.prepareCoordinatesForPoints();
     const points = series.getAllPoints();
     // assert
 

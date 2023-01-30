@@ -566,8 +566,7 @@ Series.prototype = {
         that._appendInGroup();
 
         if(!that._isAllPointsTranslated) {
-            that._applyVisibleArea();
-            that._translatePoints();
+            that.prepareCoordinatesForPoints();
         }
 
         that._isAllPointsTranslated = false;
@@ -595,7 +594,7 @@ Series.prototype = {
         });
     },
 
-    preparingCoordinatesForPoints() {
+    prepareCoordinatesForPoints() {
         this._applyVisibleArea();
         this._translatePoints();
         this._isAllPointsTranslated = true;

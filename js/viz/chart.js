@@ -886,9 +886,10 @@ const dxChart = AdvancedChart.inherit({
         return rangeDataCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
     },
 
-    _applyHidingPointsForSingleSeries(series) {
+    _hidePointsForSingleSeriesIfNeeded(series) {
         const seriesPoints = series.getPoints();
         let counterOverlay = 0;
+
         for(let i = 0; i < seriesPoints.length; i++) {
             const currentPoint = seriesPoints[i];
 
@@ -900,29 +901,8 @@ const dxChart = AdvancedChart.inherit({
         }
     },
 
-    // _applyHidingPointsForMultiSeries(series, overlayPoints) {
-
-    //     if(!series.autoHidePointMarkers) {
-    //         const seriesPoints = series.getPoints();
-    //         let checkOverlap = 0;
-
-    //         seriesPoints.forEach(currentPoint => {
-    //             checkOverlap += isPointOverlapped(0, overlayPoints, currentPoint);
-    //         });
-
-    //         if(checkOverlap < seriesPoints.length) {
-    //             overlayPoints = [...overlayPoints, ...seriesPoints];
-    //         }
-
-    //         if(checkOverlap >= seriesPoints.length) {
-    //             series.autoHidePointMarkers = true;
-    //         }
-
-    //     }
-    // },
-
     _applyAutoHidePointMarkers(filteredSeries) {
-        let overlappingPoints = [];
+        const overlappingPoints = [];
 
         for(let i = filteredSeries.length - 1; i >= 0; i--) {
             const currentSeries = filteredSeries[i];
@@ -932,28 +912,22 @@ const dxChart = AdvancedChart.inherit({
             }
 
             currentSeries.autoHidePointMarkers = false;
-            this._applyHidingPointsForSingleSeries(currentSeries);
+            this._hidePointsForSingleSeriesIfNeeded(currentSeries);
 
             if(!currentSeries.autoHidePointMarkers) {
                 const seriesPoints = currentSeries.getPoints();
-                let checkOverlap = 0;
+                const overlappingPointsCount = seriesPoints
+                    .reduce((pointsCount, currentPoint) => {
+                        return pointsCount + isPointOverlapped(currentPoint, overlappingPoints);
+                    }, 0);
 
-                seriesPoints.forEach(currentPoint => {
-                    checkOverlap += isPointOverlapped(currentPoint, overlappingPoints);
-                });
-
-                if(checkOverlap < seriesPoints.length) {
-                    overlappingPoints = [...overlappingPoints, ...seriesPoints];
-                }
-
-                if(checkOverlap >= seriesPoints.length) {
+                if(overlappingPointsCount < seriesPoints.length) {
+                    overlappingPoints.push(...seriesPoints);
+                } else {
                     currentSeries.autoHidePointMarkers = true;
                 }
-
-
             }
         }
-
     },
 
     _applyPointMarkersAutoHiding() {
@@ -968,7 +942,7 @@ const dxChart = AdvancedChart.inherit({
         that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
             series.forEach(singleSeries =>
-                singleSeries.preparingCoordinatesForPoints());
+                singleSeries.prepareCoordinatesForPoints());
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
             fastHidingPointMarkersByArea(borderCoords, markersInfo, series);
