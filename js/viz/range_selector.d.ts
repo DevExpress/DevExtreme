@@ -26,6 +26,7 @@ import BaseWidget, {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -92,11 +93,29 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | To
   readonly previousValue: Array<number | string | Date>;
 };
 
+export interface RangeSelectorSize extends BaseWidgetSize {
+  /**
+   * @public
+   * @default 400
+  */
+  width?: number;
+  /**
+   * @public
+   * @default 160
+  */
+  height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: RangeSelectorSize;
     /**
      * @docid
      * @public

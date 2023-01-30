@@ -33589,6 +33589,13 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxRangeSelector> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface RangeSelectorSize extends BaseWidgetSize {
+      width?: number;
+      height?: number;
+    }
     export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRangeSelector,
@@ -33604,6 +33611,10 @@ declare module DevExpress.viz {
    */
   export interface dxRangeSelectorOptions
     extends BaseWidgetOptions<dxRangeSelector> {
+    /**
+     * [descr:dxRangeSelectorOptions.size]
+     */
+    size?: DevExpress.viz.dxRangeSelector.RangeSelectorSize;
     /**
      * [descr:dxRangeSelectorOptions.background]
      */
