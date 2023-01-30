@@ -512,38 +512,29 @@ const HtmlEditor = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        const needCallBase = this._isEditorUpdating;
-        let callBaseArgs = args;
+        let value;
 
         switch(args.name) {
             case 'value':
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
-                        if('_previousValue' in this) {
-                            callBaseArgs = {
-                                ...args,
-                                previousValue: this._previousValue
-                            };
-                            this._valueChangeCalled = true;
-                        }
                     } else {
                         const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
 
-                        this._previousValue = args.previousValue;
+                        this._suppressValueChangeAction();
                         this._updateHtmlContent(updatedValue);
-                        delete this._previousValue;
+                        this._resumeValueChangeAction();
                     }
                 } else {
                     this._$htmlContainer.html(args.value);
                 }
 
-                this._setSubmitValue(args.value);
-
-                if(Boolean(needCallBase) === false && this._valueChangeCalled) {
-                    this._valueChangeCalled = false;
-                } else {
-                    this.callBase(callBaseArgs);
+                // NOTE: value can be optimized by Quill
+                value = this.option('value');
+                if(value !== args.previousValue) {
+                    this._setSubmitValue(value);
+                    this.callBase({ ...args, value });
                 }
                 break;
             case 'placeholder':
