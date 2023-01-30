@@ -53,11 +53,11 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions.toString()
-      + testSassString
-      + variables.toString()
-      + setterServiceCode
-      + collectorServiceCode);
+      .toBe(`${functions.toString()}
+${variables.toString()}
+${testSassString}
+${setterServiceCode}
+${collectorServiceCode}`);
   });
 
   test('sassProcessor (bootstrap5)', async () => {
@@ -73,11 +73,11 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions.toString()
-      + testSassString
-      + variables.toString()
-      + setterServiceCode
-      + collectorServiceCode);
+      .toBe(`${functions.toString()}
+${variables.toString()}
+${testSassString}
+${setterServiceCode}
+${collectorServiceCode}`);
   });
 
   test('lessProcessor', async () => {
@@ -138,6 +138,21 @@ describe('BootstrapExtractor', () => {
   test('extract (bootstrap 4)', async () => {
     const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;';
     const extractor = new BootstrapExtractor(input, 4);
+    extractor.meta = {
+      'dx-var1': '$var1',
+      'dx-var2': '$var2',
+      'dx-var3': '$var3',
+    };
+
+    expect(await extractor.extract()).toEqual([
+      { key: '$dx-var1', value: 'test1' },
+      { key: '$dx-var2', value: 'test2' },
+    ]);
+  });
+
+  test('extract (bootstrap 5)', async () => {
+    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;';
+    const extractor = new BootstrapExtractor(input, 5);
     extractor.meta = {
       'dx-var1': '$var1',
       'dx-var2': '$var2',
