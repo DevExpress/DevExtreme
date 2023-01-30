@@ -6,9 +6,8 @@ concurrency:
 
 on:
   pull_request:
-    branches: [renovation_2_0_monorepo]
   push:
-    branches: [renovation_2_0_monorepo]
+    branches: [23_1]
 
 jobs:
   Lint:
