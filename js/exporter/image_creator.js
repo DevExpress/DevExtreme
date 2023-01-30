@@ -449,7 +449,6 @@ function applyGradient(context, options, shared, element, type) {
             gradient.addColorStop(offset / 100, opt.stopColor);
         });
 
-        type === 'radial' && context.transform(1, 0, 0, box.height / box.width, 0, -box.width / box.height);
         if(type === 'linear') {
             context.translate(box.x + box.width / 2, box.y + box.height / 2);
             context.rotate(gradients[id].transform ? gradients[id].transform.replace(/\D/g, '') * Math.PI / 180 : 0);
@@ -526,7 +525,7 @@ function createGradient(element) {
     _each(element.childNodes, (_, { attributes }) => {
         options.colors.push({
             offset: attributes.offset.value,
-            stopColor: attributes['stop-color'].value,
+            stopColor: attributes['stop-color'].value
         });
     });
     return options;

@@ -195,6 +195,28 @@ function setupCanvasStub(drawnElements, paths) {
         };
     });
 
+    sinon.stub(prototype, 'createRadialGradient', function(x0, y0, r0, x1, y1, r1) {
+        const addColorStop = sinon.spy();
+        drawnElements.push({
+            type: 'radialGradient',
+            args: {
+                x0,
+                y0,
+                r0,
+                x1,
+                y1,
+                r1
+            },
+            addColorStop
+        });
+        return {
+            addColorStop,
+            toString() {
+                return '#aaa';
+            }
+        };
+    });
+
     function getFontParam(fontString, paramType) {
         const patterns = {
             weight: '(bold|bolder)',
@@ -351,6 +373,9 @@ function teardownCanvasStub() {
 
     // createLinearGradient
     prototype.createLinearGradient.restore();
+
+    // createRadialGradient
+    prototype.createRadialGradient.restore();
 
     prototype.setTransform.restore();
 }
@@ -1147,6 +1172,83 @@ QUnit.test('lineargradient', function(assert) {
             assert.strictEqual(this.drawnElements.length, 3, 'Canvas elements count');
             assert.strictEqual(this.drawnElements[1].type, 'linearGradient', 'First element is linearGradient');
             assert.deepEqual(this.drawnElements[1].args, { x0: 0, y0: 0, x1: 30, y1: 0 });
+            assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, 'red']);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, 'blue']);
+
+            assert.roughEqual(this.drawnElements[2].style.globalAlpha, 0.3, 0.1);
+            assert.strictEqual(this.drawnElements[2].style.fillStyle, '#aaaaaa');
+            assert.strictEqual(this.drawnElements[2].type, 'fill', 'fill');
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('lineargradient with rotation angle', function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<linearGradient id="testlineargradient1" gradientTransform="rotate(45)">' +
+        '<stop offset="0%" stop-color="red"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</linearGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient1)" opacity="0.3"></path>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient2)" opacity="0.3"></path>' +
+        testingMarkupEnd;
+
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
+
+    $.when(imageBlob).done(() => {
+        try {
+            assert.strictEqual(this.drawnElements.length, 3, 'Canvas elements count');
+            assert.strictEqual(this.drawnElements[1].type, 'linearGradient', 'First element is linearGradient');
+            assert.deepEqual(this.drawnElements[1].args, { x0: 0, y0: 0, x1: 30, y1: 0 });
+            assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, 'red']);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, 'blue']);
+
+            assert.roughEqual(this.drawnElements[2].style.globalAlpha, 0.3, 0.1);
+            assert.strictEqual(this.drawnElements[2].style.fillStyle, '#aaaaaa');
+            assert.strictEqual(this.drawnElements[2].type, 'fill', 'fill');
+
+            assert.strictEqual(context.translate.callCount, 5, 'translate call count');
+            assert.deepEqual(context.translate.getCall(2).args, [15, 10]);
+            assert.deepEqual(context.translate.getCall(3).args, [-15, -10]);
+
+            assert.strictEqual(context.rotate.callCount, 1, 'rotate call count');
+            assert.roughEqual(context.rotate.getCall(0).args[0], 0.78, 0.01);
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('radialgradient', function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<radialGradient id="testradialgradient">' +
+        '<stop offset="0%" stop-color="red"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</radialGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testradialgradient)" opacity="0.3"></path>' +
+        testingMarkupEnd;
+
+    const imageBlob = getData(markup);
+
+    $.when(imageBlob).done(() => {
+        try {
+            assert.strictEqual(this.drawnElements.length, 3, 'Canvas elements count');
+            assert.strictEqual(this.drawnElements[1].type, 'radialGradient', 'First element is radialGradient');
+            assert.deepEqual(this.drawnElements[1].args, { r0: 0, r1: 15, x0: 15, x1: 15, y0: 10, y1: 10 });
             assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
             assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, 'red']);
             assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, 'blue']);
@@ -2155,6 +2257,35 @@ QUnit.test('Pattern canvas has same siza as pattern', function(assert) {
             canvas = context.createPattern.lastCall.args[0];
             assert.strictEqual(canvas.width, 6);
             assert.strictEqual(canvas.height, 6);
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('Pattern with image', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3-hatching-2" width="30" height="30"><image href="/testing/content/exporterTestsContent/test-image.png" x="0" y="0" width="30" height="30" preserveAspectRatio="none"></image></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3-hatching-2)" stroke="#ffa500"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(6);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 5, 'Canvas elements count');
+            assert.equal(that.drawnElements[1].type, 'rect', 'The first element on canvas is rect');
+            assert.equal(that.drawnElements[2].type, 'image', 'The third element on canvas is image - pattern');
+            assert.equal(that.drawnElements[3].type, 'pattern', 'The fourth element on canvas is pattern');
+            assert.equal(that.drawnElements[4].type, 'fill', 'The fifth element on canvas is fill');
+
+            assert.deepEqual(that.drawnElements[2].args, {
+                height: 30,
+                node: 'IMG',
+                src: '/testing/content/exporterTestsContent/test-image.png',
+                width: 30,
+                x: 0,
+                y: 0
+            }, 'pattern image args');
         } finally {
             done();
         }
