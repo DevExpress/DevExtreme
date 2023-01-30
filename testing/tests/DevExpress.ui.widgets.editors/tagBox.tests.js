@@ -5495,7 +5495,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         assert.deepEqual(this.instance.option('value'), [items[2], items[0]], 'tags order is correct');
     });
 
-    QUnit.test('Object value should be updated correctly when item is added', function(assert) {
+    QUnit.test('value should be updated correctly after item is added if valueExpr="this" (T1141799)', function(assert) {
         const firstValue = { id: 1, description: 'item 1' };
         const secondValue = { id: 2, description: 'item 2' };
         const thirdValue = { id: 3, description: 'item 3' };
@@ -5512,13 +5512,13 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         const items = this.instance.option('value');
-        assert.equal(items.length, 3);
+        assert.strictEqual(items.length, 3);
         assert.deepEqual(items[0], firstValue);
         assert.deepEqual(items[1], thirdValue);
         assert.deepEqual(items[2], secondValue);
     });
 
-    QUnit.test('Object value should be updated correctly when item is removed', function(assert) {
+    QUnit.test('value should be updated correctly after item is removed if valueExpr="this" (T1141799)', function(assert) {
         const firstValue = { id: 1, description: 'item 1' };
         const secondValue = { id: 2, description: 'item 2' };
         const thirdValue = { id: 3, description: 'item 3' };
@@ -5536,7 +5536,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
 
         const items = this.instance.option('value');
-        assert.equal(items.length, 2);
+        assert.strictEqual(items.length, 2);
         assert.deepEqual(items[0], firstValue);
         assert.deepEqual(items[1], thirdValue);
     });
