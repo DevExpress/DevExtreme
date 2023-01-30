@@ -93,14 +93,15 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | To
   readonly previousValue: Array<number | string | Date>;
 };
 
-export interface RangeSelectorSize extends BaseWidgetSize {
+/** @public */
+export interface RangeSelectorSize extends Omit<BaseWidgetSize, 'derivedProp'> {
   /**
-   * @public
+   * @docid
    * @default 400
   */
   width?: number;
   /**
-   * @public
+   * @docid
    * @default 160
   */
   height?: number;
