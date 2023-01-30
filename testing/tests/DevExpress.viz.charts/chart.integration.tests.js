@@ -2285,7 +2285,7 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
 });
 
 QUnit.test('All points should be hidden when all points are overlapped', function(assert) {
-    const dataSource = [ {
+    const dataSource = [{
         country: 'USA',
         val1: 10,
         val2: 11,

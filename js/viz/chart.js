@@ -371,7 +371,7 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
-const checkOverlay = (currentPoint, overlayPoint, radiusPoint) => {
+const isOverlay = (currentPoint, overlayPoint, radiusPoint) => {
     const isPointHitLeftBorder = overlayPoint.x - radiusPoint <= currentPoint.x;
     const isPointHitRightBorder = overlayPoint.x + radiusPoint >= currentPoint.x;
     const isPointHitTopBorder = overlayPoint.y - radiusPoint <= currentPoint.y;
@@ -382,11 +382,11 @@ const checkOverlay = (currentPoint, overlayPoint, radiusPoint) => {
     return isPointOverlayHorizontally && isPointOverlayVertically;
 };
 
-const isPointOverlapped = (currentPoint, overlappingPoints, startCounter = 0, skippingSamePoints = true) => {
+const isPointOverlapped = (currentPoint, overlappingPoints, startCounter = 0, skipComparingSamePoints = true) => {
     const radiusPoint = currentPoint.getOptions().size / 2;
 
     for(let i = startCounter; i < overlappingPoints.length; i++) {
-        if(!skippingSamePoints) {
+        if(!skipComparingSamePoints) {
             const isXCoordinateSame = overlappingPoints[i].x === currentPoint.x;
             const isYCoordinateSame = overlappingPoints[i].y === currentPoint.y;
 
@@ -395,7 +395,7 @@ const isPointOverlapped = (currentPoint, overlappingPoints, startCounter = 0, sk
             }
         }
 
-        if(checkOverlay(currentPoint, overlappingPoints[i], radiusPoint)) {
+        if(isOverlay(currentPoint, overlappingPoints[i], radiusPoint)) {
             return true;
         }
     }
