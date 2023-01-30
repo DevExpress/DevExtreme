@@ -512,10 +512,8 @@ const HtmlEditor = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        let value;
-
         switch(args.name) {
-            case 'value':
+            case 'value': {
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
@@ -531,12 +529,13 @@ const HtmlEditor = Editor.inherit({
                 }
 
                 // NOTE: value can be optimized by Quill
-                value = this.option('value');
+                const value = this.option('value');
                 if(value !== args.previousValue) {
                     this._setSubmitValue(value);
                     this.callBase({ ...args, value });
                 }
                 break;
+            }
             case 'placeholder':
             case 'variables':
             case 'toolbar':
