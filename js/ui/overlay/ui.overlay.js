@@ -28,7 +28,7 @@ import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../..
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import { tabbable } from '../widget/selectors';
 import Widget from '../widget/ui.widget';
-// import browser from '../../core/utils/browser';
+import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
 const ready = readyCallbacks.add;
@@ -48,7 +48,7 @@ const RTL_DIRECTION_CLASS = 'dx-rtl';
 
 const OVERLAY_STACK = [];
 
-// const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
 
@@ -256,9 +256,8 @@ const Overlay = Widget.inherit({
     },
 
     _scrollHandler: function(e) {
-        const isOverlayWrapperArea = e.target.closest('.dx-popup-content');
-
-        if(isOverlayWrapperArea === null) {
+        const isOverlayWrapperArea = $(e.target).closest(this._$content.find('.dx-popup-content'));
+        if(!isOverlayWrapperArea.length || e.target.closest('.dx-dropdowneditor-active')) {
             const originalEvent = e.originalEvent.originalEvent;
             const { type } = originalEvent || {};
             const isWheel = type === 'wheel';
@@ -1018,28 +1017,28 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSafariScrolling: function() {
-        // const visible = this.option('visible');
-        // const $body = $(domAdapter.getBody());
-        // const isIosSafari = devices.real().platform === 'ios' && browser.safari;
-        // const isAllWindowCovered = this._isAllWindowCovered();
-        // const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
+        const visible = this.option('visible');
+        const $body = $(domAdapter.getBody());
+        const isIosSafari = devices.real().platform === 'ios' && browser.safari;
+        const isAllWindowCovered = this._isAllWindowCovered();
+        const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
 
-        // const shouldPreventScrolling = !isScrollingPrevented
-        //     && visible
-        //     && isAllWindowCovered;
-        // const shouldEnableScrolling = isScrollingPrevented
-        //     && (!visible || !isAllWindowCovered || this._disposed);
+        const shouldPreventScrolling = !isScrollingPrevented
+            && visible
+            && isAllWindowCovered;
+        const shouldEnableScrolling = isScrollingPrevented
+            && (!visible || !isAllWindowCovered || this._disposed);
 
-        // if(isIosSafari) {
-        //     if(shouldEnableScrolling) {
-        //         $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
-        //         window.scrollTo(0, this._cachedBodyScrollTop);
-        //         this._cachedBodyScrollTop = undefined;
-        //     } else if(shouldPreventScrolling) {
-        //         this._cachedBodyScrollTop = window.pageYOffset;
-        //         $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
-        //     }
-        // }
+        if(isIosSafari) {
+            if(shouldEnableScrolling) {
+                $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._cachedBodyScrollTop);
+                this._cachedBodyScrollTop = undefined;
+            } else if(shouldPreventScrolling) {
+                this._cachedBodyScrollTop = window.pageYOffset;
+                $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+            }
+        }
     },
 
     _renderWrapper: function() {

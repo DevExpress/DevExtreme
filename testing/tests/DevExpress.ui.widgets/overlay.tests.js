@@ -3393,6 +3393,7 @@ testModule('scrollable interaction', {
         $($shader.parent()).off('dxmousewheel');
     });
 
+    // todo: rewrite
     test('scroll event prevented on overlay shader, visible on inizialization, shading: false', function(assert) {
         assert.expect(0);
 
@@ -3430,6 +3431,7 @@ testModule('scrollable interaction', {
         $($shader.parent()).off('dxmousewheel');
     });
 
+    // todo: rewrite
     test('scroll event prevented on overlay shader, visible after option changed, shading: false', function(assert) {
         assert.expect(0);
 
@@ -3451,13 +3453,12 @@ testModule('scrollable interaction', {
     });
 
     test('scroll event should be prevented if originalEvent is mousemove or touchmove', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
+        const overlay = $('#overlay').dxOverlay({
             shading: true,
             visible: true
-        });
+        }).dxOverlay('instance');
 
-        const $content = $overlay.dxOverlay('$content');
-        const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+        const $shader = $(overlay.content()).closest(toSelector(OVERLAY_SHADER_CLASS));
 
         $($shader).on('dxmousewheel', function(e) {
             assert.strictEqual(e.isDefaultPrevented(), true, 'event is prevented');
@@ -3482,17 +3483,16 @@ testModule('scrollable interaction', {
 
     test('scroll event prevented on overlay shader', function(assert) {
         try {
-            const $overlay = $($('#overlay').dxOverlay({
+            const overlay = $('#overlay').dxOverlay({
                 shading: true,
                 visible: true
-            }));
-            const $content = $($overlay.dxOverlay('$content'));
+            }).dxOverlay('instance');
 
             $(document).on('dxpointermove.TEST', function(e) {
                 assert.ok(e.isScrollingEvent, 'scrolling event set');
             });
 
-            $content
+            $(overlay.content())
                 .trigger({
                     type: 'dxpointerdown',
                     pointers: [null]
@@ -3525,10 +3525,7 @@ testModule('scrollable interaction', {
 
         const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
 
-        $($overlayWrapper).on('dxdrag.TEST', {
-            getDirection: function() { return 'both'; },
-            validate: function() { return true; }
-        }, function(e) {
+        $($overlayWrapper).on('dxmousewheel', function(e) {
             assert.ok(e.isDefaultPrevented(), 'scroll event prevented');
         });
 
