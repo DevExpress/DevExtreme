@@ -5217,19 +5217,31 @@
             "Title": "Basics",
             "Name": "Basics",
             "DocUrl": "Guide/UI_Components/TileView/Overview/",
-            "Widget": "TileView"
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
           },
           {
             "Title": "Directions",
             "Name": "Directions",
             "DocUrl": "ApiReference/UI_Components/dxTileView/Configuration/#direction",
-            "Widget": "TileView"
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
           },
           {
             "Title": "Item Template",
             "Name": "ItemTemplate",
             "DocUrl": "Guide/UI_Components/TileView/Customize_Tile_Appearance/",
-            "Widget": "TileView"
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
           },
           {
             "Title": "Item 3rd Party Engine Template",
