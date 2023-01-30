@@ -1206,12 +1206,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setHorizontalGroupHeaderCellsHeight() {
-        let height = getBoundingRect(this._$dateTable.get(0)).height;
-
-        if(this.isAllDayPanelVisible) {
-            height = height + Math.floor(this.getAllDayHeight());
-        }
-
+        const height = getBoundingRect(this._$dateTable.get(0)).height;
         setOuterHeight(this._$groupTable, height);
     }
 
