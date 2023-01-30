@@ -3,16 +3,11 @@ import { orderEach } from './object';
 import config from '../config';
 
 function createOccurrenceMap(array) {
-    return array.reduce((map, value) => map.set(value, (map.get(value) ?? 0) + 1), new Map());
-}
-
-function getFilteredArray(from, toRemove, getUniqueItems) {
-    const toRemoveMap = createOccurrenceMap(toRemove);
-    return from.filter(value => {
-        const occurrencesCount = toRemoveMap.get(value);
-        occurrencesCount && toRemoveMap.set(value, occurrencesCount - 1);
-        return getUniqueItems ^ occurrencesCount;
-    });
+    return array.reduce((map, value) => {
+        const count = (map.get(value) ?? 0) + 1;
+        map.set(value, count);
+        return map;
+    }, new Map());
 }
 
 export const wrapToArray = function(item) {
@@ -24,11 +19,21 @@ export const getUniqueValues = function(values) {
 };
 
 export const getIntersection = function(firstArray, secondArray) {
-    return getFilteredArray(firstArray, secondArray, false);
+    const toRemoveMap = createOccurrenceMap(secondArray);
+    return firstArray.filter(value => {
+        const occurrencesCount = toRemoveMap.get(value);
+        occurrencesCount && toRemoveMap.set(value, occurrencesCount - 1);
+        return occurrencesCount;
+    });
 };
 
 export const removeDuplicates = function(from = [], toRemove = []) {
-    return getFilteredArray(from, toRemove, true);
+    const toRemoveMap = createOccurrenceMap(toRemove);
+    return from.filter(value => {
+        const occurrencesCount = toRemoveMap.get(value);
+        occurrencesCount && toRemoveMap.set(value, occurrencesCount - 1);
+        return !occurrencesCount;
+    });
 };
 
 export const normalizeIndexes = function(items, indexPropName, currentItem, needIndexCallback) {
