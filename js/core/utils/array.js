@@ -3,20 +3,10 @@ import { orderEach } from './object';
 import config from '../config';
 
 function createOccurrenceMap(array) {
-    const map = new Map();
-    array.forEach(element => {
-        map.set(element, (map.get(element) ?? 0) + 1);
-    });
-    return map;
-}
-
-function getFilteredArray(from, toRemove, getUniqueItems) {
-    const toRemoveMap = createOccurrenceMap(toRemove);
-    return from.filter(value => {
-        const occurrencesCount = toRemoveMap.get(value);
-        occurrencesCount && toRemoveMap.set(value, occurrencesCount - 1);
-        return getUniqueItems ^ occurrencesCount;
-    });
+    return array.reduce((map, value) => {
+        map[value] = (map[value] ?? 0) + 1;
+        return map;
+    }, {});
 }
 
 export const wrapToArray = function(item) {
@@ -28,11 +18,15 @@ export const getUniqueValues = function(values) {
 };
 
 export const getIntersection = function(firstArray, secondArray) {
-    return getFilteredArray(firstArray, secondArray, false);
+    const secondArrayMap = createOccurrenceMap(secondArray);
+
+    return firstArray.filter(value => secondArrayMap[value]--);
 };
 
 export const removeDuplicates = function(from = [], toRemove = []) {
-    return getFilteredArray(from, toRemove, true);
+    const toRemoveMap = createOccurrenceMap(toRemove);
+
+    return from.filter(value => !toRemoveMap[value]--);
 };
 
 export const normalizeIndexes = function(items, indexPropName, currentItem, needIndexCallback) {
