@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import DataGrid, { Properties } from '../data_grid';
 import { PropertyType as _PropertyType, DeepPartial } from '../../core/index';
+import { Component } from '../../core/component';
+import { dxElementWrapper } from '../../core/renderer';
 
 type PropertyType<O, K extends string> = _PropertyType<O, K> extends never ? any : _PropertyType<O, K>;
 
@@ -32,6 +34,8 @@ export interface InternalGrid extends Omit<DataGrid<unknown, unknown>, 'option'>
   _optionsByReference: any;
 
   _disposed: any;
+
+  _createComponent: <TComponent extends Component<any>>($container: dxElementWrapper, component: new (...args) => TComponent, options: TComponent extends Component<infer TOptions> ? TOptions : never) => TComponent;
 }
 
 export type InternalGridOptions = Properties & {
@@ -106,7 +110,7 @@ declare class ModuleItem {
 
   setAria: (this: this, ...args: any[]) => void;
 
-  _createComponent: (this: this, ...args: any[]) => any;
+  _createComponent: InternalGrid['_createComponent'];
 
   getController: InternalGrid['getController'];
 
