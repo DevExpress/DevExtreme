@@ -267,7 +267,9 @@ const Overlay = Widget.inherit({
                 return;
             }
 
-            e.preventDefault();
+            if(e.cancelable !== false) {
+                e.preventDefault();
+            }
         }
     },
 
