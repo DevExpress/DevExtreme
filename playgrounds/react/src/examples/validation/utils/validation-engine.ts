@@ -1,4 +1,3 @@
-import { ValidationEngine } from '@devextreme/interim';
 import { ValidationGroupContextValue } from '../contexts/validation-group-context';
 import { Rule } from '../types';
 
@@ -54,8 +53,4 @@ export function createValidationEngine(): DummyValidationEngine {
     validateEditorValue,
     validateEditorValues,
   };
-}
-
-export function getValidationEngine(): ValidationEngine {
-  return ValidationEngine;
 }
