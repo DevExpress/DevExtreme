@@ -1,6 +1,4 @@
-import { AdaptiveColumnsController } from './ui.grid_core.adaptivity';
-import { DataController } from './ui.grid_core.data_controller';
-import { ViewController } from './ui.grid_core.modules';
+import { Controllers, ViewController } from './ui.grid_core.modules';
 
 interface ResizingControllerState {
   _columnHeadersView: any;
@@ -18,8 +16,8 @@ interface ResizingControllerState {
 
   _updateScrollableTimeoutID: any;
 
-  _dataController: DataController;
-  _adaptiveColumnsController: AdaptiveColumnsController;
+  _dataController: Controllers['data'];
+  _adaptiveColumnsController: Controllers['adaptiveColumns'];
 }
 
 interface ResizingController extends ViewController, ResizingControllerState {

@@ -1,11 +1,11 @@
 import { HandleDataChangedArguments } from './ui.grid_core.data_controller';
-import { View } from './ui.grid_core.modules';
+import { Controllers, View } from './ui.grid_core.modules';
 
 export class ColumnsView extends View {
   // State:
-  _columnsController: import('./ui.grid_core.columns_controller').ColumnsController;
+  _columnsController: Controllers['columns'];
 
-  _dataController: import('./ui.grid_core.data_controller').DataController;
+  _dataController: Controllers['data'];
 
   _delayedTemplates: any[];
 

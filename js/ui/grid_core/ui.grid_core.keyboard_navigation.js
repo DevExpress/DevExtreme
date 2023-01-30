@@ -953,6 +953,7 @@ const keyboardNavigationMembers = {
         $cell = args.$newCellElement;
         if(!args.cancel) {
             if(args.resetFocusedRow) {
+                // @ts-expect-error
                 this.getController('focus')._resetFocusedRow();
                 return;
             }
@@ -1142,6 +1143,7 @@ const keyboardNavigationMembers = {
             const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
 
             if((isCellEditMode && editingController.hasChanges()) || (isBatchEditMode && editingController.isNewRowInEditMode())) {
+                // @ts-expect-error
                 editingController._focusEditingCell();
                 return;
             }
@@ -2003,8 +2005,10 @@ export const keyboardNavigationModule = {
                         const column = this.getController('columns').getVisibleColumns()[columnIndex];
                         const row = this.getController('data').items()[e.rowIndex];
 
+                        // @ts-expect-error
                         if(keyboardController._isAllowEditing(row, column) || force) {
                             const eventArgs = createEvent(originalEvent, { currentTarget: originalEvent.target });
+                            // @ts-expect-error
                             keyboardController._pointerEventHandler(eventArgs);
                         }
                     }
@@ -2035,6 +2039,7 @@ export const keyboardNavigationModule = {
                     const $row = cellElements.eq(0).parent();
 
                     if(isGroupRow($row)) {
+                        // @ts-expect-error
                         keyboardController._applyTabIndexToElement($row);
                     } else {
                         let columnIndex = keyboardController.getColumnIndex();
@@ -2048,9 +2053,13 @@ export const keyboardNavigationModule = {
                     const keyboardController = this.getController('keyboardNavigation');
                     const cellElementsLength = cellElements ? cellElements.length : -1;
                     const updateCellTabIndex = function($cell) {
+                        // @ts-expect-error
                         const isMasterDetailCell = keyboardController._isMasterDetailCell($cell);
+                        // @ts-expect-error
                         const isValidCell = keyboardController._isCellValid($cell);
+                        // @ts-expect-error
                         if(!isMasterDetailCell && isValidCell && keyboardController._isCellElement($cell)) {
+                            // @ts-expect-error
                             keyboardController._applyTabIndexToElement($cell);
                             keyboardController.setCellFocusType();
                             return true;
@@ -2095,6 +2104,7 @@ export const keyboardNavigationModule = {
                 _editCellPrepared: function($cell) {
                     const editorInstance = this._getEditorInstance($cell);
                     const keyboardController = this.getController('keyboardNavigation');
+                    // @ts-expect-error
                     const isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
 
                     if(editorInstance && isEditingNavigationMode) {
@@ -2134,6 +2144,7 @@ export const keyboardNavigationModule = {
                 editCell: function(rowIndex, columnIndex) {
                     const keyboardController = this.getController('keyboardNavigation');
 
+                    // @ts-expect-error
                     if(keyboardController._processCanceledEditCellPosition(rowIndex, columnIndex)) {
                         return false;
                     }
@@ -2151,6 +2162,7 @@ export const keyboardNavigationModule = {
                     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
                     if(column && column.type || this.option('editing.mode') === EDIT_MODE_FORM) {
+                        // @ts-expect-error
                         keyboardController._resetFocusedCell();
                     }
                     this.callBase(rowIndex);
@@ -2167,7 +2179,9 @@ export const keyboardNavigationModule = {
                     const keyboardNavigationController = this.getController('keyboardNavigation');
                     let $cell = this.callBase(rowIndex);
 
+                    // @ts-expect-error
                     if(keyboardNavigationController.isKeyboardEnabled() && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
+                        // @ts-expect-error
                         const $focusedCell = keyboardNavigationController._getFocusedCell();
                         if(isElementDefined($focusedCell) && !$focusedCell.hasClass(COMMAND_EDIT_CLASS)) {
                             $cell = $focusedCell;
@@ -2179,6 +2193,7 @@ export const keyboardNavigationModule = {
                 _processCanceledEditingCell: function() {
                     this.closeEditCell().done(() => {
                         const keyboardNavigation = this.getController('keyboardNavigation');
+                        // @ts-expect-error
                         keyboardNavigation._updateFocus();
                     });
                 },
@@ -2188,15 +2203,18 @@ export const keyboardNavigationModule = {
                 },
                 closeEditCell: function() {
                     const keyboardNavigation = this._keyboardNavigationController;
+                    // @ts-expect-error
                     keyboardNavigation._fastEditingStarted = false;
 
                     const result = this.callBase.apply(this, arguments);
 
+                    // @ts-expect-error
                     keyboardNavigation._updateFocus();
 
                     return result;
                 },
                 _delayedInputFocus: function() {
+                    // @ts-expect-error
                     this._keyboardNavigationController._isNeedScroll = true;
                     this.callBase.apply(this, arguments);
                 },
@@ -2204,8 +2222,11 @@ export const keyboardNavigationModule = {
                     const keyboardNavigation = this.getController('keyboardNavigation');
                     const cancel = this.callBase.apply(this, arguments);
 
+                    // @ts-expect-error
                     if(cancel && !keyboardNavigation._isNeedFocus) {
+                        // @ts-expect-error
                         const $cell = keyboardNavigation._getFocusedCell();
+                        // @ts-expect-error
                         keyboardNavigation._focus($cell, true);
                     }
 
@@ -2217,6 +2238,7 @@ export const keyboardNavigationModule = {
                     const that = this;
                     const keyboardNavigationController = that.getController('keyboardNavigation');
                     const editorFactory = that.getController('editorFactory');
+                    // @ts-expect-error
                     const focusedCellPosition = keyboardNavigationController._focusedCellPosition;
 
                     that.callBase.apply(that, arguments);

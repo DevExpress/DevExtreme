@@ -1,8 +1,8 @@
-import { ViewController } from './ui.grid_core.modules';
+import { Controllers, ViewController } from './ui.grid_core.modules';
 
 interface State {
-  _dataController: import('./ui.grid_core.data_controller').DataController;
-  _keyboardController: import('./ui.grid_core.keyboard_navigation').KeyboardNavigationController;
+  _dataController: Controllers['data'];
+  _keyboardController: Controllers['keyboardNavigation'];
 }
 
 interface FocusController extends ViewController, State {

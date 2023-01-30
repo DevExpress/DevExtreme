@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import DataGrid, { Properties } from '../data_grid';
-import { PropertyType as _PropertyType, DeepPartial } from '../../core/index';
+import { PropertyType as _PropertyType, DeepPartial, OmitInternal } from '../../core/index';
 import { Component } from '../../core/component';
 import { dxElementWrapper } from '../../core/renderer';
 
@@ -12,6 +12,8 @@ export interface InternalGrid extends Omit<DataGrid<unknown, unknown>, 'option'>
   option<TPropertyName extends string>(optionName: TPropertyName, optionValue: PropertyType<InternalGridOptions, TPropertyName>): void;
 
   option(): InternalGridOptions;
+
+  option(options: InternalGridOptions): void;
 
   NAME: 'dxDataGrid' | 'dxTreeList';
 
@@ -50,7 +52,7 @@ export interface OptionChangedArgs<T extends string = string> {
   handled: boolean;
 }
 
-export type Controllers = {
+export type ControllersPrivate = {
   data: import('./ui.grid_core.data_controller').DataController;
   columns: import('./ui.grid_core.columns_controller').ColumnsController;
   resizing: import('./ui.grid_core.grid_view').ResizingController;
@@ -67,10 +69,22 @@ export type Controllers = {
   selection: any;
 };
 
-export type Views = {
+export type ViewsPrivate = {
   headerPanel: import('./ui.grid_core.header_panel').HeaderPanel;
   rowsView: import('./ui.grid_core.rows').RowsView;
   columnChooserView: import('./ui.grid_core.column_chooser').ColumnChooserView;
+};
+
+type MapOmitThis<T> = {
+  [P in keyof T]: OmitThisParameter<T[P]>;
+};
+
+export type Controllers = {
+  [P in keyof ControllersPrivate]: OmitInternal<MapOmitThis<ControllersPrivate[P]>>;
+};
+
+export type Views = {
+  [P in keyof ViewsPrivate]: OmitInternal<MapOmitThis<ViewsPrivate[P]>>;
 };
 
 declare class ModuleItem {
@@ -167,11 +181,11 @@ export class View extends ModuleItem {
 }
 
 export interface Module {
-  controllers?: DeepPartial<Controllers>;
-  views?: DeepPartial<Views>;
+  controllers?: DeepPartial<ControllersPrivate>;
+  views?: DeepPartial<ViewsPrivate>;
   extenders?: {
-    controllers?: DeepPartial<Controllers>;
-    views?: DeepPartial<Views>;
+    controllers?: DeepPartial<ControllersPrivate>;
+    views?: DeepPartial<ViewsPrivate>;
   };
   defaultOptions?: () => InternalGridOptions;
 }
