@@ -513,22 +513,29 @@ const HtmlEditor = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'value':
+            case 'value': {
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
                     } else {
                         const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
+
+                        this._suppressValueChangeAction();
                         this._updateHtmlContent(updatedValue);
+                        this._resumeValueChangeAction();
                     }
                 } else {
                     this._$htmlContainer.html(args.value);
                 }
 
-                this._setSubmitValue(args.value);
-
-                this.callBase(args);
+                // NOTE: value can be optimized by Quill
+                const value = this.option('value');
+                if(value !== args.previousValue) {
+                    this._setSubmitValue(value);
+                    this.callBase({ ...args, value });
+                }
                 break;
+            }
             case 'placeholder':
             case 'variables':
             case 'toolbar':
