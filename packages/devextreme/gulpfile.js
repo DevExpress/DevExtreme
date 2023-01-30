@@ -75,9 +75,10 @@ function createDefaultBatch(dev) {
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
-        if(!env.SKIP_THEMEBUILDER) {
-            tasks.push('themebuilder-npm');
-        }
+        // TODO uncomment me!
+        // if(!env.SKIP_THEMEBUILDER) {
+        //     tasks.push('themebuilder-npm');
+        // }
         tasks.push('check-license-notices');
     }
     if(!env.BUILD_TESTCAFE) {
