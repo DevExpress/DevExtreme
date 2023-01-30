@@ -20,36 +20,46 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '15'
+        node-version: '18'
 
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        path: |
+          node_modules
+          packages/**/node_modules
+          playgrounds/**/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('./package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules-
 
-    - name: Restore artifacts cache
-      uses: actions/cache@v3
-      with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+#     covered by NX cache
+#    - name: Restore artifacts cache
+#      uses: actions/cache@v3
+#      with:
+#        path: ./artifacts
+#        key: build-npm-devextreme-artifacts-${{ github.sha }}
 
-    - name: Install packages in devextreme repo
-      run: test -d artifacts || npm install --no-audit --no-fund
+#    - name: Install packages in devextreme repo
+#      run: test -d artifacts || npm install --no-audit --no-fund
 
-    - name: Build devextreme repo
-      run: test -d artifacts || npm run build-npm-devextreme
+#    - name: Build devextreme repo
+#      run: test -d artifacts || npm run build-npm-devextreme
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Build
+      run: npx nx build @devextreme/devextreme
 
     - name: Pack devextreme package
-      working-directory: ./artifacts/npm/devextreme
+      working-directory: ./packages/devextreme/artifacts/npm/devextreme
       run: npm pack
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: devextreme-npm
-        path: ./artifacts/npm/devextreme/devextreme-*.tgz
+        path: ./packages/devextreme/artifacts/npm/devextreme/devextreme-*.tgz
         retention-days: 1
 
   test_npm_renovation:
@@ -71,32 +81,37 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        path: |
+          node_modules
+          packages/**/node_modules
+          playgrounds/**/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('./package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules-
 
-    - name: Install packages in devextreme repo
+    - name: Run npm install
       run: npm install --no-audit --no-fund
 
     - name: Download DevExtreme package
       uses: actions/download-artifact@v3
       with:
         name: devextreme-npm
-        path: ./testing/renovation-npm/${{ matrix.framework }}-app
+        path: ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app
 
     - name: Prepare artifacts
       run: |
-        mkdir -p ./artifacts/npm
-        cp $(ls ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-*.tgz) ./artifacts/npm/devextreme.tgz
-        cd ./artifacts/npm
+        mkdir -p ./packages/devextreme/artifacts/npm
+        cp $(ls ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app/devextreme-*.tgz) ./packages/devextreme/artifacts/npm/devextreme.tgz
+        cd ./packages/devextreme/artifacts/npm
         tar -xzf devextreme.tgz
         mv package devextreme
 
     - name: Build Renovated NPM
-      run: npm run build-npm-renovation:${{ matrix.framework }}
+      run: |
+        cd ./packages/devextreme
+        npm run build-npm-renovation:${{ matrix.framework }}
 
     - name: Prepare test project
-      working-directory: ./testing/renovation-npm
+      working-directory: ./packages/devextreme/testing/renovation-npm
       run: |
         npm i
 
@@ -113,7 +128,7 @@ jobs:
         exit 1
 
     - name: Run tests
-      working-directory: ./testing/renovation-npm
+      working-directory: ./packages/devextreme/testing/renovation-npm
       run: |
         npm run test:${{ matrix.framework }}
 
@@ -122,7 +137,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts
+        path: ${{ github.workspace }}/packages/devextreme/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
   test_angular_wrappers:
@@ -132,10 +147,10 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Use Node.js v14
+    - name: Use Node.js v18
       uses: actions/setup-node@v3
       with:
-        node-version: '14'
+        node-version: '18'
 
     - name: Get sources
       uses: actions/checkout@v3
