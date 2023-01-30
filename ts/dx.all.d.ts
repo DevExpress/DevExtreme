@@ -33590,7 +33590,7 @@ declare module DevExpress.viz {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
     export interface RangeSelectorSize
-      extends Omit<BaseWidgetSize, 'derivedProp'> {
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
       /**
        * [descr:RangeSelectorSize.width]
        */

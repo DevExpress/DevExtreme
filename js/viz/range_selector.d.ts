@@ -94,7 +94,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | To
 };
 
 /** @public */
-export interface RangeSelectorSize extends Omit<BaseWidgetSize, 'derivedProp'> {
+export interface RangeSelectorSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
   /**
    * @docid
    * @default 400
