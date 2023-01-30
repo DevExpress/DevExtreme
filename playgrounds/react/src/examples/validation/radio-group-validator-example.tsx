@@ -1,7 +1,7 @@
 import { RadioButton } from '@devextreme/react';
-import { CustomRule } from './components/dummy-validation';
 import { RadioGroupEditor as RadioGroup } from './components/enhanced-radio-group';
 import { ValidationGroup } from './components/validation-group';
+import { CustomRule } from './components/validation-rules';
 import { Validator } from './components/validator';
 
 const OPTIONS = [1, 2, 3, 4, 5];
@@ -19,7 +19,7 @@ export function RadioGroupValidatorExample() {
             <Validator>
               <CustomRule
                 message="Should be < 3"
-                validate={(value) => (value as number) < 3}
+                validationCallback={({ value }: { value: unknown }) => (value as number) < 3}
               />
             </Validator>
           </RadioGroup>
@@ -36,7 +36,7 @@ export function RadioGroupValidatorExample() {
               <Validator>
                 <CustomRule
                   message="Should be > 2"
-                  validate={(value) => (value as number) > 2}
+                  validationCallback={({ value }: { value: unknown }) => (value as number) > 2}
                 />
               </Validator>
             </RadioGroup>
@@ -46,8 +46,12 @@ export function RadioGroupValidatorExample() {
               ))}
               <Validator>
                 <CustomRule
-                  message="Should be > 2"
-                  validate={(value) => (value as number) > 2}
+                  message="Should be < 4"
+                  validationCallback={({ value }: { value: unknown }) => (value as number) < 4}
+                />
+                <CustomRule
+                  message="Should be < 3"
+                  validationCallback={({ value }: { value: unknown }) => (value as number) < 3}
                 />
               </Validator>
             </RadioGroup>

@@ -1,3 +1,4 @@
+import { ValidationEngine } from '@devextreme/interim';
 import { ValidationGroupContextValue } from '../contexts/validation-group-context';
 import { Rule } from '../types';
 
@@ -6,7 +7,7 @@ export interface ValidationResult {
   results: Record<string, string[]>;
 }
 
-export interface ValidationEngine {
+export interface DummyValidationEngine {
   initializeEditorRules: (
     name: string, rules: Rule[], group?: ValidationGroupContextValue
   ) => void;
@@ -14,7 +15,7 @@ export interface ValidationEngine {
   validateEditorValues: (values: Record<string, unknown>) => ValidationResult;
 }
 
-export function createValidationEngine(): ValidationEngine {
+export function createValidationEngine(): DummyValidationEngine {
   let validationRules: Record<string, Rule[]> = {};
 
   const initializeEditorRules = (
@@ -53,4 +54,8 @@ export function createValidationEngine(): ValidationEngine {
     validateEditorValue,
     validateEditorValues,
   };
+}
+
+export function getValidationEngine(): ValidationEngine {
+  return ValidationEngine;
 }

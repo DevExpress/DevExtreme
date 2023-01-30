@@ -1,5 +1,5 @@
 import { RadioButton } from '@devextreme/react';
-import { CustomRule } from '../validation/components/dummy-validation';
+import { CustomRule } from '../validation/components/validation-rules';
 import {
   Form,
   FormItemHint,
@@ -26,11 +26,11 @@ export function FormExample() {
               <FormItemLabel>Radio group:</FormItemLabel>
               <CustomRule
                 message="Should not be First"
-                validate={(value) => value !== 'first'}
+                validationCallback={({ value }: { value: unknown }) => value !== 'first'}
               />
               <CustomRule
                 message="Should be First or Second"
-                validate={(value) => value === 'first' || value === 'second'}
+                validationCallback={({ value }: { value: unknown }) => value === 'first' || value === 'second'}
               />
               <FormItemHint>This is a hint: </FormItemHint>
             </FormItemPlain>
@@ -45,7 +45,7 @@ export function FormExample() {
               <FormItemLabel>Radio group 2:</FormItemLabel>
               <CustomRule
                 message="Should be > 3"
-                validate={(value) => (value as number) > 3}
+                validationCallback={({ value }: { value: unknown }) => (value as number) > 3}
               />
             </FormItemPlain>
           </Form>
@@ -59,7 +59,7 @@ export function FormExample() {
               </RadioGroup>
               <CustomRule
                 message="Should not be Toe"
-                validate={(value) => value !== 'Toe'}
+                validationCallback={({ value }: { value: unknown }) => value !== 'Toe'}
               />
               <FormItemLabel>Second approach:</FormItemLabel>
             </FormItemHoc>

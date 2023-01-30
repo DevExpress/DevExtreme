@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { FormValidationResult } from '../types';
-import { ValidationEngine } from '../utils/validation-engine';
+import { DummyValidationEngine } from '../utils/validation-engine';
 
-export function useValidation(validationEngine: ValidationEngine) {
+export function useValidation(validationEngine: DummyValidationEngine) {
   const [validationResult, setValidationResult] = useState<FormValidationResult>({});
 
   const validateEditor = (name: string, value: unknown) => {

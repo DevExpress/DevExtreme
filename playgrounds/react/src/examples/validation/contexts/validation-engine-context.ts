@@ -1,6 +1,5 @@
+import { ValidationEngine } from '@devextreme/interim';
 import { createContext } from 'react';
-import { createValidationEngine, ValidationEngine } from '../utils/validation-engine';
+import { getValidationEngine } from '../utils/validation-engine';
 
-export const ValidationEngineContext = createContext<ValidationEngine>(
-  createValidationEngine(),
-);
+export const ValidationEngineContext = createContext<ValidationEngine>(getValidationEngine());

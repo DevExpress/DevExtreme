@@ -1,3 +1,4 @@
+import { ValidationRule } from '@devextreme/interim';
 import {
   PropsWithChildren, useContext, useEffect, useMemo, useRef,
 } from 'react';
@@ -5,13 +6,12 @@ import { EditorContext } from '../contexts/editor-context';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
 import { ValidatorContext } from '../contexts/validator-context';
-import { Rule } from '../types';
 
 export function Validator({
   validationGroup: validationGroupProp,
   children,
 }: PropsWithChildren & { validationGroup?: string }) {
-  const rules = useRef<Rule[]>([]);
+  const rules = useRef<ValidationRule[]>([]);
   const validationGroupContext = useContext(ValidationGroupContext);
   const editorContext = useContext(EditorContext);
   const validationEngine = useContext(ValidationEngineContext);
@@ -21,14 +21,18 @@ export function Validator({
       const { editorName, editorValue, notifyErrorRaised } = editorContext;
       const validationGroup = validationGroupProp
         ? { name: validationGroupProp } : validationGroupContext;
-      validationEngine.initializeEditorRules(editorName, rules.current, validationGroup);
-      const validationResult = validationEngine.validateEditorValue(editorName, editorValue);
-      notifyErrorRaised(validationResult);
+      console.log(validationGroup);
+      const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
+      console.log(validationResult);
+      notifyErrorRaised(
+        validationResult.isValid
+          ? [] : validationResult.brokenRules.map((rule: ValidationRule) => rule.message),
+      );
     }
   }, [editorContext?.editorName, editorContext?.editorValue]);
 
   const validatorContextValue = useMemo(() => ({
-    registerRule: (rule: Rule) => { rules.current.push(rule); },
+    registerRule: (rule: ValidationRule) => { rules.current.push(rule); },
   }), []);
 
   return (

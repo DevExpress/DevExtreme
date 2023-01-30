@@ -1,15 +1,13 @@
+import { CustomRule as CustomRuleProps } from '@devextreme/interim';
 import { useContext, useEffect, useRef } from 'react';
 import { ValidatorContext } from '../contexts/validator-context';
-import { Rule } from '../types';
-
-export type CustomRuleProps = Rule;
 
 export function CustomRule(props: CustomRuleProps) {
   const validatorContext = useContext(ValidatorContext);
   const ruleRegistered = useRef(false);
   useEffect(() => {
     if (!ruleRegistered.current) {
-      validatorContext?.registerRule(props);
+      validatorContext?.registerRule({ ...props, type: 'custom' });
       ruleRegistered.current = true;
     }
   }, []);

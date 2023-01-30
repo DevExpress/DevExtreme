@@ -2,7 +2,7 @@ import { FormEventHandler, useMemo, useRef } from 'react';
 import { ValidationContext } from 'src/examples/validation/contexts/validation-context';
 import { ValidationEngineContext } from 'src/examples/validation/contexts/validation-engine-context';
 import { useValidation } from 'src/examples/validation/hooks/use-validation';
-import { createValidationEngine, ValidationEngine } from 'src/examples/validation/utils/validation-engine';
+import { createValidationEngine, DummyValidationEngine } from 'src/examples/validation/utils/validation-engine';
 import { FormContext } from './contexts/form-context';
 import { FormProps } from './types';
 
@@ -16,7 +16,7 @@ The previous form doesn't allow the use of them separately the next form should 
 */
 export function Form({ children, onSubmit }: FormProps) {
   const formValues = useRef<Record<string, unknown>>({});
-  const validationEngine = useMemo<ValidationEngine>(createValidationEngine, []);
+  const validationEngine = useMemo<DummyValidationEngine>(createValidationEngine, []);
   const { validationResult, validateAll, validateEditor } = useValidation(validationEngine);
 
   const formContextValue = useMemo(

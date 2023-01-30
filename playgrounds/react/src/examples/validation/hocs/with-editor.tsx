@@ -31,7 +31,7 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
           valueChange={handleValueChange}
           errors={editorErrors}
         />
-        {editorErrors ? <div>{editorErrors.join('. ')}</div> : null}
+        {editorErrors && Array.isArray(editorErrors) ? <div>{editorErrors.join('. ')}</div> : null}
       </EditorContext.Provider>
     );
   }
