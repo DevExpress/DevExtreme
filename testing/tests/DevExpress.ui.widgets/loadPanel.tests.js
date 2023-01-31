@@ -2,10 +2,12 @@ import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import uiErrors from 'ui/widget/ui.errors';
+import LoadPanel from 'ui/load_panel';
 import fx from 'animation/fx';
 
 import 'generic_light.css!';
-import 'ui/load_panel';
+
+// window.DevExpress = window.DevExpress || {};
 
 QUnit.testStart(function() {
     const markup =
@@ -127,6 +129,14 @@ QUnit.module('init', {
             visible: true,
             position: { of: '#non-exist' }
         }).dxLoadPanel('instance');
+    });
+
+    QUnit.test('There is not console error when Loadpanel is creating', function(assert) {
+        new LoadPanel(document.getElementById('loadPanel'), {
+            visible: true,
+        });
+
+        assert.ok(true);
     });
 
     QUnit.module('Breaking change t1123711 - warning W1021', () => {

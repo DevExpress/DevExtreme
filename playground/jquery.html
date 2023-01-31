@@ -32,13 +32,16 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="loadPanel"></div>
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+        // $(function() {
+        //     new DevExpress.ui.dxLoadPanel(document.getElementById("loadPanel"), {
+        //         visible: true,
+        //     });
+        // });
+
+        new DevExpress.ui.dxLoadPanel(document.getElementById("loadPanel"), {
+            visible: true,
         });
     </script>
 </body>
