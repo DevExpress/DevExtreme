@@ -21,6 +21,7 @@ import { GanttTemplatesManager } from './ui.gantt.templates';
 import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import { GanttTreeList } from './ui.gantt.treelist';
 import { GanttView } from './ui.gantt.view';
+import { GanttDataChangesProcessingHelper } from './ui.gantt.data_changes_processing_helper';
 
 
 const window = getWindow();
@@ -155,6 +156,7 @@ class Gantt extends Widget {
         this._actionsManager = new GanttActionsManager(this);
         this._ganttTemplatesManager = new GanttTemplatesManager(this);
         this._sizeHelper = new GanttSizeHelper(this);
+        this._dataProcessingHelper = new GanttDataChangesProcessingHelper();
     }
     _initGanttView() {
         if(this._ganttView) {
@@ -217,6 +219,8 @@ class Gantt extends Widget {
             this._fireContentReadyAction();
         }
         delete this._treeListParentRecalculatedDataUpdating;
+
+        this._dataProcessingHelper.onTreeListReady();
     }
     _refreshDataSource(name) {
         let dataOption = this[`_${name}Option`];
@@ -310,13 +314,13 @@ class Gantt extends Widget {
                 const keyGetter = compileGetter(this.option(`${optionName}.keyExpr`));
                 const insertedId = keyGetter(response);
                 callback(insertedId);
+                this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseInsertedAction(optionName, data, insertedId); }, true, isTaskInsert);
                 this._ganttTreeList.saveExpandedKeys();
                 dataOption._reloadDataSource().done(data => {
                     if(isTaskInsert) {
                         this._ganttTreeList.onTaskInserted(insertedId, record.parentId);
                     }
                 });
-                this._actionsManager.raiseInsertedAction(optionName, data, insertedId);
             });
         }
     }
@@ -331,8 +335,8 @@ class Gantt extends Widget {
             }
             dataOption.update(key, data, () => {
                 this._ganttTreeList.saveExpandedKeys();
+                this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseUpdatedAction(optionName, data, key); }, true, isTaskUpdated);
                 dataOption._reloadDataSource();
-                this._actionsManager.raiseUpdatedAction(optionName, data, key);
             });
         }
     }
@@ -341,8 +345,8 @@ class Gantt extends Widget {
         if(dataOption) {
             dataOption.remove(key, () => {
                 this._ganttTreeList.saveExpandedKeys();
+                this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseDeletedAction(optionName, key, this._mappingHelper.convertCoreToMappedData(optionName, data)); }, true, optionName === GANTT_TASKS);
                 dataOption._reloadDataSource();
-                this._actionsManager.raiseDeletedAction(optionName, key, this._mappingHelper.convertCoreToMappedData(optionName, data));
             });
         }
     }
@@ -361,6 +365,9 @@ class Gantt extends Widget {
             });
         }
         this.isSieving = false;
+    }
+    _onGanttViewCoreUpdated() {
+        this._dataProcessingHelper.onGanttViewReady();
     }
 
     _sortAndFilter() {
