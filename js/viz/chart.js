@@ -382,10 +382,10 @@ const isOverlay = (currentPoint, overlayPoint, radiusPoint) => {
     return isPointOverlayHorizontally && isPointOverlayVertically;
 };
 
-const isPointOverlapped = (currentPoint, overlappingPoints, startCounter = 0, skipComparingSamePoints = true) => {
+const isPointOverlapped = (currentPoint, overlappingPoints, skipComparingSamePoints) => {
     const radiusPoint = currentPoint.getOptions().size / 2;
 
-    for(let i = startCounter; i < overlappingPoints.length; i++) {
+    for(let i = 0; i < overlappingPoints.length; i++) {
         if(!skipComparingSamePoints) {
             const isXCoordinateSame = overlappingPoints[i].x === currentPoint.x;
             const isYCoordinateSame = overlappingPoints[i].y === currentPoint.y;
@@ -892,8 +892,9 @@ const dxChart = AdvancedChart.inherit({
 
         for(let i = 0; i < seriesPoints.length; i++) {
             const currentPoint = seriesPoints[i];
+            const overlappingPoints = seriesPoints.slice(i + 1);
 
-            counterOverlay += isPointOverlapped(currentPoint, seriesPoints, i + 1, false);
+            counterOverlay += isPointOverlapped(currentPoint, overlappingPoints);
             if(counterOverlay > (seriesPoints.length / 2)) {
                 series.autoHidePointMarkers = true;
                 break;
@@ -918,7 +919,7 @@ const dxChart = AdvancedChart.inherit({
                 const seriesPoints = currentSeries.getPoints();
                 const overlappingPointsCount = seriesPoints
                     .reduce((pointsCount, currentPoint) => {
-                        return pointsCount + isPointOverlapped(currentPoint, overlappingPoints);
+                        return pointsCount + isPointOverlapped(currentPoint, overlappingPoints, true);
                     }, 0);
 
                 if(overlappingPointsCount < seriesPoints.length) {
