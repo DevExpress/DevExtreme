@@ -12,6 +12,7 @@ const isDomElem = (object) => {
         if(inst instanceof HTMLElement || inst instanceof jQuery) {
             return true;
         }
+        return false;
     };
     if(object instanceof HTMLCollection) {
         for(let i = 0; i < object.length; i++) {
