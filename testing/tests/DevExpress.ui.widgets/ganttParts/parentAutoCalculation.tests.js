@@ -191,7 +191,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.instance.option('onTaskUpdated', (e) => { values = e.values; });
         this.clock.tick();
         this.instance.deleteTask(4);
-        this.clock.tick();
+        this.clock.tick(500);
 
         assert.equal(tasks.length, tasksCount - 1, 'task was deleted');
         assert.equal(tasks[2].progress, values.progress, 'onTaskUpdated is triggrered');
@@ -219,7 +219,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.instance.option('onTaskUpdated', (e) => { values = e.values; });
         this.clock.tick();
         this.instance.updateTask(4, { 'end': new Date('2020-02-20') });
-        this.clock.tick();
+        this.clock.tick(500);
 
         assert.notDeepEqual(tasks[2].end, values.end, 'onTaskUpdated is triggrered');
     });
@@ -253,7 +253,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.clock.tick();
         const newEnd = new Date('2020-02-27');
         this.instance.updateTask(4, { 'end': newEnd });
-        this.clock.tick();
+        this.clock.tick(500);
         assert.equal(updated['4'].end, newEnd, 'event triggered for child');
         assert.equal(updated['2'].end, newEnd, 'event triggered for parent');
         assert.equal(tasks[1].end, newEnd, 'parent updated in data source');

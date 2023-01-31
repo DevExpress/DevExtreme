@@ -87,7 +87,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             keyExists = !!e.key;
         });
         getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
-        this.clock.tick();
+        this.clock.tick(500);
 
         assert.ok(keyExists, 'key created');
         assert.equal(values['title'], text, 'new task title is right');
@@ -181,7 +181,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const taskToDelete = data.tasks[data.tasks.length - 1];
         this.instance.option('selectedRowKey', taskToDelete.id.toString());
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(taskToDelete.id.toString(), false);
-        this.clock.tick();
+        this.clock.tick(500);
         assert.equal(values['parentId'], taskToDelete.parentId, 'check values parentId');
         assert.equal(values['title'], taskToDelete.title, 'check values title');
         assert.equal(values['start'], taskToDelete.start, 'check values start');
@@ -722,5 +722,32 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(treeListDataSourceNew[0].CustomText, customText);
         assert.equal(treeListDataSourceOld[0].start, treeListDataSourceNew[0].start);
         assert.equal(treeListDataSourceOld[0].end, treeListDataSourceNew[0].end);
+    });
+    test('collapse all on TaskUpdated', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onTaskUpdated', (e) => { e.component.collapseAll(); });
+        this.clock.tick();
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, data.tasks.length);
+        this.instance.updateTask('1', { title: 'New' });
+        this.clock.tick(500);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+    });
+    test('collapse all on TaskUpdated in auto parent mode', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.instance.option('onTaskUpdated', (e) => { e.component.collapseAll(); });
+        this.clock.tick();
+
+        assert.ok(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length > 5);
+        assert.ok(this.instance._treeList.getVisibleRows().length, data.tasks.length > 5);
+        this.instance.updateTask('2', { title: 'New' });
+        this.clock.tick(500);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
     });
 });
