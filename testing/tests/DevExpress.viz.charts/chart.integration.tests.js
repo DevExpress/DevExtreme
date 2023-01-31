@@ -2284,49 +2284,22 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
     assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
 });
 
-QUnit.test('All points should be hidden when all points are overlapped', function(assert) {
+QUnit.test('Series should hide the points when all the points are overlapped', function(assert) {
     const dataSource = [{
         country: 'USA',
         val1: 10,
-        val2: 11,
-        val3: 10.5,
-        val4: 40,
-        val5: 50
+        val2: 10,
+        val3: 10,
     }, {
         country: 'China',
         val1: 10,
-        val2: 20,
+        val2: 10,
         val3: 10,
-        val4: 20.2,
-        val5: 50
     }, {
         country: 'Russia',
         val1: 10,
-        val2: 20,
-        val3: 20.3,
-        val4: 10.5,
-        val5: 50
-    }, {
-        country: 'Japan',
-        val1: 10,
-        val2: 20,
-        val3: 30,
-        val4: 19.8,
-        val5: 10
-    }, {
-        country: 'India',
-        val1: 10,
-        val2: 20,
-        val3: 19.3,
-        val4: 40,
-        val5: 11
-    }, {
-        country: 'Germany',
-        val1: 10,
-        val2: 20,
-        val3: 21,
-        val4: 10.2,
-        val5: 50
+        val2: 10,
+        val3: 10,
     }];
 
     const chart = moduleSetup.createChart.call(this, {
@@ -2338,8 +2311,6 @@ QUnit.test('All points should be hidden when all points are overlapped', functio
             { valueField: 'val1', name: 'val1', point: { size: 14 } },
             { valueField: 'val2', name: 'val2', point: { size: 14 } },
             { valueField: 'val3', name: 'val3', point: { size: 14 } },
-            { valueField: 'val4', name: 'val4', point: { size: 14 } },
-            { valueField: 'val5', name: 'val5', point: { size: 14 } }
         ],
     });
 
@@ -2348,8 +2319,43 @@ QUnit.test('All points should be hidden when all points are overlapped', functio
     assert.notOk(series[0].getVisiblePoints()[0].graphic);
     assert.notOk(series[1].getVisiblePoints()[0].graphic);
     assert.ok(series[2].getVisiblePoints()[0].graphic);
-    assert.ok(series[3].getVisiblePoints()[0].graphic);
-    assert.ok(series[4].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test('Series should not hide points when not all points are overlapped in the series', function(assert) {
+    const dataSource = [{
+        country: 'USA',
+        val1: 20,
+        val2: 10,
+        val3: 10,
+    }, {
+        country: 'China',
+        val1: 10,
+        val2: 10,
+        val3: 10,
+    }, {
+        country: 'Russia',
+        val1: 10,
+        val2: 10,
+        val3: 40,
+    }];
+
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource,
+        commonSeriesSettings: {
+            argumentField: 'country',
+        },
+        series: [
+            { valueField: 'val1', name: 'val1', point: { size: 14 } },
+            { valueField: 'val2', name: 'val2', point: { size: 14 } },
+            { valueField: 'val3', name: 'val3', point: { size: 14 } },
+        ],
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.ok(series[0].getVisiblePoints()[0].graphic);
+    assert.ok(series[1].getVisiblePoints()[0].graphic);
+    assert.ok(series[2].getVisiblePoints()[0].graphic);
 });
 
 QUnit.test('Points on the graph should be hidden when they have multiple intersections in a single series', function(assert) {
