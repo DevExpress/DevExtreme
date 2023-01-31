@@ -22,7 +22,6 @@ if(ko) {
 
     const editorsBindingHandlers = [];
     const registerComponentKoBinding = function(componentName, componentClass) {
-        PatchAttributes();
 
         if(Editor.isEditor(componentClass.prototype)) {
             editorsBindingHandlers.push(componentName);
@@ -30,6 +29,7 @@ if(ko) {
 
         ko.bindingHandlers[componentName] = {
             init: function(domNode, valueAccessor) {
+                PatchAttributes();
                 const $element = $(domNode);
                 const optionChangedCallbacks = Callbacks();
                 let optionsByReference = {};
