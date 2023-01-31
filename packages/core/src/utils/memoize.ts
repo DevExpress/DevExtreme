@@ -1,28 +1,28 @@
 import { Comparer } from './types';
 
-export function memoize<TArgs extends unknown[], TReturn>(
-  func: (...params: TArgs) => TReturn,
-  comparer: Comparer<TArgs>,
-): (...arg: TArgs) => TReturn {
-  let cachedArg: TArgs;
+export function memoize<TParams, TReturn>(
+  func: (params: TParams) => TReturn,
+  comparer: Comparer<TParams>,
+): (params: TParams) => TReturn {
+  let cachedParams: TParams;
   let cachedResult: TReturn;
 
-  const updateCache = (...args: TArgs) => {
-    cachedArg = args;
-    cachedResult = func(...args);
+  const updateCache = (params: TParams) => {
+    cachedParams = params;
+    cachedResult = func(params);
     return cachedResult;
   };
 
-  const getCachedResult = (...arg: TArgs) => (
-    comparer(cachedArg, arg)
+  const getCachedResult = (params: TParams) => (
+    comparer(cachedParams, params)
       ? cachedResult
-      : updateCache(...arg)
+      : updateCache(params)
   );
 
-  let decoratedFunc = (...arg: TArgs) => {
+  let decoratedFunc = (params: TParams) => {
     decoratedFunc = getCachedResult;
-    return updateCache(...arg);
+    return updateCache(params);
   };
 
-  return (...arg: TArgs) => decoratedFunc(...arg);
+  return (params: TParams) => decoratedFunc(params);
 }

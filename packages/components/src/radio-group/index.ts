@@ -1,5 +1,6 @@
 /* eslint-disable import/exports-last */
 import {
+  createSelector,
   createStore,
   Selector,
   StateConfigMap,
@@ -40,7 +41,10 @@ export const RADIO_GROUP_ACTIONS = {
 export function createCheckedSelector<T>(
   value: T,
 ): Selector<RadioGroupState<T>, boolean> {
-  return (state) => state.value === value;
+  return createSelector(
+    (state) => ({ stateValue: state.value }),
+    ({ stateValue }) => stateValue === value,
+  );
 }
 
 // === component ===

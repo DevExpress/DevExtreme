@@ -11,7 +11,7 @@ export function createSelector<
   >(
   paramsGetter: (state: TState) => TParam,
   buildViewProp: (params: TParam) => TValue,
-  paramsComparer: Comparer<[TParam]> = shallowComparer,
+  paramsComparer: Comparer<TParam> = shallowComparer,
 ): Selector<TState, TValue> {
   const cached = memoize(buildViewProp, paramsComparer);
 
