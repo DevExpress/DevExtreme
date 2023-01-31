@@ -21,8 +21,8 @@ if(ko) {
     const CREATED_WITH_KO_DATA_KEY = 'dxKoCreation';
 
     const editorsBindingHandlers = [];
-    PatchAttributes();
     const registerComponentKoBinding = function(componentName, componentClass) {
+        PatchAttributes();
 
         if(Editor.isEditor(componentClass.prototype)) {
             editorsBindingHandlers.push(componentName);

@@ -8,7 +8,7 @@ const useJQuery = config().useJQuery;
 
 
 const isDomElem = (object) => {
-    const checkInstance = (inst)=>{
+    const checkInstance = (inst) => {
         if(inst instanceof HTMLElement || inst instanceof jQuery) {
             return true;
         }
@@ -28,6 +28,9 @@ const containsComputed = (object) => {
     if(!object || isDomElem(object)) {
         return false;
     }
+    // if(object.NAME && typeof object.NAME === 'string' && object.NAME.startsWith('dx')) {
+    //     return false;
+    // }
     if(ko.isComputed(object) || ko.isPureComputed(object)) {
         return true;
     }
