@@ -2,7 +2,7 @@
   <DxDataGrid
     :data-source="tasks"
     :show-borders="true"
-    :on-row-inserted="(e) => e.component.navigateToRow(e.key)"
+    @row-inserted="onRowInserted"
   >
     <DxPaging
       :enabled="true"
@@ -166,6 +166,9 @@ export default {
     onValueChanged(value, cellInfo) {
       cellInfo.setValue(value);
       cellInfo.component.updateDimensions();
+    },
+    onRowInserted(e) {
+      e.component.navigateToRow(e.key);
     },
   },
 };

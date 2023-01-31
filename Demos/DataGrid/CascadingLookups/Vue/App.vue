@@ -4,7 +4,7 @@
       :data-source="employees"
       :show-borders="true"
       key-expr="ID"
-      @editorPreparing="onEditorPreparing"
+      @editor-preparing="onEditorPreparing"
     >
       <DxEditing
         :allow-updating="true"
