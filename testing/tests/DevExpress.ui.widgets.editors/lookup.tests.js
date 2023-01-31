@@ -999,31 +999,23 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('regression: B236007 (check that selection item in one lookup do not effect to another)', function(assert) {
-        const $firstLookup = $('#lookup').dxLookup({
+        const firstLookup = $('#lookup').dxLookup({
+            items: ['1', '2', '3'],
+            value: '1',
+        }).dxLookup('instance');
+
+        const secondLookup = $('#secondLookup').dxLookup({
             items: ['1', '2', '3'],
             value: '1'
-        });
-        const firstLookup = $firstLookup.dxLookup('instance');
-        const $secondLookup = $('#secondLookup').dxLookup({
-            items: ['1', '2', '3'],
-            value: '2'
-        });
-        const secondLookup = $secondLookup.dxLookup('instance');
+        }).dxLookup('instance');
 
         openPopupWithList(firstLookup);
         assert.equal($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
 
         const $firstListItem = $(getList().$element().find('.dx-list-item').eq(0));
-        const mouse = pointerMock($firstListItem);
-        mouse.start().down().move(0, 10).up();
+        $firstListItem.trigger('dxclick');
 
         openPopupWithList(secondLookup);
-        assert.equal($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
-
-        mouse.start().down().move(0, 10).up();
-
-        openPopupWithList(firstLookup);
-
         // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
         // and other is in document
         if(QUnit.isInShadowDomMode()) {
@@ -1033,6 +1025,11 @@ QUnit.module('Lookup', {
             assert.strictEqual($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
         }
 
+        $firstListItem.trigger('dxclick');
+
+        openPopupWithList(firstLookup);
+
+        assert.strictEqual($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
     });
 
     QUnit.test('regression: dxLookup - incorrect search behavior when \'minSearchLength\' greater than zero', function(assert) {

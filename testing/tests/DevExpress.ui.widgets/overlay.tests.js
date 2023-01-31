@@ -3508,13 +3508,14 @@ testModule('scrollable interaction', {
     });
 
     test('scroll event prevented on overlay', function(assert) {
-        assert.expect(1);
+        assert.expect(2);
 
-        const $overlay = $($('#overlay').dxOverlay());
+        const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
         const $scrollable = $('<div>');
 
-        $overlay.dxOverlay('option', 'visible', true);
-        const $content = $($overlay.dxOverlay('$content')).append($scrollable);
+        overlay.option('visible', true);
+
+        const $content = $(overlay.content()).append($scrollable);
 
         $scrollable.dxScrollable({
             useNative: false,
@@ -3525,15 +3526,12 @@ testModule('scrollable interaction', {
 
         const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
 
-        $($overlayWrapper).on('dxmousewheel', function(e) {
+        $($overlayWrapper).on('dxmousewheel', (e) => {
             assert.ok(e.isDefaultPrevented(), 'scroll event prevented');
         });
 
-        $($overlayWrapper.parent()).on('dxdrag.TEST', {
-            getDirection: function() { return 'both'; },
-            validate: function() { return true; }
-        }, function() {
-            assert.ok(false, 'scroll should not be fired');
+        $($overlayWrapper.parent()).on('dxmousewheel', (e) => {
+            assert.ok(e.isDefaultPrevented(), 'scroll event prevented');
         });
 
         pointerMock($scrollable.find('.dx-scrollable-container'))
@@ -3541,20 +3539,20 @@ testModule('scrollable interaction', {
             .wheel(10);
 
         $overlayWrapper
-            .off('.TEST')
+            .off('dxmousewheel')
             .parent()
-            .off('.TEST');
+            .off('dxmousewheel');
     });
 
     // T886654
     test('Scroll event should not prevented on overlay that avoid the [Intervation] error when event is not cancelable', function(assert) {
-        assert.expect(1);
+        assert.expect(2);
 
-        const $overlay = $($('#overlay').dxOverlay());
+        const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
         const $scrollable = $('<div>');
 
-        $overlay.dxOverlay('instance').option('visible', true);
-        const $content = $($overlay.dxOverlay('$content')).append($scrollable);
+        overlay.option('visible', true);
+        const $content = $(overlay.content()).append($scrollable);
 
         $scrollable.dxScrollable({
             useNative: true,
@@ -3565,21 +3563,15 @@ testModule('scrollable interaction', {
 
         const $overlayWrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
 
-        $($overlayWrapper).on('dxdrag', {
-            getDirection: () => 'both',
-            validate: () => true
-        }, (e) => {
+        $($overlayWrapper).on('dxmousewheel', (e) => {
             assert.strictEqual(e.isDefaultPrevented(), false, 'not cancelable event should not be prevented');
         });
 
-        $($overlayWrapper.parent()).on('dxdrag', {
-            getDirection: function() { return 'both'; },
-            validate: function() { return true; }
-        }, function() {
-            assert.ok(false, 'event should not be fired');
+        $($overlayWrapper.parent()).on('dxmousewheel', (e) => {
+            assert.strictEqual(e.isDefaultPrevented(), false, 'not cancelable event should not be prevented');
         });
 
-        const event = $.Event('dxdrag', {
+        const event = $.Event('dxmousewheel', {
             cancelable: false,
             originalEvent: $.Event('dxpointermove', {
                 originalEvent: $.Event('touchmove')
