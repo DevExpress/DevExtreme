@@ -49,6 +49,7 @@
     "scripts": {
         "build:angular": "nx build @devextreme/angular",
         "build:core": "nx build @devextreme/core",
+        "build:components": "nx build @devextreme/components",
         "build:react": "nx build @devextreme/react",
         "build:jquery": "nx build @devextreme/jquery",
         "build:playgrounds": "nx run-many --target=build --projects=@playgrounds/angular,@playgrounds/react",
