@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import config from '../../core/config';
-import { normalizeOptions } from '../../core/options/utils';
+import { normalizeOptionsPatch } from '../../core/options/utils';
 
 const useJQuery = config().useJQuery;
 
@@ -40,7 +40,7 @@ const containsComputed = (object) => {
 
 export default function() {
     if(ko && useJQuery) {
-        normalizeOptions.current = (options, value) => {
+        normalizeOptionsPatch.current = (options, value) => {
             if(value && !isDomElem(value) && containsComputed(value)) {
                 return {};
             }
