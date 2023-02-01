@@ -28,7 +28,10 @@ const containsComputed = (object) => {
     if(!object || isDomElem(object)) {
         return false;
     }
-    if(object.NAME && typeof object.NAME === 'string' && object.NAME.startsWith('dx')) {
+    // if(object.NAME && typeof object.NAME === 'string' && object.NAME.startsWith('dx')) {
+    //     return false;
+    // }
+    if(Object.keys(object).includes('_owner')) {
         return false;
     }
     if(ko.isComputed(object) || ko.isPureComputed(object)) {
