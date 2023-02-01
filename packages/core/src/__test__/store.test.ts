@@ -145,6 +145,23 @@ describe('store', () => {
       expect(result).toEqual(updatedState);
     });
 
+    it('emits updated state if validated state has changes', () => {
+      const initialState = { a: 1 };
+      const validatedState = { a: 2 };
+      const validator = jest.fn().mockReturnValue(validatedState);
+
+      let result;
+      const store = createStore(initialState, {}, [validator]);
+      store.addUpdate(() => initialState);
+      const unsubscribe = store.subscribe((state) => {
+        result = state;
+        unsubscribe();
+      });
+      store.commitUpdates();
+
+      expect(result).toEqual(validatedState);
+    });
+
     it('doesnt emit updated state if it has not changes', () => {
       const initialState = { a: 1 };
       const updatedState = { a: 2 };
@@ -250,15 +267,30 @@ describe('store', () => {
       expect(result).toEqual(updatedState);
     });
 
-    it('emit state if validated state has changes', () => {
+    it('emit state if state has changes', () => {
       const initialState = { a: 1 };
       const updatedState = { a: 2 };
-      const validatedState = { a: 3 };
+
+      let result;
+      const store = createStore(initialState, {});
+      store.addUpdate(() => updatedState);
+      const unsubscribe = store.subscribe((state) => {
+        result = state;
+        unsubscribe();
+      });
+      store.commitPropsUpdates();
+
+      expect(result).toEqual(updatedState);
+    });
+
+    it('emit state if validated state has changes', () => {
+      const initialState = { a: 1 };
+      const validatedState = { a: 2 };
       const validator = jest.fn().mockReturnValue(validatedState);
 
       let result;
       const store = createStore(initialState, {}, [validator]);
-      store.addUpdate(() => updatedState);
+      store.addUpdate(() => initialState);
       const unsubscribe = store.subscribe((state) => {
         result = state;
         unsubscribe();
@@ -268,15 +300,13 @@ describe('store', () => {
       expect(result).toEqual(validatedState);
     });
 
-    it('doesnt emit state if validated state has not changes', () => {
+    it('doesnt emit state if state has not changes', () => {
       const initialState = { a: 1 };
-      const updatedState = { a: 2 };
-      const validatedState = { a: 3 };
-      const validator = jest.fn().mockReturnValue(validatedState);
+      const updatedState = { a: 1 };
       controlledModelMiddlewareMock.mockImplementation((current) => current);
 
       let result;
-      const store = createStore(initialState, {}, [validator]);
+      const store = createStore(initialState, {});
       store.addUpdate(() => updatedState);
       const unsubscribe = store.subscribe((state) => {
         result = state;

@@ -1,4 +1,5 @@
 import { EventEmitter, TemplateRef, Type } from '@angular/core';
+import { Observable } from 'rxjs';
 
 // --- inputs ---
 
@@ -20,3 +21,7 @@ export type Inputs<TModel, TConfig, TTemplate> =
 // angular has bad typed templates, so we need any here.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AngularTemplate<TComponent> = TemplateRef<any> | Type<TComponent>;
+
+export type ObservableArray<T extends unknown[]> = {
+  [K in keyof T]: Observable<T[K]>
+};

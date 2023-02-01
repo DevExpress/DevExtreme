@@ -6,6 +6,7 @@
     "build": "gulp build-dev",
     "watch": "gulp watch"
   },
+  "module": "./lib/esm",
   "author": "",
   "license": "ISC",
   "dependencies": {

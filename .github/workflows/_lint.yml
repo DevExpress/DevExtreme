@@ -37,7 +37,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules-
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund --omit=optional
     - name: Build
       run: npx nx build @devextreme/jquery
     - name: Lint

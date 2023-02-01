@@ -33,3 +33,6 @@ export class RadioButton extends ComponentWrapper {
 }
 
 registerComponent('dxRadioButton', RadioButton);
+
+// eslint-disable-next-line import/no-default-export
+export default RadioButton;

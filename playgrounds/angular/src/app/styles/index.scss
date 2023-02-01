@@ -33,5 +33,17 @@
     &:not(:last-of-type) {
       border-bottom: 1px solid #ececec;
     }
+
+    &-button {
+      &:focus {
+        border: 1px solid #f05b41;
+      }
+
+      border: 1px solid #ececec;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin: 10px;
+      cursor: pointer;
+    }
   }
 }

@@ -11,7 +11,7 @@ describe('createSelector', () => {
     const func = jest.fn();
     const comparer = jest.fn();
 
-    createSelector(func, jest.fn(), comparer);
+    createSelector(jest.fn(), func, comparer);
 
     expect(memoizeMock).toBeCalledTimes(1);
     expect(memoizeMock).toBeCalledWith(func, comparer);
@@ -40,7 +40,7 @@ describe('createSelector', () => {
     const cached = jest.fn();
     memoizeMock.mockReturnValue(cached);
 
-    const selector = createSelector(jest.fn(), getParams, jest.fn());
+    const selector = createSelector(getParams, jest.fn(), jest.fn());
     selector({});
 
     expect(cached).toBeCalledTimes(1);
@@ -53,7 +53,7 @@ describe('createSelector', () => {
     const cached = jest.fn();
     memoizeMock.mockReturnValue(cached);
 
-    const selector = createSelector(jest.fn(), getParams, jest.fn());
+    const selector = createSelector(getParams, jest.fn(), jest.fn());
     selector(paramsArgument);
 
     expect(getParams).toBeCalledTimes(1);

@@ -45,7 +45,7 @@ function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
     value,
     ...props
   }: CoreBoundRadioButtonProps<T>) {
-    const checked = useStoreSelector(store, createCheckedSelector(value));
+    const checked = useStoreSelector(store, createCheckedSelector, [value]);
 
     const handleSelected = () => {
       props.onSelected?.(value);

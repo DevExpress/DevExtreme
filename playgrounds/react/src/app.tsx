@@ -9,7 +9,7 @@ import { ThemeExample } from './examples/themes/theme-example';
 import { RadioGroupValidatorExample } from './examples/validation/radio-group-validator-example';
 import { Home } from './home';
 
-import '@devextreme/styles/lib/themes/light.css';
+import '@devextreme/styles/lib/themes/material-blue-light.css';
 import './app.css';
 
 export function App() {

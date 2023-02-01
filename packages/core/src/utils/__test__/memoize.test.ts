@@ -5,7 +5,7 @@ describe('memoize', () => {
     const spyFunc = jest.fn();
     const cachedFunc = memoize(spyFunc, () => true);
 
-    cachedFunc();
+    cachedFunc({});
 
     expect(spyFunc).toHaveBeenCalled();
   });
@@ -15,7 +15,7 @@ describe('memoize', () => {
     const spyComparer = jest.fn();
     const cachedFunc = memoize(spyFunc, spyComparer);
 
-    cachedFunc();
+    cachedFunc({});
 
     expect(spyComparer).not.toHaveBeenCalled();
   });
@@ -26,9 +26,9 @@ describe('memoize', () => {
     const spyComparer = jest.fn().mockReturnValue(true);
     const cachedFunc = memoize(spyFunc, spyComparer);
 
-    cachedFunc(...args);
-    cachedFunc(...args);
-    cachedFunc(...args);
+    cachedFunc(args);
+    cachedFunc(args);
+    cachedFunc(args);
 
     expect(spyFunc).toHaveBeenCalledTimes(1);
   });
@@ -39,8 +39,8 @@ describe('memoize', () => {
     const spyFunc = jest.fn();
     const cachedFunc = memoize(spyFunc, spyComparer);
 
-    cachedFunc(...args);
-    cachedFunc(...args);
+    cachedFunc(args);
+    cachedFunc(args);
 
     expect(spyFunc).toHaveBeenCalledTimes(2);
   });
@@ -51,10 +51,10 @@ describe('memoize', () => {
     const spyComparer = jest.fn();
     const cachedFunc = memoize(spyFunc, spyComparer);
 
-    cachedFunc(...args);
-    cachedFunc(...args);
-    cachedFunc(...args);
-    cachedFunc(...args);
+    cachedFunc(args);
+    cachedFunc(args);
+    cachedFunc(args);
+    cachedFunc(args);
 
     expect(spyComparer).toHaveBeenCalledTimes(3);
   });
@@ -65,8 +65,8 @@ describe('memoize', () => {
     const spyComparer = jest.fn().mockReturnValue(true);
     const cachedFunc = memoize(spyFunc, spyComparer);
 
-    const firstResult = cachedFunc(...args);
-    const secondResult = cachedFunc(...args);
+    const firstResult = cachedFunc(args);
+    const secondResult = cachedFunc(args);
 
     expect(firstResult).toBe(secondResult);
   });
@@ -77,8 +77,8 @@ describe('memoize', () => {
     const spyComparer = jest.fn().mockReturnValue(false);
     const cachedFunc = memoize(spyFunc, spyComparer);
 
-    const firstResult = cachedFunc(...args);
-    const secondResult = cachedFunc(...args);
+    const firstResult = cachedFunc(args);
+    const secondResult = cachedFunc(args);
 
     expect(firstResult).not.toBe(secondResult);
   });

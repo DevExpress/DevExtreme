@@ -1,5 +1,5 @@
 import { RadioButton, RadioGroup } from '@devextreme/react';
-import '@devextreme/styles/lib/themes/dark-scoped.css';
+import '@devextreme/styles/lib/themes/material-purple-light-scoped.css';
 
 const OPTIONS = [0, 1, 2, 3, 4];
 export function ThemeExample() {
@@ -20,9 +20,9 @@ export function ThemeExample() {
         </RadioGroup>
       </div>
       <div className="example__title">
-        Component styled by scoped dark theme:
+        Component styled by scoped purple theme:
       </div>
-      <div className="dx-theme-dark">
+      <div className="dx-material-purple-light">
         <RadioGroup>
           {OPTIONS.map((option) => <RadioButton key={option} value={option} />)}
         </RadioGroup>

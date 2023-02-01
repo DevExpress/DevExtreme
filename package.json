@@ -11,6 +11,7 @@
         "@nrwl/webpack": "^15.3.3",
         "@swc/core": "^1.3.19",
         "@swc/jest": "^0.2.23",
+        "@swc/wasm": "^1.3.29",
         "@testing-library/react": "13.4.0",
         "@types/jest": "^29.2.3",
         "@types/node": "18.7.18",
@@ -48,6 +49,7 @@
     "scripts": {
         "build:angular": "nx build @devextreme/angular",
         "build:core": "nx build @devextreme/core",
+        "build:components": "nx build @devextreme/components",
         "build:react": "nx build @devextreme/react",
         "build:jquery": "nx build @devextreme/jquery",
         "build:playgrounds": "nx run-many --target=build --projects=@playgrounds/angular,@playgrounds/react",
