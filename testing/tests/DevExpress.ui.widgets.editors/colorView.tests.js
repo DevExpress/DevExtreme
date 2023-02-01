@@ -443,6 +443,14 @@ QUnit.module('ColorView', {
         this.checkColor({ r: 0, g: 100, b: 50, hex: '#006432', alpha: 1 }, assert);
     });
 
+    QUnit.test('ColorView sets black color when value passed as array(T1127428)', function(assert) {
+        showColorView.call(this, {
+            value: [ 'red', 'green' ],
+        });
+
+        this.checkColor({ r: 0, g: 0, b: 0, hex: '#000000', alpha: 1 }, assert);
+    });
+
     QUnit.test('Validate a too large value', function(assert) {
         showColorView.call(this, {
             value: '#646432',
