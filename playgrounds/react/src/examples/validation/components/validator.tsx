@@ -53,7 +53,6 @@ export function Validator({
 
   useEffect(() => {
     const validationGroup = validationGroupProp ?? validationGroupContext;
-    console.log(validationGroup);
     validationEngine.registerValidatorInGroup(validationGroup, validator.current);
     return () => validationEngine.removeRegisteredValidator(validationGroup, validator.current);
   }, [validationGroupProp ?? validationGroupContext]);

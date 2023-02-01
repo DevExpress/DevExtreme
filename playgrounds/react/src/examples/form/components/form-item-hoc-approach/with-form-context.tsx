@@ -2,7 +2,6 @@ import { EditorProps } from '@devextreme/react';
 import {
   ComponentType, useContext, useEffect,
 } from 'react';
-import { ValidationResult } from '../../../validation/components/validation-result';
 import { FormContext } from '../contexts/form-context';
 
 export function withFormContext<T>(Editor: ComponentType<EditorProps<T>>) {
@@ -21,14 +20,11 @@ export function withFormContext<T>(Editor: ComponentType<EditorProps<T>>) {
       props.valueChange?.(newValue);
     };
     return (
-      <>
-        <Editor
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...props}
-          valueChange={handleValueChange}
-        />
-        {props.name ? <ValidationResult editorName={props.name} /> : null}
-      </>
+      <Editor
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        valueChange={handleValueChange}
+      />
     );
   }
   return FormEditor;
