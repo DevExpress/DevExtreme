@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { compileGetter, ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
@@ -43,7 +44,6 @@ export function RadioGroupCompatible<T>({
     return getItemLabel(item);
   };
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <RadioGroup<T> {...radioGroupProps}>
       {items.map((item, index) => {
         const value = getItemValue(item);

@@ -1,11 +1,11 @@
-import { RadioGroupControlledExample } from './radio-group-controlled-example';
-import { RadioGroupUncontrolledExample } from './radio-group-uncontrolled-example';
+import { RadioGroupControlledPlayground } from './radio-group-controlled-playground';
+import { RadioGroupUncontrolledPlayground } from './radio-group-uncontrolled-playgorund';
 
 export function RadioGroupExample() {
   return (
     <>
-      <RadioGroupControlledExample />
-      <RadioGroupUncontrolledExample />
+      <RadioGroupControlledPlayground />
+      <RadioGroupUncontrolledPlayground />
     </>
   );
 }

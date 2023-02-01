@@ -1,3 +1,7 @@
 .dxr-radio-button {
-    background-color: var(--colors-radiobtn-outline-primary-selected);
+    display: block;
+
+    &__radio {
+      color: var(--colors-radiobtn-outline-primary-selected);
+    }
 }

@@ -1,13 +1,14 @@
 import { ChangeEventHandler } from 'react';
-import '@devextreme/styles/src/radio-button/radio-button.scss';
 import {
   LabelTemplateProps,
   RadioButtonRenderProps,
   RadioTemplateProps,
 } from './types';
 
+import '@devextreme/styles/src/radio-button/radio-button.scss';
+
 export function DefaultRadioTemplate({ checked = false }: RadioTemplateProps) {
-  return <span>{checked ? '◉' : '◎'}</span>;
+  return <span className="dxr-radio-button__radio">{checked ? '◉' : '◎'}</span>;
 }
 
 export function DefaultLabelTemplate({ label }: LabelTemplateProps) {

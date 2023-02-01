@@ -1,35 +1,65 @@
-import { createRadioGroupStore, RADIO_GROUP_ACTIONS } from '@devextreme/components';
+/* eslint-disable react/jsx-props-no-spreading */
 import {
-  Children, cloneElement, isValidElement, memo, useMemo,
+  createContainerPropsSelector,
+  createRadioGroupStore,
+  RADIO_GROUP_ACTIONS,
+  RADIO_GROUP_CONTAINER_PROPS_BUILDER,
+} from '@devextreme/components';
+import {
+  Children,
+  cloneElement,
+  ForwardedRef,
+  forwardRef,
+  isValidElement,
+  memo,
+  PropsWithChildren,
+  useMemo,
 } from 'react';
-import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
-import { EditorProps } from '../../internal/props';
+import { useCallbackRef, useSecondEffect, useStoreSelector } from '../../internal/hooks';
+import { EditorProps, FocusableComponent } from '../../internal/props';
 import { RadioGroupStoreContext } from '../radio-common';
 
-function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
-  const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
+import '@devextreme/styles/src/radio-group/radio-group.scss';
+
+function RadioGroupInternal<T>(
+  props: RadioGroupProps<T>,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
+  const isValueControlled = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 
   const store = useMemo(() => createRadioGroupStore<T>({
-    value: controlledMode ? props.value : props.defaultValue,
+    readonly: RADIO_GROUP_CONTAINER_PROPS_BUILDER.getDomOptions(props),
+    value: isValueControlled ? props.value : props.defaultValue,
   }, {
     value: {
-      controlledMode,
+      controlledMode: isValueControlled,
       changeCallback: (value: T) => { valueChange.current(value); },
     },
   }), []);
 
+  const containerProps = useStoreSelector(store, createContainerPropsSelector, []);
+
   useSecondEffect(() => {
-    if (controlledMode) {
+    if (isValueControlled) {
       store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(props.value));
     }
 
+    const readonlyValue = RADIO_GROUP_CONTAINER_PROPS_BUILDER.getDomOptions(props);
+    store.addUpdate(RADIO_GROUP_ACTIONS.updateReadonly(readonlyValue));
+
     store.commitPropsUpdates();
-  }, [props.value]);
+  }, [props]);
 
   return (
     <RadioGroupStoreContext.Provider value={store}>
-      <div>
+      <div
+        ref={ref}
+        className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
+        {...containerProps.attributes}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
+      >
         {props.name
           ? Children.map(
             props.children,
@@ -45,8 +75,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   );
 }
 
-export type RadioGroupProps<T> =
-  React.PropsWithChildren<EditorProps<T>>;
+export type RadioGroupProps<T> = PropsWithChildren<EditorProps<T> & FocusableComponent>;
 
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(RadioGroupInternal) as typeof RadioGroupInternal;
+export const RadioGroup = memo(forwardRef(RadioGroupInternal)) as typeof RadioGroupInternal;
