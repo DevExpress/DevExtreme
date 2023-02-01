@@ -8,6 +8,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -55,11 +56,30 @@ export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
+/** @public */
+export interface CircularGaugeSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+    /**
+     * @docid
+     * @default 300
+    */
+    width?: number;
+    /**
+     * @docid
+     * @default 300
+    */
+    height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: CircularGaugeSize;
     /**
      * @docid
      * @public

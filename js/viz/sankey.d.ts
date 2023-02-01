@@ -23,6 +23,7 @@ import BaseWidget, {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -87,11 +88,30 @@ export type NodeHoverEvent = EventInfo<dxSankey> & {
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
+/** @public */
+export interface SankeySize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+  /**
+   * @docid
+   * @default 400
+  */
+  width?: number;
+  /**
+   * @docid
+   * @default 400
+  */
+  height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: SankeySize;
     /**
      * @docid
      * @public

@@ -25128,6 +25128,17 @@ declare module DevExpress.viz {
     render(renderOptions: any): void;
   }
   module BaseChart {
+    export interface BaseChartSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:BaseChartSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:BaseChartSize.height]
+       */
+      height?: number;
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -25217,6 +25228,10 @@ declare module DevExpress.viz {
      * [descr:BaseChartOptions.adaptiveLayout]
      */
     adaptiveLayout?: BaseChartAdaptiveLayout;
+    /**
+     * [descr:BaseChartOptions.size]
+     */
+    size?: DevExpress.viz.BaseChart.BaseChartSize;
     /**
      * [descr:BaseChartOptions.animation]
      */
@@ -26766,6 +26781,17 @@ declare module DevExpress.viz {
     values(values: Array<number>): void;
   }
   module dxBarGauge {
+    export interface BarGaugeSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:BarGaugeSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:BarGaugeSize.height]
+       */
+      height?: number;
+    }
     export type DisposingEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxBarGauge>;
@@ -26844,6 +26870,10 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
+    /**
+     * [descr:dxBarGaugeOptions.size]
+     */
+    size?: DevExpress.viz.dxBarGauge.BarGaugeSize;
     /**
      * [descr:dxBarGaugeOptions.animation]
      */
@@ -26989,6 +27019,17 @@ declare module DevExpress.viz {
    */
   export class dxBullet extends BaseSparkline<dxBulletOptions> {}
   module dxBullet {
+    export interface BulletSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:BulletSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:BulletSize.height]
+       */
+      height?: number;
+    }
     export type DisposingEvent = DevExpress.events.EventInfo<dxBullet>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBullet>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxBullet>;
@@ -27011,6 +27052,10 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
+    /**
+     * [descr:dxBulletOptions.size]
+     */
+    size?: DevExpress.viz.dxBullet.BulletSize;
     /**
      * [descr:dxBulletOptions.color]
      */
@@ -30689,6 +30734,17 @@ declare module DevExpress.viz {
       | 'inside'
       | 'outside';
     export type CircularGaugeLabelOverlap = 'first' | 'last';
+    export interface CircularGaugeSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:CircularGaugeSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:CircularGaugeSize.height]
+       */
+      height?: number;
+    }
     export type DisposingEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type ExportedEvent = DevExpress.events.EventInfo<dxCircularGauge>;
@@ -30718,6 +30774,10 @@ declare module DevExpress.viz {
    */
   export interface dxCircularGaugeOptions
     extends BaseGaugeOptions<dxCircularGauge> {
+    /**
+     * [descr:dxCircularGaugeOptions.size]
+     */
+    size?: DevExpress.viz.dxCircularGauge.CircularGaugeSize;
     /**
      * [descr:dxCircularGaugeOptions.geometry]
      */
@@ -30820,6 +30880,17 @@ declare module DevExpress.viz {
      */
     interface FunnelItemInfo {
       readonly item: Item;
+    }
+    export interface FunnelSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:FunnelSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:FunnelSize.height]
+       */
+      height?: number;
     }
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
@@ -30932,6 +31003,10 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
+    /**
+     * [descr:dxFunnelOptions.size]
+     */
+    size?: DevExpress.viz.dxFunnel.FunnelSize;
     /**
      * [descr:dxFunnelOptions.adaptiveLayout]
      */
@@ -34201,6 +34276,17 @@ declare module DevExpress.viz {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSankeyOptions;
     export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
+    export interface SankeySize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:SankeySize.width]
+       */
+      width?: number;
+      /**
+       * [descr:SankeySize.height]
+       */
+      height?: number;
+    }
   }
   /**
    * [descr:dxSankeyConnectionInfoObject]
@@ -34290,6 +34376,10 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
+    /**
+     * [descr:dxSankeyOptions.size]
+     */
+    size?: DevExpress.viz.dxSankey.SankeySize;
     /**
      * [descr:dxSankeyOptions.adaptiveLayout]
      */
@@ -34685,6 +34775,17 @@ declare module DevExpress.viz {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSparkline> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSparklineOptions;
+    export interface SparklineSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:SparklineSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:SparklineSize.height]
+       */
+      height?: number;
+    }
     export type SparklineType =
       | 'area'
       | 'bar'
@@ -34703,6 +34804,10 @@ declare module DevExpress.viz {
    */
   export interface dxSparklineOptions
     extends BaseSparklineOptions<dxSparkline> {
+    /**
+     * [descr:dxSparklineOptions.size]
+     */
+    size?: DevExpress.viz.dxSparkline.SparklineSize;
     /**
      * [descr:dxSparklineOptions.argumentField]
      */
@@ -34877,6 +34982,17 @@ declare module DevExpress.viz {
       | 'leftTopRightBottom'
       | 'rightBottomLeftTop'
       | 'rightTopLeftBottom';
+    export interface TreeMapSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:TreeMapSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:TreeMapSize.height]
+       */
+      height?: number;
+    }
   }
   /**
    * [descr:dxTreeMapNode]
@@ -34969,6 +35085,10 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
+    /**
+     * [descr:dxTreeMapOptions.size]
+     */
+    size?: DevExpress.viz.dxTreeMap.TreeMapSize;
     /**
      * [descr:dxTreeMapOptions.childrenField]
      */
@@ -35400,6 +35520,17 @@ declare module DevExpress.viz {
     export type VectorMapLayerType = 'area' | 'line' | 'marker';
     export type VectorMapMarkerShape = 'circle' | 'square';
     export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
+    export interface VectorMapSize
+      extends Omit<BaseWidgetSize, 'width' | 'height'> {
+      /**
+       * [descr:VectorMapSize.width]
+       */
+      width?: number;
+      /**
+       * [descr:VectorMapSize.height]
+       */
+      height?: number;
+    }
     export type ZoomFactorChangedEvent =
       DevExpress.events.EventInfo<dxVectorMap> & {
         readonly zoomFactor: number;
@@ -35524,6 +35655,10 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
+    /**
+     * [descr:dxVectorMapOptions.size]
+     */
+    size?: DevExpress.viz.dxVectorMap.VectorMapSize;
     /**
      * [descr:dxVectorMapOptions.background]
      */

@@ -24,6 +24,7 @@ import BaseWidget, {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -105,11 +106,30 @@ export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
+/** @public */
+export interface TreeMapSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+  /**
+   * @docid
+   * @default 400
+  */
+  width?: number;
+  /**
+   * @docid
+   * @default 400
+  */
+  height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: TreeMapSize;
     /**
      * @docid
      * @default 'items'

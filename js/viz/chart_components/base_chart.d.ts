@@ -36,6 +36,7 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     BaseWidgetAnnotationConfig,
+    BaseWidgetSize,
 } from '../core/base_widget';
 
 import {
@@ -56,6 +57,20 @@ export interface TooltipInfo {
     target?: basePointObject | dxChartAnnotationConfig | any;
 }
 
+/** @public */
+export interface BaseChartSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+    /**
+     * @docid
+     * @default 400
+    */
+    width?: number;
+    /**
+     * @docid
+     * @default 400
+    */
+    height?: number;
+}
+
 /** @namespace DevExpress.viz */
 export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
@@ -64,6 +79,11 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @public
      */
     adaptiveLayout?: BaseChartAdaptiveLayout;
+    /**
+     * @docid
+     * @public
+     */
+    size?: BaseChartSize;
     /**
      * @docid
      * @public

@@ -34,6 +34,7 @@ import BaseWidget, {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -249,11 +250,30 @@ export interface VectorMapLegendItem extends BaseLegendItem {
     start?: number;
 }
 
+/** @public */
+export interface VectorMapSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+    /**
+     * @docid
+     * @default 800
+    */
+    width?: number;
+    /**
+     * @docid
+     * @default 400
+    */
+    height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: VectorMapSize;
     /**
      * @docid
      * @public

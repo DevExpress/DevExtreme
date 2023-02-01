@@ -30,6 +30,7 @@ import BaseWidget, {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -121,11 +122,30 @@ export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
+/** @public */
+export interface BarGaugeSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+    /**
+     * @docid
+     * @default 300
+    */
+    width?: number;
+    /**
+     * @docid
+     * @default 300
+    */
+    height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: BarGaugeSize;
     /**
      * @docid
      * @inherits BaseGaugeOptions.animation

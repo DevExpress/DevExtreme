@@ -32,6 +32,7 @@ import BaseWidget, {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import {
@@ -128,11 +129,30 @@ export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
+/** @public */
+export interface FunnelSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+  /**
+   * @docid
+   * @default 400
+  */
+  width?: number;
+  /**
+   * @docid
+   * @default 400
+  */
+  height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: FunnelSize;
     /**
      * @docid
      * @public

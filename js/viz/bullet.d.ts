@@ -8,6 +8,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetSize,
 } from './core/base_widget';
 
 import BaseSparkline, {
@@ -44,11 +45,30 @@ export type TooltipHiddenEvent = EventInfo<dxBullet>;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxBullet>;
 
+/** @public */
+export interface BulletSize extends Omit<BaseWidgetSize, 'width' | 'height'> {
+    /**
+     * @docid
+     * @default 300
+    */
+    width?: number;
+    /**
+     * @docid
+     * @default 30
+    */
+    height?: number;
+}
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
+    /**
+     * @docid
+     * @public
+     */
+    size?: BulletSize;
     /**
      * @docid
      * @default '#e8c267'
