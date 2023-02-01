@@ -7,7 +7,7 @@ export function CustomRule(props: CustomRuleProps) {
   const ruleRegistered = useRef(false);
   useEffect(() => {
     if (!ruleRegistered.current) {
-      validatorContext?.registerRule({ ...props, type: 'custom' });
+      validatorContext?.registerRule({ ...props, type: 'custom', reevaluate: true });
       ruleRegistered.current = true;
     }
   }, []);

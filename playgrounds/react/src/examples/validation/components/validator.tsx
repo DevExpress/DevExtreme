@@ -15,18 +15,29 @@ interface ValidatorImpl {
   off: (event: string, callback: () => void) => void,
 }
 
+interface ValidatorProps extends PropsWithChildren {
+  validationGroup?: string,
+  validateOnValueChange?: boolean
+}
+
 export function Validator({
   validationGroup: validationGroupProp,
+  validateOnValueChange,
   children,
-}: PropsWithChildren & { validationGroup?: string }) {
+}: ValidatorProps) {
   const validationGroupContext = useContext(ValidationGroupContext);
   const editorContext = useContext(EditorContext);
   const validationEngine = useContext(ValidationEngineContext);
   const rules = useRef<ValidationRule[]>([]);
   const performValidation = useCallback(() => {
     if (editorContext) {
-      const { editorName, editorValue } = editorContext;
-      return validationEngine.validate(editorValue, rules.current, editorName);
+      const { editorName, editorValue, setEditorErrors } = editorContext;
+      const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
+      setEditorErrors(
+        validationResult.isValid
+          ? [] : validationResult.brokenRules.map((rule: ValidationRule) => rule.message),
+      );
+      return validationResult;
     }
     return null;
   },
@@ -42,6 +53,7 @@ export function Validator({
 
   useEffect(() => {
     const validationGroup = validationGroupProp ?? validationGroupContext;
+    console.log(validationGroup);
     validationEngine.registerValidatorInGroup(validationGroup, validator.current);
     return () => validationEngine.removeRegisteredValidator(validationGroup, validator.current);
   }, [validationGroupProp ?? validationGroupContext]);
@@ -51,13 +63,8 @@ export function Validator({
   }, [performValidation]);
 
   useEffect(() => {
-    if (editorContext) {
-      const { notifyErrorRaised } = editorContext;
-      const validationResult = validator.current.validate();
-      notifyErrorRaised(
-        validationResult.isValid
-          ? [] : validationResult.brokenRules.map((rule: ValidationRule) => rule.message),
-      );
+    if (validateOnValueChange) {
+      performValidation();
     }
   }, [editorContext?.editorName, editorContext?.editorValue]);
 
