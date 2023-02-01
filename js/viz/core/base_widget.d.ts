@@ -292,13 +292,11 @@ export interface BaseWidgetMargin {
 export interface BaseWidgetSize {
     /**
      * @docid BaseWidgetOptions.size.height
-     * @default undefined
      * @public
      */
     height?: number;
     /**
      * @docid BaseWidgetOptions.size.width
-     * @default undefined
      * @public
      */
     width?: number;
