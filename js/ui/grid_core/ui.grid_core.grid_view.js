@@ -68,9 +68,7 @@ const resizingControllerMembers = {
             this._refreshSizesHandler = (e) => {
                 dataController.changed.remove(this._refreshSizesHandler);
 
-                const deferreds = (this._rowsView.needWaitAsyncTemplates() && e?.templateDeferreds) || [];
-
-                when.apply(this, deferreds).done(() => {
+                this._rowsView.waitAsyncTemplates(e).done(() => {
                     this._refreshSizes(e);
                 });
             };
