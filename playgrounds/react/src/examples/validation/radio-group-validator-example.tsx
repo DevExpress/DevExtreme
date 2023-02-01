@@ -1,5 +1,6 @@
 import {
-  CustomRule, RadioButton, RadioGroup, ValidationEngineContext, ValidationGroup, Validator,
+  CustomRule, RadioButton,
+  RadioGroup, RangeRule, ValidationEngineContext, ValidationGroup, Validator,
 } from '@devextreme/react';
 import { useCallback, useContext } from 'react';
 
@@ -20,6 +21,10 @@ export function RadioGroupValidatorExample() {
               <RadioButton key={option} value={option} />
             ))}
             <Validator validateOnValueChange>
+              <RangeRule
+                message="Should be > 1"
+                min={2}
+              />
               <CustomRule
                 message="Should be < 3"
                 validationCallback={({ value }: { value: unknown }) => (value as number) < 3}

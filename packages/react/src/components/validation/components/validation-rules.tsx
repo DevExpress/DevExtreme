@@ -1,15 +1,15 @@
-import { CustomRule as CustomRuleProps } from '@devextreme/interim';
-import { useContext, useEffect, useRef } from 'react';
-import { ValidatorContext } from '../contexts/validator-context';
+import {
+  CustomRule as CustomRuleProps,
+  RangeRule as RangeRuleProps,
+} from '@devextreme/interim';
+import { useValidationRuleRegistration } from '../hooks/use-validation-rule-registration';
 
 export function CustomRule(props: CustomRuleProps) {
-  const validatorContext = useContext(ValidatorContext);
-  const ruleRegistered = useRef(false);
-  useEffect(() => {
-    if (!ruleRegistered.current) {
-      validatorContext?.registerRule({ ...props, type: 'custom', reevaluate: true });
-      ruleRegistered.current = true;
-    }
-  }, []);
+  useValidationRuleRegistration('custom', props);
+  return null;
+}
+
+export function RangeRule(props: RangeRuleProps) {
+  useValidationRuleRegistration('range', props);
   return null;
 }
