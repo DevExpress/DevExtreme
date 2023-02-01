@@ -40,16 +40,16 @@ function RadioGroupInternal<T>(
 
   const containerProps = useStoreSelector(store, createContainerPropsSelector, []);
 
+  const readonlyValues = RADIO_GROUP_CONTAINER_PROPS_BUILDER.getDomOptions(props);
   useSecondEffect(() => {
     if (isValueControlled) {
       store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(props.value));
     }
 
-    const readonlyValue = RADIO_GROUP_CONTAINER_PROPS_BUILDER.getDomOptions(props);
-    store.addUpdate(RADIO_GROUP_ACTIONS.updateReadonly(readonlyValue));
+    store.addUpdate(RADIO_GROUP_ACTIONS.updateReadonly(readonlyValues));
 
     store.commitPropsUpdates();
-  }, [props]);
+  }, [props.value, ...Object.values(readonlyValues)]);
 
   return (
     <RadioGroupStoreContext.Provider value={store}>
