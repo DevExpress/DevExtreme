@@ -34,7 +34,7 @@ export function RadioGroupValidatorExample() {
       <div className="example">
         <div className="example__title">Validation group validating on button click:</div>
         <div className="example__control">
-          <ValidationGroup name="first-group">
+          <ValidationGroup id="first-group">
             <RadioGroup defaultValue={OPTIONS[1]} name="validation-example-1">
               {OPTIONS.map((option) => (
                 <RadioButton key={option} value={option} />

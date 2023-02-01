@@ -1,5 +1,6 @@
 import { RadioButton } from '@devextreme/react';
 import { CustomRule } from '../validation/components/validation-rules';
+import { Validator } from '../validation/components/validator';
 import {
   Form,
   FormItemHint,
@@ -15,7 +16,7 @@ export function FormExample() {
       <div className="example__title">Form example:</div>
       <div className="example__control">
         <div className="example__play-part">
-          <span>Simple form: </span>
+          <span>First approach without validation on value change: </span>
           <Form>
             <FormItemPlain name="example">
               <RadioGroup defaultValue="second">
@@ -24,14 +25,16 @@ export function FormExample() {
                 <RadioButton value="third" label="Third" />
               </RadioGroup>
               <FormItemLabel>Radio group:</FormItemLabel>
-              <CustomRule
-                message="Should not be First"
-                validationCallback={({ value }: { value: unknown }) => value !== 'first'}
-              />
-              <CustomRule
-                message="Should be First or Second"
-                validationCallback={({ value }: { value: unknown }) => value === 'first' || value === 'second'}
-              />
+              <Validator>
+                <CustomRule
+                  message="Should not be First"
+                  validationCallback={({ value }: { value: unknown }) => value !== 'first'}
+                />
+                <CustomRule
+                  message="Should be First or Second"
+                  validationCallback={({ value }: { value: unknown }) => value === 'first' || value === 'second'}
+                />
+              </Validator>
               <FormItemHint>This is a hint: </FormItemHint>
             </FormItemPlain>
             <br />
@@ -43,10 +46,12 @@ export function FormExample() {
                 <RadioButton value={4} label="4" />
               </RadioGroup>
               <FormItemLabel>Radio group 2:</FormItemLabel>
-              <CustomRule
-                message="Should be > 3"
-                validationCallback={({ value }: { value: unknown }) => (value as number) > 3}
-              />
+              <Validator>
+                <CustomRule
+                  message="Should be > 3"
+                  validationCallback={({ value }: { value: unknown }) => (value as number) > 3}
+                />
+              </Validator>
             </FormItemPlain>
           </Form>
           <br />
@@ -57,10 +62,12 @@ export function FormExample() {
                 <RadioButton value="Tac" label="Tac" />
                 <RadioButton value="Toe" label="Toe" />
               </RadioGroup>
-              <CustomRule
-                message="Should not be Toe"
-                validationCallback={({ value }: { value: unknown }) => value !== 'Toe'}
-              />
+              <Validator validateOnValueChange>
+                <CustomRule
+                  message="Should not be Toe"
+                  validationCallback={({ value }: { value: unknown }) => value !== 'Toe'}
+                />
+              </Validator>
               <FormItemLabel>Second approach:</FormItemLabel>
             </FormItemHoc>
           </Form>

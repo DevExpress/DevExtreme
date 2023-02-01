@@ -1,8 +1,8 @@
-import { FormEventHandler, useMemo, useRef } from 'react';
-import { ValidationContext } from 'src/examples/validation/contexts/validation-context';
+import {
+  FormEventHandler, useContext, useMemo, useRef,
+} from 'react';
+import { ValidationGroup } from 'src/examples/validation/components/validation-group';
 import { ValidationEngineContext } from 'src/examples/validation/contexts/validation-engine-context';
-import { useValidation } from 'src/examples/validation/hooks/use-validation';
-import { createValidationEngine, DummyValidationEngine } from 'src/examples/validation/utils/validation-engine';
 import { FormContext } from './contexts/form-context';
 import { FormProps } from './types';
 
@@ -16,28 +16,18 @@ The previous form doesn't allow the use of them separately the next form should 
 */
 export function Form({ children, onSubmit }: FormProps) {
   const formValues = useRef<Record<string, unknown>>({});
-  const validationEngine = useMemo<DummyValidationEngine>(createValidationEngine, []);
-  const { validationResult, validateAll, validateEditor } = useValidation(validationEngine);
-
+  const validationGroup = useRef(Symbol('form-validation-group'));
   const formContextValue = useMemo(
     () => ({
       onValueChanged: (name: string, value: unknown) => {
         formValues.current = { ...formValues.current, [name]: value };
-        validateEditor(name, value);
       },
     }),
-    [validationResult],
+    [],
   );
-
-  const validationContextValue = useMemo(
-    () => ({
-      validationResult,
-    }),
-    [validationResult],
-  );
-
+  const validationEngine = useContext(ValidationEngineContext);
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    const isValid = validateAll(formValues.current);
+    const { isValid } = validationEngine.validateGroup(validationGroup.current);
     if (!isValid) {
       event.preventDefault();
     }
@@ -45,15 +35,13 @@ export function Form({ children, onSubmit }: FormProps) {
   };
 
   return (
-    <ValidationEngineContext.Provider value={validationEngine}>
-      <FormContext.Provider value={formContextValue}>
-        <ValidationContext.Provider value={validationContextValue}>
-          <form onSubmit={handleSubmit}>
-            {children}
-            <input type="submit" value="Submit" />
-          </form>
-        </ValidationContext.Provider>
-      </FormContext.Provider>
-    </ValidationEngineContext.Provider>
+    <FormContext.Provider value={formContextValue}>
+      <ValidationGroup id={validationGroup.current}>
+        <form onSubmit={handleSubmit}>
+          {children}
+          <input type="submit" value="Submit" />
+        </form>
+      </ValidationGroup>
+    </FormContext.Provider>
   );
 }
