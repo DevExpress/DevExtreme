@@ -1,10 +1,8 @@
-import { RadioButton } from '@devextreme/react';
+import {
+  CustomRule, RadioButton, ValidationEngineContext, ValidationGroup, Validator,
+} from '@devextreme/react';
 import { useCallback, useContext } from 'react';
 import { RadioGroupEditor as RadioGroup } from './components/enhanced-radio-group';
-import { ValidationGroup } from './components/validation-group';
-import { CustomRule } from './components/validation-rules';
-import { Validator } from './components/validator';
-import { ValidationEngineContext } from './contexts/validation-engine-context';
 
 const OPTIONS = [1, 2, 3, 4, 5];
 

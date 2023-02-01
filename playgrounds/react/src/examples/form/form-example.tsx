@@ -1,6 +1,4 @@
-import { RadioButton } from '@devextreme/react';
-import { CustomRule } from '../validation/components/validation-rules';
-import { Validator } from '../validation/components/validator';
+import { CustomRule, RadioButton, Validator } from '@devextreme/react';
 import {
   Form,
   FormItemHint,

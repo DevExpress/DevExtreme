@@ -1,8 +1,7 @@
+import { ValidationEngineContext, ValidationGroup } from '@devextreme/react';
 import {
   FormEventHandler, useContext, useMemo, useRef,
 } from 'react';
-import { ValidationGroup } from 'src/examples/validation/components/validation-group';
-import { ValidationEngineContext } from 'src/examples/validation/contexts/validation-engine-context';
 import { FormContext } from './contexts/form-context';
 import { FormProps } from './types';
 

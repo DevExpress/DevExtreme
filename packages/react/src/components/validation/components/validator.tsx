@@ -2,7 +2,7 @@ import { ValidationResult, ValidationRule } from '@devextreme/interim';
 import {
   PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef,
 } from 'react';
-import { EditorContext } from '../contexts/editor-context';
+import { EditorContext } from '../../common/contexts/editor-context';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
 import { ValidatorContext } from '../contexts/validator-context';
