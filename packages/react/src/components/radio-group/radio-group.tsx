@@ -4,6 +4,7 @@ import {
 } from 'react';
 import { useCallbackRef, useSecondEffect } from '../../internal/hooks';
 import { EditorProps } from '../../internal/props';
+import { withEditor } from '../common/hocs/with-editor';
 import { RadioGroupStoreContext } from '../radio-common';
 
 function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
@@ -45,8 +46,10 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   );
 }
 
+const RadioGroupEditor = withEditor(RadioGroupInternal);
+
 export type RadioGroupProps<T> =
   React.PropsWithChildren<EditorProps<T>>;
 
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(RadioGroupInternal) as typeof RadioGroupInternal;
+export const RadioGroup = memo(RadioGroupEditor) as typeof RadioGroupEditor;

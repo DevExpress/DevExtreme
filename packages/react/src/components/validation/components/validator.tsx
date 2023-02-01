@@ -39,7 +39,7 @@ export function Validator({
       );
       return validationResult;
     }
-    return null;
+    return { isValid: true };
   },
   [editorContext?.editorName, editorContext?.editorValue]);
 

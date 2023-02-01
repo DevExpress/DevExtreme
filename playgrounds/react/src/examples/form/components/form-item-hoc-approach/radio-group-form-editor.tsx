@@ -1,4 +1,4 @@
-import { RadioGroupEditor as RadioGroupWithValidator } from '../../../validation/components/enhanced-radio-group';
+import { RadioGroup } from '@devextreme/react';
 import { withFormContext } from './with-form-context';
 
-export const RadioGroupEditor = withFormContext(RadioGroupWithValidator);
+export const RadioGroupEditor = withFormContext(RadioGroup);

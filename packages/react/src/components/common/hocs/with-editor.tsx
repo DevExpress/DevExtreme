@@ -5,7 +5,7 @@ import { EditorProps } from '../../../internal/props';
 import { EditorContext } from '../contexts/editor-context';
 
 export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
-  function Editor(props: EditorProps<T>) {
+  function Editor<V extends T>(props: EditorProps<V>) {
     const [editorValue, setEditorValue] = useState(props.value || props.defaultValue);
     const [editorErrors, setEditorErrors] = useState<string[]>();
 
@@ -17,7 +17,7 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
       () => ({ editorName: props.name || '', editorValue, setEditorErrors: setEditorErrorsCallback }), [editorValue, props.name],
     );
 
-    const handleValueChange = (newValue?: T) => {
+    const handleValueChange = (newValue?: V) => {
       if (props.name) {
         setEditorValue(newValue);
       }
@@ -28,7 +28,8 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
         <Component
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...props}
-          valueChange={handleValueChange}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          valueChange={handleValueChange as any}
           errors={editorErrors}
         />
         {editorErrors && Array.isArray(editorErrors) ? <div>{editorErrors.join('. ')}</div> : null}
