@@ -1,4 +1,3 @@
-import { RadioGroup } from '@devextreme/react';
-import { withEditor } from '../hocs/with-editor';
+import { RadioGroup, withEditor } from '@devextreme/react';
 
 export const RadioGroupEditor = withEditor(RadioGroup);

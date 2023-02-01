@@ -1,7 +1,8 @@
-import { EditorContext, EditorProps } from '@devextreme/react';
 import {
   ComponentType, useCallback, useMemo, useState,
 } from 'react';
+import { EditorProps } from '../../../internal/props';
+import { EditorContext } from '../contexts/editor-context';
 
 export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
   function Editor(props: EditorProps<T>) {
