@@ -187,6 +187,28 @@ const standardColorTypes = [
         }
     },
     {
+        re: /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/,
+        process: function(colorString) {
+            return [
+                parseInt(colorString[1], 16),
+                parseInt(colorString[2], 16),
+                parseInt(colorString[3], 16),
+                Number((parseInt(colorString[4], 16) / 255).toFixed(2))
+            ];
+        }
+    },
+    {
+        re: /^#([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})$/,
+        process: function(colorString) {
+            return [
+                parseInt(colorString[1] + colorString[1], 16),
+                parseInt(colorString[2] + colorString[2], 16),
+                parseInt(colorString[3] + colorString[3], 16),
+                Number((parseInt(colorString[4] + colorString[4], 16) / 255).toFixed(2))
+            ];
+        }
+    },
+    {
         re: /^#([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})$/,
         process: function(colorString) {
             return [
