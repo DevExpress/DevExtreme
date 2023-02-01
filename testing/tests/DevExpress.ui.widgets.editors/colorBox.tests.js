@@ -232,6 +232,34 @@ QUnit.module('Color Box', {
         }, assert);
     });
 
+    QUnit.test('ColorBox should support 8-digit hex color', function(assert) {
+        showColorBox.call(this, {
+            value: '#be73146b'
+        });
+
+        this.checkColor({
+            r: 190,
+            g: 115,
+            b: 20,
+            hex: '#be7314',
+            alpha: '0.42'
+        }, assert);
+    });
+
+    QUnit.test('ColorBox should support 4-digit hex color', function(assert) {
+        showColorBox.call(this, {
+            value: '#fc0c'
+        });
+
+        this.checkColor({
+            r: 255,
+            g: 204,
+            b: 0,
+            hex: '#ffcc00',
+            alpha: '0.80'
+        }, assert);
+    });
+
     QUnit.test('Cancel event should work right when color was changed', function(assert) {
         showColorBox.call(this, {
             value: '#2C77B8',
