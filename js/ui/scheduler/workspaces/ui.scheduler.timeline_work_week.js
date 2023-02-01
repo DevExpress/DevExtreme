@@ -4,8 +4,6 @@ import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import {
     getWeekendsCount,
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
-import { getBoundingRect } from '../../../core/utils/position';
-import { setOuterHeight } from '../../../core/utils/size';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;
@@ -21,15 +19,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
 
     _getElementClass() {
         return TIMELINE_CLASS;
-    }
-
-    _setHorizontalGroupHeaderCellsHeight() {
-        let height = getBoundingRect(this._$dateTable.get(0)).height;
-        if(this.isAllDayPanelVisible) {
-            height = height + Math.floor(this.getAllDayHeight());
-        }
-
-        setOuterHeight(this._$groupTable, height);
     }
 
     _incrementDate(date) {
