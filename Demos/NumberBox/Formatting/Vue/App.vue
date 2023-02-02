@@ -2,6 +2,15 @@
   <div>
     <div class="dx-fieldset">
       <div class="dx-field">
+        <div class="dx-field-label">Integer format</div>
+        <div class="dx-field-value">
+          <DxNumberBox
+            :value="14500"
+            format="#"
+          />
+        </div>
+      </div>
+      <div class="dx-field">
         <div class="dx-field-label">Currency format</div>
         <div class="dx-field-value">
           <DxNumberBox

@@ -7,6 +7,14 @@ class App extends React.Component {
       <div>
         <div className="dx-fieldset">
           <div className="dx-field">
+            <div className="dx-field-label">Integer format</div>
+            <div className="dx-field-value">
+              <NumberBox
+                format="#"
+                defaultValue={14500} />
+            </div>
+          </div>
+          <div className="dx-field">
             <div className="dx-field-label">Currency format</div>
             <div className="dx-field-value">
               <NumberBox

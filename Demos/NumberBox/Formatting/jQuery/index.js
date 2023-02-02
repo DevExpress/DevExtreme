@@ -1,4 +1,9 @@
 $(() => {
+  $('#integer').dxNumberBox({
+    format: '#',
+    value: 14500,
+  });
+
   $('#currency').dxNumberBox({
     format: '$ #,##0.##',
     value: 14500.55,
