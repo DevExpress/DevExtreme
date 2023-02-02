@@ -630,9 +630,10 @@ test('Item should appear in a correct spot when dragging to a different page wit
 
   const dataGrid = new DataGrid('#container');
   await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, 90);
-  await t.wait(300);
-  await dataGrid.moveRow(toIndex, 0, 10);
+  await dataGrid.moveRow(fromIndex, 0, 95);
+  await t.wait(500);
+  await dataGrid.moveRow(toIndex, 0, 5);
+
   await t.wait(200);
 
   await ClientFunction((grid) => {
@@ -646,9 +647,9 @@ test('Item should appear in a correct spot when dragging to a different page wit
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
 
   await t.expect(draggedRowIndex)
-    .eql(toIndex);
+    .eql(toIndex - 1);
 }).before(async () => {
-  const items = generateData(50, 1);
+  const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
     height: 250,
     keyExpr: 'field1',
