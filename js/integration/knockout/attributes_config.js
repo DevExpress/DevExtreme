@@ -6,8 +6,6 @@ import { normalizeOptionsPatch } from '../../core/options/utils';
 
 const useJQuery = config().useJQuery;
 
-const MAX_NESTING_DEPTH = 100;
-
 
 const isDomElem = (object) => {
     const checkInstance = (inst) => {
@@ -26,20 +24,17 @@ const isDomElem = (object) => {
     }
     return checkInstance(object);
 };
-const traverse = (object, fn, scope = []) => {
-    if(!object || isDomElem(object) || scope.length > MAX_NESTING_DEPTH) {
-        return false;
-    }
-    if(object.NAME && typeof object.NAME === 'string' && object.NAME.startsWith('dx')) {
-        return false;
-    }
-    if(scope.includes('_owner')) {
+const traverse = (object, fn, walked = []) => {
+    if(!object || isDomElem(object)) {
         return false;
     }
     if(typeof object === 'object') {
-        return Object.entries(object).map(([key, value]) => {
+        return Object.values(object).map((value) => {
+            if(walked.includes(object)) {
+                return false;
+            }
             if(value !== null && typeof value === 'object') {
-                return traverse(value, fn, scope.concat(key));
+                return traverse(value, fn, walked.concat(object));
             }
             return fn.apply(this, [value]);
         }).includes(true);
