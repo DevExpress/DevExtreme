@@ -135,7 +135,7 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
       tabIndex: 0,
       hoverCss: true,
       activeCss: true,
-      accessKey: 'b',
+      accessKey: 'a',
       disabled: false,
       hint: 'Hello!',
       width: '',
