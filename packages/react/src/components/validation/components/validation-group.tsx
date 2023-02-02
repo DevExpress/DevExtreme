@@ -37,6 +37,7 @@ export type ValidationGroupRef = {
   validate: () => ValidationResult
 };
 
+//* Component={"name":"ValidationGroup", "jQueryRegistered":true, "hasApiMethod":true}
 export const ValidationGroup = forwardRef<ValidationGroupRef, ValidationGroupProps>(
   ValidationGroupComponent,
 );

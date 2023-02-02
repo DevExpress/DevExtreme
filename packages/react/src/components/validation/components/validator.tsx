@@ -20,6 +20,7 @@ interface ValidatorProps extends PropsWithChildren {
   validateOnValueChange?: boolean
 }
 
+//* Component={"name":"Validator", "jQueryRegistered":true}
 export function Validator({
   validationGroup: validationGroupProp,
   validateOnValueChange,
