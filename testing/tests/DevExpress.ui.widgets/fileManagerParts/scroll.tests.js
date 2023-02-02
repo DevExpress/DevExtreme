@@ -2,6 +2,7 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
+import pointerEvents from 'events/pointer';
 import { FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createHugeFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 import { implementationsMap } from 'core/utils/size';
@@ -92,14 +93,21 @@ QUnit.module('Scroll', moduleConfig, () => {
         implementationsMap.getWidth = originalFunc;
     });
 
-    test('All views - must keep scroll position for sync focused item', function(assert) {
+    test('All views - must keep scroll position for sync focused item - scroll position at the end', function(assert) {
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 550;
         // focus item in thumbnails and remember its scroll position
-        this.fileManager.option('fileSystemProvider', createHugeFileSystem());
+        this.fileManager.option({
+            fileSystemProvider: createHugeFileSystem(),
+            currentPath: 'Folder 1',
+            width: 500,
+            height: 250
+        });
         this.clock.tick(400);
 
-        this.wrapper.findThumbnailsItem('Folder 0').trigger('dxpointerdown');
+        this.wrapper.findThumbnailsItem('File 0.txt').trigger(pointerEvents.down);
         this.clock.tick(400);
-        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'End' }));
         this.clock.tick(400);
 
         const thumbnailsScrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
@@ -109,8 +117,11 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.clock.tick(400);
         this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         const detailsScrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
 
         // switch to thumbnails and check scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -125,8 +136,12 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.clock.tick(400);
         this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('Details view must keep scroll position when selection is changed', function(assert) {
@@ -139,12 +154,16 @@ QUnit.module('Scroll', moduleConfig, () => {
             }
         });
         this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
 
         this.wrapper.getDetailsViewScrollable().dxScrollable('instance').scrollTo({ top: 500 });
         const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(10).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
@@ -187,6 +206,65 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.clock.tick(800);
 
         assert.strictEqual(this.wrapper.getTreeViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+
+        implementationsMap.getWidth = originalFunc;
+    });
+
+    test('Details view - must reset scroll position on currentPath changed (T1125089)', function(assert) {
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(),
+            itemView: {
+                mode: 'details'
+            },
+            currentPath: 'Folder 1'
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+
+        this.fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
+
+        this.fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+    });
+
+    test('Thumbnails view - must reset scroll position on currentPath changed (T1125089)', function(assert) {
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
+
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(),
+            currentPath: 'Folder 1'
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+
+        this.fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop() > 5000, 'scroll position changed');
+
+        this.fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
 
         implementationsMap.getWidth = originalFunc;
     });
