@@ -330,6 +330,7 @@ Series.prototype = {
         that._createGroups();
 
         that._processEmptyValue = newOptions.ignoreEmptyPoints ? x => x === null ? undefined : x : x => x;
+        that._isAllPointsTranslated = false;
     },
 
     _defineDrawingState() {
@@ -569,7 +570,6 @@ Series.prototype = {
             that.prepareCoordinatesForPoints();
         }
 
-        that._isAllPointsTranslated = false;
         that._setGroupsSettings(animationEnabled, firstDrawing);
         !firstDrawing && !that._resetApplyingAnimation && that._preparePositionSegments();
         that._drawElements(animationEnabled, firstDrawing);

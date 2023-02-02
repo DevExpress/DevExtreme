@@ -903,7 +903,7 @@ const dxChart = AdvancedChart.inherit({
     },
 
     _applyAutoHidePointMarkers(filteredSeries) {
-        const overlappingPoints = [];
+        let overlappingPoints = [];
 
         for(let i = filteredSeries.length - 1; i >= 0; i--) {
             const currentSeries = filteredSeries[i];
@@ -923,7 +923,7 @@ const dxChart = AdvancedChart.inherit({
                     }, 0);
 
                 if(overlappingPointsCount < seriesPoints.length) {
-                    overlappingPoints.push(...seriesPoints);
+                    overlappingPoints = overlappingPoints.concat(seriesPoints);
                 } else {
                     currentSeries.autoHidePointMarkers = true;
                 }
