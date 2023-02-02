@@ -6,6 +6,8 @@ import { normalizeOptionsPatch } from '../../core/options/utils';
 
 const useJQuery = config().useJQuery;
 
+const MAX_NESTING_DEPTH = 100;
+
 
 const isDomElem = (object) => {
     const checkInstance = (inst) => {
@@ -24,30 +26,34 @@ const isDomElem = (object) => {
     }
     return checkInstance(object);
 };
-const containsComputed = (object) => {
-    if(!object || isDomElem(object)) {
+const traverse = (object, fn, scope = []) => {
+    if(!object || isDomElem(object) || scope.length > MAX_NESTING_DEPTH) {
         return false;
     }
     if(object.NAME && typeof object.NAME === 'string' && object.NAME.startsWith('dx')) {
         return false;
     }
-    if(Object.keys(object).includes('_owner')) {
+    if(scope.includes('_owner')) {
         return false;
     }
-    if(ko.isComputed(object) || ko.isPureComputed(object)) {
-        return true;
-    }
-    const objFields = Object.values(object);
-    if(objFields.length && typeof object === 'object') {
-        return objFields.map(obj=>containsComputed(obj)).includes(true);
+    if(typeof object === 'object') {
+        return Object.entries(object).map(([key, value]) => {
+            if(value !== null && typeof value === 'object') {
+                return traverse(value, fn, scope.concat(key));
+            }
+            return fn.apply(this, [value]);
+        }).includes(true);
     }
     return false;
+};
+const isComputed = (object) => {
+    return ko.isComputed(object) || ko.isPureComputed(object);
 };
 
 export default function() {
     if(ko && useJQuery) {
         normalizeOptionsPatch.current = (options, value) => {
-            if(value && !isDomElem(value) && containsComputed(value)) {
+            if(value && !isDomElem(value) && traverse(value, isComputed)) {
                 return {};
             }
             return typeof options !== 'string' ? options : { [options]: value };
