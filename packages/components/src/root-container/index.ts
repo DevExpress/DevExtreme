@@ -1,5 +1,6 @@
 export type {
   DomOptions as RootContainerDomOptions,
+  DomOptionsCompatible as RootContainerDomOptionsCompatible,
   Props as RootContainerProps,
 } from './types';
 

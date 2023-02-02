@@ -27,24 +27,26 @@ export interface EditorProps<T> extends Props<ValueProps<T>, ReadonlyProps, Temp
   name?: string
 }
 
-export type FocusableComponent = {
+export type FocusableProps = {
   onFocus?: FocusEventHandler<HTMLElement>;
   onBlur?: FocusEventHandler<HTMLDivElement>;
 };
 
-export type ComponentWithCustomRef<TRef> = {
+export type WithCustomRef<TRef> = {
   componentRef?: RefObject<TRef>;
 };
 
 // --- compat ---
-export type CompatibleOmittedProps = keyof FocusableCompatible
+export type CompatibleOmittedProps = keyof FocusablePropsCompatible
 & RootContainerDomOptions['accessKey'];
 
-export type FocusableCompatible = {
+export type FocusablePropsCompatible = {
   onFocusIn?: FocusEventHandler<HTMLElement>;
   onFocusOut?: FocusEventHandler<HTMLElement>;
 };
 
-export type DomOptionsAccessKeyCompatible = {
-  accessKey?: string;
+export type LifecyclePropsCompatible = {
+  onContentReady?: () => void;
+  onInitialized?: () => void;
+  onDisposing?: () => void;
 };

@@ -4,3 +4,4 @@ export * from './use-required-context';
 export * from './use-store';
 export * from './use-id';
 export * from './use-custom-component-ref';
+export * from './use-compatible-lifecycle';

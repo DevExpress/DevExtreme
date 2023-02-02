@@ -1,6 +1,4 @@
-import {
-  RadioButton, RadioGroup, RadioGroupCompatible, RadioGroupRef,
-} from '@devextreme/react';
+import { RadioGroupCompatible, RadioGroupRef } from '@devextreme/react';
 import { ChangeEvent, useReducer, useRef } from 'react';
 
 interface PlaygroundBtnData {
@@ -16,6 +14,10 @@ interface PlaygroundBaseDomSettings {
   accessKey: string;
   disabled: boolean;
   hint?: string;
+  width?: string;
+  height?: string;
+  logOnLifecycle: boolean;
+  visible: boolean;
 }
 
 interface PlaygroundState {
@@ -23,6 +25,7 @@ interface PlaygroundState {
   buttons: PlaygroundBtnData[];
   baseSettings: PlaygroundBaseDomSettings;
   focused: boolean;
+  componentMounted: boolean;
 }
 
 type Actions =
@@ -35,10 +38,15 @@ type Actions =
   | { type: 'setAccessKey', accessKey: string }
   | { type: 'setDisabled', disabled: boolean }
   | { type: 'setHint', hint?: string }
+  | { type: 'setWidth', width?: string }
+  | { type: 'setHeight', height?: string }
+  | { type: 'setLogOnLifecycle', enabled: boolean }
+  | { type: 'setVisible', visible: boolean }
   | { type: 'setButtonLabel', idx: number, label?: string }
   | { type: 'setButtonValue', idx: number, value?: string }
   | { type: 'removeButton' }
-  | { type: 'addButton' };
+  | { type: 'addButton' }
+  | { type: 'setComponentMounted', mounted: boolean; };
 
 function playgroundReducer(
   state: PlaygroundState,
@@ -63,6 +71,17 @@ function playgroundReducer(
       return { ...state, baseSettings: { ...state.baseSettings, disabled: action.disabled } };
     case 'setHint':
       return { ...state, baseSettings: { ...state.baseSettings, hint: action.hint } };
+    case 'setWidth':
+      return { ...state, baseSettings: { ...state.baseSettings, width: action.width } };
+    case 'setHeight':
+      return { ...state, baseSettings: { ...state.baseSettings, height: action.height } };
+    case 'setLogOnLifecycle':
+      return {
+        ...state,
+        baseSettings: { ...state.baseSettings, logOnLifecycle: action.enabled },
+      };
+    case 'setVisible':
+      return { ...state, baseSettings: { ...state.baseSettings, visible: action.visible } };
     case 'setButtonLabel':
       return {
         ...state,
@@ -92,6 +111,8 @@ function playgroundReducer(
         ...state,
         buttons: state.buttons.filter((_, idx) => idx !== state.buttons.length - 1),
       };
+    case 'setComponentMounted':
+      return { ...state, componentMounted: action.mounted };
     default:
       throw new Error('Unknown action type');
   }
@@ -103,6 +124,7 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
   const [state, dispatch] = useReducer(playgroundReducer, {
     groupValue: '1',
     focused: false,
+    componentMounted: true,
     buttons: [
       { value: '0', label: 'Option 0' },
       { value: '1', label: 'Option 1' },
@@ -113,35 +135,60 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
       tabIndex: 0,
       hoverCss: true,
       activeCss: true,
-      accessKey: 'b',
+      accessKey: 'a',
       disabled: false,
       hint: 'Hello!',
+      width: '',
+      height: '',
+      logOnLifecycle: false,
+      visible: true,
     },
   });
+
+  /* eslint-disable @typescript-eslint/no-unused-expressions, no-console */
+  const onContentReady = () => { state.baseSettings.logOnLifecycle && console.log('onContentReady'); };
+  const onInitialized = () => { state.baseSettings.logOnLifecycle && console.log('onInitialized'); };
+  const onDisposing = () => { state.baseSettings.logOnLifecycle && console.log('onDisposing'); };
+  /* eslint-enable @typescript-eslint/no-unused-expressions, no-alert */
 
   return (
     <div className="example">
       <div className="example__title">
-        Compatible uncontrolled playground
+        Compatible controlled playground
       </div>
       <div className="example__control-container">
         <div className="example__control">
-          <RadioGroupCompatible
-            componentRef={radioGroupRef}
-            items={state.buttons}
-            displayExpr="label"
-            valueExpr="value"
-            defaultValue={state.groupValue}
-            valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
-            focusStateEnabled={state.baseSettings.focusCss}
-            hoverStateEnabled={state.baseSettings.hoverCss}
-            activeStateEnabled={state.baseSettings.activeCss}
-            accessKey={state.baseSettings.accessKey}
-            disabled={state.baseSettings.disabled}
-            hint={state.baseSettings.hint}
-            onFocusIn={() => dispatch({ type: 'setFocus', focused: true })}
-            onFocusOut={() => dispatch({ type: 'setFocus', focused: false })}
-          />
+          {
+            state.componentMounted
+              ? (
+                // eslint-disable-next-line jsx-a11y/no-access-key
+                <RadioGroupCompatible
+                  componentRef={radioGroupRef}
+                  items={state.buttons}
+                  displayExpr="label"
+                  valueExpr="value"
+                  value={state.groupValue}
+                  valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
+                  focusStateEnabled={state.baseSettings.focusCss}
+                  tabIndex={state.baseSettings.tabIndex}
+                  hoverStateEnabled={state.baseSettings.hoverCss}
+                  activeStateEnabled={state.baseSettings.activeCss}
+                  disabled={state.baseSettings.disabled}
+                  hint={state.baseSettings.hint}
+                  // compatible options
+                  accessKey={state.baseSettings.accessKey}
+                  width={state.baseSettings.width}
+                  height={state.baseSettings.height}
+                  visible={state.baseSettings.visible}
+                  onFocusIn={() => dispatch({ type: 'setFocus', focused: true })}
+                  onFocusOut={() => dispatch({ type: 'setFocus', focused: false })}
+                  onContentReady={onContentReady}
+                  onInitialized={onInitialized}
+                  onDisposing={onDisposing}
+                />
+              )
+              : null
+          }
         </div>
       </div>
       <div className="example__play-part">
@@ -197,6 +244,19 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
           </button>
         </div>
       </div>
+      <div className="example__play-part">
+        <span className="example__block">
+          <span>Component mounted:</span>
+          <input
+            type="checkbox"
+            checked={state.componentMounted}
+            onChange={
+              () => { dispatch({ type: 'setComponentMounted', mounted: !state.componentMounted }); }
+            }
+          />
+        </span>
+      </div>
+      <h4>Base options:</h4>
       <div className="example__play-part">
         <span className="example__block">
           Focused:
@@ -287,6 +347,57 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
             onChange={(
               event: ChangeEvent<HTMLInputElement>,
             ) => { dispatch({ type: 'setHint', hint: event?.target?.value }); }}
+          />
+        </span>
+      </div>
+      <h4> Compatible options </h4>
+      <div className="example__play-part">
+        <div className="example__play-part">
+          <span className="example__block">
+            Width:
+          </span>
+          <input
+            type="text"
+            className="example-input"
+            value={state.baseSettings.width}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              dispatch({ type: 'setWidth', width: event?.target?.value });
+            }}
+          />
+          <span className="example__block">
+            Height:
+          </span>
+          <input
+            type="text"
+            className="example-input"
+            value={state.baseSettings.height}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              dispatch({ type: 'setHeight', height: event?.target?.value });
+            }}
+          />
+        </div>
+      </div>
+      <div className="example__play-part">
+        <span className="example__block">
+          <span>Visible:</span>
+          <input
+            type="checkbox"
+            checked={state.baseSettings.visible}
+            onChange={
+              () => { dispatch({ type: 'setVisible', visible: !state.baseSettings.visible }); }
+            }
+          />
+        </span>
+      </div>
+      <div className="example__play-part">
+        <span className="example__block">
+          <span>Show lifecycle console logs:</span>
+          <input
+            type="checkbox"
+            checked={state.baseSettings.logOnLifecycle}
+            onChange={
+              () => { dispatch({ type: 'setLogOnLifecycle', enabled: !state.baseSettings.logOnLifecycle }); }
+            }
           />
         </span>
       </div>
