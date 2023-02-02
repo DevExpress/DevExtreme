@@ -33,12 +33,10 @@ function ValidationGroupComponent(
   );
 }
 
-const ValidationGroup = forwardRef<ValidationGroupRef, ValidationGroupProps>(
-  ValidationGroupComponent,
-);
-
 export type ValidationGroupRef = {
   validate: () => ValidationResult
 };
 
-export { ValidationGroup };
+export const ValidationGroup = forwardRef<ValidationGroupRef, ValidationGroupProps>(
+  ValidationGroupComponent,
+);
