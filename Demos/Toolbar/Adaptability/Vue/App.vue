@@ -467,7 +467,7 @@ export default {
 }
 
 .widget-container {
-  margin-right: 6px;
+  margin-right: 10px;
 }
 
 .resizable-container {
