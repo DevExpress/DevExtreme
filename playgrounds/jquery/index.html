@@ -44,7 +44,13 @@
         <div id="cmp2">
             <script>
                 (function() {
-                    new window.DevExpress.ui.dxRadioGroup(document.getElementById('cmp2'), { defaultValue: 'first', items: ['first', 'second', 'third'] })
+                    new window.DevExpress.ui.dxRadioGroup(document.getElementById('cmp2'), {
+                        defaultValue: 'first',
+                        items: ['first', 'second', 'third'],
+                        onValueChanged(e) {
+                            console.log(`onValueChanged fired: ${e.previousValue} -> ${e.value}`);
+                        }
+                    })
                 })()
             </script>
         </div>
