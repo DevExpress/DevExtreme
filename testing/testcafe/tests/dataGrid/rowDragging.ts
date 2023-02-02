@@ -570,7 +570,7 @@ test('The placeholder should have correct position after dragging the row to the
 
 // T1126013
 // TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
-test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -630,7 +630,6 @@ test('Item should appear in a correct spot when dragging to a different page wit
 
   const dataGrid = new DataGrid('#container');
   await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await t.wait(100);
   await dataGrid.moveRow(fromIndex, 0, 90);
   await t.wait(300);
   await dataGrid.moveRow(toIndex, 0, 10);
