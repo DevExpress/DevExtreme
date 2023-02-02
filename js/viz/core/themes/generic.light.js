@@ -187,6 +187,7 @@ export default [{
                         step: 6,
                         opacity: 0.75
                     },
+                    lightening: true,
                     border: {
                         visible: false,
                         width: 3
@@ -199,6 +200,7 @@ export default [{
                         step: 6,
                         opacity: 0.5
                     },
+                    lightening: true,
                     border: {
                         visible: false,
                         width: 3
@@ -381,7 +383,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -394,7 +397,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -407,7 +411,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -420,7 +425,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -433,7 +439,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -446,7 +453,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -504,7 +512,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -625,7 +634,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -645,7 +655,8 @@ export default [{
                         width: 3,
                         hatching: {
                             direction: NONE
-                        }
+                        },
+                        lightening: false,
                     },
                     selectionStyle: {
                         width: 3
@@ -810,6 +821,7 @@ export default [{
                             step: 10,
                             opacity: 0.75
                         },
+                        lightening: true,
                         border: {
                             visible: false,
                             width: 2
@@ -822,6 +834,7 @@ export default [{
                             step: 10,
                             opacity: 0.5
                         },
+                        lightening: true,
                         border: {
                             visible: false,
                             width: 2
@@ -841,6 +854,7 @@ export default [{
                             step: 10,
                             opacity: 0.75
                         },
+                        lightening: true,
                         border: {
                             visible: false,
                             width: 2
@@ -853,6 +867,7 @@ export default [{
                             step: 10,
                             opacity: 0.5
                         },
+                        lightening: true,
                         border: {
                             visible: false,
                             width: 2
@@ -872,6 +887,7 @@ export default [{
                             step: 10,
                             opacity: 0.75
                         },
+                        lightening: true,
                         border: {
                             visible: false,
                             width: 2
@@ -884,6 +900,7 @@ export default [{
                             step: 10,
                             opacity: 0.5
                         },
+                        lightening: true,
                         border: {
                             visible: false,
                             width: 2
