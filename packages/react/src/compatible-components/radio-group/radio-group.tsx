@@ -42,6 +42,8 @@ export function RadioGroupCompatible<T>({
   itemComponent: ItemComponent,
   valueExpr,
   displayExpr,
+  className,
+  style,
   ...otherProps
 }: CompatibleRadioGroupProps<T>) {
   useCompatibleLifecycle(otherProps);
@@ -59,31 +61,35 @@ export function RadioGroupCompatible<T>({
     return getItemLabel(item);
   };
 
+  const cssStyle = {
+    ...style,
+    width: otherProps.width || '',
+    height: otherProps.height || '',
+  };
+
   return (
     (otherProps.visible ?? true)
       ? (
-        // NOTE: It's a temporary solution
-        // because style & class wasn't added to base component props yet.
-        <div style={{ width: otherProps.width, height: otherProps.height }}>
-          <RadioGroup<T>
-            {...otherProps}
-            shortcutKey={otherProps.accessKey}
-            onFocus={otherProps.onFocusIn}
-            onBlur={otherProps.onFocusOut}
-          >
-            {items.map((item, index) => {
-              const value = getItemValue(item);
-              const key = `${value}-${index}`;
-              return (
-                <RadioButton
-                  key={key}
-                  value={value}
-                  label={renderLabel(item, index)}
-                />
-              );
-            })}
-          </RadioGroup>
-        </div>
+        <RadioGroup<T>
+          {...otherProps}
+          className={className}
+          style={cssStyle}
+          shortcutKey={otherProps.accessKey}
+          onFocus={otherProps.onFocusIn}
+          onBlur={otherProps.onFocusOut}
+        >
+          {items.map((item, index) => {
+            const value = getItemValue(item);
+            const key = `${value}-${index}`;
+            return (
+              <RadioButton
+                key={key}
+                value={value}
+                label={renderLabel(item, index)}
+              />
+            );
+          })}
+        </RadioGroup>
       )
       : null
   );
