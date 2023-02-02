@@ -1,79 +1,68 @@
-import { getKeys, PipeFunc, UnknownRecord } from '@devextreme/core';
+import { getKeys, UnknownRecord } from '@devextreme/core';
 import {
-  Builder,
-  BuilderBase,
   DomAttributes,
+  Mapper,
+  MapperBase, PropMapFunc,
   Props,
 } from './types';
 
-export function buildCss(
+export function mapCss(
+  props: Props,
   condition: boolean,
   className: string,
-): PipeFunc<Props> {
-  return (props: Props) => (
-    condition
-      ? {
-        ...props,
-        cssClass: [
-          ...props.cssClass,
-          className,
-        ],
-      }
-      : props
-  );
+): Props {
+  if (condition) {
+    props.cssClass.push(className);
+  }
+
+  return props;
 }
 
-export function buildAttributes(
+export function mapAttributes(
+  props: Props,
   condition: boolean,
   attributes: DomAttributes,
-): PipeFunc<Props> {
-  return (props: Props) => (
-    condition
-      ? {
-        ...props,
-        attributes: {
-          ...props.attributes,
-          ...attributes,
-        },
-      }
-      : props
-  );
+): Props {
+  if (condition) {
+    props.attributes = {
+      ...props.attributes,
+      ...attributes,
+    };
+  }
+
+  return props;
 }
 
 export function createGetDomOptionsMethod<T extends UnknownRecord>(
   defaultValue: T,
 ): (params: Partial<T>) => T {
   return (params) => getKeys(defaultValue).reduce(
-    (result, key) => ({
-      ...result,
-      [key]: params[key] ?? defaultValue[key],
-    }), {} as T,
+    (result, key) => {
+      result[key] = params[key] ?? defaultValue[key];
+      return result;
+    }, {} as T,
   );
 }
 
 export function createChainMethod<T extends UnknownRecord,
   K extends UnknownRecord,
   >(
-  fistBuilder: BuilderBase<T>,
-): (builder: BuilderBase<K>) => Builder<T & K> {
-  return (secondBuilder: BuilderBase<K>) => {
+  firstMapper: MapperBase<T>,
+): (mapper: MapperBase<K>) => Mapper<T & K> {
+  return (secondMapper: MapperBase<K>) => {
     const defaultValue = {
-      ...fistBuilder.defaultValue,
-      ...secondBuilder.defaultValue,
+      ...firstMapper.defaultValue,
+      ...secondMapper.defaultValue,
     };
 
-    const build = (
-      domOptions: T & K,
-    ): PipeFunc<Props> => (
-      props,
-    ) => {
-      const firstProps = fistBuilder.build(domOptions)(props);
-      return secondBuilder.build(domOptions)(firstProps);
+    const map = (props: Props, domOptions: T & K): Props => {
+      const modifiedProps = firstMapper.map(props, domOptions);
+      return secondMapper.map(modifiedProps, domOptions);
     };
 
-    const newBuilder: BuilderBase<T & K> = {
+    const newBuilder: MapperBase<T & K> = {
       defaultValue,
-      build,
+      map,
     };
 
     return {
@@ -84,13 +73,13 @@ export function createChainMethod<T extends UnknownRecord,
   };
 }
 
-export function createBuilder<T extends UnknownRecord>(
+export function createMapper<T extends UnknownRecord>(
   defaultValue: T,
-  build: (domOptions: T) => PipeFunc<Props>,
-): Builder<T> {
+  map: PropMapFunc<T>,
+): Mapper<T> {
   const builder = {
     defaultValue,
-    build,
+    map,
   };
 
   return {

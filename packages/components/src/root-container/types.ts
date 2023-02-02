@@ -1,4 +1,4 @@
-import { PipeFunc, UnknownRecord } from '@devextreme/core';
+import { UnknownRecord } from '@devextreme/core';
 
 export type DomAttributes = Record<string, unknown>;
 
@@ -34,17 +34,21 @@ export type DomOptions = {
   },
 };
 
-export type PropBuilders = {
-  [K in keyof DomOptions]: Builder<DomOptions[K]>
+export type PropMapFunc<T> = (props: Props, domOptions: T) => Props;
+
+export type PropMappers = {
+  [K in keyof DomOptions]: Mapper<DomOptions[K]>
 };
 
-export type BuilderBase<T extends UnknownRecord> = {
+export type MapperBase<T extends UnknownRecord> = {
   defaultValue: T;
-  build: (domOptions: T) => PipeFunc<Props>;
+  map: PropMapFunc<T>;
 };
 
-export type Builder<T extends UnknownRecord> = BuilderBase<T>
+export type Mapper<T extends UnknownRecord> = MapperBase<T>
 & {
   getDomOptions: (params: Partial<T>) => T;
-  chain: <K extends UnknownRecord>(propBuilder: BuilderBase<K>) => Builder<T & K>
+  chain: <K extends UnknownRecord>(mapper: MapperBase<K>) => Mapper<T & K>
 };
+
+export type ExtractMapperType<Type> = Type extends Mapper<infer T> ? T : never;

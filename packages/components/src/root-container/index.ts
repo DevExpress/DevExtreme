@@ -4,9 +4,5 @@ export type {
 } from './types';
 
 export {
-  DEFAULT_PROPS as DEFAULT_ROOT_CONTAINER_PROPS,
-} from './consts';
-
-export {
-  PROP_BUILDERS as ROOT_CONTAINER_PROP_BUILDERS,
+  PROP_MAPPERS as ROOT_CONTAINER_PROP_MAPPERS,
 } from './prop-builders';

@@ -8,28 +8,22 @@ import {
   UpdateStateAction,
 } from '@devextreme/core';
 import {
-  DEFAULT_ROOT_CONTAINER_PROPS,
-  ROOT_CONTAINER_PROP_BUILDERS,
-  RootContainerDomOptions,
+  ROOT_CONTAINER_PROP_MAPPERS,
   RootContainerProps,
 } from '../root-container';
+import { ExtractMapperType } from '../root-container/types';
 
 // === base component ===
-export type RadioGroupContainerDomOptions = RootContainerDomOptions['accessKey']
-& RootContainerDomOptions['active']
-& RootContainerDomOptions['attributes']
-& RootContainerDomOptions['disabled']
-& RootContainerDomOptions['focus']
-& RootContainerDomOptions['hint']
-& RootContainerDomOptions['hover'];
+export const RADIO_GROUP_CONTAINER_PROPS_MAPPER = ROOT_CONTAINER_PROP_MAPPERS.accessKey
+  .chain(ROOT_CONTAINER_PROP_MAPPERS.active)
+  .chain(ROOT_CONTAINER_PROP_MAPPERS.attributes)
+  .chain(ROOT_CONTAINER_PROP_MAPPERS.disabled)
+  .chain(ROOT_CONTAINER_PROP_MAPPERS.focus)
+  .chain(ROOT_CONTAINER_PROP_MAPPERS.hint)
+  .chain(ROOT_CONTAINER_PROP_MAPPERS.hover);
 
-export const RADIO_GROUP_CONTAINER_PROPS_BUILDER = ROOT_CONTAINER_PROP_BUILDERS.accessKey
-  .chain(ROOT_CONTAINER_PROP_BUILDERS.active)
-  .chain(ROOT_CONTAINER_PROP_BUILDERS.attributes)
-  .chain(ROOT_CONTAINER_PROP_BUILDERS.disabled)
-  .chain(ROOT_CONTAINER_PROP_BUILDERS.focus)
-  .chain(ROOT_CONTAINER_PROP_BUILDERS.hint)
-  .chain(ROOT_CONTAINER_PROP_BUILDERS.hover);
+export type RadioGroupContainerDomOptions =
+  ExtractMapperType<typeof RADIO_GROUP_CONTAINER_PROPS_MAPPER>;
 
 // === props ===
 export type ValueProps<T> = {
@@ -89,7 +83,7 @@ export function createContainerPropsSelector<T>()
     (state) => state.readonly,
     (
       readonly: ReadonlyProps,
-    ) => RADIO_GROUP_CONTAINER_PROPS_BUILDER.build(readonly)(DEFAULT_ROOT_CONTAINER_PROPS),
+    ) => RADIO_GROUP_CONTAINER_PROPS_MAPPER.map({ cssClass: [], attributes: {} }, readonly),
   );
 }
 

@@ -3,6 +3,7 @@ import {
   TemplateProps,
   ValueProps,
 } from '@devextreme/components';
+import { FocusEventHandler } from 'react';
 
 type HandlerProp<P extends string> = `${P}Change`;
 type DefaultProp<P extends string> = `default${Capitalize<P>}`;
@@ -26,6 +27,6 @@ export interface EditorProps<T> extends Props<ValueProps<T>, ReadonlyProps, Temp
 }
 
 export type FocusableComponent = {
-  onFocus?: () => void;
-  onBlur?: () => void;
+  onFocus?: FocusEventHandler<HTMLElement>;
+  onBlur?: FocusEventHandler<HTMLDivElement>;
 };

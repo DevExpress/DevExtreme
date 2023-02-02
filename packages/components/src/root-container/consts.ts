@@ -1,4 +1,4 @@
-import { DomOptions, Props } from './types';
+import { DomOptions } from './types';
 
 export const DOM_CSS_CLASSES = {
   focus: '-dx-focus',
@@ -12,11 +12,6 @@ export const DOM_ATTRIBUTES = {
   accessKey: 'accessKey',
   title: 'title',
 } as const;
-
-export const DEFAULT_PROPS: Props = {
-  cssClass: [],
-  attributes: {},
-};
 
 export const DEFAULT_DOM_OPTIONS: DomOptions = {
   accessKey: {

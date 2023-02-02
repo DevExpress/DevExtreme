@@ -15,5 +15,5 @@ export {
   createCheckedSelector,
   createContainerPropsSelector,
   createRadioGroupStore,
-  RADIO_GROUP_CONTAINER_PROPS_BUILDER,
+  RADIO_GROUP_CONTAINER_PROPS_MAPPER,
 } from './radio-group';

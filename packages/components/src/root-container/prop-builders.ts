@@ -1,57 +1,75 @@
 import { DEFAULT_DOM_OPTIONS, DOM_ATTRIBUTES, DOM_CSS_CLASSES } from './consts';
-import { DomOptions, PropBuilders } from './types';
-import { buildAttributes, buildCss, createBuilder } from './utils';
+import { DomOptions, PropMappers, Props } from './types';
+import { createMapper, mapAttributes, mapCss } from './utils';
 
-export const PROP_BUILDERS: PropBuilders = {
-  accessKey: createBuilder(
+export const PROP_MAPPERS: PropMappers = {
+  accessKey: createMapper(
     DEFAULT_DOM_OPTIONS.accessKey,
     (
+      props: Props,
       { shortcutKey }: DomOptions['accessKey'],
-    ) => buildAttributes(!!shortcutKey, { [DOM_ATTRIBUTES.accessKey]: shortcutKey }),
+    ) => mapAttributes(props, !!shortcutKey, { [DOM_ATTRIBUTES.accessKey]: shortcutKey }),
   ),
-  active: createBuilder(
+  active: createMapper(
     DEFAULT_DOM_OPTIONS.active,
     (
+      props: Props,
       { activeStateEnabled }: DomOptions['active'],
-    ) => buildCss(activeStateEnabled, DOM_CSS_CLASSES.active),
+    ) => mapCss(props, activeStateEnabled, DOM_CSS_CLASSES.active),
   ),
-  attributes: createBuilder(
+  attributes: createMapper(
     DEFAULT_DOM_OPTIONS.attributes,
     (
+      props: Props,
       { attributes }: DomOptions['attributes'],
-    ) => buildAttributes(true, attributes),
+    ) => mapAttributes(props, true, attributes),
   ),
-  disabled: createBuilder(
+  disabled: createMapper(
     DEFAULT_DOM_OPTIONS.disabled,
     (
+      props: Props,
       { disabled }: DomOptions['disabled'],
-    ) => buildAttributes(disabled, {
-      [DOM_ATTRIBUTES.disabled]: ' ',
-      [DOM_ATTRIBUTES.tabIndex]: undefined,
-    }),
+    ) => mapAttributes(
+      props,
+      disabled,
+      {
+        [DOM_ATTRIBUTES.disabled]: ' ',
+        [DOM_ATTRIBUTES.tabIndex]: undefined,
+      },
+    ),
   ),
-  focus: createBuilder(
+  focus: createMapper(
     DEFAULT_DOM_OPTIONS.focus,
-    ({ focusStateEnabled, tabIndex }) => (props) => {
-      const result = buildCss(focusStateEnabled, DOM_CSS_CLASSES.focus)(props);
-      return buildAttributes(
+    (
+      props: Props,
+      { focusStateEnabled, tabIndex }: DomOptions['focus'],
+    ) => {
+      const result = mapCss(props, focusStateEnabled, DOM_CSS_CLASSES.focus);
+      return mapAttributes(
+        result,
         true,
         {
           [DOM_ATTRIBUTES.tabIndex]: props.attributes[DOM_ATTRIBUTES.disabled]
             ? undefined
             : tabIndex,
         },
-      )(result);
+      );
     },
   ),
-  hint: createBuilder(
+  hint: createMapper(
     DEFAULT_DOM_OPTIONS.hint,
-    ({ hint }) => buildAttributes(!!hint, {
+    (
+      props: Props,
+      { hint }: DomOptions['hint'],
+    ) => mapAttributes(props, !!hint, {
       [DOM_ATTRIBUTES.title]: hint!,
     }),
   ),
-  hover: createBuilder(
+  hover: createMapper(
     DEFAULT_DOM_OPTIONS.hover,
-    ({ hoverStateEnabled }) => buildCss(hoverStateEnabled, DOM_CSS_CLASSES.hover),
+    (
+      props: Props,
+      { hoverStateEnabled }: DomOptions['hover'],
+    ) => mapCss(props, hoverStateEnabled, DOM_CSS_CLASSES.hover),
   ),
 };

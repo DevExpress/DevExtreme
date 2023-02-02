@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import {
+  RADIO_GROUP_ACTIONS as ACTIONS,
   createContainerPropsSelector,
   createRadioGroupStore,
-  RADIO_GROUP_ACTIONS,
-  RADIO_GROUP_CONTAINER_PROPS_BUILDER,
+  RADIO_GROUP_CONTAINER_PROPS_MAPPER as PROPS_MAPPERS,
 } from '@devextreme/components';
 import {
   Children,
@@ -29,7 +29,7 @@ function RadioGroupInternal<T>(
   const valueChange = useCallbackRef(props.valueChange);
 
   const store = useMemo(() => createRadioGroupStore<T>({
-    readonly: RADIO_GROUP_CONTAINER_PROPS_BUILDER.getDomOptions(props),
+    readonly: PROPS_MAPPERS.getDomOptions(props),
     value: isValueControlled ? props.value : props.defaultValue,
   }, {
     value: {
@@ -40,16 +40,20 @@ function RadioGroupInternal<T>(
 
   const containerProps = useStoreSelector(store, createContainerPropsSelector, []);
 
-  const readonlyValues = RADIO_GROUP_CONTAINER_PROPS_BUILDER.getDomOptions(props);
   useSecondEffect(() => {
     if (isValueControlled) {
-      store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(props.value));
+      store.addUpdate(ACTIONS.updateValue(props.value));
     }
+  }, [props.value]);
 
-    store.addUpdate(RADIO_GROUP_ACTIONS.updateReadonly(readonlyValues));
+  const readonlyValues = PROPS_MAPPERS.getDomOptions(props);
+  useSecondEffect(() => {
+    store.addUpdate(ACTIONS.updateReadonly(readonlyValues));
+  }, [...Object.values(readonlyValues)]);
 
+  useSecondEffect(() => {
     store.commitPropsUpdates();
-  }, [props.value, ...Object.values(readonlyValues)]);
+  });
 
   return (
     <RadioGroupStoreContext.Provider value={store}>

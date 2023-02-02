@@ -7,12 +7,13 @@ interface PlaygroundBtnData {
 }
 
 interface PlaygroundBaseDomSettings {
-  focusCss: boolean,
-  hoverCss: boolean,
-  activeCss: boolean,
-  accessKey: string,
-  disabled: boolean,
-  hint?: string,
+  focusCss: boolean;
+  tabIndex: number;
+  hoverCss: boolean;
+  activeCss: boolean;
+  accessKey: string;
+  disabled: boolean;
+  hint?: string;
 }
 
 interface PlaygroundState {
@@ -26,6 +27,7 @@ type Actions =
   | { type: 'setValue', groupValue?: string }
   | { type: 'setFocus', focused: boolean }
   | { type: 'setFocusCss', enabled: boolean }
+  | { type: 'setTabIndex', tabIndex: number }
   | { type: 'setHoverCss', enabled: boolean }
   | { type: 'setActiveCss', enabled: boolean }
   | { type: 'setAccessKey', accessKey: string }
@@ -47,6 +49,8 @@ function playgroundReducer(
       return { ...state, focused: action.focused };
     case 'setFocusCss':
       return { ...state, baseSettings: { ...state.baseSettings, focusCss: action.enabled } };
+    case 'setTabIndex':
+      return { ...state, baseSettings: { ...state.baseSettings, tabIndex: action.tabIndex } };
     case 'setHoverCss':
       return { ...state, baseSettings: { ...state.baseSettings, hoverCss: action.enabled } };
     case 'setActiveCss':
@@ -103,6 +107,7 @@ export function RadioGroupUncontrolledPlayground() {
     ],
     baseSettings: {
       focusCss: true,
+      tabIndex: 0,
       hoverCss: true,
       activeCss: true,
       accessKey: 's',
@@ -232,6 +237,22 @@ export function RadioGroupUncontrolledPlayground() {
             onChange={() => dispatch({ type: 'setActiveCss', enabled: !state.baseSettings.activeCss })}
           />
         </span>
+      </div>
+      <div className="example__play-part">
+        <span className="example__block">
+          Tab index:
+        </span>
+        <input
+          type="number"
+          className="example-input"
+          value={state.baseSettings.tabIndex}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            const tabIndex = +event?.target?.value;
+            if (!isNaN(tabIndex)) {
+              dispatch({ type: 'setTabIndex', tabIndex });
+            }
+          }}
+        />
       </div>
       <div className="example__play-part">
         <span className="example__block">
