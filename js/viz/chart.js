@@ -395,9 +395,7 @@ const isPointOverlapped = (currentPoint, overlappingPoints, skipComparingSamePoi
             }
         }
 
-        if(isOverlay(currentPoint, overlappingPoints[i], radiusPoint)) {
-            return true;
-        }
+        return isOverlay(currentPoint, overlappingPoints[i], radiusPoint);
     }
     return false;
 };
