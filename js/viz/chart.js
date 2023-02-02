@@ -10,7 +10,8 @@ import {
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
     rangesAreEqual,
-    isRelativeHeightPane
+    isRelativeHeightPane,
+    extractColor
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
@@ -1235,7 +1236,7 @@ const dxChart = AdvancedChart.inherit({
                 continue;
             }
             rect = renderer.rect(0, 0, 0, 0).attr({
-                fill: backgroundColor,
+                fill: extractColor(backgroundColor),
                 'stroke-width': 0
             }).append(that._panesBackgroundGroup);
             rects.push(rect);
