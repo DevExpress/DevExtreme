@@ -3,6 +3,7 @@ import React from 'react';
 import FileManager, { Permissions } from 'devextreme-react/file-manager';
 import CustomFileSystemProvider from 'devextreme/file_management/custom_provider';
 import { LoadPanel } from 'devextreme-react/load-panel';
+import { AzureGateway, AzureFileSystem } from './azure.file.system.js'; // eslint-disable-line import/no-unresolved
 
 const endpointUrl = 'https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-access';
 const allowedFileExtensions = [];
@@ -142,8 +143,10 @@ function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
 
   if (uploadInfo.chunkIndex === 0) {
     const filePath = destinationDirectory.path ? `${destinationDirectory.path}/${fileData.name}` : fileData.name;
-    promise = gateway.getUploadAccessUrl(filePath).done((accessUrl) => {
-      uploadInfo.customData.accessUrl = accessUrl;
+    // eslint-disable-next-line spellcheck/spell-checker
+    promise = gateway.getUploadAccessUrl(filePath).then((accessUrls) => {
+      // eslint-disable-next-line spellcheck/spell-checker
+      uploadInfo.customData.accessUrl = accessUrls.url1;
     });
   } else {
     promise = Promise.resolve();

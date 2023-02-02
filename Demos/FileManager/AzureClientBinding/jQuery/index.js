@@ -79,31 +79,33 @@ function moveItem(item, destinationDirectory) {
 }
 
 function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
-  let deferred = null;
+  let promise = null;
 
   if (uploadInfo.chunkIndex === 0) {
     const filePath = destinationDirectory.path ? `${destinationDirectory.path}/${fileData.name}` : fileData.name;
-    deferred = gateway.getUploadAccessUrl(filePath).done((accessUrl) => {
-      uploadInfo.customData.accessUrl = accessUrl;
+    // eslint-disable-next-line spellcheck/spell-checker
+    promise = gateway.getUploadAccessUrl(filePath).then((accessUrls) => {
+      // eslint-disable-next-line spellcheck/spell-checker
+      uploadInfo.customData.accessUrl = accessUrls.url1;
     });
   } else {
-    deferred = $.Deferred().resolve().promise();
+    promise = Promise.resolve();
   }
 
-  deferred = deferred.then(() => gateway.putBlock(
+  promise = promise.then(() => gateway.putBlock(
     uploadInfo.customData.accessUrl,
     uploadInfo.chunkIndex,
     uploadInfo.chunkBlob,
   ));
 
   if (uploadInfo.chunkIndex === uploadInfo.chunkCount - 1) {
-    deferred = deferred.then(() => gateway.putBlockList(
+    promise = promise.then(() => gateway.putBlockList(
       uploadInfo.customData.accessUrl,
       uploadInfo.chunkCount,
     ));
   }
 
-  return deferred.promise();
+  return promise;
 }
 
 function downloadItems(items) {

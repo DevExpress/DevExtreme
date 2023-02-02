@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxFileUploaderModule, DxLoadPanelModule } from 'devextreme-angular';
+import { AzureGateway } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -38,8 +39,8 @@ export class AppComponent {
     let promise = null;
 
     if (uploadInfo.chunkIndex === 0) {
-      promise = gateway.getUploadAccessUrl(file.name).done((accessUrl) => {
-        uploadInfo.customData.accessUrl = accessUrl;
+      promise = gateway.getUploadAccessUrl(file.name).then((accessUrls) => {
+        uploadInfo.customData.accessUrl = accessUrls.url1;
       });
     } else {
       promise = Promise.resolve();

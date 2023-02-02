@@ -4819,7 +4819,8 @@
                 "Widget": "FileManager",
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/FileManagerAzureAccessApiController.cs"
+                  "/Controllers/ApiControllers/FileManagerAzureAccessApiController.cs",
+                  "/Scripts/utils/azure.file.system.js"
                 ],
                 "BackendFiles": [
                   "FileManagerAzureAccessApiController.cs"
@@ -4913,7 +4914,8 @@
             "DocUrl": "",
             "Widget": "FileUploader",
             "MvcAdditionalFiles": [
-              "/Controllers/ApiControllers/FileUploaderAzureAccessApiController.cs"
+              "/Controllers/ApiControllers/FileUploaderAzureAccessApiController.cs",
+              "/Scripts/utils/azure.file.system.js"
             ],
             "BackendFiles": [
               "FileUploaderAzureAccessApiController.cs"

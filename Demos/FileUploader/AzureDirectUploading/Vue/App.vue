@@ -56,6 +56,7 @@
 <script>
 import { DxFileUploader } from 'devextreme-vue/file-uploader';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
+import { AzureGateway } from './azure.file.system.js'; // eslint-disable-line import/no-unresolved
 
 const endpointUrl = 'https://js.devexpress.com/Demos/Mvc/api/file-manager-azure-access';
 
@@ -94,8 +95,10 @@ export default {
       let promise = null;
 
       if (uploadInfo.chunkIndex === 0) {
-        promise = gateway.getUploadAccessUrl(file.name).done((accessUrl) => {
-          uploadInfo.customData.accessUrl = accessUrl;
+        // eslint-disable-next-line spellcheck/spell-checker
+        promise = gateway.getUploadAccessUrl(file.name).then((accessUrls) => {
+          // eslint-disable-next-line spellcheck/spell-checker
+          uploadInfo.customData.accessUrl = accessUrls.url1;
         });
       } else {
         promise = Promise.resolve();

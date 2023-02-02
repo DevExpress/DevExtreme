@@ -6,6 +6,7 @@ import { lastValueFrom } from 'rxjs';
 
 import { DxFileManagerModule, DxLoadPanelModule } from 'devextreme-angular';
 import CustomFileSystemProvider from 'devextreme/file_management/custom_provider';
+import { AzureGateway, AzureFileSystem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -97,8 +98,8 @@ function uploadFileChunk(fileData, uploadInfo, destinationDirectory) {
 
   if (uploadInfo.chunkIndex === 0) {
     const filePath = destinationDirectory.path ? `${destinationDirectory.path}/${fileData.name}` : fileData.name;
-    promise = gateway.getUploadAccessUrl(filePath).done((accessUrl) => {
-      uploadInfo.customData.accessUrl = accessUrl;
+    promise = gateway.getUploadAccessUrl(filePath).then((accessUrls) => {
+      uploadInfo.customData.accessUrl = accessUrls.url1;
     });
   } else {
     promise = Promise.resolve();
