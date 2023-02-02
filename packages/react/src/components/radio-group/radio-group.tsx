@@ -3,7 +3,11 @@ import {
   RADIO_GROUP_ACTIONS as ACTIONS,
   createContainerPropsSelector,
   createRadioGroupStore,
+<<<<<<< HEAD
   RADIO_GROUP_CONTAINER_PROPS_MAPPER as PROPS_MAPPERS,
+=======
+  RADIO_GROUP_CONTAINER_PROPS_BUILDER as PROP_MAPPER,
+>>>>>>> f9a364655e (R2 React RG: Complete compatible base widget functionality.)
 } from '@devextreme/components';
 import {
   Children,
@@ -47,7 +51,11 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
   const valueChange = useCallbackRef(props.valueChange);
 
   const store = useMemo(() => createRadioGroupStore<T>({
+<<<<<<< HEAD
     readonly: PROPS_MAPPERS.getDomOptions(props),
+=======
+    readonly: PROP_MAPPER.getDomOptions(props),
+>>>>>>> f9a364655e (R2 React RG: Complete compatible base widget functionality.)
     value: isValueControlled ? props.value : props.defaultValue,
   }, {
     value: {
@@ -64,7 +72,11 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
     }
   }, [props.value]);
 
+<<<<<<< HEAD
   const readonlyValues = PROPS_MAPPERS.getDomOptions(props);
+=======
+  const readonlyValues = PROP_MAPPER.getDomOptions(props);
+>>>>>>> f9a364655e (R2 React RG: Complete compatible base widget functionality.)
   useSecondEffect(() => {
     store.addUpdate(ACTIONS.updateReadonly(readonlyValues));
   }, [...Object.values(readonlyValues)]);
