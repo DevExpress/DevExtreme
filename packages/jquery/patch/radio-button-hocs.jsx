@@ -21,7 +21,7 @@ function withUncontrolledBehavior(RadioButton) {
 
 function withRadioGroup(RadioButton) {
   function CoreBoundRadioButton({ store, value, ...props }) {
-      const checked = useStoreSelector(store, createCheckedSelector(value));
+      const checked = useStoreSelector(store, createCheckedSelector, [value]);
       const handleSelected = () => {
           props.onSelected?.(value);
           store.addUpdate(RADIO_GROUP_ACTIONS.updateValue(value));
