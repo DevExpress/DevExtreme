@@ -935,7 +935,13 @@ const Overlay = Widget.inherit({
     _checkContainerExists() {
         const $wrapperContainer = this._positionController.$container;
 
+        // NOTE: The container is undefined when DOM is not ready yet. See T1143527
+        if($wrapperContainer === undefined) {
+            return;
+        }
+
         const containerExists = $wrapperContainer.length > 0;
+
         if(!containerExists) {
             uiErrors.log('W1021', this.NAME);
         }
