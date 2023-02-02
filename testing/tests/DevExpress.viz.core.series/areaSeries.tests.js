@@ -32,10 +32,10 @@ const createSeries = function(options, renderSettings) {
             displayMode: 'none'
         },
         hoverStyle: {
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
         },
         selectionStyle: {
-            hatching: 's-hatching'
+            hatching: 's-hatching',
         },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
@@ -848,6 +848,7 @@ function setDiscreteType(series) {
             'class': 'dxc-elements',
             'clip-path': undefined,
             'fill': 'n color',
+            'filter': null,
             'hatching': undefined,
             'opacity': 'n opacity',
             'stroke': 'none'
@@ -885,7 +886,8 @@ function setDiscreteType(series) {
                 direction: 'h-h direction',
                 width: 'h-h width',
                 opacity: 'h-h opacity'
-            }
+            },
+            'filter': null,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
@@ -915,7 +917,8 @@ function setDiscreteType(series) {
             'fill': 'n color',
             'opacity': 'n opacity',
             'stroke': 'none',
-            hatching: undefined
+            hatching: undefined,
+            'filter': null,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
@@ -946,6 +949,7 @@ function setDiscreteType(series) {
             'fill': 's color',
             'opacity': 's opacity',
             'stroke': 'none',
+            'filter': null,
             'hatching': {
                 direction: 's-h direction',
                 width: 's-h width',
@@ -977,6 +981,7 @@ function setDiscreteType(series) {
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
             'fill': 's color',
+            'filter': null,
             'opacity': 's opacity',
             'stroke': 'none',
             'hatching': 's-hatching'
@@ -1036,17 +1041,20 @@ function setDiscreteType(series) {
             'hover': {
                 'fill': 'mainSeriesColor',
                 'hatching': 'h-hatching',
-                opacity: undefined
+                opacity: undefined,
+                'filter': undefined,
             },
             'normal': {
                 'fill': 'mainSeriesColor',
                 opacity: 0.5,
-                hatching: undefined
+                hatching: undefined,
+                'filter': undefined,
             },
             'selection': {
                 'fill': 'mainSeriesColor',
                 'hatching': 's-hatching',
-                opacity: undefined
+                opacity: undefined,
+                'filter': undefined,
             }
         });
     });
@@ -1068,17 +1076,20 @@ function setDiscreteType(series) {
             'hover': {
                 'fill': 'h-color',
                 'hatching': 'h-hatching',
-                opacity: undefined
+                opacity: undefined,
+                'filter': undefined,
             },
             'normal': {
                 'fill': 'n-color',
                 opacity: 'opacity',
-                hatching: undefined
+                hatching: undefined,
+                'filter': undefined,
             },
             'selection': {
                 'fill': 's-color',
                 'hatching': 's-hatching',
-                opacity: undefined
+                opacity: undefined,
+                'filter': undefined,
             }
         });
     });

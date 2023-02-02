@@ -447,23 +447,23 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.deepEqual(element.attr.lastCall.args, [{ fill: 'red', stroke: 'green' }]);
     });
 
-    QUnit.test('smartAttr, lightening', function(assert) {
+    QUnit.test('smartAttr, filter', function(assert) {
         const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
         const element = (new this.Element(this.rendererStub, 'rect'));
 
-        element.smartAttr({ fill: 'red', lightening: true });
+        element.smartAttr({ fill: 'red', filter: true });
 
         assert.deepEqual(element._settings, { fill: 'red', filter: 'test-pattern' }, 'attrs');
         assert.deepEqual(lock.lastCall.args, [{}, undefined, 'filter'], 'lock');
     });
 
-    QUnit.test('smartAttr, dispose lightening', function(assert) {
+    QUnit.test('smartAttr, dispose filter', function(assert) {
         const release = this.rendererStub.releaseDefsElements = sinon.spy();
         this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
         const element = (new this.Element(this.rendererStub, 'rect'));
 
-        element.smartAttr({ lightening: true });
-        element.smartAttr({ lightening: false });
+        element.smartAttr({ filter: true });
+        element.smartAttr({ filter: false });
 
         assert.deepEqual(release.lastCall.args, ['test-pattern'], 'release');
     });

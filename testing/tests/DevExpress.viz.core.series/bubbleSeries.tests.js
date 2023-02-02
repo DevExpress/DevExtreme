@@ -331,6 +331,7 @@ QUnit.test('Style in point', function(assert) {
     series.createPoints();
 
     assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+        labelColor: 'n-color',
         hover: {
             fill: 'h-color',
             stroke: 'h-b-color',
@@ -382,7 +383,9 @@ QUnit.test('All options defined', function(assert) {
     series.createPoints();
 
     assert.deepEqual((series._getPointOptions().styles), {
+        labelColor: 'n-color',
         hover: {
+            filter: undefined,
             fill: 'h-color',
             stroke: 'h-b-color',
             opacity: 'h-opacity',
@@ -391,6 +394,7 @@ QUnit.test('All options defined', function(assert) {
             hatching: 'h-hatching'
         },
         normal: {
+            filter: undefined,
             fill: 'n-color',
             opacity: 'n-opacity',
             stroke: 'n-b-color',
@@ -399,6 +403,7 @@ QUnit.test('All options defined', function(assert) {
             hatching: undefined
         },
         selection: {
+            filter: undefined,
             fill: 's-color',
             stroke: 's-b-color',
             opacity: 's-opacity',
@@ -491,7 +496,9 @@ QUnit.test('customize point color. all', function(assert) {
     assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
         usePointCustomOptions: true,
         useLabelCustomOptions: undefined,
+        labelColor: 'n-color',
         hover: {
+            filter: undefined,
             fill: 'h-color',
             stroke: 'h-b-color',
             'stroke-width': 'h-b-width',
@@ -500,6 +507,7 @@ QUnit.test('customize point color. all', function(assert) {
             hatching: 'h-hatching'
         },
         normal: {
+            filter: undefined,
             fill: 'n-color',
             opacity: 'n-opacity',
             stroke: 'n-b-color',
@@ -508,6 +516,7 @@ QUnit.test('customize point color. all', function(assert) {
             hatching: undefined
         },
         selection: {
+            filter: undefined,
             fill: 's-color',
             opacity: 's-opacity',
             stroke: 's-b-color',

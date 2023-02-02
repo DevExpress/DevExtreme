@@ -2,7 +2,7 @@ import { extend as _extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
 import rangeCalculator from './helpers/range_data_calculator';
 import { isDefined as _isDefined, isString as _isString } from '../../core/utils/type';
-import { map as _map, normalizeEnum as _normalizeEnum, convertXYToPolar } from '../core/utils';
+import { map as _map, normalizeEnum as _normalizeEnum, convertXYToPolar, extractColor } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
 const math = Math;
 const _abs = math.abs;
@@ -157,7 +157,7 @@ const baseScatterMethods = {
 
     _createLegendState: function(styleOptions, defaultColor) {
         return {
-            fill: styleOptions.color || defaultColor,
+            fill: extractColor(styleOptions.color) || defaultColor,
             hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: 'right' }) : undefined
         };
     },
@@ -284,7 +284,8 @@ const baseScatterMethods = {
         const border = style.border || {};
         const sizeValue = style.size !== undefined ? style.size : defaultSize;
         return {
-            fill: style.color || defaultColor,
+            fill: extractColor(style.color) || defaultColor,
+            filter: style.lightening,
             stroke: border.color || defaultBorderColor,
             'stroke-width': border.visible ? border.width : 0,
             r: sizeValue / 2 + (border.visible && sizeValue !== 0 ? ~~(border.width / 2) || 0 : 0)
@@ -300,6 +301,7 @@ const baseScatterMethods = {
         normalStyle.visibility = pointOptions.visible ? 'visible' : 'hidden';
 
         return {
+            labelColor: mainPointColor,
             normal: normalStyle,
             hover: that._parsePointStyle(pointOptions.hoverStyle, containerColor, mainPointColor, pointOptions.size),
             selection: that._parsePointStyle(pointOptions.selectionStyle, containerColor, mainPointColor, pointOptions.size)

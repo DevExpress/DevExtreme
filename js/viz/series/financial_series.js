@@ -181,6 +181,7 @@ export const stock = _extend({}, scatterSeries, {
         styles.positive = positiveStyle;
         styles.reduction = reductionStyle;
         styles.reductionPositive = reductionPositiveStyle;
+        styles.labelColor = innerColor;
 
         return styles;
     },

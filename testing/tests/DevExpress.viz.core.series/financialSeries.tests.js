@@ -616,6 +616,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -752,6 +753,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -843,6 +845,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'seriesColor',
                 stroke: 'seriesColor',
@@ -938,6 +941,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'seriesColor',
                 stroke: 'seriesColor',
@@ -1032,6 +1036,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'h-color',
                 stroke: 'h-color',
@@ -1145,6 +1150,7 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
+            labelColor: 'innerColor',
             hover: {
                 fill: 'c-h-color',
                 stroke: 'c-h-color',
@@ -1820,6 +1826,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -2158,6 +2165,7 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
+            labelColor: 'innerColor',
             hover: {
                 fill: 'c-h-color',
                 stroke: 'c-h-color',

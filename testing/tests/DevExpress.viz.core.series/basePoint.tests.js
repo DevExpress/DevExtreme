@@ -849,7 +849,8 @@ QUnit.test('apply view', function(assert) {
     assert.deepEqual(this.point.graphic.stub('attr').firstCall.args[0], {
         fill: null,
         stroke: null,
-        dashStyle: null
+        dashStyle: null,
+        filter: null
     });
 });
 

@@ -571,39 +571,46 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
                 dashStyle: 'h-b-dashStyle',
-                hatching: 'h-hatching'
+                hatching: 'h-hatching',
+                filter: undefined
             },
             normal: {
                 fill: 'n-color',
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 dashStyle: 'n-b-dashStyle',
-                hatching: undefined
+                hatching: undefined,
+                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
                 dashStyle: 's-b-dashStyle',
-                hatching: 's-hatching'
+                hatching: 's-hatching',
+                filter: undefined
             },
             legendStyles: {
                 'hover': {
                     'fill': 'h-color',
-                    hatching: 'h-hatching'
+                    hatching: 'h-hatching',
+                    filter: undefined
                 },
                 'normal': {
                     'fill': 'n-color',
-                    hatching: undefined
+                    hatching: undefined,
+                    filter: undefined
                 },
                 'selection': {
                     'fill': 's-color',
-                    hatching: 's-hatching'
+                    hatching: 's-hatching',
+                    filter: undefined
                 }
             }
         });
@@ -636,7 +643,8 @@ const checkTwoGroups = function(assert, series) {
             stroke: 'h-b-color',
             'stroke-width': 'h-b-width',
             dashStyle: 'h-b-dashStyle',
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            filter: undefined
         }, 'hover styles');
 
         assert.deepEqual(styles.normal, {
@@ -644,7 +652,8 @@ const checkTwoGroups = function(assert, series) {
             stroke: 'n-b-color',
             'stroke-width': 'n-b-width',
             dashStyle: 'n-b-dashStyle',
-            hatching: undefined
+            hatching: undefined,
+            filter: undefined
         }, 'normal styles');
 
         assert.deepEqual(styles.selection, {
@@ -652,7 +661,8 @@ const checkTwoGroups = function(assert, series) {
             stroke: 's-b-color',
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: undefined
         }, 'selection styles');
     });
 

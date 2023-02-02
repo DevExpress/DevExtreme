@@ -59,6 +59,7 @@ function getState(state, color, stateName) {
         state: stateName,
         fill: colorFromAction === NONE ? color : colorFromAction,
         opacity: state.opacity,
+        filter: state.filter,
         hatching: _extend({}, state.hatching, {
             step: DEFAULT_MARKER_HATCHING_STEP,
             width: DEFAULT_MARKER_HATCHING_WIDTH
@@ -517,7 +518,8 @@ extend(legendPrototype, {
             createMarker(renderer, attrs.size)
                 .attr({
                     fill: attrs.fill,
-                    opacity: attrs.opacity
+                    opacity: attrs.opacity,
+                    filter: attrs.filter
                 })
                 .append({ element: group });
         } : options.markerTemplate;

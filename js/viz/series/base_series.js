@@ -3,7 +3,7 @@ import { isFunction, isDefined as _isDefined, isEmptyObject as _isEmptyObject } 
 import { extend as _extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
 import { Point } from './points/base_point';
-import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { normalizeEnum as _normalizeEnum, turnOffHatching } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
 
 import consts from '../components/consts';
@@ -185,14 +185,23 @@ Series.prototype = {
     _createStyles: function(options) {
         const that = this;
         const mainSeriesColor = options.mainSeriesColor;
+        const defsColor = options.color?.defsColor;
+        const hoverStyle = options.hoverStyle || {};
+        const selectionStyle = options.selectionStyle || {};
+
+        if(defsColor) {
+            turnOffHatching(hoverStyle, selectionStyle);
+        }
+
         that._styles = {
+            labelColor: mainSeriesColor,
             normal: that._parseStyle(options, mainSeriesColor, mainSeriesColor),
-            hover: that._parseStyle(options.hoverStyle || {}, mainSeriesColor, mainSeriesColor),
-            selection: that._parseStyle(options.selectionStyle || {}, mainSeriesColor, mainSeriesColor),
+            hover: that._parseStyle(hoverStyle, defsColor || mainSeriesColor, mainSeriesColor),
+            selection: that._parseStyle(selectionStyle, defsColor || mainSeriesColor, mainSeriesColor),
             legendStyles: {
-                normal: that._createLegendState(options, mainSeriesColor),
-                hover: that._createLegendState(options.hoverStyle || {}, mainSeriesColor),
-                selection: that._createLegendState(options.selectionStyle || {}, mainSeriesColor)
+                normal: that._createLegendState(options, defsColor || mainSeriesColor),
+                hover: that._createLegendState(hoverStyle, defsColor || mainSeriesColor),
+                selection: that._createLegendState(selectionStyle, defsColor || mainSeriesColor)
             }
         };
     },
@@ -799,7 +808,7 @@ Series.prototype = {
             visibilityChanged: options.visibilityChanged
         });
 
-        parsedOptions.label = getLabelOptions(labelOptions, styles.normal.fill);
+        parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
 
         if(that.areErrorBarsVisible()) {
             parsedOptions.errorBars = options.valueErrorBar;

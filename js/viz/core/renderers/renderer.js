@@ -132,10 +132,11 @@ export function processHatchingAttrs(element, attrs) {
             color: attrs.fill,
             hatching: attrs.hatching
         }, element._hatching, 'pattern');
+        delete attrs.filter;
     } else if(element._hatching) {
         element.renderer.releaseDefsElements(element._hatching);
         element._hatching = null;
-    } else if(attrs.lightening) {
+    } else if(attrs.filter) {
         attrs = extend({}, attrs);
         attrs.filter = element._filter = element.renderer.lockDefsElements({}, element._filter, 'filter');
     } else if(element._filter) {
@@ -143,7 +144,6 @@ export function processHatchingAttrs(element, attrs) {
         element._filter = null;
     }
     delete attrs.hatching;
-    delete attrs.lightening;
     return attrs;
 }
 
