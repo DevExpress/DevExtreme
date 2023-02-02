@@ -638,10 +638,21 @@ export const getNextDefsSvgId = (function() {
     return function() { return 'DevExpress_' + numDefsSvgElements++; };
 })();
 
-export function extractColor(color) {
+export function extractColor(color, isPure) {
     if(typeof color === 'string' || !color) {
         return color;
-    } else {
+    } else if(isPure) {
         return color.pure;
+    } else {
+        return color.defsColor || color.pure;
+    }
+}
+
+export function turnOffHatching(hoverStyle, selectionStyle) {
+    if(hoverStyle.hatching) {
+        hoverStyle.hatching.direction = 'none';
+    }
+    if(selectionStyle.hatching) {
+        selectionStyle.hatching.direction = 'none';
     }
 }

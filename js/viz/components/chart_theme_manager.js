@@ -128,7 +128,7 @@ export const ThemeManager = BaseThemeManager.inherit((function() {
             settings.containerBackgroundColor = containerBackgroundColor;
 
             if(widgetType !== 'pie') {
-                mainSeriesColor = extractColor(settings.color) || palette.getNextColor(seriesCount);
+                mainSeriesColor = extractColor(settings.color, true) || palette.getNextColor(seriesCount);
             } else {
                 mainSeriesColor = function(argument, index, count) {
                     const cat = `${argument}-${index}`;
