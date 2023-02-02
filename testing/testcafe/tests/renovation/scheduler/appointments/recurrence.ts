@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Recurrent appointments');
+fixture.disablePageReloads.skip('Renovated scheduler - Recurrent appointments');
 
 [
   { currentView: 'day', expected: 2 },

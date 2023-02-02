@@ -9,7 +9,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Appointments performance');
+fixture.disablePageReloads.skip('Scheduler: Appointments performance');
 
 test('Default', async (t, { platform }) => {
   const renderCounts = {

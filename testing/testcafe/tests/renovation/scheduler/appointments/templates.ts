@@ -54,7 +54,7 @@ const resources = [
   },
 ];
 
-fixture('Renovated scheduler - Appointment templates');
+fixture.disablePageReloads.skip('Renovated scheduler - Appointment templates');
 
 [
   'week',

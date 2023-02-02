@@ -3,7 +3,7 @@ export default {
   'base-accent': '$primary',
   'base-bg': '$body-bg',
   'base-text-color': '$body-color',
-  'base-border-color': '$border-color',
+  'base-border-color': '$table-border-color',
 
   'base-border-radius': '$border-radius',
   'base-border-radius-large': '$border-radius-lg',

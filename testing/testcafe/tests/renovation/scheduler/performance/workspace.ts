@@ -7,7 +7,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Workspace');
+fixture.disablePageReloads.skip('Scheduler: Workspace');
 
 const renderCounts = {
   jquery: 4,

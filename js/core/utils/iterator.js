@@ -12,6 +12,10 @@ const map = (values, callback) => {
     return result;
 };
 
+/**
+ * @param {any} values
+ * @param {(this: any, index: any, value: any)} callback
+ */
 const each = (values, callback) => {
     if(!values) return;
 

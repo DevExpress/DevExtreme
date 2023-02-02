@@ -5068,6 +5068,24 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
     });
+
+    QUnit.test('click on remove tag button should not remove tag in another tagBox with fieldTemplate (T1137828)', function(assert) {
+        const $tagBox = $('#anotherContainer').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const tagBoxWithFieldTemplate = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            fieldTemplate: () => $('<div>').dxTextBox()
+        }).dxTagBox('instance');
+
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+
+        assert.strictEqual(tagBox.option('value').length, 0);
+        assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
+    });
 });
 
 
@@ -5475,6 +5493,52 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         $($listItems.eq(0)).trigger('dxclick');
         $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), [items[2], items[0]], 'tags order is correct');
+    });
+
+    QUnit.test('value should be updated correctly after item is added if valueExpr="this" (T1141799)', function(assert) {
+        const firstValue = { id: 1, description: 'item 1' };
+        const secondValue = { id: 2, description: 'item 2' };
+        const thirdValue = { id: 3, description: 'item 3' };
+
+        this.reinit({
+            items: [firstValue, secondValue, thirdValue],
+            value: [firstValue, thirdValue],
+            applyValueMode: 'useButtons',
+            displayExpr: 'description',
+            opened: true
+        });
+
+        $(this.$listItems.eq(1)).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
+
+        const items = this.instance.option('value');
+        assert.strictEqual(items.length, 3);
+        assert.deepEqual(items[0], firstValue);
+        assert.deepEqual(items[1], thirdValue);
+        assert.deepEqual(items[2], secondValue);
+    });
+
+    QUnit.test('value should be updated correctly after item is removed if valueExpr="this" (T1141799)', function(assert) {
+        const firstValue = { id: 1, description: 'item 1' };
+        const secondValue = { id: 2, description: 'item 2' };
+        const thirdValue = { id: 3, description: 'item 3' };
+        const allItems = [firstValue, secondValue, thirdValue];
+
+        this.reinit({
+            items: allItems,
+            value: allItems,
+            applyValueMode: 'useButtons',
+            displayExpr: 'description',
+            opened: true
+        });
+
+        $(this.$listItems.eq(1)).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
+
+        const items = this.instance.option('value');
+        assert.strictEqual(items.length, 2);
+        assert.deepEqual(items[0], firstValue);
+        assert.deepEqual(items[1], thirdValue);
     });
 
     QUnit.test('Object value should keep initial order if tags aren\'t changed', function(assert) {

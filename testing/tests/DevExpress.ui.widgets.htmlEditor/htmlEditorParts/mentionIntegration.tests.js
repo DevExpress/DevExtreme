@@ -571,5 +571,38 @@ export default function() {
             const value = prepareEmbedValue(this.$element.find(`.${MENTION_CLASS}`).parent().html());
             assert.strictEqual(value, expectedMention);
         });
+
+        test('Mention template is applied correctly after removing of a neighbour editor with the same mention marker(T1110266)', function(assert) {
+            const done = assert.async();
+            const templateResult = 'custom template';
+            const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">${templateResult}</span></span> </p>`;
+            const valueChangeSpy = sinon.spy(({ value }) => {
+                if(valueChangeSpy.calledOnce) {
+                    $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
+
+                    this.clock.tick();
+                } else {
+                    assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
+                    done();
+                }
+            });
+            this.options.mentions[0].template = (_, container) => {
+                $(container).text(templateResult);
+            };
+
+            this.options.onValueChanged = valueChangeSpy;
+
+            this.createWidget();
+
+            const $secondEditor = $('<div>').appendTo('#qunit-fixture');
+
+            $secondEditor.dxHtmlEditor(this.options);
+
+            $secondEditor.remove();
+
+            this.instance.focus();
+            this.$element.find('p').first().text('@');
+            this.clock.tick();
+        });
     });
 }

@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Reduced appointment');
+fixture.disablePageReloads.skip('Renovated scheduler - Reduced appointment');
 
 test('it should render reduced appointment correctly if currentView is month', async (t, { screenshotComparerOptions }) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);

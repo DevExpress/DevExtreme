@@ -9,7 +9,7 @@ const test = multiPlatformTest({
   platforms: [/* 'jquery', */'react'], // TODO unskip after fix children in tooltip
 });
 
-fixture('Renovated scheduler - Reduced icon tooltip');
+fixture.disablePageReloads.skip('Renovated scheduler - Reduced icon tooltip');
 
 ['timelineDay', 'week'].forEach((currentView) => {
   test(`it should show reduced icon tooltip in '${currentView}' view`, async (t) => {

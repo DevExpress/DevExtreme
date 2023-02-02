@@ -1,7 +1,9 @@
+// @ts-check
+
 import { getOuterWidth, getWidth, getOuterHeight, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
-import { getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
 import pointerEvents from '../../events/pointer';
@@ -83,6 +85,7 @@ const subscribeToRowEvents = function(that, $table) {
             e.rowIndex = that.getRowIndex(event.currentTarget);
 
             if(e.rowIndex >= 0) {
+                // @ts-ignore
                 e.rowElement = getPublicElement($(event.currentTarget));
                 e.columns = that.getColumns();
 
@@ -126,7 +129,10 @@ const copyAttributes = function(element, newElement) {
     }
 };
 
-export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
+/**
+ * @type {Partial<import('./ui.grid_core.columns_view').ColumnsView>}
+ */
+const columnsViewMembers = {
     _createScrollableOptions: function() {
         const that = this;
         const scrollingOptions = that.option('scrolling');
@@ -217,6 +223,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $table.append(that._createColGroup(columns));
             if(browser.safari) {
                 // T198380, T809552
+                // @ts-expect-error
                 $table.append($('<thead>').append('<tr>'));
             }
             that.setAria('role', 'presentation', $table);
@@ -246,6 +253,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 const $cell = $(e.currentTarget);
                 const $row = $cell.parent();
                 const visibleColumns = that._columnsController.getVisibleColumns();
+                /**
+                 * @type {any}
+                 */
                 const rowOptions = $row.data('options');
                 const columnIndex = $cell.index();
                 const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
@@ -288,12 +298,16 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             const $cell = $(event.currentTarget);
             const $fieldItemContent = $(event.target).closest('.' + FORM_FIELD_ITEM_CONTENT_CLASS);
             const $row = $cell.parent();
+            /**
+             * @type {any}
+             */
             const rowOptions = $row.data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
 
             const resultOptions = extend({}, options, {
+                // @ts-ignore
                 cellElement: getPublicElement($cell),
                 event: event,
                 eventType: event.type
@@ -302,6 +316,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             resultOptions.rowIndex = that.getRowIndex($row);
 
             if($fieldItemContent.length) {
+                /**
+                 * @type {any}
+                 */
                 const formItemOptions = $fieldItemContent.data('dx-form-item');
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
@@ -383,7 +400,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderDelayedTemplatesCoreAsync: function(templates) {
         const that = this;
         if(templates.length) {
-            getWindow().setTimeout(function() {
+            getWindow().clearTimeout(that._templateTimeout);
+            that._templateTimeout = getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }
@@ -396,15 +414,18 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             const templateParameters = templates.shift();
 
             const options = templateParameters.options;
+            // @ts-expect-error
             const doc = domAdapter.getRootNode($(options.container).get(0));
             const needWaitAsyncTemplates = this._needWaitAsyncTemplates();
 
+            // @ts-expect-error
             if(!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
                 if(change) {
                     options.change = change;
                 }
                 templateParameters.template.render(options);
             }
+            // @ts-expect-error
             if(isAsync && (new Date() - date) > 30) {
                 this._renderDelayedTemplatesCoreAsync(templates);
                 break;
@@ -439,6 +460,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
             };
         } else {
+            /**
+             * @type {any}
+             */
             const templateID = isString(template) ? template : $(template).attr('id');
 
             if(!templateID) {
@@ -460,12 +484,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const renderingTemplate = that._processTemplate(template, options);
         const column = options.column;
         const isDataRow = options.rowType === 'data';
+        // @ts-expect-error
         const templateDeferred = new Deferred();
         const templateOptions = {
             container: container,
             model: options,
             deferred: templateDeferred,
             onRendered: () => {
+                if(that.component._disposed) return;
                 templateDeferred.resolve();
             }
         };
@@ -748,6 +774,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _cellPrepared: function(cell, options) {
+        // @ts-ignore
         options.cellElement = getPublicElement($(cell));
         this.executeAction('onCellPrepared', options);
     },
@@ -785,6 +812,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     getTableElements: function() {
+        // @ts-expect-error
         return this._tableElement || $();
     },
 
@@ -983,6 +1011,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
+                        // @ts-expect-error
                         const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + DETAIL_ROW_CLASS);
                         for(let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
                             const row = $rows[rowIndex];
@@ -1046,6 +1075,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getRowElement: function(rowIndex) {
         const that = this;
+        // @ts-expect-error
         let $rowElement = $();
         const $tableElements = that.getTableElements();
 
@@ -1066,6 +1096,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const $rows = this._getRowElement(rowIndex);
         let elements = [];
 
+        // @ts-ignore
         if($rows && !getPublicElement($rows).get) {
             for(let i = 0; i < $rows.length; i++) {
                 elements.push($rows[i]);
@@ -1126,6 +1157,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + '.' + ROW_CLASS + ', > .' + ROW_CLASS);
         }
 
+        // @ts-expect-error
         return $();
     },
 
@@ -1161,5 +1193,12 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         return false;
+    },
+    dispose: function() {
+        if(hasWindow()) {
+            getWindow().clearTimeout(this._templateTimeout);
+        }
     }
-});
+};
+
+export const ColumnsView = modules.View.inherit(columnStateMixin).inherit(columnsViewMembers);

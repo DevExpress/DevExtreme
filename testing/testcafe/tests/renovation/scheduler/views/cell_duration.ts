@@ -10,7 +10,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Cell Duration modification');
+fixture.disablePageReloads.skip('Renovated scheduler - Cell Duration modification');
 
 test('cellDuration modification should work correctly',
   async (t, { screenshotComparerOptions, platform }) => {

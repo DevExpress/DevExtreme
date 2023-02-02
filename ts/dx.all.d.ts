@@ -2450,7 +2450,7 @@ declare module DevExpress.common.grids {
   };
   export type ColumnChooserMode = 'dragAndDrop' | 'select';
   export type ColumnCustomizeTextArg = {
-    value?: string | number | Date;
+    value?: any;
     valueText?: string;
     target?: string;
     groupInterval?: string | number;
