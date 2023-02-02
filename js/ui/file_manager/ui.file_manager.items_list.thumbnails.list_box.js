@@ -83,6 +83,10 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         }
     }
 
+    getScrollable() {
+        return this._scrollView;
+    }
+
     _renderItemsContainer() {
         if(!this._$itemContainer) {
             this._$itemContainer = $('<div>')
