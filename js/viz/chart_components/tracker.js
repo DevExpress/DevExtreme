@@ -117,7 +117,7 @@ const baseTrackerPrototype = {
 
         if(noHoveredSeries) {
             that._clean();
-            that._renderer.initHatching();
+            that._renderer.initDefsElements();
         }
 
         if(resetDecorations) {

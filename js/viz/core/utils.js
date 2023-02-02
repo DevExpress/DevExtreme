@@ -637,3 +637,11 @@ export const getNextDefsSvgId = (function() {
     let numDefsSvgElements = 1;
     return function() { return 'DevExpress_' + numDefsSvgElements++; };
 })();
+
+export function extractColor(color) {
+    if(typeof color === 'string' || !color) {
+        return color;
+    } else {
+        return color.pure;
+    }
+}

@@ -128,12 +128,22 @@ const preserveAspectRatioMap = {
 export function processHatchingAttrs(element, attrs) {
     if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== 'none') {
         attrs = extend({}, attrs);
-        attrs.fill = element._hatching = element.renderer.lockHatching(attrs.fill, attrs.hatching, element._hatching);
-        delete attrs.hatching;
+        attrs.fill = element._hatching = element.renderer.lockDefsElements({
+            color: attrs.fill,
+            hatching: attrs.hatching
+        }, element._hatching, 'pattern');
     } else if(element._hatching) {
-        element.renderer.releaseHatching(element._hatching);
+        element.renderer.releaseDefsElements(element._hatching);
         element._hatching = null;
+    } else if(attrs.lightening) {
+        attrs = extend({}, attrs);
+        attrs.filter = element._filter = element.renderer.lockDefsElements({}, element._filter, 'filter');
+    } else if(element._filter) {
+        element.renderer.releaseDefsElements(element._filter);
+        element._filter = null;
     }
+    delete attrs.hatching;
+    delete attrs.lightening;
     return attrs;
 }
 
@@ -2134,8 +2144,24 @@ Renderer.prototype = {
         return filter;
     },
 
-    initHatching: function() {
-        const storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() };
+    lightenFilter: function(id) {
+        const that = this;
+        const coef = 1.3;
+        const filter = that._createElement('filter', { id: id }).append(that._defs);
+
+        that._createElement('feColorMatrix')
+            .attr({
+                type: 'matrix', values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
+            })
+            .append(filter);
+
+        filter.id = id;
+
+        return filter;
+    },
+
+    initDefsElements: function() {
+        const storage = this._defsElementsStorage = this._defsElementsStorage || { byHash: {}, baseId: getNextDefsSvgId() };
         const byHash = storage.byHash;
         let name;
 
@@ -2147,19 +2173,28 @@ Renderer.prototype = {
         storage.nextId = 0;
     },
 
-    lockHatching: function(color, hatching, ref) {
-        const storage = this._hatchingStorage;
-        const hash = getHatchingHash(color, hatching);
+    drawPattern: function({ color, hatching }, storageId, nextId) {
+        return this.pattern(color, hatching, storageId + '-hatching-' + nextId++);
+    },
+
+    drawFilter: function(_, storageId, nextId) {
+        return this.lightenFilter(storageId + '-lightening-' + nextId++);
+    },
+
+    lockDefsElements: function(attrs, ref, type) {
+        const storage = this._defsElementsStorage;
         let storageItem;
+        const hash = type === 'pattern' ? getHatchingHash(attrs) : getLighteningHash();
+        const method = type === 'pattern' ? this.drawPattern : this.drawFilter;
         let pattern;
 
         if(storage.refToHash[ref] !== hash) {
             if(ref) {
-                this.releaseHatching(ref);
+                this.releaseDefsElements(ref);
             }
             storageItem = storage.byHash[hash];
             if(!storageItem) {
-                pattern = this.pattern(color, hatching, storage.baseId + '-hatching-' + storage.nextId++);
+                pattern = method.call(this, attrs, storage.baseId, storage.nextId++);
                 storageItem = storage.byHash[hash] = { pattern: pattern, count: 0 };
                 storage.refToHash[pattern.id] = hash;
             }
@@ -2169,8 +2204,8 @@ Renderer.prototype = {
         return ref;
     },
 
-    releaseHatching: function(ref) {
-        const storage = this._hatchingStorage;
+    releaseDefsElements: function(ref) {
+        const storage = this._defsElementsStorage;
         const hash = storage.refToHash[ref];
         const storageItem = storage.byHash[hash];
 
@@ -2179,11 +2214,15 @@ Renderer.prototype = {
             delete storage.byHash[hash];
             delete storage.refToHash[ref];
         }
-    }
+    },
 };
 
-function getHatchingHash(color, hatching) {
+function getHatchingHash({ color, hatching }) {
     return '@' + color + '::' + hatching.step + ':' + hatching.width + ':' + hatching.opacity + ':' + hatching.direction;
+}
+
+function getLighteningHash() {
+    return '@filter::lightening';
 }
 
 // paths modifier

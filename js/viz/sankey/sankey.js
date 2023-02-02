@@ -350,7 +350,7 @@ const dxSankey = baseWidget.inherit({
                 that._links.push(linkItem);
             });
 
-            that._renderer.initHatching();
+            that._renderer.initDefsElements();
             that._change(['NODES_DRAW', 'LINKS_DRAW', 'LABELS']);
         }
 

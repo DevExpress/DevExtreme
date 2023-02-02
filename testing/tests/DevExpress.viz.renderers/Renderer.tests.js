@@ -1099,60 +1099,104 @@ QUnit.test('custom pattern', function(assert) {
     assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
 });
 
-QUnit.module('Hatching', {
+QUnit.test('lightenFilter', function(assert) {
+    const lightenFilter = this.renderer.lightenFilter('id');
+    const coef = 1.3;
+
+    assert.ok(lightenFilter);
+    assert.ok(lightenFilter instanceof renderers.SvgElement);
+    assert.strictEqual(lightenFilter.append.callCount, 1, 'lightenFilter is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        type: 'matrix', values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
+    });
+});
+
+QUnit.module('DefsElements, pattern', {
     before: setMockElements,
 
     beforeEach: function() {
         const container = document.createElement('div');
         this.renderer = new Renderer({ container: container });
-        this.renderer.initHatching();
+        this.renderer.initDefsElements();
     },
 
     after: resetMockElements
 });
 
 QUnit.test('lock', function(assert) {
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '1');
     assert.strictEqual(renderers.SvgElement.callCount, 3, 'patterns');
 });
 
 QUnit.test('lock / different pattern', function(assert) {
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '1');
-    assert.strictEqual(this.renderer.lockHatching('blue', { direction: 'left' }), 'DevExpressId-hatching-1', '2');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'blue', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-1', '2');
     assert.strictEqual(renderers.SvgElement.callCount, 4, 'patterns');
 });
 
 QUnit.test('lock / same pattern', function(assert) {
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '1');
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '2');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '2');
     assert.strictEqual(renderers.SvgElement.callCount, 3, 'patterns');
 });
 
 QUnit.test('unlock', function(assert) {
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.releaseHatching('DevExpressId-hatching-0');
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, 'pattern');
 });
 
 QUnit.test('unlock / several references', function(assert) {
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.releaseHatching('DevExpressId-hatching-0');
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.strictEqual(renderers.SvgElement.returnValues[2].stub('dispose').callCount, 0, 'pattern');
 });
 
 QUnit.test('init', function(assert) {
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.lockHatching('blue', { direction: 'left' });
-    this.renderer.initHatching();
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.lockDefsElements({ color: 'blue', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.initDefsElements();
     assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, 'pattern 1');
     assert.strictEqual(renderers.SvgElement.returnValues[3].dispose.callCount, 1, 'pattern 2');
 });
 
 QUnit.test('release after init', function(assert) {
-    this.renderer.initHatching();
-    this.renderer.releaseHatching('DevExpressId-hatching-0');
+    this.renderer.initDefsElements();
+    this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.ok(true);
+});
+
+QUnit.module('DefsElements, filter', {
+    before: setMockElements,
+
+    beforeEach: function() {
+        const container = document.createElement('div');
+        this.renderer = new Renderer({ container: container });
+        this.renderer.initDefsElements();
+    },
+
+    after: resetMockElements
+});
+
+QUnit.test('lock', function(assert) {
+    assert.strictEqual(this.renderer.lockDefsElements({ }, undefined, 'filter'), 'DevExpressId-lightening-0', '1');
+    assert.strictEqual(renderers.SvgElement.callCount, 4, 'filters');
+});
+
+QUnit.test('lock / same filter', function(assert) {
+    assert.strictEqual(this.renderer.lockDefsElements({ }, undefined, 'filter'), 'DevExpressId-lightening-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ }, undefined, 'filter'), 'DevExpressId-lightening-0', '2');
+    assert.strictEqual(renderers.SvgElement.callCount, 4, 'filters');
+});
+
+QUnit.test('unlock', function(assert) {
+    this.renderer.lockDefsElements({ }, undefined, 'filter');
+    this.renderer.releaseDefsElements('DevExpressId-lightening-0');
+    assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, 'filters');
 });
 
 if('pushState' in history) {
