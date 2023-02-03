@@ -1309,6 +1309,44 @@ function setDiscreteType(series) {
         });
     });
 
+    QUnit.test('Custom styles should not apply, normal state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{ color: { defsColor: 'id_color', pure: 'n-color' } } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
+    QUnit.test('Custom styles should not apply, hover state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{
+            color: { defsColor: 'id_color', pure: 'n-color' },
+            hoverStyle: { color: { defsColor: 'id_color', pure: 'n-color' } }
+        } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.hover();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
+    QUnit.test('Custom styles should not apply, selection state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{
+            color: { defsColor: 'id_color', pure: 'n-color' },
+            selectionStyle: { color: { defsColor: 'id_color', pure: 'n-color' } }
+        } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.select();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
     QUnit.test('Undefined dashStyle', function(assert) {
         this.options.dashStyle = undefined;
         const series = this.createSeries(this.options);

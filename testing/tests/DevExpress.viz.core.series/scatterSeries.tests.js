@@ -1038,6 +1038,123 @@ const seriesType = 'scatter';
         });
     });
 
+    QUnit.test('custom styles in series should not apply', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            color: { defsColor: 'id_color', pure: 'n-color' },
+            hoverStyle: {
+                color: { defsColor: 'id_color', pure: 'h-color' },
+            },
+            selectionStyle: {
+                color: { defsColor: 'id_color', pure: 's-color' },
+            },
+            point: {
+                size: 5,
+                border: {
+                    visible: true,
+                    color: 'n-b-color',
+                    width: 'n-b-width'
+                },
+                hoverStyle: {
+                    size: 2,
+                    border: {
+                        visible: true,
+                        color: 'h-b-color',
+                        width: 'h-b-width'
+                    }
+                },
+                selectionStyle: {
+                    size: 4,
+                    border: {
+                        visible: true,
+                        color: 's-b-color',
+                        width: 's-b-width'
+                    }
+                }
+            }
+        });
+
+        series.updateData(this.data);
+        series.createPoints();
+
+        assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            hover: {
+                fill: 'containerColor',
+                r: 1,
+                stroke: 'h-b-color',
+                'stroke-width': 'h-b-width'
+            },
+            normal: {
+                r: 2.5,
+                'stroke-width': 'n-b-width',
+                opacity: undefined
+            },
+            selection: {
+                fill: 'containerColor',
+                r: 2,
+                stroke: 's-b-color',
+                'stroke-width': 's-b-width'
+            }
+        });
+    });
+
+    QUnit.test('custom styles in points should not apply', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            point: {
+                color: { defsColor: 'id_color', pure: 'n-color' },
+                size: 5,
+                border: {
+                    visible: true,
+                    color: 'n-b-color',
+                    width: 'n-b-width'
+                },
+                hoverStyle: {
+                    color: { defsColor: 'id_color', pure: 'h-color' },
+                    size: 2,
+                    border: {
+                        visible: true,
+                        color: 'h-b-color',
+                        width: 'h-b-width'
+                    }
+                },
+                selectionStyle: {
+                    color: { defsColor: 'id_color', pure: 's-color' },
+                    size: 4,
+                    border: {
+                        visible: true,
+                        color: 's-b-color',
+                        width: 's-b-width'
+                    }
+                }
+            }
+        });
+
+        series.updateData(this.data);
+        series.createPoints();
+
+        assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            labelColor: 'n-color',
+            hover: {
+                fill: 'h-color',
+                r: 1,
+                stroke: 'h-b-color',
+                'stroke-width': 'h-b-width'
+            },
+            normal: {
+                r: 2.5,
+                'stroke-width': 'n-b-width',
+                opacity: undefined
+            },
+            selection: {
+                fill: 's-color',
+                r: 2,
+                stroke: 's-b-color',
+                'stroke-width': 's-b-width'
+            }
+        });
+    });
+
     QUnit.test('hover and selection point size inherit normal size', function(assert) {
         const series = createSeries({
             type: seriesType,

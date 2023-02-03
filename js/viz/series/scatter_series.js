@@ -157,9 +157,13 @@ const baseScatterMethods = {
 
     _createLegendState: function(styleOptions, defaultColor) {
         return {
-            fill: extractColor(styleOptions.color) || defaultColor,
+            fill: extractColor(styleOptions.color, true) || defaultColor,
             hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: 'right' }) : undefined
         };
+    },
+
+    _getDefsColor: function() {
+        return;
     },
 
     _applyElementsClipRect: function(settings) {
@@ -284,7 +288,7 @@ const baseScatterMethods = {
         const border = style.border || {};
         const sizeValue = style.size !== undefined ? style.size : defaultSize;
         return {
-            fill: extractColor(style.color) || defaultColor,
+            fill: extractColor(style.color, true) || defaultColor,
             filter: style.lightening,
             stroke: border.color || defaultBorderColor,
             'stroke-width': border.visible ? border.width : 0,
@@ -294,7 +298,7 @@ const baseScatterMethods = {
 
     _createPointStyles: function(pointOptions) {
         const that = this;
-        const mainPointColor = pointOptions.color || that._options.mainSeriesColor;
+        const mainPointColor = extractColor(pointOptions.color, true) || that._options.mainSeriesColor;
         const containerColor = that._options.containerBackgroundColor;
         const normalStyle = that._parsePointStyle(pointOptions, mainPointColor, mainPointColor);
 

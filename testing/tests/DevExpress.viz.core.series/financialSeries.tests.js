@@ -823,6 +823,93 @@ const checkGroups = function(assert, series) {
         });
     });
 
+    QUnit.test('Custom styles should not apply', function(assert) {
+        const series = createSeries({
+            mainSeriesColor: 'mainSeriesColor',
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            hoverStyle: {
+                color: { pure: 'color_1', refsColor: 'id_color' },
+            },
+            selectionStyle: {
+                color: { pure: 'color_2', refsColor: 'id_color' },
+            },
+            color: { pure: 'color', refsColor: 'id_color' },
+            reduction: { color: 'reduction', level: 'high' },
+            innerColor: 'innerColor'
+        });
+        series.updateData(this.data);
+        series.createPoints();
+
+        assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
+            hover: {
+                fill: 'color_1',
+                stroke: 'color_1',
+                'stroke-width': undefined
+            },
+            normal: {
+                fill: 'color',
+                stroke: 'color',
+                'stroke-width': undefined
+            },
+            selection: {
+                fill: 'color_2',
+                'stroke-width': undefined,
+                stroke: 'color_2'
+            },
+            positive: {
+                hover: {
+                    fill: 'innerColor',
+                    stroke: 'color_1',
+                },
+                normal: {
+                    fill: 'innerColor',
+                    stroke: 'color',
+                },
+                selection: {
+                    fill: 'innerColor',
+                    stroke: 'color_2'
+                }
+            },
+            reductionPositive: {
+                hover: {
+                    fill: 'innerColor',
+                    stroke: 'color_1'
+                },
+                normal: {
+                    fill: 'innerColor',
+                    stroke: 'reduction'
+                },
+                selection: {
+                    fill: 'innerColor',
+                    stroke: 'color_2'
+                }
+            },
+            reduction: {
+                hover: {
+                    fill: 'color_1',
+                    stroke: 'color_1',
+                    'stroke-width': undefined
+                },
+                normal: {
+                    fill: 'reduction',
+                    stroke: 'reduction',
+                    'stroke-width': undefined
+                },
+                selection: {
+                    fill: 'color_2',
+                    'stroke-width': undefined,
+                    stroke: 'color_2'
+                }
+            }
+        });
+    });
+
     QUnit.test('Create Point styles. with defined series color', function(assert) {
         const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
