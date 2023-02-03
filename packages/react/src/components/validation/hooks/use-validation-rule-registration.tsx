@@ -13,5 +13,6 @@ export function useValidationRuleRegistration(
       validatorContext?.registerRule({ ...props, type, reevaluate: true });
       ruleRegistered.current = true;
     }
+    // TODO: consider adding rule unregistration on unmount
   }, []);
 }

@@ -1,4 +1,3 @@
-import { ValidationResult } from '@devextreme/interim';
 import {
   ForwardedRef,
   forwardRef,
@@ -6,20 +5,21 @@ import {
 } from 'react';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
+import { ValidationGroupId, ValidationGroupRef } from '../types';
 
 type ValidationGroupProps = PropsWithChildren<{
-  id?: string | symbol
+  id?: ValidationGroupId
 }>;
 
 function ValidationGroupComponent(
   { id, children }: ValidationGroupProps,
   ref: ForwardedRef<ValidationGroupRef>,
 ) {
-  const unnamedGroupSymbol = Symbol('validation-group');
-  const groupRef = useRef(id ?? unnamedGroupSymbol);
+  const unnamedGroupSymbol = useRef(Symbol('validation-group'));
+  const groupRef = useRef(id ?? unnamedGroupSymbol.current);
   const validationEngine = useContext(ValidationEngineContext);
   useEffect(() => {
-    groupRef.current = id ?? unnamedGroupSymbol;
+    groupRef.current = id ?? unnamedGroupSymbol.current;
   }, [id]);
   useImperativeHandle<ValidationGroupRef, ValidationGroupRef>(ref, () => ({
     validate: () => (validationEngine.validateGroup(groupRef.current)),
@@ -32,10 +32,6 @@ function ValidationGroupComponent(
     </ValidationGroupContext.Provider>
   );
 }
-
-export type ValidationGroupRef = {
-  validate: () => ValidationResult
-};
 
 //* Component={"name":"ValidationGroup", "jQueryRegistered":true, "hasApiMethod":true}
 export const ValidationGroup = forwardRef<ValidationGroupRef, ValidationGroupProps>(

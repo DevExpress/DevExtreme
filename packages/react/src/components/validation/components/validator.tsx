@@ -6,6 +6,7 @@ import { EditorContext } from '../../common/contexts/editor-context';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
 import { ValidatorContext } from '../contexts/validator-context';
+import { ValidationGroupId } from '../types';
 
 interface ValidatorImpl {
   validate: () => ValidationResult,
@@ -16,7 +17,7 @@ interface ValidatorImpl {
 }
 
 interface ValidatorProps extends PropsWithChildren {
-  validationGroup?: string,
+  validationGroup?: ValidationGroupId,
   validateOnValueChange?: boolean
 }
 
