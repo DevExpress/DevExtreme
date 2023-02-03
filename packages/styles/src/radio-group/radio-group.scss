@@ -1,0 +1,33 @@
+.dxr-radio-group {
+  position: relative;
+  border: 1px dashed transparent;
+
+  &.-dx-hover:hover {
+    background-color: #ececec;
+  }
+
+  &.-dx-focus:focus {
+    border-radius: 4px;
+    border-color: #939393;
+    outline: none;
+  }
+
+  &.-dx-active:active {
+    border-color: #0d47a1;
+  }
+
+  &[disabled] {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: #ececec;
+      opacity: .5;
+    }
+
+    pointer-events: none;
+  }
+}

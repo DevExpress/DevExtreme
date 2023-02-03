@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-export function FormItemHint({ children }: { children: string }) {
+export function FormItemHint({ children }: PropsWithChildren) {
   return <span>{children}</span>;
 }
 
