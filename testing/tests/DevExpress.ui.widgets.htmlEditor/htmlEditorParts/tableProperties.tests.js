@@ -218,7 +218,7 @@ module('Table properties forms', {
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
         });
 
-        test('Passing backgroundColor & borderColor from empty selected cells to colorBox(T1127428)', function(assert) {
+        test('Passing backgroundColor & borderColor from empty selected cells to colorBox', function(assert) {
             this.createWidget({ value: tableWithoutContent });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -235,7 +235,7 @@ module('Table properties forms', {
             assert.strictEqual(borderColorEditor.option('value'), 'gray', 'border color passed to colorBox');
         });
 
-        test('Apply backgroundColor & borderColor of first selected call for all cells when color did not modified in colorBox(T1127428)', function(assert) {
+        test('Apply backgroundColor & borderColor of first selected call for all cells when color did not modified in colorBox', function(assert) {
             this.createWidget({ value: tableWithoutContent });
 
             const $tableElement = this.$element.find('table').eq(0);
