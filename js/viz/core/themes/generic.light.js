@@ -638,7 +638,8 @@ export default [{
                         lightening: false,
                     },
                     selectionStyle: {
-                        width: 3
+                        width: 3,
+                        lightening: false,
                     },
                     point: {
                         border: {
@@ -659,7 +660,8 @@ export default [{
                         lightening: false,
                     },
                     selectionStyle: {
-                        width: 3
+                        width: 3,
+                        lightening: false,
                     },
                     point: {
                         border: {

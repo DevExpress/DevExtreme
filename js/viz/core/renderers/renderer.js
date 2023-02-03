@@ -7,7 +7,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
 import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams, getNextDefsSvgId } from '../utils';
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isString } from '../../../core/utils/type';
 
 const window = getWindow();
 
@@ -2013,7 +2013,7 @@ Renderer.prototype = {
             width,
             height,
             patternContentUnits: 'userSpaceOnUse',
-            patternUnits: 'userSpaceOnUse'
+            patternUnits: !isString(width) && !isString(height) && 'userSpaceOnUse'
         };
         const pattern = this._createElement('pattern', opt).append(this._defs);
 

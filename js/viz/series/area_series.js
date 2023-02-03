@@ -25,6 +25,10 @@ const baseAreaMethods = {
         };
     },
 
+    _getDefsColor: function(options) {
+        return options.color?.defsColor;
+    },
+
     getValueRangeInitialValue: function() {
         if(this.valueAxisType !== 'logarithmic' && this.valueType !== 'datetime' && this.showZero !== false) {
             return 0;

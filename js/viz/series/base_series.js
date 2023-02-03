@@ -185,7 +185,7 @@ Series.prototype = {
     _createStyles: function(options) {
         const that = this;
         const mainSeriesColor = options.mainSeriesColor;
-        const defsColor = options.color?.defsColor;
+        const defsColor = this._getDefsColor(options);
         const hoverStyle = options.hoverStyle || {};
         const selectionStyle = options.selectionStyle || {};
 
@@ -1241,6 +1241,8 @@ Series.prototype = {
     getNeighborPoint: _noop,
 
     areErrorBarsVisible: _noop,
+
+    _getDefsColor: _noop,
 
     getMarginOptions: function() {
         return this._patchMarginOptions({

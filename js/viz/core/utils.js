@@ -639,7 +639,7 @@ export const getNextDefsSvgId = (function() {
 })();
 
 export function extractColor(color, isPure) {
-    if(typeof color === 'string' || !color) {
+    if(isString(color) || !color) {
         return color;
     } else if(isPure) {
         return color.pure;
