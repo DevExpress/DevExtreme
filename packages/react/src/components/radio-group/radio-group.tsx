@@ -80,9 +80,9 @@ function RadioGroupInternal<T>(
   );
 }
 
-const RadioGroupEditor = withEditor(RadioGroupInternal);
+const RadioGroupEditor = withEditor(forwardRef(RadioGroupInternal));
 
 export type RadioGroupProps<T> = PropsWithChildren<EditorProps<T> & FocusableComponent>;
 
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(forwardRef(RadioGroupEditor)) as typeof RadioGroupEditor;
+export const RadioGroup = memo(RadioGroupEditor) as typeof RadioGroupInternal;

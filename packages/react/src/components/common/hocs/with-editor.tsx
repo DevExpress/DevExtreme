@@ -1,11 +1,13 @@
 import {
-  ComponentType, useCallback, useMemo, useState,
+  ComponentType, ForwardedRef, forwardRef, useCallback, useMemo, useState,
 } from 'react';
 import { EditorProps } from '../../../internal/props';
 import { EditorContext } from '../contexts/editor-context';
 
+// TODO: ref casted to any to work around bug with pulling types from inferno. Change it after fix.
+
 export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
-  function Editor<V extends T>(props: EditorProps<V>) {
+  function Editor<V extends T>(props: EditorProps<V>, ref: ForwardedRef<unknown>) {
     const [editorValue, setEditorValue] = useState(props.value || props.defaultValue);
     const [editorErrors, setEditorErrors] = useState<string[]>();
 
@@ -30,6 +32,8 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...props}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ref={ref as any}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           valueChange={handleValueChange as any}
           errors={editorErrors}
         />
@@ -37,5 +41,5 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
       </EditorContext.Provider>
     );
   }
-  return Editor;
+  return forwardRef(Editor);
 }
