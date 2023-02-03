@@ -30,8 +30,8 @@ const createSeries = function(options, renderSettings) {
         valueErrorBar: {
             displayMode: 'none'
         },
-        hoverStyle: { hatching: 'h-hatching' },
-        selectionStyle: { hatching: 's-hatching' },
+        hoverStyle: { hatching: 'h-hatching', lightening: true },
+        selectionStyle: { hatching: 's-hatching', lightening: true },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
     }, options);
@@ -535,7 +535,8 @@ QUnit.test('Style in point', function(assert) {
             stroke: 'h-b-color',
             'stroke-width': 'h-b-width',
             dashStyle: 'h-b-dashStyle',
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            filter: true,
         },
         normal: {
             r: undefined,
@@ -547,7 +548,8 @@ QUnit.test('Style in point', function(assert) {
             stroke: 's-b-color',
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: true,
         }
     });
 });
@@ -591,7 +593,7 @@ QUnit.test('All options defined', function(assert) {
             'stroke-width': 'h-b-width',
             dashStyle: 'h-b-dashStyle',
             hatching: 'h-hatching',
-            filter: undefined,
+            filter: true,
         },
         normal: {
             fill: 'n-color',
@@ -607,7 +609,7 @@ QUnit.test('All options defined', function(assert) {
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
             hatching: 's-hatching',
-            filter: undefined,
+            filter: true,
         }
     });
 });
@@ -689,6 +691,90 @@ QUnit.test('Define only series color', function(assert) {
 
     assert.strictEqual(styles.selection.fill, 'seriesColor', 'selection fill color');
     assert.strictEqual(styles.selection.stroke, 'seriesColor', 'selection stroke color');
+});
+
+QUnit.test('Set custom style for series', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'seriesColor',
+        color: { defsColor: 'id_series_color' },
+        border: {
+            visible: true,
+        },
+        hoverStyle: {
+            hatching: {
+                direction: 'right',
+            },
+            border: {
+                visible: true,
+            }
+        },
+        selectionStyle: {
+            hatching: {
+                direction: 'left',
+            },
+            border: {
+                visible: true,
+            }
+        }
+    });
+    series.updateData(this.data);
+    series.createPoints();
+
+    const styles = series._getPointOptions().styles;
+
+    assert.strictEqual(styles.hover.fill, 'id_series_color', 'hover fill color');
+    assert.strictEqual(styles.hover.stroke, 'seriesColor', 'hover stroke color');
+    assert.strictEqual(styles.hover.hatching.direction, 'none', 'hatching direction');
+
+    assert.strictEqual(styles.normal.fill, 'id_series_color', 'normal fill color');
+    assert.strictEqual(styles.normal.stroke, 'seriesColor', 'normal stroke color');
+
+    assert.strictEqual(styles.selection.fill, 'id_series_color', 'selection fill color');
+    assert.strictEqual(styles.selection.stroke, 'seriesColor', 'selection stroke color');
+    assert.strictEqual(styles.selection.hatching.direction, 'none', 'hatching direction');
+});
+
+QUnit.test('Set custom style and pure color for series', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'seriesColor',
+        color: { pure: 'custom_series_color', defsColor: 'id_series_color' },
+        border: {
+            visible: true,
+        },
+        hoverStyle: {
+            hatching: {
+                direction: 'right',
+            },
+            border: {
+                visible: true,
+            }
+        },
+        selectionStyle: {
+            hatching: {
+                direction: 'left',
+            },
+            border: {
+                visible: true,
+            }
+        }
+    });
+    series.updateData(this.data);
+    series.createPoints();
+
+    const styles = series._getPointOptions().styles;
+
+    assert.strictEqual(styles.hover.fill, 'id_series_color', 'hover fill color');
+    assert.strictEqual(styles.hover.stroke, 'custom_series_color', 'hover stroke color');
+    assert.strictEqual(styles.hover.hatching.direction, 'none', 'hatching direction');
+
+    assert.strictEqual(styles.normal.fill, 'id_series_color', 'normal fill color');
+    assert.strictEqual(styles.normal.stroke, 'custom_series_color', 'normal stroke color');
+
+    assert.strictEqual(styles.selection.fill, 'id_series_color', 'selection fill color');
+    assert.strictEqual(styles.selection.stroke, 'custom_series_color', 'selection stroke color');
+    assert.strictEqual(styles.selection.hatching.direction, 'none', 'hatching direction');
 });
 
 QUnit.module('Bar. Customize point', {
@@ -777,7 +863,7 @@ QUnit.test('customize point color. all', function(assert) {
             'stroke-width': 'h-b-width',
             dashStyle: 'h-b-dashStyle',
             hatching: 'h-hatching',
-            filter: undefined,
+            filter: true,
         },
         normal: {
             fill: 'n-color',
@@ -793,7 +879,7 @@ QUnit.test('customize point color. all', function(assert) {
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
             hatching: 's-hatching',
-            filter: undefined,
+            filter: true,
         }
     });
 });
@@ -842,7 +928,7 @@ QUnit.test('customize with hatching', function(assert) {
                 'stroke-width': 'h-b-width',
                 dashStyle: 'solid',
                 hatching: { hoverHatchingField: true },
-                filter: undefined,
+                filter: true,
             },
             normal: {
                 fill: 'n-color',
@@ -858,9 +944,113 @@ QUnit.test('customize with hatching', function(assert) {
                 'stroke-width': 's-b-width',
                 dashStyle: 'solid',
                 hatching: { selectHatchingField: true },
-                filter: undefined,
+                filter: true,
             }
         });
+    });
+});
+
+QUnit.test('Customize with custom styles', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'n-color',
+        customizePoint: function() {
+            return {
+                color: { defsColor: 'id_color_0' },
+                hoverStyle: {
+                    hatching: { direction: 'left' },
+                    color: { defsColor: 'id_color_1' }
+                },
+                selectionStyle: {
+                    hatching: { direction: 'right' },
+                    color: { defsColor: 'id_color_2' }
+                }
+            };
+        }
+    });
+    series.updateData(this.data);
+    series.createPoints();
+
+    assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
+        usePointCustomOptions: true,
+        useLabelCustomOptions: undefined,
+        labelColor: 'n-color',
+        hover: {
+            fill: 'id_color_1',
+            stroke: 'n-color',
+            'stroke-width': 0,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true,
+        },
+        normal: {
+            fill: 'id_color_0',
+            stroke: 'n-color',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: undefined,
+            filter: undefined,
+        },
+        selection: {
+            fill: 'id_color_2',
+            stroke: 'n-color',
+            'stroke-width': 0,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true,
+        }
+    });
+});
+
+QUnit.test('Customize with custom styles and with custom color', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'n-color',
+        customizePoint: function() {
+            return {
+                color: { pure: 'c-b-color', defsColor: 'id_color_0' },
+                hoverStyle: {
+                    hatching: { direction: 'left' },
+                    color: { defsColor: 'id_color_1' }
+                },
+                selectionStyle: {
+                    hatching: { direction: 'right' },
+                    color: { defsColor: 'id_color_2' }
+                }
+            };
+        }
+    });
+    series.updateData(this.data);
+    series.createPoints();
+
+    assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
+        usePointCustomOptions: true,
+        useLabelCustomOptions: undefined,
+        labelColor: 'c-b-color',
+        hover: {
+            fill: 'id_color_1',
+            stroke: 'c-b-color',
+            'stroke-width': 0,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true,
+        },
+        normal: {
+            fill: 'id_color_0',
+            stroke: 'c-b-color',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: undefined,
+            filter: undefined,
+        },
+        selection: {
+            fill: 'id_color_2',
+            stroke: 'c-b-color',
+            'stroke-width': 0,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true,
+        }
     });
 });
 
@@ -876,7 +1066,7 @@ QUnit.test('default LegendStyles', function(assert) {
         'hover': {
             'fill': 'mainSeriesColor',
             'hatching': 'h-hatching',
-            filter: undefined,
+            filter: true,
         },
         'normal': {
             'fill': 'mainSeriesColor',
@@ -886,7 +1076,7 @@ QUnit.test('default LegendStyles', function(assert) {
         'selection': {
             'fill': 'mainSeriesColor',
             'hatching': 's-hatching',
-            filter: undefined,
+            filter: true,
         }
     });
 });
@@ -907,7 +1097,7 @@ QUnit.test('styles colors defined', function(assert) {
         'hover': {
             'fill': 'h-color',
             'hatching': 'h-hatching',
-            filter: undefined,
+            filter: true,
         },
         'normal': {
             'fill': 'n-color',
@@ -917,7 +1107,7 @@ QUnit.test('styles colors defined', function(assert) {
         'selection': {
             'fill': 's-color',
             'hatching': 's-hatching',
-            filter: undefined,
+            filter: true,
         }
     });
 });
@@ -1060,7 +1250,8 @@ QUnit.test('Style in point', function(assert) {
             stroke: 'h-b-color',
             'stroke-width': 'h-b-width',
             dashStyle: 'solid',
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            filter: true
         },
         normal: {
             opacity: 'n-opacity',
@@ -1072,7 +1263,8 @@ QUnit.test('Style in point', function(assert) {
             stroke: 's-b-color',
             'stroke-width': 's-b-width',
             dashStyle: 'solid',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: true
         }
     });
 });
@@ -1119,7 +1311,7 @@ QUnit.test('All options defined', function(assert) {
             dashStyle: 'h-b-dashStyle',
             opacity: 'h-opacity',
             hatching: 'h-hatching',
-            filter: undefined
+            filter: true
         },
         normal: {
             fill: 'n-color',
@@ -1137,7 +1329,7 @@ QUnit.test('All options defined', function(assert) {
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
             hatching: 's-hatching',
-            filter: undefined
+            filter: true
         }
     });
 });

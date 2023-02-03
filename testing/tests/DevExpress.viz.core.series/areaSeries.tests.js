@@ -33,9 +33,11 @@ const createSeries = function(options, renderSettings) {
         },
         hoverStyle: {
             hatching: 'h-hatching',
+            lightening: true,
         },
         selectionStyle: {
             hatching: 's-hatching',
+            lightening: true,
         },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
@@ -887,7 +889,7 @@ function setDiscreteType(series) {
                 width: 'h-h width',
                 opacity: 'h-h opacity'
             },
-            'filter': null,
+            'filter': true,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
@@ -949,7 +951,7 @@ function setDiscreteType(series) {
             'fill': 's color',
             'opacity': 's opacity',
             'stroke': 'none',
-            'filter': null,
+            'filter': true,
             'hatching': {
                 direction: 's-h direction',
                 width: 's-h width',
@@ -981,7 +983,7 @@ function setDiscreteType(series) {
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
             'fill': 's color',
-            'filter': null,
+            'filter': true,
             'opacity': 's opacity',
             'stroke': 'none',
             'hatching': 's-hatching'
@@ -1028,6 +1030,91 @@ function setDiscreteType(series) {
         });
     });
 
+    QUnit.module('Custom styles. Area Series', {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
+        beforeEach: function() {
+            environment.beforeEach.call(this);
+            this.options = {
+                type: seriesType,
+                border: { visible: true },
+                color: { pure: 'seriesColor', defsColor: 'id_color_0' },
+                selectionStyle: {
+                    hatching: { direction: 'left' },
+                    color: { defsColor: 'id_color_1' },
+                    border: { visible: true },
+                },
+                hoverStyle: {
+                    hatching: { direction: 'left' },
+                    color: { defsColor: 'id_color_2' },
+                    border: { visible: true },
+                }
+            };
+        },
+        afterEach: environment.afterEach
+    });
+
+    QUnit.test('normal style', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        assert.deepEqual(series._elementsGroup._stored_settings, {
+            'class': 'dxc-elements',
+            'clip-path': undefined,
+            'fill': 'id_color_0',
+            'filter': null,
+            'opacity': undefined,
+            'hatching': undefined,
+            'stroke': 'none'
+        });
+    });
+
+    QUnit.test('hover style', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.hover();
+
+        assert.deepEqual(series._elementsGroup._stored_settings, {
+            'class': 'dxc-elements',
+            'clip-path': undefined,
+            'fill': 'id_color_2',
+            'filter': true,
+            'opacity': undefined,
+            'hatching': { direction: 'none' },
+            'stroke': 'none'
+        });
+    });
+
+    QUnit.test('selection style', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.select();
+
+        assert.deepEqual(series._elementsGroup._stored_settings, {
+            'class': 'dxc-elements',
+            'clip-path': undefined,
+            'fill': 'id_color_1',
+            'filter': true,
+            'opacity': undefined,
+            'hatching': { direction: 'none' },
+            'stroke': 'none'
+        });
+    });
+
     QUnit.module('Area Series. LegendStyles', environment);
 
     QUnit.test('default LegendStyles', function(assert) {
@@ -1042,7 +1129,7 @@ function setDiscreteType(series) {
                 'fill': 'mainSeriesColor',
                 'hatching': 'h-hatching',
                 opacity: undefined,
-                'filter': undefined,
+                'filter': true,
             },
             'normal': {
                 'fill': 'mainSeriesColor',
@@ -1054,7 +1141,7 @@ function setDiscreteType(series) {
                 'fill': 'mainSeriesColor',
                 'hatching': 's-hatching',
                 opacity: undefined,
-                'filter': undefined,
+                'filter': true,
             }
         });
     });
@@ -1077,7 +1164,7 @@ function setDiscreteType(series) {
                 'fill': 'h-color',
                 'hatching': 'h-hatching',
                 opacity: undefined,
-                'filter': undefined,
+                'filter': true,
             },
             'normal': {
                 'fill': 'n-color',
@@ -1089,7 +1176,43 @@ function setDiscreteType(series) {
                 'fill': 's-color',
                 'hatching': 's-hatching',
                 opacity: undefined,
+                'filter': true,
+            }
+        });
+    });
+
+    QUnit.test('custom styles colors defined', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            color: { defsColor: 'id_color_0' },
+            hoverStyle: {
+                hatching: { direction: 'left' },
+                color: { defsColor: 'id_color_1' }
+            },
+            selectionStyle: {
+                hatching: { direction: 'left' },
+                color: { defsColor: 'id_color_2' }
+            }
+        });
+
+        assert.deepEqual(series.getLegendStyles(), {
+            'hover': {
+                'fill': 'id_color_1',
+                'hatching': { direction: 'none' },
+                opacity: undefined,
+                'filter': true,
+            },
+            'normal': {
+                'fill': 'id_color_0',
+                opacity: undefined,
+                hatching: undefined,
                 'filter': undefined,
+            },
+            'selection': {
+                'fill': 'id_color_2',
+                'hatching': { direction: 'none' },
+                opacity: undefined,
+                'filter': true,
             }
         });
     });
