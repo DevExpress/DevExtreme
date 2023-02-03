@@ -330,7 +330,6 @@ Series.prototype = {
         that._createGroups();
 
         that._processEmptyValue = newOptions.ignoreEmptyPoints ? x => x === null ? undefined : x : x => x;
-        that._isAllPointsTranslated = false;
     },
 
     _defineDrawingState() {
@@ -582,7 +581,7 @@ Series.prototype = {
         } else {
             that._applyStyle(that._styles.normal);
         }
-
+        that._isAllPointsTranslated = false;
         that._resetApplyingAnimation = false;
     },
 
