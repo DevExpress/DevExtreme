@@ -9,10 +9,26 @@
     <div id="examples">
         <script src="../../packages/jquery/lib/bundle.debug.js" charset="utf-8"></script>
 
+        <button id="cmp-btn">Switch Value</button>
         <div id="cmp">
             <script>
                 (function() {
-                    new window.DevExpress.ui.dxRadioButton(document.getElementById('cmp'), { defaultChecked: false, value: 'radio-example', label: 'Check me' })
+                    const instance = new window.DevExpress.ui.dxRadioButton(document.getElementById('cmp'), {
+                        checked: false,
+                        value: 'radio-example',
+                        label: 'Check me',
+                        onClick() { // not fired if checked is true
+                            console.log('onClick fired');
+                            instance.option('checked', !instance.option('checked'));
+                        },
+                        onSelected() {
+                            console.log('onSelected fired');
+                        }
+                    })
+
+                    document.getElementById('cmp-btn').onclick = () => {
+                        instance.option('checked', !instance.option('checked'));
+                    }
                 })()
             </script>
         </div>

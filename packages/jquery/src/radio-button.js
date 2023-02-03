@@ -19,11 +19,11 @@ export class RadioButton extends ComponentWrapper {
 
   get _propsInfo() {
     return {
-      twoWay: [['checked', 'defaultChecked', 'onChange']],
+      twoWay: [['checked', 'defaultChecked']],
       allowNull: [],
       elements: [],
       templates: ['radioTemplate', 'labelTemplate'],
-      props: ['label', 'value', 'checked', 'defaultChecked', 'onChange'],
+      props: ['label', 'value', 'checked', 'defaultChecked', 'onSelected', 'onClick'],
     };
   }
 
