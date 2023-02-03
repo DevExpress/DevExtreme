@@ -44,6 +44,14 @@ const tableMarkup = '\
     </table>\
     <br>after table text<br>';
 
+const tableWithoutContent = '\
+<table>\
+    <tr>\
+        <td style="background-color: green; border-color: gray;"></td>\
+        <td style="background-color: red; border-color: yellow;"></td>\
+    </tr>\
+</table>\
+<br>';
 
 const tableWithFixedDimensionsMarkup = '\
     <table>\
@@ -208,6 +216,70 @@ module('Table properties forms', {
             assert.strictEqual($tableElement.css('borderTopColor'), 'rgb(255, 0, 0)', 'border color is applied');
             assert.strictEqual($tableElement.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
+        });
+
+        test('Passing backgroundColor from empty selected cells to colorBox(T1127428)', function(assert) {
+            this.createWidget({ value: tableWithoutContent });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(0, 2);
+            showCellPropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+
+            const formInstance = this.getFormInstance();
+
+            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+
+            assert.strictEqual(backgroundColorEditor.option('value'), 'green', 'background color passed to colorBox');
+        });
+
+        test('Passing borderColor from empty selected cells to colorBox(T1127428)', function(assert) {
+            this.createWidget({ value: tableWithoutContent });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(0, 2);
+            showCellPropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+
+            const formInstance = this.getFormInstance();
+
+            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+
+            assert.strictEqual(borderColorEditor.option('value'), 'gray', 'border color passed to colorBox');
+        });
+
+        test('Apply backgroundColor of first selected call for all cells when color did not modified in colorBox(T1127428)', function(assert) {
+            this.createWidget({ value: tableWithoutContent });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(0, 2);
+
+            showCellPropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+
+            this.applyFormChanges();
+
+            assert.strictEqual($tableElement.find('td').eq(0).css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
+            assert.strictEqual($tableElement.find('td').eq(1).css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
+        });
+
+        test('Apply borderColor of first selected call for all cells when color did not modified in colorBox(T1127428)', function(assert) {
+            this.createWidget({ value: tableWithoutContent });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(0, 2);
+
+            showCellPropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+
+            this.applyFormChanges();
+
+            assert.strictEqual($tableElement.find('td').eq(0).css('borderColor'), 'rgb(128, 128, 128)', 'background color is applied');
+            assert.strictEqual($tableElement.find('td').eq(1).css('borderColor'), 'rgb(128, 128, 128)', 'background color is applied');
         });
 
         test('Check table width and height editor options', function(assert) {
