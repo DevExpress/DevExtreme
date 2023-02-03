@@ -1,6 +1,7 @@
 import { each } from '../../core/utils/iterator';
 import { BaseElement } from './base_indicators';
 import { isString } from '../../core/utils/type';
+import { extractColor } from '../core/utils';
 
 const _Number = Number;
 const _isArray = Array.isArray;
@@ -33,7 +34,7 @@ const BaseRangeContainer = BaseElement.inherit({
         let list = [];
         let ranges = [];
         let backgroundRanges = [{ start: totalStart, end: totalEnd }];
-        const backgroundColor = isString(options.backgroundColor) ? options.backgroundColor : 'none';
+        const backgroundColor = extractColor(options.backgroundColor) || 'none';
         const width = options.width || {};
         const startWidth = _Number(width > 0 ? width : width.start);
         const endWidth = _Number(width > 0 ? width : width.end);
@@ -50,7 +51,7 @@ const BaseRangeContainer = BaseElement.inherit({
             const start = translator.adjust(rangeOptions.startValue);
             const end = translator.adjust(rangeOptions.endValue);
             if(_isFinite(start) && _isFinite(end) && isValidSegment(start, end, rangeOptions)) {
-                result.push({ start: start, end: end, color: rangeOptions.color, classIndex: i });
+                result.push({ start: start, end: end, color: extractColor(rangeOptions.color), classIndex: i });
             }
             return result;
         }, []);
