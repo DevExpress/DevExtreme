@@ -3,7 +3,7 @@ import { noop } from '../../core/utils/common';
 
 import { each } from '../../core/utils/iterator';
 import { chart } from './scatter_series';
-import { normalizeAngle, map, extractColor, turnOffHatching } from '../core/utils';
+import { normalizeAngle, map, extractColor } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import { chart as barChart } from './bar_series';
 ///#DEBUG
@@ -132,7 +132,7 @@ export const pie = _extend({}, barSeries, {
         const selectionStyle = pointOptions.selectionStyle || {};
 
         if(defsColor) {
-            turnOffHatching(hoverStyle, selectionStyle);
+            that._turnOffHatching(hoverStyle, selectionStyle);
         }
 
         return {

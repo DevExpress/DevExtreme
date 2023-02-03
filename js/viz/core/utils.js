@@ -647,12 +647,3 @@ export function extractColor(color, isPure) {
         return color.defsColor || color.pure;
     }
 }
-
-export function turnOffHatching(hoverStyle, selectionStyle) {
-    if(hoverStyle.hatching) {
-        hoverStyle.hatching.direction = 'none';
-    }
-    if(selectionStyle.hatching) {
-        selectionStyle.hatching.direction = 'none';
-    }
-}

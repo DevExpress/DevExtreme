@@ -3,7 +3,7 @@ import { each } from '../../core/utils/iterator';
 import * as scatterSeries from './scatter_series';
 import { chart as areaChart } from './area_series';
 const areaSeries = areaChart.area;
-import { convertPolarToXY, extractColor, turnOffHatching } from '../core/utils';
+import { convertPolarToXY, extractColor } from '../core/utils';
 const chartSeries = scatterSeries.chart;
 const polarSeries = scatterSeries.polar;
 import { isDefined as _isDefined } from '../../core/utils/type';
@@ -68,7 +68,7 @@ const baseBarSeriesMethods = {
         const selectionStyle = pointOptions.selectionStyle || {};
 
         if(defsColor) {
-            turnOffHatching(hoverStyle, selectionStyle);
+            that._turnOffHatching(hoverStyle, selectionStyle);
         }
 
         return {

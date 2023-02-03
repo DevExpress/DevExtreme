@@ -3,7 +3,7 @@ import { isFunction, isDefined as _isDefined, isEmptyObject as _isEmptyObject } 
 import { extend as _extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
 import { Point } from './points/base_point';
-import { normalizeEnum as _normalizeEnum, turnOffHatching } from '../core/utils';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
 
 import consts from '../components/consts';
@@ -190,7 +190,7 @@ Series.prototype = {
         const selectionStyle = options.selectionStyle || {};
 
         if(defsColor) {
-            turnOffHatching(hoverStyle, selectionStyle);
+            that._turnOffHatching(hoverStyle, selectionStyle);
         }
 
         that._styles = {
@@ -794,6 +794,15 @@ Series.prototype = {
         _each(this._points, function(_, point) {
             point._label.draw(false);
         });
+    },
+
+    _turnOffHatching(hoverStyle, selectionStyle) {
+        if(hoverStyle.hatching) {
+            hoverStyle.hatching.direction = 'none';
+        }
+        if(selectionStyle.hatching) {
+            selectionStyle.hatching.direction = 'none';
+        }
     },
 
     _parsePointOptions: function(pointOptions, labelOptions, data, point) {
