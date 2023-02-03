@@ -22,7 +22,8 @@ let nextUniqueId = 0;
 @Component({
   selector: 'dx-radio-button[value]',
   template: `
-    <label [for]="id">
+    <label [for]="id"
+           class="dxr-radio-button">
       <input
         [id]="id"
         class="radio-input"
@@ -43,10 +44,7 @@ let nextUniqueId = 0;
       </dx-dynamic-template>
     </label>
   `,
-  styles: [`
-    :host { display: block; }
-    .radio-input { display: none }
-  `],
+  styleUrls: ['./radio-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioButtonComponent<T>

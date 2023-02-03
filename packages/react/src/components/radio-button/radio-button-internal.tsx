@@ -6,6 +6,7 @@ import {
 } from './types';
 
 import '@devextreme/styles/src/radio-button/radio-button.scss';
+import '@devextreme/styles/src/radio-button/radio-view.scss';
 
 export function DefaultRadioTemplate({ checked = false }: RadioTemplateProps) {
   return <span className="dxr-radio-button__radio">{checked ? '◉' : '◎'}</span>;

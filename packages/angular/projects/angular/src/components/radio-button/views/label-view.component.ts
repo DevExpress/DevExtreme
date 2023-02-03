@@ -5,7 +5,7 @@ import { ViewComponent } from '../../../internal';
 
 @Component({
   selector: 'dx-radio-button-label-view',
-  template: '{{ label }}',
+  template: '<span>{{ label }}</span>',
   styles: [':host { display: inline-block; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

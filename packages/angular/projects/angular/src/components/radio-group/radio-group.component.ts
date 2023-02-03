@@ -21,10 +21,11 @@ export type RadioGroupInputs<T> =
 @Component({
   selector: 'dx-radio-group',
   template: `
-    <div>
+    <div class="dxr-radio-group">
       <ng-content></ng-content>
     </div>
   `,
+  styleUrls: ['./radio-group.component.scss'],
   providers: [RadioGroupService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
