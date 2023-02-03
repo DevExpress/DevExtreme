@@ -1,7 +1,7 @@
 .dxr-radio-button {
-    display: block;
+  display: block;
 
-    &__radio {
-      color: var(--colors-radiobtn-outline-primary-selected);
-    }
+  .radio-input {
+    display: none
+  }
 }

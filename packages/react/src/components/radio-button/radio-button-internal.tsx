@@ -32,6 +32,7 @@ export function RadioButtonInternal<T>({
         style={{ cursor: 'pointer', userSelect: 'none', margin: '2px' }}
       >
         <input
+          className="radio-input"
           ref={inputRef}
           id={inputId}
           name={name}
