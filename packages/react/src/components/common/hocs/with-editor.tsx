@@ -14,7 +14,8 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
     }, [setEditorErrors]);
 
     const editorContextValue = useMemo(
-      () => ({ editorName: props.name || '', editorValue, setEditorErrors: setEditorErrorsCallback }), [editorValue, props.name],
+      () => ({ editorName: props.name || '', editorValue, setEditorErrors: setEditorErrorsCallback }),
+      [editorValue, props.name, setEditorErrorsCallback],
     );
 
     const handleValueChange = (newValue?: V) => {
