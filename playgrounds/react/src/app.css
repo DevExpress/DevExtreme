@@ -8,33 +8,63 @@
 }
 
 .example__title {
-   font-weight: 500;
-   font-size: 20px;
-   margin: 0 0 20px 0;
+  font-weight: 500;
+  font-size: 20px;
+  margin: 0 0 20px 0;
 }
 
 .example__info {
-   margin: 20px 0 0 0;
+  margin: 20px 0 0 0;
+}
+
+.example__control-container {
+  margin: 30px;
+  padding: 10px;
+  background-color: #ececec;
+  border-radius: 4px;
+}
+
+.example__control {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 1px -1px #0003, 0 1px 1px #00000024, 0 1px 3px #0000001f;
 }
 
 .example__play-part {
-    margin: 20px 0 0 0;
+  margin: 20px 0 0 0;
+}
+
+.example__block {
+  margin: 5px 10px;
 }
 
 .example-input {
-    padding: 10px;
-    margin: 0 10px;
-    border: 1px solid #ececec;
-    border-radius: 4px;
-    outline: none;
-    font-size: 16px;
+  padding: 10px;
+  margin: 0 10px;
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  outline: none;
+  font-size: 16px;
 }
 
 .example-input:focus {
-    border: 1px solid #f05b41;
+  border: 1px solid #f05b41;
 }
 
 .example:not(:last-of-type) {
-   border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+}
+
+.example-button {
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.example-button:focus {
+  border: 1px solid #f05b41;
 }
 

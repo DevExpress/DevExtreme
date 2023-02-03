@@ -1,4 +1,9 @@
-import { ReadonlyProps, TemplateProps, ValueProps } from '@devextreme/components';
+import {
+  ReadonlyProps,
+  TemplateProps,
+  ValueProps,
+} from '@devextreme/components';
+import { FocusEventHandler } from 'react';
 
 type HandlerProp<P extends string> = `${P}Change`;
 type DefaultProp<P extends string> = `default${Capitalize<P>}`;
@@ -21,3 +26,8 @@ export interface EditorProps<T> extends Props<ValueProps<T>, ReadonlyProps, Temp
   name?: string,
   errors?: string[]
 }
+
+export type FocusableComponent = {
+  onFocus?: FocusEventHandler<HTMLElement>;
+  onBlur?: FocusEventHandler<HTMLDivElement>;
+};

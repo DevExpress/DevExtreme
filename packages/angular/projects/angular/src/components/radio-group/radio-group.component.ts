@@ -1,8 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
-  OnChanges,
+  OnChanges, Output,
 } from '@angular/core';
 import {
   createRadioGroupStore,
@@ -34,6 +35,15 @@ export class RadioGroupComponent<T>
   // First one with config for creating instance, second one for setting the initial state.
   private store = createRadioGroupStore<T>({
     value: undefined,
+    readonly: {
+      shortcutKey: 's',
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
+      disabled: false,
+      tabIndex: 0,
+      attributes: {},
+    },
   }, {
     value: {
       controlledMode: false,
@@ -42,6 +52,8 @@ export class RadioGroupComponent<T>
   });
 
   @Input() value: T | undefined;
+
+  @Output() focusChange = new EventEmitter<boolean>();
 
   constructor(private radioGroupService: RadioGroupService<T>) {
     super();

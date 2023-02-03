@@ -1,6 +1,6 @@
 import {
   Children,
-  JSXElementConstructor,
+  ComponentType,
   ReactNode,
   useMemo,
 } from 'react';
@@ -15,7 +15,7 @@ export interface FormItemChildrenInfo {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useFormItemLayout(children: ReactNode, editorTypes: JSXElementConstructor<any>[]) {
+export function useFormItemLayout(children: ReactNode, editorTypes: ComponentType[]) {
   const resultingLayout = useMemo<FormItemChildrenInfo>(() => {
     const childrenArray = Children.toArray(children);
     const label = findNodeByTypes(childrenArray, [FormItemLabel]);

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 export function useSecondEffect(
   func: () => void,
-  deps: unknown[],
+  deps?: unknown[],
 ): void {
   const isFirstRender = useRef(true);
 

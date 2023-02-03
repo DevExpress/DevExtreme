@@ -1,8 +1,8 @@
 import { registerComponent } from '@devextreme/interim';
-import { ComponentWrapper } from './component-wrapper';
+import { EditorWrapper } from './editor-wrapper';
 import { RadioGroupCompatible as RadioButtonCompatibleInferno } from './generated/compatible-components/radio-group';
 
-export class RadioGroupCompatible extends ComponentWrapper {
+export class RadioGroupCompatible extends EditorWrapper {
   _initializeComponent() {
     super._initializeComponent();
     this._propsInfo.templates.forEach((template) => {

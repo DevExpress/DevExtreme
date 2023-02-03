@@ -12,6 +12,13 @@ export default {
   methods: {
     switchChecked() {
       this.checked = !this.checked;
+    },
+    onClick() { // not fired if checked is true
+      console.log('onClick fired');
+      this.checked = !this.checked;
+    },
+    onSelected() {
+      console.log('onSelected fired');
     }
   }
 }
@@ -19,7 +26,13 @@ export default {
 
 <template>
   <main>
-    <DxRadioButton label="Check Me" :checked="checked" labelTemplate="labelTemplate" radioTemplate="radioTemplate">
+    <button @click="switchChecked()">Switch Value</button>
+    <DxRadioButton
+      label="Check Me"
+      :checked="checked"
+      :onClick="onClick"
+      :onSelected="onSelected"
+    >
       <template #labelTemplate="{ data: { label } }">
         {{ label.toUpperCase() }}
       </template>
@@ -27,6 +40,5 @@ export default {
         {{ checked ? '✔' : '∅' }}
       </template>
     </DxRadioButton>
-      <button @click="switchChecked()">Switch Value</button>
   </main>
 </template>

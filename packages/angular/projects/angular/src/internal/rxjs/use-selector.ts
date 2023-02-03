@@ -1,7 +1,13 @@
 import { Selector, Store, UnknownRecord } from '@devextreme/core';
 import {
   combineLatest,
-  distinctUntilChanged, finalize, map, Observable, OperatorFunction, pipe, startWith,
+  distinctUntilChanged,
+  finalize,
+  map,
+  Observable,
+  OperatorFunction,
+  pipe,
+  startWith,
 } from 'rxjs';
 import { ObservableArray } from '../types';
 
@@ -30,7 +36,7 @@ function applySelector<
   createSelector: (...args: TSelectorDeps) => Selector<TState, TValue>,
 ): OperatorFunction<[TState, ...TSelectorDeps], TValue> {
   return pipe(
-    map(([state, selectorArgs]: [TState, ...TSelectorDeps]) => {
+    map(([state, ...selectorArgs]: [TState, ...TSelectorDeps]) => {
       const selector = createSelector(...selectorArgs);
       return selector(state);
     }),
