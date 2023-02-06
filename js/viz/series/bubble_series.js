@@ -34,6 +34,8 @@ chart.bubble = _extend({}, scatterSeries, {
 
     _createLegendState: areaSeries._createLegendState,
 
+    _getColorId: areaSeries._getColorId,
+
     _setMarkerGroupSettings: polarBarSeries._setMarkerGroupSettings,
 
     areErrorBarsVisible: _noop,

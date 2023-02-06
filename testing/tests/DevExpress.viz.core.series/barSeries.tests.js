@@ -1112,6 +1112,41 @@ QUnit.test('styles colors defined', function(assert) {
     });
 });
 
+QUnit.test('custom styles', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'mainSeriesColor',
+        color: {
+            base: 'n-color',
+            customId: 'id_color'
+        },
+        hoverStyle: {
+            hatching: { direction: 'left' }
+        },
+        selectionStyle: {
+            hatching: { direction: 'left' }
+        }
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        'hover': {
+            'fill': 'id_color',
+            'hatching': { direction: 'none' },
+            filter: true,
+        },
+        'normal': {
+            'fill': 'id_color',
+            hatching: undefined,
+            filter: undefined,
+        },
+        'selection': {
+            'fill': 'id_color',
+            'hatching': { direction: 'none' },
+            filter: true,
+        }
+    });
+});
+
 QUnit.module('Series visibility', environment);
 
 QUnit.test('Hide visible series', function(assert) {

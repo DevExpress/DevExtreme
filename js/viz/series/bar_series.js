@@ -22,6 +22,8 @@ const baseBarSeriesMethods = {
         };
     },
 
+    _getColorId: areaSeries._getColorId,
+
     _parsePointStyle: function(style, defaultColor, defaultBorderColor) {
         const color = extractColor(style.color) || defaultColor;
         const base = chartSeries._parsePointStyle.call(this, style, color, defaultBorderColor);

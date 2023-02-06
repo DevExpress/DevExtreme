@@ -27,8 +27,8 @@ const createSeries = function(options, renderSettings) {
             selectionStyle: {}
         },
         valueErrorBar: {},
-        hoverStyle: { hatching: 'h-hatching' },
-        selectionStyle: { hatching: 's-hatching' },
+        hoverStyle: { hatching: 'h-hatching', lightening: true },
+        selectionStyle: { hatching: 's-hatching', lightening: true },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
     }, options);
@@ -465,6 +465,108 @@ QUnit.test('custom styles', function(assert) {
             dashStyle: 'solid',
             hatching: { direction: 'none' },
             filter: true
+        }
+    });
+});
+
+QUnit.module('Bar Series. LegendStyles', environment);
+
+QUnit.test('default LegendStyles', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'mainSeriesColor'
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        'hover': {
+            'fill': 'mainSeriesColor',
+            'hatching': 'h-hatching',
+            filter: true,
+            opacity: undefined
+        },
+        'normal': {
+            'fill': 'mainSeriesColor',
+            hatching: undefined,
+            filter: undefined,
+            opacity: undefined
+        },
+        'selection': {
+            'fill': 'mainSeriesColor',
+            'hatching': 's-hatching',
+            filter: true,
+            opacity: undefined
+        }
+    });
+});
+
+QUnit.test('styles colors defined', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        color: 'n-color',
+        hoverStyle: {
+            color: 'h-color'
+        },
+        selectionStyle: {
+            color: 's-color'
+        }
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        'hover': {
+            'fill': 'h-color',
+            'hatching': 'h-hatching',
+            filter: true,
+            opacity: undefined
+        },
+        'normal': {
+            'fill': 'n-color',
+            hatching: undefined,
+            filter: undefined,
+            opacity: undefined
+        },
+        'selection': {
+            'fill': 's-color',
+            'hatching': 's-hatching',
+            filter: true,
+            opacity: undefined
+        }
+    });
+});
+
+QUnit.test('custom styles', function(assert) {
+    const series = createSeries({
+        type: seriesType,
+        mainSeriesColor: 'mainSeriesColor',
+        color: {
+            base: 'n-color',
+            customId: 'id_color'
+        },
+        hoverStyle: {
+            hatching: { direction: 'left' }
+        },
+        selectionStyle: {
+            hatching: { direction: 'left' }
+        }
+    });
+
+    assert.deepEqual(series.getLegendStyles(), {
+        'hover': {
+            'fill': 'id_color',
+            'hatching': { direction: 'none' },
+            filter: true,
+            opacity: undefined
+        },
+        'normal': {
+            'fill': 'id_color',
+            hatching: undefined,
+            filter: undefined,
+            opacity: undefined
+        },
+        'selection': {
+            'fill': 'id_color',
+            'hatching': { direction: 'none' },
+            filter: true,
+            opacity: undefined
         }
     });
 });
