@@ -138,9 +138,33 @@ QUnit.test('Create', function(assert) {
     assert.ok(this.LayoutManager.calledWithNew());
 });
 
-QUnit.test('Set adaptive layout options', function(assert) {
+QUnit.test('Chart should have default value of the aggregatebycategory = true', function(assert) {
     this.createChart();
 
+    assert.equal(this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].aggregateByCategory, true);
+});
+
+QUnit.test('The chart should be able to change the aggregatebycategory setting', function(assert) {
+    this.options = {
+        argumentAxis: {
+            aggregateByCategory: false
+        }
+    };
+    this.createChart();
+
+    assert.equal(this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].aggregateByCategory, false);
+});
+
+QUnit.test('The chart should change the aggregatebycategory value when the value was updated', function(assert) {
+    const chart = this.createChart();
+
+    chart.option('argumentAxis', { aggregateByCategory: false });
+
+    assert.equal(this.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].aggregateByCategory, false);
+});
+
+QUnit.test('Set adaptive layout options', function(assert) {
+    this.createChart();
     assert.deepEqual(this.LayoutManager.firstCall.returnValue.setOptions.lastCall.args, [{ width: 80, height: 80, keepLabels: true }]);
 });
 

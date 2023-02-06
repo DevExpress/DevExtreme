@@ -415,7 +415,10 @@ Series.prototype = {
         let data = this._data || [];
 
         if(this.useAggregation()) {
-            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, this.argumentAxisType !== DISCRETE ? this.getArgumentRange() : {}), data);
+            const argumentRange = this.argumentAxisType !== DISCRETE ? this.getArgumentRange() : {};
+            const aggregationInfo = this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, argumentRange);
+
+            data = this._resample(aggregationInfo, data);
         }
 
         return data;
