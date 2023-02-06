@@ -4,8 +4,7 @@ import { FormExample } from './examples/form/form-example';
 import { RadioButtonExample } from './examples/radio-button/radio-button-example';
 import { RadioGroupCompatibleExample } from './examples/radio-group-compatible/radio-group-compatible-example';
 import { RadioGroupExample } from './examples/radio-group/radio-group-example';
-import { DynamicThemeExample } from './examples/themes/dynamic-theme-example';
-import { ThemeExample } from './examples/themes/theme-example';
+import { ThemesExample } from './examples/themes/themes-example';
 import { RadioGroupValidatorExample } from './examples/validation/radio-group-validator-example';
 import { Home } from './home';
 
@@ -22,8 +21,7 @@ export function App() {
         element={<RadioGroupCompatibleExample />}
       />
       <Route path="/radio-button" element={<RadioButtonExample />} />
-      <Route path="/theme" element={<ThemeExample />} />
-      <Route path="/dynamic-theme" element={<DynamicThemeExample />} />
+      <Route path="/themes" element={<ThemesExample />} />
       <Route path="/form" element={<FormExample />} />
       <Route path="/validation" element={<RadioGroupValidatorExample />} />
     </Routes>

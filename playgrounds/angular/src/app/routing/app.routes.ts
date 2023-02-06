@@ -3,4 +3,5 @@ export enum AppRoutes {
   radioButton = 'radio-button',
   radioGroup = 'radio-group',
   radioGroupCompat = 'radio-group-compat',
+  themes = 'themes',
 }
