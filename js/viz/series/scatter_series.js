@@ -162,7 +162,7 @@ const baseScatterMethods = {
         };
     },
 
-    _getDefsColor: function() {
+    _getColorId: function() {
         return;
     },
 

@@ -25,8 +25,8 @@ const baseAreaMethods = {
         };
     },
 
-    _getDefsColor: function(options) {
-        return options.color?.defsColor;
+    _getColorId: function(options) {
+        return options.color?.customId;
     },
 
     getValueRangeInitialValue: function() {

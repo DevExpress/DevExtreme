@@ -1041,12 +1041,12 @@ const seriesType = 'scatter';
     QUnit.test('custom styles in series should not apply', function(assert) {
         const series = createSeries({
             type: seriesType,
-            color: { defsColor: 'id_color', pure: 'n-color' },
+            color: { customId: 'id_color', base: 'n-color' },
             hoverStyle: {
-                color: { defsColor: 'id_color', pure: 'h-color' },
+                color: { customId: 'id_color', base: 'h-color' },
             },
             selectionStyle: {
-                color: { defsColor: 'id_color', pure: 's-color' },
+                color: { customId: 'id_color', base: 's-color' },
             },
             point: {
                 size: 5,
@@ -1102,7 +1102,7 @@ const seriesType = 'scatter';
         const series = createSeries({
             type: seriesType,
             point: {
-                color: { defsColor: 'id_color', pure: 'n-color' },
+                color: { customId: 'id_color', base: 'n-color' },
                 size: 5,
                 border: {
                     visible: true,
@@ -1110,7 +1110,7 @@ const seriesType = 'scatter';
                     width: 'n-b-width'
                 },
                 hoverStyle: {
-                    color: { defsColor: 'id_color', pure: 'h-color' },
+                    color: { customId: 'id_color', base: 'h-color' },
                     size: 2,
                     border: {
                         visible: true,
@@ -1119,7 +1119,7 @@ const seriesType = 'scatter';
                     }
                 },
                 selectionStyle: {
-                    color: { defsColor: 'id_color', pure: 's-color' },
+                    color: { customId: 'id_color', base: 's-color' },
                     size: 4,
                     border: {
                         visible: true,

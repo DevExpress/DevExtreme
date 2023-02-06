@@ -127,23 +127,23 @@ export const pie = _extend({}, barSeries, {
     _createPointStyles: function(pointOptions, data, point) {
         const that = this;
         const mainColor = extractColor(pointOptions.color, true) || that._getMainColor(data, point);
-        const defsColor = pointOptions.color?.defsColor;
+        const colorId = pointOptions.color?.customId;
         const hoverStyle = pointOptions.hoverStyle || {};
         const selectionStyle = pointOptions.selectionStyle || {};
 
-        if(defsColor) {
+        if(colorId) {
             that._turnOffHatching(hoverStyle, selectionStyle);
         }
 
         return {
             labelColor: mainColor,
             normal: that._parsePointStyle(pointOptions, mainColor, mainColor),
-            hover: that._parsePointStyle(hoverStyle, defsColor || mainColor, mainColor),
-            selection: that._parsePointStyle(selectionStyle, defsColor || mainColor, mainColor),
+            hover: that._parsePointStyle(hoverStyle, colorId || mainColor, mainColor),
+            selection: that._parsePointStyle(selectionStyle, colorId || mainColor, mainColor),
             legendStyles: {
                 normal: that._createLegendState(pointOptions, mainColor),
-                hover: that._createLegendState(hoverStyle, defsColor || mainColor),
-                selection: that._createLegendState(selectionStyle, defsColor || mainColor)
+                hover: that._createLegendState(hoverStyle, colorId || mainColor),
+                selection: that._createLegendState(selectionStyle, colorId || mainColor)
             }
         };
     },

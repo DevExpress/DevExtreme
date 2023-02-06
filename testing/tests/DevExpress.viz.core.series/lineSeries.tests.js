@@ -1291,7 +1291,7 @@ function setDiscreteType(series) {
     });
 
     QUnit.test('Custom styles should not apply, normal state', function(assert) {
-        const series = this.createSeries({ ...this.options, ...{ color: { defsColor: 'id_color', pure: 'n-color' } } });
+        const series = this.createSeries({ ...this.options, ...{ color: { customId: 'id_color', base: 'n-color' } } });
         series.updateData(this.data);
         series.createPoints();
 
@@ -1302,8 +1302,8 @@ function setDiscreteType(series) {
 
     QUnit.test('Custom styles should not apply, hover state', function(assert) {
         const series = this.createSeries({ ...this.options, ...{
-            color: { defsColor: 'id_color', pure: 'n-color' },
-            hoverStyle: { color: { defsColor: 'id_color', pure: 'n-color' } }
+            color: { customId: 'id_color', base: 'n-color' },
+            hoverStyle: { color: { customId: 'id_color', base: 'n-color' } }
         } });
         series.updateData(this.data);
         series.createPoints();
@@ -1316,8 +1316,8 @@ function setDiscreteType(series) {
 
     QUnit.test('Custom styles should not apply, selection state', function(assert) {
         const series = this.createSeries({ ...this.options, ...{
-            color: { defsColor: 'id_color', pure: 'n-color' },
-            selectionStyle: { color: { defsColor: 'id_color', pure: 'n-color' } }
+            color: { customId: 'id_color', base: 'n-color' },
+            selectionStyle: { color: { customId: 'id_color', base: 'n-color' } }
         } });
         series.updateData(this.data);
         series.createPoints();

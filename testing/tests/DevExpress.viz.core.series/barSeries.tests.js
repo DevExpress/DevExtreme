@@ -697,7 +697,7 @@ QUnit.test('Set custom style for series', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'seriesColor',
-        color: { defsColor: 'id_series_color' },
+        color: { customId: 'id_series_color' },
         border: {
             visible: true,
         },
@@ -735,11 +735,11 @@ QUnit.test('Set custom style for series', function(assert) {
     assert.strictEqual(styles.selection.hatching.direction, 'none', 'hatching direction');
 });
 
-QUnit.test('Set custom style and pure color for series', function(assert) {
+QUnit.test('Set custom style and base color for series', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'seriesColor',
-        color: { pure: 'custom_series_color', defsColor: 'id_series_color' },
+        color: { base: 'custom_series_color', customId: 'id_series_color' },
         border: {
             visible: true,
         },
@@ -956,14 +956,14 @@ QUnit.test('Customize with custom styles', function(assert) {
         mainSeriesColor: 'n-color',
         customizePoint: function() {
             return {
-                color: { defsColor: 'id_color_0' },
+                color: { customId: 'id_color_0' },
                 hoverStyle: {
                     hatching: { direction: 'left' },
-                    color: { defsColor: 'id_color_1' }
+                    color: { customId: 'id_color_1' }
                 },
                 selectionStyle: {
                     hatching: { direction: 'right' },
-                    color: { defsColor: 'id_color_2' }
+                    color: { customId: 'id_color_2' }
                 }
             };
         }
@@ -1008,14 +1008,14 @@ QUnit.test('Customize with custom styles and with custom color', function(assert
         mainSeriesColor: 'n-color',
         customizePoint: function() {
             return {
-                color: { pure: 'c-b-color', defsColor: 'id_color_0' },
+                color: { base: 'c-b-color', customId: 'id_color_0' },
                 hoverStyle: {
                     hatching: { direction: 'left' },
-                    color: { defsColor: 'id_color_1' }
+                    color: { customId: 'id_color_1' }
                 },
                 selectionStyle: {
                     hatching: { direction: 'right' },
-                    color: { defsColor: 'id_color_2' }
+                    color: { customId: 'id_color_2' }
                 }
             };
         }

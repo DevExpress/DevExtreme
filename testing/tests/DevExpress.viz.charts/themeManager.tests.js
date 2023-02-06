@@ -432,31 +432,31 @@ function createThemeManager(options, themeGroupName) {
         const theme = themeManager.getOptions('series', {
             type: 'area',
             color: {
-                pure: 'red',
-                defsColor: 'id_pattern'
+                base: 'red',
+                customId: 'id_pattern'
             }
         });
         // assert series theme
         assert.deepEqual(theme.color, {
-            pure: 'red',
-            defsColor: 'id_pattern'
+            base: 'red',
+            customId: 'id_pattern'
         });
         assert.strictEqual(theme.mainSeriesColor, 'red');
     });
 
-    QUnit.test('Pass color as object, pure color is not set', function(assert) {
+    QUnit.test('Pass color as object, base color is not set', function(assert) {
         const themeManager = createThemeManager({});
         themeManager.setTheme({});
         // act
         const theme = themeManager.getOptions('series', {
             type: 'area',
             color: {
-                defsColor: 'id_pattern'
+                customId: 'id_pattern'
             }
         });
         // assert series theme
         assert.deepEqual(theme.color, {
-            defsColor: 'id_pattern'
+            customId: 'id_pattern'
         });
         assert.strictEqual(theme.mainSeriesColor, '#1db2f5');
     });

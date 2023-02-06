@@ -63,19 +63,19 @@ const baseBarSeriesMethods = {
     _createPointStyles: function(pointOptions) {
         const that = this;
         const mainColor = extractColor(pointOptions.color, true) || that._getMainColor();
-        const defsColor = pointOptions.color?.defsColor;
+        const colorId = pointOptions.color?.customId;
         const hoverStyle = pointOptions.hoverStyle || {};
         const selectionStyle = pointOptions.selectionStyle || {};
 
-        if(defsColor) {
+        if(colorId) {
             that._turnOffHatching(hoverStyle, selectionStyle);
         }
 
         return {
             labelColor: mainColor,
             normal: that._parsePointStyle(pointOptions, mainColor, mainColor),
-            hover: that._parsePointStyle(hoverStyle, defsColor || mainColor, mainColor),
-            selection: that._parsePointStyle(selectionStyle, defsColor || mainColor, mainColor)
+            hover: that._parsePointStyle(hoverStyle, colorId || mainColor, mainColor),
+            selection: that._parsePointStyle(selectionStyle, colorId || mainColor, mainColor)
         };
     },
 

@@ -638,12 +638,12 @@ export const getNextDefsSvgId = (function() {
     return function() { return 'DevExpress_' + numDefsSvgElements++; };
 })();
 
-export function extractColor(color, isPure) {
+export function extractColor(color, isBase) {
     if(isString(color) || !color) {
         return color;
-    } else if(isPure) {
-        return color.pure;
+    } else if(isBase) {
+        return color.base;
     } else {
-        return color.defsColor || color.pure;
+        return color.customId || color.base;
     }
 }

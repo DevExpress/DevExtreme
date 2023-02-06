@@ -185,23 +185,23 @@ Series.prototype = {
     _createStyles: function(options) {
         const that = this;
         const mainSeriesColor = options.mainSeriesColor;
-        const defsColor = this._getDefsColor(options);
+        const colorId = this._getColorId(options);
         const hoverStyle = options.hoverStyle || {};
         const selectionStyle = options.selectionStyle || {};
 
-        if(defsColor) {
+        if(colorId) {
             that._turnOffHatching(hoverStyle, selectionStyle);
         }
 
         that._styles = {
             labelColor: mainSeriesColor,
             normal: that._parseStyle(options, mainSeriesColor, mainSeriesColor),
-            hover: that._parseStyle(hoverStyle, defsColor || mainSeriesColor, mainSeriesColor),
-            selection: that._parseStyle(selectionStyle, defsColor || mainSeriesColor, mainSeriesColor),
+            hover: that._parseStyle(hoverStyle, colorId || mainSeriesColor, mainSeriesColor),
+            selection: that._parseStyle(selectionStyle, colorId || mainSeriesColor, mainSeriesColor),
             legendStyles: {
-                normal: that._createLegendState(options, defsColor || mainSeriesColor),
-                hover: that._createLegendState(hoverStyle, defsColor || mainSeriesColor),
-                selection: that._createLegendState(selectionStyle, defsColor || mainSeriesColor)
+                normal: that._createLegendState(options, colorId || mainSeriesColor),
+                hover: that._createLegendState(hoverStyle, colorId || mainSeriesColor),
+                selection: that._createLegendState(selectionStyle, colorId || mainSeriesColor)
             }
         };
     },
@@ -1242,7 +1242,7 @@ Series.prototype = {
 
     areErrorBarsVisible: _noop,
 
-    _getDefsColor: _noop,
+    _getColorId: _noop,
 
     getMarginOptions: function() {
         return this._patchMarginOptions({

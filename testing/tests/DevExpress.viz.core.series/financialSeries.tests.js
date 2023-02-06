@@ -833,12 +833,12 @@ const checkGroups = function(assert, series) {
             lowValueField: 'l',
             closeValueField: 'c',
             hoverStyle: {
-                color: { pure: 'color_1', refsColor: 'id_color' },
+                color: { base: 'color_1', customId: 'id_color' },
             },
             selectionStyle: {
-                color: { pure: 'color_2', refsColor: 'id_color' },
+                color: { base: 'color_2', customId: 'id_color' },
             },
-            color: { pure: 'color', refsColor: 'id_color' },
+            color: { base: 'color', customId: 'id_color' },
             reduction: { color: 'reduction', level: 'high' },
             innerColor: 'innerColor'
         });
