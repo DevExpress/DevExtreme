@@ -1208,7 +1208,7 @@ const Calendar = Editor.inherit({
         if(multiselect) {
             this._updateViewsOption('values', value);
         } else {
-            const newValue = value ? new Date(value) : null;
+            const newValue = value[0] ? new Date(value[0]) : null;
             this._updateViewsOption('value', newValue);
         }
 
@@ -1224,8 +1224,8 @@ const Calendar = Editor.inherit({
         const multiselect = this.option('multiselect');
 
         if(!multiselect) {
-            value = value ? [value] : [this._dateOption('value')];
-            previousValue = previousValue ? [previousValue] : [];
+            value = value ? value : [this._dateOption('value')];
+            previousValue = previousValue ? previousValue : [];
         } else {
             value = value ?? this._dateOption('values');
             previousValue = previousValue ?? [];
@@ -1257,9 +1257,19 @@ const Calendar = Editor.inherit({
         delete this._suppressNavigation;
     },
 
+    _processValueChanged: function(value, previousValue) {
+        const multiselect = this.option('multiselect');
+        value = multiselect ? value.map((item) => this._convertToDate(item)) : [this._convertToDate(value)];
+        previousValue = multiselect ? previousValue.map((item) => this._convertToDate(item)) : [this._convertToDate(previousValue)];
+
+        this._updateAriaSelected(value, previousValue);
+        this.option('currentDate', isDefined(value[0]) ? new Date(value[0]) : new Date());
+        this._updateViewsValue(value);
+    },
+
     _optionChanged: function(args) {
-        let value = args.value;
-        let previousValue = args.previousValue;
+        const value = args.value;
+        const previousValue = args.previousValue;
 
         switch(args.name) {
             case 'width':
@@ -1273,6 +1283,14 @@ const Calendar = Editor.inherit({
                 this._suppressingNavigation(this._updateCurrentDate, [this.option('currentDate')]);
                 this._refreshViews();
                 this._renderNavigator();
+                break;
+            case 'multiselect':
+                if(value) {
+                    this._updateAriaSelected(this._dateOption('values'), [this._dateOption('value')]);
+                } else {
+                    this._updateAriaSelected([this._dateOption('value')], this._dateOption('values'),);
+                }
+                this._updateViewsOption('multiselect', value);
                 break;
             case 'firstDayOfWeek':
                 this._refreshViews();
@@ -1295,23 +1313,20 @@ const Calendar = Editor.inherit({
                 this._updateButtonsVisibility();
                 break;
             case 'value':
-                value = this._convertToDate(value);
-                previousValue = this._convertToDate(previousValue);
-                this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
-                this._updateViewsValue(value);
-                this._setSubmitValue(value);
-                this.callBase(args);
+                if(!this.option('multiselect')) {
+                    this._processValueChanged(value, previousValue);
+                    this._setSubmitValue(value);
+                    this.callBase(args);
+                }
                 break;
             case 'values':
-                value = value.map((item) => this._convertToDate(item));
-                previousValue = previousValue.map((item) => this._convertToDate(item));
-                this._updateAriaSelected(value, previousValue);
-                this._updateViewsValue(value);
-                this._raiseValuesChangeAction(value, previousValue);
-                this._saveValuesChangeEvent(undefined);
+                if(this.option('multiselect')) {
+                    this._processValueChanged(value, previousValue);
+                    this._raiseValuesChangeAction(value, previousValue);
+                    this._saveValuesChangeEvent(undefined);
+                }
                 break;
-            case 'onValuesChange':
+            case 'onValuesChanged':
                 this._createValuesChangeAction();
                 break;
             case 'onCellClick':

@@ -307,6 +307,7 @@ const BaseView = Widget.inherit({
         switch(name) {
             case 'value':
             case 'values':
+            case 'multiselect':
                 this._renderValue();
                 break;
             case 'contouredDate':
