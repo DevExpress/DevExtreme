@@ -47,7 +47,7 @@ export function RadioGroupValidatorExample() {
           </RadioGroup>
           <RadioGroup defaultValue={OPTIONS[1]} name="validation-example-1">
             {OPTIONS.map((option) => (
-              <RadioButton key={option} value={option} label={`${option}`}/>
+              <RadioButton key={option} value={option} label={`${option}`} />
             ))}
             <Validator>
               <RangeRule
