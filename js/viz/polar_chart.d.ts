@@ -42,6 +42,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    Color,
 } from './core/base_widget';
 
 import {
@@ -1484,9 +1485,10 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.color
      * @default undefined
+     * @type string|object
      * @public
      */
-    color?: string;
+    color?: Color|string;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
      * @default 'solid'
@@ -1534,9 +1536,10 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       };
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
+       * @type object|string
        * @default undefined
        */
-      color?: string;
+      color?: Color|string;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
        * @default 'solid'
@@ -1569,6 +1572,11 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          */
         width?: number;
       };
+      /**
+       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening
+       * @default true
+       */
+      lightening?: boolean
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width
        * @default 3
@@ -1655,9 +1663,10 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       };
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
+       * @type object|string
        * @default undefined
        */
-      color?: string;
+      color?: Color|string;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
        * @default 'solid'
@@ -1690,6 +1699,11 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          */
         width?: number;
       };
+      /**
+       * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening
+       * @default true
+       */
+      lightening?: boolean
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width
        * @default 3

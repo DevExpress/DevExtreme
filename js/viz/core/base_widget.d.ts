@@ -865,3 +865,23 @@ export interface BaseWidgetAnnotationConfig {
      */
     y?: number;
 }
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export interface Color {
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  base?: string,
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  customId?: string
+}

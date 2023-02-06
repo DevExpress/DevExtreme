@@ -42,6 +42,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    Color,
 } from './core/base_widget';
 
 import {
@@ -521,9 +522,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.color
      * @default undefined
+     * @type object|string
      * @public
      */
-    color?: string;
+    color?: Color|string;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
      * @default 'onlyPoint'
@@ -562,9 +564,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
+       * @type object|string
        * @default undefined
        */
-      color?: string;
+      color?: Color|string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -590,6 +593,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            */
           width?: number;
       };
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.lightening
+       * @default true
+       */
+      lightening?: boolean
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
@@ -755,9 +763,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
+       * @type object|string
        * @default undefined
        */
-      color?: string;
+      color?: Color|string;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */
@@ -783,6 +792,11 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            */
           width?: number;
       };
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.lightening
+       * @default true
+       */
+      lightening?: boolean
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping
