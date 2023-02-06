@@ -289,7 +289,6 @@ const baseScatterMethods = {
         const sizeValue = style.size !== undefined ? style.size : defaultSize;
         return {
             fill: extractColor(style.color, true) || defaultColor,
-            filter: style.lightening,
             stroke: border.color || defaultBorderColor,
             'stroke-width': border.visible ? border.width : 0,
             r: sizeValue / 2 + (border.visible && sizeValue !== 0 ? ~~(border.width / 2) || 0 : 0)

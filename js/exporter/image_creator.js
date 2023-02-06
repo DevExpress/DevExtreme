@@ -433,16 +433,19 @@ function drawElement(element, context, parentOptions, shared) {
     return promise;
 }
 
-function applyGradient(context, options, shared, element, type) {
-    const gradients = type === 'linear' ? shared.linearGradients : shared.radialGradients;
+function applyGradient(context, options, { linearGradients, radialGradients }, element, type) {
+    const gradients = type === 'linear' ? linearGradients : radialGradients;
     if(Object.keys(gradients).length === 0) {
         return;
     }
     const id = parseUrl(options.fill);
     if(id && gradients[id]) {
         const box = element.getBBox();
-        const gradient = type === 'linear' ? context.createLinearGradient(box.x, 0, box.x + box.width, 0) :
-            context.createRadialGradient(box.x + box.width / 2, box.y + box.height / 2, 0, box.x + box.width / 2, box.y + box.height / 2, Math.max(box.height / 2, box.width / 2));
+        const horizontalCenter = box.x + box.width / 2;
+        const verticalCenter = box.y + box.height / 2;
+        const gradient = type === 'linear' ?
+            context.createLinearGradient(box.x, 0, box.x + box.width, 0) :
+            context.createRadialGradient(horizontalCenter, verticalCenter, 0, horizontalCenter, verticalCenter, Math.max(box.height / 2, box.width / 2));
 
         gradients[id].colors.forEach(opt => {
             const offset = parseInt(opt.offset.replace(/%/, ''));
@@ -450,9 +453,9 @@ function applyGradient(context, options, shared, element, type) {
         });
 
         if(type === 'linear') {
-            context.translate(box.x + box.width / 2, box.y + box.height / 2);
+            context.translate(horizontalCenter, verticalCenter);
             context.rotate(gradients[id].transform ? gradients[id].transform.replace(/\D/g, '') * Math.PI / 180 : 0);
-            context.translate(-box.x - box.width / 2, -box.y - box.height / 2);
+            context.translate(-horizontalCenter, -verticalCenter);
         }
         context.globalAlpha = options.opacity;
         context.fillStyle = gradient;

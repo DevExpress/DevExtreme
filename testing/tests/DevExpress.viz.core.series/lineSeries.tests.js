@@ -548,7 +548,6 @@ function setDiscreteType(series) {
             fill: 'n-color',
             r: 2.5,
             opacity: 1,
-            filter: undefined,
             'clip-path': null,
             stroke: 'n-b-color',
             'stroke-width': 'n-b-width',
@@ -598,7 +597,6 @@ function setDiscreteType(series) {
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -606,14 +604,12 @@ function setDiscreteType(series) {
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -659,7 +655,6 @@ function setDiscreteType(series) {
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 0,
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -667,14 +662,12 @@ function setDiscreteType(series) {
                 stroke: 'n-b-color',
                 'stroke-width': 0,
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 0,
-                filter: undefined
             }
         });
     });
@@ -715,7 +708,6 @@ function setDiscreteType(series) {
                 r: 1,
                 stroke: 'n-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -723,14 +715,12 @@ function setDiscreteType(series) {
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -772,7 +762,6 @@ function setDiscreteType(series) {
                 r: 1,
                 stroke: 'seriesColor',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'seriesColor',
@@ -780,14 +769,12 @@ function setDiscreteType(series) {
                 stroke: 'seriesColor',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'seriesColor',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -842,7 +829,6 @@ function setDiscreteType(series) {
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -850,14 +836,12 @@ function setDiscreteType(series) {
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -904,7 +888,6 @@ function setDiscreteType(series) {
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -912,14 +895,12 @@ function setDiscreteType(series) {
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });

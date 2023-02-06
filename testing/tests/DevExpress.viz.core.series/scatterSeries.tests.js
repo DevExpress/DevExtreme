@@ -1306,7 +1306,6 @@ const seriesType = 'scatter';
             stroke: 'n-b-color',
             'stroke-width': 'n-b-width',
             visibility: 'visible',
-            filter: undefined,
         });
     });
 
@@ -1353,7 +1352,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined,
             },
             normal: {
                 fill: 'n-color',
@@ -1361,14 +1359,12 @@ const seriesType = 'scatter';
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'visible',
-                filter: undefined,
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
-                filter: undefined,
             }
         });
     });
@@ -1415,7 +1411,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 0,
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -1423,14 +1418,12 @@ const seriesType = 'scatter';
                 stroke: 'n-b-color',
                 'stroke-width': 0,
                 visibility: 'visible',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 0,
-                filter: undefined
             }
         });
     });
@@ -1472,7 +1465,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'n-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -1480,14 +1472,12 @@ const seriesType = 'scatter';
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'visible',
-                filter: undefined
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -1530,7 +1520,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'seriesColor',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'seriesColor',
@@ -1538,14 +1527,12 @@ const seriesType = 'scatter';
                 stroke: 'seriesColor',
                 'stroke-width': 'n-b-width',
                 visibility: 'visible',
-                filter: undefined
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'seriesColor',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -1639,7 +1626,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -1647,14 +1633,12 @@ const seriesType = 'scatter';
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
 
@@ -1745,7 +1729,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -1753,14 +1736,12 @@ const seriesType = 'scatter';
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -1806,7 +1787,6 @@ const seriesType = 'scatter';
                 r: 1,
                 stroke: 'n-color',
                 'stroke-width': 'h-b-width',
-                filter: undefined
             },
             normal: {
                 fill: 'n-color',
@@ -1814,14 +1794,12 @@ const seriesType = 'scatter';
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
                 visibility: 'hidden',
-                filter: undefined
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
                 'stroke-width': 's-b-width',
-                filter: undefined
             }
         });
     });
@@ -1900,7 +1878,6 @@ const seriesType = 'scatter';
             stroke: 'black',
             'stroke-width': 2,
             visibility: 'hidden',
-            filter: undefined
         }, 'parsed normal style');
 
         assert.deepEqual(pointOptions.styles.selection, {
@@ -1908,7 +1885,6 @@ const seriesType = 'scatter';
             stroke: 'selectionBorderColor',
             'stroke-width': 10,
             fill: 'selectionColor',
-            filter: undefined
         }, 'parseSelectionStyle');
 
         assert.deepEqual(pointOptions.styles.hover, {
@@ -1916,7 +1892,6 @@ const seriesType = 'scatter';
             stroke: 'hoverBorderColor',
             'stroke-width': 8,
             fill: 'hoverColor',
-            filter: undefined
         }, 'parseHoverStyle');
 
         assert.deepEqual(pointOptions.image, {
