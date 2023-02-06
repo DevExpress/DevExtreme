@@ -274,15 +274,16 @@ const BaseView = Widget.inherit({
             return;
         }
 
-        const value = this.option('value');
-        const selectedCell = this._getCellByDate(value);
-
-        if(this._selectedCell) {
-            this._selectedCell.removeClass(CALENDAR_SELECTED_DATE_CLASS);
+        if(this._selectedCells) {
+            this._selectedCells.forEach((cell) => (cell.removeClass(CALENDAR_SELECTED_DATE_CLASS)));
         }
+        const multiselect = this.option('multiselect');
+        const selectedCells = multiselect ?
+            this.option('values').map((value) => this._getCellByDate(value)) :
+            [this._getCellByDate(this.option('value'))];
 
-        selectedCell.addClass(CALENDAR_SELECTED_DATE_CLASS);
-        this._selectedCell = selectedCell;
+        this._selectedCells = selectedCells;
+        selectedCells.forEach((cell) => (cell.addClass(CALENDAR_SELECTED_DATE_CLASS)));
     },
 
     getCellAriaLabel: function(date) {
@@ -305,6 +306,7 @@ const BaseView = Widget.inherit({
         const { name, value } = args;
         switch(name) {
             case 'value':
+            case 'values':
                 this._renderValue();
                 break;
             case 'contouredDate':

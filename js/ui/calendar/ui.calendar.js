@@ -79,11 +79,15 @@ const Calendar = Editor.inherit({
 
             value: null,
 
+            values: [],
+
             dateSerializationFormat: undefined,
 
             min: new Date(1000, 0),
 
             max: new Date(3000, 0),
+
+            multiselect: false,
 
             firstDayOfWeek: undefined,
 
@@ -105,6 +109,7 @@ const Calendar = Editor.inherit({
 
             onCellClick: null,
             onContouredChanged: null,
+            onValuesChanged: null,
             skipFocusCheck: false,
 
             _todayDate: () => new Date()
@@ -219,7 +224,7 @@ const Calendar = Editor.inherit({
                     this._navigateDown();
                 } else if(!this._view.isDateDisabled(this.option('currentDate'))) {
                     const value = this._updateTimeComponent(this.option('currentDate'));
-                    this._dateValue(value, e);
+                    this._selectValue(value, e);
                 }
             }
         });
@@ -243,28 +248,64 @@ const Calendar = Editor.inherit({
         return dateSerialization.getDateSerializationFormat(value);
     },
 
-    _convertToDate: function(value, optionName) {
+    _createValuesChangeAction: function() {
+        this._valuesChangeAction = this._createActionByOption('onValuesChanged', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+    },
+
+    _raiseValuesChangeAction: function(value, previousValue) {
+        if(!this._valueChangeAction) {
+            this._createValuesChangeAction();
+        }
+        this._valuesChangeAction(this._valuesChangeArgs(value, previousValue));
+    },
+
+    _valuesChangeArgs: function(value, previousValue) {
+        return {
+            value: value,
+            previousValue: previousValue,
+            event: this._valuesChangeEventInstance
+        };
+    },
+
+    _saveValuesChangeEvent: function(e) {
+        this._valuesChangeEventInstance = e;
+    },
+
+    _convertToDate: function(value) {
         return dateSerialization.deserializeDate(value);
     },
 
     _dateValue: function(value, event) {
+        const optionName = Array.isArray(value) ? 'values' : 'value';
         if(event) {
             if(event.type === 'keydown') {
                 const cellElement = this._view._getContouredCell().get(0);
                 event.target = cellElement;
             }
-            this._saveValueChangeEvent(event);
+            if(optionName === 'value') {
+                this._saveValueChangeEvent(event);
+            } else {
+                this._saveValuesChangeEvent(event);
+            }
         }
-        this._dateOption('value', value);
+        this._dateOption(optionName, value);
     },
 
     _dateOption: function(optionName, optionValue) {
         if(arguments.length === 1) {
-            return this._convertToDate(this.option(optionName), optionName);
+            return optionName === 'values' ?
+                this.option('values').map((value) => this._convertToDate(value)) :
+                this._convertToDate(this.option(optionName));
         }
 
         const serializationFormat = this._getSerializationFormat(optionName);
-        this.option(optionName, dateSerialization.serializeDate(optionValue, serializationFormat));
+        const serializedValue = optionName === 'values' ?
+            optionValue.map((value) => dateSerialization.serializeDate(value, serializationFormat)) :
+            dateSerialization.serializeDate(optionValue, serializationFormat);
+
+        this.option(optionName, serializedValue);
     },
 
     _shiftDate: function(zoomLevel, date, offset, reverse) {
@@ -417,7 +458,10 @@ const Calendar = Editor.inherit({
     },
 
     _initCurrentDate: function() {
-        const currentDate = this._getNormalizedDate(this._dateOption('value')) || this._getNormalizedDate(this.option('currentDate'));
+        const currentDate = this._getNormalizedDate(this._dateOption('value')) ||
+            this._getNormalizedDate(this._dateOption('values')[0]) ||
+            this._getNormalizedDate(this.option('currentDate'));
+
         this.option('currentDate', currentDate);
     },
 
@@ -648,11 +692,13 @@ const Calendar = Editor.inherit({
             date: date,
             min: this._getMinDate(),
             max: this._getMaxDate(),
+            multiselect: this.option('multiselect'),
             firstDayOfWeek: this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex(),
             showWeekNumbers: this.option('showWeekNumbers'),
             weekNumberRule: this.option('weekNumberRule'),
             zoomLevel: this.option('zoomLevel'),
             value: this._dateOption('value'),
+            values: this._dateOption('values'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
@@ -709,8 +755,26 @@ const Calendar = Editor.inherit({
             this._navigateDown(e.event.currentTarget);
         } else {
             const newValue = this._updateTimeComponent(e.value);
-            this._dateValue(newValue, e.event);
+            this._selectValue(newValue, e.event);
             this._cellClickAction(e);
+        }
+    },
+
+    _selectValue: function(selectedValue, e) {
+        if(this.option('multiselect')) {
+            const values = [...this._dateOption('values')];
+            const alreadySelectedIndex = values.findIndex(date => date.toDateString() === selectedValue.toDateString());
+
+            if(alreadySelectedIndex > -1) {
+                values.splice(alreadySelectedIndex, 1);
+            } else {
+                values.push(selectedValue);
+            }
+
+            this._dateValue(values, e);
+            this.option('currentDate', isDefined(selectedValue) ? selectedValue : new Date());
+        } else {
+            this._dateValue(selectedValue, e);
         }
     },
 
@@ -1019,18 +1083,17 @@ const Calendar = Editor.inherit({
     },
 
     _toTodayView: function(args) {
-        this._saveValueChangeEvent(args.event);
         const today = new Date();
 
         if(this._isMaxZoomLevel()) {
-            this._dateOption('value', today);
+            this._selectValue(today, args.event);
             return;
         }
 
         this._preventViewChangeAnimation = true;
 
         this.option('zoomLevel', this.option('maxZoomLevel'));
-        this._dateOption('value', today);
+        this._selectValue(today, args.event);
 
         this._animateShowView();
 
@@ -1044,6 +1107,7 @@ const Calendar = Editor.inherit({
         this._renderNavigator();
         this._setViewContoured(newDate);
         this._updateAriaId(newDate);
+        this._updateAriaSelected();
     },
 
     _rearrangeViews: function(offset) {
@@ -1139,24 +1203,39 @@ const Calendar = Editor.inherit({
     },
 
     _updateViewsValue: function(value) {
-        const newValue = value ? new Date(value) : null;
+        const multiselect = this.option('multiselect');
 
-        this._view.option('value', newValue);
-        this._beforeView && this._beforeView.option('value', newValue);
-        this._afterView && this._afterView.option('value', newValue);
+        if(multiselect) {
+            this._updateViewsOption('values', value);
+        } else {
+            const newValue = value ? new Date(value) : null;
+            this._updateViewsOption('value', newValue);
+        }
+
+    },
+
+    _updateViewsOption: function(optionName, newValue) {
+        this._view.option(optionName, newValue);
+        this._beforeView && this._beforeView.option(optionName, newValue);
+        this._afterView && this._afterView.option(optionName, newValue);
     },
 
     _updateAriaSelected: function(value, previousValue) {
-        value = value ?? this._dateOption('value');
+        const multiselect = this.option('multiselect');
 
-        const $prevSelectedCell = this._view._getCellByDate(previousValue);
-        const $selectedCell = this._view._getCellByDate(value);
+        if(!multiselect) {
+            value = value ? [value] : [this._dateOption('value')];
+            previousValue = previousValue ? [previousValue] : [];
+        } else {
+            value = value ?? this._dateOption('values');
+            previousValue = previousValue ?? [];
+        }
 
-        this.setAria('selected', undefined, $prevSelectedCell);
-        this.setAria('selected', true, $selectedCell);
+        previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
+        value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
 
-        if(value && this.option('currentDate').getTime() === value.getTime()) {
-            this._updateAriaId(value);
+        if(!multiselect && value[0] && this.option('currentDate').getTime() === value[0].getTime()) {
+            this._updateAriaId(value[0]);
         }
     },
 
@@ -1223,6 +1302,17 @@ const Calendar = Editor.inherit({
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
                 this.callBase(args);
+                break;
+            case 'values':
+                value = value.map((item) => this._convertToDate(item));
+                previousValue = previousValue.map((item) => this._convertToDate(item));
+                this._updateAriaSelected(value, previousValue);
+                this._updateViewsValue(value);
+                this._raiseValuesChangeAction(value, previousValue);
+                this._saveValuesChangeEvent(undefined);
+                break;
+            case 'onValuesChange':
+                this._createValuesChangeAction();
                 break;
             case 'onCellClick':
                 this._view.option('onCellClick', value);
