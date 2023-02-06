@@ -1,7 +1,7 @@
 import {
   ForwardedRef,
   forwardRef,
-  PropsWithChildren, useContext, useEffect, useImperativeHandle, useMemo, useRef,
+  PropsWithChildren, useContext, useImperativeHandle, useMemo, useRef,
 } from 'react';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
@@ -16,16 +16,13 @@ function ValidationGroupComponent(
   ref: ForwardedRef<ValidationGroupRef>,
 ) {
   const unnamedGroupSymbol = useRef(Symbol('validation-group'));
-  const groupRef = useRef(id ?? unnamedGroupSymbol.current);
+  const groupId = id ?? unnamedGroupSymbol.current;
   const validationEngine = useContext(ValidationEngineContext);
-  useEffect(() => {
-    groupRef.current = id ?? unnamedGroupSymbol.current;
-  }, [id]);
   useImperativeHandle<ValidationGroupRef, ValidationGroupRef>(ref, () => ({
-    validate: () => (validationEngine.validateGroup(groupRef.current)),
-  }), [validationEngine]);
+    validate: () => (validationEngine.validateGroup(groupId)),
+  }), [validationEngine, groupId]);
 
-  const validationGroupContext = useMemo(() => (groupRef.current), [id]);
+  const validationGroupContext = useMemo(() => (groupId), [groupId]);
   return (
     <ValidationGroupContext.Provider value={validationGroupContext}>
       {children}
@@ -33,7 +30,6 @@ function ValidationGroupComponent(
   );
 }
 
-//* Component={"name":"ValidationGroup", "jQueryRegistered":true, "hasApiMethod":true}
 export const ValidationGroup = forwardRef<ValidationGroupRef, ValidationGroupProps>(
   ValidationGroupComponent,
 );

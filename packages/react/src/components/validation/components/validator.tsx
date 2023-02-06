@@ -1,6 +1,6 @@
 import { ValidationResult, ValidationRule } from '@devextreme/interim';
 import {
-  PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef,
+  PropsWithChildren, useContext, useEffect, useMemo, useRef,
 } from 'react';
 import { EditorContext } from '../../common/contexts/editor-context';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
@@ -21,7 +21,6 @@ interface ValidatorProps extends PropsWithChildren {
   validateOnValueChange?: boolean
 }
 
-//* Component={"name":"Validator", "jQueryRegistered":true}
 export function Validator({
   validationGroup: validationGroupProp,
   validateOnValueChange,
@@ -31,7 +30,7 @@ export function Validator({
   const editorContext = useContext(EditorContext);
   const validationEngine = useContext(ValidationEngineContext);
   const rules = useRef<ValidationRule[]>([]);
-  const performValidation = useCallback(() => {
+  const performValidation = () => {
     if (editorContext) {
       const { editorName, editorValue, setEditorErrors } = editorContext;
       const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
@@ -42,8 +41,7 @@ export function Validator({
       return validationResult;
     }
     return { isValid: true };
-  },
-  [editorContext?.editorName, editorContext?.editorValue]);
+  };
 
   const validator = useRef<ValidatorImpl>({
     validationRules: rules.current,
@@ -52,6 +50,7 @@ export function Validator({
     on: () => {},
     off: () => {},
   });
+  validator.current.validate = performValidation;
 
   useEffect(() => {
     const validationGroup = validationGroupProp ?? validationGroupContext;
@@ -60,12 +59,8 @@ export function Validator({
   }, [validationGroupProp ?? validationGroupContext]);
 
   useEffect(() => {
-    validator.current.validate = performValidation;
-  }, [performValidation]);
-
-  useEffect(() => {
     if (validateOnValueChange) {
-      performValidation();
+      validator.current.validate();
     }
   }, [editorContext?.editorName, editorContext?.editorValue]);
 
