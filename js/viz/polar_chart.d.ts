@@ -1488,7 +1488,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @type string|object
      * @public
      */
-    color?: Color|string;
+    color?: Color | string;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
      * @default 'solid'
@@ -1539,7 +1539,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @type object|string
        * @default undefined
        */
-      color?: Color|string;
+      color?: Color | string;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
        * @default 'solid'
@@ -1576,7 +1576,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening
        * @default true
        */
-      lightening?: boolean
+      lightening?: boolean;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width
        * @default 3
@@ -1666,7 +1666,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @type object|string
        * @default undefined
        */
-      color?: Color|string;
+      color?: Color | string;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
        * @default 'solid'
@@ -1703,7 +1703,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening
        * @default true
        */
-      lightening?: boolean
+      lightening?: boolean;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width
        * @default 3

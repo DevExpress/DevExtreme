@@ -153,7 +153,7 @@ export interface BaseGaugeRangeContainer {
      * @type string|object
      * @public
      */
-    backgroundColor?: string|Color;
+    backgroundColor?: string | Color;
     /**
      * @docid BaseGaugeOptions.rangeContainer.offset
      * @default 0
@@ -183,7 +183,7 @@ export interface BaseGaugeRangeContainer {
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
        * @type object|string
        */
-      color?: Color|string;
+      color?: Color | string;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
        */
@@ -455,7 +455,7 @@ export interface CommonIndicator {
      * @type object|string
      * @public
      */
-    color?: Color|string;
+    color?: Color | string;
     /**
      * @docid
      * @default 'right' &for(value_indicators)

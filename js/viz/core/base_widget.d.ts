@@ -877,11 +877,11 @@ export interface Color {
    * @default undefined
    * @public
    */
-  base?: string,
+  base?: string;
   /**
    * @docid
    * @default undefined
    * @public
    */
-  customId?: string
+  customId?: string;
 }

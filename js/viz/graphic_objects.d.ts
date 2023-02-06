@@ -8,14 +8,14 @@ import {
  * @static
  * @public
  */
-export function registerGradient(type: string, options: { rotationAngle: number, colors: Array<Colors>}): string;
+export function registerGradient(type: string, options: { rotationAngle: number; colors: Array<Colors> }): string;
 /**
  * @docid viz.registerPattern
  * @publicName registerPattern(options)
  * @static
  * @public
  */
-export function registerPattern(options: { width: number|string, height: number|string, template: template }): string;
+export function registerPattern(options: { width: number | string; height: number | string; template: template }): string;
 /**
  * @namespace DevExpress.viz
  */
@@ -25,11 +25,11 @@ export interface Colors {
    * @default undefined
    * @public
    */
-    offset: number|string,
+    offset: number | string;
    /**
    * @docid
    * @default undefined
    * @public
    */
-    color: string
+    color: string;
 }
