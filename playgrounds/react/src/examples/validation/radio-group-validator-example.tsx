@@ -15,7 +15,7 @@ export function RadioGroupValidatorExample() {
         <div className="example__control">
           <RadioGroup defaultValue={OPTIONS[3]} name="validation-example">
             {OPTIONS.map((option) => (
-              <RadioButton key={option} value={option} />
+              <RadioButton key={option} value={option} label={`${option}`} />
             ))}
             <Validator validateOnValueChange>
               <RangeRule
@@ -35,7 +35,7 @@ export function RadioGroupValidatorExample() {
         <div className="example__control">
           <RadioGroup defaultValue={OPTIONS[4]} name="validation-example-1">
             {OPTIONS.map((option) => (
-              <RadioButton key={option} value={option} />
+              <RadioButton key={option} value={option} label={`${option}`} />
             ))}
             <Validator>
               <RangeRule
@@ -47,7 +47,7 @@ export function RadioGroupValidatorExample() {
           </RadioGroup>
           <RadioGroup defaultValue={OPTIONS[1]} name="validation-example-1">
             {OPTIONS.map((option) => (
-              <RadioButton key={option} value={option} />
+              <RadioButton key={option} value={option} label={`${option}`}/>
             ))}
             <Validator>
               <RangeRule
@@ -66,7 +66,7 @@ export function RadioGroupValidatorExample() {
           <ValidationGroup id="first-group">
             <RadioGroup defaultValue={OPTIONS[1]} name="validation-example-2">
               {OPTIONS.map((option) => (
-                <RadioButton key={option} value={option} />
+                <RadioButton key={option} value={option} label={`${option}`} />
               ))}
               <Validator>
                 <CustomRule
@@ -77,7 +77,7 @@ export function RadioGroupValidatorExample() {
             </RadioGroup>
             <RadioGroup defaultValue={OPTIONS[2]} name="validation-example-3">
               {OPTIONS.map((option) => (
-                <RadioButton key={option} value={option} />
+                <RadioButton key={option} value={option} label={`${option}`} />
               ))}
               <Validator>
                 <CustomRule
