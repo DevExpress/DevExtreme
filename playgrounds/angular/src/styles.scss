@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import '@devextreme/styles/lib/themes/material-blue-light.css';
+@import '@devextreme/styles/lib/themes/material-purple-light-scoped.css';
+
 @import './app/styles';
 
-@include example-page-styles;

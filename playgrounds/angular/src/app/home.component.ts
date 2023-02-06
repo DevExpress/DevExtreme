@@ -7,6 +7,7 @@ import { AppRoutes } from './routing/app.routes';
     <a [routerLink]="'/' + appRoutes.radioButton">RadioButton examples</a>
     <a [routerLink]="'/' + appRoutes.radioGroup">RadioGroup examples</a>
     <a [routerLink]="'/' + appRoutes.radioGroupCompat">RadioGroupCompat examples</a>
+    <a [routerLink]="'/' + appRoutes.themes">Theme examples</a>
   `,
   styles: [`
     :host {

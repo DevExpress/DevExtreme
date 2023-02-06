@@ -6,9 +6,11 @@ import { ViewComponent } from '../../../internal';
 @Component({
   selector: 'dx-radio-button-radio-view',
   template: `
-    {{ checked ? '◉' : '◎' }}
+    <span class="dxr-radio-button__radio">
+        {{ checked ? '◉' : '◎' }}
+    </span>
   `,
-  styles: [':host { display: inline-block; }'],
+  styleUrls: ['./radio-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioViewComponent extends ViewComponent {
