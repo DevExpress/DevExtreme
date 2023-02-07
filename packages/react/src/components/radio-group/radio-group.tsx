@@ -12,6 +12,7 @@ import {
   isValidElement,
   memo,
   PropsWithChildren,
+  Ref,
   useMemo,
   useRef,
 } from 'react';
@@ -73,39 +74,36 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
   });
 
   return (
-    <RadioGroupStoreContext.Provider value={store}>
-      <div
-        ref={containerRef}
-        className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
-        {...containerProps.attributes}
-        onFocus={props.onFocus}
-        onBlur={props.onBlur}
-      >
-        {props.name
-          ? Children.map(
-            props.children,
-            child => (
-              isValidElement<EditorProps<T>>(child)
-                ? cloneElement(child, { name: props.name })
-                : child
-            ),
-          )
-          : props.children}
-      </div>
-    </RadioGroupStoreContext.Provider>
+      <RadioGroupStoreContext.Provider value={store}>
+          <div
+              ref={containerRef}
+              className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
+              {...containerProps.attributes}
+              onFocus={props.onFocus}
+              onBlur={props.onBlur}
+          >
+              {props.name
+                ? Children.map(
+                  props.children,
+                  child => (
+                    isValidElement<EditorProps<T>>(child)
+                      ? cloneElement(child, { name: props.name })
+                      : child
+                  ),
+                )
+                : props.children}
+          </div>
+      </RadioGroupStoreContext.Provider>
   );
 }
 
 const RadioGroupEditor = withEditor(forwardRef(RadioGroupInternal));
 
-//* Component={"name":"RadioGroup"}
 export type RadioGroupProps<T> = PropsWithChildren<
 EditorProps<T>
 & FocusableProps
 & WithCustomRef<RadioGroupRef>
 >;
-
+type RadioGroupType = <T>(p: RadioGroupProps<T> & { ref?: Ref<HTMLDivElement> }) => JSX.Element;
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(RadioGroupEditor) as <T>(
-  props: RadioGroupProps<T>,
-) => ReturnType<typeof RadioGroupEditor>;
+export const RadioGroup = memo(RadioGroupEditor) as RadioGroupType;

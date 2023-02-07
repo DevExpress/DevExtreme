@@ -1,5 +1,5 @@
-import { isPlainObject } from '../../../core/utils/type';
-import { getPathParts } from '../../../core/utils/data';
+import { isPlainObject } from '@devextreme/interim/src/core/utils/type';
+import { getPathParts } from '@devextreme/interim/src/core/utils/data';
 
 function cloneObjectValue(
   value: Record<string, unknown> | unknown[],

@@ -6,7 +6,7 @@ import { EditorContext } from '../contexts/editor-context';
 
 // TODO: ref casted to any to work around bug with pulling types from inferno. Change it after fix.
 
-export function withEditor<T>(Component: ComponentType<EditorProps<T>>) {
+export function withEditor<T>(Component: ComponentType<EditorProps<T> & { ref: ForwardedRef<unknown> }>) {
   function Editor<V extends T>(props: EditorProps<V>, ref: ForwardedRef<unknown>) {
     const [editorValue, setEditorValue] = useState(props.value || props.defaultValue);
     const [editorErrors, setEditorErrors] = useState<string[]>();

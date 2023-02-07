@@ -1,21 +1,23 @@
+// @ts-nocheck
+
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   createRef, RefObject, VNode, Component,
 } from 'inferno';
-import KeyboardProcessor from '../../../events/core/keyboard_processor';
 import renderer from '../../../core/inferno_renderer';
+import KeyboardProcessor from '@devextreme/interim';
 
 // eslint-disable-next-line import/named
-import $, { dxElementWrapper } from '../../../core/renderer';
-import domAdapter from '../../../core/dom_adapter';
-import DOMComponent from '../../../core/dom_component';
-import { extend } from '../../../core/utils/extend';
-import { getPublicElement } from '../../../core/element';
-import type { UserDefinedElement } from '../../../core/element';
+import { JQuery as $ } from '@devextreme/interim';
+import { domAdapter } from '@devextreme/interim';
+import { DOMComponent } from '@devextreme/interim';
+import { extend } from '@devextreme/interim';
+import { getPublicElement } from '@devextreme/interim';
+import type { UserDefinedElement, dxElementWrapper } from '@devextreme/interim';
 import {
   isDefined, isRenderer, isString,
-} from '../../../core/utils/type';
+} from '@devextreme/interim';
 import { TemplateModel, TemplateWrapper, buildTemplateArgs } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
 import type { Option, TemplateComponent } from './types';
@@ -97,8 +99,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   validateKeyDownHandler(): void {
-    // TODO Vitik functional inferno component doesn't have prototype as previous inferno class component 
-    /* 
+    // TODO Vitik functional inferno component doesn't have prototype as previous inferno class component
+    /*
     const supportedKeyNames = this.getSupportedKeyNames();
     const hasComponentDefaultKeyHandlers = supportedKeyNames.length > 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
