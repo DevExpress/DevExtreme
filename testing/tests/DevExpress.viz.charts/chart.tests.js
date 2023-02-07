@@ -140,8 +140,9 @@ QUnit.test('Create', function(assert) {
 
 QUnit.test('Chart should have default value of the aggregatebycategory = true', function(assert) {
     this.createChart();
+    const argumentAxisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
 
-    assert.strictEqual(this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].aggregateByCategory, true);
+    assert.strictEqual(argumentAxisOptions.aggregateByCategory, true);
 });
 
 QUnit.test('Chart should be able to change the aggregatebycategory setting', function(assert) {
@@ -151,8 +152,9 @@ QUnit.test('Chart should be able to change the aggregatebycategory setting', fun
         }
     };
     this.createChart();
+    const axisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
 
-    assert.strictEqual(this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].aggregateByCategory, false);
+    assert.strictEqual(axisOptions.aggregateByCategory, false);
 });
 
 QUnit.test('Chart should change the aggregatebycategory value when the value was updated', function(assert) {
@@ -160,11 +162,14 @@ QUnit.test('Chart should change the aggregatebycategory value when the value was
 
     chart.option('argumentAxis', { aggregateByCategory: false });
 
-    assert.strictEqual(this.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].aggregateByCategory, false);
+    const axisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, false);
 });
 
 QUnit.test('Set adaptive layout options', function(assert) {
     this.createChart();
+
     assert.deepEqual(this.LayoutManager.firstCall.returnValue.setOptions.lastCall.args, [{ width: 80, height: 80, keepLabels: true }]);
 });
 
