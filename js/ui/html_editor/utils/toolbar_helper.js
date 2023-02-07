@@ -184,7 +184,7 @@ function getLinkRange(module, range) {
     return result;
 }
 
-function processColorFromFormats(value) {
+function getColorFromFormat(value) {
     return Array.isArray(value) ? value[0] : value;
 }
 
@@ -553,9 +553,9 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
         formData: {
             width: startCellWidth,
             height: isDefined(formats.cellHeight) ? parseInt(formats.cellHeight) : getOuterHeight($cell),
-            backgroundColor: processColorFromFormats(formats.cellBackgroundColor) || cellStyles.backgroundColor,
+            backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || cellStyles.backgroundColor,
             borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
-            borderColor: processColorFromFormats(formats.cellBorderColor) || cellStyles.borderTopColor,
+            borderColor: getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor,
             borderWidth: parseInt(isDefined(formats.cellBorderWidth) ? formats.cellBorderWidth : cellStyles.borderTopWidth),
             alignment: formats.cellTextAlign || startTextAlign,
             verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,

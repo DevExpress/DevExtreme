@@ -5,6 +5,7 @@ import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
 
 const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
+const COLOR_BOX_CLASS = 'dx-colorbox';
 
 const showCellPropertiesForm = (instance, $cellElement) => {
     showForm(instance, $cellElement, 'cellProperties');
@@ -167,8 +168,8 @@ module('Table properties forms', {
 
             const borderStyleEditor = formInstance.getEditor('borderStyle');
             const borderWidthEditor = formInstance.getEditor('borderWidth');
-            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
-            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
             const heightEditor = formInstance.getEditor('height');
             const widthEditor = formInstance.getEditor('width');
@@ -200,10 +201,10 @@ module('Table properties forms', {
             const borderWidthEditor = formInstance.getEditor('borderWidth');
             borderWidthEditor.option('value', 3);
 
-            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
             borderColorEditor.option('value', 'red');
 
-            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             backgroundColorEditor.option('value', 'green');
 
             const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
@@ -218,7 +219,7 @@ module('Table properties forms', {
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
         });
 
-        test('Passing backgroundColor & borderColor from empty selected cells to colorBox', function(assert) {
+        test('Cell backgroundColor & borderColor should be passed to colorBox as a default during editing', function(assert) {
             this.createWidget({ value: tableWithoutContent });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -228,14 +229,14 @@ module('Table properties forms', {
             this.clock.tick();
 
             const formInstance = this.getFormInstance();
-            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
-            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
 
-            assert.strictEqual(backgroundColorEditor.option('value'), 'green', 'background color passed to colorBox');
-            assert.strictEqual(borderColorEditor.option('value'), 'gray', 'border color passed to colorBox');
+            assert.strictEqual(backgroundColorEditor.option('value'), 'green', 'background color is passed to colorBox');
+            assert.strictEqual(borderColorEditor.option('value'), 'gray', 'border color is passed to colorBox');
         });
 
-        test('Apply backgroundColor & borderColor of first selected call for all cells when color did not modified in colorBox', function(assert) {
+        test('backgroundColor & borderColor of first selected cell should be applied for all cells when color was not modified in colorBox', function(assert) {
             this.createWidget({ value: tableWithoutContent });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -246,10 +247,10 @@ module('Table properties forms', {
 
             this.applyFormChanges();
 
-            assert.strictEqual($tableElement.find('td').eq(0).css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
-            assert.strictEqual($tableElement.find('td').eq(0).css('borderColor'), 'rgb(128, 128, 128)', 'borderColor color is applied');
-            assert.strictEqual($tableElement.find('td').eq(1).css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
-            assert.strictEqual($tableElement.find('td').eq(1).css('borderColor'), 'rgb(128, 128, 128)', 'borderColor color is applied');
+            [0, 1].forEach(elementNumber => {
+                assert.strictEqual($tableElement.find('td').eq(elementNumber).css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
+                assert.strictEqual($tableElement.find('td').eq(elementNumber).css('borderColor'), 'rgb(128, 128, 128)', 'borderColor color is applied');
+            });
         });
 
         test('Check table width and height editor options', function(assert) {
@@ -355,8 +356,8 @@ module('Table properties forms', {
 
             const borderStyleEditor = formInstance.getEditor('borderStyle');
             const borderWidthEditor = formInstance.getEditor('borderWidth');
-            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
-            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
             const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
             const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
@@ -393,10 +394,10 @@ module('Table properties forms', {
             const borderWidthEditor = formInstance.getEditor('borderWidth');
             borderWidthEditor.option('value', 3);
 
-            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
             borderColorEditor.option('value', 'red');
 
-            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             backgroundColorEditor.option('value', 'green');
 
             const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
