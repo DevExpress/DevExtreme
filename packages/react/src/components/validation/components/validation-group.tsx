@@ -1,7 +1,7 @@
 import {
   ForwardedRef,
   forwardRef,
-  PropsWithChildren, useContext, useImperativeHandle, useMemo, useRef,
+  PropsWithChildren, useContext, useImperativeHandle, useRef,
 } from 'react';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
@@ -22,9 +22,8 @@ function ValidationGroupComponent(
     validate: () => (validationEngine.validateGroup(groupId)),
   }), [validationEngine, groupId]);
 
-  const validationGroupContext = useMemo(() => (groupId), [groupId]);
   return (
-    <ValidationGroupContext.Provider value={validationGroupContext}>
+    <ValidationGroupContext.Provider value={groupId}>
       {children}
     </ValidationGroupContext.Provider>
   );

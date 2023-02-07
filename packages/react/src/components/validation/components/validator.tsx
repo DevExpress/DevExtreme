@@ -47,7 +47,7 @@ export function Validator({
       );
       return validationResult;
     }
-    : () => ({ isValid: true; });
+    : () => ({ isValid: true });
 
   useEffect(() => {
     const validationGroup = validationGroupProp ?? validationGroupContext;
