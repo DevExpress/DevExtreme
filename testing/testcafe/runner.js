@@ -17,53 +17,28 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 }),
 { dependencies: { themeName } })();
 
-const matrix = [
-    { componentFolder: 'treeList', name: 'treeList', concurrency: 1 },
-    { componentFolder: 'dataGrid', name: 'dataGrid (1/2)', indices: '1/2' },
-    { componentFolder: 'dataGrid', name: 'dataGrid (2/2)', indices: '2/2' },
-    { componentFolder: 'pivotGrid', name: 'pivotGrid', concurrency: 1 },
-    { componentFolder: 'pivotGrid', name: 'pivotGrid - material', theme: 'material.blue.light', concurrency: 1 },
-    { componentFolder: 'scheduler', name: 'scheduler (1/5)', indices: '1/5' },
-    { componentFolder: 'scheduler', name: 'scheduler (2/5)', indices: '2/5' },
-    { componentFolder: 'scheduler', name: 'scheduler (3/5)', indices: '3/5' },
-    { componentFolder: 'scheduler', name: 'scheduler (4/5)', indices: '4/5' },
-    { componentFolder: 'scheduler', name: 'scheduler (5/5)', indices: '5/5' },
-    { componentFolder: 'form', name: 'form' },
-    { componentFolder: 'editors', name: 'editors' },
-    { componentFolder: 'navigation', name: 'navigation' },
-    { componentFolder: 'htmlEditor', name: 'htmlEditor', concurrency: 1 },
-    { componentFolder: 'form', name: 'form - material', theme: 'material.blue.light' },
-    { componentFolder: 'editors', name: 'editors - material', theme: 'material.blue.light' },
-    { componentFolder: 'navigation', name: 'navigation - material', theme: 'material.blue.light' },
-    { componentFolder: 'htmlEditor', name: 'htmlEditor - material', theme: 'material.blue.light', concurrency: 1 },
-    { componentFolder: 'renovation', name: 'renovation (jquery)', platform: 'jquery' },
-    { componentFolder: 'renovation', name: 'renovation (react)', platform: 'react' },
-];
+let testCafe;
+createTestCafe({
+    hostname: 'localhost',
+    port1: 1437,
+    port2: 1438,
+    // eslint-disable-next-line spellcheck/spell-checker
+    experimentalProxyless: true,
+})
+    .then(tc => {
+        testCafe = tc;
 
-(async() => {
-    const testCafe = await createTestCafe({
-        hostname: 'localhost',
-        port1: 1437,
-        port2: 1438,
-        // eslint-disable-next-line spellcheck/spell-checker
-        experimentalProxyless: false,
-    });
-    let totalFailedCount = 0;
-
-    // eslint-disable-next-line no-restricted-syntax
-    for(const { componentFolder, name, concurrency, indices, theme, platform } of matrix) {
-        console.log(`Started test: ${name}`);
         const args = getArgs();
         const testName = args.test.trim();
         const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
-        // const indices = args.indices.trim();
-        // let componentFolder = args.componentFolder.trim();
+        const indices = args.indices.trim();
+        let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
 
-        setTestingPlatform({ platform });
-        setTestingTheme({ theme });
+        setTestingPlatform(args);
+        setTestingTheme(args);
 
-        const componentPath = componentFolder ? `${componentFolder}/**` : '**';
+        componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
             fs.rmSync('./testing/testcafe/screenshots', { recursive: true });
         }
@@ -75,7 +50,7 @@ const matrix = [
         const runner = testCafe.createRunner()
             .browsers(browsers)
             .reporter(reporter)
-            .src([`./testing/testcafe/tests/${componentPath}/${file}.ts`]);
+            .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         runner.compilerOptions({
             'typescript': {
@@ -83,7 +58,7 @@ const matrix = [
             }
         });
 
-        runner.concurrency(concurrency || 3);
+        runner.concurrency(args.concurrency || 3);
 
         const filters = [];
         if(indices) {
@@ -115,10 +90,9 @@ const matrix = [
 
         const runOptions = {
             quarantineMode: { successThreshold: 1, attemptLimit: 3 },
-            disableScreenshots: true
         };
 
-        if(componentFolder.trim() !== 'renovation') {
+        if(args.componentFolder.trim() !== 'renovation') {
             runOptions.hooks = {
                 test: {
                     after: async() => {
@@ -127,20 +101,23 @@ const matrix = [
                 },
             };
 
-            if(theme) {
+            if(args.theme) {
                 runOptions.hooks.test.before = async() => {
-                    await changeTheme(theme);
+                    await changeTheme(args.theme);
                 };
             }
         }
-        const failedCount = await runner.run(runOptions);
 
-        totalFailedCount += failedCount;
-    }
+        if(args.browsers === 'chrome:docker') {
+            runOptions.disableScreenshots = true;
+        }
 
-    await testCafe.close();
-    process.exit(totalFailedCount);
-})();
+        return runner.run(runOptions);
+    })
+    .then(failedCount => {
+        testCafe.close();
+        process.exit(failedCount);
+    });
 
 function setTestingPlatform(args) {
     process.env.platform = args.platform;
@@ -154,9 +131,11 @@ function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
             return 'chrome:headless --disable-gpu --window-size=1200,800';
+        case 'chrome:docker':
+            return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
 
-    return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
+    return browser;
 }
 
 function getArgs() {
