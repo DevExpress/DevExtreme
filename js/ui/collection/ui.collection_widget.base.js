@@ -341,7 +341,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     _getAvailableItems: function($itemElements) {
-        return this._getVisibleItems($itemElements).not('.dx-state-disabled');
+        return this._getVisibleItems($itemElements);
     },
 
     _prevItem: function($items) {
