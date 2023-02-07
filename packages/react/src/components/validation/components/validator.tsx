@@ -37,7 +37,7 @@ export function Validator({
     on: () => {},
     off: () => {},
   });
-  validator.current.validate = editorContext 
+  validator.current.validate = editorContext
     ? () => {
       const { editorName, editorValue, setEditorErrors } = editorContext;
       const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
