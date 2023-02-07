@@ -361,7 +361,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     scale?: {
       /**
        * @docid
-       * @default false
+       * @default true
        */
       aggregateByCategory?: boolean;
       /**

@@ -1206,7 +1206,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
 export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.aggregateByCategory
-     * @default false
+     * @default true
      * @public
      */
     aggregateByCategory?: boolean;
