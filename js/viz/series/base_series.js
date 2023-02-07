@@ -485,10 +485,32 @@ Series.prototype = {
         }
     },
 
-    _drawElements: function(animationEnabled, firstDrawing, translateAllPoints) {
+    _prepareSegmentsPosition() {
+        const points = this._points || [];
+        const isCloseSegment = points[0] && points[0].hasValue() && this._options.closed;
+        const segments = points.reduce(function(segments, p) {
+            const segment = segments.at(-1);
+
+            if(!p.translated) {
+                p.setDefaultCoords();
+            }
+
+            if(p.hasValue() && p.hasCoords()) {
+                segment.push(p);
+            } else if(!p.hasValue() && segment.length) {
+                segments.push([]);
+            }
+
+            return segments;
+        }, [[]]);
+
+        this._drawSegments(segments, isCloseSegment, false);
+    },
+
+    _drawElements(animationEnabled, firstDrawing) {
         const that = this;
         const points = that._points || [];
-        const closeSegment = points[0] && points[0].hasValue() && that._options.closed;
+        const isCloseSegment = points[0] && points[0].hasValue() && that._options.closed;
         const groupForPoint = {
             markers: that._markersGroup,
             errorBars: that._errorBarGroup
@@ -499,14 +521,10 @@ Series.prototype = {
         that._segments = [];
 
         const segments = points.reduce(function(segments, p) {
-            const segment = segments[segments.length - 1];
+            const segment = segments.at(-1);
 
-            if(!p.translated || translateAllPoints) {
-                p.translate();
-                !translateAllPoints && p.setDefaultCoords();
-            }
             if(p.hasValue() && p.hasCoords()) {
-                translateAllPoints && that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
+                that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
                 segment.push(p);
             } else if(!p.hasValue()) {
                 segment.length && segments.push([]);
@@ -517,20 +535,23 @@ Series.prototype = {
             return segments;
         }, [[]]);
 
-        segments.forEach(function(segment, index) {
-            if(segment.length) {
-                that._drawSegment(segment, animationEnabled, index, closeSegment && index === this.length - 1);
-            }
-        }, segments);
-
+        that._drawSegments(segments, isCloseSegment, animationEnabled);
         that._firstDrawing = !points.length;
-
         that._removeOldSegments();
-
         animationEnabled && that._animate(firstDrawing);
     },
 
-    draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
+    _drawSegments(segments, closeSegment, animationEnabled) {
+        segments.forEach((segment, index) => {
+            if(segment.length) {
+                const lastSegment = closeSegment && index === segments.length - 1;
+
+                this._drawSegment(segment, animationEnabled, index, lastSegment);
+            }
+        });
+    },
+
+    draw(animationEnabled, hideLayoutLabels, legendCallback) {
         const that = this;
         const firstDrawing = that._firstDrawing;
 
@@ -543,12 +564,13 @@ Series.prototype = {
 
         that._appendInGroup();
 
-        that._applyVisibleArea();
+        if(!that._isAllPointsTranslated) {
+            that.prepareCoordinatesForPoints();
+        }
+
         that._setGroupsSettings(animationEnabled, firstDrawing);
-
-        !firstDrawing && !that._resetApplyingAnimation && that._drawElements(false, firstDrawing, false);
-        that._drawElements(animationEnabled, firstDrawing, true);
-
+        !firstDrawing && !that._resetApplyingAnimation && that._prepareSegmentsPosition();
+        that._drawElements(animationEnabled, firstDrawing);
         hideLayoutLabels && that.hideLabels();
 
         if(that.isSelected()) {
@@ -558,7 +580,22 @@ Series.prototype = {
         } else {
             that._applyStyle(that._styles.normal);
         }
+        that._isAllPointsTranslated = false;
         that._resetApplyingAnimation = false;
+    },
+
+    _translatePoints() {
+        const points = this._points ?? [];
+
+        points.forEach(p => {
+            p.translate();
+        });
+    },
+
+    prepareCoordinatesForPoints() {
+        this._applyVisibleArea();
+        this._translatePoints();
+        this._isAllPointsTranslated = true;
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
