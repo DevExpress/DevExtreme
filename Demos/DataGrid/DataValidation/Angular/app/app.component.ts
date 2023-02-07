@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   dataSource: CustomStore;
 
-  pattern: any = /^\(\d{3}\) \d{3}-\d{4 }$/i;
+  pattern: any = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
   constructor(private httpClient: HttpClient) {
     const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
