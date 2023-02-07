@@ -30,8 +30,15 @@ export function Validator({
   const editorContext = useContext(EditorContext);
   const validationEngine = useContext(ValidationEngineContext);
   const rules = useRef<ValidationRule[]>([]);
-  const performValidation = () => {
-    if (editorContext) {
+  const validator = useRef<ValidatorImpl>({
+    validationRules: rules.current,
+    validate: () => {},
+    reset: () => {},
+    on: () => {},
+    off: () => {},
+  });
+  validator.current.validate = editorContext 
+    ? () => {
       const { editorName, editorValue, setEditorErrors } = editorContext;
       const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
       setEditorErrors(
@@ -40,17 +47,7 @@ export function Validator({
       );
       return validationResult;
     }
-    return { isValid: true };
-  };
-
-  const validator = useRef<ValidatorImpl>({
-    validationRules: rules.current,
-    validate: performValidation,
-    reset: () => {},
-    on: () => {},
-    off: () => {},
-  });
-  validator.current.validate = performValidation;
+    : () => ({ isValid: true; });
 
   useEffect(() => {
     const validationGroup = validationGroupProp ?? validationGroupContext;
