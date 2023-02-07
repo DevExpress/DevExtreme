@@ -497,8 +497,8 @@ Series.prototype = {
 
             if(p.hasValue() && p.hasCoords()) {
                 segment.push(p);
-            } else if(!p.hasValue()) {
-                segment.length && segments.push([]);
+            } else if(!p.hasValue() && segment.length) {
+                segments.push([]);
             }
 
             return segments;
