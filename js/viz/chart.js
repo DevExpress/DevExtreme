@@ -371,31 +371,31 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
-const isOverlay = (currentPoint, overlayPoint, radiusPoint) => {
-    const isPointHitLeftBorder = overlayPoint.x - radiusPoint <= currentPoint.x;
-    const isPointHitRightBorder = overlayPoint.x + radiusPoint >= currentPoint.x;
-    const isPointHitTopBorder = overlayPoint.y - radiusPoint <= currentPoint.y;
-    const isPointHitBottomBorder = overlayPoint.y + radiusPoint >= currentPoint.y;
-    const isPointOverlayHorizontally = isPointHitLeftBorder && isPointHitRightBorder;
-    const isPointOverlayVertically = isPointHitTopBorder && isPointHitBottomBorder;
+const isOverlay = (currentPoint, overlayPoint, pointRadius) => {
+    const pointHitsLeftBorder = overlayPoint.x - pointRadius <= currentPoint.x;
+    const pointHitsRightBorder = overlayPoint.x + pointRadius >= currentPoint.x;
+    const pointHitsTopBorder = overlayPoint.y - pointRadius <= currentPoint.y;
+    const pointHitsBottomBorder = overlayPoint.y + pointRadius >= currentPoint.y;
+    const isPointOverlappedHorizontally = pointHitsLeftBorder && pointHitsRightBorder;
+    const isPointOverlappedVertically = pointHitsTopBorder && pointHitsBottomBorder;
 
-    return isPointOverlayHorizontally && isPointOverlayVertically;
+    return isPointOverlappedHorizontally && isPointOverlappedVertically;
 };
 
-const isPointOverlapped = (currentPoint, overlappingPoints, skipComparingSamePoints) => {
+const isPointOverlapped = (currentPoint, points, skipSamePointsComparing) => {
     const radiusPoint = currentPoint.getOptions().size / 2;
 
-    for(let i = 0; i < overlappingPoints.length; i++) {
-        if(!skipComparingSamePoints) {
-            const isXCoordinateSame = overlappingPoints[i].x === currentPoint.x;
-            const isYCoordinateSame = overlappingPoints[i].y === currentPoint.y;
+    for(let i = 0; i < points.length; i++) {
+        if(!skipSamePointsComparing) {
+            const isXCoordinateSame = points[i].x === currentPoint.x;
+            const isYCoordinateSame = points[i].y === currentPoint.y;
 
             if(isXCoordinateSame && isYCoordinateSame) {
                 continue;
             }
         }
 
-        if(isOverlay(currentPoint, overlappingPoints[i], radiusPoint)) {
+        if(isOverlay(currentPoint, points[i], radiusPoint)) {
             return true;
         }
     }
@@ -888,14 +888,14 @@ const dxChart = AdvancedChart.inherit({
 
     _hidePointsForSingleSeriesIfNeeded(series) {
         const seriesPoints = series.getPoints();
-        let counterOverlay = 0;
+        let overlappedPointsCount = 0;
 
         for(let i = 0; i < seriesPoints.length; i++) {
             const currentPoint = seriesPoints[i];
             const overlappingPoints = seriesPoints.slice(i + 1);
 
-            counterOverlay += isPointOverlapped(currentPoint, overlappingPoints);
-            if(counterOverlay > (seriesPoints.length / 2)) {
+            overlappedPointsCount += isPointOverlapped(currentPoint, overlappingPoints);
+            if(overlappedPointsCount > seriesPoints.length / 2) {
                 series.autoHidePointMarkers = true;
                 break;
             }
@@ -942,8 +942,9 @@ const dxChart = AdvancedChart.inherit({
 
         that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
-            series.forEach(singleSeries =>
-                singleSeries.prepareCoordinatesForPoints());
+            series.forEach(singleSeries => {
+                singleSeries.prepareCoordinatesForPoints();
+            });
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
             fastHidingPointMarkersByArea(borderCoords, markersInfo, series);

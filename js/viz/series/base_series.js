@@ -485,13 +485,11 @@ Series.prototype = {
         }
     },
 
-    _preparePositionSegments() {
-        const that = this;
-        const points = that._points || [];
-        const closeSegment = points[0] && points[0].hasValue() && that._options.closed;
-
+    _prepareSegmentsPosition() {
+        const points = this._points || [];
+        const closeSegment = points[0] && points[0].hasValue() && this._options.closed;
         const segments = points.reduce(function(segments, p) {
-            const segment = segments[segments.length - 1];
+            const segment = segments.at(-1);
 
             if(!p.translated) {
                 p.setDefaultCoords();
@@ -506,11 +504,7 @@ Series.prototype = {
             return segments;
         }, [[]]);
 
-        segments.forEach(function(segment, index) {
-            if(segment.length) {
-                that._drawSegment(segment, false, index, closeSegment && index === this.length - 1);
-            }
-        }, segments);
+        this._drawSegments(segments, closeSegment, false);
     },
 
     _drawElements(animationEnabled, firstDrawing) {
@@ -527,7 +521,7 @@ Series.prototype = {
         that._segments = [];
 
         const segments = points.reduce(function(segments, p) {
-            const segment = segments[segments.length - 1];
+            const segment = segments.at(-1);
 
             if(p.hasValue() && p.hasCoords()) {
                 that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
@@ -541,15 +535,20 @@ Series.prototype = {
             return segments;
         }, [[]]);
 
-        segments.forEach(function(segment, index) {
-            if(segment.length) {
-                that._drawSegment(segment, animationEnabled, index, closeSegment && index === this.length - 1);
-            }
-        }, segments);
-
+        that._drawSegments(segments, closeSegment, animationEnabled);
         that._firstDrawing = !points.length;
         that._removeOldSegments();
         animationEnabled && that._animate(firstDrawing);
+    },
+
+    _drawSegments(segments, closeSegment, animationEnabled) {
+        segments.forEach((segment, index) => {
+            if(segment.length) {
+                const lastSegment = closeSegment && index === segments.length - 1;
+
+                this._drawSegment(segment, animationEnabled, index, lastSegment);
+            }
+        });
     },
 
     draw(animationEnabled, hideLayoutLabels, legendCallback) {
@@ -570,7 +569,7 @@ Series.prototype = {
         }
 
         that._setGroupsSettings(animationEnabled, firstDrawing);
-        !firstDrawing && !that._resetApplyingAnimation && that._preparePositionSegments();
+        !firstDrawing && !that._resetApplyingAnimation && that._prepareSegmentsPosition();
         that._drawElements(animationEnabled, firstDrawing);
         hideLayoutLabels && that.hideLabels();
 

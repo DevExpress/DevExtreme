@@ -785,8 +785,9 @@ export const BaseChart = BaseWidget.inherit({
 
         series.forEach((singleSeries, index) =>{
             that._applyExtraSettings(singleSeries, drawOptions);
-            const animationEnabled = drawOptions.animate && pointsToAnimation[index] <= drawOptions.animationPointsLimit && that._renderer.animationEnabled();
-
+            const animationEnabled = drawOptions.animate
+                && pointsToAnimation[index] <= drawOptions.animationPointsLimit
+                && that._renderer.animationEnabled();
 
             singleSeries.draw(animationEnabled,
                 drawOptions.hideLayoutLabels,
