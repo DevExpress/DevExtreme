@@ -9,6 +9,7 @@ import {
   GroupDescriptor,
   LoadOptions,
 } from './index';
+import { ResolvedData } from './custom_store';
 
 export type Options<
     TItem = any,
@@ -237,7 +238,7 @@ export class Store<
      * @return Promise<any>
      * @public
      */
-    load(): DxExtendedPromise<Array<TItem>>;
+    load(): DxExtendedPromise<ResolvedData<TItem>>;
 
     /**
      * @docid Store.load(options)
@@ -246,5 +247,5 @@ export class Store<
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
+    load(options: LoadOptions<TItem>): DxExtendedPromise<ResolvedData<TItem>>;
   }
