@@ -3,7 +3,8 @@ import {
   TemplateProps,
   ValueProps,
 } from '@devextreme/components';
-import { FocusEventHandler } from 'react';
+import { RootContainerDomOptions } from '@devextreme/components/src/root-container';
+import { FocusEventHandler, RefObject } from 'react';
 
 type HandlerProp<P extends string> = `${P}Change`;
 type DefaultProp<P extends string> = `default${Capitalize<P>}`;
@@ -27,7 +28,26 @@ export interface EditorProps<T> extends Props<ValueProps<T>, ReadonlyProps, Temp
   errors?: string[]
 }
 
-export type FocusableComponent = {
+export type FocusableProps = {
   onFocus?: FocusEventHandler<HTMLElement>;
   onBlur?: FocusEventHandler<HTMLDivElement>;
+};
+
+export type WithCustomRef<TRef> = {
+  componentRef?: RefObject<TRef>;
+};
+
+// --- compat ---
+export type CompatibleOmittedProps = keyof FocusablePropsCompatible
+& RootContainerDomOptions['accessKey'];
+
+export type FocusablePropsCompatible = {
+  onFocusIn?: FocusEventHandler<HTMLElement>;
+  onFocusOut?: FocusEventHandler<HTMLElement>;
+};
+
+export type LifecyclePropsCompatible = {
+  onContentReady?: () => void;
+  onInitialized?: () => void;
+  onDisposing?: () => void;
 };

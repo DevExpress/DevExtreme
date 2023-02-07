@@ -7,6 +7,8 @@ export type {
 } from './radio-group';
 
 export type {
+  RootContainerDomOptions,
+  RootContainerDomOptionsCompatible,
   RootContainerProps,
 } from './root-container';
 

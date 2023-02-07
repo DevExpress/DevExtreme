@@ -28,7 +28,7 @@ function CustomItemComponent({ data }: { data: AnyRecord }) {
   );
 }
 
-export function RadioGroupCompatibleExample() {
+export function RadioGroupCompatibleSimpleExample() {
   const [selectedValue, setSelectedValue] = useState<number | undefined>(1);
   const handleChange = (value?: number) => setSelectedValue(value);
 

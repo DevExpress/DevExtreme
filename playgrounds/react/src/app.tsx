@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { FormExample } from './examples/form/form-example';
 import { RadioButtonExample } from './examples/radio-button/radio-button-example';
-import { RadioGroupCompatibleExample } from './examples/radio-group-compatible/radio-group-compatible-example';
+import { RadioGroupCompatibleExample } from './examples/radio-group-compatible/radio-group-example';
 import { RadioGroupExample } from './examples/radio-group/radio-group-example';
 import { ThemesExample } from './examples/themes/themes-example';
 import { RadioGroupValidatorExample } from './examples/validation/radio-group-validator-example';

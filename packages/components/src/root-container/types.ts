@@ -34,6 +34,19 @@ export type DomOptions = {
   },
 };
 
+export type DomOptionsCompatible = DomOptions & {
+  accessKey: {
+    accessKey?: string;
+  },
+  size: {
+    width?: string;
+    height?: string;
+  },
+  visible: {
+    visible: boolean;
+  }
+};
+
 export type PropMapFunc<T> = (props: Props, domOptions: T) => Props;
 
 export type PropMappers = {

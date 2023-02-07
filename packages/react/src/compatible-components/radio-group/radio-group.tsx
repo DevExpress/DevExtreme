@@ -1,4 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading, react/jsx-handler-names */
+import { RootContainerDomOptionsCompatible } from '@devextreme/components/src';
+import { DomOptionsCompatible } from '@devextreme/components/src/root-container/types';
 import { compileGetter, ItemLike } from '@devextreme/interim';
 import { ComponentType } from 'react';
 import { RadioButton } from '../../components/radio-button';
@@ -6,18 +8,29 @@ import {
   RadioGroup,
   RadioGroupProps,
 } from '../../components/radio-group';
+import { useCompatibleLifecycle } from '../../internal/hooks';
+import {
+  CompatibleOmittedProps,
+  FocusablePropsCompatible, LifecyclePropsCompatible,
+} from '../../internal/props';
 
-interface ItemComponentProps {
+type ItemComponentProps = {
   data: ItemLike;
-}
+};
 
-interface CompatibleRadioGroupProps<T> extends RadioGroupProps<T> {
+type CompatibleRadioGroupProps<T> = Omit<RadioGroupProps<T>, CompatibleOmittedProps>
+& FocusablePropsCompatible
+& LifecyclePropsCompatible
+& Partial<RootContainerDomOptionsCompatible['accessKey']>
+& Partial<RootContainerDomOptionsCompatible['size']>
+& Partial<DomOptionsCompatible['visible']>
+& {
   items: Array<ItemLike>;
   itemRender?: (data: ItemLike, index?: number) => JSX.Element;
   itemComponent?: ComponentType<ItemComponentProps>;
   valueExpr?: string;
   displayExpr?: string;
-}
+};
 
 type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
@@ -29,8 +42,10 @@ export function RadioGroupCompatible<T>({
   itemComponent: ItemComponent,
   valueExpr,
   displayExpr,
-  ...radioGroupProps
+  ...otherProps
 }: CompatibleRadioGroupProps<T>) {
+  useCompatibleLifecycle(otherProps);
+
   const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
   const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
 
@@ -43,19 +58,33 @@ export function RadioGroupCompatible<T>({
     }
     return getItemLabel(item);
   };
+
   return (
-    <RadioGroup<T> {...radioGroupProps}>
-      {items.map((item, index) => {
-        const value = getItemValue(item);
-        const key = `${value}-${index}`;
-        return (
-          <RadioButton
-            key={key}
-            value={value}
-            label={renderLabel(item, index)}
-          />
-        );
-      })}
-    </RadioGroup>
+    (otherProps.visible ?? true)
+      ? (
+        // NOTE: It's a temporary solution
+        // because style & class wasn't added to base component props yet.
+        <div style={{ width: otherProps.width, height: otherProps.height }}>
+          <RadioGroup<T>
+            {...otherProps}
+            shortcutKey={otherProps.accessKey}
+            onFocus={otherProps.onFocusIn}
+            onBlur={otherProps.onFocusOut}
+          >
+            {items.map((item, index) => {
+              const value = getItemValue(item);
+              const key = `${value}-${index}`;
+              return (
+                <RadioButton
+                  key={key}
+                  value={value}
+                  label={renderLabel(item, index)}
+                />
+              );
+            })}
+          </RadioGroup>
+        </div>
+      )
+      : null
   );
 }
