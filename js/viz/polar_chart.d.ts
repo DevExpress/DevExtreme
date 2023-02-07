@@ -1575,6 +1575,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.lightening
        * @default true
+       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
       lightening?: boolean;
       /**
@@ -1702,6 +1703,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.lightening
        * @default true
+       * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
       lightening?: boolean;
       /**
