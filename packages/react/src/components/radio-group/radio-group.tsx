@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading, import/exports-last */
 import {
   RADIO_GROUP_ACTIONS as ACTIONS,
   createContainerPropsSelector,
@@ -8,23 +8,38 @@ import {
 import {
   Children,
   cloneElement,
-  ForwardedRef,
-  forwardRef,
   isValidElement,
   memo,
   PropsWithChildren,
   useMemo,
+  useRef,
 } from 'react';
-import { useCallbackRef, useSecondEffect, useStoreSelector } from '../../internal/hooks';
-import { EditorProps, FocusableComponent } from '../../internal/props';
+import {
+  useCallbackRef, useCustomComponentRef, useSecondEffect, useStoreSelector,
+} from '../../internal/hooks';
+import { EditorProps, FocusableProps, WithCustomRef } from '../../internal/props';
 import { RadioGroupStoreContext } from '../radio-common';
 
 import '@devextreme/styles/src/radio-group/radio-group.scss';
 
-function RadioGroupInternal<T>(
-  props: RadioGroupProps<T>,
-  ref: ForwardedRef<HTMLDivElement>,
-) {
+export type RadioGroupRef = {
+  focus(options?: FocusOptions): void,
+};
+
+function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // NOTE: Workaround for the useImperativeHandler hook.
+  useCustomComponentRef(
+    componentRef,
+    () => ({
+      focus(options?: FocusOptions) {
+        containerRef.current?.focus(options);
+      },
+    }),
+    [containerRef.current],
+  );
+
   const isValueControlled = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 
@@ -58,7 +73,7 @@ function RadioGroupInternal<T>(
   return (
     <RadioGroupStoreContext.Provider value={store}>
       <div
-        ref={ref}
+        ref={containerRef}
         className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
         {...containerProps.attributes}
         onFocus={props.onFocus}
@@ -79,7 +94,13 @@ function RadioGroupInternal<T>(
   );
 }
 
-export type RadioGroupProps<T> = PropsWithChildren<EditorProps<T> & FocusableComponent>;
+export type RadioGroupProps<T> = PropsWithChildren<
+EditorProps<T>
+& FocusableProps
+& WithCustomRef<RadioGroupRef>
+>;
 
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(forwardRef(RadioGroupInternal)) as typeof RadioGroupInternal;
+export const RadioGroup = memo(RadioGroupInternal) as <T>(
+  props: RadioGroupProps<T>,
+) => ReturnType<typeof RadioGroupInternal>;
