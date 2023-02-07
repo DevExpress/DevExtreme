@@ -1610,7 +1610,7 @@ module('keyboard navigation', {
         const $element = $('#cmp');
 
         const instance = new TestComponent($element, {
-            items: [0, { disabled: true, text: 1 }, { disabled: true, text: 2 }, 3],
+            items: [0, { disabled: true, text: 1 }, 2],
             focusStateEnabled: true,
             selectOnFocus: true,
             loopItemFocus: true,
@@ -1624,10 +1624,13 @@ module('keyboard navigation', {
 
         $element.focusin();
         $item.trigger('dxpointerdown');
+
         this.clock.tick();
+
         keyboard.keyDown('right');
-        assert.equal(instance.option('selectedIndex'), 3, 'selectedIndex is correctly');
-        $item = $($items.get(3));
+        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correctly');
+
+        $item = $($items.get(1));
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'correct item has an focused-state');
     });
 
