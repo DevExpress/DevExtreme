@@ -44,9 +44,9 @@ export function RadioGroupCompatible<T>({
   displayExpr,
   className,
   style,
-  ...otherProps
+  ...restProps
 }: CompatibleRadioGroupProps<T>) {
-  useCompatibleLifecycle(otherProps);
+  useCompatibleLifecycle(restProps);
 
   const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
   const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
@@ -63,20 +63,20 @@ export function RadioGroupCompatible<T>({
 
   const cssStyle = {
     ...style,
-    width: otherProps.width || '',
-    height: otherProps.height || '',
+    width: restProps.width || '',
+    height: restProps.height || '',
   };
 
   return (
-    (otherProps.visible ?? true)
+    (restProps.visible ?? true)
       ? (
         <RadioGroup<T>
-          {...otherProps}
+          {...restProps}
           className={className}
           style={cssStyle}
-          shortcutKey={otherProps.accessKey}
-          onFocus={otherProps.onFocusIn}
-          onBlur={otherProps.onFocusOut}
+          shortcutKey={restProps.accessKey}
+          onFocus={restProps.onFocusIn}
+          onBlur={restProps.onFocusOut}
         >
           {items.map((item, index) => {
             const value = getItemValue(item);
