@@ -24,7 +24,8 @@ export type Props<
   & Partial<TTemplate>;
 
 export interface EditorProps<T> extends Props<ValueProps<T>, ReadonlyProps, TemplateProps> {
-  name?: string
+  name?: string,
+  errors?: string[]
 }
 
 export type FocusableProps = {

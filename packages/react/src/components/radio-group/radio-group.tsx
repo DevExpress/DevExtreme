@@ -8,6 +8,7 @@ import {
 import {
   Children,
   cloneElement,
+  forwardRef,
   isValidElement,
   memo,
   PropsWithChildren,
@@ -18,6 +19,7 @@ import {
   useCallbackRef, useCustomComponentRef, useSecondEffect, useStoreSelector,
 } from '../../internal/hooks';
 import { EditorProps, FocusableProps, WithCustomRef } from '../../internal/props';
+import { withEditor } from '../common/hocs/with-editor';
 import { RadioGroupStoreContext } from '../radio-common';
 
 import '@devextreme/styles/src/radio-group/radio-group.scss';
@@ -94,6 +96,9 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
   );
 }
 
+const RadioGroupEditor = withEditor(forwardRef(RadioGroupInternal));
+
+//* Component={"name":"RadioGroup"}
 export type RadioGroupProps<T> = PropsWithChildren<
 EditorProps<T>
 & FocusableProps
@@ -101,6 +106,6 @@ EditorProps<T>
 >;
 
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(RadioGroupInternal) as <T>(
+export const RadioGroup = memo(RadioGroupEditor) as <T>(
   props: RadioGroupProps<T>,
-) => ReturnType<typeof RadioGroupInternal>;
+) => ReturnType<typeof RadioGroupEditor>;

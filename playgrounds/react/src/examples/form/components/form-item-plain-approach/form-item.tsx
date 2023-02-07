@@ -1,24 +1,21 @@
-import { RadioGroup } from '@devextreme/react';
-import { cloneElement, ReactElement, useContext } from 'react';
+import {
+  Children,
+  cloneElement, ReactElement, useContext,
+} from 'react';
 import { FormContext } from '../contexts/form-context';
-import { ValidationContext } from '../contexts/validation-context';
+import { RadioGroupEditor } from '../form-item-hoc-approach/radio-group-form-editor';
 import { useFormItemLayout } from '../hooks/use-form-item-layout';
-import { useEditorValidationRulesInitialization } from '../hooks/use-validation-rules-extractor';
 import { FormItemProps } from '../types';
 
 export function FormItem({ name, children }: FormItemProps) {
   const formContext = useContext(FormContext);
-  const validationContext = useContext(ValidationContext);
-  const { label, hint, editor } = useFormItemLayout(children, [RadioGroup]);
-  useEditorValidationRulesInitialization(name, children);
+  const {
+    label, hint, editor, rest,
+  } = useFormItemLayout(children, [RadioGroupEditor]);
 
   const onEditorValueChanged = (value: unknown) => {
     formContext?.onValueChanged(name, value);
   };
-
-  const renderValidation = () => (
-    <span>{validationContext?.validationResult?.[name]?.join('. ')}</span>
-  );
 
   return (
     <div>
@@ -30,9 +27,10 @@ export function FormItem({ name, children }: FormItemProps) {
         {cloneElement(editor as ReactElement, {
           valueChange: onEditorValueChanged,
           name,
-        })}
+        },
+        ...(editor as ReactElement).props.children,
+        ...Children.toArray(rest))}
       </span>
-      <span>{renderValidation()}</span>
     </div>
   );
 }

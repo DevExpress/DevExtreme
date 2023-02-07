@@ -1,14 +1,12 @@
-import { RadioButton, RadioGroup } from '@devextreme/react';
+import { CustomRule, RadioButton, Validator } from '@devextreme/react';
 import {
-  CustomRule,
-  CustomRule1,
   Form,
   FormItemHint,
   FormItemHoc,
   FormItemLabel,
   FormItemPlain,
 } from './components';
-import { RadioGroupEditor } from './components/form-item-hoc-approach/radio-group-form-editor';
+import { RadioGroupEditor as RadioGroup } from './components/form-item-hoc-approach/radio-group-form-editor';
 
 export function FormExample() {
   return (
@@ -16,7 +14,7 @@ export function FormExample() {
       <div className="example__title">Form example:</div>
       <div className="example__control">
         <div className="example__play-part">
-          <span>Simple form: </span>
+          <span>First approach without validation on value change: </span>
           <Form>
             <FormItemPlain name="example">
               <RadioGroup defaultValue="second">
@@ -25,14 +23,16 @@ export function FormExample() {
                 <RadioButton value="third" label="Third" />
               </RadioGroup>
               <FormItemLabel>Radio group:</FormItemLabel>
-              <CustomRule
-                message="Should not be First"
-                validate={(value) => value !== 'first'}
-              />
-              <CustomRule1
-                message="Should be First or Second"
-                validate={(value) => value === 'first' || value === 'second'}
-              />
+              <Validator>
+                <CustomRule
+                  message="Should not be First"
+                  validationCallback={({ value }: { value: unknown }) => value !== 'first'}
+                />
+                <CustomRule
+                  message="Should be First or Second"
+                  validationCallback={({ value }: { value: unknown }) => value === 'first' || value === 'second'}
+                />
+              </Validator>
               <FormItemHint>This is a hint: </FormItemHint>
             </FormItemPlain>
             <br />
@@ -44,24 +44,28 @@ export function FormExample() {
                 <RadioButton value={4} label="4" />
               </RadioGroup>
               <FormItemLabel>Radio group 2:</FormItemLabel>
-              <CustomRule
-                message="Should be > 3"
-                validate={(value) => (value as number) > 3}
-              />
+              <Validator>
+                <CustomRule
+                  message="Should be > 3"
+                  validationCallback={({ value }: { value: unknown }) => (value as number) > 3}
+                />
+              </Validator>
             </FormItemPlain>
           </Form>
           <br />
           <Form>
             <FormItemHoc name="example2">
-              <RadioGroupEditor defaultValue="Toe">
+              <RadioGroup defaultValue="Toe">
                 <RadioButton value="Tic" label="Tic" />
                 <RadioButton value="Tac" label="Tac" />
                 <RadioButton value="Toe" label="Toe" />
-              </RadioGroupEditor>
-              <CustomRule
-                message="Should not be Toe"
-                validate={(value) => value !== 'Toe'}
-              />
+              </RadioGroup>
+              <Validator validateOnValueChange>
+                <CustomRule
+                  message="Should not be Toe"
+                  validationCallback={({ value }: { value: unknown }) => value !== 'Toe'}
+                />
+              </Validator>
               <FormItemLabel>Second approach:</FormItemLabel>
             </FormItemHoc>
           </Form>

@@ -11,23 +11,25 @@ export interface FormItemChildrenInfo {
   editor: ReactNode;
   label?: ReactNode;
   hint?: ReactNode;
+  rest?: ReactNode;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useFormItemLayout(children: ReactNode, editorTypes: ComponentType[]) {
-  const { label, hint, editor } = useMemo<FormItemChildrenInfo>(() => {
+  const resultingLayout = useMemo<FormItemChildrenInfo>(() => {
     const childrenArray = Children.toArray(children);
-
+    const label = findNodeByTypes(childrenArray, [FormItemLabel]);
+    const editor = findNodeByTypes(childrenArray, editorTypes);
+    const hint = findNodeByTypes(childrenArray, [FormItemHint]);
+    const rest = childrenArray.filter(
+      child => child !== label && child !== editor && child !== hint,
+    );
     return {
-      label: findNodeByTypes(childrenArray, [FormItemLabel]),
-      editor: findNodeByTypes(childrenArray, editorTypes),
-      hint: findNodeByTypes(childrenArray, [FormItemHint]),
+      label,
+      hint,
+      editor,
+      rest,
     };
   }, [children]);
-
-  return {
-    label,
-    hint,
-    editor,
-  };
+  return resultingLayout;
 }
