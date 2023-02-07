@@ -67,6 +67,7 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/dx-diagram*`,
     `!${jsFolder}/dx-gantt*`,
     `!${jsFolder}/dx-quill*`,
+    `!${jsFolder}/**.debug.js`,
 ];
 
 const srcGlobs = esmSrcGlobs;
