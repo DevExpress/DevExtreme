@@ -779,22 +779,21 @@ export const BaseChart = BaseWidget.inherit({
 
     _renderSeriesElements: function(drawOptions, isLegendInside) {
         const that = this;
-        let i;
         const series = that.series;
-        let singleSeries;
-        const seriesLength = series.length;
         const resolveLabelOverlapping = that._themeManager.getOptions('resolveLabelOverlapping');
-
         const pointsToAnimation = that._getPointsToAnimation(series);
-        for(i = 0; i < seriesLength; i++) {
-            singleSeries = series[i];
-            that._applyExtraSettings(singleSeries, drawOptions);
 
-            singleSeries.draw(drawOptions.animate && pointsToAnimation[i] <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
+        series.forEach((singleSeries, index) =>{
+            that._applyExtraSettings(singleSeries, drawOptions);
+            const animationEnabled = drawOptions.animate
+                && pointsToAnimation[index] <= drawOptions.animationPointsLimit
+                && that._renderer.animationEnabled();
+
+            singleSeries.draw(animationEnabled,
                 drawOptions.hideLayoutLabels,
                 that._getLegendCallBack(singleSeries)
             );
-        }
+        });
 
         if(resolveLabelOverlapping === 'none') {
             that._adjustSeriesLabels(false);

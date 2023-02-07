@@ -16,3 +16,4 @@ import './knockout/validation';
 import './knockout/variable_wrapper_utils';
 import './knockout/clean_node';
 import './knockout/clean_node_old';
+import './knockout/attributes_config';

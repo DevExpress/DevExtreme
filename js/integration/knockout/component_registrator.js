@@ -14,6 +14,7 @@ import Editor from '../../ui/editor/editor';
 import Locker from '../../core/utils/locker';
 import { getClosestNodeWithContext } from './utils';
 import config from '../../core/config';
+import PatchAttributes from './attributes_config';
 
 if(ko) {
     const LOCKS_DATA_KEY = 'dxKoLocks';
@@ -28,6 +29,7 @@ if(ko) {
 
         ko.bindingHandlers[componentName] = {
             init: function(domNode, valueAccessor) {
+                PatchAttributes();
                 const $element = $(domNode);
                 const optionChangedCallbacks = Callbacks();
                 let optionsByReference = {};

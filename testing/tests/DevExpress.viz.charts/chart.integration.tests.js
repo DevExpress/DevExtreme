@@ -2282,8 +2282,104 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
     });
 
     assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic); // area algorithm
-    assert.notOk(chart.getAllSeries()[1].getVisiblePoints()[0].graphic); // intersection algorithm
 });
+
+QUnit.test('Series should hide the points when all the points are overlapped', function(assert) {
+    const dataSource = [{
+        country: 'USA',
+        val1: 10,
+        val2: 10,
+        val3: 10,
+    }, {
+        country: 'China',
+        val1: 10,
+        val2: 10,
+        val3: 10,
+    }, {
+        country: 'Russia',
+        val1: 10,
+        val2: 10,
+        val3: 10,
+    }];
+
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource,
+        commonSeriesSettings: {
+            argumentField: 'country',
+        },
+        series: [
+            { valueField: 'val1', name: 'val1', point: { size: 14 } },
+            { valueField: 'val2', name: 'val2', point: { size: 14 } },
+            { valueField: 'val3', name: 'val3', point: { size: 14 } },
+        ],
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.notOk(series[0].getVisiblePoints()[0].graphic);
+    assert.notOk(series[1].getVisiblePoints()[0].graphic);
+    assert.ok(series[2].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test('Series should not hide points when not all points are overlapped in the series', function(assert) {
+    const dataSource = [{
+        country: 'USA',
+        val1: 20,
+        val2: 10,
+        val3: 10,
+    }, {
+        country: 'China',
+        val1: 10,
+        val2: 10,
+        val3: 10,
+    }, {
+        country: 'Russia',
+        val1: 10,
+        val2: 10,
+        val3: 40,
+    }];
+
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource,
+        commonSeriesSettings: {
+            argumentField: 'country',
+        },
+        series: [
+            { valueField: 'val1', name: 'val1', point: { size: 14 } },
+            { valueField: 'val2', name: 'val2', point: { size: 14 } },
+            { valueField: 'val3', name: 'val3', point: { size: 14 } },
+        ],
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.ok(series[0].getVisiblePoints()[0].graphic);
+    assert.ok(series[1].getVisiblePoints()[0].graphic);
+    assert.ok(series[2].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test('Points on the graph should be hidden when they have multiple intersections in a single series', function(assert) {
+    const dataSource = [];
+
+    for(let i = 0; i < 600; i += 1) {
+        const argument = i / 100;
+        dataSource.push({
+            arg: argument,
+            val: Math.exp(-argument) * Math.cos(2 * Math.PI * argument) });
+    }
+
+    const chart = moduleSetup.createChart.call(this, {
+        dataSource,
+        series: [{
+            point: { size: 14 }
+        }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.notOk(series[0].getVisiblePoints()[0].graphic);
+});
+
 
 QUnit.test('don\'t hide scatter points (T929480)', function(assert) {
     const chart = this.createChart({

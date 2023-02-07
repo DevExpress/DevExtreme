@@ -4197,6 +4197,27 @@ QUnit.module('API', {
     afterEach: environmentWithSinonStubPoint.afterEach
 });
 
+QUnit.test('All points should be translated', function(assert) {
+    const series = createSeries({}, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
+    });
+    series.updateData(this.data);
+    series.createPoints();
+    const points = series.getAllPoints();
+    points.forEach(point => point.translate.reset());
+
+    // act
+    series.prepareCoordinatesForPoints();
+    // assert
+
+    assert.ok(points, 'Points were returned');
+    assert.strictEqual(points[0].translate.callCount, 1);
+    assert.strictEqual(points[1].translate.callCount, 1);
+    assert.strictEqual(points[2].translate.callCount, 1);
+    assert.strictEqual(points[3].translate.callCount, 1);
+});
+
 QUnit.test('hide labels', function(assert) {
     const series = createSeries({}, {
         argumentAxis: new MockAxis({ renderer: this.renderer }),
