@@ -9,6 +9,7 @@ type HandleDataChangedArguments = {
   changeType?: 'refresh' | 'update';
   isDelayed?: boolean;
   isLiveUpdate?: boolean;
+  isMasterDetail?: boolean;
   templateDeferreds?: DeferredObj<void>[];
 };
 

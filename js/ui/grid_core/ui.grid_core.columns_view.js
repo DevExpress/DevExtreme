@@ -918,7 +918,7 @@ const columnsViewMembers = {
 
     waitAsyncTemplates: function(change, forceWaiting) {
         const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
-        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates) && change?.templateDeferreds ? change?.templateDeferreds : [];
+        const templateDeferreds = (forceWaiting || needWaitAsyncTemplates && (change?.changeType !== 'update' || change?.isLiveUpdate || change.isMasterDetail)) && change?.templateDeferreds ? change?.templateDeferreds : [];
 
         return when.apply(this, templateDeferreds);
     },
