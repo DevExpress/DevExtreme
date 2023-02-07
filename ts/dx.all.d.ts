@@ -4291,14 +4291,18 @@ declare module DevExpress.data {
     /**
      * [descr:Store.load()]
      */
-    load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+    load(): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
 
     /**
      * [descr:Store.load(options)]
      */
     load(
       options: LoadOptions<TItem>
-    ): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
+    ): DevExpress.core.utils.DxExtendedPromise<
+      DevExpress.data.CustomStore.ResolvedData<TItem>
+    >;
   }
   module AbstractStore {
     /**
