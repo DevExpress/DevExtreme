@@ -487,7 +487,7 @@ Series.prototype = {
 
     _prepareSegmentsPosition() {
         const points = this._points || [];
-        const closeSegment = points[0] && points[0].hasValue() && this._options.closed;
+        const isCloseSegment = points[0] && points[0].hasValue() && this._options.closed;
         const segments = points.reduce(function(segments, p) {
             const segment = segments.at(-1);
 
@@ -504,13 +504,13 @@ Series.prototype = {
             return segments;
         }, [[]]);
 
-        this._drawSegments(segments, closeSegment, false);
+        this._drawSegments(segments, isCloseSegment, false);
     },
 
     _drawElements(animationEnabled, firstDrawing) {
         const that = this;
         const points = that._points || [];
-        const closeSegment = points[0] && points[0].hasValue() && that._options.closed;
+        const isCloseSegment = points[0] && points[0].hasValue() && that._options.closed;
         const groupForPoint = {
             markers: that._markersGroup,
             errorBars: that._errorBarGroup
@@ -535,7 +535,7 @@ Series.prototype = {
             return segments;
         }, [[]]);
 
-        that._drawSegments(segments, closeSegment, animationEnabled);
+        that._drawSegments(segments, isCloseSegment, animationEnabled);
         that._firstDrawing = !points.length;
         that._removeOldSegments();
         animationEnabled && that._animate(firstDrawing);
