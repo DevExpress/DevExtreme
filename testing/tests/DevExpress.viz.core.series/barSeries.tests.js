@@ -1002,7 +1002,7 @@ QUnit.test('Customize with custom styles', function(assert) {
     });
 });
 
-QUnit.test('Customize with custom styles and with custom color', function(assert) {
+QUnit.test('Customize with custom styles and with base color', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'n-color',

@@ -1181,7 +1181,7 @@ function setDiscreteType(series) {
         });
     });
 
-    QUnit.test('custom styles colors defined', function(assert) {
+    QUnit.test('custom styles are defined', function(assert) {
         const series = createSeries({
             type: seriesType,
             color: { customId: 'id_color_0' },

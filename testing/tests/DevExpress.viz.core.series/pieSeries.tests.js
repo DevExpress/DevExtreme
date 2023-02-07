@@ -668,7 +668,7 @@ const checkTwoGroups = function(assert, series) {
         }, 'selection styles');
     });
 
-    QUnit.test('custom styles', function(assert) {
+    QUnit.test('custom styles are defined', function(assert) {
         const series = createSeries({
             type: seriesType,
             color: { base: 'seriesColor', customId: 'id_color_1' },
