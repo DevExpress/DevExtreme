@@ -1802,13 +1802,12 @@ QUnit.module('keyboard navigation', {
         assert.equal($(this.instance.option('focusedElement')).text(), 'item1');
     });
 
-    QUnit.test('disabled item should be skipped when keyboard navigation is used', function(assert) {
+    QUnit.test('disabled item should not be skipped when keyboard navigation is used', function(assert) {
         this.instance.option('items', [{ text: 'Item 1', disabled: true }, { text: 'Item 2' }]);
 
-        this.keyboard
-            .press('right');
+        this.keyboard.press('right');
 
-        assert.ok(this.instance.itemElements().eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was skipped');
+        assert.ok(this.instance.itemElements().eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was not skipped');
     });
 
     QUnit.test('submenu should be closed after left button pressed (T321290, vertical mode)', function(assert) {
