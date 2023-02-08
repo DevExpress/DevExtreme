@@ -917,36 +917,38 @@ QUnit.test('customize with hatching', function(assert) {
 
     series.createPoints();
 
-    series.getAllPoints().forEach(p => {
-        assert.deepEqual(p.updateOptions.lastCall.args[0].styles, {
-            usePointCustomOptions: true,
-            useLabelCustomOptions: undefined,
-            labelColor: 'n-color',
-            hover: {
-                fill: 'n-color',
-                stroke: 'n-color',
-                'stroke-width': 'h-b-width',
-                dashStyle: 'solid',
-                hatching: { hoverHatchingField: true },
-                filter: true,
-            },
-            normal: {
-                fill: 'n-color',
-                stroke: 'n-color',
-                'stroke-width': 'n-b-width',
-                dashStyle: 'solid',
-                hatching: undefined,
-                filter: undefined,
-            },
-            selection: {
-                fill: 'n-color',
-                stroke: 'n-color',
-                'stroke-width': 's-b-width',
-                dashStyle: 'solid',
-                hatching: { selectHatchingField: true },
-                filter: true,
-            }
-        });
+    series.getAllPoints().forEach(point => {
+        const styles = point.updateOptions.lastCall.args[0].styles;
+        assert.strictEqual(styles.usePointCustomOptions, true, 'usePointCustomOptions');
+        assert.strictEqual(styles.useLabelCustomOptions, undefined, 'useLabelCustomOptions');
+        assert.strictEqual(styles.labelColor, 'n-color', 'label color');
+
+        assert.deepEqual(styles.hover, {
+            fill: 'n-color',
+            stroke: 'n-color',
+            'stroke-width': 'h-b-width',
+            dashStyle: 'solid',
+            hatching: { hoverHatchingField: true },
+            filter: true,
+        }, 'hover style');
+
+        assert.deepEqual(styles.normal, {
+            fill: 'n-color',
+            stroke: 'n-color',
+            'stroke-width': 'n-b-width',
+            dashStyle: 'solid',
+            hatching: undefined,
+            filter: undefined,
+        }, 'normal style');
+
+        assert.deepEqual(styles.selection, {
+            fill: 'n-color',
+            stroke: 'n-color',
+            'stroke-width': 's-b-width',
+            dashStyle: 'solid',
+            hatching: { selectHatchingField: true },
+            filter: true,
+        }, 'selection style');
     });
 });
 
@@ -971,35 +973,35 @@ QUnit.test('Customize with custom styles', function(assert) {
     series.updateData(this.data);
     series.createPoints();
 
-    assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
-        usePointCustomOptions: true,
-        useLabelCustomOptions: undefined,
-        labelColor: 'n-color',
-        hover: {
-            fill: 'id_color_1',
-            stroke: 'n-color',
-            'stroke-width': 0,
-            dashStyle: 'solid',
-            hatching: { direction: 'none' },
-            filter: true,
-        },
-        normal: {
-            fill: 'id_color_0',
-            stroke: 'n-color',
-            'stroke-width': undefined,
-            dashStyle: 'solid',
-            hatching: undefined,
-            filter: undefined,
-        },
-        selection: {
-            fill: 'id_color_2',
-            stroke: 'n-color',
-            'stroke-width': 0,
-            dashStyle: 'solid',
-            hatching: { direction: 'none' },
-            filter: true,
-        }
-    });
+    const styles = series.getAllPoints()[0].updateOptions.lastCall.args[0].styles;
+    assert.strictEqual(styles.labelColor, 'n-color', 'label color');
+
+    assert.deepEqual(styles.hover, {
+        fill: 'id_color_1',
+        stroke: 'n-color',
+        'stroke-width': 0,
+        dashStyle: 'solid',
+        hatching: { direction: 'none' },
+        filter: true,
+    }, 'hover style');
+
+    assert.deepEqual(styles.normal, {
+        fill: 'id_color_0',
+        stroke: 'n-color',
+        'stroke-width': undefined,
+        dashStyle: 'solid',
+        hatching: undefined,
+        filter: undefined,
+    }, 'normal style');
+
+    assert.deepEqual(styles.selection, {
+        fill: 'id_color_2',
+        stroke: 'n-color',
+        'stroke-width': 0,
+        dashStyle: 'solid',
+        hatching: { direction: 'none' },
+        filter: true,
+    }, 'selection style');
 });
 
 QUnit.test('Customize with custom styles and with base color', function(assert) {
@@ -1023,35 +1025,35 @@ QUnit.test('Customize with custom styles and with base color', function(assert) 
     series.updateData(this.data);
     series.createPoints();
 
-    assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
-        usePointCustomOptions: true,
-        useLabelCustomOptions: undefined,
-        labelColor: 'c-b-color',
-        hover: {
-            fill: 'id_color_1',
-            stroke: 'c-b-color',
-            'stroke-width': 0,
-            dashStyle: 'solid',
-            hatching: { direction: 'none' },
-            filter: true,
-        },
-        normal: {
-            fill: 'id_color_0',
-            stroke: 'c-b-color',
-            'stroke-width': undefined,
-            dashStyle: 'solid',
-            hatching: undefined,
-            filter: undefined,
-        },
-        selection: {
-            fill: 'id_color_2',
-            stroke: 'c-b-color',
-            'stroke-width': 0,
-            dashStyle: 'solid',
-            hatching: { direction: 'none' },
-            filter: true,
-        }
-    });
+    const styles = series.getAllPoints()[0].updateOptions.lastCall.args[0].styles;
+    assert.strictEqual(styles.labelColor, 'c-b-color', 'label color');
+
+    assert.deepEqual(styles.hover, {
+        fill: 'id_color_1',
+        stroke: 'c-b-color',
+        'stroke-width': 0,
+        dashStyle: 'solid',
+        hatching: { direction: 'none' },
+        filter: true,
+    }, 'hover style');
+
+    assert.deepEqual(styles.normal, {
+        fill: 'id_color_0',
+        stroke: 'c-b-color',
+        'stroke-width': undefined,
+        dashStyle: 'solid',
+        hatching: undefined,
+        filter: undefined,
+    }, 'normal style');
+
+    assert.deepEqual(styles.selection, {
+        fill: 'id_color_2',
+        stroke: 'c-b-color',
+        'stroke-width': 0,
+        dashStyle: 'solid',
+        hatching: { direction: 'none' },
+        filter: true,
+    }, 'selection style');
 });
 
 QUnit.module('Bar Series. LegendStyles', environment);

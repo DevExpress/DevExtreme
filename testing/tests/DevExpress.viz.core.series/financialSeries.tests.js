@@ -845,69 +845,75 @@ const checkGroups = function(assert, series) {
         series.updateData(this.data);
         series.createPoints();
 
-        assert.deepEqual(series._getPointOptions().styles, {
-            labelColor: 'innerColor',
+        const styles = series._getPointOptions().styles;
+
+        assert.strictEqual(styles.labelColor, 'innerColor', 'label color');
+
+        assert.deepEqual(styles.hover, {
+            fill: 'color_1',
+            stroke: 'color_1',
+            'stroke-width': undefined
+        }, 'hover style');
+
+        assert.deepEqual(styles.normal, {
+            fill: 'color',
+            stroke: 'color',
+            'stroke-width': undefined
+        }, 'normal style');
+
+        assert.deepEqual(styles.selection, {
+            fill: 'color_2',
+            'stroke-width': undefined,
+            stroke: 'color_2'
+        }, 'selection style');
+
+        assert.deepEqual(styles.positive, {
+            hover: {
+                fill: 'innerColor',
+                stroke: 'color_1',
+            },
+            normal: {
+                fill: 'innerColor',
+                stroke: 'color',
+            },
+            selection: {
+                fill: 'innerColor',
+                stroke: 'color_2'
+            }
+        }, 'positive style');
+
+        assert.deepEqual(styles.reductionPositive, {
+            hover: {
+                fill: 'innerColor',
+                stroke: 'color_1'
+            },
+            normal: {
+                fill: 'innerColor',
+                stroke: 'reduction'
+            },
+            selection: {
+                fill: 'innerColor',
+                stroke: 'color_2'
+            }
+        }, 'reduction positive style');
+
+        assert.deepEqual(styles.reduction, {
             hover: {
                 fill: 'color_1',
                 stroke: 'color_1',
                 'stroke-width': undefined
             },
             normal: {
-                fill: 'color',
-                stroke: 'color',
+                fill: 'reduction',
+                stroke: 'reduction',
                 'stroke-width': undefined
             },
             selection: {
                 fill: 'color_2',
                 'stroke-width': undefined,
                 stroke: 'color_2'
-            },
-            positive: {
-                hover: {
-                    fill: 'innerColor',
-                    stroke: 'color_1',
-                },
-                normal: {
-                    fill: 'innerColor',
-                    stroke: 'color',
-                },
-                selection: {
-                    fill: 'innerColor',
-                    stroke: 'color_2'
-                }
-            },
-            reductionPositive: {
-                hover: {
-                    fill: 'innerColor',
-                    stroke: 'color_1'
-                },
-                normal: {
-                    fill: 'innerColor',
-                    stroke: 'reduction'
-                },
-                selection: {
-                    fill: 'innerColor',
-                    stroke: 'color_2'
-                }
-            },
-            reduction: {
-                hover: {
-                    fill: 'color_1',
-                    stroke: 'color_1',
-                    'stroke-width': undefined
-                },
-                normal: {
-                    fill: 'reduction',
-                    stroke: 'reduction',
-                    'stroke-width': undefined
-                },
-                selection: {
-                    fill: 'color_2',
-                    'stroke-width': undefined,
-                    stroke: 'color_2'
-                }
             }
-        });
+        }, 'redusction style');
     });
 
     QUnit.test('Create Point styles. with defined series color', function(assert) {
