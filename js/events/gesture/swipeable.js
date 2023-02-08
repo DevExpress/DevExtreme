@@ -27,6 +27,7 @@ const Swipeable = DOMComponent.inherit({
         return extend(this.callBase(), {
             elastic: true,
             immediate: false,
+            immediateTimeout: 180,
             direction: 'horizontal',
             itemSizeFunc: null,
             onStart: null,
@@ -70,7 +71,8 @@ const Swipeable = DOMComponent.inherit({
             elastic: this.option('elastic'),
             itemSizeFunc: this.option('itemSizeFunc'),
             direction: this.option('direction'),
-            immediate: this.option('immediate')
+            immediate: this.option('immediate'),
+            immediateTimeout: this.option('immediateTimeout'),
         };
     },
 
