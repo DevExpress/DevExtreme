@@ -6,6 +6,7 @@ import { attachInstanceToElement, getInstanceByElement } from '../../core/utils/
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
+const DISABLED_STATE_ATTR = 'aria-disabled';
 
 const forcibleWatcher = function(watchMethod, fn, callback) {
     const filteredCallback = (function() {
@@ -77,6 +78,7 @@ const CollectionItem = Class.inherit({
 
     _renderDisabled: function(value, oldValue) {
         this._$element.toggleClass(DISABLED_STATE_CLASS, !!value);
+        this._$element.attr(DISABLED_STATE_ATTR, !!value);
 
         this._updateOwnerFocus(value);
     },
