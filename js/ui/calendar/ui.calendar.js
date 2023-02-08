@@ -1035,6 +1035,7 @@ const Calendar = Editor.inherit({
         this._renderNavigator();
         this._setViewContoured(newDate);
         this._updateAriaId(newDate);
+        this._updateAriaSelected();
     },
 
     _rearrangeViews: function(offset) {
