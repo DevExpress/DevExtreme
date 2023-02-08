@@ -1381,13 +1381,16 @@ QUnit.module('keyboard navigation', {}, () => {
         const instance = $element.dxWidget('instance');
 
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class');
-
-        assert.equal($element.attr('tabindex'), null, 'element has not tabindex after focus');
+        assert.equal($element.attr('tabindex'), 0, 'element has not tabindex after focus');
 
         $element.trigger('focusin');
-        assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class after focus in disabled state');
+        assert.equal($element.hasClass(FOCUSED_STATE_CLASS), true, 'element has dx-state-focus class after focus in disabled state');
+
+        $element.trigger('focusout');
+        assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, 'element has not dx-state-focus class after focus out');
 
         instance.option('disabled', false);
+
         $element.trigger('focusin');
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), true, 'element has dx-state-focus class after focus');
     });

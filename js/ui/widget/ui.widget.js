@@ -138,7 +138,9 @@ const Widget = DOMComponent.inherit({
         this._toggleVisibility(visible);
         this._renderHint();
 
-        focusStateEnabled && this._renderFocusTarget();
+        if(focusStateEnabled) {
+            this._renderFocusTarget();
+        }
 
         this.callBase();
     },
@@ -258,7 +260,7 @@ const Widget = DOMComponent.inherit({
         if(!event.isDefaultPrevented()) {
             this._createActionByOption('onFocusIn', {
                 beforeExecute: () => this._updateFocusState(event, true),
-                excludeValidators: ['readOnly']
+                excludeValidators: ['readOnly', 'disabled']
             })({ event });
         }
     },
