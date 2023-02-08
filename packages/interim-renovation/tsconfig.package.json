@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  "outDir": "./lib",
+  "rootDir": "./src",
+  "composite": true,
+
+  "compilerOptions": {
+    "allowJs": true,
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
+    // TODO Remove
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitOverride": false,
+    "lib": [
+      "es6",
+      "es7",
+      "es2017.object",
+      "dom"
+    ],
+    "stripInternal": true,
+  },
+
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "test",
+    "__test__",
+    "lib",
+    "**/*.test.ts"
+  ]
+}

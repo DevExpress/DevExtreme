@@ -1,4 +1,4 @@
-import { ComponentWrapper as BaseComponentWrapper } from '@devextreme/interim';
+import { ComponentWrapper as BaseComponentWrapper } from '@devextreme/interim-renovation';
 
 export class ComponentWrapper extends BaseComponentWrapper {
   _createTemplateComponent(...args) {

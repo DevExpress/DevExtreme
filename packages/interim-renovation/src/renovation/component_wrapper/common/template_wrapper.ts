@@ -1,16 +1,17 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
+// eslint-disable-next-line import/named
+import { domAdapter } from '@devextreme/interim';
+// eslint-disable-next-line import/named
+import { getPublicElement } from '@devextreme/interim';
+import { JQuery as $, dxElementWrapper, DxElement } from '@devextreme/interim';
+import { FunctionTemplate } from '@devextreme/interim';
+import { noop } from '@devextreme/interim';
+import { isDefined } from '@devextreme/interim';
 import { shallowEquals } from '../../utils/shallow_equals';
-// eslint-disable-next-line import/named
-import $, { dxElementWrapper } from '../../../core/renderer';
-import domAdapter from '../../../core/dom_adapter';
-// eslint-disable-next-line import/named
-import { DxElement, getPublicElement } from '../../../core/element';
-import { FunctionTemplate } from '../../../core/templates/function_template';
-import { isDefined } from '../../../core/utils/type';
-import { noop } from '../../../core/utils/common';
 import { recordMutations } from './mutations_recording';
+
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 type UnknownRecord = Record<PropertyKey, unknown>;
@@ -136,8 +137,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
       return model !== nextModel;
     }
 
-    const { data, index } = model;
-    const { data: nextData, index: nextIndex } = nextModel;
+    const { data, index } = model!;
+    const { data: nextData, index: nextIndex } = nextModel!;
 
     if (index !== nextIndex) {
       return true;

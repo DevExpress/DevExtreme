@@ -1,9 +1,7 @@
 import { render } from 'inferno';
 import { InfernoEffectHost, hydrate } from '@devextreme/runtime/inferno';
 import { createElement } from 'inferno-create-element';
-import domAdapter from './dom_adapter';
-import { cleanDataRecursive } from './element_data';
-import injector from './utils/dependency_injector';
+import { domAdapter, injector, cleanDataRecursive } from '@devextreme/interim';
 
 const remove = (element) => {
     const { parentNode } = element;

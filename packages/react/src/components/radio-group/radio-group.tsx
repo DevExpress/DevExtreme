@@ -12,6 +12,7 @@ import {
   isValidElement,
   memo,
   PropsWithChildren,
+  Ref,
   useMemo,
   useRef,
 } from 'react';
@@ -98,14 +99,11 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
 
 const RadioGroupEditor = withEditor(forwardRef(RadioGroupInternal));
 
-//* Component={"name":"RadioGroup"}
 export type RadioGroupProps<T> = PropsWithChildren<
 EditorProps<T>
 & FocusableProps
 & WithCustomRef<RadioGroupRef>
 >;
-
+type RadioGroupType = <T>(p: RadioGroupProps<T> & { ref?: Ref<HTMLDivElement> }) => JSX.Element;
 //* Component={"name":"RadioGroup"}
-export const RadioGroup = memo(RadioGroupEditor) as <T>(
-  props: RadioGroupProps<T>,
-) => ReturnType<typeof RadioGroupEditor>;
+export const RadioGroup = memo(RadioGroupEditor) as RadioGroupType;
