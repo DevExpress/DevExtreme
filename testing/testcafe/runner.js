@@ -108,6 +108,10 @@ createTestCafe({
             }
         }
 
+        if(args.browsers === 'chrome:docker') {
+            runOptions.disableScreenshots = true;
+        }
+
         return runner.run(runOptions);
     })
     .then(failedCount => {
@@ -127,6 +131,8 @@ function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
             return 'chrome:headless --disable-gpu --window-size=1200,800';
+        case 'chrome:docker':
+            return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
 
     return browser;
