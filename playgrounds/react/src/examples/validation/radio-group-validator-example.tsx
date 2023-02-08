@@ -1,8 +1,12 @@
 import {
-  CustomRule, RadioButton,
+  CustomRule, LegacyEditorConnector, RadioButton,
   RadioGroup, RangeRule, ValidationEngineContext, ValidationGroup, Validator,
 } from '@devextreme/react';
+import TextBox from 'devextreme-react/text-box';
+import $ from 'devextreme/core/renderer';
 import { useContext } from 'react';
+
+LegacyEditorConnector.setRenderer($);
 
 const OPTIONS = [1, 2, 3, 4, 5];
 
@@ -93,6 +97,22 @@ export function RadioGroupValidatorExample() {
           </ValidationGroup>
         </div>
         <button type="button" onClick={() => validationEngine.validateGroup('first-group')}>Validate group</button>
+      </div>
+      <div className="example">
+        <div className="example__title">Using new validation with old editor:</div>
+        <div className="example__control">
+          <ValidationGroup id="legacy-validation-group">
+            <TextBox name="Legacy textbox">
+              <Validator>
+                <CustomRule
+                  message="Should be 'correct'"
+                  validationCallback={({ value }: { value: unknown }) => (value as string) === 'correct'}
+                />
+              </Validator>
+            </TextBox>
+          </ValidationGroup>
+          <button type="button" onClick={() => validationEngine.validateGroup('legacy-validation-group')}>Validate</button>
+        </div>
       </div>
     </>
   );

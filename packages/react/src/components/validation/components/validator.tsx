@@ -1,4 +1,6 @@
-import { ValidationResult, ValidationRule } from '@devextreme/interim';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable import/exports-last */
+import { DefaultAdapter, ValidationRule } from '@devextreme/interim';
 import {
   PropsWithChildren, useContext, useEffect, useMemo, useRef,
 } from 'react';
@@ -6,15 +8,8 @@ import { EditorContext } from '../../common/contexts/editor-context';
 import { ValidationEngineContext } from '../contexts/validation-engine-context';
 import { ValidationGroupContext } from '../contexts/validation-group-context';
 import { ValidatorContext } from '../contexts/validator-context';
-import { ValidationGroupId } from '../types';
-
-interface ValidatorImpl {
-  validate: () => ValidationResult,
-  validationRules?: ValidationRule[],
-  reset: () => void,
-  on: (event: string, callback: () => void) => void,
-  off: (event: string, callback: () => void) => void,
-}
+import { ValidationGroupId, ValidatorImpl } from '../types';
+import { LegacyEditorConnector } from './legacy-editor-connector';
 
 interface ValidatorProps extends PropsWithChildren {
   validationGroup?: ValidationGroupId,
@@ -30,6 +25,7 @@ export function Validator({
   const editorContext = useContext(EditorContext);
   const validationEngine = useContext(ValidationEngineContext);
   const rules = useRef<ValidationRule[]>([]);
+  const legacyEditorAdapter = useRef<DefaultAdapter | null>(null);
   const validator = useRef<ValidatorImpl>({
     validationRules: rules.current,
     validate: () => {},
@@ -37,18 +33,33 @@ export function Validator({
     on: () => {},
     off: () => {},
   });
-  validator.current.validate = editorContext
-    ? () => {
-      const { editorName, editorValue, setEditorErrors } = editorContext;
-      const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
-      setEditorErrors(
-        validationResult.isValid
-          ? [] : validationResult.brokenRules.map((rule: ValidationRule) => rule.message),
-      );
-      return validationResult;
-    }
-    : () => ({ isValid: true });
-
+  const initializeValidationMethod = () => {
+    validator.current.validate = editorContext
+      ? () => {
+        const { editorName, editorValue, setEditorErrors } = editorContext;
+        const validationResult = validationEngine.validate(editorValue, rules.current, editorName);
+        setEditorErrors(
+          validationResult.isValid
+            ? [] : validationResult.brokenRules.map((rule: ValidationRule) => rule.message),
+        );
+        return validationResult;
+      }
+      : legacyEditorAdapter.current
+        ? () => {
+          const validationResult = validationEngine.validate(
+            legacyEditorAdapter.current.getValue(),
+            rules.current, legacyEditorAdapter.current.getName(),
+          );
+          legacyEditorAdapter.current.applyValidationResults(validationResult);
+          return validationResult;
+        }
+        : () => ({ isValid: true });
+  };
+  const setLegacyEditorAdapter = (adapter: DefaultAdapter) => {
+    legacyEditorAdapter.current = adapter;
+    initializeValidationMethod();
+  };
+  initializeValidationMethod();
   useEffect(() => {
     const validationGroup = validationGroupProp ?? validationGroupContext;
     validationEngine.registerValidatorInGroup(validationGroup, validator.current);
@@ -67,6 +78,10 @@ export function Validator({
 
   return (
     <ValidatorContext.Provider value={validatorContextValue}>
+      <LegacyEditorConnector
+        validator={validator.current}
+        setEditorAdapter={setLegacyEditorAdapter}
+      />
       {children}
     </ValidatorContext.Provider>
   );
