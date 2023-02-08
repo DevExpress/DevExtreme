@@ -659,7 +659,7 @@ module('keyboard navigation', moduleConfig, () => {
             disabled: true
         });
 
-        assert.strictEqual($element.attr('tabindex'), undefined, 'collection of radio group has not tabindex');
+        assert.strictEqual($element.attr('tabindex'), 0, 'collection of radio group has tabindex');
     });
 
     test('radio group items should not have tabIndex(T674238)', function(assert) {
