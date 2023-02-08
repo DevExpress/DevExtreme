@@ -458,11 +458,20 @@ const Calendar = Editor.inherit({
     },
 
     _initCurrentDate: function() {
-        const currentDate = this._getNormalizedDate(this._dateOption('value')) ||
-            this._getNormalizedDate(this._dateOption('values')[0]) ||
-            this._getNormalizedDate(this.option('currentDate'));
+        const multiselect = this.option('multiselect');
+        const currentDate = (multiselect ?
+            this._getNormalizedDate(this._getLowestDateInArray(this._dateOption('values'))) :
+            this._getNormalizedDate(this._dateOption('value'))
+        ) || this._getNormalizedDate(this.option('currentDate'));
 
         this.option('currentDate', currentDate);
+    },
+
+    _getLowestDateInArray: function(dates) {
+        if(!dates.length) {
+            return;
+        }
+        return new Date(Math.min(...dates));
     },
 
     _getNormalizedDate: function(date) {
@@ -771,8 +780,9 @@ const Calendar = Editor.inherit({
                 values.push(selectedValue);
             }
 
-            this._dateValue(values, e);
+            this._currentDateChanged = true;
             this.option('currentDate', isDefined(selectedValue) ? selectedValue : new Date());
+            this._dateValue(values, e);
         } else {
             this._dateValue(selectedValue, e);
         }
@@ -1263,7 +1273,6 @@ const Calendar = Editor.inherit({
         previousValue = multiselect ? previousValue.map((item) => this._convertToDate(item)) : [this._convertToDate(previousValue)];
 
         this._updateAriaSelected(value, previousValue);
-        this.option('currentDate', isDefined(value[0]) ? new Date(value[0]) : new Date());
         this._updateViewsValue(value);
     },
 
@@ -1290,6 +1299,7 @@ const Calendar = Editor.inherit({
                 } else {
                     this._updateAriaSelected([this._dateOption('value')], this._dateOption('values'),);
                 }
+                this._initCurrentDate();
                 this._updateViewsOption('multiselect', value);
                 break;
             case 'firstDayOfWeek':
@@ -1315,6 +1325,7 @@ const Calendar = Editor.inherit({
             case 'value':
                 if(!this.option('multiselect')) {
                     this._processValueChanged(value, previousValue);
+                    this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
                     this._setSubmitValue(value);
                     this.callBase(args);
                 }
@@ -1324,6 +1335,7 @@ const Calendar = Editor.inherit({
                     this._processValueChanged(value, previousValue);
                     this._raiseValuesChangeAction(value, previousValue);
                     this._saveValuesChangeEvent(undefined);
+                    !this._currentDateChanged && this.option('currentDate', this._getLowestDateInArray(this._dateOption('values')) || new Date());
                 }
                 break;
             case 'onValuesChanged':
