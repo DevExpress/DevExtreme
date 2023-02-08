@@ -1,13 +1,12 @@
-import { createSelector, createStore } from '../../index';
+import { createStore } from '../../index';
 
 const PROP1_DEFAULT = 'prop1-default';
-const PROP1_PARAM = 'param1';
 
 type Props = {
   prop1: string;
 };
 
-function createUncontrolledComponent({
+function createBindingComponent({
   onProp1Change,
   prop1Default = PROP1_DEFAULT,
 }: {
@@ -25,45 +24,48 @@ function createUncontrolledComponent({
     },
   });
 
-  const selector1 = createSelector(
-    (state: Props) => ({ ...state, param1: PROP1_PARAM }),
-    ({ prop1, param1 }) => `selected1-${param1}-${prop1}`,
-  );
-
-  let selected1 = selector1(store.getState());
-
-  store.subscribe((state) => { selected1 = selector1(state); });
-
   return {
-    selected1,
     getState: store.getState,
     updateState(state: Props) {
       store.addUpdate(() => ({ ...state }));
       store.commitUpdates();
     },
+    updateProp1(prop1: Props['prop1']) {
+      store.addUpdate((state) => ({ ...state, prop1 }));
+      store.commitUpdates();
+    },
   };
 }
 
-describe('uncontrolled component', () => {
-  it('provides selected value', () => {
-    const uncontrolledComponent = createUncontrolledComponent({
-      prop1Default: 'abc',
-    });
-
-    expect(uncontrolledComponent.selected1).toBe('selected1-param1-abc');
-  });
-
+describe('controlled component', () => {
   it('updates state', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
       updateState,
-    } = createUncontrolledComponent({
+    } = createBindingComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
     updateState({ prop1: 'def' });
+
+    expect(getState().prop1).toBe('def');
+    expect(onProp1Change).toBeCalledTimes(1);
+    expect(onProp1Change).toBeCalledWith('def');
+  });
+
+  it('updates prop', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      updateProp1,
+    } = createBindingComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    updateProp1('def');
 
     expect(getState().prop1).toBe('def');
     expect(onProp1Change).toBeCalledTimes(1);
