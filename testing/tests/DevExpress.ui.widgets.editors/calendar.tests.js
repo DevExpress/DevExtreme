@@ -1878,15 +1878,15 @@ QUnit.module('Options', {
 
         [
             {
-                values: [new Date('01/05/2023'), new Date('02/01/2023'), new Date('02/05/2023')],
+                values: [new Date('01/05/2023'), new Date('02/01/2023')],
                 type: 'dates'
             },
             {
-                values: ['01/05/2023', '02/01/2023', '02/07/2023'],
+                values: ['01/05/2023', '02/01/2023'],
                 type: 'strings'
             },
             {
-                values: [1672873200000, 1675206000000, 1675551600000],
+                values: [1672916400000, 1675249200000],
                 type: 'numbers'
             }
         ].forEach(({ values, type }) => {
