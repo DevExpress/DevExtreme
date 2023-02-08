@@ -130,14 +130,15 @@ const Widget = DOMComponent.inherit({
     },
 
     _initMarkup() {
-        const { disabled, visible } = this.option();
+        const { disabled, visible, focusStateEnabled } = this.option();
 
         this.$element().addClass('dx-widget');
 
         this._toggleDisabledState(disabled);
         this._toggleVisibility(visible);
         this._renderHint();
-        this._isFocusable() && this._renderFocusTarget();
+
+        focusStateEnabled && this._renderFocusTarget();
 
         this.callBase();
     },
@@ -193,7 +194,9 @@ const Widget = DOMComponent.inherit({
     _renderFocusState() {
         this._attachKeyboardEvents();
 
-        if(this._isFocusable()) {
+        const { focusStateEnabled } = this.option();
+
+        if(focusStateEnabled) {
             this._renderFocusTarget();
             this._attachFocusEvents();
             this._renderAccessKey();
@@ -205,12 +208,6 @@ const Widget = DOMComponent.inherit({
         const { accessKey } = this.option();
 
         $el.attr('accesskey', accessKey);
-    },
-
-    _isFocusable() {
-        const { focusStateEnabled, disabled } = this.option();
-
-        return focusStateEnabled && !disabled;
     },
 
     _eventBindingTarget() {
