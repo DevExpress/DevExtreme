@@ -74,26 +74,26 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
   });
 
   return (
-      <RadioGroupStoreContext.Provider value={store}>
-          <div
-              ref={containerRef}
-              className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
-              {...containerProps.attributes}
-              onFocus={props.onFocus}
-              onBlur={props.onBlur}
-          >
-              {props.name
-                ? Children.map(
-                  props.children,
-                  child => (
-                    isValidElement<EditorProps<T>>(child)
-                      ? cloneElement(child, { name: props.name })
-                      : child
-                  ),
-                )
-                : props.children}
-          </div>
-      </RadioGroupStoreContext.Provider>
+    <RadioGroupStoreContext.Provider value={store}>
+      <div
+        ref={containerRef}
+        className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
+        {...containerProps.attributes}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
+      >
+        {props.name
+          ? Children.map(
+            props.children,
+            child => (
+              isValidElement<EditorProps<T>>(child)
+                ? cloneElement(child, { name: props.name })
+                : child
+            ),
+          )
+          : props.children}
+      </div>
+    </RadioGroupStoreContext.Provider>
   );
 }
 

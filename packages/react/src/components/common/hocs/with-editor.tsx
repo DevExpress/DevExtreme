@@ -4,9 +4,10 @@ import {
 import { EditorProps } from '../../../internal/props';
 import { EditorContext } from '../contexts/editor-context';
 
+type EditorType<T> = ComponentType<EditorProps<T> & { ref: ForwardedRef<unknown> }>;
 // TODO: ref casted to any to work around bug with pulling types from inferno. Change it after fix.
 
-export function withEditor<T>(Component: ComponentType<EditorProps<T> & { ref: ForwardedRef<unknown> }>) {
+export function withEditor<T>(Component: EditorType<T>) {
   function Editor<V extends T>(props: EditorProps<V>, ref: ForwardedRef<unknown>) {
     const [editorValue, setEditorValue] = useState(props.value || props.defaultValue);
     const [editorErrors, setEditorErrors] = useState<string[]>();
@@ -37,7 +38,11 @@ export function withEditor<T>(Component: ComponentType<EditorProps<T> & { ref: F
           valueChange={handleValueChange as any}
           errors={editorErrors}
         />
-        {editorErrors && Array.isArray(editorErrors) ? <div>{editorErrors.join('. ')}</div> : null}
+        {editorErrors && Array.isArray(editorErrors) ? (
+          <div>
+            {editorErrors.join('. ')}
+          </div>
+        ) : null}
       </EditorContext.Provider>
     );
   }
