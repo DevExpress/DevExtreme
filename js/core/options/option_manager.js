@@ -3,7 +3,7 @@ import { noop } from '../utils/common';
 import { equals } from '../utils/comparator';
 import { extend } from '../utils/extend';
 import { isDefined, isPlainObject } from '../utils/type';
-import { normalizeOptionsPatch } from './utils';
+import { normalizeOptions } from './utils';
 
 const cachedGetters = {};
 const cachedSetters = {};
@@ -62,7 +62,7 @@ export class OptionManager {
     }
 
     set(options, value, merge, silent) {
-        options = normalizeOptionsPatch.current(options, value);
+        options = normalizeOptions(options, value);
 
         for(const name in options) {
             this._prepareRelevantNames(options, name, options[name], silent);
