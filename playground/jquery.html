@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,40 +31,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-    <div id="accordion-container"></div>
-
+    <div id="button"></div>
     <script>
-        $(function () {
-            const accordionItems = [{
-                ID: 1,
-                title: 'Super Mart of the West',
-                text: '702 SW 8th Street',
-            }, {
-                ID: 2,
-                title: 'Electronics Depot',
-                text: '2455 Paces Ferry Road NW',
-            }, {
-                ID: 3,
-                title: 'K&S Music',
-                text: '1000 Nicllet Mall',
-                disabled: true,
-            }, {
-                ID: 4,
-                title: "Tom's Club",
-                text: '999 Lake Drive',
-            }];
-
-            const accordion = $('#accordion-container').dxAccordion({
-                dataSource: accordionItems,
-                animationDuration: 300,
-                collapsible: false,
-                multiple: false,
-                selectedItems: [accordionItems[0]],
-            }).dxAccordion('instance');
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
-
 </html>
