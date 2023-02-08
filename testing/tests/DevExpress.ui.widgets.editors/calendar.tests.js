@@ -3704,6 +3704,24 @@ QUnit.module('Aria accessibility', {
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
     });
 
+    QUnit.test('aria-selected should be added to selected date cell afrer view change', function(assert) {
+        const calendar = this.$element.dxCalendar({
+            value: new Date(2023, 1, 1),
+            focusStateEnabled: true
+        }).dxCalendar('instance');
+
+        const keyboard = keyboardMock(this.$element);
+
+        let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+
+        keyboard.press('up');
+        keyboard.press('down');
+
+        $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+    });
+
     QUnit.test('cell id should be set before widget activedescendant attribute', function(assert) {
         const calendar = this.$element.dxCalendar({
             focusStateEnabled: true
