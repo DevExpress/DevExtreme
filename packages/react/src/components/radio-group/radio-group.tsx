@@ -17,10 +17,18 @@ import {
   useRef,
 } from 'react';
 import {
-  useCallbackRef, useCustomComponentRef, useSecondEffect, useStoreSelector,
+  useCallbackRef,
+  useCustomComponentRef,
+  useSecondEffect,
+  useStoreSelector,
 } from '../../internal/hooks';
-import { EditorProps, FocusableProps, WithCustomRef } from '../../internal/props';
-import { withEditor } from '../common/hocs/with-editor';
+import {
+  CssForwardProps,
+  EditorProps,
+  FocusableProps,
+  WithCustomRef,
+} from '../../internal/props';
+import { withEditor } from '../common';
 import { RadioGroupStoreContext } from '../radio-common';
 
 import '@devextreme/styles/src/radio-group/radio-group.scss';
@@ -29,7 +37,7 @@ export type RadioGroupRef = {
   focus(options?: FocusOptions): void,
 };
 
-function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
+function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // NOTE: Workaround for the useImperativeHandler hook.
@@ -77,7 +85,8 @@ function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>) {
     <RadioGroupStoreContext.Provider value={store}>
       <div
         ref={containerRef}
-        className={`dxr-radio-group ${containerProps.cssClass.join(' ')}`}
+        className={`dxr-radio-group ${containerProps.cssClass.join(' ')} ${props.className ?? ''}`}
+        style={props.style ?? {}}
         {...containerProps.attributes}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
@@ -102,6 +111,7 @@ const RadioGroupEditor = withEditor(forwardRef(RadioGroupInternal));
 export type RadioGroupProps<T> = PropsWithChildren<
 EditorProps<T>
 & FocusableProps
+& CssForwardProps
 & WithCustomRef<RadioGroupRef>
 >;
 type RadioGroupType = <T>(p: RadioGroupProps<T> & { ref?: Ref<HTMLDivElement> }) => JSX.Element;

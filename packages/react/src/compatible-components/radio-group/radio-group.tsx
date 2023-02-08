@@ -42,9 +42,11 @@ export function RadioGroupCompatible<T>({
   itemComponent: ItemComponent,
   valueExpr,
   displayExpr,
-  ...otherProps
+  className,
+  style,
+  ...restProps
 }: CompatibleRadioGroupProps<T>) {
-  useCompatibleLifecycle(otherProps);
+  useCompatibleLifecycle(restProps);
 
   const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
   const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
@@ -59,31 +61,35 @@ export function RadioGroupCompatible<T>({
     return getItemLabel(item);
   };
 
+  const cssStyle = {
+    ...style,
+    width: restProps.width || '',
+    height: restProps.height || '',
+  };
+
   return (
-    (otherProps.visible ?? true)
+    (restProps.visible ?? true)
       ? (
-        // NOTE: It's a temporary solution
-        // because style & class wasn't added to base component props yet.
-        <div style={{ width: otherProps.width, height: otherProps.height }}>
-          <RadioGroup<T>
-            {...otherProps}
-            shortcutKey={otherProps.accessKey}
-            onFocus={otherProps.onFocusIn}
-            onBlur={otherProps.onFocusOut}
-          >
-            {items.map((item, index) => {
-              const value = getItemValue(item);
-              const key = `${value}-${index}`;
-              return (
-                <RadioButton
-                  key={key}
-                  value={value}
-                  label={renderLabel(item, index)}
-                />
-              );
-            })}
-          </RadioGroup>
-        </div>
+        <RadioGroup<T>
+          {...restProps}
+          className={className}
+          style={cssStyle}
+          shortcutKey={restProps.accessKey}
+          onFocus={restProps.onFocusIn}
+          onBlur={restProps.onFocusOut}
+        >
+          {items.map((item, index) => {
+            const value = getItemValue(item);
+            const key = `${value}-${index}`;
+            return (
+              <RadioButton
+                key={key}
+                value={value}
+                label={renderLabel(item, index)}
+              />
+            );
+          })}
+        </RadioGroup>
       )
       : null
   );

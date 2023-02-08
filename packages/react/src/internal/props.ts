@@ -37,6 +37,11 @@ export type WithCustomRef<TRef> = {
   componentRef?: RefObject<TRef>;
 };
 
+export type CssForwardProps = {
+  className?: string;
+  style?: Record<string, string>;
+};
+
 // --- compat ---
 export type CompatibleOmittedProps = keyof FocusablePropsCompatible
 & RootContainerDomOptions['accessKey'];

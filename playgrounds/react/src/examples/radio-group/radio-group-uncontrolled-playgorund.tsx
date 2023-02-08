@@ -1,5 +1,7 @@
 import { RadioButton, RadioGroup, RadioGroupRef } from '@devextreme/react';
-import { ChangeEvent, useReducer, useRef } from 'react';
+import {
+  ChangeEvent, useMemo, useReducer, useRef,
+} from 'react';
 
 interface PlaygroundBtnData {
   value: string;
@@ -14,6 +16,8 @@ interface PlaygroundBaseDomSettings {
   accessKey: string;
   disabled: boolean;
   hint?: string;
+  cssClass?: string;
+  cssStyles: Record<string, string>;
 }
 
 interface PlaygroundState {
@@ -33,10 +37,35 @@ type Actions =
   | { type: 'setAccessKey', accessKey: string }
   | { type: 'setDisabled', disabled: boolean }
   | { type: 'setHint', hint?: string }
+  | { type: 'setCssClass', cssClass?: string }
+  | { type: 'setCssStylesJson', cssStylesJson: string }
   | { type: 'setButtonLabel', idx: number, label?: string }
   | { type: 'setButtonValue', idx: number, value?: string }
   | { type: 'removeButton' }
   | { type: 'addButton' };
+
+function setCssStylesJson(
+  state: PlaygroundState,
+  json: string,
+): PlaygroundState {
+  let styles: string | Record<string, string> = {};
+
+  try {
+    styles = JSON.parse(json);
+    styles = typeof styles === 'string' ? {} : styles;
+  } catch {
+    // eslint-disable-next-line no-console
+    console.warn(`Invalid css styles: ${json}`);
+  }
+
+  return {
+    ...state,
+    baseSettings: {
+      ...state.baseSettings,
+      cssStyles: styles as Record<string, string>,
+    },
+  };
+}
 
 function playgroundReducer(
   state: PlaygroundState,
@@ -61,6 +90,10 @@ function playgroundReducer(
       return { ...state, baseSettings: { ...state.baseSettings, disabled: action.disabled } };
     case 'setHint':
       return { ...state, baseSettings: { ...state.baseSettings, hint: action.hint } };
+    case 'setCssClass':
+      return { ...state, baseSettings: { ...state.baseSettings, cssClass: action.cssClass } };
+    case 'setCssStylesJson':
+      return setCssStylesJson(state, action.cssStylesJson);
     case 'setButtonLabel':
       return {
         ...state,
@@ -114,8 +147,15 @@ export function RadioGroupUncontrolledPlayground() {
       accessKey: 'b',
       disabled: false,
       hint: 'Hello!',
+      cssClass: 'example-css-class',
+      cssStyles: { display: 'block' },
     },
   });
+
+  const cssStylesString = useMemo(
+    () => JSON.stringify(state.baseSettings.cssStyles),
+    [],
+  );
 
   return (
     <div className="example">
@@ -129,11 +169,14 @@ export function RadioGroupUncontrolledPlayground() {
             defaultValue={state.groupValue}
             valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
             focusStateEnabled={state.baseSettings.focusCss}
+            tabIndex={state.baseSettings.tabIndex}
             hoverStateEnabled={state.baseSettings.hoverCss}
             activeStateEnabled={state.baseSettings.activeCss}
             shortcutKey={state.baseSettings.accessKey}
             disabled={state.baseSettings.disabled}
             hint={state.baseSettings.hint}
+            className={state.baseSettings.cssClass}
+            style={state.baseSettings.cssStyles}
             onFocus={() => dispatch({ type: 'setFocus', focused: true })}
             onBlur={() => dispatch({ type: 'setFocus', focused: false })}
           >
@@ -290,6 +333,28 @@ export function RadioGroupUncontrolledPlayground() {
             onChange={(
               event: ChangeEvent<HTMLInputElement>,
             ) => { dispatch({ type: 'setHint', hint: event?.target?.value }); }}
+          />
+        </span>
+      </div>
+      <div className="example__play-part">
+        <span className="example__block">
+          <span>CSS classes:</span>
+          <input
+            type="text"
+            className="example-input"
+            value={state.baseSettings.cssClass}
+            onChange={(
+              event: ChangeEvent<HTMLInputElement>,
+            ) => { dispatch({ type: 'setCssClass', cssClass: event?.target?.value }); }}
+          />
+          <span>CSS styles JSON:</span>
+          <input
+            type="text"
+            className="example-input"
+            defaultValue={cssStylesString}
+            onBlur={(
+              event: ChangeEvent<HTMLInputElement>,
+            ) => { dispatch({ type: 'setCssStylesJson', cssStylesJson: event?.target?.value }); }}
           />
         </span>
       </div>

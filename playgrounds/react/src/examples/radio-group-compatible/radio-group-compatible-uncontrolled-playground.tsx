@@ -1,5 +1,7 @@
 import { RadioGroupCompatible, RadioGroupRef } from '@devextreme/react';
-import { ChangeEvent, useReducer, useRef } from 'react';
+import {
+  ChangeEvent, useMemo, useReducer, useRef,
+} from 'react';
 
 interface PlaygroundBtnData {
   value: string;
@@ -14,6 +16,8 @@ interface PlaygroundBaseDomSettings {
   accessKey: string;
   disabled: boolean;
   hint?: string;
+  cssClass?: string;
+  cssStyles: Record<string, string>;
   width?: string;
   height?: string;
   logOnLifecycle: boolean;
@@ -38,6 +42,8 @@ type Actions =
   | { type: 'setAccessKey', accessKey: string }
   | { type: 'setDisabled', disabled: boolean }
   | { type: 'setHint', hint?: string }
+  | { type: 'setCssClass', cssClass?: string }
+  | { type: 'setCssStylesJson', cssStylesJson: string }
   | { type: 'setWidth', width?: string }
   | { type: 'setHeight', height?: string }
   | { type: 'setLogOnLifecycle', enabled: boolean }
@@ -47,6 +53,29 @@ type Actions =
   | { type: 'removeButton' }
   | { type: 'addButton' }
   | { type: 'setComponentMounted', mounted: boolean; };
+
+function setCssStylesJson(
+  state: PlaygroundState,
+  json: string,
+): PlaygroundState {
+  let styles: string | Record<string, string> = {};
+
+  try {
+    styles = JSON.parse(json);
+    styles = typeof styles === 'string' ? {} : styles;
+  } catch {
+    // eslint-disable-next-line no-console
+    console.warn(`Invalid css styles: ${json}`);
+  }
+
+  return {
+    ...state,
+    baseSettings: {
+      ...state.baseSettings,
+      cssStyles: styles as Record<string, string>,
+    },
+  };
+}
 
 function playgroundReducer(
   state: PlaygroundState,
@@ -71,6 +100,10 @@ function playgroundReducer(
       return { ...state, baseSettings: { ...state.baseSettings, disabled: action.disabled } };
     case 'setHint':
       return { ...state, baseSettings: { ...state.baseSettings, hint: action.hint } };
+    case 'setCssClass':
+      return { ...state, baseSettings: { ...state.baseSettings, cssClass: action.cssClass } };
+    case 'setCssStylesJson':
+      return setCssStylesJson(state, action.cssStylesJson);
     case 'setWidth':
       return { ...state, baseSettings: { ...state.baseSettings, width: action.width } };
     case 'setHeight':
@@ -135,9 +168,11 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
       tabIndex: 0,
       hoverCss: true,
       activeCss: true,
-      accessKey: 'b',
+      accessKey: 'a',
       disabled: false,
       hint: 'Hello!',
+      cssClass: 'example-css-class',
+      cssStyles: { display: 'block' },
       width: '',
       height: '',
       logOnLifecycle: false,
@@ -150,6 +185,11 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
   const onInitialized = () => { state.baseSettings.logOnLifecycle && console.log('onInitialized'); };
   const onDisposing = () => { state.baseSettings.logOnLifecycle && console.log('onDisposing'); };
   /* eslint-enable @typescript-eslint/no-unused-expressions, no-alert */
+
+  const cssStylesString = useMemo(
+    () => JSON.stringify(state.baseSettings.cssStyles),
+    [],
+  );
 
   return (
     <div className="example">
@@ -175,6 +215,8 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
                   activeStateEnabled={state.baseSettings.activeCss}
                   disabled={state.baseSettings.disabled}
                   hint={state.baseSettings.hint}
+                  className={state.baseSettings.cssClass}
+                  style={state.baseSettings.cssStyles}
                   // compatible options
                   accessKey={state.baseSettings.accessKey}
                   width={state.baseSettings.width}
@@ -350,7 +392,31 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
           />
         </span>
       </div>
+      <div className="example__play-part">
+        <span className="example__block">
+          <span>CSS classes:</span>
+          <input
+            type="text"
+            className="example-input"
+            value={state.baseSettings.cssClass}
+            onChange={(
+              event: ChangeEvent<HTMLInputElement>,
+            ) => { dispatch({ type: 'setCssClass', cssClass: event?.target?.value }); }}
+          />
+          <span>CSS styles JSON:</span>
+          <input
+            type="text"
+            className="example-input"
+            defaultValue={cssStylesString}
+            onBlur={(
+              event: ChangeEvent<HTMLInputElement>,
+            ) => { dispatch({ type: 'setCssStylesJson', cssStylesJson: event?.target?.value }); }}
+          />
+        </span>
+      </div>
+
       <h4> Compatible options </h4>
+
       <div className="example__play-part">
         <div className="example__play-part">
           <span className="example__block">
