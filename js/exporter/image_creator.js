@@ -603,14 +603,14 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                 const onDone = () => {
                     context.restore();
                 };
-                const d = drawCanvasElements(element.childNodes, context, options, shared);
+                const promise = drawCanvasElements(element.childNodes, context, options, shared);
 
-                if(isPromise(d)) {
-                    d.then(onDone);
+                if(isPromise(promise)) {
+                    promise.then(onDone);
                 } else {
                     onDone();
                 }
-                return d;
+                return promise;
             }
             case 'defs':
                 return drawCanvasElements(element.childNodes, context, {}, shared);
@@ -665,7 +665,7 @@ function getPattern(context, pattern, shared, parentOptions) {
     const patternCanvas = imageCreator._createCanvas(options.width, options.height, 0);
     const patternContext = patternCanvas.getContext('2d');
 
-    const d = drawCanvasElements(pattern.childNodes, patternContext, options, shared);
+    const promise = drawCanvasElements(pattern.childNodes, patternContext, options, shared);
     const onDone = () => {
         context.fillStyle = context.createPattern(patternCanvas, 'repeat');
         context.globalAlpha = parentOptions.fillOpacity;
@@ -673,13 +673,13 @@ function getPattern(context, pattern, shared, parentOptions) {
         context.globalAlpha = 1;
     };
 
-    if(isPromise(d)) {
-        d.then(onDone);
+    if(isPromise(promise)) {
+        promise.then(onDone);
     } else {
         onDone();
     }
 
-    return d;
+    return promise;
 }
 
 function fillElement(context, options, shared) {
