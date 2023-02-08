@@ -169,6 +169,7 @@ export function RadioGroupUncontrolledPlayground() {
             defaultValue={state.groupValue}
             valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
             focusStateEnabled={state.baseSettings.focusCss}
+            tabIndex={state.baseSettings.tabIndex}
             hoverStateEnabled={state.baseSettings.hoverCss}
             activeStateEnabled={state.baseSettings.activeCss}
             shortcutKey={state.baseSettings.accessKey}
