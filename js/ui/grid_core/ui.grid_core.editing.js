@@ -2605,7 +2605,7 @@ export const editingModule = {
                 _renderCore: function(change) {
                     this.callBase.apply(this, arguments);
 
-                    return this._waitAsyncTemplates(change, true).done(() => {
+                    return this.waitAsyncTemplates(change, true).done(() => {
                         this._editingController._focusEditorIfNeed();
                     });
                 }
