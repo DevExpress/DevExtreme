@@ -1,6 +1,6 @@
 import { createSelector, createStore } from '../../index';
 import {
-  getParam1,
+  PARAM1_DEFAULT,
   PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, selectProp1, validateProp1,
 } from './shared';
 
@@ -24,8 +24,10 @@ function createUncontrolledComponent({
     validateProp1,
   ]);
 
+  let param1 = PARAM1_DEFAULT;
+
   const selector1 = createSelector(
-    (state: Props) => ({ ...state, ...getParam1() }),
+    (state: Props) => ({ ...state, param1 }),
     selectProp1,
   );
 
@@ -43,6 +45,9 @@ function createUncontrolledComponent({
     updateState(state: Props) {
       store.addUpdate(() => ({ ...state }));
       store.commitUpdates();
+    },
+    setParam1(value: string) {
+      param1 = value;
     },
   };
 }
@@ -67,16 +72,18 @@ describe('uncontrolled component', () => {
     const {
       getState,
       getViewModel,
+      setParam1,
       updateState,
     } = createUncontrolledComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     updateState({ prop1: 'def' });
 
     expect(getState().prop1).toBe('def');
-    expect(getViewModel().selected1).toBe('selected1-param1-def');
+    expect(getViewModel().selected1).toBe('selected1-newParam1-def');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
   });
@@ -102,16 +109,18 @@ describe('uncontrolled component with validator', () => {
     const {
       getState,
       getViewModel,
+      setParam1,
       updateState,
     } = createUncontrolledComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     updateState({ prop1: PROP1_INVALID });
 
     expect(getState().prop1).toBe(PROP1_VALID);
-    expect(getViewModel().selected1).toBe(`selected1-param1-${PROP1_VALID}`);
+    expect(getViewModel().selected1).toBe(`selected1-newParam1-${PROP1_VALID}`);
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });

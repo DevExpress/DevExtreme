@@ -1,6 +1,6 @@
 import { createSelector, createStore } from '../../index';
 import {
-  getParam1,
+  PARAM1_DEFAULT,
   PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, selectProp1, validateProp1,
 } from './shared';
 
@@ -24,8 +24,10 @@ function createControlledComponent({
     validateProp1,
   ]);
 
+  let param1 = PARAM1_DEFAULT;
+
   const selector1 = createSelector(
-    (state: Props) => ({ ...state, ...getParam1() }),
+    (state: Props) => ({ ...state, param1 }),
     selectProp1,
   );
 
@@ -47,6 +49,9 @@ function createControlledComponent({
     updateProp1(prop1: Props['prop1']) {
       store.addUpdate((state) => ({ ...state, prop1 }));
       store.commitPropsUpdates();
+    },
+    setParam1(value: string) {
+      param1 = value;
     },
   };
 }
@@ -72,11 +77,13 @@ describe('controlled component', () => {
       getState,
       getViewModel,
       suggestStateUpdate,
+      setParam1,
     } = createControlledComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     suggestStateUpdate({ prop1: 'def' });
 
     expect(getState().prop1).toBe('abc');
@@ -96,16 +103,18 @@ describe('controlled component', () => {
       getState,
       getViewModel,
       suggestStateUpdate,
+      setParam1,
       updateProp1,
     } = createControlledComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     suggestStateUpdate({ prop1: 'def' });
 
     expect(getState().prop1).toBe('DEF');
-    expect(getViewModel().selected1).toBe('selected1-param1-DEF');
+    expect(getViewModel().selected1).toBe('selected1-newParam1-DEF');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
   });
@@ -132,11 +141,13 @@ describe('controlled component with validator', () => {
       getState,
       getViewModel,
       suggestStateUpdate,
+      setParam1,
     } = createControlledComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     suggestStateUpdate({ prop1: PROP1_INVALID });
 
     expect(getState().prop1).toBe('abc');
@@ -156,16 +167,18 @@ describe('controlled component with validator', () => {
       getState,
       getViewModel,
       suggestStateUpdate,
+      setParam1,
       updateProp1,
     } = createControlledComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     suggestStateUpdate({ prop1: PROP1_INVALID });
 
     expect(getState().prop1).toBe(PROP1_VALID.toUpperCase());
-    expect(getViewModel().selected1).toBe(`selected1-param1-${PROP1_VALID.toUpperCase()}`);
+    expect(getViewModel().selected1).toBe(`selected1-newParam1-${PROP1_VALID.toUpperCase()}`);
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });
