@@ -438,6 +438,28 @@ describe('Widget\'s container manipulations', () => {
     expect($('#components').children().get(1)).toBe($('#component').get(0));
   });
 
+  it('component container should not change its position after recreating', () => {
+    /* This test is also relevant when the component is used in <React.StrictMode> */
+    const instance = $('#component').dxTestWidget({}).dxTestWidget('instance');
+
+    $('#components').append($('<div>')).prepend($('<div>'));
+
+    instance.dispose();
+    instance._initMarkup();
+
+    expect($('#components').children().get(1)).toBe($('#component').get(0));
+  });
+
+  it('component container should not change its position after repaint', () => {
+    const instance = $('#component').dxTestWidget({}).dxTestWidget('instance');
+
+    $('#components').append($('<div>')).prepend($('<div>'));
+
+    instance.repaint();
+
+    expect($('#components').children().get(1)).toBe($('#component').get(0));
+  });
+
   it('should be rendered not in "div" container', () => {
     document.body.innerHTML = `
       <div id="components">

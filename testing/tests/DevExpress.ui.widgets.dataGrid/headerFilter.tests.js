@@ -4411,6 +4411,63 @@ QUnit.module('Header Filter with real columnsController', {
             assert.strictEqual($listItemElements.eq(1).text(), 'value0');
             assert.strictEqual($listItemElements.eq(-1).text(), 'value39');
         });
+
+        // T1133935
+        [true, false].forEach((syncLookupFilterValues) => {
+            [true, false].forEach((lookupDataSourceHasNullItem) => {
+                QUnit.test(`Header filter should not contain two blank items if dataSource has item with nullish lookup value,
+                        syncLookupFilterValues = ${syncLookupFilterValues}
+                        lookupOptimization = ${hasLookupOptimization}
+                        lookupDataSourceHasNullItem = ${lookupDataSourceHasNullItem}`,
+                function(assert) {
+                    const lookupDataSource = [
+                        { id: 1, value: 'value1' },
+                        { id: 2, value: 'value2' }
+                    ];
+
+                    if(lookupDataSourceHasNullItem) {
+                        lookupDataSource.unshift({ id: null, value: null });
+                    }
+
+                    // arrange
+                    this.options.columns = [{
+                        dataField: 'column1',
+                        allowFiltering: true,
+                        lookup: {
+                            dataSource: lookupDataSource,
+                            valueExpr: 'id',
+                            displayExpr: 'value',
+                        },
+                        calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                    }];
+
+                    this.options.dataSource = [
+                        { column1: 1, text: 'value1' },
+                        { column1: 2, text: 'value2' },
+                        { column1: null, text: null, },
+                    ];
+
+
+                    this.options.syncLookupFilterValues = syncLookupFilterValues;
+
+                    const $testElement = $('#container');
+
+                    this.setupDataGrid();
+                    this.headerFilterView.render($testElement);
+
+                    // act
+                    this.headerFilterController.showHeaderFilterMenu(0);
+
+                    // assert
+                    const $popupContent = this.headerFilterView.getPopupContainer().$content();
+                    const $listItemElements = $popupContent.find('.dx-list-item-content');
+                    assert.equal($listItemElements.length, 3, 'count list item');
+                    assert.strictEqual($listItemElements.eq(0).text(), '(Blanks)');
+                    assert.strictEqual($listItemElements.eq(1).text(), 'value1');
+                    assert.strictEqual($listItemElements.eq(2).text(), 'value2');
+                });
+            });
+        });
     });
 
     // T938460
@@ -4460,6 +4517,7 @@ QUnit.module('Header Filter with real columnsController', {
             }]
         };
         this.setupDataGrid();
+        this.columnHeadersView.render($testElement);
         this.columnHeadersView.render($testElement);
         this.headerFilterView.render($testElement);
 
