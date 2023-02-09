@@ -588,6 +588,17 @@ QUnit.test('gesture should not be started immediately without detected direction
     pointer.start().down().move(0).up();
 });
 
+QUnit.test('gesture should be started immediately without detected direction if immediateTimeout is 0', function(assert) {
+    assert.expect(1);
+
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 0, direction: 'horizontal' }, function() {
+        assert.ok(true, 'swipestart was fired');
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(0).up();
+});
+
 QUnit.test('gesture should be started with wrong direction after timeout', function(assert) {
     let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
@@ -596,10 +607,35 @@ QUnit.test('gesture should be started with wrong direction after timeout', funct
     const pointer = pointerMock($element);
 
     pointer.start().down().move(0, 1);
-    assert.equal(swipeFired, 0, 'swipestart was fired');
+    assert.equal(swipeFired, 0, 'swipestart was not fired');
     this.clock.tick(180);
     pointer.move(0, 1);
     assert.equal(swipeFired, 1, 'swipestart was fired');
+});
+
+QUnit.test('gesture should be started with wrong direction after timeout, immediateTimeout: 100', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 100, direction: 'horizontal' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(0, 1);
+    assert.strictEqual(swipeFired, 0, 'swipestart was not fired');
+    this.clock.tick(100);
+    pointer.move(0, 1);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
+});
+
+QUnit.test('gesture should be started with wrong direction without timeout if immediateTimeout is 0', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 0, direction: 'horizontal' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(0, 1);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
 });
 
 QUnit.test('not immediate gesture should not be started with wrong direction after timeout', function(assert) {
@@ -629,6 +665,19 @@ QUnit.test('gesture should not be started with wrong direction without timeout',
     assert.equal(swipeFired, 0, 'swipestart was not fired');
 });
 
+QUnit.test('immediate gesture should be started with wrong direction without timeout if immediateTimeout is 0', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 0, direction: 'horizontal' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(0, 1);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
+    pointer.move(0, 11);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
+});
+
 QUnit.test('gesture should not be started with wrong and specified direction without timeout (horizontal)', function(assert) {
     let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
@@ -651,6 +700,29 @@ QUnit.test('gesture should not be started with wrong and specified direction wit
     assert.equal(swipeFired, 0, 'swipestart was not fired');
 });
 
+QUnit.test('immediate gesture should be started with wrong and specified direction without timeout (horizontal) if immediateTimeout is 0', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 0, direction: 'horizontal' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(5, 10);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
+});
+
+QUnit.test('immediate gesture should be started with wrong and specified direction without timeout (vertical) if immediateTimeout is 0', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 0, direction: 'vertical' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(10, 5);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
+});
+
+
 QUnit.test('second gesture should not be started with wrong direction without timeout', function(assert) {
     let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
@@ -660,11 +732,47 @@ QUnit.test('second gesture should not be started with wrong direction without ti
 
     pointer.start().down().move(0, 1);
     assert.equal(swipeFired, 0, 'swipestart was not fired');
+
     this.clock.tick(170);
     pointer.up().down().move(0, 1);
+
     this.clock.tick(10);
     pointer.move(0, 1);
     assert.equal(swipeFired, 0, 'swipestart was not fired');
+});
+
+QUnit.test('second gesture should not be started with wrong direction without timeout, immediateTimeout: 100', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 100, direction: 'horizontal' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(0, 1);
+    assert.strictEqual(swipeFired, 0, 'swipestart was not fired');
+
+    this.clock.tick(90);
+    pointer.up().down().move(0, 1);
+    assert.strictEqual(swipeFired, 0, 'swipestart was not fired');
+
+    this.clock.tick(100);
+    pointer.move(0, 1);
+    assert.strictEqual(swipeFired, 1, 'swipestart was fired');
+});
+
+QUnit.test('second gesture should be started with wrong direction without timeout if immediateTimeout is 0', function(assert) {
+    let swipeFired = 0;
+    const $element = $('#element').on(swipeEvents.start, { immediate: true, immediateTimeout: 0, direction: 'horizontal' }, function() {
+        swipeFired++;
+    });
+    const pointer = pointerMock($element);
+
+    pointer.start().down().move(0, 1);
+    assert.strictEqual(swipeFired, 1, 'swipestart was not fired');
+
+    pointer.up().down().move(0, 1);
+    pointer.move(0, 1);
+    assert.strictEqual(swipeFired, 2, 'swipestart was not fired');
 });
 
 
