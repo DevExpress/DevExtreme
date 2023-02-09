@@ -20,6 +20,7 @@ fixture.disablePageReloads`Form`
           .ok(compareResults.errorMessages());
       }).before(async () => createWidget('dxForm', {
         width: 1200,
+        height: 800,
         labelMode: formLabelMode,
         colCount: 3,
         items: [
@@ -27,7 +28,7 @@ fixture.disablePageReloads`Form`
             dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
           },
           {
-            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17), labelMode: editorLabelMode },
+            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
           },
           {
             dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
@@ -42,7 +43,7 @@ fixture.disablePageReloads`Form`
             dataField: 'field6', label: { visible: labelVisible }, editorType: 'dxDropDownBox', editorOptions: { labelMode: editorLabelMode },
           },
           {
-            dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { labelMode: editorLabelMode, height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow', 'insertColumnLeft', 'insertColumnRight', 'deleteColumn'] } },
+            dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxTextArea', editorOptions: { labelMode: editorLabelMode },
           },
           {
             dataField: 'field8', label: { visible: labelVisible }, editorType: 'dxLookup', editorOptions: { labelMode: editorLabelMode },
@@ -69,10 +70,10 @@ fixture.disablePageReloads`Form`
             dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox', editorOptions: { labelMode: editorLabelMode },
           },
           {
-            dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxTextArea', editorOptions: { labelMode: editorLabelMode },
+            dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { labelMode: editorLabelMode, height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow'] } },
           },
           {
-            dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
+            dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17), labelMode: editorLabelMode },
           },
         ],
       }));
@@ -197,15 +198,16 @@ fixture.disablePageReloads`Form`
         labelMode: formLabelMode,
         showColonAfterLabel,
         width: 1200,
+        height: 800,
         colCount: 3,
         items: [
           { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
-          { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
+          { dataField: 'field2', editorType: 'dxTextBox' },
           { dataField: 'field3', editorType: 'dxCheckBox' },
           { dataField: 'field4', editorType: 'dxColorBox' },
           { dataField: 'field5', editorType: 'dxDateBox' },
           { dataField: 'field6', editorType: 'dxDropDownBox' },
-          { dataField: 'field7', editorType: 'dxHtmlEditor', editorOptions: { height: 100, toolbar: { items: ['undo', 'redo'] } } },
+          { dataField: 'field7', editorType: 'dxTextArea' },
           { dataField: 'field8', editorType: 'dxLookup' },
           { dataField: 'field9', editorType: 'dxNumberBox' },
           { dataField: 'field10', editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'] } },
@@ -214,8 +216,8 @@ fixture.disablePageReloads`Form`
           { dataField: 'field13', editorType: 'dxSlider' },
           { dataField: 'field14', editorType: 'dxSwitch' },
           { dataField: 'field15', editorType: 'dxTagBox' },
-          { dataField: 'field16', editorType: 'dxTextArea' },
-          { dataField: 'field17', editorType: 'dxTextBox' },
+          { dataField: 'field16', editorType: 'dxHtmlEditor', editorOptions: { height: 100, toolbar: { items: ['undo', 'redo'] } } },
+          { dataField: 'field17', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
         ],
       } as any;
 
