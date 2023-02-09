@@ -1,11 +1,7 @@
 import { createSelector, createStore } from '../../index';
-
-const PROP1_DEFAULT = 'prop1-default';
-const PROP1_PARAM = 'param1';
-
-type Props = {
-  prop1: string;
-};
+import {
+  PROP1_DEFAULT, PROP1_INVALID, PROP1_PARAM, PROP1_VALID, Props, validateProp1,
+} from './shared';
 
 function createUncontrolledComponent({
   onProp1Change,
@@ -23,7 +19,9 @@ function createUncontrolledComponent({
         onProp1Change?.(value);
       },
     },
-  });
+  }, [
+    validateProp1,
+  ]);
 
   const selector1 = createSelector(
     (state: Props) => ({ ...state, param1: PROP1_PARAM }),
@@ -68,5 +66,24 @@ describe('uncontrolled component', () => {
     expect(getState().prop1).toBe('def');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
+  });
+});
+
+describe('uncontrolled component with validator', () => {
+  it('updates state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      updateState,
+    } = createUncontrolledComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    updateState({ prop1: PROP1_INVALID });
+
+    expect(getState().prop1).toBe(PROP1_VALID);
+    expect(onProp1Change).toBeCalledTimes(1);
+    expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });
 });

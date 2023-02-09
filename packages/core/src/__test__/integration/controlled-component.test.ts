@@ -1,10 +1,7 @@
 import { createStore } from '../../index';
-
-const PROP1_DEFAULT = 'prop1-default';
-
-type Props = {
-  prop1: string;
-};
+import {
+  PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, validateProp1,
+} from './shared';
 
 function createControlledComponent({
   onProp1Change,
@@ -22,7 +19,9 @@ function createControlledComponent({
         onProp1Change?.(value);
       },
     },
-  });
+  }, [
+    validateProp1,
+  ]);
 
   return {
     getState: store.getState,
@@ -76,5 +75,47 @@ describe('controlled component', () => {
     expect(getState().prop1).toBe('DEF');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
+  });
+});
+
+describe('controlled component with validator', () => {
+  it('does not update state if prop is not changed', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      suggestStateUpdate,
+    } = createControlledComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    suggestStateUpdate({ prop1: PROP1_INVALID });
+
+    expect(getState().prop1).toBe('abc');
+    expect(onProp1Change).toBeCalledTimes(1);
+    expect(onProp1Change).toBeCalledWith(PROP1_VALID);
+  });
+
+  it('updates state if prop is changed', () => {
+    const onProp1Change = jest.fn().mockImplementation(
+      (prop1) => {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        updateProp1(prop1.toUpperCase());
+      },
+    );
+    const {
+      getState,
+      suggestStateUpdate,
+      updateProp1,
+    } = createControlledComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    suggestStateUpdate({ prop1: PROP1_INVALID });
+
+    expect(getState().prop1).toBe(PROP1_VALID.toUpperCase());
+    expect(onProp1Change).toBeCalledTimes(1);
+    expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });
 });
