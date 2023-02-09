@@ -19,9 +19,9 @@ fixture.disablePageReloads`Form`
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => createWidget('dxForm', {
-        width: 1000,
+        width: 1200,
         labelMode: formLabelMode,
-        colCount: 2,
+        colCount: 3,
         items: [
           {
             dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
@@ -196,7 +196,8 @@ fixture.disablePageReloads`Form`
       const options = {
         labelMode: formLabelMode,
         showColonAfterLabel,
-        width: 500,
+        width: 1200,
+        colCount: 3,
         items: [
           { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
           { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
