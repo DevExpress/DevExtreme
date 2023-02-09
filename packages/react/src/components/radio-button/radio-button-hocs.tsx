@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { createCheckedSelector, RADIO_GROUP_ACTIONS } from '@devextreme/components';
 import {
   ComponentType,
@@ -13,11 +14,12 @@ import {
   SelectedEventHandler,
 } from './types';
 
-//* Component={"name":"UncontrolledRadioButton"}
 function withUncontrolledBehavior<T>(
   RadioButton: RadioButtonRenderType<T>,
 ) {
-  function UncontrolledRadioButton({ defaultChecked, ...props }: RadioButtonRenderProps<T>) {
+  function UncontrolledRadioButtonInternal(
+    { defaultChecked, ...props }: RadioButtonRenderProps<T>,
+  ) {
     const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
     const handleSelected: SelectedEventHandler<T> = (value) => {
       setInternalChecked(true);
@@ -35,12 +37,11 @@ function withUncontrolledBehavior<T>(
       />
     );
   }
-  return UncontrolledRadioButton;
+  return UncontrolledRadioButtonInternal;
 }
 
-//* Component={"name":"CoreBoundRadioButton"}
 function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
-  function CoreBoundRadioButton({
+  function CoreBoundRadioButtonInternal({
     store,
     value,
     ...props
@@ -64,8 +65,14 @@ function withRadioGroup<T>(RadioButton: RadioButtonRenderType<T>) {
     );
   }
 
-  return CoreBoundRadioButton;
+  return CoreBoundRadioButtonInternal;
 }
+const CoreBoundRadioButtonInternal = withRadioGroup(RadioButtonInternal);
 
-export const CoreBoundRadioButton = withRadioGroup(RadioButtonInternal);
-export const UncontrolledRadioButton = withUncontrolledBehavior(RadioButtonInternal);
+const UncontrolledRadioButtonInternal = withUncontrolledBehavior(RadioButtonInternal);
+
+//* Component={"name":"CoreBoundRadioButton"}
+export const CoreBoundRadioButton = CoreBoundRadioButtonInternal;
+
+//* Component={"name":"UncontrolledRadioButton"}
+export const UncontrolledRadioButton = UncontrolledRadioButtonInternal;
