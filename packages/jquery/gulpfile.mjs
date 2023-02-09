@@ -1,5 +1,4 @@
 import gulp from 'gulp';
-import fs from 'node:fs';
 import babel from 'gulp-babel';
 import { generateInfernoFromReactComponents, ReactSrc } from './gulp/inferno-from-react.mjs';
 import './gulp/js-bundles.mjs';
@@ -10,7 +9,6 @@ function generateInfernoComponents() {
 }
 
 function patchGeneratedSources(done) {
-  fs.copyFileSync('./patch/radio-button-hocs.jsx', './src/generated/components/radio-button/radio-button-hocs.jsx');
   done();
 }
 
