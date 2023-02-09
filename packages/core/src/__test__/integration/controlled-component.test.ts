@@ -1,6 +1,7 @@
-import { createStore } from '../../index';
+import { createSelector, createStore } from '../../index';
 import {
-  PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, validateProp1,
+  getParam1,
+  PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, selectProp1, validateProp1,
 } from './shared';
 
 function createControlledComponent({
@@ -23,8 +24,22 @@ function createControlledComponent({
     validateProp1,
   ]);
 
+  const selector1 = createSelector(
+    (state: Props) => ({ ...state, ...getParam1() }),
+    selectProp1,
+  );
+
+  let selected1 = selector1(store.getState());
+
+  store.subscribe((state) => { selected1 = selector1(state); });
+
   return {
     getState: store.getState,
+    getViewModel() {
+      return {
+        selected1,
+      };
+    },
     suggestStateUpdate(state: Props) {
       store.addUpdate(() => ({ ...state }));
       store.commitUpdates();
@@ -37,10 +52,25 @@ function createControlledComponent({
 }
 
 describe('controlled component', () => {
+  it('has intial state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+    } = createControlledComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
+  });
+
   it('does not update state if prop is not changed', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
+      getViewModel,
       suggestStateUpdate,
     } = createControlledComponent({
       prop1Default: 'abc',
@@ -50,6 +80,7 @@ describe('controlled component', () => {
     suggestStateUpdate({ prop1: 'def' });
 
     expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
   });
@@ -63,6 +94,7 @@ describe('controlled component', () => {
     );
     const {
       getState,
+      getViewModel,
       suggestStateUpdate,
       updateProp1,
     } = createControlledComponent({
@@ -73,16 +105,32 @@ describe('controlled component', () => {
     suggestStateUpdate({ prop1: 'def' });
 
     expect(getState().prop1).toBe('DEF');
+    expect(getViewModel().selected1).toBe('selected1-param1-DEF');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
   });
 });
 
 describe('controlled component with validator', () => {
+  it('has intial state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+    } = createControlledComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
+  });
+
   it('does not update state if prop is not changed', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
+      getViewModel,
       suggestStateUpdate,
     } = createControlledComponent({
       prop1Default: 'abc',
@@ -92,6 +140,7 @@ describe('controlled component with validator', () => {
     suggestStateUpdate({ prop1: PROP1_INVALID });
 
     expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });
@@ -105,6 +154,7 @@ describe('controlled component with validator', () => {
     );
     const {
       getState,
+      getViewModel,
       suggestStateUpdate,
       updateProp1,
     } = createControlledComponent({
@@ -115,6 +165,7 @@ describe('controlled component with validator', () => {
     suggestStateUpdate({ prop1: PROP1_INVALID });
 
     expect(getState().prop1).toBe(PROP1_VALID.toUpperCase());
+    expect(getViewModel().selected1).toBe(`selected1-param1-${PROP1_VALID.toUpperCase()}`);
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });

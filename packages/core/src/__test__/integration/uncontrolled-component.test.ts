@@ -1,6 +1,7 @@
 import { createSelector, createStore } from '../../index';
 import {
-  PROP1_DEFAULT, PROP1_INVALID, PROP1_PARAM, PROP1_VALID, Props, validateProp1,
+  getParam1,
+  PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, selectProp1, validateProp1,
 } from './shared';
 
 function createUncontrolledComponent({
@@ -24,8 +25,8 @@ function createUncontrolledComponent({
   ]);
 
   const selector1 = createSelector(
-    (state: Props) => ({ ...state, param1: PROP1_PARAM }),
-    ({ prop1, param1 }) => `selected1-${param1}-${prop1}`,
+    (state: Props) => ({ ...state, ...getParam1() }),
+    selectProp1,
   );
 
   let selected1 = selector1(store.getState());
@@ -33,8 +34,12 @@ function createUncontrolledComponent({
   store.subscribe((state) => { selected1 = selector1(state); });
 
   return {
-    selected1,
     getState: store.getState,
+    getViewModel() {
+      return {
+        selected1,
+      };
+    },
     updateState(state: Props) {
       store.addUpdate(() => ({ ...state }));
       store.commitUpdates();
@@ -43,18 +48,25 @@ function createUncontrolledComponent({
 }
 
 describe('uncontrolled component', () => {
-  it('provides selected value', () => {
-    const uncontrolledComponent = createUncontrolledComponent({
+  it('has intial state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+    } = createUncontrolledComponent({
       prop1Default: 'abc',
+      onProp1Change,
     });
 
-    expect(uncontrolledComponent.selected1).toBe('selected1-param1-abc');
+    expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
   });
 
   it('updates state', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
+      getViewModel,
       updateState,
     } = createUncontrolledComponent({
       prop1Default: 'abc',
@@ -64,16 +76,32 @@ describe('uncontrolled component', () => {
     updateState({ prop1: 'def' });
 
     expect(getState().prop1).toBe('def');
+    expect(getViewModel().selected1).toBe('selected1-param1-def');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
   });
 });
 
 describe('uncontrolled component with validator', () => {
+  it('has intial state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+    } = createUncontrolledComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
+  });
+
   it('updates state', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
+      getViewModel,
       updateState,
     } = createUncontrolledComponent({
       prop1Default: 'abc',
@@ -83,6 +111,7 @@ describe('uncontrolled component with validator', () => {
     updateState({ prop1: PROP1_INVALID });
 
     expect(getState().prop1).toBe(PROP1_VALID);
+    expect(getViewModel().selected1).toBe(`selected1-param1-${PROP1_VALID}`);
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });
