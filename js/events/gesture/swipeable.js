@@ -20,6 +20,7 @@ const ACTION_TO_EVENT_MAP = {
     'onCancel': 'dxswipecancel'
 };
 
+const IMMEDIATE_TIMEOUT = 180;
 
 const Swipeable = DOMComponent.inherit({
 
@@ -27,7 +28,7 @@ const Swipeable = DOMComponent.inherit({
         return extend(this.callBase(), {
             elastic: true,
             immediate: false,
-            immediateTimeout: 180,
+            immediateTimeout: IMMEDIATE_TIMEOUT,
             direction: 'horizontal',
             itemSizeFunc: null,
             onStart: null,
