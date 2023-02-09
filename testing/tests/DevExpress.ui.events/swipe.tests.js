@@ -387,6 +387,19 @@ QUnit.test('default behaviour on dxpointermove should be prevented to reduce use
     $element.trigger($.Event('dxpointerup', { pointerType: 'mouse', pointers: [] }));
 });
 
+QUnit.test('Event should not be prevented to avoid the "[Intervation] error" when event is not cancelable', function(assert) {
+    const $element = $('#element');
+
+    $element.on(swipeEvents.start, noop);
+
+    $element.trigger($.Event('dxpointerdown', { pointerType: 'mouse', pageX: 200, pageY: 200, pointers: [0] }));
+
+    const moveEvent = $.Event('dxpointermove', { cancelable: false, pointerType: 'mouse', pageX: 210, pageY: 200, pointers: [0] });
+    $element.trigger(moveEvent);
+
+    assert.strictEqual(moveEvent.isDefaultPrevented(), false, 'event is not prevented');
+});
+
 
 QUnit.module('integration', moduleConfig);
 
