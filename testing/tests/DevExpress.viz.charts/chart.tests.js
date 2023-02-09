@@ -138,14 +138,14 @@ QUnit.test('Create', function(assert) {
     assert.ok(this.LayoutManager.calledWithNew());
 });
 
-QUnit.test('Chart should have default value of the aggregatebycategory = true', function(assert) {
+QUnit.test('Chart should have default value of the aggregateByCategory = true', function(assert) {
     this.createChart();
     const argumentAxisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
 
     assert.strictEqual(argumentAxisOptions.aggregateByCategory, true);
 });
 
-QUnit.test('Chart should be able to change the aggregatebycategory setting', function(assert) {
+QUnit.test('Chart should be able to change the aggregateByCategory setting', function(assert) {
     this.options = {
         argumentAxis: {
             aggregateByCategory: false
@@ -157,7 +157,7 @@ QUnit.test('Chart should be able to change the aggregatebycategory setting', fun
     assert.strictEqual(axisOptions.aggregateByCategory, false);
 });
 
-QUnit.test('Chart should change the aggregatebycategory value when the value was updated', function(assert) {
+QUnit.test('Chart should change the aggregateByCategory value when the value was updated', function(assert) {
     const chart = this.createChart();
 
     chart.option('argumentAxis', { aggregateByCategory: false });
