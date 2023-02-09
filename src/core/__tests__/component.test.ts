@@ -1196,6 +1196,7 @@ describe("component rendering", () => {
             const config = {
                 globalProperties: { name: "test"}
             };
+            // @ts-ignore
             mount(vm, { global: { config } });
             renderItemTemplate();
             expect(templateGlobalProperties).toEqual(config.globalProperties);
