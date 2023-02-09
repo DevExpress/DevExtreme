@@ -19,7 +19,7 @@ fixture.disablePageReloads`Form`
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => createWidget('dxForm', {
-        width: 1200,
+        width: 1100,
         height: 800,
         labelMode: formLabelMode,
         colCount: 3,
@@ -197,7 +197,7 @@ fixture.disablePageReloads`Form`
       const options = {
         labelMode: formLabelMode,
         showColonAfterLabel,
-        width: 1200,
+        width: 1100,
         height: 800,
         colCount: 3,
         items: [
