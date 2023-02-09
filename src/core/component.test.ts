@@ -788,12 +788,12 @@ describe("nested option", () => {
         }).$mount();
 
         const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode;
-        const expected = nestedConfig.componentInstance._watchers.length;
+        const expected = nestedConfig.componentInstance._watcher.id;
 
         vm.$props.value = 456;
 
         Vue.nextTick(() => {
-            expect(nestedConfig.componentInstance._watchers.length).toEqual(expected);
+            expect(nestedConfig.componentInstance._watcher.id).toEqual(expected);
             done();
         });
     });

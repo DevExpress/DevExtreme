@@ -43,6 +43,7 @@ describe("useLegacyTemplateEngine", () => {
             }
         }).$mount();
 
+        // @ts-ignore
         const render = WidgetClass.mock.calls[0][1].integrationOptions.templates.item.render;
         const renderedTemplate = render({
             container: document.createElement("div"),
