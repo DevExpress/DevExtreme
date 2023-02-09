@@ -1,13 +1,19 @@
 import {
-  CustomRule, RadioButton,
-  RadioGroup, RangeRule, ValidationEngineContext, ValidationGroup, Validator,
+  CustomRule, LegacyEditorConnector, RadioButton,
+  RadioGroup, RangeRule, ValidationEngineContext, ValidationGroup, ValidationGroupRef, Validator,
 } from '@devextreme/react';
-import { useContext } from 'react';
+import TextBox from 'devextreme-react/text-box';
+import $ from 'devextreme/core/renderer';
+import { useContext, useRef } from 'react';
+
+// Workaround for using old editors, renderer should be provided for LegacyEditorConnector
+LegacyEditorConnector.setRenderer($);
 
 const OPTIONS = [1, 2, 3, 4, 5];
 
 export function RadioGroupValidatorExample() {
   const validationEngine = useContext(ValidationEngineContext);
+  const firstGroupRef = useRef<ValidationGroupRef>(null);
   return (
     <>
       <div className="example">
@@ -63,7 +69,7 @@ export function RadioGroupValidatorExample() {
       <div className="example">
         <div className="example__title">Validation group validating on button click:</div>
         <div className="example__control">
-          <ValidationGroup id="first-group">
+          <ValidationGroup id="first-group" ref={firstGroupRef}>
             <RadioGroup defaultValue={OPTIONS[1]} name="validation-example-2">
               {OPTIONS.map((option) => (
                 <RadioButton key={option} value={option} label={`${option}`} />
@@ -92,7 +98,23 @@ export function RadioGroupValidatorExample() {
             </RadioGroup>
           </ValidationGroup>
         </div>
-        <button type="button" onClick={() => validationEngine.validateGroup('first-group')}>Validate group</button>
+        <button type="button" onClick={() => firstGroupRef.current?.validate()}>Validate group</button>
+      </div>
+      <div className="example">
+        <div className="example__title">Using new validation with old editor:</div>
+        <div className="example__control">
+          <ValidationGroup id="legacy-validation-group">
+            <TextBox name="Legacy textbox">
+              <Validator>
+                <CustomRule
+                  message="Should be 'correct'"
+                  validationCallback={({ value }: { value: unknown }) => (value as string) === 'correct'}
+                />
+              </Validator>
+            </TextBox>
+          </ValidationGroup>
+          <button type="button" onClick={() => validationEngine.validateGroup('legacy-validation-group')}>Validate</button>
+        </div>
       </div>
     </>
   );

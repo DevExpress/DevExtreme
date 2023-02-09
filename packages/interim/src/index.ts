@@ -2,10 +2,11 @@ import registerComponent from './core/component_registrator';
 import { compileGetter } from './core/utils/data';
 import type { ItemLike } from './ui/collection/ui.collection_widget.base';
 import ValidationEngine from './ui/validation_engine';
+import DefaultAdapter from './ui/validation/default_adapter';
 
 export type { ValidationRule, ValidationRuleType, CompareRule, CustomRule, EmailRule, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule } from './ui/validation_rules';
 export type { ValidationResult } from './ui/validator';
-export { registerComponent, ItemLike, compileGetter, ValidationEngine };
+export { registerComponent, ItemLike, compileGetter, ValidationEngine, DefaultAdapter as EditorValidationAdapter };
 export { getWindow } from './core/utils/window';
 
 import KeyboardProcessor from './events/core/keyboard_processor';
