@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/exports-last */
-import { DefaultAdapter, ValidationRule } from '@devextreme/interim';
+import { EditorValidationAdapter, ValidationRule } from '@devextreme/interim';
 import {
   PropsWithChildren, useContext, useEffect, useMemo, useRef,
 } from 'react';
@@ -27,7 +27,7 @@ export function Validator({
   const editorContext = useContext(EditorContext);
   const validationEngine = useContext(ValidationEngineContext);
   const rules = useRef<ValidationRule[]>([]);
-  const legacyEditorAdapter = useRef<DefaultAdapter | null>(null);
+  const legacyEditorAdapter = useRef<EditorValidationAdapter | null>(null);
   const validator = useRef<ValidatorImpl>({
     validationRules: rules.current,
     validate: () => {},
@@ -47,7 +47,7 @@ export function Validator({
     }
     : () => emptyValidatonResult;
 
-  const setLegacyEditorAdapter = (adapter: DefaultAdapter) => {
+  const setLegacyEditorAdapter = (adapter: EditorValidationAdapter) => {
     legacyEditorAdapter.current = adapter;
     validator.current.validate = () => {
       if (legacyEditorAdapter.current) {

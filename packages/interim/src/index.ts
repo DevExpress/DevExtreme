@@ -6,7 +6,7 @@ import DefaultAdapter from './ui/validation/default_adapter';
 
 export type { ValidationRule, ValidationRuleType, CompareRule, CustomRule, EmailRule, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule } from './ui/validation_rules';
 export type { ValidationResult } from './ui/validator';
-export { registerComponent, ItemLike, compileGetter, ValidationEngine, DefaultAdapter };
+export { registerComponent, ItemLike, compileGetter, ValidationEngine, DefaultAdapter as EditorValidationAdapter };
 export { getWindow } from './core/utils/window';
 
 import KeyboardProcessor from './events/core/keyboard_processor';
