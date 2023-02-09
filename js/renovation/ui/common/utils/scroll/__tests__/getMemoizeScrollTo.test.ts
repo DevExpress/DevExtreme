@@ -13,7 +13,7 @@ describe('Scroll memoize scrollTo', () => {
 
   it('should call origin scrollTo first time', () => {
     const scrollParams = { top: 10 };
-    const cachedScrollTo = getMemoizeScrollTo(scrollableMock);
+    const cachedScrollTo = getMemoizeScrollTo(() => scrollableMock);
 
     cachedScrollTo(scrollParams);
 
@@ -32,7 +32,7 @@ describe('Scroll memoize scrollTo', () => {
     });
 
     const scrollParams = { top: 10 };
-    const cachedScrollTo = getMemoizeScrollTo(scrollableMock);
+    const cachedScrollTo = getMemoizeScrollTo(() => scrollableMock);
 
     cachedScrollTo(scrollParams);
 
@@ -41,7 +41,7 @@ describe('Scroll memoize scrollTo', () => {
 
   it('should call origin scrollTo if params changed', () => {
     const scrollParams = [{ top: 10 }, { top: 10, left: 10 }];
-    const cachedScrollTo = getMemoizeScrollTo(scrollableMock);
+    const cachedScrollTo = getMemoizeScrollTo(() => scrollableMock);
 
     cachedScrollTo(scrollParams[0]);
     cachedScrollTo(scrollParams[1]);
@@ -52,7 +52,7 @@ describe('Scroll memoize scrollTo', () => {
 
   it('shouldn\'t call origin scrollTo if params wasn\'t change', () => {
     const scrollParams = [{ left: 10 }, { left: 10 }];
-    const cachedScrollTo = getMemoizeScrollTo(scrollableMock);
+    const cachedScrollTo = getMemoizeScrollTo(() => scrollableMock);
 
     cachedScrollTo(scrollParams[0]);
     cachedScrollTo(scrollParams[1]);
@@ -62,12 +62,23 @@ describe('Scroll memoize scrollTo', () => {
 
   it('shouldn\'t call origin scrollTo if the integer part of params wasn\'t change', () => {
     const scrollParams = [{ left: 10.2 }, { left: 10.3 }, { left: 10.4 }];
-    const cachedScrollTo = getMemoizeScrollTo(scrollableMock);
+    const cachedScrollTo = getMemoizeScrollTo(() => scrollableMock);
 
     cachedScrollTo(scrollParams[0]);
     cachedScrollTo(scrollParams[1]);
     cachedScrollTo(scrollParams[2]);
 
     expect(scrollableMock.scrollTo).toBeCalledTimes(1);
+  });
+
+  it('should call origin scroll to if params wasn\'t change and force flag is true', () => {
+    const scrollParams = { left: 10 };
+    const cachedScrollTo = getMemoizeScrollTo(() => scrollableMock);
+
+    cachedScrollTo(scrollParams, true);
+    cachedScrollTo(scrollParams, true);
+    cachedScrollTo(scrollParams, true);
+
+    expect(scrollableMock.scrollTo).toBeCalledTimes(3);
   });
 });
