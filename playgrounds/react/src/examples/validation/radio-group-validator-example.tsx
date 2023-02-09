@@ -6,6 +6,7 @@ import TextBox from 'devextreme-react/text-box';
 import $ from 'devextreme/core/renderer';
 import { useContext } from 'react';
 
+// Workaround for using old editors, renderer should be provided for LegacyEditorConnector
 LegacyEditorConnector.setRenderer($);
 
 const OPTIONS = [1, 2, 3, 4, 5];
