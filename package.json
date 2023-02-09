@@ -10,23 +10,23 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "dependencies": {
-    "devextreme": "23.1-next",
     "devextreme-vue": "~23.1.0"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
-    "@types/node": "^13.11.1",
+    "@types/node": "^16.18.6",
     "@vue/compiler-sfc": "3.0.0",
     "@vue/test-utils": "^2.0.0-beta.7",
     "css-loader": "^2.1.1",
+    "devextreme": "22.2.3",
     "minimatch": "^3.0.2",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.20.3",
     "ts-loader": "^8.0.4",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
-    "typescript": "^4.0.2",
+    "typescript": "^4.7.4",
     "url-loader": "^1.1.2",
-    "vue": "3.0.0",
+    "vue": "^3.0.0",
     "vue-loader": "^16.0.0-beta.8",
     "vue-router": "^4.0.16",
     "webpack": "^4.29.2",
