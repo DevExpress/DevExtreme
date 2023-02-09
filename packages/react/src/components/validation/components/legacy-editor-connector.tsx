@@ -21,7 +21,7 @@ export function LegacyEditorConnector({ validator, setEditorAdapter }: LegacyEdi
     setEditorAdapter(editorAdapter);
   });
 
-  return <span ref={domAccessor} style={{ display: 'none' }} />;
+  return <span ref={domAccessor} style={{ display: 'contents' }} />;
 }
 
 LegacyEditorConnector.setRenderer = (newRenderer: typeof $) => {
