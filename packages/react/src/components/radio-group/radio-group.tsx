@@ -7,18 +7,18 @@ import {
 } from '@devextreme/components';
 import {
   Children,
-  cloneElement,
+  cloneElement, ForwardedRef,
   forwardRef,
   isValidElement,
   memo,
   PropsWithChildren,
   Ref,
+  useImperativeHandle,
   useMemo,
   useRef,
 } from 'react';
 import {
   useCallbackRef,
-  useCustomComponentRef,
   useSecondEffect,
   useStoreSelector,
 } from '../../internal/hooks';
@@ -26,7 +26,6 @@ import {
   CssForwardProps,
   EditorProps,
   FocusableProps,
-  WithCustomRef,
 } from '../../internal/props';
 import { withEditor } from '../common';
 import { RadioGroupStoreContext } from '../radio-common';
@@ -37,19 +36,17 @@ export type RadioGroupRef = {
   focus(options?: FocusOptions): void,
 };
 
-function RadioGroupInternal<T>({ componentRef, ...props }: RadioGroupProps<T>): JSX.Element {
+function RadioGroupInternal<T>(
+  props: RadioGroupProps<T>,
+  componentRef: ForwardedRef<RadioGroupRef>,
+): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // NOTE: Workaround for the useImperativeHandler hook.
-  useCustomComponentRef(
-    componentRef,
-    () => ({
-      focus(options?: FocusOptions) {
-        containerRef.current?.focus(options);
-      },
-    }),
-    [containerRef.current],
-  );
+  useImperativeHandle(componentRef, () => ({
+    focus(options?: FocusOptions) {
+      containerRef.current?.focus(options);
+    },
+  }), [containerRef.current]);
 
   const isValueControlled = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
@@ -112,8 +109,7 @@ export type RadioGroupProps<T> = PropsWithChildren<
 EditorProps<T>
 & FocusableProps
 & CssForwardProps
-& WithCustomRef<RadioGroupRef>
 >;
-type RadioGroupType = <T>(p: RadioGroupProps<T> & { ref?: Ref<HTMLDivElement> }) => JSX.Element;
+type RadioGroupType = <T>(p: RadioGroupProps<T> & { ref?: Ref<RadioGroupRef> }) => JSX.Element;
 //* Component={"name":"RadioGroup"}
 export const RadioGroup = memo(RadioGroupEditor) as RadioGroupType;

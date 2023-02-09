@@ -2,16 +2,18 @@
 import { RootContainerDomOptionsCompatible } from '@devextreme/components/src';
 import { DomOptionsCompatible } from '@devextreme/components/src/root-container/types';
 import { compileGetter, ItemLike } from '@devextreme/interim';
-import { ComponentType } from 'react';
+import {
+  ComponentType, ForwardedRef, forwardRef, Ref,
+} from 'react';
 import { RadioButton } from '../../components/radio-button';
 import {
   RadioGroup,
   RadioGroupProps,
+  RadioGroupRef,
 } from '../../components/radio-group';
-import { useCompatibleLifecycle } from '../../internal/hooks';
 import {
   CompatibleOmittedProps,
-  FocusablePropsCompatible, LifecyclePropsCompatible,
+  FocusablePropsCompatible,
 } from '../../internal/props';
 
 type ItemComponentProps = {
@@ -20,7 +22,6 @@ type ItemComponentProps = {
 
 type CompatibleRadioGroupProps<T> = Omit<RadioGroupProps<T>, CompatibleOmittedProps>
 & FocusablePropsCompatible
-& LifecyclePropsCompatible
 & Partial<RootContainerDomOptionsCompatible['accessKey']>
 & Partial<RootContainerDomOptionsCompatible['size']>
 & Partial<DomOptionsCompatible['visible']>
@@ -36,18 +37,19 @@ type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
 
 //* Component={"name":"RadioGroupCompatible", "jQueryRegistered":true}
-export function RadioGroupCompatible<T>({
-  items,
-  itemRender,
-  itemComponent: ItemComponent,
-  valueExpr,
-  displayExpr,
-  className,
-  style,
-  ...restProps
-}: CompatibleRadioGroupProps<T>) {
-  useCompatibleLifecycle(restProps);
-
+function RadioGroupCompatibleInternal<T>(
+  {
+    items,
+    itemRender,
+    itemComponent: ItemComponent,
+    valueExpr,
+    displayExpr,
+    className,
+    style,
+    ...restProps
+  }: CompatibleRadioGroupProps<T>,
+  componentRef: ForwardedRef<RadioGroupRef>,
+) {
   const getItemLabel = compileGetter(displayExpr || '') as LabelGetter;
   const getItemValue = compileGetter(valueExpr || '') as ValueGetter;
 
@@ -72,6 +74,7 @@ export function RadioGroupCompatible<T>({
       ? (
         <RadioGroup<T>
           {...restProps}
+          ref={componentRef}
           className={className}
           style={cssStyle}
           shortcutKey={restProps.accessKey}
@@ -94,3 +97,11 @@ export function RadioGroupCompatible<T>({
       : null
   );
 }
+
+type RadioGroupCompatibleType = <T>(
+  p: CompatibleRadioGroupProps<T> & { ref?: Ref<RadioGroupRef> }
+) => JSX.Element;
+
+export const RadioGroupCompatible = forwardRef(
+  RadioGroupCompatibleInternal,
+) as RadioGroupCompatibleType;
