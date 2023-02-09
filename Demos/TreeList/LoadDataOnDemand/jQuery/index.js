@@ -6,7 +6,9 @@ $(() => {
           url: 'https://js.devexpress.com/Demos/Mvc/api/treeListData',
           dataType: 'json',
           data: { parentIds: options.parentIds },
-        });
+        }).then((result) => ({
+          data: result,
+        }));
       },
     },
     remoteOperations: {
