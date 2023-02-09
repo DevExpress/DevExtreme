@@ -15,7 +15,6 @@ import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import { DataSource } from '../../data/data_source/data_source';
-import ArrayStore from '../../data/array_store';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import variableWrapper from '../../core/utils/variable_wrapper';
 
@@ -598,6 +597,13 @@ export default {
         const hasLookupOptimization = column.displayField && isString(column.displayField);
 
         let cachedUniqueRelevantItems;
+
+        const sliceItems = (items, loadOptions) => {
+            const start = loadOptions.skip ?? 0;
+            const end = loadOptions.take ? start + loadOptions.take : items.length;
+            return items.slice(start, end);
+        };
+
         const loadUniqueRelevantItems = (loadOptions) => {
             const group = normalizeGroupingLoadOptions(
                 hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField
@@ -605,7 +611,7 @@ export default {
             const d = new Deferred();
 
             if(!hasGroupPaging && cachedUniqueRelevantItems) {
-                d.resolve(cachedUniqueRelevantItems);
+                d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
             } else {
                 dataSource.load({
                     filter,
@@ -614,7 +620,7 @@ export default {
                     skip: hasGroupPaging ? loadOptions.skip : undefined,
                 }).done((items) => {
                     cachedUniqueRelevantItems = items;
-                    d.resolve(items);
+                    d.resolve(hasGroupPaging ? items : sliceItems(items, loadOptions));
                 }).fail(d.fail);
             }
 
@@ -629,45 +635,22 @@ export default {
                 loadUniqueRelevantItems(loadOptions).done((items) => {
                     if(items.length === 0) {
                         d.resolve([]);
+                        return;
                     }
 
-                    let newDataSource;
+                    const filter = this.combineFilters(
+                        items.flatMap((data) => data.key).map((key => [
+                            column.lookup.valueExpr, key,
+                        ])),
+                        'or'
+                    );
 
-                    if(hasLookupOptimization) {
-                        const lookupItems = items.map(item => ({
-                            [column.lookup.valueExpr]: item.key,
-                            [column.lookup.displayExpr]: column.displayValueMap[item.key] ?? item.items[0].key
-                        }));
-
-                        newDataSource = new DataSource({
-                            ...lookupDataSourceOptions,
-                            ...loadOptions,
-                            store: new ArrayStore({
-                                data: lookupItems,
-                                key: column.lookup.valueExpr,
-                            })
-                        });
-                    } else {
-                        const filter = this.combineFilters(
-                            items.flatMap((data) => data.key).map((key => [
-                                column.lookup.valueExpr, key,
-                            ])),
-                            'or'
-                        );
-
-                        newDataSource = new DataSource({
-                            ...lookupDataSourceOptions,
-                            ...loadOptions,
-                            filter: this.combineFilters([filter, loadOptions.filter], 'and'),
-                        });
-                    }
-
-                    if(!hasGroupPaging) {
-                        newDataSource.on('customizeStoreLoadOptions', (e) => {
-                            e.storeLoadOptions.take = loadOptions.take;
-                            e.storeLoadOptions.skip = loadOptions.skip;
-                        });
-                    }
+                    const newDataSource = new DataSource({
+                        ...lookupDataSourceOptions,
+                        ...loadOptions,
+                        filter: this.combineFilters([filter, loadOptions.filter], 'and'),
+                        paginate: false, // pagination is included to filter
+                    });
 
                     newDataSource
                         .load()
