@@ -3,10 +3,14 @@ import { DataSourceAdapter, OperationTypes, RemoteOperations } from './ui.grid_c
 import { Store } from '../../data/index';
 
 import { Controller, Controllers, OptionChangedArgs } from './ui.grid_core.modules';
+import { DeferredObj } from '../../core/utils/deferred';
 
 type HandleDataChangedArguments = {
   changeType?: 'refresh' | 'update';
-  isDelayed: boolean;
+  isDelayed?: boolean;
+  isLiveUpdate?: boolean;
+  isMasterDetail?: boolean;
+  templateDeferreds?: DeferredObj<void>[];
 };
 
 type UserData = Record<string, unknown>;

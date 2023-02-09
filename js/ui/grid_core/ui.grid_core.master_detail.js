@@ -105,7 +105,8 @@ export const masterDetailModule = {
 
                             that.updateItems({
                                 changeType: 'update',
-                                rowIndices: that._getRowIndicesForExpand(key)
+                                rowIndices: that._getRowIndicesForExpand(key),
+                                isMasterDetail: true,
                             });
 
                             result = new Deferred().resolve();
