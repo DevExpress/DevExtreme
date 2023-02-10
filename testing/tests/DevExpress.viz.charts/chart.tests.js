@@ -169,7 +169,6 @@ QUnit.test('Chart should change the aggregateByCategory value when the value was
 });
 
 QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" option is used', function(assert) {
-
     sinon.spy(errors, 'log');
 
     try {
