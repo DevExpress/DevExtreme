@@ -248,21 +248,17 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   focusInEffect(): EffectReturn {
-    const {
-      disabled, focusStateEnabled, name, onFocusIn,
-    } = this.props;
+    const { focusStateEnabled, name, onFocusIn } = this.props;
     const namespace = `${name}Focus`;
 
     if (focusStateEnabled) {
-      if (!disabled) {
-        return subscribeToDxFocusInEvent(this.widgetElementRef.current,
-          (event: Event & { isDefaultPrevented: () => boolean }) => {
-            if (!event.isDefaultPrevented()) {
-              this.focused = true;
-              onFocusIn?.(event);
-            }
-          }, null, namespace);
-      }
+      return subscribeToDxFocusInEvent(this.widgetElementRef.current,
+        (event: Event & { isDefaultPrevented: () => boolean }) => {
+          if (!event.isDefaultPrevented()) {
+            this.focused = true;
+            onFocusIn?.(event);
+          }
+        }, null, namespace);
     }
 
     return undefined;
@@ -454,7 +450,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       visible,
     } = this.props;
 
-    const isFocusable = !!focusStateEnabled && !disabled;
+    const isFocusable = !!focusStateEnabled;
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
@@ -474,9 +470,8 @@ export class Widget extends JSXComponent(WidgetProps) {
   }
 
   get tabIndex(): undefined | number {
-    const { focusStateEnabled, disabled, tabIndex } = this.props;
-    const isFocusable = focusStateEnabled && !disabled;
+    const { focusStateEnabled, tabIndex } = this.props;
 
-    return isFocusable ? tabIndex : undefined;
+    return focusStateEnabled ? tabIndex : undefined;
   }
 }
