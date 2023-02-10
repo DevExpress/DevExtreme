@@ -193,7 +193,6 @@ QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory"
     }
 });
 
-
 QUnit.test('Set adaptive layout options', function(assert) {
     this.createChart();
 
