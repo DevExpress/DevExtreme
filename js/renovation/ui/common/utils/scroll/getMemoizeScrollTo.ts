@@ -3,16 +3,17 @@ export interface ScrollOffset {
   left?: number;
 }
 
-export type ScrollToFunc = (params: ScrollOffset) => void;
+export type ScrollToFunc = (params: ScrollOffset, force?: boolean) => void;
 
 export interface ScrollableInstance {
   scrollTo: ScrollToFunc;
 }
 
-export function getMemoizeScrollTo(instance: ScrollableInstance): ScrollToFunc {
+export function getMemoizeScrollTo(getScrollableInstance: () => ScrollableInstance): ScrollToFunc {
+  const instance = getScrollableInstance();
   let lastParams: ScrollOffset = {};
 
-  return (params: ScrollOffset): void => {
+  return (params: ScrollOffset, force = false): void => {
     const normalizedParams = {
       top: params.top !== undefined ? Math.ceil(params.top) : undefined,
       left: params.left !== undefined ? Math.ceil(params.left) : undefined,
@@ -21,7 +22,7 @@ export function getMemoizeScrollTo(instance: ScrollableInstance): ScrollToFunc {
     const isSameParams = normalizedParams.top === lastParams.top
       && normalizedParams.left === lastParams.left;
 
-    if (isSameParams) {
+    if (!force && isSameParams) {
       return;
     }
 

@@ -5,6 +5,7 @@ import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
+import { getMemoizeScrollTo } from '../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -585,6 +586,11 @@ export const AreaItem = Class.inherit({
         return this.groupElement().data('dxScrollable');
     },
 
+    _getMemoizeScrollTo: function() {
+        this._memoizeScrollTo = this._memoizeScrollTo ?? getMemoizeScrollTo(() => this._getScrollable());
+        return this._memoizeScrollTo;
+    },
+
     _getMaxLeftOffset(scrollable) {
         const containerElement = $(scrollable.container()).get(0);
 
@@ -613,23 +619,27 @@ export const AreaItem = Class.inherit({
         }
         return this;
     },
-    scrollTo: function(pos) {
+    scrollTo(pos, force = false) {
         const scrollable = this._getScrollable();
-        let scrollablePos = pos;
+        if(!scrollable) {
+            return;
+        }
 
-        if(scrollable) {
-            if(this.option('rtlEnabled')) {
-                if(this._getAreaName() === 'column') {
-                    scrollablePos = this._getMaxLeftOffset(scrollable) - pos.left;
-                } else if(this._getAreaName() === 'data') {
-                    scrollablePos = { left: this._getMaxLeftOffset(scrollable) - pos.left, top: pos.top };
-                }
-            }
-            scrollable.scrollTo(scrollablePos);
-            if(this._virtualContent) {
-                this._createFakeTable();
-                this._moveFakeTable(pos);
-            }
+        const rtlEnabled = this.option('rtlEnabled');
+        const areaName = this._getAreaName();
+        const scrollablePos = {
+            ...pos,
+            left: rtlEnabled && (areaName === 'column' || areaName === 'data')
+                ? this._getMaxLeftOffset(scrollable) - pos.left
+                : pos.left,
+        };
+
+        const memoizeScrollTo = this._getMemoizeScrollTo();
+        memoizeScrollTo(scrollablePos, force);
+
+        if(this._virtualContent) {
+            this._createFakeTable();
+            this._moveFakeTable(pos);
         }
     },
 
