@@ -7,7 +7,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import { getSvgMarkup } from '../../../core/utils/svg';
 import { AnimationController } from './animation';
 import { normalizeBBox, rotateBBox, normalizeEnum, normalizeArcParams, getNextDefsSvgId } from '../utils';
-import { isDefined, isString } from '../../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 
 const window = getWindow();
 
@@ -15,6 +15,8 @@ const { max, round, } = Math;
 
 const SHARPING_CORRECTION = 0.5;
 const ARC_COORD_PREC = 5;
+
+const LIGHTENING_HASH = '@filter::lightening';
 
 const pxAddingExceptions = {
     'column-count': true,
@@ -1947,8 +1949,7 @@ Renderer.prototype = {
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
-    linearGradient: function(stops, _id, rotationAngle) {
-        const id = _id || getNextDefsSvgId();
+    linearGradient: function(stops, id = getNextDefsSvgId(), rotationAngle) {
         const gradient = this._createElement('linearGradient', {
             id: id,
             gradientTransform: `rotate(${rotationAngle || 0})`
@@ -1969,9 +1970,8 @@ Renderer.prototype = {
     },
 
     _createGradientStops: function(stops, group) {
-        const that = this;
         stops.forEach((stop) => {
-            that._createElement('stop', {
+            this._createElement('stop', {
                 offset: stop.offset,
                 'stop-color': stop['stop-color'] || stop.color,
                 'stop-opacity': stop.opacity
@@ -2013,13 +2013,23 @@ Renderer.prototype = {
             width,
             height,
             patternContentUnits: 'userSpaceOnUse',
-            patternUnits: !isString(width) && !isString(height) && 'userSpaceOnUse'
+            patternUnits: this._getPatternUnits(width, height)
         };
         const pattern = this._createElement('pattern', opt).append(this._defs);
 
         templateFunction.render({ container: pattern.element });
 
         return pattern;
+    },
+
+    _getPatternUnits: function(width, height) {
+        const widthInNumber = Number(width);
+        const heightInNumber = Number(height);
+
+        if(widthInNumber && heightInNumber) {
+            return 'userSpaceOnUse';
+        }
+        return undefined;
     },
 
     _getPointsWithYOffset: function(points, offset) {
@@ -2149,11 +2159,9 @@ Renderer.prototype = {
         const coef = 1.3;
         const filter = that._createElement('filter', { id: id }).append(that._defs);
 
-        that._createElement('feColorMatrix')
-            .attr({
-                type: 'matrix', values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
-            })
-            .append(filter);
+        that._createElement('feColorMatrix', {
+            type: 'matrix', values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
+        }).append(filter);
 
         filter.id = id;
 
@@ -2184,7 +2192,7 @@ Renderer.prototype = {
     lockDefsElements: function(attrs, ref, type) {
         const storage = this._defsElementsStorage;
         let storageItem;
-        const hash = type === 'pattern' ? getHatchingHash(attrs) : getLighteningHash();
+        const hash = type === 'pattern' ? getHatchingHash(attrs) : LIGHTENING_HASH;
         const method = type === 'pattern' ? this.drawPattern : this.drawFilter;
         let pattern;
 
@@ -2219,10 +2227,6 @@ Renderer.prototype = {
 
 function getHatchingHash({ color, hatching }) {
     return '@' + color + '::' + hatching.step + ':' + hatching.width + ':' + hatching.opacity + ':' + hatching.direction;
-}
-
-function getLighteningHash() {
-    return '@filter::lightening';
 }
 
 // paths modifier

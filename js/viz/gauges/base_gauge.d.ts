@@ -181,9 +181,9 @@ export interface BaseGaugeRangeContainer {
     ranges?: Array<{
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
-       * @type object|string
+       * @type string|object
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
        */
@@ -452,10 +452,10 @@ export interface CommonIndicator {
     beginAdaptingAtRadius?: number;
     /**
      * @docid
-     * @type object|string
+     * @type string|object
      * @public
      */
-    color?: Color | string;
+    color?: string | Color;
     /**
      * @docid
      * @default 'right' &for(value_indicators)

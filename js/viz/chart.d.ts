@@ -2019,7 +2019,7 @@ export interface dxChartCommonPaneSettings {
      * @type string|object
      * @public
      */
-    backgroundColor?: Color | string;
+    backgroundColor?: string | Color;
     /**
      * @docid dxChartOptions.commonPaneSettings.border
      * @public
@@ -3157,7 +3157,7 @@ export interface dxChartSeriesTypesCommonSeries {
     closeValueField?: string;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.color
-     * @type object|string
+     * @type string|object
      * @default undefined
      * @public
      */
@@ -3473,7 +3473,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
     border?: dxChartSeriesTypesCommonSeriesHoverStyleBorder;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.color
-     * @type object|string
+     * @type string|object
      * @default undefined
      * @public
      */
@@ -3510,7 +3510,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
 export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.color
-     * @type object|string
+     * @type string|object
      * @default undefined
      * @public
      */
@@ -3727,7 +3727,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.color
      * @default undefined
-     * @type object|string
+     * @type string|object
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
@@ -3771,7 +3771,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
       };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.color
-       * @type object|string
+       * @type string|object
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
@@ -3887,7 +3887,7 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
       };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.color
-       * @type object|string
+       * @type string|object
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
@@ -3932,7 +3932,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
     border?: dxChartSeriesTypesCommonSeriesSelectionStyleBorder;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.color
-     * @type object|string
+     * @type string|object
      * @default undefined
      * @public
      */

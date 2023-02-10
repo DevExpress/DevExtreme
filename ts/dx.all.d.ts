@@ -25497,7 +25497,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseGaugeOptions.rangeContainer.ranges.color]
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * [descr:BaseGaugeOptions.rangeContainer.ranges.endValue]
        */
@@ -26685,7 +26685,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.color]
      */
-    color?: Color | string;
+    color?: string | Color;
     /**
      * [descr:CommonIndicator.horizontalOrientation]
      */
@@ -27877,7 +27877,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonPaneSettings.backgroundColor]
      */
-    backgroundColor?: Color | string;
+    backgroundColor?: string | Color;
     /**
      * [descr:dxChartOptions.commonPaneSettings.border]
      */
@@ -31736,7 +31736,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.color]
      */
-    color?: Color | string;
+    color?: string | Color;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode]
      */
@@ -31769,7 +31769,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color]
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching]
        */
@@ -31927,7 +31927,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color]
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching]
        */
@@ -32895,7 +32895,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.color]
      */
-    color?: Color | string;
+    color?: string | Color;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
      */
@@ -32932,7 +32932,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color]
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
@@ -33023,7 +33023,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color]
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */

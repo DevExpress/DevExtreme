@@ -522,10 +522,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.color
      * @default undefined
-     * @type object|string
+     * @type string|object
      * @public
      */
-    color?: Color | string;
+    color?: string | Color;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
      * @default 'onlyPoint'
@@ -564,10 +564,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
-       * @type object|string
+       * @type string|object
        * @default undefined
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
        */
@@ -763,10 +763,10 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       };
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
-       * @type object|string
+       * @type string|object
        * @default undefined
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
        */

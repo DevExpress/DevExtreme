@@ -162,9 +162,7 @@ const baseScatterMethods = {
         };
     },
 
-    _getColorId: function() {
-        return;
-    },
+    _getColorId: _noop,
 
     _applyElementsClipRect: function(settings) {
         settings['clip-path'] = this._paneClipRectID;

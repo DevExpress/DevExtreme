@@ -1099,6 +1099,40 @@ QUnit.test('custom pattern', function(assert) {
     assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
 });
 
+QUnit.test('custom pattern with width and height as strings', function(assert) {
+    const template = { render: sinon.stub() };
+    const customPattern = this.renderer.customPattern('id', template, '20', '10');
+
+    assert.ok(customPattern);
+    assert.ok(customPattern instanceof renderers.SvgElement);
+    assert.strictEqual(customPattern.append.callCount, 1, 'customPattern is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+        width: '20',
+        height: '10',
+        patternContentUnits: 'userSpaceOnUse',
+        patternUnits: 'userSpaceOnUse'
+    });
+    assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
+});
+
+QUnit.test('custom pattern with width and height as strings with percents', function(assert) {
+    const template = { render: sinon.stub() };
+    const customPattern = this.renderer.customPattern('id', template, '20%', '10%');
+
+    assert.ok(customPattern);
+    assert.ok(customPattern instanceof renderers.SvgElement);
+    assert.strictEqual(customPattern.append.callCount, 1, 'customPattern is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+        width: '20%',
+        height: '10%',
+        patternContentUnits: 'userSpaceOnUse',
+        patternUnits: undefined
+    });
+    assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
+});
+
 QUnit.test('lightenFilter', function(assert) {
     const lightenFilter = this.renderer.lightenFilter('id');
     const coef = 1.3;
@@ -1164,7 +1198,7 @@ QUnit.test('init', function(assert) {
     assert.strictEqual(renderers.SvgElement.returnValues[3].dispose.callCount, 1, 'pattern 2');
 });
 
-QUnit.test('release after init', function(assert) {
+QUnit.test('release should be correct after init', function(assert) {
     this.renderer.initDefsElements();
     this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.ok(true);

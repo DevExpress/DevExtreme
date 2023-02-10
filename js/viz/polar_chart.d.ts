@@ -1488,7 +1488,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @type string|object
      * @public
      */
-    color?: Color | string;
+    color?: string | Color;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
      * @default 'solid'
@@ -1536,10 +1536,10 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       };
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
-       * @type object|string
+       * @type string|object
        * @default undefined
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
        * @default 'solid'
@@ -1664,10 +1664,10 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       };
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
-       * @type object|string
+       * @type string|object
        * @default undefined
        */
-      color?: Color | string;
+      color?: string | Color;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
        * @default 'solid'

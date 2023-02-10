@@ -732,11 +732,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     },
 
     _renderGraphicObjects: function() {
+        const renderer = this._renderer;
         const graphics = getGraphicObjects();
         for(const id in graphics) {
             if(!this._graphicObjects[id]) {
                 const { element, colors, rotationAngle, template, width, height } = graphics[id];
-                const renderer = this._renderer;
 
                 switch(element) {
                     case 'linear':

@@ -4,10 +4,12 @@ import utils from 'viz/core/utils';
 
 QUnit.module('Graphic objects', {
     beforeEach: function() {
-        this.getNextDefsStub = sinon.stub();
+        this.getNextDefsStub = sinon.stub(utils, 'getNextDefsSvgId');
         this.getNextDefsStub.onCall(0).returns('DevExpressId_1');
         this.getNextDefsStub.onCall(1).returns('DevExpressId_2');
-        utils.getNextDefsSvgId = this.getNextDefsStub;
+    },
+    afterEach: function() {
+        this.getNextDefsStub.restore();
     }
 });
 
