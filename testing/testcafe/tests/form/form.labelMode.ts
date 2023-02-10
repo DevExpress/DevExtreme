@@ -9,7 +9,7 @@ fixture.disablePageReloads`Form`
 [true, false].forEach((labelVisible) => {
   ['left', 'right', 'top'].forEach((formLabelLocation) => {
     ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-      ['floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+      [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
         const testName = `Priorities, lblMode=${formLabelMode},lblLoc=${formLabelLocation},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
         test(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -30,10 +30,10 @@ fixture.disablePageReloads`Form`
               dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
             },
             {
-              dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
+              dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { value: 'dxTextBox', labelMode: editorLabelMode },
             },
             {
-              dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
+              dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { value: true, labelMode: editorLabelMode },
             },
             {
               dataField: 'field4', label: { visible: labelVisible }, editorType: 'dxColorBox', editorOptions: { labelMode: editorLabelMode },
@@ -60,13 +60,13 @@ fixture.disablePageReloads`Form`
               dataField: 'field11', label: { visible: labelVisible }, editorType: 'dxRangeSlider', editorOptions: { labelMode: editorLabelMode },
             },
             {
-              dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox', editorOptions: { labelMode: editorLabelMode },
+              dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
             },
             {
               dataField: 'field13', label: { visible: labelVisible }, editorType: 'dxSlider', editorOptions: { labelMode: editorLabelMode },
             },
             {
-              dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch', editorOptions: { labelMode: editorLabelMode },
+              dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch', editorOptions: { value: true, labelMode: editorLabelMode },
             },
             {
               dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox', editorOptions: { labelMode: editorLabelMode },
