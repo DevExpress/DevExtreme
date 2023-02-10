@@ -472,7 +472,7 @@ declare module DevExpress.viz {
 declare module DevExpress.ui.dxSlider {
     /** @deprecated Use DevExpress.common.SliderValueChangeMode instead */
     export type ValueChangeMode = DevExpress.common.SliderValueChangeMode;
-}   
+}
 
 declare module DevExpress.viz.dxFunnel {
     /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
