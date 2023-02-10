@@ -180,7 +180,7 @@ QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory"
         };
         this.createChart();
 
-        assert.strictEqual(errors.log.lastCall.args,
+        assert.deepEqual(errors.log.lastCall.args,
             [
                 'W0001',
                 'dxChart',
