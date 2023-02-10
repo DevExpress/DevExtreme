@@ -1,10 +1,8 @@
-import { createStore } from '../../index';
-
-const PROP1_DEFAULT = 'prop1-default';
-
-type Props = {
-  prop1: string;
-};
+import { createSelector, createStore } from '../../index';
+import {
+  PARAM1_DEFAULT,
+  PROP1_DEFAULT, PROP1_INVALID, PROP1_VALID, Props, selectProp1, validateProp1,
+} from './shared';
 
 function createBindingComponent({
   onProp1Change,
@@ -22,10 +20,28 @@ function createBindingComponent({
         onProp1Change?.(value);
       },
     },
-  });
+  }, [
+    validateProp1,
+  ]);
+
+  let param1 = PARAM1_DEFAULT;
+
+  const selector1 = createSelector(
+    (state: Props) => ({ ...state, param1 }),
+    selectProp1,
+  );
+
+  let selected1 = selector1(store.getState());
+
+  store.subscribe((state) => { selected1 = selector1(state); });
 
   return {
     getState: store.getState,
+    getViewModel() {
+      return {
+        selected1,
+      };
+    },
     updateState(state: Props) {
       store.addUpdate(() => ({ ...state }));
       store.commitUpdates();
@@ -34,23 +50,44 @@ function createBindingComponent({
       store.addUpdate((state) => ({ ...state, prop1 }));
       store.commitUpdates();
     },
+    setParam1(value: string) {
+      param1 = value;
+    },
   };
 }
 
-describe('controlled component', () => {
+describe('binding component', () => {
+  it('has intial state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+    } = createBindingComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
+  });
+
   it('updates state', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
+      getViewModel,
+      setParam1,
       updateState,
     } = createBindingComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     updateState({ prop1: 'def' });
 
     expect(getState().prop1).toBe('def');
+    expect(getViewModel().selected1).toBe('selected1-newParam1-def');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
   });
@@ -59,16 +96,78 @@ describe('controlled component', () => {
     const onProp1Change = jest.fn();
     const {
       getState,
+      getViewModel,
+      setParam1,
       updateProp1,
     } = createBindingComponent({
       prop1Default: 'abc',
       onProp1Change,
     });
 
+    setParam1('newParam1');
     updateProp1('def');
 
     expect(getState().prop1).toBe('def');
+    expect(getViewModel().selected1).toBe('selected1-newParam1-def');
     expect(onProp1Change).toBeCalledTimes(1);
     expect(onProp1Change).toBeCalledWith('def');
+  });
+});
+
+describe('binding component with validator', () => {
+  it('has intial state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+    } = createBindingComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    expect(getState().prop1).toBe('abc');
+    expect(getViewModel().selected1).toBe('selected1-param1-abc');
+  });
+
+  it('updates state', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+      setParam1,
+      updateState,
+    } = createBindingComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    setParam1('newParam1');
+    updateState({ prop1: PROP1_INVALID });
+
+    expect(getState().prop1).toBe(PROP1_VALID);
+    expect(getViewModel().selected1).toBe(`selected1-newParam1-${PROP1_VALID}`);
+    expect(onProp1Change).toBeCalledTimes(1);
+    expect(onProp1Change).toBeCalledWith(PROP1_VALID);
+  });
+
+  it('updates prop', () => {
+    const onProp1Change = jest.fn();
+    const {
+      getState,
+      getViewModel,
+      setParam1,
+      updateProp1,
+    } = createBindingComponent({
+      prop1Default: 'abc',
+      onProp1Change,
+    });
+
+    setParam1('newParam1');
+    updateProp1(PROP1_INVALID);
+
+    expect(getState().prop1).toBe(PROP1_VALID);
+    expect(getViewModel().selected1).toBe(`selected1-newParam1-${PROP1_VALID}`);
+    expect(onProp1Change).toBeCalledTimes(1);
+    expect(onProp1Change).toBeCalledWith(PROP1_VALID);
   });
 });
