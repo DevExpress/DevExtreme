@@ -7,6 +7,7 @@ const axisModule = require('viz/axes/base_axis');
 const titleModule = require('viz/core/title');
 const dataValidatorModule = require('viz/components/data_validator');
 const legendModule = require('viz/components/legend');
+const errors = require('core/errors.js');
 const rangeModule = require('viz/translators/range');
 const layoutManagerModule = require('viz/chart_components/layout_manager');
 const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
@@ -166,6 +167,32 @@ QUnit.test('Chart should change the aggregateByCategory value when the value was
 
     assert.strictEqual(axisOptions.aggregateByCategory, false);
 });
+
+QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" option is used', function(assert) {
+
+    sinon.spy(errors, 'log');
+
+    try {
+        this.options = {
+            argumentAxis: {
+                aggregateByCategory: true
+            }
+        };
+        this.createChart();
+
+        assert.strictEqual(errors.log.lastCall.args,
+            [
+                'W0001',
+                'dxChart',
+                'argumentAxis.aggregateByCategory',
+                '23.1',
+                'This option is deprecated, use the aggregation.enabled property instead'
+            ]);
+    } finally {
+        errors.log.restore();
+    }
+});
+
 
 QUnit.test('Set adaptive layout options', function(assert) {
     this.createChart();

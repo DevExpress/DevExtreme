@@ -141,3 +141,24 @@ QUnit.test('Should show warning if deprecated "behavior.callValueChanged" option
         errors.log.restore();
     }
 });
+
+QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" option is used', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        this.$container.dxRangeSelector({
+            scale: {
+                aggregateByCategory: 'onMoving'
+            }
+        });
+        assert.deepEqual(errors.log.lastCall.args, [
+            'W0001',
+            'dxRangeSelector',
+            'scale.aggregateByCategory',
+            '23.1',
+            'This option is deprecated, use the aggregation.enabled property instead'
+        ]);
+    } finally {
+        errors.log.restore();
+    }
+});

@@ -467,6 +467,13 @@ const dxChart = AdvancedChart.inherit({
         this._correctValueAxes(true);
     },
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        _extend(this._deprecatedOptions, {
+            'argumentAxis.aggregateByCategory': { since: '23.1', message: 'This option is deprecated, use the aggregation.enabled property instead' }
+        });
+    },
+
     _getExtraOptions: noop,
 
     _createPanes: function() {

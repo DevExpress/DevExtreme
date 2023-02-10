@@ -362,6 +362,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       /**
        * @docid
        * @default true
+       * @deprecated use Use DevExpress.common.SliderValueChangeMode instead
        */
       aggregateByCategory?: boolean;
       /**
