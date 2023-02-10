@@ -1207,7 +1207,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.aggregateByCategory
      * @default true
-     * @deprecated dxChartOptions.aggregation.enabled
+     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
      */
     aggregateByCategory?: boolean;
     /**
