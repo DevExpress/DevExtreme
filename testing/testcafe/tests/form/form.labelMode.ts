@@ -6,77 +6,80 @@ import { testScreenshot } from '../../helpers/themeUtils';
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));
 
-[undefined, true, false].forEach((labelVisible) => {
-  ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-    [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
-      const testName = `Priorities, lblMode=${formLabelMode},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
-      test(testName, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((labelVisible) => {
+  ['left', 'right', 'top'].forEach((formLabelLocation) => {
+    ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+      ['floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+        const testName = `Priorities, lblMode=${formLabelMode},lblLoc=${formLabelLocation},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
+        test(testName, async (t) => {
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
+          await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async () => createWidget('dxForm', {
-        width: 1100,
-        height: 800,
-        labelMode: formLabelMode,
-        colCount: 3,
-        items: [
-          {
-            dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field4', label: { visible: labelVisible }, editorType: 'dxColorBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field5', label: { visible: labelVisible }, editorType: 'dxDateBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field6', label: { visible: labelVisible }, editorType: 'dxDropDownBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxTextArea', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field8', label: { visible: labelVisible }, editorType: 'dxLookup', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field9', label: { visible: labelVisible }, editorType: 'dxNumberBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field10', label: { visible: labelVisible }, editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field11', label: { visible: labelVisible }, editorType: 'dxRangeSlider', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field13', label: { visible: labelVisible }, editorType: 'dxSlider', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox', editorOptions: { labelMode: editorLabelMode },
-          },
-          {
-            dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { labelMode: editorLabelMode, height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow'] } },
-          },
-          {
-            dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17), labelMode: editorLabelMode },
-          },
-        ],
-      }));
+          await t
+            .expect(compareResults.isValid())
+            .ok(compareResults.errorMessages());
+        }).before(async () => createWidget('dxForm', {
+          width: 1100,
+          height: 800,
+          labelMode: formLabelMode,
+          labelLocation: formLabelLocation,
+          colCount: 3,
+          items: [
+            {
+              dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field4', label: { visible: labelVisible }, editorType: 'dxColorBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field5', label: { visible: labelVisible }, editorType: 'dxDateBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field6', label: { visible: labelVisible }, editorType: 'dxDropDownBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxTextArea', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field8', label: { visible: labelVisible }, editorType: 'dxLookup', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field9', label: { visible: labelVisible }, editorType: 'dxNumberBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field10', label: { visible: labelVisible }, editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field11', label: { visible: labelVisible }, editorType: 'dxRangeSlider', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field13', label: { visible: labelVisible }, editorType: 'dxSlider', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox', editorOptions: { labelMode: editorLabelMode },
+            },
+            {
+              dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { labelMode: editorLabelMode, height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow'] } },
+            },
+            {
+              dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17), labelMode: editorLabelMode },
+            },
+          ],
+        }));
+      });
     });
   });
 });
