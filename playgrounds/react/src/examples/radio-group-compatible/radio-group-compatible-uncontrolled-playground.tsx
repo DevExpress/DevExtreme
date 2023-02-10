@@ -46,7 +46,6 @@ type Actions =
   | { type: 'setCssStylesJson', cssStylesJson: string }
   | { type: 'setWidth', width?: string }
   | { type: 'setHeight', height?: string }
-  | { type: 'setLogOnLifecycle', enabled: boolean }
   | { type: 'setVisible', visible: boolean }
   | { type: 'setButtonLabel', idx: number, label?: string }
   | { type: 'setButtonValue', idx: number, value?: string }
@@ -108,11 +107,6 @@ function playgroundReducer(
       return { ...state, baseSettings: { ...state.baseSettings, width: action.width } };
     case 'setHeight':
       return { ...state, baseSettings: { ...state.baseSettings, height: action.height } };
-    case 'setLogOnLifecycle':
-      return {
-        ...state,
-        baseSettings: { ...state.baseSettings, logOnLifecycle: action.enabled },
-      };
     case 'setVisible':
       return { ...state, baseSettings: { ...state.baseSettings, visible: action.visible } };
     case 'setButtonLabel':
@@ -180,12 +174,6 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
     },
   });
 
-  /* eslint-disable @typescript-eslint/no-unused-expressions, no-console */
-  const onContentReady = () => { state.baseSettings.logOnLifecycle && console.log('onContentReady'); };
-  const onInitialized = () => { state.baseSettings.logOnLifecycle && console.log('onInitialized'); };
-  const onDisposing = () => { state.baseSettings.logOnLifecycle && console.log('onDisposing'); };
-  /* eslint-enable @typescript-eslint/no-unused-expressions, no-alert */
-
   const cssStylesString = useMemo(
     () => JSON.stringify(state.baseSettings.cssStyles),
     [],
@@ -203,7 +191,7 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
               ? (
                 // eslint-disable-next-line jsx-a11y/no-access-key
                 <RadioGroupCompatible
-                  componentRef={radioGroupRef}
+                  ref={radioGroupRef}
                   items={state.buttons}
                   displayExpr="label"
                   valueExpr="value"
@@ -224,9 +212,6 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
                   visible={state.baseSettings.visible}
                   onFocusIn={() => dispatch({ type: 'setFocus', focused: true })}
                   onFocusOut={() => dispatch({ type: 'setFocus', focused: false })}
-                  onContentReady={onContentReady}
-                  onInitialized={onInitialized}
-                  onDisposing={onDisposing}
                 />
               )
               : null
@@ -451,18 +436,6 @@ export function RadioGroupCompatibleUncontrolledPlayground() {
             checked={state.baseSettings.visible}
             onChange={
               () => { dispatch({ type: 'setVisible', visible: !state.baseSettings.visible }); }
-            }
-          />
-        </span>
-      </div>
-      <div className="example__play-part">
-        <span className="example__block">
-          <span>Show lifecycle console logs:</span>
-          <input
-            type="checkbox"
-            checked={state.baseSettings.logOnLifecycle}
-            onChange={
-              () => { dispatch({ type: 'setLogOnLifecycle', enabled: !state.baseSettings.logOnLifecycle }); }
             }
           />
         </span>

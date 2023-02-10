@@ -165,7 +165,7 @@ export function RadioGroupUncontrolledPlayground() {
       <div className="example__control-container">
         <div className="example__control">
           <RadioGroup
-            componentRef={radioGroupRef}
+            ref={radioGroupRef}
             defaultValue={state.groupValue}
             valueChange={(groupValue) => { dispatch({ type: 'setValue', groupValue }); }}
             focusStateEnabled={state.baseSettings.focusCss}

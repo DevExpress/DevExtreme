@@ -4,8 +4,8 @@ import {
 import { EditorProps } from '../../../internal/props';
 import { EditorContext } from '../contexts/editor-context';
 
-type EditorType<T> = ComponentType<EditorProps<T> & { ref: ForwardedRef<unknown> }>;
-// TODO: ref casted to any to work around bug with pulling types from inferno. Change it after fix.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EditorType<T> = ComponentType<EditorProps<T> & { ref: ForwardedRef<any> }>;
 
 export function withEditor<T>(Component: EditorType<T>) {
   function Editor<V extends T>(props: EditorProps<V>, ref: ForwardedRef<unknown>) {
