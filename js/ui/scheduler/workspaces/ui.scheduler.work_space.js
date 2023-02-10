@@ -83,7 +83,7 @@ import {
 
 import { utils } from '../utils';
 import { compileGetter } from '../../../core/utils/data';
-import { getMemoizeScrollTo } from '../../../renovation/ui/scheduler/utils/scroll/getMemoizeScrollTo';
+import { getMemoizeScrollTo } from '../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -2398,7 +2398,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $dateTableScrollable = $('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
 
         this._dateTableScrollable = this._createComponent($dateTableScrollable, Scrollable, this._dateTableScrollableConfig());
-        this._scrollSync.dateTable = getMemoizeScrollTo(this._dateTableScrollable);
+        this._scrollSync.dateTable = getMemoizeScrollTo(() => this._dateTableScrollable);
     }
 
     _createWorkSpaceElements() {
@@ -2489,7 +2489,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             .appendTo(this._$headerTablesContainer);
 
         this._headerScrollable = this._createComponent($headerScrollable, Scrollable, this._headerScrollableConfig());
-        this._scrollSync.header = getMemoizeScrollTo(this._headerScrollable);
+        this._scrollSync.header = getMemoizeScrollTo(() => this._headerScrollable);
     }
 
     _createSidebarScrollable() {
@@ -2508,7 +2508,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._scrollSync.dateTable({ top: event.scrollOffset.top });
             }
         });
-        this._scrollSync.sidebar = getMemoizeScrollTo(this._sidebarScrollable);
+        this._scrollSync.sidebar = getMemoizeScrollTo(() => this._sidebarScrollable);
     }
 
     _attachTableClasses() {

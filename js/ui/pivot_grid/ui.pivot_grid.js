@@ -451,7 +451,7 @@ const PivotGrid = Widget.inherit({
         }
     },
 
-    _updateScrollPosition: function(columnsArea, rowsArea, dataArea) {
+    _updateScrollPosition: function(columnsArea, rowsArea, dataArea, force = false) {
         const that = this;
         let scrollTop;
         let scrollLeft;
@@ -472,9 +472,9 @@ const PivotGrid = Widget.inherit({
             scrollTop = that._scrollTop || 0;
             scrollLeft = that._scrollLeft || 0;
 
-            dataArea.scrollTo({ left: scrollLeft, top: scrollTop });
-            columnsArea.scrollTo({ left: scrollLeft });
-            rowsArea.scrollTo({ top: scrollTop });
+            dataArea.scrollTo({ left: scrollLeft, top: scrollTop }, force);
+            columnsArea.scrollTo({ left: scrollLeft }, force);
+            rowsArea.scrollTo({ top: scrollTop }, force);
             that._dataController.updateWindowScrollPosition(that._scrollTop);
         }
 
@@ -1380,7 +1380,7 @@ const PivotGrid = Widget.inherit({
                 ///#ENDDEBUG
 
                 when.apply($, updateScrollableResults).done(function() {
-                    that._updateScrollPosition(that._columnsArea, that._rowsArea, that._dataArea);
+                    that._updateScrollPosition(that._columnsArea, that._rowsArea, that._dataArea, true);
                     that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
                     d.resolve();
                 });
