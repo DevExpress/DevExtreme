@@ -42,9 +42,9 @@ QUnit.module('Localization date', () => {
 
                     const formattedDate = dateLocalization.format(new Date(2021, 9, 17, 16, 23), format);
 
-                    const isNonBreakingSymbols = formattedDate.indexOf(' ') !== -1;
+                    const isNonBreakingSpaceSymbols = formattedDate.indexOf(' ') !== -1;
 
-                    assert.strictEqual(isNonBreakingSymbols, false, `formatted date with ${format} locale has no any narrow breaking space symbols`);
+                    assert.strictEqual(isNonBreakingSpaceSymbols, false, `formatted date with ${format} locale has no any narrow breaking space symbols`);
                 });
             } finally {
                 locale('en');
