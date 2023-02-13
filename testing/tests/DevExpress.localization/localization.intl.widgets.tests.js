@@ -40,6 +40,8 @@ QUnit.module('Intl localization', () => {
                 const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
                 const keyboard = keyboardMock($input);
 
+                // debugger;
+
                 keyboard
                     .press('right')
                     .press('enter');

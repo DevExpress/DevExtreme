@@ -229,9 +229,9 @@ const Calendar = Editor.inherit({
         return this.option('disabled');
     },
 
-    _keyboardHandler() {
-        if(!this._isDisabled) {
-            this.callBase();
+    _keyboardHandler(options, onlyChildProcessing) {
+        if(!this._isDisabled()) {
+            this.callBase(options, onlyChildProcessing);
         }
     },
 
@@ -1175,7 +1175,7 @@ const Calendar = Editor.inherit({
         const value = this._dateOption('value');
         const $disabledCell = this._view._getCellByDate(value);
 
-        const ariaValue = this._isDisabled;
+        const ariaValue = this._isDisabled();
 
         this.setAria('disabled', ariaValue, $disabledCell);
     },
