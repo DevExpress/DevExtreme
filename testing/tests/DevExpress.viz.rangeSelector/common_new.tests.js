@@ -156,7 +156,7 @@ QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory"
             'dxRangeSelector',
             'scale.aggregateByCategory',
             '23.1',
-            'Use the aggregation.enabled option instead'
+            'Use the aggregation.enabled property'
         ]);
     } finally {
         errors.log.restore();

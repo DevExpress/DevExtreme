@@ -470,7 +470,7 @@ const dxChart = AdvancedChart.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         _extend(this._deprecatedOptions, {
-            'argumentAxis.aggregateByCategory': { since: '23.1', message: 'Use the aggregation.enabled option instead' }
+            'argumentAxis.aggregateByCategory': { since: '23.1', message: 'Use the aggregation.enabled property' }
         });
     },
 
