@@ -1,5 +1,5 @@
 import {
-  ComponentType, ForwardedRef, forwardRef, useCallback, useMemo, useState,
+  ComponentType, ForwardedRef, useCallback, useMemo, useState,
 } from 'react';
 import { EditorProps } from '../../../internal/props';
 import { EditorContext } from '../contexts/editor-context';
@@ -46,5 +46,5 @@ export function withEditor<T>(Component: EditorType<T>) {
       </EditorContext.Provider>
     );
   }
-  return forwardRef(Editor);
+  return Editor;
 }
