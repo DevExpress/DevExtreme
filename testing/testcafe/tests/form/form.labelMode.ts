@@ -263,6 +263,83 @@ fixture.disablePageReloads`Form`
   });
 });
 
+[undefined, true, false].forEach((labelVisible) => {
+  if (!isMaterial()) {
+    ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+      [undefined, 'top', 'left', 'right'].forEach((labelLocation) => {
+        const testName = `Priorities, lblMode=${formLabelMode},lblVis=${labelVisible},lblLoc=${labelLocation}`;
+        test(testName, async (t) => {
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+          await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
+
+          await t
+            .expect(compareResults.isValid())
+            .ok(compareResults.errorMessages());
+        }).before(async () => createWidget('dxForm', {
+          width: 1000,
+          labelMode: formLabelMode,
+          labelLocation,
+          colCount: 2,
+          items: [
+            {
+              dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] },
+            },
+            {
+              dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) },
+            },
+            {
+              dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox',
+            },
+            {
+              dataField: 'field4', label: { visible: labelVisible }, editorType: 'dxColorBox',
+            },
+            {
+              dataField: 'field5', label: { visible: labelVisible }, editorType: 'dxDateBox',
+            },
+            {
+              dataField: 'field6', label: { visible: labelVisible }, editorType: 'dxDropDownBox',
+            },
+            {
+              dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow', 'insertColumnLeft', 'insertColumnRight', 'deleteColumn'] } },
+            },
+            {
+              dataField: 'field8', label: { visible: labelVisible }, editorType: 'dxLookup',
+            },
+            {
+              dataField: 'field9', label: { visible: labelVisible }, editorType: 'dxNumberBox',
+            },
+            {
+              dataField: 'field10', label: { visible: labelVisible }, editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'] },
+            },
+            {
+              dataField: 'field11', label: { visible: labelVisible }, editorType: 'dxRangeSlider',
+            },
+            {
+              dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox',
+            },
+            {
+              dataField: 'field13', label: { visible: labelVisible }, editorType: 'dxSlider',
+            },
+            {
+              dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch',
+            },
+            {
+              dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox',
+            },
+            {
+              dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxTextArea',
+            },
+            {
+              dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxTextBox',
+            },
+          ],
+        }));
+      });
+    });
+  }
+});
+
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
   [true, false].forEach((alignItemLabelsInAllGroups) => {
     [true, false].forEach((alignItemLabels) => {

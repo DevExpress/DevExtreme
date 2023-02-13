@@ -28,6 +28,7 @@ import { renderLabel } from './label';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const VALIDATION_TARGET_CLASS = 'dx-validation-target';
 const INVALID_CLASS = 'dx-invalid';
+const SWITCH_GROUP_SPACING_CLASS = 'dx-swithc-group-spacing';
 
 export function renderFieldItem({
     $parent,
@@ -85,6 +86,8 @@ export function renderFieldItem({
     }
 
     if($label) {
+        const { editorType } = item;
+
         $rootElement.append($label);
         if(labelLocation === 'top' || labelLocation === 'left') {
             $rootElement.append($fieldEditorContainer);
@@ -99,10 +102,17 @@ export function renderFieldItem({
             $rootElement.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
         }
 
-        if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
+        if(editorType === 'dxCheckBox' || editorType === 'dxSwitch') {
             eventsEngine.on($label, clickEventName, function() {
                 eventsEngine.trigger($fieldEditorContainer.children(), clickEventName);
             });
+        }
+
+        const switchGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
+        const isSwitchGroup = switchGroup.includes(editorType);
+
+        if(isSwitchGroup && labelLocation === 'top') {
+            $fieldEditorContainer.addClass(SWITCH_GROUP_SPACING_CLASS);
         }
     } else {
         $rootElement.append($fieldEditorContainer);
