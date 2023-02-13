@@ -1012,6 +1012,29 @@ QUnit.test('linear gradient, stops color set as `stop-color` (sankey chart)', fu
     });
 });
 
+QUnit.test('linear gradient, stops color set as `stop-color` equal to 0 (sankey chart)', function(assert) {
+    const stops = [{ offset: 'offset_1', 'stop-color': 0 }, { offset: 'offset_2', 'stop-color': 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id');
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 0,
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
 QUnit.test('linear gradient, id is not set', function(assert) {
     const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
     const linearGradient = this.renderer.linearGradient(stops);

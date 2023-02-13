@@ -92,7 +92,7 @@ const baseAreaMethods = {
                 fill: extractColor(options.color) || defaultColor,
                 hatching: options.hatching,
                 opacity: options.opacity,
-                filter: options.lightening || null
+                filter: options.lightening ?? null
             }
         };
     },

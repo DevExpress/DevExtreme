@@ -576,7 +576,7 @@ QUnit.test('Style in point group', function(assert) {
         stroke: 'n-b-color',
         'dashStyle': 'n-b-dashStyle',
         'stroke-width': 'n-b-width',
-        'hatching': undefined
+        hatching: undefined
     });
 });
 
@@ -1065,19 +1065,19 @@ QUnit.test('default LegendStyles', function(assert) {
     });
 
     assert.deepEqual(series.getLegendStyles(), {
-        'hover': {
-            'fill': 'mainSeriesColor',
-            'hatching': 'h-hatching',
+        hover: {
+            fill: 'mainSeriesColor',
+            hatching: 'h-hatching',
             filter: true,
         },
-        'normal': {
-            'fill': 'mainSeriesColor',
+        normal: {
+            fill: 'mainSeriesColor',
             hatching: undefined,
             filter: undefined,
         },
-        'selection': {
-            'fill': 'mainSeriesColor',
-            'hatching': 's-hatching',
+        selection: {
+            fill: 'mainSeriesColor',
+            hatching: 's-hatching',
             filter: true,
         }
     });
@@ -1096,19 +1096,19 @@ QUnit.test('styles colors defined', function(assert) {
     });
 
     assert.deepEqual(series.getLegendStyles(), {
-        'hover': {
-            'fill': 'h-color',
-            'hatching': 'h-hatching',
+        hover: {
+            fill: 'h-color',
+            hatching: 'h-hatching',
             filter: true,
         },
-        'normal': {
-            'fill': 'n-color',
+        normal: {
+            fill: 'n-color',
             hatching: undefined,
             filter: undefined,
         },
-        'selection': {
-            'fill': 's-color',
-            'hatching': 's-hatching',
+        selection: {
+            fill: 's-color',
+            hatching: 's-hatching',
             filter: true,
         }
     });
@@ -1131,19 +1131,19 @@ QUnit.test('custom styles', function(assert) {
     });
 
     assert.deepEqual(series.getLegendStyles(), {
-        'hover': {
-            'fill': 'id_color',
-            'hatching': { direction: 'none' },
+        hover: {
+            fill: 'id_color',
+            hatching: { direction: 'none' },
             filter: true,
         },
-        'normal': {
-            'fill': 'id_color',
+        normal: {
+            fill: 'id_color',
             hatching: undefined,
             filter: undefined,
         },
-        'selection': {
-            'fill': 'id_color',
-            'hatching': { direction: 'none' },
+        selection: {
+            fill: 'id_color',
+            hatching: { direction: 'none' },
             filter: true,
         }
     });

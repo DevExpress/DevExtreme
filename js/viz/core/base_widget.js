@@ -736,9 +736,9 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const graphics = getGraphicObjects();
         for(const id in graphics) {
             if(!this._graphicObjects[id]) {
-                const { element, colors, rotationAngle, template, width, height } = graphics[id];
+                const { type, colors, rotationAngle, template, width, height } = graphics[id];
 
-                switch(element) {
+                switch(type) {
                     case 'linear':
                         this._graphicObjects[id] = renderer.linearGradient(colors, id, rotationAngle);
                         break;

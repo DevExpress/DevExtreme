@@ -370,7 +370,7 @@ QUnit.test('Style in point group', function(assert) {
     series.draw(false);
 
     assert.deepEqual(series._markersGroup._stored_settings, {
-        'class': 'dxc-markers',
+        class: 'dxc-markers',
         fill: 'n-color',
         stroke: 'n-b-color',
         'stroke-width': 'n-b-width',
@@ -478,21 +478,21 @@ QUnit.test('default LegendStyles', function(assert) {
     });
 
     assert.deepEqual(series.getLegendStyles(), {
-        'hover': {
-            'fill': 'mainSeriesColor',
-            'hatching': 'h-hatching',
+        hover: {
+            fill: 'mainSeriesColor',
+            hatching: 'h-hatching',
             filter: true,
             opacity: undefined
         },
-        'normal': {
-            'fill': 'mainSeriesColor',
+        normal: {
+            fill: 'mainSeriesColor',
             hatching: undefined,
             filter: undefined,
             opacity: undefined
         },
-        'selection': {
-            'fill': 'mainSeriesColor',
-            'hatching': 's-hatching',
+        selection: {
+            fill: 'mainSeriesColor',
+            hatching: 's-hatching',
             filter: true,
             opacity: undefined
         }
@@ -512,21 +512,21 @@ QUnit.test('styles colors defined', function(assert) {
     });
 
     assert.deepEqual(series.getLegendStyles(), {
-        'hover': {
-            'fill': 'h-color',
-            'hatching': 'h-hatching',
+        hover: {
+            fill: 'h-color',
+            hatching: 'h-hatching',
             filter: true,
             opacity: undefined
         },
-        'normal': {
-            'fill': 'n-color',
+        normal: {
+            fill: 'n-color',
             hatching: undefined,
             filter: undefined,
             opacity: undefined
         },
-        'selection': {
-            'fill': 's-color',
-            'hatching': 's-hatching',
+        selection: {
+            fill: 's-color',
+            hatching: 's-hatching',
             filter: true,
             opacity: undefined
         }
@@ -550,21 +550,21 @@ QUnit.test('custom styles are defined', function(assert) {
     });
 
     assert.deepEqual(series.getLegendStyles(), {
-        'hover': {
-            'fill': 'id_color',
-            'hatching': { direction: 'none' },
+        hover: {
+            fill: 'id_color',
+            hatching: { direction: 'none' },
             filter: true,
             opacity: undefined
         },
-        'normal': {
-            'fill': 'id_color',
+        normal: {
+            fill: 'id_color',
             hatching: undefined,
             filter: undefined,
             opacity: undefined
         },
-        'selection': {
-            'fill': 'id_color',
-            'hatching': { direction: 'none' },
+        selection: {
+            fill: 'id_color',
+            hatching: { direction: 'none' },
             filter: true,
             opacity: undefined
         }

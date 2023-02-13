@@ -1973,7 +1973,7 @@ Renderer.prototype = {
         stops.forEach((stop) => {
             this._createElement('stop', {
                 offset: stop.offset,
-                'stop-color': stop['stop-color'] || stop.color,
+                'stop-color': stop['stop-color'] ?? stop.color,
                 'stop-opacity': stop.opacity
             }).append(group);
         });
@@ -2007,29 +2007,23 @@ Renderer.prototype = {
         return pattern;
     },
 
-    customPattern: function(id, templateFunction, width, height) {
-        const opt = {
-            id: id,
+    customPattern: function(id, template, width, height) {
+        const option = {
+            id,
             width,
             height,
             patternContentUnits: 'userSpaceOnUse',
             patternUnits: this._getPatternUnits(width, height)
         };
-        const pattern = this._createElement('pattern', opt).append(this._defs);
+        const pattern = this._createElement('pattern', option).append(this._defs);
 
-        templateFunction.render({ container: pattern.element });
+        template.render({ container: pattern.element });
 
         return pattern;
     },
 
     _getPatternUnits: function(width, height) {
-        const widthInNumber = Number(width);
-        const heightInNumber = Number(height);
-
-        if(widthInNumber && heightInNumber) {
-            return 'userSpaceOnUse';
-        }
-        return undefined;
+        return Number(width) && Number(height) ? 'userSpaceOnUse' : undefined;
     },
 
     _getPointsWithYOffset: function(points, offset) {
@@ -2155,12 +2149,12 @@ Renderer.prototype = {
     },
 
     lightenFilter: function(id) {
-        const that = this;
         const coef = 1.3;
-        const filter = that._createElement('filter', { id: id }).append(that._defs);
+        const filter = this._createElement('filter', { id }).append(this._defs);
 
-        that._createElement('feColorMatrix', {
-            type: 'matrix', values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
+        this._createElement('feColorMatrix', {
+            type: 'matrix',
+            values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
         }).append(filter);
 
         filter.id = id;

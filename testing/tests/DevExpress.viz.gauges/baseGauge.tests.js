@@ -539,15 +539,15 @@ QUnit.test('case 3', function(assert) {
     assert.strictEqual(this.test_getSampleText(-9.11, 9.999), '-9.11##');
 });
 
-QUnit.module('Render graphic objects', $.extend({}, environment, {
+QUnit.module('Graphic objects render', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
         this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects', function() {
             return {
-                'id_1': { element: 'linear', colors: 'colors_1', rotationAngle: 30 },
-                'id_2': { element: 'radial', colors: 'colors_2' },
-                'id_3': { element: 'pattern', template: () => {}, width: 20, height: 10 },
-                'id_4': { element: 'incorrect_type' }
+                'id_1': { type: 'linear', colors: 'colors_1', rotationAngle: 30 },
+                'id_2': { type: 'radial', colors: 'colors_2' },
+                'id_3': { type: 'pattern', template: () => {}, width: 20, height: 10 },
+                'id_4': { type: 'incorrect_type' }
             };
         });
     },
@@ -557,30 +557,30 @@ QUnit.module('Render graphic objects', $.extend({}, environment, {
     },
 }));
 
-QUnit.test('Should create graphic objects', function(assert) {
+QUnit.test('Should create graphic objects on widget creating', function(assert) {
     const gauge = this.createGauge();
 
-    assert.equal(gauge._graphicObjects['id_1']._stored_settings.color, 'colors_1');
-    assert.equal(gauge._graphicObjects['id_1']._stored_settings.id, 'id_1');
-    assert.equal(gauge._graphicObjects['id_1']._stored_settings.rotationAngle, 30);
+    assert.strictEqual(gauge._graphicObjects['id_1']._stored_settings.color, 'colors_1');
+    assert.strictEqual(gauge._graphicObjects['id_1']._stored_settings.id, 'id_1');
+    assert.strictEqual(gauge._graphicObjects['id_1']._stored_settings.rotationAngle, 30);
 
-    assert.equal(gauge._graphicObjects['id_2']._stored_settings.color, 'colors_2');
-    assert.equal(gauge._graphicObjects['id_2']._stored_settings.id, 'id_2');
+    assert.strictEqual(gauge._graphicObjects['id_2']._stored_settings.color, 'colors_2');
+    assert.strictEqual(gauge._graphicObjects['id_2']._stored_settings.id, 'id_2');
 
-    assert.equal(gauge._graphicObjects['id_3']._stored_settings.width, 20);
-    assert.equal(gauge._graphicObjects['id_3']._stored_settings.height, 10);
-    assert.equal(gauge._graphicObjects['id_3']._stored_settings.id, 'id_3');
+    assert.strictEqual(gauge._graphicObjects['id_3']._stored_settings.width, 20);
+    assert.strictEqual(gauge._graphicObjects['id_3']._stored_settings.height, 10);
+    assert.strictEqual(gauge._graphicObjects['id_3']._stored_settings.id, 'id_3');
     assert.ok(gauge._graphicObjects['id_3']._stored_settings.template);
 
-    assert.equal(gauge._renderer.linearGradient.callCount, 1);
-    assert.equal(gauge._renderer.radialGradient.callCount, 1);
-    assert.equal(gauge._renderer.customPattern.callCount, 1);
+    assert.strictEqual(gauge._renderer.linearGradient.callCount, 1);
+    assert.strictEqual(gauge._renderer.radialGradient.callCount, 1);
+    assert.strictEqual(gauge._renderer.customPattern.callCount, 1);
 });
 
-QUnit.test('Should dispose graphic objects', function(assert) {
+QUnit.test('Should dispose graphic objects on container remove', function(assert) {
     const gauge = this.createGauge();
 
     this.$container.remove();
 
-    assert.equal(gauge._graphicObjects, null);
+    assert.strictEqual(gauge._graphicObjects, null);
 });

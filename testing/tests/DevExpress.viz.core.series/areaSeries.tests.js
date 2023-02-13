@@ -847,20 +847,20 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
-            'class': 'dxc-elements',
+            class: 'dxc-elements',
             'clip-path': undefined,
-            'fill': 'n color',
-            'filter': null,
-            'hatching': undefined,
-            'opacity': 'n opacity',
-            'stroke': 'none'
+            fill: 'n color',
+            filter: null,
+            hatching: undefined,
+            opacity: 'n opacity',
+            stroke: 'none'
         });
 
         assert.deepEqual(series._bordersGroup._stored_settings, {
-            'class': 'dxc-borders',
+            class: 'dxc-borders',
             'clip-path': undefined,
-            'dashStyle': 'b-n dashStyle',
-            'stroke': 'b-n color',
+            dashStyle: 'b-n dashStyle',
+            stroke: 'b-n color',
             'stroke-width': 'b-n width'
         });
 
@@ -881,20 +881,20 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 'h color',
-            'opacity': 'h opacity',
-            'stroke': 'none',
-            'hatching': {
+            fill: 'h color',
+            opacity: 'h opacity',
+            stroke: 'none',
+            hatching: {
                 direction: 'h-h direction',
                 width: 'h-h width',
                 opacity: 'h-h opacity'
             },
-            'filter': true,
+            filter: true,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-h dashStyle',
-            'stroke': 'b-h color',
+            dashStyle: 'b-h dashStyle',
+            stroke: 'b-h color',
             'stroke-width': 'b-h width'
         });
 
@@ -916,16 +916,16 @@ function setDiscreteType(series) {
         series.clearHover(false);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 'n color',
-            'opacity': 'n opacity',
-            'stroke': 'none',
+            fill: 'n color',
+            opacity: 'n opacity',
+            stroke: 'none',
             hatching: undefined,
-            'filter': null,
+            filter: null,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-n dashStyle',
-            'stroke': 'b-n color',
+            dashStyle: 'b-n dashStyle',
+            stroke: 'b-n color',
             'stroke-width': 'b-n width'
         });
 
@@ -948,11 +948,11 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 's color',
-            'opacity': 's opacity',
-            'stroke': 'none',
-            'filter': true,
-            'hatching': {
+            fill: 's color',
+            opacity: 's opacity',
+            stroke: 'none',
+            filter: true,
+            hatching: {
                 direction: 's-h direction',
                 width: 's-h width',
                 opacity: 's-h opacity'
@@ -960,8 +960,8 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-s dashStyle',
-            'stroke': 'none',
+            dashStyle: 'b-s dashStyle',
+            stroke: 'none',
             'stroke-width': 'b-s width'
         });
 
@@ -982,16 +982,16 @@ function setDiscreteType(series) {
         series.draw(undefined, undefined, noop);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 's color',
-            'filter': true,
-            'opacity': 's opacity',
-            'stroke': 'none',
-            'hatching': 's-hatching'
+            fill: 's color',
+            filter: true,
+            opacity: 's opacity',
+            stroke: 'none',
+            hatching: 's-hatching'
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-s dashStyle',
-            'stroke': 'none',
+            dashStyle: 'b-s dashStyle',
+            stroke: 'none',
             'stroke-width': 'b-s width'
         });
 
@@ -1018,8 +1018,8 @@ function setDiscreteType(series) {
         series.select();
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-s dashStyle',
-            'stroke': 'none',
+            dashStyle: 'b-s dashStyle',
+            stroke: 'none',
             'stroke-width': 1
         });
 
@@ -1067,13 +1067,13 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
-            'class': 'dxc-elements',
+            class: 'dxc-elements',
             'clip-path': undefined,
-            'fill': 'id_color_0',
-            'filter': null,
-            'opacity': undefined,
-            'hatching': undefined,
-            'stroke': 'none'
+            fill: 'id_color_0',
+            filter: null,
+            opacity: undefined,
+            hatching: undefined,
+            stroke: 'none'
         });
     });
 
@@ -1086,13 +1086,13 @@ function setDiscreteType(series) {
         series.hover();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
-            'class': 'dxc-elements',
+            class: 'dxc-elements',
             'clip-path': undefined,
-            'fill': 'id_color_2',
-            'filter': true,
-            'opacity': undefined,
-            'hatching': { direction: 'none' },
-            'stroke': 'none'
+            fill: 'id_color_2',
+            filter: true,
+            opacity: undefined,
+            hatching: { direction: 'none' },
+            stroke: 'none'
         });
     });
 
@@ -1105,13 +1105,13 @@ function setDiscreteType(series) {
         series.select();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
-            'class': 'dxc-elements',
+            class: 'dxc-elements',
             'clip-path': undefined,
-            'fill': 'id_color_1',
-            'filter': true,
-            'opacity': undefined,
-            'hatching': { direction: 'none' },
-            'stroke': 'none'
+            fill: 'id_color_1',
+            filter: true,
+            opacity: undefined,
+            hatching: { direction: 'none' },
+            stroke: 'none'
         });
     });
 
@@ -1125,23 +1125,23 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series.getLegendStyles(), {
-            'hover': {
-                'fill': 'mainSeriesColor',
-                'hatching': 'h-hatching',
+            hover: {
+                fill: 'mainSeriesColor',
+                hatching: 'h-hatching',
                 opacity: undefined,
-                'filter': true,
+                filter: true,
             },
-            'normal': {
-                'fill': 'mainSeriesColor',
+            normal: {
+                fill: 'mainSeriesColor',
                 opacity: 0.5,
                 hatching: undefined,
-                'filter': undefined,
+                filter: undefined,
             },
-            'selection': {
-                'fill': 'mainSeriesColor',
-                'hatching': 's-hatching',
+            selection: {
+                fill: 'mainSeriesColor',
+                hatching: 's-hatching',
                 opacity: undefined,
-                'filter': true,
+                filter: true,
             }
         });
     });
@@ -1160,23 +1160,23 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series.getLegendStyles(), {
-            'hover': {
-                'fill': 'h-color',
-                'hatching': 'h-hatching',
+            hover: {
+                fill: 'h-color',
+                hatching: 'h-hatching',
                 opacity: undefined,
-                'filter': true,
+                filter: true,
             },
-            'normal': {
-                'fill': 'n-color',
+            normal: {
+                fill: 'n-color',
                 opacity: 'opacity',
                 hatching: undefined,
-                'filter': undefined,
+                filter: undefined,
             },
-            'selection': {
-                'fill': 's-color',
-                'hatching': 's-hatching',
+            selection: {
+                fill: 's-color',
+                hatching: 's-hatching',
                 opacity: undefined,
-                'filter': true,
+                filter: true,
             }
         });
     });
@@ -1196,23 +1196,23 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series.getLegendStyles(), {
-            'hover': {
-                'fill': 'id_color_1',
-                'hatching': { direction: 'none' },
+            hover: {
+                fill: 'id_color_1',
+                hatching: { direction: 'none' },
                 opacity: undefined,
-                'filter': true,
+                filter: true,
             },
-            'normal': {
-                'fill': 'id_color_0',
+            normal: {
+                fill: 'id_color_0',
                 opacity: undefined,
                 hatching: undefined,
-                'filter': undefined,
+                filter: undefined,
             },
-            'selection': {
-                'fill': 'id_color_2',
-                'hatching': { direction: 'none' },
+            selection: {
+                fill: 'id_color_2',
+                hatching: { direction: 'none' },
                 opacity: undefined,
-                'filter': true,
+                filter: true,
             }
         });
     });

@@ -4,13 +4,13 @@ const graphicObjects = {};
 
 export const registerPattern = (options) => {
     const id = getNextDefsSvgId();
-    graphicObjects[id] = { element: 'pattern', ...options };
+    graphicObjects[id] = { type: 'pattern', ...options };
     return id;
 };
 
 export const registerGradient = (type, options) => {
     const id = getNextDefsSvgId();
-    graphicObjects[id] = { element: type, ...options };
+    graphicObjects[id] = { type, ...options };
     return id;
 };
 
