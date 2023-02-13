@@ -13,6 +13,45 @@ QUnit.module('Localization date', () => {
         assert.equal(dateLocalization.format(date, { ...options, fractionalSecondDigits: '3' }), '01:02.345');
         assert.equal(dateLocalization.format(date, { ...options, fractionalSecondDigits: '1' }), '01:02.3');
     });
+
+    const locales = [ 'de', 'en', 'ja', 'ru', 'zh', 'ar', 'hr', 'el', 'ca' ];
+    locales.forEach((localeId) => {
+        QUnit.test(`Formatted value via Intl.DateTimeFormat shouldn't have any narrow breaking space symbols (T1146346)(${localeId} locale)`, function(assert) {
+            const testData = [
+                { format: 'shortDate' },
+                { format: 'shortTime' },
+                { format: 'shortDateshortTime' },
+                { format: 'longtime' },
+                { format: 'longDate' },
+                { format: 'longDateLongTime' },
+                { format: 'monthAndYear' },
+                { format: 'monthAndDay' },
+                { format: 'year' },
+                { format: 'shortyear' },
+                { format: 'month' },
+                { format: 'day' },
+                { format: 'hour' },
+                { format: 'minute' },
+            ];
+
+            try {
+                locale(localeId);
+
+                testData.forEach(config => {
+                    const { format } = config;
+
+                    const formattedDate = dateLocalization.format(new Date(2021, 9, 17, 16, 23), format);
+
+                    const isNonBreakingSymbols = formattedDate.indexOf(' ') !== -1;
+
+                    assert.strictEqual(isNonBreakingSymbols, false, `formatted date with ${format} locale has no any narrow breaking space symbols`);
+                });
+            } finally {
+                locale('en');
+            }
+
+        });
+    });
 });
 
 QUnit.module('Localization number', () => {
