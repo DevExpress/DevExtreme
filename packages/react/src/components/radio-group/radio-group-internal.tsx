@@ -68,6 +68,7 @@ export function RadioGroupInternal<T>(
         ref={containerRef}
         className={`dxr-radio-group ${containerProps.cssClass.join(' ')} ${props.className ?? ''}`}
         style={props.style ?? {}}
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...containerProps.attributes}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
