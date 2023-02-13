@@ -21,6 +21,7 @@ import 'generic_light.css!';
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_TODAY_CELL_CLASS = 'dx-calendar-today';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
 const CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month';
@@ -882,6 +883,47 @@ QUnit.module('Keyboard navigation', {
         }, this));
     });
 
+    QUnit.test('keys press should not change currentDate if disabled is true', function(assert) {
+        const date = new Date(2013, 9, 13);
+
+        this.reinit({
+            focusStateEnabled: true,
+            disabled: true,
+            value: date,
+        });
+
+        const $element = this.$element;
+        const calendar = this.calendar;
+
+        iterateViews((_, type) => {
+            calendar.option('zoomLevel', type);
+
+            triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${RIGHT_ARROW_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, LEFT_ARROW_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${LEFT_ARROW_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, UP_ARROW_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${UP_ARROW_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, DOWN_ARROW_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${DOWN_ARROW_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, PAGE_UP_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${PAGE_UP_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, PAGE_DOWN_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${PAGE_DOWN_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, HOME_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${HOME_KEY_CODE} when zoom is ${type}`);
+
+            triggerKeydown($element, END_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), date, `currentDate is correct after pressing ${END_KEY_CODE} when zoom is ${type}`);
+        });
+    });
+
     QUnit.test('pressing enter should change value', function(assert) {
         const calendar = this.calendar;
         const keyboard = keyboardMock(this.$element);
@@ -894,6 +936,25 @@ QUnit.module('Keyboard navigation', {
 
             keyboard.press('enter');
             assert.deepEqual(calendar.option('value'), calendar.option('currentDate'), 'value is changed');
+        });
+    });
+
+    QUnit.test('Calendar should not allow to select date in disabled state changed in runtime by keyboard', function(assert) {
+        this.reinit({ focusStateEnabled: true });
+
+        const keyboard = keyboardMock(this.$element);
+        const calendar = this.calendar;
+
+        iterateViews((_, type) => {
+            calendar.option({
+                disabled: true,
+                zoomLevel: type,
+            });
+
+            calendar.focus();
+            keyboard.press('enter');
+
+            assert.strictEqual(calendar.option('value'), null, `value is null when zoom is ${type}`);
         });
     });
 
@@ -3738,6 +3799,19 @@ QUnit.module('Aria accessibility', {
 
         assert.ok($contouredDateCell.attr('id'), 'aria id exists');
         assert.equal($contouredDateCell.attr('id'), this.$element.attr('aria-activedescendant'), 'cell has correct id');
+    });
+
+    QUnit.test('aria-disabled should be setted on active date in disabled state changed in runtime', function(assert) {
+        const calendar = this.$element.dxCalendar({
+            focusStateEnabled: true,
+            zoomLevel: 'month'
+        }).dxCalendar('instance');
+
+        const $todayDateCell = this.$element.find('.' + CALENDAR_TODAY_CELL_CLASS);
+        assert.strictEqual($todayDateCell.attr('aria-disabled'), undefined, 'aria-disabled is undefined');
+
+        calendar.option('disabled', true);
+        assert.strictEqual($todayDateCell.attr('aria-disabled'), 'true', 'aria-disabled is setted');
     });
 
     QUnit.test('aria id on contoured cell after view change (T321824)', function(assert) {
