@@ -52,8 +52,7 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
 };
 
 fixture.disablePageReloads`Row dragging`
-  .page(url(__dirname, '../container.html'))
-  .beforeEach(async (t) => { await t.maximizeWindow(); });
+  .page(url(__dirname, '../container.html'));
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
@@ -64,7 +63,8 @@ test('The placeholder should appear when a cross-component dragging rows after s
   await dataGrid.moveRow(6, 550, 0);
 
   await t.expect(isPlaceholderVisible()).ok();
-}).before(async () => {
+}).before(async (t) => {
+  await t.maximizeWindow();
   await ClientFunction(() => {
     $('body').css('display', 'flex');
     $('#container, #otherContainer').css({
@@ -164,7 +164,8 @@ test('The cross-component drag and drop rows should work when there are fixed co
     .ok()
     .expect(getPlaceholderOffset())
     .eql(dataRowOffset);
-}).before(async () => {
+}).before(async (t) => {
+  await t.maximizeWindow();
   await ClientFunction(() => {
     $('body').css('display', 'flex');
     $('#container, #otherContainer').css({
@@ -260,7 +261,8 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
     .eql('none')
     .expect(otherFixedPointerEvents)
     .eql('none');
-}).before(async () => {
+}).before(async (t) => {
+  await t.maximizeWindow();
   await ClientFunction(() => {
     $('body').css('display', 'flex');
     $('#container, #otherContainer').css({
@@ -348,37 +350,40 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
   await t
     .expect(lastRow.element.exists)
     .ok();
-}).before(async () => createWidget('dxDataGrid', {
-  height: 200,
-  keyExpr: 'id',
-  scrolling: {
-    mode: 'virtual',
-  },
-  dataSource: [
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-    { id: 7 },
-    { id: 8 },
-    { id: 9 },
-    { id: 10 },
-  ],
-  columns: ['id'],
-  rowDragging: {
-    allowReordering: true,
-    scrollSpeed: 300,
-    onDragChange(e) {
-      const visibleRows = e.component.getVisibleRows();
-      const row = visibleRows[e.toIndex];
-      if (!row) {
-        throw new Error('row is null');
-      }
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 200,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
     },
-  },
-}));
+    dataSource: [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
+      { id: 9 },
+      { id: 10 },
+    ],
+    columns: ['id'],
+    rowDragging: {
+      allowReordering: true,
+      scrollSpeed: 300,
+      onDragChange(e) {
+        const visibleRows = e.component.getVisibleRows();
+        const row = visibleRows[e.toIndex];
+        if (!row) {
+          throw new Error('row is null');
+        }
+      },
+    },
+  });
+});
 
 // T1078513
 test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
@@ -392,46 +397,49 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
     .ok()
     .expect(headerRow.getStyleProperty('transform'))
     .eql('none');
-}).before(async () => createWidget('dxDataGrid', {
-  height: 200,
-  keyExpr: 'id',
-  scrolling: {
-    mode: 'virtual',
-  },
-  paging: {
-    pageSize: 2,
-  },
-  dataSource: [
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-    { id: 7 },
-    { id: 8 },
-    { id: 9 },
-    { id: 10 },
-    { id: 11 },
-    { id: 12 },
-    { id: 13 },
-    { id: 14 },
-    { id: 15 },
-  ],
-  columns: ['id'],
-  columnAutoWidth: true,
-  rowDragging: {
-    allowReordering: true,
-    dropFeedbackMode: 'push',
-    onDragEnd(e: any): void {
-      e.cancel = new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, 500);
-      });
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 200,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
     },
-  },
-}));
+    paging: {
+      pageSize: 2,
+    },
+    dataSource: [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
+      { id: 9 },
+      { id: 10 },
+      { id: 11 },
+      { id: 12 },
+      { id: 13 },
+      { id: 14 },
+      { id: 15 },
+    ],
+    columns: ['id'],
+    columnAutoWidth: true,
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+      onDragEnd(e: any): void {
+        e.cancel = new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 500);
+        });
+      },
+    },
+  });
+});
 
 // T1078513
 test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
@@ -445,52 +453,55 @@ test('Footer should not be hidden during auto scrolling when virtual scrollling 
     .ok()
     .expect(footerRow.getStyleProperty('transform'))
     .eql('none');
-}).before(async () => createWidget('dxDataGrid', {
-  height: 250,
-  keyExpr: 'id',
-  scrolling: {
-    mode: 'virtual',
-  },
-  summary: {
-    totalItems: [{
-      column: 'id',
-      summaryType: 'count',
-    }],
-  },
-  paging: {
-    pageSize: 2,
-  },
-  dataSource: [
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-    { id: 7 },
-    { id: 8 },
-    { id: 9 },
-    { id: 10 },
-    { id: 11 },
-    { id: 12 },
-    { id: 13 },
-    { id: 14 },
-    { id: 15 },
-  ],
-  columns: ['id'],
-  columnAutoWidth: true,
-  rowDragging: {
-    allowReordering: true,
-    dropFeedbackMode: 'push',
-    onDragEnd(e: any): void {
-      e.cancel = new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, 500);
-      });
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 250,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
     },
-  },
-}));
+    summary: {
+      totalItems: [{
+        column: 'id',
+        summaryType: 'count',
+      }],
+    },
+    paging: {
+      pageSize: 2,
+    },
+    dataSource: [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
+      { id: 9 },
+      { id: 10 },
+      { id: 11 },
+      { id: 12 },
+      { id: 13 },
+      { id: 14 },
+      { id: 15 },
+    ],
+    columns: ['id'],
+    columnAutoWidth: true,
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+      onDragEnd(e: any): void {
+        e.cancel = new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 500);
+        });
+      },
+    },
+  });
+});
 
 // T1082538
 test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
@@ -515,20 +526,23 @@ test('The draggable element should be displayed correctly after horizontal scrol
       left: 2500,
       top: 0,
     });
-}).before(async () => createWidget('dxDataGrid', {
-  width: 600,
-  height: 500,
-  dataSource: generateData(10, 50),
-  columnWidth: 100,
-  scrolling: {
-    columnRenderingMode: 'virtual',
-    useNative: false,
-  },
-  rowDragging: {
-    allowReordering: true,
-    showDragIcons: false,
-  },
-}));
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    width: 600,
+    height: 500,
+    dataSource: generateData(10, 50),
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+      useNative: false,
+    },
+    rowDragging: {
+      allowReordering: true,
+      showDragIcons: false,
+    },
+  });
+});
 
 // T1085143
 test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
@@ -544,29 +558,32 @@ test('The placeholder should have correct position after dragging the row to the
   await t
     .expect(getPlaceholderOffset())
     .eql(freeSpaceRowOffset);
-}).before(async () => createWidget('dxDataGrid', {
-  width: 400,
-  height: 600,
-  dataSource: [
-    {
-      id: 1, name: 'Name 1', age: 19,
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    width: 400,
+    height: 600,
+    dataSource: [
+      {
+        id: 1, name: 'Name 1', age: 19,
+      },
+      {
+        id: 2, name: 'Name 2', age: 11,
+      },
+    ],
+    columns: ['name', 'age'],
+    dataRowTemplate(_, { data }) {
+      return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
     },
-    {
-      id: 2, name: 'Name 2', age: 11,
+    rowDragging: {
+      allowReordering: true,
+      dragTemplate() {
+        return $('<div>test</div>');
+      },
+      showDragIcons: false,
     },
-  ],
-  columns: ['name', 'age'],
-  dataRowTemplate(_, { data }) {
-    return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
-  },
-  rowDragging: {
-    allowReordering: true,
-    dragTemplate() {
-      return $('<div>test</div>');
-    },
-    showDragIcons: false,
-  },
-}));
+  });
+});
 
 // T1126013
 // TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
@@ -593,7 +610,8 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
   await t.expect(draggedRowIndex)
     .eql(toIndex - 1);
-}).before(async () => {
+}).before(async (t) => {
+  await t.maximizeWindow();
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
     height: 250,
@@ -648,7 +666,8 @@ test('Item should appear in a correct spot when dragging to a different page wit
 
   await t.expect(draggedRowIndex)
     .eql(toIndex - 1);
-}).before(async () => {
+}).before(async (t) => {
+  await t.maximizeWindow();
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
     height: 250,
