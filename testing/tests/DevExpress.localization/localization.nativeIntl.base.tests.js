@@ -42,16 +42,15 @@ QUnit.module('Localization date', () => {
                 testData.forEach(config => {
                     const { format } = config;
 
-                    const formattedDate = dateLocalization.format(new Date(2021, 9, 17, 16, 23), format);
+                    const formattedDate = dateLocalization.format(new Date(2021, 9, 17, 16, 6), format);
 
-                    const isNarrowNoBreakSpaces = formattedDate.indexOf(NARROW_NO_BREAK_SPACE) !== -1;
+                    const hasNarrowNoBreakSpaces = formattedDate.indexOf(NARROW_NO_BREAK_SPACE) !== -1;
 
-                    assert.strictEqual(isNarrowNoBreakSpaces, false, `formatted date with ${format} locale has no any narrow no-break spaces`);
+                    assert.strictEqual(hasNarrowNoBreakSpaces, false, `formatted date with ${format} locale has no any narrow no-break spaces`);
                 });
             } finally {
                 locale('en');
             }
-
         });
     });
 });
