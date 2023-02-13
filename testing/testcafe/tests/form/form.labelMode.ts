@@ -23,7 +23,7 @@ fixture.disablePageReloads`Form`
               return;
             }
 
-            const testName = `Priorities, lblMode=${formLabelMode},lblLoc=${formLabelLocation},lblVis=${labelVisible},lblAl=${labelAlignment},edtr.lblMode=${editorLabelMode},edtr.stlMode=${editorStylingMode}`;
+            const testName = `Form,lMode=${formLabelMode},lLoc=${formLabelLocation},lVis=${labelVisible},lAl=${labelAlignment},e.lMode=${editorLabelMode},e.sMode=${editorStylingMode}`;
 
             test(testName, async (t) => {
               const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
