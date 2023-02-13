@@ -185,7 +185,7 @@ QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory"
                 'dxChart',
                 'argumentAxis.aggregateByCategory',
                 '23.1',
-                'This option is deprecated, use the aggregation.enabled property instead'
+                'Use the aggregation.enabled option instead'
             ]);
     } finally {
         errors.log.restore();
