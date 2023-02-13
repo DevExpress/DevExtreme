@@ -679,11 +679,14 @@ const VirtualScrollingRowsViewExtender = (function() {
             const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
             const zeroTopPosition = e.scrollOffset.top === 0;
             const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;
+            const hasScrolled = isScrollTopChanged || e.forceUpdateScrollPosition;
+            const isValidScrollTarget = this._hasHeight || !legacyScrollingMode && zeroTopPosition;
 
-            if((isScrollTopChanged || e.forceUpdateScrollPosition) && (this._hasHeight || !legacyScrollingMode && zeroTopPosition) && this._rowHeight) {
+            if(hasScrolled && isValidScrollTarget && this._rowHeight) {
                 this._scrollTop = e.scrollOffset.top;
+                const isVirtualRowRendering = isVirtualMode(this) || this.option('scrolling.rowRenderingMode') !== 'standard';
 
-                if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false) {
+                if(isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
                     this._updateContentItemSizes();
                     this._updateViewportSize(null, this._scrollTop);
                 }

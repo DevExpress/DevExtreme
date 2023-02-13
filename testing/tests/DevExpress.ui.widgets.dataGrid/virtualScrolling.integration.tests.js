@@ -7707,4 +7707,83 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             assert.deepEqual(names, ['test 3', 'test 2', 'test 1']);
         });
     });
+    QUnit.test('Partially hidden master detail row should not prevent next page from loading on scroll when rowRenderingMode is virtual (T1139685)', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            let categoryId = 0;
+            for(let i = 0; i < count; i++) {
+                i % 3 === 0 && categoryId++;
+                items.push({
+                    ID: i + 1,
+                    Name: `Name ${i + 1}`,
+                    Category: `Category ${categoryId}`,
+                    column3: i,
+                    column4: i,
+                    column5: i,
+                    column6: i
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(30),
+            keyExpr: 'ID',
+            height: 400,
+            remoteOperations: {
+                filtering: true,
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                mode: 'standard',
+                rowRenderingMode: 'virtual'
+            },
+            columns: ['ID', {
+                dataField: 'Name',
+                width: 300
+            }, {
+                dataField: 'Category'
+            }, 'column3', 'column4', 'column5', 'column6'],
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $('<div>')
+                        .addClass('myclass')
+                        .text(options.key)
+                        .appendTo(container);
+                    $('<div>')
+                        .dxDataGrid({
+                            dataSource: getData(3),
+                            columns: ['ID', {
+                                dataField: 'Name',
+                                width: 300
+                            }, {
+                                dataField: 'Category'
+                            }, 'column3', 'column4', 'column5', 'column6'] })
+                        .appendTo(container);
+                },
+            },
+            width: 350,
+
+        });
+        // act
+        this.clock.tick();
+        const scrollable = dataGrid.getScrollable();
+
+        dataGrid.expandRow(1);
+        this.clock.tick();
+
+        scrollable.scrollBy(100);
+        this.clock.tick();
+
+        const lastVisibleRowBeforeScroll = dataGrid.getVisibleRows().at(-1).key;
+        scrollable.scrollBy(100);
+        this.clock.tick();
+
+        // const scrollableBottom
+        // assert
+        assert.ok($('.dx-virtual-row').last().position().top - $('.dx-master-detail-row').height() >= scrollable.scrollTop(), 'placeholder should not be visible');
+        assert.notEqual(lastVisibleRowBeforeScroll, dataGrid.getVisibleRows().at(-1).key, 'scroll should have occurred');
+    });
 });
