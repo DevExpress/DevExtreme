@@ -1171,15 +1171,13 @@ const Calendar = Editor.inherit({
         }
     },
 
-    _updateAriaDisabled(isRuntimeChange = false) {
-        const isDisabled = this._isDisabled();
-
+    _updateAriaDisabled() {
         const value = this._dateOption('value') ?? this._dateOption('currentDate');
         const $disabledCell = this._view._getCellByDate(value);
 
-        const ariaValue = isRuntimeChange ? isDisabled : isDisabled && !isRuntimeChange;
+        const isDisabled = this._isDisabled();
 
-        this.setAria('disabled', ariaValue || undefined, $disabledCell);
+        this.setAria('disabled', isDisabled || undefined, $disabledCell);
     },
 
     _updateAriaId: function(value) {
@@ -1206,7 +1204,7 @@ const Calendar = Editor.inherit({
 
         switch(args.name) {
             case 'disabled':
-                this._updateAriaDisabled(true);
+                this._updateAriaDisabled();
                 this.callBase(args);
                 break;
             case 'width':
