@@ -36,7 +36,6 @@ type CompatibleRadioGroupProps<T> = Omit<RadioGroupProps<T>, CompatibleOmittedPr
 type ValueGetter = <T>(item: ItemLike) => T;
 type LabelGetter = (item: ItemLike) => string;
 
-//* Component={"name":"RadioGroupCompatible", "jQueryRegistered":true}
 function RadioGroupCompatibleInternal<T>(
   {
     items,
@@ -102,6 +101,7 @@ type RadioGroupCompatibleType = <T>(
   p: CompatibleRadioGroupProps<T> & { ref?: Ref<RadioGroupRef> }
 ) => JSX.Element;
 
+//* Component={"name":"RadioGroupCompatible", "jQueryRegistered":true, "hasApiMethod":true}
 export const RadioGroupCompatible = forwardRef(
   RadioGroupCompatibleInternal,
 ) as RadioGroupCompatibleType;

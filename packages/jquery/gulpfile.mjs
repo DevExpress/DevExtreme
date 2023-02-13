@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import gulp from 'gulp';
 import babel from 'gulp-babel';
 import { generateInfernoFromReactComponents, ReactSrc } from './gulp/inferno-from-react.mjs';
@@ -9,6 +10,7 @@ function generateInfernoComponents() {
 }
 
 function patchGeneratedSources(done) {
+  fs.copyFileSync('./patch/radio-group.jsx', './src/generated/components/radio-group/radio-group.jsx');
   done();
 }
 
@@ -33,23 +35,20 @@ function generateInferno() {
 function build() {
   return gulp.series(
     generateInferno(),
-        gulp.parallel(
+    gulp.parallel(
       'js-bundles-debug',
       gulp.series(
         transpile,
-        copydts
-      )
-    )
-  )
+        copydts,
+      ),
+    ),
+  );
 }
 
 gulp.task('build-dev',
-  build(),
-);
+  build());
 
-gulp.task('watch', () =>
-  gulp.watch(
-    [...ReactSrc, './src/*'],
-    build(),
-  ),
-);
+gulp.task('watch', () => gulp.watch(
+  [...ReactSrc, './src/*'],
+  build(),
+));

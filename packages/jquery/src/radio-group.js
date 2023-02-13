@@ -3,18 +3,8 @@ import { EditorWrapper } from './editor-wrapper';
 import { RadioGroupCompatible as RadioButtonCompatibleInferno } from './generated/compatible-components/radio-group';
 
 export class RadioGroupCompatible extends EditorWrapper {
-  _initializeComponent() {
-    super._initializeComponent();
-    this._propsInfo.templates.forEach((template) => {
-      this._componentTemplates[template] = this._createTemplateComponent(
-        this._props[template],
-        template,
-      );
-    });
-  }
-
-  getProps() {
-    return super.getProps();
+  focus() {
+    this.viewRef.focus();
   }
 
   get _propsInfo() {
@@ -23,7 +13,11 @@ export class RadioGroupCompatible extends EditorWrapper {
       allowNull: ['value'],
       elements: [],
       templates: ['itemRender'],
-      props: ['items', 'displayExpr', 'valueExpr', 'itemRender', 'value', 'defaultValue', 'valueChange'],
+      props: ['items', 'displayExpr', 'valueExpr', 'itemRender', 'value', 'defaultValue', 'valueChange',
+        'name', 'errors',
+        'active', 'disabled', 'visible', 'shortcutKey', 'tabIndex', 'hint', 'width', 'height',
+        'focusStateEnabled', 'hoverStateEnabled', 'activeStateEnabled',
+        'onFocus', 'onBlur'],
     };
   }
 
