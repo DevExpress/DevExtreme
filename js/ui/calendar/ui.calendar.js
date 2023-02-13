@@ -225,6 +225,16 @@ const Calendar = Editor.inherit({
         });
     },
 
+    _isDisabled() {
+        return this.option('disabled');
+    },
+
+    _keyboardHandler() {
+        if(!this._isDisabled) {
+            this.callBase();
+        }
+    },
+
     _getSerializationFormat: function(optionName) {
         const value = this.option(optionName || 'value');
 
@@ -588,6 +598,7 @@ const Calendar = Editor.inherit({
         this._renderFooter();
 
         this._updateAriaSelected();
+        this._updateAriaDisabled();
         this._updateAriaId();
 
         this._moveToClosestAvailableDate();
@@ -1160,6 +1171,15 @@ const Calendar = Editor.inherit({
         }
     },
 
+    _updateAriaDisabled() {
+        const value = this._dateOption('value');
+        const $disabledCell = this._view._getCellByDate(value);
+
+        const ariaValue = this._isDisabled;
+
+        this.setAria('disabled', ariaValue, $disabledCell);
+    },
+
     _updateAriaId: function(value) {
         value = value ?? this.option('currentDate');
 
@@ -1183,6 +1203,10 @@ const Calendar = Editor.inherit({
         let previousValue = args.previousValue;
 
         switch(args.name) {
+            case 'disabled':
+                this._updateAriaDisabled();
+                this.callBase(args);
+                break;
             case 'width':
                 this.callBase(args);
                 this._clearViewWidthCache();
