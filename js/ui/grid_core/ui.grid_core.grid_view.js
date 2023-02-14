@@ -606,19 +606,10 @@ const ResizingController = modules.ViewController.inherit({
 
         that.updateSize($rootElement);
 
-        that._hasHeight = !!that._rootElementHeight || !!maxHeight;
-
-        // height value validation
-        if(!that._hasHeight && isHeightSpecified) {
-            const $testDiv = $('<div>');
-            setHeight($testDiv, height);
-            $testDiv.appendTo($rootElement);
-            that._hasHeight = !!getHeight($testDiv);
-            $testDiv.remove();
-        }
-
         deferRender(function() {
-            rowsView.height(null, that._hasHeight);
+            const hasHeight = !!that._rootElementHeight || !!maxHeight || isHeightSpecified;
+            rowsView.hasHeight(hasHeight);
+
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css('height', maxHeight);
