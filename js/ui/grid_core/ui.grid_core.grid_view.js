@@ -1,4 +1,4 @@
-import { getOuterWidth, getInnerWidth, getWidth, getHeight, setHeight } from '../../core/utils/size';
+import { getOuterWidth, getInnerWidth, getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 // @ts-expect-error
