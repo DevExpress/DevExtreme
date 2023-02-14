@@ -1182,12 +1182,6 @@ const columnsViewMembers = {
             paddingLeft: rtlEnabled ? width : '',
             paddingRight: !rtlEnabled ? width : ''
         });
-
-    },
-    dispose: function() {
-        if(hasWindow()) {
-            getWindow().clearTimeout(this._templateTimeout);
-        }
     },
 
     isScrollbarVisible: function(isHorizontal) {
@@ -1199,6 +1193,12 @@ const columnsViewMembers = {
         }
 
         return false;
+    },
+
+    dispose: function() {
+        if(hasWindow()) {
+            getWindow().clearTimeout(this._templateTimeout);
+        }
     }
 };
 
