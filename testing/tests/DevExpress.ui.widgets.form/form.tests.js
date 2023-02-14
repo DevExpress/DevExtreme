@@ -1803,7 +1803,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
                                 itemType: 'group',
                                 items: [{
                                     dataField: editorType,
-                                    label: { visible: false },
+                                    label: { visible: true },
                                     editorType: editorType,
                                 }, ],
                             },
@@ -1819,7 +1819,35 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
         });
     });
 
+    ['center', 'right'].forEach(alignment => {
+        QUnit.test(`${editorType} should not have a class when the alignment = ${alignment} (T1126956)`, function(assert) {
+            const testContainer = $('#form');
 
+            testContainer.dxForm({
+                labelLocation: 'top',
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: editorType,
+                                    label: { visible: true, alignment },
+                                    editorType: editorType,
+                                }, ],
+                            },
+                        ],
+                    },
+
+                ],
+            }).dxForm('instance');
+
+            const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
+
+            assert.notOk($componentWrapper.hasClass(SWITCH_GROUP_SPACING_CLASS));
+        });
+    });
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top with the groups', function(assert) {

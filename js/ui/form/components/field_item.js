@@ -110,8 +110,10 @@ export function renderFieldItem({
 
         const switchGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
         const isSwitchGroup = switchGroup.includes(editorType);
+        const labelAlignment = labelOptions.alignment;
+        const isNotAlignmentRightOrCenter = labelAlignment !== 'right' && labelAlignment !== 'center';
 
-        if(isSwitchGroup && labelLocation === 'top') {
+        if(isSwitchGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
             $fieldEditorContainer.addClass(SWITCH_GROUP_SPACING_CLASS);
         }
     } else {
