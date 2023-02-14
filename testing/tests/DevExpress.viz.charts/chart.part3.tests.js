@@ -1331,9 +1331,9 @@ QUnit.test('CommonPaneSetting. Two panes, color set as object with gradients', f
             bottom: 80
         },
         commonPaneSettings: {
-            backgroundColor: { customId: 'id_gradient' }
+            backgroundColor: { fillId: 'id_gradient' }
         },
-        panes: [{ name: 'pane1', backgroundColor: { customId: 'id_gradient1' } }, { name: 'pane2' }]
+        panes: [{ name: 'pane1', backgroundColor: { fillId: 'id_gradient1' } }, { name: 'pane2' }]
     });
 
     assert.ok(chart.panesBackground);

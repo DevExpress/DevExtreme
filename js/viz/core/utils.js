@@ -644,6 +644,6 @@ export function extractColor(color, isBase) {
     } else if(isBase) {
         return color.base;
     } else {
-        return color.customId || color.base;
+        return color.fillId || color.base;
     }
 }

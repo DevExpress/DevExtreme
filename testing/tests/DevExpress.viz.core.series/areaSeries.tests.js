@@ -1043,15 +1043,15 @@ function setDiscreteType(series) {
             this.options = {
                 type: seriesType,
                 border: { visible: true },
-                color: { base: 'seriesColor', customId: 'id_color_0' },
+                color: { base: 'seriesColor', fillId: 'id_color_0' },
                 selectionStyle: {
                     hatching: { direction: 'left' },
-                    color: { customId: 'id_color_1' },
+                    color: { fillId: 'id_color_1' },
                     border: { visible: true },
                 },
                 hoverStyle: {
                     hatching: { direction: 'left' },
-                    color: { customId: 'id_color_2' },
+                    color: { fillId: 'id_color_2' },
                     border: { visible: true },
                 }
             };
@@ -1184,14 +1184,14 @@ function setDiscreteType(series) {
     QUnit.test('custom styles are defined', function(assert) {
         const series = createSeries({
             type: seriesType,
-            color: { customId: 'id_color_0' },
+            color: { fillId: 'id_color_0' },
             hoverStyle: {
                 hatching: { direction: 'left' },
-                color: { customId: 'id_color_1' }
+                color: { fillId: 'id_color_1' }
             },
             selectionStyle: {
                 hatching: { direction: 'left' },
-                color: { customId: 'id_color_2' }
+                color: { fillId: 'id_color_2' }
             }
         });
 

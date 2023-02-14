@@ -421,12 +421,12 @@ QUnit.test('All options defined', function(assert) {
 QUnit.test('custom styles are defined', function(assert) {
     const series = createSeries({
         type: seriesType,
-        color: { base: 'seriesColor', customId: 'id_color_0' },
+        color: { base: 'seriesColor', fillId: 'id_color_0' },
         border: {
             visible: true,
         },
         hoverStyle: {
-            color: { customId: 'id_color_1' },
+            color: { fillId: 'id_color_1' },
             lightening: true,
             hatching: { direction: 'left' },
             border: {
@@ -434,7 +434,7 @@ QUnit.test('custom styles are defined', function(assert) {
             }
         },
         selectionStyle: {
-            color: { customId: 'id_color_2' },
+            color: { fillId: 'id_color_2' },
             lightening: true,
             hatching: { direction: 'left' },
             border: {
@@ -539,7 +539,7 @@ QUnit.test('custom styles are defined', function(assert) {
         mainSeriesColor: 'mainSeriesColor',
         color: {
             base: 'n-color',
-            customId: 'id_color'
+            fillId: 'id_color'
         },
         hoverStyle: {
             hatching: { direction: 'left' }

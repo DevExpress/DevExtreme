@@ -433,13 +433,13 @@ function createThemeManager(options, themeGroupName) {
             type: 'area',
             color: {
                 base: 'red',
-                customId: 'id_pattern'
+                fillId: 'id_pattern'
             }
         });
         // assert series theme
         assert.deepEqual(theme.color, {
             base: 'red',
-            customId: 'id_pattern'
+            fillId: 'id_pattern'
         });
         assert.strictEqual(theme.mainSeriesColor, 'red');
     });
@@ -451,12 +451,12 @@ function createThemeManager(options, themeGroupName) {
         const theme = themeManager.getOptions('series', {
             type: 'area',
             color: {
-                customId: 'id_pattern'
+                fillId: 'id_pattern'
             }
         });
         // assert series theme
         assert.deepEqual(theme.color, {
-            customId: 'id_pattern'
+            fillId: 'id_pattern'
         });
         assert.strictEqual(theme.mainSeriesColor, '#1db2f5');
     });

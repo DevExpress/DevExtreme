@@ -166,11 +166,11 @@ QUnit.test('Custom colors', function(assert) {
     this.translator.setDomain(0, 100);
     this.rangeContainer.render({
         width: 1,
-        backgroundColor: { customId: 'id_color_0' },
+        backgroundColor: { fillId: 'id_color_0' },
         ranges: [
-            { startValue: 10, endValue: 20, color: { customId: 'id_color_1' } },
-            { startValue: 30, endValue: 50, color: { customId: 'id_color_2' } },
-            { startValue: 50, endValue: 80, color: { customId: 'id_color_3' } }
+            { startValue: 10, endValue: 20, color: { fillId: 'id_color_1' } },
+            { startValue: 30, endValue: 50, color: { fillId: 'id_color_2' } },
+            { startValue: 50, endValue: 80, color: { fillId: 'id_color_3' } }
         ]
     });
 

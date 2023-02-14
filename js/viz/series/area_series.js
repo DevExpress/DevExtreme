@@ -26,7 +26,7 @@ const baseAreaMethods = {
     },
 
     _getColorId: function(options) {
-        return options.color?.customId;
+        return options.color?.fillId;
     },
 
     getValueRangeInitialValue: function() {

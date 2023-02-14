@@ -65,7 +65,7 @@ const baseBarSeriesMethods = {
     _createPointStyles: function(pointOptions) {
         const that = this;
         const mainColor = extractColor(pointOptions.color, true) || that._getMainColor();
-        const colorId = pointOptions.color?.customId;
+        const colorId = pointOptions.color?.fillId;
         const hoverStyle = pointOptions.hoverStyle || {};
         const selectionStyle = pointOptions.selectionStyle || {};
 

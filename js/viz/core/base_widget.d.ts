@@ -883,5 +883,5 @@ export interface Color {
    * @default undefined
    * @public
    */
-  customId?: string;
+  fillId?: string;
 }

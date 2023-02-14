@@ -697,7 +697,7 @@ QUnit.test('Set custom style for series', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'seriesColor',
-        color: { customId: 'id_series_color' },
+        color: { fillId: 'id_series_color' },
         border: {
             visible: true,
         },
@@ -739,7 +739,7 @@ QUnit.test('Set custom style and base color for series', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'seriesColor',
-        color: { base: 'custom_series_color', customId: 'id_series_color' },
+        color: { base: 'custom_series_color', fillId: 'id_series_color' },
         border: {
             visible: true,
         },
@@ -958,14 +958,14 @@ QUnit.test('Customize with custom styles', function(assert) {
         mainSeriesColor: 'n-color',
         customizePoint: function() {
             return {
-                color: { customId: 'id_color_0' },
+                color: { fillId: 'id_color_0' },
                 hoverStyle: {
                     hatching: { direction: 'left' },
-                    color: { customId: 'id_color_1' }
+                    color: { fillId: 'id_color_1' }
                 },
                 selectionStyle: {
                     hatching: { direction: 'right' },
-                    color: { customId: 'id_color_2' }
+                    color: { fillId: 'id_color_2' }
                 }
             };
         }
@@ -1010,14 +1010,14 @@ QUnit.test('Customize with custom styles and with base color', function(assert) 
         mainSeriesColor: 'n-color',
         customizePoint: function() {
             return {
-                color: { base: 'c-b-color', customId: 'id_color_0' },
+                color: { base: 'c-b-color', fillId: 'id_color_0' },
                 hoverStyle: {
                     hatching: { direction: 'left' },
-                    color: { customId: 'id_color_1' }
+                    color: { fillId: 'id_color_1' }
                 },
                 selectionStyle: {
                     hatching: { direction: 'right' },
-                    color: { customId: 'id_color_2' }
+                    color: { fillId: 'id_color_2' }
                 }
             };
         }
@@ -1120,7 +1120,7 @@ QUnit.test('custom styles', function(assert) {
         mainSeriesColor: 'mainSeriesColor',
         color: {
             base: 'n-color',
-            customId: 'id_color'
+            fillId: 'id_color'
         },
         hoverStyle: {
             hatching: { direction: 'left' }

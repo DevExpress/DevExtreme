@@ -127,7 +127,7 @@ export const pie = _extend({}, barSeries, {
     _createPointStyles: function(pointOptions, data, point) {
         const that = this;
         const mainColor = extractColor(pointOptions.color, true) || that._getMainColor(data, point);
-        const colorId = pointOptions.color?.customId;
+        const colorId = pointOptions.color?.fillId;
         const hoverStyle = pointOptions.hoverStyle || {};
         const selectionStyle = pointOptions.selectionStyle || {};
 
