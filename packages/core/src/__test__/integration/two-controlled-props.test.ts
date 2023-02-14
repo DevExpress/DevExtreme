@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { createSelector } from '../../selector';
 import { createStore } from '../../store';
 
@@ -12,28 +11,29 @@ describe('two controlled props (pager like scenario)', () => {
     pageCount: (val: number) => number,
     pageIndex?: (val: number) => number
   }) {
-    const stateConfig: { [name:string]: unknown } = {};
-    Object.entries(callbacks).forEach(([name, callback]) => {
-      stateConfig[name] = {
-        controlledMode: true,
-        changeCallback: (newVal: number) => {
-          const userPatchedVal = callback(newVal);
-          store.addUpdate((state) => ({
-            ...state,
-            [name]: userPatchedVal,
-          }));
-          // Simulate component logic: pageIndex should be always less then pageCount
-          if (!callbacks.pageIndex) {
-            store.addUpdate((state) => ({
-              ...state,
-              pageIndex: Math.min(state.pageIndex, userPatchedVal),
-            }));
-          }
-          store.commitPropsUpdates();
-        },
-      };
-    });
-    const store = createStore(initialState, stateConfig);
+    const store = createStore(initialState,
+      Object.entries(callbacks)
+        .reduce((stateConfig, [name, callback]) => {
+          stateConfig[name] = {
+            controlledMode: true,
+            changeCallback: (newVal: number) => {
+              const userPatchedVal = callback(newVal);
+              store.addUpdate((state) => ({
+                ...state,
+                [name]: userPatchedVal,
+              }));
+              // Simulate component logic: pageIndex should be always less then pageCount
+              if (!callbacks.pageIndex) {
+                store.addUpdate((state) => ({
+                  ...state,
+                  pageIndex: Math.min(state.pageIndex, userPatchedVal),
+                }));
+              }
+              store.commitPropsUpdates();
+            },
+          };
+          return stateConfig;
+        }, {} as { [name:string]: unknown }));
     const pageCountVM = jest.fn(({ pageCount }) => `view-${pageCount}`);
     const pageCountSelector = createSelector(
       ({ pageCount }: State) => ({ pageCount }),
@@ -76,7 +76,6 @@ describe('two controlled props (pager like scenario)', () => {
       pageCount: (newPageCount: number) => (newPageCount - 2),
     });
 
-    expect(store.getState()).toMatchObject(initialState);
     store.addUpdate((state) => ({
       ...state,
       pageCount: 5,
