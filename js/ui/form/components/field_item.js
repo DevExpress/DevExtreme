@@ -22,13 +22,14 @@ export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
 export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
+export const SWITCH_GROUP_SPACING_CLASS = 'dx-swithc-group-spacing';
 
 import { renderLabel } from './label';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const VALIDATION_TARGET_CLASS = 'dx-validation-target';
 const INVALID_CLASS = 'dx-invalid';
-const SWITCH_GROUP_SPACING_CLASS = 'dx-swithc-group-spacing';
+
 
 export function renderFieldItem({
     $parent,

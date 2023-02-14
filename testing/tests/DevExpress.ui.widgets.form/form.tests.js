@@ -39,6 +39,8 @@ import {
     FIELD_ITEM_LABEL_TEXT_CLASS,
 } from 'ui/form/components/label';
 
+import { SWITCH_GROUP_SPACING_CLASS } from 'ui/form/components/field_item.js';
+
 const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 
@@ -48,6 +50,7 @@ import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
 import 'ui/lookup';
 import 'ui/radio_group';
+import 'ui/switch';
 import 'ui/tag_box';
 import 'ui/toolbar';
 import 'ui/text_area';
@@ -1725,6 +1728,98 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
 
     const $labelTexts = $(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
     assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)));
+});
+
+['dxCheckBox', 'dxSwitch', 'dxRadioGroup'].forEach(editorType => {
+    const selector = editorType.split('dx')[1].toLowerCase();
+
+    QUnit.test(`${editorType} should have a class when label Location = top and label is visible (T1126956)`, function(assert) {
+        const testContainer = $('#form');
+
+        testContainer.dxForm({
+            labelLocation: 'top',
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        {
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true },
+                                editorType: editorType,
+                            }],
+                        },
+                    ],
+                },
+
+            ],
+        }).dxForm('instance');
+
+        const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
+
+        assert.ok($componentWrapper.hasClass(SWITCH_GROUP_SPACING_CLASS));
+    });
+
+    QUnit.test(`${editorType} should not have a class when the label is not visible (T1126956)`, function(assert) {
+        const testContainer = $('#form');
+
+        testContainer.dxForm({
+            labelLocation: 'top',
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        {
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: false },
+                                editorType: editorType,
+                            }, ],
+                        },
+                    ],
+                },
+
+            ],
+        }).dxForm('instance');
+
+        const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
+
+        assert.notOk($componentWrapper.hasClass(SWITCH_GROUP_SPACING_CLASS));
+    });
+
+    ['left', 'right'].forEach(labelLocation => {
+        QUnit.test(`${editorType} should not have a class when the labelLocation = ${labelLocation} (T1126956)`, function(assert) {
+            const testContainer = $('#form');
+
+            testContainer.dxForm({
+                labelLocation,
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: editorType,
+                                    label: { visible: false },
+                                    editorType: editorType,
+                                }, ],
+                            },
+                        ],
+                    },
+
+                ],
+            }).dxForm('instance');
+
+            const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
+
+            assert.notOk($componentWrapper.hasClass(SWITCH_GROUP_SPACING_CLASS));
+        });
+    });
+
+
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top with the groups', function(assert) {
