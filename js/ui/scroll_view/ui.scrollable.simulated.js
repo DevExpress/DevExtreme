@@ -1012,22 +1012,18 @@ export const SimulatedStrategy = Class.inherit({
 
         this._updateBounds();
         if(this._isHorizontalAndRtlEnabled()) {
-            deferUpdate(() => {
-                let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
+            let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
 
-                if(scrollLeft <= 0) {
-                    scrollLeft = 0;
-                    this._rtlConfig.scrollRight = this._getMaxOffset().left;
-                }
+            if(scrollLeft <= 0) {
+                scrollLeft = 0;
+                this._rtlConfig.scrollRight = this._getMaxOffset().left;
+            }
 
-                deferRender(() => {
-                    if(this._getScrollOffset().left !== scrollLeft) {
-                        this._rtlConfig.skipUpdating = true;
-                        this._component.scrollTo({ left: scrollLeft });
-                        this._rtlConfig.skipUpdating = false;
-                    }
-                });
-            });
+            if(this._getScrollOffset().left !== scrollLeft) {
+                this._rtlConfig.skipUpdating = true;
+                this._component.scrollTo({ left: scrollLeft });
+                this._rtlConfig.skipUpdating = false;
+            }
         }
     },
 
