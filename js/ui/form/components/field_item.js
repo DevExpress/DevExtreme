@@ -30,7 +30,6 @@ const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const VALIDATION_TARGET_CLASS = 'dx-validation-target';
 const INVALID_CLASS = 'dx-invalid';
 
-
 export function renderFieldItem({
     $parent,
     rootElementCssClassList,
