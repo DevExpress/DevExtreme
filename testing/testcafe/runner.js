@@ -24,6 +24,7 @@ createTestCafe({
     port2: 1438,
     // eslint-disable-next-line spellcheck/spell-checker
     experimentalProxyless: true,
+    configFile: './testing/testcafe/.testcaferc.js'
 })
     .then(tc => {
         testCafe = tc;
