@@ -15,8 +15,8 @@ themebuilder-scss
 lib
 *.scss
 
-packages/jquery/patch/*
-packages/jquery/src/generated/*
+packages/js-widgets/patch/*
+packages/js-widgets/src/generated/*
 packages/vue/src/*
 packages/vue/artifacts/*
 packages/interim/*
