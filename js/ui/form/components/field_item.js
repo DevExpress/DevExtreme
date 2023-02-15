@@ -22,7 +22,7 @@ export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
 export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
-export const TOGGLE_GROUP_SPACING_CLASS = 'dx-toggle-group-spacing';
+export const TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS = 'dx-toggle-controls-conditional-paddings';
 
 import { renderLabel } from './label';
 
@@ -108,13 +108,13 @@ export function renderFieldItem({
             });
         }
 
-        const toggleGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
-        const isToggleGroup = toggleGroup.includes(editorType);
+        const toggleControlsGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
+        const isToggleControlsGroup = toggleControlsGroup.includes(editorType);
         const labelAlignment = labelOptions.alignment;
         const isNotAlignmentRightOrCenter = labelAlignment !== 'right' && labelAlignment !== 'center';
 
-        if(isToggleGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
-            $fieldEditorContainer.addClass(TOGGLE_GROUP_SPACING_CLASS);
+        if(isToggleControlsGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
+            $fieldEditorContainer.addClass(TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS);
         }
     } else {
         $rootElement.append($fieldEditorContainer);

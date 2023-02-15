@@ -39,7 +39,7 @@ import {
     FIELD_ITEM_LABEL_TEXT_CLASS,
 } from 'ui/form/components/label';
 
-import { TOGGLE_GROUP_SPACING_CLASS } from 'ui/form/components/field_item.js';
+import { TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS } from 'ui/form/components/field_item.js';
 
 const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
@@ -1758,7 +1758,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
 
         const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
 
-        assert.ok($componentWrapper.hasClass(TOGGLE_GROUP_SPACING_CLASS));
+        assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS));
     });
 
     QUnit.test(`${editorType} should not have a class when the label is not visible (T1126956)`, function(assert) {
@@ -1786,7 +1786,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
 
         const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
 
-        assert.notOk($componentWrapper.hasClass(TOGGLE_GROUP_SPACING_CLASS));
+        assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS));
     });
 
     ['left', 'right'].forEach(labelLocation => {
@@ -1815,7 +1815,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
 
             const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
 
-            assert.notOk($componentWrapper.hasClass(TOGGLE_GROUP_SPACING_CLASS));
+            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS));
         });
     });
 
@@ -1845,7 +1845,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
 
             const $componentWrapper = testContainer.find(`.dx-${selector}`).parent();
 
-            assert.notOk($componentWrapper.hasClass(TOGGLE_GROUP_SPACING_CLASS));
+            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS));
         });
     });
 });
