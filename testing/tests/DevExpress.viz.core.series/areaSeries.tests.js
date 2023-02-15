@@ -1059,7 +1059,7 @@ function setDiscreteType(series) {
         afterEach: environment.afterEach
     });
 
-    QUnit.test('normal style', function(assert) {
+    QUnit.test('should have normal style', function(assert) {
         const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -1077,7 +1077,7 @@ function setDiscreteType(series) {
         });
     });
 
-    QUnit.test('hover style', function(assert) {
+    QUnit.test('should have hover style after hover series', function(assert) {
         const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -1096,7 +1096,7 @@ function setDiscreteType(series) {
         });
     });
 
-    QUnit.test('selection style', function(assert) {
+    QUnit.test('should have selection style after select series', function(assert) {
         const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -1181,7 +1181,7 @@ function setDiscreteType(series) {
         });
     });
 
-    QUnit.test('custom styles are defined', function(assert) {
+    QUnit.test('should contain custom styles from series', function(assert) {
         const series = createSeries({
             type: seriesType,
             color: { fillId: 'id_color_0' },

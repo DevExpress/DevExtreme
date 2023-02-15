@@ -1058,7 +1058,7 @@ QUnit.test('Customize with custom styles and with base color', function(assert) 
 
 QUnit.module('Bar Series. LegendStyles', environment);
 
-QUnit.test('default LegendStyles', function(assert) {
+QUnit.test('should contain default styles', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'mainSeriesColor'
@@ -1083,7 +1083,7 @@ QUnit.test('default LegendStyles', function(assert) {
     });
 });
 
-QUnit.test('styles colors defined', function(assert) {
+QUnit.test('should contain colors, that used as string', function(assert) {
     const series = createSeries({
         type: seriesType,
         color: 'n-color',
@@ -1114,7 +1114,7 @@ QUnit.test('styles colors defined', function(assert) {
     });
 });
 
-QUnit.test('custom styles', function(assert) {
+QUnit.test('should contain custom styles', function(assert) {
     const series = createSeries({
         type: seriesType,
         mainSeriesColor: 'mainSeriesColor',
