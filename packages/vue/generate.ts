@@ -10,7 +10,7 @@ const componentsDir = outputDir;
 const oldComponentsDir = `${outputDir}/ui`;
 const indexFileName = `${outputDir}/index.ts`;
 const metadataFile = './artifacts/internal-tools/integration-data.json';
-const targetsDir = '../../jquery/lib/esm';
+const targetsDir = '../../js-widgets/lib/esm';
 
 // eslint-disable-next-line no-console
 console.log('Generating wrappers...');
