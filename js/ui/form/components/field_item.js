@@ -22,7 +22,7 @@ export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
 export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
-export const SWITCH_GROUP_SPACING_CLASS = 'dx-swithc-group-spacing';
+export const TOGGLE_GROUP_SPACING_CLASS = 'dx-toggle-group-spacing';
 
 import { renderLabel } from './label';
 
@@ -108,13 +108,13 @@ export function renderFieldItem({
             });
         }
 
-        const switchGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
-        const isSwitchGroup = switchGroup.includes(editorType);
+        const toggleGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
+        const isToggleGroup = toggleGroup.includes(editorType);
         const labelAlignment = labelOptions.alignment;
         const isNotAlignmentRightOrCenter = labelAlignment !== 'right' && labelAlignment !== 'center';
 
-        if(isSwitchGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
-            $fieldEditorContainer.addClass(SWITCH_GROUP_SPACING_CLASS);
+        if(isToggleGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
+            $fieldEditorContainer.addClass(TOGGLE_GROUP_SPACING_CLASS);
         }
     } else {
         $rootElement.append($fieldEditorContainer);
