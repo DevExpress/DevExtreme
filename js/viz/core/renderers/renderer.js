@@ -2176,11 +2176,11 @@ Renderer.prototype = {
     },
 
     drawPattern: function({ color, hatching }, storageId, nextId) {
-        return this.pattern(color, hatching, storageId + '-hatching-' + nextId++);
+        return this.pattern(color, hatching, `${storageId}-hatching-${nextId++}`);
     },
 
     drawFilter: function(_, storageId, nextId) {
-        return this.lightenFilter(storageId + '-lightening-' + nextId++);
+        return this.lightenFilter(`${storageId}-lightening-${nextId++}`);
     },
 
     lockDefsElements: function(attrs, ref, type) {
