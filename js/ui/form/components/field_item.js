@@ -22,7 +22,7 @@ export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
 export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
-export const TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS = 'dx-toggle-controls-conditional-paddings';
+export const TOGGLE_CONTROLS_PADDING_CLASS = 'dx-toggle-controls-paddings';
 
 import { renderLabel } from './label';
 
@@ -114,7 +114,7 @@ export function renderFieldItem({
         const isNotAlignmentRightOrCenter = labelAlignment !== 'right' && labelAlignment !== 'center';
 
         if(isToggleControlsGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
-            $fieldEditorContainer.addClass(TOGGLE_CONTROLS_CONDITIONAL_PADDING_CLASS);
+            $fieldEditorContainer.addClass(TOGGLE_CONTROLS_PADDING_CLASS);
         }
     } else {
         $rootElement.append($fieldEditorContainer);
