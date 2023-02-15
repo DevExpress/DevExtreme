@@ -6,7 +6,7 @@ import {
   createRef, RefObject, VNode, Component,
 } from 'inferno';
 import renderer from '../../../core/inferno_renderer';
-import KeyboardProcessor from '@devextreme/interim';
+import { KeyboardProcessor } from '@devextreme/interim';
 
 // eslint-disable-next-line import/named
 import { JQuery as $ } from '@devextreme/interim';
