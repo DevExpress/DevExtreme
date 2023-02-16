@@ -887,6 +887,31 @@ QUnit.module('Class check', ()=>{
                 assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
             });
         });
+
+        test(`default editor should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when the alignment = left, label.visible = true,  labelLocation = top, (T1126956)`, function(assert) {
+            const $form = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: 'default',
+                                    label: { visible: true, alignment: 'left' },
+                                }, ],
+                            },
+                        ],
+                    },
+
+                ],
+            });
+
+            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+        });
     });
 
 });
