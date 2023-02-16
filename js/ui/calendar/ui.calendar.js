@@ -225,16 +225,6 @@ const Calendar = Editor.inherit({
         });
     },
 
-    _isDisabled() {
-        return this.option('disabled');
-    },
-
-    _keyboardHandler(options, onlyChildProcessing) {
-        if(!this._isDisabled()) {
-            this.callBase(options, onlyChildProcessing);
-        }
-    },
-
     _getSerializationFormat: function(optionName) {
         const value = this.option(optionName || 'value');
 
