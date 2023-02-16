@@ -108,12 +108,12 @@ export function renderFieldItem({
             });
         }
 
-        const toggleControlsGroup = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
-        const isToggleControlsGroup = toggleControlsGroup.includes(editorType);
+        const toggleControls = ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'];
+        const isToggleControls = toggleControls.includes(editorType);
         const labelAlignment = labelOptions.alignment;
         const isNotAlignmentRightOrCenter = labelAlignment !== 'right' && labelAlignment !== 'center';
 
-        if(isToggleControlsGroup && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
+        if(isToggleControls && labelLocation === 'top' && isNotAlignmentRightOrCenter) {
             $fieldEditorContainer.addClass(TOGGLE_CONTROLS_PADDING_CLASS);
         }
     } else {

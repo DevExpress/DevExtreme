@@ -16,11 +16,14 @@ import { FIELD_ITEM_CLASS,
 
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
+    TOGGLE_CONTROLS_PADDING_CLASS
 } from 'ui/form/components/field_item';
 
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
+import 'ui/radio_group';
+import 'ui/switch';
 
 import 'generic_light.css!';
 
@@ -771,6 +774,121 @@ QUnit.module('Form', () => {
 
         assert.equal(templateStub.getCall(0).args[0].name, undefined, 'name argument');
     });
+});
+
+QUnit.module('Class check', ()=>{
+    ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'].forEach(editorType => {
+        const componentName = editorType.split('dx')[1].toLowerCase();
+
+        test(`${editorType} should have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label Location = top, label alignment=left (T1126956)`, function(assert) {
+            const $form = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: editorType,
+                                    label: { visible: true },
+                                    editorType,
+                                }],
+                            },
+                        ],
+                    },
+
+                ],
+            }).dxForm('instance');
+
+            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+            assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+        });
+
+        test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when the label is not visible (T1126956)`, function(assert) {
+            const $form = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: editorType,
+                                    label: { visible: false },
+                                    editorType,
+                                }, ],
+                            },
+                        ],
+                    },
+
+                ],
+            }).dxForm('instance');
+
+            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+        });
+
+        ['left', 'right'].forEach(labelLocation => {
+            test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when the labelLocation = ${labelLocation} (T1126956)`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation,
+                    items: [
+                        {
+                            itemType: 'group',
+                            items: [
+                                {
+                                    itemType: 'group',
+                                    items: [{
+                                        dataField: editorType,
+                                        label: { visible: true },
+                                        editorType,
+                                    }, ],
+                                },
+                            ],
+                        },
+
+                    ],
+                }).dxForm('instance');
+
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            });
+        });
+
+        ['center', 'right'].forEach(alignment => {
+            test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when the alignment = ${alignment} (T1126956)`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation: 'top',
+                    items: [
+                        {
+                            itemType: 'group',
+                            items: [
+                                {
+                                    itemType: 'group',
+                                    items: [{
+                                        dataField: editorType,
+                                        label: { visible: true, alignment },
+                                        editorType,
+                                    }, ],
+                                },
+                            ],
+                        },
+
+                    ],
+                }).dxForm('instance');
+
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+            });
+        });
+    });
+
 });
 
 QUnit.module('Validation group', () => {
