@@ -21,6 +21,10 @@
   ],
   "author": "Developer Express Inc.",
   "license": "MIT",
+  "peerDependencies": {
+    "devextreme": "23.1-next",
+    "vue": "^2.5.16 || ^3.0.0"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@vue/compiler-sfc": "^3.0.0",
