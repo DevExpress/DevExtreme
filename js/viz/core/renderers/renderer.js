@@ -1951,7 +1951,7 @@ Renderer.prototype = {
 
     linearGradient: function(stops, id = getNextDefsSvgId(), rotationAngle) {
         const gradient = this._createElement('linearGradient', {
-            id: id,
+            id,
             gradientTransform: `rotate(${rotationAngle || 0})`
         }).append(this._defs);
         gradient.id = id;
@@ -1962,7 +1962,7 @@ Renderer.prototype = {
     },
 
     radialGradient: function(stops, id) {
-        const gradient = this._createElement('radialGradient', { id: id }).append(this._defs);
+        const gradient = this._createElement('radialGradient', { id }).append(this._defs);
 
         this._createGradientStops(stops, gradient);
 
@@ -2023,7 +2023,9 @@ Renderer.prototype = {
     },
 
     _getPatternUnits: function(width, height) {
-        return Number(width) && Number(height) ? 'userSpaceOnUse' : undefined;
+        if(Number(width) && Number(height)) {
+            return 'userSpaceOnUse';
+        }
     },
 
     _getPointsWithYOffset: function(points, offset) {
