@@ -799,7 +799,7 @@ QUnit.module('Class check', ()=>{
                     },
 
                 ],
-            }).dxForm('instance');
+            });
 
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
@@ -825,7 +825,7 @@ QUnit.module('Class check', ()=>{
                     },
 
                 ],
-            }).dxForm('instance');
+            });
 
             const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
@@ -852,7 +852,7 @@ QUnit.module('Class check', ()=>{
                         },
 
                     ],
-                }).dxForm('instance');
+                });
 
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
@@ -880,7 +880,7 @@ QUnit.module('Class check', ()=>{
                         },
 
                     ],
-                }).dxForm('instance');
+                });
 
                 const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
 
