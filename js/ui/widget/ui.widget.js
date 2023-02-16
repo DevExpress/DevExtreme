@@ -317,7 +317,15 @@ const Widget = DOMComponent.inherit({
         }
     },
 
+    _isDisabled() {
+        return this.option('disabled');
+    },
+
     _keyboardHandler(options, onlyChildProcessing) {
+        if(this._isDisabled()) {
+            return false;
+        }
+
         if(!onlyChildProcessing) {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys(originalEvent);
