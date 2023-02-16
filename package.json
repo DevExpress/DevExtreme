@@ -13,6 +13,9 @@
     "test": "jest",
     "start": "webpack-dev-server"
   },
+  "peerDependencies": {
+    "devextreme": "23.1-next"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
