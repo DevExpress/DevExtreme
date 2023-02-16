@@ -31,14 +31,6 @@ const isPixelWidth = function(width) {
     return isString(width) && width.slice(-2) === 'px';
 };
 
-const getContainerHeight = function($container) {
-    const clientHeight = $container.get(0).clientHeight;
-    const paddingTop = parseFloat($container.css('paddingTop'));
-    const paddingBottom = parseFloat($container.css('paddingBottom'));
-
-    return clientHeight - paddingTop - paddingBottom;
-};
-
 const calculateFreeWidth = function(that, widths) {
     const contentWidth = that._rowsView.contentWidth();
     const totalWidth = that._getTotalWidth(widths, contentWidth);
@@ -488,22 +480,25 @@ const resizingControllerMembers = {
         return Math.ceil(result);
     },
 
+    _$groupElement: function() {
+        return this.component.$element().children().eq(0);
+    },
+
     updateSize: function(rootElement) {
         const that = this;
-        let $groupElement;
-        let width;
         const $rootElement = $(rootElement);
         const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-        if(that._rootElementHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
-            $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
+        if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
+            const $groupElement = $rootElement.children('.' + that.getWidgetContainerClass());
+
             if($groupElement.length) {
                 $groupElement.detach();
             }
 
-            that._rootElementHeight = getContainerHeight($rootElement);
+            that._hasHeight = !!getHeight($rootElement);
 
-            width = getWidth($rootElement);
+            const width = getWidth($rootElement);
             $rootElement.addClass(importantMarginClass);
             that._hasWidth = getWidth($rootElement) === width;
             $rootElement.removeClass(importantMarginClass);
@@ -559,7 +554,7 @@ const resizingControllerMembers = {
     },
     _resetGroupElementHeight: function() {
         // @ts-expect-error
-        const groupElement = this.component.$element().children().get(0);
+        const groupElement = this._$groupElement().get(0);
         const scrollable = this._rowsView.getScrollable();
 
         if(groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
@@ -605,27 +600,27 @@ const resizingControllerMembers = {
     },
     _updateDimensionsCore: function() {
         const that = this;
+
         const dataController = that._dataController;
+        // @ts-expect-error
+        const editorFactory = that.getController('editorFactory');
         const rowsView = that._rowsView;
+
         const $rootElement = that.component.$element();
         // @ts-expect-error
-        const groupElement = $rootElement.children().get(0);
+        const groupElement = this._$groupElement().get(0);
+
         // @ts-expect-error
-        const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || getHeight($rootElement));
+        const rootElementHeight = getHeight($rootElement);
         // @ts-expect-error
         const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
-        // @ts-expect-error
-        const height = that.option('height') || $rootElement.get(0).style.height;
-        const isHeightSpecified = !!height && height !== 'auto';
-        // @ts-expect-error
-        const editorFactory = that.getController('editorFactory');
-        const isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight;
+        const isMaxHeightApplied = groupElement && groupElement.scrollHeight === groupElement.offsetHeight;
 
         that.updateSize($rootElement);
 
         deferRender(function() {
-            const hasHeight = !!that._rootElementHeight || !!maxHeight || isHeightSpecified;
+            const hasHeight = that._hasHeight || !!maxHeight;
             rowsView.hasHeight(hasHeight);
 
             // IE11
