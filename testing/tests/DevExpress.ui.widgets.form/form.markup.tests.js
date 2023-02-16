@@ -806,7 +806,7 @@ QUnit.module('Class check', ()=>{
             assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
         });
 
-        test(`${editorType} should have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when update occurs and labelLocation=top, label.alignment=default (default=left), label.visible=true (T1126956)`, function(assert) {
+        test(`${editorType} should have a ${TOGGLE_CONTROLS_PADDING_CLASS} class after visible change to true (labelLocation=top, label.alignment=left)`, function(assert) {
             const $formContainer = $('#form').dxForm({
                 labelLocation: 'top',
                 items: [
@@ -838,7 +838,7 @@ QUnit.module('Class check', ()=>{
             assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
         });
 
-        test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when update occurs and labelLocation=top, label.alignment=default (default=left), label.visible=true (T1126956)`, function(assert) {
+        test(`${editorType} should not have a ${TOGGLE_CONTROLS_PADDING_CLASS} class after visible change to false (labelLocation=top, label.alignment=left)`, function(assert) {
             const $formContainer = $('#form').dxForm({
                 labelLocation: 'top',
                 items: [
@@ -870,7 +870,7 @@ QUnit.module('Class check', ()=>{
             assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
         });
 
-        test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.visible=false (T1126956)`, function(assert) {
+        test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.visible=false`, function(assert) {
             const $form = $('#form').dxForm({
                 labelLocation: 'top',
                 items: [
@@ -897,7 +897,7 @@ QUnit.module('Class check', ()=>{
         });
 
         ['left', 'right'].forEach(labelLocation => {
-            test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when the labelLocation=${labelLocation} (T1126956)`, function(assert) {
+            test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when the labelLocation=${labelLocation}`, function(assert) {
                 const $form = $('#form').dxForm({
                     labelLocation,
                     items: [
@@ -925,7 +925,7 @@ QUnit.module('Class check', ()=>{
         });
 
         ['center', 'right'].forEach(alignment => {
-            test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.alignment=${alignment} (T1126956)`, function(assert) {
+            test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.alignment=${alignment}`, function(assert) {
                 const $form = $('#form').dxForm({
                     labelLocation: 'top',
                     items: [
@@ -952,7 +952,7 @@ QUnit.module('Class check', ()=>{
             });
         });
 
-        test(`default editor should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.alignment=left, label.visible=true,  labelLocation=top, (T1126956)`, function(assert) {
+        test(`default editor should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.alignment=left, label.visible=true,  labelLocation=top`, function(assert) {
             const $form = $('#form').dxForm({
                 labelLocation: 'top',
                 items: [
