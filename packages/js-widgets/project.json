@@ -1,7 +1,7 @@
 {
-  "name": "@devextreme/jquery",
+  "name": "@devextreme/js-widgets",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/jquery/src",
+  "sourceRoot": "packages/js-widgets/src",
   "projectType": "library",
   "implicitDependencies": [
     "@devextreme/react"

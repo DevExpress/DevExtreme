@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "generate": "npm run generate:metadata && npm run generate:components",
-    "generate:metadata": "dx-tools update-integration-meta --js-scripts ../jquery/src --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
+    "generate:metadata": "dx-tools update-integration-meta --js-scripts ../js-widgets/src --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "generate:components": "tsc ./generate.ts --outdir ./artifacts --types \"node\" && node ./artifacts/generate.js"
   },
   "author": "",

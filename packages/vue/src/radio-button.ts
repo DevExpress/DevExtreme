@@ -1,4 +1,4 @@
-import RadioButton, { Properties } from "../../jquery/lib/esm/radio-button";
+import RadioButton, { Properties } from "../../js-widgets/lib/esm/radio-button";
 import { createComponent } from "devextreme-vue/core/index";
 
 type AccessibleOptions = Pick<Properties,
