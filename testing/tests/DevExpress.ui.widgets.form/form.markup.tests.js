@@ -806,6 +806,70 @@ QUnit.module('Class check', ()=>{
             assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
         });
 
+        test(`${editorType} should have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when update occurs and labelLocation=top, label.alignment=default (default=left), label.visible=true (T1126956)`, function(assert) {
+            const $formContainer = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: editorType,
+                                    label: { visible: false },
+                                    editorType,
+                                }],
+                            },
+                        ],
+                    },
+
+                ],
+            });
+
+            const optionLabelVisible = 'items[0].items[0].items[0].label.visible';
+
+            $formContainer
+                .dxForm('instance')
+                .option(optionLabelVisible, true);
+
+            const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
+
+            assert.ok($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+        });
+
+        test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when update occurs and labelLocation=top, label.alignment=default (default=left), label.visible=true (T1126956)`, function(assert) {
+            const $formContainer = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [
+                    {
+                        itemType: 'group',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [{
+                                    dataField: editorType,
+                                    label: { visible: true },
+                                    editorType,
+                                }],
+                            },
+                        ],
+                    },
+
+                ],
+            });
+
+            const optionLabelVisible = 'items[0].items[0].items[0].label.visible';
+
+            $formContainer
+                .dxForm('instance')
+                .option(optionLabelVisible, false);
+
+            const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
+
+            assert.notOk($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS));
+        });
+
         test(`${editorType} should not have a css class ${TOGGLE_CONTROLS_PADDING_CLASS} when label.visible=false (T1126956)`, function(assert) {
             const $form = $('#form').dxForm({
                 labelLocation: 'top',
